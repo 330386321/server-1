@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+       <mvc:interceptors>
+              <!--身份验证的拦截器-->
+              <bean id="authorizationInterceptor" class="com.lawu.eshop.authorization.interceptor.AuthorizationInterceptor">
+                     <!--验证信息存储的Http头-->
+                     <property name="httpHeaderName" value="authorization" />
+                     <!--验证信息通用前缀，例如Bearer-->
+                     <property name="httpHeaderPrefix" value="" />
+                     <!--验证失败时的错误信息-->
+                     <property name="unauthorizedErrorMessage" value="令牌失效，请重新登录" />
+                     <!--管理验证信息的bean-->
+                     <property name="manager" ref="tokenManager" />
+              </bean>
+       </mvc:interceptors>
+
+       <!--管理验证信息的bean-->
+       <bean id="tokenManager" class="com.lawu.eshop.authorization.manager.impl.CacheTokenManager">
+              <!--Token失效时间-->
+              <property name="tokenExpireSeconds" value="3600" />
+       </bean>
+</beans>
