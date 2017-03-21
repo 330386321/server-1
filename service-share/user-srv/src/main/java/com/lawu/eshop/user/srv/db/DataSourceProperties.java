@@ -18,7 +18,7 @@ public class DataSourceProperties {
 
     private String type = "mysql";
     private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/eshop_member?useUnicode=true&characterEncoding=utf8";
+    private String url = "jdbc:mysql://192.168.2.22:3306/eshop_user?useUnicode=true&characterEncoding=utf8";
     private String username = "root";
     private String password = "123456";
 

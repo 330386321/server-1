@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Leach
  * @date 2017/3/13
  */
-@FeignClient(value= "member-srv", fallback = MemberServiceHystrix.class)
+@FeignClient(value= "user-srv", fallback = MemberServiceHystrix.class)
 public interface MemberService {
 
     /**

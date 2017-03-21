@@ -27,7 +27,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.lawu.eshop.member.srv.domain" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.lawu.eshop.user.srv.domain" targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -36,11 +36,23 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.member.srv.mapper" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.user.srv.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <table tableName="member" domainObjectName="MemberDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="member_profile" domainObjectName="MemberProfileDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant" domainObjectName="MerchantDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="invite_relation" domainObjectName="InviteRelationDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

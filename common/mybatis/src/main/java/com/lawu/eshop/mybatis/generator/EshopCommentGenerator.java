@@ -30,7 +30,7 @@ import static org.mybatis.generator.internal.util.StringUtility.isTrue;
  * @date 2017/3/12
  * <p>
  */
-public class EshopCommentGenerator implements CommentGenerator {
+public class  EshopCommentGenerator implements CommentGenerator {
 
     /** The properties. */
     private Properties properties;

@@ -11,19 +11,6 @@
 
     <artifactId>dto</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>user-dto</module>
-        <module>statistics-dto</module>
-        <module>comment-dto</module>
-        <module>integral-dto</module>
-        <module>activity-dto</module>
-        <module>ad-dto</module>
-        <module>fund-dto</module>
-        <module>order-dto</module>
-        <module>product-dto</module>
-        <module>property-dto</module>
-        <module>mall-dto</module>
-    </modules>
     <dependencies>
 
         <dependency>
