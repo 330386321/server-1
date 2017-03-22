@@ -18,4 +18,11 @@ public class MemberServiceHystrix implements MemberService {
         userDTO.setId(-1L);
         return userDTO;
     }
+
+    @Override
+    public UserDTO findMemberInfo(@RequestParam("memberId") Long memberId) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(-1L);
+        return userDTO;
+    }
 }

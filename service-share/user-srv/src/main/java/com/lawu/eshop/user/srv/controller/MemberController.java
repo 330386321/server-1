@@ -5,10 +5,7 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -26,4 +23,29 @@ public class MemberController {
         MemberBO memberBO = memberService.find(account, pwd);
         return MemberConverter.convertDTO(memberBO);
     }
+
+    /**
+     *  会员个人资料查询
+     * @param memberId 会员id
+     * @return
+     */
+    @RequestMapping(value = "findmemberinfo", method = RequestMethod.GET)
+    public UserDTO findMemberInfo(@RequestParam Long memberId ) {
+        MemberBO memberBO = memberService.findMemberInfoById(memberId);
+        return MemberConverter.convertDTO(memberBO);
+    }
+
+    /**
+     * 会员个人资料修改
+     * @param member 会员信息
+     * @return
+     */
+    @RequestMapping(value = "updatememberinfo", method = RequestMethod.GET)
+    public void updateMemberInfo(@ModelAttribute UserDTO memberParam ){
+        if(memberParam != null){
+            memberService.updateMemberInfo(memberParam);
+        }
+
+    }
+
 }

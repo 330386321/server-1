@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 
 /**
@@ -18,4 +19,13 @@ public interface MemberService {
      * @return
      */
     MemberBO find(String account, String pwd);
+
+    /**
+     * 查询会员个人资料
+     * @param id 会员id
+     * @return
+     */
+    MemberBO findMemberInfoById(Long id);
+
+    void updateMemberInfo(UserDTO memberParam);
 }
