@@ -141,7 +141,7 @@ public class DateUtil {
         return timeIntFormat.format(new Date());
     }
 
-    //-------------------------------------------------------------暂未用到-------------------------------------------------
+    //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
      * 日期格式化yyyy-MM-dd
@@ -196,10 +196,8 @@ public class DateUtil {
      * @return
      */
     public static String getDateFormat(Date date, String formatStr) {
-        if (StringUtil.isNotEmpty(formatStr)) {
-            return new SimpleDateFormat(formatStr).format(date);
-        }
-        return null;
+
+        return new SimpleDateFormat(formatStr).format(date);
     }
 
     /**
