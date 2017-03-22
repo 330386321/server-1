@@ -39,10 +39,7 @@ public class CommonController extends BaseController {
     public Result<TokenDTO> login(@ApiParam(required = true, value = "账号") String account,
                                   @ApiParam(required = true, value = "密码") String pwd) {
 
-        //UserDTO userDTO = memberService.find(account, pwd);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(1L);
-        userDTO.setAccount("slq");
+        UserDTO userDTO = memberService.find(account, pwd);
         if (userDTO == null) {
             return response(MemberResultCode.MEMBER_WRONG_PWD);
         }
