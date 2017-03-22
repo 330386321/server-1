@@ -25,27 +25,40 @@ public class MemberController {
     }
 
     /**
-     *  会员个人资料查询
+     * 会员个人资料查询
+     *
      * @param memberId 会员id
      * @return
      */
     @RequestMapping(value = "findmemberinfo", method = RequestMethod.GET)
-    public UserDTO findMemberInfo(@RequestParam Long memberId ) {
+    public UserDTO findMemberInfo(@RequestParam Long memberId) {
         MemberBO memberBO = memberService.findMemberInfoById(memberId);
         return MemberConverter.convertDTO(memberBO);
     }
 
     /**
      * 会员个人资料修改
+     *
      * @param member 会员信息
      * @return
      */
     @RequestMapping(value = "updatememberinfo", method = RequestMethod.GET)
-    public void updateMemberInfo(@ModelAttribute UserDTO memberParam ){
-        if(memberParam != null){
+    public void updateMemberInfo(@ModelAttribute UserDTO memberParam) {
+        if (memberParam != null) {
             memberService.updateMemberInfo(memberParam);
         }
 
+    }
+
+    /**
+     * 会员修改密码
+     *
+     * @param id  主键
+     * @param pwd 密码
+     */
+    @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
+    public void updatePwd(@RequestParam Long id, @RequestParam String pwd) {
+        memberService.updatePwd(id, pwd);
     }
 
 }

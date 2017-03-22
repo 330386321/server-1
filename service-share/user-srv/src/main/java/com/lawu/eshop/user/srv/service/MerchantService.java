@@ -10,8 +10,9 @@ public interface MerchantService {
 
     /**
      * 修改密码
-     * @param id
-     * @param pwd
+     *
+     * @param id  主键
+     * @param pwd 密码
      */
     void updatePwd(Long id, String pwd);
 }

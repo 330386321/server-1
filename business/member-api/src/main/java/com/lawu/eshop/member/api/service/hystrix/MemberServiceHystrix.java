@@ -25,4 +25,9 @@ public class MemberServiceHystrix implements MemberService {
         userDTO.setId(-1L);
         return userDTO;
     }
+
+    @Override
+    public void updatePwd(@RequestParam("id") Long id, @RequestParam("pwd") String pwd) {
+
+    }
 }

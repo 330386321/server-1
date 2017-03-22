@@ -48,35 +48,38 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updateMemberInfo(UserDTO memberParam) {
         MemberDOExample example = new MemberDOExample();
-        if(memberParam.getId() != null){
+        if (memberParam.getId() != null) {
             example.createCriteria().andIdEqualTo(memberParam.getId());
-        }else if(!StringUtils.isEmpty(memberParam.getNickname())){//昵称
+        } else if (!StringUtils.isEmpty(memberParam.getNickname())) {//昵称
             example.createCriteria().andNicknameEqualTo(memberParam.getNickname());
-        }
-        else if(!StringUtils.isEmpty(memberParam.getHeadimg())){//头像
+        } else if (!StringUtils.isEmpty(memberParam.getHeadimg())) {//头像
             example.createCriteria().andHeadimgEqualTo(memberParam.getHeadimg());
-        }
-        else if(!StringUtils.isEmpty(memberParam.getName())){//名称
+        } else if (!StringUtils.isEmpty(memberParam.getName())) {//名称
             example.createCriteria().andNameEqualTo(memberParam.getName());
-        }
-        else if(!StringUtils.isEmpty(memberParam.getNum())){
+        } else if (!StringUtils.isEmpty(memberParam.getNum())) {
             example.createCriteria().andNumEqualTo(memberParam.getNum());
-        }
-        else if(!StringUtils.isEmpty(memberParam.getAccount())){//账号
+        } else if (!StringUtils.isEmpty(memberParam.getAccount())) {//账号
             example.createCriteria().andAccountEqualTo(memberParam.getAccount());
-        }
-        else if(!StringUtils.isEmpty(memberParam.getMobile())){//手机号
+        } else if (!StringUtils.isEmpty(memberParam.getMobile())) {//手机号
             example.createCriteria().andMobileEqualTo(memberParam.getMobile());
-        }
-        else if(memberParam.getSex() != null ){//性别
+        } else if (memberParam.getSex() != null) {//性别
             example.createCriteria().andSexEqualTo(memberParam.getSex());
-        }else if(memberParam.getBirthday() != null){//生日
+        } else if (memberParam.getBirthday() != null) {//生日
             example.createCriteria().andBirthdayEqualTo(memberParam.getBirthday());
         }
-        MemberBO  memberBO = MemberConverter.convertDTOOther(memberParam);
+        MemberBO memberBO = MemberConverter.convertDTOOther(memberParam);
         MemberDO memberDO = MemberConverter.convertDO(memberBO);
-        memberDOMapper.updateByExampleSelective(memberDO,example);
+        memberDOMapper.updateByExampleSelective(memberDO, example);
         System.out.println("member 资料修改成功");
 
     }
+
+    @Override
+    public void updatePwd(Long id, String pwd) {
+        MemberDO member = new MemberDO();
+        member.setId(id);
+        member.setPwd(pwd);
+        memberDOMapper.updateByPrimaryKeySelective(member);
+    }
+
 }

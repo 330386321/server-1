@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Leach
  * @date 2017/3/13
  */
-@FeignClient(value= "user-srv", fallback = MemberServiceHystrix.class)
+@FeignClient(value = "user-srv", fallback = MemberServiceHystrix.class)
 public interface MemberService {
 
     /**
      * 查询会员信息
      *
      * @param account 登录账号
-     * @param pwd 密码
+     * @param pwd     密码
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/find")
@@ -26,5 +26,15 @@ public interface MemberService {
 
     @RequestMapping(method = RequestMethod.GET, value = "member/findmemberinfo")
     UserDTO findMemberInfo(@RequestParam("memberId") Long memberId);
+
+    /**
+     * 修改密码
+     *
+     * @param id  主键
+     * @param pwd 密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "member/updatePwd")
+    void updatePwd(@RequestParam("id") Long id, @RequestParam("pwd") String pwd);
 
 }

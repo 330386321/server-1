@@ -18,6 +18,12 @@ public class MerchantController {
     @Autowired
     private MerchantService merchantService;
 
+    /**
+     * 商户修改密码
+     *
+     * @param id  主键
+     * @param pwd 密码
+     */
     @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
     public void updatePwd(@RequestParam Long id, @RequestParam String pwd) {
         merchantService.updatePwd(id, pwd);

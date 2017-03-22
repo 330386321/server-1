@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author meishuquan
  * @date 2017/3/22
  */
-@FeignClient(value= "user-srv", fallback = MerchantServiceHystrix.class)
+@FeignClient(value = "user-srv", fallback = MerchantServiceHystrix.class)
 public interface MerchantService {
 
     /**
      * 修改密码
      *
-     * @param id 主键
+     * @param id  主键
      * @param pwd 密码
      * @return
      */
