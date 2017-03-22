@@ -21,7 +21,7 @@ import javax.sql.DataSource;
  * @date 2017/3/13
  */
 @Configuration
-@MapperScan("com.lawu.eshop.member.srv.mapper")
+@MapperScan("com.lawu.eshop.product.srv.mapper")
 @EnableConfigurationProperties(DataSourceProperties.class)
 @EnableTransactionManagement
 public class MybatisDataSource {
