@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "member")
 @RestController
-@RequestMapping(value = "member/api/")
+@RequestMapping(value = "member/")
 public class MemberController {
 
     @Autowired
