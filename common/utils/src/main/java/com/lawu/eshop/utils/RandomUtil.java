@@ -1,0 +1,75 @@
+package com.lawu.eshop.utils;
+
+import java.util.Random;
+
+/**
+ * 生成随机字符串工具类
+ * @author meishuquan
+ * @date 2017/3/22
+ */
+public class RandomUtil {
+
+    private static final String STR_1 = "0123456789";
+    private static final String STR_2 = "0123456789abcdefghijklmnopqrstuvwxyz";
+    private static final String STR_3 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String STR_4 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String STR_5 = "abcdefghijklmnopqrstuvwxyz";
+    private static final String STR_6 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final String STR_7 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private static final int TABLE_FIELD_NUM_LENGTH = 12;
+
+    /**
+     * 生成随机字符串
+     * @date 2017/3/22
+     * @param type  产生随机数类型：1--数字，2--数字+小写字母，3--数字+大写字母，4--数字+字母，5--小写字母，6--大写字母，7--字母
+     * @param length    产生随机数长度
+     * @return  String
+     */
+    public static String getRandomString(int type, int length){
+        String str = "";
+        switch (type){
+            case 1: str = STR_1; break;
+            case 2: str = STR_2; break;
+            case 3: str = STR_3; break;
+            case 4: str = STR_4; break;
+            case 5: str = STR_5; break;
+            case 6: str = STR_6; break;
+            case 7: str = STR_7; break;
+            default: return "";
+        }
+        if (length <= 0 ){
+            return "";
+        }
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < length; i++){
+            int number = random.nextInt(str.length());
+            sb.append(str.charAt(number));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 生成保存到数据库表num字段的随机字符串
+     * @date 2017/3/22
+     * @param str   自定义的字符
+     * @return  String
+     */
+    public static String getTableNumRandomString(String str){
+        if (str == null){
+            return "";
+        }
+        if (str.length() > TABLE_FIELD_NUM_LENGTH){
+            return "";
+        }
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer(str);
+        for (int i = 0; i < TABLE_FIELD_NUM_LENGTH - str.length(); i++){
+            int number = random.nextInt(STR_2.length());
+            sb.append(STR_2.charAt(number));
+        }
+        return sb.toString();
+    }
+
+}
