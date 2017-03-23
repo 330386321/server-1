@@ -1,16 +1,14 @@
-package com.lawu.eshop.user.dto;
+package com.lawu.eshop.user.dto.param;
 
 import java.util.Date;
 
 /**
- * @author Leach
+ * @author
  * @date 2017/3/13
  */
-public class UserDTO {
+public class UserParam {
 
     private Long id;
-
-    private String account;
 
     private String nickname;
 
@@ -30,13 +28,6 @@ public class UserDTO {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
 
     public String getNickname() {
         return nickname;
