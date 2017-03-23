@@ -22,7 +22,7 @@ public class MemberController {
 
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息）", httpMethod = "POST")
     @Authorization
-    @RequestMapping(value = "findmemberinfo", method = RequestMethod.POST)
+    @RequestMapping(value = "findMemberInfo", method = RequestMethod.POST)
     public UserDTO findMemberInfo(@RequestParam @ApiParam(name = "memberId", required = true, value = "会员ID") Long memberId) {
         UserDTO userDTO = memberService.findMemberInfo(memberId);
 
@@ -36,7 +36,7 @@ public class MemberController {
         memberService.updateMemberInfo(memberParam);
     }
 
-    @ApiOperation(value = "修改密码", notes = "会员修改密码）", httpMethod = "POST")
+    @ApiOperation(value = "修改密码", notes = "会员修改密码", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
     public void updatePwd(@RequestParam @ApiParam(required = true, value = "主键") Long id,
