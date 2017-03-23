@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.converter;
 
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 
@@ -92,55 +93,32 @@ public class MemberConverter {
         userDTO.setId(memberBO.getId());
         userDTO.setAccount(memberBO.getAccount());
         userDTO.setBirthday(memberBO.getBirthday());
-        userDTO.setNum(memberBO.getNum());
-        userDTO.setPwd(memberBO.getPwd());
-        userDTO.setMobile(memberBO.getMobile());
-        userDTO.setGmtCreate(memberBO.getGmtCreate());
-        userDTO.setGmtModified(memberBO.getGmtModified());
-        userDTO.setHeadimg(memberBO.getHeadimg());
-        userDTO.setInviterId(memberBO.getInviterId());
-        userDTO.setInviterType(memberBO.getInviterType());
-        userDTO.setLevel(memberBO.getLevel());
-        userDTO.setStatus(memberBO.getStatus());
         userDTO.setSex(memberBO.getSex());
         userDTO.setRegionPath(memberBO.getRegionPath());
         userDTO.setNickname(memberBO.getNickname());
-        userDTO.setName(memberBO.getName());
         return userDTO;
     }
 
 
 
     /**
-     * DTO转DO
+     * param转DO
      *
      * @param userDTO
      * @return
      */
-    public static MemberBO convertDTOOther(UserDTO userDTO){
-        if(userDTO == null){
+    public static MemberDO convertDOOther(UserParam userParam){
+        if(userParam == null){
             return null;
         }
-        MemberBO memberBO = new MemberBO();
-        memberBO.setId(userDTO.getId());
-        memberBO.setName(userDTO.getName());
-        memberBO.setNickname(userDTO.getNickname());
-        memberBO.setRegionPath(userDTO.getRegionPath());
-        memberBO.setSex(userDTO.getSex());
-        memberBO.setAccount(userDTO.getAccount());
-        memberBO.setBirthday(userDTO.getBirthday());
-        memberBO.setGmtCreate(userDTO.getGmtCreate());
-        memberBO.setGmtModified(userDTO.getGmtModified());
-        memberBO.setInviterId(userDTO.getInviterId());
-        memberBO.setInviterType(userDTO.getInviterType());
-        memberBO.setHeadimg(userDTO.getHeadimg());
-        memberBO.setStatus(userDTO.getStatus());
-        memberBO.setPwd(userDTO.getPwd());
-        memberBO.setMobile(userDTO.getMobile());
-        memberBO.setLevel(userDTO.getLevel());
-        memberBO.setNum(userDTO.getNum());
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(userParam.getId());
+        memberDO.setNickname(userParam.getNickname());
+        memberDO.setRegionPath(userParam.getRegionPath());
+        memberDO.setSex(userParam.getSex());
+        memberDO.setBirthday(userParam.getBirthday());
 
-        return memberBO;
+        return memberDO;
     }
 
 }

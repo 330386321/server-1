@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 
 /**
@@ -28,7 +29,7 @@ public interface MemberService {
      */
     MemberBO findMemberInfoById(Long id);
 
-    void updateMemberInfo(UserDTO memberParam);
+    void updateMemberInfo(UserParam memberParam);
 
     /**
      * 修改密码

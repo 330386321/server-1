@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.domain.MemberDO;
@@ -46,30 +47,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMemberInfo(UserDTO memberParam) {
-        MemberDOExample example = new MemberDOExample();
-        if (memberParam.getId() != null) {
-            example.createCriteria().andIdEqualTo(memberParam.getId());
-        } else if (!StringUtils.isEmpty(memberParam.getNickname())) {//昵称
-            example.createCriteria().andNicknameEqualTo(memberParam.getNickname());
-        } else if (!StringUtils.isEmpty(memberParam.getHeadimg())) {//头像
-            example.createCriteria().andHeadimgEqualTo(memberParam.getHeadimg());
-        } else if (!StringUtils.isEmpty(memberParam.getName())) {//名称
-            example.createCriteria().andNameEqualTo(memberParam.getName());
-        } else if (!StringUtils.isEmpty(memberParam.getNum())) {
-            example.createCriteria().andNumEqualTo(memberParam.getNum());
-        } else if (!StringUtils.isEmpty(memberParam.getAccount())) {//账号
-            example.createCriteria().andAccountEqualTo(memberParam.getAccount());
-        } else if (!StringUtils.isEmpty(memberParam.getMobile())) {//手机号
-            example.createCriteria().andMobileEqualTo(memberParam.getMobile());
-        } else if (memberParam.getSex() != null) {//性别
-            example.createCriteria().andSexEqualTo(memberParam.getSex());
-        } else if (memberParam.getBirthday() != null) {//生日
-            example.createCriteria().andBirthdayEqualTo(memberParam.getBirthday());
-        }
-        MemberBO memberBO = MemberConverter.convertDTOOther(memberParam);
-        MemberDO memberDO = MemberConverter.convertDO(memberBO);
-        memberDOMapper.updateByExampleSelective(memberDO, example);
+    public void updateMemberInfo(UserParam memberParam) {
+
+        MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
+        memberDOMapper.updateByPrimaryKeySelective(memberDO);
         System.out.println("member 资料修改成功");
 
     }

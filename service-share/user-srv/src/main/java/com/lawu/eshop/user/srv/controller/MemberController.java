@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.controller;
 
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
@@ -43,7 +44,7 @@ public class MemberController {
      * @return
      */
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.GET)
-    public void updateMemberInfo(@ModelAttribute UserDTO memberParam) {
+    public void updateMemberInfo(@ModelAttribute UserParam memberParam) {
         if (memberParam != null) {
             memberService.updateMemberInfo(memberParam);
         }
