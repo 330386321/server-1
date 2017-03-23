@@ -38,6 +38,20 @@ public class ProductCategoryConverter {
     }
 
     /**
+     * DO转BO，集合
+     * @param productCategoryeDOS
+     * @return
+     */
+    public static List<ProductCategoryBO> convertBOS(List<ProductCategoryeDO>  productCategoryeDOS){
+        List<ProductCategoryBO> productCategoryeBOS = new ArrayList<ProductCategoryBO>();
+        for(ProductCategoryeDO d : productCategoryeDOS){
+            ProductCategoryBO bo = ProductCategoryConverter.convertBO(d);
+            productCategoryeBOS.add(bo);
+        }
+        return productCategoryeBOS;
+    }
+
+    /**
      * 转换DTO,集合
      * @param productCategoryBOS
      * @return

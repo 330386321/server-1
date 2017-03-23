@@ -22,4 +22,11 @@ public class ProductCategoryServiceHystrix implements ProductCategoryService {
         dtos.add(dto);
         return dtos;
     }
+
+	@Override
+	public ProductCategoryDTO getById(Integer id) {
+		ProductCategoryDTO dto = new ProductCategoryDTO();
+        dto.setId(-1);
+        return dto;
+	}
 }

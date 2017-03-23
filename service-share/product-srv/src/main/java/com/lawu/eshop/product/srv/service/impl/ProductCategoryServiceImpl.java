@@ -9,7 +9,6 @@ import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,16 +25,17 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategoryeDOExample example = new ProductCategoryeDOExample();
         List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
 
-        List<ProductCategoryBO> productCategoryeBOS = null;
-        if(productCategoryeDOS == null || productCategoryeDOS.isEmpty()){
-            return null;
-        }else{
-            productCategoryeBOS = new ArrayList<ProductCategoryBO>();
-            for(ProductCategoryeDO d : productCategoryeDOS){
-                ProductCategoryBO bo = ProductCategoryConverter.convertBO(d);
-                productCategoryeBOS.add(bo);
-            }
-        }
-        return productCategoryeBOS;
+        return ProductCategoryConverter.convertBOS(productCategoryeDOS);
     }
+
+	@Override
+	public ProductCategoryBO getById(Integer id) {
+		ProductCategoryeDOExample example = new ProductCategoryeDOExample();
+        example.createCriteria().andIdEqualTo(id);
+        List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
+        return productCategoryeDOS.isEmpty() ? null :  ProductCategoryConverter.convertBO(productCategoryeDOS.get(0));
+	}
+
+    
+
 }

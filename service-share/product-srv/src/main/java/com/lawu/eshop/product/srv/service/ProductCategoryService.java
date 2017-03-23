@@ -19,4 +19,10 @@ public interface ProductCategoryService {
      * @return
      */
     List<ProductCategoryBO> findAll();
+
+    /**
+     * 通过ID查询
+     * @return
+     */
+	ProductCategoryBO getById(Integer id);
 }
