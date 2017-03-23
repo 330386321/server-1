@@ -7,6 +7,8 @@ import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberDOExample;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
+
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,10 +72,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
 	@Override
-	public List<MemberBO> findMemberListByUserId(Long inviterId) {
+	public List<MemberBO> findMemberListByUser(Memberp inviterId) {
 		 MemberDOExample example = new MemberDOExample();
 		 example.createCriteria().andInviterIdEqualTo(inviterId);
-		 List<MemberDO> memberDOS=memberDOMapper.selectByExample(example);
+		 //List<MemberDO> memberDOS=memberDOMapper.selectByExample(example);
+		 RowBounds rowBounds = new RowBounds(0, 10);
+		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		 
 		return memberDOS.isEmpty() ? null : MemberConverter.convertListBOS(memberDOS);
 	}
 
