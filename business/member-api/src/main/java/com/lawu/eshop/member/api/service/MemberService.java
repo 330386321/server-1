@@ -60,7 +60,7 @@ public interface MemberService {
      * @date 2017/03/23
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST,value = "member/findMemberListByUserId")
+    @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUserId")
     List<MemberDTO> findMemberListByUserId(@RequestParam("inviterId") Long inviterId );
 
 }

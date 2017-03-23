@@ -88,7 +88,7 @@ public class MemberController {
      *@param account 会员账号
      *@return
      */
-    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
+    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
     public List<MemberDTO> findMemberListByUserId(@RequestParam Long inviterId) {
         List<MemberBO> memberBOS = memberService.findMemberListByUserId(inviterId);
         return MemberConverter.convertListDOTS(memberBOS);
