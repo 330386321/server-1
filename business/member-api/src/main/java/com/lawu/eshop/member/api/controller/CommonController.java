@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
-import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -14,10 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -36,8 +32,8 @@ public class CommonController extends BaseController {
 
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[200|2000]）", httpMethod = "POST")
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Result<TokenDTO> login(@ApiParam(required = true, value = "账号") String account,
-                                  @ApiParam(required = true, value = "密码") String pwd) {
+    public Result<TokenDTO> login(@RequestParam @ApiParam(required = true, value = "账号") String account,
+                                  @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
         UserDTO userDTO = memberService.find(account, pwd);
         if (userDTO == null) {
@@ -58,14 +54,8 @@ public class CommonController extends BaseController {
     @Authorization
     @RequestMapping(value = "logout")
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        //tokenManager.delRelationshipByToken(token);
+        tokenManager.delRelationshipByToken(token);
         return successResponse();
     }
 
-    @ApiOperation(value = "测试", notes = "测试。[200]）", httpMethod = "GET")
-    @Authorization
-    @RequestMapping(value = "test")
-    public Result test(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        return successResponse(UserUtil.getCurrentAccount(getRequest()));
-    }
 }
