@@ -1,7 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
-import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;

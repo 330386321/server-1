@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach

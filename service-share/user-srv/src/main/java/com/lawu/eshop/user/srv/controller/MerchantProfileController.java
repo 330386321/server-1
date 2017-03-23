@@ -7,7 +7,6 @@ import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.user.srv.service.MerchantService;
-import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,8 +43,8 @@ public class MerchantProfileController {
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
         // 商家基本信息
-
         MerchantBO merchantBO = merchantService.findMerchantInfo(merchantProfileId);
+        //TODO 门店信息
 
         return MerchantProfileConverter.coverConverDTO(merchantProfileBO);
     }
