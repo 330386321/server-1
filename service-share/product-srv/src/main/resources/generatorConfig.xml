@@ -19,8 +19,8 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/eshop_product?useUnicode=true&amp;characterEncoding=UTF-8"
-                        userId="root" password="123456">
+                        connectionURL="jdbc:mysql://192.168.1.22:3306/eshop_product?useUnicode=true&amp;characterEncoding=UTF-8"
+                        userId="root" password="1qazXSW@">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -47,6 +47,9 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="product_model" domainObjectName="ProductModelDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="product_image" domainObjectName="ProductImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

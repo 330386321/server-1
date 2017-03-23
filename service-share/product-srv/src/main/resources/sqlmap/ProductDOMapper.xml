@@ -11,7 +11,7 @@
     <result column="category_id" property="categoryId" jdbcType="INTEGER" />
     <result column="num" property="num" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <result column="feature_image" property="featureImage" jdbcType="BIGINT" />
+    <result column="feature_image" property="featureImage" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
@@ -184,7 +184,7 @@
       gmt_modified, gmt_create, content
       )
     values (#{merchantId,jdbcType=BIGINT}, #{categoryId,jdbcType=INTEGER}, #{num,jdbcType=VARCHAR}, 
-      #{name,jdbcType=VARCHAR}, #{featureImage,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
+      #{name,jdbcType=VARCHAR}, #{featureImage,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
       #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{content,jdbcType=LONGVARCHAR}
       )
   </insert>
@@ -240,7 +240,7 @@
         #{name,jdbcType=VARCHAR},
       </if>
       <if test="featureImage != null" >
-        #{featureImage,jdbcType=BIGINT},
+        #{featureImage,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -289,7 +289,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.featureImage != null" >
-        feature_image = #{record.featureImage,jdbcType=BIGINT},
+        feature_image = #{record.featureImage,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
@@ -319,7 +319,7 @@
       category_id = #{record.categoryId,jdbcType=INTEGER},
       num = #{record.num,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      feature_image = #{record.featureImage,jdbcType=BIGINT},
+      feature_image = #{record.featureImage,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -339,7 +339,7 @@
       category_id = #{record.categoryId,jdbcType=INTEGER},
       num = #{record.num,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      feature_image = #{record.featureImage,jdbcType=BIGINT},
+      feature_image = #{record.featureImage,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
@@ -367,7 +367,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="featureImage != null" >
-        feature_image = #{featureImage,jdbcType=BIGINT},
+        feature_image = #{featureImage,jdbcType=VARCHAR},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -394,7 +394,7 @@
       category_id = #{categoryId,jdbcType=INTEGER},
       num = #{num,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      feature_image = #{featureImage,jdbcType=BIGINT},
+      feature_image = #{featureImage,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -411,7 +411,7 @@
       category_id = #{categoryId,jdbcType=INTEGER},
       num = #{num,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      feature_image = #{featureImage,jdbcType=BIGINT},
+      feature_image = #{featureImage,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
