@@ -1,7 +1,13 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 
 /**
@@ -65,4 +71,34 @@ public class MerchantConverter {
         merchantDTO.setGmtCreate(merchantBO.getGmtCreate());
         return merchantDTO;
     }
+
+    /**
+     * DOS 转BOS
+     * @author zhangrc
+     * @date 2013/03/23
+     * @param merchantDOS
+     * @return
+     */
+	public static List<MerchantBO> convertBOS(List<MerchantDO> merchantDOS) {
+		if (merchantDOS == null) {
+	       return null;
+	    }
+		List<MerchantBO> merchantBOS=new ArrayList<MerchantBO>();
+		for (MerchantDO merchantDO : merchantDOS) {
+			merchantBOS.add(convertBO(merchantDO));
+		}
+		return merchantBOS;
+	}
+
+	
+	public static List<MerchantDTO> convertListDOTS(List<MerchantBO> merchantBOS) {
+		if (merchantBOS == null) {
+	       return null;
+	    }
+		List<MerchantDTO> memberDTOS=new ArrayList<MerchantDTO>();
+		for (MerchantBO merchantBO : merchantBOS) {
+			memberDTOS.add(convertDTO(merchantBO));
+		}
+		return memberDTOS;
+	}
 }

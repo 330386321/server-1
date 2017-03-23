@@ -54,7 +54,7 @@ public interface AddressService {
 	 * @return
 	 */
     @RequestMapping(method = RequestMethod.GET, value = "address/delete")
-	void delete(@RequestParam("userId") Long userId);
+	void delete(@RequestParam("id") Long userId);
 	 
 	 
 

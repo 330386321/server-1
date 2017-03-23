@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 
 /**
@@ -31,4 +33,11 @@ public interface MerchantService {
      * @return
      */
     MerchantBO getMerchantByAccount(String account);
+    
+    /**
+     * 我的推荐商家
+     * @param inviterId
+     * @return
+     */
+    List<MerchantBO>  getMerchantByInviterId(Long inviterId);
 }

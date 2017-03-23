@@ -45,7 +45,7 @@ public class AddressController extends BaseController {
     }
 	
 	 /**
-	  * 收货地址单个查询
+	  * 收货地址单个查询 	
 	  * @return
 	  */
 	//@Authorization
@@ -60,6 +60,7 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
+	@ApiOperation(value = "delete", notes = "删除", httpMethod = "GET")
 	@RequestMapping(value = "delete", method = RequestMethod.GET)
     public void delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		addressService.delete(id);
@@ -70,7 +71,7 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@ApiOperation(value = "save", notes = "insert", httpMethod = "POST")
+	@ApiOperation(value = "save", notes = "添加", httpMethod = "POST")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
     public void insert(@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 	addressService.save(address);
