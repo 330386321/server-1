@@ -82,4 +82,12 @@ public class MemberServiceImpl implements MemberService {
         memberDOMapper.updateByPrimaryKeySelective(member);
     }
 
+    @Override
+    public MemberBO getMemberByAccount(String account) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andAccountEqualTo(account);
+        List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+        return memberDOS.isEmpty() ? null : MemberConverter.convertBO(memberDOS.get(0));
+    }
+
 }

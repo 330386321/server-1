@@ -37,4 +37,11 @@ public interface MemberService {
      * @param pwd 密码
      */
     void updatePwd(Long id, String pwd);
+
+    /**
+     * 根据账号查询会员信息
+     * @param account   会员账号
+     * @return
+     */
+    MemberBO getMemberByAccount(String account);
 }

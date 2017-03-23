@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+
 /**
  * 商户服务接口
  *
@@ -15,4 +17,11 @@ public interface MerchantService {
      * @param pwd 密码
      */
     void updatePwd(Long id, String pwd);
+
+    /**
+     * 根据账号查询商户信息
+     * @param account   商户账号
+     * @return
+     */
+    MerchantBO getMerchantByAccount(String account);
 }

@@ -1,13 +1,12 @@
-package com.lawu.eshop.user.srv.bo;
-
+package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
 /**
  * @author meishuquan
- * @date 2017/3/22
+ * @date 2017/3/23
  */
-public class MerchantBO {
+public class MerchantDTO {
 
     private Long id;
 

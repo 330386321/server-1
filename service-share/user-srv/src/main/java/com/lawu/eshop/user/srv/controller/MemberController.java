@@ -61,4 +61,16 @@ public class MemberController {
         memberService.updatePwd(id, pwd);
     }
 
+    /**
+     * 根据账号查询会员信息
+     *
+     * @param account 会员账号
+     * @return
+     */
+    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
+    public UserDTO getMemberByAccount(@RequestParam String account) {
+        MemberBO memberBO = memberService.getMemberByAccount(account);
+        return MemberConverter.convertDTO(memberBO);
+    }
+
 }
