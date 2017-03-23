@@ -24,7 +24,7 @@ public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
-    @ApiOperation(value = "修改密码", notes = "商户修改密码）", httpMethod = "POST")
+    @ApiOperation(value = "修改密码", notes = "商户修改密码", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
     public void updatePwd(@RequestParam @ApiParam(required = true, value = "主键") Long id,
