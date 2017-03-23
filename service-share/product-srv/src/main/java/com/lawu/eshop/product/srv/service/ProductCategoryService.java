@@ -25,4 +25,11 @@ public interface ProductCategoryService {
      * @return
      */
 	ProductCategoryBO getById(Integer id);
+	
+	/**
+	 * 获取商品分类全名称
+	 * @param id
+	 * @return
+	 */
+	String getFullName(Integer id);
 }
