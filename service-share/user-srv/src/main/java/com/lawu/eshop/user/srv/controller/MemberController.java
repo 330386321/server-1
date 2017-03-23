@@ -30,7 +30,7 @@ public class MemberController {
      * @param memberId 会员id
      * @return
      */
-    @RequestMapping(value = "findmemberinfo", method = RequestMethod.GET)
+    @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
     public UserDTO findMemberInfo(@RequestParam Long memberId) {
         MemberBO memberBO = memberService.findMemberInfoById(memberId);
         return MemberConverter.convertDTO(memberBO);
@@ -42,7 +42,7 @@ public class MemberController {
      * @param member 会员信息
      * @return
      */
-    @RequestMapping(value = "updatememberinfo", method = RequestMethod.GET)
+    @RequestMapping(value = "updateMemberInfo", method = RequestMethod.GET)
     public void updateMemberInfo(@ModelAttribute UserDTO memberParam) {
         if (memberParam != null) {
             memberService.updateMemberInfo(memberParam);
