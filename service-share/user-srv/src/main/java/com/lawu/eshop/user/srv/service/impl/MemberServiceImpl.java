@@ -72,7 +72,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 	@Override
-	public List<MemberBO> findMemberListByUser(Memberp inviterId) {
+	public List<MemberBO> findMemberListByUser(Long inviterId) {
 		 MemberDOExample example = new MemberDOExample();
 		 example.createCriteria().andInviterIdEqualTo(inviterId);
 		 //List<MemberDO> memberDOS=memberDOMapper.selectByExample(example);
