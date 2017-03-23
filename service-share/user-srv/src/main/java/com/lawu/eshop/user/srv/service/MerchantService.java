@@ -24,4 +24,11 @@ public interface MerchantService {
      * @return
      */
     MerchantBO findMerchantInfo(Long merchantProfileId);
+
+    /**
+     * 根据账号查询商户信息
+     * @param account   商户账号
+     * @return
+     */
+    MerchantBO getMerchantByAccount(String account);
 }

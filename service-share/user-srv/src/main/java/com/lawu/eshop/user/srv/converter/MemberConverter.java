@@ -1,8 +1,14 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 
 /**
@@ -120,5 +126,68 @@ public class MemberConverter {
 
         return memberDO;
     }
+    
+    
+    /**
+     * 描述：将DOS转成BOS
+     * @author zhangrc
+     * @date 2017/03/23
+     * @param memberDOS
+     * @return
+     */
+    public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS) {
+		if (memberDOS == null) {
+	       return null;
+	    }
+		List<MemberBO> memberBOS=new ArrayList<MemberBO>();
+		for (MemberDO memberDO : memberDOS) {
+			memberBOS.add(convertBO(memberDO));
+		}
+		return memberBOS;
+	}
+    
+    
+    /**
+     * DTO转换
+     *
+     * @param memberBO
+     * @return
+     */
+    public static MemberDTO convertMDTO(MemberBO memberBO) {
+        if (memberBO == null) {
+            return null;
+        }
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setAccount(memberBO.getAccount());
+        memberDTO.setBirthday(memberBO.getBirthday());
+        memberDTO.setNum(memberBO.getNum());
+        memberDTO.setMobile(memberBO.getMobile());
+        memberDTO.setHeadimg(memberBO.getHeadimg());
+        memberDTO.setInviterType(memberBO.getInviterType());
+        memberDTO.setStatus(memberBO.getStatus());
+        memberDTO.setSex(memberBO.getSex());
+        memberDTO.setRegionPath(memberBO.getRegionPath());
+        memberDTO.setNickname(memberBO.getNickname());
+        memberDTO.setName(memberBO.getName());
+        return memberDTO;
+    }
+    
+    /**
+     * 描述：将BOS转成DTOS
+     * @author zhangrc
+     * @date 2017/03/23
+     * @param memberDOS
+     * @return
+     */
+    public static List<MemberDTO> convertListDOTS(List<MemberBO> memberBOS) {
+		if (memberBOS == null) {
+		       return null;
+		    }
+			List<MemberDTO> memberDTOS=new ArrayList<MemberDTO>();
+			for (MemberBO MemberBO : memberBOS) {
+				memberDTOS.add(convertMDTO(MemberBO));
+			}
+		return memberDTOS;
+	}
 
 }

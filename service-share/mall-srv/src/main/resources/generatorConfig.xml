@@ -19,8 +19,8 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/eshop_mall?useUnicode=true&amp;characterEncoding=UTF-8"
-                        userId="root" password="123456">
+                        connectionURL="jdbc:mysql://192.168.1.22:3306/eshop_mall?useUnicode=true&amp;characterEncoding=UTF-8"
+                        userId="root" password="1qazXSW@">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -40,13 +40,16 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="online_activity" domainObjectName="OnlineActivityDO">
+        <!--<table tableName="online_activity" domainObjectName="OnlineActivityDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="online_activity_image" domainObjectName="OnlineActivityImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="region" domainObjectName="RegionDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="suggestion" domainObjectName="SuggestionDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

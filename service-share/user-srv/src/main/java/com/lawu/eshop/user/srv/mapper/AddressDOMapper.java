@@ -102,4 +102,10 @@ public interface AddressDOMapper {
      * @mbg.generated 2017-03-22 13:17:08
      */
     int updateByPrimaryKey(AddressDO record);
+
+    /**
+     * 修改默认状态
+     * @param addressDO
+     */
+	void updateStatusById(AddressDO addressDO);
 }

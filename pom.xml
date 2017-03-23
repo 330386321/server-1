@@ -55,28 +55,28 @@
         </dependencies>
     </dependencyManagement>
 
-    <build>
+    <!--<build>
         <plugins>
-            <!--<plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            &lt;!&ndash;<plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                 </configuration>
-            </plugin>-->
+            </plugin>&ndash;&gt;
             <plugin>
-                <!--skip deploy (this is just a test module) -->
+                &lt;!&ndash;skip deploy (this is just a test module) &ndash;&gt;
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 
     <repositories>

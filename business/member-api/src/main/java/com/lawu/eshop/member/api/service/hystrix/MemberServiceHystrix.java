@@ -1,7 +1,11 @@
 package com.lawu.eshop.member.api.service.hystrix;
 
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+
+import java.util.List;
+
 import com.lawu.eshop.user.dto.param.UserParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,4 +41,9 @@ public class MemberServiceHystrix implements MemberService {
     public void updatePwd(@RequestParam("id") Long id, @RequestParam("pwd") String pwd) {
 
     }
+
+	@Override
+	public List<MemberDTO> findMemberListByUserId(@RequestParam("inviterId") Long inviterId) {
+		return null;
+	}
 }

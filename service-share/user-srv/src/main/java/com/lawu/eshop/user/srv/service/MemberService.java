@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -38,4 +40,19 @@ public interface MemberService {
      * @param pwd 密码
      */
     void updatePwd(Long id, String pwd);
+
+    /**
+     * 根据账号查询会员信息
+     * @param account   会员账号
+     * @return
+     */
+    MemberBO getMemberByAccount(String account);
+    
+    /**
+     * @author zhangrc
+     * @date 2017/03/23
+     * 查询我的E友
+     * @return
+     */
+    List<MemberBO> findMemberListByUserId(Long inviterId);
 }

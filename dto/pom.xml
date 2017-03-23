@@ -11,6 +11,14 @@
 
     <artifactId>dto</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>ad-dto</module>
+        <module>mall-dto</module>
+        <module>order-dto</module>
+        <module>product-dto</module>
+        <module>property-dto</module>
+        <module>user-dto</module>
+    </modules>
     <dependencies>
 
         <dependency>

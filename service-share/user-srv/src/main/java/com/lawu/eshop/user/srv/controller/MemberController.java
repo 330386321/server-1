@@ -1,12 +1,12 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -60,6 +60,31 @@ public class MemberController {
     @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
     public void updatePwd(@RequestParam Long id, @RequestParam String pwd) {
         memberService.updatePwd(id, pwd);
+    }
+
+    /**
+     * 根据账号查询会员信息
+     *
+     * @param account 会员账号
+     * @return
+     */
+    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
+    public UserDTO getMemberByAccount(@RequestParam String account) {
+        MemberBO memberBO = memberService.getMemberByAccount(account);
+        return MemberConverter.convertDTO(memberBO);
+    }
+
+    /**
+     * 我的E友
+     *@author zhangrc
+     *@date 2017/03/23
+     *@param account 会员账号
+     *@return
+     */
+    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
+    public List<MemberDTO> findMemberListByUserId(@RequestParam Long inviterId) {
+        List<MemberBO> memberBOS = memberService.findMemberListByUserId(inviterId);
+        return MemberConverter.convertListDOTS(memberBOS);
     }
 
 }
