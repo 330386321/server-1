@@ -27,16 +27,6 @@ public class ProductCategoryController {
     public List<ProductCategoryDTO> findAll() {
         List<ProductCategoryBO> productCategoryBOS = productCategoryService.findAll();
         System.out.println("---------------------->"+productCategoryBOS.size()+"->"+productCategoryBOS.get(0).getName());
-        List<ProductCategoryDTO> productCategoryeDTOS = null;
-        if(productCategoryBOS == null){
-            return null;
-        }else{
-            productCategoryeDTOS = new ArrayList<ProductCategoryDTO>();
-            for(ProductCategoryBO bo : productCategoryBOS){
-                ProductCategoryDTO dto = ProductCategoryConverter.convertDTO(bo);
-                productCategoryeDTOS.add(dto);
-            }
-        }
-       return productCategoryeDTOS;
+        return productCategoryBOS.isEmpty() ? null : ProductCategoryConverter.convertDTOS(productCategoryBOS);
     }
 }

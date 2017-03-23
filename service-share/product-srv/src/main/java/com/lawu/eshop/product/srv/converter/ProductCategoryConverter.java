@@ -4,6 +4,9 @@ import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * 会员信息转换器
@@ -32,6 +35,20 @@ public class ProductCategoryConverter {
         productCategoryBO.setPath(productCategoryeDO.getPath());
         productCategoryBO.setType(Utils.byteToInt(productCategoryeDO.getType()));
         return productCategoryBO;
+    }
+
+    /**
+     * 转换DTO,集合
+     * @param productCategoryBOS
+     * @return
+     */
+    public static List<ProductCategoryDTO> convertDTOS( List<ProductCategoryBO> productCategoryBOS){
+        List<ProductCategoryDTO> productCategoryeDTOS = new ArrayList<ProductCategoryDTO>();
+        for(ProductCategoryBO bo : productCategoryBOS){
+            ProductCategoryDTO dto = ProductCategoryConverter.convertDTO(bo);
+            productCategoryeDTOS.add(dto);
+        }
+        return productCategoryeDTOS;
     }
 
     /**

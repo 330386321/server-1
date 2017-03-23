@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -18,9 +19,9 @@ import java.util.List;
  * @author Leach
  * @date 2017/3/11
  */
-@Api(tags = "common")
+@Api(tags = "productCategory")
 @RestController
-@RequestMapping(value = "/productCategory/")
+@RequestMapping(value = "productCategory/")
 public class ProductCategoryController extends BaseController {
 
     @Autowired
@@ -31,6 +32,7 @@ public class ProductCategoryController extends BaseController {
     public List<ProductCategoryDTO> findAll() {
 
         List<ProductCategoryDTO> dtos = productCategoryService.findAll();
+        System.out.println("api ---->"+dtos.get(0).getName());
         return dtos;
     }
 
