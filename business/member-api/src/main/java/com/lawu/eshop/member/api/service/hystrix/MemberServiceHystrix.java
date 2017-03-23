@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service.hystrix;
 
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +29,8 @@ public class MemberServiceHystrix implements MemberService {
     }
 
     @Override
-    public void updateMemberInfo(@ModelAttribute UserDTO memberParam) {
-
+    public void updateMemberInfo(@ModelAttribute UserParam memberParam) {
+        System.out.println("服务层调用失败");
     }
 
     @Override

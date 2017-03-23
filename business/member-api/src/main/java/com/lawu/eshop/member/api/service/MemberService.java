@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +38,8 @@ public interface MemberService {
      * 会员资料修改
      * @param memberParam 会员信息
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/updateMemberInfo")
-    void updateMemberInfo(@ModelAttribute UserDTO memberParam);
+    @RequestMapping(method = RequestMethod.POST, value = "member/updateMemberInfo")
+    void updateMemberInfo(@ModelAttribute UserParam memberParam);
 
     /**
      * 修改密码
