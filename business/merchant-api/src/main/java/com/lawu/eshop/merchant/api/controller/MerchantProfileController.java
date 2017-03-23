@@ -1,6 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantProfileService;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "merchantprofile")
 @RestController
 @RequestMapping(value = "/")
-public class MerchantProfileController {
+public class MerchantProfileController extends BaseController {
 
     @Autowired
     private MerchantProfileService merchantProfileService;
@@ -33,10 +35,14 @@ public class MerchantProfileController {
     @ApiOperation(value ="查询商家信息", notes = "查询商家主页基本信息",httpMethod = "POST")
     //@Authorization
     @RequestMapping(value ="findMerchantProfileInfo", method = RequestMethod.POST)
-    public MerchantProfileDTO findMerchantProfileInfo(@RequestParam @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
+    public Result<MerchantProfileDTO> findMerchantProfileInfo(@RequestParam @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
         MerchantProfileDTO merchantProfileDTO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
+        if(merchantProfileDTO == null){
+            return  successResponse();
+        }else{
+            return successResponse(merchantProfileDTO);
 
-        return merchantProfileDTO;
+        }
     }
 
 
