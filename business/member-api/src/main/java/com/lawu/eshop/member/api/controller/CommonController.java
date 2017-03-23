@@ -30,14 +30,14 @@ public class CommonController extends BaseController {
     @Autowired
     private TokenManager tokenManager;
 
-    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[200|2000]）", httpMethod = "POST")
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public Result<TokenDTO> login(@RequestParam @ApiParam(required = true, value = "账号") String account,
+    @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[200|2000]（孙林青）", httpMethod = "POST")
+    @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
+    public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,
                                   @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
         UserDTO userDTO = memberService.find(account, pwd);
         if (userDTO == null) {
-            return response(MemberResultCode.MEMBER_WRONG_PWD);
+            return response(ResultCode.MEMBER_WRONG_PWD);
         }
         if (userDTO.getId() < 1) {
             return failResponse(ResultCode.NATIVE_BAD_REQUEST, "会员查询内部接口调用异常");
@@ -50,9 +50,9 @@ public class CommonController extends BaseController {
         return successResponse(tokenDTO);
     }
 
-    @ApiOperation(value = "退出", notes = "退出登录，清除token。[200]）", httpMethod = "GET")
+    @ApiOperation(value = "退出", notes = "退出登录，清除token。[200]（孙林青）", httpMethod = "DELETE")
     @Authorization
-    @RequestMapping(value = "logout")
+    @RequestMapping(value = "logout", method = RequestMethod.DELETE)
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         tokenManager.delRelationshipByToken(token);
         return successResponse();

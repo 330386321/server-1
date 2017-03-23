@@ -19,6 +19,10 @@ public class ResultCode {
     public static final int NOT_ACCEPTABLE = 406;
     public static final int INTERNAL_SERVER_ERROR = 500;
 
+
+    public static final int INVALID_TOKEN = 1000;
+    public static final int MEMBER_WRONG_PWD = 2000;
+
     // 初始化状态码与文字说明
     static {
         ResultCode.messageMap.put(ResultCode.SUCCESS_CODE, "success");
@@ -29,6 +33,23 @@ public class ResultCode {
         ResultCode.messageMap.put(ResultCode.METHOD_NOT_ALLOWED, "方法不允许访问");
         ResultCode.messageMap.put(ResultCode.NOT_ACCEPTABLE, "请求不可达");
         ResultCode.messageMap.put(ResultCode.INTERNAL_SERVER_ERROR, "服务器内部异常");
+
+        // 公共代码 1xxx
+        ResultCode.putMessages(INVALID_TOKEN, "TOKEN无效");
+
+        // 用户模块 2xxx
+        ResultCode.putMessages(MEMBER_WRONG_PWD, "用户名或密码错误");
+
+        // 商品模块 3xxx
+
+        // 订单模块 4xxx
+
+        // 广告模块 5xxx
+
+        // 资产模块 6xxx
+
+        // 商城模块 7xxx
+
     }
 
     public static String get(int code) {
