@@ -43,7 +43,7 @@ public class MemberServiceHystrix implements MemberService {
     }
 
 	@Override
-	public List<MemberDTO> findMemberListByUserId(@RequestParam("inviterId") Long inviterId) {
+	public List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId) {
 		return null;
 	}
 }

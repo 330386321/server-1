@@ -1,9 +1,15 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -41,5 +47,18 @@ public class MerchantController {
     public MerchantDTO getMerchantByAccount(@RequestParam String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
         return MerchantConverter.convertDTO(merchantBO);
+    }
+    
+    /**
+     * 推荐商家
+     *@author zhangrc
+     *@date 2017/03/23
+     *@param inviterId 用户id
+     *@return
+     */
+    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
+    public List<MerchantDTO> findMemberListByUserId(@RequestParam Long inviterId) {
+        List<MerchantBO> merchantBOS = merchantService.getMerchantByInviterId(inviterId);
+        return MerchantConverter.convertListDOTS(merchantBOS);
     }
 }

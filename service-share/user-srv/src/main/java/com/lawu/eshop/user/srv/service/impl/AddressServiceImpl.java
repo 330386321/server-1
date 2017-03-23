@@ -43,6 +43,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public List<AddressBO> listByUserId(Long userId) {
 		AddressDOExample example = new AddressDOExample();
+		example.setOrderByClause("gmtCreate");
 		example.createCriteria().andUserIdEqualTo(userId);
 		List<AddressDO> addressDOS= addressDOMapper.selectByExample(example);
 		return addressDOS.isEmpty() ? null : AddressConverter.convertListBOS(addressDOS);
