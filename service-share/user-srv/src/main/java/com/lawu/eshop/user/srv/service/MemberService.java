@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 
@@ -44,4 +46,12 @@ public interface MemberService {
      * @return
      */
     MemberBO getMemberByAccount(String account);
+    
+    /**
+     * @author zhangrc
+     * @date 2017/03/23
+     * 查询我的E友
+     * @return
+     */
+    List<MemberBO> findMemberListByUserId(Long inviterId);
 }

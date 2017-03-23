@@ -13,10 +13,7 @@ import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
 import com.lawu.eshop.user.srv.converter.AddressConverter;
-import com.lawu.eshop.user.srv.domain.AddressDO;
 import com.lawu.eshop.user.srv.service.AddressService;
-
-import io.swagger.annotations.Authorization;
 
 /**
  * 描述：收货地址管理
@@ -35,9 +32,9 @@ public class AddressController {
 	  * 收货地址列表
 	  * @return
 	  */
-	@RequestMapping(value = "findAll", method = RequestMethod.GET)
-    public List<AddressDTO> findAll(@RequestParam Long userId) {
-		List<AddressBO> addressBOS = addressService.findAll(userId);
+	@RequestMapping(value = "listByUserId", method = RequestMethod.GET)
+    public List<AddressDTO> listByUserId(@RequestParam Long userId) {
+		List<AddressBO> addressBOS = addressService.listByUserId(userId);
         return AddressConverter.convertListDOTS(addressBOS);
     }
 	
@@ -46,9 +43,9 @@ public class AddressController {
 	  * 增加收货地址
 	  * @return
 	  */
-    @RequestMapping(value = "insert", method = RequestMethod.POST)
-    public void insert(@ModelAttribute AddressParam  addressDO ) {
-		addressService.insert(addressDO);
+    @RequestMapping(value = "save", method = RequestMethod.POST)
+    public void save(@ModelAttribute AddressParam  addressDO ) {
+		addressService.save(addressDO);
     }
    
    
@@ -56,9 +53,9 @@ public class AddressController {
 	 * 单个查询地址
 	 * @return
 	 */
-    @RequestMapping(value = "find", method = RequestMethod.GET)
-    public AddressDTO find(@RequestParam Long id) {
-		AddressBO addressBO = addressService.find(id);
+    @RequestMapping(value = "get", method = RequestMethod.GET)
+    public AddressDTO get(@RequestParam Long id) {
+		AddressBO addressBO = addressService.get(id);
       return AddressConverter.convertDTO(addressBO);
     }
    

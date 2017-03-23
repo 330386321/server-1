@@ -381,4 +381,17 @@
       order by ${orderByClause}
     </if>
   </select>
+  
+    <update id="updateStatusById" parameterType="com.lawu.eshop.user.srv.domain.AddressDO" >
+    update address
+    <set >
+      <if test="isDefault != null" >
+        is_default = #{isDefault,jdbcType=BIT},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT} 
+  </update>
 </mapper>

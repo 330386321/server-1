@@ -1,12 +1,16 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
-import com.lawu.eshop.user.dto.UserDTO;
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.UserDTO;
 
 /**
  * @author Leach
@@ -49,5 +53,14 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/updatePwd")
     void updatePwd(@RequestParam("id") Long id, @RequestParam("pwd") String pwd);
+    
+    /**
+     * 查询我的E友
+     * @author zhangrc
+     * @date 2017/03/23
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST,value = "member/findMemberListByUserId")
+    List<MemberDTO> findMemberListByUserId(@RequestParam("inviterId") Long inviterId );
 
 }

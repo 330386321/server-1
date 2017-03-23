@@ -21,7 +21,7 @@ public class AddressServiceImpl implements AddressService {
 	private AddressDOMapper addressDOMapper; 
  
 	@Override
-	public void insert(AddressParam address) {
+	public void save(AddressParam address) {
 		AddressDO addressDO =AddressConverter.convertDO(address);
 		addressDO.setGmtCreate(new Date());
 		addressDOMapper.insert(addressDO);
@@ -35,13 +35,13 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public AddressBO find(Long id) {
+	public AddressBO get(Long id) {
         AddressDO address = addressDOMapper.selectByPrimaryKey(id);
 		return AddressConverter.convertBO(address);
 	}
 
 	@Override
-	public List<AddressBO> findAll(Long userId) {
+	public List<AddressBO> listByUserId(Long userId) {
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andUserIdEqualTo(userId);
 		List<AddressDO> addressDOS= addressDOMapper.selectByExample(example);
@@ -51,6 +51,16 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public void delete(Long id) {
 		addressDOMapper.deleteByPrimaryKey(id);
+	}
+
+	@Override
+	public void updateStatus(Long id, Boolean isDefault,Long userId) {
+		AddressDO addressDO=new AddressDO();
+		addressDO.setId(id);
+		addressDO.setIsDefault(isDefault);
+		addressDO.setUserId(userId);
+		addressDO.setGmtModified(new Date());
+		addressDOMapper.updateStatusById(addressDO);
 	}
 
 }

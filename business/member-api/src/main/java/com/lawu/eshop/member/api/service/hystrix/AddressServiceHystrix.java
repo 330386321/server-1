@@ -21,13 +21,13 @@ public class AddressServiceHystrix implements AddressService {
 
 
 	@Override
-	public List<AddressDTO> findAll(@RequestParam Long userId) {
+	public List<AddressDTO> listByUserId(@RequestParam Long userId) {
 		
 		return null;
 	}
 
 	@Override
-	public AddressDTO find(@RequestParam Long id) {
+	public AddressDTO get(@RequestParam Long id) {
 		AddressDTO addressDTO = new AddressDTO();
 		addressDTO.setId(-1L);
 	    return addressDTO;
@@ -40,7 +40,7 @@ public class AddressServiceHystrix implements AddressService {
 	}
 
 	@Override
-	public void insert(@ModelAttribute  AddressParam address) {
+	public void save(@ModelAttribute  AddressParam address) {
 		AddressDTO addressDTO = new AddressDTO();
 		addressDTO.setId(-1L);
 	}

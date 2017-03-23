@@ -25,8 +25,8 @@ public interface AddressService {
 	 * 添加收货地址
 	 * @param address
 	 */
-	 @RequestMapping(method = RequestMethod.POST, value = "address/insert")
-	 void insert(@ModelAttribute AddressParam address);
+	 @RequestMapping(method = RequestMethod.POST, value = "address/save")
+	 void save(@ModelAttribute AddressParam address);
 	 
 	 /**
 	  * 编辑收货地址
@@ -39,15 +39,15 @@ public interface AddressService {
 	  * 单个查询地址
 	  * @return
 	  */
-	@RequestMapping(method = RequestMethod.GET, value = "address/find")
-	AddressDTO find(@RequestParam("id") Long id);
+	@RequestMapping(method = RequestMethod.GET, value = "address/get")
+	AddressDTO get(@RequestParam("id") Long id);
 	 
 	 /**
 	  * 查询所有地址
 	  * @return
 	  */
-    @RequestMapping(method = RequestMethod.GET, value = "address/findAll")
-    List<AddressDTO> findAll(@RequestParam("userId") Long userId);
+    @RequestMapping(method = RequestMethod.GET, value = "address/listByUserId")
+    List<AddressDTO> listByUserId(@RequestParam("userId") Long userId);
 
     /**
 	 *刪除地址

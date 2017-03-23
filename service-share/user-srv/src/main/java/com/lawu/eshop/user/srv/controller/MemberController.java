@@ -1,11 +1,19 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -71,6 +79,19 @@ public class MemberController {
     public UserDTO getMemberByAccount(@RequestParam String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
         return MemberConverter.convertDTO(memberBO);
+    }
+    
+    /**
+     * 我的E友
+     *@author zhangrc
+     *@date 2017/03/23
+     *@param account 会员账号
+     *@return
+     */
+    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
+    public List<MemberDTO> findMemberListByUserId(@RequestParam Long inviterId) {
+        List<MemberBO> memberBOS = memberService.findMemberListByUserId(inviterId);
+        return MemberConverter.convertListDOTS(memberBOS);
     }
 
 }

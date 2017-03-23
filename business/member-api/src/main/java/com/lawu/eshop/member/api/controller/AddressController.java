@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiParam;
  */
 @Api(tags = "address")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "address/")
 public class AddressController extends BaseController {
 	
 	 @Autowired
@@ -38,9 +38,9 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@RequestMapping(value = "findAll", method = RequestMethod.GET)
-    public List<AddressDTO> findAll(@RequestParam @ApiParam(required = true, value = "用户id") Long userId) {
-		List<AddressDTO> addressDTO = addressService.findAll(userId);
+	@RequestMapping(value = "listByUserId", method = RequestMethod.GET)
+    public List<AddressDTO> listByUserId(@RequestParam @ApiParam(required = true, value = "用户id") Long userId) {
+		List<AddressDTO> addressDTO = addressService.listByUserId(userId);
         return addressDTO;
     }
 	
@@ -49,9 +49,9 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@RequestMapping(value = "find", method = RequestMethod.GET)
-    public AddressDTO find(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
-		AddressDTO addressDTO=addressService.find(id);
+	@RequestMapping(value = "get", method = RequestMethod.GET)
+    public AddressDTO get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
+		AddressDTO addressDTO=addressService.get(id);
 		return addressDTO;
     }
 	
@@ -70,10 +70,10 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@ApiOperation(value = "insert", notes = "insert", httpMethod = "POST")
-	@RequestMapping(value = "insert", method = RequestMethod.POST)
+	@ApiOperation(value = "save", notes = "insert", httpMethod = "POST")
+	@RequestMapping(value = "save", method = RequestMethod.POST)
     public void insert(@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-	addressService.insert(address);
+	addressService.save(address);
     }
 
 	/**

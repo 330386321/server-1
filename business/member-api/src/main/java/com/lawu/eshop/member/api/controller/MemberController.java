@@ -43,4 +43,11 @@ public class MemberController {
                           @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
         memberService.updatePwd(id, pwd);
     }
+    
+    @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "POST")
+    @Authorization
+    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.POST)
+    public void findMemberListByUserId(@RequestParam @ApiParam(required = true, value = "当前用户id") Long userId) {
+        memberService.findMemberListByUserId(userId);
+    }
 }
