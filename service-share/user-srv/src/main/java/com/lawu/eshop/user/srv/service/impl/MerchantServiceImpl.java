@@ -7,6 +7,7 @@ import com.lawu.eshop.user.srv.domain.MerchantDOExample;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/3/22
  */
+@Service
 public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
