@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.merchant.api.service.hystrix.ProductServiceHystrix;
 import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 
@@ -18,7 +17,7 @@ import com.lawu.eshop.product.query.ProductQuery;
  * @author Yangqh
  * @date 2017/3/22
  */
-@FeignClient(value= "product-srv", fallback = ProductServiceHystrix.class)
+@FeignClient(value= "product-srv")
 public interface ProductService {
 
     /**

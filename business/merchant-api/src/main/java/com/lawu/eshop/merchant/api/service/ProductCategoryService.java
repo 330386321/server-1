@@ -1,6 +1,5 @@
 package com.lawu.eshop.merchant.api.service;
 
-import com.lawu.eshop.merchant.api.service.hystrix.ProductCategoryServiceHystrix;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -16,7 +15,7 @@ import java.util.List;
  * @author Yangqh
  * @date 2017/3/22
  */
-@FeignClient(value= "product-srv", fallback = ProductCategoryServiceHystrix.class)
+@FeignClient(value= "product-srv")
 public interface ProductCategoryService {
 
     /**
