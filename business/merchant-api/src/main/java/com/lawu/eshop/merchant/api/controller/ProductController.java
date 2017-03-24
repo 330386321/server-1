@@ -3,7 +3,6 @@ package com.lawu.eshop.merchant.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 /**
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/11
  */
 @Api(tags = "product")
@@ -30,9 +29,9 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "分页查询商品", notes = "分页查询商品", httpMethod = "POST")
-    @RequestMapping(value = "getProductList", method = RequestMethod.POST)
-    public List<ProductDTO> getProductList(@ModelAttribute @ApiParam(required = false, value = "查询条件")@RequestBody ProductQuery query) {
+    @ApiOperation(value = "分页查询商品", notes = "分页查询商品", httpMethod = "GET")
+    @RequestMapping(value = "getProductList", method = RequestMethod.GET)
+    public List<ProductDTO> getProductList(@RequestBody @ApiParam(required = false, value = "查询条件") ProductQuery query) {
 
         List<ProductDTO> dtos = productService.getProductList(query);
         return dtos;

@@ -12,7 +12,7 @@ import com.lawu.eshop.utils.DateUtil;
  *
  * 会员信息转换器
  *
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 public class ProductConverter {

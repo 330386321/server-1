@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 产品服务接口
  *
- * @author Leach
+ * @author yangqh
  * @date 2017/3/22
  */
 public interface ProductCategoryService {

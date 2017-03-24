@@ -3,7 +3,7 @@ package com.lawu.eshop.product.srv.bo;
 /**
  * 产品类别BO
  *
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/22
  */
 public class ProductBO {

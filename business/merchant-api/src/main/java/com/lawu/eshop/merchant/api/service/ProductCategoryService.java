@@ -6,13 +6,14 @@ import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 /**
  * 产品服务接口
  *
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/22
  */
 @FeignClient(value= "product-srv", fallback = ProductCategoryServiceHystrix.class)
@@ -22,7 +23,7 @@ public interface ProductCategoryService {
      * 查询所有商品类型
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "productCategory/findAll")
+    @RequestMapping(method = RequestMethod.GET, value = "productCategory/findAll")
     List<ProductCategoryDTO> findAll();
     
     /**
@@ -30,6 +31,6 @@ public interface ProductCategoryService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "productCategory/getById")
-    ProductCategoryDTO getById(Integer id);
+    @RequestMapping(method = RequestMethod.GET, value = "productCategory/getById")
+    ProductCategoryDTO getById(@RequestParam("id") Integer id);
 }
