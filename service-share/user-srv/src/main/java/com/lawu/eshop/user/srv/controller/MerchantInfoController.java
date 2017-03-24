@@ -45,8 +45,8 @@ public class MerchantInfoController {
      * @param merchantProfileId
      * @return
      */
-    @RequestMapping(value = "findMerchantProfileInfo", method = RequestMethod.GET)
-    public MerchantInfoDTO findMerchantProfileInfo(@RequestParam Long merchantProfileId){
+    @RequestMapping(value = "findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
+    public MerchantInfoDTO findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId){
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
         // 商家基本信息

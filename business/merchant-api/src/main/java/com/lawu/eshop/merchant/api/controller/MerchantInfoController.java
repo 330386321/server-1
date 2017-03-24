@@ -44,8 +44,8 @@ public class MerchantInfoController extends BaseController {
     @ApiOperation(value ="查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）",httpMethod = "GET")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value ="findMerchantProfileInfo", method = RequestMethod.GET)
-    public Result<MerchantInfoDTO> findMerchantProfileInfo(@RequestParam @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
+    @RequestMapping(value ="findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
+    public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
         MerchantInfoDTO merchantProfileDTO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
         if(merchantProfileDTO == null){
             return  successGet();
