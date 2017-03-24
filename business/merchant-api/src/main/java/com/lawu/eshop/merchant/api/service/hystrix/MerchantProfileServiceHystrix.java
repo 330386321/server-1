@@ -5,6 +5,7 @@ import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component
 public class MerchantProfileServiceHystrix implements MerchantProfileService{
     @Override
-    public void updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam) {
+    public void updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam) {
         System.out.println("服务调用失败");
     }
 

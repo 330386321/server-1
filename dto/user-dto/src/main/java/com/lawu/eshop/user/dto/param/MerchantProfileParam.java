@@ -3,15 +3,13 @@ package com.lawu.eshop.user.dto.param;
 import java.util.Date;
 
 /**
+ *
+ *
  * Created by zhangyong on 2017/3/23.
  */
 public class MerchantProfileParam {
 
     private Long id;
-
-    private Integer inviteMemberCount;
-
-    private Integer inviteMerchantCount;
 
     private String websiteUrl;
 
@@ -21,9 +19,6 @@ public class MerchantProfileParam {
 
     private String jdUrl;
 
-    private Date gmtModified;
-
-    private Date gmtCreate;
 
     public Long getId() {
         return id;
@@ -33,13 +28,6 @@ public class MerchantProfileParam {
         this.id = id;
     }
 
-    public Integer getInviteMemberCount() {
-        return inviteMemberCount;
-    }
-
-    public void setInviteMemberCount(Integer inviteMemberCount) {
-        this.inviteMemberCount = inviteMemberCount;
-    }
 
     public String getWebsiteUrl() {
         return websiteUrl;
@@ -73,27 +61,4 @@ public class MerchantProfileParam {
         this.jdUrl = jdUrl;
     }
 
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Integer getInviteMerchantCount() {
-        return inviteMerchantCount;
-    }
-
-    public void setInviteMerchantCount(Integer inviteMerchantCount) {
-        this.inviteMerchantCount = inviteMerchantCount;
-    }
 }

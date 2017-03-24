@@ -1,6 +1,8 @@
 package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.UserParam;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "member")
 @RestController
 @RequestMapping(value = "member/")
-public class MemberController {
+public class MemberController extends BaseController{
 
     @Autowired
     private MemberService memberService;
@@ -24,10 +26,13 @@ public class MemberController {
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息）", httpMethod = "POST")
    // @Authorization
     @RequestMapping(value = "findMemberInfo", method = RequestMethod.POST)
-    public UserDTO findMemberInfo(@RequestParam @ApiParam(name = "memberId", required = true, value = "会员ID") Long memberId) {
+    public Result<UserDTO> findMemberInfo(@RequestParam @ApiParam(name = "memberId", required = true, value = "会员ID") Long memberId) {
         UserDTO userDTO = memberService.findMemberInfo(memberId);
-
-        return userDTO;
+        if (userDTO == null){
+            return successResponse();
+        }else{
+            return successResponse(userDTO);
+        }
     }
 
     @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息）", httpMethod = "POST")

@@ -50,13 +50,9 @@ public class MerchantProfileConverter {
         MerchantProfileDO merchantProfileDO = new MerchantProfileDO();
         merchantProfileDO.setId(merchantProfileParam.getId());
         merchantProfileDO.setJdUrl(merchantProfileParam.getJdUrl());
-        merchantProfileDO.setInviteMemberCount(merchantProfileParam.getInviteMemberCount());
         merchantProfileDO.setTaobaoUrl(merchantProfileParam.getTaobaoUrl());
         merchantProfileDO.setTmallUrl(merchantProfileParam.getTmallUrl());
         merchantProfileDO.setWebsiteUrl(merchantProfileParam.getWebsiteUrl());
-        merchantProfileDO.setInviteMerchantCount(merchantProfileParam.getInviteMerchantCount());
-        merchantProfileDO.setGmtCreate(merchantProfileParam.getGmtCreate());
-        merchantProfileDO.setGmtModified(merchantProfileParam.getGmtModified());
 
         return merchantProfileDO;
 

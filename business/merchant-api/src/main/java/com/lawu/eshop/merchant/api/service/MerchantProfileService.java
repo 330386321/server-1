@@ -5,10 +5,7 @@ import com.lawu.eshop.merchant.api.service.hystrix.MerchantProfileServiceHystrix
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "user-srv")
 public interface MerchantProfileService {
@@ -18,7 +15,7 @@ public interface MerchantProfileService {
      * @param merchantProfileParam
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchantprofile/updateMerchantSizeLink")
-    void updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam);
+    void updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam);
 
     /**
      * 查询商家主页基本信息

@@ -28,8 +28,8 @@ public class MerchantProfileController {
      * 设置网站链接
      * @param merchantProfileParam
      */
-    @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.GET)
-    public void updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam){
+    @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.POST)
+    public void updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam){
         merchantProfileService.updateMerchantSizeLink(merchantProfileParam);
     }
 

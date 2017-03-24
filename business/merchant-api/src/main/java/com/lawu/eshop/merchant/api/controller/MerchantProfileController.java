@@ -27,7 +27,7 @@ public class MerchantProfileController extends BaseController {
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接", httpMethod = "POST")
    // @Authorization
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.POST)
-    public void updateMerchantSizeLink(@ModelAttribute @ApiParam MerchantProfileParam merchantProfileParam){
+    public void updateMerchantSizeLink(@RequestBody  @ApiParam MerchantProfileParam merchantProfileParam){
         merchantProfileService.updateMerchantSizeLink(merchantProfileParam);
     }
 
