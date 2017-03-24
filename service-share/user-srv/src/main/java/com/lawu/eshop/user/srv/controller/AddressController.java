@@ -3,14 +3,15 @@ package com.lawu.eshop.user.srv.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
@@ -25,7 +26,7 @@ import com.lawu.eshop.user.srv.service.AddressService;
  */
 @RestController
 @RequestMapping(value = "address/")
-public class AddressController {
+public class AddressController extends BaseController{
 	
 	@Autowired
 	private AddressService addressService;
@@ -35,9 +36,9 @@ public class AddressController {
 	  * @return
 	  */
 	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
-    public List<AddressDTO> selectByUserId(@RequestParam Long userId) {
+    public Result selectByUserId(@RequestParam Long userId) {
 		List<AddressBO> addressBOS = addressService.selectByUserId(userId);
-        return AddressConverter.convertListDOTS(addressBOS);
+		return  successAccepted(AddressConverter.convertListDOTS(addressBOS));
     }
 	
 	
@@ -46,8 +47,14 @@ public class AddressController {
 	  * @return
 	  */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public void save(@RequestBody  AddressParam  addressDO ) {
-		addressService.save(addressDO);
+    public Result save(@RequestBody  AddressParam  addressDO ) {
+    	Integer i=addressService.save(addressDO);
+    	if(i>0){
+    		return successCreated();
+    	}else{
+    		return successCreated(ResultCode.USER_WRONG_ID);
+    	}
+    	
     }
    
    
@@ -55,10 +62,10 @@ public class AddressController {
 	 * 单个查询地址
 	 * @return
 	 */
-    @RequestMapping(value = "get", method = RequestMethod.POST)
-    public AddressDTO get(@RequestParam Long id) {
+    @RequestMapping(value = "get", method = RequestMethod.GET)
+    public Result<AddressDTO> get(@RequestParam Long id) {
 		AddressBO addressBO = addressService.get(id);
-      return AddressConverter.convertDTO(addressBO);
+        return successGet(AddressConverter.convertDTO(addressBO));
     }
    
    /**
@@ -66,8 +73,13 @@ public class AddressController {
 	 * @return
 	 */
    @RequestMapping(value = "update", method = RequestMethod.POST)
-   public void update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
-		addressService.update(addressParam,id);
+   public Result update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
+	   Integer i=addressService.update(addressParam,id);
+	   if(i>0){
+		    return successCreated();
+	   }else{
+	   		return successCreated(ResultCode.USER_WRONG_ID);
+	   }
    }
    
    /**
@@ -75,8 +87,13 @@ public class AddressController {
 	 * @return
 	 */
    @RequestMapping(value = "remove", method = RequestMethod.GET)
-   public void remove(@RequestParam Long id) {
-		addressService.remove(id);
+   public Result remove(@RequestParam Long id) {
+	   Integer i=addressService.remove(id);
+	   if(i>0){
+   			return successCreated();
+   	   }else{
+   		    return successCreated(ResultCode.USER_WRONG_ID);
+   	   }
    }
    
    /**
@@ -84,8 +101,13 @@ public class AddressController {
 	 * @return
 	 */
   @RequestMapping(value = "updateStatus", method = RequestMethod.GET)
-  public void updateStatus(@RequestParam Long id,@RequestParam Long userId) {
-		addressService.updateStatus(id, userId);
+  public Result updateStatus(@RequestParam Long id,@RequestParam Long userId) {
+	  Integer i=addressService.updateStatus(id, userId);
+	  if(i>0){
+ 			return successCreated();
+ 	   }else{
+ 		    return successCreated(ResultCode.USER_WRONG_ID);
+ 	   }
   }
 	
 	

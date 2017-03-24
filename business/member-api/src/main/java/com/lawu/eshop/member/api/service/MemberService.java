@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 
 /**
  * @author Leach
@@ -67,7 +69,7 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUser")
-    List<MemberDTO> findMemberListByUser(@ModelAttribute MemberParam memberParam );
+    Result<List<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery query );
 
 
     /**

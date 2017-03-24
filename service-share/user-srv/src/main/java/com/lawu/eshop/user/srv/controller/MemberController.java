@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.MemberParam;
@@ -21,6 +23,7 @@ import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.converter.AddressConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 
@@ -104,9 +107,9 @@ public class MemberController extends BaseController{
      *@return
      */
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
-    public List<MemberDTO> findMemberListByUser(@ModelAttribute MemberQuery memberQuery) {
+    public Result<List<MemberDTO>> findMemberListByUser(@ModelAttribute MemberQuery memberQuery) {
         List<MemberBO> memberBOS = memberService.findMemberListByUser(memberQuery);
-        return MemberConverter.convertListDOTS(memberBOS);
+        return (Result<List<MemberDTO>>) MemberConverter.convertListDOTS(memberBOS);
     }
 
     /**

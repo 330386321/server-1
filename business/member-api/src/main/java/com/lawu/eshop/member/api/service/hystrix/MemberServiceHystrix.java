@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 
 /**
  * @author Leach
@@ -57,7 +59,7 @@ public class MemberServiceHystrix implements MemberService {
     }
 
 	@Override
-	public List<MemberDTO> findMemberListByUser(@ModelAttribute MemberParam memberParam) {
+	public Result<List<MemberDTO>> findMemberListByUser(@ModelAttribute MemberQuery query) {
 		return null;
 	}
 }

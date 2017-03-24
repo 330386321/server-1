@@ -1,7 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ProductService;
@@ -35,11 +35,8 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
     public Result selectProduct(@RequestBody @ApiParam ProductQuery query) {
     	
-        List<ProductDTO> dtos = productService.selectProduct(query);
-        if(dtos == null || dtos.isEmpty()){
-        	return successAccepted(new ArrayList<ProductDTO>());
-        }
-        return successAccepted(dtos);
+    	Result<Page<ProductDTO>> page = productService.selectProduct(query);
+        return successGet(page);
     }
     
 

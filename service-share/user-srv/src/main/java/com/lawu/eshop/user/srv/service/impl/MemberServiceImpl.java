@@ -99,7 +99,6 @@ public class MemberServiceImpl implements MemberService {
 	public List<MemberBO> findMemberListByUser(MemberQuery memberQuery) {
 		 MemberDOExample example = new MemberDOExample();
 		 example.createCriteria().andInviterIdEqualTo(memberQuery.getInviterId());
-		 //List<MemberDO> memberDOS=memberDOMapper.selectByExample(example);
 		 RowBounds rowBounds = new RowBounds(memberQuery.getCurrentPage(), memberQuery.getPageSize());
 		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		return memberDOS.isEmpty() ? null : MemberConverter.convertListBOS(memberDOS);
