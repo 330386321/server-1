@@ -1,32 +1,26 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.constants.UserStatusConstant;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.InviteRelationDO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberDOExample;
-import com.lawu.eshop.user.srv.domain.MemberProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.MD5;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -117,6 +111,7 @@ public class MemberServiceImpl implements MemberService {
         MemberDO memberDO = new MemberDO();
         memberDO.setAccount(registerParam.getAccount());
         memberDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
+        memberDO.setStatus(UserStatusConstant.MEMBER_STATUS_VALID);
         memberDO.setGmtCreate(new Date());
         if (registerParam.getInviterId() != null) {
             memberDO.setInviterId(registerParam.getInviterId());

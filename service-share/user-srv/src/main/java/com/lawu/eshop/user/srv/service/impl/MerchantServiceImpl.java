@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.constants.UserStatusConstant;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
@@ -84,6 +85,7 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setAccount(registerParam.getAccount());
         merchantDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
+        merchantDO.setStatus(UserStatusConstant.MEMBER_STATUS_VALID);
         merchantDO.setGmtCreate(new Date());
         if (registerParam.getInviterId() != null) {
             merchantDO.setInviterId(registerParam.getInviterId());

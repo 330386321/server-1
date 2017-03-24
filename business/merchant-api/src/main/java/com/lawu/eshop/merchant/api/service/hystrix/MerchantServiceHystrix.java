@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.service.hystrix;
 
-import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.param.RegisterParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,19 +12,21 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @date 2017/3/22
  */
 @Component
-public class MerchantServiceHystrix   {
+public class MerchantServiceHystrix  implements MerchantService {
 
-    public void updateLoginPwd(@RequestParam("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd) {
 
+    @Override
+    public Result updateLoginPwd(@RequestParam("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd) {
+        return null;
     }
 
-    public InviterDTO getInviterByAccount(@RequestParam("account") String account) {
-        InviterDTO inviterDTO = new InviterDTO();
-        inviterDTO.setInviterId(-1L);
-        return inviterDTO;
+    @Override
+    public Result getInviterByAccount(@RequestParam("account") String account) {
+        return null;
     }
 
-    public void register(@RequestBody RegisterParam registerParam) {
-
+    @Override
+    public Result register(@RequestBody RegisterParam registerParam) {
+        return null;
     }
 }

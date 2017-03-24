@@ -75,7 +75,7 @@ public class MemberController extends BaseController {
     	return memberDTOS;
     }
 
-    @ApiOperation(value = "会员注册", notes = "会员注册", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。(梅述全)", httpMethod = "POST")
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result register(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
         memberService.register(registerParam);

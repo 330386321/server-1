@@ -45,11 +45,4 @@ public class MerchantController extends BaseController {
         return  merchantService.register(registerParam);
     }
 
-    @ApiOperation(value = "商户注册", notes = "商户注册", httpMethod = "POST")
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result getInviterByAccount(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
-        merchantService.register(registerParam);
-        return successResponse();
-    }
-
 }
