@@ -33,7 +33,7 @@ public class MerchantController extends BaseController {
     public Result updatePwd(@RequestParam @ApiParam(required = true, value = "主键") Long id,
                             @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
         merchantService.updatePwd(id, pwd);
-        return successResponse();
+        return successCreated();
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息", httpMethod = "GET")
@@ -41,12 +41,12 @@ public class MerchantController extends BaseController {
     public Result<InviterDTO> getInviterByAccount(@RequestParam @ApiParam(required = true, value = "邀请人账号") String account) {
         InviterDTO inviterDTO = merchantService.getInviterByAccount(account);
         if (inviterDTO == null) {
-            return successResponse();
+            return successGet();
         }
         if (inviterDTO.getInviterId() < 1) {
-            return failResponse(ResultCode.NATIVE_BAD_REQUEST, "查询邀请人信息调用异常");
+            return failServerError( "查询邀请人信息调用异常");
         }
-        return successResponse(inviterDTO);
+        return successGet(inviterDTO);
     }
 
 }
