@@ -1,6 +1,8 @@
 package com.lawu.eshop.user.srv.converter;
 
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
@@ -10,6 +12,7 @@ import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
  * Created by Administrator on 2017/3/24.
  */
 public class MerchantStoreConverter {
+
     /**
      * BO转换
      *
@@ -23,21 +26,61 @@ public class MerchantStoreConverter {
 
         MerchantStoreProfileBO merchantStoreProfileBO = new MerchantStoreProfileBO();
         merchantStoreProfileBO.setMerchantId(merchantStoreProfileDO.getMerchantId());
-        merchantStoreProfileBO.setPrincipalMobile(merchantStoreProfileDO.getPrincipalMobile());
-        merchantStoreProfileBO.setPrincipalName(merchantStoreProfileDO.getPrincipalName());
-
         return merchantStoreProfileBO;
 
     }
 
-    public static MerchantStoreBO coverter(MerchantStoreDO merchantStoreDO){
+    public static MerchantStoreInfoBO coverter(MerchantStoreDO merchantStoreDO){
         if(merchantStoreDO == null){
             return null;
         }
-        MerchantStoreBO merchantStoreBO = new MerchantStoreBO();
-        merchantStoreBO.setName(merchantStoreDO.getName());
-       // merchantStoreBO.setPrincipalName(merchantStoreDO.getP);
-        return merchantStoreBO;
+        MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
+        merchantStoreInfoBO.setName(merchantStoreDO.getName());
+        merchantStoreInfoBO.setPrincipalName(merchantStoreDO.getPrincipalName());
+        merchantStoreInfoBO.setRegionPath(merchantStoreDO.getRegionPath());
+        merchantStoreInfoBO.setAddress(merchantStoreDO.getAddress());
+        merchantStoreInfoBO.setIndustryPath(merchantStoreDO.getIndustryPath());
+        merchantStoreInfoBO.setLongitude(merchantStoreDO.getLongitude());
+        merchantStoreInfoBO.setLatitude(merchantStoreDO.getLatitude());
+        merchantStoreInfoBO.setIntro(merchantStoreDO.getIntro());
+        merchantStoreInfoBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+
+        return merchantStoreInfoBO;
+    }
+
+    /**
+     * BO转DTO
+     * @param merchantStoreInfoBO
+     * @return
+     */
+    public static MerchantStoreDTO coverDTO(MerchantStoreInfoBO merchantStoreInfoBO){
+        if(merchantStoreInfoBO == null){
+            return null;
+        }
+        MerchantStoreDTO merchantStoreDTO = new MerchantStoreDTO();
+        merchantStoreDTO.setName(merchantStoreInfoBO.getName());
+        merchantStoreDTO.setPrincipalName(merchantStoreInfoBO.getPrincipalName());
+        merchantStoreDTO.setRegionPath(merchantStoreInfoBO.getRegionPath());
+        merchantStoreDTO.setAddress(merchantStoreInfoBO.getAddress());
+        merchantStoreDTO.setIndustryPath(merchantStoreInfoBO.getIndustryPath());
+        merchantStoreDTO.setLongitude(merchantStoreInfoBO.getLongitude());
+        merchantStoreDTO.setLatitude(merchantStoreInfoBO.getLatitude());
+        merchantStoreDTO.setIntro(merchantStoreInfoBO.getIntro());
+        merchantStoreDTO.setPrincipalMobile(merchantStoreInfoBO.getPrincipalMobile());
+
+        merchantStoreDTO.setCompanyAddress(merchantStoreInfoBO.getCompanyAddress());
+        merchantStoreDTO.setCompanyName(merchantStoreInfoBO.getCompanyName());
+        merchantStoreDTO.setRegNumber(merchantStoreInfoBO.getRegNumber());
+        merchantStoreDTO.setLicenseIndate(merchantStoreInfoBO.getLicenseIndate());
+        merchantStoreDTO.setManageType(merchantStoreInfoBO.getManageType());
+        merchantStoreDTO.setCertifType(merchantStoreInfoBO.getCertifType());
+        merchantStoreDTO.setOperatorCardId(merchantStoreInfoBO.getOperatorCardId());
+        merchantStoreDTO.setOperatorName(merchantStoreInfoBO.getOperatorName());
+
+        merchantStoreDTO.setType(merchantStoreInfoBO.getType());
+        merchantStoreDTO.setPath(merchantStoreInfoBO.getPath());
+
+        return merchantStoreDTO;
     }
 
 }

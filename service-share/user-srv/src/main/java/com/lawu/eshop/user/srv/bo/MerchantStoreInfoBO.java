@@ -107,6 +107,32 @@ public class MerchantStoreInfoBO {
      */
     private Byte manageType;
 
+    /**
+     * 证件类型
+     */
+    private Byte certifType;
+
+    /**
+     *
+     * 个人经营者身份证号码
+     */
+    private String operatorCardId;
+
+    /**
+     * 个人经营者姓名
+     */
+    private String operatorName;
+
+    /**
+     * 图片类型
+     */
+    private Byte type;
+
+    /**
+     * 图片路径
+     */
+    private String path;
+
     public String getName() {
         return name;
     }
@@ -217,5 +243,45 @@ public class MerchantStoreInfoBO {
 
     public void setManageType(Byte manageType) {
         this.manageType = manageType;
+    }
+
+    public Byte getCertifType() {
+        return certifType;
+    }
+
+    public void setCertifType(Byte certifType) {
+        this.certifType = certifType;
+    }
+
+    public String getOperatorCardId() {
+        return operatorCardId;
+    }
+
+    public void setOperatorCardId(String operatorCardId) {
+        this.operatorCardId = operatorCardId;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
+    }
+
+    public void setOperatorName(String operatorName) {
+        this.operatorName = operatorName;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

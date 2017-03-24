@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
@@ -43,7 +44,24 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(id);
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
 
+        MerchantStoreInfoBO merchantStoreInfoBO = MerchantStoreConverter.coverter(merchantStoreDO);
+        if(!merchantStoreProfileDOS.isEmpty()){
+            merchantStoreInfoBO.setCompanyAddress(merchantStoreProfileDOS.get(0).getCompanyAddress());
+            merchantStoreInfoBO.setCompanyName(merchantStoreProfileDOS.get(0).getCompanyName());
+            merchantStoreInfoBO.setRegNumber(merchantStoreProfileDOS.get(0).getRegNumber());
+            merchantStoreInfoBO.setLicenseIndate(merchantStoreProfileDOS.get(0).getLicenseIndate());
+            merchantStoreInfoBO.setManageType(merchantStoreProfileDOS.get(0).getManageType());
+            merchantStoreInfoBO.setCertifType(merchantStoreProfileDOS.get(0).getCertifType());
+            merchantStoreInfoBO.setOperatorCardId(merchantStoreProfileDOS.get(0).getOperatorCardId());
+            merchantStoreInfoBO.setOperatorName(merchantStoreProfileDOS.get(0).getOperatorName());
+        }
 
-        return null;
+        if(!merchantStoreImageDOS.isEmpty()){
+            merchantStoreInfoBO.setType(merchantStoreImageDOS.get(0).getType());
+            merchantStoreInfoBO.setPath(merchantStoreImageDOS.get(0).getPath());
+
+        }
+
+        return merchantStoreInfoBO;
     }
 }

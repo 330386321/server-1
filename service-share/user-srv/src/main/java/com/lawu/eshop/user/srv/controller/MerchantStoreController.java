@@ -1,7 +1,10 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,18 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "merchantStore/")
-public class MerchantStoreController {
+public class MerchantStoreController extends BaseController{
 
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
-    @RequestMapping(value = "/merchantStore/{id}", method = RequestMethod.GET)
-    public MerchantStoreDTO selectMerchantStore(@PathVariable("id") Long id){
+    @RequestMapping(value = "/findMerchantStoreInfo/{id}", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") Long id){
 
         MerchantStoreInfoBO merchantStoreBO =merchantStoreInfoService.selectMerchantStore(id);
-        MerchantStoreDTO merchantStoreDTO = new MerchantStoreDTO();
+        if(merchantStoreBO == null){
+            successGet();
+        }
+        MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.coverDTO(merchantStoreBO);
 
-        return merchantStoreDTO;
+        return successGet(merchantStoreDTO);
 
 
     }
