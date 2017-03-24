@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -14,7 +15,7 @@ public interface MerchantInfoService {
      * @param merchantProfileParam
      */
     @RequestMapping(method = RequestMethod.PUT, value = "merchantInfo/updateMerchantSizeLink")
-    int updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam("id") Long id);
+    Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam("id") Long id);
 
     /**
      * 查询商家主页基本信息
@@ -22,5 +23,5 @@ public interface MerchantInfoService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value ="merchantInfo/findMerchantProfileInfo/{merchantProfileId}")
-    MerchantInfoDTO findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId);
+    Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId);
 }

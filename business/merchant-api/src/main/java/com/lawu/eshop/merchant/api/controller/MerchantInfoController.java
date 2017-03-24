@@ -31,13 +31,9 @@ public class MerchantInfoController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
     public Result updateMerchantSizeLink(@RequestBody  @ApiParam MerchantProfileParam merchantProfileParam,
-                                       @RequestParam @ApiParam(required = true, value = "主键") Long id){
-      int result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
-      if(result == 1){
-          return successCreated();
-      }else {
-          return successCreated(ResultCode.USER_WRONG_ID);
-      }
+                                       @RequestParam @ApiParam(required = true, value = "商家ID") Long id){
+        Result result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
+        return result;
     }
 
 
@@ -46,13 +42,8 @@ public class MerchantInfoController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value ="findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
     public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
-        MerchantInfoDTO merchantProfileDTO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
-        if(merchantProfileDTO == null){
-            return  successGet();
-        }else{
-            return successGet(merchantProfileDTO);
-
-        }
+        Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
+        return result;
     }
 
 

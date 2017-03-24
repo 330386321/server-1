@@ -1,5 +1,8 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
@@ -18,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "merchantInfo/")
-public class MerchantInfoController {
+public class MerchantInfoController extends BaseController{
 
     @Autowired
     private MerchantProfileService merchantProfileService;
@@ -34,10 +37,14 @@ public class MerchantInfoController {
      * @param merchantProfileParam
      */
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
-    public int updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id){
+    public Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id){
        int result =  merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
+        if(result ==1){
+           return successCreated();
+        }else{
+            return successCreated(ResultCode.USER_WRONG_ID);
 
-       return result;
+        }
     }
 
     /**
@@ -46,20 +53,25 @@ public class MerchantInfoController {
      * @return
      */
     @RequestMapping(value = "findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
-    public MerchantInfoDTO findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId){
+    public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId){
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
         // 商家基本信息
         MerchantInfoBO merchantInfoBO = merchantService.findMerchantInfo(merchantProfileId);
 
         MerchantInfoDTO merchantInfoDTO = MerchantInfoConverter.coverConverDTO(merchantProfileBO,merchantInfoBO);
-        //门店信息
-        MerchantStoreProfileBO merchantStoreBO = merchantStoreProfileService.findMerchantStoreInfo(merchantProfileId);
-        if(merchantStoreBO != null){
-            merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
-            merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
+        if(merchantInfoDTO == null){
+            return successGet();
+        }else{
+            //门店信息
+            MerchantStoreProfileBO merchantStoreBO = merchantStoreProfileService.findMerchantStoreInfo(merchantProfileId);
+            if(merchantStoreBO != null){
+                merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
+                merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
+
+            }
+            return successGet(merchantInfoDTO);
         }
 
-        return merchantInfoDTO;
     }
 }

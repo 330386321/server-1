@@ -2,6 +2,9 @@ package com.lawu.eshop.user.srv.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +30,7 @@ import com.lawu.eshop.user.srv.service.MemberService;
  */
 @RestController
 @RequestMapping(value = "member/")
-public class MemberController {
+public class MemberController extends BaseController{
 
     @Autowired
     private MemberService memberService;
@@ -45,9 +48,13 @@ public class MemberController {
      * @return
      */
     @RequestMapping(value = "findMemberInfo/{memberId}", method = RequestMethod.GET)
-    public UserDTO findMemberInfo(@PathVariable("memberId") Long memberId) {
+    public Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId) {
         MemberBO memberBO = memberService.findMemberInfoById(memberId);
-        return MemberConverter.convertDTO(memberBO);
+        if(memberBO == null){
+            return successGet();
+        }else{
+            return successGet(MemberConverter.convertDTO(memberBO));
+        }
     }
 
     /**
@@ -57,11 +64,13 @@ public class MemberController {
      * @return
      */
     @RequestMapping(value = "updateMemberInfo/{id}", method = RequestMethod.PUT)
-    public int updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id") Long id) {
+    public Result updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id") Long id) {
           int result =  memberService.updateMemberInfo(memberParam,id);
-
-          return result;
-
+          if(result == 1){
+            return  successCreated();
+          }else{
+              return successCreated(ResultCode.USER_WRONG_ID);
+          }
     }
 
     /**

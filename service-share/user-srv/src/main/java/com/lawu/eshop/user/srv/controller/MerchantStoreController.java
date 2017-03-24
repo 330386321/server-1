@@ -23,7 +23,7 @@ public class MerchantStoreController extends BaseController{
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
-    @RequestMapping(value = "/findMerchantStoreInfo/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "findMerchantStoreInfo/{id}", method = RequestMethod.GET)
     public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") Long id){
 
         MerchantStoreInfoBO merchantStoreBO =merchantStoreInfoService.selectMerchantStore(id);

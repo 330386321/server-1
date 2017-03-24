@@ -32,7 +32,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     public MerchantStoreInfoBO selectMerchantStore(Long id) {
 
         //商家门店基本信息
-        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
+        merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(id);
+        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+        if(merchantStoreDOS.isEmpty()){
+            return null;
+        }
 
         //商家店铺扩展信息
         MerchantStoreProfileDOExample example = new MerchantStoreProfileDOExample();
@@ -44,7 +49,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(id);
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
 
-        MerchantStoreInfoBO merchantStoreInfoBO = MerchantStoreConverter.coverter(merchantStoreDO);
+        MerchantStoreInfoBO merchantStoreInfoBO = MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
         if(!merchantStoreProfileDOS.isEmpty()){
             merchantStoreInfoBO.setCompanyAddress(merchantStoreProfileDOS.get(0).getCompanyAddress());
             merchantStoreInfoBO.setCompanyName(merchantStoreProfileDOS.get(0).getCompanyName());

@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service.hystrix;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.Result;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,15 +31,17 @@ public class MemberServiceHystrix implements MemberService {
     }
 
     @Override
-    public UserDTO findMemberInfo(@RequestParam("memberId") Long memberId) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(-1L);
+    public Result<UserDTO> findMemberInfo(@RequestParam("memberId") Long memberId) {
+        Result<UserDTO> userDTO = new Result<UserDTO>();
+        userDTO.setMsg("异常处理");
         return userDTO;
     }
 
     @Override
-    public int updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id")  Long id) {
-       return -1;
+    public Result updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id")  Long id) {
+        Result r = new Result();
+        r.setMsg("异常处理");
+        return r;
     }
 
     @Override

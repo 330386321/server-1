@@ -39,25 +39,20 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberInfo/{memberId}", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo(@PathVariable("memberId") @ApiParam(name = "memberId", required = true, value = "会员ID") Long memberId) {
-        UserDTO userDTO = memberService.findMemberInfo(memberId);
-        if (userDTO == null){
-            return successGet();
-        }else{
-            return successGet(userDTO);
-        }
+        Result<UserDTO> result = memberService.findMemberInfo(memberId);
+
+            return result;
+
     }
 
     @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息（章勇）", httpMethod = "PUT")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo/{id}", method = RequestMethod.PUT)
-    public Result updateMemberInfo(@RequestBody @ApiParam(required = true, value = "会员信息") UserParam memberParam, @PathVariable("id") Long id){
-        int row = memberService.updateMemberInfo(memberParam,id);
-        if(row == 1){
-            return successCreated();
-        }else {
-            return successCreated(ResultCode.USER_WRONG_ID);
-        }
+    public Result updateMemberInfo(@RequestBody @ApiParam(required = true, value = "会员信息") UserParam memberParam, @PathVariable("id") @ApiParam(required = true, value = "会员ID") Long id){
+        Result r = memberService.updateMemberInfo(memberParam,id);
+
+        return r;
     }
 
     @ApiOperation(value = "修改密码", notes = "会员修改密码", httpMethod = "POST")

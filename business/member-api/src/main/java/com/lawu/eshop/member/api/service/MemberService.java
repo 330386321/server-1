@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,14 +41,14 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/findMemberInfo/{memberId}")
-    UserDTO findMemberInfo(@PathVariable("memberId") Long memberId);
+    Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId);
 
     /**
      * 会员资料修改
      * @param memberParam 会员信息
      */
     @RequestMapping(method = RequestMethod.PUT, value = "member/updateMemberInfo/{id}")
-    int updateMemberInfo(@RequestBody UserParam memberParam,@PathVariable("id")  Long id);
+    Result updateMemberInfo(@RequestBody UserParam memberParam,@PathVariable("id")  Long id);
 
     /**
      * 修改密码

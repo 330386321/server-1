@@ -24,6 +24,6 @@ public interface MerchantStoreService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/findMerchantStoreInfo/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/findMerchantStoreInfo/{id}")
     Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") Long id);
 }

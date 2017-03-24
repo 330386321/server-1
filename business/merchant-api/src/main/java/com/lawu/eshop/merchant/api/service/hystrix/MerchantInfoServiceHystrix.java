@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.service.hystrix;
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
@@ -14,15 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component
 public class MerchantInfoServiceHystrix implements MerchantInfoService {
     @Override
-    public int updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id) {
-        return -1;
+    public Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id) {
+        Result result = new Result();
+        result.setMsg("异常");
+        return result;
     }
 
     @Override
-    public MerchantInfoDTO findMerchantProfileInfo(@RequestParam("merchantProfileId") Long merchantProfileId) {
-        System.out.println("服务调用失败");
-        MerchantInfoDTO merchantProfileDTO = new MerchantInfoDTO();
-        merchantProfileDTO.setAccount("-1");
-        return  merchantProfileDTO;
+    public Result<MerchantInfoDTO> findMerchantProfileInfo(@RequestParam("merchantProfileId") Long merchantProfileId) {
+        Result<MerchantInfoDTO> result = new Result<MerchantInfoDTO>();
+        result.setMsg("异常");
+        return  result;
     }
 }
