@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 

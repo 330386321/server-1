@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantDOExample;
@@ -40,10 +41,10 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public MerchantBO findMerchantInfo(Long merchantProfileId) {
+    public MerchantInfoBO findMerchantInfo(Long merchantProfileId) {
         MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantProfileId);
 
-        return MerchantConverter.convertBO(merchantDO);
+        return MerchantConverter.convertInfoBO(merchantDO);
     }
     
 	@Override

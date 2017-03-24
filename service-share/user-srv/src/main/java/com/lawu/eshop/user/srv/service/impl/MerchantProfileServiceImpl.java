@@ -1,9 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
-import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
+import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
@@ -23,16 +22,15 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
 
     @Override
     public int updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd, @RequestParam Long id) {
-        MerchantProfileDO merchantProfileDO = MerchantProfileConverter.paramConvertDO(merchantProfileParamd);
+        MerchantProfileDO merchantProfileDO = MerchantInfoConverter.paramConvertDO(merchantProfileParamd);
         merchantProfileDO.setId(id);
         int result = merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
-        System.out.println("result = " + result );
         return result;
     }
 
     @Override
     public MerchantProfileBO findMerchantProfileInfo(Long merchantProfileId) {
         MerchantProfileDO  merchantProfileDO = merchantProfileDOMapper.selectByPrimaryKey(merchantProfileId);
-        return MerchantProfileConverter.convertBO(merchantProfileDO);
+        return MerchantInfoConverter.convertBO(merchantProfileDO);
     }
 }

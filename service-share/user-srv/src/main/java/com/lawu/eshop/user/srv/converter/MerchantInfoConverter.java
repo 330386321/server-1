@@ -1,7 +1,8 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.MerchantProfileDTO;
+import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 
@@ -9,7 +10,7 @@ import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
  * 商家扩展信息转换器
  * Created by zhangyong on 2017/3/23.
  */
-public class MerchantProfileConverter {
+public class MerchantInfoConverter {
 
     /**
      * BO转换
@@ -24,14 +25,8 @@ public class MerchantProfileConverter {
 
         MerchantProfileBO merchantProfileBO = new MerchantProfileBO();
         merchantProfileBO.setId(merchantProfileDO.getId());
-        merchantProfileBO.setJdUrl(merchantProfileDO.getJdUrl());
         merchantProfileBO.setInviteMemberCount(merchantProfileDO.getInviteMemberCount());
-        merchantProfileBO.setTaobaoUrl(merchantProfileDO.getTaobaoUrl());
-        merchantProfileBO.setTmallUrl(merchantProfileDO.getTmallUrl());
-        merchantProfileBO.setWebsiteUrl(merchantProfileDO.getWebsiteUrl());
         merchantProfileBO.setInviteMerchantCount(merchantProfileDO.getInviteMerchantCount());
-        merchantProfileBO.setGmtCreate(merchantProfileDO.getGmtCreate());
-        merchantProfileBO.setGmtModified(merchantProfileDO.getGmtModified());
 
         return merchantProfileBO;
 
@@ -62,20 +57,16 @@ public class MerchantProfileConverter {
      * @param merchantProfileBO
      * @return
      */
-    public static MerchantProfileDTO coverConverDTO(MerchantProfileBO merchantProfileBO){
+    public static MerchantInfoDTO coverConverDTO(MerchantProfileBO merchantProfileBO, MerchantInfoBO merchantInfoBO){
         if(merchantProfileBO == null){
             return null;
         }
 
-        MerchantProfileDTO merchantProfileDTO = new MerchantProfileDTO();
-        merchantProfileDTO.setId(merchantProfileBO.getId());
-        merchantProfileDTO.setJdUrl(merchantProfileBO.getJdUrl());
+        MerchantInfoDTO merchantProfileDTO = new MerchantInfoDTO();
         merchantProfileDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());
-        merchantProfileDTO.setTaobaoUrl(merchantProfileBO.getTaobaoUrl());
-        merchantProfileDTO.setTmallUrl(merchantProfileBO.getTmallUrl());
-        merchantProfileDTO.setWebsiteUrl(merchantProfileBO.getWebsiteUrl());
         merchantProfileDTO.setInviteMerchantCount(merchantProfileBO.getInviteMerchantCount());
-
+        merchantProfileDTO.setAccount(merchantInfoBO.getAccount());
+        merchantProfileDTO.setHeadimg(merchantInfoBO.getHeadimg());
         return merchantProfileDTO;
 
     }

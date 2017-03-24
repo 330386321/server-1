@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 
 /**
  * 商户服务接口
@@ -25,7 +26,7 @@ public interface MerchantService {
      * @param merchantProfileId
      * @return
      */
-    MerchantBO findMerchantInfo(Long merchantProfileId);
+    MerchantInfoBO findMerchantInfo(Long merchantProfileId);
 
     /**
      * 根据账号查询商户信息

@@ -7,6 +7,7 @@ import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 
@@ -101,4 +102,22 @@ public class MerchantConverter {
 		}
 		return memberDTOS;
 	}
+
+    /**
+     * 商家主页信息BO转换
+     * @param merchantDO
+     * @return
+     */
+    public static MerchantInfoBO convertInfoBO(MerchantDO merchantDO) {
+        if (merchantDO == null) {
+            return null;
+        }
+
+        MerchantInfoBO merchantBO = new MerchantInfoBO();
+        merchantBO.setAccount(merchantDO.getAccount());
+        merchantBO.setHeadimg(merchantDO.getHeadimg());
+
+        return merchantBO;
+    }
+
 }

@@ -6,34 +6,18 @@ import java.util.Date;
  * 商家扩展信息表
  * Created by zhangyong on 2017/3/23.
  */
-public class MerchantProfileDTO {
+public class MerchantInfoDTO {
 
-    private Long id;
 
     private Integer inviteMemberCount;
 
     private Integer inviteMerchantCount;
 
-    private String websiteUrl;
-
-    private String taobaoUrl;
-
-    private String tmallUrl;
-
-    private String jdUrl;
-
     private String headimg;
 
     private String account;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private String principalName;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -41,38 +25,6 @@ public class MerchantProfileDTO {
 
     public void setInviteMemberCount(Integer inviteMemberCount) {
         this.inviteMemberCount = inviteMemberCount;
-    }
-
-    public String getWebsiteUrl() {
-        return websiteUrl;
-    }
-
-    public void setWebsiteUrl(String websiteUrl) {
-        this.websiteUrl = websiteUrl;
-    }
-
-    public String getTaobaoUrl() {
-        return taobaoUrl;
-    }
-
-    public void setTaobaoUrl(String taobaoUrl) {
-        this.taobaoUrl = taobaoUrl;
-    }
-
-    public String getTmallUrl() {
-        return tmallUrl;
-    }
-
-    public void setTmallUrl(String tmallUrl) {
-        this.tmallUrl = tmallUrl;
-    }
-
-    public String getJdUrl() {
-        return jdUrl;
-    }
-
-    public void setJdUrl(String jdUrl) {
-        this.jdUrl = jdUrl;
     }
 
     public Integer getInviteMerchantCount() {
@@ -97,5 +49,13 @@ public class MerchantProfileDTO {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
     }
 }
