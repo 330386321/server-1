@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 
 /**
@@ -118,7 +116,6 @@ public class MemberConverter {
             return null;
         }
         MemberDO memberDO = new MemberDO();
-        memberDO.setId(userParam.getId());
         memberDO.setNickname(userParam.getNickname());
         memberDO.setRegionPath(userParam.getRegionPath());
         memberDO.setSex(userParam.getSex());

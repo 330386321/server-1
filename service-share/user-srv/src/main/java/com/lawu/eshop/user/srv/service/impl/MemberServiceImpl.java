@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.domain.*;
@@ -62,11 +63,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateMemberInfo(com.lawu.eshop.user.dto.param.UserParam memberParam) {
+    public int updateMemberInfo(UserParam memberParam, Long id) {
 
         MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
-        memberDOMapper.updateByPrimaryKeySelective(memberDO);
-        System.out.println("member 资料修改成功");
+        memberDO.setId(id);
+        int result = memberDOMapper.updateByPrimaryKeySelective(memberDO);
+        return result;
 
     }
 

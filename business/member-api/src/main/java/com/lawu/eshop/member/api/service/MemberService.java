@@ -4,12 +4,9 @@ import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.UserParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -35,15 +32,15 @@ public interface MemberService {
      * @param memberId 会员id
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/findMemberInfo")
-    UserDTO findMemberInfo(@RequestParam("memberId") Long memberId);
+    @RequestMapping(method = RequestMethod.GET, value = "member/findMemberInfo/{memberId}")
+    UserDTO findMemberInfo(@PathVariable("memberId") Long memberId);
 
     /**
      * 会员资料修改
      * @param memberParam 会员信息
      */
-    @RequestMapping(method = RequestMethod.POST, value = "member/updateMemberInfo")
-    void updateMemberInfo(@ModelAttribute UserParam memberParam);
+    @RequestMapping(method = RequestMethod.PUT, value = "member/updateMemberInfo/{id}")
+    int updateMemberInfo(@RequestBody UserParam memberParam,@PathVariable("id")  Long id);
 
     /**
      * 修改密码

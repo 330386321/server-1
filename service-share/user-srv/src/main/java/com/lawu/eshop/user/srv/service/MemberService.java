@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service;
 
 
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface MemberService {
      */
     MemberBO findMemberInfoById(Long id);
 
-    void updateMemberInfo(com.lawu.eshop.user.dto.param.UserParam memberParam);
+    int updateMemberInfo(UserParam memberParam, Long id);
 
     /**
      * 修改密码

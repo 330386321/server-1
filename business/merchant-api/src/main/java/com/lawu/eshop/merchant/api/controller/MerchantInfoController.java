@@ -36,7 +36,7 @@ public class MerchantInfoController extends BaseController {
       if(result == 1){
           return successCreated();
       }else {
-          return successCreated(ResultCode.MERCHANT_WRONG_ID);
+          return successCreated(ResultCode.USER_WRONG_ID);
       }
     }
 

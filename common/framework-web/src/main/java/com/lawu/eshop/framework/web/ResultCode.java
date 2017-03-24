@@ -15,7 +15,7 @@ public class ResultCode {
 
     public static final int INVALID_TOKEN = 1000;
     public static final int MEMBER_WRONG_PWD = 2000;
-    public static final int MERCHANT_WRONG_ID = 2100;
+    public static final int USER_WRONG_ID = 2100;
 
     // 初始化状态码与文字说明
     static {
@@ -25,7 +25,7 @@ public class ResultCode {
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
-        ResultCode.messageMap.put(MERCHANT_WRONG_ID, "ID不存在");
+        ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");
 
         // 商品模块 3xxx
 

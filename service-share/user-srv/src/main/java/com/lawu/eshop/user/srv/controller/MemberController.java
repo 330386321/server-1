@@ -2,7 +2,7 @@ package com.lawu.eshop.user.srv.controller;
 
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
@@ -35,8 +35,8 @@ public class MemberController {
      * @param memberId 会员id
      * @return
      */
-    @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
-    public UserDTO findMemberInfo(@RequestParam Long memberId) {
+    @RequestMapping(value = "findMemberInfo/{memberId}", method = RequestMethod.GET)
+    public UserDTO findMemberInfo(@PathVariable("memberId") Long memberId) {
         MemberBO memberBO = memberService.findMemberInfoById(memberId);
         return MemberConverter.convertDTO(memberBO);
     }
@@ -47,11 +47,11 @@ public class MemberController {
      * @param memberParam 会员信息
      * @return
      */
-    @RequestMapping(value = "updateMemberInfo", method = RequestMethod.GET)
-    public void updateMemberInfo(@ModelAttribute UserParam memberParam) {
-        if (memberParam != null) {
-            memberService.updateMemberInfo(memberParam);
-        }
+    @RequestMapping(value = "updateMemberInfo/{id}", method = RequestMethod.PUT)
+    public int updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id") Long id) {
+          int result =  memberService.updateMemberInfo(memberParam,id);
+
+          return result;
 
     }
 

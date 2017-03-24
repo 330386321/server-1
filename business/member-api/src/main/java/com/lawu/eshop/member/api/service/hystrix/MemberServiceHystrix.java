@@ -4,9 +4,11 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.UserParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -33,8 +35,8 @@ public class MemberServiceHystrix implements MemberService {
     }
 
     @Override
-    public void updateMemberInfo(@ModelAttribute UserParam memberParam) {
-        System.out.println("服务层调用失败");
+    public int updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id")  Long id) {
+       return -1;
     }
 
     @Override
