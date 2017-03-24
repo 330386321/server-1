@@ -1,8 +1,9 @@
 package com.lawu.eshop.user.srv.service;
 
-import java.util.List;
-
+import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+
+import java.util.List;
 
 /**
  * 商户服务接口
@@ -33,11 +34,17 @@ public interface MerchantService {
      * @return
      */
     MerchantBO getMerchantByAccount(String account);
-    
+
     /**
      * 我的推荐商家
      * @param inviterId
      * @return
      */
     List<MerchantBO>  getMerchantByInviterId(Long inviterId);
+
+    /**
+     * 商户注册
+     * @param registerParam 商户注册信息
+     */
+    void register(RegisterParam registerParam);
 }

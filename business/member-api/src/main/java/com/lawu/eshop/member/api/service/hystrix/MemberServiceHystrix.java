@@ -1,15 +1,15 @@
 package com.lawu.eshop.member.api.service.hystrix;
 
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-
-import java.util.List;
-
 import com.lawu.eshop.user.dto.param.UserParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author Leach
@@ -40,6 +40,13 @@ public class MemberServiceHystrix implements MemberService {
     @Override
     public void updatePwd(@RequestParam("id") Long id, @RequestParam("pwd") String pwd) {
 
+    }
+
+    @Override
+    public InviterDTO getInviterByAccount(@RequestParam("account") String account) {
+        InviterDTO inviterDTO = new InviterDTO();
+        inviterDTO.setInviterId(-1L);
+        return inviterDTO;
     }
 
 	@Override

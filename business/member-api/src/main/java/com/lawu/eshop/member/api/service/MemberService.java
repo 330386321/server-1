@@ -1,17 +1,17 @@
 package com.lawu.eshop.member.api.service;
 
-import java.util.List;
-
+import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
+import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import java.util.List;
 
 /**
  * @author Leach
@@ -63,5 +63,14 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUserId")
     List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId );
+
+
+    /**
+     * 根据邀请人账号查询邀请人信息
+     *
+     * @param account 邀请人账号
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviterByAccount")
+    InviterDTO getInviterByAccount(@RequestParam("account") String account);
 
 }

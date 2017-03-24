@@ -1,10 +1,10 @@
 package com.lawu.eshop.user.srv.service;
 
-import java.util.List;
 
-import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+
+import java.util.List;
 
 /**
  * 会员服务接口
@@ -31,7 +31,7 @@ public interface MemberService {
      */
     MemberBO findMemberInfoById(Long id);
 
-    void updateMemberInfo(UserParam memberParam);
+    void updateMemberInfo(com.lawu.eshop.user.dto.param.UserParam memberParam);
 
     /**
      * 修改密码
@@ -47,7 +47,7 @@ public interface MemberService {
      * @return
      */
     MemberBO getMemberByAccount(String account);
-    
+
     /**
      * @author zhangrc
      * @date 2017/03/23
@@ -55,4 +55,10 @@ public interface MemberService {
      * @return
      */
     List<MemberBO> findMemberListByUser(Long inviterId);
+
+    /**
+     * 会员注册
+     * @param registerParam 会员注册信息
+     */
+    void register(RegisterParam registerParam);
 }
