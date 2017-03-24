@@ -1,7 +1,5 @@
 package com.lawu.eshop.merchant.api.service;
 
-import java.util.List;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +10,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.hystrix.ProductServiceHystrix;
 import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
-import com.lawu.eshop.product.srv.bo.ProductBO;
 
 /**
  * 产品服务接口
@@ -28,6 +25,6 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/selectProduct")
-    Result<Page<ProductBO>> selectProduct(@RequestBody ProductQuery query);
+    Result<Page<ProductDTO>> selectProduct(@RequestBody ProductQuery query);
     
 }

@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.srv.service;
 
-import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.query.ProductQuery;

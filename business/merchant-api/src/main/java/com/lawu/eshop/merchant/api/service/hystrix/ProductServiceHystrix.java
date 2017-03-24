@@ -1,9 +1,9 @@
 package com.lawu.eshop.merchant.api.service.hystrix;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
@@ -16,7 +16,7 @@ import com.lawu.eshop.product.query.ProductQuery;
 public class ProductServiceHystrix implements ProductService {
 
 	@Override
-	public List<ProductDTO> selectProduct(ProductQuery query) {
+	public Result<Page<ProductDTO>> selectProduct(ProductQuery query) {
 		
 		return null;
 	}

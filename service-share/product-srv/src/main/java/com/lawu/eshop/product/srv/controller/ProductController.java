@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 
 /**
@@ -33,9 +35,16 @@ public class ProductController extends BaseController{
      * @return
      */
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
-    public Result<Page<ProductBO>> selectProduct(@RequestBody ProductQuery query) {
+    public Result<Page<ProductDTO>> selectProduct(@RequestBody ProductQuery query) {
     	Page<ProductBO> page = productService.selectProduct(query);
     	List<ProductBO> list = page.getRecords();
-    	return successAccepted(page);
+    	List<ProductDTO> dtos = ProductConverter.convertDTOS(list);
+    	
+    	Page<ProductDTO> retPage = new Page<>();
+    	retPage.setCurrentPage(query.getCurrentPage());
+    	retPage.setTotalCount(page.getTotalCount());
+    	retPage.setRecords(dtos);
+    	
+    	return successAccepted(retPage);
     }
 }
