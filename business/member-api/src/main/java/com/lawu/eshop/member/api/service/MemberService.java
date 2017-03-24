@@ -29,7 +29,7 @@ import com.lawu.eshop.user.query.MemberQuery;
  * @author Leach
  * @date 2017/3/13
  */
-@FeignClient(value = "user-srv", fallback = MemberServiceHystrix.class)
+@FeignClient(value = "user-srv")
 public interface MemberService {
 
     /**
