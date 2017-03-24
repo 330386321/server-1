@@ -41,11 +41,12 @@ public class MerchantServiceImpl implements MerchantService {
     private InviteRelationDOMapper inviteRelationDOMapper;
 
     @Override
-    public void updatePwd(Long id, String pwd) {
-        MerchantDO merchant = new MerchantDO();
-        merchant.setId(id);
-        merchant.setPwd(MD5.MD5Encode(pwd));
-        merchantDOMapper.updateByPrimaryKeySelective(merchant);
+    public void updateLoginPwd(Long id,String originalPwd, String newPwd) {
+
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(id);
+        merchantDO.setPwd(MD5.MD5Encode(newPwd));
+        merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
     }
 
     @Override
@@ -185,5 +186,11 @@ public class MerchantServiceImpl implements MerchantService {
             }
         }
 
+    }
+
+    @Override
+    public MerchantBO getMerchantBOById(Long id) {
+        MerchantDO merchantDO=merchantDOMapper.selectByPrimaryKey(id);
+        return  MerchantConverter.convertBO(merchantDO);
     }
 }

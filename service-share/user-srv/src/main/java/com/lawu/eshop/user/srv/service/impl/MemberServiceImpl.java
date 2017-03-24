@@ -80,11 +80,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updatePwd(Long id, String pwd) {
-        MemberDO member = new MemberDO();
-        member.setId(id);
-        member.setPwd(pwd);
-        memberDOMapper.updateByPrimaryKeySelective(member);
+    public void updateLoginPwd(Long id,String originalPwd, String newPwd) {
+
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(id);
+        memberDO.setPwd(MD5.MD5Encode(newPwd));
+        memberDOMapper.updateByPrimaryKeySelective(memberDO);
     }
 
     @Override
@@ -189,34 +190,31 @@ public class MemberServiceImpl implements MemberService {
                         merchantDO.setId(inviteRelationDO1.getUserId());
                         merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
                     }
-                }
-            }
-        }
 
-        //查询会员的所有推荐人
-        InviteRelationDOExample inviteRelationDOExample = new InviteRelationDOExample();
-        inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(memberId);
-        List<InviteRelationDO> inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
-        if (!inviteRelationDOS.isEmpty()) {
-            for (InviteRelationDO inviteRelationDO1 : inviteRelationDOS) {
-                //查询推荐会员总人数
-                inviteRelationDOExample = new InviteRelationDOExample();
-                inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MEMBER).andDepthBetween(1, 3);
-                int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                //查询推荐商户总人数
-                inviteRelationDOExample = new InviteRelationDOExample();
-                inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MERCHANT).andDepthBetween(1, 3);
-                int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                //更新会员扩展信息
-                memberProfileDO = new MemberProfileDO();
-                memberProfileDO.setId(inviteRelationDO1.getUserId());
-                memberProfileDO.setInviteMemberCount(inviteMemberCount);
-                memberProfileDO.setInviteMerchantCount(inviteMerchantCount);
-                memberProfileDO.setGmtModified(new Date());
-                memberProfileDOMapper.updateByPrimaryKeySelective(memberProfileDO);
+                    //查询推荐会员总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MEMBER).andDepthBetween(1, 3);
+                    int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐商户总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MERCHANT).andDepthBetween(1, 3);
+                    int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //更新会员扩展信息
+                    memberProfileDO = new MemberProfileDO();
+                    memberProfileDO.setId(inviteRelationDO1.getUserId());
+                    memberProfileDO.setInviteMemberCount(inviteMemberCount);
+                    memberProfileDO.setInviteMerchantCount(inviteMerchantCount);
+                    memberProfileDO.setGmtModified(new Date());
+                    memberProfileDOMapper.updateByPrimaryKeySelective(memberProfileDO);
+                }
             }
         }
     }
 
+    @Override
+    public MemberBO getMemberById(Long id) {
+        MemberDO memberDO=memberDOMapper.selectByPrimaryKey(id);
+        return MemberConverter.convertBO(memberDO);
+    }
 
 }

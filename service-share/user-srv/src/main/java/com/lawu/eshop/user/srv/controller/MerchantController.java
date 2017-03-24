@@ -1,10 +1,13 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +19,27 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "merchant/")
-public class MerchantController {
+public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
 
     /**
-     * 商户修改密码
+     * 修改登录密码
      *
-     * @param id  主键
-     * @param pwd 密码
+     * @param id          主键
+     * @param originalPwd 原始密码
+     * @param newPwd      新密码
      */
-    @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
-    public void updatePwd(@RequestParam Long id, @RequestParam String pwd) {
-        merchantService.updatePwd(id, pwd);
+    @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@RequestParam Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+
+        MerchantBO merchantBO = merchantService.getMerchantBOById(id);
+        if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
+            return failVerify();
+        }
+        merchantService.updateLoginPwd(id, originalPwd, newPwd);
+        return successCreated();
     }
 
     /**
@@ -38,9 +48,10 @@ public class MerchantController {
      * @param account 商户账号
      */
     @RequestMapping(value = "getMerchantByAccount", method = RequestMethod.GET)
-    public MerchantDTO getMerchantByAccount(@RequestParam String account) {
+    public Result getMerchantByAccount(@RequestParam String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
-        return MerchantConverter.convertDTO(merchantBO);
+        MerchantDTO merchantDTO= MerchantConverter.convertDTO(merchantBO);
+        return successGet(merchantDTO);
     }
 
     /**
@@ -58,11 +69,13 @@ public class MerchantController {
 
     /**
      * 商户注册
+     *
      * @param registerParam 商户注册信息
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public void register(@ModelAttribute RegisterParam registerParam){
+    public Result register(@RequestBody RegisterParam registerParam) {
         merchantService.register(registerParam);
+        return successCreated();
     }
 }
