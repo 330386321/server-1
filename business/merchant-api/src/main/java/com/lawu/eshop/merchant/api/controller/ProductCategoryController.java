@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiParam;
  * @author Leach
  * @date 2017/3/11
  */
-@Api(tags = "productCategory")
+@Api(tags = "商品分类")
 @RestController
 @RequestMapping(value = "productCategory/")
 public class ProductCategoryController extends BaseController {

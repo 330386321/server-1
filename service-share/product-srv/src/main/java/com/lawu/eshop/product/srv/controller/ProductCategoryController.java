@@ -38,7 +38,7 @@ public class ProductCategoryController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "getById", method = RequestMethod.GET)
+    @RequestMapping(value = "getById", method = RequestMethod.POST)
     public ProductCategoryDTO getById(@RequestParam Integer id) {
         ProductCategoryBO productCategoryBO = productCategoryService.getById(id);
         return productCategoryBO == null ? null : ProductCategoryConverter.convertDTO(productCategoryBO);
