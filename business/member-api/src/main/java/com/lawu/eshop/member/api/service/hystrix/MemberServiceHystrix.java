@@ -40,7 +40,7 @@ public class MemberServiceHystrix implements MemberService {
     }
 
     @Override
-    public Result updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id")  Long id) {
+    public Result updateMemberInfo(@ModelAttribute UserParam memberParam, @PathVariable("id")  Long id) {
         Result r = new Result();
         r.setMsg("异常处理");
         return r;

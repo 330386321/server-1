@@ -5,6 +5,7 @@ import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component
 public class MerchantInfoServiceHystrix implements MerchantInfoService {
     @Override
-    public Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id) {
+    public Result updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam, @RequestParam Long id) {
         Result result = new Result();
         result.setMsg("异常");
         return result;

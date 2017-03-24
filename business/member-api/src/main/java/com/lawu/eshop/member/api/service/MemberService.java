@@ -50,7 +50,7 @@ public interface MemberService {
      * @param memberParam 会员信息
      */
     @RequestMapping(method = RequestMethod.PUT, value = "member/updateMemberInfo/{id}")
-    Result updateMemberInfo(@RequestBody UserParam memberParam,@PathVariable("id")  Long id);
+    Result updateMemberInfo(@ModelAttribute UserParam memberParam,@PathVariable("id")  Long id);
 
     /**
      * 修改密码

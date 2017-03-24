@@ -3,12 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
@@ -55,7 +50,7 @@ public class MemberController extends BaseController {
     //@Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo/{id}", method = RequestMethod.PUT)
-    public Result updateMemberInfo(@RequestBody @ApiParam(required = true, value = "会员信息") UserParam memberParam, @PathVariable("id") @ApiParam(required = true, value = "会员ID") Long id){
+    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam, @PathVariable("id") @ApiParam(required = true, value = "会员ID") Long id){
         Result r = memberService.updateMemberInfo(memberParam,id);
 
         return r;
