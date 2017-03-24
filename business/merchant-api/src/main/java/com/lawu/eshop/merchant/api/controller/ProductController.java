@@ -29,9 +29,9 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "分页查询商品", notes = "分页查询商品", httpMethod = "GET")
-    @RequestMapping(value = "getProductList", method = RequestMethod.GET)
-    public List<ProductDTO> getProductList(@RequestBody @ApiParam(required = false, value = "查询条件") ProductQuery query) {
+    @ApiOperation(value = "分页查询商品", notes = "分页查询商品。(杨清华)", httpMethod = "POST")
+    @RequestMapping(value = "getProductList", method = RequestMethod.POST)
+    public List<ProductDTO> getProductList(@RequestBody @ApiParam ProductQuery query) {
 
         List<ProductDTO> dtos = productService.getProductList(query);
         return dtos;

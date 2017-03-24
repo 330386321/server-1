@@ -4,19 +4,19 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class ProductQuery {
 	
-	@ApiModelProperty(value = "商家ID", required = true)
+//	@ApiModelProperty(value = "商家ID", required = true)
 	private Long merchantId;
 	
-	@ApiModelProperty(value = "商品名称", required = false)
+//	@ApiModelProperty(value = "商品名称", required = false)
 	private String name;
 	
-	@ApiModelProperty(value = "状态", required = true)
+//	@ApiModelProperty(value = "状态", required = true)
 	private Integer status;
 	
-	@ApiModelProperty(value = "当前第几页", required = true)
+//	@ApiModelProperty(value = "当前第几页", required = true)
 	private Integer pageIndex;
 	
-	@ApiModelProperty(value = "每页展示数量", required = true)
+//	@ApiModelProperty(value = "每页展示数量", required = true)
 	private Integer pageSize;
 	public Long getMerchantId() {
 		return merchantId;
