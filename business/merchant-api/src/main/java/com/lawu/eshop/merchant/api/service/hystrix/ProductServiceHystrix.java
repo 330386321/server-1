@@ -16,7 +16,7 @@ import com.lawu.eshop.product.query.ProductQuery;
 public class ProductServiceHystrix implements ProductService {
 
 	@Override
-	public List<ProductDTO> getProductList(ProductQuery query) {
+	public List<ProductDTO> selectProduct(ProductQuery query) {
 		
 		return null;
 	}
