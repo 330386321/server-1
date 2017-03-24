@@ -28,7 +28,7 @@ public class MerchantStoreController extends BaseController{
 
         MerchantStoreInfoBO merchantStoreBO =merchantStoreInfoService.selectMerchantStore(id);
         if(merchantStoreBO == null){
-            successGet();
+           return  successGet();
         }
         MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.coverDTO(merchantStoreBO);
 
