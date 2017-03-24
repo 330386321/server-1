@@ -1,11 +1,13 @@
 package com.lawu.eshop.product.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
@@ -93,6 +95,24 @@ public class ProductServiceImpl implements ProductService {
 		page.setRecords(productBOS);
 		
 		return page;
+	}
+
+	@Override
+	@Transactional
+	public int updateProductStatus(String ids, Integer status) {
+		int rows = 0;
+		String idArray[] = ids.split(",");
+		ProductDOExample examle = new ProductDOExample();
+		for(int i = 0 ; i < idArray.length ; i++){
+			examle.clear();
+			ProductDO productDO = new ProductDO();
+			productDO.setId(Long.valueOf(idArray[i]));
+			productDO.setStatus(Utils.intToByte(status));
+			productDO.setGmtModified(new Date());
+			int row = productDOMapper.updateByPrimaryKeySelective(productDO);
+			rows = rows + row;
+		}
+		return rows;
 	}
 
 }

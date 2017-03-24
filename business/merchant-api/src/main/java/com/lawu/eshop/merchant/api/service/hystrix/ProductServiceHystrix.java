@@ -21,5 +21,11 @@ public class ProductServiceHystrix implements ProductService {
 		return null;
 	}
 
+	@Override
+	public Result updateProductStatus(String ids, Integer status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
     
 }

@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductBO;
@@ -46,5 +49,20 @@ public class ProductController extends BaseController{
     	retPage.setRecords(dtos);
     	
     	return successAccepted(retPage);
+    }
+    
+    /**
+     * 商品批量操作
+     * @param ids	商品ID字符串
+     * @param status 目标修改的状态
+     * @return
+     */
+    @RequestMapping(value = "updateProductStatus", method = RequestMethod.GET)
+    public Result updateProductStatus(@RequestParam String ids , @RequestParam Integer status){
+    	int counts = productService.updateProductStatus(ids,status);
+    	if(counts == 0 || counts != ids.split(",").length){
+    		return successCreated(ResultCode.PRODUCT_WRONG_ID);
+    	}
+    	return successCreated();
     }
 }
