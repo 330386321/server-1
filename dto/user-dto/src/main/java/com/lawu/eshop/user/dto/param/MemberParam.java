@@ -1,6 +1,6 @@
 package com.lawu.eshop.user.dto.param;
 
-public class MemerParam {
+public class MemberParam {
 
 	private String nickname;
 	

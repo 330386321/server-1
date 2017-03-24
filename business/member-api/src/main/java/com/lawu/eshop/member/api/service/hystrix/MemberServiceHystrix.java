@@ -1,17 +1,19 @@
 package com.lawu.eshop.member.api.service.hystrix;
 
-import com.lawu.eshop.member.api.service.MemberService;
-import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.param.UserParam;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.MemberParam;
+import com.lawu.eshop.user.param.UserParam;
 
 /**
  * @author Leach
@@ -52,7 +54,7 @@ public class MemberServiceHystrix implements MemberService {
     }
 
 	@Override
-	public List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId) {
+	public List<MemberDTO> findMemberListByUser(@ModelAttribute MemberParam memberParam) {
 		return null;
 	}
 }

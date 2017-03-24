@@ -30,8 +30,9 @@ public class ProductController {
      * @param query
      * @return
      */
-    @RequestMapping(value = "getProductList", method = RequestMethod.GET)
+    @RequestMapping(value = "getProductList", method = RequestMethod.POST)
     public List<ProductDTO> getProductList(@RequestBody ProductQuery query) {
+    	
         List<ProductBO> productBOS = productService.getProductList(query);
         return productBOS.isEmpty() ? null : ProductConverter.convertDTOS(productBOS);
     }

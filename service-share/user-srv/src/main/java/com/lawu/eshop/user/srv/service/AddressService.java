@@ -17,13 +17,13 @@ public interface AddressService {
 	 * 添加收货地址
 	 * @param address
 	 */
-	 void save(AddressParam address);
+	 Integer save(AddressParam address);
 	 
 	 /**
 	  * 编辑收货地址
 	  * @param address
 	  */
-	 void update(AddressParam address);
+	 Integer update(AddressParam address,Long id);
 	 
 	 /**
 	  * 单个查询地址
@@ -35,19 +35,19 @@ public interface AddressService {
 	  * 查询所有地址
 	  * @return
 	  */
-	 List<AddressBO> listByUserId(Long userId);
+	 List<AddressBO> selectByUserId(Long userId);
 
 	 /**
 	  * 查询所有地址
 	  * @return
 	  */
-	 void delete(Long id);
+	 Integer remove(Long id);
 	 
 	 /**
 	  * 修改默认地址
 	  * @param id
 	  * @param isDefault
 	  */
-	 void updateStatus(Long id ,Boolean isDefault,Long userId);
+	 Integer updateStatus(Long id ,Long userId);
 
 }

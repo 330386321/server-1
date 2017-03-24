@@ -24,7 +24,7 @@ public interface ProductService {
      * 查询所有商品类型
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "product/getProductList")
+    @RequestMapping(method = RequestMethod.POST, value = "product/getProductList")
     List<ProductDTO> getProductList(@RequestBody ProductQuery query);
     
 }

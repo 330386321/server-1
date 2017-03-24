@@ -28,7 +28,7 @@ public class ProductCategoryController extends BaseController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类", httpMethod = "GET")
+    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<ProductCategoryDTO> findAll() {
 
@@ -36,7 +36,7 @@ public class ProductCategoryController extends BaseController {
         return dtos;
     }
     
-    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类", httpMethod = "GET")
+    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
     @RequestMapping(value = "getById", method = RequestMethod.GET)
     public ProductCategoryDTO getById(@RequestParam @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 

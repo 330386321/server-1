@@ -1,5 +1,13 @@
 package com.lawu.eshop.member.api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -9,12 +17,11 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -78,7 +85,10 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
-    public void findMemberListByUserId(@ModelAttribute @ApiParam(required = true, value = "当前用户id") Long userId) {
-        memberService.findMemberListByUser(userId);
+    public void findMemberListByUserId(@RequestParam @ApiParam(required = true, value = "用户id") Long userId
+    		,@RequestParam @ApiParam(required = false, value = "当前页") Long currentPage
+    		,@RequestParam @ApiParam(required = false, value = "查询条件") String accountOrName) {
+    	
+       // memberService.findMemberListByUser(userId,currentPage,accountOrName);
     }
 }

@@ -51,29 +51,40 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         if(paths.length==1){
         	return productCategoryeDOS.get(0).getName();
         }else if(paths.length==2){
-        	sb.append(productCategoryeDOS.get(0).getName());
         	example.clear();
-        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[1]));
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[0]));
         	List<ProductCategoryeDO>  productCategoryeDOS1 = productCategoryeDOMapper.selectByExample(example);
-        	if(productCategoryeDOS1 != null && productCategoryeDOS1.isEmpty()){
-        		sb.append("-").append(productCategoryeDOS1.get(0).getName());
+        	if(productCategoryeDOS1 != null && !productCategoryeDOS1.isEmpty()){
+        		sb.append(productCategoryeDOS1.get(0).getName());
             }
-        	return sb.toString();
-        }else{
-        	sb.append(productCategoryeDOS.get(0).getName());
         	
         	example.clear();
         	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[1]));
+        	List<ProductCategoryeDO>  productCategoryeDOS2 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS2 != null && !productCategoryeDOS2.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS2.get(0).getName());
+            }
+        	return sb.toString();
+        }else{
+        	example.clear();
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[0]));
         	List<ProductCategoryeDO>  productCategoryeDOS1 = productCategoryeDOMapper.selectByExample(example);
-        	if(productCategoryeDOS1 != null && productCategoryeDOS1.isEmpty()){
-        		sb.append("-").append(productCategoryeDOS1.get(0).getName());
+        	if(productCategoryeDOS1 != null && !productCategoryeDOS1.isEmpty()){
+        		sb.append(productCategoryeDOS1.get(0).getName());
+            }
+        	
+        	example.clear();
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[1]));
+        	List<ProductCategoryeDO>  productCategoryeDOS2 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS2 != null && !productCategoryeDOS2.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS2.get(0).getName());
             }
         	
         	example.clear();
         	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[2]));
-        	List<ProductCategoryeDO>  productCategoryeDOS2 = productCategoryeDOMapper.selectByExample(example);
-        	if(productCategoryeDOS2 != null && productCategoryeDOS2.isEmpty()){
-        		sb.append("-").append(productCategoryeDOS2.get(0).getName());
+        	List<ProductCategoryeDO>  productCategoryeDOS3 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS3 != null && !productCategoryeDOS3.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS3.get(0).getName());
             }
         	return sb.toString();
         }

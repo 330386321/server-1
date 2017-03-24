@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,9 +39,9 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@RequestMapping(value = "listByUserId", method = RequestMethod.GET)
-    public List<AddressDTO> listByUserId(@RequestParam @ApiParam(required = true, value = "用户id") Long userId) {
-		List<AddressDTO> addressDTO = addressService.listByUserId(userId);
+	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
+    public List<AddressDTO> selectByUserId(@RequestParam @ApiParam(required = true, value = "会员id") Long userId) {
+		List<AddressDTO> addressDTO = addressService.selectByUserId(userId);
         return addressDTO;
     }
 	
@@ -60,8 +61,8 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@ApiOperation(value = "delete", notes = "删除", httpMethod = "GET")
-	@RequestMapping(value = "delete", method = RequestMethod.GET)
+	@ApiOperation(value = "delete", notes = "删除", httpMethod = "POST")
+	@RequestMapping(value = "delete", method = RequestMethod.POST)
     public void delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		addressService.delete(id);
     }
@@ -73,7 +74,7 @@ public class AddressController extends BaseController {
 	//@Authorization
 	@ApiOperation(value = "save", notes = "添加", httpMethod = "POST")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public void insert(@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
+    public void insert( @RequestBody @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 	addressService.save(address);
     }
 
@@ -82,9 +83,21 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@RequestMapping(value = "update", method = RequestMethod.GET)
-    public void update(@ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-	   addressService.update(address);
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+    public void update(@RequestBody  @ApiParam(required = true, value = "收货地址信息") AddressParam address
+    		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+	   addressService.update(address,id);
+    }
+	
+	/**
+	 * 收货地址修改
+	 * @return
+	 */
+	//@Authorization
+	@RequestMapping(value = "updateStatus", method = RequestMethod.POST)
+    public void updateStatus(@RequestParam @ApiParam (required = true, value = "会员id") Long userId
+   		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+	   addressService.updateStatus(userId,id);
     }
 	
 	

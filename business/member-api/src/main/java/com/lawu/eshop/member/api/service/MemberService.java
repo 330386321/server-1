@@ -1,14 +1,21 @@
 package com.lawu.eshop.member.api.service;
 
+import java.util.List;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.UserParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Leach
@@ -58,8 +65,8 @@ public interface MemberService {
      * @date 2017/03/23
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUserId")
-    List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId );
+    @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUser")
+    List<MemberDTO> findMemberListByUser(@ModelAttribute MemberParam memberParam );
 
 
     /**
