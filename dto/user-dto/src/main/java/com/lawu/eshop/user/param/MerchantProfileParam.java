@@ -1,4 +1,4 @@
-package com.lawu.eshop.user.dto.param;
+package com.lawu.eshop.user.param;
 
 import java.util.Date;
 

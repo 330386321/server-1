@@ -2,7 +2,7 @@ package com.lawu.eshop.merchant.api.service;
 
 
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
-import com.lawu.eshop.user.dto.param.MerchantProfileParam;
+import com.lawu.eshop.user.param.MerchantProfileParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

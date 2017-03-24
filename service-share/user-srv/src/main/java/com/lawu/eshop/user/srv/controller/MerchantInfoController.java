@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.controller;
 
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
-import com.lawu.eshop.user.dto.param.MerchantProfileParam;
+import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;

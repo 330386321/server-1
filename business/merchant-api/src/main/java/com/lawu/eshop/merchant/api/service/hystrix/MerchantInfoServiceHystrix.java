@@ -2,7 +2,7 @@ package com.lawu.eshop.merchant.api.service.hystrix;
 
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
-import com.lawu.eshop.user.dto.param.MerchantProfileParam;
+import com.lawu.eshop.user.param.MerchantProfileParam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
