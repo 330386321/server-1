@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.service;
 
 import com.lawu.eshop.merchant.api.service.hystrix.ProductCategoryServiceHystrix;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,4 +24,12 @@ public interface ProductCategoryService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "productCategory/findAll")
     List<ProductCategoryDTO> findAll();
+    
+    /**
+     * 根据ID查询商品分类
+     * @param id
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "productCategory/getById")
+    ProductCategoryDTO getById(Integer id);
 }

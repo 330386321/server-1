@@ -9,7 +9,6 @@ import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,16 +25,60 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategoryeDOExample example = new ProductCategoryeDOExample();
         List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
 
-        List<ProductCategoryBO> productCategoryeBOS = null;
-        if(productCategoryeDOS == null || productCategoryeDOS.isEmpty()){
-            return null;
-        }else{
-            productCategoryeBOS = new ArrayList<ProductCategoryBO>();
-            for(ProductCategoryeDO d : productCategoryeDOS){
-                ProductCategoryBO bo = ProductCategoryConverter.convertBO(d);
-                productCategoryeBOS.add(bo);
-            }
-        }
-        return productCategoryeBOS;
+        return ProductCategoryConverter.convertBOS(productCategoryeDOS);
     }
+
+	@Override
+	public ProductCategoryBO getById(Integer id) {
+		ProductCategoryeDOExample example = new ProductCategoryeDOExample();
+        example.createCriteria().andIdEqualTo(id);
+        List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
+        return productCategoryeDOS.isEmpty() ? null :  ProductCategoryConverter.convertBO(productCategoryeDOS.get(0));
+	}
+
+	@Override
+	public String getFullName(Integer id) {
+		ProductCategoryeDOExample example = new ProductCategoryeDOExample();
+        example.createCriteria().andIdEqualTo(id);
+        List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
+        if(productCategoryeDOS == null || productCategoryeDOS.isEmpty()){
+        	return "";
+        }
+        
+        String path = productCategoryeDOS.get(0).getPath();
+        String []paths = path.split("/");
+        StringBuffer sb = new StringBuffer();
+        if(paths.length==1){
+        	return productCategoryeDOS.get(0).getName();
+        }else if(paths.length==2){
+        	sb.append(productCategoryeDOS.get(0).getName());
+        	example.clear();
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[1]));
+        	List<ProductCategoryeDO>  productCategoryeDOS1 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS1 != null && productCategoryeDOS1.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS1.get(0).getName());
+            }
+        	return sb.toString();
+        }else{
+        	sb.append(productCategoryeDOS.get(0).getName());
+        	
+        	example.clear();
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[1]));
+        	List<ProductCategoryeDO>  productCategoryeDOS1 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS1 != null && productCategoryeDOS1.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS1.get(0).getName());
+            }
+        	
+        	example.clear();
+        	example.createCriteria().andIdEqualTo(Integer.valueOf(paths[2]));
+        	List<ProductCategoryeDO>  productCategoryeDOS2 = productCategoryeDOMapper.selectByExample(example);
+        	if(productCategoryeDOS2 != null && productCategoryeDOS2.isEmpty()){
+        		sb.append("-").append(productCategoryeDOS2.get(0).getName());
+            }
+        	return sb.toString();
+        }
+	}
+
+    
+
 }

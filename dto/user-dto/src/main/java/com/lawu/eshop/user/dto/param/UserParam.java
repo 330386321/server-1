@@ -19,6 +19,8 @@ public class UserParam {
     private Date birthday;
 
     private String headimg;
+   
+    
 
     public Long getId() {
         return id;

@@ -54,5 +54,5 @@ public interface MemberService {
      * 查询我的E友
      * @return
      */
-    List<MemberBO> findMemberListByUserId(Long inviterId);
+    List<MemberBO> findMemberListByUser(Long inviterId);
 }

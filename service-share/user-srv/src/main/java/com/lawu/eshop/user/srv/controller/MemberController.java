@@ -81,12 +81,12 @@ public class MemberController {
      * 我的E友
      *@author zhangrc
      *@date 2017/03/23
-     *@param account 会员账号
+     *@param inviterId 登录用户
      *@return
      */
     @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
-    public List<MemberDTO> findMemberListByUserId(@RequestParam Long inviterId) {
-        List<MemberBO> memberBOS = memberService.findMemberListByUserId(inviterId);
+    public List<MemberDTO> findMemberListByUser(@RequestParam Long inviterId) {
+        List<MemberBO> memberBOS = memberService.findMemberListByUser(inviterId);
         return MemberConverter.convertListDOTS(memberBOS);
     }
 

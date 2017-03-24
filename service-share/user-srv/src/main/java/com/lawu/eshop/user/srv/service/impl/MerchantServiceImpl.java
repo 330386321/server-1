@@ -45,4 +45,12 @@ public class MerchantServiceImpl implements MerchantService {
 
         return MerchantConverter.convertBO(merchantDO);
     }
+    
+	@Override
+	public List<MerchantBO> getMerchantByInviterId(Long inviterId) {
+		 MerchantDOExample example = new MerchantDOExample();
+	     example.createCriteria().andInviterIdEqualTo(inviterId);
+	     List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+		return merchantDOS.isEmpty() ? null : MerchantConverter.convertBOS(merchantDOS);
+	}
 }

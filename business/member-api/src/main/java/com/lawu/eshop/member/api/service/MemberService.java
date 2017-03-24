@@ -1,8 +1,5 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
-import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.UserParam;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.member.api.service.hystrix.MemberServiceHystrix;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.param.UserParam;
 
 /**
  * @author Leach
@@ -64,6 +62,6 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "member/findMemberListByUserId")
-    List<MemberDTO> findMemberListByUserId(@RequestParam("inviterId") Long inviterId );
+    List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId );
 
 }

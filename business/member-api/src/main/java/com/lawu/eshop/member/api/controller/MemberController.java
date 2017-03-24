@@ -52,8 +52,8 @@ public class MemberController extends BaseController{
 
     @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "GET")
     @Authorization
-    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
-    public void findMemberListByUserId(@RequestParam @ApiParam(required = true, value = "当前用户id") Long userId) {
-        memberService.findMemberListByUserId(userId);
+    @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
+    public void findMemberListByUserId(@ModelAttribute @ApiParam(required = true, value = "当前用户id") Long userId) {
+        memberService.findMemberListByUser(userId);
     }
 }
