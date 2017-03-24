@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.merchant.api.service.MerchantProfileService;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.param.MerchantProfileParam;
@@ -27,8 +28,14 @@ public class MerchantProfileController extends BaseController {
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接", httpMethod = "POST")
    // @Authorization
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.POST)
-    public void updateMerchantSizeLink(@RequestBody  @ApiParam MerchantProfileParam merchantProfileParam){
-        merchantProfileService.updateMerchantSizeLink(merchantProfileParam);
+    public Result updateMerchantSizeLink(@RequestBody  @ApiParam MerchantProfileParam merchantProfileParam,
+                                       @RequestParam @ApiParam(required = true, value = "主键") Long id){
+      int result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
+      if(result == 1){
+          return successResponse();
+      }else {
+          return failResponse(ResultCode.BAD_REQUEST,"设置失败");
+      }
     }
 
 

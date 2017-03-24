@@ -9,8 +9,6 @@ import java.util.Date;
  */
 public class MerchantProfileParam {
 
-    private Long id;
-
     private String websiteUrl;
 
     private String taobaoUrl;
@@ -18,15 +16,6 @@ public class MerchantProfileParam {
     private String tmallUrl;
 
     private String jdUrl;
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 
     public String getWebsiteUrl() {

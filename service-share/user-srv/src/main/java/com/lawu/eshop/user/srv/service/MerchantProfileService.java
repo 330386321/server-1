@@ -13,7 +13,7 @@ public interface MerchantProfileService {
      * 设置相关网站链接
      * @param merchantProfileParamd
      */
-    void updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd);
+    int updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd, Long id);
 
     /**
      * 查询商家主页

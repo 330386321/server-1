@@ -48,7 +48,6 @@ public class MerchantProfileConverter {
         }
 
         MerchantProfileDO merchantProfileDO = new MerchantProfileDO();
-        merchantProfileDO.setId(merchantProfileParam.getId());
         merchantProfileDO.setJdUrl(merchantProfileParam.getJdUrl());
         merchantProfileDO.setTaobaoUrl(merchantProfileParam.getTaobaoUrl());
         merchantProfileDO.setTmallUrl(merchantProfileParam.getTmallUrl());

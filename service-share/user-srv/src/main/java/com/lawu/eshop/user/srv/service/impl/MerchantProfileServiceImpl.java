@@ -9,6 +9,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -21,9 +22,12 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
     private MerchantProfileDOMapper merchantProfileDOMapper;
 
     @Override
-    public void updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd) {
+    public int updateMerchantSizeLink(MerchantProfileParam merchantProfileParamd, @RequestParam Long id) {
         MerchantProfileDO merchantProfileDO = MerchantProfileConverter.paramConvertDO(merchantProfileParamd);
-        merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
+        merchantProfileDO.setId(id);
+        int result = merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
+        System.out.println("result = " + result );
+        return result;
     }
 
     @Override

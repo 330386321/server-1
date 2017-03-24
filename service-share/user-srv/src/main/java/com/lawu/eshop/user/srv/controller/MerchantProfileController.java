@@ -29,8 +29,10 @@ public class MerchantProfileController {
      * @param merchantProfileParam
      */
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.POST)
-    public void updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam){
-        merchantProfileService.updateMerchantSizeLink(merchantProfileParam);
+    public int updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id){
+       int result =  merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
+
+       return result;
     }
 
     /**
@@ -45,6 +47,7 @@ public class MerchantProfileController {
         // 商家基本信息
         MerchantBO merchantBO = merchantService.findMerchantInfo(merchantProfileId);
         //TODO 门店信息
+
 
         return MerchantProfileConverter.coverConverDTO(merchantProfileBO);
     }
