@@ -57,9 +57,6 @@
         </table>
         <table tableName="address" domainObjectName="AddressDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
-        <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_store_audit" domainObjectName="MerchantStoreAuditDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
@@ -67,10 +64,13 @@
         <table tableName="merchant_store_image" domainObjectName="MerchantStoreImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="merchant_store_profile" domainObjectName="MerchantStoreProfileDO">
+        <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
+        <table tableName="merchant_store_profile" domainObjectName="MerchantStoreProfileDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         
