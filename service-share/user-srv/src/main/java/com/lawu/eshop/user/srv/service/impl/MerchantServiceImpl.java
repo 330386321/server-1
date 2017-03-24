@@ -41,11 +41,12 @@ public class MerchantServiceImpl implements MerchantService {
     private InviteRelationDOMapper inviteRelationDOMapper;
 
     @Override
-    public void updatePwd(Long id, String pwd) {
-        MerchantDO merchant = new MerchantDO();
-        merchant.setId(id);
-        merchant.setPwd(MD5.MD5Encode(pwd));
-        merchantDOMapper.updateByPrimaryKeySelective(merchant);
+    public void updateLoginPwd(Long id,String originalPwd, String newPwd) {
+
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(id);
+        merchantDO.setPwd(MD5.MD5Encode(newPwd));
+        merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
     }
 
     @Override
@@ -157,33 +158,30 @@ public class MerchantServiceImpl implements MerchantService {
                         merchantDO.setId(inviteRelationDO1.getUserId());
                         merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
                     }
+
+                    //查询推荐会员总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MEMBER).andDepthBetween(1, 3);
+                    int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐商户总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MERCHANT).andDepthBetween(1, 3);
+                    int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //更新商户扩展信息
+                    merchantProfileDO = new MerchantProfileDO();
+                    merchantProfileDO.setId(inviteRelationDO1.getUserId());
+                    merchantProfileDO.setInviteMemberCount(inviteMemberCount);
+                    merchantProfileDO.setInviteMerchantCount(inviteMerchantCount);
+                    merchantProfileDO.setGmtModified(new Date());
+                    merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
                 }
             }
         }
+    }
 
-        //查询商户的所有推荐人
-        InviteRelationDOExample inviteRelationDOExample = new InviteRelationDOExample();
-        inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(merchantId);
-        List<InviteRelationDO> inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
-        if (!inviteRelationDOS.isEmpty()) {
-            for (InviteRelationDO inviteRelationDO1 : inviteRelationDOS) {
-                //查询推荐会员总人数
-                inviteRelationDOExample = new InviteRelationDOExample();
-                inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MEMBER).andDepthBetween(1, 3);
-                int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                //查询推荐商户总人数
-                inviteRelationDOExample = new InviteRelationDOExample();
-                inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MERCHANT).andDepthBetween(1, 3);
-                int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                //更新商户扩展信息
-                merchantProfileDO = new MerchantProfileDO();
-                merchantProfileDO.setId(inviteRelationDO1.getUserId());
-                merchantProfileDO.setInviteMemberCount(inviteMemberCount);
-                merchantProfileDO.setInviteMerchantCount(inviteMerchantCount);
-                merchantProfileDO.setGmtModified(new Date());
-                merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
-            }
-        }
-
+    @Override
+    public MerchantBO getMerchantBOById(Long id) {
+        MerchantDO merchantDO=merchantDOMapper.selectByPrimaryKey(id);
+        return  MerchantConverter.convertBO(merchantDO);
     }
 }

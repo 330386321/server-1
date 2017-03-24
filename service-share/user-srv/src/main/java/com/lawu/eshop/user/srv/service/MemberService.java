@@ -36,16 +36,19 @@ public interface MemberService {
     int updateMemberInfo(UserParam memberParam, Long id);
 
     /**
-     * 修改密码
+     * 修改登录密码
      *
-     * @param id  主键
-     * @param pwd 密码
+     * @param id          主键
+     * @param originalPwd 原始密码
+     * @param newPwd      新密码
+     * @return 0--成功，1--原始密码不正确
      */
-    void updatePwd(Long id, String pwd);
+    void updateLoginPwd(Long id, String originalPwd, String newPwd);
 
     /**
      * 根据账号查询会员信息
-     * @param account   会员账号
+     *
+     * @param account 会员账号
      * @return
      */
     MemberBO getMemberByAccount(String account);
@@ -60,9 +63,15 @@ public interface MemberService {
 
     /**
      * 会员注册
+     *
      * @param registerParam 会员注册信息
      */
     void register(RegisterParam registerParam);
-    
 
+    /**
+     * 根据会员ID查询会员信息
+     *
+     * @param id 会员ID
+     */
+    MemberBO getMemberById(Long id );
 }

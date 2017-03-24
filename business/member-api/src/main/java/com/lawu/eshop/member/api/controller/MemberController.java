@@ -1,28 +1,24 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.MemberService;
-import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
-
+import com.lawu.eshop.user.param.RegisterParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -56,26 +52,19 @@ public class MemberController extends BaseController {
         return r;
     }
 
-    @ApiOperation(value = "修改密码", notes = "会员修改密码", httpMethod = "POST")
+    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。(梅述全)", httpMethod = "PUT")
     @Authorization
-    @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
-    public Result updatePwd(@RequestParam @ApiParam(required = true, value = "主键") Long id,
-                            @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
-        memberService.updatePwd(id, pwd);
-        return successCreated();
+    @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@PathVariable @ApiParam(required = true, value = "id") Long id,
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+                                 @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        return memberService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
-    @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息", httpMethod = "GET")
-    @RequestMapping(value = "getInviterByAccount", method = RequestMethod.GET)
-    public Result<InviterDTO> getInviterByAccount(@RequestParam @ApiParam(required = true, value = "邀请人账号") String account) {
-        InviterDTO inviterDTO = memberService.getInviterByAccount(account);
-        if (inviterDTO == null) {
-            return successGet();
-        }
-        if (inviterDTO.getInviterId() < 1) {
-            return failServerError( "查询邀请人信息调用异常");
-        }
-        return successGet(inviterDTO);
+    @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
+    @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
+    public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
+        return memberService.getInviterByAccount(account);
     }
 
     @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "POST")
@@ -84,5 +73,12 @@ public class MemberController extends BaseController {
     public Result<List<MemberDTO>> findMemberListByUser(@RequestBody @ApiParam(required = true, value = "查询信息") MemberQuery query) {
     	Result<List<MemberDTO>> memberDTOS = memberService.findMemberListByUser(query);
     	return memberDTOS;
+    }
+
+    @ApiOperation(value = "会员注册", notes = "会员注册", httpMethod = "POST")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public Result register(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
+        memberService.register(registerParam);
+        return successCreated();
     }
 }

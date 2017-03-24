@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -26,6 +28,11 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.AddressConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Leach
@@ -33,7 +40,7 @@ import com.lawu.eshop.user.srv.service.MemberService;
  */
 @RestController
 @RequestMapping(value = "member/")
-public class MemberController extends BaseController{
+public class MemberController extends BaseController {
 
     @Autowired
     private MemberService memberService;
@@ -77,14 +84,20 @@ public class MemberController extends BaseController{
     }
 
     /**
-     * 会员修改密码
+     * 修改登录密码
      *
-     * @param id  主键
-     * @param pwd 密码
+     * @param id          主键
+     * @param originalPwd 原始密码
+     * @param newPwd      新密码
      */
-    @RequestMapping(value = "updatePwd", method = RequestMethod.POST)
-    public void updatePwd(@RequestParam Long id, @RequestParam String pwd) {
-        memberService.updatePwd(id, pwd);
+    @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@RequestParam Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+        MemberBO memberBO = memberService.getMemberById(id);
+        if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
+            return failVerify();
+        }
+        memberService.updateLoginPwd(id, originalPwd, newPwd);
+        return successCreated();
     }
 
     /**
@@ -94,9 +107,10 @@ public class MemberController extends BaseController{
      * @return
      */
     @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
-    public UserDTO getMemberByAccount(@RequestParam String account) {
+    public Result getMemberByAccount(@RequestParam String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
-        return MemberConverter.convertDTO(memberBO);
+        MemberDTO memberDTO = MemberConverter.convertMDTO(memberBO);
+        return successGet(memberDTO);
     }
 
     /**
@@ -114,12 +128,14 @@ public class MemberController extends BaseController{
 
     /**
      * 会员注册
+     *
      * @param registerParam 会员注册信息
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public void register(@ModelAttribute RegisterParam registerParam){
-         memberService.register(registerParam);
+    public Result register(@RequestBody RegisterParam registerParam) {
+        memberService.register(registerParam);
+        return successCreated();
     }
 
 }
