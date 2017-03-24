@@ -1,4 +1,4 @@
-package com.lawu.eshop.utils.page;
+package com.lawu.eshop.framework.core.page;
 
 /**
  * @author Leach
