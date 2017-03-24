@@ -2,6 +2,7 @@ package com.lawu.eshop.product.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductBO;
 
@@ -15,5 +16,5 @@ public interface ProductService {
 	 * @param query
 	 * @return
 	 */
-	List<ProductBO> getProductList(ProductQuery query);
+	Page<ProductBO> selectProduct(ProductQuery query);
 }

@@ -3,10 +3,12 @@ package com.lawu.eshop.product.srv.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
@@ -41,12 +43,19 @@ public class ProductServiceImpl implements ProductService {
 	private ProductCategoryService productCategoryService;
 	
 	@Override
-	public List<ProductBO> getProductList(ProductQuery query) {
+	public Page<ProductBO> selectProduct(ProductQuery query) {
 		ProductDOExample example = new ProductDOExample();
 		example.createCriteria().andMerchantIdEqualTo(query.getMerchantId())
-			.andNameLike(query.getName())
+			.andNameLike("%" + query.getName() + "%")
 			.andStatusEqualTo(Utils.intToByte(query.getStatus()));
-		List<ProductDO> productDOS = productDOMapper.selectByExample(example);
+		
+		//查询总数
+		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
+		Page<ProductBO> page = new Page<>();
+		page.setTotalCount(productDOMapper.countByExample(example));
+		page.setCurrentPage(query.getCurrentPage());
+		List<ProductDO> productDOS = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
+		
 		List<ProductBO> productBOS = new ArrayList<ProductBO>();
 		
 		ProductModelDOExample modelExample = null;
@@ -81,7 +90,9 @@ public class ProductServiceImpl implements ProductService {
 			
 			productBOS.add(productBO);
 		}
-		return productBOS;
+		page.setRecords(productBOS);
+		
+		return page;
 	}
 
 }

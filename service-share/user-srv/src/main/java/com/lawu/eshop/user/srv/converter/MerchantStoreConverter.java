@@ -22,8 +22,8 @@ public class MerchantStoreConverter {
 
         MerchantStoreProfileBO merchantStoreProfileBO = new MerchantStoreProfileBO();
         merchantStoreProfileBO.setMerchantId(merchantStoreProfileDO.getMerchantId());
-        merchantStoreProfileBO.setPrincipalMobile(merchantStoreProfileDO.getPrincipalMobile());
-        merchantStoreProfileBO.setPrincipalName(merchantStoreProfileDO.getPrincipalName());
+//        merchantStoreProfileBO.setPrincipalMobile(merchantStoreProfileDO.getPrincipalMobile());
+//        merchantStoreProfileBO.setPrincipalName(merchantStoreProfileDO.getPrincipalName());
 
         return merchantStoreProfileBO;
 
