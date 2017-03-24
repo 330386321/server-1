@@ -1,7 +1,6 @@
 package com.lawu.eshop.user.srv.converter;
 
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 
 /**
@@ -22,8 +21,9 @@ public class MerchantStoreConverter {
 
         MerchantStoreProfileBO merchantStoreProfileBO = new MerchantStoreProfileBO();
         merchantStoreProfileBO.setMerchantId(merchantStoreProfileDO.getMerchantId());
-//        merchantStoreProfileBO.setPrincipalMobile(merchantStoreProfileDO.getPrincipalMobile());
-//        merchantStoreProfileBO.setPrincipalName(merchantStoreProfileDO.getPrincipalName());
+       // merchantStoreProfileBO.setPrincipalMobile(merchantStoreProfileDO.getPrincipalMobile());
+        //merchantStoreProfileBO.setPrincipalName(merchantStoreProfileDO.getPrincipalName());
+
 
         return merchantStoreProfileBO;
 

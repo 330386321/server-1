@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,9 +16,13 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,13 +88,11 @@ public class MemberController extends BaseController {
         return successGet(inviterDTO);
     }
 
-    @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "GET")
+    @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "POST")
     @Authorization
-    @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
-    public void findMemberListByUserId(@RequestParam @ApiParam(required = true, value = "用户id") Long userId
-    		,@RequestParam @ApiParam(required = false, value = "当前页") Long currentPage
-    		,@RequestParam @ApiParam(required = false, value = "查询条件") String accountOrName) {
-    	
-       // memberService.findMemberListByUser(userId,currentPage,accountOrName);
+    @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
+    public Result<List<MemberDTO>> findMemberListByUser(@RequestBody @ApiParam(required = true, value = "查询信息") MemberQuery query) {
+    	Result<List<MemberDTO>> memberDTOS = memberService.findMemberListByUser(query);
+    	return memberDTOS;
     }
 }

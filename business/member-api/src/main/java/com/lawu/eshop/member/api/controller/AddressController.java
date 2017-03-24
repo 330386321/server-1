@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
@@ -19,6 +22,7 @@ import com.lawu.eshop.user.param.AddressParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
 
 /**
  * 描述：收货地址管理
@@ -39,10 +43,12 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
+	@ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息，成功返回 list （张荣成）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
-    public List<AddressDTO> selectByUserId(@RequestParam @ApiParam(required = true, value = "会员id") Long userId) {
-		List<AddressDTO> addressDTO = addressService.selectByUserId(userId);
-        return addressDTO;
+    public Result<List<AddressDTO>> selectByUserId(@RequestParam @ApiParam(required = true, value = "会员id") Long userId) {
+		Result<List<AddressDTO>> addressDTOS = addressService.selectByUserId(userId);
+        return addressDTOS;
     }
 	
 	 /**
@@ -50,9 +56,11 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
+	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址（张荣成）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "get", method = RequestMethod.GET)
-    public AddressDTO get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
-		AddressDTO addressDTO=addressService.get(id);
+    public Result<AddressDTO> get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
+		Result<AddressDTO> addressDTO=addressService.get(id);
 		return addressDTO;
     }
 	
@@ -61,21 +69,25 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@ApiOperation(value = "delete", notes = "删除", httpMethod = "POST")
+	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "delete", method = RequestMethod.POST)
-    public void delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
-		addressService.delete(id);
+    public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+		Result rs=addressService.delete(id);
+		return rs;
     }
 	
 	/**
 	  * 收货地址添加
-	  * @return
+	  * @return 
 	  */
 	//@Authorization
-	@ApiOperation(value = "save", notes = "添加", httpMethod = "POST")
+	@ApiOperation(value = "添加收货地址", notes = "添加收货地址（张荣成）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public void insert( @RequestBody @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-	addressService.save(address);
+    public Result insert( @RequestBody @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
+		Result rs= addressService.save(address);
+		return rs;
     }
 
 	/**
@@ -83,21 +95,28 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
+	@ApiOperation(value = "修改收货地址", notes = "修改收货地址（张荣成）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-    public void update(@RequestBody  @ApiParam(required = true, value = "收货地址信息") AddressParam address
+    public Result update(@RequestBody  @ApiParam(required = true, value = "收货地址信息") AddressParam address
     		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
-	   addressService.update(address,id);
+		Result rs= addressService.update(address,id);
+		return rs;
+	   
     }
 	
 	/**
-	 * 收货地址修改
+	 * 收货默认地址修改
 	 * @return
 	 */
 	//@Authorization
+	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址（张荣成）", httpMethod = "POST")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateStatus", method = RequestMethod.POST)
-    public void updateStatus(@RequestParam @ApiParam (required = true, value = "会员id") Long userId
+    public Result updateStatus(@RequestParam @ApiParam (required = true, value = "会员id") Long userId
    		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
-	   addressService.updateStatus(userId,id);
+	   Result rs= addressService.updateStatus(userId,id);
+	   return rs;
     }
 	
 	
