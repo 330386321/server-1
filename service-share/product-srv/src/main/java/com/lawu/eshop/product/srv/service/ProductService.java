@@ -16,4 +16,12 @@ public interface ProductService {
 	 * @return
 	 */
 	Page<ProductBO> selectProduct(ProductQuery query);
+
+	/**
+	 * 批量处理
+	 * @param ids
+	 * @param status
+	 * @return
+	 */
+	int updateProductStatus(String ids, Integer status);
 }

@@ -4,6 +4,7 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -27,4 +28,12 @@ public interface ProductService {
     @RequestMapping(method = RequestMethod.POST, value = "product/selectProduct")
     Result<Page<ProductDTO>> selectProduct(@RequestBody ProductQuery query);
     
+    /**
+	 * 批量处理
+	 * @param ids
+	 * @param status
+	 * @return
+	 */
+    @RequestMapping(method = RequestMethod.GET, value = "product/updateProductStatus")
+    Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("status") Integer status);
 }
