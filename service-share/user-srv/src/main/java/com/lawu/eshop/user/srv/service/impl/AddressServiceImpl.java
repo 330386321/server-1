@@ -21,17 +21,22 @@ public class AddressServiceImpl implements AddressService {
 	private AddressDOMapper addressDOMapper; 
  
 	@Override
-	public void save(AddressParam address) {
+	public Integer save(AddressParam address) {
 		AddressDO addressDO =AddressConverter.convertDO(address);
 		addressDO.setGmtCreate(new Date());
-		addressDOMapper.insert(addressDO);
+		addressDO.setGmtModified(new Date());
+		addressDO.setIsDefault(false);
+		Integer id=addressDOMapper.insert(addressDO);
+		return id;
 	}
 
 	@Override
-	public void update(AddressParam address) {
+	public Integer update(AddressParam address,Long id) {
 		AddressDO addressDO= AddressConverter.convertDO(address);
+		addressDO.setId(id);
 		addressDO.setGmtModified(new Date());
-		addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		Integer i=addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		return i;
 	}
 
 	@Override
@@ -41,27 +46,33 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public List<AddressBO> listByUserId(Long userId) {
+	public List<AddressBO> selectByUserId(Long userId) {
 		AddressDOExample example = new AddressDOExample();
-		example.setOrderByClause("gmtCreate");
+		example.setOrderByClause("gmt_create");
 		example.createCriteria().andUserIdEqualTo(userId);
 		List<AddressDO> addressDOS= addressDOMapper.selectByExample(example);
 		return addressDOS.isEmpty() ? null : AddressConverter.convertListBOS(addressDOS);
 	}
 
 	@Override
-	public void delete(Long id) {
-		addressDOMapper.deleteByPrimaryKey(id);
+	public Integer remove(Long id) {
+		Integer i=addressDOMapper.deleteByPrimaryKey(id);
+		return i;
+		
 	}
 
 	@Override
-	public void updateStatus(Long id, Boolean isDefault,Long userId) {
+	public Integer updateStatus(Long id,Long userId) {
 		AddressDO addressDO=new AddressDO();
-		addressDO.setId(id);
-		addressDO.setIsDefault(isDefault);
+		addressDO.setIsDefault(false);
 		addressDO.setUserId(userId);
 		addressDO.setGmtModified(new Date());
 		addressDOMapper.updateStatusById(addressDO);
+		addressDO.setId(id);
+		addressDO.setIsDefault(true);
+		Integer i =addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		return i;
+		
 	}
 
 }

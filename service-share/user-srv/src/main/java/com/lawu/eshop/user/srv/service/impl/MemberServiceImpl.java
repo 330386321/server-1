@@ -1,25 +1,32 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
-
-import org.apache.ibatis.session.RowBounds;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -89,13 +96,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
 	@Override
-	public List<MemberBO> findMemberListByUser(Long inviterId) {
+	public List<MemberBO> findMemberListByUser(MemberQuery memberQuery) {
 		 MemberDOExample example = new MemberDOExample();
-		 example.createCriteria().andInviterIdEqualTo(inviterId);
+		 example.createCriteria().andInviterIdEqualTo(memberQuery.getInviterId());
 		 //List<MemberDO> memberDOS=memberDOMapper.selectByExample(example);
-		 RowBounds rowBounds = new RowBounds(0, 10);
+		 RowBounds rowBounds = new RowBounds(memberQuery.getCurrentPage(), memberQuery.getPageSize());
 		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-
 		return memberDOS.isEmpty() ? null : MemberConverter.convertListBOS(memberDOS);
 	}
 
@@ -212,5 +218,6 @@ public class MemberServiceImpl implements MemberService {
             }
         }
     }
+
 
 }

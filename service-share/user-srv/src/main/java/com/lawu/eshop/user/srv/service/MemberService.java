@@ -1,11 +1,12 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
 
+import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
-
-import java.util.List;
 
 /**
  * 会员服务接口
@@ -55,11 +56,13 @@ public interface MemberService {
      * 查询我的E友
      * @return
      */
-    List<MemberBO> findMemberListByUser(Long inviterId);
+    List<MemberBO> findMemberListByUser(MemberQuery memberQuery);
 
     /**
      * 会员注册
      * @param registerParam 会员注册信息
      */
     void register(RegisterParam registerParam);
+    
+
 }

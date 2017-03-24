@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.user.dto.AddressDTO;
@@ -32,9 +34,9 @@ public class AddressController {
 	  * 收货地址列表
 	  * @return
 	  */
-	@RequestMapping(value = "listByUserId", method = RequestMethod.GET)
-    public List<AddressDTO> listByUserId(@RequestParam Long userId) {
-		List<AddressBO> addressBOS = addressService.listByUserId(userId);
+	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
+    public List<AddressDTO> selectByUserId(@RequestParam Long userId) {
+		List<AddressBO> addressBOS = addressService.selectByUserId(userId);
         return AddressConverter.convertListDOTS(addressBOS);
     }
 	
@@ -44,7 +46,7 @@ public class AddressController {
 	  * @return
 	  */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public void save(@ModelAttribute AddressParam  addressDO ) {
+    public void save(@RequestBody  AddressParam  addressDO ) {
 		addressService.save(addressDO);
     }
    
@@ -53,7 +55,7 @@ public class AddressController {
 	 * 单个查询地址
 	 * @return
 	 */
-    @RequestMapping(value = "get", method = RequestMethod.GET)
+    @RequestMapping(value = "get", method = RequestMethod.POST)
     public AddressDTO get(@RequestParam Long id) {
 		AddressBO addressBO = addressService.get(id);
       return AddressConverter.convertDTO(addressBO);
@@ -63,19 +65,28 @@ public class AddressController {
 	 * 修改地址
 	 * @return
 	 */
-   @RequestMapping(value = "update", method = RequestMethod.GET)
-   public void update(@ModelAttribute AddressParam  addressDO) {
-		addressService.update(addressDO);
+   @RequestMapping(value = "update", method = RequestMethod.POST)
+   public void update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
+		addressService.update(addressParam,id);
    }
    
    /**
 	 * 修改地址
 	 * @return
 	 */
-   @RequestMapping(value = "delete", method = RequestMethod.GET)
-   public void delete(@RequestParam Long id) {
-		addressService.delete(id);
+   @RequestMapping(value = "remove", method = RequestMethod.GET)
+   public void remove(@RequestParam Long id) {
+		addressService.remove(id);
    }
+   
+   /**
+	 * 修改默认地址
+	 * @return
+	 */
+  @RequestMapping(value = "updateStatus", method = RequestMethod.GET)
+  public void updateStatus(@RequestParam Long id,@RequestParam Long userId) {
+		addressService.updateStatus(id, userId);
+  }
 	
 	
 

@@ -1,16 +1,25 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Leach
@@ -79,15 +88,15 @@ public class MemberController {
     }
 
     /**
-     * 我的E友
+     *我的E友
      *@author zhangrc
      *@date 2017/03/23
      *@param inviterId 登录用户
      *@return
      */
-    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
-    public List<MemberDTO> findMemberListByUser(@RequestParam Long inviterId) {
-        List<MemberBO> memberBOS = memberService.findMemberListByUser(inviterId);
+    @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
+    public List<MemberDTO> findMemberListByUser(@ModelAttribute MemberQuery memberQuery) {
+        List<MemberBO> memberBOS = memberService.findMemberListByUser(memberQuery);
         return MemberConverter.convertListDOTS(memberBOS);
     }
 

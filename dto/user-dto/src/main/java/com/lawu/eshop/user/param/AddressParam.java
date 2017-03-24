@@ -10,11 +10,7 @@ import java.io.Serializable;
  */
 public class AddressParam implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 
 	private Long userId;
 
@@ -32,7 +28,7 @@ public class AddressParam implements Serializable{
 
 
 	private String postcode;
-
+	
 
 	public Long getUserId() {
 		return userId;

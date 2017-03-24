@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.member.api.service.AddressService;
@@ -21,7 +22,7 @@ public class AddressServiceHystrix implements AddressService {
 
 
 	@Override
-	public List<AddressDTO> listByUserId(@RequestParam Long userId) {
+	public List<AddressDTO> selectByUserId(@RequestParam Long userId) {
 		
 		return null;
 	}
@@ -40,13 +41,19 @@ public class AddressServiceHystrix implements AddressService {
 	}
 
 	@Override
-	public void save(@ModelAttribute  AddressParam address) {
+	public void save(@RequestBody  AddressParam address) {
 		AddressDTO addressDTO = new AddressDTO();
 		addressDTO.setId(-1L);
 	}
 
 	@Override
-	public void update(@ModelAttribute  AddressParam address) {
+	public void update(@RequestBody AddressParam address,@RequestParam Long id) {
+		AddressDTO addressDTO = new AddressDTO();
+		addressDTO.setId(-1L);
+	}
+
+	@Override
+	public void updateStatus(@RequestParam Long id,@RequestParam Long userId) {
 		AddressDTO addressDTO = new AddressDTO();
 		addressDTO.setId(-1L);
 	}

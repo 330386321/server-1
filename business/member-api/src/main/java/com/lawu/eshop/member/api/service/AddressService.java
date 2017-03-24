@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,14 +27,14 @@ public interface AddressService {
 	 * @param address
 	 */
 	 @RequestMapping(method = RequestMethod.POST, value = "address/save")
-	 void save(@ModelAttribute AddressParam address);
+	 void save(@RequestBody AddressParam address);
 	 
 	 /**
 	  * 编辑收货地址
 	  * @param address
 	  */
-	 @RequestMapping(method = RequestMethod.GET, value = "address/update")
-	 void update(AddressParam address);
+	 @RequestMapping(method = RequestMethod.POST, value = "address/update")
+	 void update(@RequestBody AddressParam address,@RequestParam("id") Long id);
 	 
 	 /**
 	  * 单个查询地址
@@ -46,16 +47,21 @@ public interface AddressService {
 	  * 查询所有地址
 	  * @return
 	  */
-    @RequestMapping(method = RequestMethod.GET, value = "address/listByUserId")
-    List<AddressDTO> listByUserId(@RequestParam("userId") Long userId);
+    @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId")
+    List<AddressDTO> selectByUserId(@RequestParam("userId") Long userId);
 
     /**
 	 *刪除地址
 	 * @return
 	 */
-    @RequestMapping(method = RequestMethod.GET, value = "address/delete")
+    @RequestMapping(method = RequestMethod.GET, value = "address/remove")
 	void delete(@RequestParam("id") Long userId);
 	 
-	 
+    /**
+	 *修改默认地址
+	 *@return
+	 */
+    @RequestMapping( method = RequestMethod.GET,value = "address/updateStatus")
+    void updateStatus(@RequestParam("id") Long id,@RequestParam("userId") Long userId);
 
 }
