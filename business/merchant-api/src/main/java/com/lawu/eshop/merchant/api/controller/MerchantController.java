@@ -5,14 +5,12 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.param.RegisterParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -45,6 +43,13 @@ public class MerchantController extends BaseController {
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result getInviterByAccount(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
         return  merchantService.register(registerParam);
+    }
+
+    @ApiOperation(value = "商户注册", notes = "商户注册", httpMethod = "POST")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public Result getInviterByAccount(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
+        merchantService.register(registerParam);
+        return successResponse();
     }
 
 }

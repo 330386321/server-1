@@ -2,12 +2,10 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.user.srv.bo.InviterBO;
 import com.lawu.eshop.user.srv.converter.InviterConverter;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,9 @@ public class CommonServiceImpl implements CommonService {
     @Autowired
     private MerchantDOMapper merchantDOMapper;
 
+    @Autowired
+    private MerchantStoreDOMapper merchantStoreDOMapper;
+
     @Override
     public InviterBO getInviterByAccount(String account) {
 
@@ -45,8 +46,13 @@ public class CommonServiceImpl implements CommonService {
         merchantDOExample.createCriteria().andAccountEqualTo(account);
         List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(merchantDOExample);
         if (!merchantDOS.isEmpty()) {
-            //TODO   查询门店信息
-            return null;
+            MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
+            merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(merchantDOS.get(0).getId());
+            List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+            if (!merchantStoreDOS.isEmpty()) {
+                return InviterConverter.convertBO(merchantStoreDOS.get(0));
+            }
+            return InviterConverter.convertBO(merchantDOS.get(0));
         }
         return null;
     }

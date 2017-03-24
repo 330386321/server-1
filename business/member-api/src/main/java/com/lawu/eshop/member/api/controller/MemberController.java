@@ -10,6 +10,7 @@ import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
+import com.lawu.eshop.user.param.RegisterParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -72,5 +73,12 @@ public class MemberController extends BaseController {
     public Result<List<MemberDTO>> findMemberListByUser(@RequestBody @ApiParam(required = true, value = "查询信息") MemberQuery query) {
     	Result<List<MemberDTO>> memberDTOS = memberService.findMemberListByUser(query);
     	return memberDTOS;
+    }
+
+    @ApiOperation(value = "会员注册", notes = "会员注册", httpMethod = "POST")
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public Result register(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
+        memberService.register(registerParam);
+        return successCreated();
     }
 }
