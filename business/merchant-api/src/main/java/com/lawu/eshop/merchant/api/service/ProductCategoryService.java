@@ -22,7 +22,7 @@ public interface ProductCategoryService {
      * 查询所有商品类型
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "productCategory/findAll")
+    @RequestMapping(method = RequestMethod.POST, value = "productCategory/findAll")
     List<ProductCategoryDTO> findAll();
     
     /**
@@ -30,6 +30,6 @@ public interface ProductCategoryService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "productCategory/getById")
+    @RequestMapping(method = RequestMethod.POST, value = "productCategory/getById")
     ProductCategoryDTO getById(Integer id);
 }

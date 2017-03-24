@@ -4,7 +4,6 @@ import com.lawu.eshop.merchant.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
