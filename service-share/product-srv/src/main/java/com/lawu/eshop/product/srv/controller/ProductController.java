@@ -3,7 +3,6 @@ package com.lawu.eshop.product.srv.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,7 +15,7 @@ import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 
 /**
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 @RestController
@@ -31,8 +30,8 @@ public class ProductController {
      * @param query
      * @return
      */
-    @RequestMapping(value = "getProductList", method = RequestMethod.POST)
-    public List<ProductDTO> getProductList(@ModelAttribute @RequestBody ProductQuery query) {
+    @RequestMapping(value = "getProductList", method = RequestMethod.GET)
+    public List<ProductDTO> getProductList(@RequestBody ProductQuery query) {
         List<ProductBO> productBOS = productService.getProductList(query);
         return productBOS.isEmpty() ? null : ProductConverter.convertDTOS(productBOS);
     }

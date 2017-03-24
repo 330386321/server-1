@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 @RestController
@@ -38,7 +38,7 @@ public class ProductCategoryController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "getById", method = RequestMethod.POST)
+    @RequestMapping(value = "getById", method = RequestMethod.GET)
     public ProductCategoryDTO getById(@RequestParam Integer id) {
         ProductCategoryBO productCategoryBO = productCategoryService.getById(id);
         return productCategoryBO == null ? null : ProductCategoryConverter.convertDTO(productCategoryBO);

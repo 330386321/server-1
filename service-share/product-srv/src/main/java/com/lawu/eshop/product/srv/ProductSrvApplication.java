@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * 商品服务启动类
- * @author Leach
+ * @author yangqh
  * @date 2017/3/10
  */
 @EnableDiscoveryClient

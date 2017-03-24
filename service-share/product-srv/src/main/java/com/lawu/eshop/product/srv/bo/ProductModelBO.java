@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * 产品型号BO
  *
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/22
  */
 public class ProductModelBO {

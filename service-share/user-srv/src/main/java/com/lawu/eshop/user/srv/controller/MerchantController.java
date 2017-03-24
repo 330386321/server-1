@@ -1,20 +1,14 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
-import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author meishuquan
@@ -48,7 +42,7 @@ public class MerchantController {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
         return MerchantConverter.convertDTO(merchantBO);
     }
-    
+
     /**
      * 推荐商家
      *@author zhangrc
@@ -60,5 +54,15 @@ public class MerchantController {
     public List<MerchantDTO> findMemberListByUserId(@RequestParam Long inviterId) {
         List<MerchantBO> merchantBOS = merchantService.getMerchantByInviterId(inviterId);
         return MerchantConverter.convertListDOTS(merchantBOS);
+    }
+
+    /**
+     * 商户注册
+     * @param registerParam 商户注册信息
+     * @return
+     */
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public void register(@ModelAttribute RegisterParam registerParam){
+        merchantService.register(registerParam);
     }
 }

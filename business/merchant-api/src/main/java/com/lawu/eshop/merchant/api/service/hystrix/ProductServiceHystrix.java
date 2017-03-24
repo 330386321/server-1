@@ -9,7 +9,7 @@ import com.lawu.eshop.product.dto.ProductDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 
 /**
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 @Component
@@ -17,8 +17,6 @@ public class ProductServiceHystrix implements ProductService {
 
 	@Override
 	public List<ProductDTO> getProductList(ProductQuery query) {
-//		ProductDTO dto = new ProductDTO();
-//		dto.setId(-1L);
 		
 		return null;
 	}

@@ -1,15 +1,16 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.List;
-
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.param.UserParam;
+import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Leach
@@ -43,7 +44,7 @@ public class MemberController {
     /**
      * 会员个人资料修改
      *
-     * @param member 会员信息
+     * @param memberParam 会员信息
      * @return
      */
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.GET)
@@ -88,6 +89,16 @@ public class MemberController {
     public List<MemberDTO> findMemberListByUser(@RequestParam Long inviterId) {
         List<MemberBO> memberBOS = memberService.findMemberListByUser(inviterId);
         return MemberConverter.convertListDOTS(memberBOS);
+    }
+
+    /**
+     * 会员注册
+     * @param registerParam 会员注册信息
+     * @return
+     */
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public void register(@ModelAttribute RegisterParam registerParam){
+         memberService.register(registerParam);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.srv.converter;
 
-import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
 
@@ -8,7 +7,7 @@ import com.lawu.eshop.product.srv.domain.ProductModelDO;
  *
  * 会员信息转换器
  *
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 public class ProductModelConverter {

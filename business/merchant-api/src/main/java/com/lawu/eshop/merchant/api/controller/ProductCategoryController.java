@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiParam;
  * @author Leach
  * @date 2017/3/11
  */
-@Api(tags = "商品分类")
+@Api(tags = "productCategory")
 @RestController
 @RequestMapping(value = "productCategory/")
 public class ProductCategoryController extends BaseController {
@@ -28,16 +28,16 @@ public class ProductCategoryController extends BaseController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类", httpMethod = "POST")
-    @RequestMapping(value = "findAll", method = RequestMethod.POST)
+    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类", httpMethod = "GET")
+    @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<ProductCategoryDTO> findAll() {
 
         List<ProductCategoryDTO> dtos = productCategoryService.findAll();
         return dtos;
     }
     
-    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类", httpMethod = "POST")
-    @RequestMapping(value = "getById", method = RequestMethod.POST)
+    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类", httpMethod = "GET")
+    @RequestMapping(value = "getById", method = RequestMethod.GET)
     public ProductCategoryDTO getById(@RequestParam @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 
         ProductCategoryDTO dto = productCategoryService.getById(id);
