@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.converter;
 
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
@@ -28,4 +29,15 @@ public class MerchantStoreConverter {
         return merchantStoreProfileBO;
 
     }
+
+    public static MerchantStoreBO coverter(MerchantStoreDO merchantStoreDO){
+        if(merchantStoreDO == null){
+            return null;
+        }
+        MerchantStoreBO merchantStoreBO = new MerchantStoreBO();
+        merchantStoreBO.setName(merchantStoreDO.getName());
+       // merchantStoreBO.setPrincipalName(merchantStoreDO.getP);
+        return merchantStoreBO;
+    }
+
 }
