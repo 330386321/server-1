@@ -48,8 +48,20 @@
         </table>
         <table tableName="region" domainObjectName="RegionDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="suggestion" domainObjectName="SuggestionDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="express_company" domainObjectName="ExpressCompanyDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="industry_type" domainObjectName="IndustryTypeDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="sms_record" domainObjectName="SmsRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="verify_code" domainObjectName="VerifyCodeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
