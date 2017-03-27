@@ -1,9 +1,7 @@
 package com.lawu.eshop.member.api.service.hystrix;
 
-<<<<<<< Updated upstream
 import java.util.List;
 
-=======
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,16 +9,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
->>>>>>> Stashed changes
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-<<<<<<< Updated upstream
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.framework.web.Result;
-=======
->>>>>>> Stashed changes
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import org.springframework.stereotype.Component;
@@ -75,18 +69,14 @@ public class MemberServiceHystrix  {
         return inviterDTO;
     }
 
-<<<<<<< Updated upstream
     public Result register(@RequestBody RegisterParam registerParam) {
 
     }
 
     public List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId) {
         return null;
-    }*/
-=======
-	@Override
+    }
 	public Result<Page<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery query) {
 		return null;
-	}
->>>>>>> Stashed changes
+	}*/
 }
