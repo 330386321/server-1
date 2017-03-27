@@ -182,6 +182,12 @@ public abstract class BaseController {
         return new ModelAndView(viewName, model);
     }
 
+    /**
+     * 内部模块返回接口成功判断
+     *
+     * @param result
+     * @return
+     */
     public boolean isSuccess(Result result) {
         return result.getRet() == ResultCode.SUCCESS;
     }
