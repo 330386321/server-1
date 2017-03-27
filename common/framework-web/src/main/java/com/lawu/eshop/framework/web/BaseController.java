@@ -37,45 +37,75 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> successGet(T model) {
-        return response(HttpCode.SC_OK, HttpCode.SC_OK, HttpCode.get(HttpCode.SC_OK), null, model);
+        return response(HttpCode.SC_OK, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
 
     public <T> Result<T> successGet() {
         return successGet(null);
     }
 
+    public <T> Result<T> successGet(int resultCode) {
+        return response(HttpCode.SC_OK, resultCode, ResultCode.get(resultCode), null, null);
+    }
+
+    public <T> Result<T> successGet(int resultCode, String message) {
+        return response(HttpCode.SC_OK, resultCode, message, null, null);
+    }
+
     public <T> Result<T> successCreated(T model) {
-        return response(HttpCode.SC_CREATED, HttpCode.SC_CREATED, HttpCode.get(HttpCode.SC_CREATED), null, model);
+        return response(HttpCode.SC_CREATED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
 
     public <T> Result<T> successCreated() {
         return successCreated(null);
     }
 
+
+    public <T> Result<T> successCreated(int resultCode) {
+        return response(HttpCode.SC_CREATED, resultCode, ResultCode.get(resultCode), null, null);
+    }
+
+    public <T> Result<T> successCreated(int resultCode, String message) {
+        return response(HttpCode.SC_CREATED, resultCode, message, null, null);
+    }
+
     public <T> Result<T> successAccepted(T model) {
-        return response(HttpCode.SC_ACCEPTED, HttpCode.SC_ACCEPTED, HttpCode.get(HttpCode.SC_CREATED), null, model);
+        return response(HttpCode.SC_ACCEPTED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
 
     public <T> Result<T> successAccepted() {
         return successAccepted(null);
     }
 
+
+    public <T> Result<T> successAccepted(int resultCode) {
+        return response(HttpCode.SC_ACCEPTED, resultCode, ResultCode.get(resultCode), null, null);
+    }
+
+    public <T> Result<T> successAccepted(int resultCode, String message) {
+        return response(HttpCode.SC_ACCEPTED, resultCode, message, null, null);
+    }
+
+    @Deprecated
     public <T> Result<T> successDelete(T model) {
-        return response(HttpCode.SC_NO_CONTENT, HttpCode.SC_NO_CONTENT, HttpCode.get(HttpCode.SC_CREATED), null, model);
+        return response(HttpCode.SC_NO_CONTENT, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
 
     public <T> Result<T> successDelete() {
         return successDelete(null);
     }
 
+    @Deprecated
     public <T> Result<T> failCreated(int retCode, T model) {
         return response(HttpCode.SC_BAD_REQUEST, retCode, ResultCode.get(retCode), null, model);
     }
 
+    @Deprecated
     public <T> Result<T> failCreated(int retCode) {
         return failCreated(retCode, null);
     }
-    
+
+    @Deprecated
     public <T> Result<T> failCreated(String debug) {
         return response(HttpCode.SC_BAD_REQUEST, HttpCode.SC_BAD_REQUEST, HttpCode.get(HttpCode.SC_BAD_REQUEST), debug, null);
     }
@@ -88,30 +118,37 @@ public abstract class BaseController {
         return failUnauthorized(retCode, null);
     }
 
+    @Deprecated
     public <T> Result<T> failForbidden(int retCode, T model) {
         return response(HttpCode.SC_FORBIDDEN, retCode, ResultCode.get(retCode), null, model);
     }
 
+    @Deprecated
     public <T> Result<T> failForbidden(int retCode) {
         return failForbidden(retCode, null);
     }
 
+    @Deprecated
     public <T> Result<T> failGone(int retCode, T model) {
         return response(HttpCode.SC_GONE, retCode, ResultCode.get(retCode), null, model);
     }
-    
+
+    @Deprecated
     public <T> Result<T> failGone(String debug) {
         return response(HttpCode.SC_GONE, HttpCode.SC_GONE, HttpCode.get(HttpCode.SC_GONE), debug, null);
     }
 
+    @Deprecated
     public <T> Result<T> failGone(int retCode) {
         return failGone(retCode, null);
     }
 
+    @Deprecated
     public <T> Result<T> failVerify(T model) {
         return response(HttpCode.SC_UNPROCESABLE_ENTITY, HttpCode.SC_UNPROCESABLE_ENTITY, HttpCode.get(HttpCode.SC_UNPROCESABLE_ENTITY), null, model);
     }
 
+    @Deprecated
     public <T> Result<T> failVerify() {
         return failVerify(null);
     }

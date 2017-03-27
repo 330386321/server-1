@@ -34,13 +34,13 @@ public class HttpCode {
         HttpCode.messageMap.put(HttpCode.SC_ACCEPTED, "请求已接收");
         HttpCode.messageMap.put(HttpCode.SC_NO_CONTENT, "删除成功");
 
-        HttpCode.messageMap.put(HttpCode.SC_BAD_REQUEST, "新建/修改失败");
+        //HttpCode.messageMap.put(HttpCode.SC_BAD_REQUEST, "新建/修改失败");
         HttpCode.messageMap.put(HttpCode.SC_UNAUTHORIZED, "操作未授权");
         HttpCode.messageMap.put(HttpCode.SC_FORBIDDEN, "禁止访问");
-        HttpCode.messageMap.put(HttpCode.SC_NOT_FOUND, "请求不存在");
+        //HttpCode.messageMap.put(HttpCode.SC_NOT_FOUND, "请求不存在");
         HttpCode.messageMap.put(HttpCode.SC_NOT_ACCEPTABLE, "请求格式不正确");
-        HttpCode.messageMap.put(HttpCode.SC_GONE, "请求资源不存在");
-        HttpCode.messageMap.put(HttpCode.SC_UNPROCESABLE_ENTITY, "验证错误");
+        //HttpCode.messageMap.put(HttpCode.SC_GONE, "请求资源不存在");
+        //HttpCode.messageMap.put(HttpCode.SC_UNPROCESABLE_ENTITY, "验证错误");
 
         HttpCode.messageMap.put(HttpCode.SC_INTERNAL_SERVER_ERROR, "服务器内部错误");
 

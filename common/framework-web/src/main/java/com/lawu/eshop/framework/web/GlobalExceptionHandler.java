@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * 统一异常处理
@@ -22,6 +23,13 @@ public class GlobalExceptionHandler extends BaseController {
     public Result defaultErrorHandler(Exception e) throws Exception {
         logger.error("内部异常", e);
         return failServerError(e.getMessage());
+    }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public Result defaultMethodArgumentErrorHandler(MethodArgumentTypeMismatchException e) throws Exception {
+        logger.error("参数格式错误", e);
+        return response(HttpCode.SC_NOT_ACCEPTABLE, ResultCode.FAIL, "参数格式错误", e.getMessage(), null);
     }
 
 }
