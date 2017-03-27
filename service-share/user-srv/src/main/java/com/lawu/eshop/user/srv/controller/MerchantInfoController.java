@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -66,7 +67,9 @@ public class MerchantInfoController extends BaseController{
             //门店信息
             MerchantStoreProfileBO merchantStoreBO = merchantStoreProfileService.findMerchantStoreInfo(merchantProfileId);
             if(merchantStoreBO != null){
-                merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
+                if(!StringUtils.isEmpty(merchantStoreBO.getPrincipalMobile())){
+                    merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
+                }
                 merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
 
             }

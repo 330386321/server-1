@@ -30,7 +30,7 @@ public class MerchantInfoController extends BaseController {
    // @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMerchantSizeLink/{id}", method = RequestMethod.PUT)
-    public Result updateMerchantSizeLink(@ModelAttribute  @ApiParam MerchantProfileParam merchantProfileParam,
+    public Result updateMerchantSizeLink(@ModelAttribute  @ApiParam(name = "merchantProfileParam",value = "商家附件") MerchantProfileParam merchantProfileParam,
                                        @PathVariable @ApiParam(required = true, value = "商家ID") Long id){
         Result result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
         return result;

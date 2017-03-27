@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.param;
 
+import io.swagger.annotations.ApiParam;
+
 import java.util.Date;
 
 /**
@@ -8,14 +10,19 @@ import java.util.Date;
  */
 public class UserParam {
 
+    @ApiParam(name="nickname", value = "昵称")
     private String nickname;
 
+    @ApiParam(name="regionPath", value = "地区路径")
     private String regionPath;
 
+    @ApiParam(name="sex", value = "性别")
     private Byte sex;
 
+    @ApiParam(name="birthday", value = "生日")
     private Date birthday;
 
+    @ApiParam(name="headimg", value = "头像")
     private String headimg;
    
     public String getNickname() {

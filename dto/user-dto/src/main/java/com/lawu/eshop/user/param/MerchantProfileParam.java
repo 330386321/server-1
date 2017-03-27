@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.param;
 
-import java.util.Date;
+import io.swagger.annotations.ApiParam;
+
 
 /**
  *
@@ -9,12 +10,16 @@ import java.util.Date;
  */
 public class MerchantProfileParam {
 
+    @ApiParam(name="websiteUrl", value = "官网链接")
     private String websiteUrl;
 
+    @ApiParam(name="taobaoUrl", value = "淘宝链接")
     private String taobaoUrl;
 
+    @ApiParam(name="tmallUrl", value = "天猫链接")
     private String tmallUrl;
 
+    @ApiParam(name="jdUrl", value = "京东链接")
     private String jdUrl;
 
 
