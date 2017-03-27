@@ -1,13 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 	
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -21,11 +13,12 @@ import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -104,5 +97,12 @@ public class MemberController extends BaseController {
     public Result register(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
         memberService.register(registerParam);
         return successCreated();
+    }
+
+    @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
+    public Result<MemberDTO> getMemberByAccount(@PathVariable @ApiParam(required = true, value = "会员账号") String account) {
+        return memberService.getMemberByAccount(account);
     }
 }

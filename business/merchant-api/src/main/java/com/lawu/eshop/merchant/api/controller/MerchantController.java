@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +53,7 @@ public class MerchantController extends BaseController {
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
+    @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return merchantService.getInviterByAccount(account);
     }
@@ -62,6 +63,13 @@ public class MerchantController extends BaseController {
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result getInviterByAccount(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
         return  merchantService.register(registerParam);
+    }
+
+    @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。(梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
+    public Result<MerchantDTO> getMerchantByAccount(@PathVariable @ApiParam(required = true, value = "商户账号") String account) {
+        return merchantService.getMerchantByAccount(account);
     }
 
 }

@@ -47,10 +47,10 @@ public class MerchantController extends BaseController {
      *
      * @param account 商户账号
      */
-    @RequestMapping(value = "getMerchantByAccount", method = RequestMethod.GET)
-    public Result getMerchantByAccount(@RequestParam String account) {
+    @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
+    public Result getMerchantByAccount(@PathVariable String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
-        MerchantDTO merchantDTO= MerchantConverter.convertDTO(merchantBO);
+        MerchantDTO merchantDTO = MerchantConverter.convertDTO(merchantBO);
         return successGet(merchantDTO);
     }
 

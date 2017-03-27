@@ -94,8 +94,8 @@ public class MemberController extends BaseController {
      * @param account 会员账号
      * @return
      */
-    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
-    public Result getMemberByAccount(@RequestParam String account) {
+    @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
+    public Result getMemberByAccount(@PathVariable String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
         MemberDTO memberDTO = MemberConverter.convertMDTO(memberBO);
         return successGet(memberDTO);

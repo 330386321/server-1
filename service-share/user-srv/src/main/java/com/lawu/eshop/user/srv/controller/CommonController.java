@@ -18,7 +18,7 @@ public class CommonController {
     @Autowired
     private CommonService commonService;
 
-    @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
+    @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)
     public InviterDTO getInviterByAccount(@PathVariable String account) {
         InviterBO inviterBO = commonService.getInviterByAccount(account);
         return InviterConverter.convertDTO(inviterBO);

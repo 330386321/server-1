@@ -85,4 +85,12 @@ public interface MemberService {
     @RequestMapping(method = RequestMethod.POST, value = "member/register")
     Result register(@ModelAttribute RegisterParam registerParam);
 
+    /**
+     * 根据账号查询会员信息
+     * @param account   会员账号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
+    Result getMemberByAccount(@PathVariable String account);
+
 }

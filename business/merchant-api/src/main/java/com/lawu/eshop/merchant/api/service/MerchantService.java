@@ -29,7 +29,7 @@ public interface MerchantService {
      *
      * @param account 邀请人账号
      */
-    @RequestMapping(method = RequestMethod.POST, value = "user/common/getInviterByAccount/{account}")
+    @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviter/{account}")
     Result getInviterByAccount(@PathVariable("account") String account);
 
     /**
@@ -39,4 +39,8 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchant/register")
     Result register(@ModelAttribute RegisterParam registerParam);
+
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
+    Result getMerchantByAccount(@PathVariable String account);
+
 }
