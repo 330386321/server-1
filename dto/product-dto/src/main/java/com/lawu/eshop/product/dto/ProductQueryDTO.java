@@ -3,35 +3,27 @@ package com.lawu.eshop.product.dto;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 产品DTO
+ * 商品列表查询，封装的DTO
  *
  * @author Leach
  * @date 2017/3/22
  */
-public class ProductDTO {
+public class ProductQueryDTO {
 
-	@ApiModelProperty(value = "主键", required = true)
     private Long id;
 	
-	@ApiModelProperty(value = "分类", required = true)
     private String category;
 	
-	@ApiModelProperty(value = "商品名称", required = true)
+    private String categoryName;
+	
     private String name;
 	
-	@ApiModelProperty(value = "状态", required = true)
     private Integer status;
 	
-	@ApiModelProperty(value = "创建时间", required = true)
     private String gmtCreate;
 	
-	@ApiModelProperty(value = "封面图片", required = true)
     private String featureImage;
 	
-	@ApiModelProperty(value = "商品图片", required = true)
-    private String imagesUrl;
-	
-	@ApiModelProperty(value = "商品型号", required = true)
     private String spec;
 	
 	public Long getId() {
@@ -45,6 +37,12 @@ public class ProductDTO {
 	}
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	public String getName() {
 		return name;
@@ -76,11 +74,4 @@ public class ProductDTO {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
-	public String getImagesUrl() {
-		return imagesUrl;
-	}
-	public void setImagesUrl(String imagesUrl) {
-		this.imagesUrl = imagesUrl;
-	}
-    
 }

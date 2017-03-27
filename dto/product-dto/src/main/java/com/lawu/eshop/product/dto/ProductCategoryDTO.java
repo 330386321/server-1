@@ -1,29 +1,22 @@
 package com.lawu.eshop.product.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 
 /**
- * @author Leach
+ * @author Yangqh
  * @date 2017/3/13
  */
 public class ProductCategoryDTO {
 
-    @ApiModelProperty(value = "主键", required = true)
     private Integer id;
 
-    @ApiModelProperty(value = "商品类型名称", required = true)
     private String name;
 
-    @ApiModelProperty(value = "父ID", required = true)
     private Integer parentId;
 
-    @ApiModelProperty(value = "全路径", required = true)
     private String path;
 
-    @ApiModelProperty(value = "等级", required = true)
     private Integer level;
 
-    @ApiModelProperty(value = "1热门分类", required = true)
     private Integer type;
 
 

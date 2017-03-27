@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.product.dto.ProductDTO;
+import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 
 /**
@@ -25,7 +25,7 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/selectProduct")
-    Result<Page<ProductDTO>> selectProduct(@RequestBody ProductQuery query);
+    Result<Page<ProductQueryDTO>> selectProduct(@RequestBody ProductQuery query);
     
     /**
 	 * 批量处理

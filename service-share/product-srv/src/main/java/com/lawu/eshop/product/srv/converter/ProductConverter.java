@@ -3,8 +3,10 @@ package com.lawu.eshop.product.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lawu.eshop.product.dto.ProductDTO;
-import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -23,20 +25,19 @@ public class ProductConverter {
      * @param productCategoryeDO
      * @return
      */
-    public static List<ProductDTO> convertDTOS(List<ProductBO> productBOS) {
+    public static List<ProductQueryDTO> convertDTOS(List<ProductQueryBO> productBOS) {
         if (productBOS == null) {
             return null;
         }
         
-        List<ProductDTO> productDTOS = new ArrayList<ProductDTO>();
-        for(ProductBO productBO : productBOS){
-        	ProductDTO productDTO = new ProductDTO();
+        List<ProductQueryDTO> productDTOS = new ArrayList<ProductQueryDTO>();
+        for(ProductQueryBO productBO : productBOS){
+        	ProductQueryDTO productDTO = new ProductQueryDTO();
             productDTO.setId(productBO.getId());
             productDTO.setName(productBO.getName());
             productDTO.setCategory(productBO.getCategory());
             productDTO.setFeatureImage(productBO.getFeatureImage());
             productDTO.setGmtCreate(productBO.getGmtCreate());
-            productDTO.setImagesUrl(productBO.getImagesUrl());
             productDTO.setSpec(productBO.getSpec());
             productDTO.setStatus(productBO.getStatus());   
             productDTOS.add(productDTO);
@@ -49,14 +50,54 @@ public class ProductConverter {
      * @param productDO
      * @return
      */
-	public static ProductBO convertBO(ProductDO productDO) {
-		ProductBO productBO = new ProductBO();
+	public static ProductQueryBO convertQueryBO(ProductDO productDO) {
+		ProductQueryBO productBO = new ProductQueryBO();
 		productBO.setId(productDO.getId());
 		productBO.setName(productDO.getName());
 		productBO.setFeatureImage(productDO.getFeatureImage());
 		productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
 		productBO.setStatus(Utils.byteToInt(productDO.getStatus())); 
 		return productBO;
+	}
+
+	public static ProductQueryDTO convertDTO(ProductQueryBO productBO) {
+		ProductQueryDTO productDTO = new ProductQueryDTO();
+        productDTO.setId(productBO.getId());
+        productDTO.setName(productBO.getName());
+        productDTO.setCategory(productBO.getCategory());
+        productDTO.setFeatureImage(productBO.getFeatureImage());
+        productDTO.setGmtCreate(productBO.getGmtCreate());
+        productDTO.setSpec(productBO.getSpec());
+        productDTO.setStatus(productBO.getStatus());   
+		return productDTO;
+	}
+
+	/**
+	 * 用户端商品详情BO转换
+	 * @param productDO
+	 * @return
+	 */
+	public static ProductInfoBO convertInfoBO(ProductDO productDO) {
+		ProductInfoBO productInfoBO = new ProductInfoBO();
+		productInfoBO.setId(productDO.getId());
+		productInfoBO.setName(productDO.getName());
+		productInfoBO.setFeatureImage(productDO.getFeatureImage());
+		productInfoBO.setContent(productDO.getContent());
+		return productInfoBO;
+	}
+
+	/**
+	 * 用户端商品详情DTO转换
+	 * @param productBO
+	 * @return
+	 */
+	public static ProductInfoDTO convertInfoDTO(ProductInfoBO productBO) {
+		ProductInfoDTO productInfoDTO = new ProductInfoDTO();
+		productInfoDTO.setId(productBO.getId());
+		productInfoDTO.setName(productBO.getName());
+		productInfoDTO.setFeatureImage(productBO.getFeatureImage());
+		productInfoDTO.setContent(productBO.getContent());
+		return null;
 	}
 
     

@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,7 +12,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ProductService;
-import com.lawu.eshop.product.dto.ProductDTO;
+import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.query.ProductQuery;
 
 import io.swagger.annotations.Api;
@@ -32,9 +33,9 @@ public class ProductController extends BaseController {
 
     @ApiOperation(value = "分页查询商品", notes = "分页查询商品，[201|400]。(杨清华)", httpMethod = "POST")
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
-    public Result selectProduct(@RequestBody @ApiParam ProductQuery query) {
+    public Result selectProduct(@ModelAttribute @ApiParam ProductQuery query) {
     	
-    	Result<Page<ProductDTO>> page = productService.selectProduct(query);
+    	Result<Page<ProductQueryDTO>> page = productService.selectProduct(query);
         return successGet(page);
     }
     

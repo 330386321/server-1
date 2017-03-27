@@ -2,15 +2,17 @@ package com.lawu.eshop.product.query;
 
 import com.lawu.eshop.framework.core.page.PageParam;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ProductQuery extends PageParam{
 	
-//	@ApiModelProperty(value = "商家ID", required = true)
+	@ApiModelProperty(value = "商家ID", required = true)
 	private Long merchantId;
 	
-//	@ApiModelProperty(value = "商品名称", required = false)
+	@ApiModelProperty(value = "商品名称", required = false)
 	private String name;
 	
-//	@ApiModelProperty(value = "状态", required = true)
+	@ApiModelProperty(value = "状态", required = true)
 	private Integer status;
 	
 	public Long getMerchantId() {

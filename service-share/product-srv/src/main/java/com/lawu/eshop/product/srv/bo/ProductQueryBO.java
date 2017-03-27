@@ -6,7 +6,7 @@ package com.lawu.eshop.product.srv.bo;
  * @author Yangqh
  * @date 2017/3/22
  */
-public class ProductBO {
+public class ProductQueryBO {
 
     private Long id;
     private String category;
@@ -14,7 +14,6 @@ public class ProductBO {
     private Integer status;
     private String gmtCreate;
     private String featureImage;
-    private String imagesUrl;
     private String spec;
 	public Long getId() {
 		return id;
@@ -57,12 +56,6 @@ public class ProductBO {
 	}
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
-	}
-	public String getImagesUrl() {
-		return imagesUrl;
-	}
-	public void setImagesUrl(String imagesUrl) {
-		this.imagesUrl = imagesUrl;
 	}
     
 }
