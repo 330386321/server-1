@@ -36,6 +36,10 @@ public abstract class BaseController {
         return result;
     }
 
+    public Result response(int httpCode, Result result) {
+        return response(httpCode, result.getRet(), result.getMsg(), result.getDebug(), result.getModel());
+    }
+
     public <T> Result<T> successGet(T model) {
         return response(HttpCode.SC_OK, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
@@ -50,6 +54,10 @@ public abstract class BaseController {
 
     public <T> Result<T> successGet(int resultCode, String message) {
         return response(HttpCode.SC_OK, resultCode, message, null, null);
+    }
+
+    public Result successGet(Result result) {
+        return response(HttpCode.SC_OK, result);
     }
 
     public <T> Result<T> successCreated(T model) {
@@ -69,6 +77,10 @@ public abstract class BaseController {
         return response(HttpCode.SC_CREATED, resultCode, message, null, null);
     }
 
+    public Result successCreated(Result result) {
+        return response(HttpCode.SC_CREATED, result);
+    }
+
     public <T> Result<T> successAccepted(T model) {
         return response(HttpCode.SC_ACCEPTED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
@@ -84,6 +96,10 @@ public abstract class BaseController {
 
     public <T> Result<T> successAccepted(int resultCode, String message) {
         return response(HttpCode.SC_ACCEPTED, resultCode, message, null, null);
+    }
+
+    public Result successAccepted(Result result) {
+        return response(HttpCode.SC_ACCEPTED, result);
     }
 
     @Deprecated
@@ -160,5 +176,10 @@ public abstract class BaseController {
     public ModelAndView createMav(String viewName, Map<String, ?> model) {
         return new ModelAndView(viewName, model);
     }
+
+    public boolean isSuccess(Result result) {
+        return result.getRet() == ResultCode.SUCCESS;
+    }
+
 
 }
