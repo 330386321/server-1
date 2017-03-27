@@ -74,13 +74,13 @@ public class ProductController extends BaseController{
      * @return
      */
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
-    public Result selectProductById(@RequestParam Long id){
-    	if(id == null){
+    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId){
+    	if(productId == null){
     		return failCreated(ResultCode.PRODUCT_WRONG_ID, null);
     	}
     	
     	//商品基本信息 
-    	ProductInfoBO productBO = productService.selectProductById(id);
+    	ProductInfoBO productBO = productService.selectProductById(productId);
     	ProductInfoDTO productDTO = ProductConverter.convertInfoDTO(productBO);
     	
     	return successCreated(productDTO);

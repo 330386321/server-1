@@ -5,7 +5,7 @@ import com.lawu.eshop.product.srv.domain.ProductModelDO;
 
 /**
  *
- * 会员信息转换器
+ * 商品信息转换器
  *
  * @author Yangqh
  * @date 2017/3/13

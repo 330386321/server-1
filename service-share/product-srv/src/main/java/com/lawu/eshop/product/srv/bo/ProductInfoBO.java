@@ -9,6 +9,7 @@ package com.lawu.eshop.product.srv.bo;
 public class ProductInfoBO {
 
     private Long id;
+    private Long merchantId;
     private String name;
     private String content;
     private Integer totalSales;//销量
@@ -22,6 +23,12 @@ public class ProductInfoBO {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 	public String getName() {
 		return name;

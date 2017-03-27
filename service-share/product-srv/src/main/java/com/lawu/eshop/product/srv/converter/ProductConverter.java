@@ -83,6 +83,7 @@ public class ProductConverter {
 		productInfoBO.setName(productDO.getName());
 		productInfoBO.setFeatureImage(productDO.getFeatureImage());
 		productInfoBO.setContent(productDO.getContent());
+		productInfoBO.setMerchantId(productDO.getMerchantId());
 		return productInfoBO;
 	}
 
@@ -94,10 +95,16 @@ public class ProductConverter {
 	public static ProductInfoDTO convertInfoDTO(ProductInfoBO productBO) {
 		ProductInfoDTO productInfoDTO = new ProductInfoDTO();
 		productInfoDTO.setId(productBO.getId());
+		productInfoDTO.setMerchantId(productBO.getMerchantId());
 		productInfoDTO.setName(productBO.getName());
 		productInfoDTO.setFeatureImage(productBO.getFeatureImage());
 		productInfoDTO.setContent(productBO.getContent());
-		return null;
+		productInfoDTO.setImagesUrl(productBO.getImagesUrl());
+		productInfoDTO.setSpec(productBO.getSpec());
+		productInfoDTO.setTotalSales(productBO.getTotalSales());
+		productInfoDTO.setPriceMax(productBO.getPriceMax());
+		productInfoDTO.setPriceMin(productBO.getPriceMin());
+		return productInfoDTO;
 	}
 
     

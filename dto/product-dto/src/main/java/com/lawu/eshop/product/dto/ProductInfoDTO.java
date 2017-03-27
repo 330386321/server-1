@@ -9,17 +9,55 @@ package com.lawu.eshop.product.dto;
 public class ProductInfoDTO {
 
     private Long id;
-	
+    private Long merchantId;
     private String name;
-	
 	private String content;
-	
+    private Integer totalSales;//销量
     private String featureImage;
-	
     private String imagesUrl;
-	
     private String spec;
-	
+    private String priceMax;
+    private String priceMin;
+    
+    private String isSupportEleven;//是否支持七天无理由退货
+    private String evaluateJson;//商品评价json字符串
+    
+	public String getIsSupportEleven() {
+		return isSupportEleven;
+	}
+	public void setIsSupportEleven(String isSupportEleven) {
+		this.isSupportEleven = isSupportEleven;
+	}
+	public String getEvaluateJson() {
+		return evaluateJson;
+	}
+	public void setEvaluateJson(String evaluateJson) {
+		this.evaluateJson = evaluateJson;
+	}
+	public Integer getTotalSales() {
+		return totalSales;
+	}
+	public void setTotalSales(Integer totalSales) {
+		this.totalSales = totalSales;
+	}
+	public String getPriceMax() {
+		return priceMax;
+	}
+	public Long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+	public void setPriceMax(String priceMax) {
+		this.priceMax = priceMax;
+	}
+	public String getPriceMin() {
+		return priceMin;
+	}
+	public void setPriceMin(String priceMin) {
+		this.priceMin = priceMin;
+	}
 	public Long getId() {
 		return id;
 	}
