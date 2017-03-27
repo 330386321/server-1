@@ -54,7 +54,7 @@ public class MemberConverter {
     /**
      * DO转换
      *
-     * @param memberDO
+     * @param memberBO
      * @return
      */
     public static MemberDO convertDO(MemberBO memberBO) {
@@ -96,6 +96,7 @@ public class MemberConverter {
 
         UserDTO userDTO = new UserDTO();
         userDTO.setId(memberBO.getId());
+        userDTO.setNum(memberBO.getNum());
         userDTO.setAccount(memberBO.getAccount());
         userDTO.setBirthday(memberBO.getBirthday());
         userDTO.setSex(memberBO.getSex());
@@ -109,7 +110,7 @@ public class MemberConverter {
     /**
      * param转DO
      *
-     * @param userDTO
+     * @param userParam
      * @return
      */
     public static MemberDO convertDOOther(UserParam userParam){
@@ -171,7 +172,7 @@ public class MemberConverter {
      * 描述：将BOS转成DTOS
      * @author zhangrc
      * @date 2017/03/23
-     * @param memberDOS
+     * @param memberBOS
      * @return
      */
     public static List<MemberDTO> convertListDOTS(List<MemberBO> memberBOS) {

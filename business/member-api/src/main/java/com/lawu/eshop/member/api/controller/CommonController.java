@@ -47,6 +47,8 @@ public class CommonController extends BaseController {
         String token = tokenManager.createToken(UserConstant.TOKEN_TYPE, userDTO.getId(), userDTO.getAccount());
 
         TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setUserId(userDTO.getId());
+        tokenDTO.setUserNum(userDTO.getNum());
         tokenDTO.setToken(token);
 
         return successCreated(tokenDTO);
