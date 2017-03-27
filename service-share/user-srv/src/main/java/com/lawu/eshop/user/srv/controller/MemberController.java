@@ -78,8 +78,8 @@ public class MemberController extends BaseController {
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      */
-    @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@RequestParam Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+    @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
         MemberBO memberBO = memberService.getMemberById(id);
         if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
             return failVerify();
@@ -94,8 +94,8 @@ public class MemberController extends BaseController {
      * @param account 会员账号
      * @return
      */
-    @RequestMapping(value = "getMemberByAccount", method = RequestMethod.GET)
-    public Result getMemberByAccount(@RequestParam String account) {
+    @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
+    public Result getMemberByAccount(@PathVariable String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
         MemberDTO memberDTO = MemberConverter.convertMDTO(memberBO);
         return successGet(memberDTO);

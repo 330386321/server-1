@@ -15,3 +15,5 @@
 .classpath
 target
 bin
+
+.DS_Store

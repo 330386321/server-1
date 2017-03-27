@@ -48,15 +48,18 @@ public class MemberServiceHystrix  {
         return inviterDTO;
     }
 
-<<<<<<< Updated upstream
     public Result register(@RequestBody RegisterParam registerParam) {
 
     }
 
     public List<MemberDTO> findMemberListByUser(@RequestParam("inviterId") Long inviterId) {
         return null;
+<<<<<<< HEAD
     }*/
 	/*@Override
+=======
+    }
+>>>>>>> 9a4ec6b8d0a3c1986beb613ac3fbf088cf0c7732
 	public Result<Page<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery query) {
 		Result<Page<MemberDTO>> page=new 
 		return null;

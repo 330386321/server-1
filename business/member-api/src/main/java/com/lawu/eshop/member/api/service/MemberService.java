@@ -56,8 +56,8 @@ public interface MemberService {
      * @param newPwd      新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "member/updateLoginPwd")
-    Result updateLoginPwd(@RequestParam("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+    @RequestMapping(method = RequestMethod.PUT, value = "member/updateLoginPwd/{id}")
+    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
 
     /**
      * 查询我的E友
@@ -74,8 +74,8 @@ public interface MemberService {
      *
      * @param account 邀请人账号
      */
-    @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviterByAccount")
-    Result getInviterByAccount(@RequestParam("account") String account);
+    @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviterByAccount/{account}")
+    Result getInviterByAccount(@PathVariable("account") String account);
 
     /**
      * 会员注册
@@ -84,5 +84,13 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/register")
     Result register(@ModelAttribute RegisterParam registerParam);
+
+    /**
+     * 根据账号查询会员信息
+     * @param account   会员账号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
+    Result getMemberByAccount(@PathVariable String account);
 
 }

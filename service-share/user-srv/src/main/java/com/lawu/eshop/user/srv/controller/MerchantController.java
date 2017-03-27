@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,8 +39,8 @@ public class MerchantController extends BaseController {
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      */
-    @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@RequestParam Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+    @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
 
         MerchantBO merchantBO = merchantService.getMerchantBOById(id);
         if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
@@ -54,10 +55,10 @@ public class MerchantController extends BaseController {
      *
      * @param account 商户账号
      */
-    @RequestMapping(value = "getMerchantByAccount", method = RequestMethod.GET)
-    public Result getMerchantByAccount(@RequestParam String account) {
+    @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
+    public Result getMerchantByAccount(@PathVariable String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
-        MerchantDTO merchantDTO= MerchantConverter.convertDTO(merchantBO);
+        MerchantDTO merchantDTO = MerchantConverter.convertDTO(merchantBO);
         return successGet(merchantDTO);
     }
 

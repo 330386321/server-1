@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 
 /**
@@ -60,17 +57,7 @@ public class MerchantConverter {
 
         MerchantDTO merchantDTO = new MerchantDTO();
         merchantDTO.setId(merchantBO.getId());
-        merchantDTO.setNum(merchantBO.getNum());
         merchantDTO.setAccount(merchantBO.getAccount());
-        merchantDTO.setPwd(merchantBO.getPwd());
-        merchantDTO.setMobile(merchantBO.getMobile());
-        merchantDTO.setHeadimg(merchantBO.getHeadimg());
-        merchantDTO.setStatus(merchantBO.getStatus());
-        merchantDTO.setInviterId(merchantBO.getInviterId());
-        merchantDTO.setInviterType(merchantBO.getInviterType());
-        merchantDTO.setLevel(merchantBO.getLevel());
-        merchantDTO.setGmtModified(merchantBO.getGmtModified());
-        merchantDTO.setGmtCreate(merchantBO.getGmtCreate());
         return merchantDTO;
     }
 
