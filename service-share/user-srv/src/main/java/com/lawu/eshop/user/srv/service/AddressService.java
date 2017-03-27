@@ -48,6 +48,6 @@ public interface AddressService {
 	  * @param id
 	  * @param isDefault
 	  */
-	 Integer updateStatus(Long id ,Long userId);
+	 Integer updateDefault(Long id ,Long userId);
 
 }

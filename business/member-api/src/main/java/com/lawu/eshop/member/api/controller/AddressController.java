@@ -69,9 +69,9 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	//@Authorization
-	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "delete", method = RequestMethod.POST)
+	@RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs=addressService.delete(id);
 		return rs;
@@ -85,7 +85,7 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "添加收货地址", notes = "添加收货地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result insert( @RequestBody @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
+    public Result insert( @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 		Result rs= addressService.save(address);
 		return rs;
     }
@@ -98,7 +98,7 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "修改收货地址", notes = "修改收货地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-    public Result update(@RequestBody  @ApiParam(required = true, value = "收货地址信息") AddressParam address
+    public Result update(@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address
     		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs= addressService.update(address,id);
 		return rs;
@@ -112,10 +112,9 @@ public class AddressController extends BaseController {
 	//@Authorization
 	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "updateStatus", method = RequestMethod.POST)
-    public Result updateStatus(@RequestParam @ApiParam (required = true, value = "会员id") Long userId
-   		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
-	   Result rs= addressService.updateStatus(userId,id);
+	@RequestMapping(value = "updateDefault", method = RequestMethod.POST)
+    public Result updateDefault(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id,@RequestParam @ApiParam (required = true, value = "会员id") Long userId) {
+	   Result rs= addressService.updateDefault(id,userId);
 	   return rs;
     }
 	

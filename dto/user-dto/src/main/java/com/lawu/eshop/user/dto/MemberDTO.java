@@ -7,11 +7,6 @@ public class MemberDTO {
 	
     private String account;
 
-    private String num;
-
-
-    private String mobile;
-
     private String name;
 
     private String nickname;
@@ -24,11 +19,10 @@ public class MemberDTO {
 
     private String headimg;
 
-    private Byte status;
-
-    private Byte inviterType;
-
     private Integer level;
+    
+    private Date gmtCreate;
+    
 
 	public String getAccount() {
 		return account;
@@ -38,21 +32,7 @@ public class MemberDTO {
 		this.account = account;
 	}
 
-	public String getNum() {
-		return num;
-	}
 
-	public void setNum(String num) {
-		this.num = num;
-	}
-
-	public String getMobile() {
-		return mobile;
-	}
-
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
 
 	public String getName() {
 		return name;
@@ -102,22 +82,6 @@ public class MemberDTO {
 		this.headimg = headimg;
 	}
 
-	public Byte getStatus() {
-		return status;
-	}
-
-	public void setStatus(Byte status) {
-		this.status = status;
-	}
-
-	public Byte getInviterType() {
-		return inviterType;
-	}
-
-	public void setInviterType(Byte inviterType) {
-		this.inviterType = inviterType;
-	}
-
 	public Integer getLevel() {
 		return level;
 	}
@@ -133,7 +97,16 @@ public class MemberDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
     
+	
     
 
 }

@@ -1,5 +1,14 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserStatusConstant;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -7,20 +16,19 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.MD5;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -91,12 +99,27 @@ public class MemberServiceImpl implements MemberService {
     }
 
 	@Override
-	public List<MemberBO> findMemberListByUser(MemberQuery memberQuery) {
+	public Page<MemberBO> findMemberListByUser(MemberQuery memberQuery) {
 		 MemberDOExample example = new MemberDOExample();
-		 example.createCriteria().andInviterIdEqualTo(memberQuery.getInviterId());
+		 Byte status=1;
+		 Criteria c1=example.createCriteria();
+		 c1.andInviterIdEqualTo(memberQuery.getInviterId()).andStatusEqualTo(status);
+		 int totalCount= memberDOMapper.countByExample(example); //总记录数
+		 if(memberQuery.getAccountOrNickName()!=null){ //存在模糊查询
+			 Criteria c2=example.createCriteria();
+			 c2.andAccountLike(memberQuery.getAccountOrNickName());
+			 Criteria c3=example.createCriteria();
+			 c3.andNicknameLike(memberQuery.getAccountOrNickName());
+			 example.or(c2);
+			 example.or(c3);
+		 }
 		 RowBounds rowBounds = new RowBounds(memberQuery.getCurrentPage(), memberQuery.getPageSize());
 		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		return memberDOS.isEmpty() ? null : MemberConverter.convertListBOS(memberDOS);
+		 Page<MemberBO> pageMember =new Page<MemberBO>();
+		 pageMember.setTotalCount(totalCount);
+		 List<MemberBO> memberBOS= MemberConverter.convertListBOS(memberDOS);
+		 pageMember.setRecords(memberBOS);
+		return pageMember;
 	}
 
     @Override

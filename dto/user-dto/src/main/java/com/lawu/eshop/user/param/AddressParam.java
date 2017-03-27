@@ -2,6 +2,8 @@ package com.lawu.eshop.user.param;
 
 import java.io.Serializable;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * api 收货地址操作实体
  * @author zhangrc
@@ -12,21 +14,22 @@ public class AddressParam implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
+	@ApiParam (name="userId",required = true, value = "用户id")
 	private Long userId;
 
-
+	@ApiParam (name="name",required = true, value = "收货人")
 	private String name;
 
-
+	@ApiParam (name="mobile",required = true, value = "电话")
 	private String mobile;
 
-
+	@ApiParam (name="regionPath",required = true, value = "地址")
 	private String regionPath;
 
-
+	@ApiParam (name="addr",required = true, value = "详细地址")
 	private String addr;
 
-
+	@ApiParam (name="postcode",required = true, value = "邮箱")
 	private String postcode;
 	
 

@@ -86,7 +86,7 @@ public class AddressController extends BaseController{
 	 * 修改地址
 	 * @return
 	 */
-   @RequestMapping(value = "remove", method = RequestMethod.GET)
+   @RequestMapping(value = "remove", method = RequestMethod.DELETE)
    public Result remove(@RequestParam Long id) {
 	   Integer i=addressService.remove(id);
 	   if(i>0){
@@ -100,9 +100,9 @@ public class AddressController extends BaseController{
 	 * 修改默认地址
 	 * @return
 	 */
-  @RequestMapping(value = "updateStatus", method = RequestMethod.GET)
-  public Result updateStatus(@RequestParam Long id,@RequestParam Long userId) {
-	  Integer i=addressService.updateStatus(id, userId);
+  @RequestMapping(value = "updateDefault", method = RequestMethod.GET)
+  public Result updateDefault(@RequestParam Long id,@RequestParam Long userId) {
+	  Integer i=addressService.updateDefault(id, userId);
 	  if(i>0){
  			return successCreated();
  	   }else{

@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
@@ -157,15 +158,12 @@ public class MemberConverter {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setAccount(memberBO.getAccount());
         memberDTO.setBirthday(memberBO.getBirthday());
-        memberDTO.setNum(memberBO.getNum());
-        memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setHeadimg(memberBO.getHeadimg());
-        memberDTO.setInviterType(memberBO.getInviterType());
-        memberDTO.setStatus(memberBO.getStatus());
         memberDTO.setSex(memberBO.getSex());
         memberDTO.setRegionPath(memberBO.getRegionPath());
         memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setName(memberBO.getName());
+        memberDTO.setGmtCreate(memberBO.getGmtCreate());
         return memberDTO;
     }
     
@@ -185,6 +183,21 @@ public class MemberConverter {
 				memberDTOS.add(convertMDTO(MemberBO));
 			}
 		return memberDTOS;
+	}
+
+    /**
+     * 描述：将pageBOS转成pageDTOS
+     * @param pageMemberBOS
+     * @return
+     */
+	public static Page<MemberDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
+		Page<MemberDTO> pageDTO=new Page<MemberDTO>();
+		List<MemberBO> BOS=pageMemberBOS.getRecords();
+		List<MemberDTO> DTOS=pageDTO.getRecords();
+		for (MemberBO memberBO : BOS) {
+			DTOS.add(convertMDTO(memberBO));
+		}
+		return pageDTO;
 	}
 
 }

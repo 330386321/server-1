@@ -52,14 +52,14 @@ public interface AddressService {
 	 *刪除地址
 	 * @return
 	 */
-    @RequestMapping(method = RequestMethod.GET, value = "address/remove")
+    @RequestMapping(method = RequestMethod.DELETE, value = "address/remove")
     Result delete(@RequestParam("id") Long userId);
 	 
     /**
 	 *修改默认地址
 	 *@return
 	 */
-    @RequestMapping( method = RequestMethod.GET,value = "address/updateStatus")
-    Result updateStatus(@RequestParam("id") Long id,@RequestParam("userId") Long userId);
+    @RequestMapping( method = RequestMethod.GET,value = "address/updateDefault")
+    Result updateDefault(@RequestParam("id") Long id,@RequestParam("userId") Long userId);
 
 }

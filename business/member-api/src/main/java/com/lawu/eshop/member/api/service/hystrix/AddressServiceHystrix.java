@@ -51,7 +51,7 @@ public class AddressServiceHystrix  implements AddressService{
 	}
 
 	@Override
-	public Result updateStatus(Long id, Long userId) {
+	public Result updateDefault(Long id, Long userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

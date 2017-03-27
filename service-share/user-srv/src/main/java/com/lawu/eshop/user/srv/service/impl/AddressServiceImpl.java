@@ -26,6 +26,7 @@ public class AddressServiceImpl implements AddressService {
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
 		addressDO.setIsDefault(false);
+		addressDO.setStatus(new Byte("1"));
 		Integer id=addressDOMapper.insert(addressDO);
 		return id;
 	}
@@ -48,29 +49,36 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public List<AddressBO> selectByUserId(Long userId) {
 		AddressDOExample example = new AddressDOExample();
+		Byte status=1;
 		example.setOrderByClause("gmt_create");
-		example.createCriteria().andUserIdEqualTo(userId);
+		example.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo(status);
 		List<AddressDO> addressDOS= addressDOMapper.selectByExample(example);
 		return addressDOS.isEmpty() ? null : AddressConverter.convertListBOS(addressDOS);
 	}
 
 	@Override
 	public Integer remove(Long id) {
-		Integer i=addressDOMapper.deleteByPrimaryKey(id);
+		AddressDOExample example = new AddressDOExample();
+		example.createCriteria().andIdEqualTo(id);
+		AddressDO address=new AddressDO();
+		address.setStatus(new Byte("0"));
+		Integer i=addressDOMapper.updateByExampleSelective(address, example);
 		return i;
 		
 	}
 
 	@Override
-	public Integer updateStatus(Long id,Long userId) {
+	public Integer updateDefault(Long id,Long userId) {
 		AddressDO addressDO=new AddressDO();
+		AddressDOExample example = new AddressDOExample();
+		example.createCriteria().andUserIdEqualTo(userId);
 		addressDO.setIsDefault(false);
-		addressDO.setUserId(userId);
 		addressDO.setGmtModified(new Date());
-		addressDOMapper.updateStatusById(addressDO);
-		addressDO.setId(id);
+		addressDOMapper.updateByExampleSelective(addressDO, example);
 		addressDO.setIsDefault(true);
-		Integer i =addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		AddressDOExample example2 = new AddressDOExample();
+		example2.createCriteria().andIdEqualTo(id);
+		Integer i =addressDOMapper.updateByExampleSelective(addressDO, example2);
 		return i;
 		
 	}

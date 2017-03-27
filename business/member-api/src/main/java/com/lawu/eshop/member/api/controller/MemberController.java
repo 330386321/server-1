@@ -1,6 +1,15 @@
 package com.lawu.eshop.member.api.controller;
+	
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -8,17 +17,14 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
-import com.lawu.eshop.user.param.RegisterParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -69,12 +75,13 @@ public class MemberController extends BaseController {
         return memberService.getInviterByAccount(account);
     }
 
-    @ApiOperation(value = "我的E友", notes = "我的E有查询", httpMethod = "POST")
-    @Authorization
+    @ApiOperation(value = "我的E友", notes = "我的E有查询,[200],（张荣成）", httpMethod = "POST")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-    public Result<List<MemberDTO>> findMemberListByUser(@RequestBody @ApiParam(required = true, value = "查询信息") MemberQuery query) {
-    	Result<List<MemberDTO>> memberDTOS = memberService.findMemberListByUser(query);
-    	return memberDTOS;
+    public Result<Page<MemberDTO>> findMemberListByUser(@ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
+    	Result<Page<MemberDTO>> page = memberService.findMemberListByUser(query);
+    	return page;
     }
 
     @ApiOperation(value = "注册", notes = "会员注册。(梅述全)", httpMethod = "POST")
