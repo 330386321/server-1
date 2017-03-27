@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -119,5 +120,22 @@ public class MerchantConverter {
 
         return merchantBO;
     }
+    
+    
+    /**
+     * 描述：将pageBOS转成pageDTOS
+     * @param pageMemberBOS
+     * @return
+     */
+	public static Page<MerchantDTO> convertPageDOTS(Page<MerchantBO> pageMerchantBOS) {
+		Page<MerchantDTO> pageDTO=new Page<MerchantDTO>();
+		List<MerchantBO> BOS=pageMerchantBOS.getRecords();
+		List<MerchantDTO> DTOS=pageDTO.getRecords();
+		for (MerchantBO merchantBO : BOS) {
+			DTOS.add(convertDTO(merchantBO));
+		}
+		return pageDTO;
+	}
+    
 
 }

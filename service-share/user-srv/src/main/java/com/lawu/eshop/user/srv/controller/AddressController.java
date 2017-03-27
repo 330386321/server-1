@@ -35,7 +35,7 @@ public class AddressController extends BaseController{
 	  * 收货地址列表
 	  * @return
 	  */
-	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
+	@RequestMapping(value = "selectByUserId/{userId}", method = RequestMethod.GET)
     public Result selectByUserId(@RequestParam Long userId) {
 		List<AddressBO> addressBOS = addressService.selectByUserId(userId);
 		return  successAccepted(AddressConverter.convertListDOTS(addressBOS));
@@ -62,7 +62,7 @@ public class AddressController extends BaseController{
 	 * 单个查询地址
 	 * @return
 	 */
-    @RequestMapping(value = "get", method = RequestMethod.GET)
+    @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public Result<AddressDTO> get(@RequestParam Long id) {
 		AddressBO addressBO = addressService.get(id);
         return successGet(AddressConverter.convertDTO(addressBO));
@@ -86,7 +86,7 @@ public class AddressController extends BaseController{
 	 * 修改地址
 	 * @return
 	 */
-   @RequestMapping(value = "remove", method = RequestMethod.DELETE)
+   @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
    public Result remove(@RequestParam Long id) {
 	   Integer i=addressService.remove(id);
 	   if(i>0){

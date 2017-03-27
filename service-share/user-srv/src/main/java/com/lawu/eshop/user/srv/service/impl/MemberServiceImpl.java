@@ -107,9 +107,9 @@ public class MemberServiceImpl implements MemberService {
 		 int totalCount= memberDOMapper.countByExample(example); //总记录数
 		 if(memberQuery.getAccountOrNickName()!=null){ //存在模糊查询
 			 Criteria c2=example.createCriteria();
-			 c2.andAccountLike(memberQuery.getAccountOrNickName());
+			 c2.andAccountLike("%"+memberQuery.getAccountOrNickName()+"%");
 			 Criteria c3=example.createCriteria();
-			 c3.andNicknameLike(memberQuery.getAccountOrNickName());
+			 c3.andNicknameLike("%"+memberQuery.getAccountOrNickName()+"%");
 			 example.or(c2);
 			 example.or(c3);
 		 }

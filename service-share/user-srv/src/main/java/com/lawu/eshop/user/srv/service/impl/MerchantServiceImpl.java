@@ -1,12 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserStatusConstant;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample.Criteria;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
@@ -14,6 +19,8 @@ import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
+
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,14 +72,6 @@ public class MerchantServiceImpl implements MerchantService {
 
         return MerchantConverter.convertInfoBO(merchantDO);
     }
-
-	@Override
-	public List<MerchantBO> getMerchantByInviterId(Long inviterId) {
-		 MerchantDOExample example = new MerchantDOExample();
-	     example.createCriteria().andInviterIdEqualTo(inviterId);
-	     List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
-		return merchantDOS.isEmpty() ? null : MerchantConverter.convertBOS(merchantDOS);
-	}
 
     @Override
     @Transactional
@@ -190,4 +189,25 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantDO merchantDO=merchantDOMapper.selectByPrimaryKey(id);
         return  MerchantConverter.convertBO(merchantDO);
     }
+
+	@Override
+	public Page<MerchantBO> getMerchantByInviter(Long inviterId, String account, PageParam pageParam) {
+		MerchantDOExample example = new MerchantDOExample();
+		 Byte status=1;
+		 Criteria c1=example.createCriteria();
+		 c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status);
+		 int totalCount= merchantDOMapper.countByExample(example); //总记录数
+		 if(account!=null){ //存在模糊查询
+			 Criteria c2=example.createCriteria();
+			 c2.andAccountLike("%"+account+"%");
+			 example.or(c2);
+		 }
+		 RowBounds rowBounds = new RowBounds(pageParam.getCurrentPage(), pageParam.getPageSize());
+		 List<MerchantDO> merchantDOS=merchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		 Page<MerchantBO> pageMerchant =new Page<MerchantBO>();
+		 pageMerchant.setTotalCount(totalCount);
+		 List<MerchantBO> memberBOS= MerchantConverter.convertBOS(merchantDOS);
+		 pageMerchant.setRecords(memberBOS);
+		return pageMerchant;
+	}
 }

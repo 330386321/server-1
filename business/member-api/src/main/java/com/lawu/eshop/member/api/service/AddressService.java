@@ -38,21 +38,21 @@ public interface AddressService {
 	  * 单个查询地址
 	  * @return
 	  */
-	@RequestMapping(method = RequestMethod.GET, value = "address/get")
+	@RequestMapping(method = RequestMethod.GET, value = "address/get/{id}")
 	Result<AddressDTO> get(@RequestParam("id") Long id);
 	 
 	 /**
 	  * 查询所有地址
 	  * @return
 	  */
-    @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId")
+    @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId/{userId}")
     Result selectByUserId(@RequestParam("userId") Long userId);
 
     /**
 	 *刪除地址
 	 * @return
 	 */
-    @RequestMapping(method = RequestMethod.DELETE, value = "address/remove")
+    @RequestMapping(method = RequestMethod.DELETE, value = "address/remove/{id}")
     Result delete(@RequestParam("id") Long userId);
 	 
     /**

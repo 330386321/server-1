@@ -45,7 +45,7 @@ public class AddressController extends BaseController {
 	//@Authorization
 	@ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息，成功返回 list （张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
+	@RequestMapping(value = "selectByUserId/{userId}", method = RequestMethod.GET)
     public Result<List<AddressDTO>> selectByUserId(@RequestParam @ApiParam(required = true, value = "会员id") Long userId) {
 		Result<List<AddressDTO>> addressDTOS = addressService.selectByUserId(userId);
         return addressDTOS;
@@ -58,7 +58,7 @@ public class AddressController extends BaseController {
 	//@Authorization
 	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "get", method = RequestMethod.GET)
+	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public Result<AddressDTO> get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result<AddressDTO> addressDTO=addressService.get(id);
 		return addressDTO;
@@ -71,7 +71,7 @@ public class AddressController extends BaseController {
 	//@Authorization
 	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs=addressService.delete(id);
 		return rs;

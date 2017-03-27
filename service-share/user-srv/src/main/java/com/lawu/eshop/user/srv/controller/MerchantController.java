@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantDTO;
@@ -8,10 +19,6 @@ import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -61,10 +68,11 @@ public class MerchantController extends BaseController {
      *@param inviterId 用户id
      *@return
      */
-    @RequestMapping(value = "findMemberListByUserId", method = RequestMethod.GET)
-    public List<MerchantDTO> findMemberListByUserId(@RequestParam Long inviterId) {
-        List<MerchantBO> merchantBOS = merchantService.getMerchantByInviterId(inviterId);
-        return MerchantConverter.convertListDOTS(merchantBOS);
+    @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.GET)
+    public Page<MerchantDTO> getMerchantByInviter(@RequestParam Long inviterId,@RequestParam String account,@RequestBody PageParam pageQuery) {
+    	Page<MerchantBO> pageBO=merchantService.getMerchantByInviter(inviterId, account, pageQuery);
+    	Page<MerchantDTO> pageDTOS=MerchantConverter.convertPageDOTS(pageBO);
+        return pageDTOS;
     }
 
     /**

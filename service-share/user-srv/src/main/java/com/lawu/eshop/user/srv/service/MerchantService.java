@@ -1,6 +1,10 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.query.MemberQuery;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 
@@ -41,14 +45,6 @@ public interface MerchantService {
     MerchantBO getMerchantByAccount(String account);
 
     /**
-     * 我的推荐商家
-     *
-     * @param inviterId
-     * @return
-     */
-    List<MerchantBO> getMerchantByInviterId(Long inviterId);
-
-    /**
      * 商户注册
      *
      * @param registerParam 商户注册信息
@@ -61,4 +57,15 @@ public interface MerchantService {
      * @param id 商户ID
      */
     MerchantBO getMerchantBOById(Long id );
+    
+    /**
+     * 我推荐的商家 
+     * @author zhangrc
+     * @date 2017/03/27
+     * @param inviterId
+     * @param account
+     * @param pageParam
+     * @return
+     */
+    Page<MerchantBO> getMerchantByInviter(Long inviterId ,String account,PageParam pageParam);
 }
