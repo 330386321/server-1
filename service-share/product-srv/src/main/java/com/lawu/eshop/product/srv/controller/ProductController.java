@@ -79,7 +79,7 @@ public class ProductController extends BaseController{
     		return failCreated(ResultCode.PRODUCT_WRONG_ID, null);
     	}
     	
-    	//商品基本信息
+    	//商品基本信息 
     	ProductInfoBO productBO = productService.selectProductById(id);
     	ProductInfoDTO productDTO = ProductConverter.convertInfoDTO(productBO);
     	
