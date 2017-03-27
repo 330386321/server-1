@@ -56,6 +56,11 @@ public abstract class BaseController {
         return response(HttpCode.SC_OK, resultCode, message, null, null);
     }
 
+    /**
+     * 主要用于直接返回service层数据
+     * @param result
+     * @return
+     */
     public Result successGet(Result result) {
         return response(HttpCode.SC_OK, result);
     }
