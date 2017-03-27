@@ -33,10 +33,20 @@ public class MemberController extends BaseController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public UserDTO login(@RequestParam String account, @RequestParam String pwd) {
+    /**
+     * 根据用户名密码查找会员
+     *
+     * @param account
+     * @param pwd
+     * @return
+     */
+    @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
+    public Result<UserDTO> find(@PathVariable String account, @RequestParam String pwd) {
         MemberBO memberBO = memberService.find(account, pwd);
-        return MemberConverter.convertDTO(memberBO);
+        if (memberBO == null) {
+            return successGet(ResultCode.MEMBER_WRONG_PWD);
+        }
+        return successGet(MemberConverter.convertDTO(memberBO));
     }
 
     /**

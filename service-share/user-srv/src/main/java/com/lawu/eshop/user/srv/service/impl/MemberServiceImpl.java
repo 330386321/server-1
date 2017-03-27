@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,11 +52,15 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private MemberProfileDOMapper memberProfileDOMapper;
 
+    @Autowired
+    private PasswordStrategy passwordStrategy;
+
     @Override
     public MemberBO find(String account, String pwd) {
 
+
         MemberDOExample example = new MemberDOExample();
-        example.createCriteria().andAccountEqualTo(account).andPwdEqualTo(pwd);
+        example.createCriteria().andAccountEqualTo(account).andPwdEqualTo(passwordStrategy.encode(pwd));
         List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
 
         return memberDOS.isEmpty() ? null : MemberConverter.convertBO(memberDOS.get(0));

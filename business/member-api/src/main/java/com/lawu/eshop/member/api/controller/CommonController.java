@@ -5,7 +5,6 @@ import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.constants.UserConstant;
 import com.lawu.eshop.member.api.dto.TokenDTO;
 import com.lawu.eshop.member.api.service.MemberService;
@@ -38,13 +37,13 @@ public class CommonController extends BaseController {
     public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,
                                   @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
-        UserDTO userDTO = memberService.find(account, pwd);
-        if (userDTO == null) {
-            return failUnauthorized(ResultCode.MEMBER_WRONG_PWD);
+        Result<UserDTO> result = memberService.find(account, pwd);
+        if (!isSuccess(result)) {
+            return successGet(result);
         }
-        if (userDTO.getId() < 1) {
-            return failServerError("会员查询内部接口调用异常");
-        }
+
+        UserDTO userDTO = result.getModel();
+
         String token = tokenManager.createToken(UserConstant.TOKEN_TYPE, userDTO.getId(), userDTO.getAccount());
 
         TokenDTO tokenDTO = new TokenDTO();
