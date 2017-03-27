@@ -11,13 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
+import com.lawu.eshop.product.srv.converter.ProductImageConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.converter.Utils;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductImageDO;
@@ -29,6 +30,7 @@ import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
+import com.lawu.eshop.utils.DataTransUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -50,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
 		ProductDOExample example = new ProductDOExample();
 		example.createCriteria().andMerchantIdEqualTo(query.getMerchantId())
 			.andNameLike("%" + query.getName() + "%")
-			.andStatusEqualTo(Utils.intToByte(query.getStatus()));
+			.andStatusEqualTo(DataTransUtil.intToByte(query.getStatus()));
 		
 		//查询总数
 		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
@@ -98,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
 			examle.clear();
 			ProductDO productDO = new ProductDO();
 			productDO.setId(Long.valueOf(idArray[i]));
-			productDO.setStatus(Utils.intToByte(status));
+			productDO.setStatus(DataTransUtil.intToByte(status));
 			productDO.setGmtModified(new Date());
 			int row = productDOMapper.updateByPrimaryKeySelective(productDO);
 			rows = rows + row;
@@ -160,6 +162,24 @@ public class ProductServiceImpl implements ProductService {
 		productInfoBO.setImagesUrl(iamgesJson);
 		
 		return productInfoBO;
+	}
+
+	@Override
+	@Transactional
+	public void saveProduct(EditProductParam product) {
+		ProductDO productDO = ProductConverter.convertDO(product);
+		int productId = productDOMapper.insert(productDO);
+		
+		String imageUrl = product.getImageUrls();
+		
+		ProductImageDO productImageDO = null;
+		
+	}
+
+	@Override
+	public void updateProductById(Long id, EditProductParam product) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

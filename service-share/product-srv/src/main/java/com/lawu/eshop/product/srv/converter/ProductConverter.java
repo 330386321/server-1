@@ -1,13 +1,16 @@
 package com.lawu.eshop.product.srv.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -56,7 +59,7 @@ public class ProductConverter {
 		productBO.setName(productDO.getName());
 		productBO.setFeatureImage(productDO.getFeatureImage());
 		productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
-		productBO.setStatus(Utils.byteToInt(productDO.getStatus())); 
+		productBO.setStatus(DataTransUtil.byteToInt(productDO.getStatus())); 
 		return productBO;
 	}
 
@@ -105,6 +108,25 @@ public class ProductConverter {
 		productInfoDTO.setPriceMax(productBO.getPriceMax());
 		productInfoDTO.setPriceMin(productBO.getPriceMin());
 		return productInfoDTO;
+	}
+
+	/**
+	 * Param转DO
+	 * @param product
+	 * @return
+	 */
+	public static ProductDO convertDO(EditProductParam param) {
+		ProductDO productDO = new ProductDO();
+		productDO.setName(param.getName());
+		productDO.setCategoryId(param.getCategoryId());
+		productDO.setMerchantId(param.getMerchantId());
+		productDO.setName(param.getNum());
+		productDO.setContent(param.getContent());
+		productDO.setFeatureImage(param.getFeatureImage());
+		productDO.setStatus(DataTransUtil.intToByte(1));
+		productDO.setGmtCreate(new Date());
+		productDO.setGmtModified(new Date());
+		return productDO;
 	}
 
     

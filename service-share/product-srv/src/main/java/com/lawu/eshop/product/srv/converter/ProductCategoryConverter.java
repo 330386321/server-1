@@ -1,11 +1,12 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.utils.DataTransUtil;
 
 /**
  *
@@ -30,10 +31,10 @@ public class ProductCategoryConverter {
         ProductCategoryBO productCategoryBO = new ProductCategoryBO();
         productCategoryBO.setId(productCategoryeDO.getId());
         productCategoryBO.setName(productCategoryeDO.getName());
-        productCategoryBO.setLevel(Utils.byteToInt(productCategoryeDO.getLevel()));
+        productCategoryBO.setLevel(DataTransUtil.byteToInt(productCategoryeDO.getLevel()));
         productCategoryBO.setParentId(productCategoryeDO.getParentId());
         productCategoryBO.setPath(productCategoryeDO.getPath());
-        productCategoryBO.setType(Utils.byteToInt(productCategoryeDO.getType()));
+        productCategoryBO.setType(DataTransUtil.byteToInt(productCategoryeDO.getType()));
         return productCategoryBO;
     }
 

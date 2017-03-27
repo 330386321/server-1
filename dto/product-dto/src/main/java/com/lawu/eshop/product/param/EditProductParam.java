@@ -24,6 +24,9 @@ public class EditProductParam {
 
 	@ApiModelProperty(value = "商品型号信息", required = true)
 	private String spec;
+	
+	@ApiModelProperty(value = "商品图片", required = true)
+	private String imageUrls;
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -79,6 +82,14 @@ public class EditProductParam {
 
 	public void setSpec(String spec) {
 		this.spec = spec;
+	}
+
+	public String getImageUrls() {
+		return imageUrls;
+	}
+
+	public void setImageUrls(String imageUrls) {
+		this.imageUrls = imageUrls;
 	}
 
 }

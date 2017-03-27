@@ -2,6 +2,7 @@ package com.lawu.eshop.product.srv.service;
 
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -32,4 +33,17 @@ public interface ProductService {
 	 * @return
 	 */
 	ProductInfoBO selectProductById(Long id);
+
+	/**
+	 * 保存商品
+	 * @param product
+	 */
+	void saveProduct(EditProductParam product);
+
+	/**
+	 * 编辑商品
+	 * @param id	商品ID
+	 * @param product
+	 */
+	void updateProductById(Long id, EditProductParam product);
 }
