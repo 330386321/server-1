@@ -29,9 +29,9 @@ public class MerchantInfoController extends BaseController {
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
    // @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
+    @RequestMapping(value = "updateMerchantSizeLink/{id}", method = RequestMethod.PUT)
     public Result updateMerchantSizeLink(@ModelAttribute  @ApiParam MerchantProfileParam merchantProfileParam,
-                                       @RequestParam @ApiParam(required = true, value = "商家ID") Long id){
+                                       @PathVariable @ApiParam(required = true, value = "商家ID") Long id){
         Result result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
         return result;
     }

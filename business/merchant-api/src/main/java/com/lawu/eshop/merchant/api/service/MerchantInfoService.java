@@ -14,8 +14,8 @@ public interface MerchantInfoService {
      * 设置网站链接
      * @param merchantProfileParam
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "merchantInfo/updateMerchantSizeLink")
-    Result updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam, @RequestParam("id") Long id);
+    @RequestMapping(method = RequestMethod.PUT, value = "merchantInfo/updateMerchantSizeLink/{id}")
+    Result updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam, @PathVariable("id") Long id);
 
     /**
      * 查询商家主页基本信息

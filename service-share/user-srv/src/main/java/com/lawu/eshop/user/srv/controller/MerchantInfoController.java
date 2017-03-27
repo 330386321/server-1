@@ -36,8 +36,8 @@ public class MerchantInfoController extends BaseController{
      * 设置网站链接
      * @param merchantProfileParam
      */
-    @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
-    public Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @RequestParam Long id){
+    @RequestMapping(value = "updateMerchantSizeLink/{id}", method = RequestMethod.PUT)
+    public Result updateMerchantSizeLink(@RequestBody MerchantProfileParam merchantProfileParam, @PathVariable("id") Long id){
        int result =  merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
         if(result ==1){
            return successCreated();

@@ -23,6 +23,11 @@ public class MerchantStoreController extends BaseController{
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
+    /**
+     * 门店信息查询
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "findMerchantStoreInfo/{id}", method = RequestMethod.GET)
     public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") Long id){
 
@@ -36,4 +41,8 @@ public class MerchantStoreController extends BaseController{
 
 
     }
+
+
+
+
 }
