@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
 
+import com.lawu.eshop.user.dto.LoginUserDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,16 @@ import com.lawu.eshop.user.param.RegisterParam;
  */
 @FeignClient(value = "user-srv")
 public interface MerchantService {
+
+    /**
+     * 查询商家信息
+     *
+     * @param account 登录账号
+     * @param pwd     密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
+    Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd);
 
     /**
      * 修改登录密码

@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,12 +43,12 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
-    public Result<UserDTO> find(@PathVariable String account, @RequestParam String pwd) {
+    public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
         MemberBO memberBO = memberService.find(account, pwd);
         if (memberBO == null) {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
         }
-        return successGet(MemberConverter.convertDTO(memberBO));
+        return successGet(LoginUserConverter.convert(memberBO));
     }
 
     /**

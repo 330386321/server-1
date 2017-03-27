@@ -17,6 +17,7 @@ import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
 
@@ -48,6 +49,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private InviteRelationDOMapper inviteRelationDOMapper;
+
+    @Autowired
+    private PasswordStrategy passwordStrategy;
 
     @Override
     public void updateLoginPwd(Long id,String originalPwd, String newPwd) {
@@ -210,4 +214,15 @@ public class MerchantServiceImpl implements MerchantService {
 		 pageMerchant.setRecords(memberBOS);
 		return pageMerchant;
 	}
+
+    @Override
+    public MerchantBO find(String account, String pwd) {
+
+
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andAccountEqualTo(account).andPwdEqualTo(passwordStrategy.encode(pwd));
+        List<MerchantDO> merchantDOs = merchantDOMapper.selectByExample(example);
+
+        return merchantDOs.isEmpty() ? null : MerchantConverter.convertBO(merchantDOs.get(0));
+    }
 }

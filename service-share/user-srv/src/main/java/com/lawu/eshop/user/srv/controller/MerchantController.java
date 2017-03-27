@@ -2,6 +2,12 @@ package com.lawu.eshop.user.srv.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.converter.LoginUserConverter;
+import com.lawu.eshop.user.srv.converter.MemberConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +37,16 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
+
+    @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
+    public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
+        MerchantBO merchantBO = merchantService.find(account, pwd);
+        if (merchantBO == null) {
+            return successGet(ResultCode.MEMBER_WRONG_PWD);
+        }
+        return successGet(LoginUserConverter.convert(merchantBO));
+    }
+
 
     /**
      * 修改登录密码

@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.controller;
+package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
@@ -7,7 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
-import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommonController extends BaseController {
 
     @Autowired
-    private MemberService memberService;
+    private MerchantService memberService;
 
     @Autowired
     private TokenManager tokenManager;
@@ -44,7 +44,7 @@ public class CommonController extends BaseController {
 
         LoginUserDTO userDTO = result.getModel();
 
-        String token = tokenManager.createToken(UserConstant.MEMBER_TOKEN_TYPE, userDTO.getId(), userDTO.getAccount());
+        String token = tokenManager.createToken(UserConstant.MERCHANT_TOKEN_TYPE, userDTO.getId(), userDTO.getAccount());
 
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setUserId(userDTO.getId());

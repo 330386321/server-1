@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.dto;
+package com.lawu.eshop.framework.web.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 

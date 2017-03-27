@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.user.dto.LoginUserDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +32,7 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
-    Result<UserDTO> find(@PathVariable String account, @RequestParam String pwd);
+    Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd);
 
     /**
      * 会员资料查询

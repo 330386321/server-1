@@ -3,12 +3,8 @@ package com.lawu.eshop.user.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.user.param.RegisterParam;
-import com.lawu.eshop.user.query.MemberQuery;
-import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-
-import java.util.List;
 
 /**
  * 商户服务接口
@@ -68,4 +64,13 @@ public interface MerchantService {
      * @return
      */
     Page<MerchantBO> getMerchantByInviter(Long inviterId ,String account,PageParam pageParam);
+
+    /**
+     * 查询会员信息
+     *
+     * @param account 登录账号
+     * @param pwd     密码
+     * @return
+     */
+    MerchantBO find(String account, String pwd);
 }
