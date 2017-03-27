@@ -7,6 +7,16 @@ package com.lawu.eshop.user.constants;
 public class UserCommonConstant {
 
     /**
+     * 会员num标记
+     */
+    public static final String MEMBER_NUM_TAG = "1";
+
+    /**
+     * 商户num标记
+     */
+    public static final String MERCHANT_NUM_TAG = "2";
+
+    /**
      * 男
      */
     public static final byte SEX_MALE = 0;
