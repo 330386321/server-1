@@ -2,30 +2,13 @@ package com.lawu.eshop.user.srv.controller;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import java.util.List;
-
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
-import com.lawu.eshop.user.dto.param.MemberParam;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.converter.AddressConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.MD5;
@@ -60,9 +43,9 @@ public class MemberController extends BaseController {
     @RequestMapping(value = "findMemberInfo/{memberId}", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId) {
         MemberBO memberBO = memberService.findMemberInfoById(memberId);
-        if(memberBO == null){
+        if (memberBO == null) {
             return successGet();
-        }else{
+        } else {
             return successGet(MemberConverter.convertDTO(memberBO));
         }
     }
@@ -75,12 +58,12 @@ public class MemberController extends BaseController {
      */
     @RequestMapping(value = "updateMemberInfo/{id}", method = RequestMethod.PUT)
     public Result updateMemberInfo(@RequestBody UserParam memberParam, @PathVariable("id") Long id) {
-          int result =  memberService.updateMemberInfo(memberParam,id);
-          if(result == 1){
-            return  successCreated();
-          }else{
-              return successCreated(ResultCode.USER_WRONG_ID);
-          }
+        int result = memberService.updateMemberInfo(memberParam, id);
+        if (result == 1) {
+            return successCreated();
+        } else {
+            return successCreated(ResultCode.USER_WRONG_ID);
+        }
     }
 
     /**
@@ -114,11 +97,12 @@ public class MemberController extends BaseController {
     }
 
     /**
-     *我的E友
-     *@author zhangrc
-     *@date 2017/03/23
-     *@param inviterId 登录用户
-     *@return
+     * 我的E友
+     *
+     * @param memberQuery 登录用户
+     * @return
+     * @author zhangrc
+     * @date 2017/03/23
      */
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.GET)
     public Result<List<MemberDTO>> findMemberListByUser(@ModelAttribute MemberQuery memberQuery) {

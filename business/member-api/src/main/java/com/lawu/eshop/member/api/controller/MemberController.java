@@ -53,6 +53,7 @@ public class MemberController extends BaseController {
     }
 
     @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。(梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
     public Result updateLoginPwd(@PathVariable @ApiParam(required = true, value = "id") Long id,
@@ -62,6 +63,7 @@ public class MemberController extends BaseController {
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return memberService.getInviterByAccount(account);
@@ -76,8 +78,9 @@ public class MemberController extends BaseController {
     }
 
     @ApiOperation(value = "注册", notes = "会员注册。(梅述全)", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result register(@RequestBody @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
+    public Result register(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam ) {
         memberService.register(registerParam);
         return successCreated();
     }

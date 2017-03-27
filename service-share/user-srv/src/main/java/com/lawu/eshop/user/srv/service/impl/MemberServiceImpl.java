@@ -109,9 +109,13 @@ public class MemberServiceImpl implements MemberService {
         }
         //插入会员信息
         MemberDO memberDO = new MemberDO();
+        memberDO.setName(UserCommonConstant.MEMBER_NUM_TAG);
         memberDO.setAccount(registerParam.getAccount());
         memberDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
+        memberDO.setMobile(registerParam.getAccount());
+        memberDO.setSex(UserCommonConstant.SEX_SECRET);
         memberDO.setStatus(UserStatusConstant.MEMBER_STATUS_VALID);
+        memberDO.setLevel(UserCommonConstant.LEVEL_1);
         memberDO.setGmtCreate(new Date());
         if (registerParam.getInviterId() != null) {
             memberDO.setInviterId(registerParam.getInviterId());

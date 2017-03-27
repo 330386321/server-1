@@ -69,15 +69,19 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> failCreated(int retCode, T model) {
-        return response(HttpCode.SC_BAD_REQUEST, retCode, HttpCode.get(retCode), null, model);
+        return response(HttpCode.SC_BAD_REQUEST, retCode, ResultCode.get(retCode), null, model);
     }
 
     public <T> Result<T> failCreated(int retCode) {
         return failCreated(retCode, null);
     }
+    
+    public <T> Result<T> failCreated(String debug) {
+        return response(HttpCode.SC_BAD_REQUEST, HttpCode.SC_BAD_REQUEST, HttpCode.get(HttpCode.SC_BAD_REQUEST), debug, null);
+    }
 
     public <T> Result<T> failUnauthorized(int retCode, T model) {
-        return response(HttpCode.SC_UNAUTHORIZED, retCode, HttpCode.get(retCode), null, model);
+        return response(HttpCode.SC_UNAUTHORIZED, retCode, ResultCode.get(retCode), null, model);
     }
 
     public <T> Result<T> failUnauthorized(int retCode) {
@@ -85,7 +89,7 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> failForbidden(int retCode, T model) {
-        return response(HttpCode.SC_FORBIDDEN, retCode, HttpCode.get(retCode), null, model);
+        return response(HttpCode.SC_FORBIDDEN, retCode, ResultCode.get(retCode), null, model);
     }
 
     public <T> Result<T> failForbidden(int retCode) {
@@ -93,7 +97,11 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> failGone(int retCode, T model) {
-        return response(HttpCode.SC_GONE, retCode, HttpCode.get(retCode), null, model);
+        return response(HttpCode.SC_GONE, retCode, ResultCode.get(retCode), null, model);
+    }
+    
+    public <T> Result<T> failGone(String debug) {
+        return response(HttpCode.SC_GONE, HttpCode.SC_GONE, HttpCode.get(HttpCode.SC_GONE), debug, null);
     }
 
     public <T> Result<T> failGone(int retCode) {

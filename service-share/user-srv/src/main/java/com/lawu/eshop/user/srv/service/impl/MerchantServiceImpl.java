@@ -13,6 +13,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,9 +84,12 @@ public class MerchantServiceImpl implements MerchantService {
         }
         //插入商户信息
         MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
         merchantDO.setAccount(registerParam.getAccount());
         merchantDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
+        merchantDO.setMobile(registerParam.getAccount());
         merchantDO.setStatus(UserStatusConstant.MEMBER_STATUS_VALID);
+        merchantDO.setLevel(UserCommonConstant.LEVEL_1);
         merchantDO.setGmtCreate(new Date());
         if (registerParam.getInviterId() != null) {
             merchantDO.setInviterId(registerParam.getInviterId());
