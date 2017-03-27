@@ -31,8 +31,8 @@ public class MerchantController extends BaseController {
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      */
-    @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@RequestParam Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+    @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
 
         MerchantBO merchantBO = merchantService.getMerchantBOById(id);
         if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {

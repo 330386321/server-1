@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -37,6 +38,9 @@ public class MemberController extends BaseController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private PropertyInfoService propertyInfoService;
+
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
    // @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -58,7 +62,7 @@ public class MemberController extends BaseController {
         return r;
     }
 
-    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。(梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[422] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
@@ -66,6 +70,16 @@ public class MemberController extends BaseController {
                                  @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         return memberService.updateLoginPwd(id, originalPwd, newPwd);
+    }
+
+    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[422] (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
+    public Result updatePayPwd(@PathVariable @ApiParam(required = true, value = "会员编号") String userNo,
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+                                 @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")

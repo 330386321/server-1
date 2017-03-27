@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.MerchantService;
+import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import io.swagger.annotations.Api;
@@ -26,7 +27,10 @@ public class MerchantController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
-    @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。(梅述全)", httpMethod = "PUT")
+    @Autowired
+    private PropertyInfoService propertyInfoService;
+
+    @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[422] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
@@ -34,6 +38,16 @@ public class MerchantController extends BaseController {
                                  @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         return merchantService.updateLoginPwd(id, originalPwd, newPwd);
+    }
+
+    @ApiOperation(value = "修改支付密码", notes = "根据商户编号修改支付密码。[422] (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
+    public Result updatePayPwd(@PathVariable @ApiParam(required = true, value = "商户编号") String userNo,
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+                                 @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")

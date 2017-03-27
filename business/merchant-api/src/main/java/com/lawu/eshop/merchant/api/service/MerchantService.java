@@ -4,10 +4,7 @@ package com.lawu.eshop.merchant.api.service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.param.RegisterParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -17,23 +14,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface MerchantService {
 
     /**
-     * 修改密码
+     * 修改登录密码
      *
      * @param id          主键
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "merchant/updateLoginPwd")
-    Result updateLoginPwd(@RequestParam("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+    @RequestMapping(method = RequestMethod.PUT, value = "merchant/updateLoginPwd/{id}")
+    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
 
     /**
      * 根据邀请人账号查询邀请人信息
      *
      * @param account 邀请人账号
      */
-    @RequestMapping(method = RequestMethod.POST, value = "user/common/getInviterByAccount")
-    Result getInviterByAccount(@RequestParam("account") String account);
+    @RequestMapping(method = RequestMethod.POST, value = "user/common/getInviterByAccount/{account}")
+    Result getInviterByAccount(@PathVariable("account") String account);
 
     /**
      * 商户注册

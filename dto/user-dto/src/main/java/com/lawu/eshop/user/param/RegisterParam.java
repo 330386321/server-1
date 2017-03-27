@@ -1,17 +1,23 @@
 package com.lawu.eshop.user.param;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author meishuquan
  * @date 2017/3/23
  */
 public class RegisterParam {
 
+    @ApiModelProperty(value = "注册账号", required = true)
     private String account;
 
+    @ApiModelProperty(value = "密码", required = true)
     private String pwd;
 
+    @ApiModelProperty(value = "邀请人ID", required = true)
     private Long inviterId;
 
+    @ApiModelProperty(value = "邀请人类型", required = true)
     private Byte inviterType;
 
     public String getAccount() {
