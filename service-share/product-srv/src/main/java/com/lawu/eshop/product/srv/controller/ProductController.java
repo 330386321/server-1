@@ -17,7 +17,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductEnum;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditProductParam;
+import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -94,7 +94,7 @@ public class ProductController extends BaseController{
      * @return
      */
     @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@RequestParam Long id ,@RequestBody EditProductParam product){
+    public Result saveProduct(@RequestParam Long id ,@RequestParam String featureImage ,@RequestBody EditDataProductParam product){
     	if(id == 0L){
     		productService.saveProduct(product);
     	}else{
@@ -104,9 +104,8 @@ public class ProductController extends BaseController{
     }
     
     public static void main(String[] args) {
-    	//System.out.println(ProductEnum.getEnum((byte)0x01));
-    	//System.out.println(ProductEnum.PRODUCT_STATUS_DEL.val);
-    	//System.out.println(new byte[](1));
+    	System.out.println(ProductEnum.getEnum((byte)0x01));
+    	System.out.println(ProductEnum.PRODUCT_STATUS_DEL.val);
 	}
     
 }

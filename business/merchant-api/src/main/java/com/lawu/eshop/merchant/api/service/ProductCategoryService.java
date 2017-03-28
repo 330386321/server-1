@@ -1,13 +1,13 @@
 package com.lawu.eshop.merchant.api.service;
 
-import com.lawu.eshop.product.dto.ProductCategoryDTO;
+import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import com.lawu.eshop.product.dto.ProductCategoryDTO;
 
 /**
  * 产品服务接口
@@ -31,5 +31,5 @@ public interface ProductCategoryService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "productCategory/getById")
-    ProductCategoryDTO getById(@RequestParam("id") Integer id);
+    ProductCategoryDTO getById(@PathVariable("id") Integer id);
 }

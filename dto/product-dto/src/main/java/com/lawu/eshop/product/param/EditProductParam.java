@@ -2,6 +2,15 @@ package com.lawu.eshop.product.param;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * api接收app提交参数对象
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年3月27日 下午8:21:09
+ *
+ */
 public class EditProductParam {
 
 	@ApiModelProperty(value = "商家ID", required = true)
@@ -19,15 +28,9 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品描述", required = true)
 	private String content;
 
-	@ApiModelProperty(value = "商品特征图片", required = false)
-	private String featureImage;
-
-	@ApiModelProperty(value = "商品型号信息", required = true)
+	@ApiModelProperty(value = "商品型号信息[{name(名称):,originalPrice(原价):,price(现价):,inventory(库存):},{}]", required = true)
 	private String spec;
 	
-	@ApiModelProperty(value = "商品图片", required = true)
-	private String imageUrls;
-
 	public Long getMerchantId() {
 		return merchantId;
 	}
@@ -68,28 +71,12 @@ public class EditProductParam {
 		this.content = content;
 	}
 
-	public String getFeatureImage() {
-		return featureImage;
-	}
-
-	public void setFeatureImage(String featureImage) {
-		this.featureImage = featureImage;
-	}
-
 	public String getSpec() {
 		return spec;
 	}
 
 	public void setSpec(String spec) {
 		this.spec = spec;
-	}
-
-	public String getImageUrls() {
-		return imageUrls;
-	}
-
-	public void setImageUrls(String imageUrls) {
-		this.imageUrls = imageUrls;
 	}
 
 }

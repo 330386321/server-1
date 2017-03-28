@@ -1,11 +1,12 @@
 package com.lawu.eshop.member.api.controller;
 	
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.ProductService;
@@ -31,9 +32,9 @@ public class ProductController extends BaseController {
     private ProductService productService;
 
     @ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
-    // @Authorization
-    @RequestMapping(value = "selectProductById/{productId}", method = RequestMethod.GET)
-    public Result<ProductInfoDTO> selectProductById(@PathVariable("productId") @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
+    @Authorization
+    @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
+    public Result<ProductInfoDTO> selectProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
     	
     	Result<ProductInfoDTO> result = productService.selectProductById(productId);
     	

@@ -122,7 +122,6 @@ public class ProductConverter {
 		productDO.setMerchantId(param.getMerchantId());
 		productDO.setName(param.getNum());
 		productDO.setContent(param.getContent());
-		productDO.setFeatureImage(param.getFeatureImage());
 		productDO.setStatus(DataTransUtil.intToByte(1));
 		productDO.setGmtCreate(new Date());
 		productDO.setGmtModified(new Date());

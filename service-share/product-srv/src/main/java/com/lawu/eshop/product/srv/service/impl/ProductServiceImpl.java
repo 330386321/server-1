@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,13 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.constant.ProductEnum;
+import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductQuery;
+import com.lawu.eshop.product.srv.bo.ProductCategoryDataBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
-import com.lawu.eshop.product.srv.converter.ProductImageConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
@@ -166,13 +169,42 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void saveProduct(EditProductParam product) {
+	public void saveProduct(EditDataProductParam product) {
+		
+		//保存商品信息
 		ProductDO productDO = ProductConverter.convertDO(product);
 		int productId = productDOMapper.insert(productDO);
 		
-		String imageUrl = product.getImageUrls();
+		//保存商品型号信息
+		String spec = product.getSpec();
+		List<ProductCategoryDataBO> speclist = JSON.parseArray(spec, ProductCategoryDataBO.class);
+		ProductModelDO pmDO = null;
+		for(ProductCategoryDataBO dataBO : speclist){
+			pmDO = new ProductModelDO();
+			pmDO.setMerchantId(product.getMerchantId());
+			pmDO.setProductId(Long.valueOf(productId));
+			pmDO.setName(dataBO.getName());
+			pmDO.setOriginalPrice(new BigDecimal(dataBO.getOriginalPrice()));
+			pmDO.setPrice(new BigDecimal(dataBO.getPrice()));
+			pmDO.setInventory(Integer.valueOf(dataBO.getInventory()));
+			pmDO.setGmtCreate(new Date());
+			pmDO.setGmtModified(new Date());
+			productModelDOMapper.insertSelective(pmDO);
+		}
 		
-		ProductImageDO productImageDO = null;
+		//保存商品图片信息
+		ProductImageDO pcDO = null;
+		String imageUrl = product.getImageUrl();
+		String []imageUrls = imageUrl.split(",");
+		for(int i = 0 ; i < imageUrls.length ; i++){
+			pcDO = new ProductImageDO();
+			pcDO.setProductId(Long.valueOf(productId));
+			pcDO.setImagePath(imageUrls[i]);
+			pcDO.setGmtCreate(new Date());
+			pcDO.setGmtModified(new Date());
+			productImageDOMapper.insert(pcDO);
+		}
+		
 		
 	}
 
@@ -182,4 +214,5 @@ public class ProductServiceImpl implements ProductService {
 		
 	}
 
+	
 }
