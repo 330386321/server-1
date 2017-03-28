@@ -47,7 +47,6 @@ public class ResultCode {
         ResultCode.messageMap.put(ID_EMPTY, "ID不能为空");
         ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "必填参数不能为空");
         ResultCode.messageMap.put(SAVE_FAIL, "保存失败");
-        ResultCode.messageMap.put(INVALID_TOKEN, "TOKEN无效");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE, "请上传门店照");

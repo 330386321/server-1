@@ -36,7 +36,7 @@ public class MerchantController extends BaseController {
     @Autowired
     private SmsRecordService smsRecordService;
 
-    @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1006] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
@@ -46,7 +46,7 @@ public class MerchantController extends BaseController {
         return merchantService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
-    @ApiOperation(value = "修改支付密码", notes = "根据商户编号修改支付密码。[1006] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改支付密码", notes = "根据商户编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
@@ -77,7 +77,7 @@ public class MerchantController extends BaseController {
         return merchantService.getMerchantByAccount(account);
     }
 
-    @ApiOperation(value = "发送短信", notes = "发送短信。[1000|1001|1003|1004|1005] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "发送短信", notes = "发送短信。[1000|1001|1006|1007|1008] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,

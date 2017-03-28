@@ -61,7 +61,7 @@ public class MemberController extends BaseController {
         return r;
     }
 
-    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1006] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
@@ -71,7 +71,7 @@ public class MemberController extends BaseController {
         return memberService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
-    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1006] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
@@ -112,7 +112,7 @@ public class MemberController extends BaseController {
         return memberService.getMemberByAccount(account);
     }
 
-    @ApiOperation(value = "发送短信", notes = "发送短信。[1000|1001|1003|1004|1005] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "发送短信", notes = "发送短信。[1000|1001|1006|1007|1008] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result<SmsRecordDTO> sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
