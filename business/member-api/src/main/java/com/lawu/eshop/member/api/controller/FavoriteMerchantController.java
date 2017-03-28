@@ -2,16 +2,20 @@ package com.lawu.eshop.member.api.controller;
 
 import javax.annotation.Resource;
 
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.FavoriteMerchantService;
+import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
+import com.lawu.eshop.user.query.FavoriteMerchantParam;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,6 +45,15 @@ public class FavoriteMerchantController extends BaseController{
     public Result save(@RequestParam @ApiParam (required = true, value = "会员id")  Long memberId ,@RequestParam @ApiParam (required = true, value = "商家id") Long merchantId ) {
 	   Result rs=favoriteMerchantService.save(memberId,merchantId);
 	   return rs;
+    }
+	
+	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[200],（张荣成）", httpMethod = "POST")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
+    public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
+    	Result<Page<FavoriteMerchantDTO>> page = favoriteMerchantService.getMyFavoriteMerchant(pageQuery);
+    	return page;
     }
 
 }

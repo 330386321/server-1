@@ -198,6 +198,8 @@ public class MemberConverter {
 		for (MemberBO memberBO : BOS) {
 			DTOS.add(convertMDTO(memberBO));
 		}
+		pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
+		pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
 		return pageDTO;
 	}
 

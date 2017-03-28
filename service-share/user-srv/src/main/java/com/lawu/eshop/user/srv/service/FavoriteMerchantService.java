@@ -1,6 +1,8 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.query.FavoriteMerchantParam;
+import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 
 /**
  * 商家收藏
@@ -16,5 +18,12 @@ public interface FavoriteMerchantService {
 	 * @return
 	 */
 	Integer save(Long memberId ,Long merchantId);
+	
+	/**
+	 * 我收藏的商家
+	 * @param memberId
+	 * @return
+	 */
+	Page<FavoriteMerchantBO> getMyFavoriteMerchant(FavoriteMerchantParam pageQuery);
 
 }

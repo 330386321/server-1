@@ -124,6 +124,7 @@ public class MemberServiceImpl implements MemberService {
 		 pageMember.setTotalCount(totalCount);
 		 List<MemberBO> memberBOS= MemberConverter.convertListBOS(memberDOS);
 		 pageMember.setRecords(memberBOS);
+		 pageMember.setCurrentPage(memberQuery.getCurrentPage());
 		return pageMember;
 	}
 

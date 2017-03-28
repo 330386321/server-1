@@ -50,9 +50,9 @@ public class AddressController extends BaseController{
     public Result save(@RequestBody  AddressParam  addressDO ) {
     	Integer i=addressService.save(addressDO);
     	if(i>0){
-    		return successCreated();
+    		return successCreated(ResultCode.SUCCESS);
     	}else{
-    		return successCreated(ResultCode.USER_WRONG_ID);
+    		return successCreated(ResultCode.SAVE_FAIL);
     	}
     	
     }
@@ -76,9 +76,9 @@ public class AddressController extends BaseController{
    public Result update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
 	   Integer i=addressService.update(addressParam,id);
 	   if(i>0){
-		    return successCreated();
+		    return successCreated(ResultCode.SUCCESS);
 	   }else{
-	   		return successCreated(ResultCode.USER_WRONG_ID);
+	   		return successCreated(ResultCode.FAIL);
 	   }
    }
    
@@ -90,9 +90,9 @@ public class AddressController extends BaseController{
    public Result remove(@RequestParam Long id) {
 	   Integer i=addressService.remove(id);
 	   if(i>0){
-   			return successCreated();
+   			return successCreated(ResultCode.SUCCESS);
    	   }else{
-   		    return successCreated(ResultCode.USER_WRONG_ID);
+   		    return successCreated(ResultCode.FAIL);
    	   }
    }
    
@@ -104,9 +104,9 @@ public class AddressController extends BaseController{
   public Result updateDefault(@RequestParam Long id,@RequestParam Long userId) {
 	  Integer i=addressService.updateDefault(id, userId);
 	  if(i>0){
- 			return successCreated();
+ 			return successCreated(ResultCode.SUCCESS);
  	   }else{
- 		    return successCreated(ResultCode.USER_WRONG_ID);
+ 		    return successCreated(ResultCode.FAIL);
  	   }
   }
 	
