@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -33,7 +34,7 @@ public class MerchantInviterController extends BaseController {
     private MerchantInviterService merchantInviterService;
 
     @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[200]（张荣成）", httpMethod = "POST")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
     public Result<Page<MerchantInviterDTO>> findMemberListByUser(@ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {

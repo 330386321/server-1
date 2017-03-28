@@ -56,7 +56,7 @@ public class AddressController extends BaseController {
 	  * 收货地址单个查询 	
 	  * @return
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
@@ -69,7 +69,7 @@ public class AddressController extends BaseController {
 	  * 收货地址删除
 	  * @return
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
@@ -82,7 +82,7 @@ public class AddressController extends BaseController {
 	  * 收货地址添加
 	  * @return 
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "添加收货地址", notes = "添加收货地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
@@ -95,7 +95,7 @@ public class AddressController extends BaseController {
 	  * 收货地址修改
 	  * @return
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "修改收货地址", notes = "修改收货地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
@@ -110,7 +110,7 @@ public class AddressController extends BaseController {
 	 * 收货默认地址修改
 	 * @return
 	 */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateDefault", method = RequestMethod.POST)

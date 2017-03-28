@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -39,7 +39,7 @@ public class FavoriteMerchantController extends BaseController{
 	  * 添加商家收藏
 	  * @return
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
@@ -50,7 +50,7 @@ public class FavoriteMerchantController extends BaseController{
     }
 	
 	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[200],（张荣成）", httpMethod = "POST")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
     public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
