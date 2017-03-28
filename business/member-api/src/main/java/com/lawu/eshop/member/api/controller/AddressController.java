@@ -71,7 +71,7 @@ public class AddressController extends BaseController {
 	  */
 	@Authorization
 	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "DELETE")
-	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
     public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs=addressService.delete(id);
