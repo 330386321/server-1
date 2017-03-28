@@ -31,7 +31,7 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
+    @ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {

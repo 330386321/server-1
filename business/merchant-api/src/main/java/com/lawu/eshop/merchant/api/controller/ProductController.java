@@ -60,7 +60,7 @@ public class ProductController extends BaseController {
     	return productService.updateProductStatus(ids,productStatus);
     }
     
-    @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1000|1002]，（杨清华）", httpMethod = "GET")
+    @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
     public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {

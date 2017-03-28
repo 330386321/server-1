@@ -14,7 +14,6 @@ import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditDataProductParam;
-import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductCategoryDataBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
@@ -34,7 +33,6 @@ import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
-import com.lawu.eshop.utils.DataTransUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -213,7 +211,7 @@ public class ProductServiceImpl implements ProductService {
 	public void saveProduct(EditDataProductParam product) {
 		
 		//保存商品信息
-		ProductDO productDO = ProductConverter.convertDO(product);
+		ProductDO productDO = ProductConverter.convertDO(product,0L);
 		int productId = productDOMapper.insert(productDO);
 		
 		//保存商品型号信息
@@ -254,7 +252,7 @@ public class ProductServiceImpl implements ProductService {
 	public void updateProductById(Long id, EditDataProductParam product) {
 		
 		//修改商品基本信息
-		ProductDO productDO = ProductConverter.convertDO(product);
+		ProductDO productDO = ProductConverter.convertDO(product,id);
 		productDO.setId(id);
 		productDOMapper.updateByPrimaryKey(productDO);
 		

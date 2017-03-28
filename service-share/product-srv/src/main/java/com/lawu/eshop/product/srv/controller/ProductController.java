@@ -77,11 +77,11 @@ public class ProductController extends BaseController{
      * @param Long
      * @return
      */
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    @SuppressWarnings({ "deprecation" })
 	@RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId){
     	if(productId == null){
-    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    		return failCreated(ResultCode.ID_EMPTY, null);
     	}
     	
     	//商品基本信息 
@@ -99,11 +99,11 @@ public class ProductController extends BaseController{
      * @param productId
      * @return
      */
-    @SuppressWarnings({ "deprecation", "unchecked" })
+    @SuppressWarnings({ "deprecation" })
 	@RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
     public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam Long productId){
     	if(productId == null){
-    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    		return failCreated(ResultCode.ID_EMPTY, null);
     	}
     	
     	//商品基本信息 

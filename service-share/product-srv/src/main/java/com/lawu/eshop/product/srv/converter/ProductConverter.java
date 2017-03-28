@@ -151,7 +151,7 @@ public class ProductConverter {
 	 * @param product
 	 * @return
 	 */
-	public static ProductDO convertDO(EditDataProductParam param) {
+	public static ProductDO convertDO(EditDataProductParam param,Long id) {
 		ProductDO productDO = new ProductDO();
 		productDO.setName(param.getName());
 		productDO.setCategoryId(param.getCategoryId());
@@ -160,7 +160,9 @@ public class ProductConverter {
 		productDO.setContent(param.getContent());
 		productDO.setFeatureImage(param.getFeatureImage());
 		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
-		productDO.setGmtCreate(new Date());
+		if(id == 0L){
+			productDO.setGmtCreate(new Date());
+		}
 		productDO.setGmtModified(new Date());
 		return productDO;
 	}
