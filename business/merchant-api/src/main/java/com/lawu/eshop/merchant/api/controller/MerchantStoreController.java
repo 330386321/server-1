@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshoop.upload.UploadFileService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -13,7 +14,12 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * 商家扩展信息
@@ -44,6 +50,9 @@ public class MerchantStoreController extends BaseController {
     public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
                                         @RequestParam("certifType") CertifTypeEnum certifType) {
         //TODO 上传图片
+        HttpServletRequest request = getRequest();
+        Map<String,String> map =  UploadFileService.uploadStoreImages(request);
+        //if()
         return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
     }
 
@@ -56,5 +65,21 @@ public class MerchantStoreController extends BaseController {
         //TODO 上传图片
         return merchantStoreService.updateMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
     }
+
+   /* @ApiOperation(value = "测试上传", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "testUpload", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+    public Result testUpload(@RequestParam("file") MultipartFile file) {
+        HttpServletRequest request = getRequest();
+        Map<String,String> map =  UploadFileService.uploadOnePic(request,file);
+        String flag = map.get("resultFlag");
+        if("OK".equals(flag)){
+            String url = map.get("imgUrl");
+        }
+        Result r = new Result();
+        return r;
+
+    }*/
 
 }

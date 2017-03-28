@@ -92,13 +92,12 @@ public class UploadFileService {
         return valsMap;
     }
 
-    public static Map<String, String> testUpload(HttpServletRequest request, MultipartFile file) {
+    public static Map<String, String> uploadOnePic(HttpServletRequest request,MultipartFile file) {
         Map<String, String> valsMap = new HashMap<>();
         valsMap.put("resultFlag", "OK");
-        String basePath = request.getServletContext().getRealPath("/");
+        String basePath = "F:\\pic";//根路径
         System.out.println(basePath);
         String originalFilename = file.getOriginalFilename();
-        String fieldName = file.getName();
         if (originalFilename != null && !"".equals(originalFilename)) {
             String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
             prefix = prefix.toLowerCase();
@@ -108,28 +107,24 @@ public class UploadFileService {
                 valsMap.put("msg", "上传图片格式错误");
                 return valsMap;
             }
+           // 1M=1024k=1048576字节
+            long fileSize = file.getSize();
+            if(fileSize>0.5*1048576){
+                valsMap.put("resultFlag", "false");
+                valsMap.put("msg", "图片文件大于500K");
+                return valsMap;
+            }
             try {
                 //设置门店图片路径
                 String imagePath = StringUtil.getUploadImagePath("store").toString().replace("\\", "/");
+                //String newFileUploadPath = request.getSession().getServletContext().getRealPath(imagePath);
                 String newFileUploadPath = request.getSession().getServletContext().getRealPath(imagePath);
                 File localFile = new File(newFileUploadPath + newfileName);
                 if (!localFile.getParentFile().exists()) {
                     localFile.getParentFile().mkdirs();
                 }
                 file.transferTo(localFile);
-                if (fieldName.contains("store")) {
-                    System.out.println("1");
-                } else if (fieldName.contains("environment")) {
-                    System.out.println("12");
-                } else if (fieldName.contains("logo")) {
-                    System.out.println("13");
-                } else if (fieldName.contains("idcard")) {
-                    System.out.println("14");
-                } else if (fieldName.contains("licence")) {
-                    System.out.println("15");
-                } else if (fieldName.contains("other")) {
-                    System.out.println("16");
-                }
+                valsMap.put("imgUrl",basePath + imagePath + newfileName );
                 valsMap.put("resultFlag", "OK");
 
             } catch (Exception e) {

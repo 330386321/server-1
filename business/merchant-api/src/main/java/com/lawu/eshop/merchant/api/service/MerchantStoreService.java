@@ -8,6 +8,7 @@ import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zhangyong
@@ -45,4 +46,5 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchantStore/updateMerchantStoreInfo/{merchantId}")
     Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam,@RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
+
 }
