@@ -22,9 +22,9 @@ import io.swagger.annotations.ApiParam;
  * @author Sunny 
  * @date 2017/3/23
  */
-@Api(tags = "onlineActivity")
-@RestController
-@RequestMapping(value = "onlineActivity/")
+//@Api(tags = "onlineActivity")
+//@RestController
+//@RequestMapping(value = "onlineActivity/")
 public class OnlineActivityController {
 
     @Autowired

@@ -17,3 +17,8 @@ target
 bin
 
 .DS_Store
+
+#Custom
+.gitignore
+test
+application.properties

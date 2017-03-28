@@ -119,14 +119,10 @@ public class SuggestionServiceImpl implements SuggestionService {
 	@Transactional
 	@Override
 	public Integer save(SuggestionParam param) {
-
-		SuggestionDO suggestionDO = new SuggestionDO();
-		suggestionDO.setClientType(param.getClientType());
-		suggestionDO.setContent(param.getContent());
+		SuggestionDO suggestionDO = SuggestionConverter.convert(param);
 		suggestionDO.setGmtCreate(new Date());
 		suggestionDO.setGmtModified(new Date());
-		suggestionDO.setUserNum(param.getUserNum());
-		suggestionDO.setUserType(param.getUserType());
+		
 		// 空值交给Mybatis去处理
 		int result = suggestionDOMapper.insertSelective(suggestionDO);
 
@@ -137,14 +133,9 @@ public class SuggestionServiceImpl implements SuggestionService {
 	@Transactional
 	@Override
 	public Integer update(SuggestionParam param, Integer id) {
-
-		SuggestionDO suggestionDO = new SuggestionDO();
+		SuggestionDO suggestionDO = SuggestionConverter.convert(param);
 		suggestionDO.setId(id);
-		suggestionDO.setClientType(param.getClientType());
-		suggestionDO.setContent(param.getContent());
 		suggestionDO.setGmtModified(new Date());
-		suggestionDO.setUserNum(param.getUserNum());
-		suggestionDO.setUserType(param.getUserType());
 
 		// 空值交给Mybatis去处理
 		return suggestionDOMapper.updateByPrimaryKeySelective(suggestionDO);

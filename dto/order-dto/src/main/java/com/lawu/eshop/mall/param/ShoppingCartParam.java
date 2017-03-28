@@ -11,12 +11,6 @@ public class ShoppingCartParam implements Serializable {
     private static final long serialVersionUID = 1L;
 	
     /**
-     * 用户ID
-     */
-    @ApiParam(name = "memberId", required = true, value = "用户ID")
-    private Long memberId;
-
-    /**
      * 商家ID
      */
     @ApiParam(name = "merchantId", required = true, value = "商家ID")
@@ -69,14 +63,6 @@ public class ShoppingCartParam implements Serializable {
      */
     @ApiParam(name = "salesPrice", required = true, value = "现价")
     private BigDecimal salesPrice;
-
-	public Long getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(Long memberId) {
-		this.memberId = memberId;
-	}
 
 	public Long getMerchantId() {
 		return merchantId;

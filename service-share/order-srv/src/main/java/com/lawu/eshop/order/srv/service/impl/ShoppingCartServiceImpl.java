@@ -41,8 +41,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	@Transactional
 	@Override
-	public Long save(ShoppingCartParam param) {
+	public Long save(Long memberId, ShoppingCartParam param) {
 		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
+		suggestionDO.setMemberId(memberId);
 		suggestionDO.setGmtCreate(new Date());
 		suggestionDO.setGmtModified(new Date());
 

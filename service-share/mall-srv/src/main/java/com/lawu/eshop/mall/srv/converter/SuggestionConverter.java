@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.dto.SuggestionDTO;
+import com.lawu.eshop.mall.param.SuggestionParam;
 import com.lawu.eshop.mall.srv.bo.SuggestionBO;
 import com.lawu.eshop.mall.srv.domain.SuggestionDO;
 
@@ -76,6 +77,17 @@ public class SuggestionConverter {
 		}
 
 		return dtos;
+	}
+	
+	public static SuggestionDO convert(SuggestionParam param) {
+		if (param == null) {
+			return null;
+		}
+
+		SuggestionDO suggestionDO = new SuggestionDO();
+		BeanUtils.copyProperties(param, suggestionDO);
+
+		return suggestionDO;
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -34,23 +35,25 @@ public class ShoppingCartController extends BaseController {
     @Autowired
     private ShoppingCartService shoppingCartService;
     
-    @ApiOperation(value = "加入购物车", notes = "加入购物车。[201]（蒋鑫俊）", httpMethod = "POST")
+    @ApiOperation(value = "加入购物车", notes = "加入购物车。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
     public Result save(@ModelAttribute @ApiParam(name = "parm", required = true, value = "购物车资料") ShoppingCartParam param) {
-    	return successCreated(shoppingCartService.save(param));
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	return successCreated(shoppingCartService.save(memberId, param));
     }
     
-    @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[200]（蒋鑫俊）", httpMethod = "GET")
+    @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1000|1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "list/{memberId}", method = RequestMethod.GET)
-    Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId) {
+    @RequestMapping(method = RequestMethod.GET)
+    Result<List<ShoppingCartDTO>> findListByMemberId() {
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	return successGet(shoppingCartService.findListByMemberId(memberId));
     }
     
-    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[201]（蒋鑫俊）", httpMethod = "PUT")
+    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[100|1002|1003]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
@@ -58,7 +61,7 @@ public class ShoppingCartController extends BaseController {
     	return successCreated(shoppingCartService.update(id, parm));
     }
     
-    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[204]（蒋鑫俊）", httpMethod = "PUT")
+    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1000|1002|1003]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)

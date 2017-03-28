@@ -30,14 +30,12 @@ public class SuggestionController extends BaseController {
     @Autowired
     private SuggestionService suggestionService;
     
-    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[201|400]（蒋鑫俊）", httpMethod = "POST")
+    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
     public Result<Integer> save(@ModelAttribute @ApiParam(name = "parm", required = true, value = "反馈意见资料") SuggestionParam param) {
-    	Result<Integer> result = suggestionService.save(param);
-    	getResponse().setStatus(result.getRet());
-    	return result;
+    	return successCreated(suggestionService.save(param));
     }
     
 }

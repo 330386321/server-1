@@ -34,17 +34,17 @@ public class ShoppingCartController extends BaseController {
 	 * 
 	 * @param param
 	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public Result save(@RequestBody ShoppingCartParam param) {
+	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
+	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartParam param) {
 		// 参数验证
-		if (param == null || param.getMemberId() == null || StringUtils.isEmpty(param.getMerchantName()) || param.getMerchantId() == null 
+		if (param == null || StringUtils.isEmpty(param.getMerchantName()) || param.getMerchantId() == null 
 				|| StringUtils.isEmpty(param.getProductName()) || param.getProductId() == null 
 				|| param.getProductModelId() == null || StringUtils.isEmpty(param.getProductModelName())
 				|| param.getQuantity() == null || param.getSalesPrice() == null || param.getQuantity() == null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 		
-		Long id = shoppingCartService.save(param);
+		Long id = shoppingCartService.save(memberId, param);
 		
 		if (id == null || id <= 0) {
 			return successCreated(ResultCode.SAVE_FAIL);

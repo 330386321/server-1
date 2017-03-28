@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
@@ -26,8 +27,8 @@ public interface ShoppingCartService {
 	 * @param parm
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingCart/", method = RequestMethod.POST)
-	Result save(@RequestBody ShoppingCartParam parm);
+	@RequestMapping(value = "shoppingCart/{memberId}", method = RequestMethod.POST)
+	Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartParam parm);
 	
 	/**
 	 * 根据memberId查询用户的购物车列表

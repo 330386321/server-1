@@ -28,7 +28,7 @@ public interface ShoppingCartService {
 	 * 
 	 * @return 返回生成的id
 	 */
-	Long save(ShoppingCartParam param);
+	Long save(Long memberId, ShoppingCartParam param);
 	
 	/**
 	 * 根据id更新购物车

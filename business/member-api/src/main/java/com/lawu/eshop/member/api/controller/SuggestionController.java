@@ -30,7 +30,7 @@ public class SuggestionController extends BaseController {
     @Autowired
     private SuggestionService suggestionService;
     
-    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[201]（蒋鑫俊）", httpMethod = "POST")
+    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
