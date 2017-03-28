@@ -22,7 +22,17 @@ public class ResultCode {
 
     public static final int MEMBER_WRONG_PWD = 2000;
     public static final int USER_WRONG_ID = 2100;
-    
+    public static final int PRODUCT_WRONG_ID = 3100;
+    public static final int IMAGE_WRONG_UPLOAD =1101;
+    public static final int IMAGE_FORMAT_WRONG_UPLOAD =1102;
+    public static final int IMAGE_WRONG_UPLOAD_STORE =1103;
+    public static final int IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT =1104;
+    public static final int IMAGE_WRONG_UPLOAD_LICENSE =1105;
+    public static final int IMAGE_WRONG_UPLOAD_IDCARD =1106;
+    public static final int USER_WRONG_IDCARD =2101;
+    public static final int RECORD_EXIST =1107;
+
+
     // 初始化状态码与文字说明
     static {
 
@@ -33,17 +43,28 @@ public class ResultCode {
         ResultCode.messageMap.put(ID_EMPTY, "ID不能为空");
         ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "必填参数不能为空");
         ResultCode.messageMap.put(SAVE_FAIL, "保存失败");
+        ResultCode.messageMap.put(INVALID_TOKEN, "TOKEN无效");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");
+        ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE, "请上传门店照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT, "请上传门店环境照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_LICENSE, "请上传营业执照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
+        ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
+
+
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
         ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");
+        ResultCode.messageMap.put(USER_WRONG_IDCARD, "身份证号不正确");
 
         // 商品模块 3xxx
-        
+
         
         
         // 订单模块 4xxx
-        
+
 
         // 广告模块 5xxx
 

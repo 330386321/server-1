@@ -3,12 +3,11 @@ package com.lawu.eshop.merchant.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
-import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.param.MerchantProfileParam;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.param.MerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,8 +28,6 @@ public class MerchantStoreController extends BaseController {
     private MerchantStoreService merchantStoreService;
 
 
-
-
     @ApiOperation(value ="根据商家id查询门店信息", notes = "根据商家id查询门店信息，成功返回门店信息。（章勇）",httpMethod = "GET")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -40,5 +37,17 @@ public class MerchantStoreController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value ="test", notes = "test",httpMethod = "POST")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value ="upload", method = RequestMethod.POST)
+    public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
+                                        @RequestParam("certifType")CertifTypeEnum certifType) {
+        // System.out.println(user);
+        //System.out.println(file.getOriginalFilename());
+        return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType,certifType);
+
+
+    }
 
 }

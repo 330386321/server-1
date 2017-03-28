@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -8,10 +7,12 @@ import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class MerchantInfoController extends BaseController{
     private MerchantService merchantService;
 
     @Autowired
-    private MerchantStoreProfileService merchantStoreProfileService;
+    private MerchantStoreInfoService merchantStoreInfoService;
 
     /**
      * 设置网站链接
@@ -65,13 +66,10 @@ public class MerchantInfoController extends BaseController{
             return successGet();
         }else{
             //门店信息
-            MerchantStoreProfileBO merchantStoreBO = merchantStoreProfileService.findMerchantStoreInfo(merchantProfileId);
+            MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStore(merchantProfileId);
             if(merchantStoreBO != null){
-                if(!StringUtils.isEmpty(merchantStoreBO.getPrincipalMobile())){
-                    merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
-                }
+                merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
                 merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
-
             }
             return successGet(merchantInfoDTO);
         }

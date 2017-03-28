@@ -1,7 +1,10 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
@@ -10,7 +13,9 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,5 +73,45 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         }
 
         return merchantStoreInfoBO;
+    }
+
+    @Override
+    @Transactional
+    public void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam) {
+
+        //新增门店基本信息
+        MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam,1);
+        merchantStoreDO.setMerchantId(merchantId);
+        merchantStoreDO.setGmtCreate(new Date());
+        merchantStoreDO.setGmtModified(new Date());
+
+        merchantStoreDOMapper.insert(merchantStoreDO);
+
+        //新增商家店铺扩展信息
+        MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam,2);
+        merchantStoreProfileDO.setMerchantId(merchantId);
+        merchantStoreProfileDO.setGmtCreate(new Date());
+        merchantStoreProfileDO.setGmtModified(new Date());
+
+        merchantStoreProfileDOMapper.insert(merchantStoreProfileDO);
+
+
+
+
+    }
+
+    @Override
+    public MerchantStoreProfileBO selectStoreInfoByExample(String example,Integer type) {
+        MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
+        if(type == 1){
+            merchantStoreProfileDOExample.createCriteria().andRegNumberEqualTo(example);
+        }else{
+            merchantStoreProfileDOExample.createCriteria().andOperatorCardIdEqualTo(example);
+        }
+        List<MerchantStoreProfileDO> merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
+            if (!merchantStoreProfileDOS.isEmpty()) {
+              return MerchantStoreConverter.convertBO(merchantStoreProfileDOS.get(0));
+            }
+        return null;
     }
 }

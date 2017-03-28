@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Created by Administrator on 2017/3/23.
  */
 @Component
-public class MerchantInfoServiceHystrix implements MerchantInfoService {
-    @Override
+public class MerchantInfoServiceHystrix  {
+    //@Override
     public Result updateMerchantSizeLink(@ModelAttribute MerchantProfileParam merchantProfileParam, @RequestParam Long id) {
         Result result = new Result();
         result.setMsg("异常");
         return result;
     }
 
-    @Override
+    //@Override
     public Result<MerchantInfoDTO> findMerchantProfileInfo(@RequestParam("merchantProfileId") Long merchantProfileId) {
         Result<MerchantInfoDTO> result = new Result<MerchantInfoDTO>();
         result.setMsg("异常");

@@ -72,4 +72,16 @@ public class RandomUtil {
         return sb.toString();
     }
 
+    /**
+     * 构建文件上传文件名，系统统一文件名
+     *
+     * @param prefix
+     *            后缀名
+     * @return
+     */
+    public static final String buildFileName(String prefix) {
+        return String.valueOf(System.currentTimeMillis())
+                + RandomUtil.getRandomString(1, 6) + prefix;
+    }
+
 }
