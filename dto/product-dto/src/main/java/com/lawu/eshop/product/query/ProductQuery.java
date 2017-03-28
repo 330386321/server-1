@@ -4,35 +4,25 @@ import com.lawu.eshop.framework.core.page.PageParam;
 
 import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * 
+ * <p>
+ * Description: 接收app参数
+ * </p>
+ * @author Yangqh
+ * @date 2017年3月28日 上午10:11:42
+ *
+ */
 public class ProductQuery extends PageParam{
-	
-	@ApiModelProperty(value = "商家ID", required = true)
-	private Long merchantId;
 	
 	@ApiModelProperty(value = "商品名称", required = false)
 	private String name;
 	
-	@ApiModelProperty(value = "状态", required = true)
-	private Integer status;
-	
-	public Long getMerchantId() {
-		return merchantId;
-	}
-	public void setMerchantId(Long merchantId) {
-		this.merchantId = merchantId;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getStatus() {
-		return status;
-	}
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-	
 	
 }

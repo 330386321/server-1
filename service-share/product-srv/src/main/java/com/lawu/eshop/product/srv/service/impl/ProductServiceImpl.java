@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.product.constant.ProductEnum;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.param.EditProductParam;
-import com.lawu.eshop.product.query.ProductQuery;
+import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductCategoryDataBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
@@ -51,11 +51,11 @@ public class ProductServiceImpl implements ProductService {
 	private ProductCategoryService productCategoryService;
 	
 	@Override
-	public Page<ProductQueryBO> selectProduct(ProductQuery query) {
+	public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
 		ProductDOExample example = new ProductDOExample();
 		example.createCriteria().andMerchantIdEqualTo(query.getMerchantId())
 			.andNameLike("%" + query.getName() + "%")
-			.andStatusEqualTo(DataTransUtil.intToByte(query.getStatus()));
+			.andStatusEqualTo(query.getStatus().val);
 		
 		//查询总数
 		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public int updateProductStatus(String ids, Integer status) {
+	public int updateProductStatus(String ids, ProductStatusEnum productStatus) {
 		int rows = 0;
 		String idArray[] = ids.split(",");
 		ProductDOExample examle = new ProductDOExample();
@@ -103,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
 			examle.clear();
 			ProductDO productDO = new ProductDO();
 			productDO.setId(Long.valueOf(idArray[i]));
-			productDO.setStatus(DataTransUtil.intToByte(status));
+			productDO.setStatus(productStatus.val);
 			productDO.setGmtModified(new Date());
 			int row = productDOMapper.updateByPrimaryKeySelective(productDO);
 			rows = rows + row;

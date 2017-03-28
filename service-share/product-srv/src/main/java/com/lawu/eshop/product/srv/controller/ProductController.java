@@ -14,11 +14,11 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.product.constant.ProductEnum;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditDataProductParam;
-import com.lawu.eshop.product.query.ProductQuery;
+import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
@@ -41,7 +41,7 @@ public class ProductController extends BaseController{
      * @return
      */
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
-    public Result<Page<ProductQueryDTO>> selectProduct(@RequestBody ProductQuery query) {
+    public Result<Page<ProductQueryDTO>> selectProduct(@RequestBody ProductDataQuery query) {
     	Page<ProductQueryBO> page = productService.selectProduct(query);
     	List<ProductQueryBO> list = page.getRecords();
     	List<ProductQueryDTO> dtos = ProductConverter.convertDTOS(list);
@@ -61,12 +61,12 @@ public class ProductController extends BaseController{
      * @return
      */
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.GET)
-    public Result updateProductStatus(@RequestParam String ids , @RequestParam Integer status){
-    	int counts = productService.updateProductStatus(ids,status);
+    public Result updateProductStatus(@RequestParam String ids , @RequestParam ProductStatusEnum productStatus){
+    	int counts = productService.updateProductStatus(ids,productStatus);
     	if(counts == 0 || counts != ids.split(",").length){
-    		return failCreated(ResultCode.PRODUCT_WRONG_ID, null);
+    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
     	}
-    	return successCreated();
+    	return successCreated(ResultCode.SUCCESS);
     }
     
     /**
@@ -77,7 +77,7 @@ public class ProductController extends BaseController{
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId){
     	if(productId == null){
-    		return failCreated(ResultCode.PRODUCT_WRONG_ID, null);
+    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
     	}
     	
     	//商品基本信息 
@@ -104,8 +104,8 @@ public class ProductController extends BaseController{
     }
     
     public static void main(String[] args) {
-    	System.out.println(ProductEnum.getEnum((byte)0x01));
-    	System.out.println(ProductEnum.PRODUCT_STATUS_DEL.val);
+    	System.out.println(ProductStatusEnum.getEnum((byte)0x01));
+    	System.out.println(ProductStatusEnum.PRODUCT_STATUS_DEL.val);
 	}
     
 }

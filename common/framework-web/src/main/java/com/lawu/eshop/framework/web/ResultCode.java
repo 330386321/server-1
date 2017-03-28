@@ -22,7 +22,6 @@ public class ResultCode {
 
     public static final int MEMBER_WRONG_PWD = 2000;
     public static final int USER_WRONG_ID = 2100;
-    public static final int PRODUCT_WRONG_ID = 3100;
     
     // 初始化状态码与文字说明
     static {
@@ -40,7 +39,7 @@ public class ResultCode {
         ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");
 
         // 商品模块 3xxx
-        ResultCode.messageMap.put(PRODUCT_WRONG_ID, "ID不存在");
+        
         
         
         // 订单模块 4xxx

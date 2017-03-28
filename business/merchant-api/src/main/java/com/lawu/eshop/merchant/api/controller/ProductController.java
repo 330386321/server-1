@@ -13,7 +13,9 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ProductService;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
 
 import io.swagger.annotations.Api;
@@ -36,18 +38,23 @@ public class ProductController extends BaseController {
 //    @Authorization
     @RequestMapping(value = "selectProduct/{merchantId}", method = RequestMethod.POST)
     public Result selectProduct(@PathVariable @ApiParam(required = true, value = "merchantId") Long merchantId,
+    							ProductStatusEnum productStatus,
     					        @ModelAttribute @ApiParam ProductQuery query) {
-    	
-    	Result<Page<ProductQueryDTO>> page = productService.selectProduct(query);
+    	ProductDataQuery queryData = new ProductDataQuery();
+    	queryData.setStatus(productStatus);
+    	queryData.setMerchantId(merchantId);
+    	queryData.setName(query.getName());
+    	Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);
         return successGet(page);
     }
     
-    @ApiOperation(value = "商品批量处理", notes = "商品批量处理，[201|400]。(杨清华)", httpMethod = "POST")
-    @Authorization
+    @ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1000|1002]。(杨清华)", httpMethod = "POST")
+//    @Authorization
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.POST)
     public Result updateProductStatus(@RequestParam @ApiParam(required = true, value = "商家ID(多个英文逗号分开)") String ids,
-    								  @RequestParam @ApiParam(required = true, value = "目标状态") Integer status) {
+    								  ProductStatusEnum productStatus) {
     	
-    	return productService.updateProductStatus(ids,status);
+    	return productService.updateProductStatus(ids,productStatus);
     }
+    
 }

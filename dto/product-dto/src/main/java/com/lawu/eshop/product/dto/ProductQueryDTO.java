@@ -1,5 +1,7 @@
 package com.lawu.eshop.product.dto;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -14,11 +16,9 @@ public class ProductQueryDTO {
 	
     private String category;
 	
-    private String categoryName;
-	
     private String name;
 	
-    private Integer status;
+    private ProductStatusEnum status;
 	
     private String gmtCreate;
 	
@@ -38,22 +38,16 @@ public class ProductQueryDTO {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getCategoryName() {
-		return categoryName;
-	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getStatus() {
+	public ProductStatusEnum getStatus() {
 		return status;
 	}
-	public void setStatus(Integer status) {
+	public void setStatus(ProductStatusEnum status) {
 		this.status = status;
 	}
 	public String getGmtCreate() {

@@ -1,5 +1,7 @@
 package com.lawu.eshop.product.srv.bo;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+
 /**
  * 产品类别BO
  *
@@ -11,7 +13,7 @@ public class ProductQueryBO {
     private Long id;
     private String category;
     private String name;
-    private Integer status;
+    private ProductStatusEnum status;
     private String gmtCreate;
     private String featureImage;
     private String spec;
@@ -33,10 +35,10 @@ public class ProductQueryBO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Integer getStatus() {
+	public ProductStatusEnum getStatus() {
 		return status;
 	}
-	public void setStatus(Integer status) {
+	public void setStatus(ProductStatusEnum status) {
 		this.status = status;
 	}
 	public String getGmtCreate() {
