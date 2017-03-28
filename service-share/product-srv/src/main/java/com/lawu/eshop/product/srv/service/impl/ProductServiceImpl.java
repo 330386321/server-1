@@ -17,6 +17,7 @@ import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductCategoryDataBO;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -114,6 +115,10 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public ProductInfoBO selectProductById(Long id) {
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
+		if(productDO == null){
+			return null;
+		}
+		
 		ProductInfoBO productInfoBO = ProductConverter.convertInfoBO(productDO);
 		
 		//查询商品型号
@@ -166,6 +171,42 @@ public class ProductServiceImpl implements ProductService {
 		
 		return productInfoBO;
 	}
+	
+	@Override
+	public ProductEditInfoBO selectEditProductById(Long productId) {
+		ProductDO productDO = productDOMapper.selectByPrimaryKey(productId);
+		if(productDO == null){
+			return null;
+		}
+		
+		ProductEditInfoBO productEditInfoBO = ProductConverter.convertEditInfoBO(productDO);
+		
+		//查询商品型号
+		ProductModelDOExample modelExample = new ProductModelDOExample();
+		modelExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
+		
+		List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
+		for(ProductModelDO productModelDO : productModelDOS){
+			ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
+			ProductModelBOS.add(productModelBO);
+		}
+		String specJson = JSON.toJSONString(ProductModelBOS);
+		productEditInfoBO.setSpec(specJson);
+		
+		//查询型号图片
+		ProductImageDOExample imageExample = new ProductImageDOExample();
+		imageExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
+		List<String> images = new ArrayList<String>();
+		for(ProductImageDO image : imageDOS){
+			images.add(image.getImagePath());
+		}
+		String iamgesJson = JSON.toJSONString(images);
+		productEditInfoBO.setImagesUrl(iamgesJson);
+		
+		return productEditInfoBO;
+	}
 
 	@Override
 	@Transactional
@@ -209,8 +250,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void updateProductById(Long id, EditProductParam product) {
-		// TODO Auto-generated method stub
+	@Transactional
+	public void updateProductById(Long id, EditDataProductParam product) {
+		
+		//修改商品基本信息
+		ProductDO productDO = ProductConverter.convertDO(product);
+		productDO.setId(id);
+		productDOMapper.updateByPrimaryKey(productDO);
+		
+		
 		
 	}
 

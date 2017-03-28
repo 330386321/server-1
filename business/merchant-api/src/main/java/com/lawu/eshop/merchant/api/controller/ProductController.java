@@ -14,6 +14,8 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
@@ -57,4 +59,13 @@ public class ProductController extends BaseController {
     	return productService.updateProductStatus(ids,productStatus);
     }
     
+    @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1000|1002]，（杨清华）", httpMethod = "GET")
+//    @Authorization
+    @RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
+    public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
+    	
+    	Result<ProductEditInfoDTO> result = productService.selectEditProductById(productId);
+    	
+        return result;
+    }
 }

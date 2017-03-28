@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditProductParam;
+import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
@@ -89,6 +91,22 @@ public class ProductConverter {
 		productInfoBO.setMerchantId(productDO.getMerchantId());
 		return productInfoBO;
 	}
+	
+	/**
+	 * 商家编辑商品时商品详情BO转换
+	 * @param productDO
+	 * @return
+	 */
+	public static ProductEditInfoBO convertEditInfoBO(ProductDO productDO) {
+		ProductEditInfoBO productEditInfoBO = new ProductEditInfoBO();
+		productEditInfoBO.setId(productDO.getId());
+		productEditInfoBO.setName(productDO.getName());
+		productEditInfoBO.setCategory(productDO.getId());
+		productEditInfoBO.setFeatureImage(productDO.getFeatureImage());
+		productEditInfoBO.setContent(productDO.getContent());
+		productEditInfoBO.setMerchantId(productDO.getMerchantId());
+		return productEditInfoBO;
+	}
 
 	/**
 	 * 用户端商品详情DTO转换
@@ -109,24 +127,47 @@ public class ProductConverter {
 		productInfoDTO.setPriceMin(productBO.getPriceMin());
 		return productInfoDTO;
 	}
+	
+	/**
+	 * 商家编辑商品时查询商品详情DTO转换
+	 * @param productBO
+	 * @return
+	 */
+	public static ProductEditInfoDTO convertEditInfoDTO(ProductEditInfoBO productBO) {
+		ProductEditInfoDTO productEditInfoDTO = new ProductEditInfoDTO();
+		productEditInfoDTO.setId(productBO.getId());
+		productEditInfoDTO.setMerchantId(productBO.getMerchantId());
+		productEditInfoDTO.setCategory(productBO.getCategory());
+		productEditInfoDTO.setName(productBO.getName());
+		productEditInfoDTO.setFeatureImage(productBO.getFeatureImage());
+		productEditInfoDTO.setContent(productBO.getContent());
+		productEditInfoDTO.setImagesUrl(productBO.getImagesUrl());
+		productEditInfoDTO.setSpec(productBO.getSpec());
+		return productEditInfoDTO;
+	}
 
 	/**
 	 * Param转DO
 	 * @param product
 	 * @return
 	 */
-	public static ProductDO convertDO(EditProductParam param) {
+	public static ProductDO convertDO(EditDataProductParam param) {
 		ProductDO productDO = new ProductDO();
 		productDO.setName(param.getName());
 		productDO.setCategoryId(param.getCategoryId());
 		productDO.setMerchantId(param.getMerchantId());
 		productDO.setName(param.getNum());
 		productDO.setContent(param.getContent());
+		productDO.setFeatureImage(param.getFeatureImage());
 		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
 		productDO.setGmtCreate(new Date());
 		productDO.setGmtModified(new Date());
 		return productDO;
 	}
+
+	
+
+	
 
     
 }

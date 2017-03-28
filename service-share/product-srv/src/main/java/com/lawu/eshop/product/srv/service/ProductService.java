@@ -6,6 +6,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 
@@ -30,12 +31,19 @@ public interface ProductService {
 	int updateProductStatus(String ids, ProductStatusEnum productStatus);
 
 	/**
-	 * 根据商品ID获取商品信息
+	 * 用户端商品详情，根据商品ID获取商品信息
 	 * @param id
 	 * @return
 	 */
 	ProductInfoBO selectProductById(Long id);
 
+	/**
+	 * 商家端编辑商品时，根据ID查询商品
+	 * @param productId
+	 * @return
+	 */
+	ProductEditInfoBO selectEditProductById(Long productId);
+	
 	/**
 	 * 保存商品
 	 * @param product
@@ -47,5 +55,7 @@ public interface ProductService {
 	 * @param id	商品ID
 	 * @param product
 	 */
-	void updateProductById(Long id, EditProductParam product);
+	void updateProductById(Long id, EditDataProductParam product);
+
+	
 }

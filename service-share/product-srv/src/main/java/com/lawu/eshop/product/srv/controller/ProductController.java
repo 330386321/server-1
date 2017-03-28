@@ -15,10 +15,12 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
@@ -60,7 +62,8 @@ public class ProductController extends BaseController{
      * @param status 目标修改的状态
      * @return
      */
-    @RequestMapping(value = "updateProductStatus", method = RequestMethod.GET)
+    @SuppressWarnings({ "rawtypes", "deprecation" })
+	@RequestMapping(value = "updateProductStatus", method = RequestMethod.GET)
     public Result updateProductStatus(@RequestParam String ids , @RequestParam ProductStatusEnum productStatus){
     	int counts = productService.updateProductStatus(ids,productStatus);
     	if(counts == 0 || counts != ids.split(",").length){
@@ -70,11 +73,12 @@ public class ProductController extends BaseController{
     }
     
     /**
-     * 根据ID查询商品详情
+     * 用户端商品详情，根据ID查询商品详情
      * @param Long
      * @return
      */
-    @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
+    @SuppressWarnings({ "unchecked", "deprecation" })
+	@RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId){
     	if(productId == null){
     		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
@@ -82,7 +86,32 @@ public class ProductController extends BaseController{
     	
     	//商品基本信息 
     	ProductInfoBO productBO = productService.selectProductById(productId);
+    	if(productBO == null){
+    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    	}
     	ProductInfoDTO productDTO = ProductConverter.convertInfoDTO(productBO);
+    	
+    	return successCreated(productDTO);
+    }
+    
+    /**
+     * 商家端编辑商品时，根据ID查询商品
+     * @param productId
+     * @return
+     */
+    @SuppressWarnings({ "deprecation", "unchecked" })
+	@RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
+    public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam Long productId){
+    	if(productId == null){
+    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    	}
+    	
+    	//商品基本信息 
+    	ProductEditInfoBO productBO = productService.selectEditProductById(productId);
+    	if(productBO == null){
+    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    	}
+    	ProductEditInfoDTO productDTO = ProductConverter.convertEditInfoDTO(productBO);
     	
     	return successCreated(productDTO);
     }
@@ -93,14 +122,15 @@ public class ProductController extends BaseController{
      * @param product
      * @return
      */
-    @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@RequestParam Long id ,@RequestParam String featureImage ,@RequestBody EditDataProductParam product){
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
+    public Result saveProduct(@RequestParam Long id ,@RequestBody EditDataProductParam product){
     	if(id == 0L){
     		productService.saveProduct(product);
     	}else{
     		productService.updateProductById(id,product);
     	}
-    	return successCreated();
+    	return successCreated(ResultCode.SUCCESS);
     }
     
     public static void main(String[] args) {

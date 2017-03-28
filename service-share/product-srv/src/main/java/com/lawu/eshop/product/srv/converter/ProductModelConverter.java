@@ -24,6 +24,7 @@ public class ProductModelConverter {
         }
 
         ProductModelBO productModelBO = new ProductModelBO();
+        productModelBO.setId(productModelDO.getId());
         productModelBO.setName(productModelDO.getName());
         productModelBO.setOriginalPrice(productModelDO.getOriginalPrice());
         productModelBO.setPrice(productModelDO.getPrice());

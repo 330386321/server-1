@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.query.ProductDataQuery;
 
@@ -36,4 +37,12 @@ public interface ProductService {
 	 */
     @RequestMapping(method = RequestMethod.GET, value = "product/updateProductStatus")
     Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("productStatus") ProductStatusEnum productStatus);
+    
+    /**
+     * 根据商品ID查询商品详情信息
+     * @param id 商品ID
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/selectEditProductById")
+    Result<ProductEditInfoDTO> selectEditProductById(@RequestParam("productId") Long productId);
 }
