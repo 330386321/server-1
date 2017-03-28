@@ -32,7 +32,7 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
-    Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd);
+    Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam("pwd") String pwd);
 
     /**
      * 会员资料查询
@@ -92,6 +92,6 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
-    Result getMemberByAccount(@PathVariable String account);
+    Result getMemberByAccount(@PathVariable("account") String account);
 
 }
