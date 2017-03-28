@@ -3,10 +3,7 @@ package com.lawu.eshop.authorization.interceptor;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
 import com.lawu.eshop.authorization.manager.impl.AbstractTokenManager;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -112,23 +109,26 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                 claimsJws = Jwts.parser().setSigningKey(AbstractTokenManager.TOKEN_KEY).parseClaimsJws(token);
                 // OK, we can trust this JWT
 
-            } catch (SignatureException e) {
+            } catch (SignatureException | MalformedJwtException e) {
                 // don't trust the JWT!
                 logger.warn("Wrong token: {}", token);
             }
-            String key = manager.getAccount(token);
-            if (claimsJws != null && key != null) {
-                String userNum = claimsJws.getBody().getId();
-                String userId = claimsJws.getBody().getAudience();
-                String userAccount = claimsJws.getBody().getSubject();
-                if (!StringUtils.isEmpty(userId) && !StringUtils.isEmpty(userAccount)) {
+            if (claimsJws != null) {
+                String key = manager.getAccount(token);
+                if (key != null) {
 
-                    // 如果token验证成功，将token对应的用户id存在request中，便于之后注入
-                    request.setAttribute(REQUEST_CURRENT_USER_NUM, userNum);
-                    request.setAttribute(REQUEST_CURRENT_USER_ID, userId);
-                    request.setAttribute(REQUEST_CURRENT_ACCOUNT, userAccount);
-                    return true;
+                    String userNum = claimsJws.getBody().getId();
+                    String userId = claimsJws.getBody().getAudience();
+                    String userAccount = claimsJws.getBody().getSubject();
+                    if (!StringUtils.isEmpty(userId) && !StringUtils.isEmpty(userAccount)) {
 
+                        // 如果token验证成功，将token对应的用户id存在request中，便于之后注入
+                        request.setAttribute(REQUEST_CURRENT_USER_NUM, userNum);
+                        request.setAttribute(REQUEST_CURRENT_USER_ID, userId);
+                        request.setAttribute(REQUEST_CURRENT_ACCOUNT, userAccount);
+                        return true;
+
+                    }
                 }
             }
         }
