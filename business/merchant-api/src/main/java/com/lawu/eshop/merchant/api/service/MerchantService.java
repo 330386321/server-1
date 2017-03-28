@@ -24,7 +24,7 @@ public interface MerchantService {
      * @param pwd     密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/withPwd/{account}")
     Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam("pwd") String pwd);
 
     /**

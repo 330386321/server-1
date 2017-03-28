@@ -44,10 +44,9 @@ public class CommonController extends BaseController {
 
         LoginUserDTO userDTO = result.getModel();
 
-        String token = tokenManager.createToken(UserConstant.MERCHANT_TOKEN_TYPE, userDTO.getId(), userDTO.getAccount());
+        String token = tokenManager.createToken(UserConstant.MERCHANT_TOKEN_TYPE, userDTO.getNum(), userDTO.getId(), userDTO.getAccount());
 
         TokenDTO tokenDTO = new TokenDTO();
-        tokenDTO.setUserId(userDTO.getId());
         tokenDTO.setUserNum(userDTO.getNum());
         tokenDTO.setToken(token);
 

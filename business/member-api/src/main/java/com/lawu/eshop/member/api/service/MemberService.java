@@ -31,7 +31,7 @@ public interface MemberService {
      * @param pwd     密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
+    @RequestMapping(method = RequestMethod.GET, value = "member/withPwd/{account}")
     Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam("pwd") String pwd);
 
     /**

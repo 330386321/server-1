@@ -43,7 +43,7 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
-    public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
+    public Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam String pwd) {
         MemberBO memberBO = memberService.find(account, pwd);
         if (memberBO == null) {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
