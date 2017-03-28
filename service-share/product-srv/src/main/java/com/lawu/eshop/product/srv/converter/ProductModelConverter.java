@@ -28,7 +28,8 @@ public class ProductModelConverter {
         productModelBO.setName(productModelDO.getName());
         productModelBO.setOriginalPrice(productModelDO.getOriginalPrice());
         productModelBO.setPrice(productModelDO.getPrice());
-        productModelBO.setInventory(productModelDO.getInventory());       
+        productModelBO.setInventory(productModelDO.getInventory());
+        productModelBO.setSalesVolume(productModelDO.getSalesVolume());
         return productModelBO;
     }
 

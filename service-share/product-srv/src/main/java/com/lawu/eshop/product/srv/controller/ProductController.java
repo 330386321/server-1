@@ -124,18 +124,11 @@ public class ProductController extends BaseController{
      */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@RequestParam Long id ,@RequestBody EditDataProductParam product){
-    	if(id == 0L){
-    		productService.saveProduct(product);
-    	}else{
-    		productService.updateProductById(id,product);
-    	}
+    public Result saveProduct(@RequestParam Long productId ,@RequestBody EditDataProductParam product){
+    	productService.eidtProduct(productId,product);
     	return successCreated(ResultCode.SUCCESS);
     }
     
-    public static void main(String[] args) {
-    	System.out.println(ProductStatusEnum.getEnum((byte)0x01));
-    	System.out.println(ProductStatusEnum.PRODUCT_STATUS_DEL.val);
-	}
+   
     
 }

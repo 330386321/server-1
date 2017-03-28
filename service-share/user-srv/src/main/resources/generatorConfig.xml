@@ -43,14 +43,8 @@
         <!--<table tableName="member" domainObjectName="MemberDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="member_profile" domainObjectName="MemberProfileDO">
-            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="merchant" domainObjectName="MerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
-            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="invite_relation" domainObjectName="InviteRelationDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
@@ -73,6 +67,12 @@
         <table tableName="merchant_store_profile" domainObjectName="MerchantStoreProfileDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
+        <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
+            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="member_profile" domainObjectName="MemberProfileDO">
+            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
+        </table>
         
     </context>
 </generatorConfiguration>

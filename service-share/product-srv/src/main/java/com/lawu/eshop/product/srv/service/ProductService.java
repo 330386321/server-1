@@ -45,17 +45,11 @@ public interface ProductService {
 	ProductEditInfoBO selectEditProductById(Long productId);
 	
 	/**
-	 * 保存商品
-	 * @param product
-	 */
-	void saveProduct(EditDataProductParam product);
-
-	/**
 	 * 编辑商品
-	 * @param id	商品ID
+	 * @param productId 商品ID
 	 * @param product
 	 */
-	void updateProductById(Long id, EditDataProductParam product);
+	void eidtProduct(Long productId, EditDataProductParam product);
 
 	
 }

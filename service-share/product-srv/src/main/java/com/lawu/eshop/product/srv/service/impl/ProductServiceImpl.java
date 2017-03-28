@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +14,6 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
-import com.lawu.eshop.product.srv.bo.ProductCategoryDataBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
@@ -121,7 +119,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		//查询商品型号
 		ProductModelDOExample modelExample = new ProductModelDOExample();
-		modelExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		modelExample.createCriteria().andProductIdEqualTo(productDO.getId())
+									 .andStatusEqualTo(true);
 		List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
 		
 		List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
@@ -181,7 +180,8 @@ public class ProductServiceImpl implements ProductService {
 		
 		//查询商品型号
 		ProductModelDOExample modelExample = new ProductModelDOExample();
-		modelExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		modelExample.createCriteria().andProductIdEqualTo(productDO.getId())
+		                             .andStatusEqualTo(true);
 		List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
 		
 		List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
@@ -208,29 +208,56 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void saveProduct(EditDataProductParam product) {
+	public void eidtProduct(Long productId, EditDataProductParam product) {
 		
-		//保存商品信息
-		ProductDO productDO = ProductConverter.convertDO(product,0L);
-		int productId = productDOMapper.insert(productDO);
+		boolean isEdit = true;
+		if(productId == 0L || productId == null){
+			//保存商品信息
+			ProductDO productDO = ProductConverter.convertDO(product,0L);
+			int id = productDOMapper.insert(productDO);
+			productId = Long.valueOf(id);
+			isEdit = false;
+		}else{
+			//修改商品基本信息
+			ProductDO productDO = ProductConverter.convertDO(product,productId);
+			ProductDOExample example = new ProductDOExample();
+			example.createCriteria().andIdEqualTo(productId);
+			productDOMapper.updateByExampleSelective(productDO, example);
+		}
 		
-		//保存商品型号信息
+		if(isEdit){
+			//删除商品型号信息
+			ProductModelDOExample modelExample = new ProductModelDOExample();
+			modelExample.createCriteria().andProductIdEqualTo(productId);
+			ProductModelDO modelDO = new ProductModelDO();
+			modelDO.setStatus(false);
+			modelDO.setGmtModified(new Date());
+			productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
+		}
+		//新增型号信息
 		String spec = product.getSpec();
-		List<ProductCategoryDataBO> speclist = JSON.parseArray(spec, ProductCategoryDataBO.class);
+		List<ProductModelBO> speclist = JSON.parseArray(spec, ProductModelBO.class);
 		ProductModelDO pmDO = null;
-		for(ProductCategoryDataBO dataBO : speclist){
+		for(ProductModelBO dataBO : speclist){
 			pmDO = new ProductModelDO();
 			pmDO.setMerchantId(product.getMerchantId());
-			pmDO.setProductId(Long.valueOf(productId));
+			pmDO.setProductId(productId);
 			pmDO.setName(dataBO.getName());
-			pmDO.setOriginalPrice(new BigDecimal(dataBO.getOriginalPrice()));
-			pmDO.setPrice(new BigDecimal(dataBO.getPrice()));
+			pmDO.setSalesVolume(dataBO.getSalesVolume());
+			pmDO.setOriginalPrice(dataBO.getOriginalPrice());
+			pmDO.setPrice(dataBO.getPrice());
 			pmDO.setInventory(Integer.valueOf(dataBO.getInventory()));
 			pmDO.setGmtCreate(new Date());
 			pmDO.setGmtModified(new Date());
 			productModelDOMapper.insertSelective(pmDO);
 		}
 		
+		if(isEdit){
+			//删除产品图片
+			ProductImageDOExample imageExample = new ProductImageDOExample();
+			imageExample.createCriteria().andProductIdEqualTo(productId);
+			productImageDOMapper.deleteByExample(imageExample);
+		}
 		//保存商品图片信息
 		ProductImageDO pcDO = null;
 		String imageUrl = product.getImageUrl();
@@ -243,21 +270,6 @@ public class ProductServiceImpl implements ProductService {
 			pcDO.setGmtModified(new Date());
 			productImageDOMapper.insert(pcDO);
 		}
-		
-		
-	}
-
-	@Override
-	@Transactional
-	public void updateProductById(Long id, EditDataProductParam product) {
-		
-		//修改商品基本信息
-		ProductDO productDO = ProductConverter.convertDO(product,id);
-		productDO.setId(id);
-		productDOMapper.updateByPrimaryKey(productDO);
-		
-		
-		
 	}
 
 	

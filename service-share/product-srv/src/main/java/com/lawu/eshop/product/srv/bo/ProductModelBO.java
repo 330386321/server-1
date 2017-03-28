@@ -15,6 +15,7 @@ public class ProductModelBO {
     private BigDecimal originalPrice;
     private BigDecimal price;
     private Integer inventory;
+    private Integer salesVolume;
     
 	public Long getId() {
 		return id;
@@ -46,7 +47,11 @@ public class ProductModelBO {
 	public void setInventory(Integer inventory) {
 		this.inventory = inventory;
 	}
-	
-	
+	public Integer getSalesVolume() {
+		return salesVolume;
+	}
+	public void setSalesVolume(Integer salesVolume) {
+		this.salesVolume = salesVolume;
+	}
     
 }
