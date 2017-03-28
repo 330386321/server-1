@@ -9,12 +9,12 @@ public class UserCommonConstant {
     /**
      * 会员num标记
      */
-    public static final String MEMBER_NUM_TAG = "1";
+    public static final String MEMBER_NUM_TAG = "M";
 
     /**
      * 商户num标记
      */
-    public static final String MERCHANT_NUM_TAG = "2";
+    public static final String MERCHANT_NUM_TAG = "B";
 
     /**
      * 男

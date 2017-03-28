@@ -74,7 +74,7 @@ public class SmsRecordController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         if (!smsRecordBO.getContent().contains(smsCode)) {
-            return successGet(ResultCode.VERIFY_FAIL);
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         return successGet();
     }

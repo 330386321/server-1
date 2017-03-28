@@ -94,7 +94,7 @@ public class MemberController extends BaseController {
     public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
         MemberBO memberBO = memberService.getMemberById(id);
         if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
-            return successGet(ResultCode.VERIFY_FAIL);
+            return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         memberService.updateLoginPwd(id, originalPwd, newPwd);
         return successCreated();

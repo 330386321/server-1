@@ -22,10 +22,12 @@ public class ResultCode {
     public static final int SMS_SEND_HOUR_LIMIT = 1006;
     public static final int SMS_SEND_IP_LIMIT = 1007;
     public static final int SMS_SEND_MOBILE_LIMIT = 1008;
-    public static final int VERIFY_FAIL = 1009;
+    public static final int VERIFY_PWD_FAIL = 1009;
     public static final int IMAGE_WRONG_UPLOAD =1010;
     public static final int IMAGE_FORMAT_WRONG_UPLOAD =1011;
     public static final int RECORD_EXIST =1012;
+    public static final int VERIFY_SMS_CODE_FAIL = 1013;
+    public static final int VERIFY_PIC_CODE_FAIL = 1014;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -66,7 +68,9 @@ public class ResultCode {
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
         ResultCode.messageMap.put(SMS_SEND_MOBILE_LIMIT, "超过发送限制（同一手机号24小时内只能发送5次)");
-        ResultCode.messageMap.put(VERIFY_FAIL, "验证不通过");
+        ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
+        ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码密码错误");
+        ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码密码错误");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
