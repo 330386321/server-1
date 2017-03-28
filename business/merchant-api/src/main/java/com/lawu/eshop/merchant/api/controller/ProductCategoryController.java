@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.merchant.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
@@ -29,6 +30,7 @@ public class ProductCategoryController extends BaseController {
     private ProductCategoryService productCategoryService;
 
     @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
+    @Authorization
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<ProductCategoryDTO> findAll() {
 
@@ -37,6 +39,7 @@ public class ProductCategoryController extends BaseController {
     }
     
     @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
+    @Authorization
     @RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
     public ProductCategoryDTO getById(@PathVariable @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 
