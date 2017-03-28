@@ -165,16 +165,6 @@ public abstract class BaseController {
         return failGone(retCode, null);
     }
 
-    @Deprecated
-    public <T> Result<T> failVerify(T model) {
-        return response(HttpCode.SC_UNPROCESABLE_ENTITY, HttpCode.SC_UNPROCESABLE_ENTITY, HttpCode.get(HttpCode.SC_UNPROCESABLE_ENTITY), null, model);
-    }
-
-    @Deprecated
-    public <T> Result<T> failVerify() {
-        return failVerify(null);
-    }
-
     public <T> Result<T> failServerError(String debug) {
         return response(HttpCode.SC_INTERNAL_SERVER_ERROR, HttpCode.SC_INTERNAL_SERVER_ERROR, HttpCode.get(HttpCode.SC_INTERNAL_SERVER_ERROR), debug, null);
     }

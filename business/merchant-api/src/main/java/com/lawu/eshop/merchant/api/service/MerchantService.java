@@ -59,16 +59,23 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchant/register")
     Result register(@ModelAttribute RegisterParam registerParam);
-    
+
     /**
      * 查询我推荐的商家
+     *
+     * @return
      * @author zhangrc
      * @date 2017/03/27
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "merchant/getMerchantByInviter")
+    Result<Page<MerchantDTO>> getMerchantByInviter(@RequestParam("inviterId") Long inviterId, @RequestBody PageParam query);
+
+    /**
+     * 根据账号查询商户信息
+     *
+     * @param account 商家账号
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST,value = "merchant/getMerchantByInviter")
-    Result<Page<MerchantDTO>> getMerchantByInviter(@RequestParam("inviterId")  Long inviterId,@RequestBody PageParam query );
-
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
     Result getMerchantByAccount(@PathVariable("account") String account);
 

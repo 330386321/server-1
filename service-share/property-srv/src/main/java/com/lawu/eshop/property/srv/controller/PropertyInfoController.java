@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.controller;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
@@ -43,7 +44,7 @@ public class PropertyInfoController extends BaseController {
     public Result updatePayPwd(@PathVariable String userNo, @RequestParam String originalPwd, @RequestParam String newPwd) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNo(userNo);
         if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
-            return failVerify();
+            return successGet(ResultCode.VERIFY_FAIL);
         }
         propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
         return successCreated();

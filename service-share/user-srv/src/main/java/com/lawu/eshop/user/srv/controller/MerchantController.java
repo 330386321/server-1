@@ -20,10 +20,13 @@ import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
+import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -58,7 +61,7 @@ public class MerchantController extends BaseController {
 
         MerchantBO merchantBO = merchantService.getMerchantBOById(id);
         if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
-            return failVerify();
+            return successGet(ResultCode.VERIFY_FAIL);
         }
         merchantService.updateLoginPwd(id, originalPwd, newPwd);
         return successCreated();

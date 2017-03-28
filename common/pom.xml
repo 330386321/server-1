@@ -17,6 +17,7 @@
         <module>framework-web</module>
         <module>utils</module>
         <module>framework-core</module>
+        <module>sms-util</module>
     </modules>
 
 </project>
