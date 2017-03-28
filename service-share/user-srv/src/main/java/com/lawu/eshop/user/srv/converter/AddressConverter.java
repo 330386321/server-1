@@ -103,7 +103,6 @@ public class AddressConverter {
             return null;
         }
         AddressDO addressDO = new AddressDO();
-        addressDO.setUserId(addressParam.getUserId());
         addressDO.setAddr(addressParam.getAddr());;
         addressDO.setMobile(addressParam.getMobile());
         addressDO.setName(addressParam.getName());
