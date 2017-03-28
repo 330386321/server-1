@@ -17,24 +17,25 @@ import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 public class FavoriteMerchantConverter {
 	
 	public static List<FavoriteMerchantBO> convertListBOS(List<MerchantStoreDO> merchantStoreDOS,List<FavoriteMerchantDO> fmdos) {
-		if (merchantStoreDOS == null && fmdos==null) {
+		if (fmdos==null) {
 	       return null;
 	    }
 		List<FavoriteMerchantBO> FMBOS=new ArrayList<FavoriteMerchantBO>();
-		for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
+		
+		for (FavoriteMerchantDO favoriteMerchantDO : fmdos) {
 			FavoriteMerchantBO FBO=new FavoriteMerchantBO();
-			for (FavoriteMerchantDO favoriteMerchantDO : fmdos) {
+			FBO.setId(favoriteMerchantDO.getId());
+			FBO.setGmtCreate(favoriteMerchantDO.getGmtCreate());
+			for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
 				if(favoriteMerchantDO.getMerchantId().equals(merchantStoreDO.getMerchantId())){
-					FBO.setId(merchantStoreDO.getId());
-					FBO.setGmtCreate(merchantStoreDO.getGmtCreate());
+					FBO.setName(merchantStoreDO.getName());
+					FBO.setPrincipalName(merchantStoreDO.getPrincipalName());
+					FBO.setRegionPath(merchantStoreDO.getRegionPath());
 				}
-				
 			}
-			FBO.setName(merchantStoreDO.getName());
-			FBO.setPrincipalName(merchantStoreDO.getPrincipalName());
-			FBO.setRegionPath(merchantStoreDO.getRegionPath());
 			FMBOS.add(FBO);
 		}
+		
 		return FMBOS;
 	}
 	
