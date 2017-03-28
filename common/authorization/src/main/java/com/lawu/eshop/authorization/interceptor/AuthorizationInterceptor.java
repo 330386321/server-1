@@ -55,6 +55,18 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     // 鉴权失败后返回的HTTP错误码，默认为401
     private int unauthorizedErrorCode = HttpServletResponse.SC_UNAUTHORIZED;
 
+    private Long testId;
+
+    private String testAccount;
+
+    public void setTestId(Long testId) {
+        this.testId = testId;
+    }
+
+    public void setTestAccount(String testAccount) {
+        this.testAccount = testAccount;
+    }
+
     public void setManager(TokenManager manager) {
         this.manager = manager;
     }
@@ -124,9 +136,14 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             writer.close();
             return false;
         }
+
+        // 用户未授权测试 TODO remove
+        request.setAttribute(REQUEST_CURRENT_USER_ID, testId);
+        request.setAttribute(REQUEST_CURRENT_ACCOUNT, testAccount);
+
         // 为了防止以恶意操作直接在REQUEST_CURRENT_USER_ID、REQUEST_CURRENT_ACCOUNT中写入数据，将其设为null
-        request.setAttribute(REQUEST_CURRENT_USER_ID, null);
-        request.setAttribute(REQUEST_CURRENT_ACCOUNT, null);
+        //request.setAttribute(REQUEST_CURRENT_USER_ID, null);
+        //request.setAttribute(REQUEST_CURRENT_ACCOUNT, null);
         return true;
     }
 }
