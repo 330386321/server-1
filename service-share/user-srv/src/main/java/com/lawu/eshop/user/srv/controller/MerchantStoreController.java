@@ -71,16 +71,16 @@ public class MerchantStoreController extends BaseController {
 
         MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantId);
         if (merchantStoreInfoBO != null) {
-            return failVerify(ResultCode.RECORD_EXIST);
+            return failCreated(ResultCode.RECORD_EXIST);
         }
 
         switch (storeType) {
             case ENTITY_MERCHANT:
                 if ("".equals(merchantStoreParam.getStoreUrl())) {
-                    return failVerify(ResultCode.IMAGE_WRONG_UPLOAD_STORE);
+                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_STORE);
                 }
                 if ("".equals(merchantStoreParam.getEnvironmentUrl())) {
-                    return failVerify(ResultCode.IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT);
+                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT);
                 }
                 break;
             default:
@@ -89,15 +89,15 @@ public class MerchantStoreController extends BaseController {
         switch (certifType) {
             case CERTIF_TYPE_LICENSE:
                 if ("".equals(merchantStoreParam.getLicenseUrl())) {
-                    return failVerify(ResultCode.IMAGE_WRONG_UPLOAD_LICENSE);
+                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_LICENSE);
                 }
                 break;
             case CERTIF_TYPE_IDCARD:
                 if ("".equals(merchantStoreParam.getOperatorCardId())) {
-                    return failVerify(ResultCode.IMAGE_WRONG_UPLOAD_IDCARD);
+                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_IDCARD);
                 }
                 if (!ValidateUtil.isIDCard(merchantStoreParam.getOperatorCardId())) {
-                    return failVerify(ResultCode.USER_WRONG_IDCARD);
+                    return failCreated(ResultCode.USER_WRONG_IDCARD);
                 }
                 break;
             default:
@@ -107,7 +107,7 @@ public class MerchantStoreController extends BaseController {
         if (!StringUtils.isEmpty(merchantStoreParam.getRegNumber())) {
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
             if (merchantStoreProfileBO != null) {
-                return failVerify(ResultCode.RECORD_EXIST);
+                return failCreated(ResultCode.RECORD_EXIST);
             }
         }
 
@@ -115,13 +115,19 @@ public class MerchantStoreController extends BaseController {
         if (!StringUtils.isEmpty(merchantStoreParam.getOperatorCardId())) {
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 2);
             if (merchantStoreProfileBO != null) {
-                return failVerify(ResultCode.RECORD_EXIST);
+                return failCreated(ResultCode.RECORD_EXIST);
             }
         }
 
         merchantStoreInfoService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
 
         return successCreated();
+    }
+
+    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
+    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId,@RequestBody MerchantStoreParam merchantStoreParam){
+        Result r = new Result();
+        return r;
     }
 
 

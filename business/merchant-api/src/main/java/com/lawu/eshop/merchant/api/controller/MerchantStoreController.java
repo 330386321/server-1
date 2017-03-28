@@ -37,14 +37,13 @@ public class MerchantStoreController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value ="test", notes = "test",httpMethod = "POST")
+    @ApiOperation(value ="新增门店信息", notes = "成功返回 [1012]（章勇）",httpMethod = "POST")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value ="upload", method = RequestMethod.POST)
     public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
                                         @RequestParam("certifType")CertifTypeEnum certifType) {
-        // System.out.println(user);
-        //System.out.println(file.getOriginalFilename());
+        //TODO 上传图片
         return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType,certifType);
 
 

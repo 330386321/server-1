@@ -1,14 +1,11 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
@@ -88,7 +85,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreDO.setMerchantId(merchantId);
         merchantStoreDO.setGmtCreate(new Date());
         merchantStoreDO.setGmtModified(new Date());
-
+        merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
        Integer merchantStoreId = merchantStoreDOMapper.insert(merchantStoreDO);
 
         //新增商家店铺扩展信息
