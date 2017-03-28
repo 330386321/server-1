@@ -1,5 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
@@ -85,7 +89,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreDO.setGmtCreate(new Date());
         merchantStoreDO.setGmtModified(new Date());
 
-        merchantStoreDOMapper.insert(merchantStoreDO);
+       Integer merchantStoreId = merchantStoreDOMapper.insert(merchantStoreDO);
 
         //新增商家店铺扩展信息
         MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam,2);
@@ -95,8 +99,47 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
         merchantStoreProfileDOMapper.insert(merchantStoreProfileDO);
 
-
-
+        MerchantStoreImageDO merchantStoreImageDO = new MerchantStoreImageDO();
+        merchantStoreImageDO.setMerchantId(merchantId);
+        merchantStoreImageDO.setMerchantStoreId(Long.valueOf(merchantStoreId));
+        merchantStoreImageDO.setGmtCreate(new Date());
+        merchantStoreImageDO.setGmtModified(new Date());
+        //新增门店照
+        if(!StringUtils.isEmpty(merchantStoreParam.getStoreUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getStoreUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
+        //新增门店环境照
+        if(!StringUtils.isEmpty(merchantStoreParam.getEnvironmentUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getEnvironmentUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
+        //新增营业执照
+        if(!StringUtils.isEmpty(merchantStoreParam.getLicenseUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getLicenseUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
+        //新增其他许可证
+        if(!StringUtils.isEmpty(merchantStoreParam.getOtherUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getOtherUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_OTHER.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
+        //新增门店LOGO
+        if(!StringUtils.isEmpty(merchantStoreParam.getLogoUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getLogoUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
+        //新增门店手持身份证照
+        if(!StringUtils.isEmpty(merchantStoreParam.getIdcardUrl())){
+            merchantStoreImageDO.setPath(merchantStoreParam.getIdcardUrl());
+            merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
+            merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+        }
 
     }
 

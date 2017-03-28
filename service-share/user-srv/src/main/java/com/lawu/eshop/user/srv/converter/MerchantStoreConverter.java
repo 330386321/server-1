@@ -5,6 +5,7 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 
 /**
@@ -121,7 +122,7 @@ public class MerchantStoreConverter {
 
             return  merchantStoreProfileDO;
         }else{
-
+            
             return null;
         }
     }
