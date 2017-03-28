@@ -29,6 +29,7 @@ public class ResultCode {
     public static final int VERIFY_SMS_CODE_FAIL = 1013;
     public static final int VERIFY_PIC_CODE_FAIL = 1014;
     public static final int IMAGE_SIZE_ERROR = 1015;
+    public static final int VERIFY_FAIL = 1016;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -72,6 +73,7 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
+        ResultCode.messageMap.put(VERIFY_FAIL, "验证不通过");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
