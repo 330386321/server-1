@@ -26,10 +26,11 @@ public interface TokenManager {
     /**
      * 创建token
      * @param type
+     * @param userNo
      * @param userId
      * @param account
      */
-    String createToken(String type, Long userId, String account);
+    String createToken(String type, String userNo, Long userId, String account);
 
     /**
      * 通过token获得对应的key

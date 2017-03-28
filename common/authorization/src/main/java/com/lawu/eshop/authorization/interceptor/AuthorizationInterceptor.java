@@ -34,6 +34,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     /**
      * 存放登录用户模型Key的Request Key
      */
+    public static final String REQUEST_CURRENT_USER_NUM = "REQUEST_CURRENT_USER_NUM";
+
     public static final String REQUEST_CURRENT_USER_ID = "REQUEST_CURRENT_USER_ID";
 
     public static final String REQUEST_CURRENT_ACCOUNT = "REQUEST_CURRENT_ACCOUNT";
@@ -57,10 +59,16 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     private Long testId;
 
+    private String testNum;
+
     private String testAccount;
 
     public void setTestId(Long testId) {
         this.testId = testId;
+    }
+
+    public void setTestNum(String testNum) {
+        this.testNum = testNum;
     }
 
     public void setTestAccount(String testAccount) {
@@ -110,11 +118,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             }
             String key = manager.getAccount(token);
             if (claimsJws != null && key != null) {
-                String userId = claimsJws.getBody().getId();
+                String userNum = claimsJws.getBody().getId();
+                String userId = claimsJws.getBody().getAudience();
                 String userAccount = claimsJws.getBody().getSubject();
                 if (!StringUtils.isEmpty(userId) && !StringUtils.isEmpty(userAccount)) {
 
                     // 如果token验证成功，将token对应的用户id存在request中，便于之后注入
+                    request.setAttribute(REQUEST_CURRENT_USER_NUM, userNum);
                     request.setAttribute(REQUEST_CURRENT_USER_ID, userId);
                     request.setAttribute(REQUEST_CURRENT_ACCOUNT, userAccount);
                     return true;
@@ -138,10 +148,12 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 用户未授权测试 TODO remove
+        request.setAttribute(REQUEST_CURRENT_USER_NUM, testNum);
         request.setAttribute(REQUEST_CURRENT_USER_ID, testId);
         request.setAttribute(REQUEST_CURRENT_ACCOUNT, testAccount);
 
         // 为了防止以恶意操作直接在REQUEST_CURRENT_USER_ID、REQUEST_CURRENT_ACCOUNT中写入数据，将其设为null
+        // request.setAttribute(REQUEST_CURRENT_USER_NUM, null);
         //request.setAttribute(REQUEST_CURRENT_USER_ID, null);
         //request.setAttribute(REQUEST_CURRENT_ACCOUNT, null);
         return true;

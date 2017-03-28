@@ -18,6 +18,7 @@
                      <!--管理验证信息的bean-->
                      <property name="manager" ref="tokenManager" />
                      <!--测试 TODO remove-->
+                     <property name="testNum" value="M000001"/>
                      <property name="testId" value="2"/>
                      <property name="testAccount" value="test" />
               </bean>

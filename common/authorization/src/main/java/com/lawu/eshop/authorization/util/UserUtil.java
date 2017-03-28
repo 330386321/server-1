@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UserUtil {
 
+    /**
+     * 获取当前登录用户ID
+     *
+     * @param request
+     * @return
+     */
     public static Long getCurrentUserId(HttpServletRequest request) {
         Object userId = request.getAttribute(AuthorizationInterceptor.REQUEST_CURRENT_USER_ID);
         if (userId == null) {
@@ -20,6 +26,23 @@ public class UserUtil {
         return Long.valueOf(userId.toString());
     }
 
+    /**
+     * 获取当前登录用户编号
+     *
+     * @param request
+     * @return
+     */
+    public static String getCurrentUserNum(HttpServletRequest request) {
+        Object userNum = request.getAttribute(AuthorizationInterceptor.REQUEST_CURRENT_USER_NUM);
+        return userNum == null ? null : userNum.toString();
+    }
+
+    /**
+     * 获取当前登录用户账号
+     *
+     * @param request
+     * @return
+     */
     public static String getCurrentAccount(HttpServletRequest request) {
         Object account = request.getAttribute(AuthorizationInterceptor.REQUEST_CURRENT_ACCOUNT);
         return account == null ? null : account.toString();

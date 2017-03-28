@@ -49,14 +49,15 @@ public abstract class AbstractTokenManager implements TokenManager {
     protected abstract void delSingleRelationshipByKey(String account);
 
     @Override
-    public String createToken(String type, Long userId, String account) {
+    public String createToken(String type, String userNo, Long userId, String account) {
         String id = String.valueOf(userId);
         // JWT
         String token = Jwts
                 .builder()
                 .setIssuer(type)
-                .setId(id)
+                .setId(userNo)
                 .setSubject(account)
+                .setAudience(id)
                 .signWith(SignatureAlgorithm.HS512, AbstractTokenManager.TOKEN_KEY)
                 .compact();
 
