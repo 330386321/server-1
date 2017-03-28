@@ -46,7 +46,7 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> successGet() {
-        return successGet(null);
+        return response(HttpCode.SC_OK, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, null);
     }
 
     public <T> Result<T> successGet(int resultCode) {
@@ -69,10 +69,9 @@ public abstract class BaseController {
     public <T> Result<T> successCreated(T model) {
         return response(HttpCode.SC_CREATED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
-    
-    @Deprecated
+
     public <T> Result<T> successCreated() {
-        return successCreated(null);
+        return response(HttpCode.SC_CREATED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, null);
     }
 
     public <T> Result<T> successCreated(int resultCode) {
@@ -92,7 +91,8 @@ public abstract class BaseController {
     }
 
     public <T> Result<T> successAccepted() {
-        return successAccepted(null);
+        return response(HttpCode.SC_ACCEPTED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, null);
+
     }
 
 
