@@ -23,7 +23,7 @@ public interface SmsRecordService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "smsRecord/sendSms/{mobile}")
-    Result sendSms(@PathVariable String mobile, @RequestParam String ip, @RequestParam Integer type);
+    Result sendSms(@PathVariable("mobile") String mobile, @RequestParam("ip") String ip, @RequestParam("type") Integer type);
 
     /**
      * 校验手机验证码
