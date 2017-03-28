@@ -83,7 +83,7 @@ public class MerchantController extends BaseController {
      *@param inviterId 用户id
      *@return
      */
-    @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.GET)
+    @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.POST)
     public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestBody MerchantInviterParam pageQuery) {
     	Page<MerchantInviterBO> pageBO=merchantService.getMerchantByInviter(pageQuery);
     	Page<MerchantInviterDTO> pageDTOS=MerchantInviterConverter.convertPageMIDOTS(pageBO);

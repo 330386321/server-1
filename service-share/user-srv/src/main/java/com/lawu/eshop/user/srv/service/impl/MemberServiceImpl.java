@@ -118,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
 			 example.or(c2);
 			 example.or(c3);
 		 }
-		 RowBounds rowBounds = new RowBounds(memberQuery.getCurrentPage(), memberQuery.getPageSize());
+		 RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
 		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 Page<MemberBO> pageMember =new Page<MemberBO>();
 		 pageMember.setTotalCount(totalCount);

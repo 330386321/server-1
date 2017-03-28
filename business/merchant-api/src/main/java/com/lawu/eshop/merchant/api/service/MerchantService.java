@@ -1,7 +1,6 @@
 package com.lawu.eshop.merchant.api.service;
 
 
-import com.lawu.eshop.user.dto.LoginUserDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,10 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.query.MerchantInviterParam;
 
 /**
  * @author meishuquan
@@ -60,16 +60,10 @@ public interface MerchantService {
     @RequestMapping(method = RequestMethod.POST, value = "merchant/register")
     Result register(@ModelAttribute RegisterParam registerParam);
     
-    /**
-     * 查询我推荐的商家
-     * @author zhangrc
-     * @date 2017/03/27
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.POST,value = "merchant/getMerchantByInviter")
-    Result<Page<MerchantDTO>> getMerchantByInviter(@RequestParam("inviterId")  Long inviterId,@RequestBody PageParam query );
+    
 
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
     Result getMerchantByAccount(@PathVariable("account") String account);
+
 
 }
