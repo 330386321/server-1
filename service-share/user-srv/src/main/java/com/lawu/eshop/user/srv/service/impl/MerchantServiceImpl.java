@@ -213,9 +213,7 @@ public class MerchantServiceImpl implements MerchantService {
 		 c1.andInviterIdEqualTo(pageParam.getInviterId()).andStatusEqualTo(new Byte("1"));
 		 int totalCount= merchantDOMapper.countByExample(example); //总记录数
 		 if(pageParam.getAccount()!=null){ //存在模糊查询
-			 Criteria c2=example.createCriteria();
-			 c2.andAccountLike("%"+pageParam.getAccount()+"%");
-			 example.or(c2);
+			 c1.andAccountLike("%"+pageParam.getAccount()+"%");
 		 }
 		 RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
 		 //推荐的商家
