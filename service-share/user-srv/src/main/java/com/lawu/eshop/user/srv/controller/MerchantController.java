@@ -76,20 +76,24 @@ public class MerchantController extends BaseController {
     public Result getMerchantByAccount(@PathVariable String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
         MerchantDTO merchantDTO = MerchantConverter.convertDTO(merchantBO);
+        if (merchantDTO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         return successGet(merchantDTO);
     }
 
     /**
      * 推荐商家
-     *@author zhangrc
-     *@date 2017/03/23
-     *@param inviterId 用户id
-     *@return
+     *
+     * @param inviterId 用户id
+     * @return
+     * @author zhangrc
+     * @date 2017/03/23
      */
     @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.POST)
     public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestBody MerchantInviterParam pageQuery) {
-    	Page<MerchantInviterBO> pageBO=merchantService.getMerchantByInviter(pageQuery);
-    	Page<MerchantInviterDTO> pageDTOS=MerchantInviterConverter.convertPageMIDOTS(pageBO);
+        Page<MerchantInviterBO> pageBO = merchantService.getMerchantByInviter(pageQuery);
+        Page<MerchantInviterDTO> pageDTOS = MerchantInviterConverter.convertPageMIDOTS(pageBO);
         return successGet(pageDTOS);
     }
 

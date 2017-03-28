@@ -110,6 +110,9 @@ public class MemberController extends BaseController {
     public Result getMemberByAccount(@PathVariable String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
         MemberDTO memberDTO = MemberConverter.convertMDTO(memberBO);
+        if (memberDTO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         return successGet(memberDTO);
     }
 
@@ -124,7 +127,7 @@ public class MemberController extends BaseController {
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
     public Result<Page<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery memberQuery) {
         Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(memberQuery);
-        Page<MemberDTO> page=MemberConverter.convertPageDOTS(pageMemberBOS);
+        Page<MemberDTO> page = MemberConverter.convertPageDOTS(pageMemberBOS);
         return successGet(page);
     }
 

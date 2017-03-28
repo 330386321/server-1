@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.SmsRecordDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
@@ -97,12 +98,19 @@ public class MemberController extends BaseController {
         return page;
     }
 
-    @ApiOperation(value = "注册", notes = "会员注册。(梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。[1009|1012] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result register(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
-        memberService.register(registerParam);
-        return successCreated();
+        Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
+        if (isSuccess(accountResult)) {
+            return failCreated(ResultCode.RECORD_EXIST);
+        }
+        Result smsResult = smsRecordService.verifySmsRecord(registerParam.getSmsId(), registerParam.getSmsCode());
+        if (!isSuccess(smsResult)) {
+            return failCreated(ResultCode.VERIFY_FAIL);
+        }
+        return memberService.register(registerParam);
     }
 
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")

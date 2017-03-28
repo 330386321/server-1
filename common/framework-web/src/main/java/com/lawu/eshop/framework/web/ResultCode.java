@@ -65,7 +65,7 @@ public class ResultCode {
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
         ResultCode.messageMap.put(SMS_SEND_MOBILE_LIMIT, "超过发送限制（同一手机号24小时内只能发送5次)");
-        ResultCode.messageMap.put(VERIFY_FAIL, "验证不匹配");
+        ResultCode.messageMap.put(VERIFY_FAIL, "验证不通过");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");

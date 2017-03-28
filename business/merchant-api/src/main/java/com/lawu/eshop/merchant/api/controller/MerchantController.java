@@ -4,6 +4,7 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
@@ -63,10 +64,18 @@ public class MerchantController extends BaseController {
         return merchantService.getInviterByAccount(account);
     }
 
-    @ApiOperation(value = "注册", notes = "商户注册。(梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "商户注册。[1009|1012] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result getInviterByAccount(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+        Result accountResult = merchantService.getMerchantByAccount(registerParam.getAccount());
+        if (isSuccess(accountResult)) {
+            return failCreated(ResultCode.RECORD_EXIST);
+        }
+        Result smsResult = smsRecordService.verifySmsRecord(registerParam.getSmsId(), registerParam.getSmsCode());
+        if (!isSuccess(smsResult)) {
+            return failCreated(ResultCode.VERIFY_FAIL);
+        }
         return merchantService.register(registerParam);
     }
 
@@ -81,7 +90,7 @@ public class MerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
-                                        @RequestParam @ApiParam(required = true, value = "短信类型") Integer type) {
+                          @RequestParam @ApiParam(required = true, value = "短信类型") Integer type) {
         String ip = IpUtil.getIpAddress(getRequest());
         return smsRecordService.sendSms(mobile, ip, type);
     }

@@ -24,4 +24,13 @@ public interface SmsRecordService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "smsRecord/sendSms/{mobile}")
     Result sendSms(@PathVariable String mobile, @RequestParam String ip, @RequestParam Integer type);
+
+    /**
+     * 校验手机验证码
+     * @param id    ID
+     * @param smsCode      输入的手机验证码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "smsRecord/verifySmsRecord/{id}")
+    Result verifySmsRecord(@PathVariable("id") Long id,@RequestParam("smsCode") String smsCode);
 }
