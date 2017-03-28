@@ -12,7 +12,7 @@ public class ResultCode {
 
     private static Map<Integer, String> messageMap = new HashMap<>();
 
-
+    // 公共代码
     public static final int SUCCESS = 1000;
     public static final int FAIL = 1001;
     public static final int RESOURCE_NOT_FOUND = 1002;
@@ -23,20 +23,31 @@ public class ResultCode {
     public static final int SMS_SEND_IP_LIMIT = 1007;
     public static final int SMS_SEND_MOBILE_LIMIT = 1008;
     public static final int VERIFY_FAIL = 1009;
+    public static final int IMAGE_WRONG_UPLOAD =1010;
+    public static final int IMAGE_FORMAT_WRONG_UPLOAD =1011;
+    public static final int RECORD_EXIST =1012;
 
+    // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
-    public static final int USER_WRONG_ID = 2100;
-    public static final int PRODUCT_WRONG_ID = 3100;
-    public static final int IMAGE_WRONG_UPLOAD =1101;
-    public static final int IMAGE_FORMAT_WRONG_UPLOAD =1102;
-    public static final int IMAGE_WRONG_UPLOAD_STORE =1103;
-    public static final int IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT =1104;
-    public static final int IMAGE_WRONG_UPLOAD_LICENSE =1105;
-    public static final int IMAGE_WRONG_UPLOAD_IDCARD =1106;
-    public static final int USER_WRONG_IDCARD =2101;
-    public static final int RECORD_EXIST =1107;
+    public static final int USER_WRONG_ID = 2001;
+    public static final int USER_WRONG_IDCARD =2002;
+    public static final int IMAGE_WRONG_UPLOAD_STORE =2003;
+    public static final int IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT = 2004;
+    public static final int IMAGE_WRONG_UPLOAD_LICENSE = 2005;
+    public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
+    
+    // 商品模块代码 3xxx
+    
+    // 订单模块代码 4xxx
+    
+    // 广告模块代码 5xxx
 
+    // 资产模块代码 6xxx
 
+    // 商城模块代码 7xxx
+    
+    
+    
     // 初始化状态码与文字说明
     static {
 
@@ -49,12 +60,7 @@ public class ResultCode {
         ResultCode.messageMap.put(SAVE_FAIL, "保存失败");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE, "请上传门店照");
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT, "请上传门店环境照");
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_LICENSE, "请上传营业执照");
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
         ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
-
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
@@ -65,9 +71,12 @@ public class ResultCode {
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
         ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");
         ResultCode.messageMap.put(USER_WRONG_IDCARD, "身份证号不正确");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE, "请上传门店照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT, "请上传门店环境照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_LICENSE, "请上传营业执照");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
 
         // 商品模块 3xxx
-
         
         
         // 订单模块 4xxx
@@ -75,10 +84,13 @@ public class ResultCode {
 
         // 广告模块 5xxx
 
+        
         // 资产模块 6xxx
 
+        
         // 商城模块 7xxx
 
+        
     }
 
     public static String get(int code) {
