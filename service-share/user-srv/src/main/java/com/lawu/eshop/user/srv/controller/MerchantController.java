@@ -16,6 +16,8 @@ import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
