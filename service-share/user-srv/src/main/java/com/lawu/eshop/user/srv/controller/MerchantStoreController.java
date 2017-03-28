@@ -61,10 +61,11 @@ public class MerchantStoreController extends BaseController {
 
     /**
      * 新增门店信息
-     * @param merchantId 商家id
+     *
+     * @param merchantId         商家id
      * @param merchantStoreParam 门店信息（）
-     * @param storeType 经营类型
-     * @param certifType 证件类型
+     * @param storeType          经营类型
+     * @param certifType         证件类型
      * @return
      */
     @RequestMapping(value = "saveMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
@@ -73,7 +74,6 @@ public class MerchantStoreController extends BaseController {
                                         @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
 
         //判断门店是否存在
-
         MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantId);
         if (merchantStoreInfoBO != null) {
             return failCreated(ResultCode.RECORD_EXIST);
@@ -124,15 +124,27 @@ public class MerchantStoreController extends BaseController {
             }
         }
 
-        merchantStoreInfoService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
+        merchantStoreInfoService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
 
         return successCreated();
     }
 
-    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
-    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId,@RequestBody MerchantStoreParam merchantStoreParam){
-        Result r = new Result();
-        return r;
+    /**
+     * 修改门店信息
+     *
+     * @param merchantId         商家id
+     * @param merchantStoreParam 门店信息
+     * @return
+     */
+    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.PUT)
+    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
+        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantId);
+        if (merchantStoreInfoBO == null) {
+            return failCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        merchantStoreInfoService.updateMerchantStoreInfo(merchantId, merchantStoreParam, merchantStoreInfoBO.getMerchantStoreId(), storeType, certifType);
+
+        return successCreated();
     }
 
 

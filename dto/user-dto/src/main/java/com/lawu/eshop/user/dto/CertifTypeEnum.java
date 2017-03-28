@@ -7,7 +7,7 @@ package com.lawu.eshop.user.dto;
 public enum CertifTypeEnum {
     CERTIF_TYPE_IDCARD((byte)0x01),
     CERTIF_TYPE_LICENSE((byte)0x02);
-    private Byte val;
+    public Byte val;
     CertifTypeEnum(Byte val) {
         this.val = val;
     }

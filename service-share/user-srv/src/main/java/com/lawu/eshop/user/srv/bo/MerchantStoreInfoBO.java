@@ -8,6 +8,8 @@ import java.util.Date;
  * Created by Administrator on 2017/3/24.
  */
 public class MerchantStoreInfoBO {
+
+    private Long merchantStoreId;
     /**
      *
      * 店铺名称
@@ -132,6 +134,14 @@ public class MerchantStoreInfoBO {
      * 图片路径
      */
     private String path;
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
+    }
 
     public String getName() {
         return name;

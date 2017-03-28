@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.param;
 
+import io.swagger.annotations.ApiParam;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -13,111 +15,134 @@ public class MerchantStoreParam {
     /**
      * 店铺名称
      */
+    @ApiParam(name = "name" ,value = "店铺名称")
     private  String name;
 
     /**
      * 省市区
      */
+    @ApiParam(name = "regionPath" ,value = "省市区")
     private String regionPath;
 
     /**
      * 店铺地址信息
      */
+    @ApiParam(name = "address" ,value = "店铺地址信息")
     private String address;
 
     /**
      * 经度
      */
+    @ApiParam(name = "longitude" ,value = "经度")
     private BigDecimal longitude;
 
     /**
      * 纬度
      */
+    @ApiParam(name = "latitude" ,value = "纬度")
     private BigDecimal latitude;
 
     /**
      * 主营业务
      */
+    @ApiParam(name = "industryPath" ,value = "主营业务")
     private String industryPath;
 
     /**
      * 店铺介绍
      */
+    @ApiParam(name = "intro" ,value = "店铺介绍")
     private String intro;
 
     /**
      * 负责人名字
      */
+    @ApiParam(name = "principalName" ,value = "负责人名字")
     private String principalName;
 
     /**
      * 负责人手机
      */
+    @ApiParam(name = "principalMobile" ,value = "负责人手机")
     private String principalMobile;
 
     /**
      * 注册公司名称
      */
+    @ApiParam(name = "companyName" ,value = "注册公司名称")
     private String companyName;
 
     /**
      * 营业执照号码
      */
+    @ApiParam(name = "regNumber" ,value = "营业执照号码")
     private String regNumber;
 
     /**
      * 经营住所
      */
+    @ApiParam(name = "companyAddress" ,value = "经营住所")
     private String companyAddress;
 
     /**
      * 营业执照有效期
      */
+    @ApiParam(name = "licenseIndate" ,value = "营业执照有效期")
     private Date licenseIndate;
 
     /**
      * 经营类型
      */
+    @ApiParam(name = "manageType" ,value = "经营类型")
     private Byte manageType;
 
     /**
      * 证件类型
      */
+    @ApiParam(name = "certifType" ,value = "证件类型")
     private Byte certifType;
 
     /**
      * 个人经营者身份证号码
      */
+    @ApiParam(name = "operatorCardId" ,value = "证件类型")
     private String operatorCardId;
 
     /**
      * 个人经营者姓名
      */
+    @ApiParam(name = "operatorName" ,value = "个人经营者姓名")
     private String operatorName;
 
     /**
      * 门店照
      */
+    @ApiParam(name = "storeUrl" ,value = "门店照")
     private String storeUrl;
     /**
      * 门店环境照
      */
+    @ApiParam(name = "environmentUrl" ,value = "门店环境照")
     private String environmentUrl ;
     /**
      * 身份证照
      */
+    @ApiParam(name = "idcardUrl" ,value = "身份证照")
     private String idcardUrl;
     /**
      * 营业执照照片
      */
+    @ApiParam(name = "licenseUrl" ,value = "营业执照照片")
     private String licenseUrl;
     /**
      * 门店logo
      */
+    @ApiParam(name = "logoUrl" ,value = "门店logo")
     private String logoUrl;
     /**
      * 其他照片
      */
+    @ApiParam(name = "otherUrl" ,value = "其他照片")
     private String otherUrl;
 
 

@@ -26,7 +26,23 @@ public interface MerchantStoreService {
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/findMerchantStoreInfo/{id}")
     Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") Long id);
 
+    /**
+     * 新增门店信息
+     * @param merchantId 商家id
+     * @param merchantStoreParam 门店信息
+     * @param storeType 经营类型
+     * @param certifType 证件类型
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, value = "merchantStore/saveMerchantStoreInfo/{merchantId}")
     Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
 
+    /**
+     * 修改门店信息
+     * @param merchantId 商家id
+     * @param merchantStoreParam 门店信息
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/updateMerchantStoreInfo/{merchantId}")
+    Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam,@RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
 }

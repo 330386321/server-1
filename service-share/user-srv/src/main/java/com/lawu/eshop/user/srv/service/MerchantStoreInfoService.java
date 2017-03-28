@@ -26,7 +26,7 @@ public interface MerchantStoreInfoService {
      * @param merchantId
      * @param merchantStoreParam
      */
-    void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam);
+    void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,MerchantStoreTypeEnum storeTypeEnum,CertifTypeEnum certifTypeEnum);
 
     /**
      * 查询门店扩展信息
@@ -36,5 +36,11 @@ public interface MerchantStoreInfoService {
      */
     MerchantStoreProfileBO selectStoreInfoByExample(String example,Integer type);
 
-
+    /**
+     * 修改门店信息
+     * @param merchantId 门店id
+     * @param merchantStoreParam 门店信息
+     */
+    void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,Long merchantStoreId,MerchantStoreTypeEnum storeTypeEnum,CertifTypeEnum certifTypeEnum);
+    
 }

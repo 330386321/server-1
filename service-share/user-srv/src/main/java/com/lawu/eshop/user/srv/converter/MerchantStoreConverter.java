@@ -37,6 +37,7 @@ public class MerchantStoreConverter {
             return null;
         }
         MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
+        merchantStoreInfoBO.setMerchantStoreId(merchantStoreDO.getId());
         merchantStoreInfoBO.setName(merchantStoreDO.getName());
         merchantStoreInfoBO.setPrincipalName(merchantStoreDO.getPrincipalName());
         merchantStoreInfoBO.setRegionPath(merchantStoreDO.getRegionPath());

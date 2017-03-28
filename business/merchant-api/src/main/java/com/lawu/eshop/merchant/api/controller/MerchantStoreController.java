@@ -28,25 +28,33 @@ public class MerchantStoreController extends BaseController {
     private MerchantStoreService merchantStoreService;
 
 
-    @ApiOperation(value ="根据商家id查询门店信息", notes = "根据商家id查询门店信息，成功返回门店信息。（章勇）",httpMethod = "GET")
+    @ApiOperation(value = "根据商家id查询门店信息", notes = "根据商家id查询门店信息，成功返回门店信息。（章勇）", httpMethod = "GET")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value ="findMerchantStoreInfo/{id}", method = RequestMethod.GET)
-    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") @ApiParam(required = true, value = "商家主键") Long id){
+    @RequestMapping(value = "findMerchantStoreInfo/{id}", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") @ApiParam(required = true, value = "商家主键") Long id) {
         Result<MerchantStoreDTO> result = merchantStoreService.selectMerchantStore(id);
         return result;
     }
 
-    @ApiOperation(value ="新增门店信息", notes = "成功返回 [1012]（章勇）",httpMethod = "POST")
+    @ApiOperation(value = "新增门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     //@Authorization
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value ="upload", method = RequestMethod.POST)
-    public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
-                                        @RequestParam("certifType")CertifTypeEnum certifType) {
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "saveMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
+    public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
+                                        @RequestParam("certifType") CertifTypeEnum certifType) {
         //TODO 上传图片
-        return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType,certifType);
+        return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
+    }
 
-
+    @ApiOperation(value = "修改门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "PUT")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.PUT)
+    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
+                                          @RequestParam("certifType") CertifTypeEnum certifType) {
+        //TODO 上传图片
+        return merchantStoreService.updateMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
     }
 
 }

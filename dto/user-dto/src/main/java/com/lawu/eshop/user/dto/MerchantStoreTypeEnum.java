@@ -7,9 +7,19 @@ package com.lawu.eshop.user.dto;
 public enum  MerchantStoreTypeEnum {
     NORMAL_MERCHANT((byte)0x01),
     ENTITY_MERCHANT((byte)0x02);
-    private Byte val;
+    public Byte val;
     MerchantStoreTypeEnum(Byte val) {
         this.val = val;
+    }
+
+    public static MerchantStoreTypeEnum getEnum(Byte val){
+        MerchantStoreTypeEnum[] values = MerchantStoreTypeEnum.values();
+        for (MerchantStoreTypeEnum object : values) {
+            if (object.val.equals(val)) {
+                return object;
+            }
+        }
+        return null;
     }
 
 }
