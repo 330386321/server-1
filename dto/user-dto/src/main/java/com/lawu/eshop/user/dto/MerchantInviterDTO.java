@@ -2,24 +2,30 @@ package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
-public class FavoriteMerchantDTO {
+public class MerchantInviterDTO {
 	
-	private Long id;
+	private String account;
 	
 	private String name;
 	
 	private String principalName;
+	 
+	private String principalMobile;
 	
 	private String regionPath;
 	
+	private String address;
+	
 	private Date gmtCreate;
+	
+	private Byte status;
 
-	public Long getId() {
-		return id;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 	public String getName() {
@@ -38,12 +44,28 @@ public class FavoriteMerchantDTO {
 		this.principalName = principalName;
 	}
 
+	public String getPrincipalMobile() {
+		return principalMobile;
+	}
+
+	public void setPrincipalMobile(String principalMobile) {
+		this.principalMobile = principalMobile;
+	}
+
 	public String getRegionPath() {
 		return regionPath;
 	}
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public Date getGmtCreate() {
@@ -54,5 +76,13 @@ public class FavoriteMerchantDTO {
 		this.gmtCreate = gmtCreate;
 	}
 
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
+	}
+	
 
 }

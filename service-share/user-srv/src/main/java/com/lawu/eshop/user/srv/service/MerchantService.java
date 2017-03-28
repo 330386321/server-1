@@ -1,10 +1,11 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 
 /**
  * 商户服务接口
@@ -58,12 +59,10 @@ public interface MerchantService {
      * 我推荐的商家 
      * @author zhangrc
      * @date 2017/03/27
-     * @param inviterId
-     * @param account
-     * @param pageParam
+     * @param pageQuery
      * @return
      */
-    Page<MerchantBO> getMerchantByInviter(Long inviterId ,String account,PageParam pageParam);
+    Page<MerchantInviterBO> getMerchantByInviter(MerchantInviterParam pageQuery);
 
     /**
      * 查询会员信息

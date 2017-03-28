@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 
 /**
  * 商户信息转换器
@@ -123,6 +128,8 @@ public class MerchantConverter {
 		}
 		return pageDTO;
 	}
+
+
     
 
 }
