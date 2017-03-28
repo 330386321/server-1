@@ -65,7 +65,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
     }
 
     @Override
-    public int saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode) {
+    public Long saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode) {
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setMobile(mobile);
         smsRecordDO.setContent(SmsRecordConstant.SMS_TEMPLATE.replace("{smsCode}", smsCode));
@@ -74,13 +74,14 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         smsRecordDO.setIsSuccess(SmsRecordConstant.SMS_SEND_FAIL);
         smsRecordDO.setFailReason(ResultCode.get(errorCode));
         smsRecordDO.setGmtCreate(new Date());
-        return smsRecordDOMapper.insertSelective(smsRecordDO);
+        smsRecordDOMapper.insertSelective(smsRecordDO);
+        return smsRecordDO.getId();
     }
 
     @Override
-    public void updateSmsRecordSuccess(int id) {
+    public void updateSmsRecordSuccess(Long id) {
         SmsRecordDO smsRecordDO = new SmsRecordDO();
-        smsRecordDO.setId(Long.valueOf(id));
+        smsRecordDO.setId(id);
         smsRecordDO.setIsSuccess(SmsRecordConstant.SMS_SEND_SUCCESS);
         smsRecordDOMapper.updateByPrimaryKeySelective(smsRecordDO);
     }

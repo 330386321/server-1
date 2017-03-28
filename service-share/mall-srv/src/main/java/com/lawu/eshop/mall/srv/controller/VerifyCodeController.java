@@ -30,9 +30,9 @@ public class VerifyCodeController extends BaseController {
      */
     @RequestMapping(value = "save/{mobile}", method = RequestMethod.POST)
     public Result save(@PathVariable String mobile,@RequestParam String verifyCode, @RequestParam VerifyCodePurposeEnum purpose) {
-        int id = verifyCodeService.save(mobile, verifyCode, purpose);
+        long id = verifyCodeService.save(mobile, verifyCode, purpose);
         VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
-        verifyCodeDTO.setId(Long.valueOf(id));
+        verifyCodeDTO.setId(id);
         verifyCodeDTO.setCode(verifyCode);
         return successGet(verifyCodeDTO);
     }

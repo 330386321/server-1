@@ -1,14 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserStatusConstant;
@@ -17,19 +8,23 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.InviteRelationDO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
-import com.lawu.eshop.user.srv.domain.MemberProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.RandomUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -87,7 +82,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateLoginPwd(Long id,String originalPwd, String newPwd) {
+    public void updateLoginPwd(Long id, String originalPwd, String newPwd) {
 
         MemberDO memberDO = new MemberDO();
         memberDO.setId(id);
@@ -103,30 +98,30 @@ public class MemberServiceImpl implements MemberService {
         return memberDOS.isEmpty() ? null : MemberConverter.convertBO(memberDOS.get(0));
     }
 
-	@Override
-	public Page<MemberBO> findMemberListByUser(Long inviterId,MemberQuery memberQuery) {
-		 MemberDOExample example = new MemberDOExample();
-		 Byte status=1;
-		 Criteria c1=example.createCriteria();
-		 c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status);
-		 int totalCount= memberDOMapper.countByExample(example); //总记录数
-		 if(memberQuery.getAccountOrNickName()!=null){ //存在模糊查询
-			 Criteria c2=example.createCriteria();
-			 c2.andAccountLike("%"+memberQuery.getAccountOrNickName()+"%");
-			 Criteria c3=example.createCriteria();
-			 c3.andNicknameLike("%"+memberQuery.getAccountOrNickName()+"%");
-			 example.or(c2);
-			 example.or(c3);
-		 }
-		 RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
-		 List<MemberDO> memberDOS=memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		 Page<MemberBO> pageMember =new Page<MemberBO>();
-		 pageMember.setTotalCount(totalCount);
-		 List<MemberBO> memberBOS= MemberConverter.convertListBOS(memberDOS);
-		 pageMember.setRecords(memberBOS);
-		 pageMember.setCurrentPage(memberQuery.getCurrentPage());
-		return pageMember;
-	}
+    @Override
+    public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery) {
+        MemberDOExample example = new MemberDOExample();
+        Byte status = 1;
+        Criteria c1 = example.createCriteria();
+        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status);
+        int totalCount = memberDOMapper.countByExample(example); //总记录数
+        if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
+            Criteria c2 = example.createCriteria();
+            c2.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
+            Criteria c3 = example.createCriteria();
+            c3.andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
+            example.or(c2);
+            example.or(c3);
+        }
+        RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
+        List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        Page<MemberBO> pageMember = new Page<MemberBO>();
+        pageMember.setTotalCount(totalCount);
+        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS);
+        pageMember.setRecords(memberBOS);
+        pageMember.setCurrentPage(memberQuery.getCurrentPage());
+        return pageMember;
+    }
 
     @Override
     @Transactional
@@ -138,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
         }
         //插入会员信息
         MemberDO memberDO = new MemberDO();
-        memberDO.setName(UserCommonConstant.MEMBER_NUM_TAG);
+        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
         memberDO.setAccount(registerParam.getAccount());
         memberDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
         memberDO.setMobile(registerParam.getAccount());
@@ -152,7 +147,8 @@ public class MemberServiceImpl implements MemberService {
         if (registerParam.getInviterType() != null) {
             memberDO.setInviterType(registerParam.getInviterType());
         }
-        long memberId = memberDOMapper.insertSelective(memberDO);
+        memberDOMapper.insertSelective(memberDO);
+        long memberId = memberDO.getId();
 
         //插入会员扩展信息
         MemberProfileDO memberProfileDO = new MemberProfileDO();
@@ -241,7 +237,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberBO getMemberById(Long id) {
-        MemberDO memberDO=memberDOMapper.selectByPrimaryKey(id);
+        MemberDO memberDO = memberDOMapper.selectByPrimaryKey(id);
         return MemberConverter.convertBO(memberDO);
     }
 

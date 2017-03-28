@@ -43,7 +43,7 @@ public class SmsRecordController extends BaseController {
     public Result sendSms(@PathVariable String mobile, @RequestParam String ip, @RequestParam Integer type) throws Exception {
         String smsCode = RandomUtil.getRandomString(1, 6);
         int errorCode = smsRecordService.verifySendSms(mobile, ip);
-        int id = smsRecordService.saveSmsRecord(mobile, ip, DataTransUtil.intToByte(type), smsCode, errorCode);
+        long id = smsRecordService.saveSmsRecord(mobile, ip, DataTransUtil.intToByte(type), smsCode, errorCode);
         if (errorCode != SmsRecordConstant.SMS_SEND_CODE) {
             return failCreated(errorCode);
         }
@@ -56,7 +56,7 @@ public class SmsRecordController extends BaseController {
         }
         smsRecordService.updateSmsRecordSuccess(id);
         SmsRecordDTO smsRecordDTO = new SmsRecordDTO();
-        smsRecordDTO.setId(Long.valueOf(id));
+        smsRecordDTO.setId(id);
         return successCreated(smsRecordDTO);
     }
 

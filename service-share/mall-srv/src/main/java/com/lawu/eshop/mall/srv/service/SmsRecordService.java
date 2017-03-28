@@ -32,14 +32,14 @@ public interface SmsRecordService {
      * @param errorCode 验证发送短信错误码
      * @return
      */
-    int saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode);
+    Long saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode);
 
     /**
      * 更新短信发送成功
      *
      * @param id ID
      */
-    void updateSmsRecordSuccess(int id);
+    void updateSmsRecordSuccess(Long id);
 
     /**
      * 根据ID查询短信记录

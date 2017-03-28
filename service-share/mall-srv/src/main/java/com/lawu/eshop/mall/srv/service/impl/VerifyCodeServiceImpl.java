@@ -22,13 +22,14 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     private VerifyCodeDOMapper verifyCodeDOMapper;
 
     @Override
-    public int save(String mobile, String verifyCode, VerifyCodePurposeEnum purpose) {
+    public Long save(String mobile, String verifyCode, VerifyCodePurposeEnum purpose) {
         VerifyCodeDO verifyCodeDO = new VerifyCodeDO();
         verifyCodeDO.setMobile(mobile);
         verifyCodeDO.setCode(verifyCode);
         verifyCodeDO.setPurpose(purpose.val);
         verifyCodeDO.setGmtCreate(new Date());
-        return verifyCodeDOMapper.insertSelective(verifyCodeDO);
+        verifyCodeDOMapper.insertSelective(verifyCodeDO);
+        return verifyCodeDO.getId();
     }
 
     @Override

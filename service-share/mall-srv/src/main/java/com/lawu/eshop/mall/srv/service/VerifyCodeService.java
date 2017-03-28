@@ -17,7 +17,7 @@ public interface VerifyCodeService {
      * @param purpose    用途
      * @return
      */
-    int save(String mobile, String verifyCode, VerifyCodePurposeEnum purpose);
+    Long save(String mobile, String verifyCode, VerifyCodePurposeEnum purpose);
 
     /**
      * 根据ID查询验证码
