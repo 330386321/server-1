@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
@@ -39,7 +41,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
-    public Result save(@ModelAttribute @ApiParam(name = "parm", required = true, value = "购物车资料") ShoppingCartParam param) {
+    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "parm", required = true, value = "购物车资料") ShoppingCartParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	return successCreated(shoppingCartService.save(memberId, param));
     }
@@ -48,7 +50,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.GET)
-    Result<List<ShoppingCartDTO>> findListByMemberId() {
+    Result<List<ShoppingCartDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	return successGet(shoppingCartService.findListByMemberId(memberId));
     }
@@ -57,7 +59,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-	public Result update(@PathVariable(name = "id") Long id, @ModelAttribute ShoppingCartParam parm) {
+	public Result update(@PathVariable(name = "id") Long id, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute ShoppingCartParam parm) {
     	return successCreated(shoppingCartService.update(id, parm));
     }
     
@@ -65,7 +67,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)
-	public Result delete(@PathVariable(name = "id") Long id) {
+	public Result delete(@PathVariable(name = "id") Long id, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successCreated(shoppingCartService.delete(id));
     }
     

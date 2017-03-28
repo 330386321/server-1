@@ -21,6 +21,6 @@ public interface SuggestionService {
      * @param parm
      */
     @RequestMapping(method = RequestMethod.POST, value = "suggestion/")
-    Result<Integer> save(@RequestBody SuggestionParam parm);
+    Result save(@RequestBody SuggestionParam parm);
     
 }

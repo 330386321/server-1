@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ShoppingCartDTO implements Serializable {
 	
     private static final long serialVersionUID = 1L;
@@ -11,56 +13,67 @@ public class ShoppingCartDTO implements Serializable {
     /**
      * 主键
      */
+    @ApiModelProperty(value = "主键", required = true)
     private Long id;
 
     /**
      * 用户
      */
+    @ApiModelProperty(value = "用户", required = true)
     private Long memberId;
 
     /**
      * 商家
      */
+    @ApiModelProperty(value = "商家", required = true)
     private Long merchantId;
 
     /**
      * 商家名称
      */
+    @ApiModelProperty(value = "商家名称", required = true)
     private String merchantName;
 
     /**
      * 商品ID
      */
+    @ApiModelProperty(value = "商品ID", required = true)
     private Long productId;
 
     /**
      * 商品名称
      */
+    @ApiModelProperty(value = "商品名称", required = true)
     private String productName;
 
     /**
      * 商品型号ID
      */
+    @ApiModelProperty(value = "商品型号ID", required = true)
     private Long productModelId;
 
     /**
      * 商品型号名称
      */
+    @ApiModelProperty(value = "商品型号名称", required = true)
     private String productModelName;
 
     /**
      * 数量
      */
+    @ApiModelProperty(value = "数量", required = true)
     private Integer quantity;
 
     /**
      * 原价
      */
+    @ApiModelProperty(value = "原价", required = true)
     private BigDecimal regularPrice;
 
     /**
      * 现价
      */
+    @ApiModelProperty(value = "现价", required = true)
     private BigDecimal salesPrice;
 
 	public Long getId() {

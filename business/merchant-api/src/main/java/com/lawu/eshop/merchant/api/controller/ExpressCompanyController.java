@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 
@@ -34,7 +36,7 @@ public class ExpressCompanyController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.GET)
-    public Result<List<ExpressCompanyDTO>> list() {
+    public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.list());
     }
     
