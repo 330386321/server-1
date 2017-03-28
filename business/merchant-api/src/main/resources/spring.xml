@@ -19,7 +19,7 @@
                      <property name="manager" ref="tokenManager" />
                      <!--测试 TODO remove-->
                      <property name="testId" value="1"/>
-                     <property name="testAccount" value="test" />
+                     <property name="testAccount" value="18696523658" />
               </bean>
        </mvc:interceptors>
 

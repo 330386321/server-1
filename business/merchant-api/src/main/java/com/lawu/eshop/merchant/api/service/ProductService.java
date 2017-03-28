@@ -11,6 +11,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.param.EditDataProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 
 /**
@@ -19,6 +20,7 @@ import com.lawu.eshop.product.query.ProductDataQuery;
  * @author Yangqh
  * @date 2017/3/22
  */
+@SuppressWarnings("rawtypes")
 @FeignClient(value= "product-srv")
 public interface ProductService {
 
@@ -35,7 +37,7 @@ public interface ProductService {
 	 * @param status
 	 * @return
 	 */
-    @RequestMapping(method = RequestMethod.GET, value = "product/updateProductStatus")
+	@RequestMapping(method = RequestMethod.GET, value = "product/updateProductStatus")
     Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("productStatus") ProductStatusEnum productStatus);
     
     /**
@@ -45,4 +47,12 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectEditProductById")
     Result<ProductEditInfoDTO> selectEditProductById(@RequestParam("productId") Long productId);
+
+    /**
+     * 
+     * @param product
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "product/saveProduct")
+	Result saveProduct(@RequestBody EditDataProductParam product);
 }
