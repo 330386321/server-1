@@ -93,9 +93,9 @@ public class UploadFileService {
     }
 
     /**
-     * 
-     * @param request	
-     * @param file	
+     *
+     * @param request
+     * @param file
      * @param dir	业务的图片文件夹，值参考FileDirConstant
      * @return
      */
@@ -113,7 +113,7 @@ public class UploadFileService {
                 valsMap.put("msg", "上传图片格式错误");
                 return valsMap;
             }
-           // 1M=1024k=1048576字节
+            // 1M=1024k=1048576字节
             long fileSize = file.getSize();
             if(fileSize>0.5*1048576){
                 valsMap.put("resultFlag", "1015");

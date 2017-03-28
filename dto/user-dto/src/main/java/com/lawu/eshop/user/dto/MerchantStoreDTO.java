@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import io.swagger.annotations.ApiParam;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "name",value = "店铺名称")
     private String name;
 
     /**
@@ -23,6 +26,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "regionPath",value = "省市区")
     private String regionPath;
 
     /**
@@ -32,6 +36,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "address",value = "店铺地址信息")
     private String address;
 
     /**
@@ -41,6 +46,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "longitude",value = "经度")
     private BigDecimal longitude;
 
     /**
@@ -50,6 +56,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "latitude",value = "纬度")
     private BigDecimal latitude;
 
     /**
@@ -59,6 +66,7 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "industryPath",value = "主营业务")
     private String industryPath;
 
     /**
@@ -68,68 +76,81 @@ public class MerchantStoreDTO  {
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
+    @ApiParam(name = "intro",value = "店铺介绍")
     private String intro;
 
     /**
      * 负责人
      *
      */
+    @ApiParam(name = "principalName",value = "负责人")
     private String principalName;
 
     /**
      * 负责人电话
      */
+    @ApiParam(name = "principalMobile",value = "负责人电话")
     private String principalMobile;
 
     /**
      * 注册公司名称
      */
+    @ApiParam(name = "companyName",value = "注册公司名称")
     private String companyName;
 
     /**
      * 营业执照号码
      */
+    @ApiParam(name = "regNumber",value = "营业执照号码")
     private String regNumber;
 
     /**
      * 经营住所
      */
+    @ApiParam(name = "companyAddress",value = "经营住所")
     private String companyAddress;
 
     /**
      * 营业执照有效期
      */
+    @ApiParam(name = "licenseIndate",value = "营业执照有效期")
     private Date licenseIndate;
 
     /**
      * 经营类型
      */
+    @ApiParam(name = "manageType",value = "经营类型")
     private Byte manageType;
 
     /**
      * 证件类型
      */
+    @ApiParam(name = "certifType",value = "证件类型")
     private Byte certifType;
 
     /**
      *
      * 个人经营者身份证号码
      */
+    @ApiParam(name = "operatorCardId",value = "个人经营者身份证号码")
     private String operatorCardId;
 
     /**
      * 个人经营者姓名
      */
+    @ApiParam(name = "operatorName",value = "个人经营者姓名")
     private String operatorName;
 
     /**
      * 图片类型
      */
+    @ApiParam(name = "type",value = "图片类型")
     private Byte type;
 
     /**
      * 图片路径
      */
+    @ApiParam(name = "path",value = "图片路径")
     private String path;
 
     public String getName() {
