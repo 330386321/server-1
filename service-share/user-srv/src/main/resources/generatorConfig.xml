@@ -44,13 +44,13 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="member_profile" domainObjectName="MemberProfileDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant" domainObjectName="MerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="invite_relation" domainObjectName="InviteRelationDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
@@ -66,13 +66,13 @@
         </table>
         <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_store_profile" domainObjectName="MerchantStoreProfileDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         
     </context>
 </generatorConfiguration>
