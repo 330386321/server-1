@@ -217,7 +217,7 @@ public class MerchantServiceImpl implements MerchantService {
 			 c2.andAccountLike("%"+pageParam.getAccount()+"%");
 			 example.or(c2);
 		 }
-		 RowBounds rowBounds = new RowBounds(pageParam.getCurrentPage(), pageParam.getPageSize());
+		 RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
 		 //推荐的商家
 		 List<MerchantDO> merchantDOS=merchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 //店铺
@@ -237,7 +237,7 @@ public class MerchantServiceImpl implements MerchantService {
 		 pageMerchantInviter.setTotalCount(totalCount);
 		 List<MerchantInviterBO> memberBOS= MerchantInviterConverter.convertMerchantInviterBOS(merchantDOS, storeList);
 		 pageMerchantInviter.setRecords(memberBOS);
-		return pageMerchantInviter;
+		 return pageMerchantInviter;
 	}
 
     @Override

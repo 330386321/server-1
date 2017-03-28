@@ -1,0 +1,26 @@
+package com.lawu.eshop.member.api.service;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.query.MerchantInviterParam;
+
+/**
+ * 推荐的商家
+ * @author zhangrc
+ * @date 2017/03/28
+ *
+ */
+@FeignClient(value = "user-srv")
+public interface MerchantInviterService {
+	
+	
+	@RequestMapping(method = RequestMethod.POST,value = "merchant/getMerchantByInviter")
+    Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestBody MerchantInviterParam query );
+
+}
