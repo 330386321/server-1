@@ -2,13 +2,14 @@ package com.lawu.eshop.user.srv.controller;
 
 import javax.annotation.Resource;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.user.param.AddressParam;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.MemberProfileDTO;
 import com.lawu.eshop.user.srv.service.MemberProfileService;
 
 /**
@@ -19,7 +20,7 @@ import com.lawu.eshop.user.srv.service.MemberProfileService;
  */
 @RestController
 @RequestMapping(value = "memberProfile/")
-public class MemberProfileController {
+public class MemberProfileController extends BaseController{
 	
 	@Resource
 	private  MemberProfileService memberProfileService;
@@ -30,9 +31,11 @@ public class MemberProfileController {
 	 * @return
 	 */
    @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-   public Integer getMemberCount(@RequestParam Long id) {
+   public Result<MemberProfileDTO> getMemberCount(@RequestParam Long id) {
 	   Integer count=memberProfileService.getMemberCount(id);
-	   return count;
+	   MemberProfileDTO dto=new MemberProfileDTO();
+	   dto.setInviteMemberCount(count);
+	   return successGet(dto);
    }
    
    /**
@@ -41,9 +44,11 @@ public class MemberProfileController {
     * @return
     */
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-   public Integer getMerchantCount(@RequestParam Long id) {
+   public Result<MemberProfileDTO> getMerchantCount(@RequestParam Long id) {
 	   Integer count=memberProfileService.getMerchantCount(id);
-	   return count;
+	   MemberProfileDTO dto=new MemberProfileDTO();
+	   dto.setInviteMemberCount(count);
+	   return successGet(dto);
    }
 
 }

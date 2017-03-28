@@ -11,15 +11,13 @@ import com.lawu.eshop.member.api.service.MemberProfileService;
  *
  */
 @Component
-public class MemberProfileServiceHystrix implements MemberProfileService {
+public class MemberProfileServiceHystrix  {
 
-	@Override
 	public Integer getMemberCount(Long id) {
 		System.out.println("服务器调用异常");
 		return -1;
 	}
 
-	@Override
 	public Integer getMerchantCount(Long id) {
 		System.out.println("服务器调用异常");
 		return -1;

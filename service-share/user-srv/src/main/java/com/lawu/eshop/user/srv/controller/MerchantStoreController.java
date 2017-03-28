@@ -1,5 +1,17 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshoop.upload.UploadFileService;
 import com.lawu.eshop.framework.web.BaseController;
@@ -14,14 +26,7 @@ import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-
 import com.lawu.eshop.utils.ValidateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.Map;
 
 /**
  * 商家门店

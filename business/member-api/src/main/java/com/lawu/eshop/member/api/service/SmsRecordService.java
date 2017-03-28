@@ -34,3 +34,4 @@ public interface SmsRecordService {
     @RequestMapping(method = RequestMethod.GET, value = "smsRecord/verifySmsRecord/{id}")
     Result verifySmsRecord(@PathVariable("id") Long id,@RequestParam("smsCode") String smsCode);
 }
+

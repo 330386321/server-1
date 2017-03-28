@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberProfileService;
+import com.lawu.eshop.user.dto.MemberProfileDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -21,7 +24,7 @@ import io.swagger.annotations.ApiParam;
 @Api(tags = "memberProfile")
 @RestController
 @RequestMapping(value = "memberProfile/")
-public class MemberProfileController {
+public class MemberProfileController extends BaseController{
 	
 	@Resource
 	private  MemberProfileService memberProfileService;
@@ -32,9 +35,9 @@ public class MemberProfileController {
 	 * @return
 	 */
    @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-   public Integer getMemberCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
-	   Integer count=memberProfileService.getMemberCount(id);
-	   return count;
+   public Result<MemberProfileDTO> getMemberCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
+	   Result<MemberProfileDTO> rdto=memberProfileService.getMemberCount(id);
+	   return rdto;
    }
    
    /**
@@ -43,9 +46,9 @@ public class MemberProfileController {
     * @return
     */
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-   public Integer getMerchantCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
-	   Integer count=memberProfileService.getMerchantCount(id);
-	   return count;
+   public Result<MemberProfileDTO> getMerchantCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
+	   Result<MemberProfileDTO> rdto=memberProfileService.getMerchantCount(id);
+	   return rdto;
    }
 
 }
