@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.MemberProfileService;
@@ -35,7 +36,8 @@ public class MemberProfileController extends BaseController{
 	 * @return
 	 */
    @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-   public Result<MemberProfileDTO> getMemberCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
+   public Result<MemberProfileDTO> getMemberCount() {
+	   Long id=UserUtil.getCurrentUserId(getRequest());
 	   Result<MemberProfileDTO> rdto=memberProfileService.getMemberCount(id);
 	   return rdto;
    }
@@ -46,7 +48,8 @@ public class MemberProfileController extends BaseController{
     * @return
     */
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-   public Result<MemberProfileDTO> getMerchantCount(@RequestParam @ApiParam(required = true, value = "会员id") Long id) {
+   public Result<MemberProfileDTO> getMerchantCount() {
+	   Long id=UserUtil.getCurrentUserId(getRequest());
 	   Result<MemberProfileDTO> rdto=memberProfileService.getMerchantCount(id);
 	   return rdto;
    }

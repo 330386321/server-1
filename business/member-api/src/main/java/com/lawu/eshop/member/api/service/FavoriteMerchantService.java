@@ -23,5 +23,5 @@ public interface FavoriteMerchantService {
 	 Result save(@RequestParam("memberId")  Long memberId ,@RequestParam("merchantId") Long merchantId);
 	 
 	 @RequestMapping(method = RequestMethod.POST,value = "favoriteMerchant/getMyFavoriteMerchant")
-	 Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestBody FavoriteMerchantParam pageQuery);
+	 Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam("memberId")  Long memberId ,@RequestBody FavoriteMerchantParam pageQuery);
 }

@@ -207,10 +207,10 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
 	@Override
-	public Page<MerchantInviterBO> getMerchantByInviter(MerchantInviterParam pageParam) {
+	public Page<MerchantInviterBO> getMerchantByInviter(Long userId,MerchantInviterParam pageParam) {
 		 MerchantDOExample example = new MerchantDOExample();
 		 Criteria c1=example.createCriteria();
-		 c1.andInviterIdEqualTo(pageParam.getInviterId()).andStatusEqualTo(new Byte("1"));
+		 c1.andInviterIdEqualTo(userId).andStatusEqualTo(new Byte("1"));
 		 int totalCount= merchantDOMapper.countByExample(example); //总记录数
 		 if(pageParam.getAccount()!=null){ //存在模糊查询
 			 c1.andAccountLike("%"+pageParam.getAccount()+"%");

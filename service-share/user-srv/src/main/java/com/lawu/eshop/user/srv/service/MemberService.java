@@ -60,7 +60,7 @@ public interface MemberService {
      * 查询我的E友
      * @return
      */
-    Page<MemberBO> findMemberListByUser(MemberQuery memberQuery);
+    Page<MemberBO> findMemberListByUser(Long inviterId,MemberQuery memberQuery);
 
     /**
      * 会员注册

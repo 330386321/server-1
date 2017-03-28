@@ -67,7 +67,7 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST,value = "member/findMemberListByUser")
-    Result<Page<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery query );
+    Result<Page<MemberDTO>> findMemberListByUser(@RequestParam("userId") Long id,@RequestBody MemberQuery query );
 
 
     /**

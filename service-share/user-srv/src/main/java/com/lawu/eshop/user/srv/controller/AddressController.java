@@ -35,7 +35,7 @@ public class AddressController extends BaseController{
 	  * 收货地址列表
 	  * @return
 	  */
-	@RequestMapping(value = "selectByUserId/{userId}", method = RequestMethod.GET)
+	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
     public Result selectByUserId(@RequestParam Long userId) {
 		List<AddressBO> addressBOS = addressService.selectByUserId(userId);
 		return  successAccepted(AddressConverter.convertListDOTS(addressBOS));

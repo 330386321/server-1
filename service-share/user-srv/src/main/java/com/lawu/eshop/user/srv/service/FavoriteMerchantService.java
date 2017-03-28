@@ -24,6 +24,6 @@ public interface FavoriteMerchantService {
 	 * @param memberId
 	 * @return
 	 */
-	Page<FavoriteMerchantBO> getMyFavoriteMerchant(FavoriteMerchantParam pageQuery);
+	Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId,FavoriteMerchantParam pageQuery);
 
 }

@@ -20,13 +20,10 @@ import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
-import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -91,8 +88,8 @@ public class MerchantController extends BaseController {
      * @date 2017/03/23
      */
     @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.POST)
-    public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestBody MerchantInviterParam pageQuery) {
-        Page<MerchantInviterBO> pageBO = merchantService.getMerchantByInviter(pageQuery);
+    public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestParam Long userId,@RequestBody MerchantInviterParam pageQuery) {
+        Page<MerchantInviterBO> pageBO = merchantService.getMerchantByInviter(userId,pageQuery);
         Page<MerchantInviterDTO> pageDTOS = MerchantInviterConverter.convertPageMIDOTS(pageBO);
         return successGet(pageDTOS);
     }

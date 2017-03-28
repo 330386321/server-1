@@ -45,7 +45,7 @@ public interface AddressService {
 	  * 查询所有地址
 	  * @return
 	  */
-    @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId/{userId}")
+    @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId")
     Result selectByUserId(@RequestParam("userId") Long userId);
 
     /**

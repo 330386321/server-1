@@ -47,8 +47,8 @@ public class FavoriteMerchantController extends BaseController{
    }
    
    @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
-   public Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestBody FavoriteMerchantParam pageQuery) {
-       Page<FavoriteMerchantBO> pageBO =favoriteMerchantService.getMyFavoriteMerchant(pageQuery);
+   public Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam  Long memberId ,@RequestBody FavoriteMerchantParam pageQuery) {
+       Page<FavoriteMerchantBO> pageBO =favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
        Page<FavoriteMerchantDTO> page=FavoriteMerchantConverter.convertPageDOTS(pageBO);
        return successGet(page);
    }

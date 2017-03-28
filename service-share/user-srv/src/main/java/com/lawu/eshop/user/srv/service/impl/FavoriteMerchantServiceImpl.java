@@ -41,9 +41,9 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 	}
 
 	@Override
-	public Page<FavoriteMerchantBO> getMyFavoriteMerchant(FavoriteMerchantParam pageQuery) {
+	public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId,FavoriteMerchantParam pageQuery) {
 		FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
-		example.createCriteria().andMemberIdEqualTo(pageQuery.getMemberId());
+		example.createCriteria().andMemberIdEqualTo(memberId);
 		int totalCount=favoriteMerchantDOMapper.countByExample(example);
 		RowBounds rowBounds = new RowBounds(pageQuery.getCurrentPage(), pageQuery.getPageSize());
 		List<FavoriteMerchantDO> FMDOS=favoriteMerchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);

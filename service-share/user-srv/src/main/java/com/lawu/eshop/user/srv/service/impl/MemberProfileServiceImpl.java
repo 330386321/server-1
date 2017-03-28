@@ -16,13 +16,23 @@ public class MemberProfileServiceImpl implements MemberProfileService {
 	@Override
 	public Integer getMemberCount(Long id) {
 		MemberProfileDO memberProfile = memberProfileDOMapper.selectByPrimaryKey(id);
-		return memberProfile.getInviteMemberCount();
+		if(memberProfile==null){
+			return 0;
+		}else{
+			return memberProfile.getInviteMemberCount();
+		}
+		
 	}
 
 	@Override
 	public Integer getMerchantCount(Long id) {
 		MemberProfileDO memberProfile = memberProfileDOMapper.selectByPrimaryKey(id);
-		return memberProfile.getInviteMerchantCount();
+		if(memberProfile==null){
+			return 0;
+		}else{
+			return memberProfile.getInviteMerchantCount();
+		}
+		
 	}
 
 }

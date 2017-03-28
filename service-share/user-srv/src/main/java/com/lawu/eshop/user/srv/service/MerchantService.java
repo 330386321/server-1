@@ -62,7 +62,7 @@ public interface MerchantService {
      * @param pageQuery
      * @return
      */
-    Page<MerchantInviterBO> getMerchantByInviter(MerchantInviterParam pageQuery);
+    Page<MerchantInviterBO> getMerchantByInviter(Long userId,MerchantInviterParam pageQuery);
 
     /**
      * 查询会员信息

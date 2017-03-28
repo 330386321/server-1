@@ -1,7 +1,5 @@
 package com.lawu.eshop.user.srv.controller;
 
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +12,14 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.MD5;
@@ -125,8 +125,8 @@ public class MemberController extends BaseController {
      * @date 2017/03/23
      */
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-    public Result<Page<MemberDTO>> findMemberListByUser(@RequestBody MemberQuery memberQuery) {
-        Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(memberQuery);
+    public Result<Page<MemberDTO>> findMemberListByUser(@RequestParam Long userId, @RequestBody MemberQuery memberQuery) {
+        Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(userId,memberQuery);
         Page<MemberDTO> page = MemberConverter.convertPageDOTS(pageMemberBOS);
         return successGet(page);
     }
