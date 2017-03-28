@@ -28,9 +28,31 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品描述", required = true)
 	private String content;
 
-	@ApiModelProperty(value = "商品型号信息[{name(名称):,originalPrice(原价):,price(现价):,inventory(库存):},{}]", required = true)
+	@ApiModelProperty(value = "商品型号信息", required = true)
 	private String spec;
 	
+	@ApiModelProperty(value = "特征图片url(新增时为空)", required = false)
+	private String featureImageStr;
+	
+	@ApiModelProperty(value = "商品图片(新增时为空)", required = false)
+	private String iamgeStr;
+	
+	public String getFeatureImageStr() {
+		return featureImageStr;
+	}
+
+	public void setFeatureImageStr(String featureImageStr) {
+		this.featureImageStr = featureImageStr;
+	}
+
+	public String getIamgeStr() {
+		return iamgeStr;
+	}
+
+	public void setIamgeStr(String iamgeStr) {
+		this.iamgeStr = iamgeStr;
+	}
+
 	public Long getMerchantId() {
 		return merchantId;
 	}

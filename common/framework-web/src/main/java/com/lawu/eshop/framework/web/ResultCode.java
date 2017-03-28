@@ -28,6 +28,7 @@ public class ResultCode {
     public static final int RECORD_EXIST =1012;
     public static final int VERIFY_SMS_CODE_FAIL = 1013;
     public static final int VERIFY_PIC_CODE_FAIL = 1014;
+    public static final int IMAGE_SIZE_ERROR = 1015;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -60,10 +61,10 @@ public class ResultCode {
         ResultCode.messageMap.put(ID_EMPTY, "ID不能为空");
         ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "必填参数不能为空");
         ResultCode.messageMap.put(SAVE_FAIL, "保存失败");
-        //ResultCode.messageMap.put(INVALID_TOKEN, "TOKEN无效");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
         ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
+        ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");

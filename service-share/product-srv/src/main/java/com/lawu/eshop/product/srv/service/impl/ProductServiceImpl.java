@@ -214,8 +214,8 @@ public class ProductServiceImpl implements ProductService {
 		if(productId == 0L || productId == null){
 			//保存商品信息
 			ProductDO productDO = ProductConverter.convertDO(product,0L);
-			int id = productDOMapper.insert(productDO);
-			productId = Long.valueOf(id);
+			productDOMapper.insert(productDO);
+			productId = productDO.getId();
 			isEdit = false;
 		}else{
 			//修改商品基本信息
