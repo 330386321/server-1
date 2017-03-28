@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.param.SuggestionParam;
 import com.lawu.eshop.mall.srv.service.SuggestionService;
 
@@ -28,12 +29,18 @@ public class SuggestionController extends BaseController {
 	 * @param parm
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public Result<Integer> save(@RequestBody SuggestionParam parm) {
+	public Result save(@RequestBody SuggestionParam parm) {
 		if (parm == null || parm.getUserNum() == null || parm.getClientType() == null || parm.getUserType() == null) {
-			return failCreated("userNum|userType|clientType信息为空");
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 		
-		return successCreated(suggestionService.save(parm));
+		Integer id = suggestionService.save(parm);
+		
+		if (id == null || id <= 0) {
+			successCreated(ResultCode.SAVE_FAIL);
+		}
+		
+		return successCreated(ResultCode.SUCCESS);
 	}
 	
 }

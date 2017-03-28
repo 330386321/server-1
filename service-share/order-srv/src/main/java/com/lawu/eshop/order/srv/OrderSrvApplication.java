@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.srv;
+package com.lawu.eshop.order.srv;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,19 +7,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * 商城服务启动类
+ * 订单服务启动类
  * @author Sunny
- * @date 2017/3/10
+ * @date 2017/3/27
  */
 @EnableDiscoveryClient
 @SpringBootApplication
-public class MallSrvApplication {
+public class OrderSrvApplication {
 
-    private static Logger logger = LoggerFactory.getLogger(MallSrvApplication.class);
+    private static Logger logger = LoggerFactory.getLogger(OrderSrvApplication.class);
 
     public static void main(String[] args) {
-        logger.info("mall-srv is starting");
-        SpringApplication.run(MallSrvApplication.class, args);
-        logger.info("mall-srv is started");
+        logger.info("order-srv is starting");
+        SpringApplication.run(OrderSrvApplication.class, args);
+        logger.info("order-srv is started");
     }
 }

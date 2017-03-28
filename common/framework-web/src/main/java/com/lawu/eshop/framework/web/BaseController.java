@@ -1,12 +1,13 @@
 package com.lawu.eshop.framework.web;
 
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @author Leach
@@ -68,11 +69,11 @@ public abstract class BaseController {
     public <T> Result<T> successCreated(T model) {
         return response(HttpCode.SC_CREATED, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
     }
-
+    
+    @Deprecated
     public <T> Result<T> successCreated() {
         return successCreated(null);
     }
-
 
     public <T> Result<T> successCreated(int resultCode) {
         return response(HttpCode.SC_CREATED, resultCode, ResultCode.get(resultCode), null, null);

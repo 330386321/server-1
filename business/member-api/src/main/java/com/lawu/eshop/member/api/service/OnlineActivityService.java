@@ -9,13 +9,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.mall.dto.OnlineActivityDTO;
-import com.lawu.eshop.member.api.service.hystrix.OnlineActivityServiceHystrix;
 
 /**
  * @author Sunny
  * @date 2017/3/23
  */
-@FeignClient(value= "mall-srv", fallback = OnlineActivityServiceHystrix.class)
+@FeignClient(value= "mall-srv")
 public interface OnlineActivityService {
 
 	/**

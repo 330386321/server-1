@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -31,11 +32,10 @@ public class ExpressCompanyController extends BaseController {
     
     @ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[200]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
     @RequestMapping(method = RequestMethod.GET)
-    public Result<List<ExpressCompanyDTO>> save() {
-    	Result<List<ExpressCompanyDTO>> result = expressCompanyService.list();
-    	getResponse().setStatus(result.getRet());
-    	return result;
+    public Result<List<ExpressCompanyDTO>> list() {
+    	return successGet(expressCompanyService.list());
     }
     
 }

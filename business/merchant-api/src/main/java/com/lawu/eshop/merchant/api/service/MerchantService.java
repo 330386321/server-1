@@ -31,7 +31,7 @@ public interface MerchantService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
-    Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd);
+    Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam("pwd") String pwd);
 
     /**
      * 修改登录密码
@@ -70,6 +70,6 @@ public interface MerchantService {
     Result<Page<MerchantDTO>> getMerchantByInviter(@RequestParam("inviterId")  Long inviterId,@RequestBody PageParam query );
 
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
-    Result getMerchantByAccount(@PathVariable String account);
+    Result getMerchantByAccount(@PathVariable("account") String account);
 
 }
