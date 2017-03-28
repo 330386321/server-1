@@ -47,8 +47,8 @@ public class AddressController extends BaseController{
 	  * @return
 	  */
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody  AddressParam  addressDO ) {
-    	Integer i=addressService.save(addressDO);
+    public Result save(@RequestParam Long userId,@RequestBody  AddressParam  addressDO ) {
+    	Integer i=addressService.save(userId,addressDO);
     	if(i>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else{
@@ -100,7 +100,7 @@ public class AddressController extends BaseController{
 	 * 修改默认地址
 	 * @return
 	 */
-  @RequestMapping(value = "updateDefault", method = RequestMethod.GET)
+  @RequestMapping(value = "updateDefault/{id}", method = RequestMethod.GET)
   public Result updateDefault(@RequestParam Long id,@RequestParam Long userId) {
 	  Integer i=addressService.updateDefault(id, userId);
 	  if(i>0){

@@ -87,7 +87,8 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
     public Result insert( @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-		Result rs= addressService.save(address);
+		Long userId=UserUtil.getCurrentUserId(getRequest());
+		Result rs= addressService.save(userId,address);
 		return rs;
     }
 
@@ -113,7 +114,7 @@ public class AddressController extends BaseController {
 	@Authorization
 	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "updateDefault", method = RequestMethod.POST)
+	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.POST)
     public Result updateDefault(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 	   Long userId=UserUtil.getCurrentUserId(getRequest());
 	   Result rs= addressService.updateDefault(id,userId);

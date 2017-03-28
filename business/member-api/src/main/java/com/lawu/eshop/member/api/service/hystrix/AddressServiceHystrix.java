@@ -21,7 +21,7 @@ import com.lawu.eshop.user.param.AddressParam;
 public class AddressServiceHystrix  implements AddressService{
 
 	@Override
-	public Result save(AddressParam address) {
+	public Result save(Long id,AddressParam address) {
 		// TODO Auto-generated method stub
 		return null;
 	}

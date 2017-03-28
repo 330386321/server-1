@@ -14,9 +14,6 @@ public class AddressParam implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	@ApiParam (name="userId",required = true, value = "用户id")
-	private Long userId;
-
 	@ApiParam (name="name",required = true, value = "收货人")
 	private String name;
 
@@ -31,16 +28,6 @@ public class AddressParam implements Serializable{
 
 	@ApiParam (name="postcode",required = true, value = "邮箱")
 	private String postcode;
-	
-
-	public Long getUserId() {
-		return userId;
-	}
-
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 
 	public String getName() {

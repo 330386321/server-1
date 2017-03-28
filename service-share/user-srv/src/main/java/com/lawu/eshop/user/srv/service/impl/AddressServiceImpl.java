@@ -21,8 +21,9 @@ public class AddressServiceImpl implements AddressService {
 	private AddressDOMapper addressDOMapper; 
  
 	@Override
-	public Integer save(AddressParam address) {
+	public Integer save(Long userId,AddressParam address) {
 		AddressDO addressDO =AddressConverter.convertDO(address);
+		addressDO.setUserId(userId);
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
 		addressDO.setIsDefault(false);

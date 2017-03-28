@@ -25,7 +25,7 @@ public interface AddressService {
 	 * @param address
 	 */
 	 @RequestMapping(method = RequestMethod.POST, value = "address/save")
-	 Result save(@RequestBody AddressParam address);
+	 Result save(@RequestParam("userId") Long id,@RequestBody AddressParam address);
 	 
 	 /**
 	  * 编辑收货地址
@@ -59,7 +59,7 @@ public interface AddressService {
 	 *修改默认地址
 	 *@return
 	 */
-    @RequestMapping( method = RequestMethod.GET,value = "address/updateDefault")
+    @RequestMapping( method = RequestMethod.GET,value = "address/updateDefault/{id}")
     Result updateDefault(@RequestParam("id") Long id,@RequestParam("userId") Long userId);
 
 }

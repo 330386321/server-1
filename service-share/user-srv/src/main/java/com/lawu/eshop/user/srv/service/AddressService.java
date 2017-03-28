@@ -17,7 +17,7 @@ public interface AddressService {
 	 * 添加收货地址
 	 * @param address
 	 */
-	 Integer save(AddressParam address);
+	 Integer save(Long userId,AddressParam address);
 	 
 	 /**
 	  * 编辑收货地址
