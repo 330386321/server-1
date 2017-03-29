@@ -23,6 +23,12 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public Integer save(Long userId,AddressParam address) {
 		AddressDO addressDO =AddressConverter.convertDO(address);
+		String reg="^\\d(\\d|\\/)*\\d$";
+		String regionPath=addressDO.getRegionPath();
+		boolean tag=regionPath.matches(reg);
+		if(!tag){
+			return 0;
+		}
 		addressDO.setUserId(userId);
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
