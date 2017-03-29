@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 
 /**
@@ -33,4 +34,13 @@ public interface PropertyInfoService {
      * @param newPwd      新密码
      */
     void updatePayPwd(String userNo, String originalPwd, String newPwd);
+    
+    /**
+     * 根据用户编号查询余额
+     * 
+     * @param userNo 用户编号
+     * @return
+     */
+    PropertyBalanceBO getPropertyBalanceByUserNum(String userNum);
+    
 }
