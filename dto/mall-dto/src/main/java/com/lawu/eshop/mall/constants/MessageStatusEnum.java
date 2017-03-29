@@ -7,7 +7,8 @@ package com.lawu.eshop.mall.constants;
 public enum MessageStatusEnum {
 
     MESSAGE_STATUS_UNREAD((byte) 0x00),
-    message_status_read((byte) 0x01);
+    MESSAGE_STATUS_READ((byte) 0x01),
+    MESSAGE_STATUS_DELETE((byte) 0x02);
     public Byte val;
     MessageStatusEnum(Byte val) {
         this.val = val;

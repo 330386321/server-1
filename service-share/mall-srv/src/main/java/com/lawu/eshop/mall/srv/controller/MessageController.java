@@ -6,10 +6,15 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
+import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 站内信息controller
@@ -24,6 +29,7 @@ public class MessageController extends BaseController {
 
     /**
      * 站内信息统计
+     *
      * @param userNum
      * @return
      */
@@ -33,7 +39,7 @@ public class MessageController extends BaseController {
         MessageStatisticsDTO messageStatisticsDTO = new MessageStatisticsDTO();
         messageStatisticsDTO.setNoReadCount(counts);
         if (counts > 0) {
-            MessageStatisticsBO messageStatisticsBO =  messageService.selectLastMessage(userNum);
+            MessageStatisticsBO messageStatisticsBO = messageService.selectLastMessage(userNum);
             messageStatisticsDTO.setContent(messageStatisticsBO.getContent());
             messageStatisticsDTO.setType(messageStatisticsBO.getType());
             return successGet(messageStatisticsDTO);
@@ -41,10 +47,25 @@ public class MessageController extends BaseController {
         return successGet();
     }
 
-    @RequestMapping(value = "getMessageList/{userNum}", method = RequestMethod.GET)
-    public Result<Page<MessageDTO>> getMessageList(@PathVariable("userNum") String userNum, @RequestBody PageParam pageParam){
+    /**
+     * 站内信息列表
+     *
+     * @param userNum
+     * @param pageParam
+     * @return
+     */
+    @RequestMapping(value = "getMessageList/{userNum}", method = RequestMethod.POST)
+    public Result<Page<MessageDTO>> getMessageList(@PathVariable("userNum") String userNum, @RequestBody MessageParam pageParam) {
 
-        return  successGet();
+        Page<MessageBO> messageDTOPage = messageService.getMessageList(userNum, pageParam);
+        List<MessageBO> messageBOS = messageDTOPage.getRecords();
+        //BO转DTO
+        List<MessageDTO> messageDTOS = MessageConverter.coverDTOS(messageBOS);
+        Page<MessageDTO> pages = new Page<>();
+        pages.setRecords(messageDTOS);
+        pages.setCurrentPage(pageParam.getCurrentPage());
+        pages.setTotalCount(messageDTOPage.getTotalCount());
+        return successGet(pages);
 
     }
 

@@ -1,8 +1,13 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
+import com.lawu.eshop.mall.param.MessageParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +19,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient(value = "mall-srv")
 public interface MessageService {
 
+    /**
+     * 站内信息统计
+     *
+     * @param userNum用户编号
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, value = "message/getMessageStatistics/{userNum}")
     Result<MessageStatisticsDTO> getMessageStatistics(@PathVariable("userNum") String userNum);
+
+    /**
+     * 站内信息列表
+     *
+     * @param userNum   用户编号
+     * @param pageParam
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "message/getMessageList/{userNum}")
+    Result<Page<MessageDTO>> getMessageList(@PathVariable("userNum") String userNum, @ModelAttribute MessageParam pageParam);
 }
