@@ -1,6 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshoop.upload.UploadFileService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -49,7 +48,7 @@ public class MerchantStoreController extends BaseController {
     public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
                                         @RequestParam("certifType") CertifTypeEnum certifType) {
         HttpServletRequest request = getRequest();
-        Map<String, String> map = UploadFileService.uploadStoreImages(request);
+        Map<String, String> map = null;//UploadFileService.uploadStoreImages(request);
         //上传返回成功/失败
         String flag = map.get("resultFlag");
         if ("OK".equals(flag)) {
@@ -81,6 +80,9 @@ public class MerchantStoreController extends BaseController {
 
         }
         return failCreated(ResultCode.FAIL);
+        //Map<String,String> map = UploadFileService.uploadStoreImages(request);
+        //if()
+        //return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
     }
 
     @ApiOperation(value = "修改门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "PUT")
@@ -90,7 +92,7 @@ public class MerchantStoreController extends BaseController {
     public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
                                           @RequestParam("certifType") CertifTypeEnum certifType) {
         HttpServletRequest request = getRequest();
-        Map<String, String> urlMap = UploadFileService.uploadStoreImages(request);
+        Map<String, String> urlMap = null;//UploadFileService.uploadStoreImages(request);
         //上传返回成功/失败
         String urlFlag = urlMap.get("resultFlag");
         if ("OK".equals(urlFlag)) {

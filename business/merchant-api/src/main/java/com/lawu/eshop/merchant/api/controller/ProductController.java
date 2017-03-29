@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,14 +16,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import com.lawu.eshoop.upload.UploadFileService;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
@@ -48,14 +47,12 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
     
-    @Autowired
-    private UploadFileService uploadService;
-
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[201|400]。(杨清华)", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
-    public Result selectProduct(ProductStatusEnum productStatus,
+    public Result selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    							ProductStatusEnum productStatus,
     					        @ModelAttribute @ApiParam ProductQuery query) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	ProductDataQuery queryData = new ProductDataQuery();
@@ -91,6 +88,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
     public Result saveProduct(@ModelAttribute @ApiParam EditProductParam product,HttpServletRequest request) {
     	
+    	StringBuffer iamgeSb = new StringBuffer();
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
         if(multipartResolver.isMultipart(request)){
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;  
@@ -103,7 +101,7 @@ public class ProductController extends BaseController {
                         String fieldName = file.getName();
                     	String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
                     	prefix = prefix.toLowerCase();
-                    	Map<String, String> retMap = uploadService.uploadOnePic(request, file, FileDirConstant.DIR_PRODUCT);
+                    	Map<String, String> retMap = null;//uploadService.uploadOnePic(request, file, FileDirConstant.DIR_PRODUCT);
                     	String resultFlag = retMap.get("resultFlag");
                     	if(!"0".equals(resultFlag)){
                     		return successCreated(resultFlag);	
@@ -116,7 +114,6 @@ public class ProductController extends BaseController {
         
         
     	EditDataProductParam dataParam = new EditDataProductParam();
-    	
     	
     	return productService.saveProduct(dataParam);
     	
