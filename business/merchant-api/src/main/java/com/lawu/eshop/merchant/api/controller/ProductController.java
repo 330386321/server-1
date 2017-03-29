@@ -71,7 +71,8 @@ public class ProductController extends BaseController {
 	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1000|1002]。(杨清华)", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.POST)
-    public Result updateProductStatus(@RequestParam @ApiParam(required = true, value = "商家ID(多个英文逗号分开)") String ids,
+    public Result updateProductStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    							      @RequestParam @ApiParam(required = true, value = "商家ID(多个英文逗号分开)") String ids,
     								  ProductStatusEnum productStatus) {
     	
     	return productService.updateProductStatus(ids,productStatus);
@@ -80,7 +81,8 @@ public class ProductController extends BaseController {
     @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
-    public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
+    public Result<ProductEditInfoDTO> selectEditProductById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    													    @RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
     	
     	return productService.selectEditProductById(productId);
     	

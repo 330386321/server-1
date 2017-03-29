@@ -1,4 +1,4 @@
-package com.lawu.eshop.merchant.api.controller;
+package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.merchant.api.service.ProductCategoryService;
+import com.lawu.eshop.member.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 
 import io.swagger.annotations.Api;
@@ -32,7 +32,7 @@ public class ProductCategoryController extends BaseController {
     private ProductCategoryService productCategoryService;
 
     @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
-    @Authorization
+//    @Authorization
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
     public List<ProductCategoryDTO> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 
