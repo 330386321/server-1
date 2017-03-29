@@ -42,6 +42,7 @@ public class FavoriteMerchantController extends BaseController{
 	 /**
 	  * 添加商家收藏
 	  * @return
+      * @audit  sunlinqing 2016.03.29
 	  */
 	@Authorization
 	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "PUT")
@@ -53,7 +54,14 @@ public class FavoriteMerchantController extends BaseController{
 	   Result rs=favoriteMerchantService.save(memberId,merchantId);
 	   return rs;
     }
-	
+
+    /**
+     *
+     * @param token
+     * @param pageQuery
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
 	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[200],（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

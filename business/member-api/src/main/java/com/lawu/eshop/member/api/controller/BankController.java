@@ -34,6 +34,7 @@ public class BankController extends BaseController{
 	/**
 	 * 查询所有银行
 	 * @return
+	 * @audit  sunlinqing 2016.03.29
 	 */
 	@Authorization
 	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[]（张荣成）", httpMethod = "GET")

@@ -33,6 +33,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货地址列表
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息[]（张荣成）", httpMethod = "GET")
@@ -46,6 +47,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货地址单个查询
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（张荣成）", httpMethod = "GET")
@@ -59,6 +61,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货地址删除
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "删除收货地址", notes = "删除收货地址[1002]（张荣成）", httpMethod = "DELETE")
@@ -72,6 +75,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货地址添加
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "添加收货地址", notes = "添加收货地址[1000|1001]（张荣成）", httpMethod = "POST")
@@ -86,6 +90,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货地址修改
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "修改收货地址", notes = "修改收货地址[]（张荣成）", httpMethod = "POST")
@@ -101,6 +106,7 @@ public class AddressController extends BaseController {
 
     /**
      * 收货默认地址修改
+     * @audit  sunlinqing 2016.03.29
      */
     @Authorization
     @ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址[]（张荣成）", httpMethod = "PUT")

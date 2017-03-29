@@ -53,26 +53,36 @@ public class MemberController extends BaseController {
     @Autowired
     private VerifyCodeService verifyCodeService;
 
-    @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
+    // TODO 2016.03.29 性别用枚举
+    //@ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "currentUser", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<UserDTO> result = memberService.findMemberInfo(memberId);
         return result;
     }
 
-    @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息（章勇）", httpMethod = "PUT")
+    // TODO 2016.03.29 性别用枚举
+    // @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息（章勇）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
-    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result updateMemberInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                   @ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam) {
         long id = UserUtil.getCurrentUserId(getRequest());
         Result r = memberService.updateMemberInfo(memberParam, id);
         return r;
     }
 
+    /**
+     *
+     * @param token
+     * @param updatePwdParam
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
     @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -81,12 +91,19 @@ public class MemberController extends BaseController {
                                  @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
         Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         long id = UserUtil.getCurrentUserId(getRequest());
         return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    /**
+     *
+     * @param token
+     * @param updatePwdParam
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
     @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -95,20 +112,22 @@ public class MemberController extends BaseController {
                                @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
         Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         String userNo = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
-    @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
+    // TODO 2016.03.29 邀请人类型请用枚举
+    //@ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return memberService.getInviterByAccount(account);
     }
 
-    @ApiOperation(value = "我的E友", notes = "我的E有查询,[1000|1001]（张荣成）", httpMethod = "POST")
+    // TODO 2016.03.29 性别用枚举，该接口请放入InviterController
+    //@ApiOperation(value = "我的E友", notes = "我的E有查询,[1000|1001]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
@@ -118,7 +137,8 @@ public class MemberController extends BaseController {
         return page;
     }
 
-    @ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
+    // TODO 2016.03.29 通过用户编码进行邀请，不要传邀请人类型，类型可以根据编码去判断
+    //@ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
@@ -126,19 +146,20 @@ public class MemberController extends BaseController {
                            UserInviterTypeEnum inviterType) {
         Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
-            return failCreated(ResultCode.RECORD_EXIST);
+            return successCreated(ResultCode.RECORD_EXIST);
         }
         Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) smsResult.getModel();
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
-            return failCreated(ResultCode.NOT_SEND_SMS_MOBILE);
+            return successCreated(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         return memberService.register(registerParam, inviterType);
     }
 
+    // TODO 2016.03.29 性别用枚举，该接口请放入InviterController
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -148,6 +169,11 @@ public class MemberController extends BaseController {
         return memberService.getMemberByAccount(account);
     }
 
+    /**
+     *
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveHeadImage", method = RequestMethod.PUT)

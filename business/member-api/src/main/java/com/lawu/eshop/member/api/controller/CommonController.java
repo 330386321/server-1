@@ -31,6 +31,13 @@ public class CommonController extends BaseController {
     @Autowired
     private TokenManager tokenManager;
 
+    /**
+     *
+     * @param account
+     * @param pwd
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
@@ -53,6 +60,12 @@ public class CommonController extends BaseController {
         return successCreated(tokenDTO);
     }
 
+    /**
+     *
+     * @param token
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
     @ApiOperation(value = "退出", notes = "退出登录，清除token。（孙林青）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
