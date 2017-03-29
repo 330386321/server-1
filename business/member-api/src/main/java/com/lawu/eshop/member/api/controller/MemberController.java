@@ -1,28 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -32,11 +9,9 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
-import com.lawu.eshop.member.api.service.SmsRecordService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.InviterDTO;
@@ -46,14 +21,20 @@ import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UpdatePwdParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
-import com.lawu.eshop.utils.IpUtil;
-import com.lawu.eshop.utils.VerifyCodeUtil;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import util.UploadFileUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -70,13 +51,10 @@ public class MemberController extends BaseController {
     private PropertyInfoService propertyInfoService;
 
     @Autowired
-    private SmsRecordService smsRecordService;
-
-    @Autowired
     private VerifyCodeService verifyCodeService;
 
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
-     @Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
@@ -89,7 +67,7 @@ public class MemberController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
-    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         long id = UserUtil.getCurrentUserId(getRequest());
         Result r = memberService.updateMemberInfo(memberParam, id);
         return r;
@@ -134,7 +112,7 @@ public class MemberController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-    public Result<Page<MemberDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
+    public Result<Page<MemberDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         Result<Page<MemberDTO>> page = memberService.findMemberListByUser(userId, query);
         return page;
@@ -168,39 +146,6 @@ public class MemberController extends BaseController {
     public Result<MemberDTO> getMemberByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String account = UserUtil.getCurrentAccount(getRequest());
         return memberService.getMemberByAccount(account);
-    }
-
-    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1000|1001|1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
-    public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
-                          @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
-                          VerifyCodePurposeEnum purpose) {
-        Result result = verifyCodeService.verifyPicCode(mobile, picCode);
-        if (!isSuccess(result)) {
-            return failCreated(ResultCode.VERIFY_PIC_CODE_FAIL);
-        }
-        String ip = IpUtil.getIpAddress(getRequest());
-        return smsRecordService.sendSms(mobile, ip, purpose);
-    }
-
-    @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
-    @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)
-    public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
-        BufferedImage buffImg = new BufferedImage(60, 20, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = buffImg.createGraphics();
-        String picCode = VerifyCodeUtil.getVerifyCode(g);
-        verifyCodeService.savePicCode(mobile, picCode, purpose);
-
-        HttpServletResponse response = getResponse();
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setDateHeader("Expires", 0);
-        response.setContentType("image/jpeg");
-        // 将图像输出到Servlet输出流中。
-        ServletOutputStream sos = response.getOutputStream();
-        ImageIO.write(buffImg, "jpeg", sos);
-        sos.close();
     }
 
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
