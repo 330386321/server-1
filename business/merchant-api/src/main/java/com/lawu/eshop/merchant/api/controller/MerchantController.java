@@ -59,24 +59,23 @@ public class MerchantController extends BaseController {
     public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                  @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
-        long id= UserUtil.getCurrentUserId(getRequest());
+        long id = UserUtil.getCurrentUserId(getRequest());
         return merchantService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
     @ApiOperation(value = "修改支付密码", notes = "根据商户编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
+    @RequestMapping(value = "updatePayPwd", method = RequestMethod.PUT)
     public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                               @PathVariable @ApiParam(required = true, value = "商户编号") String userNo,
                                @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String userNo = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
     @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return merchantService.getInviterByAccount(account);
@@ -99,9 +98,10 @@ public class MerchantController extends BaseController {
 
     @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
-    public Result<MerchantDTO> getMerchantByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                    @PathVariable @ApiParam(required = true, value = "商户账号") String account) {
+    @Authorization
+    @RequestMapping(value = "getMerchant", method = RequestMethod.GET)
+    public Result<MerchantDTO> getMerchantByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        String account = UserUtil.getCurrentAccount(getRequest());
         return merchantService.getMerchantByAccount(account);
     }
 

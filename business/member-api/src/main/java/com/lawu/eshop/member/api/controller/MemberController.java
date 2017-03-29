@@ -61,7 +61,7 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo() {
-        long memberId= UserUtil.getCurrentUserId(getRequest());
+        long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<UserDTO> result = memberService.findMemberInfo(memberId);
         return result;
     }
@@ -71,7 +71,7 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
     public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam) {
-        long id=UserUtil.getCurrentUserId(getRequest());
+        long id = UserUtil.getCurrentUserId(getRequest());
         Result r = memberService.updateMemberInfo(memberParam, id);
         return r;
     }
@@ -83,18 +83,18 @@ public class MemberController extends BaseController {
     public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                  @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
-        long id=UserUtil.getCurrentUserId(getRequest());
+        long id = UserUtil.getCurrentUserId(getRequest());
         return memberService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
     @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
+    @RequestMapping(value = "updatePayPwd", method = RequestMethod.PUT)
     public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                               @PathVariable @ApiParam(required = true, value = "会员编号") String userNo,
                                @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String userNo = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
     }
 
@@ -110,8 +110,8 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
     public Result<Page<MemberDTO>> findMemberListByUser(@ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
-    	Long userId=UserUtil.getCurrentUserId(getRequest());
-        Result<Page<MemberDTO>> page = memberService.findMemberListByUser(userId,query);
+        Long userId = UserUtil.getCurrentUserId(getRequest());
+        Result<Page<MemberDTO>> page = memberService.findMemberListByUser(userId, query);
         return page;
     }
 
@@ -133,9 +133,9 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
-    public Result<MemberDTO> getMemberByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                @PathVariable @ApiParam(required = true, value = "会员账号") String account) {
+    @RequestMapping(value = "getMember", method = RequestMethod.GET)
+    public Result<MemberDTO> getMemberByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        String account = UserUtil.getCurrentAccount(getRequest());
         return memberService.getMemberByAccount(account);
     }
 
