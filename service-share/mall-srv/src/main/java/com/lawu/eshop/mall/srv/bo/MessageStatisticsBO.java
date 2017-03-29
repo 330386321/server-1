@@ -11,11 +11,21 @@ public class MessageStatisticsBO {
      */
     private  String content;
 
+    private  Byte type;
+
     public String getContent() {
         return content;
     }
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }

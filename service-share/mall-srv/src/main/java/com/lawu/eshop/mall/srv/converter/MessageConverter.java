@@ -15,7 +15,7 @@ public class MessageConverter {
         }
         MessageStatisticsBO messageStatisticsBO = new MessageStatisticsBO();
         messageStatisticsBO.setContent(messageDO.getContent());
-
+        messageStatisticsBO.setType(messageDO.getType());
         return messageStatisticsBO;
     }
 }

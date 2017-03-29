@@ -5,6 +5,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
@@ -28,11 +29,11 @@ public class MerchantInfoController extends BaseController {
     private MerchantInfoService merchantProfileService;
 
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
-     @Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
-    public Result updateMerchantSizeLink(@ModelAttribute @ApiParam(name = "merchantProfileParam", value = "商家附件") MerchantProfileParam merchantProfileParam
-    ) {
+    public Result updateMerchantSizeLink(@ModelAttribute @ApiParam(name = "merchantProfileParam", value = "商家附件") MerchantProfileParam merchantProfileParam,
+                                         @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
         Result result = merchantProfileService.updateMerchantSizeLink(merchantProfileParam, id);
         return result;
@@ -43,7 +44,7 @@ public class MerchantInfoController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantProfileInfo", method = RequestMethod.GET)
-    public Result<MerchantInfoDTO> findMerchantProfileInfo() {
+    public Result<MerchantInfoDTO> findMerchantProfileInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(id);
         return result;

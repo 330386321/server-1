@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -45,7 +46,7 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.GET)
-    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId) {
+    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Result<MerchantStoreDTO> result = merchantStoreService.selectMerchantStore(merchantStoreId);
         return result;
     }
@@ -55,7 +56,7 @@ public class MerchantStoreController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreInfo", method = RequestMethod.POST)
     public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
-                                        @RequestParam("certifType") CertifTypeEnum certifType) {
+                                        @RequestParam("certifType") CertifTypeEnum certifType, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
@@ -142,7 +143,7 @@ public class MerchantStoreController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMerchantStoreInfo", method = RequestMethod.PUT)
     public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") @ApiParam(required = true, value = "NORMAL_MERCHANT：普通商户，ENTITY_MERCHANT:实体店") MerchantStoreTypeEnum storeType,
-                                          @RequestParam("certifType") @ApiParam(required = true, value = "CERTIF_TYPE_IDCARD：身份证，CERTIF_TYPE_LICENSE:营业执照") CertifTypeEnum certifType) {
+                                          @RequestParam("certifType") @ApiParam(required = true, value = "CERTIF_TYPE_IDCARD：身份证，CERTIF_TYPE_LICENSE:营业执照") CertifTypeEnum certifType, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照

@@ -79,7 +79,7 @@ public class MemberController extends BaseController {
      @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
-    public Result<UserDTO> findMemberInfo() {
+    public Result<UserDTO> findMemberInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<UserDTO> result = memberService.findMemberInfo(memberId);
         return result;
@@ -89,7 +89,7 @@ public class MemberController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
-    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam) {
+    public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         long id = UserUtil.getCurrentUserId(getRequest());
         Result r = memberService.updateMemberInfo(memberParam, id);
         return r;

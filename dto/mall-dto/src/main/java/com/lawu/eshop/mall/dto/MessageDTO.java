@@ -3,15 +3,15 @@ package com.lawu.eshop.mall.dto;
 import io.swagger.annotations.ApiParam;
 
 /**
- * 站内信息统计信息
- * Created by zhangyong on 2017/3/29.
+ * 信息返回
+ * Created by Administrator on 2017/3/29.
  */
-public class MessageStatisticsDTO {
+public class MessageDTO {
     /**
-     * 未读消息总数
+     * 信息id
      */
-    @ApiParam(name = "noReadCount",value = "未读消息总数")
-    private Integer noReadCount;
+    @ApiParam(name = "id",value = "信息id")
+    private Long id;
 
     /**
      * 消息内容
@@ -25,12 +25,18 @@ public class MessageStatisticsDTO {
     @ApiParam(name = "type",value = "消息类型")
     private Byte type;
 
-    public Integer getNoReadCount() {
-        return noReadCount;
+    /**
+     * 消息状态
+     */
+    @ApiParam(name = "status",value = "消息状态")
+    private Byte status;
+
+    public Long getId() {
+        return id;
     }
 
-    public void setNoReadCount(Integer noReadCount) {
-        this.noReadCount = noReadCount;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -47,5 +53,13 @@ public class MessageStatisticsDTO {
 
     public void setType(Byte type) {
         this.type = type;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }
