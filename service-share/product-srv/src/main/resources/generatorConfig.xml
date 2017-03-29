@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/slq/.m2/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="F:/1/maven/repository/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
         <property name="javaFileEncoding" value="UTF-8"/>
         <!-- 分页相关 -->
@@ -47,13 +47,13 @@
         <table tableName="product_category" domainObjectName="ProductCategoryeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="product_image" domainObjectName="ProductImageDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="product_model" domainObjectName="ProductModelDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> -->
+        </table>
         <table tableName="favorite_product" domainObjectName="FavoriteProductDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="product_image" domainObjectName="ProductImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

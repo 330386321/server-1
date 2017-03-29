@@ -43,7 +43,8 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
 
     // 商品模块代码 3xxx
-    public static final int IMAGE_WRONG_UPLOAD_PRODUCT = 3000;
+    public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
+    public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
 
     // 订单模块代码 4xxx
 
@@ -88,7 +89,8 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
 
         // 商品模块 3xxx
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT, "请上传商品图片");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品详情图片");
 
         // 订单模块 4xxx
 

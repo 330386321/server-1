@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.constant.ProductImgTypeEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
@@ -158,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		//查询型号图片
 		ProductImageDOExample imageExample = new ProductImageDOExample();
-		imageExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		imageExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
 		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
 		List<String> images = new ArrayList<String>();
 		for(ProductImageDO image : imageDOS){
@@ -195,7 +196,7 @@ public class ProductServiceImpl implements ProductService {
 		
 		//查询型号图片
 		ProductImageDOExample imageExample = new ProductImageDOExample();
-		imageExample.createCriteria().andProductIdEqualTo(productDO.getId());
+		imageExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
 		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
 		List<String> images = new ArrayList<String>();
 		for(ProductImageDO image : imageDOS){
@@ -257,9 +258,12 @@ public class ProductServiceImpl implements ProductService {
 			//删除产品图片
 			ProductImageDOExample imageExample = new ProductImageDOExample();
 			imageExample.createCriteria().andProductIdEqualTo(productId);
-			productImageDOMapper.deleteByExample(imageExample);
+			ProductImageDO imageDO = new ProductImageDO();
+			imageDO.setStatus(false);
+			imageDO.setGmtModified(new Date());
+			productImageDOMapper.updateByExampleSelective(imageDO, imageExample);
 		}
-		//保存商品图片信息
+		//保存商品滚动图片信息
 		ProductImageDO pcDO = null;
 		String imageUrl = product.getProductImage();
 		String []imageUrls = imageUrl.split(",");
@@ -269,6 +273,21 @@ public class ProductServiceImpl implements ProductService {
 			pcDO.setImagePath(imageUrls[i]);
 			pcDO.setGmtCreate(new Date());
 			pcDO.setGmtModified(new Date());
+			pcDO.setStatus(true);
+			pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
+			productImageDOMapper.insert(pcDO);
+		}
+		//保存商品详情图片
+		String imageDetailUrl = product.getProductDetailImage();
+		String []imageDetailUrls = imageDetailUrl.split(",");
+		for(int i = 0 ; i < imageDetailUrls.length ; i++){
+			pcDO = new ProductImageDO();
+			pcDO.setProductId(Long.valueOf(productId));
+			pcDO.setImagePath(imageUrls[i]);
+			pcDO.setGmtCreate(new Date());
+			pcDO.setGmtModified(new Date());
+			pcDO.setStatus(true);
+			pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
 			productImageDOMapper.insert(pcDO);
 		}
 	}

@@ -96,6 +96,7 @@ public class ProductController extends BaseController {
     	
     	StringBuffer featureImageStr = new StringBuffer();
     	StringBuffer productImageStr = new StringBuffer();
+    	StringBuffer productDetailImageStr = new StringBuffer();
     	HttpServletRequest request = getRequest();
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
 		if((productId == null || productId == 0L || productId < 0) && !multipartResolver.isMultipart(request)){
@@ -122,30 +123,46 @@ public class ProductController extends BaseController {
                 		featureImageStr.append(imgUrl).append(",");
                 	}else if(fieldName.contains("productIamge")){
                 		productImageStr.append(imgUrl).append(",");
+                	}else if(fieldName.contains("productDetailImage")){
+                		productDetailImageStr.append(imgUrl).append(",");
                 	}
                 }
             }
         }
         String featureImage = "";
         String productImage = "";
+        String productDetailImage = "";
         if(productId == null || productId == 0L || productId < 0){
         	featureImage = featureImageStr.toString();
         	productImage = productImageStr.toString();
+        	productDetailImage = productDetailImageStr.toString();
         	if("".equals(productImage)){
-        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT);
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
         	}
+        	if("".equals(productDetailImage)){
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
+        	}
+        	
         	if("".equals(featureImage)){
         		featureImage = productImage.split(",")[0];
         	}
         }else{
-        	if("".equals(product.getBackProductIamgeUrls()) && "".equals(productImage)){
-        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT);
+        	if("".equals(product.getBackProductImageUrls()) && "".equals(productImage)){
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
         	}
-        	if(!"".equals(product.getBackProductIamgeUrls())){
-        		productImage = product.getBackProductIamgeUrls() + "," + productImage;
+        	if("".equals(product.getBackProductDetailImageUrls()) && "".equals(productDetailImage)){
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
+        	}
+        	
+        	if(!"".equals(product.getBackProductImageUrls())){
+        		productImage = product.getBackProductImageUrls() + "," + productImage;
+        	}
+        	if(!"".equals(product.getBackProductDetailImageUrls())){
+        		productDetailImage = product.getBackProductDetailImageUrls() + "," + productDetailImage;
         	}
         }
     	productImage = productImage.substring(0, productImage.lastIndexOf(","));
+    	productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
         
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	
@@ -157,6 +174,7 @@ public class ProductController extends BaseController {
     	dataProduct.setSpec(product.getSpec());
     	dataProduct.setFeatureImage(featureImage);
     	dataProduct.setProductImage(productImage);
+    	dataProduct.setBackProductDetailImageUrls(productDetailImage);
     	
     	return productService.saveProduct(productId,dataProduct);
     	

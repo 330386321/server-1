@@ -25,17 +25,23 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品型号信息[{name,originalPrice,price,inventory}]", required = true)
 	private String spec;
 	
-	@ApiModelProperty(value = "特征图片url(新增、修改都非必填)", required = false)
+	@ApiModelProperty(value = "特征图片(新增、修改都非必填)", required = false)
 	private String featureImage;
 	
-	@ApiModelProperty(value = "商品图片url，如果存在多张提交key为productIamge-*(新增时必填，修改非必填)", required = false)
+	@ApiModelProperty(value = "滚动图片，多张提交key为productIamge-*(新增时必填，修改非必填)", required = false)
 	private String productImage;
+	
+	@ApiModelProperty(value = "详情图片，多张提交key为productDetailImage-*(新增时必填，修改非必填)", required = false)
+	private String productDetailImage;
 	
 	@ApiModelProperty(value = "修改时回显的特征图片url(新增时传空)", required = false)
 	private String backFeatureImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的商品图片(新增时传空)", required = false)
-	private String backProductIamgeUrls;
+	@ApiModelProperty(value = "修改时回显的滚动图片(新增时传空)", required = false)
+	private String backProductImageUrls;
+	
+	@ApiModelProperty(value = "修改时回显的详情图片(新增时传空)", required = false)
+	private String backProductDetailImageUrls;
 	
 	public String getBackFeatureImageUrls() {
 		return backFeatureImageUrls;
@@ -43,14 +49,6 @@ public class EditProductParam {
 
 	public void setBackFeatureImageUrls(String backFeatureImageUrls) {
 		this.backFeatureImageUrls = backFeatureImageUrls;
-	}
-
-	public String getBackProductIamgeUrls() {
-		return backProductIamgeUrls;
-	}
-
-	public void setBackProductIamgeUrls(String backProductIamgeUrls) {
-		this.backProductIamgeUrls = backProductIamgeUrls;
 	}
 
 	public Integer getCategoryId() {
@@ -99,6 +97,30 @@ public class EditProductParam {
 
 	public void setProductImage(String productImage) {
 		this.productImage = productImage;
+	}
+
+	public String getProductDetailImage() {
+		return productDetailImage;
+	}
+
+	public void setProductDetailImage(String productDetailImage) {
+		this.productDetailImage = productDetailImage;
+	}
+
+	public String getBackProductImageUrls() {
+		return backProductImageUrls;
+	}
+
+	public void setBackProductImageUrls(String backProductImageUrls) {
+		this.backProductImageUrls = backProductImageUrls;
+	}
+
+	public String getBackProductDetailImageUrls() {
+		return backProductDetailImageUrls;
+	}
+
+	public void setBackProductDetailImageUrls(String backProductDetailImageUrls) {
+		this.backProductDetailImageUrls = backProductDetailImageUrls;
 	}
 
 
