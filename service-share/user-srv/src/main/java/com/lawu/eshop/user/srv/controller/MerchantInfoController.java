@@ -66,7 +66,7 @@ public class MerchantInfoController extends BaseController{
             return successGet();
         }else{
             //门店信息
-            MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStore(merchantProfileId);
+            MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantProfileId);
             if(merchantStoreBO != null){
                 merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
                 merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());

@@ -107,6 +107,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreImageDO.setMerchantStoreId(Long.valueOf(merchantStoreId));
         merchantStoreImageDO.setGmtCreate(new Date());
         merchantStoreImageDO.setGmtModified(new Date());
+        merchantStoreImageDO.setStatus(true);
         //新增门店照
         if (!StringUtils.isEmpty(merchantStoreParam.getStoreUrl())) {
             merchantStoreImageDO.setPath(merchantStoreParam.getStoreUrl());
@@ -185,16 +186,20 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
         //更新门店图片信息
 
-        //先删除对应商家门店---逻辑删除
+        //先删除对应商家门店图片---逻辑删除
         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
         merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
-        merchantStoreImageDOMapper.deleteByExample(merchantStoreImageDOExample);
+        merchantStoreImageDOExample.createCriteria().andStatusEqualTo(false);
+        MerchantStoreImageDO merchantStoreImageDODel = new MerchantStoreImageDO();
+        merchantStoreImageDODel.setStatus(false);
+        merchantStoreImageDOMapper.updateByExampleSelective(merchantStoreImageDODel,merchantStoreImageDOExample);
 
         MerchantStoreImageDO merchantStoreImageDO = new MerchantStoreImageDO();
         merchantStoreImageDO.setMerchantId(merchantId);
         merchantStoreImageDO.setMerchantStoreId(merchantStoreId);
         merchantStoreImageDO.setGmtCreate(new Date());
         merchantStoreImageDO.setGmtModified(new Date());
+        merchantStoreImageDO.setStatus(true);
         //新增门店照
         if (!StringUtils.isEmpty(merchantStoreParam.getStoreUrl())) {
             merchantStoreImageDO.setPath(merchantStoreParam.getStoreUrl());

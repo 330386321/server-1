@@ -46,7 +46,7 @@ public class MerchantStoreController extends BaseController {
 
         MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStore(id);
         if (merchantStoreBO == null) {
-            return successGet();
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.coverDTO(merchantStoreBO);
 
