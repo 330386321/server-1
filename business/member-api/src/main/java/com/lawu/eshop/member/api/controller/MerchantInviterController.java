@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.MerchantInviterService;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.query.MerchantInviterParam;
@@ -37,7 +39,7 @@ public class MerchantInviterController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-    public Result<Page<MerchantInviterDTO>> findMemberListByUser(@ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {
+    public Result<Page<MerchantInviterDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {
     	Long userId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<MerchantInviterDTO>>  pageDTOS=merchantInviterService.getMerchantByInviter(userId,pageQuery);
     	return pageDTOS;

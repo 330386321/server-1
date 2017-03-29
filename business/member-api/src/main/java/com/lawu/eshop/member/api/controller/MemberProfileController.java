@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +13,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.user.dto.MemberProfileDTO;
 
@@ -43,7 +45,7 @@ public class MemberProfileController extends BaseController{
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-    public Result<MemberProfileDTO> getMemberCount() {
+    public Result<MemberProfileDTO> getMemberCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 	   Long id=UserUtil.getCurrentUserId(getRequest());
 	   Result<MemberProfileDTO> rdto=memberProfileService.getMemberCount(id);
 	   return rdto;
@@ -58,7 +60,7 @@ public class MemberProfileController extends BaseController{
    @Authorization
    @ApiResponse(code = HttpCode.SC_OK, message = "success")
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-   public Result<MemberProfileDTO> getMerchantCount() {
+   public Result<MemberProfileDTO> getMerchantCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 	   Long id=UserUtil.getCurrentUserId(getRequest());
 	   Result<MemberProfileDTO> rdto=memberProfileService.getMerchantCount(id);
 	   return rdto;
