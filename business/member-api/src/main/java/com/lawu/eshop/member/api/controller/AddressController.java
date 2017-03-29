@@ -102,8 +102,8 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "修改收货地址", notes = "修改收货地址[1000|1001]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-    public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address
-    		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id,
+    		@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 		Result rs= addressService.update(address,id);
 		return rs;
 	   
