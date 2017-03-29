@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>authorization</module>
         <module>mybatis</module>
         <module>framework-web</module>
         <module>utils</module>
