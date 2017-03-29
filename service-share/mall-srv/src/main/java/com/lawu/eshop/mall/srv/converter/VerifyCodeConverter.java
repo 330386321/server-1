@@ -23,6 +23,7 @@ public class VerifyCodeConverter {
 
         VerifyCodeBO verifyCodeBO = new VerifyCodeBO();
         verifyCodeBO.setId(verifyCodeDO.getId());
+        verifyCodeBO.setMobile(verifyCodeDO.getMobile());
         verifyCodeBO.setCode(verifyCodeDO.getCode());
         return verifyCodeBO;
     }
@@ -40,6 +41,7 @@ public class VerifyCodeConverter {
 
         VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
         verifyCodeDTO.setId(verifyCodeBO.getId());
+        verifyCodeDTO.setMobile(verifyCodeBO.getMobile());
         verifyCodeDTO.setCode(verifyCodeBO.getCode());
         return verifyCodeDTO;
     }

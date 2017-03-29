@@ -30,6 +30,7 @@ public class ResultCode {
     public static final int VERIFY_SMS_CODE_FAIL = 1013;
     public static final int VERIFY_PIC_CODE_FAIL = 1014;
     public static final int IMAGE_SIZE_ERROR = 1015;
+    public static final int NOT_SEND_SMS_MOBILE = 1016;
     public static final int IMAGE_IS_NULL = 1017;
 
     // 用户模块代码 2xxx
@@ -67,6 +68,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
         ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
         ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
+        ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
         ResultCode.messageMap.put(IMAGE_IS_NULL, "请上传图片");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
@@ -87,7 +89,7 @@ public class ResultCode {
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT, "请上传商品图片");
-        
+
         // 订单模块 4xxx
 
 

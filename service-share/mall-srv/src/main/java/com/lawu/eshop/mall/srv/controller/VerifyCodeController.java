@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.srv.bo.VerifyCodeBO;
+import com.lawu.eshop.mall.srv.converter.VerifyCodeConverter;
 import com.lawu.eshop.mall.srv.service.VerifyCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class VerifyCodeController extends BaseController {
         if (!verifyCodeBO.getCode().equals(smsCode)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        return successGet();
+        return successGet(VerifyCodeConverter.convertDTO(verifyCodeBO));
     }
 
     /**

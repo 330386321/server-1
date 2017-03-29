@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.SmsRecordService;
@@ -123,10 +124,10 @@ public class MemberController extends BaseController {
         return page;
     }
 
-    @ApiOperation(value = "注册", notes = "会员注册。[1012|1013] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
-    public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId ,
+    public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
                            @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam,
                            UserInviterTypeEnum inviterType) {
         Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
@@ -137,7 +138,11 @@ public class MemberController extends BaseController {
         if (!isSuccess(smsResult)) {
             return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        return memberService.register(registerParam,inviterType);
+        VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) smsResult.getModel();
+        if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
+            return failCreated(ResultCode.NOT_SEND_SMS_MOBILE);
+        }
+        return memberService.register(registerParam, inviterType);
     }
 
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
@@ -153,9 +158,9 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
-                                        @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
-                                        VerifyCodePurposeEnum purpose) {
-        Result result = verifyCodeService.verifyPicCode(mobile,picCode);
+                          @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
+                          VerifyCodePurposeEnum purpose) {
+        Result result = verifyCodeService.verifyPicCode(mobile, picCode);
         if (!isSuccess(result)) {
             return failCreated(ResultCode.VERIFY_PIC_CODE_FAIL);
         }
@@ -185,34 +190,34 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveHeadImage", method = RequestMethod.PUT)
-    public Result saveHeadImage(){
+    public Result saveHeadImage() {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         String headImg = "";
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        if(multipartResolver.isMultipart(request)){
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
+        if (multipartResolver.isMultipart(request)) {
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
             Iterator<String> iter = multiRequest.getFileNames();
-            if(iter.hasNext()){
-                while(iter.hasNext()){
+            if (iter.hasNext()) {
+                while (iter.hasNext()) {
                     MultipartFile file = multiRequest.getFile(iter.next());
-                    if(file != null){
+                    if (file != null) {
                         String originalFilename = file.getOriginalFilename();
                         String fieldName = file.getName();
                         String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
                         prefix = prefix.toLowerCase();
                         Map<String, String> retMap = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_HEAD);
                         String resultFlag = retMap.get("resultFlag");
-                        if(!"0".equals(resultFlag)){
+                        if (!"0".equals(resultFlag)) {
                             return successCreated(resultFlag);
                         }
                         headImg = retMap.get("imgUrl");
                     }
                 }
             }
-           return  memberService.saveHeadImage(memberId,headImg);
+            return memberService.saveHeadImage(memberId, headImg);
         }
-        return  successCreated();
+        return successCreated();
     }
 }
 

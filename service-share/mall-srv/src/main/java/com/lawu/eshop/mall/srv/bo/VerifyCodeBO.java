@@ -8,6 +8,8 @@ public class VerifyCodeBO {
 
     private Long id;
 
+    private String mobile;
+
     private String code;
 
     public Long getId() {
@@ -16,6 +18,14 @@ public class VerifyCodeBO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getCode() {

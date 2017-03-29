@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
@@ -82,7 +83,7 @@ public class MerchantController extends BaseController {
         return merchantService.getInviterByAccount(account);
     }
 
-    @ApiOperation(value = "注册", notes = "商户注册。[1012|1013] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "商户注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result getInviterByAccount(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
@@ -95,6 +96,10 @@ public class MerchantController extends BaseController {
         Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {
             return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) smsResult.getModel();
+        if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
+            return failCreated(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         return merchantService.register(registerParam, inviterType);
     }
