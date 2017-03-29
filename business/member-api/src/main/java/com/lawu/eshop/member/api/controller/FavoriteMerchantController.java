@@ -44,10 +44,11 @@ public class FavoriteMerchantController extends BaseController{
 	  * @return
 	  */
 	@Authorization
-	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam (required = true, value = "商家id") Long merchantId ) {
+	@RequestMapping(value = "save", method = RequestMethod.PUT)
+    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+					   @RequestParam @ApiParam (required = true, value = "商家id") Long merchantId ) {
 	   Long memberId=UserUtil.getCurrentUserId(getRequest());
 	   Result rs=favoriteMerchantService.save(memberId,merchantId);
 	   return rs;
@@ -57,7 +58,8 @@ public class FavoriteMerchantController extends BaseController{
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
-    public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
+    public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+																  @ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<FavoriteMerchantDTO>> page = favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
     	return page;
