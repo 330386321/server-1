@@ -188,8 +188,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
         //先删除对应商家门店图片---逻辑删除
         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-        merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
-        merchantStoreImageDOExample.createCriteria().andStatusEqualTo(false);
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId);
         MerchantStoreImageDO merchantStoreImageDODel = new MerchantStoreImageDO();
         merchantStoreImageDODel.setStatus(false);
         merchantStoreImageDOMapper.updateByExampleSelective(merchantStoreImageDODel,merchantStoreImageDOExample);

@@ -24,8 +24,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public int selectNoReadCount(String userNum) {
         MessageDOExample example = new MessageDOExample();
-        example.createCriteria().andUserNumEqualTo(userNum);
-        example.createCriteria().andStatusEqualTo(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
+        example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
         int count = messageDOMapper.countByExample(example);
         return count;
     }
@@ -34,8 +33,7 @@ public class MessageServiceImpl implements MessageService {
     public MessageStatisticsBO selectLastMessage(String userNum) {
 
         MessageDOExample example = new MessageDOExample();
-        example.createCriteria().andStatusEqualTo(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
-        example.createCriteria().andUserNumEqualTo(userNum);
+        example.createCriteria().andStatusEqualTo(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val).andUserNumEqualTo(userNum);
         example.setOrderByClause("id desc");
         List<MessageDO> messageDOS = messageDOMapper.selectByExample(example);
         return messageDOS.isEmpty() ? null : MessageConverter.coverStatisticsBO(messageDOS.get(0));

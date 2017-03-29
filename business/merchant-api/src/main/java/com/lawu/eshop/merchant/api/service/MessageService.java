@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.service;
+package com.lawu.eshop.merchant.api.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
