@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
@@ -53,6 +54,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantStoreDOMapper merchantStoreDOMapper;
+
+    @Autowired
+    private TransactionMainService transactionMainService;
 
     @Override
     public void updateLoginPwd(Long id, String originalPwd, String newPwd) {
@@ -184,6 +188,7 @@ public class MerchantServiceImpl implements MerchantService {
                 }
             }
         }
+        transactionMainService.sendNotice(merchantId);
     }
 
     @Override

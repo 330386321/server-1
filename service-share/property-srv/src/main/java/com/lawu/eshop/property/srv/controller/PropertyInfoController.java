@@ -28,18 +28,6 @@ public class PropertyInfoController extends BaseController {
     private PropertyInfoService propertyInfoService;
 
     /**
-     * 初始化用户资产信息
-     *
-     * @param userNo 用户编号
-     * @return
-     */
-    @RequestMapping(value = "savePropertyInfo/{userNo}", method = RequestMethod.POST)
-    public Result savePropertyInfo(@PathVariable String userNo) {
-        propertyInfoService.savePropertyInfo(userNo);
-        return successCreated();
-    }
-
-    /**
      * 修改用户支付密码
      *
      * @param userNo      用户编号

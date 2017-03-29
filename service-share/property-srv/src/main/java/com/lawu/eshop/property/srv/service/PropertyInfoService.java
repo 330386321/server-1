@@ -12,13 +12,6 @@ import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 public interface PropertyInfoService {
 
     /**
-     * 初始化用户资产信息
-     *
-     * @param userNo 用户编号
-     */
-    void savePropertyInfo(String userNo);
-
-    /**
      * 根据用户编号查询用户信息
      *
      * @param userNo 用户编号
@@ -34,13 +27,13 @@ public interface PropertyInfoService {
      * @param newPwd      新密码
      */
     void updatePayPwd(String userNo, String originalPwd, String newPwd);
-    
+
     /**
      * 根据用户编号查询余额
-     * 
-     * @param userNo 用户编号
+     *
+     * @param userNum 用户编号
      * @return
      */
     PropertyBalanceBO getPropertyBalanceByUserNum(String userNum);
-    
+
 }

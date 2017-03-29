@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
@@ -51,6 +52,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private PasswordStrategy passwordStrategy;
+
+    @Autowired
+    private TransactionMainService transactionMainService;
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -231,6 +235,7 @@ public class MemberServiceImpl implements MemberService {
                 }
             }
         }
+        transactionMainService.sendNotice(memberId);
     }
 
     @Override
