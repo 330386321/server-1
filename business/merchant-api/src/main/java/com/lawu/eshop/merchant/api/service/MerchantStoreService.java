@@ -44,7 +44,7 @@ public interface MerchantStoreService {
      * @param merchantStoreParam 门店信息
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/updateMerchantStoreInfo/{merchantId}")
-    Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam,@RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
+    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/updateMerchantStoreInfo/{merchantStoreId}")
+    Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId,@RequestParam("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam,@RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
 
 }

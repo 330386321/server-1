@@ -70,7 +70,7 @@ public class MerchantStoreController extends BaseController {
                                         @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
 
         //判断门店是否存在
-        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantId);
+        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
         if (merchantStoreInfoBO != null) {
             return failCreated(ResultCode.RECORD_EXIST);
         }
@@ -132,13 +132,14 @@ public class MerchantStoreController extends BaseController {
      * @param merchantStoreParam 门店信息
      * @return
      */
-    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.PUT)
-    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
-        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantId);
+    @RequestMapping(value = "updateMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.PUT)
+    public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
+        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantStoreId);
         if (merchantStoreInfoBO == null) {
             return failCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        merchantStoreInfoService.updateMerchantStoreInfo(merchantId, merchantStoreParam, merchantStoreInfoBO.getMerchantStoreId(), storeType, certifType);
+
+        merchantStoreInfoService.updateMerchantStoreInfo(merchantId, merchantStoreParam, merchantStoreId, storeType, certifType);
 
         return successCreated();
     }

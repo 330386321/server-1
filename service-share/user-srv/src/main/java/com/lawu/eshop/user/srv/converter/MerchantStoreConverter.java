@@ -61,6 +61,7 @@ public class MerchantStoreConverter {
             return null;
         }
         MerchantStoreDTO merchantStoreDTO = new MerchantStoreDTO();
+        merchantStoreDTO.setMerchantStoreId(merchantStoreInfoBO.getMerchantStoreId());
         merchantStoreDTO.setName(merchantStoreInfoBO.getName());
         merchantStoreDTO.setPrincipalName(merchantStoreInfoBO.getPrincipalName());
         merchantStoreDTO.setRegionPath(merchantStoreInfoBO.getRegionPath());

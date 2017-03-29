@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -26,22 +27,24 @@ public class MerchantInfoController extends BaseController {
     private MerchantInfoService merchantProfileService;
 
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
-   // @Authorization
+    // @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "updateMerchantSizeLink/{id}", method = RequestMethod.PUT)
-    public Result updateMerchantSizeLink(@ModelAttribute  @ApiParam(name = "merchantProfileParam",value = "商家附件") MerchantProfileParam merchantProfileParam,
-                                       @PathVariable @ApiParam(required = true, value = "商家ID") Long id){
-        Result result =   merchantProfileService.updateMerchantSizeLink(merchantProfileParam,id);
+    @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
+    public Result updateMerchantSizeLink(@ModelAttribute @ApiParam(name = "merchantProfileParam", value = "商家附件") MerchantProfileParam merchantProfileParam
+    ) {
+        Long id = UserUtil.getCurrentUserId(getRequest());
+        Result result = merchantProfileService.updateMerchantSizeLink(merchantProfileParam, id);
         return result;
     }
 
 
-    @ApiOperation(value ="查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）",httpMethod = "GET")
+    @ApiOperation(value = "查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value ="findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
-    public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") @ApiParam(required = true, value = "商家主键") Long merchantProfileId){
-        Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
+    @RequestMapping(value = "findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
+    public Result<MerchantInfoDTO> findMerchantProfileInfo() {
+        Long id = UserUtil.getCurrentUserId(getRequest());
+        Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(id);
         return result;
     }
 

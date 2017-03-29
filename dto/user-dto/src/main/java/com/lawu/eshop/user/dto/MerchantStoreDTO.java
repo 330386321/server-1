@@ -8,7 +8,8 @@ import java.util.Date;
 public class MerchantStoreDTO  {
 
 
-
+    @ApiParam(name = "merchantStoreId",value = "门店id")
+    private Long merchantStoreId;
     /**
      *
      * 店铺名称
@@ -152,6 +153,14 @@ public class MerchantStoreDTO  {
      */
     @ApiParam(name = "path",value = "图片路径")
     private String path;
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
+    }
 
     public String getName() {
         return name;

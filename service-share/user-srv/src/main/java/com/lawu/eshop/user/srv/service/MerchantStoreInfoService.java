@@ -42,5 +42,6 @@ public interface MerchantStoreInfoService {
      * @param merchantStoreParam 门店信息
      */
     void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,Long merchantStoreId,MerchantStoreTypeEnum storeTypeEnum,CertifTypeEnum certifTypeEnum);
-    
+
+    MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
 }

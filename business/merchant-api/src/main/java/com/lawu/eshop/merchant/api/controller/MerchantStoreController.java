@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -14,6 +15,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,8 +43,9 @@ public class MerchantStoreController extends BaseController {
     @ApiOperation(value = "根据商家id查询门店信息", notes = "根据商家id查询门店信息，成功返回门店信息。（章勇）", httpMethod = "GET")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "findMerchantStoreInfo/{id}", method = RequestMethod.GET)
-    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("id") @ApiParam(required = true, value = "商家主键") Long id) {
+    @RequestMapping(value = "findMerchantStoreInfo", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStore() {
+        Long id = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantStoreDTO> result = merchantStoreService.selectMerchantStore(id);
         return result;
     }
@@ -50,10 +53,11 @@ public class MerchantStoreController extends BaseController {
     @ApiOperation(value = "新增门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
-    public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
+    @RequestMapping(value = "saveMerchantStoreInfo", method = RequestMethod.POST)
+    public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
                                         @RequestParam("certifType") CertifTypeEnum certifType) {
         HttpServletRequest request = getRequest();
+        Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
         StringBuffer storeUrls = new StringBuffer();        //门店照
         StringBuffer environmentUrls = new StringBuffer();        //店内环境照
@@ -136,10 +140,11 @@ public class MerchantStoreController extends BaseController {
     @ApiOperation(value = "修改门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "PUT")
     //@Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "updateMerchantStoreInfo/{merchantId}", method = RequestMethod.PUT)
-    public Result updateMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
-                                          @RequestParam("certifType") CertifTypeEnum certifType) {
+    @RequestMapping(value = "updateMerchantStoreInfo", method = RequestMethod.PUT)
+    public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") @ApiParam(required = true, value = "NORMAL_MERCHANT：普通商户，ENTITY_MERCHANT:实体店") MerchantStoreTypeEnum storeType,
+                                          @RequestParam("certifType") @ApiParam(required = true, value = "CERTIF_TYPE_IDCARD：身份证，CERTIF_TYPE_LICENSE:营业执照") CertifTypeEnum certifType) {
         HttpServletRequest request = getRequest();
+        Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
         StringBuffer storeUrls = new StringBuffer();        //门店照
         StringBuffer environmentUrls = new StringBuffer();        //店内环境照
@@ -213,7 +218,7 @@ public class MerchantStoreController extends BaseController {
             } else {
                 merchantStoreParam.setOtherUrl(otherUrls.toString());
             }
-            return merchantStoreService.updateMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
+            return merchantStoreService.updateMerchantStoreInfo(merchantStoreId, merchantId, merchantStoreParam, storeType, certifType);
         }
 
         return failCreated(ResultCode.FAIL);
