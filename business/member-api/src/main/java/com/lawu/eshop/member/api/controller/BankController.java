@@ -36,9 +36,9 @@ public class BankController extends BaseController{
 	 * @return
 	 */
 	@Authorization
-	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[1000|1001]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "findBank", method = RequestMethod.GET)
+	@RequestMapping(value = "all", method = RequestMethod.GET)
     public Result<List<BankDTO>> findBank() {
 		Result<List<BankDTO>> DTOS = bankService.findBank();
 		return  DTOS;
