@@ -59,7 +59,7 @@ public class BankAccountDO implements Serializable {
 
     /**
      *
-     * 1启用 2停用 3删除
+     * 1启用  3删除
      * bank_account.status
      *
      * @mbg.generated 2017-03-29 10:45:56

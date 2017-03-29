@@ -35,7 +35,7 @@ public class BankController extends BaseController{
 	 * 查询所有银行
 	 * @return
 	 */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "findBank", method = RequestMethod.GET)

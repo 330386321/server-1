@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 
@@ -18,7 +19,7 @@ public interface BankAccountService {
 	 * @param bankAccountDO
 	 * @return
 	 */
-	Integer saveBankAccount(BankAccountDO bankAccountDO);
+	Integer saveBankAccount(BankAccountParam bankAccountParam);
 	
 	/**
 	 * 查询我绑定的银行卡
