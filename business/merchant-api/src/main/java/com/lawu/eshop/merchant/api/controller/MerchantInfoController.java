@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -27,7 +28,7 @@ public class MerchantInfoController extends BaseController {
     private MerchantInfoService merchantProfileService;
 
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
-    // @Authorization
+     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMerchantSizeLink", method = RequestMethod.PUT)
     public Result updateMerchantSizeLink(@ModelAttribute @ApiParam(name = "merchantProfileParam", value = "商家附件") MerchantProfileParam merchantProfileParam
@@ -39,7 +40,7 @@ public class MerchantInfoController extends BaseController {
 
 
     @ApiOperation(value = "查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantProfileInfo", method = RequestMethod.GET)
     public Result<MerchantInfoDTO> findMerchantProfileInfo() {

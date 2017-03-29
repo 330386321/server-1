@@ -75,7 +75,7 @@ public class MemberController extends BaseController {
     private VerifyCodeService verifyCodeService;
 
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
-    // @Authorization
+     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMemberInfo", method = RequestMethod.GET)
     public Result<UserDTO> findMemberInfo() {
@@ -85,7 +85,7 @@ public class MemberController extends BaseController {
     }
 
     @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息（章勇）", httpMethod = "PUT")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
     public Result updateMemberInfo(@ModelAttribute @ApiParam(required = true, value = "会员信息") UserParam memberParam) {
