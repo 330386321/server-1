@@ -53,7 +53,7 @@ public class ProductController extends BaseController {
     
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[201|400]。(杨清华)", httpMethod = "POST")
-    @Authorization
+//    @Authorization
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
     public Result selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     							ProductStatusEnum productStatus,
@@ -68,7 +68,7 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings("rawtypes")
-	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1000|1002]。(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1002]。(杨清华)", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.POST)
     public Result updateProductStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -78,7 +78,7 @@ public class ProductController extends BaseController {
     	return productService.updateProductStatus(ids,productStatus);
     }
     
-    @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
+    @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1002|1003]，（杨清华）", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
     public Result<ProductEditInfoDTO> selectEditProductById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -89,12 +89,12 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings({ "rawtypes" })
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000|1000]，（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000]，（杨清华）", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
     public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						  @PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId, 
-    						  @ModelAttribute @ApiParam EditProductParam product) {
+    						  @ModelAttribute @ApiParam EditProductParam product,MultipartFile file1) {
     	
     	StringBuffer featureImageStr = new StringBuffer();
     	StringBuffer productImageStr = new StringBuffer();
