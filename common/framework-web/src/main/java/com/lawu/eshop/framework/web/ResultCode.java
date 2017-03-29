@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * 返回码
+ *
  * @author Leach
  * @date 2017/3/13
  */
@@ -23,37 +24,35 @@ public class ResultCode {
     public static final int SMS_SEND_IP_LIMIT = 1007;
     public static final int SMS_SEND_MOBILE_LIMIT = 1008;
     public static final int VERIFY_PWD_FAIL = 1009;
-    public static final int IMAGE_WRONG_UPLOAD =1010;
-    public static final int IMAGE_FORMAT_WRONG_UPLOAD =1011;
-    public static final int RECORD_EXIST =1012;
+    public static final int IMAGE_WRONG_UPLOAD = 1010;
+    public static final int IMAGE_FORMAT_WRONG_UPLOAD = 1011;
+    public static final int RECORD_EXIST = 1012;
     public static final int VERIFY_SMS_CODE_FAIL = 1013;
     public static final int VERIFY_PIC_CODE_FAIL = 1014;
     public static final int IMAGE_SIZE_ERROR = 1015;
-    public static final int VERIFY_FAIL = 1016;
     public static final int IMAGE_IS_NULL = 1017;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
     public static final int USER_WRONG_ID = 2001;
-    public static final int USER_WRONG_IDCARD =2002;
-    public static final int IMAGE_WRONG_UPLOAD_STORE =2003;
+    public static final int USER_WRONG_IDCARD = 2002;
+    public static final int IMAGE_WRONG_UPLOAD_STORE = 2003;
     public static final int IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT = 2004;
     public static final int IMAGE_WRONG_UPLOAD_LICENSE = 2005;
     public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
-    
+
     // 商品模块代码 3xxx
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT = 3000;
-    
+
     // 订单模块代码 4xxx
-    
+
     // 广告模块代码 5xxx
 
     // 资产模块代码 6xxx
 
     // 商城模块代码 7xxx
-    
-    
-    
+
+
     // 初始化状态码与文字说明
     static {
 
@@ -76,7 +75,6 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
-        ResultCode.messageMap.put(VERIFY_FAIL, "验证不通过");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
@@ -95,13 +93,13 @@ public class ResultCode {
 
         // 广告模块 5xxx
 
-        
+
         // 资产模块 6xxx
 
-        
+
         // 商城模块 7xxx
 
-        
+
     }
 
     public static String get(int code) {

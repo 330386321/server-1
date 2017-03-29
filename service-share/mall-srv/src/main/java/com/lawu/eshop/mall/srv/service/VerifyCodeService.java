@@ -10,14 +10,14 @@ import com.lawu.eshop.mall.srv.bo.VerifyCodeBO;
 public interface VerifyCodeService {
 
     /**
-     * 保存验证码
+     * 保存图形验证码
      *
-     * @param mobile     手机号码
-     * @param verifyCode 验证码
-     * @param purpose    用途
+     * @param mobile  手机号码
+     * @param picCode 图形验证码
+     * @param purpose 用途
      * @return
      */
-    Long save(String mobile, String verifyCode, VerifyCodePurposeEnum purpose);
+    Long savePicCode(String mobile, String picCode, VerifyCodePurposeEnum purpose);
 
     /**
      * 根据ID查询验证码
@@ -26,4 +26,11 @@ public interface VerifyCodeService {
      * @return
      */
     VerifyCodeBO getVerifyCodeById(Long id);
+
+    /**
+     * 根据手机号码查询生成的最后一个图形验证码
+     *
+     * @return
+     */
+    VerifyCodeBO getLastPicVerifyCode(String mobile);
 }

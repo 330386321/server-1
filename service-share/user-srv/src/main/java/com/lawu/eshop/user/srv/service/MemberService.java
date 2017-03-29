@@ -1,9 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.dto.param.MemberParam;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
@@ -66,8 +64,9 @@ public interface MemberService {
      * 会员注册
      *
      * @param registerParam 会员注册信息
+     * @param inviterType   邀请类型
      */
-    void register(RegisterParam registerParam);
+    void register(RegisterParam registerParam, UserInviterTypeEnum inviterType);
 
     /**
      * 根据会员ID查询会员信息

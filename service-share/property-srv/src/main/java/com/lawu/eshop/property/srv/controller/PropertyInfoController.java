@@ -44,7 +44,7 @@ public class PropertyInfoController extends BaseController {
     public Result updatePayPwd(@PathVariable String userNo, @RequestParam String originalPwd, @RequestParam String newPwd) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNo(userNo);
         if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
-            return successGet(ResultCode.VERIFY_FAIL);
+            return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
         return successCreated();

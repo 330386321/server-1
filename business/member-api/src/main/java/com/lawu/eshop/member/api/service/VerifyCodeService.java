@@ -16,23 +16,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface VerifyCodeService {
 
     /**
-     * 保存验证码
+     * 保存图形验证码
      *
-     * @param mobile 手机号码
-     * @param mobile 验证码
-     * @param mobile 用途
+     * @param mobile  手机号码
+     * @param picCode 图形验证码
+     * @param purpose 用途
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "verifyCode/save/{mobile}")
-    Result saveVerifyCode(@PathVariable("mobile") String mobile, @RequestParam("verifyCode") String verifyCode, @RequestParam("purpose") VerifyCodePurposeEnum purpose);
+    @RequestMapping(method = RequestMethod.POST, value = "verifyCode/savePicCode/{mobile}")
+    void savePicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode, @RequestParam("purpose") VerifyCodePurposeEnum purpose);
+
+    /**
+     * 校验手机验证码
+     *
+     * @param id      ID
+     * @param smsCode 手机验证码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "verifyCode/verifySmsCode/{id}")
+    Result verifySmsCode(@PathVariable("id") Long id, @RequestParam("smsCode") String smsCode);
 
 
     /**
-     * 校验验证码
+     * 校验图形验证码
      *
-     * @param id ID
+     * @param mobile  手机号码
+     * @param picCode 图形验证码
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "verifyCode/getVerifyCode/{id}")
-    Result verifyPicCode(@PathVariable("id") Long id);
+    @RequestMapping(method = RequestMethod.GET, value = "verifyCode/verifyPicCode/{mobile}")
+    Result verifyPicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode);
 }

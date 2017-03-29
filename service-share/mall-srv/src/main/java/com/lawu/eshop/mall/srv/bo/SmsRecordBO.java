@@ -10,6 +10,16 @@ public class SmsRecordBO {
 
     private String content;
 
+    private Long virifyCodeId;
+
+    public Long getVirifyCodeId() {
+        return virifyCodeId;
+    }
+
+    public void setVirifyCodeId(Long virifyCodeId) {
+        this.virifyCodeId = virifyCodeId;
+    }
+
     public Long getId() {
         return id;
     }

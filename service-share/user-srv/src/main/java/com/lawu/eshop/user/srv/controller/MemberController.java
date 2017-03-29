@@ -1,17 +1,10 @@
 package com.lawu.eshop.user.srv.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -23,6 +16,8 @@ import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -126,7 +121,7 @@ public class MemberController extends BaseController {
      */
     @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
     public Result<Page<MemberDTO>> findMemberListByUser(@RequestParam Long userId, @RequestBody MemberQuery memberQuery) {
-        Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(userId,memberQuery);
+        Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(userId, memberQuery);
         Page<MemberDTO> page = MemberConverter.convertPageDOTS(pageMemberBOS);
         return successGet(page);
     }
@@ -135,11 +130,12 @@ public class MemberController extends BaseController {
      * 会员注册
      *
      * @param registerParam 会员注册信息
+     * @param inviterType   邀请类型
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result register(@RequestBody RegisterParam registerParam) {
-        memberService.register(registerParam);
+    public Result register(@RequestBody RegisterParam registerParam, @RequestParam UserInviterTypeEnum inviterType) {
+        memberService.register(registerParam, inviterType);
         return successCreated();
     }
 

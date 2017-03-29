@@ -4,7 +4,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
-import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.mall.srv.bo.VerifyCodeBO;
 import com.lawu.eshop.mall.srv.service.VerifyCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,35 +21,52 @@ public class VerifyCodeController extends BaseController {
     private VerifyCodeService verifyCodeService;
 
     /**
-     * 保存验证码
+     * 保存图形验证码
      *
      * @param mobile  手机号码
+     * @param picCode 图形验证码
      * @param purpose 用途
      * @return
      */
-    @RequestMapping(value = "save/{mobile}", method = RequestMethod.POST)
-    public Result save(@PathVariable String mobile,@RequestParam String verifyCode, @RequestParam VerifyCodePurposeEnum purpose) {
-        long id = verifyCodeService.save(mobile, verifyCode, purpose);
-        VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
-        verifyCodeDTO.setId(id);
-        verifyCodeDTO.setCode(verifyCode);
-        return successGet(verifyCodeDTO);
+    @RequestMapping(value = "savePicCode/{mobile}", method = RequestMethod.POST)
+    public Result savePicCode(@PathVariable String mobile, @RequestParam String picCode, @RequestParam VerifyCodePurposeEnum purpose) {
+        verifyCodeService.savePicCode(mobile, picCode, purpose);
+        return successCreated();
     }
 
     /**
-     * 根据编号查询验证码
+     * 校验手机验证码
      *
-     * @param id         ID
-     * @param verifyCode 验证码
+     * @param id      ID
+     * @param smsCode 手机验证码
      * @return
      */
-    @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)
-    public Result getVerifyCode(@PathVariable Long id, @RequestParam String verifyCode) {
+    @RequestMapping(value = "verifySmsCode/{id}", method = RequestMethod.GET)
+    public Result verifySmsCode(@PathVariable Long id, @RequestParam String smsCode) {
         VerifyCodeBO verifyCodeBO = verifyCodeService.getVerifyCodeById(id);
         if (verifyCodeBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        if (!verifyCodeBO.getCode().equals(verifyCode)) {
+        if (!verifyCodeBO.getCode().equals(smsCode)) {
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        return successGet();
+    }
+
+    /**
+     * 校验图形验证码
+     *
+     * @param mobile  手机号码
+     * @param picCode 图形验证码
+     * @return
+     */
+    @RequestMapping(value = "verifyPicCode/{mobile}", method = RequestMethod.GET)
+    public Result verifyPicCode(@PathVariable String mobile, @RequestParam String picCode) {
+        VerifyCodeBO verifyCodeBO = verifyCodeService.getLastPicVerifyCode(mobile);
+        if (verifyCodeBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (!verifyCodeBO.getCode().equals(picCode)) {
             return successGet(ResultCode.VERIFY_PIC_CODE_FAIL);
         }
         return successGet();

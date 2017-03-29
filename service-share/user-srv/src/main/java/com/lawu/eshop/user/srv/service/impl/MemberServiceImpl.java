@@ -2,7 +2,9 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserStatusConstant;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
+import com.lawu.eshop.user.constants.UserSexEnum;
+import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
@@ -125,7 +127,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void register(RegisterParam registerParam) {
+    public void register(RegisterParam registerParam,UserInviterTypeEnum inviterType) {
         //推荐人id
         long invitedUserId = 0;
         if (registerParam.getInviterId() != null) {
@@ -137,16 +139,12 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setAccount(registerParam.getAccount());
         memberDO.setPwd(MD5.MD5Encode(registerParam.getPwd()));
         memberDO.setMobile(registerParam.getAccount());
-        memberDO.setSex(UserCommonConstant.SEX_SECRET);
-        memberDO.setStatus(UserStatusConstant.MEMBER_STATUS_VALID);
+        memberDO.setSex(UserSexEnum.SEX_SECRET.val);
+        memberDO.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        memberDO.setInviterId(invitedUserId);
+        memberDO.setInviterType(inviterType.val);
         memberDO.setLevel(UserCommonConstant.LEVEL_1);
         memberDO.setGmtCreate(new Date());
-        if (registerParam.getInviterId() != null) {
-            memberDO.setInviterId(registerParam.getInviterId());
-        }
-        if (registerParam.getInviterType() != null) {
-            memberDO.setInviterType(registerParam.getInviterType());
-        }
         memberDOMapper.insertSelective(memberDO);
         long memberId = memberDO.getId();
 
@@ -163,7 +161,7 @@ public class MemberServiceImpl implements MemberService {
         inviteRelationDO.setUserId(memberId);
         inviteRelationDO.setInvitedUserId(memberId);
         inviteRelationDO.setDepth(0);
-        inviteRelationDO.setType(UserCommonConstant.INVITER_TYPE_MEMBER);
+        inviteRelationDO.setType(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val);
         inviteRelationDOMapper.insert(inviteRelationDO);
         if (invitedUserId > 0) {
             //查询推荐人推荐关系
@@ -203,7 +201,7 @@ public class MemberServiceImpl implements MemberService {
                     } else if (inviteCount >= UserCommonConstant.LEVEL_2_FANS_CNT) {
                         level = UserCommonConstant.LEVEL_2;
                     }
-                    if (inviteRelationDO1.getType() == UserCommonConstant.INVITER_TYPE_MEMBER) {
+                    if (inviteRelationDO1.getType() == UserInviterTypeEnum.INVITER_TYPE_MEMBER.val) {
                         memberDO = new MemberDO();
                         memberDO.setLevel(level);
                         memberDO.setId(inviteRelationDO1.getUserId());
@@ -217,11 +215,11 @@ public class MemberServiceImpl implements MemberService {
 
                     //查询推荐会员总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MEMBER).andDepthBetween(1, 3);
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthBetween(1, 3);
                     int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
                     //查询推荐商户总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserCommonConstant.INVITER_TYPE_MERCHANT).andDepthBetween(1, 3);
+                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthBetween(1, 3);
                     int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
                     //更新会员扩展信息
                     memberProfileDO = new MemberProfileDO();

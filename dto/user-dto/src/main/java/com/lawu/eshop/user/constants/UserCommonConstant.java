@@ -17,31 +17,6 @@ public class UserCommonConstant {
     public static final String MERCHANT_NUM_TAG = "B";
 
     /**
-     * 男
-     */
-    public static final byte SEX_MALE = 0;
-
-    /**
-     * 女
-     */
-    public static final byte SEX_FEMALE = 2;
-
-    /**
-     * 保密
-     */
-    public static final byte SEX_SECRET = 1;
-
-    /**
-     * 会员推荐
-     */
-    public static final byte INVITER_TYPE_MEMBER = 1;
-
-    /**
-     * 商户推荐
-     */
-    public static final byte INVITER_TYPE_MERCHANT = 2;
-
-    /**
      * LEVEL_1
      */
     public static final int LEVEL_1 = 1;

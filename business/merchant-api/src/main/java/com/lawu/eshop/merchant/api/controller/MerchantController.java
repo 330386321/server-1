@@ -12,6 +12,7 @@ import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -81,19 +82,21 @@ public class MerchantController extends BaseController {
         return merchantService.getInviterByAccount(account);
     }
 
-    @ApiOperation(value = "注册", notes = "商户注册。[1009|1012] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "商户注册。[1012|1013] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result getInviterByAccount(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+    @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
+    public Result getInviterByAccount(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
+                                      @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam,
+                                      UserInviterTypeEnum inviterType) {
         Result accountResult = merchantService.getMerchantByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
             return failCreated(ResultCode.RECORD_EXIST);
         }
-        Result smsResult = smsRecordService.verifySmsRecord(registerParam.getSmsId(), registerParam.getSmsCode());
+        Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return failCreated(ResultCode.VERIFY_PWD_FAIL);
+            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        return merchantService.register(registerParam);
+        return merchantService.register(registerParam, inviterType);
     }
 
     @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。(梅述全)", httpMethod = "GET")
@@ -105,28 +108,27 @@ public class MerchantController extends BaseController {
         return merchantService.getMerchantByAccount(account);
     }
 
-    @ApiOperation(value = "发送短信", notes = "发送短信。[1000|1001|1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1000|1001|1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
-                          @RequestParam @ApiParam(required = true, value = "短信类型") Integer type,
-                          @RequestParam @ApiParam(required = true, value = "验证码ID") Long verifyCodeId) {
-        Result result = verifyCodeService.verifyPicCode(verifyCodeId);
+                          @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
+                          VerifyCodePurposeEnum purpose) {
+        Result result = verifyCodeService.verifyPicCode(mobile, picCode);
         if (!isSuccess(result)) {
             return failCreated(ResultCode.VERIFY_PIC_CODE_FAIL);
         }
         String ip = IpUtil.getIpAddress(getRequest());
-        return smsRecordService.sendSms(mobile, ip, type);
+        return smsRecordService.sendSms(mobile, ip, purpose);
     }
 
-    @ApiOperation(value = "获取验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getVerifyCode/{mobile}", method = RequestMethod.GET)
-    public void getVerifyCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
+    public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
         BufferedImage buffImg = new BufferedImage(60, 20, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffImg.createGraphics();
-        String verifyCode = VerifyCodeUtil.getVerifyCode(g);
-        Result result = verifyCodeService.saveVerifyCode(mobile, verifyCode, purpose);
+        String picCode = VerifyCodeUtil.getVerifyCode(g);
+        verifyCodeService.savePicCode(mobile, picCode, purpose);
 
         HttpServletResponse response = getResponse();
         response.setHeader("Pragma", "no-cache");

@@ -1,21 +1,16 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
+import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Leach
@@ -36,6 +31,7 @@ public interface MemberService {
 
     /**
      * 会员资料查询
+     *
      * @param memberId 会员id
      * @return
      */
@@ -44,10 +40,11 @@ public interface MemberService {
 
     /**
      * 会员资料修改
+     *
      * @param memberParam 会员信息
      */
     @RequestMapping(method = RequestMethod.PUT, value = "member/updateMemberInfo/{id}")
-    Result updateMemberInfo(@ModelAttribute UserParam memberParam,@PathVariable("id")  Long id);
+    Result updateMemberInfo(@ModelAttribute UserParam memberParam, @PathVariable("id") Long id);
 
     /**
      * 修改密码
@@ -62,12 +59,13 @@ public interface MemberService {
 
     /**
      * 查询我的E友
+     *
+     * @return
      * @author zhangrc
      * @date 2017/03/23
-     * @return
      */
-    @RequestMapping(method = RequestMethod.POST,value = "member/findMemberListByUser")
-    Result<Page<MemberDTO>> findMemberListByUser(@RequestParam("userId") Long id,@RequestBody MemberQuery query );
+    @RequestMapping(method = RequestMethod.POST, value = "member/findMemberListByUser")
+    Result<Page<MemberDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query);
 
 
     /**
@@ -82,13 +80,15 @@ public interface MemberService {
      * 会员注册
      *
      * @param registerParam 会员注册信息
+     * @param inviterType   邀请类型
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/register")
-    Result register(@ModelAttribute RegisterParam registerParam);
+    Result register(@ModelAttribute RegisterParam registerParam, @RequestParam("inviterType") UserInviterTypeEnum inviterType);
 
     /**
      * 根据账号查询会员信息
-     * @param account   会员账号
+     *
+     * @param account 会员账号
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")

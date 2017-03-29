@@ -1,16 +1,19 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.constants.SmsRecordConstant;
+import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
-import com.lawu.eshop.mall.srv.converter.SmsRecordConverter;
 import com.lawu.eshop.mall.srv.domain.SmsRecordDO;
 import com.lawu.eshop.mall.srv.domain.SmsRecordDOExample;
+import com.lawu.eshop.mall.srv.domain.VerifyCodeDO;
 import com.lawu.eshop.mall.srv.mapper.SmsRecordDOMapper;
+import com.lawu.eshop.mall.srv.mapper.VerifyCodeDOMapper;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
 import com.lawu.eshop.utils.DateUtil;
+import constants.SmsConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,6 +32,9 @@ public class SmsRecordServiceImpl implements SmsRecordService {
     @Autowired
     private SmsRecordDOMapper smsRecordDOMapper;
 
+    @Autowired
+    private VerifyCodeDOMapper verifyCodeDOMapper;
+
     @Override
     public int verifySendSms(String mobile, String ip) throws ParseException {
         DateFormat dfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -37,7 +43,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         String startDate = date + ":00:00";
         String endDate = date + ":59:59";
         SmsRecordDOExample smsRecordDOExample = new SmsRecordDOExample();
-        smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsRecordConstant.SMS_SEND_SUCCESS);
+        smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
         long hourCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
         if (hourCount >= 2) {
             return ResultCode.SMS_SEND_HOUR_LIMIT;
@@ -48,7 +54,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         endDate = date + " 23:59:59";
         if (ip != null) {
             smsRecordDOExample = new SmsRecordDOExample();
-            smsRecordDOExample.createCriteria().andIpEqualTo(ip).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsRecordConstant.SMS_SEND_SUCCESS);
+            smsRecordDOExample.createCriteria().andIpEqualTo(ip).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
             long ipCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
             if (ipCount >= 5) {
                 return ResultCode.SMS_SEND_IP_LIMIT;
@@ -56,40 +62,49 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         }
 
         smsRecordDOExample = new SmsRecordDOExample();
-        smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsRecordConstant.SMS_SEND_SUCCESS);
+        smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
         long dayCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
         if (dayCount >= 5) {
             return ResultCode.SMS_SEND_MOBILE_LIMIT;
         }
-        return SmsRecordConstant.SMS_SEND_CODE;
+        return ResultCode.SUCCESS;
     }
 
     @Override
-    public Long saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode) {
+    @Transactional
+    public SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode, int errorCode) {
+        //插入短信记录
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setMobile(mobile);
-        smsRecordDO.setContent(SmsRecordConstant.SMS_TEMPLATE.replace("{smsCode}", smsCode));
+        smsRecordDO.setContent(SmsConstant.SMS_TEMPLATE.replace("{smsCode}", smsCode));
         smsRecordDO.setIp(ip);
-        smsRecordDO.setType(type);
-        smsRecordDO.setIsSuccess(SmsRecordConstant.SMS_SEND_FAIL);
+        smsRecordDO.setType(purpose.val);
+        smsRecordDO.setIsSuccess(SmsConstant.SMS_SEND_FAIL);
         smsRecordDO.setFailReason(ResultCode.get(errorCode));
         smsRecordDO.setGmtCreate(new Date());
         smsRecordDOMapper.insertSelective(smsRecordDO);
-        return smsRecordDO.getId();
+
+        //插入验证码记录
+        VerifyCodeDO verifyCodeDO = new VerifyCodeDO();
+        verifyCodeDO.setMobile(mobile);
+        verifyCodeDO.setCode(smsCode);
+        verifyCodeDO.setPurpose(purpose.val);
+        verifyCodeDO.setGmtCreate(new Date());
+        verifyCodeDOMapper.insertSelective(verifyCodeDO);
+
+        SmsRecordBO smsRecordBO = new SmsRecordBO();
+        smsRecordBO.setId(smsRecordDO.getId());
+        smsRecordBO.setVirifyCodeId(verifyCodeDO.getId());
+        return smsRecordBO;
     }
 
     @Override
-    public void updateSmsRecordSuccess(Long id) {
+    public void updateSmsRecordResult(Long id, Boolean isSuccess, String failReason) {
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setId(id);
-        smsRecordDO.setIsSuccess(SmsRecordConstant.SMS_SEND_SUCCESS);
+        smsRecordDO.setIsSuccess(isSuccess);
+        smsRecordDO.setFailReason(failReason);
         smsRecordDOMapper.updateByPrimaryKeySelective(smsRecordDO);
-    }
-
-    @Override
-    public SmsRecordBO getSmsRecordById(Long id) {
-        SmsRecordDO smsRecordDO = smsRecordDOMapper.selectByPrimaryKey(id);
-        return smsRecordDO == null ? null : SmsRecordConverter.convertBO(smsRecordDO);
     }
 
 }

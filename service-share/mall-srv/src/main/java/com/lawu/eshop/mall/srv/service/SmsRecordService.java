@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.service;
 
+import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
 
 import java.text.ParseException;
@@ -27,26 +28,20 @@ public interface SmsRecordService {
      *
      * @param mobile    手机号码
      * @param ip        IP
-     * @param type      短信类型
+     * @param purpose   短信类型
      * @param smsCode   短信码
      * @param errorCode 验证发送短信错误码
      * @return
      */
-    Long saveSmsRecord(String mobile, String ip, byte type, String smsCode, int errorCode);
+    SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode, int errorCode);
 
     /**
      * 更新短信发送成功
      *
-     * @param id ID
+     * @param id         ID
+     * @param isSuccess  发送结果
+     * @param failReason 失败原因
      */
-    void updateSmsRecordSuccess(Long id);
-
-    /**
-     * 根据ID查询短信记录
-     *
-     * @param id ID
-     * @return
-     */
-    SmsRecordBO getSmsRecordById(Long id);
+    void updateSmsRecordResult(Long id, Boolean isSuccess, String failReason);
 
 }
