@@ -94,4 +94,13 @@ public interface MemberService {
     @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
     Result getMemberByAccount(@PathVariable("account") String account);
 
+    /**
+     * 修改头像
+     * @param mermberId
+     * @param headimg
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "member/saveHeadImage/{memberId}")
+    Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam String headimg);
+
 }

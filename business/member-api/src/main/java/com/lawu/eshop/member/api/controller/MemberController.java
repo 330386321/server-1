@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.SmsRecordDTO;
@@ -28,13 +29,20 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import util.UploadFileUtil;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author zhangyong on 2017/3/22.
@@ -171,6 +179,39 @@ public class MemberController extends BaseController {
         ServletOutputStream sos = response.getOutputStream();
         ImageIO.write(buffImg, "jpeg", sos);
         sos.close();
+    }
+
+    @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "saveHeadImage", method = RequestMethod.PUT)
+    public Result saveHeadImage(){
+        HttpServletRequest request = getRequest();
+        Long memberId = UserUtil.getCurrentUserId(request);
+        String headImg = "";
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        if(multipartResolver.isMultipart(request)){
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
+            Iterator<String> iter = multiRequest.getFileNames();
+            if(iter.hasNext()){
+                while(iter.hasNext()){
+                    MultipartFile file = multiRequest.getFile(iter.next());
+                    if(file != null){
+                        String originalFilename = file.getOriginalFilename();
+                        String fieldName = file.getName();
+                        String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
+                        prefix = prefix.toLowerCase();
+                        Map<String, String> retMap = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_HEAD);
+                        String resultFlag = retMap.get("resultFlag");
+                        if(!"0".equals(resultFlag)){
+                            return successCreated(resultFlag);
+                        }
+                        headImg = retMap.get("imgUrl");
+                    }
+                }
+            }
+           return  memberService.saveHeadImage(memberId,headImg);
+        }
+        return  successCreated();
     }
 }
 
