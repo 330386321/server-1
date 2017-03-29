@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.service;
 
-import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
+import java.math.BigDecimal;
+
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 
 /**
@@ -34,6 +35,13 @@ public interface PropertyInfoService {
      * @param userNum 用户编号
      * @return
      */
-    PropertyBalanceBO getPropertyBalanceByUserNum(String userNum);
-
+    BigDecimal getPropertyBalanceByUserNum(String userNum);
+    
+    /**
+     * 根据用户编号查询积分
+     * 
+     * @param userNo 用户编号
+     * @return
+     */
+    Integer getPropertyPointByUserNum(String userNum);
 }

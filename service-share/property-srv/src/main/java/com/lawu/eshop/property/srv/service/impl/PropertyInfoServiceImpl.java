@@ -1,18 +1,18 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
-import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.converter.PropertyInfoConverter;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -45,7 +45,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
     }
 
     @Override
-    public PropertyBalanceBO getPropertyBalanceByUserNum(String userNum) {
+    public BigDecimal getPropertyBalanceByUserNum(String userNum) {
         PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
         propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
         List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
@@ -54,6 +54,19 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
             return null;
         }
 
-        return PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
+        return propertyInfoDOS.get(0).getBalance();
     }
+    
+    @Override
+	public Integer getPropertyPointByUserNum(String userNum) {
+		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+
+		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+			return null;
+		}
+		
+		return propertyInfoDOS.get(0).getPoint();
+	}
 }

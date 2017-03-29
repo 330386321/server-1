@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,6 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
-import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,9 +34,9 @@ public class PropertyInfoController extends BaseController {
     
     @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[1000]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "propertyBalance", method = RequestMethod.GET)
-    public Result<PropertyBalanceDTO> getPropertyBalance(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token*/) {
+    public Result<BigDecimal> getPropertyBalance(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyBalance(userNum));
     }

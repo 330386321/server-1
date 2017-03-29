@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
-import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
 
@@ -53,7 +53,18 @@ public class PropertyInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "propertyBalance/{userNum}", method = RequestMethod.GET)
-    public Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum) {
-        return successCreated(PropertyBalanceConverter.convert(propertyInfoService.getPropertyBalanceByUserNum(userNum)));
+    public Result<BigDecimal> getPropertyBalance(@PathVariable("userNum") String userNum) {
+        return successCreated(propertyInfoService.getPropertyBalanceByUserNum(userNum));
+    }
+    
+    /**
+     * 根据用户编号获取用户积分
+     *
+     * @param userNo 用户编号
+     * @return
+     */
+    @RequestMapping(value = "propertyPoint/{userNum}", method = RequestMethod.GET)
+    public Result<Integer> getPropertyPoint(@PathVariable("userNum") String userNum) {
+        return successCreated(propertyInfoService.getPropertyPointByUserNum(userNum));
     }
 }

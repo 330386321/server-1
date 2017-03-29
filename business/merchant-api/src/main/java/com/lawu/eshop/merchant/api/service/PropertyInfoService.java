@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 
 /**
  * @author meishuquan
@@ -35,5 +36,5 @@ public interface PropertyInfoService {
      * @return
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)
-    Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum);
+    Result<BigDecimal> getPropertyBalance(@PathVariable("userNum") String userNum);
 }

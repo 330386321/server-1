@@ -16,7 +16,6 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.TransactionDetailService;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryParam;
@@ -40,9 +39,9 @@ public class TransactionDetailController extends BaseController {
     
     @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[1000]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "findPageByUserNum", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailDTO>> page(//@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
+    public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
     		@RequestParam(name = "transactionType", required = false) @ApiParam(name = "transactionType", value = "交易类型") MerchantTransactionTypeEnum transactionType, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") TransactionDetailQueryParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
