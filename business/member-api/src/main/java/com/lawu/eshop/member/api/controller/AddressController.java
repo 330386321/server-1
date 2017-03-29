@@ -36,9 +36,9 @@ public class AddressController extends BaseController {
      * @audit  sunlinqing 2016.03.29
      */
     @Authorization
-    @ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息[]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "收货地址信息查询", notes = "查询当前用户收货地址列表信息[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "currentUser", method = RequestMethod.GET)
+    @RequestMapping(value = "list", method = RequestMethod.GET)
     public Result<List<AddressDTO>> selectAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         Result<List<AddressDTO>> addressDTOS = addressService.selectAddress(userId);
