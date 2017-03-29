@@ -20,7 +20,7 @@ public class AddressParam implements Serializable{
 	@ApiParam (name="mobile",required = true, value = "电话")
 	private String mobile;
 
-	@ApiParam (name="regionPath",required = true, value = "地址 格式: 1000/1001 ")
+	@ApiParam (name="regionPath",required = true, value = "地址 格式: 省id/市id/区id")
 	private String regionPath;
 
 	@ApiParam (name="addr",required = true, value = "详细地址")
