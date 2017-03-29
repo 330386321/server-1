@@ -34,5 +34,5 @@ public interface PropertyInfoService {
      * @return
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)
-    Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable String userNum);
+    Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum);
 }
