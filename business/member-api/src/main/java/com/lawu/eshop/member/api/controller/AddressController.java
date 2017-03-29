@@ -62,7 +62,7 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result<AddressDTO> get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result<AddressDTO> addressDTO=addressService.get(id);
 		return addressDTO;
     }
@@ -75,7 +75,7 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "删除收货地址", notes = "删除收货地址[1000|1001|1002]（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs=addressService.delete(id);
 		return rs;
     }
