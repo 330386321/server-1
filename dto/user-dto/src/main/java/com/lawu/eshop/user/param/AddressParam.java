@@ -26,7 +26,7 @@ public class AddressParam implements Serializable{
 	@ApiParam (name="addr",required = true, value = "详细地址")
 	private String addr;
 
-	@ApiParam (name="postcode",required = true, value = "邮箱")
+	@ApiParam (name="postcode",required = true, value = "邮编")
 	private String postcode;
 
 
