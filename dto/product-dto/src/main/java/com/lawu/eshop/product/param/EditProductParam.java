@@ -31,26 +31,32 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品型号信息", required = true)
 	private String spec;
 	
-	@ApiModelProperty(value = "特征图片url(新增时为空)", required = false)
-	private String featureImageStr;
+	@ApiModelProperty(value = "特征图片url(新增时必填)", required = false)
+	private String featureImage;
 	
-	@ApiModelProperty(value = "商品图片(新增时为空)", required = false)
-	private String iamgeStr;
+	@ApiModelProperty(value = "商品图片url，如果存在多张提交key为productIamge-*(新增时必填)", required = false)
+	private String productIamge;
 	
-	public String getFeatureImageStr() {
-		return featureImageStr;
+	@ApiModelProperty(value = "修改时回显的特征图片url(新增时为空)", required = false)
+	private String backFeatureImageUrls;
+	
+	@ApiModelProperty(value = "修改时回显的商品图片(新增时为空)", required = false)
+	private String backProductIamgeUrls;
+	
+	public String getBackFeatureImageUrls() {
+		return backFeatureImageUrls;
 	}
 
-	public void setFeatureImageStr(String featureImageStr) {
-		this.featureImageStr = featureImageStr;
+	public void setBackFeatureImageUrls(String backFeatureImageUrls) {
+		this.backFeatureImageUrls = backFeatureImageUrls;
 	}
 
-	public String getIamgeStr() {
-		return iamgeStr;
+	public String getBackProductIamgeUrls() {
+		return backProductIamgeUrls;
 	}
 
-	public void setIamgeStr(String iamgeStr) {
-		this.iamgeStr = iamgeStr;
+	public void setBackProductIamgeUrls(String backProductIamgeUrls) {
+		this.backProductIamgeUrls = backProductIamgeUrls;
 	}
 
 	public Long getMerchantId() {
@@ -99,6 +105,22 @@ public class EditProductParam {
 
 	public void setSpec(String spec) {
 		this.spec = spec;
+	}
+
+	public String getFeatureImage() {
+		return featureImage;
+	}
+
+	public void setFeatureImage(String featureImage) {
+		this.featureImage = featureImage;
+	}
+
+	public String getProductIamge() {
+		return productIamge;
+	}
+
+	public void setProductIamge(String productIamge) {
+		this.productIamge = productIamge;
 	}
 
 }

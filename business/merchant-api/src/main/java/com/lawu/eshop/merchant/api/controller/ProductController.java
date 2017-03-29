@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +22,8 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
@@ -34,6 +37,7 @@ import com.lawu.eshop.product.query.ProductQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import util.UploadFileUtil;
 
 /**
  * @author Yangqh
@@ -82,40 +86,71 @@ public class ProductController extends BaseController {
     	
     }
     
-    @SuppressWarnings({ "rawtypes", "unused" })
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[]，（杨清华）", httpMethod = "POST")
+    @SuppressWarnings({ "rawtypes" })
+	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000]，（杨清华）", httpMethod = "POST")
     @Authorization
-    @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@ModelAttribute @ApiParam EditProductParam product,HttpServletRequest request) {
+    @RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
+    public Result saveProduct(@PathVariable @ApiParam(required = true, value = "商品ID") Long productId, 
+    						  @ModelAttribute @ApiParam EditProductParam product) {
     	
-    	StringBuffer iamgeSb = new StringBuffer();
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());  
+    	StringBuffer featureImageStr = new StringBuffer();
+    	StringBuffer productImageStr = new StringBuffer();
+    	HttpServletRequest request = getRequest();
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+		if((productId == null || productId == 0L || productId < 0) && !multipartResolver.isMultipart(request)){
+			return successCreated(ResultCode.IMAGE_IS_NULL);
+		}
         if(multipartResolver.isMultipart(request)){
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;  
             Iterator<String> iter = multiRequest.getFileNames();
-            if(iter.hasNext()){
-            	while(iter.hasNext()){
-                    MultipartFile file = multiRequest.getFile(iter.next());
-                    if(file != null){
-                        String originalFilename = file.getOriginalFilename();
-                        String fieldName = file.getName();
-                    	String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
-                    	prefix = prefix.toLowerCase();
-                    	Map<String, String> retMap = null;//uploadService.uploadOnePic(request, file, FileDirConstant.DIR_PRODUCT);
-                    	String resultFlag = retMap.get("resultFlag");
-                    	if(!"0".equals(resultFlag)){
-                    		return successCreated(resultFlag);	
-                    	}
-                    	
-                    }
+        	while(iter.hasNext()){
+                MultipartFile file = multiRequest.getFile(iter.next());
+                if(file != null){
+                    String originalFilename = file.getOriginalFilename();
+                    String fieldName = file.getName();
+                	String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
+                	prefix = prefix.toLowerCase();
+                	Map<String, String> retMap =  UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_PRODUCT);
+                	String resultFlag = retMap.get("resultFlag");
+                	if(!"0".equals(resultFlag)){
+                		return successCreated(resultFlag);	
+                	}
+                	
+                	String imgUrl = retMap.get("imgUrl");
+                	if(fieldName.contains("featureImage")){
+                		featureImageStr.append(imgUrl).append(",");
+                	}else if(fieldName.contains("productIamge")){
+                		productImageStr.append(imgUrl).append(",");
+                	}
                 }
             }
         }
-        
+        String featureImage = "";
+        String productImage = "";
+        if(productId == null || productId == 0L || productId < 0){
+        	featureImage = featureImageStr.toString();
+        	productImage = productImageStr.toString();
+        	if("".equals(productImage)){
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT);
+        	}
+        	if("".equals(featureImage)){
+        		featureImage = productImage.split(",")[0];
+        	}
+        }else{
+        	if("".equals(product.getBackProductIamgeUrls()) && "".equals(productImage)){
+        		return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT);
+        	}
+        	if(!"".equals(product.getBackProductIamgeUrls())){
+        		productImage = product.getBackProductIamgeUrls() + "," + productImage;
+        	}
+        }
+    	productImage = productImage.substring(0, productImage.lastIndexOf(","));
         
     	EditDataProductParam dataParam = new EditDataProductParam();
     	
     	return productService.saveProduct(dataParam);
     	
     }
+    
+    
 }

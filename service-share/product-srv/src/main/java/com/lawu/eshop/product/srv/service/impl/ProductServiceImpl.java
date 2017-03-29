@@ -211,7 +211,7 @@ public class ProductServiceImpl implements ProductService {
 	public void eidtProduct(Long productId, EditDataProductParam product) {
 		
 		boolean isEdit = true;
-		if(productId == 0L || productId == null){
+		if(productId == 0L || productId == null || productId < 0){
 			//保存商品信息
 			ProductDO productDO = ProductConverter.convertDO(product,0L);
 			productDOMapper.insert(productDO);

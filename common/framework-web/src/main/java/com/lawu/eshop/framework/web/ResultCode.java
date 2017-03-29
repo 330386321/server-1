@@ -30,6 +30,7 @@ public class ResultCode {
     public static final int VERIFY_PIC_CODE_FAIL = 1014;
     public static final int IMAGE_SIZE_ERROR = 1015;
     public static final int VERIFY_FAIL = 1016;
+    public static final int IMAGE_IS_NULL = 1017;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -41,6 +42,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
     
     // 商品模块代码 3xxx
+    public static final int IMAGE_WRONG_UPLOAD_PRODUCT = 3000;
     
     // 订单模块代码 4xxx
     
@@ -66,6 +68,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
         ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
         ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
+        ResultCode.messageMap.put(IMAGE_IS_NULL, "请上传图片");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
@@ -85,7 +88,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
 
         // 商品模块 3xxx
-        
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT, "请上传商品图片");
         
         // 订单模块 4xxx
 
