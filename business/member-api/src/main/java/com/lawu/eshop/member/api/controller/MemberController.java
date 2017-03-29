@@ -160,7 +160,7 @@ public class MemberController extends BaseController {
     }
 
     // TODO 2016.03.29 性别用枚举，该接口请放入InviterController
-    @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
+    //@ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getMember", method = RequestMethod.GET)
