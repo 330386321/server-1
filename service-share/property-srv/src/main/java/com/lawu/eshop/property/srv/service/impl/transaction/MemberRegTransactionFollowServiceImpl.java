@@ -1,8 +1,8 @@
-package com.lawu.eshop.mall.srv.service.impl.transaction;
+package com.lawu.eshop.property.srv.service.impl.transaction;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
-import com.lawu.eshop.mall.srv.bo.RegNotification;
+import com.lawu.eshop.property.srv.bo.RegNotification;
 import org.springframework.stereotype.Service;
 
 /**
