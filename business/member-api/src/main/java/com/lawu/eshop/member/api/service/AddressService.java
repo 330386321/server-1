@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.member.api.service.hystrix.AddressServiceHystrix;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
 
@@ -17,7 +16,7 @@ import com.lawu.eshop.user.param.AddressParam;
  * @date 2017/03/22
  *
  */
-@FeignClient(value= "user-srv" , fallback = AddressServiceHystrix.class)
+
 public interface AddressService {
 	
 	/**
