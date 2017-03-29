@@ -1,13 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -15,6 +7,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.SmsRecordDTO;
 import com.lawu.eshop.member.api.service.MemberService;
@@ -29,11 +22,12 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.utils.IpUtil;
 import com.lawu.eshop.utils.VerifyCodeUtil;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -86,7 +80,8 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+    public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         long id=UserUtil.getCurrentUserId(getRequest());
         return memberService.updateLoginPwd(id, originalPwd, newPwd);
@@ -96,7 +91,8 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
-    public Result updatePayPwd(@PathVariable @ApiParam(required = true, value = "会员编号") String userNo,
+    public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                               @PathVariable @ApiParam(required = true, value = "会员编号") String userNo,
                                @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
@@ -136,8 +132,10 @@ public class MemberController extends BaseController {
 
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
     @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
-    public Result<MemberDTO> getMemberByAccount(@PathVariable @ApiParam(required = true, value = "会员账号") String account) {
+    public Result<MemberDTO> getMemberByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                @PathVariable @ApiParam(required = true, value = "会员账号") String account) {
         return memberService.getMemberByAccount(account);
     }
 

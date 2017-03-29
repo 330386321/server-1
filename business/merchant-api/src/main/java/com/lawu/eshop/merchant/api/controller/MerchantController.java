@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
@@ -55,7 +56,8 @@ public class MerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+    public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                  @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         long id= UserUtil.getCurrentUserId(getRequest());
         return merchantService.updateLoginPwd(id, originalPwd, newPwd);
@@ -65,7 +67,8 @@ public class MerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
-    public Result updatePayPwd(@PathVariable @ApiParam(required = true, value = "商户编号") String userNo,
+    public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                               @PathVariable @ApiParam(required = true, value = "商户编号") String userNo,
                                @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
                                @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
@@ -73,6 +76,7 @@ public class MerchantController extends BaseController {
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
     @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return merchantService.getInviterByAccount(account);
@@ -96,7 +100,8 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
-    public Result<MerchantDTO> getMerchantByAccount(@PathVariable @ApiParam(required = true, value = "商户账号") String account) {
+    public Result<MerchantDTO> getMerchantByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                    @PathVariable @ApiParam(required = true, value = "商户账号") String account) {
         return merchantService.getMerchantByAccount(account);
     }
 
