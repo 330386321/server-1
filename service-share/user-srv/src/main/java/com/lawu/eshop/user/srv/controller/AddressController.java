@@ -72,7 +72,7 @@ public class AddressController extends BaseController{
 	 * 修改地址
 	 * @return
 	 */
-   @RequestMapping(value = "update", method = RequestMethod.POST)
+   @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
    public Result update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
 	   Integer i=addressService.update(addressParam,id);
 	   if(i>0){
