@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.srv.bo;
+package com.lawu.eshop.property.srv.bo;
 
 import com.lawu.eshop.compensating.transaction.Notification;
 

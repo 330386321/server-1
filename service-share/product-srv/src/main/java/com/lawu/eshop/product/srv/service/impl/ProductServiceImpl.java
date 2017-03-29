@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
@@ -67,7 +67,8 @@ public class ProductServiceImpl implements ProductService {
 		for(ProductDO productDO : productDOS){
 			
 			modelExample = new ProductModelDOExample();
-			modelExample.createCriteria().andProductIdEqualTo(productDO.getId());
+			modelExample.createCriteria().andProductIdEqualTo(productDO.getId())
+									     .andStatusEqualTo(true);
 			//查询商品型号
 			List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
 			List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
@@ -208,13 +209,13 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void eidtProduct(Long productId, EditDataProductParam product) {
+	public void eidtProduct(Long productId, EditProductDataParam product) {
 		
 		boolean isEdit = true;
 		if(productId == 0L || productId == null || productId < 0){
 			//保存商品信息
 			ProductDO productDO = ProductConverter.convertDO(product,0L);
-			productDOMapper.insert(productDO);
+			productDOMapper.insertSelective(productDO);
 			productId = productDO.getId();
 			isEdit = false;
 		}else{
@@ -260,7 +261,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		//保存商品图片信息
 		ProductImageDO pcDO = null;
-		String imageUrl = product.getImageUrl();
+		String imageUrl = product.getProductImage();
 		String []imageUrls = imageUrl.split(",");
 		for(int i = 0 ; i < imageUrls.length ; i++){
 			pcDO = new ProductImageDO();

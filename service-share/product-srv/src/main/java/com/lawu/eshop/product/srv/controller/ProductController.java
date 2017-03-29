@@ -18,7 +18,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
@@ -124,7 +124,7 @@ public class ProductController extends BaseController{
      */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@RequestParam Long productId ,@RequestBody EditDataProductParam product){
+    public Result saveProduct(@RequestParam Long productId ,@RequestBody EditProductDataParam product){
     	productService.eidtProduct(productId,product);
     	return successCreated(ResultCode.SUCCESS);
     }
