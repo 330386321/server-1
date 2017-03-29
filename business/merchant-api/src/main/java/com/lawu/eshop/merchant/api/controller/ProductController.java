@@ -29,7 +29,7 @@ import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
@@ -87,10 +87,11 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings({ "rawtypes" })
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000]，（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000|1000]，（杨清华）", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
-    public Result saveProduct(@PathVariable @ApiParam(required = true, value = "商品ID") Long productId, 
+    public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    						  @PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId, 
     						  @ModelAttribute @ApiParam EditProductParam product) {
     	
     	StringBuffer featureImageStr = new StringBuffer();
@@ -146,9 +147,18 @@ public class ProductController extends BaseController {
         }
     	productImage = productImage.substring(0, productImage.lastIndexOf(","));
         
-    	EditDataProductParam dataParam = new EditDataProductParam();
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	
-    	return productService.saveProduct(dataParam);
+    	EditProductDataParam dataProduct = new EditProductDataParam();
+    	dataProduct.setMerchantId(merchantId);
+    	dataProduct.setName(product.getName());
+    	dataProduct.setCategoryId(product.getCategoryId());
+    	dataProduct.setContent(product.getContent());
+    	dataProduct.setSpec(product.getSpec());
+    	dataProduct.setFeatureImage(featureImage);
+    	dataProduct.setProductImage(productImage);
+    	
+    	return productService.saveProduct(productId,dataProduct);
     	
     }
     

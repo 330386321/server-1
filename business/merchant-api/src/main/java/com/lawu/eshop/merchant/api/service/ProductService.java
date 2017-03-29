@@ -11,7 +11,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 
 /**
@@ -54,5 +54,5 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/saveProduct")
-	Result saveProduct(@RequestBody EditDataProductParam product);
+	Result saveProduct(@RequestParam("productId") Long productId,@RequestBody EditProductDataParam product);
 }

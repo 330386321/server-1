@@ -8,7 +8,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.param.EditDataProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -151,15 +151,15 @@ public class ProductConverter {
 	 * @param product
 	 * @return
 	 */
-	public static ProductDO convertDO(EditDataProductParam param,Long id) {
+	public static ProductDO convertDO(EditProductDataParam param,Long id) {
 		ProductDO productDO = new ProductDO();
 		productDO.setName(param.getName());
 		productDO.setCategoryId(param.getCategoryId());
 		productDO.setMerchantId(param.getMerchantId());
-		productDO.setName(param.getNum());
+//		productDO.setName(param.getNum());
 		productDO.setContent(param.getContent());
 		productDO.setFeatureImage(param.getFeatureImage());
-		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+//		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
 		if(id == 0L){
 			productDO.setGmtCreate(new Date());
 		}

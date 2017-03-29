@@ -13,14 +13,8 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class EditProductParam {
 
-	@ApiModelProperty(value = "商家ID", required = true)
-	private Long merchantId;
-
 	@ApiModelProperty(value = "商品类型ID", required = true)
 	private Integer categoryId;
-
-	@ApiModelProperty(value = "商品编号", required = true)
-	private String num;
 
 	@ApiModelProperty(value = "商品名称", required = true)
 	private String name;
@@ -28,19 +22,19 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品描述", required = true)
 	private String content;
 
-	@ApiModelProperty(value = "商品型号信息", required = true)
+	@ApiModelProperty(value = "商品型号信息[{name,originalPrice,price,inventory}]", required = true)
 	private String spec;
 	
-	@ApiModelProperty(value = "特征图片url(新增时必填)", required = false)
+	@ApiModelProperty(value = "特征图片url(新增、修改都非必填)", required = false)
 	private String featureImage;
 	
-	@ApiModelProperty(value = "商品图片url，如果存在多张提交key为productIamge-*(新增时必填)", required = false)
-	private String productIamge;
+	@ApiModelProperty(value = "商品图片url，如果存在多张提交key为productIamge-*(新增时必填，修改非必填)", required = false)
+	private String productImage;
 	
-	@ApiModelProperty(value = "修改时回显的特征图片url(新增时为空)", required = false)
+	@ApiModelProperty(value = "修改时回显的特征图片url(新增时传空)", required = false)
 	private String backFeatureImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的商品图片(新增时为空)", required = false)
+	@ApiModelProperty(value = "修改时回显的商品图片(新增时传空)", required = false)
 	private String backProductIamgeUrls;
 	
 	public String getBackFeatureImageUrls() {
@@ -59,28 +53,12 @@ public class EditProductParam {
 		this.backProductIamgeUrls = backProductIamgeUrls;
 	}
 
-	public Long getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(Long merchantId) {
-		this.merchantId = merchantId;
-	}
-
 	public Integer getCategoryId() {
 		return categoryId;
 	}
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
-	}
-
-	public String getNum() {
-		return num;
-	}
-
-	public void setNum(String num) {
-		this.num = num;
 	}
 
 	public String getName() {
@@ -115,12 +93,13 @@ public class EditProductParam {
 		this.featureImage = featureImage;
 	}
 
-	public String getProductIamge() {
-		return productIamge;
+	public String getProductImage() {
+		return productImage;
 	}
 
-	public void setProductIamge(String productIamge) {
-		this.productIamge = productIamge;
+	public void setProductImage(String productImage) {
+		this.productImage = productImage;
 	}
+
 
 }
