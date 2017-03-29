@@ -36,10 +36,11 @@ public class MemberProfileController extends BaseController{
 	
 	
 	/**
+	 * TODO 2016.03.29 返回值怎么包括E友、商家？该接口请移至InviterController
 	 * 我的E友总数量
 	 * @return
 	 */
-	@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[1000|1001]（张荣成）", httpMethod = "GET")
+	//@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[1000|1001]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
@@ -50,11 +51,12 @@ public class MemberProfileController extends BaseController{
     }
    
    /**
+	* TODO 2016.03.29 返回值怎么包括E友、商家？该接口请移至InviterController
     * 我的商家推荐总数量
     * @param id
     * @return
     */
-   @ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[1000|1001]（张荣成）", httpMethod = "GET")
+   //@ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[1000|1001]（张荣成）", httpMethod = "GET")
    @Authorization
    @ApiResponse(code = HttpCode.SC_OK, message = "success")
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)

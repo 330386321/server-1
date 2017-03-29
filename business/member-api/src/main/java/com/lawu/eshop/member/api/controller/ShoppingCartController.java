@@ -36,8 +36,9 @@ public class ShoppingCartController extends BaseController {
 
     @Autowired
     private ShoppingCartService shoppingCartService;
-    
-    @ApiOperation(value = "加入购物车", notes = "加入购物车。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+
+    // TODO 2016.03.29 加入购物车只需要一个商品型号ID，可以通过服务端查询的信息不要通过客户端传递。接口加上路径
+    //@ApiOperation(value = "加入购物车", notes = "加入购物车。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
@@ -45,8 +46,9 @@ public class ShoppingCartController extends BaseController {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	return successCreated(shoppingCartService.save(memberId, param));
     }
-    
-    @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1000|1004]（蒋鑫俊）", httpMethod = "GET")
+
+    // TODO 2016.03.29 不要把多余的信息返回给客户端。接口加上路径
+    //@ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1000|1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.GET)
@@ -54,7 +56,8 @@ public class ShoppingCartController extends BaseController {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	return successGet(shoppingCartService.findListByMemberId(memberId));
     }
-    
+
+    // TODO 2016.03.29 更新参数只需要商品型号ID和数量
     @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[100|1002|1003]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -63,7 +66,7 @@ public class ShoppingCartController extends BaseController {
     	return successCreated(shoppingCartService.update(id, parm));
     }
     
-    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1000|1002|1003]（蒋鑫俊）", httpMethod = "PUT")
+    //@ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1000|1002|1003]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)

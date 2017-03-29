@@ -31,7 +31,8 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
+    // TODO 2016.03.29 商品评价另外提供接口，与商品详情分开。
+    //@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
     @RequestMapping(value = "selectProductById/{productId}", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
     	

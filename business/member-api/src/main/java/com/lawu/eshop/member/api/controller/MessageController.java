@@ -31,7 +31,8 @@ public class MessageController extends BaseController {
     @Autowired
     private MessageService messageService;
 
-    @ApiOperation(value = "站内信息统计", notes = "根据用户编号获取站内未读信息统计 （章勇）", httpMethod = "GET")
+    // TODO 2016.03.29 类型用枚举
+    //@ApiOperation(value = "站内信息统计", notes = "根据用户编号获取站内未读信息统计 （章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     // @Authorization
     @RequestMapping(value = "getMessageStatistics", method = RequestMethod.GET)
@@ -41,7 +42,8 @@ public class MessageController extends BaseController {
         return messageService.getMessageStatistics(userNum);
     }
 
-    @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 （章勇）", httpMethod = "POST")
+    // TODO 2016.03.29 类型用枚举
+    //@ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 （章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     // @Authorization
     @RequestMapping(value = "getMessageList", method = RequestMethod.POST)

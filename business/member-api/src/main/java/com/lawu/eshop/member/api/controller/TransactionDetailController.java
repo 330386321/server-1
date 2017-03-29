@@ -36,11 +36,19 @@ public class TransactionDetailController extends BaseController {
 
     @Autowired
     private TransactionDetailService transactionDetailService;
-    
-    @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[1000]（蒋鑫俊）", httpMethod = "GET")
+
+    /**
+     *
+     * @param token
+     * @param transactionType
+     * @param param
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
+    @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "findPageByUserNum", method = RequestMethod.GET)
+    @RequestMapping(value = "page", method = RequestMethod.GET)
     public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
     		@RequestParam(name = "transactionType", required = false) @ApiParam(name = "transactionType", value = "交易类型") MemberTransactionTypeEnum transactionType, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") TransactionDetailQueryParam param) {

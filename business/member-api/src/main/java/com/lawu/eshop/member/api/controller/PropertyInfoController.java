@@ -31,11 +31,17 @@ public class PropertyInfoController extends BaseController {
 
     @Autowired
     private PropertyInfoService propertyInfoService;
-    
-    @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[1000]（蒋鑫俊）", httpMethod = "GET")
+
+    /**
+     *
+     * @param token
+     * @return
+     * @audit  sunlinqing 2016.03.29
+     */
+    @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "propertyBalance", method = RequestMethod.GET)
+    @RequestMapping(value = "balance", method = RequestMethod.GET)
     public Result<BigDecimal> getPropertyBalance(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyBalance(userNum));

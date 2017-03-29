@@ -31,18 +31,20 @@ public class ProductCategoryController extends BaseController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
+    // TODO 2016.03.29 类型用枚举
+    //@ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
 //    @Authorization
-    @RequestMapping(value = "findAll", method = RequestMethod.GET)
+    @RequestMapping(value = "all", method = RequestMethod.GET)
     public List<ProductCategoryDTO> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 
         List<ProductCategoryDTO> dtos = productCategoryService.findAll();
         return dtos;
     }
-    
-    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
+
+    // TODO 2016.03.29 类型用枚举
+    //@ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
     @Authorization
-    @RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ProductCategoryDTO getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     								  @PathVariable @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 

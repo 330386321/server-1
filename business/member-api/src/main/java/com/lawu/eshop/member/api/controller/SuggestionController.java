@@ -31,8 +31,9 @@ public class SuggestionController extends BaseController {
 
     @Autowired
     private SuggestionService suggestionService;
-    
-    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+
+    // TODO 2016.03.29 客户端传递过来的参数不要包括单亲用户的相关id、编号；类型用枚举；用户类型没必要传
+    //@ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(method = RequestMethod.POST)
