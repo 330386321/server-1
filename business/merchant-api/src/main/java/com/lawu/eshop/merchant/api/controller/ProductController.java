@@ -53,7 +53,7 @@ public class ProductController extends BaseController {
     
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[201|400]。(杨清华)", httpMethod = "POST")
-//    @Authorization
+    @Authorization
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
     public Result selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     							ProductStatusEnum productStatus,
