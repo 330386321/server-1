@@ -100,22 +100,22 @@ public class MerchantStoreController extends BaseController {
             String idcardUrl = urlMap.get("idcardUrl");
             String licenceUrl = urlMap.get("licenceUrl");
             String otherUrl = urlMap.get("otherUrl");
-            if (!"".equals(storeUrl)) {
+            if (!"".equals(storeUrl) && "".equals(merchantStoreParam.getStoreUrl())) {
                 merchantStoreParam.setStoreUrl(storeUrl);
             }
-            if (!"".equals(environmentUrl)) {
+            if (!"".equals(environmentUrl) && "".equals(merchantStoreParam.getEnvironmentUrl())) {
                 merchantStoreParam.setEnvironmentUrl(environmentUrl);
             }
-            if (!"".equals(logoUrl)) {
+            if (!"".equals(logoUrl) && "".equals(merchantStoreParam.getLogoUrl())) {
                 merchantStoreParam.setLogoUrl(logoUrl);
             }
-            if (!"".equals(idcardUrl)) {
+            if (!"".equals(idcardUrl) && "".equals(merchantStoreParam.getIdcardUrl())) {
                 merchantStoreParam.setIdcardUrl(idcardUrl);
             }
-            if (!"".equals(licenceUrl)) {
+            if (!"".equals(licenceUrl) && "".equals(merchantStoreParam.getLicenseUrl())) {
                 merchantStoreParam.setLicenseUrl(licenceUrl);
             }
-            if (!"".equals(otherUrl)) {
+            if (!"".equals(otherUrl) && "".equals(merchantStoreParam.getOtherUrl())) {
                 merchantStoreParam.setOtherUrl(otherUrl);
             }
 
