@@ -1,6 +1,6 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
@@ -28,7 +28,7 @@ public class InviterConverter {
 
         InviterBO inviterBO = new InviterBO();
         inviterBO.setInviterId(memberDO.getId());
-        inviterBO.setInviterType(UserCommonConstant.INVITER_TYPE_MEMBER);
+        inviterBO.setInviterType(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val);
         inviterBO.setInviterName(memberDO.getName());
         return inviterBO;
     }
@@ -46,7 +46,7 @@ public class InviterConverter {
 
         InviterBO inviterBO = new InviterBO();
         inviterBO.setInviterId(merchantDO.getId());
-        inviterBO.setInviterType(UserCommonConstant.INVITER_TYPE_MERCHANT);
+        inviterBO.setInviterType(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val);
         return inviterBO;
     }
 
@@ -63,7 +63,7 @@ public class InviterConverter {
 
         InviterBO inviterBO = new InviterBO();
         inviterBO.setInviterId(merchantStoreDO.getMerchantId());
-        inviterBO.setInviterType(UserCommonConstant.INVITER_TYPE_MERCHANT);
+        inviterBO.setInviterType(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val);
         inviterBO.setInviterName(merchantStoreDO.getName());
         return inviterBO;
     }
