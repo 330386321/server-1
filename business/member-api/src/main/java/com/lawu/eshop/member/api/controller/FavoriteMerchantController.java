@@ -20,6 +20,7 @@ import com.lawu.eshop.member.api.service.FavoriteMerchantService;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
 import com.lawu.eshop.user.query.FavoriteMerchantParam;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -30,6 +31,7 @@ import io.swagger.annotations.ApiResponse;
  * @date 2017/03/27
  *
  */
+@Api(tags = "favoriteMerchant")
 @RestController
 @RequestMapping(value = "favoriteMerchant/")
 public class FavoriteMerchantController extends BaseController{

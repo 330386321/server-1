@@ -4,6 +4,57 @@ public class BankAccountBO {
 	
 	private Long id;
 	
-	private String userNum;
+	private String accountName;
+	
+	private String accountNumber;
+	
+	private String subBranchName;
+	
+	private String bankName;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+
+	public String getSubBranchName() {
+		return subBranchName;
+	}
+
+	public void setSubBranchName(String subBranchName) {
+		this.subBranchName = subBranchName;
+	}
+
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+	 
+	 
+	
+	
 
 }
