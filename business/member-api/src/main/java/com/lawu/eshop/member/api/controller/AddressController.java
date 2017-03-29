@@ -43,7 +43,7 @@ public class AddressController extends BaseController {
 	  * 收货地址列表
 	  * @return
 	  */
-	//@Authorization
+	@Authorization
 	@ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAddress", method = RequestMethod.GET)
