@@ -241,4 +241,12 @@ public class MemberServiceImpl implements MemberService {
         return MemberConverter.convertBO(memberDO);
     }
 
+    @Override
+    public void updateMemberHeadImg(String headimg, Long mermberId) {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setHeadimg(headimg);
+        memberDO.setId(mermberId);
+        memberDOMapper.updateByPrimaryKeySelective(memberDO);
+    }
+
 }

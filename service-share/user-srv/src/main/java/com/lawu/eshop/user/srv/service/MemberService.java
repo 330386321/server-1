@@ -75,4 +75,11 @@ public interface MemberService {
      * @param id 会员ID
      */
     MemberBO getMemberById(Long id );
+
+    /**
+     * 修改头像
+     * @param headimg
+     * @param mermberId
+     */
+    void updateMemberHeadImg(String headimg, Long mermberId);
 }

@@ -143,4 +143,16 @@ public class MemberController extends BaseController {
         return successCreated();
     }
 
+    /**
+     * 修改头像
+     * @param mermberId
+     * @param headimg
+     * @return
+     */
+    @RequestMapping(value = "saveHeadImage/{mermberId}" ,method = RequestMethod.PUT)
+    public Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam String headimg){
+        memberService.updateMemberHeadImg(headimg, mermberId);
+        return  successCreated();
+    }
+
 }
