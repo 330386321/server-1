@@ -84,11 +84,12 @@ public class MemberController extends BaseController {
      * @param id          主键
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型(1--忘记密码，2--修改密码)
      */
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
         MemberBO memberBO = memberService.getMemberById(id);
-        if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
+        if (type == 2 && !MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         memberService.updateLoginPwd(id, originalPwd, newPwd);
@@ -141,14 +142,15 @@ public class MemberController extends BaseController {
 
     /**
      * 修改头像
+     *
      * @param mermberId
      * @param headimg
      * @return
      */
-    @RequestMapping(value = "saveHeadImage/{mermberId}" ,method = RequestMethod.PUT)
-    public Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam String headimg){
+    @RequestMapping(value = "saveHeadImage/{mermberId}", method = RequestMethod.PUT)
+    public Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam String headimg) {
         memberService.updateMemberHeadImg(headimg, mermberId);
-        return  successCreated();
+        return successCreated();
     }
 
 }

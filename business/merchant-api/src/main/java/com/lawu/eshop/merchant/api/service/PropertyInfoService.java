@@ -17,11 +17,12 @@ public interface PropertyInfoService {
     /**
      * 修改支付密码
      *
-     * @param userNo          商户编号
+     * @param userNo      商户编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
-    Result updatePayPwd(@PathVariable("userNo") String  userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
 }

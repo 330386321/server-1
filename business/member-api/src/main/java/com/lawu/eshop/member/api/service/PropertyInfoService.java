@@ -22,15 +22,16 @@ public interface PropertyInfoService {
      * @param userNo      会员编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
-    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
-    
+    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+
     /**
      * 根据用户编号获取资产余额
      *
-     * @param userNo 用户编号
+     * @param userNum 用户编号
      * @return
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)

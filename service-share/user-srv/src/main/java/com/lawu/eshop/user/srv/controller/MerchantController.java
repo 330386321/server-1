@@ -47,12 +47,12 @@ public class MerchantController extends BaseController {
      * @param id          主键
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型(1--忘记密码，2--修改密码)
      */
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
-
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
         MerchantBO merchantBO = merchantService.getMerchantBOById(id);
-        if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
+        if (type == 2 && !MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         merchantService.updateLoginPwd(id, originalPwd, newPwd);
@@ -98,7 +98,7 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public Result register(@RequestBody RegisterParam registerParam, @RequestParam UserInviterTypeEnum inviterType) {
-        merchantService.register(registerParam,inviterType);
+        merchantService.register(registerParam, inviterType);
         return successCreated();
     }
 }

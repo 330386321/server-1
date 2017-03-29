@@ -38,12 +38,13 @@ public class PropertyInfoController extends BaseController {
      * @param userNo      用户编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型(1--设置密码，2--修改密码)
      * @return
      */
     @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.POST)
-    public Result updatePayPwd(@PathVariable String userNo, @RequestParam String originalPwd, @RequestParam String newPwd) {
+    public Result updatePayPwd(@PathVariable String userNo, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNo(userNo);
-        if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
+        if (type == 2 && !MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);

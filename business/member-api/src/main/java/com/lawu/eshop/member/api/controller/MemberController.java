@@ -43,6 +43,7 @@ import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.UpdatePwdParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.utils.IpUtil;
@@ -99,10 +100,13 @@ public class MemberController extends BaseController {
     @Authorization
     @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
     public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
-                                 @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+                                 @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
+        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
+        if (!isSuccess(smsResult)) {
+            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
         long id = UserUtil.getCurrentUserId(getRequest());
-        return memberService.updateLoginPwd(id, originalPwd, newPwd);
+        return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
     @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
@@ -110,10 +114,13 @@ public class MemberController extends BaseController {
     @Authorization
     @RequestMapping(value = "updatePayPwd", method = RequestMethod.PUT)
     public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                               @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
-                               @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+                               @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
+        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
+        if (!isSuccess(smsResult)) {
+            return failCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
         String userNo = UserUtil.getCurrentUserNum(getRequest());
-        return propertyInfoService.updatePayPwd(userNo, originalPwd, newPwd);
+        return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")

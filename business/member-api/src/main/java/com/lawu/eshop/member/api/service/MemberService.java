@@ -52,10 +52,11 @@ public interface MemberService {
      * @param id          主键
      * @param originalPwd 原始密码
      * @param newPwd      新密码
+     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "member/updateLoginPwd/{id}")
-    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
 
     /**
      * 查询我的E友
@@ -96,6 +97,7 @@ public interface MemberService {
 
     /**
      * 修改头像
+     *
      * @param mermberId
      * @param headimg
      * @return
