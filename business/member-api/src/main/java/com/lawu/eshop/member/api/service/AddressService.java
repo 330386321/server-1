@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,7 @@ import com.lawu.eshop.user.param.AddressParam;
  * @date 2017/03/22
  *
  */
-
+@FeignClient(value = "user-srv")
 public interface AddressService {
 	
 	/**
@@ -30,7 +32,7 @@ public interface AddressService {
 	  * 编辑收货地址
 	  * @param address
 	  */
-	 @RequestMapping(method = RequestMethod.POST, value = "address/update")
+	 @RequestMapping(method = RequestMethod.POST, value = "address/update/{id}")
 	 Result update(@RequestBody AddressParam address,@RequestParam("id") Long id);
 	 
 	 /**
@@ -45,7 +47,7 @@ public interface AddressService {
 	  * @return
 	  */
     @RequestMapping(method = RequestMethod.GET, value = "address/selectByUserId")
-    Result selectByUserId(@RequestParam("userId") Long userId);
+    Result<List<AddressDTO>> selectAddress(@RequestParam("userId") Long userId);
 
     /**
 	 *刪除地址
