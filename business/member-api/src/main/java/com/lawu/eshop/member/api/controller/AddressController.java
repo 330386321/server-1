@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
@@ -44,10 +46,10 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	@Authorization
-	@ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息，成功返回 list （张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "收货地址信息查询", notes = "根据会员id获取收货地址列表信息[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
-    public Result<List<AddressDTO>> selectByUserId() {
+    public Result<List<AddressDTO>> selectByUserId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		Result<List<AddressDTO>> addressDTOS = addressService.selectByUserId(UserUtil.getCurrentUserId(getRequest()));
         return addressDTOS;
     }
@@ -57,10 +59,10 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	@Authorization
-	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public Result<AddressDTO> get(@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam  @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result<AddressDTO> addressDTO=addressService.get(id);
 		return addressDTO;
     }
@@ -70,10 +72,10 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	@Authorization
-	@ApiOperation(value = "删除收货地址", notes = "删除收货地址（张荣成）", httpMethod = "DELETE")
+	@ApiOperation(value = "删除收货地址", notes = "删除收货地址[1000|1001|1002]（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public Result delete(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs=addressService.delete(id);
 		return rs;
     }
@@ -83,10 +85,10 @@ public class AddressController extends BaseController {
 	  * @return 
 	  */
 	@Authorization
-	@ApiOperation(value = "添加收货地址", notes = "添加收货地址（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "添加收货地址", notes = "添加收货地址[1000|1001]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result insert( @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
+    public Result insert(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 		Long userId=UserUtil.getCurrentUserId(getRequest());
 		Result rs= addressService.save(userId,address);
 		return rs;
@@ -97,10 +99,10 @@ public class AddressController extends BaseController {
 	  * @return
 	  */
 	@Authorization
-	@ApiOperation(value = "修改收货地址", notes = "修改收货地址（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "修改收货地址", notes = "修改收货地址[1000|1001]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-    public Result update(@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address
+    public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute  @ApiParam(required = true, value = "收货地址信息") AddressParam address
     		,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 		Result rs= addressService.update(address,id);
 		return rs;
@@ -112,10 +114,10 @@ public class AddressController extends BaseController {
 	 * @return
 	 */
 	@Authorization
-	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址[1000|1001]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.POST)
-    public Result updateDefault(@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
+    public Result updateDefault(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam (required = true, value = "收货地址id") Long id) {
 	   Long userId=UserUtil.getCurrentUserId(getRequest());
 	   Result rs= addressService.updateDefault(id,userId);
 	   return rs;

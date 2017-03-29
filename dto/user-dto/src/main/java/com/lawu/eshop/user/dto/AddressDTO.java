@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 地址DTO转化
  * @author zhangrc
@@ -7,24 +9,26 @@ package com.lawu.eshop.user.dto;
  *
  */
 public class AddressDTO {
+	
+	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
 
-
+	@ApiModelProperty(value = "是否为默认(0为不默认,1为默认)", required = true)
 	private Boolean isDefault;
 
-
+	@ApiModelProperty(value = "收货人姓名", required = true)
 	private String name;
 
-
+	@ApiModelProperty(value = "电话", required = true)
 	private String mobile;
 
-
+	@ApiModelProperty(value = "区域", required = true)
 	private String regionPath;
 
-
+	@ApiModelProperty(value = "详细地址", required = true)
 	private String addr;
 
-
+	@ApiModelProperty(value = "邮编", required = true)
 	private String postcode;
 
 

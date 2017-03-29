@@ -2,16 +2,23 @@ package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class FavoriteMerchantDTO {
 	
+	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
 	
+	@ApiModelProperty(value = "店铺名称", required = true)
 	private String name;
 	
+	@ApiModelProperty(value = "责任人姓名", required = true)
 	private String principalName;
 	
+	@ApiModelProperty(value = "区域", required = true)
 	private String regionPath;
 	
+	@ApiModelProperty(value = "创建时间", required = true)
 	private Date gmtCreate;
 
 	public Long getId() {

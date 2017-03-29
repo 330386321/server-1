@@ -2,22 +2,32 @@ package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class MerchantInviterDTO {
 	
+	@ApiModelProperty(value = "商家账号", required = true)
 	private String account;
 	
+	@ApiModelProperty(value = "店铺名称", required = true)
 	private String name;
 	
+	@ApiModelProperty(value = "责任人姓名", required = true)
 	private String principalName;
 	 
+	@ApiModelProperty(value = "责任人电话", required = true)
 	private String principalMobile;
 	
+	@ApiModelProperty(value = "区域", required = true)
 	private String regionPath;
 	
+	@ApiModelProperty(value = "详细地址", required = true)
 	private String address;
 	
+	@ApiModelProperty(value = "创建时间", required = true)
 	private Date gmtCreate;
 	
+	@ApiModelProperty(value = "是否审核(0：待审核，1：审核通过，2：审核不通过，3：未提交保证金，4：已提交保证金待财务核实，5：财务审核不通过)", required = true)
 	private Byte status;
 
 	public String getAccount() {
