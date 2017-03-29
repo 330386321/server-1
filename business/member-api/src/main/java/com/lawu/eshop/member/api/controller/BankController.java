@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.lawu.eshop.framework.web.constants.UserConstant;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +42,7 @@ public class BankController extends BaseController{
 	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "all", method = RequestMethod.GET)
-    public Result<List<BankDTO>> findBank() {
+    public Result<List<BankDTO>> findBank(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		Result<List<BankDTO>> DTOS = bankService.findBank();
 		return  DTOS;
     }
