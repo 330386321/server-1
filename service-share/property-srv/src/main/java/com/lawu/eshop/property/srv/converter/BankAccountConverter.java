@@ -6,6 +6,7 @@ import java.util.List;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
+import com.lawu.eshop.property.srv.domain.BankDO;
 
 /**
  * 银行卡信息转换
@@ -19,14 +20,17 @@ public class BankAccountConverter {
 	 * @param bankAccountDO
 	 * @return
 	 */
-	public static BankAccountBO convertBO(BankAccountDO bankAccountDO) {
+	public static BankAccountBO convertBO(BankAccountDO bankAccountDO,String bankName) {
         if (bankAccountDO == null) {
             return null;
         }
         BankAccountBO bankAccountBO=new BankAccountBO();
         bankAccountBO.setId(bankAccountDO.getId());
+        bankAccountBO.setBankName(bankName);
         bankAccountBO.setAccountName(bankAccountDO.getAccountName());
-        bankAccountBO.setAccountNumber(bankAccountDO.getAccountNumber());
+        String accountNumber=bankAccountDO.getAccountNumber();
+        String newAccountNumber =accountNumber.substring(accountNumber.length()-4, accountNumber.length());
+        bankAccountBO.setAccountNumber(newAccountNumber);
         bankAccountBO.setSubBranchName(bankAccountDO.getSubBranchName());
         return bankAccountBO;
     }
@@ -36,13 +40,19 @@ public class BankAccountConverter {
 	 * @param bankDOS
 	 * @return
 	 */
-	public static List<BankAccountBO> convertBO(List<BankAccountDO> bankAccountDOS ) {
+	public static List<BankAccountBO> convertBOS(List<BankAccountDO> bankAccountDOS ,List<BankDO> bankDOS) {
         if (bankAccountDOS == null) {
             return null;
         }
         List<BankAccountBO> BOS=new ArrayList<BankAccountBO>();
         for (BankAccountDO bankAccountDO: bankAccountDOS) {
-        	BOS.add(convertBO(bankAccountDO));
+        	String bankName=null;
+        	for (BankDO bankBO : bankDOS) {
+				if(bankAccountDO.getBankId().equals(bankBO.getId())){
+					bankName=bankBO.getName();
+				}
+			}
+        	BOS.add(convertBO(bankAccountDO,bankName));
 		}
         
         return BOS;

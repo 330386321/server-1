@@ -71,7 +71,7 @@ public class MemberDTO {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+	public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

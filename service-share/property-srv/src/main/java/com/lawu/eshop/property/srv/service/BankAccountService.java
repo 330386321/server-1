@@ -26,6 +26,13 @@ public interface BankAccountService {
 	 */
 	List<BankAccountBO> selectMyBank(String userNum);
 	
+	/**
+	 * 删除绑定的银行卡
+	 * @param id
+	 * @return
+	 */
+	Integer remove(Long id);
+	
 	
 
 }

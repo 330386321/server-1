@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.service;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,14 +34,14 @@ public interface AddressService {
 	  * @param address
 	  */
 	 @RequestMapping(method = RequestMethod.POST, value = "address/update/{id}")
-	 Result update(@RequestBody AddressParam address,@RequestParam("id") Long id);
+	 Result update(@RequestBody AddressParam address,@PathVariable("id") Long id);
 	 
 	 /**
 	  * 单个查询地址
 	  * @return
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "address/get/{id}")
-	Result<AddressDTO> get(@RequestParam("id") Long id);
+	Result<AddressDTO> get(@PathVariable("id") Long id);
 	 
 	 /**
 	  * 查询所有地址
@@ -54,13 +55,13 @@ public interface AddressService {
 	 * @return
 	 */
     @RequestMapping(method = RequestMethod.DELETE, value = "address/remove/{id}")
-    Result delete(@RequestParam("id") Long userId);
+    Result delete(@PathVariable("id") Long userId);
 	 
     /**
 	 *修改默认地址
 	 *@return
 	 */
     @RequestMapping( method = RequestMethod.GET,value = "address/updateDefault/{id}")
-    Result updateDefault(@RequestParam("id") Long id,@RequestParam("userId") Long userId);
+    Result updateDefault(@PathVariable("id") Long id,@RequestParam("userId") Long userId);
 
 }

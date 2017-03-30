@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ public class BankAccountController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
-    public Result saveBankAccount(String userNum,BankAccountParam bankAccountParam) {
+    public Result saveBankAccount(@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
 		Integer id= bankAccountService.saveBankAccount(userNum,bankAccountParam);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
@@ -56,6 +57,21 @@ public class BankAccountController extends BaseController{
     public Result<List<BankAccountDTO>> selectMyBankAccount(@RequestParam String userNum) {
 		List<BankAccountBO> BOS = bankAccountService.selectMyBank(userNum);
 		return  successAccepted(BankAccountConverter.convertDTOS(BOS));
+    }
+	
+	/**
+	 * 删除绑定的银行卡
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+    public Result remove(@RequestParam Long id) {
+		Integer i = bankAccountService.remove(id);
+		if(id>0){
+    		return successCreated(ResultCode.SUCCESS);
+    	}else{
+    		return successCreated(ResultCode.FAIL);
+    	}
     }
 
 }

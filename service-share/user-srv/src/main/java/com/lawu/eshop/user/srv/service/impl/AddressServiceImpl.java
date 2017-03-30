@@ -57,7 +57,7 @@ public class AddressServiceImpl implements AddressService {
 	public List<AddressBO> selectByUserId(Long userId) {
 		AddressDOExample example = new AddressDOExample();
 		Byte status=1;
-		example.setOrderByClause("gmt_create");
+		example.setOrderByClause("gmt_create asc");
 		example.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo(status);
 		List<AddressDO> addressDOS= addressDOMapper.selectByExample(example);
 		return addressDOS.isEmpty() ? null : AddressConverter.convertListBOS(addressDOS);

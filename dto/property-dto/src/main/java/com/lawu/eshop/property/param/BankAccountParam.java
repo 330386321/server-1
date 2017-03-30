@@ -1,14 +1,20 @@
 package com.lawu.eshop.property.param;
 
+import io.swagger.annotations.ApiParam;
+
 public class BankAccountParam {
 	
-	 private String accountName;
+	@ApiParam (name="accountName",required = true, value = "开户名")
+	private String accountName;
 	 
-	 private String accountNumber;
+	@ApiParam (name="accountNumber",required = true, value = "银行卡号")
+	private String accountNumber;
 	 
-	 private Integer bankId;
+	@ApiParam (name="bankId",required = true, value = "所属银行")
+	private Integer bankId;
 	 
-	 private String subBranchName;
+	@ApiParam (name="subBranchName",required = true, value = "支行名称")
+	private String subBranchName;
 
 	public String getAccountName() {
 		return accountName;

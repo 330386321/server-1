@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.controller;
+package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -15,8 +16,11 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.member.api.service.BankAccountService;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.merchant.api.service.BankAccountService;
+import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
@@ -25,7 +29,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 /**
- * 会员银行卡管理
+ * 商家银行卡管理
  * @author zhangrc
  * @date 2017/03/30
  *
@@ -37,6 +41,9 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private BankAccountService bankAccountService;
+	
+	@Autowired
+	private VerifyCodeService verifyCodeService;
 	
 	/**
 	 * 
@@ -59,13 +66,19 @@ public class BankAccountController extends BaseController{
 	 * @param bankAccountParam
 	 * @return
 	 */
-	@Authorization
-    @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000]（张荣成）", httpMethod = "POST")
+	//@Authorization
+    @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000|1013]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    						 @RequestParam @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
+    						 @RequestParam @ApiParam(required = true, value = "手机验证码") String smsCode,
                              @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
+        if (!isSuccess(smsResult)) {
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
         Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
         return rs;
     }

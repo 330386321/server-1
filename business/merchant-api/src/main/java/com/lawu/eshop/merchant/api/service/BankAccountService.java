@@ -1,4 +1,4 @@
-package com.lawu.eshop.member.api.service;
+package com.lawu.eshop.merchant.api.service;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
 /**
- * 会员api 银行卡管理接口
+ * 商家api 银行卡管理接口
  * @author zhangrc
  * @date 2017/03/30
  *
