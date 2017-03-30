@@ -40,7 +40,6 @@ public class InviterController extends BaseController {
     @Autowired
     private InviterService inviterService;
 
-    @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[200]（张荣成）", httpMethod = "POST")
     @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[1000|1001]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
