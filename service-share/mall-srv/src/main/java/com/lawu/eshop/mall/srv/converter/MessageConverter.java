@@ -6,6 +6,7 @@ import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
+import com.lawu.eshop.mall.srv.domain.extend.MessageDOView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +27,16 @@ public class MessageConverter {
         return messageStatisticsBO;
     }
 
-    public static MessageBO coverBO(MessageDO messageDO) {
-        if (messageDO == null) {
+    public static MessageBO coverBO(MessageDOView messageDOView) {
+        if (messageDOView == null) {
             return null;
         }
         MessageBO messageBO = new MessageBO();
-        messageBO.setContent(messageDO.getContent());
-        messageBO.setType(messageDO.getType());
-        messageBO.setId(messageDO.getId());
-        messageBO.setStatus(messageDO.getStatus());
+        messageBO.setContent(messageDOView.getContent());
+        messageBO.setType(messageDOView.getType());
+        messageBO.setId(messageDOView.getId());
+        messageBO.setStatus(messageDOView.getStatus());
+        messageBO.setTitle(messageDOView.getTitle());
         return messageBO;
     }
 
@@ -49,6 +51,7 @@ public class MessageConverter {
             messageDTO.setId(messageBO.getId());
             messageDTO.setMessageTypeEnum(MessageTypeEnum.getEnum(messageBO.getType()));
             messageDTO.setContent(messageBO.getContent());
+            messageDTO.setTitle(messageBO.getTitle());
             messageDTOS.add(messageDTO);
         }
         return messageDTOS;

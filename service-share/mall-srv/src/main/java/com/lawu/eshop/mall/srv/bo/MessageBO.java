@@ -25,6 +25,8 @@ public class MessageBO {
      */
     private Byte status;
 
+    private String title;
+
     public Long getId() {
         return id;
     }
@@ -55,5 +57,13 @@ public class MessageBO {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

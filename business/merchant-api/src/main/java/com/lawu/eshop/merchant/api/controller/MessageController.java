@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -31,7 +32,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "站内信息统计", notes = "根据用户编号获取站内未读信息统计 [1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "getMessageStatistics", method = RequestMethod.GET)
     public Result<MessageStatisticsDTO> getMessageStatistics(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
@@ -41,9 +42,9 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 [1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    // @Authorization
+    @Authorization
     @RequestMapping(value = "getMessageList", method = RequestMethod.POST)
-    public Result<Page<MessageDTO>> getMessageList(@ModelAttribute @ApiParam MessageParam pageParam) {
+    public Result<Page<MessageDTO>> getMessageList(@ModelAttribute @ApiParam MessageParam pageParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<Page<MessageDTO>> messageDTOPage = messageService.getMessageList(userNum, pageParam);
         return messageDTOPage;

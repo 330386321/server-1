@@ -5,12 +5,15 @@ import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessageQueryParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
 import com.lawu.eshop.mall.srv.domain.MessageDOExample;
+import com.lawu.eshop.mall.srv.domain.extend.MessageDOView;
 import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
+import com.lawu.eshop.mall.srv.mapper.extend.MessageDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageDOMapper messageDOMapper;
+
+    @Autowired
+    private MessageDOMMapperExtend messageDOMMapperExtend;
 
     @Override
     public int selectNoReadCount(String userNum) {
@@ -50,19 +56,21 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Page<MessageBO> getMessageList(String userNum, MessageParam pageParam) {
 
-        MessageDOExample example = new MessageDOExample();
-        example.createCriteria().andUserNumEqualTo(userNum).andStatusNotEqualTo(MessageStatusEnum.MESSAGE_STATUS_DELETE.val);
-        example.setOrderByClause("id desc");
+        MessageQueryParam  messageQueryParam = new MessageQueryParam();
+        messageQueryParam.setUserNum(userNum);
+        messageQueryParam.setCurrentPage(pageParam.getCurrentPage());
+        messageQueryParam.setPageSize(pageParam.getPageSize());
         //查询总数
-        RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
+        int totalCount = messageDOMMapperExtend.selectCountByUserNum(userNum);
+
         Page<MessageBO> page = new Page<>();
         //设置记录总数
-        page.setTotalCount(messageDOMapper.countByExample(example));
+        page.setTotalCount(totalCount);
         page.setCurrentPage(pageParam.getCurrentPage());
-        List<MessageDO> messageDOS = messageDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        List<MessageDOView> messageDOViews = messageDOMMapperExtend.selectByUserNum(messageQueryParam);
         List<MessageBO> messageBOS = new ArrayList<>();
 
-        for (MessageDO messageDO : messageDOS) {
+        for (MessageDOView messageDO : messageDOViews) {
             MessageBO messageBO = MessageConverter.coverBO(messageDO);
             messageBOS.add(messageBO);
         }
