@@ -68,9 +68,9 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings("rawtypes")
-	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1002]。(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1002]。(杨清华)", httpMethod = "PUT")
     @Authorization
-    @RequestMapping(value = "updateProductStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "updateProductStatus", method = RequestMethod.PUT)
     public Result updateProductStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     							      @RequestParam @ApiParam(required = true, value = "商家ID(多个英文逗号分开)") String ids,
     								  ProductStatusEnum productStatus) {
