@@ -53,6 +53,7 @@ public class ResultCode {
     // 广告模块代码 5xxx
 
     // 资产模块代码 6xxx
+    public static final int BANK_ACCOUNT_ERROR = 6000;
 
     // 商城模块代码 7xxx
 
@@ -102,6 +103,7 @@ public class ResultCode {
 
 
         // 资产模块 6xxx
+        ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
 
 
         // 商城模块 7xxx
