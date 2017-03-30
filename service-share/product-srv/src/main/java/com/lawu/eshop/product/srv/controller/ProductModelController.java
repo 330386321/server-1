@@ -17,10 +17,6 @@ import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 
 /**
- * @author Yangqh
- * @date 2017/3/13
- */
-/**
  * 
  * @author Sunny
  * @date 2017/3/30
