@@ -44,16 +44,16 @@
         <table tableName="product" domainObjectName="ProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="product_category" domainObjectName="ProductCategoryeDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="product_model" domainObjectName="ProductModelDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="favorite_product" domainObjectName="FavoriteProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="product_image" domainObjectName="ProductImageDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="product_category" domainObjectName="ProductCategoryeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

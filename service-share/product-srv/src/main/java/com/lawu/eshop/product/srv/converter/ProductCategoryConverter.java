@@ -80,7 +80,6 @@ public class ProductCategoryConverter {
         ProductCategoryDTO productCategoryDTO = new ProductCategoryDTO();
         productCategoryDTO.setId(productCategoryBO.getId());
         productCategoryDTO.setName(productCategoryBO.getName());
-        productCategoryDTO.setType(productCategoryBO.getType());
         productCategoryDTO.setPath(productCategoryBO.getPath());
         productCategoryDTO.setParentId(productCategoryBO.getParentId());
         productCategoryDTO.setLevel(productCategoryBO.getLevel());

@@ -17,9 +17,6 @@ public class ProductCategoryDTO {
 
     private Integer level;
 
-    private Integer type;
-
-
     public Integer getId() {
         return id;
     }
@@ -60,11 +57,4 @@ public class ProductCategoryDTO {
         this.level = level;
     }
 
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 }

@@ -19,20 +19,13 @@ public class ProductInfoDTO {
     private String priceMax;
     private String priceMin;
     
-    private String isSupportEleven;//是否支持七天无理由退货
-    private String evaluateJson;//商品评价json字符串
+    private boolean isSupportEleven;//是否支持七天无理由退货
     
-	public String getIsSupportEleven() {
+	public boolean isSupportEleven() {
 		return isSupportEleven;
 	}
-	public void setIsSupportEleven(String isSupportEleven) {
+	public void setSupportEleven(boolean isSupportEleven) {
 		this.isSupportEleven = isSupportEleven;
-	}
-	public String getEvaluateJson() {
-		return evaluateJson;
-	}
-	public void setEvaluateJson(String evaluateJson) {
-		this.evaluateJson = evaluateJson;
 	}
 	public Integer getTotalSales() {
 		return totalSales;

@@ -23,6 +23,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Override
     public List<ProductCategoryBO> findAll() {
         ProductCategoryeDOExample example = new ProductCategoryeDOExample();
+        example.createCriteria().andStatueEqualTo(true);
+        example.setOrderByClause("type DESC,ordinal ASC");
         List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
 
         return ProductCategoryConverter.convertBOS(productCategoryeDOS);
@@ -31,7 +33,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 	@Override
 	public ProductCategoryBO getById(Integer id) {
 		ProductCategoryeDOExample example = new ProductCategoryeDOExample();
-        example.createCriteria().andIdEqualTo(id);
+        example.createCriteria().andIdEqualTo(id).andStatueEqualTo(true);
         List<ProductCategoryeDO>  productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
         return productCategoryeDOS.isEmpty() ? null :  ProductCategoryConverter.convertBO(productCategoryeDOS.get(0));
 	}

@@ -1,6 +1,8 @@
 package com.lawu.eshop.member.api.controller;
 	
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 
@@ -31,18 +34,17 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 
-    // TODO 2016.03.29 商品评价另外提供接口，与商品详情分开。
-    //@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1000|1002|1003]，（杨清华）", httpMethod = "GET")
-    @RequestMapping(value = "selectProductById/{productId}", method = RequestMethod.GET)
-    public Result<ProductInfoDTO> selectProductById(@RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
+    @ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1002|1003]，（杨清华）", httpMethod = "GET")
+    @Authorization
+    @RequestMapping(value = "{productId}", method = RequestMethod.GET)
+    public Result<ProductInfoDTO> selectProductById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    											    @PathVariable @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
     	
     	Result<ProductInfoDTO> result = productService.selectProductById(productId);
     	
-    	//TODO 查询商家是否支持7天无理由退货
-    	result.getModel().setIsSupportEleven("0");
+    	result.getModel().setSupportEleven(true);
     	
-    	//TODO 查询商品评价信息
-    	result.getModel().setEvaluateJson("[]");
+    	//TODO 商品评价额外调用服务
     	
         return result;
     }

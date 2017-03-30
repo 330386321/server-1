@@ -12,7 +12,7 @@
     <result column="path" property="path" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="TINYINT" />
     <result column="ordinal" property="ordinal" jdbcType="TINYINT" />
-    <result column="statue" property="statue" jdbcType="TINYINT" />
+    <result column="statue" property="statue" jdbcType="BIT" />
     <result column="type" property="type" jdbcType="TINYINT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -146,7 +146,7 @@
       level, ordinal, statue, 
       type)
     values (#{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, 
-      #{level,jdbcType=TINYINT}, #{ordinal,jdbcType=TINYINT}, #{statue,jdbcType=TINYINT}, 
+      #{level,jdbcType=TINYINT}, #{ordinal,jdbcType=TINYINT}, #{statue,jdbcType=BIT}, 
       #{type,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.product.srv.domain.ProductCategoryeDO" >
@@ -198,7 +198,7 @@
         #{ordinal,jdbcType=TINYINT},
       </if>
       <if test="statue != null" >
-        #{statue,jdbcType=TINYINT},
+        #{statue,jdbcType=BIT},
       </if>
       <if test="type != null" >
         #{type,jdbcType=TINYINT},
@@ -241,7 +241,7 @@
         ordinal = #{record.ordinal,jdbcType=TINYINT},
       </if>
       <if test="record.statue != null" >
-        statue = #{record.statue,jdbcType=TINYINT},
+        statue = #{record.statue,jdbcType=BIT},
       </if>
       <if test="record.type != null" >
         type = #{record.type,jdbcType=TINYINT},
@@ -263,7 +263,7 @@
       path = #{record.path,jdbcType=VARCHAR},
       level = #{record.level,jdbcType=TINYINT},
       ordinal = #{record.ordinal,jdbcType=TINYINT},
-      statue = #{record.statue,jdbcType=TINYINT},
+      statue = #{record.statue,jdbcType=BIT},
       type = #{record.type,jdbcType=TINYINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -292,7 +292,7 @@
         ordinal = #{ordinal,jdbcType=TINYINT},
       </if>
       <if test="statue != null" >
-        statue = #{statue,jdbcType=TINYINT},
+        statue = #{statue,jdbcType=BIT},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
@@ -311,7 +311,7 @@
       path = #{path,jdbcType=VARCHAR},
       level = #{level,jdbcType=TINYINT},
       ordinal = #{ordinal,jdbcType=TINYINT},
-      statue = #{statue,jdbcType=TINYINT},
+      statue = #{statue,jdbcType=BIT},
       type = #{type,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
@@ -31,25 +32,23 @@ public class ProductCategoryController extends BaseController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    // TODO 2016.03.29 类型用枚举
-    //@ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
-//    @Authorization
+    @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
+    @Authorization
     @RequestMapping(value = "all", method = RequestMethod.GET)
-    public List<ProductCategoryDTO> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<List<ProductCategoryDTO>> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 
         List<ProductCategoryDTO> dtos = productCategoryService.findAll();
-        return dtos;
+        return successCreated(dtos);
     }
 
-    // TODO 2016.03.29 类型用枚举
-    //@ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
+    @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
-    public ProductCategoryDTO getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<ProductCategoryDTO> getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     								  @PathVariable @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 
         ProductCategoryDTO dto = productCategoryService.getById(id);
-        return dto;
+        return successCreated(dto);
     }
 
 }
