@@ -2,6 +2,7 @@ package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
@@ -32,4 +33,11 @@ public interface MessageService {
      * @return
      */
     Page<MessageBO> getMessageList(String userNum, MessageParam pageParam);
+
+    /**
+     * 站内信息操作（已读，删除）
+     * @param messageId
+     * @param statusEnum
+     */
+    void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum);
 }

@@ -78,4 +78,12 @@ public class MessageServiceImpl implements MessageService {
 
         return page;
     }
+
+    @Override
+    public void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum) {
+        MessageDO messageDO= new MessageDO();
+        messageDO.setId(messageId);
+        messageDO.setStatus(statusEnum.val);
+        messageDOMapper.updateByPrimaryKeySelective(messageDO);
+    }
 }

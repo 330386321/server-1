@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageParam;
@@ -67,6 +68,12 @@ public class MessageController extends BaseController {
         pages.setTotalCount(messageDTOPage.getTotalCount());
         return successGet(pages);
 
+    }
+
+    @RequestMapping(value = "updateMessageStatus/{messageId}")
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam MessageStatusEnum statusEnum) {
+        messageService.updateMessageStatus(messageId, statusEnum);
+        return successCreated();
     }
 
 }
