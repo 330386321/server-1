@@ -1,9 +1,7 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.param.MessageQueryParam;
@@ -16,7 +14,6 @@ import com.lawu.eshop.mall.srv.domain.extend.MessageDOView;
 import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.MessageDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.MessageService;
-import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
