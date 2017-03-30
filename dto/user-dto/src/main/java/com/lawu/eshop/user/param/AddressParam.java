@@ -1,8 +1,8 @@
 package com.lawu.eshop.user.param;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiParam;
+
+import java.io.Serializable;
 
 /**
  * api 收货地址操作实体
@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiParam;
  *
  */
 public class AddressParam implements Serializable{
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@ApiParam (name="name",required = true, value = "收货人")
@@ -78,7 +78,7 @@ public class AddressParam implements Serializable{
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
-	
-	
+
+
 
 }
