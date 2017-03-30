@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
-import com.lawu.eshop.property.srv.domain.BankAccountDO;
 
 /**
  * 银行卡管理接口
@@ -19,13 +18,13 @@ public interface BankAccountService {
 	 * @param bankAccountDO
 	 * @return
 	 */
-	Integer saveBankAccount(BankAccountParam bankAccountParam);
+	Integer saveBankAccount(String userNum,BankAccountParam bankAccountParam);
 	
 	/**
 	 * 查询我绑定的银行卡
 	 * @return
 	 */
-	List<BankAccountBO> findMyBank(Long userId);
+	List<BankAccountBO> selectMyBank(String userNum);
 	
 	
 

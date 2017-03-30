@@ -25,7 +25,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	
 
 	@Override
-	public Integer saveBankAccount(BankAccountParam bankAccountParam) {
+	public Integer saveBankAccount(String userNum,BankAccountParam bankAccountParam) {
 		String accountNumber=bankAccountParam.getAccountNumber();
 		String reg="^(?!0)\\d{15,19}$"; 
 		boolean flag=accountNumber.matches(reg);
@@ -33,6 +33,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 			return 0;
 		}
 		BankAccountDO bankAccountDO=new BankAccountDO();
+		bankAccountDO.setUserNum(userNum);
 		bankAccountDO.setAccountName(bankAccountParam.getAccountName());
 		bankAccountParam.getAccountNumber();
 		bankAccountDO.setBankId(bankAccountParam.getBankId());
@@ -43,7 +44,8 @@ public class BankAccountServiceImpl implements BankAccountService {
 	}
 
 	@Override
-	public List<BankAccountBO> findMyBank(Long userId) {
+	public List<BankAccountBO> selectMyBank(String userNum) {
+		
 		return null;
 	}
 

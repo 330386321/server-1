@@ -2,6 +2,8 @@ package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
+import com.lawu.eshop.user.constants.UserSexEnum;
+
 public class MemberDTO {
 	private Long id;
 	
@@ -13,8 +15,6 @@ public class MemberDTO {
 
     private String regionPath;
 
-    private Byte sex;
-
     private Date birthday;
 
     private String headimg;
@@ -22,6 +22,8 @@ public class MemberDTO {
     private Integer level;
     
     private Date gmtCreate;
+    
+    private UserSexEnum userSex;
     
 
 	public String getAccount() {
@@ -56,14 +58,6 @@ public class MemberDTO {
 
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
-	}
-
-	public Byte getSex() {
-		return sex;
-	}
-
-	public void setSex(Byte sex) {
-		this.sex = sex;
 	}
 
 	public Date getBirthday() {
@@ -104,6 +98,14 @@ public class MemberDTO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public UserSexEnum getUserSex() {
+		return userSex;
+	}
+
+	public void setUserSex(UserSexEnum userSex) {
+		this.userSex = userSex;
 	}
     
 	

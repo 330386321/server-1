@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
@@ -44,7 +45,7 @@ public class MemberConverter {
         memberBO.setInviterType(memberDO.getInviterType());
         memberBO.setLevel(memberDO.getLevel());
         memberBO.setStatus(memberDO.getStatus());
-        memberBO.setSex(memberDO.getSex());
+        memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
         memberBO.setRegionPath(memberDO.getRegionPath());
         memberBO.setNickname(memberDO.getNickname());
         memberBO.setName(memberDO.getName());
@@ -160,7 +161,7 @@ public class MemberConverter {
         memberDTO.setAccount(memberBO.getAccount());
         memberDTO.setBirthday(memberBO.getBirthday());
         memberDTO.setHeadimg(memberBO.getHeadimg());
-        memberDTO.setSex(memberBO.getSex());
+        memberDTO.setUserSex(memberBO.getUserSex());
         memberDTO.setRegionPath(memberBO.getRegionPath());
         memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setName(memberBO.getName());

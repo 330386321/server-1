@@ -6,8 +6,7 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDO;
 
 public class MerchantInviterConverter {
 	/**
@@ -16,25 +15,19 @@ public class MerchantInviterConverter {
 	 * @param storeList
 	 * @return
 	 */
-	public static List<MerchantInviterBO> convertMerchantInviterBOS(List<MerchantDO> merchantDOS,
-			List<MerchantStoreDO> storeList) {
-		if(merchantDOS==null){
+	public static List<MerchantInviterBO> convertMerchantInviterBOS(List<InviterMerchantDO> inviterMerchantDOS) {
+		if(inviterMerchantDOS==null){
 			return null;
 		}
 		List<MerchantInviterBO> FIBOS=new ArrayList<MerchantInviterBO>();
-		for (MerchantDO merchantDO : merchantDOS) {
+		for (InviterMerchantDO inviterMerchantDO : inviterMerchantDOS) {
 			MerchantInviterBO FIO=new MerchantInviterBO();
-			FIO.setAccount(merchantDO.getAccount());
-			for (MerchantStoreDO merchantStoreDO : storeList) {
-				if(merchantDO.getId().equals(merchantStoreDO.getMerchantId())){
-					FIO.setName(merchantStoreDO.getName());
-					FIO.setPrincipalName(merchantStoreDO.getPrincipalName());
-					FIO.setRegionPath(merchantStoreDO.getRegionPath());
-					FIO.setAddress(merchantStoreDO.getAddress());
-					FIO.setGmtCreate(merchantStoreDO.getGmtCreate());
-					FIO.setStatus(merchantStoreDO.getStatus());
-				}
-			}
+			FIO.setAccount(inviterMerchantDO.getAccount());
+			FIO.setName(inviterMerchantDO.getName());
+			FIO.setPrincipalName(inviterMerchantDO.getPrincipalName());
+			FIO.setRegionPath(inviterMerchantDO.getRegionPath());
+			FIO.setGmtCreate(inviterMerchantDO.getGmtCreate());
+			FIO.setStatus(inviterMerchantDO.getStatus());
 			FIBOS.add(FIO);
 			
 		}

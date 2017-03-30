@@ -126,16 +126,7 @@ public class MemberController extends BaseController {
         return memberService.getInviterByAccount(account);
     }
 
-    // TODO 2016.03.29 性别用枚举，该接口请放入InviterController
-    //@ApiOperation(value = "我的E友", notes = "我的E有查询,[1000|1001]（张荣成）", httpMethod = "POST")
-    @Authorization
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-    public Result<Page<MemberDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
-        Long userId = UserUtil.getCurrentUserId(getRequest());
-        Result<Page<MemberDTO>> page = memberService.findMemberListByUser(userId, query);
-        return page;
-    }
+    
 
     // TODO 2016.03.29 通过用户编码进行邀请，不要传邀请人类型，类型可以根据编码去判断
     //@ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")

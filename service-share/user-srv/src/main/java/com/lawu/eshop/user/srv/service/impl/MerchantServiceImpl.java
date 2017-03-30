@@ -1,5 +1,14 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -12,21 +21,25 @@ import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample.Criteria;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDO;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 商户服务实现
@@ -57,6 +70,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private TransactionMainService transactionMainService;
+    
+    @Autowired
+    private InviterMerchantDOMapper inviterMerchantDOMapper;
 
     @Override
     public void updateLoginPwd(Long id, String originalPwd, String newPwd) {
@@ -199,35 +215,20 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam) {
-        MerchantDOExample example = new MerchantDOExample();
-        Criteria c1 = example.createCriteria();
-        c1.andInviterIdEqualTo(userId).andStatusEqualTo(new Byte("1"));
-        int totalCount = merchantDOMapper.countByExample(example); //总记录数
-        if (pageParam.getAccount() != null) { //存在模糊查询
-            c1.andAccountLike("%" + pageParam.getAccount() + "%");
-        }
+    	InviterMerchantDO inviterMerchantDO=new InviterMerchantDO();
+    	inviterMerchantDO.setInviterId(userId);
+    	inviterMerchantDO.setMobileAndName(pageParam.getMobileOrName());
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
-        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        //店铺
-        List<MerchantStoreDO> storeList = new ArrayList<MerchantStoreDO>();
-        for (MerchantDO merchantDO : merchantDOS) {
-            MerchantStoreDOExample msExample = new MerchantStoreDOExample();
-            msExample.createCriteria().andMerchantIdEqualTo(merchantDO.getId())
-                    .andStatusEqualTo(new Byte("1"));
-            List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(msExample);
-            if (!list.isEmpty()) {
-                MerchantStoreDO merchantStoreDO = list.get(0);
-                storeList.add(merchantStoreDO);
-            }
-        }
-
+        List<InviterMerchantDO> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
         Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();
-        pageMerchantInviter.setTotalCount(totalCount);
-        List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(merchantDOS, storeList);
+        pageMerchantInviter.setTotalCount(inviterMerchantDOS.size());
+        List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);
         pageMerchantInviter.setRecords(memberBOS);
         return pageMerchantInviter;
     }
+    
+    
 
     @Override
     public MerchantBO find(String account, String pwd) {
