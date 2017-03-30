@@ -30,7 +30,7 @@ import java.io.IOException;
 @Api(tags = "verifyCode")
 @RestController
 @RequestMapping(value = "verifyCode/")
-public class VerifyCodeController extends BaseController{
+public class VerifyCodeController extends BaseController {
 
     @Autowired
     private SmsRecordService smsRecordService;
@@ -39,16 +39,15 @@ public class VerifyCodeController extends BaseController{
     private VerifyCodeService verifyCodeService;
 
     /**
-     *
      * @param mobile
      * @param picCode
      * @param purpose
      * @return
-     * @audit  sunlinqing 2016.03.29
+     * @audit sunlinqing 2016.03.29
      */
-    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.POST)
+    @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
                           @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
                           VerifyCodePurposeEnum purpose) {
@@ -62,11 +61,10 @@ public class VerifyCodeController extends BaseController{
 
 
     /**
-     *
      * @param mobile
      * @param purpose
      * @throws IOException
-     * @audit  sunlinqing 2016.03.29s
+     * @audit sunlinqing 2016.03.29s
      */
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)

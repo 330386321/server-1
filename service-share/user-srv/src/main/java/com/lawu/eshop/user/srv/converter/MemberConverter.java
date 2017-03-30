@@ -1,8 +1,5 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -11,8 +8,10 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *
  * 会员信息转换器
  *
  * @author Leach
@@ -107,15 +106,14 @@ public class MemberConverter {
     }
 
 
-
     /**
      * param转DO
      *
      * @param userParam
      * @return
      */
-    public static MemberDO convertDOOther(UserParam userParam){
-        if(userParam == null){
+    public static MemberDO convertDOOther(UserParam userParam) {
+        if (userParam == null) {
             return null;
         }
         MemberDO memberDO = new MemberDO();
@@ -126,14 +124,15 @@ public class MemberConverter {
 
         return memberDO;
     }
-    
-    
+
+
     /**
      * 描述：将DOS转成BOS
-     * @author zhangrc
-     * @date 2017/03/23
+     *
      * @param memberDOS
      * @return
+     * @author zhangrc
+     * @date 2017/03/23
      */
     public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS) {
 		if (memberDOS == null) {
@@ -158,23 +157,23 @@ public class MemberConverter {
             return null;
         }
         MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setAccount(memberBO.getAccount());
+        memberDTO.setId(memberBO.getId());
+        memberDTO.setNum(memberBO.getNum());
+        memberDTO.setName(memberBO.getName());
+        memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setBirthday(memberBO.getBirthday());
         memberDTO.setHeadimg(memberBO.getHeadimg());
-        memberDTO.setUserSex(memberBO.getUserSex());
-        memberDTO.setRegionPath(memberBO.getRegionPath());
-        memberDTO.setNickname(memberBO.getNickname());
-        memberDTO.setName(memberBO.getName());
-        memberDTO.setGmtCreate(memberBO.getGmtCreate());
+        memberDTO.setLevel(memberBO.getLevel());
         return memberDTO;
     }
-    
+
     /**
      * 描述：将BOS转成DTOS
-     * @author zhangrc
-     * @date 2017/03/23
+     *
      * @param memberBOS
      * @return
+     * @author zhangrc
+     * @date 2017/03/23
      */
     public static List<MemberDTO> convertListDOTS(List<MemberBO> memberBOS) {
 		if (memberBOS == null) {
@@ -189,6 +188,7 @@ public class MemberConverter {
 
     /**
      * 描述：将pageBOS转成pageDTOS
+     *
      * @param pageMemberBOS
      * @return
      */

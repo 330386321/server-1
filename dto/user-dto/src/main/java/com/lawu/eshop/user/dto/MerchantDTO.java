@@ -1,14 +1,24 @@
 package com.lawu.eshop.user.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author meishuquan
  * @date 2017/3/23
  */
 public class MerchantDTO {
 
+    @ApiModelProperty(value = "ID")
     private Long id;
 
-    private String account;
+    @ApiModelProperty(value = "编号")
+    private String num;
+
+    @ApiModelProperty(value = "头像")
+    private String headimg;
+
+    @ApiModelProperty(value = "等级")
+    private Integer level;
 
     public Long getId() {
         return id;
@@ -18,11 +28,27 @@ public class MerchantDTO {
         this.id = id;
     }
 
-    public String getAccount() {
-        return account;
+    public String getNum() {
+        return num;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setNum(String num) {
+        this.num = num;
+    }
+
+    public String getHeadimg() {
+        return headimg;
+    }
+
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

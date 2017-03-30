@@ -13,8 +13,6 @@ import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
-import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -83,7 +81,7 @@ public class MemberController extends BaseController {
      * @return
      * @audit  sunlinqing 2016.03.29
      */
-    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
@@ -91,7 +89,7 @@ public class MemberController extends BaseController {
                                  @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
         Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         long id = UserUtil.getCurrentUserId(getRequest());
         return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
@@ -104,7 +102,7 @@ public class MemberController extends BaseController {
      * @return
      * @audit  sunlinqing 2016.03.29
      */
-    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd", method = RequestMethod.PUT)
@@ -112,46 +110,33 @@ public class MemberController extends BaseController {
                                @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
         Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         String userNo = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
-    // TODO 2016.03.29 邀请人类型请用枚举
-    //@ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。(梅述全)", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getInviterByAccount/{account}", method = RequestMethod.GET)
-    public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
-        return memberService.getInviterByAccount(account);
-    }
-
-    
-
-    // TODO 2016.03.29 通过用户编码进行邀请，不要传邀请人类型，类型可以根据编码去判断
-    //@ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
-                           @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam,
-                           UserInviterTypeEnum inviterType) {
+                           @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
         Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
-            return successCreated(ResultCode.RECORD_EXIST);
+            return successGet(ResultCode.RECORD_EXIST);
         }
         Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {
-            return successCreated(ResultCode.VERIFY_SMS_CODE_FAIL);
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) smsResult.getModel();
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
-            return successCreated(ResultCode.NOT_SEND_SMS_MOBILE);
+            return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        return memberService.register(registerParam, inviterType);
+        return memberService.register(registerParam);
     }
 
-    // TODO 2016.03.29 性别用枚举，该接口请放入InviterController
-    //@ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。(梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getMember", method = RequestMethod.GET)

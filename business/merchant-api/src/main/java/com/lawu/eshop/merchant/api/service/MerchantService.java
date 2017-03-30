@@ -4,7 +4,6 @@ package com.lawu.eshop.merchant.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -31,7 +30,7 @@ public interface MerchantService {
     /**
      * 修改登录密码
      *
-     * @param id          主键
+     * @param id          ID
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      * @param type        业务类型
@@ -52,10 +51,9 @@ public interface MerchantService {
      * 商户注册
      *
      * @param registerParam 商户注册信息
-     * @param inviterType   邀请类型
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchant/register")
-    Result register(@ModelAttribute RegisterParam registerParam, @RequestParam("inviterType") UserInviterTypeEnum inviterType);
+    Result register(@ModelAttribute RegisterParam registerParam);
 
 
     /**

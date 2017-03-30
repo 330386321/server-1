@@ -50,7 +50,7 @@ public class CommonServiceImpl implements CommonService {
             merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(merchantDOS.get(0).getId());
             List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
             if (!merchantStoreDOS.isEmpty()) {
-                return InviterConverter.convertBO(merchantStoreDOS.get(0));
+                return InviterConverter.convertBO(merchantStoreDOS.get(0),merchantDOS.get(0));
             }
             return InviterConverter.convertBO(merchantDOS.get(0));
         }

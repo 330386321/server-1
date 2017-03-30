@@ -15,7 +15,7 @@ public class MerchantInfoConverter {
     /**
      * BO转换
      *
-     * @param memberDO
+     * @param merchantProfileDO
      * @return
      */
     public static MerchantProfileBO convertBO(MerchantProfileDO merchantProfileDO) {

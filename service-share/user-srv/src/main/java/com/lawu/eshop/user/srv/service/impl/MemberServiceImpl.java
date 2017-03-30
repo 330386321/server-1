@@ -131,12 +131,22 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void register(RegisterParam registerParam,UserInviterTypeEnum inviterType) {
+    public void register(RegisterParam registerParam) {
         //推荐人id
-        long invitedUserId = 0;
+        long inviterId = 0;
         if (registerParam.getInviterId() != null) {
-            invitedUserId = registerParam.getInviterId();
+            inviterId = registerParam.getInviterId();
         }
+        //推荐人类型
+        byte inviterType = UserInviterTypeEnum.INVITER_TYPE_NULL.val;
+        if (registerParam.getUserNum() != null) {
+            if (registerParam.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+                inviterType = UserInviterTypeEnum.INVITER_TYPE_MEMBER.val;
+            } else {
+                inviterType = UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val;
+            }
+        }
+
         //插入会员信息
         MemberDO memberDO = new MemberDO();
         memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
@@ -145,8 +155,8 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setMobile(registerParam.getAccount());
         memberDO.setSex(UserSexEnum.SEX_SECRET.val);
         memberDO.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
-        memberDO.setInviterId(invitedUserId);
-        memberDO.setInviterType(inviterType.val);
+        memberDO.setInviterId(inviterId);
+        memberDO.setInviterType(inviterType);
         memberDO.setLevel(UserCommonConstant.LEVEL_1);
         memberDO.setGmtCreate(new Date());
         memberDOMapper.insertSelective(memberDO);
@@ -167,10 +177,10 @@ public class MemberServiceImpl implements MemberService {
         inviteRelationDO.setDepth(0);
         inviteRelationDO.setType(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val);
         inviteRelationDOMapper.insert(inviteRelationDO);
-        if (invitedUserId > 0) {
+        if (inviterId > 0) {
             //查询推荐人推荐关系
             InviteRelationDOExample inviteRelationDOExample = new InviteRelationDOExample();
-            inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(invitedUserId);
+            inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(inviterId);
             List<InviteRelationDO> inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
             if (!inviteRelationDOS.isEmpty()) {
                 //更新推荐关系

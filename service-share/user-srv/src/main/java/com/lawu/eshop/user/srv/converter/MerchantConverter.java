@@ -1,18 +1,13 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商户信息转换器
@@ -62,42 +57,46 @@ public class MerchantConverter {
 
         MerchantDTO merchantDTO = new MerchantDTO();
         merchantDTO.setId(merchantBO.getId());
-        merchantDTO.setAccount(merchantBO.getAccount());
+        merchantDTO.setNum(merchantBO.getNum());
+        merchantDTO.setHeadimg(merchantBO.getHeadimg());
+        merchantDTO.setLevel(merchantBO.getLevel());
         return merchantDTO;
     }
 
     /**
      * DOS 转BOS
-     * @author zhangrc
-     * @date 2013/03/23
+     *
      * @param merchantDOS
      * @return
+     * @author zhangrc
+     * @date 2013/03/23
      */
-	public static List<MerchantBO> convertBOS(List<MerchantDO> merchantDOS) {
-		if (merchantDOS == null) {
-	       return null;
-	    }
-		List<MerchantBO> merchantBOS=new ArrayList<MerchantBO>();
-		for (MerchantDO merchantDO : merchantDOS) {
-			merchantBOS.add(convertBO(merchantDO));
-		}
-		return merchantBOS;
-	}
+    public static List<MerchantBO> convertBOS(List<MerchantDO> merchantDOS) {
+        if (merchantDOS == null) {
+            return null;
+        }
+        List<MerchantBO> merchantBOS = new ArrayList<MerchantBO>();
+        for (MerchantDO merchantDO : merchantDOS) {
+            merchantBOS.add(convertBO(merchantDO));
+        }
+        return merchantBOS;
+    }
 
-	
-	public static List<MerchantDTO> convertListDOTS(List<MerchantBO> merchantBOS) {
-		if (merchantBOS == null) {
-	       return null;
-	    }
-		List<MerchantDTO> memberDTOS=new ArrayList<MerchantDTO>();
-		for (MerchantBO merchantBO : merchantBOS) {
-			memberDTOS.add(convertDTO(merchantBO));
-		}
-		return memberDTOS;
-	}
+
+    public static List<MerchantDTO> convertListDOTS(List<MerchantBO> merchantBOS) {
+        if (merchantBOS == null) {
+            return null;
+        }
+        List<MerchantDTO> memberDTOS = new ArrayList<MerchantDTO>();
+        for (MerchantBO merchantBO : merchantBOS) {
+            memberDTOS.add(convertDTO(merchantBO));
+        }
+        return memberDTOS;
+    }
 
     /**
      * 商家主页信息BO转换
+     *
      * @param merchantDO
      * @return
      */
@@ -112,24 +111,23 @@ public class MerchantConverter {
 
         return merchantBO;
     }
-    
-    
+
+
     /**
      * 描述：将pageBOS转成pageDTOS
-     * @param pageMemberBOS
+     *
+     * @param pageMerchantBOS
      * @return
      */
-	public static Page<MerchantDTO> convertPageDOTS(Page<MerchantBO> pageMerchantBOS) {
-		Page<MerchantDTO> pageDTO=new Page<MerchantDTO>();
-		List<MerchantBO> BOS=pageMerchantBOS.getRecords();
-		List<MerchantDTO> DTOS=pageDTO.getRecords();
-		for (MerchantBO merchantBO : BOS) {
-			DTOS.add(convertDTO(merchantBO));
-		}
-		return pageDTO;
-	}
+    public static Page<MerchantDTO> convertPageDOTS(Page<MerchantBO> pageMerchantBOS) {
+        Page<MerchantDTO> pageDTO = new Page<MerchantDTO>();
+        List<MerchantBO> BOS = pageMerchantBOS.getRecords();
+        List<MerchantDTO> DTOS = pageDTO.getRecords();
+        for (MerchantBO merchantBO : BOS) {
+            DTOS.add(convertDTO(merchantBO));
+        }
+        return pageDTO;
+    }
 
-
-    
 
 }

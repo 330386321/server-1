@@ -83,7 +83,7 @@ public class MemberController extends BaseController {
     /**
      * 修改登录密码
      *
-     * @param id          主键
+     * @param id          ID
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      * @param type        业务类型(1--忘记密码，2--修改密码)
@@ -133,12 +133,11 @@ public class MemberController extends BaseController {
      * 会员注册
      *
      * @param registerParam 会员注册信息
-     * @param inviterType   邀请类型
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result register(@RequestBody RegisterParam registerParam, @RequestParam UserInviterTypeEnum inviterType) {
-        memberService.register(registerParam, inviterType);
+    public Result register(@RequestBody RegisterParam registerParam) {
+        memberService.register(registerParam);
         return successCreated();
     }
 

@@ -29,7 +29,7 @@ public class VerifyCodeController extends BaseController {
      * @param purpose 用途
      * @return
      */
-    @RequestMapping(value = "savePicCode/{mobile}", method = RequestMethod.POST)
+    @RequestMapping(value = "savePicCode/{mobile}", method = RequestMethod.GET)
     public Result savePicCode(@PathVariable String mobile, @RequestParam String picCode, @RequestParam VerifyCodePurposeEnum purpose) {
         verifyCodeService.savePicCode(mobile, picCode, purpose);
         return successCreated();

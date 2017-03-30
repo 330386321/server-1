@@ -10,7 +10,7 @@ public class InviterBO {
 
     private Long inviterId;
 
-    private Byte inviterType;
+    private String userNum;
 
     private String inviterName;
 
@@ -22,12 +22,12 @@ public class InviterBO {
         this.inviterId = inviterId;
     }
 
-    public Byte getInviterType() {
-        return inviterType;
+    public String getUserNum() {
+        return userNum;
     }
 
-    public void setInviterType(Byte inviterType) {
-        this.inviterType = inviterType;
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 
     public String getInviterName() {

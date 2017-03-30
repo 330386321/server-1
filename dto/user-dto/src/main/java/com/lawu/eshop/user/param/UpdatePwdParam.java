@@ -11,16 +11,16 @@ public class UpdatePwdParam {
     @ApiModelProperty(value = "手机验证码ID", required = true)
     private Long verifyCodeId;
 
-    @ApiModelProperty(value = "原始密码", required = true)
+    @ApiModelProperty(value = "手机验证码", required = true)
+    private String smsCode;
+
+    @ApiModelProperty(value = "原始密码")
     private String originalPwd;
 
     @ApiModelProperty(value = "新密码", required = true)
     private String newPwd;
 
-    @ApiModelProperty(value = "手机验证码", required = true)
-    private String smsCode;
-
-    @ApiModelProperty(value = "业务类型(1--忘记密码/设置密码，2--修改密码)")
+    @ApiModelProperty(value = "业务类型(1--忘记密码/设置密码，2--修改密码)", required = true)
     private Integer type;
 
     public Long getVerifyCodeId() {

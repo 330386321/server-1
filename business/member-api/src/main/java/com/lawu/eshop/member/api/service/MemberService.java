@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -68,23 +67,13 @@ public interface MemberService {
     @RequestMapping(method = RequestMethod.POST, value = "member/findMemberListByUser")
     Result<Page<MemberDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query);
 
-
-    /**
-     * 根据邀请人账号查询邀请人信息
-     *
-     * @param account 邀请人账号
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviterByAccount/{account}")
-    Result getInviterByAccount(@PathVariable("account") String account);
-
     /**
      * 会员注册
      *
      * @param registerParam 会员注册信息
-     * @param inviterType   邀请类型
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/register")
-    Result register(@ModelAttribute RegisterParam registerParam, @RequestParam("inviterType") UserInviterTypeEnum inviterType);
+    Result register(@ModelAttribute RegisterParam registerParam);
 
     /**
      * 根据账号查询会员信息

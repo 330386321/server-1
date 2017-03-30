@@ -18,12 +18,12 @@ public class SmsRecordConverter {
      * @param smsRecordDO
      * @return
      */
-    public static SmsRecordBO convertBO(SmsRecordDO smsRecordDO ) {
+    public static SmsRecordBO convertBO(SmsRecordDO smsRecordDO) {
         if (smsRecordDO == null) {
             return null;
         }
 
-        SmsRecordBO smsRecordBO=new SmsRecordBO();
+        SmsRecordBO smsRecordBO = new SmsRecordBO();
         smsRecordBO.setId(smsRecordDO.getId());
         smsRecordBO.setContent(smsRecordDO.getContent());
         return smsRecordBO;
@@ -35,12 +35,12 @@ public class SmsRecordConverter {
      * @param smsRecordBO
      * @return
      */
-    public static SmsRecordDTO convertDTO(SmsRecordBO smsRecordBO ) {
+    public static SmsRecordDTO convertDTO(SmsRecordBO smsRecordBO) {
         if (smsRecordBO == null) {
             return null;
         }
 
-        SmsRecordDTO smsRecordDTO=new SmsRecordDTO();
+        SmsRecordDTO smsRecordDTO = new SmsRecordDTO();
         smsRecordDTO.setId(smsRecordBO.getId());
         smsRecordDTO.setContent(smsRecordBO.getContent());
         return smsRecordDTO;

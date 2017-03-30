@@ -1,7 +1,6 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
@@ -46,9 +45,8 @@ public interface MerchantService {
      * 商户注册
      *
      * @param registerParam 商户注册信息
-     * @param inviterType   邀请类型
      */
-    void register(RegisterParam registerParam, UserInviterTypeEnum inviterType);
+    void register(RegisterParam registerParam);
 
     /**
      * 根据商户ID查询商户信息

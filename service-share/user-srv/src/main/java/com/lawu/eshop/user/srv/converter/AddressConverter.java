@@ -1,12 +1,12 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
 import com.lawu.eshop.user.srv.domain.AddressDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 *
@@ -57,7 +57,7 @@ public class AddressConverter {
 	/**
      * BO转换
      *
-     * @param addressDO
+     * @param addressBO
      * @return
      */
     public static AddressDTO convertDTO(AddressBO addressBO) {

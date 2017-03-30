@@ -1,11 +1,11 @@
 package com.lawu.eshop.mall.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.mall.dto.OnlineActivityDTO;
 import com.lawu.eshop.mall.srv.bo.OnlineActivityBO;
 import com.lawu.eshop.mall.srv.domain.OnlineActivityDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,7 +19,7 @@ public class OnlineActivityConverter {
 	/**
      * DO转换
      *
-     * @param onlineActivityDO
+     * @param onlineActivityBO
      * @return
      */
     public static OnlineActivityDO convertDO(OnlineActivityBO onlineActivityBO) {
@@ -41,7 +41,7 @@ public class OnlineActivityConverter {
     /**
      * BO转换
      *
-     * @param onlineActivityDO
+     * @param onlineActivityDTO
      * @return
      */
     public static OnlineActivityBO convertBO(OnlineActivityDTO onlineActivityDTO) {

@@ -1,20 +1,15 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.math.BigDecimal;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -36,7 +31,7 @@ public class PropertyInfoController extends BaseController {
      * @param type        业务类型(1--设置密码，2--修改密码)
      * @return
      */
-    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.POST)
+    @RequestMapping(value = "updatePayPwd/{userNo}", method = RequestMethod.PUT)
     public Result updatePayPwd(@PathVariable String userNo, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNo(userNo);
         if (type == 2 && !MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
@@ -49,7 +44,7 @@ public class PropertyInfoController extends BaseController {
     /**
      * 根据用户编号获取资产余额
      *
-     * @param userNo 用户编号
+     * @param userNum 用户编号
      * @return
      */
     @RequestMapping(value = "propertyBalance/{userNum}", method = RequestMethod.GET)
@@ -60,7 +55,7 @@ public class PropertyInfoController extends BaseController {
     /**
      * 根据用户编号获取用户积分
      *
-     * @param userNo 用户编号
+     * @param userNum 用户编号
      * @return
      */
     @RequestMapping(value = "propertyPoint/{userNum}", method = RequestMethod.GET)
