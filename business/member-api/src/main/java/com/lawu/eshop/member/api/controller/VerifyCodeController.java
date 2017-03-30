@@ -53,7 +53,7 @@ public class VerifyCodeController extends BaseController {
                           VerifyCodePurposeEnum purpose) {
         Result result = verifyCodeService.verifyPicCode(mobile, picCode);
         if (!isSuccess(result)) {
-            return successCreated(ResultCode.VERIFY_PIC_CODE_FAIL);
+            return successGet(ResultCode.VERIFY_PIC_CODE_FAIL);
         }
         String ip = IpUtil.getIpAddress(getRequest());
         return smsRecordService.sendSms(mobile, ip, purpose);
