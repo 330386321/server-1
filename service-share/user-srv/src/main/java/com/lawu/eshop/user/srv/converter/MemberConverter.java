@@ -99,7 +99,7 @@ public class MemberConverter {
         userDTO.setNum(memberBO.getNum());
         userDTO.setAccount(memberBO.getAccount());
         userDTO.setBirthday(memberBO.getBirthday());
-        userDTO.setSex(memberBO.getSex());
+        userDTO.setUserSex(memberBO.getUserSex());
         userDTO.setRegionPath(memberBO.getRegionPath());
         userDTO.setNickname(memberBO.getNickname());
         return userDTO;
@@ -120,7 +120,7 @@ public class MemberConverter {
         MemberDO memberDO = new MemberDO();
         memberDO.setNickname(userParam.getNickname());
         memberDO.setRegionPath(userParam.getRegionPath());
-        memberDO.setSex(userParam.getSex());
+        memberDO.setSex(userParam.getUserSexEnum().val);
         memberDO.setBirthday(userParam.getBirthday());
 
         return memberDO;

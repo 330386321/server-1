@@ -1,6 +1,8 @@
 package com.lawu.eshop.user.srv.bo;
 
 
+import com.lawu.eshop.user.constants.UserSexEnum;
+
 import java.util.Date;
 
 /**
@@ -44,6 +46,16 @@ public class MemberBO {
     private Date gmtModified;
 
     private Date gmtCreate;
+
+    private UserSexEnum userSex;
+
+    public UserSexEnum getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(UserSexEnum userSex) {
+        this.userSex = userSex;
+    }
 
     public Long getId() {
         return id;

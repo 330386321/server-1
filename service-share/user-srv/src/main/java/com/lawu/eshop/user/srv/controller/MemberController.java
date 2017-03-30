@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
+import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -58,6 +59,7 @@ public class MemberController extends BaseController {
         if (memberBO == null) {
             return successGet();
         } else {
+            memberBO.setUserSex(UserSexEnum.getEnum(memberBO.getSex()));
             return successGet(MemberConverter.convertDTO(memberBO));
         }
     }

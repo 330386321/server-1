@@ -53,8 +53,8 @@ public class MemberController extends BaseController {
     @Autowired
     private VerifyCodeService verifyCodeService;
 
-    // TODO 2016.03.29 性别用枚举
-    //@ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member （章勇）", httpMethod = "GET")
+
+    @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member [1000]（章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "currentUser", method = RequestMethod.GET)
@@ -64,8 +64,8 @@ public class MemberController extends BaseController {
         return result;
     }
 
-    // TODO 2016.03.29 性别用枚举
-    // @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息（章勇）", httpMethod = "PUT")
+
+     @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息  [1000]（章勇）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)

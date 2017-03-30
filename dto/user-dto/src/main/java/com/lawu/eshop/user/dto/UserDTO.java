@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.UserSexEnum;
+
 import java.util.Date;
 
 /**
@@ -18,11 +20,19 @@ public class UserDTO {
 
     private String regionPath;
 
-    private Byte sex;
-
     private Date birthday;
 
     private String headimg;
+
+    private UserSexEnum userSex;
+
+    public UserSexEnum getUserSex() {
+        return userSex;
+    }
+
+    public void setUserSex(UserSexEnum userSex) {
+        this.userSex = userSex;
+    }
 
     public Long getId() {
         return id;
@@ -62,14 +72,6 @@ public class UserDTO {
 
     public void setRegionPath(String regionPath) {
         this.regionPath = regionPath;
-    }
-
-    public Byte getSex() {
-        return sex;
-    }
-
-    public void setSex(Byte sex) {
-        this.sex = sex;
     }
 
     public Date getBirthday() {
