@@ -57,7 +57,7 @@ public class InviterController extends BaseController {
      * @param id
      * @return
     */
-    @ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[1000|1001]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
@@ -71,7 +71,7 @@ public class InviterController extends BaseController {
 	 * 我的E友总数量
 	 * @return
 	 */
-	@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[1000|1001]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
@@ -87,7 +87,7 @@ public class InviterController extends BaseController {
 	 * @param pageQuery
 	 * @return
 	 */
-    @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[1000|1001]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectInviterMerchant", method = RequestMethod.POST)
@@ -104,7 +104,7 @@ public class InviterController extends BaseController {
      * @param query
      * @return
      */
-    @ApiOperation(value = "我的E友", notes = "我的E有查询,[1000|1001]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectInviterMember", method = RequestMethod.POST)
