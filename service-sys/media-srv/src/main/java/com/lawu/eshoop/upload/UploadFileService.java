@@ -1,5 +1,12 @@
 package com.lawu.eshoop.upload;
 
+import com.lawu.eshop.utils.RandomUtil;
+import com.lawu.eshop.utils.ValidateUtil;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
