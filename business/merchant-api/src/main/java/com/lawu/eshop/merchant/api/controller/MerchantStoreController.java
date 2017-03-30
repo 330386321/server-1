@@ -138,12 +138,12 @@ public class MerchantStoreController extends BaseController {
         return failCreated(ResultCode.FAIL);
     }
 
-    @ApiOperation(value = "修改门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "updateMerchantStoreInfo", method = RequestMethod.PUT)
-    public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") @ApiParam(required = true, value = "NORMAL_MERCHANT：普通商户，ENTITY_MERCHANT:实体店") MerchantStoreTypeEnum storeType,
-                                          @RequestParam("certifType") @ApiParam(required = true, value = "CERTIF_TYPE_IDCARD：身份证，CERTIF_TYPE_LICENSE:营业执照") CertifTypeEnum certifType, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.PUT)
+    public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
+                                          @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
@@ -219,7 +219,7 @@ public class MerchantStoreController extends BaseController {
             } else {
                 merchantStoreParam.setOtherUrl(otherUrls.toString());
             }
-            return merchantStoreService.updateMerchantStoreInfo(merchantStoreId, merchantId, merchantStoreParam, storeType, certifType);
+            return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId,merchantStoreParam);
         }
 
         return failCreated(ResultCode.FAIL);

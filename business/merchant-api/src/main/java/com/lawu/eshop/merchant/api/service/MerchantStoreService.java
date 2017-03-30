@@ -39,12 +39,12 @@ public interface MerchantStoreService {
     Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
 
     /**
-     * 修改门店信息
+     * 修改门店信息TO审核
      * @param merchantId 商家id
      * @param merchantStoreParam 门店信息
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/updateMerchantStoreInfo/{merchantStoreId}")
-    Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId,@RequestParam("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam,@RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType")CertifTypeEnum certifType);
+    @RequestMapping(method = RequestMethod.POST, value = "merchantStore/saveMerchantStoreAuditInfo/{merchantStoreId}")
+    Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId,@RequestParam("merchantId") Long merchantId, @ModelAttribute MerchantStoreParam merchantStoreParam);
 
 }

@@ -10,18 +10,24 @@ import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.utils.DateUtil;
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
+ * 商家门店service
  * Created by Administrator on 2017/3/24.
  */
 @Service
@@ -35,6 +41,9 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Autowired
     MerchantStoreImageDOMapper merchantStoreImageDOMapper;
+
+    @Autowired
+    private MerchantStoreAuditDOMapper merchantStoreAuditDOMapper;
 
     @Override
     public MerchantStoreInfoBO selectMerchantStore(Long merchantStoreId) {
@@ -248,5 +257,42 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             return null;
         }
         return  MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
+    }
+
+    @Override
+    public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeType, CertifTypeEnum certifType) {
+
+        MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
+        merchantStoreAuditDO.setMerchantStoreId(merchantStoreId);
+        merchantStoreAuditDO.setMerchantId(merchantId);
+        Map<String,String> map = new HashMap<>();
+        map.put("name",merchantStoreParam.getName());//店铺名称
+        map.put("regionPath",merchantStoreParam.getRegionPath());
+        map.put("address",merchantStoreParam.getAddress());
+        map.put("longitude",String.valueOf(merchantStoreParam.getLongitude()));
+        map.put("latitude",String.valueOf(merchantStoreParam.getLatitude()));
+        map.put("industryPath",merchantStoreParam.getIndustryPath());
+        map.put("intro",merchantStoreParam.getIntro());
+        map.put("principalName",merchantStoreParam.getPrincipalName());
+        map.put("principalMobile",merchantStoreParam.getPrincipalMobile());
+        map.put("companyName",merchantStoreParam.getCompanyName());
+        map.put("regNumber",merchantStoreParam.getRegNumber());
+        map.put("companyAddress",merchantStoreParam.getCompanyAddress());
+        map.put("licenseIndate", DateUtil.getDateTimeFormat(merchantStoreParam.getLicenseIndate()));
+        map.put("manageType",String.valueOf(merchantStoreParam.getManageType()));
+        map.put("certifType",String.valueOf(merchantStoreParam.getCertifType()));
+        map.put("operatorCardId",merchantStoreParam.getOperatorCardId());
+        map.put("operatorName",merchantStoreParam.getOperatorName());
+        map.put("storeUrl",merchantStoreParam.getStoreUrl());
+        map.put("environmentUrl",merchantStoreParam.getEnvironmentUrl());
+        map.put("idcardUrl",merchantStoreParam.getIdcardUrl());
+        map.put("logoUrl",merchantStoreParam.getLogoUrl());
+        map.put("otherUrl",merchantStoreParam.getOtherUrl());
+        JSONArray json = JSONArray.fromObject(map);
+        merchantStoreAuditDO.setContent(json.toString());
+        merchantStoreAuditDO.setGmtModified(new Date());
+        merchantStoreAuditDO.setGmtCreate(new Date());
+        merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+        merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
     }
 }

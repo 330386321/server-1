@@ -23,6 +23,9 @@ import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.utils.ValidateUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * 商家门店
@@ -144,4 +147,23 @@ public class MerchantStoreController extends BaseController {
         return successCreated();
     }
 
+    /**
+     * 增加门店审核信息记录
+     * @param merchantStoreId
+     * @param merchantId
+     * @param merchantStoreParam
+     * @param storeType
+     * @param certifType
+     * @return
+     */
+    @RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
+    public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType, @RequestParam("certifType") CertifTypeEnum certifType) {
+        //判断门店是否存在
+        MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+        if (merchantStoreInfoBO != null) {
+            return failCreated(ResultCode.RECORD_EXIST);
+        }
+        merchantStoreInfoService.saveMerchantStoreAuditInfo(merchantId, merchantStoreParam, merchantStoreId, storeType, certifType);
+       return  successCreated();
+    }
 }
