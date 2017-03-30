@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,13 +29,13 @@ public class SuggestionController extends BaseController {
 	 * 
 	 * @param parm
 	 */
-	@RequestMapping(method = RequestMethod.POST)
-	public Result save(@RequestBody SuggestionParam parm) {
-		if (parm == null || parm.getUserNum() == null || parm.getClientType() == null || parm.getUserType() == null) {
+	@RequestMapping(value = "{userNum}", method = RequestMethod.POST)
+	public Result save(@PathVariable("userNum") String userNum, @RequestBody SuggestionParam parm) {
+		if (parm == null || parm.getClientType() == null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 		
-		Integer id = suggestionService.save(parm);
+		Integer id = suggestionService.save(userNum, parm);
 		
 		if (id == null || id <= 0) {
 			successCreated(ResultCode.SAVE_FAIL);

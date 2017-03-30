@@ -36,9 +36,10 @@ public class TransactionDetailController extends BaseController {
 
     @Autowired
     private TransactionDetailService transactionDetailService;
-
+    
     /**
-     *
+     * 根据用户编号分页获取交易明细列表。
+     * 
      * @param token
      * @param transactionType
      * @param param

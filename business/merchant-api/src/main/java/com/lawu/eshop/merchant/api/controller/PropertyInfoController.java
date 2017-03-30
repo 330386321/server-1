@@ -32,7 +32,13 @@ public class PropertyInfoController extends BaseController {
     @Autowired
     private PropertyInfoService propertyInfoService;
     
-    @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[1000]（蒋鑫俊）", httpMethod = "GET")
+    /**
+     * 根据用户编号获取资产余额。
+     * 
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "propertyBalance", method = RequestMethod.GET)

@@ -33,6 +33,7 @@ public class PropertyInfoController extends BaseController {
     private PropertyInfoService propertyInfoService;
 
     /**
+     *根据用户编号获取资产余额。
      *
      * @param token
      * @return

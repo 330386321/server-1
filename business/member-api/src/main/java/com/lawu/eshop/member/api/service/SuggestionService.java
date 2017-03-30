@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ public interface SuggestionService {
      * 
      * @param parm
      */
-    @RequestMapping(method = RequestMethod.POST, value = "suggestion/")
-    Result save(@RequestBody SuggestionParam parm);
+    @RequestMapping(method = RequestMethod.POST, value = "suggestion/{userNum}")
+    Result save(@PathVariable("userNum") String userNum, @RequestBody SuggestionParam parm);
     
 }

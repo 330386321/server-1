@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -16,6 +17,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
+import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -72,20 +74,26 @@ public class ShoppingCartController extends BaseController {
 	 * 根据id更新购物车的商品（使用实时更新不采用批量更新的方式）
 	 * 
 	 * @param id
-	 * @param parm
+	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-	public Result update(@PathVariable(name = "id") Long id, @RequestBody ShoppingCartParam parm) {
+	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartParam param) {
 		if (id == null) {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 		
-		Integer num = shoppingCartService.update(id, parm);
-		
-		if (num == null) {
+		// 判断id对应的数据是否存在
+		ShoppingCartDO shoppingCartDO = shoppingCartService.get(id);
+		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
+		
+		if (!shoppingCartDO.getMemberId().equals(memberId)) {
+			return successCreated(ResultCode.PRODUCT_NOT_FOUND_IN_CART);
+		}
+		
+		shoppingCartService.update(id, param);
 		
 		return successCreated(ResultCode.SUCCESS);
 	}
@@ -96,16 +104,21 @@ public class ShoppingCartController extends BaseController {
 	 * @param id
 	 */
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)
-	public Result delete(@PathVariable(name = "id") Long id) {
+	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId) {
 		if (id == null) {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 		
-		Integer num = shoppingCartService.remove(id);
-		
-		if (num == null) {
+		ShoppingCartDO shoppingCartDO = shoppingCartService.get(id);
+		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
+		
+		if (!shoppingCartDO.getMemberId().equals(memberId)) {
+			return successCreated(ResultCode.PRODUCT_NOT_FOUND_IN_CART);
+		}
+		
+		shoppingCartService.remove(id);
 		
 		return successCreated(ResultCode.SUCCESS);
 	}

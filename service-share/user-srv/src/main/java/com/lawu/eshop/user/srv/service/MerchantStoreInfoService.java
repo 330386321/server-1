@@ -46,4 +46,5 @@ public interface MerchantStoreInfoService {
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
 
     void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeType, CertifTypeEnum certifType);
+    
 }

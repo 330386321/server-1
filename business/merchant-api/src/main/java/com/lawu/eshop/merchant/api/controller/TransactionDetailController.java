@@ -37,7 +37,15 @@ public class TransactionDetailController extends BaseController {
     @Autowired
     private TransactionDetailService transactionDetailService;
     
-    @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[1000]（蒋鑫俊）", httpMethod = "GET")
+    /**
+     * 根据用户编号分页获取交易明细列表。
+     * 
+     * @param token
+     * @param transactionType
+     * @param param
+     * @return
+     */
+    @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findPageByUserNum", method = RequestMethod.GET)
