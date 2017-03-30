@@ -62,7 +62,7 @@ public class FavoriteMerchantController extends BaseController{
      * @return
      * @audit  sunlinqing 2016.03.29
      */
-	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[200],（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)

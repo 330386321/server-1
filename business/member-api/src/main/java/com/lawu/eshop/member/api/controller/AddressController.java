@@ -78,7 +78,7 @@ public class AddressController extends BaseController {
      * @audit  sunlinqing 2016.03.29
      */
     @Authorization
-    @ApiOperation(value = "添加收货地址", notes = "添加收货地址[1000|1001]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加收货地址", notes = "添加收货地址[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "addAddress", method = RequestMethod.POST)
     public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

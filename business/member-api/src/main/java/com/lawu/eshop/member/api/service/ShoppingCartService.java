@@ -48,7 +48,7 @@ public interface ShoppingCartService {
      * @return
      */
     @RequestMapping(value = "shoppingCart/update/{id}", method = RequestMethod.PUT)
-	public Result update(@PathVariable(name = "id") Long id, @RequestBody ShoppingCartParam parm);
+	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartParam parm);
     
 	/**
 	 * 根据id删除购物车的商品
@@ -56,6 +56,6 @@ public interface ShoppingCartService {
 	 * @param id
 	 */
 	@RequestMapping(value = "shoppingCart/delete/{id}", method = RequestMethod.PUT)
-	public Result delete(@PathVariable(name = "id") Long id);
+	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId);
     
 }

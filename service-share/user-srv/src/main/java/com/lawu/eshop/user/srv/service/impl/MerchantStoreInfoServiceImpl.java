@@ -295,4 +295,5 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
     }
+    
 }

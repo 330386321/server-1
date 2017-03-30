@@ -95,5 +95,4 @@ public class ShoppingCartConverter {
 
 		return shoppingCartDO;
 	}
-
 }

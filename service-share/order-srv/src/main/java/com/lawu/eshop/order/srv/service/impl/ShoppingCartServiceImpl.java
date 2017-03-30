@@ -57,11 +57,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	@Transactional
 	@Override
 	public Integer update(Long id, ShoppingCartParam param) {
-		// 判断id对应的数据是否存在
-		if (get(id) == null) {
-			return null;
-		}
-		
 		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
 		suggestionDO.setId(id);
 		suggestionDO.setGmtModified(new Date());
@@ -73,15 +68,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	@Transactional
 	@Override
 	public Integer remove(Long id) {
-		// 判断id对应的数据是否存在
-		if (get(id) == null) {
-			return null;
-		}
-
 		return shoppingCartDOMapper.deleteByPrimaryKey(id);
 	}
 	
-	private ShoppingCartDO get(Long id){
+	public ShoppingCartDO get(Long id){
 		return shoppingCartDOMapper.selectByPrimaryKey(id);
 	}
 }

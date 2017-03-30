@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -32,13 +33,13 @@ public class SuggestionController extends BaseController {
     @Autowired
     private SuggestionService suggestionService;
 
-    // TODO 2016.03.29 客户端传递过来的参数不要包括单亲用户的相关id、编号；类型用枚举；用户类型没必要传
-    //@ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1000|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
+    //@Authorization
     @RequestMapping(method = RequestMethod.POST)
-    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "parm", required = true, value = "反馈意见资料") SuggestionParam param) {
-    	return successCreated(suggestionService.save(param));
+    public Result save(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @ModelAttribute @ApiParam(name = "parm", required = true, value = "反馈意见资料") SuggestionParam param) {
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	return successCreated(suggestionService.save(userNum, param));
     }
     
 }

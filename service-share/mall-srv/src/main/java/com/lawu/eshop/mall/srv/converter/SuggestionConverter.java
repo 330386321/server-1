@@ -79,14 +79,27 @@ public class SuggestionConverter {
 		return dtos;
 	}
 	
-	public static SuggestionDO convert(SuggestionParam param) {
+	public static SuggestionDO convert(String userNum, SuggestionParam param) {
 		if (param == null) {
 			return null;
 		}
 
 		SuggestionDO suggestionDO = new SuggestionDO();
-		BeanUtils.copyProperties(param, suggestionDO);
-
+		BeanUtils.copyProperties(param, suggestionDO, new String[]{"userType","clientType"});
+		
+		// 用户类型，1是商家，2是会员
+		if (userNum.startsWith("B")) {
+			suggestionDO.setUserType((byte)1);
+		}
+		
+		if (userNum.startsWith("M")) {
+			suggestionDO.setUserType((byte)2);
+		}
+		
+		if (param.getClientType() != null) {
+			suggestionDO.setClientType(param.getClientType().getValue());
+		}
+		
 		return suggestionDO;
 	}
 
