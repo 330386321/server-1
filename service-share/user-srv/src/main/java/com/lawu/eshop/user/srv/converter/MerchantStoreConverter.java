@@ -35,8 +35,8 @@ public class MerchantStoreConverter {
 
     }
 
-    public static MerchantStoreInfoBO coverter(MerchantStoreDO merchantStoreDO){
-        if(merchantStoreDO == null){
+    public static MerchantStoreInfoBO coverter(MerchantStoreDO merchantStoreDO) {
+        if (merchantStoreDO == null) {
             return null;
         }
         MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
@@ -56,11 +56,12 @@ public class MerchantStoreConverter {
 
     /**
      * BO转DTO
+     *
      * @param merchantStoreInfoBO
      * @return
      */
-    public static MerchantStoreDTO coverDTO(MerchantStoreInfoBO merchantStoreInfoBO){
-        if(merchantStoreInfoBO == null){
+    public static MerchantStoreDTO coverDTO(MerchantStoreInfoBO merchantStoreInfoBO) {
+        if (merchantStoreInfoBO == null) {
             return null;
         }
         MerchantStoreDTO merchantStoreDTO = new MerchantStoreDTO();
@@ -92,15 +93,16 @@ public class MerchantStoreConverter {
 
     /**
      * 门店参数对象转DO
+     *
      * @param merchantStoreParam
      * @param type
      * @return
      */
-    public  static  Object couverDOByParam(MerchantStoreParam merchantStoreParam, int type){
-        if(merchantStoreParam == null){
+    public static Object couverDOByParam(MerchantStoreParam merchantStoreParam, int type) {
+        if (merchantStoreParam == null) {
             return null;
         }
-        if(type == 1){//商店基本信息转换DO
+        if (type == 1) {//商店基本信息转换DO
             MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
             merchantStoreDO.setIndustryPath(merchantStoreParam.getIndustryPath());
             merchantStoreDO.setPrincipalName(merchantStoreParam.getPrincipalName());
@@ -113,21 +115,21 @@ public class MerchantStoreConverter {
             merchantStoreDO.setRegionPath(merchantStoreParam.getRegionPath());
 
             return merchantStoreDO;
-        }else if(type == 2){
+        } else if (type == 2) {
             MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
 
-            merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType());
+            merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
             merchantStoreProfileDO.setCompanyAddress(merchantStoreParam.getCompanyAddress());
             merchantStoreProfileDO.setLicenseIndate(merchantStoreParam.getLicenseIndate());
             merchantStoreProfileDO.setOperatorCardId(merchantStoreParam.getOperatorCardId());
             merchantStoreProfileDO.setCompanyName(merchantStoreParam.getCompanyName());
-            merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType());
+            merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
             merchantStoreProfileDO.setOperatorName(merchantStoreProfileDO.getOperatorName());
             merchantStoreProfileDO.setRegNumber(merchantStoreProfileDO.getRegNumber());
 
-            return  merchantStoreProfileDO;
-        }else{
-            
+            return merchantStoreProfileDO;
+        } else {
+
             return null;
         }
     }
