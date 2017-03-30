@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
+import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.param.MessageQueryParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,7 +58,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Page<MessageBO> getMessageList(String userNum, MessageParam pageParam) {
 
-        MessageQueryParam  messageQueryParam = new MessageQueryParam();
+        MessageQueryParam messageQueryParam = new MessageQueryParam();
         messageQueryParam.setUserNum(userNum);
         messageQueryParam.setCurrentPage(pageParam.getCurrentPage());
         messageQueryParam.setPageSize(pageParam.getPageSize());
@@ -81,9 +83,25 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum) {
-        MessageDO messageDO= new MessageDO();
+        MessageDO messageDO = new MessageDO();
         messageDO.setId(messageId);
         messageDO.setStatus(statusEnum.val);
         messageDOMapper.updateByPrimaryKeySelective(messageDO);
+    }
+
+    @Override
+    public void saveMessage(String userNum, MessageInfoParam messageInfoParam) {
+        MessageDO messageDO = new MessageDO();
+        messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
+        messageDO.setUserNum(userNum);
+        messageDO.setType(messageInfoParam.getTypeEnum().val);
+        messageDO.setContent(messageInfoParam.getContent());
+        if (messageInfoParam.getRelateId() > 0) {
+            messageDO.setRelateId(messageInfoParam.getRelateId());
+        }
+        messageDO.setGmtModified(new Date());
+        messageDO.setGmtCreate(new Date());
+        messageDOMapper.insert(messageDO);
+
     }
 }

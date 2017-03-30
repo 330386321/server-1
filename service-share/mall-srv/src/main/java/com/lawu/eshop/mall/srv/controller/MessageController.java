@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
+import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
@@ -72,13 +73,27 @@ public class MessageController extends BaseController {
 
     /**
      * 站内信息操作（已读未读）
+     *
      * @param messageId
      * @param statusEnum
      * @return
      */
-    @RequestMapping(value = "updateMessageStatus/{messageId}",method = RequestMethod.PUT)
+    @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
     public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam MessageStatusEnum statusEnum) {
         messageService.updateMessageStatus(messageId, statusEnum);
+        return successCreated();
+    }
+
+    /**
+     * 新增站内信息
+     *
+     * @param userNum
+     * @param messageInfoParam
+     * @return
+     */
+    @RequestMapping(value = "saveMessage/{userNum}", method = RequestMethod.POST)
+    public Result saveMessage(@PathVariable("userNum") String userNum, @RequestBody MessageInfoParam messageInfoParam) {
+        messageService.saveMessage(userNum, messageInfoParam);
         return successCreated();
     }
 
