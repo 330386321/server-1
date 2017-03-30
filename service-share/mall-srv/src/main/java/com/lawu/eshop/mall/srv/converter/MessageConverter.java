@@ -1,5 +1,7 @@
 package com.lawu.eshop.mall.srv.converter;
 
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
@@ -43,9 +45,9 @@ public class MessageConverter {
         List<MessageDTO> messageDTOS = new ArrayList<>();
         for (MessageBO messageBO : messageBOS) {
             MessageDTO messageDTO = new MessageDTO();
-            messageDTO.setStatus(messageBO.getStatus());
+            messageDTO.setStatusEnum(MessageStatusEnum.getEnum(messageBO.getStatus()));
             messageDTO.setId(messageBO.getId());
-            messageDTO.setType(messageBO.getType());
+            messageDTO.setMessageTypeEnum(MessageTypeEnum.getEnum(messageBO.getType()));
             messageDTO.setContent(messageBO.getContent());
             messageDTOS.add(messageDTO);
         }

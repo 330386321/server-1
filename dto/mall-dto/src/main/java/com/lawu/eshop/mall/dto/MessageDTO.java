@@ -1,5 +1,7 @@
 package com.lawu.eshop.mall.dto;
 
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -23,13 +25,15 @@ public class MessageDTO {
      * 消息类型
      */
     @ApiParam(name = "type",value = "消息类型")
-    private Byte type;
+    private MessageTypeEnum messageTypeEnum;
 
     /**
      * 消息状态
      */
     @ApiParam(name = "status",value = "消息状态")
-    private Byte status;
+    private MessageStatusEnum statusEnum;
+
+    private String title;
 
     public Long getId() {
         return id;
@@ -47,19 +51,27 @@ public class MessageDTO {
         this.content = content;
     }
 
-    public Byte getType() {
-        return type;
+    public MessageTypeEnum getMessageTypeEnum() {
+        return messageTypeEnum;
     }
 
-    public void setType(Byte type) {
-        this.type = type;
+    public void setMessageTypeEnum(MessageTypeEnum messageTypeEnum) {
+        this.messageTypeEnum = messageTypeEnum;
     }
 
-    public Byte getStatus() {
-        return status;
+    public MessageStatusEnum getStatusEnum() {
+        return statusEnum;
     }
 
-    public void setStatus(Byte status) {
-        this.status = status;
+    public void setStatusEnum(MessageStatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

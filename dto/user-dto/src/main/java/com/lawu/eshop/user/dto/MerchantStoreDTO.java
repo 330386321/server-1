@@ -121,13 +121,13 @@ public class MerchantStoreDTO  {
      * 经营类型
      */
     @ApiParam(name = "manageType",value = "经营类型")
-    private Byte manageType;
+    private MerchantStoreTypeEnum manageType;
 
     /**
      * 证件类型
      */
     @ApiParam(name = "certifType",value = "证件类型")
-    private Byte certifType;
+    private CertifTypeEnum certifType;
 
     /**
      *
@@ -146,7 +146,7 @@ public class MerchantStoreDTO  {
      * 图片类型
      */
     @ApiParam(name = "type",value = "图片类型")
-    private Byte type;
+    private MerchantStoreImageEnum type;
 
     /**
      * 图片路径
@@ -266,19 +266,19 @@ public class MerchantStoreDTO  {
         this.licenseIndate = licenseIndate;
     }
 
-    public Byte getManageType() {
+    public MerchantStoreTypeEnum getManageType() {
         return manageType;
     }
 
-    public void setManageType(Byte manageType) {
+    public void setManageType(MerchantStoreTypeEnum manageType) {
         this.manageType = manageType;
     }
 
-    public Byte getCertifType() {
+    public CertifTypeEnum getCertifType() {
         return certifType;
     }
 
-    public void setCertifType(Byte certifType) {
+    public void setCertifType(CertifTypeEnum certifType) {
         this.certifType = certifType;
     }
 
@@ -298,11 +298,11 @@ public class MerchantStoreDTO  {
         this.operatorName = operatorName;
     }
 
-    public Byte getType() {
+    public MerchantStoreImageEnum getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(MerchantStoreImageEnum type) {
         this.type = type;
     }
 

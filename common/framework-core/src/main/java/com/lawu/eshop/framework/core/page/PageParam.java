@@ -33,7 +33,7 @@ public abstract class PageParam {
     private OrderType orderType = OrderType.ASC;
 
     public int getOffset() {
-        return this.pageSize * (this.currentPage-1);
+        return this.pageSize * this.currentPage;
     }
 
     public Integer getCurrentPage() {

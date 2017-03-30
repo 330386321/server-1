@@ -10,8 +10,19 @@ public enum MessageStatusEnum {
     MESSAGE_STATUS_READ((byte) 0x01),
     MESSAGE_STATUS_DELETE((byte) 0x02);
     public Byte val;
+
     MessageStatusEnum(Byte val) {
         this.val = val;
+    }
+
+    public static MessageStatusEnum getEnum(Byte val) {
+        MessageStatusEnum[] values = MessageStatusEnum.values();
+        for (MessageStatusEnum object : values) {
+            if (object.val.equals(val)) {
+                return object;
+            }
+        }
+        return null;
     }
 
 }

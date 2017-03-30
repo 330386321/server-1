@@ -1,6 +1,9 @@
 package com.lawu.eshop.user.srv.converter;
 
+import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -76,12 +79,12 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setCompanyName(merchantStoreInfoBO.getCompanyName());
         merchantStoreDTO.setRegNumber(merchantStoreInfoBO.getRegNumber());
         merchantStoreDTO.setLicenseIndate(merchantStoreInfoBO.getLicenseIndate());
-        merchantStoreDTO.setManageType(merchantStoreInfoBO.getManageType());
-        merchantStoreDTO.setCertifType(merchantStoreInfoBO.getCertifType());
+        merchantStoreDTO.setManageType(MerchantStoreTypeEnum.getEnum(merchantStoreInfoBO.getManageType()));
+        merchantStoreDTO.setCertifType(CertifTypeEnum.getEnum(merchantStoreInfoBO.getCertifType()));
         merchantStoreDTO.setOperatorCardId(merchantStoreInfoBO.getOperatorCardId());
         merchantStoreDTO.setOperatorName(merchantStoreInfoBO.getOperatorName());
 
-        merchantStoreDTO.setType(merchantStoreInfoBO.getType());
+        merchantStoreDTO.setType(MerchantStoreImageEnum.getEnum(merchantStoreInfoBO.getType()));
         merchantStoreDTO.setPath(merchantStoreInfoBO.getPath());
 
         return merchantStoreDTO;
