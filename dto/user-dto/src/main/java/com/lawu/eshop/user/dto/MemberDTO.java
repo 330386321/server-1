@@ -1,10 +1,9 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
-
-import com.lawu.eshop.user.constants.UserSexEnum;
 
 public class MemberDTO {
 
@@ -60,17 +59,14 @@ public class MemberDTO {
         this.nickname = nickname;
     }
 
-	public String getRegionPath() {
-		return regionPath;
-	}
+    public String getRegionPath() {
+        return regionPath;
+    }
 
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
-	}
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
 
-	public Date getBirthday() {
-		return birthday;
-	}
     public Date getBirthday() {
         return birthday;
     }
@@ -103,23 +99,21 @@ public class MemberDTO {
         this.id = id;
     }
 
-	public Date getGmtCreate() {
-		return gmtCreate;
-	}
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
-	}
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
 
-	public UserSexEnum getUserSex() {
-		return userSex;
-	}
+    public UserSexEnum getUserSex() {
+        return userSex;
+    }
 
-	public void setUserSex(UserSexEnum userSex) {
-		this.userSex = userSex;
-	}
+    public void setUserSex(UserSexEnum userSex) {
+        this.userSex = userSex;
+    }
 
-	
-    
 
 }
