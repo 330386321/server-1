@@ -70,7 +70,13 @@ public class MessageController extends BaseController {
 
     }
 
-    @RequestMapping(value = "updateMessageStatus/{messageId}")
+    /**
+     * 站内信息操作（已读未读）
+     * @param messageId
+     * @param statusEnum
+     * @return
+     */
+    @RequestMapping(value = "updateMessageStatus/{messageId}",method = RequestMethod.PUT)
     public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam MessageStatusEnum statusEnum) {
         messageService.updateMessageStatus(messageId, statusEnum);
         return successCreated();

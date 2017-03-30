@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageParam;
@@ -43,7 +44,14 @@ public class MessageController extends BaseController {
     }
 
 
-    @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 （章勇）", httpMethod = "POST")
+    /**
+     * 站内信息列表
+     *
+     * @param pageParam
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 [1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getMessageList", method = RequestMethod.POST)
@@ -51,5 +59,14 @@ public class MessageController extends BaseController {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<Page<MessageDTO>> messageDTOPage = messageService.getMessageList(userNum, pageParam);
         return messageDTOPage;
+    }
+
+    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（已读未读） [1000]（章勇）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("statusEnum") MessageStatusEnum statusEnum, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        messageService.updateMessageStatus(messageId, statusEnum);
+        return successCreated();
     }
 }

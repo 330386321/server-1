@@ -96,7 +96,7 @@ public class MerchantStoreController extends BaseController {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
-                    return failCreated(Integer.valueOf(flag));
+                    return successCreated(Integer.valueOf(flag));
                 }
             }
             //判断回显照片
@@ -135,7 +135,7 @@ public class MerchantStoreController extends BaseController {
             return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
         }
 
-        return failCreated(ResultCode.FAIL);
+        return successCreated(ResultCode.FAIL);
     }
 
     @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
@@ -184,7 +184,7 @@ public class MerchantStoreController extends BaseController {
                     }
 
                 } else {
-                    return failCreated(Integer.valueOf(flag));
+                    return successCreated(Integer.valueOf(flag));
                 }
             }
 
@@ -222,7 +222,7 @@ public class MerchantStoreController extends BaseController {
             return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId,merchantStoreParam);
         }
 
-        return failCreated(ResultCode.FAIL);
+        return successCreated(ResultCode.FAIL);
     }
 
 }
