@@ -41,10 +41,24 @@ public class PropertyInfoController extends BaseController {
     @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "propertyBalance", method = RequestMethod.GET)
+    @RequestMapping(value = "balance", method = RequestMethod.GET)
     public Result<BigDecimal> getPropertyBalance(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyBalance(userNum));
     }
     
+    /**
+     *根据用户编号获取积分。
+     *
+     * @param token
+     * @return
+     */
+    @ApiOperation(value = "获取积分", notes = "根据用户编号获取积分。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    //@Authorization
+    @RequestMapping(value = "point", method = RequestMethod.GET)
+    public Result<Integer> getPropertyPoint(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token*/) {
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	return successGet(propertyInfoService.getPropertyPoint(userNum));
+    }
 }

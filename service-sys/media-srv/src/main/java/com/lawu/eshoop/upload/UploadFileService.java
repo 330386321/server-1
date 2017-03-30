@@ -1,17 +1,18 @@
 package com.lawu.eshoop.upload;
 
-import com.lawu.eshop.utils.RandomUtil;
-import com.lawu.eshop.utils.StringUtil;
-import com.lawu.eshop.utils.ValidateUtil;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
+import com.lawu.eshop.utils.RandomUtil;
+import com.lawu.eshop.utils.ValidateUtil;
 
 /**
  *
@@ -50,7 +51,7 @@ public class UploadFileService {
                         }
                         try {
                             //设置门店图片路径
-                            String imagePath = StringUtil.getUploadImagePath("store").toString().replace("\\", "/");
+                            String imagePath = "";//StringUtil.getUploadImagePath("store").toString().replace("\\", "/");
                             String newFileUploadPath = request.getSession().getServletContext().getRealPath(imagePath);
                             File localFile = new File(newFileUploadPath + newfileName);
                             if (!localFile.getParentFile().exists()) {
@@ -121,7 +122,7 @@ public class UploadFileService {
                 return valsMap;
             }
             try {
-                String imagePath = StringUtil.getUploadImagePath(dir).toString().replace("\\", "/");
+                String imagePath = "";//StringUtil.getUploadImagePath(dir).toString().replace("\\", "/");
                 String newFileUploadPath = request.getSession().getServletContext().getRealPath(imagePath);
                 File localFile = new File(newFileUploadPath + newfileName);
                 if (!localFile.getParentFile().exists()) {

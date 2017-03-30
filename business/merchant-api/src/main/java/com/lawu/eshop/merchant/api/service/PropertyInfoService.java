@@ -37,4 +37,13 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)
     Result<BigDecimal> getPropertyBalance(@PathVariable("userNum") String userNum);
+    
+    /**
+     * 根据用户编号获取用户积分
+     *
+     * @param userNum 用户编号
+     * @return
+     */
+    @RequestMapping(value = "propertyInfo/propertyPoint/{userNum}", method = RequestMethod.GET)
+    public Result<Integer> getPropertyPoint(@PathVariable("userNum") String userNum);
 }

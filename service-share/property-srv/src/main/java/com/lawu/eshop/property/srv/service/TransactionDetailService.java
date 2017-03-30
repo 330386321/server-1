@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.srv.service;
 
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.TransactionDetailQueryParam;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;

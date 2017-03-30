@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -34,6 +35,20 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		if (transactionType != null) {
 			criteria.andTransactionTypeEqualTo(transactionType);
 		}
+		
+		if (transactionDetailQueryParam.getConsumptionType() != null) {
+			switch (transactionDetailQueryParam.getConsumptionType()) {
+				case INCOME : 
+					criteria.andAmountGreaterThanOrEqualTo(new BigDecimal(0));
+					break;
+				case EXPENDITURE:
+					criteria.andAmountLessThan(new BigDecimal(0));
+					break;
+				default:
+					break;
+			}
+		}
+		
 		criteria.andUserNumEqualTo(userNum);
 		
 		Page<TransactionDetailBO> page = new Page<TransactionDetailBO>();
