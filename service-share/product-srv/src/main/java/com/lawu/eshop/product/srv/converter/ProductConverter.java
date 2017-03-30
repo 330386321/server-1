@@ -120,7 +120,8 @@ public class ProductConverter {
 		productInfoDTO.setName(productBO.getName());
 		productInfoDTO.setFeatureImage(productBO.getFeatureImage());
 		productInfoDTO.setContent(productBO.getContent());
-		productInfoDTO.setImagesUrl(productBO.getImagesUrl());
+		productInfoDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
+		productInfoDTO.setImageDetailUrl(productBO.getImageDetailUrl());
 		productInfoDTO.setSpec(productBO.getSpec());
 		productInfoDTO.setTotalSales(productBO.getTotalSales());
 		productInfoDTO.setPriceMax(productBO.getPriceMax());

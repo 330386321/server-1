@@ -134,6 +134,15 @@ public class MerchantStoreInfoBO {
      * 图片路径
      */
     private String path;
+    
+    /**
+    *
+    * 是否支持无理由退货,0否 1是
+    * merchant_store.is_no_reason_return
+    *
+    * @mbg.generated 2017-03-30 10:55:26
+    */
+    private Boolean isNoReasonReturn;
 
     public Long getMerchantStoreId() {
         return merchantStoreId;
@@ -294,4 +303,13 @@ public class MerchantStoreInfoBO {
     public void setPath(String path) {
         this.path = path;
     }
+
+	public Boolean getIsNoReasonReturn() {
+		return isNoReasonReturn;
+	}
+
+	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
+		this.isNoReasonReturn = isNoReasonReturn;
+	}
+    
 }

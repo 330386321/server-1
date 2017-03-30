@@ -2,8 +2,6 @@ package com.lawu.eshop.product.dto;
 
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * 商品列表查询，封装的DTO
  *

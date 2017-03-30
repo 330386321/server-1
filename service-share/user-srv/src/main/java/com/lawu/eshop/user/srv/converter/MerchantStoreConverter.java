@@ -50,6 +50,7 @@ public class MerchantStoreConverter {
         merchantStoreInfoBO.setLatitude(merchantStoreDO.getLatitude());
         merchantStoreInfoBO.setIntro(merchantStoreDO.getIntro());
         merchantStoreInfoBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+        merchantStoreInfoBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
 
         return merchantStoreInfoBO;
     }

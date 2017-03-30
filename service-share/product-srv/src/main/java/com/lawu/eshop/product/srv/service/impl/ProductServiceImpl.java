@@ -157,16 +157,23 @@ public class ProductServiceImpl implements ProductService {
 		productInfoBO.setPriceMax(String.valueOf(max));
 		productInfoBO.setPriceMin(String.valueOf(min));	
 		
-		//查询型号图片
+		//查询商品图片
 		ProductImageDOExample imageExample = new ProductImageDOExample();
 		imageExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
 		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
-		List<String> images = new ArrayList<String>();
+		List<String> imagesHead = new ArrayList<String>();
+		List<String> imagesDetail = new ArrayList<String>();
 		for(ProductImageDO image : imageDOS){
-			images.add(image.getImagePath());
+			if(image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_HEAD.val.byteValue()){
+				imagesHead.add(image.getImagePath());
+			}else if(image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val.byteValue()){
+				imagesDetail.add(image.getImagePath());
+			}
 		}
-		String iamgesJson = JSON.toJSONString(images);
-		productInfoBO.setImagesUrl(iamgesJson);
+		String imagesHeadJson = JSON.toJSONString(imagesHead);
+		String imagesDetailJson = JSON.toJSONString(imagesDetail);
+		productInfoBO.setImagesHeadUrl(imagesHeadJson);
+		productInfoBO.setImageDetailUrl(imagesDetailJson);
 		
 		return productInfoBO;
 	}

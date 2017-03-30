@@ -14,7 +14,8 @@ public class ProductInfoBO {
     private String content;
     private Integer totalSales;//销量
     private String featureImage;
-    private String imagesUrl;
+    private String imagesHeadUrl;
+    private String imageDetailUrl;
     private String spec;
     private String priceMax;
     private String priceMin;
@@ -54,11 +55,12 @@ public class ProductInfoBO {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
-	public String getImagesUrl() {
-		return imagesUrl;
+	
+	public String getImagesHeadUrl() {
+		return imagesHeadUrl;
 	}
-	public void setImagesUrl(String imagesUrl) {
-		this.imagesUrl = imagesUrl;
+	public void setImagesHeadUrl(String imagesHeadUrl) {
+		this.imagesHeadUrl = imagesHeadUrl;
 	}
 	public Integer getTotalSales() {
 		return totalSales;
@@ -77,6 +79,12 @@ public class ProductInfoBO {
 	}
 	public void setPriceMin(String priceMin) {
 		this.priceMin = priceMin;
+	}
+	public String getImageDetailUrl() {
+		return imageDetailUrl;
+	}
+	public void setImageDetailUrl(String imageDetailUrl) {
+		this.imageDetailUrl = imageDetailUrl;
 	}
     
 }

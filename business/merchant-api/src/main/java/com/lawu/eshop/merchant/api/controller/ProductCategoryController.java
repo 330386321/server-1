@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ProductCategoryService;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
@@ -33,21 +34,21 @@ public class ProductCategoryController extends BaseController {
 
     @ApiOperation(value = "查询所有商品分类", notes = "查询所有商品分类，(杨清华)", httpMethod = "GET")
     @Authorization
-    @RequestMapping(value = "findAll", method = RequestMethod.GET)
-    public List<ProductCategoryDTO> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    @RequestMapping(value = "all", method = RequestMethod.GET)
+    public Result<List<ProductCategoryDTO>> findAll(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 
         List<ProductCategoryDTO> dtos = productCategoryService.findAll();
-        return dtos;
+        return successCreated(dtos);
     }
     
     @ApiOperation(value = "根据ID查询商品分类", notes = "根据ID查询商品分类，(杨清华)", httpMethod = "GET")
     @Authorization
-    @RequestMapping(value = "getById/{id}", method = RequestMethod.GET)
-    public ProductCategoryDTO getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    public Result<ProductCategoryDTO> getById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     								  @PathVariable @ApiParam(name = "id", required = true, value = "商品分类ID") Integer id) {
 
         ProductCategoryDTO dto = productCategoryService.getById(id);
-        return dto;
+        return successCreated(dto);
     }
 
 }

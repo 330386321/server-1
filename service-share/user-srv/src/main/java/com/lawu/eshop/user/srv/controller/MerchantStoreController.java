@@ -179,6 +179,25 @@ public class MerchantStoreController extends BaseController {
         }
         merchantStoreInfoService.saveMerchantStoreAuditInfo(merchantId, merchantStoreParam, merchantStoreId, storeType, certifType);
        return  successCreated();
-        
+    }
+
+    /**
+     * 根据商家ID查询该商家是否支持七天无理由退货
+     * @param merchantId
+     * @return
+     * @author Yangqh
+     */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "findIsNoReasonReturnById", method = RequestMethod.GET)
+    public Result findIsNoReasonReturnById(@RequestParam Long merchantId) {
+    	
+    	if(merchantId == null || merchantId == 0L){
+    		return successCreated(ResultCode.ID_EMPTY);
+    	}
+    	MerchantStoreInfoBO storeBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+    	if(storeBO == null){
+    		return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+    	}
+        return successCreated(storeBO.getIsNoReasonReturn());
     }
 }

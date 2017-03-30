@@ -1,5 +1,7 @@
 package com.lawu.eshop.product.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 用户端商品详情封装DTO
  *
@@ -8,18 +10,30 @@ package com.lawu.eshop.product.dto;
  */
 public class ProductInfoDTO {
 
+    @ApiModelProperty(value = "商品ID")
     private Long id;
+    @ApiModelProperty(value = "商家ID")
     private Long merchantId;
+    @ApiModelProperty(value = "商品名称")
     private String name;
+    @ApiModelProperty(value = "商品描述")
 	private String content;
-    private Integer totalSales;//销量
+    @ApiModelProperty(value = "销量")
+    private Integer totalSales;
+    @ApiModelProperty(value = "封面图片")
     private String featureImage;
-    private String imagesUrl;
+    @ApiModelProperty(value = "滚动图片")
+    private String imagesHeadUrl;
+    @ApiModelProperty(value = "详情图片")
+    private String imageDetailUrl;
+    @ApiModelProperty(value = "型号信息")
     private String spec;
+    @ApiModelProperty(value = "型号最大价格")
     private String priceMax;
+    @ApiModelProperty(value = "型号最小价格")
     private String priceMin;
-    
-    private boolean isSupportEleven;//是否支持七天无理由退货
+    @ApiModelProperty(value = "是否支持七天无理由退货")
+    private boolean isSupportEleven;
     
 	public boolean isSupportEleven() {
 		return isSupportEleven;
@@ -75,17 +89,23 @@ public class ProductInfoDTO {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
-	public String getImagesUrl() {
-		return imagesUrl;
+	public String getImagesHeadUrl() {
+		return imagesHeadUrl;
 	}
-	public void setImagesUrl(String imagesUrl) {
-		this.imagesUrl = imagesUrl;
+	public void setImagesHeadUrl(String imagesHeadUrl) {
+		this.imagesHeadUrl = imagesHeadUrl;
 	}
 	public String getSpec() {
 		return spec;
 	}
 	public void setSpec(String spec) {
 		this.spec = spec;
+	}
+	public String getImageDetailUrl() {
+		return imageDetailUrl;
+	}
+	public void setImageDetailUrl(String imageDetailUrl) {
+		this.imageDetailUrl = imageDetailUrl;
 	}
 	
     

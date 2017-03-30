@@ -62,12 +62,12 @@ public class ProductController extends BaseController{
      * @param status 目标修改的状态
      * @return
      */
-    @SuppressWarnings({ "rawtypes", "deprecation" })
+    @SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "updateProductStatus", method = RequestMethod.GET)
     public Result updateProductStatus(@RequestParam String ids , @RequestParam ProductStatusEnum productStatus){
     	int counts = productService.updateProductStatus(ids,productStatus);
     	if(counts == 0 || counts != ids.split(",").length){
-    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    		return successCreated(ResultCode.RESOURCE_NOT_FOUND);
     	}
     	return successCreated(ResultCode.SUCCESS);
     }
@@ -77,17 +77,16 @@ public class ProductController extends BaseController{
      * @param Long
      * @return
      */
-    @SuppressWarnings({ "deprecation" })
 	@RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId){
     	if(productId == null){
-    		return failCreated(ResultCode.ID_EMPTY, null);
+    		return successCreated(ResultCode.ID_EMPTY);
     	}
     	
     	//商品基本信息 
     	ProductInfoBO productBO = productService.selectProductById(productId);
     	if(productBO == null){
-    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    		return successCreated(ResultCode.RESOURCE_NOT_FOUND);
     	}
     	ProductInfoDTO productDTO = ProductConverter.convertInfoDTO(productBO);
     	
@@ -99,17 +98,16 @@ public class ProductController extends BaseController{
      * @param productId
      * @return
      */
-    @SuppressWarnings({ "deprecation" })
 	@RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
     public Result<ProductEditInfoDTO> selectEditProductById(@RequestParam Long productId){
     	if(productId == null){
-    		return failCreated(ResultCode.ID_EMPTY, null);
+    		return successCreated(ResultCode.ID_EMPTY, null);
     	}
     	
     	//商品基本信息 
     	ProductEditInfoBO productBO = productService.selectEditProductById(productId);
     	if(productBO == null){
-    		return failCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+    		return successCreated(ResultCode.RESOURCE_NOT_FOUND, null);
     	}
     	ProductEditInfoDTO productDTO = ProductConverter.convertEditInfoDTO(productBO);
     	
