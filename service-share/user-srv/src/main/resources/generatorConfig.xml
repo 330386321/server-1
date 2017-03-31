@@ -64,10 +64,10 @@
         <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="member_profile" domainObjectName="MemberProfileDO">
+        <!--<table tableName="member_profile" domainObjectName="MemberProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--<table tableName="merchant_store_image" domainObjectName="MerchantStoreImageDO">
+        <table tableName="merchant_store_image" domainObjectName="MerchantStoreImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_store_profile" domainObjectName="MerchantStoreProfileDO">
