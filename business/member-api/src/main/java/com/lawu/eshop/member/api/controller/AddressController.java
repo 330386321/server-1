@@ -1,22 +1,30 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 描述：收货地址管理
@@ -35,6 +43,7 @@ public class AddressController extends BaseController {
      * 收货地址列表
      * @audit  sunlinqing 2016.03.29
      */
+    @Audit(date = "2017-03-31", reviewer = "sunny")
     @Authorization
     @ApiOperation(value = "收货地址信息查询", notes = "查询当前用户收货地址列表信息[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -51,16 +51,13 @@ public class TransactionDetailController extends BaseController {
     @Authorization
     @RequestMapping(value = "page", method = RequestMethod.GET)
     public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-    		@RequestParam(name = "transactionType", required = false) @ApiParam(name = "transactionType", value = "交易类型<br/>默认全部<br/>RECHARGE_THE_BALANCE 充值余额<br/>WITHDRAW 提现<br/>WITHDRAW_FAILURE 提现失败<br>PAY_FOR_MERCHANDISE_ORDERS 支付商品订单") MemberTransactionTypeEnum transactionType, 
+    		@RequestParam(name = "transactionType", required = false) @ApiParam(name = "transactionType", 
+    		value = "交易类型<br/>默认全部<br/>RECHARGE 充值<br/>ADVERTISING 广告<br/>RED_SWEEP 扫红包<br/>REFUNDS 退款<br/>LOWER_INCOME 下级收益<br/>PAY 买单<br/>PAY_ORDERS 付商品订单<br/>INTEGRAL_RECHARGE 积分充值<br/>WITHDRAW 提现") 
+    		MemberTransactionTypeEnum transactionType, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") TransactionDetailQueryParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
-    	Byte type = null;
-    	if (transactionType != null) {
-    		type = transactionType.getValue();
-    	}
-    	
-    	return successGet(transactionDetailService.findPageByUserNum(userNum, type, param));
+    	return successGet(transactionDetailService.findPageByUserNumForMember(userNum, transactionType, param));
     }
     
     

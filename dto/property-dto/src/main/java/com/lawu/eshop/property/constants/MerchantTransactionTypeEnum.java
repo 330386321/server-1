@@ -7,24 +7,46 @@ package com.lawu.eshop.property.constants;
  * @date 2017/3/29
  */
 public enum MerchantTransactionTypeEnum {
+	
 	/**
-	 * 充值余额
+	 * 买单
 	 */
-	RECHARGE_THE_BALANCE((byte)1),
+	PAY((byte)0x01),
+	
+	/**
+	 * 订单
+	 */
+	ORDER((byte)0x02),
+	
+	/**
+	 * 下级收益
+	 */
+	LOWER_INCOME((byte)0x03),
+	
+	/**
+	 * 充值
+	 */
+	RECHARGE((byte)0x04),
+	
+	/**
+	 * 投放
+	 */
+	PUT_ON((byte)0x05),
+	
+	/**
+	 * 积分充值
+	 */
+	INTEGRAL_RECHARGE((byte)0x06),
+	
+	/**
+	 * 退款
+	 */
+	REFUNDS((byte)0x07),
+	
 	/**
 	 * 提现
 	 */
-	WITHDRAW((byte)2),
-	
-	/**
-	 * 提现失败
-	 */
-	WITHDRAW_FAILURE((byte)3),
-	
-	/**
-	 * 销售商品收入
-	 */
-	REVENUE_FROM_SELLING_GOODS((byte)4);
+	WITHDRAW((byte)0x08);
 	
 	MerchantTransactionTypeEnum(Byte value){
 		this.value = value;

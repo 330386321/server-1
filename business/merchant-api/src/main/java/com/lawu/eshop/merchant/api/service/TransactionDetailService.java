@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryParam;
 
@@ -27,7 +28,9 @@ public interface TransactionDetailService {
      * @param transactionDetailQueryParam 查询参数
      * @return
      */
-    @RequestMapping(value = "transactionDetail/findPageByUserNum/{userNum}", method = RequestMethod.POST)
-    public Result<Page<TransactionDetailDTO>> findPageByUserNum(@PathVariable("userNum") String userNum, @RequestParam(name = "transactionType", required = false) Byte transactionType, @RequestBody TransactionDetailQueryParam transactionDetailQueryParam);
+    @RequestMapping(value = "transactionDetail/findPageByUserNumForMerchant/{userNum}", method = RequestMethod.POST)
+    public Result<Page<TransactionDetailDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum, 
+    		@RequestParam(name = "transactionType", required = false) MerchantTransactionTypeEnum transactionType, 
+    		@RequestBody TransactionDetailQueryParam transactionDetailQueryParam);
 	
 }
