@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.dto;
 
 import com.lawu.eshop.user.constants.UserSexEnum;
+import io.swagger.annotations.ApiParam;
 
 import java.util.Date;
 
@@ -10,20 +11,25 @@ import java.util.Date;
  */
 public class UserDTO {
 
-    private Long id;
-
+    @ApiParam(name = "num",value = "编号")
     private String num;
 
+    @ApiParam(name = "account",value = "账号")
     private String account;
 
+    @ApiParam(name = "nickname",value = "昵称")
     private String nickname;
 
+    @ApiParam(name = "regionPath",value = "地区路径")
     private String regionPath;
 
+    @ApiParam(name = "birthday",value = "生日")
     private Date birthday;
 
+    @ApiParam(name = "headimg",value = "头像")
     private String headimg;
 
+    @ApiParam(name = "userSex",value = "性别")
     private UserSexEnum userSex;
 
     public UserSexEnum getUserSex() {
@@ -32,14 +38,6 @@ public class UserDTO {
 
     public void setUserSex(UserSexEnum userSex) {
         this.userSex = userSex;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getNum() {

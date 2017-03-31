@@ -16,6 +16,7 @@ import com.lawu.eshop.mall.srv.mapper.extend.MessageDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,6 +80,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional
     public void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum) {
         MessageDO messageDO = new MessageDO();
         messageDO.setId(messageId);
@@ -87,6 +89,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
+    @Transactional
     public void saveMessage(String userNum, MessageInfoParam messageInfoParam) {
         MessageDO messageDO = new MessageDO();
         messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);

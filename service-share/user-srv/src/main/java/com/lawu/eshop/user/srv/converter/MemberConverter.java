@@ -31,23 +31,17 @@ public class MemberConverter {
         }
 
         MemberBO memberBO = new MemberBO();
-        memberBO.setId(memberDO.getId());
         memberBO.setAccount(memberDO.getAccount());
         memberBO.setBirthday(memberDO.getBirthday());
         memberBO.setNum(memberDO.getNum());
-        memberBO.setPwd(memberDO.getPwd());
         memberBO.setMobile(memberDO.getMobile());
-        memberBO.setGmtCreate(memberDO.getGmtCreate());
-        memberBO.setGmtModified(memberDO.getGmtModified());
         memberBO.setHeadimg(memberDO.getHeadimg());
         memberBO.setInviterId(memberDO.getInviterId());
         memberBO.setInviterType(memberDO.getInviterType());
         memberBO.setLevel(memberDO.getLevel());
-        memberBO.setStatus(memberDO.getStatus());
         memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
         memberBO.setRegionPath(memberDO.getRegionPath());
         memberBO.setNickname(memberDO.getNickname());
-        memberBO.setName(memberDO.getName());
         return memberBO;
     }
 
@@ -95,7 +89,6 @@ public class MemberConverter {
         }
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(memberBO.getId());
         userDTO.setNum(memberBO.getNum());
         userDTO.setAccount(memberBO.getAccount());
         userDTO.setBirthday(memberBO.getBirthday());
@@ -135,17 +128,17 @@ public class MemberConverter {
      * @date 2017/03/23
      */
     public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS) {
-		if (memberDOS == null) {
-	       return null;
-	    }
-		List<MemberBO> memberBOS=new ArrayList<MemberBO>();
-		for (MemberDO memberDO : memberDOS) {
-			memberBOS.add(convertBO(memberDO));
-		}
-		return memberBOS;
-	}
-    
-    
+        if (memberDOS == null) {
+            return null;
+        }
+        List<MemberBO> memberBOS = new ArrayList<MemberBO>();
+        for (MemberDO memberDO : memberDOS) {
+            memberBOS.add(convertBO(memberDO));
+        }
+        return memberBOS;
+    }
+
+
     /**
      * DTO转换
      *
@@ -176,15 +169,15 @@ public class MemberConverter {
      * @date 2017/03/23
      */
     public static List<MemberDTO> convertListDOTS(List<MemberBO> memberBOS) {
-		if (memberBOS == null) {
-		       return null;
-		    }
-			List<MemberDTO> memberDTOS=new ArrayList<MemberDTO>();
-			for (MemberBO MemberBO : memberBOS) {
-				memberDTOS.add(convertMDTO(MemberBO));
-			}
-		return memberDTOS;
-	}
+        if (memberBOS == null) {
+            return null;
+        }
+        List<MemberDTO> memberDTOS = new ArrayList<MemberDTO>();
+        for (MemberBO MemberBO : memberBOS) {
+            memberDTOS.add(convertMDTO(MemberBO));
+        }
+        return memberDTOS;
+    }
 
     /**
      * 描述：将pageBOS转成pageDTOS
@@ -192,16 +185,16 @@ public class MemberConverter {
      * @param pageMemberBOS
      * @return
      */
-	public static Page<MemberDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
-		Page<MemberDTO> pageDTO=new Page<MemberDTO>();
-		List<MemberBO> BOS=pageMemberBOS.getRecords();
-		List<MemberDTO> DTOS=pageDTO.getRecords();
-		for (MemberBO memberBO : BOS) {
-			DTOS.add(convertMDTO(memberBO));
-		}
-		pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
-		pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
-		return pageDTO;
-	}
+    public static Page<MemberDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
+        Page<MemberDTO> pageDTO = new Page<MemberDTO>();
+        List<MemberBO> BOS = pageMemberBOS.getRecords();
+        List<MemberDTO> DTOS = pageDTO.getRecords();
+        for (MemberBO memberBO : BOS) {
+            DTOS.add(convertMDTO(memberBO));
+        }
+        pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
+        pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
+        return pageDTO;
+    }
 
 }

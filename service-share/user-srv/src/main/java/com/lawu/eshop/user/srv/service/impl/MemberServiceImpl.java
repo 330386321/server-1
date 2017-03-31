@@ -78,6 +78,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public int updateMemberInfo(UserParam memberParam, Long id) {
 
         MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
@@ -88,6 +89,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateLoginPwd(Long id, String originalPwd, String newPwd) {
 
         MemberDO memberDO = new MemberDO();
@@ -255,6 +257,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateMemberHeadImg(String headimg, Long mermberId) {
         MemberDO memberDO = new MemberDO();
         memberDO.setHeadimg(headimg);

@@ -33,6 +33,10 @@ public class MessageDTO {
     @ApiParam(name = "status",value = "消息状态")
     private MessageStatusEnum statusEnum;
 
+    /**
+     * 消息状态
+     */
+    @ApiParam(name = "title",value = "标题")
     private String title;
 
     public Long getId() {

@@ -9,6 +9,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
+import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
@@ -73,25 +74,25 @@ public class MerchantStoreController extends BaseController {
                 String fileName = file.getName();
                 Map<String, String> map = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_STORE);
                 String flag = map.get("resultFlag");
-                if ("0".equals(flag)) {
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
-                    if (fileName.contains("store") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("environment") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("logo") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("idcard") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("licence") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("other") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -160,25 +161,25 @@ public class MerchantStoreController extends BaseController {
                 String fileName = file.getName();
                 Map<String, String> map = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_STORE);
                 String flag = map.get("resultFlag");
-                if ("0".equals(flag)) {
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
-                    if (fileName.contains("store") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("environment") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("logo") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("idcard") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("licence") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains("other") && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
 

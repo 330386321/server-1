@@ -172,6 +172,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     }
 
     @Override
+    @Transactional
     public void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeTypeEnum, CertifTypeEnum certifTypeEnum) {
 
         MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 1);
@@ -260,6 +261,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     }
 
     @Override
+    @Transactional
     public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeType, CertifTypeEnum certifType) {
 
         MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
