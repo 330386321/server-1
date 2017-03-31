@@ -3,6 +3,7 @@
 <mapper namespace="com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOExtendMapper" >
   <resultMap id="BaseResultMap" type="com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO" >
   	<result column="member_id" property="memberId" jdbcType="BIGINT" />
+  	
     <result column="product_id" property="productId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="feature_image" property="featureImage" jdbcType="VARCHAR" />

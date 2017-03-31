@@ -136,11 +136,11 @@ public class  EshopCommentGenerator implements CommentGenerator {
         if (markAsDoNotDelete) {
             sb.append(" do_not_delete_during_merge"); //$NON-NLS-1$
         }
-        String s = getDateString();
+        /*String s = getDateString();
         if (s != null) {
             sb.append(' ');
             sb.append(s);
-        }
+        }*/
         javaElement.addJavaDocLine(sb.toString());
     }
 
@@ -151,7 +151,7 @@ public class  EshopCommentGenerator implements CommentGenerator {
      *
      * @return a string representing the current timestamp, or null
      */
-    protected String getDateString() {
+    /*protected String getDateString() {
         if (suppressDate) {
             return null;
         } else if (dateFormat != null) {
@@ -159,7 +159,7 @@ public class  EshopCommentGenerator implements CommentGenerator {
         } else {
             return new Date().toString();
         }
-    }
+    }*/
 
     /* (non-Javadoc)
      * @see org.mybatis.generator.api.CommentGenerator#addClassComment(org.mybatis.generator.api.dom.java.InnerClass, org.mybatis.generator.api.IntrospectedTable)
