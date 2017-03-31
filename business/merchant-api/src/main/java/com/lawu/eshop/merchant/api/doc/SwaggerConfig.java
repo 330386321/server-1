@@ -2,7 +2,11 @@ package com.lawu.eshop.merchant.api.doc;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
+
 import io.swagger.annotations.ApiOperation;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +27,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @ComponentScan(basePackages = {"com.lawu.eshop.merchant.api.controller"})
 public class SwaggerConfig {
-
+	
+	@Value(value="${swagger.api.audit}")
+	private boolean ISAUDIT;
+	
     @Bean
     public Docket adminApi() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -31,7 +38,7 @@ public class SwaggerConfig {
                 .forCodeGeneration(true)
                 .pathMapping("/")
                 .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ISAUDIT ? Audit.class : ApiOperation.class))
                 .paths(paths())
                 .build()
                 .apiInfo(apiInfo())
