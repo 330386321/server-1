@@ -5,9 +5,16 @@ package com.lawu.eshop.mall.constants;
  * Created by Administrator on 2017/3/30.
  */
 public enum MessageTypeEnum {
-    MESSAGE_TYPE_REFUND((byte) 0x01),//退款
-    MESSAGE_TYPE_APPRAISE((byte) 0x02),//评价
-    MESSAGE_TYPEUS_NOTICE((byte) 0x03);//通知
+    MESSAGE_TYPE_RECOMMEND_STORE((byte) 0x01),//推荐店铺
+    MESSAGE_TYPE_PLATFORM_NOTICE((byte) 0x02),//平台通知
+
+    MESSAGE_TYPE_RECHARGE((byte) 0x03),//充值
+    MESSAGE_TYPE_WITHDRAW((byte) 0x04),//提现
+    MESSAGE_TYPE_INCOME((byte) 0x05),//收益
+
+    MESSAGE_TYPE_START_SEND_NOTICE((byte) 0x06),//发货通知
+    MESSAGE_TYPE_SENDING_NOTICE((byte) 0x07),//派送通知
+    MESSAGE_TYPE_SIGN_NOTICE((byte) 0x08);//签收通知
     public Byte val;
 
     MessageTypeEnum(Byte val) {
