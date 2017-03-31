@@ -1,0 +1,33 @@
+package com.lawu.eshop.member.api.service;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.product.dto.FavoriteProductDTO;
+import com.lawu.eshop.product.query.FavoriteProductQuery;
+
+/**
+ * 
+ * @author zhangrc
+ * @date 2017/03/31
+ *
+ */
+@FeignClient(value = "product-srv")
+public interface FavoriteProductService {
+	
+	@RequestMapping(method = RequestMethod.POST, value = "favoriteProduct/save")
+	Result save(@RequestParam("memberId") Long memberId,@RequestParam("productId") Long productId);
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteProduct/remove/{id}")
+    Result remove(@PathVariable("id") Long id);
+	
+	@RequestMapping(method = RequestMethod.POST, value = "favoriteProduct/selectMyFavoriteProduct")
+	Result<Page<FavoriteProductDTO>> selectMyFavoriteProduct(@RequestParam("memberId") Long id, @RequestBody FavoriteProductQuery query);
+
+}

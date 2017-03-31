@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,7 @@ public class AddressController extends BaseController{
 	 * @return
 	 */
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public Result<AddressDTO> get(@RequestParam Long id) {
+    public Result<AddressDTO> get(@PathVariable Long id) {
 		AddressBO addressBO = addressService.get(id);
         return successGet(AddressConverter.convertDTO(addressBO));
     }
@@ -73,7 +74,7 @@ public class AddressController extends BaseController{
 	 * @return
 	 */
    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-   public Result update(@RequestBody AddressParam  addressParam,@RequestParam Long id) {
+   public Result update(@RequestBody AddressParam  addressParam,@PathVariable Long id) {
 	   Integer i=addressService.update(addressParam,id);
 	   if(i>0){
 		    return successCreated(ResultCode.SUCCESS);
@@ -87,7 +88,7 @@ public class AddressController extends BaseController{
 	 * @return
 	 */
    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
-   public Result remove(@RequestParam Long id) {
+   public Result remove(@PathVariable Long id) {
 	   Integer i=addressService.remove(id);
 	   if(i>0){
    			return successCreated(ResultCode.SUCCESS);
@@ -101,7 +102,7 @@ public class AddressController extends BaseController{
 	 * @return
 	 */
   @RequestMapping(value = "updateDefault/{id}", method = RequestMethod.GET)
-  public Result updateDefault(@RequestParam Long id,@RequestParam Long userId) {
+  public Result updateDefault(@PathVariable Long id,@RequestParam Long userId) {
 	  Integer i=addressService.updateDefault(id, userId);
 	  if(i>0){
  			return successCreated(ResultCode.SUCCESS);

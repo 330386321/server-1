@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOExtendMapper" >
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO" >
+  	<result column="member_id" property="memberId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="feature_image" property="featureImage" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO" id="selectMyFavoriteProductByRowbounds" >
+    select 
+    	fp.member_id as memberId,
+    	fp.product_id as productId,
+    	pd.name as name,
+    	pd.feature_image as feature_image
+    from favorite_product fp  
+    	left join product pd on fp.product_id=pd.id
+    <where>
+    	fp.member_id=#{memberId,jdbcType=BIGINT}
+    	and  pd.status !=1
+    </where>
+  </select>
+</mapper>

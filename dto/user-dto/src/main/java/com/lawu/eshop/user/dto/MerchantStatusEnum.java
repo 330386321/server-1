@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.UserStatusEnum;
+
 /**
  *
  * Created by zhangyong on 2017/3/28.
@@ -16,5 +18,15 @@ public enum  MerchantStatusEnum {
     public Byte val;
     MerchantStatusEnum(Byte val) {
         this.val = val;
+    }
+    
+    public static MerchantStatusEnum getEnum(Byte val) {
+    	MerchantStatusEnum[] values = MerchantStatusEnum.values();
+        for (MerchantStatusEnum object : values) {
+            if (object.val.equals(val)) {
+                return object;
+            }
+        }
+        return null;
     }
 }

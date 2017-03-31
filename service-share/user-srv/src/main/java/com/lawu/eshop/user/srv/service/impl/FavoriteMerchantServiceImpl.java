@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.query.FavoriteMerchantParam;
@@ -31,6 +32,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 	private MerchantStoreDOMapper merchantStoreDOMapper;
 
 	@Override
+	@Transactional
 	public Integer save(Long memberId ,Long merchantId) {
 		FavoriteMerchantDO favoriteMerchant=new FavoriteMerchantDO();
 		favoriteMerchant.setMemberId(memberId);

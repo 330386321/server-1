@@ -2,6 +2,8 @@ package com.lawu.eshop.user.srv.bo;
 
 import java.util.Date;
 
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+
 public class MerchantInviterBO {
 	
 	private String account;
@@ -18,7 +20,7 @@ public class MerchantInviterBO {
 	
 	private Date gmtCreate;
 	
-	private Byte status;
+	private MerchantStatusEnum statusEnum;
 
 	public String getAccount() {
 		return account;
@@ -76,13 +78,15 @@ public class MerchantInviterBO {
 		this.gmtCreate = gmtCreate;
 	}
 
-	public Byte getStatus() {
-		return status;
+	public MerchantStatusEnum getStatusEnum() {
+		return statusEnum;
 	}
 
-	public void setStatus(Byte status) {
-		this.status = status;
+	public void setStatusEnum(MerchantStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
 	}
+
+	
 	
 	
 

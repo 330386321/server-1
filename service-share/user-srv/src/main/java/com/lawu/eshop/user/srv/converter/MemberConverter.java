@@ -1,15 +1,16 @@
 package com.lawu.eshop.user.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserSexEnum;
+import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 会员信息转换器
@@ -159,6 +160,21 @@ public class MemberConverter {
         memberDTO.setLevel(memberBO.getLevel());
         return memberDTO;
     }
+    
+    
+    public static EfriendDTO convertEDTO(MemberBO memberBO) {
+        if (memberBO == null) {
+            return null;
+        }
+        EfriendDTO memberDTO = new EfriendDTO();
+        memberDTO.setId(memberBO.getId());
+        memberDTO.setNum(memberBO.getNum());
+        memberDTO.setName(memberBO.getName());
+        memberDTO.setNickname(memberBO.getNickname());
+        memberDTO.setHeadimg(memberBO.getHeadimg());
+        memberDTO.setLevel(memberBO.getLevel());
+        return memberDTO;
+    }
 
     /**
      * 描述：将BOS转成DTOS
@@ -168,16 +184,16 @@ public class MemberConverter {
      * @author zhangrc
      * @date 2017/03/23
      */
-    public static List<MemberDTO> convertListDOTS(List<MemberBO> memberBOS) {
-        if (memberBOS == null) {
-            return null;
-        }
-        List<MemberDTO> memberDTOS = new ArrayList<MemberDTO>();
-        for (MemberBO MemberBO : memberBOS) {
-            memberDTOS.add(convertMDTO(MemberBO));
-        }
-        return memberDTOS;
-    }
+    public static List<EfriendDTO> convertListDOTS(List<MemberBO> memberBOS) {
+		if (memberBOS == null) {
+		       return null;
+		    }
+			List<EfriendDTO> memberDTOS=new ArrayList<EfriendDTO>();
+			for (MemberBO MemberBO : memberBOS) {
+				memberDTOS.add(convertEDTO(MemberBO));
+			}
+		return memberDTOS;
+	}
 
     /**
      * 描述：将pageBOS转成pageDTOS
@@ -185,16 +201,16 @@ public class MemberConverter {
      * @param pageMemberBOS
      * @return
      */
-    public static Page<MemberDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
-        Page<MemberDTO> pageDTO = new Page<MemberDTO>();
-        List<MemberBO> BOS = pageMemberBOS.getRecords();
-        List<MemberDTO> DTOS = pageDTO.getRecords();
-        for (MemberBO memberBO : BOS) {
-            DTOS.add(convertMDTO(memberBO));
-        }
-        pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
-        pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
-        return pageDTO;
-    }
+	public static Page<EfriendDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
+		Page<EfriendDTO> pageDTO=new Page<EfriendDTO>();
+		List<MemberBO> BOS=pageMemberBOS.getRecords();
+		List<EfriendDTO> DTOS=pageDTO.getRecords();
+		for (MemberBO memberBO : BOS) {
+			DTOS.add(convertEDTO(memberBO));
+		}
+		pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
+		pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
+		return pageDTO;
+	}
 
 }

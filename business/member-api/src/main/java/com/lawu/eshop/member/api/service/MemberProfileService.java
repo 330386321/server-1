@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.member.api.service.hystrix.MemberProfileServiceHystrix;
-import com.lawu.eshop.user.dto.MemberProfileDTO;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
 
 /**
  * 
@@ -24,7 +24,7 @@ public interface MemberProfileService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "memberProfile/getMemberCount")
-	public Result<MemberProfileDTO> getMemberCount(@RequestParam("id")Long id);
+	public Result<InviteeMemberCountDTO> getMemberCount(@RequestParam("id")Long id);
 
 	/**
 	 * 我推荐的商家总数量
@@ -32,6 +32,6 @@ public interface MemberProfileService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "memberProfile/getMerchantCount")
-	public Result<MemberProfileDTO> getMerchantCount(@RequestParam("id")Long id);
+	public Result<InviteeMechantCountDTO> getMerchantCount(@RequestParam("id")Long id);
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDO;
 
@@ -27,7 +28,7 @@ public class MerchantInviterConverter {
 			FIO.setPrincipalName(inviterMerchantDO.getPrincipalName());
 			FIO.setRegionPath(inviterMerchantDO.getRegionPath());
 			FIO.setGmtCreate(inviterMerchantDO.getGmtCreate());
-			FIO.setStatus(inviterMerchantDO.getStatus());
+			FIO.setStatusEnum(MerchantStatusEnum.getEnum(inviterMerchantDO.getStatus()));
 			FIBOS.add(FIO);
 			
 		}
@@ -52,7 +53,7 @@ public class MerchantInviterConverter {
         DTO.setName(merchantInviterBO.getName());
         DTO.setPrincipalMobile(merchantInviterBO.getPrincipalMobile());
         DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
-        DTO.setStatus(merchantInviterBO.getStatus());
+        DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
         return DTO;
     }
 	

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.property.param.BankAccountParam;
 import com.lawu.eshop.property.srv.bo.BankAccountBO;
@@ -34,6 +35,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	
 
 	@Override
+	@Transactional
 	public Integer saveBankAccount(String userNum,BankAccountParam bankAccountParam) {
 		String accountNumber=bankAccountParam.getAccountNumber();
 		String reg="^(?!0)\\d{15,19}$"; 
@@ -66,6 +68,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	}
 
 	@Override
+	@Transactional
 	public Integer remove(Long id) {
 		BankAccountDOExample example = new BankAccountDOExample();
 		example.createCriteria().andIdEqualTo(id);

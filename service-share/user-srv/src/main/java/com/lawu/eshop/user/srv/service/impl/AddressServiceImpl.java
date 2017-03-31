@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
@@ -20,7 +21,9 @@ public class AddressServiceImpl implements AddressService {
 	@Autowired
 	private AddressDOMapper addressDOMapper; 
  
+	
 	@Override
+	@Transactional
 	public Integer save(Long userId,AddressParam address) {
 		AddressDO addressDO =AddressConverter.convertDO(address);
 		String reg="^\\d(\\d|\\/)*\\d$";
@@ -39,6 +42,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
+	@Transactional
 	public Integer update(AddressParam address,Long id) {
 		AddressDO addressDO= AddressConverter.convertDO(address);
 		addressDO.setId(id);
@@ -64,6 +68,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
+	@Transactional
 	public Integer remove(Long id) {
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andIdEqualTo(id);
@@ -75,6 +80,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
+	@Transactional
 	public Integer updateDefault(Long id,Long userId) {
 		AddressDO addressDO=new AddressDO();
 		AddressDOExample example = new AddressDOExample();

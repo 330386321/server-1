@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.MemberProfileDTO;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
 import com.lawu.eshop.user.srv.service.MemberProfileService;
 
 /**
@@ -31,10 +32,10 @@ public class MemberProfileController extends BaseController{
 	 * @return
 	 */
    @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-   public Result<MemberProfileDTO> getMemberCount(@RequestParam Long id) {
+   public Result<InviteeMemberCountDTO> getMemberCount(@RequestParam Long id) {
 	   Integer count=memberProfileService.getMemberCount(id);
-	   MemberProfileDTO dto=new MemberProfileDTO();
-	   dto.setInviteMemberCount(count);
+	   InviteeMemberCountDTO dto=new InviteeMemberCountDTO();
+	   dto.setInviteeMemberCount(count);
 	   return successGet(dto);
    }
    
@@ -44,10 +45,10 @@ public class MemberProfileController extends BaseController{
     * @return
     */
    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-   public Result<MemberProfileDTO> getMerchantCount(@RequestParam Long id) {
+   public Result<InviteeMechantCountDTO> getMerchantCount(@RequestParam Long id) {
 	   Integer count=memberProfileService.getMerchantCount(id);
-	   MemberProfileDTO dto=new MemberProfileDTO();
-	   dto.setInviteMemberCount(count);
+	   InviteeMechantCountDTO dto=new InviteeMechantCountDTO();
+	   dto.setInviteeMechantCount(count);
 	   return successGet(dto);
    }
 

@@ -19,9 +19,10 @@ import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantInviterService;
+import com.lawu.eshop.user.dto.EfriendDTO;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.MemberProfileDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.query.MerchantInviterParam;
@@ -50,7 +51,7 @@ public class InviterController extends BaseController {
     private InviterService inviterService;
     
     @Autowired
-    private MemberProfileService memberProfileService;
+    private MemberProfileService memberProfileService; 
     
     /**
      * 我的商家推荐总数量
@@ -61,10 +62,10 @@ public class InviterController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-    public Result<MemberProfileDTO> getMerchantCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<InviteeMechantCountDTO> getMerchantCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 	   Long id=UserUtil.getCurrentUserId(getRequest());
-	   Result<MemberProfileDTO> rdto=memberProfileService.getMerchantCount(id);
-	   return rdto;
+	   Result<InviteeMechantCountDTO>  count=memberProfileService.getMerchantCount(id);
+	   return count;
     }
     
     /**
@@ -75,10 +76,10 @@ public class InviterController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-    public Result<MemberProfileDTO> getMemberCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<InviteeMemberCountDTO> getMemberCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 	   Long id=UserUtil.getCurrentUserId(getRequest());
-	   Result<MemberProfileDTO> rdto=memberProfileService.getMemberCount(id);
-	   return rdto;
+	   Result<InviteeMemberCountDTO>  count=memberProfileService.getMemberCount(id);
+	   return count;
     }
 	
 	/**
@@ -90,8 +91,8 @@ public class InviterController extends BaseController {
     @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectInviterMerchant", method = RequestMethod.POST)
-    public Result<Page<MerchantInviterDTO>> selectInviterMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "selectInviteeMerchant", method = RequestMethod.POST)
+    public Result<Page<MerchantInviterDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {
     	Long userId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<MerchantInviterDTO>>  pageDTOS=merchantInviterService.getMerchantByInviter(userId,pageQuery);
@@ -108,9 +109,9 @@ public class InviterController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectInviterMember", method = RequestMethod.POST)
-    public Result<Page<MemberDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
+    public Result<Page<EfriendDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
-        Result<Page<MemberDTO>> page = memberService.findMemberListByUser(userId, query);
+        Result<Page<EfriendDTO>> page = memberService.findMemberListByUser(userId, query);
         return page;
     }
 

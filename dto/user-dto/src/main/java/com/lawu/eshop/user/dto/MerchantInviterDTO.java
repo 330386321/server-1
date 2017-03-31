@@ -28,7 +28,7 @@ public class MerchantInviterDTO {
 	private Date gmtCreate;
 	
 	@ApiModelProperty(value = "是否审核(0：待审核，1：审核通过，2：审核不通过，3：未提交保证金，4：已提交保证金待财务核实，5：财务审核不通过)", required = true)
-	private Byte status;
+	private MerchantStatusEnum statusEnum;
 
 	public String getAccount() {
 		return account;
@@ -86,13 +86,15 @@ public class MerchantInviterDTO {
 		this.gmtCreate = gmtCreate;
 	}
 
-	public Byte getStatus() {
-		return status;
+	public MerchantStatusEnum getStatusEnum() {
+		return statusEnum;
 	}
 
-	public void setStatus(Byte status) {
-		this.status = status;
+	public void setStatusEnum(MerchantStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
 	}
+
+	
 	
 
 }
