@@ -51,20 +51,20 @@
         </table>
         <table tableName="address" domainObjectName="AddressDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         <table tableName="merchant_store_audit" domainObjectName="MerchantStoreAuditDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
+        <!--<table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--<table tableName="member_profile" domainObjectName="MemberProfileDO">
+        <table tableName="member_profile" domainObjectName="MemberProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant_store_image" domainObjectName="MerchantStoreImageDO">
