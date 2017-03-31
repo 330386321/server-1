@@ -34,6 +34,7 @@ public class MerchantAuditParam {
     @ApiParam(name = "merchantStoreId", value = "门店id")
     private Long merchantStoreId;
 
+    @ApiParam(name = "auditorId", value = "审核人员ID")
     private Integer auditorId;
 
     public MerchantAuditStatusEnum getAuditStatusEnum() {
