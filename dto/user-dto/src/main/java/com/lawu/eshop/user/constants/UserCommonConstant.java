@@ -65,4 +65,19 @@ public class UserCommonConstant {
      * LEVEL_5要求粉丝数量
      */
     public static final int LEVEL_5_FANS_CNT = 8100;
+
+    /**
+     * DEPTH_1
+     */
+    public static final int DEPTH_1 = 1;
+
+    /**
+     * DEPTH_2
+     */
+    public static final int DEPTH_2 = 2;
+
+    /**
+     * DEPTH_3
+     */
+    public static final int DEPTH_3 = 3;
 }

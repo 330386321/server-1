@@ -1,10 +1,5 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
@@ -16,6 +11,11 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -38,6 +38,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
     }
 
     @Override
+    @Transactional
     public void updatePayPwd(String userNum, String originalPwd, String newPwd) {
         PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
         propertyInfoDO.setUserNum(userNum);

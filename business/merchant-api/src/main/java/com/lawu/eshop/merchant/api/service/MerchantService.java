@@ -6,7 +6,7 @@ import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,10 +50,10 @@ public interface MerchantService {
     /**
      * 商户注册
      *
-     * @param registerParam 商户注册信息
+     * @param registerRealParam 商户注册信息
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchant/register")
-    Result register(@ModelAttribute RegisterParam registerParam);
+    Result register(@ModelAttribute RegisterRealParam registerRealParam);
 
 
     /**

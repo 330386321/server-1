@@ -7,7 +7,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
@@ -91,12 +91,12 @@ public class MerchantController extends BaseController {
     /**
      * 商户注册
      *
-     * @param registerParam 商户注册信息
+     * @param registerRealParam 商户注册信息
      * @return
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public Result register(@RequestBody RegisterParam registerParam) {
-        merchantService.register(registerParam);
+    public Result register(@RequestBody RegisterRealParam registerRealParam) {
+        merchantService.register(registerRealParam);
         return successCreated();
     }
 }

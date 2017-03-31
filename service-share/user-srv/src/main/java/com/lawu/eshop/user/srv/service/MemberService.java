@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -62,9 +62,9 @@ public interface MemberService {
     /**
      * 会员注册
      *
-     * @param registerParam 会员注册信息
+     * @param registerRealParam 会员注册信息
      */
-    void register(RegisterParam registerParam);
+    void register(RegisterRealParam registerRealParam);
 
     /**
      * 根据会员ID查询会员信息

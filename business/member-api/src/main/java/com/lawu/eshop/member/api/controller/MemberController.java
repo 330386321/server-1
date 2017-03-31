@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
-import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -10,19 +9,22 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
+import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UpdatePwdParam;
 import com.lawu.eshop.user.param.UserParam;
-import com.lawu.eshop.user.query.MemberQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +53,9 @@ public class MemberController extends BaseController {
     @Autowired
     private VerifyCodeService verifyCodeService;
 
+    @Autowired
+    private InviterService inviterService;
+
 
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member [1000]（章勇）", httpMethod = "GET")
     @Authorization
@@ -63,7 +68,7 @@ public class MemberController extends BaseController {
     }
 
 
-     @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息  [1000]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "更新会员资料", notes = "会员修改资料信息  [1000]（章勇）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "updateMemberInfo", method = RequestMethod.PUT)
@@ -75,11 +80,10 @@ public class MemberController extends BaseController {
     }
 
     /**
-     *
      * @param token
      * @param updatePwdParam
      * @return
-     * @audit  sunlinqing 2016.03.29
+     * @audit sunlinqing 2016.03.29
      */
     @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -96,11 +100,10 @@ public class MemberController extends BaseController {
     }
 
     /**
-     *
      * @param token
      * @param updatePwdParam
      * @return
-     * @audit  sunlinqing 2016.03.29
+     * @audit sunlinqing 2016.03.29
      */
     @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -116,11 +119,21 @@ public class MemberController extends BaseController {
         return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
-    @ApiOperation(value = "注册", notes = "会员注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。[1002|1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
                            @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+        RegisterRealParam registerRealParam = new RegisterRealParam();
+        if (StringUtils.isNotEmpty(registerParam.getInviterAccount())) {
+            Result inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
+            if (!isSuccess(inviterResult)) {
+                return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            }
+            InviterDTO inviterDTO = (InviterDTO) inviterResult.getModel();
+            registerRealParam.setInviterId(inviterDTO.getInviterId());
+            registerRealParam.setUserNum(inviterDTO.getUserNum());
+        }
         Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
             return successGet(ResultCode.RECORD_EXIST);
@@ -133,7 +146,9 @@ public class MemberController extends BaseController {
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        return memberService.register(registerParam);
+        registerRealParam.setAccount(registerParam.getAccount());
+        registerRealParam.setPwd(registerParam.getPwd());
+        return memberService.register(registerRealParam);
     }
 
     @ApiOperation(value = "根据账号查询会员信息", notes = "根据账号查询会员信息。[1002] (梅述全)", httpMethod = "GET")
@@ -146,9 +161,8 @@ public class MemberController extends BaseController {
     }
 
     /**
-     *
      * @return
-     * @audit  sunlinqing 2016.03.29
+     * @audit sunlinqing 2016.03.29
      */
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

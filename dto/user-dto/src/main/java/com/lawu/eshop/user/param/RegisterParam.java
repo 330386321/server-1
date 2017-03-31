@@ -14,22 +14,11 @@ public class RegisterParam {
     @ApiModelProperty(value = "密码", required = true)
     private String pwd;
 
-    @ApiModelProperty(value = "邀请人ID")
-    private Long inviterId;
-
-    @ApiModelProperty(value = "邀请人编码")
-    private String userNum;
-
-    public String getUserNum() {
-        return userNum;
-    }
-
-    public void setUserNum(String userNum) {
-        this.userNum = userNum;
-    }
-
     @ApiModelProperty(value = "手机验证码", required = true)
     private String smsCode;
+
+    @ApiModelProperty(value = "邀请人账号")
+    private String inviterAccount;
 
     public String getSmsCode() {
         return smsCode;
@@ -55,12 +44,12 @@ public class RegisterParam {
         this.pwd = pwd;
     }
 
-    public Long getInviterId() {
-        return inviterId;
+    public String getInviterAccount() {
+        return inviterAccount;
     }
 
-    public void setInviterId(Long inviterId) {
-        this.inviterId = inviterId;
+    public void setInviterAccount(String inviterAccount) {
+        this.inviterAccount = inviterAccount;
     }
 
 }

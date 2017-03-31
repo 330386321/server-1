@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
@@ -44,9 +44,9 @@ public interface MerchantService {
     /**
      * 商户注册
      *
-     * @param registerParam 商户注册信息
+     * @param registerRealParam 商户注册信息
      */
-    void register(RegisterParam registerParam);
+    void register(RegisterRealParam registerRealParam);
 
     /**
      * 根据商户ID查询商户信息

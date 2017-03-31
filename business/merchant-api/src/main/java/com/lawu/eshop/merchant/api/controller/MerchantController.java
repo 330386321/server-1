@@ -8,16 +8,20 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
+import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.param.RegisterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UpdatePwdParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +42,9 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private VerifyCodeService verifyCodeService;
+
+    @Autowired
+    private InviterService inviterService;
 
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -67,11 +74,21 @@ public class MerchantController extends BaseController {
         return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
-    @ApiOperation(value = "注册", notes = "商户注册。[1012|1013|1016] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "商户注册。[1002|1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
-                                      @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+                           @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+        RegisterRealParam registerRealParam=new RegisterRealParam();
+        if (StringUtils.isNotEmpty(registerParam.getInviterAccount())) {
+            Result inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
+            if (!isSuccess(inviterResult)) {
+                return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            }
+            InviterDTO inviterDTO = (InviterDTO) inviterResult.getModel();
+            registerRealParam.setInviterId(inviterDTO.getInviterId());
+            registerRealParam.setUserNum(inviterDTO.getUserNum());
+        }
         Result accountResult = merchantService.getMerchantByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
             return successGet(ResultCode.RECORD_EXIST);
@@ -84,7 +101,9 @@ public class MerchantController extends BaseController {
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
-        return merchantService.register(registerParam);
+        registerRealParam.setAccount(registerParam.getAccount());
+        registerRealParam.setPwd(registerParam.getPwd());
+        return merchantService.register(registerRealParam);
     }
 
     @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。[1002] (梅述全)", httpMethod = "GET")
