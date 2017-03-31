@@ -47,9 +47,9 @@ public class TransactionDetailController extends BaseController {
      */
     @ApiOperation(value = "获取交易明细列表", notes = "根据用户编号分页获取交易明细列表。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "findPageByUserNum", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailDTO>> page(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ 
+    public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
     		@RequestParam(name = "transactionType", required = false) @ApiParam(name = "transactionType", value = "交易类型<br/>默认全部<br/>RECHARGE_THE_BALANCE 充值余额<br/>WITHDRAW 提现<br/>WITHDRAW_FAILURE 提现失败<br>REVENUE_FROM_SELLING_GOODS 销售商品收入") MerchantTransactionTypeEnum transactionType, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") TransactionDetailQueryParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());

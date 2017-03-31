@@ -44,9 +44,9 @@ public class PointDetailController extends BaseController {
      */
     @ApiOperation(value = "获取积分明细列表", notes = "根据用户编号分页获取积分明细列表。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "page", method = RequestMethod.GET)
-    public Result<Page<PointDetailDTO>> page(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ 
+    public Result<Page<PointDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") PointDetailQueryParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	

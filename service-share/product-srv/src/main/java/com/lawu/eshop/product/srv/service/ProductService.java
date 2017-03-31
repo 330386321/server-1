@@ -1,11 +1,14 @@
 package com.lawu.eshop.product.srv.service;
 
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductImageBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 
@@ -49,6 +52,13 @@ public interface ProductService {
 	 * @param product
 	 */
 	void eidtProduct(Long productId, EditProductDataParam product);
-
+	
+	/**
+	 * 根据商品id返回商品图片
+	 * 
+	 * @param id
+	 * @return
+	 */
+	List<ProductImageBO> getProductImageByIds(List<Long> ids);
 	
 }

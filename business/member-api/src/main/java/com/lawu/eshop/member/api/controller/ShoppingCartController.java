@@ -1,6 +1,11 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +25,9 @@ import com.lawu.eshop.mall.dto.ShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;
+import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
+import com.lawu.eshop.product.dto.ProductImageDTO;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 
 import io.swagger.annotations.Api;
@@ -42,6 +49,9 @@ public class ShoppingCartController extends BaseController {
     
     @Autowired
     private ProductModelService productModelService;
+    
+    @Autowired
+    private ProductService productService;
     
     @Autowired
     private MerchantStoreService merchantStoreService;
@@ -102,7 +112,32 @@ public class ShoppingCartController extends BaseController {
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
     Result<List<ShoppingCartDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	return successGet(shoppingCartService.findListByMemberId(memberId));
+    	
+    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
+    	
+    	// 把要查询的id放入set,统一一次性查询
+    	Set<Long> ids = new HashSet<Long>();
+    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
+    		ids.add(shoppingCartDTO.getProductId());
+    	}
+    	
+    	// 通过id list查询购物车内所有商品的图片，以id为key放入map
+    	Result<List<ProductImageDTO>> resultProductImageDTOS = productService.getProductImage(new ArrayList<Long>(ids));
+    	Map<Long, String> productImageMap = new HashMap<Long, String>();
+    	if (resultProductImageDTOS.getModel() != null && !resultProductImageDTOS.getModel().isEmpty()) {
+    		for (ProductImageDTO productImageDTO : resultProductImageDTOS.getModel()) {
+    			if (productImageDTO != null && productImageDTO.getId() != null) {
+    				productImageMap.put(productImageDTO.getId(), productImageDTO.getFeatureImage());
+    			}
+    		}
+    	}
+    	
+    	// 从map获取商品图片
+    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
+    		shoppingCartDTO.setFeatureImage(productImageMap.get(shoppingCartDTO.getProductId()));
+    	}
+    	
+    	return successGet(resultShoppingCartDTOS);
     }
     
     /**

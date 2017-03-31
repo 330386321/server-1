@@ -1,13 +1,16 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.bo.PropertyPointBO;
+import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.converter.PropertyInfoConverter;
+import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
@@ -45,7 +48,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
     }
 
     @Override
-    public BigDecimal getPropertyBalanceByUserNum(String userNum) {
+    public PropertyBalanceBO getPropertyBalanceByUserNum(String userNum) {
         PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
         propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
         List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
@@ -53,12 +56,12 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
         if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
             return null;
         }
-
-        return propertyInfoDOS.get(0).getBalance();
+        
+        return PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
     }
     
     @Override
-	public Integer getPropertyPointByUserNum(String userNum) {
+	public PropertyPointBO getPropertyPointByUserNum(String userNum) {
 		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
 		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
@@ -67,6 +70,6 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			return null;
 		}
 		
-		return propertyInfoDOS.get(0).getPoint();
+		return PropertyPointConverter.convert(propertyInfoDOS.get(0));
 	}
 }

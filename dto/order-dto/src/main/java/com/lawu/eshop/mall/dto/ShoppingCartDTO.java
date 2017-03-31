@@ -32,7 +32,19 @@ public class ShoppingCartDTO implements Serializable {
      */
     @ApiModelProperty(value = "商品名称", required = true)
     private String productName;
-
+    
+    /**
+     * 特征图片
+     */
+    @ApiModelProperty(value = "特征图片", required = true)
+    private String featureImage;
+    
+    /**
+    * 商品型号ID
+    */
+    @ApiModelProperty(value = "商品型号ID", required = true)
+    private Long productModelId;
+    
     /**
      * 商品型号名称
      */
@@ -81,6 +93,22 @@ public class ShoppingCartDTO implements Serializable {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public String getFeatureImage() {
+		return featureImage;
+	}
+
+	public void setFeatureImage(String featureImage) {
+		this.featureImage = featureImage;
+	}
+
+	public Long getProductModelId() {
+		return productModelId;
+	}
+
+	public void setProductModelId(Long productModelId) {
+		this.productModelId = productModelId;
 	}
 
 	public String getProductModelName() {

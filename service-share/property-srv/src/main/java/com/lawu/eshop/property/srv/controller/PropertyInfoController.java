@@ -1,15 +1,24 @@
 package com.lawu.eshop.property.srv.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.bo.PropertyPointBO;
+import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
+import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -48,8 +57,9 @@ public class PropertyInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "propertyBalance/{userNum}", method = RequestMethod.GET)
-    public Result<BigDecimal> getPropertyBalance(@PathVariable("userNum") String userNum) {
-        return successCreated(propertyInfoService.getPropertyBalanceByUserNum(userNum));
+    public Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum) {
+    	PropertyBalanceBO propertyBalanceBO = propertyInfoService.getPropertyBalanceByUserNum(userNum);
+        return successCreated(PropertyBalanceConverter.convert(propertyBalanceBO));
     }
     
     /**
@@ -59,7 +69,8 @@ public class PropertyInfoController extends BaseController {
      * @return
      */
     @RequestMapping(value = "propertyPoint/{userNum}", method = RequestMethod.GET)
-    public Result<Integer> getPropertyPoint(@PathVariable("userNum") String userNum) {
-        return successCreated(propertyInfoService.getPropertyPointByUserNum(userNum));
+    public Result<PropertyPointDTO> getPropertyPoint(@PathVariable("userNum") String userNum) {
+    	PropertyPointBO propertyPointBO = propertyInfoService.getPropertyPointByUserNum(userNum);
+        return successCreated(PropertyPointConverter.convert(propertyPointBO));
     }
 }

@@ -35,9 +35,9 @@ public class SuggestionController extends BaseController {
 
     @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(method = RequestMethod.POST)
-    public Result save(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @ModelAttribute @ApiParam(name = "parm", required = true, value = "反馈意见资料") SuggestionParam param) {
+    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "parm", required = true, value = "反馈意见资料") SuggestionParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successCreated(suggestionService.save(userNum, param));
     }

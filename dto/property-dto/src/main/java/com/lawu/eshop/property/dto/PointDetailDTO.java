@@ -1,7 +1,8 @@
 package com.lawu.eshop.property.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import io.swagger.annotations.ApiModelProperty;
 
 public class PointDetailDTO implements Serializable {
 	
@@ -10,17 +11,20 @@ public class PointDetailDTO implements Serializable {
     /**
      * 积分标题
      */
+	@ApiModelProperty(value = "积分标题", required = true)
     private String title;
 
     /**
      * 积分
      */
+	@ApiModelProperty(value = "积分", required = true)
     private Integer point;
-
+	
     /**
-     * 创建时间
+     * 积分时间
      */
-    private Date gmtCreate;
+	@ApiModelProperty(value = "积分时间", required = true)
+    private String integralDate;
 
 	public String getTitle() {
 		return title;
@@ -38,12 +42,12 @@ public class PointDetailDTO implements Serializable {
 		this.point = point;
 	}
 
-	public Date getGmtCreate() {
-		return gmtCreate;
+	public String getIntegralDate() {
+		return integralDate;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setIntegralDate(String integralDate) {
+		this.integralDate = integralDate;
 	}
-
+	
 }

@@ -31,6 +31,11 @@ public class ShoppingCartBO implements Serializable {
      * 商品型号名称
      */
     private String productModelName;
+    
+    /**
+    * 商品型号ID
+    */
+   private Long productModelId;
 
     /**
      * 数量
@@ -72,6 +77,14 @@ public class ShoppingCartBO implements Serializable {
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+	
+	public Long getProductModelId() {
+		return productModelId;
+	}
+
+	public void setProductModelId(Long productModelId) {
+		this.productModelId = productModelId;
 	}
 
 	public String getProductModelName() {

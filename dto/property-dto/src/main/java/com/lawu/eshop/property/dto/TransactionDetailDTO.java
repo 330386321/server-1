@@ -29,10 +29,10 @@ public class TransactionDetailDTO implements Serializable {
     private BigDecimal amount;
 
     /**
-     * 创建时间
+     * 交易时间
      */
-	@ApiModelProperty(value = "创建时间", required = true)
-    private Date gmtCreate;
+	@ApiModelProperty(value = "交易时间", required = true)
+    private String transactionDate;
 
 	public String getTitle() {
 		return title;
@@ -50,12 +50,12 @@ public class TransactionDetailDTO implements Serializable {
 		this.amount = amount;
 	}
 
-	public Date getGmtCreate() {
-		return gmtCreate;
+	public String getTransactionDate() {
+		return transactionDate;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setTransactionDate(String transactionDate) {
+		this.transactionDate = transactionDate;
 	}
 
 }

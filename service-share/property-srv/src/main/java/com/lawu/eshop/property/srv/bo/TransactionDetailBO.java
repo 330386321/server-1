@@ -25,9 +25,9 @@ public class TransactionDetailBO implements Serializable {
     private BigDecimal amount;
 
     /**
-     * 创建时间
+     * 交易时间
      */
-    private Date gmtCreate;
+    private String transactionDate;
 
 	public String getTitle() {
 		return title;
@@ -45,12 +45,12 @@ public class TransactionDetailBO implements Serializable {
 		this.amount = amount;
 	}
 
-	public Date getGmtCreate() {
-		return gmtCreate;
+	public String getTransactionDate() {
+		return transactionDate;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setTransactionDate(String transactionDate) {
+		this.transactionDate = transactionDate;
 	}
-
+	
 }

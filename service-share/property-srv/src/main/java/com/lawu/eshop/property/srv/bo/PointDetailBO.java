@@ -18,9 +18,9 @@ public class PointDetailBO implements Serializable {
     private Integer point;
 
     /**
-     * 创建时间
+     * 积分时间
      */
-    private Date gmtCreate;
+    private String integralDate;
 
 	public String getTitle() {
 		return title;
@@ -38,12 +38,12 @@ public class PointDetailBO implements Serializable {
 		this.point = point;
 	}
 
-	public Date getGmtCreate() {
-		return gmtCreate;
+	public String getIntegralDate() {
+		return integralDate;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setIntegralDate(String integralDate) {
+		this.integralDate = integralDate;
 	}
 
 }

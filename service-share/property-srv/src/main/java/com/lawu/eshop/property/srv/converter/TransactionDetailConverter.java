@@ -8,6 +8,7 @@ import org.springframework.beans.BeanUtils;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 交易明细转换器
@@ -24,6 +25,7 @@ public class TransactionDetailConverter {
 
 		TransactionDetailBO transactionDetailBO = new TransactionDetailBO();
 		BeanUtils.copyProperties(transactionDetailDO, transactionDetailBO);
+		transactionDetailBO.setTransactionDate(DateUtil.getDateFormat(transactionDetailDO.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
 
 		return transactionDetailBO;
 	}
