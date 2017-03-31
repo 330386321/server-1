@@ -1,44 +1,39 @@
 package com.lawu.eshop.user.dto;
 
+import java.util.Date;
+
 import com.lawu.eshop.user.constants.UserSexEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
 public class EfriendDTO {
 
-    @ApiModelProperty(value = "ID")
-    private Long id;
-
-    @ApiModelProperty(value = "编号")
-    private String num;
-
     @ApiModelProperty(value = "姓名")
     private String name;
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
+    
+    @ApiModelProperty(value = "电话")
+    private String mobile;
 
     @ApiModelProperty(value = "生日")
     private String regionPath;
 
-
     @ApiModelProperty(value = "头像")
     private String headimg;
-
+    
     @ApiModelProperty(value = "等级")
     private Integer level;
+    
+    @ApiModelProperty(value = "受邀者总数")
+    private Integer inviterCount;
+    
+    @ApiModelProperty(value = "注册时间")
+    private Date gmtCreate;
 
 
     private UserSexEnum userSex;
-
-
-    public String getNum() {
-        return num;
-    }
-
-    public void setNum(String num) {
-        this.num = num;
-    }
 
     public String getName() {
         return name;
@@ -73,22 +68,6 @@ public class EfriendDTO {
         this.headimg = headimg;
     }
 
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -98,5 +77,38 @@ public class EfriendDTO {
         this.userSex = userSex;
     }
 
+	public Integer getInviterCount() {
+		return inviterCount;
+	}
+
+	public void setInviterCount(Integer inviterCount) {
+		this.inviterCount = inviterCount;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public Integer getLevel() {
+		return level;
+	}
+
+	public void setLevel(Integer level) {
+		this.level = level;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+
+	
 
 }

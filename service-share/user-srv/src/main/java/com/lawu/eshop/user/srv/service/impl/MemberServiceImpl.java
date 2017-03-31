@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -123,9 +124,16 @@ public class MemberServiceImpl implements MemberService {
         }
         RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
         List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        
+        List<MemberProfileDO> mpList=new ArrayList<MemberProfileDO>();
+        for (MemberDO memberDO : memberDOS) {
+        	MemberProfileDOExample mpExample=new MemberProfileDOExample();
+        	MemberProfileDO memberProfileDO=memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
+        	mpList.add(memberProfileDO);
+		}
         Page<MemberBO> pageMember = new Page<MemberBO>();
         pageMember.setTotalCount(totalCount);
-        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS);
+        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS,mpList);
         pageMember.setRecords(memberBOS);
         pageMember.setCurrentPage(memberQuery.getCurrentPage());
         return pageMember;

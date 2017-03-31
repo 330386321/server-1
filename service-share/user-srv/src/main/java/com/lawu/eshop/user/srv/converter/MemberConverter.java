@@ -11,6 +11,7 @@ import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
 
 /**
  * 会员信息转换器
@@ -128,13 +129,34 @@ public class MemberConverter {
      * @author zhangrc
      * @date 2017/03/23
      */
-    public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS) {
+    public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS,List<MemberProfileDO> mpList) {
         if (memberDOS == null) {
             return null;
         }
         List<MemberBO> memberBOS = new ArrayList<MemberBO>();
         for (MemberDO memberDO : memberDOS) {
-            memberBOS.add(convertBO(memberDO));
+        	MemberBO memberBO = new MemberBO();
+	        memberBO.setAccount(memberDO.getAccount());
+	        memberBO.setName(memberDO.getName());
+	        memberBO.setMobile(memberDO.getMobile());
+	        memberBO.setHeadimg(memberDO.getHeadimg());
+	        memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
+	        memberBO.setRegionPath(memberDO.getRegionPath());
+	        memberBO.setNickname(memberDO.getNickname());
+	        memberBO.setGmtCreate(memberDO.getGmtCreate());
+	        memberBO.setLevel(memberDO.getLevel());
+	        if(mpList.isEmpty()){
+	        	memberBO.setInviterCount(0);
+	        }else{
+	        	for (MemberProfileDO memberProfileDO : mpList) {
+					if(memberDO.getId().equals(memberProfileDO.getId())){
+						memberBO.setInviterCount(memberProfileDO.getInviteMemberCount()+memberProfileDO.getInviteMemberCount2());
+					}else{
+						memberBO.setInviterCount(0);
+			        }
+				}
+	        }
+        	memberBOS.add(memberBO);
         }
         return memberBOS;
     }
@@ -167,12 +189,15 @@ public class MemberConverter {
             return null;
         }
         EfriendDTO memberDTO = new EfriendDTO();
-        memberDTO.setId(memberBO.getId());
-        memberDTO.setNum(memberBO.getNum());
         memberDTO.setName(memberBO.getName());
         memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setHeadimg(memberBO.getHeadimg());
+        memberDTO.setRegionPath(memberBO.getRegionPath());
+        memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setLevel(memberBO.getLevel());
+        memberDTO.setGmtCreate(memberBO.getGmtCreate());
+        memberDTO.setUserSex(memberBO.getUserSex());
+        memberDTO.setInviterCount(memberBO.getInviterCount());
         return memberDTO;
     }
 

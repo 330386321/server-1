@@ -46,6 +46,8 @@ public class MemberBO {
     private Date gmtModified;
 
     private Date gmtCreate;
+    
+    private Integer inviterCount;
 
     private UserSexEnum userSex;
 
@@ -196,4 +198,14 @@ public class MemberBO {
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
+
+	public Integer getInviterCount() {
+		return inviterCount;
+	}
+
+	public void setInviterCount(Integer inviterCount) {
+		this.inviterCount = inviterCount;
+	}
+    
+    
 }
