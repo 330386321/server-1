@@ -53,7 +53,7 @@ public class ProductController extends BaseController {
     
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[]。(杨清华)", httpMethod = "POST")
-//    @Authorization
+    @Authorization
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
     public Result<Page<ProductQueryDTO>> selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     							ProductStatusEnum productStatus,
