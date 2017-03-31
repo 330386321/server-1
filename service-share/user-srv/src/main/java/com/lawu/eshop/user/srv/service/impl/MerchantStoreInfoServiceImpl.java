@@ -1,10 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -87,7 +85,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Override
     @Transactional
-    public void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, MerchantStoreTypeEnum storeTypeEnum, CertifTypeEnum certifTypeEnum) {
+    public void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam) {
 
         //新增门店基本信息
         MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 1);
@@ -104,8 +102,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
         merchantStoreProfileDO.setId(Long.valueOf(merchantStoreId));
 
-        merchantStoreProfileDO.setManageType(storeTypeEnum.val);
-        merchantStoreProfileDO.setCertifType(certifTypeEnum.val);
+        merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
+        merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
         merchantStoreProfileDO.setGmtCreate(new Date());
         merchantStoreProfileDO.setGmtModified(new Date());
 
@@ -173,7 +171,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Override
     @Transactional
-    public void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeTypeEnum, CertifTypeEnum certifTypeEnum) {
+    public void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId) {
 
         MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 1);
         //设置门店待审核状态
@@ -188,8 +186,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         //更新门店扩展信息
         MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 2);
         merchantStoreProfileDO.setGmtModified(new Date());
-        merchantStoreProfileDO.setManageType(storeTypeEnum.val);
-        merchantStoreProfileDO.setCertifType(certifTypeEnum.val);
+        merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
+        merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
         MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
         merchantStoreProfileDOExample.createCriteria().andIdEqualTo(merchantStoreId);
         merchantStoreProfileDOMapper.updateByExample(merchantStoreProfileDO, merchantStoreProfileDOExample);
@@ -262,7 +260,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Override
     @Transactional
-    public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeType, CertifTypeEnum certifType) {
+    public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId) {
 
         MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
         merchantStoreAuditDO.setMerchantStoreId(merchantStoreId);

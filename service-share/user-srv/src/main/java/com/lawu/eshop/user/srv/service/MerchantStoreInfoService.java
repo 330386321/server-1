@@ -1,12 +1,8 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 门店信息接口
@@ -26,7 +22,7 @@ public interface MerchantStoreInfoService {
      * @param merchantId
      * @param merchantStoreParam
      */
-    void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,MerchantStoreTypeEnum storeTypeEnum,CertifTypeEnum certifTypeEnum);
+    void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam);
 
     /**
      * 查询门店扩展信息
@@ -41,10 +37,10 @@ public interface MerchantStoreInfoService {
      * @param merchantId 门店id
      * @param merchantStoreParam 门店信息
      */
-    void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,Long merchantStoreId,MerchantStoreTypeEnum storeTypeEnum,CertifTypeEnum certifTypeEnum);
+    void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,Long merchantStoreId);
 
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
 
-    void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId, MerchantStoreTypeEnum storeType, CertifTypeEnum certifType);
+    void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
     
 }

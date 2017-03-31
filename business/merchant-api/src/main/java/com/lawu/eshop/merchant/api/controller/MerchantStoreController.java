@@ -10,9 +10,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
-import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,8 +53,7 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreInfo", method = RequestMethod.POST)
-    public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestParam("storeType") MerchantStoreTypeEnum storeType,
-                                        @RequestParam("certifType") CertifTypeEnum certifType, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
@@ -132,7 +129,7 @@ public class MerchantStoreController extends BaseController {
             }
 
             merchantStoreParam.setStoreUrl(storeUrls.toString());
-            return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam, storeType, certifType);
+            return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
         }
 
         return successCreated(ResultCode.FAIL);
@@ -143,7 +140,7 @@ public class MerchantStoreController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.PUT)
     public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
-                                          @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+                                             @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer idCardUrls = new StringBuffer();        //身份证照
@@ -219,7 +216,7 @@ public class MerchantStoreController extends BaseController {
             } else {
                 merchantStoreParam.setOtherUrl(otherUrls.toString());
             }
-            return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId,merchantStoreParam);
+            return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
         }
 
         return successCreated(ResultCode.FAIL);
