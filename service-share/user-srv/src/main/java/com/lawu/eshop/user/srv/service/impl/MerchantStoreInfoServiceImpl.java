@@ -13,16 +13,13 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import com.lawu.eshop.utils.DateUtil;
-import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 商家门店service
@@ -152,6 +149,16 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
         }
 
+        //增加门店审核信息
+        MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
+        merchantStoreAuditDO.setMerchantId(merchantId);
+        merchantStoreAuditDO.setMerchantStoreId(Long.valueOf(merchantStoreId));
+        merchantStoreAuditDO.setContent(JSONObject.fromObject(merchantStoreParam).toString());
+        merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);//待审核
+        merchantStoreAuditDO.setGmtCreate(new Date());
+        merchantStoreAuditDO.setGmtModified(new Date());
+        merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
+
     }
 
     @Override
@@ -265,30 +272,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
         merchantStoreAuditDO.setMerchantStoreId(merchantStoreId);
         merchantStoreAuditDO.setMerchantId(merchantId);
-        Map<String,String> map = new HashMap<>();
-        map.put("name",merchantStoreParam.getName());//店铺名称
-        map.put("regionPath",merchantStoreParam.getRegionPath());
-        map.put("address",merchantStoreParam.getAddress());
-        map.put("longitude",String.valueOf(merchantStoreParam.getLongitude()));
-        map.put("latitude",String.valueOf(merchantStoreParam.getLatitude()));
-        map.put("industryPath",merchantStoreParam.getIndustryPath());
-        map.put("intro",merchantStoreParam.getIntro());
-        map.put("principalName",merchantStoreParam.getPrincipalName());
-        map.put("principalMobile",merchantStoreParam.getPrincipalMobile());
-        map.put("companyName",merchantStoreParam.getCompanyName());
-        map.put("regNumber",merchantStoreParam.getRegNumber());
-        map.put("companyAddress",merchantStoreParam.getCompanyAddress());
-        map.put("licenseIndate", DateUtil.getDateTimeFormat(merchantStoreParam.getLicenseIndate()));
-        map.put("manageType",String.valueOf(merchantStoreParam.getManageType()));
-        map.put("certifType",String.valueOf(merchantStoreParam.getCertifType()));
-        map.put("operatorCardId",merchantStoreParam.getOperatorCardId());
-        map.put("operatorName",merchantStoreParam.getOperatorName());
-        map.put("storeUrl",merchantStoreParam.getStoreUrl());
-        map.put("environmentUrl",merchantStoreParam.getEnvironmentUrl());
-        map.put("idcardUrl",merchantStoreParam.getIdcardUrl());
-        map.put("logoUrl",merchantStoreParam.getLogoUrl());
-        map.put("otherUrl",merchantStoreParam.getOtherUrl());
-        JSONArray json = JSONArray.fromObject(map);
+        JSONObject json = JSONObject.fromObject(merchantStoreParam);
         merchantStoreAuditDO.setContent(json.toString());
         merchantStoreAuditDO.setGmtModified(new Date());
         merchantStoreAuditDO.setGmtCreate(new Date());

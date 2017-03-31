@@ -1,0 +1,53 @@
+package com.lawu.eshop.operator.api.doc;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+/**
+ * api文档生成
+ * @author zhangyong
+ * @date 2017/3/31
+ */
+@Configuration
+@EnableSwagger2
+@ComponentScan(basePackages = {"com.lawu.eshop.operator.api.controller"})
+public class SwaggerConfig {
+
+    @Bean
+    public Docket adminApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("Operator API")
+                .forCodeGeneration(true)
+                .pathMapping("/")
+                .select()
+                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+                .paths(paths())
+                .build()
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false);
+    }
+
+    private Predicate<String> paths() {
+        return Predicates.and(PathSelectors.regex("/.*"), Predicates.not(PathSelectors.regex("/error")));
+    }
+
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Operator API")
+                .description("运营后台API")
+                .version("1.0")
+                .build();
+    }
+}
