@@ -51,11 +51,11 @@ public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
     
-    @SuppressWarnings("rawtypes")
-	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[201|400]。(杨清华)", httpMethod = "POST")
-    @Authorization
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[]。(杨清华)", httpMethod = "POST")
+//    @Authorization
     @RequestMapping(value = "selectProduct", method = RequestMethod.POST)
-    public Result selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<Page<ProductQueryDTO>> selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     							ProductStatusEnum productStatus,
     					        @ModelAttribute @ApiParam ProductQuery query) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
@@ -64,7 +64,7 @@ public class ProductController extends BaseController {
     	queryData.setMerchantId(merchantId);
     	queryData.setName(query.getName());
     	Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);
-        return successGet(page);
+        return successCreated(page);
     }
     
     @SuppressWarnings("rawtypes")

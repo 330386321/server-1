@@ -53,7 +53,7 @@ public class ProductController extends BaseController{
     	retPage.setTotalCount(page.getTotalCount());
     	retPage.setRecords(dtos);
     	
-    	return successAccepted(retPage);
+    	return successCreated(retPage);
     }
     
     /**
