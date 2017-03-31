@@ -106,10 +106,10 @@ public class InviterController extends BaseController {
      * @return
      */
     @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "POST")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectInviterMember", method = RequestMethod.POST)
-    public Result<Page<EfriendDTO>> findMemberListByUser(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
+    public Result<Page<EfriendDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         Result<Page<EfriendDTO>> page = memberService.findMemberListByUser(userId, query);
         return page;
