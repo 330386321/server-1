@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import javax.annotation.Resource;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,30 +39,20 @@ public class FavoriteMerchantController extends BaseController{
 	
 	@Resource
 	private FavoriteMerchantService favoriteMerchantService;
-	
-	 /**
-	  * 添加商家收藏
-	  * @return
-      * @audit  sunlinqing 2016.03.29
-	  */
+
+	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.PUT)
-    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-					   @RequestParam @ApiParam (required = true, value = "商家id") Long merchantId ) {
-	   Long memberId=UserUtil.getCurrentUserId(getRequest());
-	   Result rs=favoriteMerchantService.save(memberId,merchantId);
-	   return rs;
-    }
+	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+					   @RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result rs = favoriteMerchantService.save(memberId, merchantId);
+		return rs;
+	}
 
-    /**
-     *
-     * @param token
-     * @param pageQuery
-     * @return
-     * @audit  sunlinqing 2016.03.29
-     */
+	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

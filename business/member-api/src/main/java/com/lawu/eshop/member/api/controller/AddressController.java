@@ -39,11 +39,7 @@ public class AddressController extends BaseController {
     @Autowired
     private AddressService addressService;
 
-    /**
-     * 收货地址列表
-     * @audit  sunlinqing 2016.03.29
-     */
-    @Audit(date = "2017-03-31", reviewer = "sunny")
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "收货地址信息查询", notes = "查询当前用户收货地址列表信息[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -54,10 +50,7 @@ public class AddressController extends BaseController {
         return addressDTOS;
     }
 
-    /**
-     * 收货地址单个查询
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -68,10 +61,7 @@ public class AddressController extends BaseController {
         return addressDTO;
     }
 
-    /**
-     * 收货地址删除
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "删除收货地址", notes = "删除收货地址[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
@@ -82,10 +72,7 @@ public class AddressController extends BaseController {
         return rs;
     }
 
-    /**
-     * 收货地址添加
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "添加收货地址", notes = "添加收货地址[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -97,10 +84,7 @@ public class AddressController extends BaseController {
         return rs;
     }
 
-    /**
-     * 收货地址修改
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "修改收货地址", notes = "修改收货地址[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -113,10 +97,7 @@ public class AddressController extends BaseController {
 
     }
 
-    /**
-     * 收货默认地址修改
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

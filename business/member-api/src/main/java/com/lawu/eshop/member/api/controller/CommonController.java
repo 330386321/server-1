@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
@@ -31,13 +32,7 @@ public class CommonController extends BaseController {
     @Autowired
     private TokenManager tokenManager;
 
-    /**
-     *
-     * @param account
-     * @param pwd
-     * @return
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
@@ -60,12 +55,7 @@ public class CommonController extends BaseController {
         return successCreated(tokenDTO);
     }
 
-    /**
-     *
-     * @param token
-     * @return
-     * @audit  sunlinqing 2016.03.29
-     */
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "退出", notes = "退出登录，清除token。（孙林青）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization

@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,12 +38,8 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private BankAccountService bankAccountService;
-	
-	/**
-	 * 
-	 * @param token
-	 * @return
-	 */
+
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "我绑定的银行卡", notes = "查询当前用户绑定的银行卡[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -52,13 +49,8 @@ public class BankAccountController extends BaseController{
         Result<List<BankAccountDTO>> bankAccountDTOS = bankAccountService.selectMyBank(userNum);
         return bankAccountDTOS;
     }
-	
-	/**
-	 * 绑定银行卡
-	 * @param token
-	 * @param bankAccountParam
-	 * @return
-	 */
+
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -69,13 +61,8 @@ public class BankAccountController extends BaseController{
         Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
         return rs;
     }
-	
-	/**
-	 * 删除已经绑定的银行卡
-	 * @param token
-	 * @param id
-	 * @return
-	 */
+
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "删除银行卡", notes = "删除银行卡[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
