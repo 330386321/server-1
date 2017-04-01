@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Leach
  * @date 2017/3/23
  */
+@Deprecated
 public abstract class PageParam {
 
     /**
