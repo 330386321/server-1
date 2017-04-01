@@ -43,19 +43,19 @@ public class SmsRecordController extends BaseController {
         String smsCode = RandomUtil.getRandomString(1, 6);
         int errorCode = smsRecordService.verifySendSms(mobile, ip);
         SmsRecordBO smsRecordBO  = smsRecordService.saveSmsRecord(mobile, ip, purpose, smsCode, errorCode);
+        VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
+        verifyCodeDTO.setId(smsRecordBO.getVirifyCodeId());
         if (errorCode != ResultCode.SUCCESS) {
             return successGet(errorCode);
         }
         if (!isSend) {
-            return successCreated();
+            return successCreated(verifyCodeDTO);
         }
         Map<String, Object> returnMap = SmsUtil.sendSms(mobile, smsCode, ip);
         smsRecordService.updateSmsRecordResult(smsRecordBO.getId(),(Boolean) returnMap.get("sendCode"),returnMap.get("sendResult").toString());
         if (!(Boolean) returnMap.get("sendCode")) {
             return successGet(ResultCode.FAIL);
         }
-        VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
-        verifyCodeDTO.setId(smsRecordBO.getVirifyCodeId());
         return successCreated(verifyCodeDTO);
     }
 

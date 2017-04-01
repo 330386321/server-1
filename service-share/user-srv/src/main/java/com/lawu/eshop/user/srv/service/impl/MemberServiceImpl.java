@@ -124,16 +124,16 @@ public class MemberServiceImpl implements MemberService {
         }
         RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
         List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        
-        List<MemberProfileDO> mpList=new ArrayList<MemberProfileDO>();
+
+        List<MemberProfileDO> mpList = new ArrayList<MemberProfileDO>();
         for (MemberDO memberDO : memberDOS) {
-        	MemberProfileDOExample mpExample=new MemberProfileDOExample();
-        	MemberProfileDO memberProfileDO=memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
-        	mpList.add(memberProfileDO);
-		}
+            MemberProfileDOExample mpExample = new MemberProfileDOExample();
+            MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
+            mpList.add(memberProfileDO);
+        }
         Page<MemberBO> pageMember = new Page<MemberBO>();
         pageMember.setTotalCount(totalCount);
-        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS,mpList);
+        List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS, mpList);
         pageMember.setRecords(memberBOS);
         pageMember.setCurrentPage(memberQuery.getCurrentPage());
         return pageMember;
@@ -179,6 +179,11 @@ public class MemberServiceImpl implements MemberService {
         memberProfileDO.setInviteMerchantCount(0);
         memberProfileDO.setGmtCreate(new Date());
         memberProfileDOMapper.insertSelective(memberProfileDO);
+
+        //注册会员成为商户粉丝
+        if (inviterId > 0 && inviterType == UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val) {
+
+        }
 
         //插入会员推荐关系
         InviteRelationDO inviteRelationDO = new InviteRelationDO();

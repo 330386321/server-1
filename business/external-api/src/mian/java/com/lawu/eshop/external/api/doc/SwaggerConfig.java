@@ -1,4 +1,4 @@
-package com.lawu.eshop.operator.api.doc;
+package com.lawu.eshop.external.api.doc;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
