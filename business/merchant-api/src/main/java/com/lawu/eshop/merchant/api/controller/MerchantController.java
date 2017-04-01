@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.merchant.api.service.MerchantService;
@@ -46,6 +47,7 @@ public class MerchantController extends BaseController {
     @Autowired
     private InviterService inviterService;
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -60,6 +62,7 @@ public class MerchantController extends BaseController {
         return merchantService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改支付密码", notes = "根据商户编号修改支付密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -74,6 +77,7 @@ public class MerchantController extends BaseController {
         return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "注册", notes = "商户注册。[1002|1012|1013|1016] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
@@ -106,7 +110,8 @@ public class MerchantController extends BaseController {
         return merchantService.register(registerRealParam);
     }
 
-    @ApiOperation(value = "根据账号查询商户信息", notes = "根据账号查询商户信息。[1002] (梅述全)", httpMethod = "GET")
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
+    @ApiOperation(value = "查询当前商户信息", notes = "查询当前商户信息。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getMerchant", method = RequestMethod.GET)

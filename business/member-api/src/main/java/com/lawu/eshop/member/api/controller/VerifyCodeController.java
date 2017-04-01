@@ -74,6 +74,7 @@ public class VerifyCodeController extends BaseController {
         sos.close();
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询验证码", notes = "查询验证码。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)

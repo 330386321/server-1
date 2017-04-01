@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +34,8 @@ public class BankController extends BaseController{
 	 * 查询所有银行
 	 * @return
 	 */
-	//@Authorization
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
+	@Authorization
 	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "findBank", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +51,7 @@ public class BankAccountController extends BaseController{
 	 * @param token
 	 * @return
 	 */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "我绑定的银行卡", notes = "查询当前用户绑定的银行卡[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -66,7 +68,8 @@ public class BankAccountController extends BaseController{
 	 * @param bankAccountParam
 	 * @return
 	 */
-	//@Authorization
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
+	@Authorization
     @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000|1013]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)

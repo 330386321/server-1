@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +51,8 @@ public class ProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
-    
+
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询商品", notes = "分页查询商品，[]。(杨清华)", httpMethod = "POST")
     @Authorization

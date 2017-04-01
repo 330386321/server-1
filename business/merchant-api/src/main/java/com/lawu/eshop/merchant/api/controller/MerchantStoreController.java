@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -40,8 +41,9 @@ public class MerchantStoreController extends BaseController {
     private MerchantStoreService merchantStoreService;
 
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
+    @Authorization
     @ApiOperation(value = "根据商家门店id查询门店信息", notes = "根据商家门店id查询门店信息，成功返回门店信息。（章勇）", httpMethod = "GET")
-   // @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.GET)
     public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId) {
@@ -49,6 +51,7 @@ public class MerchantStoreController extends BaseController {
         return result;
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "新增门店信息", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -135,6 +138,7 @@ public class MerchantStoreController extends BaseController {
         return successCreated(ResultCode.FAIL);
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.InviterService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class InviterController extends BaseController {
     @Autowired
     private InviterService inviterService;
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。[1002](梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)

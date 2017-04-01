@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
@@ -38,6 +39,7 @@ public class VerifyCodeController extends BaseController {
     @Autowired
     private VerifyCodeService verifyCodeService;
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
@@ -52,6 +54,7 @@ public class VerifyCodeController extends BaseController {
         return smsRecordService.sendSms(mobile, ip, purpose);
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)
     public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
@@ -71,6 +74,7 @@ public class VerifyCodeController extends BaseController {
         sos.close();
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询验证码", notes = "查询验证码。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)
