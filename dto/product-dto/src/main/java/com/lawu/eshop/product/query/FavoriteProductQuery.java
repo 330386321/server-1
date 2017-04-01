@@ -1,7 +1,7 @@
 package com.lawu.eshop.product.query;
 
-import com.lawu.eshop.framework.core.page.PageParam;
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
-public class FavoriteProductQuery extends PageParam{
+public class FavoriteProductQuery extends AbstractPageParam{
 
 }
