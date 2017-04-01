@@ -1,14 +1,10 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 
 /**
@@ -51,6 +47,7 @@ public class MerchantStoreConverter {
         merchantStoreInfoBO.setIntro(merchantStoreDO.getIntro());
         merchantStoreInfoBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
         merchantStoreInfoBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
+        merchantStoreInfoBO.setStatusEnum(MerchantStatusEnum.getEnum(merchantStoreDO.getStatus()));
 
         return merchantStoreInfoBO;
     }
@@ -88,6 +85,8 @@ public class MerchantStoreConverter {
 
         merchantStoreDTO.setType(MerchantStoreImageEnum.getEnum(merchantStoreInfoBO.getType()));
         merchantStoreDTO.setPath(merchantStoreInfoBO.getPath());
+        merchantStoreDTO.setAuditSuccess(merchantStoreInfoBO.isAuditSuccess());
+        merchantStoreDTO.setMerchantStatus(merchantStoreInfoBO.getStatusEnum());
 
         return merchantStoreDTO;
     }

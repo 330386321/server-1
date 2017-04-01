@@ -41,10 +41,10 @@ public class MerchantStoreController extends BaseController {
 
 
     @ApiOperation(value = "根据商家门店id查询门店信息", notes = "根据商家门店id查询门店信息，成功返回门店信息。（章勇）", httpMethod = "GET")
-    @Authorization
+   // @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.GET)
-    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId) {
         Result<MerchantStoreDTO> result = merchantStoreService.selectMerchantStore(merchantStoreId);
         return result;
     }

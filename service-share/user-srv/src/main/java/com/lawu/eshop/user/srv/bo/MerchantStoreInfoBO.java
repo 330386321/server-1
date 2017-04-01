@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.bo;
 
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -143,6 +145,16 @@ public class MerchantStoreInfoBO {
     * @mbg.generated 2017-03-30 10:55:26
     */
     private Boolean isNoReasonReturn;
+
+    /**
+     * 门店状态
+     */
+    private MerchantStatusEnum statusEnum;
+
+    /**
+     * 门店审核状态
+     */
+    private boolean auditSuccess = false;
 
     public Long getMerchantStoreId() {
         return merchantStoreId;
@@ -311,5 +323,20 @@ public class MerchantStoreInfoBO {
 	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
 		this.isNoReasonReturn = isNoReasonReturn;
 	}
-    
+
+    public MerchantStatusEnum getStatusEnum() {
+        return statusEnum;
+    }
+
+    public void setStatusEnum(MerchantStatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
+    }
+
+    public boolean isAuditSuccess() {
+        return auditSuccess;
+    }
+
+    public void setAuditSuccess(boolean auditSuccess) {
+        this.auditSuccess = auditSuccess;
+    }
 }

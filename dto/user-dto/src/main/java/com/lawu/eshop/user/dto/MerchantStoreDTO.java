@@ -154,6 +154,18 @@ public class MerchantStoreDTO  {
     @ApiParam(name = "path",value = "图片路径")
     private String path;
 
+    /**
+     * 门店状态
+     */
+    @ApiParam(name = "merchantStatus",value = "门店状态")
+    private MerchantStatusEnum merchantStatus;
+
+    /**
+     * 门店审核状态
+     */
+    @ApiParam(name = "auditSuccess",value = "门店审核状态 false未审核，true 已审核/审核")
+    private boolean auditSuccess =false;
+
     public Long getMerchantStoreId() {
         return merchantStoreId;
     }
@@ -312,5 +324,21 @@ public class MerchantStoreDTO  {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public MerchantStatusEnum getMerchantStatus() {
+        return merchantStatus;
+    }
+
+    public void setMerchantStatus(MerchantStatusEnum merchantStatus) {
+        this.merchantStatus = merchantStatus;
+    }
+
+    public boolean isAuditSuccess() {
+        return auditSuccess;
+    }
+
+    public void setAuditSuccess(boolean auditSuccess) {
+        this.auditSuccess = auditSuccess;
     }
 }

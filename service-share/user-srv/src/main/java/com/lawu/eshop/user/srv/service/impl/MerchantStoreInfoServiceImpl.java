@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -75,6 +76,14 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             merchantStoreInfoBO.setType(merchantStoreImageDOS.get(0).getType());
             merchantStoreInfoBO.setPath(merchantStoreImageDOS.get(0).getPath());
 
+        }
+        //查询门店审核记录
+        MerchantStoreAuditDOExample merchantStoreAuditDOExample = new MerchantStoreAuditDOExample();
+        merchantStoreAuditDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId).
+                andStatusEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+        List<MerchantStoreAuditDO> auditInfos = merchantStoreAuditDOMapper.selectByExample(merchantStoreAuditDOExample);
+        if(auditInfos.isEmpty()){
+            merchantStoreInfoBO.setAuditSuccess(true);//未存在未审核状态
         }
 
         return merchantStoreInfoBO;
