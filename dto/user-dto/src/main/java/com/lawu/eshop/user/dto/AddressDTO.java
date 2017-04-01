@@ -13,7 +13,7 @@ public class AddressDTO {
 	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
 
-	@ApiModelProperty(value = "是否为默认(0为不默认,1为默认)", required = true)
+	@ApiModelProperty(value = "是否为默认(false为不默认,true为默认)", required = true)
 	private Boolean isDefault;
 
 	@ApiModelProperty(value = "收货人姓名", required = true)

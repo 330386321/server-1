@@ -73,7 +73,7 @@ public class ResultCode {
         ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
         ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
         ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
-        ResultCode.messageMap.put(IMAGE_IS_NULL, "请上传图片");
+        ResultCode.messageMap.put(IMAGE_IS_NULL, "图片格式不正确");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
