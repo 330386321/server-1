@@ -61,7 +61,6 @@ public class AddressController extends BaseController {
         return addressDTO;
     }
 
-    @Audit(date = "2017-03-29", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "删除收货地址", notes = "删除收货地址[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

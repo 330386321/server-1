@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 	
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -37,6 +38,7 @@ public class ProductController extends BaseController {
     @Autowired
     private MerchantStoreService merchantStoreService;
 
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[1002|1003]，（杨清华）", httpMethod = "GET")
     @Authorization

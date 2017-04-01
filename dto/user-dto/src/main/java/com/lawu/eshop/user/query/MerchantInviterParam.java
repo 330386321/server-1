@@ -1,10 +1,9 @@
 package com.lawu.eshop.user.query;
 
-import com.lawu.eshop.framework.core.page.PageParam;
-
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import io.swagger.annotations.ApiParam;
 
-public class MerchantInviterParam extends PageParam{
+public class MerchantInviterParam extends AbstractPageParam{
 	
 	@ApiParam (name="mobileOrName", value = "商家名称或者电话")
 	private String mobileOrName;

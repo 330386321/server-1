@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,6 +45,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param productId
 	 * @return
 	 */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "收藏商品", notes = "收藏商品[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -61,6 +63,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param pageQuery
 	 * @return
 	 */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@ApiOperation(value = "我收藏的商品", notes = "我收藏的商品，[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

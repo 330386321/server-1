@@ -1,10 +1,9 @@
 package com.lawu.eshop.user.query;
 
-import com.lawu.eshop.framework.core.page.PageParam;
-
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import io.swagger.annotations.ApiParam;
 
-public class MemberQuery extends PageParam{
+public class MemberQuery extends AbstractPageParam{
 
 	@ApiParam (name="accountOrNickName", value = "会员账号或者会员昵称")
 	private String accountOrNickName;

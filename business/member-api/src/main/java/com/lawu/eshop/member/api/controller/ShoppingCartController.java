@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -63,6 +64,7 @@ public class ShoppingCartController extends BaseController {
      * @param param
      * @return
      */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "加入购物车", notes = "加入购物车。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -106,6 +108,7 @@ public class ShoppingCartController extends BaseController {
      * @param token
      * @return
      */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -148,6 +151,7 @@ public class ShoppingCartController extends BaseController {
      * @param parm
      * @return
      */
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1002|1003|4000]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

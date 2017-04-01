@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +59,7 @@ public class InviterController extends BaseController {
      * @param id
      * @return
     */
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -72,6 +74,7 @@ public class InviterController extends BaseController {
 	 * 我的E友总数量
 	 * @return
 	 */
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
 	@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -88,6 +91,7 @@ public class InviterController extends BaseController {
 	 * @param pageQuery
 	 * @return
 	 */
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -105,6 +109,7 @@ public class InviterController extends BaseController {
      * @param query
      * @return
      */
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -115,6 +120,7 @@ public class InviterController extends BaseController {
         return page;
     }
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)

@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -33,6 +34,7 @@ public class SuggestionController extends BaseController {
     @Autowired
     private SuggestionService suggestionService;
 
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "保存反馈意见", notes = "保存反馈意见。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

@@ -1,8 +1,8 @@
 package com.lawu.eshop.property.param;
 
-import java.io.Serializable;
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
-import com.lawu.eshop.framework.core.page.PageParam;
+import java.io.Serializable;
 
 /**
  * 积分明细查询参数
@@ -10,7 +10,7 @@ import com.lawu.eshop.framework.core.page.PageParam;
  * @author Sunny
  * @date 2017/3/29
  */
-public class PointDetailQueryParam extends PageParam implements Serializable {
+public class PointDetailQueryParam extends AbstractPageParam implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
