@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend" >
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" >
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="inviter_id" property="inviterId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="region_path" property="regionPath" jdbcType="VARCHAR" />
+    <result column="principal_name" property="principalName" jdbcType="VARCHAR" />
+    <result column="principal_mobile" property="principalMobile" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" id="selectInviterMerchantByRowbounds" >
+    select 
+    	me.account as account,
+    	me.mobile as mobile,
+    	ms.name as name,
+    	ms.region_path as region_path,
+    	ms.principal_name as regionPath,
+    	ms.principal_mobile as principalMobile,
+    	ms.status as status,
+    	ms.gmt_create as gmtCreate
+    from merchant me left join merchant_store ms on me.id=ms.merchant_id
+    <where>
+    	me.inviter_id=#{inviterId,jdbcType=VARCHAR}
+	    <if test="mobileAndName != null and mobileAndName!=''" >
+	      and me.mobile=concat(concat('%',#{mobileAndName,jdbcType=VARCHAR}),'%')
+	      or ms.name=concat(concat('%',#{mobileAndName,jdbcType=VARCHAR}),'%')
+	    </if>
+    </where>
+  </select>
+</mapper>

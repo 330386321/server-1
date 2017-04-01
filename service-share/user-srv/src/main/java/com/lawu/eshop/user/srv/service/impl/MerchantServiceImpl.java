@@ -13,9 +13,9 @@ import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDO;
+import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
@@ -59,7 +59,7 @@ public class MerchantServiceImpl implements MerchantService {
     private TransactionMainService transactionMainService;
     
     @Autowired
-    private InviterMerchantDOMapper inviterMerchantDOMapper;
+    private InviterMerchantDOMapperExtend inviterMerchantDOMapper;
 
     @Override
     @Transactional
@@ -233,12 +233,12 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam) {
-    	InviterMerchantDO inviterMerchantDO=new InviterMerchantDO();
+    	InviterMerchantDOView inviterMerchantDO=new InviterMerchantDOView();
     	inviterMerchantDO.setInviterId(userId);
     	inviterMerchantDO.setMobileAndName(pageParam.getMobileOrName());
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
-        List<InviterMerchantDO> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
+        List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
         Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();
         pageMerchantInviter.setTotalCount(inviterMerchantDOS.size());
         List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);

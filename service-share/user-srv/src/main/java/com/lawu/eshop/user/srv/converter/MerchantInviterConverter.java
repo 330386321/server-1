@@ -7,7 +7,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
-import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDO;
+import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 
 public class MerchantInviterConverter {
 	/**
@@ -16,12 +16,12 @@ public class MerchantInviterConverter {
 	 * @param storeList
 	 * @return
 	 */
-	public static List<MerchantInviterBO> convertMerchantInviterBOS(List<InviterMerchantDO> inviterMerchantDOS) {
+	public static List<MerchantInviterBO> convertMerchantInviterBOS(List<InviterMerchantDOView> inviterMerchantDOS) {
 		if(inviterMerchantDOS==null){
 			return null;
 		}
 		List<MerchantInviterBO> FIBOS=new ArrayList<MerchantInviterBO>();
-		for (InviterMerchantDO inviterMerchantDO : inviterMerchantDOS) {
+		for (InviterMerchantDOView inviterMerchantDO : inviterMerchantDOS) {
 			MerchantInviterBO FIO=new MerchantInviterBO();
 			FIO.setAccount(inviterMerchantDO.getAccount());
 			FIO.setName(inviterMerchantDO.getName());

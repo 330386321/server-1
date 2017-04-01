@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
-import com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO;
+import com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDOView;
 
 /**
  * 
@@ -13,14 +13,14 @@ import com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO;
  * @date 2017/03/30
  *
  */
-public interface FavoriteProductDOExtendMapper {
+public interface FavoriteProductDOExtendMapperExtend {
 	
 	/**
 	 * 我邀请的商家
 	 * @param merchantInviter
 	 * @return
 	 */
-	List<FavoriteProductExtendDO> selectMyFavoriteProductByRowbounds(FavoriteProductExtendDO favoriteProductExtendDO,RowBounds rowBounds);
+	List<FavoriteProductExtendDOView> selectMyFavoriteProductByRowbounds(FavoriteProductExtendDOView favoriteProductExtendDO,RowBounds rowBounds);
 	
    
 }

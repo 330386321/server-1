@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOExtendMapper" >
-  <resultMap id="BaseResultMap" type="com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO" >
+<mapper namespace="com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOExtendMapperExtend" >
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDOView" >
   	<result column="member_id" property="memberId" jdbcType="BIGINT" />
   	
     <result column="product_id" property="productId" jdbcType="BIGINT" />

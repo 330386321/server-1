@@ -2,7 +2,7 @@ package com.lawu.eshop.product.srv.domain.extend;
 
 import java.math.BigDecimal;
 
-public class FavoriteProductExtendDO {
+public class FavoriteProductExtendDOView {
 	private Long memberId;
 	
 	private Long productId;
