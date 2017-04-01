@@ -35,7 +35,7 @@ public class CommonController extends BaseController {
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "登录", notes = "根据账号密码登录，成功返回token。[2000]（孙林青）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "token/{account}", method = RequestMethod.POST)
+    @RequestMapping(value = "login/{account}", method = RequestMethod.POST)
     public Result<TokenDTO> login(@PathVariable @ApiParam(required = true, value = "账号") String account,
                                   @RequestParam @ApiParam(required = true, value = "密码") String pwd) {
 
@@ -59,7 +59,7 @@ public class CommonController extends BaseController {
     @ApiOperation(value = "退出", notes = "退出登录，清除token。（孙林青）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
-    @RequestMapping(value = "token", method = RequestMethod.DELETE)
+    @RequestMapping(value = "logout", method = RequestMethod.DELETE)
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         tokenManager.delRelationshipByToken(token);
         return successDelete();

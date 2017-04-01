@@ -14,7 +14,7 @@ import org.mybatis.generator.exception.XMLParserException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 public class GenMain {
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		List<String> warnings = new ArrayList<String>();
 		boolean overwrite = true;
 		String genCfg = "/generatorConfig.xml";
@@ -45,5 +45,5 @@ public class GenMain {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }
