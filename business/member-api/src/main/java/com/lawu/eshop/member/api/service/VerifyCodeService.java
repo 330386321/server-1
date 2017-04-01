@@ -46,4 +46,13 @@ public interface VerifyCodeService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "verifyCode/verifyPicCode/{mobile}")
     Result verifyPicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode);
+
+    /**
+     * 查询验证码
+     *
+     * @param id ID
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "verifyCode/getVerifyCode/{id}")
+    Result getVerifyCodeById(@PathVariable("id") Long id);
 }

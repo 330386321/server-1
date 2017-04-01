@@ -73,4 +73,19 @@ public class VerifyCodeController extends BaseController {
         return successGet();
     }
 
+    /**
+     * 根据ID查询验证码
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)
+    public Result getVerifyCode(@PathVariable Long id) {
+        VerifyCodeBO verifyCodeBO = verifyCodeService.getVerifyCodeById(id);
+        if (verifyCodeBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(VerifyCodeConverter.convertDTO(verifyCodeBO));
+    }
+
 }

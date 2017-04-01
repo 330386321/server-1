@@ -69,7 +69,7 @@ public class VerifyCodeController extends BaseController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)
     public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
-        BufferedImage buffImg = new BufferedImage(60, 20, BufferedImage.TYPE_INT_RGB);
+        BufferedImage buffImg = new BufferedImage(280, 120, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffImg.createGraphics();
         String picCode = VerifyCodeUtil.getVerifyCode(g);
         verifyCodeService.savePicCode(mobile, picCode, purpose);
@@ -83,5 +83,12 @@ public class VerifyCodeController extends BaseController {
         ServletOutputStream sos = response.getOutputStream();
         ImageIO.write(buffImg, "jpeg", sos);
         sos.close();
+    }
+
+    @ApiOperation(value = "查询验证码", notes = "查询验证码。[1002] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)
+    public Result getVerifyCode(@PathVariable @ApiParam(required = true, value = "ID") Long  id) {
+        return verifyCodeService.getVerifyCodeById(id);
     }
 }
