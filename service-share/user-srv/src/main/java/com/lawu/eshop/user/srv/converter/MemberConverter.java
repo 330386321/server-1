@@ -33,6 +33,7 @@ public class MemberConverter {
         }
 
         MemberBO memberBO = new MemberBO();
+        memberBO.setId(memberDO.getId());
         memberBO.setAccount(memberDO.getAccount());
         memberBO.setBirthday(memberDO.getBirthday());
         memberBO.setNum(memberDO.getNum());
