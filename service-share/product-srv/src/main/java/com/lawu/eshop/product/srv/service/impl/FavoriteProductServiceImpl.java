@@ -16,10 +16,10 @@ import com.lawu.eshop.product.srv.converter.FavoriteProductConverter;
 import com.lawu.eshop.product.srv.domain.FavoriteProductDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
-import com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO;
+import com.lawu.eshop.product.srv.domain.extend.FavoriteProductView;
 import com.lawu.eshop.product.srv.mapper.FavoriteProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
-import com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOExtendMapper;
+import com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.FavoriteProductService;
 
 /**
@@ -35,7 +35,7 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 	private FavoriteProductDOMapper favoriteProductDOMapper;
 	
 	@Autowired
-	private FavoriteProductDOExtendMapper favoriteProductDOExtendMapper;
+	private FavoriteProductDOMapperExtend favoriteProductDOExtendMapper;
 	
 	@Autowired
 	private ProductModelDOMapper productModelDOMapper;
@@ -60,12 +60,12 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 
 	@Override
 	public Page<FavoriteProductBO> selectMyFavoriteProduct(Long memberId, FavoriteProductQuery query) {
-		FavoriteProductExtendDO favoriteProductExtendDO=new FavoriteProductExtendDO();
-		favoriteProductExtendDO.setMemberId(memberId);
+		FavoriteProductView favoriteProductView=new FavoriteProductView();
+		favoriteProductView.setMemberId(memberId);
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
-        List<FavoriteProductExtendDO> DOS = favoriteProductDOExtendMapper.selectMyFavoriteProductByRowbounds(favoriteProductExtendDO, rowBounds);
+        List<FavoriteProductView> DOS = favoriteProductDOExtendMapper.selectMyFavoriteProductByRowbounds(favoriteProductView, rowBounds);
         List<ProductModelDO> listPM=new ArrayList<ProductModelDO>();
-        for (FavoriteProductExtendDO fpeDO : DOS) {
+        for (FavoriteProductView fpeDO : DOS) {
         	ProductModelDOExample pmExample=new ProductModelDOExample();
         	pmExample.setOrderByClause("price asc");
         	pmExample.createCriteria().andProductIdEqualTo(fpeDO.getProductId());

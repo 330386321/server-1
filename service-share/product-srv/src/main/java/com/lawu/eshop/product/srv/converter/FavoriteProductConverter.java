@@ -6,36 +6,36 @@ import java.util.List;
 import com.lawu.eshop.product.dto.FavoriteProductDTO;
 import com.lawu.eshop.product.srv.bo.FavoriteProductBO;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.extend.FavoriteProductExtendDO;
+import com.lawu.eshop.product.srv.domain.extend.FavoriteProductView;
 
 public class FavoriteProductConverter {
 	
 	/**
 	 * DO转BO
-	 * @param FavoriteProductExtendDO
+	 * @param favoriteProductView
 	 * @return
 	 */
-	public static FavoriteProductBO convertBO(FavoriteProductExtendDO favoriteProductExtendDO) {
-        if (favoriteProductExtendDO == null) {
+	public static FavoriteProductBO convertBO(FavoriteProductView favoriteProductView) {
+        if (favoriteProductView == null) {
             return null;
         }
         FavoriteProductBO favoriteProductBO=new FavoriteProductBO();
-        favoriteProductBO.setName(favoriteProductExtendDO.getName());
-        favoriteProductBO.setFeatureImage(favoriteProductExtendDO.getFeatureImage());
+        favoriteProductBO.setName(favoriteProductView.getName());
+        favoriteProductBO.setFeatureImage(favoriteProductView.getFeatureImage());
         return favoriteProductBO;
     }
 	
 	/**
 	 * DOS 转BOS
-	 * @param bankDOS
+	 * @param listPM
 	 * @return
 	 */
-	public static List<FavoriteProductBO> convertBOS(List<FavoriteProductExtendDO> favoriteProductExtendDOS,List<ProductModelDO> listPM) {
-        if (favoriteProductExtendDOS == null) {
+	public static List<FavoriteProductBO> convertBOS(List<FavoriteProductView> favoriteProductViews,List<ProductModelDO> listPM) {
+        if (favoriteProductViews == null) {
             return null;
         }
         List<FavoriteProductBO> BOS=new ArrayList<FavoriteProductBO>();
-        for (FavoriteProductExtendDO favoriteProductExtendDO: favoriteProductExtendDOS) {
+        for (FavoriteProductView favoriteProductExtendDO: favoriteProductViews) {
         	for (ProductModelDO productModelDO : listPM) {
         		if(favoriteProductExtendDO.getProductId().equals(productModelDO.getProductId())){
         			FavoriteProductBO favoriteProductBO=new FavoriteProductBO();
@@ -55,7 +55,7 @@ public class FavoriteProductConverter {
 	
 	/**
 	 * BO转DTO
-	 * @param bankDO
+	 * @param favoriteProductBO
 	 * @return
 	 */
 	public static FavoriteProductDTO convertDTO(FavoriteProductBO favoriteProductBO ) {
@@ -73,7 +73,7 @@ public class FavoriteProductConverter {
 	
 	/**
 	 * BOS 转DTOS
-	 * @param bankDOS
+	 * @param favoriteProductBOS
 	 * @return
 	 */
 	public static List<FavoriteProductDTO> convertDTOS(List<FavoriteProductBO> favoriteProductBOS ) {
