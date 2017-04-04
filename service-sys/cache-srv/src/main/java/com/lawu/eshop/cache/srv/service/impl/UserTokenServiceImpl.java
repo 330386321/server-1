@@ -90,4 +90,71 @@ public class UserTokenServiceImpl implements UserTokenService {
     }
 
 
+    private String formatMerchantKey(String account) {
+        return KeyConstant.REDIS_KEY_MERCHANT_PREFIX.concat(account);
+    }
+
+    private String formatMerchantToken(String token) {
+        return KeyConstant.REDIS_TOKEN_MERCHANT_PREFIX.concat(token);
+    }
+
+
+    @Override
+    public void setMerchantTokenOneToOne(String account, String token, Integer expireSeconds) {
+
+        String accountKey = formatMerchantKey(account);
+
+        String oldToken = getValue(accountKey);
+        if (oldToken != null) {
+            String oldTokenKey = formatMerchantToken(oldToken);
+            stringRedisTemplate.delete(oldTokenKey);
+        }
+        stringRedisTemplate.opsForValue().set(formatMerchantKey(account), token, expireSeconds);
+        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds);
+    }
+
+    @Override
+    public void setMerchantTokenOneToMany(String account, String token, Integer expireSeconds) {
+
+        stringRedisTemplate.opsForValue().set(formatMerchantToken(token), account, expireSeconds);
+    }
+
+    @Override
+    public String getMerchantAccount(String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
+        String tokenKey = formatMerchantToken(token);
+        String account = getValue(tokenKey).toString();
+        //根据设置，在每次有效操作后刷新过期时间
+        if (account != null && flushExpireAfterOperation) {
+            if (singleTokenWithUser) {
+                stringRedisTemplate.expire(formatMerchantKey(account), expireSeconds, TimeUnit.SECONDS);
+
+            }
+            stringRedisTemplate.expire(tokenKey, expireSeconds, TimeUnit.SECONDS);
+
+        }
+        return account;
+    }
+
+    @Override
+    public void delMerchantRelationshipByAccount(String account) {
+        String accountKey = formatMerchantKey(account);
+        String token = getValue(accountKey);
+        if (token != null) {
+            stringRedisTemplate.delete(Arrays.asList(accountKey, formatMerchantToken(token)));
+        }
+    }
+
+    @Override
+    public void delMerchantRelationshipByToken(String token, Boolean singleTokenWithUser) {
+        String tokenKey = formatMerchantToken(token);
+
+        if (singleTokenWithUser) {
+            String account = getValue(tokenKey);
+            stringRedisTemplate.delete(Arrays.asList(formatMerchantKey(account), tokenKey));
+        } else {
+            stringRedisTemplate.delete(tokenKey);
+        }
+    }
+
+
 }

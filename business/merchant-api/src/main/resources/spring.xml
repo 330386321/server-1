@@ -28,5 +28,8 @@
        <bean id="tokenManager" class="com.lawu.eshop.authorization.manager.impl.CacheTokenManager">
               <!--Token失效时间-->
               <property name="tokenExpireSeconds" value="3600" />
+              <property name="cacheService" ref="redisCacheService" />
        </bean>
+
+       <bean id="redisCacheService" class="com.lawu.eshop.merchant.api.service.impl.RedisCacheServiceImpl" />
 </beans>

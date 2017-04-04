@@ -18,4 +18,15 @@ public class KeyConstant {
      */
     public static final String REDIS_TOKEN_MEMBER_PREFIX = "AUTHORIZATION_TOKEN_MEMBER_";
 
+
+    /**
+     * 商家账号-token
+     */
+    public static final String REDIS_KEY_MERCHANT_PREFIX = "AUTHORIZATION_KEY_MERCHANT_";
+
+    /**
+     * 商家token-账号
+     */
+    public static final String REDIS_TOKEN_MERCHANT_PREFIX = "AUTHORIZATION_TOKEN_MERCHANT_";
+
 }

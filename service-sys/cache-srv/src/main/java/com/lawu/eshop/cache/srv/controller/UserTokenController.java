@@ -41,4 +41,29 @@ public class UserTokenController {
     public void delMemberRelationshipByToken(String token, Boolean singleTokenWithUser) {
         userTokenService.delMemberRelationshipByToken(token, singleTokenWithUser);
     }
+
+    @RequestMapping(value = "setMerchantTokenOneToOne", method = RequestMethod.PUT)
+    public void setMerchantTokenOneToOne(String account, String token, Integer expireSeconds) {
+        userTokenService.setMerchantTokenOneToOne(account, token, expireSeconds);
+    }
+
+    @RequestMapping(value = "setMerchantTokenOneToMany", method = RequestMethod.PUT)
+    public void setMerchantTokenOneToMany(String account, String token, Integer expireSeconds) {
+        userTokenService.setMerchantTokenOneToMany(account, token, expireSeconds);
+    }
+
+    @RequestMapping(value = "getMerchantAccount", method = RequestMethod.GET)
+    public String getMerchantAccount(String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
+        return userTokenService.getMerchantAccount(token, flushExpireAfterOperation, expireSeconds, singleTokenWithUser);
+    }
+
+    @RequestMapping(value = "delMerchantRelationshipByAccount", method = RequestMethod.DELETE)
+    public void delMerchantRelationshipByAccount(String account) {
+        userTokenService.delMerchantRelationshipByAccount(account);
+    }
+
+    @RequestMapping(value = "delMerchantRelationshipByToken", method = RequestMethod.DELETE)
+    public void delMerchantRelationshipByToken(String token, Boolean singleTokenWithUser) {
+        userTokenService.delMerchantRelationshipByToken(token, singleTokenWithUser);
+    }
 }
