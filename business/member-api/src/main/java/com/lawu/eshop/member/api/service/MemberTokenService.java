@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.member.api.service.hystrix.MemberTokenServiceHystrix;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Leach
  * @date 2017/3/20
  */
-@FeignClient(value = "cache-srv", fallback = MemberTokenServiceHystrix.class)
+@FeignClient(value = "cache-srv")
 public interface MemberTokenService {
 
     @RequestMapping(value = "userToken/setMemberTokenOneToOne", method = RequestMethod.PUT)
