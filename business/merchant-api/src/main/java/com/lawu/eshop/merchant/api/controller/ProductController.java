@@ -70,6 +70,7 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings("rawtypes")
+	@Audit(date="2017-04-05",reviewer="杨清华")
 	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1002]。(杨清华)", httpMethod = "PUT")
     @Authorization
     @RequestMapping(value = "updateProductStatus", method = RequestMethod.PUT)
@@ -91,7 +92,8 @@ public class ProductController extends BaseController {
     }
     
     @SuppressWarnings({ "rawtypes" })
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，[1017|3000]，（杨清华）", httpMethod = "POST")
+	@Audit(date="2017-04-05",reviewer="杨清华")
+	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[1017|3000]，（杨清华）", httpMethod = "POST")
     @Authorization
     @RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
     public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
