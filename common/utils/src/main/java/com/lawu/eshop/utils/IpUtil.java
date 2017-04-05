@@ -93,7 +93,4 @@ public class IpUtil {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(ipToLong("192.168.1.176"));
-    }
 }

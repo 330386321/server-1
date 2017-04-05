@@ -10,9 +10,9 @@ import java.util.Random;
 public class VerifyCodeUtil {
 
     // 验证码图片的宽度。
-    private static final int width = 60;
+    private static final int width = 280;
     // 验证码图片的高度。
-    private static final int height = 20;
+    private static final int height = 120;
     // 验证码字符个数
     private static final int codeCount = 4;
     // 字体高度

@@ -37,9 +37,4 @@ public class ValidateUtil {
         return Pattern.matches(VALIDATE_ID_CARD, idCard);
     }
 
-    public static void main(String[] args) {
-        System.out.println(isIDCard("362527199213013"));
-    }
-
-
 }
