@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
@@ -82,7 +83,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId).
                 andStatusEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
         List<MerchantStoreAuditDO> auditInfos = merchantStoreAuditDOMapper.selectByExample(merchantStoreAuditDOExample);
-        if(auditInfos.isEmpty()){
+        if (auditInfos.isEmpty()) {
             merchantStoreInfoBO.setAuditSuccess(true);//未存在未审核状态
         }
 
@@ -99,7 +100,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreDO.setGmtCreate(new Date());
         merchantStoreDO.setGmtModified(new Date());
         //设置门店待审核状态
-        merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+        if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val.equals(merchantStoreParam.getCertifType())) {
+            //填写身份证用户需要交保证金
+            merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val);
+        } else {
+            merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+        }
         Integer merchantStoreId = merchantStoreDOMapper.insert(merchantStoreDO);
 
         //新增商家店铺扩展信息
@@ -215,7 +221,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId);
         MerchantStoreImageDO merchantStoreImageDODel = new MerchantStoreImageDO();
         merchantStoreImageDODel.setStatus(false);
-        merchantStoreImageDOMapper.updateByExampleSelective(merchantStoreImageDODel,merchantStoreImageDOExample);
+        merchantStoreImageDOMapper.updateByExampleSelective(merchantStoreImageDODel, merchantStoreImageDOExample);
 
         MerchantStoreImageDO merchantStoreImageDO = new MerchantStoreImageDO();
         merchantStoreImageDO.setMerchantId(merchantId);
@@ -268,10 +274,10 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
         merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-        if(merchantStoreDOS.isEmpty()){
+        if (merchantStoreDOS.isEmpty()) {
             return null;
         }
-        return  MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
+        return MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
     }
 
     @Override
@@ -288,5 +294,5 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
     }
-    
+
 }
