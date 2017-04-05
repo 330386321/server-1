@@ -99,6 +99,7 @@ public class MemberConverter {
         userDTO.setUserSex(memberBO.getUserSex());
         userDTO.setRegionPath(memberBO.getRegionPath());
         userDTO.setNickname(memberBO.getNickname());
+        userDTO.setHeadimg(memberBO.getHeadimg());
         return userDTO;
     }
 
@@ -116,7 +117,9 @@ public class MemberConverter {
         MemberDO memberDO = new MemberDO();
         memberDO.setNickname(userParam.getNickname());
         memberDO.setRegionPath(userParam.getRegionPath());
-        memberDO.setSex(userParam.getUserSexEnum().val);
+        if (userParam.getUserSexEnum() != null) {
+            memberDO.setSex(userParam.getUserSexEnum().val);
+        }
         memberDO.setBirthday(userParam.getBirthday());
 
         return memberDO;
@@ -131,34 +134,34 @@ public class MemberConverter {
      * @author zhangrc
      * @date 2017/03/23
      */
-    public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS,List<MemberProfileDO> mpList) {
+    public static List<MemberBO> convertListBOS(List<MemberDO> memberDOS, List<MemberProfileDO> mpList) {
         if (memberDOS == null) {
             return null;
         }
         List<MemberBO> memberBOS = new ArrayList<MemberBO>();
         for (MemberDO memberDO : memberDOS) {
-        	MemberBO memberBO = new MemberBO();
-	        memberBO.setAccount(memberDO.getAccount());
-	        memberBO.setName(memberDO.getName());
-	        memberBO.setMobile(memberDO.getMobile());
-	        memberBO.setHeadimg(memberDO.getHeadimg());
-	        memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
-	        memberBO.setRegionPath(memberDO.getRegionPath());
-	        memberBO.setNickname(memberDO.getNickname());
-	        memberBO.setGmtCreate(memberDO.getGmtCreate());
-	        memberBO.setLevel(memberDO.getLevel());
-	        if(mpList.isEmpty()){
-	        	memberBO.setInviterCount(0);
-	        }else{
-	        	for (MemberProfileDO memberProfileDO : mpList) {
-					if(memberDO.getId().equals(memberProfileDO.getId())){
-						memberBO.setInviterCount(memberProfileDO.getInviteMemberCount()+memberProfileDO.getInviteMemberCount2());
-					}else{
-						memberBO.setInviterCount(0);
-			        }
-				}
-	        }
-        	memberBOS.add(memberBO);
+            MemberBO memberBO = new MemberBO();
+            memberBO.setAccount(memberDO.getAccount());
+            memberBO.setName(memberDO.getName());
+            memberBO.setMobile(memberDO.getMobile());
+            memberBO.setHeadimg(memberDO.getHeadimg());
+            memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
+            memberBO.setRegionPath(memberDO.getRegionPath());
+            memberBO.setNickname(memberDO.getNickname());
+            memberBO.setGmtCreate(memberDO.getGmtCreate());
+            memberBO.setLevel(memberDO.getLevel());
+            if (mpList.isEmpty()) {
+                memberBO.setInviterCount(0);
+            } else {
+                for (MemberProfileDO memberProfileDO : mpList) {
+                    if (memberDO.getId().equals(memberProfileDO.getId())) {
+                        memberBO.setInviterCount(memberProfileDO.getInviteMemberCount() + memberProfileDO.getInviteMemberCount2());
+                    } else {
+                        memberBO.setInviterCount(0);
+                    }
+                }
+            }
+            memberBOS.add(memberBO);
         }
         return memberBOS;
     }
@@ -184,8 +187,8 @@ public class MemberConverter {
         memberDTO.setLevel(memberBO.getLevel());
         return memberDTO;
     }
-    
-    
+
+
     public static EfriendDTO convertEDTO(MemberBO memberBO) {
         if (memberBO == null) {
             return null;
@@ -212,15 +215,15 @@ public class MemberConverter {
      * @date 2017/03/23
      */
     public static List<EfriendDTO> convertListDOTS(List<MemberBO> memberBOS) {
-		if (memberBOS == null) {
-		       return null;
-		    }
-			List<EfriendDTO> memberDTOS=new ArrayList<EfriendDTO>();
-			for (MemberBO MemberBO : memberBOS) {
-				memberDTOS.add(convertEDTO(MemberBO));
-			}
-		return memberDTOS;
-	}
+        if (memberBOS == null) {
+            return null;
+        }
+        List<EfriendDTO> memberDTOS = new ArrayList<EfriendDTO>();
+        for (MemberBO MemberBO : memberBOS) {
+            memberDTOS.add(convertEDTO(MemberBO));
+        }
+        return memberDTOS;
+    }
 
     /**
      * 描述：将pageBOS转成pageDTOS
@@ -228,16 +231,16 @@ public class MemberConverter {
      * @param pageMemberBOS
      * @return
      */
-	public static Page<EfriendDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
-		Page<EfriendDTO> pageDTO=new Page<EfriendDTO>();
-		List<MemberBO> BOS=pageMemberBOS.getRecords();
-		List<EfriendDTO> DTOS=pageDTO.getRecords();
-		for (MemberBO memberBO : BOS) {
-			DTOS.add(convertEDTO(memberBO));
-		}
-		pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
-		pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
-		return pageDTO;
-	}
+    public static Page<EfriendDTO> convertPageDOTS(Page<MemberBO> pageMemberBOS) {
+        Page<EfriendDTO> pageDTO = new Page<EfriendDTO>();
+        List<MemberBO> BOS = pageMemberBOS.getRecords();
+        List<EfriendDTO> DTOS = pageDTO.getRecords();
+        for (MemberBO memberBO : BOS) {
+            DTOS.add(convertEDTO(memberBO));
+        }
+        pageDTO.setTotalCount(pageMemberBOS.getTotalCount());
+        pageDTO.setCurrentPage(pageMemberBOS.getCurrentPage());
+        return pageDTO;
+    }
 
 }

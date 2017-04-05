@@ -11,22 +11,19 @@ import java.util.Date;
  */
 public class UserParam {
 
-    @ApiParam(name="nickname", value = "昵称")
+    @ApiParam(name = "nickname", value = "昵称")
     private String nickname;
 
-    @ApiParam(name="regionPath", value = "地区路径")
+    @ApiParam(name = "regionPath", value = "地区路径")
     private String regionPath;
 
 
-    @ApiParam(name="sex", value = "性别")
+    @ApiParam(name = "sex", value = "性别", required = true)
     private UserSexEnum userSexEnum;
 
-    @ApiParam(name="birthday", value = "生日")
+    @ApiParam(name = "birthday", value = "生日")
     private Date birthday;
 
-    @ApiParam(name="headimg", value = "头像")
-    private String headimg;
-   
     public String getNickname() {
         return nickname;
     }
@@ -59,11 +56,4 @@ public class UserParam {
         this.birthday = birthday;
     }
 
-    public String getHeadimg() {
-        return headimg;
-    }
-
-    public void setHeadimg(String headimg) {
-        this.headimg = headimg;
-    }
 }

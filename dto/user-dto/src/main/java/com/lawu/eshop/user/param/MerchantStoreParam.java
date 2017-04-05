@@ -16,61 +16,61 @@ public class MerchantStoreParam {
     /**
      * 店铺名称
      */
-    @ApiParam(name = "name", value = "店铺名称")
+    @ApiParam(name = "name", value = "店铺名称",required = true)
     private String name;
 
     /**
      * 省市区
      */
-    @ApiParam(name = "regionPath", value = "省市区")
+    @ApiParam(name = "regionPath", value = "省市区",required = true)
     private String regionPath;
 
     /**
      * 店铺地址信息
      */
-    @ApiParam(name = "address", value = "店铺地址信息")
+    @ApiParam(name = "address", value = "店铺地址信息",required = true)
     private String address;
 
     /**
      * 经度
      */
-    @ApiParam(name = "longitude", value = "经度")
+    @ApiParam(name = "longitude", value = "经度",required = true)
     private BigDecimal longitude;
 
     /**
      * 纬度
      */
-    @ApiParam(name = "latitude", value = "纬度")
+    @ApiParam(name = "latitude", value = "纬度",required = true)
     private BigDecimal latitude;
 
     /**
      * 主营业务
      */
-    @ApiParam(name = "industryPath", value = "主营业务")
+    @ApiParam(name = "industryPath", value = "主营业务",required = true)
     private String industryPath;
 
     /**
      * 店铺介绍
      */
-    @ApiParam(name = "intro", value = "店铺介绍")
+    @ApiParam(name = "intro", value = "店铺介绍",required = true)
     private String intro;
 
     /**
      * 负责人名字
      */
-    @ApiParam(name = "principalName", value = "负责人名字")
+    @ApiParam(name = "principalName", value = "负责人名字",required = true)
     private String principalName;
 
     /**
      * 负责人手机
      */
-    @ApiParam(name = "principalMobile", value = "负责人手机")
+    @ApiParam(name = "principalMobile", value = "负责人手机",required = true)
     private String principalMobile;
 
     /**
      * 注册公司名称
      */
-    @ApiParam(name = "companyName", value = "注册公司名称")
+    @ApiParam(name = "companyName", value = "注册公司名称",required = true)
     private String companyName;
 
     /**
@@ -94,19 +94,19 @@ public class MerchantStoreParam {
     /**
      * 经营类型
      */
-    @ApiParam(name = "manageType", value = "经营类型")
+    @ApiParam(name = "manageType", value = "经营类型",required = true)
     private MerchantStoreTypeEnum manageType;
 
     /**
      * 证件类型
      */
-    @ApiParam(name = "certifType", value = "证件类型")
+    @ApiParam(name = "certifType", value = "证件类型",required = true)
     private CertifTypeEnum certifType;
 
     /**
      * 个人经营者身份证号码
      */
-    @ApiParam(name = "operatorCardId", value = "证件类型")
+    @ApiParam(name = "operatorCardId", value = "个人经营者身份证号码")
     private String operatorCardId;
 
     /**

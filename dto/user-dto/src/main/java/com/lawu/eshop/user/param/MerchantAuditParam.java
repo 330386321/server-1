@@ -13,13 +13,13 @@ public class MerchantAuditParam {
     /**
      * 门店审核状态
      */
-    @ApiParam(name = "auditStatusEnum", value = "审核状态")
+    @ApiParam(name = "auditStatusEnum", value = "审核状态",required = true)
     private MerchantAuditStatusEnum auditStatusEnum;
 
     /**
      * 门店状态
      */
-    @ApiParam(name = "storeStatusEnum", value = "门店状态")
+    @ApiParam(name = "storeStatusEnum", value = "门店状态",required = true)
     private MerchantStatusEnum storeStatusEnum;
 
     /**
@@ -31,7 +31,7 @@ public class MerchantAuditParam {
     /**
      * 门店id
      */
-    @ApiParam(name = "merchantStoreId", value = "门店id")
+    @ApiParam(name = "merchantStoreId", value = "门店id",required = true)
     private Long merchantStoreId;
 
     @ApiParam(name = "auditorId", value = "审核人员ID")

@@ -1,6 +1,5 @@
 package com.lawu.eshop.mall.param;
 
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import io.swagger.annotations.ApiParam;
 
@@ -19,7 +18,7 @@ public class MessageInfoParam {
     /**
      * 消息类型
      */
-    @ApiParam(name = "typeEnum", value = "消息类型 MESSAGE_TYPE_REFUND:退款，MESSAGE_TYPE_APPRAISE：评价，MESSAGE_TYPEUS_NOTICE：通知")
+    @ApiParam(name = "typeEnum", value = "消息类型 MESSAGE_TYPE_REFUND:退款，MESSAGE_TYPE_APPRAISE：评价，MESSAGE_TYPEUS_NOTICE：通知",required = true)
     private MessageTypeEnum typeEnum;
 
     /**
