@@ -73,10 +73,6 @@ public class DateUtil {
         gregorianCalendar = new GregorianCalendar();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getSpritDateTime());
-    }
-
     /**
      * 获取当前日期   yyyy-MM-dd
      * @return String
