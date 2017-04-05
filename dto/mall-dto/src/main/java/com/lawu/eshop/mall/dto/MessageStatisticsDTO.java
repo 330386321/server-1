@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.dto;
 
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -23,7 +24,7 @@ public class MessageStatisticsDTO {
      * 消息类型
      */
     @ApiParam(name = "type",value = "消息类型")
-    private Byte type;
+    private MessageTypeEnum type;
 
     public Integer getNoReadCount() {
         return noReadCount;
@@ -41,11 +42,11 @@ public class MessageStatisticsDTO {
         this.content = content;
     }
 
-    public Byte getType() {
+    public MessageTypeEnum getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(MessageTypeEnum type) {
         this.type = type;
     }
 }

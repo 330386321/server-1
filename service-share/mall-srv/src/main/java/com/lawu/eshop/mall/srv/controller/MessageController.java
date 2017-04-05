@@ -1,10 +1,10 @@
 package com.lawu.eshop.mall.srv.controller;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
@@ -43,7 +43,7 @@ public class MessageController extends BaseController {
         if (counts > 0) {
             MessageStatisticsBO messageStatisticsBO = messageService.selectLastMessage(userNum);
             messageStatisticsDTO.setContent(messageStatisticsBO.getContent());
-            messageStatisticsDTO.setType(messageStatisticsBO.getType());
+            messageStatisticsDTO.setType(MessageTypeEnum.getEnum(messageStatisticsBO.getType()));
             return successGet(messageStatisticsDTO);
         }
         return successGet();
