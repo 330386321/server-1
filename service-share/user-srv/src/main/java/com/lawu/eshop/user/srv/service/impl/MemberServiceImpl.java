@@ -13,10 +13,7 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
-import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
@@ -56,6 +53,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private TransactionMainService transactionMainService;
+
+    @Autowired
+    private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -182,7 +182,11 @@ public class MemberServiceImpl implements MemberService {
 
         //注册会员成为商户粉丝
         if (inviterId > 0 && inviterType == UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val) {
-
+            FansMerchantDO fansMerchantDO=new FansMerchantDO();
+            fansMerchantDO.setMerchantId(inviterId);
+            fansMerchantDO.setMemberId(memberId);
+            fansMerchantDO.setGmtCreate(new Date());
+            fansMerchantDOMapper.insertSelective(fansMerchantDO);
         }
 
         //插入会员推荐关系

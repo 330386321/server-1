@@ -1,8 +1,5 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.EfriendDTO;
@@ -12,6 +9,9 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 会员信息转换器
@@ -35,6 +35,7 @@ public class MemberConverter {
         MemberBO memberBO = new MemberBO();
         memberBO.setId(memberDO.getId());
         memberBO.setAccount(memberDO.getAccount());
+        memberBO.setPwd(memberDO.getPwd());
         memberBO.setBirthday(memberDO.getBirthday());
         memberBO.setNum(memberDO.getNum());
         memberBO.setMobile(memberDO.getMobile());
