@@ -57,7 +57,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                 newStoreDO.setId(merchantStoreDO.getId());
                 newStoreDO.setStatus(auditParam.getStoreStatusEnum().val);
                 newStoreDO.setGmtModified(new Date());
-                if (merchantStoreDO.getStatus() == MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val) {
+                if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
                     // 新增记录 修改门店信息状态
                     merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                 } else {
