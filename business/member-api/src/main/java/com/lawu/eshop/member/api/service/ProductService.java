@@ -1,14 +1,11 @@
 package com.lawu.eshop.member.api.service;
 
-import java.util.List;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.product.dto.ProductImageDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 
 /**
@@ -30,13 +27,4 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectProductById")
     Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId);
-    
-	/**
-	 * 根据商品ID查询商品图片
-	 * 
-	 * @param 商品ID
-	 * @return
-	 */
-	@RequestMapping(value = "product/getProductImageByIds", method = RequestMethod.GET)
-	public Result<List<ProductImageDTO>> getProductImage(@RequestParam("ids") List<Long> ids);
 }

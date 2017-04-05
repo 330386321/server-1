@@ -15,7 +15,8 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
-import com.lawu.eshop.mall.param.ShoppingCartParam;
+import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
+import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
@@ -37,11 +38,10 @@ public class ShoppingCartController extends BaseController {
 	 * @param param
 	 */
 	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
-	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartParam param) {
+	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
 		// 参数验证
 		if (param == null || StringUtils.isEmpty(param.getMerchantName()) || param.getMerchantId() == null 
-				|| StringUtils.isEmpty(param.getProductName()) || param.getProductId() == null 
-				|| param.getProductModelId() == null || StringUtils.isEmpty(param.getProductModelName())
+				|| param.getProductId() == null || param.getProductModelId() == null
 				|| param.getQuantity() == null || param.getSalesPrice() == null || param.getQuantity() == null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
@@ -78,7 +78,7 @@ public class ShoppingCartController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartParam param) {
+	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam param) {
 		if (id == null) {
 			return successCreated(ResultCode.ID_EMPTY);
 		}

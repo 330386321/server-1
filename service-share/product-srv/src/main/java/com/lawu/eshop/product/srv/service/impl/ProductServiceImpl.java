@@ -16,12 +16,10 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductImageBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
-import com.lawu.eshop.product.srv.converter.ProductImageConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
@@ -301,12 +299,4 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	@Override
-	public List<ProductImageBO> getProductImageByIds(List<Long> ids) {
-		ProductDOExample productDOExample = new ProductDOExample();
-		productDOExample.createCriteria().andIdIn(ids);
-		
-		return ProductImageConverter.convertBOS(productDOMapper.selectByExample(productDOExample));
-	}
-	
 }

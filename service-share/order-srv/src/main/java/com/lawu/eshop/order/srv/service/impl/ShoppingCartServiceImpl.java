@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.mall.param.ShoppingCartParam;
+import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
+import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
@@ -16,7 +17,7 @@ import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
- * 反馈意见服务实现
+ * 购物车服务实现
  *
  * @author Sunny
  * @date 2017/3/24
@@ -41,7 +42,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	@Transactional
 	@Override
-	public Long save(Long memberId, ShoppingCartParam param) {
+	public Long save(Long memberId, ShoppingCartSaveParam param) {
 		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
 		suggestionDO.setMemberId(memberId);
 		suggestionDO.setGmtCreate(new Date());
@@ -56,7 +57,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	@Transactional
 	@Override
-	public Integer update(Long id, ShoppingCartParam param) {
+	public Integer update(Long id, ShoppingCartUpdateParam param) {
 		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
 		suggestionDO.setId(id);
 		suggestionDO.setGmtModified(new Date());

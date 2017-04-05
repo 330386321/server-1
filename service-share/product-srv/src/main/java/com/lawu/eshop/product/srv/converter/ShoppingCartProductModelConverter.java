@@ -1,5 +1,10 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
@@ -32,16 +37,44 @@ public class ShoppingCartProductModelConverter {
 
 		if (productDO != null) {
 			shoppingCartProductModelBO.setProductName(productDO.getName());
+			shoppingCartProductModelBO.setFeatureImage(productDO.getFeatureImage());
+			shoppingCartProductModelBO.setStatus(productDO.getStatus());
 		}
 
 		return shoppingCartProductModelBO;
 	}
+	
+	/**
+	 * BOS转换
+	 * 
+	 * @param productModelDOS
+	 * @param productDOS
+	 * @return
+	 */
+	public static List<ShoppingCartProductModelBO> convert(List<ProductModelDO> productModelDOS, List<ProductDO> productDOS) {
+		if (productModelDOS == null || productModelDOS.isEmpty() || productDOS == null || productDOS.isEmpty()) {
+			return null;
+		}
+		
+		Map<Long, ProductDO> productDOMap = new HashMap<Long, ProductDO>();
+		for (ProductDO productDO : productDOS) {
+			if (!productDOMap.containsKey(productDO.getId())) {
+				productDOMap.put(productDO.getId(), productDO);
+			}
+		}
+		
+		List<ShoppingCartProductModelBO> shoppingCartProductModelBOS = new ArrayList<ShoppingCartProductModelBO>();
+		for (ProductModelDO productModelDO : productModelDOS) {
+			shoppingCartProductModelBOS.add(convert(productModelDO, productDOMap.get(productModelDO.getProductId())));
+		}
+		
+		return shoppingCartProductModelBOS;
+	}
 
 	/**
-	 * BO转换
+	 * DTO转换
 	 * 
-	 * @param productModelDO
-	 * @param productDO
+	 * @param shoppingCartProductModelBO
 	 * @return
 	 */
 	public static ShoppingCartProductModelDTO convert(ShoppingCartProductModelBO shoppingCartProductModelBO) {
@@ -53,6 +86,25 @@ public class ShoppingCartProductModelConverter {
 		BeanUtils.copyProperties(shoppingCartProductModelBO, shoppingCartProductModelDTO);
 
 		return shoppingCartProductModelDTO;
+	}
+	
+	/**
+	 * DTOS转换
+	 * 
+	 * @param shoppingCartProductModelBOS
+	 * @return
+	 */
+	public static List<ShoppingCartProductModelDTO> convert(List<ShoppingCartProductModelBO> shoppingCartProductModelBOS) {
+		if (shoppingCartProductModelBOS == null || shoppingCartProductModelBOS.isEmpty()) {
+			return null;
+		}
+		
+		List<ShoppingCartProductModelDTO> shoppingCartProductModelDTOS = new ArrayList<ShoppingCartProductModelDTO>();
+		for (ShoppingCartProductModelBO shoppingCartProductModelBO : shoppingCartProductModelBOS) {
+			shoppingCartProductModelDTOS.add(convert(shoppingCartProductModelBO));
+		}
+		
+		return shoppingCartProductModelDTOS;
 	}
 
 }

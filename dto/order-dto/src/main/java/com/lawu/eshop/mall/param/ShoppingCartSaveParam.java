@@ -1,16 +1,18 @@
-package com.lawu.eshop.order.srv.bo;
+package com.lawu.eshop.mall.param;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShoppingCartBO implements Serializable {
+import io.swagger.annotations.ApiParam;
+
+public class ShoppingCartSaveParam implements Serializable {
 	
     private static final long serialVersionUID = 1L;
 	
     /**
-     * 主键
+     * 商家ID
      */
-    private Long id;
+    private Long merchantId;
 
     /**
      * 商家名称
@@ -22,11 +24,10 @@ public class ShoppingCartBO implements Serializable {
      */
     private Long productId;
 
-
     /**
-    * 商品型号ID
-    */
-   private Long productModelId;
+     * 商品型号ID
+     */
+    private Long productModelId;
 
     /**
      * 数量
@@ -38,12 +39,12 @@ public class ShoppingCartBO implements Serializable {
      */
     private BigDecimal salesPrice;
 
-	public Long getId() {
-		return id;
+	public Long getMerchantId() {
+		return merchantId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public String getMerchantName() {

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
-import com.lawu.eshop.mall.param.ShoppingCartParam;
+import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
+import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
 
 /**
  * @author Sunny
@@ -28,7 +29,7 @@ public interface ShoppingCartService {
 	 * @return
 	 */
 	@RequestMapping(value = "shoppingCart/{memberId}", method = RequestMethod.POST)
-	Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartParam parm);
+	Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam parm);
 	
 	/**
 	 * 根据memberId查询用户的购物车列表
@@ -48,7 +49,7 @@ public interface ShoppingCartService {
      * @return
      */
     @RequestMapping(value = "shoppingCart/update/{id}", method = RequestMethod.PUT)
-	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartParam parm);
+	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam parm);
     
 	/**
 	 * 根据id删除购物车的商品

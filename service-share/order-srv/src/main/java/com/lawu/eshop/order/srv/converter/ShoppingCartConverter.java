@@ -6,7 +6,8 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
-import com.lawu.eshop.mall.param.ShoppingCartParam;
+import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
+import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 
@@ -85,7 +86,18 @@ public class ShoppingCartConverter {
 	 * @param param
 	 * @return
 	 */
-	public static ShoppingCartDO convert(ShoppingCartParam param) {
+	public static ShoppingCartDO convert(ShoppingCartSaveParam param) {
+		if (param == null) {
+			return null;
+		}
+
+		ShoppingCartDO shoppingCartDO = new ShoppingCartDO();
+		BeanUtils.copyProperties(param, shoppingCartDO);
+
+		return shoppingCartDO;
+	}
+	
+	public static ShoppingCartDO convert(ShoppingCartUpdateParam param) {
 		if (param == null) {
 			return null;
 		}

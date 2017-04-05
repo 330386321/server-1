@@ -21,11 +21,19 @@ public class ShoppingCartProductModelBO implements Serializable {
 	
 	private String productName;
 	
+    /**
+    * 特征图片
+    */
+    private String featureImage;
+	
 	private Long merchantId;
 	
-	private BigDecimal originalPrice;
-	
 	private BigDecimal price;
+	
+    /**
+    * 状态(1-删除2-上架3-下架)
+    */
+   private Byte status;
 	
 	public Long getId() {
 		return id;
@@ -58,6 +66,14 @@ public class ShoppingCartProductModelBO implements Serializable {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
+	
+	public String getFeatureImage() {
+		return featureImage;
+	}
+
+	public void setFeatureImage(String featureImage) {
+		this.featureImage = featureImage;
+	}
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -67,20 +83,20 @@ public class ShoppingCartProductModelBO implements Serializable {
 		this.merchantId = merchantId;
 	}
 
-	public BigDecimal getOriginalPrice() {
-		return originalPrice;
-	}
-
-	public void setOriginalPrice(BigDecimal originalPrice) {
-		this.originalPrice = originalPrice;
-	}
-
 	public BigDecimal getPrice() {
 		return price;
 	}
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 	
 }

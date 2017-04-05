@@ -2,22 +2,22 @@ package com.lawu.eshop.mall.param;
 
 import java.io.Serializable;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiParam;
 
-public class ShoppingCartParam implements Serializable {
+public class ShoppingCartUpdateParam implements Serializable {
 	
     private static final long serialVersionUID = 1L;
 	
     /**
      * 商品型号ID
      */
-    @ApiModelProperty(name = "productModelId", required = true, value = "商品型号ID")
+    @ApiParam(name = "productModelId", required = true, value = "商品型号ID")
     private Long productModelId;
 
     /**
      * 数量
      */
-    @ApiModelProperty(name = "quantity", required = true, value = "数量")
+    @ApiParam(name = "quantity", required = true, value = "数量")
     private Integer quantity;
 
 	public Long getProductModelId() {

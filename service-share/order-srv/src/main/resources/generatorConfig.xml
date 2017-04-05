@@ -41,9 +41,17 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.order.srv.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-
+		
         <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <!-- 
+        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="shopping_order_item" domainObjectName="ShoppingOrderItemDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
     </context>
 </generatorConfiguration>

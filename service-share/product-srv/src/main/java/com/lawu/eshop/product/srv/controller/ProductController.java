@@ -15,17 +15,14 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
-import com.lawu.eshop.product.dto.ProductImageDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductImageBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
-import com.lawu.eshop.product.srv.converter.ProductImageConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 
 /**
@@ -136,25 +133,4 @@ public class ProductController extends BaseController {
 		return successCreated(ResultCode.SUCCESS);
 	}
 
-	/**
-	 * 根据商品ID查询商品图片
-	 * 
-	 * @param id 商品ID
-	 * @return
-	 */
-	@RequestMapping(value = "getProductImageByIds", method = RequestMethod.GET)
-	public Result<List<ProductImageDTO>> getProductImage(@RequestParam("ids") List<Long> ids) {
-		if (ids == null || ids.isEmpty()) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
-
-		// 商品图片
-		List<ProductImageBO> productImageBOS = productService.getProductImageByIds(ids);
-
-		if (productImageBOS == null || productImageBOS.isEmpty()) {
-			successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		return successCreated(ProductImageConverter.convertDTOS(productImageBOS));
-	}
 }

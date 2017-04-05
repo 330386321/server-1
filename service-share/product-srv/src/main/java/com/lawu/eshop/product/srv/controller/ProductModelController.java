@@ -1,10 +1,13 @@
 package com.lawu.eshop.product.srv.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.druid.util.StringUtils;
@@ -31,7 +34,7 @@ public class ProductModelController extends BaseController{
     /**
      * 根据商品型号ID查询购物车商品信息
      * 
-     * @param query
+     * @param id 商品型号ID
      * @return
      */
     @RequestMapping(value = "shoppingCart/{id}", method = RequestMethod.GET)
@@ -48,6 +51,24 @@ public class ProductModelController extends BaseController{
     	}
     	
     	return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBO));
+    }
+    
+    /**
+     * 根据商品型号ID列表查询购物车商品信息
+     * 
+     * @param ids 商品型号ID列表
+     * @return
+     */
+    @RequestMapping(value = "shoppingCart/list", method = RequestMethod.GET)
+    public Result<List<ShoppingCartProductModelDTO>> getShoppingCartProductModel(@RequestParam("ids") List<Long> ids) {
+    	
+    	List<ShoppingCartProductModelBO> shoppingCartProductModelBOS = productModelService.getShoppingCartProductModel(ids);
+    	
+    	if (shoppingCartProductModelBOS == null || shoppingCartProductModelBOS.isEmpty()) {
+    		successGet(ResultCode.RESOURCE_NOT_FOUND);
+    	}
+    	
+    	return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBOS));
     }
     
 }
