@@ -23,7 +23,7 @@ public interface VerifyCodeService {
      * @param purpose 用途
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "verifyCode/savePicCode/{mobile}")
+    @RequestMapping(method = RequestMethod.GET, value = "verifyCode/savePicCode/{mobile}")
     Result savePicCode(@PathVariable("mobile") String mobile, @RequestParam("picCode") String picCode, @RequestParam("purpose") VerifyCodePurposeEnum purpose);
 
     /**

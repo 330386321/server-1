@@ -58,7 +58,7 @@ public class VerifyCodeController extends BaseController {
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)
     public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
-        BufferedImage buffImg = new BufferedImage(280, 120, BufferedImage.TYPE_INT_RGB);
+        BufferedImage buffImg = new BufferedImage(120, 40, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffImg.createGraphics();
         String picCode = VerifyCodeUtil.getVerifyCode(g);
         verifyCodeService.savePicCode(mobile, picCode, purpose);
