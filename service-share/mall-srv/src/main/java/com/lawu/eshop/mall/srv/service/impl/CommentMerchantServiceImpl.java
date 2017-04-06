@@ -6,6 +6,7 @@ import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
+import com.lawu.eshop.mall.param.CommentMerchantPageParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
@@ -13,6 +14,7 @@ import com.lawu.eshop.mall.srv.domain.CommentImageDO;
 import com.lawu.eshop.mall.srv.domain.CommentImageDOExample;
 import com.lawu.eshop.mall.srv.domain.CommentMerchantDO;
 import com.lawu.eshop.mall.srv.domain.CommentMerchantDOExample;
+import com.lawu.eshop.mall.srv.domain.extend.CommentMerchantDOView;
 import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentMerchantDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentMerchantDOMapperExtend;
@@ -31,7 +33,7 @@ import java.util.List;
  * @date 2017/4/6.
  */
 @Service
-public class CommentMerchantServiceImpl implements CommentMerchantService{
+public class CommentMerchantServiceImpl implements CommentMerchantService {
 
     @Autowired
     private CommentMerchantDOMapper commentMerchantDOMapper;
@@ -41,25 +43,24 @@ public class CommentMerchantServiceImpl implements CommentMerchantService{
     private CommentMerchantDOMapperExtend commentMerchantDOMapperExtend;
 
 
-
     @Override
     @Transactional
     public Integer saveCommentMerchantInfo(Long memberId, CommentMerchantParam param, String commentPic) {
 
-        CommentMerchantDO  commentMerchantDO = new CommentMerchantDO();
+        CommentMerchantDO commentMerchantDO = new CommentMerchantDO();
         commentMerchantDO.setMemberId(memberId);
         commentMerchantDO.setMerchantId(param.getMerchantId());
         commentMerchantDO.setContent(param.getContent());
         commentMerchantDO.setGrade(param.getGradeEnum().val);
-        if(CommentAnonymousEnum.COMMENT_ANONYMOUS_SUCCESS.equals(param.getAnonymousEnum())){
+        if (CommentAnonymousEnum.COMMENT_ANONYMOUS_SUCCESS.equals(param.getAnonymousEnum())) {
             commentMerchantDO.setIsAnonymous(true);//匿名
-        }else{
+        } else {
             commentMerchantDO.setIsAnonymous(false);//不匿名
         }
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO.setGmtCreate(new Date());
         commentMerchantDO.setGmtModified(new Date());
-      Integer id =   commentMerchantDOMapper.insert(commentMerchantDO);
+        Integer id = commentMerchantDOMapper.insert(commentMerchantDO);
         if (!StringUtils.isEmpty(commentPic)) {
             String imgs[] = commentPic.split(",");
             if (id != null && id > 0) {
@@ -104,7 +105,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService{
             commentMerchantBO.setGrade(grade);
             //查询图片
             CommentImageDOExample imageDOExample = new CommentImageDOExample();
-            imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDO.getId());
+            imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);
             List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
             List<String> images = new ArrayList<String>();
             if (!commentImageDOS.isEmpty()) {
@@ -118,5 +119,49 @@ public class CommentMerchantServiceImpl implements CommentMerchantService{
         }
         page.setRecords(commentMerchantBOS);
         return page;
+    }
+
+    @Override
+    public Page<CommentMerchantBO> getCommentMerchantListWithImgs(CommentMerchantListParam listParam) {
+        int totalCount = commentMerchantDOMapperExtend.selectCountByMerchantId(listParam.getMerchantId());
+
+        Page<CommentMerchantBO> commentProductBOPage = new Page<CommentMerchantBO>();
+        commentProductBOPage.setTotalCount(totalCount);
+        commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
+
+        CommentMerchantPageParam merchantPageParam = new CommentMerchantPageParam();
+        merchantPageParam.setCurrentPage(listParam.getOffset());
+        merchantPageParam.setPageSize(listParam.getPageSize());
+        merchantPageParam.setMerchantId(listParam.getMerchantId());
+        //查询评论列表信息
+        List<CommentMerchantDOView> commentMerchantDOViews = commentMerchantDOMapperExtend.selectCommentsWithImg(merchantPageParam);
+        Page<CommentMerchantBO> pages = new Page<CommentMerchantBO>();
+        List<CommentMerchantBO> commentMerchantBOS = new ArrayList<CommentMerchantBO>();
+        if (!commentMerchantDOViews.isEmpty()) {
+            for (CommentMerchantDOView commentMerchantDOView : commentMerchantDOViews) {
+                CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converterBOFromView(commentMerchantDOView);
+
+                //查询平均评分
+                float grade = commentMerchantDOMapperExtend.selectAvgGrade(commentMerchantDOView.getMerchantId());
+                commentMerchantBO.setGrade(grade);
+
+                //查询对应的评价图片
+                CommentImageDOExample imageDOExample = new CommentImageDOExample();
+                imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDOView.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);
+                List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+                List<String> images = new ArrayList<String>();
+                if (!commentImageDOS.isEmpty()) {
+                    for (int i = 0; i < commentImageDOS.size(); i++) {
+                        images.add(commentImageDOS.get(i).getImgUrl());
+                    }
+                    commentMerchantBO.setUrlImgs(images);
+                }
+                commentMerchantBOS.add(commentMerchantBO);
+            }
+        }
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(totalCount);
+        pages.setRecords(commentMerchantBOS);
+        return pages;
     }
 }

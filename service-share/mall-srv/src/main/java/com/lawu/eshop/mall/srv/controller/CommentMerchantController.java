@@ -67,4 +67,22 @@ public class CommentMerchantController extends BaseController {
         pages.setTotalCount(commentMerchantBOPage.getTotalCount());
         return successGet(pages);
     }
+
+    @RequestMapping(value = "getCommentMerchantListWithImgs",method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentMerchantListWithImgs(@RequestBody CommentMerchantListParam listParam){
+        if(listParam == null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        Page<CommentMerchantBO>  commentMerchantBOPage =   commentMerchantService.getCommentMerchantListWithImgs(listParam);
+
+        List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
+
+        List<CommentDTO> commentDTOS = CommentMerchantConverter.converterDTOS(commentMerchantBOS);
+        Page<CommentDTO> pages = new Page<CommentDTO>();
+        pages.setRecords(commentDTOS);
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(commentMerchantBOPage.getTotalCount());
+        return successGet(pages);
+    }
+
 }

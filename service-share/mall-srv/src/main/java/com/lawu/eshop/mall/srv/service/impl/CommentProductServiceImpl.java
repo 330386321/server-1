@@ -96,7 +96,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         for (CommentProductDO commentProductDO : commentProductDOS) {
             CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
             CommentImageDOExample imageDOExample = new CommentImageDOExample();
-            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId());
+            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
             List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
             List<String> images = new ArrayList<String>();
             if (!commentImageDOS.isEmpty()) {
@@ -135,7 +135,7 @@ public class CommentProductServiceImpl implements CommentProductService {
                 CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
                 //查询对应的评价图片
                 CommentImageDOExample imageDOExample = new CommentImageDOExample();
-                imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDOView.getId());
+                imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDOView.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
                 List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
                 List<String> images = new ArrayList<String>();
                 if (!commentImageDOS.isEmpty()) {

@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.srv.converter;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.domain.CommentMerchantDO;
+import com.lawu.eshop.mall.srv.domain.extend.CommentMerchantDOView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +51,18 @@ public class CommentMerchantConverter {
             commentDTOS.add(commentDTO);
         }
         return commentDTOS;
+    }
+
+    public static CommentMerchantBO converterBOFromView(CommentMerchantDOView commentMerchantDOView) {
+        if (commentMerchantDOView == null) {
+            return null;
+        }
+        CommentMerchantBO commentMerchantBO = new CommentMerchantBO();
+        commentMerchantBO.setContent(commentMerchantDOView.getContent());
+        commentMerchantBO.setGmtCreate(commentMerchantDOView.getGmtCreate());
+        commentMerchantBO.setAnonymous(commentMerchantDOView.getAnonymous());
+        commentMerchantBO.setReplyContent(commentMerchantDOView.getReplyContent());
+        commentMerchantBO.setMemberId(commentMerchantDOView.getMemberId());
+        return commentMerchantBO;
     }
 }

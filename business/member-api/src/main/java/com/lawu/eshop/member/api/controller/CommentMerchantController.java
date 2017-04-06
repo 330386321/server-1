@@ -110,4 +110,35 @@ public class CommentMerchantController extends BaseController {
         pages.setRecords(commentMerchantDTOS);
         return successGet(pages);
     }
+
+    @ApiOperation(value = "用户评价商家列表（有图）", notes = "用户评价商家（有图） [1005，1000]（章勇）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.POST)
+    public Result<Page<CommentMerchantDTO>> getCommentMerchantListWithImgs(@ModelAttribute @ApiParam CommentMerchantListParam listParam) {
+        List<CommentMerchantDTO> commentMerchantDTOS = new ArrayList<>();
+        Page<CommentMerchantDTO> pages = new Page<>();
+        //获取评论列表
+        Result<Page<CommentDTO>> result = commentMerchantService.getCommentMerchantListWithImgs(listParam);
+        if (!result.getModel().getRecords().isEmpty()) {
+            for (CommentDTO commentDTO : result.getModel().getRecords()) {
+                CommentMerchantDTO commentMerchantDTO = new CommentMerchantDTO();
+                commentMerchantDTO.setAnonymous(commentDTO.getAnonymous());
+                commentMerchantDTO.setContent(commentDTO.getContent());
+                commentMerchantDTO.setGmtCreate(commentDTO.getGmtCreate());
+                commentMerchantDTO.setReplyContent(commentDTO.getReplyContent());
+                commentMerchantDTO.setImgUrls(commentDTO.getImgUrls());
+                commentMerchantDTO.setGrade(commentDTO.getGrade());
+                //查询评论用户信息
+                Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
+                commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
+                commentMerchantDTO.setNickName(user.getModel().getNickname());
+                commentMerchantDTOS.add(commentMerchantDTO);
+            }
+        }
+        pages.setCurrentPage(result.getModel().getCurrentPage());
+        pages.setTotalCount(result.getModel().getTotalCount());
+        pages.setRecords(commentMerchantDTOS);
+        return successGet(pages);
+    }
+
 }

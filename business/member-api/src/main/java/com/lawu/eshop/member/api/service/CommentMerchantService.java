@@ -21,4 +21,7 @@ public interface CommentMerchantService {
 
     @RequestMapping(value = "commentMerchant/getCommentMerchantAllList", method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentMerchantAllList(@ModelAttribute CommentMerchantListParam listParam);
+
+    @RequestMapping(value = "commentMerchant/getCommentMerchantListWithImgs", method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentMerchantListWithImgs(@ModelAttribute CommentMerchantListParam listParam);
 }

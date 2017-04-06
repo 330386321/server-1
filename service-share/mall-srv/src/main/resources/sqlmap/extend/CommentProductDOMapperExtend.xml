@@ -33,6 +33,7 @@
         LEFT JOIN comment_image ci ON cp.id = ci.comment_id
         WHERE
         cp.product_id = #{productId}
+        AND ci.type =2
         AND ci.img_url IS NOT NULL
         ORDER  BY
         cp.id DESC
@@ -48,6 +49,7 @@
         LEFT JOIN comment_image ci ON cp.id = ci.comment_id
         WHERE
         cp.product_id = #{productId}
+        AND ci.type =2
         AND ci.img_url IS NOT NULL
     </select>
 

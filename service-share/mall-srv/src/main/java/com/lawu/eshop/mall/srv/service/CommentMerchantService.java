@@ -20,4 +20,6 @@ public interface CommentMerchantService {
     Integer saveCommentMerchantInfo(Long memberId, CommentMerchantParam param, String commentPic);
 
     Page<CommentMerchantBO> getCommentMerchantAllList(CommentMerchantListParam listParam);
+
+    Page<CommentMerchantBO> getCommentMerchantListWithImgs(CommentMerchantListParam listParam);
 }
