@@ -77,7 +77,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         CommentProductDOExample example = new CommentProductDOExample();
         example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
                 andProductIdEqualTo(listParam.getProductId());
-
+        example.setOrderByClause("id desc");
         RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
         Page<CommentProductBO> page = new Page<>();
         page.setTotalCount(commentProductDOMapper.countByExample(example));
