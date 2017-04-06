@@ -28,13 +28,9 @@ import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import util.UploadFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -155,36 +151,18 @@ public class MemberController extends BaseController {
     }
 
     @Audit(date = "2017-03-29", reviewer = "孙林青")
-    @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "PUT")
+    @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveHeadImage", method = RequestMethod.PUT)
+    @RequestMapping(value = "saveHeadImage", method = RequestMethod.POST)
     public Result saveHeadImage() {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         String headImg = "";
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        if (multipartResolver.isMultipart(request)) {
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-            Iterator<String> iter = multiRequest.getFileNames();
-            if (iter.hasNext()) {
-                while (iter.hasNext()) {
-                    MultipartFile file = multiRequest.getFile(iter.next());
-                    if (file != null) {
-                        String originalFilename = file.getOriginalFilename();
-                        String fieldName = file.getName();
-                        String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
-                        prefix = prefix.toLowerCase();
-                        Map<String, String> retMap = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_HEAD);
-                        String resultFlag = retMap.get("resultFlag");
-                        if (!"0".equals(resultFlag)) {
-                            return successCreated(resultFlag);
-                        }
-                        headImg = retMap.get("imgUrl");
-                    }
-                }
-            }
-            return memberService.saveHeadImage(memberId, headImg);
+        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD);
+        if(!"".equals(retMap.get("imgUrl"))){
+             headImg = retMap.get("imgUrl").toString();
+                 return    memberService.saveHeadImage(memberId, headImg);
         }
-        return successCreated();
+        return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
     }
 }

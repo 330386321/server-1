@@ -91,7 +91,7 @@ public interface MemberService {
      * @param headimg
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "member/saveHeadImage/{memberId}")
-    Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam("headimg") String headimg);
+    @RequestMapping(method = RequestMethod.POST, value = "member/saveHeadImage/{memberId}")
+    Result saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg);
 
 }
