@@ -16,7 +16,6 @@ import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
 import com.lawu.eshop.property.srv.service.BankAccountService;
-import com.lawu.eshop.property.srv.service.BankService;
 
 /**
  * 银行卡管理接口实现

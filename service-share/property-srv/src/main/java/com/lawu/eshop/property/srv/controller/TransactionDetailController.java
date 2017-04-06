@@ -15,6 +15,7 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
@@ -27,64 +28,87 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 @RequestMapping(value = "transactionDetail/")
 public class TransactionDetailController extends BaseController {
 
-    @Autowired
-    private TransactionDetailService transactionDetailService;
+	@Autowired
+	private TransactionDetailService transactionDetailService;
 
-    /**
-     * <p>提供给用户<p>
-     * 根据用户编号和查询参数查询交易明细
-     * 
-     * @param userNo 用户编号
-     * @param transactionType 交易类型
-     * @param transactionDetailQueryParam 查询参数
-     * @return
-     */
-    @RequestMapping(value = "findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
-    public Result<Page<TransactionDetailDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum, 
-    		@RequestParam(name = "transactionType", required = false) MemberTransactionTypeEnum transactionType, 
-    		@RequestBody TransactionDetailQueryParam transactionDetailQueryParam) {
-    	
-    	Byte type = null;
-    	if (transactionType != null) {
-    		type = transactionType.getValue();
-    	}
+	/**
+	 * <p>
+	 * 提供给用户
+	 * <p>
+	 * 根据用户编号和查询参数查询交易明细
+	 * 
+	 * @param userNo
+	 *            用户编号
+	 * @param transactionType
+	 *            交易类型
+	 * @param transactionDetailQueryParam
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
+	public Result<Page<TransactionDetailDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum,
+			@RequestParam(name = "transactionType", required = false) MemberTransactionTypeEnum transactionType,
+			@RequestBody TransactionDetailQueryParam transactionDetailQueryParam) {
 
-        return successCreated(findPageByUserNum(userNum, type, transactionDetailQueryParam));
-    }
-    
-    /**
-     * <p>提供给商家<p>
-     * 根据用户编号和查询参数查询交易明细
-     * 
-     * @param userNo 用户编号
-     * @param transactionType 交易类型
-     * @param transactionDetailQueryParam 查询参数
-     * @return
-     */
-    @RequestMapping(value = "findPageByUserNumForMerchant/{userNum}", method = RequestMethod.POST)
-    public Result<Page<TransactionDetailDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum, 
-    		@RequestParam(name = "transactionType", required = false) MerchantTransactionTypeEnum transactionType, 
-    		@RequestBody TransactionDetailQueryParam transactionDetailQueryParam) {
-    	
-    	
-    	Byte type = null;
-    	if (transactionType != null) {
-    		type = transactionType.getValue();
-    	}
+		Byte type = null;
+		if (transactionType != null) {
+			type = transactionType.getValue();
+		}
 
-        return successCreated(findPageByUserNum(userNum, type, transactionDetailQueryParam));
-    }
-    
-    
-    private Page<TransactionDetailDTO> findPageByUserNum(String userNum, Byte transactionType, TransactionDetailQueryParam transactionDetailQueryParam) {
-    	
-    	Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.findPageByUserNum(userNum, transactionType, transactionDetailQueryParam);
-    	
-    	Page<TransactionDetailDTO> transactionDetailDTOPage = new Page<TransactionDetailDTO>();
-    	transactionDetailDTOPage.setCurrentPage(transactionDetailBOPage.getCurrentPage());
-    	transactionDetailDTOPage.setTotalCount(transactionDetailBOPage.getTotalCount());
-    	transactionDetailDTOPage.setRecords(TransactionDetailConverter.convertDTOS(transactionDetailBOPage.getRecords()));
-    	
-    	return transactionDetailDTOPage;
-    }
+		return successCreated(findPageByUserNum(userNum, type, transactionDetailQueryParam));
+	}
+
+	/**
+	 * <p>
+	 * 提供给商家
+	 * <p>
+	 * 根据用户编号和查询参数查询交易明细
+	 * 
+	 * @param userNo
+	 *            用户编号
+	 * @param transactionType
+	 *            交易类型
+	 * @param transactionDetailQueryParam
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "findPageByUserNumForMerchant/{userNum}", method = RequestMethod.POST)
+	public Result<Page<TransactionDetailDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum,
+			@RequestParam(name = "transactionType", required = false) MerchantTransactionTypeEnum transactionType,
+			@RequestBody TransactionDetailQueryParam transactionDetailQueryParam) {
+
+		Byte type = null;
+		if (transactionType != null) {
+			type = transactionType.getValue();
+		}
+
+		return successCreated(findPageByUserNum(userNum, type, transactionDetailQueryParam));
+	}
+
+	private Page<TransactionDetailDTO> findPageByUserNum(String userNum, Byte transactionType,
+			TransactionDetailQueryParam transactionDetailQueryParam) {
+
+		Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.findPageByUserNum(userNum,
+				transactionType, transactionDetailQueryParam);
+
+		Page<TransactionDetailDTO> transactionDetailDTOPage = new Page<TransactionDetailDTO>();
+		transactionDetailDTOPage.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+		transactionDetailDTOPage.setTotalCount(transactionDetailBOPage.getTotalCount());
+		transactionDetailDTOPage
+				.setRecords(TransactionDetailConverter.convertDTOS(transactionDetailBOPage.getRecords()));
+
+		return transactionDetailDTOPage;
+	}
+
+	/**
+	 * 保存交易明细记录
+	 * 
+	 * @param userNum
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "save", method = RequestMethod.POST)
+	public Result save(@RequestBody TransactionDetailSaveDataParam param) {
+		return successCreated(transactionDetailService.save(param));
+	}
 }
