@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
 import com.lawu.eshop.user.srv.converter.InviterConverter;
 import com.lawu.eshop.user.srv.service.CommonService;
@@ -24,7 +25,7 @@ public class CommonController extends BaseController {
     private CommonService commonService;
 
     @RequestMapping(value = "getInviter/{account}", method = RequestMethod.GET)
-    public Result getInviterByAccount(@PathVariable String account) {
+    public Result<InviterDTO> getInviterByAccount(@PathVariable String account) {
         InviterBO inviterBO = commonService.getInviterByAccount(account);
         if (inviterBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);

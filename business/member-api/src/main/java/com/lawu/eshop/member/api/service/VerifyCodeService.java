@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,7 @@ public interface VerifyCodeService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "verifyCode/verifySmsCode/{id}")
-    Result verifySmsCode(@PathVariable("id") Long id, @RequestParam("smsCode") String smsCode);
+    Result<VerifyCodeDTO> verifySmsCode(@PathVariable("id") Long id, @RequestParam("smsCode") String smsCode);
 
 
     /**

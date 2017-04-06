@@ -92,6 +92,24 @@ public class MemberController extends BaseController {
         return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1002|1013] (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
+    public Result resetLoginPwd(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
+                                @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
+        Result<MemberDTO> memResult = memberService.getMemberByAccount(mobile);
+        if (!isSuccess(memResult)) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
+        if (!isSuccess(smsResult)) {
+            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        MemberDTO memberDTO = memResult.getModel();
+        long id = memberDTO.getId();
+        return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+    }
+
     @Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -115,11 +133,11 @@ public class MemberController extends BaseController {
                            @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
         RegisterRealParam registerRealParam = new RegisterRealParam();
         if (StringUtils.isNotEmpty(registerParam.getInviterAccount())) {
-            Result inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
+            Result<InviterDTO> inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
             if (!isSuccess(inviterResult)) {
                 return successGet(ResultCode.RESOURCE_NOT_FOUND);
             }
-            InviterDTO inviterDTO = (InviterDTO) inviterResult.getModel();
+            InviterDTO inviterDTO = inviterResult.getModel();
             registerRealParam.setInviterId(inviterDTO.getInviterId());
             registerRealParam.setUserNum(inviterDTO.getUserNum());
         }
@@ -127,11 +145,11 @@ public class MemberController extends BaseController {
         if (isSuccess(accountResult)) {
             return successGet(ResultCode.RECORD_EXIST);
         }
-        Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
+        Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) smsResult.getModel();
+        VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
         if (!registerParam.getAccount().equals(verifyCodeDTO.getMobile())) {
             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }

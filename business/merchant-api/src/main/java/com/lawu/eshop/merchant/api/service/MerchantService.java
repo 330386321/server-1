@@ -73,6 +73,6 @@ public interface MerchantService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
-    Result getMerchantByAccount(@PathVariable("account") String account);
+    Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
 
 }

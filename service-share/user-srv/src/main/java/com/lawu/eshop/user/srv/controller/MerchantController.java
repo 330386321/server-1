@@ -64,13 +64,12 @@ public class MerchantController extends BaseController {
      * @param account 商户账号
      */
     @RequestMapping(value = "getMerchant/{account}", method = RequestMethod.GET)
-    public Result getMerchantByAccount(@PathVariable String account) {
+    public Result<MerchantDTO> getMerchantByAccount(@PathVariable String account) {
         MerchantBO merchantBO = merchantService.getMerchantByAccount(account);
-        MerchantDTO merchantDTO = MerchantConverter.convertDTO(merchantBO);
-        if (merchantDTO == null) {
+        if (merchantBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        return successGet(merchantDTO);
+        return successGet(MerchantConverter.convertDTO(merchantBO));
     }
 
     /**

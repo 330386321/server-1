@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.mall.srv.bo.VerifyCodeBO;
 import com.lawu.eshop.mall.srv.converter.VerifyCodeConverter;
 import com.lawu.eshop.mall.srv.service.VerifyCodeService;
@@ -43,7 +44,7 @@ public class VerifyCodeController extends BaseController {
      * @return
      */
     @RequestMapping(value = "verifySmsCode/{id}", method = RequestMethod.GET)
-    public Result verifySmsCode(@PathVariable Long id, @RequestParam String smsCode) {
+    public Result<VerifyCodeDTO> verifySmsCode(@PathVariable Long id, @RequestParam String smsCode) {
         VerifyCodeBO verifyCodeBO = verifyCodeService.getVerifyCodeById(id);
         if (verifyCodeBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);

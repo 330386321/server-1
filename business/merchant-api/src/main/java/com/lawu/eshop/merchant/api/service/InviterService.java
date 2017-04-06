@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.InviterDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,5 +20,5 @@ public interface InviterService {
      * @param account 邀请人账号
      */
     @RequestMapping(method = RequestMethod.GET, value = "user/common/getInviter/{account}")
-    Result getInviterByAccount(@PathVariable("account") String account);
+    Result<InviterDTO> getInviterByAccount(@PathVariable("account") String account);
 }

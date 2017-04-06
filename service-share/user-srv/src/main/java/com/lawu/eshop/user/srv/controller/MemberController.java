@@ -105,13 +105,12 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "getMember/{account}", method = RequestMethod.GET)
-    public Result getMemberByAccount(@PathVariable String account) {
+    public Result<MemberDTO> getMemberByAccount(@PathVariable String account) {
         MemberBO memberBO = memberService.getMemberByAccount(account);
-        MemberDTO memberDTO = MemberConverter.convertMDTO(memberBO);
-        if (memberDTO == null) {
+        if (memberBO == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        return successGet(memberDTO);
+        return successGet(MemberConverter.convertMDTO(memberBO));
     }
 
     /**
