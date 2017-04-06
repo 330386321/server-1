@@ -100,6 +100,7 @@ public class MemberConverter {
         userDTO.setRegionPath(memberBO.getRegionPath());
         userDTO.setNickname(memberBO.getNickname());
         userDTO.setHeadimg(memberBO.getHeadimg());
+        userDTO.setLevel(memberBO.getLevel());
         return userDTO;
     }
 
