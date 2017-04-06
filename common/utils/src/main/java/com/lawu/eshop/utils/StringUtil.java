@@ -1,9 +1,15 @@
 package com.lawu.eshop.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.SortedMap;
 
 public class StringUtil {
 
@@ -47,4 +53,5 @@ public class StringUtil {
 		}
 		return str.toString();
 	}
+	
 }

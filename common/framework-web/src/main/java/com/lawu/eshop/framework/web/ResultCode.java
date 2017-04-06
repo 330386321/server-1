@@ -64,6 +64,14 @@ public class ResultCode {
     public static final int PROPERTY_CASH_PAY_PWD_ERROR = 6006;
     public static final int PROPERTY_CASH_BANK_NOT_EXIST = 6007;
     public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
+    
+    public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
+    public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
+    public static final int ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL = 6011;
+    public static final int ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL = 6012;
+    public static final int ALIPAY_INIT_VALIDATOR_BODY_NULL = 6013;
+    public static final int ALIPAY_INIT_VALIDATOR_USER_NUM_NULL = 6014;
+    public static final int ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL = 6015;
 
     // 商城模块代码 7xxx
 
@@ -124,6 +132,14 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
+        
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_SUBJECT_NULL, "app支付宝支付时subject参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_MONEY_NULL, "app支付宝支付时total_amount参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL, "app支付宝支付时out_trade_no参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL, "app支付宝支付时userTypeEnum参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BODY_NULL, "app支付宝支付时body参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_NUM_NULL, "app支付宝支付时userNum参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL, "app支付宝支付时bizFlagEnum参数不能为空");
 
 
         // 商城模块 7xxx

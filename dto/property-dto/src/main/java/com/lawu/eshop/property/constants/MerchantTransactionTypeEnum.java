@@ -9,44 +9,44 @@ package com.lawu.eshop.property.constants;
 public enum MerchantTransactionTypeEnum {
 	
 	/**
-	 * 买单
+	 * 买单100
 	 */
-	PAY((byte)0x101),
+	PAY((byte)0x64),
 	
 	/**
-	 * 订单
+	 * 订单101
 	 */
-	ORDER((byte)0x102),
+	ORDER((byte)0x65),
 	
 	/**
-	 * 下级收益
+	 * 下级收益102
 	 */
-	LOWER_INCOME((byte)0x103),
+	LOWER_INCOME((byte)0x66),
 	
 	/**
-	 * 充值
+	 * 充值103
 	 */
-	RECHARGE((byte)0x104),
+	RECHARGE((byte)0x67),
 	
 	/**
-	 * 投放
+	 * 投放104
 	 */
-	PUT_ON((byte)0x105),
+	PUT_ON((byte)0x68),
 	
 	/**
-	 * 积分充值
+	 * 积分充值105
 	 */
-	INTEGRAL_RECHARGE((byte)0x106),
+	INTEGRAL_RECHARGE((byte)0x69),
 	
 	/**
-	 * 退款
+	 * 退款106
 	 */
-	REFUNDS((byte)0x107),
+	REFUNDS((byte)0x70),
 	
 	/**
-	 * 提现
+	 * 提现107
 	 */
-	WITHDRAW((byte)0x108);
+	WITHDRAW((byte)0x71);
 	
 	MerchantTransactionTypeEnum(Byte value){
 		this.value = value;
