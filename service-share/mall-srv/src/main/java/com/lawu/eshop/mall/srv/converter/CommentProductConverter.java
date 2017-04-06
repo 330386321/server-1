@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.srv.converter;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.domain.CommentProductDO;
+import com.lawu.eshop.mall.srv.domain.extend.CommentProductDOView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,11 @@ import java.util.List;
  */
 public class CommentProductConverter {
 
+    /**
+     * 商品评价BO转换
+     * @param commentProductDO
+     * @return
+     */
     public static CommentProductBO converterBO(CommentProductDO commentProductDO) {
         if (commentProductDO == null) {
             return null;
@@ -22,6 +28,7 @@ public class CommentProductConverter {
         commentProductBO.setGmtCreate(commentProductDO.getGmtCreate());
         commentProductBO.setAnonymous(commentProductDO.getIsAnonymous());
         commentProductBO.setReplyContent(commentProductDO.getReplyContent());
+        commentProductBO.setMemberId(commentProductDO.getMemberId());
         return commentProductBO;
     }
 
@@ -42,4 +49,19 @@ public class CommentProductConverter {
         }
         return commentDTOS;
     }
+
+    public static CommentProductBO converterBOFromView(CommentProductDOView commentProductDOView) {
+        if (commentProductDOView == null) {
+            return null;
+        }
+        CommentProductBO commentProductBO = new CommentProductBO();
+        commentProductBO.setContent(commentProductDOView.getContent());
+        commentProductBO.setGmtCreate(commentProductDOView.getGmtCreate());
+        commentProductBO.setAnonymous(commentProductDOView.getAnonymous());
+        commentProductBO.setReplyContent(commentProductDOView.getReplyContent());
+        commentProductBO.setMemberId(commentProductDOView.getMemberId());
+        return commentProductBO;
+    }
+
+
 }

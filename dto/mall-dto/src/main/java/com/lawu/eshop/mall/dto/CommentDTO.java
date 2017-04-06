@@ -17,6 +17,9 @@ public class CommentDTO {
     @ApiModelProperty(value = "评价内容")
     private String content;
 
+    @ApiModelProperty(value = "回复内容")
+    private String replyContent;
+
     /**
      * 评价时间
      */
@@ -46,6 +49,9 @@ public class CommentDTO {
      */
     @ApiModelProperty(value = "评价ID")
     private Long id;
+
+    @ApiModelProperty(value = "评分")
+    private float grade;
 
     public String getContent() {
         return content;
@@ -93,5 +99,21 @@ public class CommentDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getReplyContent() {
+        return replyContent;
+    }
+
+    public void setReplyContent(String replyContent) {
+        this.replyContent = replyContent;
+    }
+
+    public float getGrade() {
+        return grade;
+    }
+
+    public void setGrade(float grade) {
+        this.grade = grade;
     }
 }

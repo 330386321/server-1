@@ -25,7 +25,20 @@ public interface CommentProductService {
     @RequestMapping(method = RequestMethod.POST, value = "commentProduct/saveCommentProductInfo/{memberId}")
     Result saveCommentProductInfo(@PathVariable("memberId") Long memberId, @ModelAttribute CommentProductParam param, @RequestParam("headImg") String headImg);
 
-    @RequestMapping(method = RequestMethod.GET,value = "commentProduct/getCommentProducts")
+    /**
+     * 获取用户评价列表（全部）
+     * @param listParam
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST,value = "commentProduct/getCommentProducts")
     public Result<Page<CommentDTO>> getCommentProducts(@ModelAttribute CommentProductListParam listParam);
+
+    /**
+     * 获取评价列表（有图）
+     * @param listParam
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST,value = "commentProduct/getCommentProductsWithImgs")
+    public Result<Page<CommentDTO>> getCommentProductsWithImgs(@ModelAttribute CommentProductListParam listParam);
 
 }

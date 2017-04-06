@@ -25,4 +25,11 @@ public interface CommentProductService {
      * @return
      */
     Page<CommentProductBO> getCommentProducts(CommentProductListParam listParam);
+
+    /**
+     * 查询有图评价
+     * @param listParam
+     * @return
+     */
+    Page<CommentProductBO> getCommentProductsWithImgs(CommentProductListParam listParam);
 }

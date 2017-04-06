@@ -45,11 +45,11 @@ public class CommentProductController extends BaseController {
     }
 
     /**
-     * 获取评论信息列表
+     * 获取评论信息列表(全部)
      * @param listParam
      * @return
      */
-    @RequestMapping(value = "getCommentProducts",method = RequestMethod.GET)
+    @RequestMapping(value = "getCommentProducts",method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentProducts(@RequestBody CommentProductListParam listParam){
 
         if(listParam == null){
@@ -65,4 +65,22 @@ public class CommentProductController extends BaseController {
         pages.setTotalCount(commentProductBOPage.getTotalCount());
         return  successGet(pages);
     }
+
+    @RequestMapping(value = "getCommentProductsWithImgs",method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentProductsWithImgs(@RequestBody CommentProductListParam listParam){
+        if(listParam == null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        Page<CommentProductBO> commentProductBOPage =   commentProductService.getCommentProductsWithImgs(listParam);
+
+        List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
+
+        List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
+        Page<CommentDTO> pages = new Page<CommentDTO>();
+        pages.setRecords(commentProductDTOS);
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(commentProductBOPage.getTotalCount());
+        return  successGet(pages);
+    }
+
 }

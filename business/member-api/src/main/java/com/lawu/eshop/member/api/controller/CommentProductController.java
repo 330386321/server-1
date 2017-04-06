@@ -89,7 +89,7 @@ public class CommentProductController extends BaseController {
 
     }
 
-    @ApiOperation(value = "评价商品列表", notes = "评价商品列表 [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
     public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) {
@@ -98,6 +98,42 @@ public class CommentProductController extends BaseController {
         Page<CommentProductDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentProductService.getCommentProducts(listParam);
+        if (!result.getModel().getRecords().isEmpty()) {
+            for (CommentDTO commentDTO : result.getModel().getRecords()) {
+                //设置评论信息
+                CommentProductDTO commentProductDTO = new CommentProductDTO();
+                commentProductDTO.setContent(commentDTO.getContent());
+                commentProductDTO.setAnonymous(commentDTO.getAnonymous());
+                commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
+                commentProductDTO.setImgUrls(commentDTO.getImgUrls());
+                //查询评论用户信息
+                Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
+                commentProductDTO.setHeadImg(user.getModel().getHeadimg());
+                commentProductDTO.setNickName(user.getModel().getNickname());
+                //查询商品信息
+                Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
+                commentProductDTO.setName(product.getModel().getName());
+                commentProductDTO.setPriceMax(product.getModel().getPriceMax());
+                commentProductDTO.setPriceMin(product.getModel().getPriceMin());
+                commentProductDTO.setSpec(product.getModel().getSpec());
+                commentProductDTOS.add(commentProductDTO);
+            }
+        }
+        pages.setCurrentPage(result.getModel().getCurrentPage());
+        pages.setTotalCount(result.getModel().getTotalCount());
+        pages.setRecords(commentProductDTOS);
+        return successGet(pages);
+    }
+
+    @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.GET)
+    public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) {
+
+        List<CommentProductDTO> commentProductDTOS = new ArrayList<>();
+        Page<CommentProductDTO> pages = new Page<>();
+        //获取评论列表
+        Result<Page<CommentDTO>> result = commentProductService.getCommentProductsWithImgs(listParam);
         if (!result.getModel().getRecords().isEmpty()) {
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 //设置评论信息
