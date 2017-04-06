@@ -122,4 +122,20 @@ public class ShoppingCartController extends BaseController {
 		
 		return successCreated(ResultCode.SUCCESS);
 	}
+	
+	
+	/**
+	 * 根据购物车id列表查询购物车列表
+	 * 
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "list/findListByIds",  method = RequestMethod.GET)
+	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
+		if (ids == null || ids.isEmpty()) {
+			return successGet(ResultCode.ID_EMPTY);
+		}
+		
+		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartService.findListByIds(ids)));
+	}
 }

@@ -11,7 +11,12 @@ public class ShoppingCartDTO implements Serializable {
      * 主键
      */
     private Long id;
-
+    
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
+    
     /**
      * 商家名称
      */
@@ -43,6 +48,14 @@ public class ShoppingCartDTO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public String getMerchantName() {

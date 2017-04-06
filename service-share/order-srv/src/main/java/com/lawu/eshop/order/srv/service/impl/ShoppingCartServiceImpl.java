@@ -72,6 +72,24 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		return shoppingCartDOMapper.deleteByPrimaryKey(id);
 	}
 	
+	/**
+	 * 根据购物车id列表查询购物车列表
+	 * 
+	 * @param ids 购物车id列表
+	 * @return
+	 */
+	@Override
+	public List<ShoppingCartBO> findListByIds(List<Long> ids) {
+		if (ids == null || ids.isEmpty()) {
+			return null;
+		}
+		
+		ShoppingCartDOExample example = new ShoppingCartDOExample();
+		example.createCriteria().andIdIn(ids);
+		
+		return ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
+	}
+	
 	public ShoppingCartDO get(Long id){
 		return shoppingCartDOMapper.selectByPrimaryKey(id);
 	}

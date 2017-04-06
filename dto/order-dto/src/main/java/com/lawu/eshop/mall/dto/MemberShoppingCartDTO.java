@@ -14,7 +14,13 @@ public class MemberShoppingCartDTO implements Serializable {
      */
     @ApiModelProperty(value = "主键", required = true)
     private Long id;
-
+    
+    /**
+     * 商家ID
+     */
+    @ApiModelProperty(value = "商家ID", required = true)
+    private Long merchantId;
+    
     /**
      * 商家名称
      */
@@ -81,6 +87,14 @@ public class MemberShoppingCartDTO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public String getMerchantName() {

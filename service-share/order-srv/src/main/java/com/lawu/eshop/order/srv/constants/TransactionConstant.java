@@ -1,4 +1,4 @@
-package com.lawu.eshop.user.srv.constants;
+package com.lawu.eshop.order.srv.constants;
 
 /**
  * 分布式事务业务类型
@@ -8,7 +8,7 @@ package com.lawu.eshop.user.srv.constants;
 public class TransactionConstant {
 
     /**
-     * 购物车结算
+     * 注册
      */
-    public static final byte REGISTER = 0x01;
+    public static final byte SETTLEMENT = 0x01;
 }

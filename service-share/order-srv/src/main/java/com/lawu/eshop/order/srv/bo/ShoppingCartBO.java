@@ -4,39 +4,43 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class ShoppingCartBO implements Serializable {
-	
-    private static final long serialVersionUID = 1L;
-	
-    /**
-     * 主键
-     */
-    private Long id;
 
-    /**
-     * 商家名称
-     */
-    private String merchantName;
+	private static final long serialVersionUID = 1L;
 
-    /**
-     * 商品ID
-     */
-    private Long productId;
+	/**
+	 * 主键
+	 */
+	private Long id;
 
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
 
-    /**
-    * 商品型号ID
-    */
-   private Long productModelId;
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
 
-    /**
-     * 数量
-     */
-    private Integer quantity;
+	/**
+	 * 商品ID
+	 */
+	private Long productId;
 
-    /**
-     * 现价
-     */
-    private BigDecimal salesPrice;
+	/**
+	 * 商品型号ID
+	 */
+	private Long productModelId;
+
+	/**
+	 * 数量
+	 */
+	private Integer quantity;
+
+	/**
+	 * 现价
+	 */
+	private BigDecimal salesPrice;
 
 	public Long getId() {
 		return id;
@@ -44,6 +48,14 @@ public class ShoppingCartBO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public String getMerchantName() {
@@ -85,5 +97,5 @@ public class ShoppingCartBO implements Serializable {
 	public void setSalesPrice(BigDecimal salesPrice) {
 		this.salesPrice = salesPrice;
 	}
-    
+
 }

@@ -58,5 +58,13 @@ public interface ShoppingCartService {
 	 */
 	@RequestMapping(value = "shoppingCart/delete/{id}", method = RequestMethod.PUT)
 	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId);
-    
+	
+	/**
+	 * 根据购物车id列表查询购物车列表
+	 * 
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingCart/list/findListByIds",  method = RequestMethod.GET)
+	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids);
 }

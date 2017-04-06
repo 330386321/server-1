@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
@@ -38,7 +39,7 @@ public class ShoppingCartProductModelConverter {
 		if (productDO != null) {
 			shoppingCartProductModelBO.setProductName(productDO.getName());
 			shoppingCartProductModelBO.setFeatureImage(productDO.getFeatureImage());
-			shoppingCartProductModelBO.setStatus(productDO.getStatus());
+			shoppingCartProductModelBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
 		}
 
 		return shoppingCartProductModelBO;

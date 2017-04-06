@@ -3,6 +3,8 @@ package com.lawu.eshop.product.srv.bo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
+
 /**
  * 购物车产品型号BO
  * 
@@ -14,27 +16,32 @@ public class ShoppingCartProductModelBO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	
+
 	private String name;
-	
+
 	private Long productId;
-	
+
 	private String productName;
-	
-    /**
-    * 特征图片
-    */
-    private String featureImage;
-	
+
+	/**
+	 * 特征图片
+	 */
+	private String featureImage;
+
 	private Long merchantId;
-	
+
+	/**
+	 * 原价
+	 */
+	private BigDecimal originalPrice;
+
 	private BigDecimal price;
-	
-    /**
-    * 状态(1-删除2-上架3-下架)
-    */
-   private Byte status;
-	
+
+	/**
+	 * 状态
+	 */
+	private ProductStatusEnum status;
+
 	public Long getId() {
 		return id;
 	}
@@ -66,7 +73,7 @@ public class ShoppingCartProductModelBO implements Serializable {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	
+
 	public String getFeatureImage() {
 		return featureImage;
 	}
@@ -83,6 +90,14 @@ public class ShoppingCartProductModelBO implements Serializable {
 		this.merchantId = merchantId;
 	}
 
+	public BigDecimal getOriginalPrice() {
+		return originalPrice;
+	}
+
+	public void setOriginalPrice(BigDecimal originalPrice) {
+		this.originalPrice = originalPrice;
+	}
+
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -91,12 +106,12 @@ public class ShoppingCartProductModelBO implements Serializable {
 		this.price = price;
 	}
 
-	public Byte getStatus() {
+	public ProductStatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(Byte status) {
+	public void setStatus(ProductStatusEnum status) {
 		this.status = status;
 	}
-	
+
 }

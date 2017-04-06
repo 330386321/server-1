@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,8 +28,10 @@ import com.lawu.eshop.mall.dto.ShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
 import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.mall.param.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;
+import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 
@@ -50,10 +53,7 @@ public class ShoppingCartController extends BaseController {
     private ShoppingCartService shoppingCartService;
     
     @Autowired
-    private ProductModelService productModelService;
-    
-    @Autowired
-    private MerchantStoreService merchantStoreService;
+    private ShoppingCartExtendService shoppingcartExtendService;
     
     /**
      * 加入购物车。
@@ -70,29 +70,7 @@ public class ShoppingCartController extends BaseController {
     public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") ShoppingCartParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
-    	
-    	if (!isSuccess(resultShoppingCartProductModelDTO)) {
-    		return successCreated(resultShoppingCartProductModelDTO.getRet());
-    	}
-    	
-    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
-    	
-    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
-    	
-    	if (!isSuccess(resultMerchantName)) {
-    		return successCreated(resultMerchantName.getRet());
-    	}
-    	
-    	ShoppingCartSaveParam shoppingCartSaveParam = new ShoppingCartSaveParam();
-    	shoppingCartSaveParam.setMerchantName(resultMerchantName.getModel());
-    	shoppingCartSaveParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
-    	shoppingCartSaveParam.setProductId(shoppingCartProductModelDTO.getProductId());
-    	shoppingCartSaveParam.setProductModelId(shoppingCartProductModelDTO.getId());
-    	shoppingCartSaveParam.setQuantity(param.getQuantity());
-    	shoppingCartSaveParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
-    	
-    	return successCreated(shoppingCartService.save(memberId, shoppingCartSaveParam));
+    	return successCreated(shoppingcartExtendService.save(memberId, param));
     }
 
     /**
@@ -104,69 +82,12 @@ public class ShoppingCartController extends BaseController {
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
+    //@Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    Result<List<MemberShoppingCartDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    Result<List<MemberShoppingCartDTO>> findListByMemberId(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token*/) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	// 通过memberId查询用户购物车资料
-    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
-    	if (!isSuccess(resultShoppingCartDTOS)) {
-    		return successGet(resultShoppingCartDTOS.getRet());
-    	}
-    	
-    	// 把要查询的id放入set,统一一次性查询
-    	Set<Long> ids = new HashSet<Long>();
-    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
-    		ids.add(shoppingCartDTO.getProductModelId());
-    	}
-    	
-    	// 通过商品型号id列表查询商品信息
-    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(ids));
-    	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
-    		return successGet(resultShoppingCartProductModelDTOS.getRet());
-    	}
-    	
-    	// 组装数据
-    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<Long, ShoppingCartProductModelDTO>();
-    	for (ShoppingCartProductModelDTO shoppingCartProductModelDTO : resultShoppingCartProductModelDTOS.getModel()) {
-    		if (!shoppingCartProductModelDTOMap.containsKey(shoppingCartProductModelDTO.getId())) {
-    			shoppingCartProductModelDTOMap.put(shoppingCartProductModelDTO.getId(), shoppingCartProductModelDTO);
-    		}
-    	}
-    	
-    	List<MemberShoppingCartDTO> MemberShoppingCartDTOS = new ArrayList<MemberShoppingCartDTO>();
-    	
-    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
-    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
-    		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
-    		memberShoppingCartDTO.setId(shoppingCartDTO.getId());
-    		memberShoppingCartDTO.setMerchantName(shoppingCartDTO.getMerchantName());
-    		memberShoppingCartDTO.setProductId(shoppingCartDTO.getProductId());
-    		memberShoppingCartDTO.setProductModelId(shoppingCartDTO.getProductModelId());
-    		memberShoppingCartDTO.setQuantity(shoppingCartDTO.getQuantity());
-    		memberShoppingCartDTO.setSalesPrice(shoppingCartDTO.getSalesPrice());
-    		
-    		shoppingCartProductModelDTO = shoppingCartProductModelDTOMap.get(shoppingCartDTO.getProductModelId());
-    		if (shoppingCartProductModelDTO == null) {
-    			continue;
-    		}
-    		memberShoppingCartDTO.setProductModelName(shoppingCartProductModelDTO.getName());
-    		memberShoppingCartDTO.setProductName(shoppingCartProductModelDTO.getProductName());
-    		memberShoppingCartDTO.setFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
-    		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
-    		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
-    		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
-    		if (shoppingCartProductModelDTO.getStatus().equals(((byte)0x01)) || shoppingCartProductModelDTO.getStatus().equals(((byte)0x03))) {
-    			memberShoppingCartDTO.setIsInvalid(true);
-    		} else {
-    			memberShoppingCartDTO.setIsInvalid(false);
-    		}
-    		
-    		MemberShoppingCartDTOS.add(memberShoppingCartDTO);
-    	}
-    	
-    	return successGet(MemberShoppingCartDTOS);
+    	return successGet(shoppingcartExtendService.findListByMemberId(memberId));
     }
     
     /**
@@ -205,7 +126,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-	public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable(name = "id") Long id) {
+	public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable(name = "id") @ApiParam(name = "id", required = true, value = "购物车ID") Long id) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	Result result = successCreated(shoppingCartService.delete(id, memberId));
@@ -214,6 +135,22 @@ public class ShoppingCartController extends BaseController {
     	}
     	
     	return successDelete(result);
+    }
+    
+    /**
+     * 根据参数列表结算购物车的商品。
+     * 
+     * @param params 购物车参数
+     * @return
+     */
+    @ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表生成订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    //@Authorization
+	@RequestMapping(value = "settlement", method = RequestMethod.POST)
+	public Result<Integer> settlement(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @RequestBody @ApiParam(name = "param", required = true, value = "购物车结算参数") List<ShoppingOrderSettlementForeignParam> params) {
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	
+    	return successCreated(shoppingcartExtendService.settlement(memberId, params));
     }
     
 }

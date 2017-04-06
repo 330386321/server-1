@@ -7,7 +7,9 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
@@ -61,4 +63,25 @@ public class ProductModelServiceImpl implements ProductModelService {
 		return ShoppingCartProductModelConverter.convert(productModelDOS, productDOs);
 	}
 	
+	/**
+	 * 批量更新商品库存
+	 * 
+	 * @param params 商品模型更新库存参数
+	 * @return 受影响的行数
+	 */
+	@Transactional
+	@Override
+	public List<Integer> updateInventory(List<ProductModeUpdateInventoryParam> params) {
+		List<Integer> rtn = new ArrayList<Integer>();
+		
+		for (ProductModeUpdateInventoryParam param : params) {
+			ProductModelDO productModelDO = new ProductModelDO();
+			productModelDO.setId(param.getId());
+			Integer inventory = productModelDOMapper.selectByPrimaryKey(param.getId()).getInventory() - param.getQuantity();
+			productModelDO.setInventory(inventory);
+			rtn.add(productModelDOMapper.updateByPrimaryKeySelective(productModelDO));
+		}
+		
+		return rtn;
+	}
 }

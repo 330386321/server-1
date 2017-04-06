@@ -54,4 +54,12 @@ public interface ShoppingCartService {
 	 */
 	public ShoppingCartDO get(Long id);
 	
+	/**
+	 * 根据购物车id列表查询购物车列表
+	 * 
+	 * @param ids 购物车id列表
+	 * @return
+	 */
+	List<ShoppingCartBO> findListByIds(List<Long> ids);
+	
 }
