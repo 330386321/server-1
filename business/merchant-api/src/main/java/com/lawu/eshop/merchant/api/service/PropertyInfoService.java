@@ -28,16 +28,16 @@ public interface PropertyInfoService {
      */
     @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
     Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
-    
+
     /**
      * 根据用户编号获取资产余额
      *
-     * @param userNo 用户编号
+     * @param userNum 用户编号
      * @return
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)
     Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum);
-    
+
     /**
      * 根据用户编号获取用户积分
      *
@@ -46,4 +46,14 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/propertyPoint/{userNum}", method = RequestMethod.GET)
     public Result<PropertyPointDTO> getPropertyPoint(@PathVariable("userNum") String userNum);
+
+    /**
+     * 邀请粉丝消费积分
+     *
+     * @param userNum      商户编号
+     * @param consumePoint 消费积分
+     * @return
+     */
+    @RequestMapping(value = "inviteFans/inviteFans/{userNum}", method = RequestMethod.POST)
+    public Result inviteFans(@PathVariable("userNum") String userNum, @RequestParam("consumePoint") Integer consumePoint);
 }

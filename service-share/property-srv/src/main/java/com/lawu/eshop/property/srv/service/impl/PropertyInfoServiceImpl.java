@@ -1,12 +1,5 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -19,8 +12,15 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
+import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -35,6 +35,11 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	private PropertyInfoDOMapper propertyInfoDOMapper;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
+
+	@Autowired
+	private PointDetailService pointDetailService;
+
+
 
 	@Override
 	public PropertyInfoBO getPropertyInfoByUserNo(String userNo) {
@@ -114,4 +119,5 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 
 		return ResultCode.SUCCESS;
 	}
+
 }

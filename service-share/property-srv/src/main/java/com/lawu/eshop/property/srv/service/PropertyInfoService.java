@@ -1,10 +1,10 @@
 package com.lawu.eshop.property.srv.service;
 
-import java.math.BigDecimal;
-
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
+
+import java.math.BigDecimal;
 
 /**
  * 资产管理服务接口
@@ -47,7 +47,7 @@ public interface PropertyInfoService {
 	/**
 	 * 根据用户编号查询积分
 	 * 
-	 * @param userNo
+	 * @param userNum
 	 *            用户编号
 	 * @return
 	 */
@@ -66,4 +66,5 @@ public interface PropertyInfoService {
 	 * @return
 	 */
 	int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number);
+
 }
