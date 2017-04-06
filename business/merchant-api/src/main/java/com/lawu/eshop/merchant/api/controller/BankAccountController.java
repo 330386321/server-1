@@ -92,6 +92,7 @@ public class BankAccountController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@Audit(date = "2017-04-05", reviewer = "张荣成")
 	@Authorization
     @ApiOperation(value = "删除银行卡", notes = "删除银行卡[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

@@ -84,14 +84,14 @@ public class AddressController extends BaseController{
    }
    
    /**
-	 * 修改地址
+	 * 删除地址
 	 * @return
 	 */
    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
    public Result remove(@PathVariable Long id) {
 	   Integer i=addressService.remove(id);
 	   if(i>0){
-   			return successCreated(ResultCode.SUCCESS);
+   			return successDelete();
    	   }else{
    		    return successCreated(ResultCode.FAIL);
    	   }
