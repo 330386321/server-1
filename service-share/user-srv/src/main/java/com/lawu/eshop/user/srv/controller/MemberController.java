@@ -59,7 +59,6 @@ public class MemberController extends BaseController {
         if (memberBO == null) {
             return successGet();
         } else {
-            memberBO.setUserSex(UserSexEnum.getEnum(memberBO.getSex()));
             return successGet(MemberConverter.convertDTO(memberBO));
         }
     }
