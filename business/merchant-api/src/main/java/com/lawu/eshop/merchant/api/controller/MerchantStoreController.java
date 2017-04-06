@@ -19,13 +19,11 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import util.UploadFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Iterator;
+import javax.servlet.http.Part;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -65,15 +63,13 @@ public class MerchantStoreController extends BaseController {
         StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
         StringBuffer licenseUrls = new StringBuffer();        //营业执照
         StringBuffer otherUrls = new StringBuffer();
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        if (multipartResolver.isMultipart(request)) {
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-            Iterator<String> iter = multiRequest.getFileNames();
-            while (iter.hasNext()) {
-                MultipartFile file = multiRequest.getFile(iter.next());
-                String fileName = file.getName();
-                Map<String, String> map = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_STORE);
+        Collection<Part> parts ;
+        try {
+            parts = request.getParts();
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE,part);
                 String flag = map.get("resultFlag");
+                String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
@@ -99,6 +95,97 @@ public class MerchantStoreController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
+
+            //判断回显照片
+            if (!"".equals(merchantStoreParam.getStoreUrl())) {
+                merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
+            } else {
+                merchantStoreParam.setStoreUrl(otherUrls.toString());
+            }
+            if (!"".equals(merchantStoreParam.getEnvironmentUrl())) {
+                merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
+            } else {
+                merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
+            }
+            if (!"".equals(merchantStoreParam.getLogoUrl())) {
+                merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
+            } else {
+                merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
+            }
+            if (!"".equals(merchantStoreParam.getIdcardUrl())) {
+                merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
+            } else {
+                merchantStoreParam.setIdcardUrl(idCardUrls.toString());
+            }
+            if (!"".equals(merchantStoreParam.getLicenseUrl())) {
+                merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
+            } else {
+                merchantStoreParam.setLicenseUrl(licenseUrls.toString());
+            }
+            if (!"".equals(merchantStoreParam.getOtherUrl())) {
+                merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
+            } else {
+                merchantStoreParam.setOtherUrl(otherUrls.toString());
+            }
+
+            merchantStoreParam.setStoreUrl(storeUrls.toString());
+            return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+        }
+    }
+
+    @Audit(date = "2017-04-01", reviewer = "孙林青")
+    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.PUT)
+    public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
+                                             @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        HttpServletRequest request = getRequest();
+        Long merchantId = UserUtil.getCurrentUserId(request);
+        StringBuffer idCardUrls = new StringBuffer();        //身份证照
+        StringBuffer storeUrls = new StringBuffer();        //门店照
+        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
+        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
+        StringBuffer licenseUrls = new StringBuffer();        //营业执照
+        StringBuffer otherUrls = new StringBuffer();
+
+        Collection<Part> parts ;
+        try {
+            parts = request.getParts();
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE,part);
+                String flag = map.get("resultFlag");
+                String fileName = part.getSubmittedFileName();
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                    //有图片上传成功返回,拼接图片url
+                    String imgUrl = map.get("imgUrl");
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                        storeUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                        environmentUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                        storeLogoUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                        idCardUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                        licenseUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                        otherUrls.append(imgUrl + ",");
+                    }
+                } else {
+                    return successCreated(Integer.valueOf(flag));
+                }
+            }
+
             //判断回显照片
             if (!"".equals(merchantStoreParam.getStoreUrl())) {
                 merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
@@ -132,98 +219,12 @@ public class MerchantStoreController extends BaseController {
             }
 
             merchantStoreParam.setStoreUrl(storeUrls.toString());
-            return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
-        }
-
-        return successCreated(ResultCode.FAIL);
-    }
-
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
-    @Authorization
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.PUT)
-    public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
-                                             @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        HttpServletRequest request = getRequest();
-        Long merchantId = UserUtil.getCurrentUserId(request);
-        StringBuffer idCardUrls = new StringBuffer();        //身份证照
-        StringBuffer storeUrls = new StringBuffer();        //门店照
-        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
-        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
-        StringBuffer licenseUrls = new StringBuffer();        //营业执照
-        StringBuffer otherUrls = new StringBuffer();
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
-        if (multipartResolver.isMultipart(request)) {
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-            Iterator<String> iter = multiRequest.getFileNames();
-            while (iter.hasNext()) {
-                MultipartFile file = multiRequest.getFile(iter.next());
-                String fileName = file.getName();
-                Map<String, String> map = UploadFileUtil.uploadOnePic(request, file, FileDirConstant.DIR_STORE);
-                String flag = map.get("resultFlag");
-                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                    //有图片上传成功返回,拼接图片url
-                    String imgUrl = map.get("imgUrl");
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
-                        storeUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
-                        environmentUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
-                        storeLogoUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
-                        idCardUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
-                        licenseUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
-                        otherUrls.append(imgUrl + ",");
-                    }
-
-                } else {
-                    return successCreated(Integer.valueOf(flag));
-                }
-            }
-
-            //判断回显照片
-            if (!"".equals(merchantStoreParam.getStoreUrl())) {
-                merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
-            } else {
-                merchantStoreParam.setStoreUrl(otherUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getEnvironmentUrl())) {
-                merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
-            } else {
-                merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getLogoUrl())) {
-                merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
-            } else {
-                merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getIdcardUrl())) {
-                merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
-            } else {
-                merchantStoreParam.setIdcardUrl(idCardUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getLicenseUrl())) {
-                merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
-            } else {
-                merchantStoreParam.setLicenseUrl(licenseUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getOtherUrl())) {
-                merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
-            } else {
-                merchantStoreParam.setOtherUrl(otherUrls.toString());
-            }
             return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
-        }
 
-        return successCreated(ResultCode.FAIL);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+        }
     }
 
 }
