@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.math.BigDecimal;
+
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
@@ -12,36 +14,56 @@ import com.lawu.eshop.property.srv.bo.PropertyPointBO;
  */
 public interface PropertyInfoService {
 
-    /**
-     * 根据用户编号查询用户信息
-     *
-     * @param userNo 用户编号
-     * @return
-     */
-    PropertyInfoBO getPropertyInfoByUserNo(String userNo);
+	/**
+	 * 根据用户编号查询用户信息
+	 *
+	 * @param userNo
+	 *            用户编号
+	 * @return
+	 */
+	PropertyInfoBO getPropertyInfoByUserNo(String userNo);
 
-    /**
-     * 根据用户编号修改支付密码
-     *
-     * @param userNo      用户编号
-     * @param originalPwd 原始密码
-     * @param newPwd      新密码
-     */
-    void updatePayPwd(String userNo, String originalPwd, String newPwd);
+	/**
+	 * 根据用户编号修改支付密码
+	 *
+	 * @param userNo
+	 *            用户编号
+	 * @param originalPwd
+	 *            原始密码
+	 * @param newPwd
+	 *            新密码
+	 */
+	void updatePayPwd(String userNo, String originalPwd, String newPwd);
 
-    /**
-     * 根据用户编号查询余额
-     *
-     * @param userNum 用户编号
-     * @return
-     */
-    PropertyBalanceBO getPropertyBalanceByUserNum(String userNum);
-    
-    /**
-     * 根据用户编号查询积分
-     * 
-     * @param userNo 用户编号
-     * @return
-     */
-    PropertyPointBO getPropertyPointByUserNum(String userNum);
+	/**
+	 * 根据用户编号查询余额
+	 *
+	 * @param userNum
+	 *            用户编号
+	 * @return
+	 */
+	PropertyBalanceBO getPropertyBalanceByUserNum(String userNum);
+
+	/**
+	 * 根据用户编号查询积分
+	 * 
+	 * @param userNo
+	 *            用户编号
+	 * @return
+	 */
+	PropertyPointBO getPropertyPointByUserNum(String userNum);
+
+	/**
+	 * 
+	 * @param userNum
+	 *            用户编号
+	 * @param column
+	 *            列名：B-余额，P-积分，L-爱心账户
+	 * @param flag
+	 *            标记:A-加，M-减
+	 * @param number
+	 *            余额、积分、爱心账户的数额
+	 * @return
+	 */
+	int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number);
 }

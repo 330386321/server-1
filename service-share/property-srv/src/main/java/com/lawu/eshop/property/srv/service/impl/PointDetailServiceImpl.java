@@ -1,15 +1,20 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
+import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
+import com.lawu.eshop.property.srv.domain.PointDetailDO;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
@@ -72,6 +77,20 @@ public class PointDetailServiceImpl implements PointDetailService {
 		criteria.andUserNumEqualTo(userNum);
 		
 		return pointDetailDOMapper.countByExample(pointDetailDOExample);
+	}
+
+	@Override
+	@Transactional
+	public int save(PointDetailSaveDataParam param) {
+		PointDetailDO pointDetailDO = new PointDetailDO();
+		pointDetailDO.setTitle(param.getTitle());
+		pointDetailDO.setPointNum(param.getPointNum());
+		pointDetailDO.setUserNum(param.getUserNum());
+		pointDetailDO.setPointType(param.getPointType());
+		pointDetailDO.setRemark(param.getRemark());
+		pointDetailDO.setGmtCreate(new Date());
+		pointDetailDOMapper.insertSelective(pointDetailDO);
+		return ResultCode.SUCCESS;
 	}
 
 }

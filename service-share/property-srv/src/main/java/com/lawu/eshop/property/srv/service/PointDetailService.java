@@ -1,7 +1,9 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
+import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 
 /**
@@ -29,4 +31,11 @@ public interface PointDetailService {
 	 * @return
 	 */
 	Integer findCountByUserNum(String userNo);
+
+	/**
+	 * 保存积分明细记录
+	 * @param param
+	 * @return
+	 */
+	int save(PointDetailSaveDataParam param);
 }
