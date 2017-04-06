@@ -18,6 +18,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 
         //查询评价列表
         List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-
+        List<CommentProductBO> commentProductBOS  = new ArrayList<>();
         for (CommentProductDO commentProductDO : commentProductDOS) {
 
         }

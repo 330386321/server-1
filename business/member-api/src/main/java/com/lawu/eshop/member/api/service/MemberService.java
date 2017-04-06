@@ -6,6 +6,7 @@ import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
@@ -93,6 +94,6 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/saveHeadImage/{memberId}")
-    Result saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg);
+    Result<UserHeadImgDTO> saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg);
 
 }

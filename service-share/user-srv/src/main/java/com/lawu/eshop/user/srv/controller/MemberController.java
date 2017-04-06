@@ -4,11 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.constants.UserSexEnum;
-import com.lawu.eshop.user.dto.EfriendDTO;
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
-import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
@@ -147,9 +143,11 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "saveHeadImage/{memberId}", method = RequestMethod.POST)
-    public Result saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam String headimg) {
+    public Result<UserHeadImgDTO> saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam String headimg) {
         memberService.updateMemberHeadImg(headimg, memberId);
-        return successCreated();
+        UserHeadImgDTO userHeadImgDTO = new UserHeadImgDTO();
+        userHeadImgDTO.setHeadImg(headimg);
+        return successCreated(userHeadImgDTO);
     }
 
 }

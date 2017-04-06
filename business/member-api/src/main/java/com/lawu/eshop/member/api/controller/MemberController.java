@@ -17,6 +17,7 @@ import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UpdatePwdParam;
@@ -172,7 +173,7 @@ public class MemberController extends BaseController {
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveHeadImage", method = RequestMethod.POST)
-    public Result saveHeadImage() {
+    public Result<UserHeadImgDTO> saveHeadImage() {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         String headImg = "";
