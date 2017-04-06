@@ -7,9 +7,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * 支付服务启动类
- * @author meishuquan
- * @date 2017/3/21
+ * 
+ * <p>
+ * Description: 支付服务启动类
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月5日 下午2:37:27
+ *
  */
 @EnableDiscoveryClient
 @SpringBootApplication

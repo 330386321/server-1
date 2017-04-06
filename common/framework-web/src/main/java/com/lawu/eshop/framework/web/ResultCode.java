@@ -32,6 +32,7 @@ public class ResultCode {
     public static final int IMAGE_SIZE_ERROR = 1015;
     public static final int NOT_SEND_SMS_MOBILE = 1016;
     public static final int IMAGE_IS_NULL = 1017;
+    public static final int MONEY_IS_POINT_2 = 1018;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -54,6 +55,14 @@ public class ResultCode {
 
     // 资产模块代码 6xxx
     public static final int BANK_ACCOUNT_ERROR = 6000;
+    public static final int CASH_MORE_NUM_MAX_MONEY_ERROR = 6001;
+    public static final int PROPERTY_INFO_NULL = 6002;
+    public static final int PROPERTY_INFO_OUT_INDEX = 6003;
+    public static final int PROPERTY_INFO_BALANCE_LESS = 6004;
+    public static final int PROPERTY_CASH_SCALE_NULL = 6005;
+    public static final int PROPERTY_CASH_PAY_PWD_ERROR = 6006;
+    public static final int PROPERTY_CASH_BANK_NOT_EXIST = 6007;
+    public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
 
     // 商城模块代码 7xxx
 
@@ -74,6 +83,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
         ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
         ResultCode.messageMap.put(IMAGE_IS_NULL, "图片格式不正确");
+        ResultCode.messageMap.put(MONEY_IS_POINT_2, "金额请保留两位小数");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");
@@ -104,6 +114,14 @@ public class ResultCode {
 
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
+        ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "自然月提现次数大于1次时，提现金额必须大于5元");
+        ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
+        ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
+        ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "提现余额不足");
+        ResultCode.messageMap.put(PROPERTY_CASH_SCALE_NULL, "提现比例系统参数未配置");
+        ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
+        ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
+        ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
 
 
         // 商城模块 7xxx

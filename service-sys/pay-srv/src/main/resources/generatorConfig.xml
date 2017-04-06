@@ -29,7 +29,7 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.lawu.eshop.property.srv.domain" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.lawu.eshop.pay.srv.domain" targetProject="src/main/java">
             <property name="enableSubPackages" value="false"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -38,33 +38,13 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.property.srv.mapper" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.pay.srv.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-
-        <!--<table tableName="bank" domainObjectName="BankDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="bank_account" domainObjectName="BankAccountDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="property_info" domainObjectName="PropertyInfoDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="point_detail" domainObjectName="PointDetailDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="love_detail" domainObjectName="LoveDetailDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="transaction_detail" domainObjectName="TransactionDetailDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="withdraw_cash" domainObjectName="WithdrawCashDO">
+		
+		<!-- 
+        <table tableName="pay" domainObjectName="payDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="property" domainObjectName="PropertyDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
     </context>
 </generatorConfiguration>
