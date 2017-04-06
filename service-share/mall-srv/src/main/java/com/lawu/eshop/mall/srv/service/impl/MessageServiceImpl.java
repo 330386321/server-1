@@ -96,7 +96,7 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setUserNum(userNum);
         messageDO.setType(messageInfoParam.getTypeEnum().val);
         messageDO.setContent(messageInfoParam.getContent());
-        if (messageInfoParam.getRelateId() > 0) {
+        if (messageInfoParam.getRelateId() != null && messageInfoParam.getRelateId() > 0) {
             messageDO.setRelateId(messageInfoParam.getRelateId());
         }
         messageDO.setGmtModified(new Date());

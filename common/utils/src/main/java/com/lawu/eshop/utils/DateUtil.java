@@ -75,72 +75,91 @@ public class DateUtil {
 
     /**
      * 获取当前日期   yyyy-MM-dd
+     *
      * @return String
      */
-    public static String getDate(){
+    public static String getDate() {
         return dateFormat.format(new Date());
     }
 
     /**
      * 获取当前日期   yyyy/MM/dd
+     *
      * @return String
      */
-    public static String getSpritDate(){
+    public static String getSpritDate() {
         return dateSpritFormat.format(new Date());
     }
 
     /**
      * 获取当前日期   yyyyMMdd
+     *
      * @return String
      */
-    public static String getIntDate(){
+    public static String getIntDate() {
         return dateIntFormat.format(new Date());
     }
 
     /**
      * 获取当前日期时间   yyyy-MM-dd HH:mm:ss
+     *
      * @return String
      */
-    public static String getDateTime(){
+    public static String getDateTime() {
         return dateTimeFormat.format(new Date());
     }
 
     /**
      * 获取当前日期时间   yyyy/MM/dd HH:mm:ss
+     *
      * @return String
      */
-    public static String getSpritDateTime(){
+    public static String getSpritDateTime() {
         return dateTimeSpritFormat.format(new Date());
     }
 
     /**
      * 获取当前日期时间   yyyyMMddHHmmss
+     *
      * @return String
      */
-    public static String getIntDateTime(){
+    public static String getIntDateTime() {
         return dateTimeIntFormat.format(new Date());
     }
 
     /**
      * 获取当前时间   HH:mm:ss
-     * @return  String
+     *
+     * @return String
      */
-    public static String getTime(){
+    public static String getTime() {
         return timeFormat.format(new Date());
     }
 
     /**
      * 获取当前时间   HHmmss
-     * @return  String
+     *
+     * @return String
      */
-    public static String getIntTime(){
+    public static String getIntTime() {
         return timeIntFormat.format(new Date());
+    }
+
+    /**
+     * date格式转换为double格式
+     *
+     * @param date
+     * @return
+     */
+    public static Double dateDateToDoubleDate(Date date) {
+        return Double.valueOf(dateTimeIntFormat.format(date));
     }
 
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
      * 日期格式化yyyy-MM-dd
+     *
      * @param date
      * @param format
      * @return
