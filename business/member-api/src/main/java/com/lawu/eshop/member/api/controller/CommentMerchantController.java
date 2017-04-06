@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentMerchantDTO;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
@@ -21,10 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,7 +50,7 @@ public class CommentMerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "saveCommentMerchantInfo", method = RequestMethod.POST)
-    public Result saveCommentMerchantInfo(@ModelAttribute CommentMerchantParam param) {
+    public Result saveCommentMerchantInfo(@ModelAttribute CommentMerchantParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         StringBuffer commentPic = new StringBuffer();
@@ -98,6 +96,7 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setReplyContent(commentDTO.getReplyContent());
                 commentMerchantDTO.setImgUrls(commentDTO.getImgUrls());
                 commentMerchantDTO.setGrade(commentDTO.getGrade());
+                commentMerchantDTO.setId(commentDTO.getId());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
@@ -128,6 +127,7 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setReplyContent(commentDTO.getReplyContent());
                 commentMerchantDTO.setImgUrls(commentDTO.getImgUrls());
                 commentMerchantDTO.setGrade(commentDTO.getGrade());
+                commentMerchantDTO.setId(commentDTO.getId());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());

@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentProductDTO;
 import com.lawu.eshop.mall.param.CommentProductListParam;
@@ -23,10 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +57,7 @@ public class CommentProductController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "saveCommentProductInfo", method = RequestMethod.POST)
-    public Result saveCommentProductInfo(@ModelAttribute @ApiParam CommentProductParam param) {
+    public Result saveCommentProductInfo(@ModelAttribute @ApiParam CommentProductParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         StringBuffer headImg = new StringBuffer();
@@ -106,6 +104,7 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setAnonymous(commentDTO.getAnonymous());
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
+                commentProductDTO.setId(commentDTO.getId());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
@@ -142,6 +141,7 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setAnonymous(commentDTO.getAnonymous());
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
+                commentProductDTO.setId(commentDTO.getId());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
@@ -161,5 +161,15 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+    @ApiOperation(value = "商家回复商品评价", notes = "商家回复商品评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "replyProductComment/{commentId}",method = RequestMethod.PUT)
+    public Result replyProductComment(@PathVariable("commentId") @ApiParam(required = true, value = "评价ID") Long commentId,
+                                      @RequestParam("replyContent") @ApiParam(required = true, value = "回复内容") String replyContent,
+                                      @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+
+        return  commentProductService.replyProductComment(commentId,replyContent);
+    }
 
 }

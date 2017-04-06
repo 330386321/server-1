@@ -152,4 +152,22 @@ public class CommentProductServiceImpl implements CommentProductService {
         pages.setRecords(commentProductBOS);
         return pages;
     }
+
+    @Override
+    public CommentProductBO findProductComment(Long commentId) {
+
+        CommentProductDO commentProductDO = commentProductDOMapper.selectByPrimaryKey(commentId);
+        CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+        return commentProductBO;
+    }
+
+    @Override
+    public Integer replyProductComment(Long commentId, String replyContent) {
+        CommentProductDO commentProductDO = new CommentProductDO();
+        commentProductDO.setId(commentId);
+        commentProductDO.setReplyContent(replyContent);
+        commentProductDO.setGmtReply(new Date());
+        int rows = commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+        return rows;
+    }
 }

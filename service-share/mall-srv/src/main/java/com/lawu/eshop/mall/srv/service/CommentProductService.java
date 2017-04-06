@@ -32,4 +32,8 @@ public interface CommentProductService {
      * @return
      */
     Page<CommentProductBO> getCommentProductsWithImgs(CommentProductListParam listParam);
+
+    CommentProductBO findProductComment(Long commentId);
+
+    Integer replyProductComment(Long commentId, String replyContent);
 }

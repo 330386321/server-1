@@ -54,6 +54,9 @@ public class CommentMerchantDTO {
     @ApiModelProperty(value = "综合评分")
     private float grade;
 
+    @ApiModelProperty(value = "评价ID")
+    private Long id;
+
     public String getHeadImg() {
         return headImg;
     }
@@ -116,5 +119,13 @@ public class CommentMerchantDTO {
 
     public void setReplyContent(String replyContent) {
         this.replyContent = replyContent;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

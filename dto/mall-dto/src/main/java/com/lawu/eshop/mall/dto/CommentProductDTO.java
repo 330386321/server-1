@@ -59,6 +59,8 @@ public class CommentProductDTO {
     private String priceMax;
     @ApiModelProperty(value = "型号最小价格")
     private String priceMin;
+    @ApiModelProperty(value = "评价ID")
+    private Long id;
 
 
     public String getHeadImg() {
@@ -139,5 +141,13 @@ public class CommentProductDTO {
 
     public void setPriceMin(String priceMin) {
         this.priceMin = priceMin;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
