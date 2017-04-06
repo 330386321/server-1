@@ -162,6 +162,7 @@ public class UploadFileUtil {
 
     /**
      * 上传多张图片
+     *
      * @param request
      * @param dir
      * @param part
@@ -220,6 +221,78 @@ public class UploadFileUtil {
         valsMap.put("imgUrl", urlImg);
         valsMap.put("resultFlag", "0");
 
+        return valsMap;
+
+    }
+
+    /**
+     * 文件上传单张图片
+     *
+     * @param request
+     * @param dir         文件存放目录
+     * @param newfileName 文件名
+     * @return
+     */
+    public static Map<String, String> uploadOneImage(HttpServletRequest request, String dir, String newfileName) {
+        Map<String, String> valsMap = new HashMap<>();
+        // 设置默认返回类型成功
+        valsMap.put("resultFlag", "0");
+        String bashdir = request.getServletContext().getRealPath("/");// 根路径
+        FileOutputStream out = null;
+        byte b[] = new byte[1024 * 1024];
+        Collection<Part> parts;
+
+        String urlImg = "";
+        try {
+            parts = request.getParts();
+            for (Part part : parts) {
+                if (part.getContentType() == null) {
+                    valsMap.put(part.getName(), request.getParameter(part.getName()));
+                } else {
+
+                    String extension = part.getSubmittedFileName();
+                    extension = extension.substring(extension.lastIndexOf("."));
+                    newfileName = newfileName + ".jpg";
+                    if (!ValidateUtil.validateImageFormat(extension)) {
+                        valsMap.put("resultFlag", "1011");
+                        valsMap.put("msg", "上传图片格式错误");
+                        return valsMap;
+                    }
+                    // 1M=1024k=1048576字节
+                    long fileSize = part.getSize();
+                    if (fileSize > 0.5 * 1048576) {
+                        valsMap.put("resultFlag", "1015");
+                        valsMap.put("msg", "图片文件大于500K");
+                        return valsMap;
+                    }
+                    File file = new File(bashdir, dir);
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+
+                    InputStream in = part.getInputStream();
+                    out = new FileOutputStream(new File(file, newfileName));
+
+                    int index = 0;
+                    while ((index = in.read(b)) != -1) {
+                        out.write(b, 0, index);
+                    }
+                    out.flush();
+                    out.close();
+                    in.close();
+
+                    //文件路径，文件类型
+                    urlImg = bashdir + dir + "/" + newfileName;
+
+                }
+            }
+            valsMap.put("imgUrl", urlImg);
+            valsMap.put("resultFlag", "0");
+        } catch (Exception e) {
+            valsMap.put("resultFlag", "1010");
+            valsMap.put("msg", "上传图片失败");
+            e.printStackTrace();
+        }
         return valsMap;
 
     }
