@@ -148,9 +148,9 @@ public class MemberController extends BaseController {
      * @param headimg
      * @return
      */
-    @RequestMapping(value = "saveHeadImage/{mermberId}", method = RequestMethod.PUT)
-    public Result saveHeadImage(@PathVariable("mermberId") Long mermberId, @RequestParam String headimg) {
-        memberService.updateMemberHeadImg(headimg, mermberId);
+    @RequestMapping(value = "saveHeadImage/{memberId}", method = RequestMethod.POST)
+    public Result saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam String headimg) {
+        memberService.updateMemberHeadImg(headimg, memberId);
         return successCreated();
     }
 
