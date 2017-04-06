@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.bo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -31,6 +32,13 @@ public class CommentProductBO {
      * 评价时间
      */
     private Date gmtCreate;
+
+    private List urlImgs;
+
+    /**
+     * 用户
+     */
+    private Long memberId;
 
     public Long getId() {
         return id;
@@ -70,5 +78,21 @@ public class CommentProductBO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public List getUrlImgs() {
+        return urlImgs;
+    }
+
+    public void setUrlImgs(List urlImgs) {
+        this.urlImgs = urlImgs;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
     }
 }

@@ -4,13 +4,16 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.dto.CommentProductDTO;
+import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
+import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -41,13 +44,25 @@ public class CommentProductController extends BaseController {
         return successCreated(ResultCode.SUCCESS);
     }
 
-    @RequestMapping(value = "getCommentProducts")
-    public Result<Page<CommentProductDTO>> getCommentProducts(@RequestBody CommentProductListParam listParam){
+    /**
+     * 获取评论信息列表
+     * @param listParam
+     * @return
+     */
+    @RequestMapping(value = "getCommentProducts",method = RequestMethod.GET)
+    public Result<Page<CommentDTO>> getCommentProducts(@RequestBody CommentProductListParam listParam){
 
         if(listParam == null){
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Page<CommentProductBO> commentProductDTOS =   commentProductService.getCommentProducts(listParam);
-        return  successGet();
+        Page<CommentProductBO> commentProductBOPage =   commentProductService.getCommentProducts(listParam);
+        List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
+
+        List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
+        Page<CommentDTO> pages = new Page<>();
+        pages.setRecords(commentProductDTOS);
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(commentProductBOPage.getTotalCount());
+        return  successGet(pages);
     }
 }

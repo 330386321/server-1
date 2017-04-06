@@ -8,7 +8,9 @@ import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
+import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
 import com.lawu.eshop.mall.srv.domain.CommentImageDO;
+import com.lawu.eshop.mall.srv.domain.CommentImageDOExample;
 import com.lawu.eshop.mall.srv.domain.CommentProductDO;
 import com.lawu.eshop.mall.srv.domain.CommentProductDOExample;
 import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
@@ -48,7 +50,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());
         commentProductDO.setGmtModified(new Date());
-        Integer id = commentProductDOMapper.insert(commentProductDO);
+        Integer id = commentProductDOMapper.insert(commentProductDO);//新增评价信息
         if (!StringUtils.isEmpty(headImg)) {
             String imgs[] = headImg.split(",");
             if (id != null && id > 0) {
@@ -83,10 +85,23 @@ public class CommentProductServiceImpl implements CommentProductService {
 
         //查询评价列表
         List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        List<CommentProductBO> commentProductBOS  = new ArrayList<>();
+        List<CommentProductBO> commentProductBOS = new ArrayList<>();
         for (CommentProductDO commentProductDO : commentProductDOS) {
+            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+            CommentImageDOExample imageDOExample = new CommentImageDOExample();
+            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId());
+            List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+            List<String> images = new ArrayList<String>();
+            if(!commentImageDOS.isEmpty()){
+                for (int i=0;i<commentImageDOS.size();i++){
+                    images.add(commentImageDOS.get(i).getImgUrl());
+                }
+                commentProductBO.setUrlImgs(images);
+            }
 
+            commentProductBOS.add(commentProductBO);
         }
-        return null;
+        page.setRecords(commentProductBOS);
+        return page;
     }
 }

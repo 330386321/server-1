@@ -1,10 +1,14 @@
 package com.lawu.eshop.mall.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 import java.util.List;
 
 /**
  * 用户评论返回
+ *
  * @author zhangyong
  * @date 2017/4/5.
  */
@@ -13,32 +17,49 @@ public class CommentProductDTO {
     /**
      * 头像
      */
+    @ApiModelProperty(value = "头像")
     private String headImg;
 
     /**
      * 昵称
      */
+    @ApiModelProperty(value = "昵称")
     private String nickName;
 
     /**
      * 评价内容
      */
+    @ApiModelProperty(value = "评价内容")
     private String content;
 
     /**
      * 评价时间
      */
+    @ApiModelProperty(value = "评价时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
     /**
      * 评价图片
      */
+    @ApiModelProperty(value = "评价图片")
     private List imgUrls;
 
     /**
      * 是否匿名
      */
+    @ApiModelProperty(value = "是否匿名")
     private Boolean isAnonymous;
+
+    @ApiModelProperty(value = "商品名称")
+    private String name;
+    @ApiModelProperty(value = "型号信息")
+    private String spec;
+    @ApiModelProperty(value = "型号最大价格")
+    private String priceMax;
+    @ApiModelProperty(value = "型号最小价格")
+    private String priceMin;
+
 
     public String getHeadImg() {
         return headImg;
@@ -86,5 +107,37 @@ public class CommentProductDTO {
 
     public void setAnonymous(Boolean anonymous) {
         isAnonymous = anonymous;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
+    }
+
+    public String getPriceMax() {
+        return priceMax;
+    }
+
+    public void setPriceMax(String priceMax) {
+        this.priceMax = priceMax;
+    }
+
+    public String getPriceMin() {
+        return priceMin;
+    }
+
+    public void setPriceMin(String priceMin) {
+        this.priceMin = priceMin;
     }
 }

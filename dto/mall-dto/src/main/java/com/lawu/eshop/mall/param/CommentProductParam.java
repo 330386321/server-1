@@ -28,6 +28,11 @@ public class CommentProductParam {
      */
     @ApiModelProperty(value = "商品ID",required = true)
     private Long productId;
+    /**
+     * 订单ID
+     */
+    @ApiModelProperty(value = "订单ID",required = true)
+    private Long orderId;
 
     /**
      * 是否匿名（0：否1：是）
@@ -79,5 +84,13 @@ public class CommentProductParam {
 
     public void setStatusEnum(CommentStatusEnum statusEnum) {
         this.statusEnum = statusEnum;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }
