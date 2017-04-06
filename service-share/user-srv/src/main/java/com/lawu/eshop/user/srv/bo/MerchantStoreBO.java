@@ -1,13 +1,13 @@
 package com.lawu.eshop.user.srv.bo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 商家门店信息
  * Created by Administrator on 2017/3/24.
  */
 public class MerchantStoreBO {
+
     /**
      *
      * 店铺名称
@@ -153,4 +153,5 @@ public class MerchantStoreBO {
     public void setPrincipalMobile(String principalMobile) {
         this.principalMobile = principalMobile;
     }
+
 }
