@@ -2,6 +2,7 @@ package com.lawu.eshop.user.param;
 
 import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiParam;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class UserParam {
     private UserSexEnum userSexEnum;
 
     @ApiParam(name = "birthday", value = "生日")
+    @DateTimeFormat( pattern =  "yyyy-MM-dd")
     private Date birthday;
 
     public String getNickname() {

@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiParam;
 
@@ -24,6 +25,7 @@ public class UserDTO {
     private String regionPath;
 
     @ApiParam(name = "birthday",value = "生日")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
 
     @ApiParam(name = "headimg",value = "头像")
@@ -31,6 +33,9 @@ public class UserDTO {
 
     @ApiParam(name = "userSex",value = "性别")
     private UserSexEnum userSex;
+
+    @ApiParam(name = "level",value = "等级")
+    private int level;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -86,5 +91,13 @@ public class UserDTO {
 
     public void setHeadimg(String headimg) {
         this.headimg = headimg;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }
