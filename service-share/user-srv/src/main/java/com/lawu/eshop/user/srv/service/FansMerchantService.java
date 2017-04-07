@@ -29,4 +29,13 @@ public interface FansMerchantService {
      */
     List<FansMerchantBO> listFans(Long merchantId, ListFansParam listFansParam);
 
+    /**
+     * 根据会员ID和商家ID查询粉丝记录
+     *
+     * @param memberId
+     * @param merchantId
+     * @return
+     */
+    FansMerchantBO getFansMerchant(Long memberId, Long merchantId);
+
 }

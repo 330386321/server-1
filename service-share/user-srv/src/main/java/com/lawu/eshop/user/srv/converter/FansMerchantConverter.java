@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.converter;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 
 import java.util.ArrayList;
@@ -13,6 +14,22 @@ import java.util.List;
  * @date 2017/4/6.
  */
 public class FansMerchantConverter {
+
+    /**
+     * BO转换
+     *
+     * @param fansMerchantDO
+     * @return
+     */
+    public static FansMerchantBO convertBO(FansMerchantDO fansMerchantDO) {
+        if (fansMerchantDO == null) {
+            return null;
+        }
+
+        FansMerchantBO fansMerchantBO = new FansMerchantBO();
+        fansMerchantBO.setMemberId(fansMerchantDO.getMemberId());
+        return fansMerchantBO;
+    }
 
     /**
      * BO转换

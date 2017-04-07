@@ -22,5 +22,5 @@ public interface NearStoreService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "nearStore/listNearStore")
-    Result listNearStore(@RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude);
+    Result listNearStore(@RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude,@RequestParam("industryPath")String industryPath);
 }

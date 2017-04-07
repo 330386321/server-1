@@ -6,9 +6,11 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.utils.ValidateUtil;
@@ -52,8 +54,6 @@ public class MerchantStoreController extends BaseController {
      *
      * @param merchantId         商家id
      * @param merchantStoreParam 门店信息（）
-     * @param storeType          经营类型
-     * @param certifType         证件类型
      * @return
      */
     @RequestMapping(value = "saveMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
@@ -159,8 +159,6 @@ public class MerchantStoreController extends BaseController {
      * @param merchantStoreId
      * @param merchantId
      * @param merchantStoreParam
-     * @param storeType
-     * @param certifType
      * @return
      */
     @RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
@@ -194,4 +192,20 @@ public class MerchantStoreController extends BaseController {
         }
         return successCreated(storeBO.getIsNoReasonReturn());
     }
+
+    /**
+     * 根据门店ID查询门店详细信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "storeDetail/{id}", method = RequestMethod.GET)
+    public Result<StoreDetailDTO> storeDetail(@PathVariable("id") Long id) {
+        StoreDetailBO storeDetailBO = merchantStoreInfoService.getStoreDetailById(id);
+        if (storeDetailBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(MerchantStoreConverter.convertDTO(storeDetailBO));
+    }
+
 }

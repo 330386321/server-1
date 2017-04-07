@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.service;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 
 /**
  * 门店信息接口
@@ -12,6 +13,7 @@ public interface MerchantStoreInfoService {
 
     /**
      * 根据商户id查询门店信息
+     *
      * @param id
      * @return
      */
@@ -19,6 +21,7 @@ public interface MerchantStoreInfoService {
 
     /**
      * 新增门店信息
+     *
      * @param merchantId
      * @param merchantStoreParam
      */
@@ -26,21 +29,31 @@ public interface MerchantStoreInfoService {
 
     /**
      * 查询门店扩展信息
+     *
      * @param example（营业执照号码/身份证号）
-     * @param type（1：营业执照号码 2:身份证号）
+     * @param type（1：营业执照号码        2:身份证号）
      * @return
      */
-    MerchantStoreProfileBO selectStoreInfoByExample(String example,Integer type);
+    MerchantStoreProfileBO selectStoreInfoByExample(String example, Integer type);
 
     /**
      * 修改门店信息
-     * @param merchantId 门店id
+     *
+     * @param merchantId         门店id
      * @param merchantStoreParam 门店信息
      */
-    void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam,Long merchantStoreId);
+    void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
 
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
 
     void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
-    
+
+    /**
+     * 根据门店ID查询门店详细信息
+     *
+     * @param id
+     * @return
+     */
+    StoreDetailBO getStoreDetailById(Long id);
+
 }

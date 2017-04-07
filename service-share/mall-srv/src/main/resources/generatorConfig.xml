@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="E:/maven/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
         <!-- 再次生成xml时候是覆盖 -->
         <property name="mergeable" value="false"></property>
@@ -72,7 +72,10 @@
         <table tableName="message_template" domainObjectName="MessageTemplateDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="trade" domainObjectName="TradeDO">
+        <table tableName="property" domainObjectName="PropertyDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="search_word" domainObjectName="SearchWordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
         <table tableName="comment_merchant" domainObjectName="CommentMerchantDO">

@@ -4,6 +4,7 @@ import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 
@@ -132,6 +133,28 @@ public class MerchantStoreConverter {
 
             return null;
         }
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param storeDetailBO
+     * @return
+     */
+    public static StoreDetailDTO convertDTO(StoreDetailBO storeDetailBO) {
+        if (storeDetailBO == null) {
+            return null;
+        }
+
+        StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
+        storeDetailDTO.setFavCount(storeDetailBO.getFavCount());
+        storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
+        storeDetailDTO.setLogoPic(storeDetailBO.getLogoPic());
+        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
+        storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
+        storeDetailDTO.setAddress(storeDetailBO.getAddress());
+        storeDetailDTO.setName(storeDetailBO.getName());
+        return storeDetailDTO;
     }
 
 }

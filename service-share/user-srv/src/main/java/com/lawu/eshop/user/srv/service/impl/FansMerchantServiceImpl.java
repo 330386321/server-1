@@ -6,7 +6,10 @@ import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.FansMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class FansMerchantServiceImpl implements FansMerchantService {
 
     @Autowired
     private FansMerchantDOMapperExtend fansMerchantDOMapperExtend;
+
+    @Autowired
+    private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
     public List<FansMerchantBO> listInviteFans(InviteFansParam inviteFansParam) {
@@ -45,6 +51,14 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listFansRealParam.setEndAge(listFansParam.getEndAge());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listFans(listFansRealParam);
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
+    }
+
+    @Override
+    public FansMerchantBO getFansMerchant(Long memberId, Long merchantId) {
+        FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantId);
+        List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
+        return fansMerchantDOS.isEmpty() ? null : FansMerchantConverter.convertBO(fansMerchantDOS.get(0));
     }
 
 }

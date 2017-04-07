@@ -35,9 +35,9 @@ public class NearStoreServiceImpl implements NearStoreService {
     private FavoriteMerchantDOMapper favoriteMerchantDOMapper;
 
     @Override
-    public List<NearStoreBO> listNearStore(Double longitude, Double latitude) {
+    public List<NearStoreBO> listNearStore(Double longitude, Double latitude, String industryPath) {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
-        merchantStoreDOExample.createCriteria().andStatusEqualTo(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        merchantStoreDOExample.createCriteria().andStatusEqualTo(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val).andIndustryPathEqualTo(industryPath);
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
         if (merchantStoreDOS.isEmpty()) {
             return null;

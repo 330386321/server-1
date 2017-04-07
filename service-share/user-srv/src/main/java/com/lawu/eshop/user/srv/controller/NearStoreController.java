@@ -33,8 +33,8 @@ public class NearStoreController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)
-    public Result listNearStore(@RequestParam Double longitude, @RequestParam Double latitude) {
-        List<NearStoreBO> nearStoreBOS = nearStoreService.listNearStore(longitude, latitude);
+    public Result listNearStore(@RequestParam Double longitude, @RequestParam Double latitude,@RequestParam String industryPath) {
+        List<NearStoreBO> nearStoreBOS = nearStoreService.listNearStore(longitude, latitude, industryPath);
         if (nearStoreBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }

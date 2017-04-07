@@ -34,8 +34,9 @@ public class NearStoreController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)
     public Result sendSms(@RequestParam @ApiParam(required = true, value = "经度") Double longitude,
-                          @RequestParam @ApiParam(required = true, value = "纬度") Double latitude) {
-        Result result = nearStoreService.listNearStore(longitude, latitude);
+                          @RequestParam @ApiParam(required = true, value = "纬度") Double latitude,
+                          @RequestParam @ApiParam(value = "主营业务") String industryPath) {
+        Result result = nearStoreService.listNearStore(longitude, latitude,industryPath);
         if (!isSuccess(result)) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }

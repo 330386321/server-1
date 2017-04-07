@@ -8,12 +8,10 @@ import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,9 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Autowired
     private MerchantStoreAuditDOMapper merchantStoreAuditDOMapper;
+
+    @Autowired
+    private FavoriteMerchantDOMapper favoriteMerchantDOMapper;
 
     @Override
     public MerchantStoreInfoBO selectMerchantStore(Long merchantStoreId) {
@@ -293,6 +294,39 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDO.setGmtCreate(new Date());
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
+    }
+
+    @Override
+    public StoreDetailBO getStoreDetailById(Long id) {
+        //查询门店信息
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        if (merchantStoreDO == null) {
+            return null;
+        }
+        //查询门店照
+        MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.STORE_IMAGE_STORE.val);
+        List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+        //查询门店logo
+        merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.STORE_IMAGE_LOGO.val);
+        merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        String logoPic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+        //查询门店收藏数
+        FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
+        favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
+
+        StoreDetailBO storeDetailBO = new StoreDetailBO();
+        storeDetailBO.setName(merchantStoreDO.getName());
+        storeDetailBO.setAddress(merchantStoreDO.getAddress());
+        storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+        storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
+        storeDetailBO.setStorePic(storePic);
+        storeDetailBO.setLogoPic(logoPic);
+        storeDetailBO.setFavCount(favCount);
+        return storeDetailBO;
     }
 
 }

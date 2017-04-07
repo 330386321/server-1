@@ -40,12 +40,36 @@ public class FansMerchantController extends BaseController {
         return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
     }
 
+    /**
+     * 粉丝列表
+     *
+     * @param merchantId
+     * @param listFansParam
+     * @return
+     */
     @RequestMapping(value = "listFans/{merchantId}", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listFans(@PathVariable Long merchantId,@RequestBody ListFansParam listFansParam ) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listFans(merchantId,listFansParam);
+    public Result<List<FansMerchantDTO>> listFans(@PathVariable Long merchantId, @RequestBody ListFansParam listFansParam) {
+        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listFans(merchantId, listFansParam);
         if (fansMerchantBOList.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
     }
+
+    /**
+     * 查询会员是否是商家粉丝
+     *
+     * @param memberId
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "isFansMerchant", method = RequestMethod.GET)
+    public Result<Boolean> isFansMerchant(@RequestParam Long memberId, @RequestParam Long merchantId) {
+        FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(memberId, merchantId);
+        if (fansMerchantBO == null) {
+            return successGet(false);
+        }
+        return successGet(true);
+    }
+
 }
