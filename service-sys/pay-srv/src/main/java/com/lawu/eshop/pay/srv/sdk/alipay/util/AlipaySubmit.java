@@ -42,11 +42,13 @@ public class AlipaySubmit {
 	 */
 	public static String buildRequestMysign(Map<String, String> sPara) {
 		String prestr = AlipayCore.createLinkString(sPara); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
+//		System.out.println("待签名字符串：" + prestr);
 		String mysign = "";
 		if ("RSA".equals(PropertiesUtil.getPropertyValue("sign_type", "alipay.properties"))) {
 			mysign = RSA.sign(prestr, PropertiesUtil.getPropertyValue("private_key", "alipay.properties"),
 					PropertiesUtil.getPropertyValue("input_charset", "alipay.properties"));
 		}
+//		System.out.println("sign：" + mysign);
 		return mysign;
 	}
 

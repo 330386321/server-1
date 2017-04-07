@@ -21,8 +21,11 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AlipayService;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.AppAlipayParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
+import com.lawu.eshop.property.param.PcAlipayParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,13 +53,21 @@ public class AlipayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam AppAlipayDataParam param) {
+	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
+	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam AppAlipayParam param) {
 
-		param.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		aparam.setTotalAmount(param.getTotalAmount());
+		aparam.setOutTradeNo(param.getOutTradeNo());
+		aparam.setSubject(param.getSubject());
+		aparam.setBizIds(param.getBizIds());
+		aparam.setBody(param.getBody());
+		aparam.setBizFlagEnum(param.getBizFlagEnum());
+		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 		
-		return successGet(alipayService.getAppAlipayReqParams(param));
+		return successGet(alipayService.getAppAlipayReqParams(aparam));
 		
 	}
 	
@@ -65,10 +76,16 @@ public class AlipayController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
 	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam PcAlipayDataParam param) throws IOException {
+			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
 
-		param.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		Result result = alipayService.initPcPay(param);
+		PcAlipayDataParam aparam = new PcAlipayDataParam();
+		aparam.setTotalAmount(param.getTotalAmount());
+		aparam.setOutTradeNo(param.getOutTradeNo());
+		aparam.setSubject(param.getSubject());
+		aparam.setBizId(param.getBizId());
+		aparam.setBizFlagEnum(param.getBizFlagEnum());
+		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		Result result = alipayService.initPcPay(aparam);
 		if(ResultCode.SUCCESS == result.getRet()){
 			Object obj = result.getModel();
 			HttpServletResponse response = getResponse();

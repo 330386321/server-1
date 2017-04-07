@@ -15,7 +15,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.AppAlipayParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,11 +47,19 @@ public class AlipayController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam AppAlipayDataParam param) {
+			@ModelAttribute @ApiParam AppAlipayParam param) {
 
-		param.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		aparam.setTotalAmount(param.getTotalAmount());
+		aparam.setOutTradeNo(param.getOutTradeNo());
+		aparam.setSubject(param.getSubject());
+		aparam.setBizIds(param.getBizIds());
+		aparam.setBody(param.getBody());
+		aparam.setBizFlagEnum(param.getBizFlagEnum());
+		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
 		
-		return successGet(alipayService.getAppAlipayReqParams(param));
+		return successGet(alipayService.getAppAlipayReqParams(aparam));
 		
 	}
 	
