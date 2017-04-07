@@ -43,6 +43,7 @@ public class AppAlipayDataParam implements Serializable {
 	 * 商品描述
 	 * 苹果：商家充值余额I、商家充值积分I、缴纳保证金I、用户充值余额I、用户充值积分I、订单付款I、买单I
 	 * 安卓：商家充值余额A、商家充值积分A、缴纳保证金A、用户充值余额A、用户充值积分A、订单付款A、买单A
+	 * 网页：商家充值余额P、商家充值积分P、缴纳保证金P
 	 */
 	private String body;
 	
@@ -55,7 +56,6 @@ public class AppAlipayDataParam implements Serializable {
 	 * 业务标记
 	 */
 	private ThirdPartyBizFlagEnum bizFlagEnum;
-	
 	
 	public String getUserNum() {
 		return userNum;

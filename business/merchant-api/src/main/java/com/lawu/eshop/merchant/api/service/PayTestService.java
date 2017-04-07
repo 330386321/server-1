@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.PcAlipayDataParam;
 
 /**
  * 
@@ -23,5 +24,9 @@ public interface PayTestService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "alipay/getAppAlipayReqParams")
 	Result getAppAlipayReqParams(@RequestBody AppAlipayDataParam param);
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.POST, value = "alipay/initPcPay")
+	Result initPcPay(PcAlipayDataParam param);
 
 }
