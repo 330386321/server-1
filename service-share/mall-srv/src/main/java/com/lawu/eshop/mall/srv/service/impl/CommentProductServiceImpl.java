@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
@@ -11,7 +12,10 @@ import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
-import com.lawu.eshop.mall.srv.domain.*;
+import com.lawu.eshop.mall.srv.domain.CommentImageDO;
+import com.lawu.eshop.mall.srv.domain.CommentImageDOExample;
+import com.lawu.eshop.mall.srv.domain.CommentProductDO;
+import com.lawu.eshop.mall.srv.domain.CommentProductDOExample;
 import com.lawu.eshop.mall.srv.domain.extend.CommentProductDOView;
 import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
@@ -42,8 +46,8 @@ public class CommentProductServiceImpl implements CommentProductService {
     @Autowired
     private CommentProductDOMapperExtend commentProductDOMapperExtend;
 
-   /* @Autowired
-    private TransactionMainService transactionMainService;*/
+    @Autowired
+    private TransactionMainService transactionMainService;
 
     @Override
     @Transactional
@@ -80,7 +84,7 @@ public class CommentProductServiceImpl implements CommentProductService {
             }
         }
         // 更新评价状态 发消息
-        /*transactionMainService.sendNotice(param.getOrderId());*/
+        transactionMainService.sendNotice(param.getOrderId());
         return id;
     }
 

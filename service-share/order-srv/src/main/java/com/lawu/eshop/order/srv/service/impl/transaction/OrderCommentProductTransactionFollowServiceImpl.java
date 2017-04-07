@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2017/4/7.
  */
 //@Service
-@CompensatingTransactionFollow(topic = "transaction-comtent_product", tags = "property")
+@CompensatingTransactionFollow(topic = "transaction-comtent_product", tags = "order")
 public class OrderCommentProductTransactionFollowServiceImpl extends AbstractTransactionFollowService<CommentProductNotification> {
 
     @Autowired

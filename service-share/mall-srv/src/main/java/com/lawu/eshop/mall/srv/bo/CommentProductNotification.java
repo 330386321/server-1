@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.bo;
 
+
 import com.lawu.eshop.compensating.transaction.Notification;
 
 /**
