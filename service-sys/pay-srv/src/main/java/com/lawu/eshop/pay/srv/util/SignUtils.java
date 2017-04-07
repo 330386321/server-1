@@ -102,7 +102,10 @@ public class SignUtils {
         String tailValue = map.get(tailKey);
         authInfo.append(buildKeyValue(tailKey, tailValue, false));
 
+//        System.out.println("待签名字符串：" + authInfo.toString());
+//        System.out.println("私钥：" + rsaKey);
         String oriSign = SignUtils.sign(authInfo.toString(), rsaKey, rsa2);
+//        System.out.println("sign：" + oriSign);
         String encodedSign = "";
 
         try {

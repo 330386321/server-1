@@ -14,7 +14,7 @@ import com.lawu.eshop.property.constants.UserTypeEnum;
  * @date 2017年4月6日 下午5:36:40
  *
  */
-public class AppAlipayParam implements Serializable {
+public class AppAlipayDataParam implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	/**

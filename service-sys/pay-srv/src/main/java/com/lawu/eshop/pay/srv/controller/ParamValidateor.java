@@ -1,7 +1,7 @@
 package com.lawu.eshop.pay.srv.controller;
 
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.AppAlipayParam;
+import com.lawu.eshop.property.param.AppAlipayDataParam;
 
 public class ParamValidateor {
 
@@ -10,7 +10,7 @@ public class ParamValidateor {
 	 * @param param
 	 * @return
 	 */
-	public static int appAlipayReqValidate(AppAlipayParam param){
+	public static int appAlipayReqValidate(AppAlipayDataParam param){
 		if(param.getSubject() == null || "".equals(param.getSubject())){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_SUBJECT_NULL;
 		}

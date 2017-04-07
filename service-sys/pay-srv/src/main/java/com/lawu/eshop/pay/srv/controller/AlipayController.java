@@ -14,7 +14,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.pay.srv.util.SignUtils;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.AppAlipayParam;
+import com.lawu.eshop.property.param.AppAlipayDataParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PropertiesUtil;
 
@@ -29,14 +29,14 @@ public class AlipayController extends BaseController {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.GET)
-	public Result getAppAlipayReqParams(@RequestBody AppAlipayParam param) {
-		
+	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
+	public Result getAppAlipayReqParams(@RequestBody AppAlipayDataParam param) {
+
 		int retCode = ParamValidateor.appAlipayReqValidate(param);
-		if(retCode != ResultCode.SUCCESS){
+		if (retCode != ResultCode.SUCCESS) {
 			return successCreated(retCode);
 		}
-		
+
 		SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
 		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
@@ -51,18 +51,17 @@ public class AlipayController extends BaseController {
 		paramMap.put("timestamp", DateUtil.getDateTime());
 		paramMap.put("version", "1.0");
 		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url", "alipay.properties"));
-		
+
 		String passback_params = "";
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
-			passback_params = ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val + "|" + param.getBizIds() + "|"
-					+ param.getUserNum() + "|" + param.getBody();
-			
+			passback_params = ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val + "|" + param.getUserNum() + "|"
+					+ param.getBody() + "|" + param.getBizIds();
+
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
-			//TODO
-			
-		}else{
-			passback_params = param.getBizFlagEnum().val + "|" + param.getUserNum() + "|"
-					+ param.getBody();
+			// TODO
+
+		} else {
+			passback_params = param.getBizFlagEnum().val + "|" + param.getUserNum() + "|" + param.getBody();
 		}
 
 		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
@@ -70,12 +69,12 @@ public class AlipayController extends BaseController {
 				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
 
 		String paramStr = SignUtils.buildMapToString(paramMap);
-		String sign = SignUtils.getSign(paramMap, PropertiesUtil.getPropertyValue("private_key", "alipay.properties"), false);
-		
+		String sign = SignUtils.getSign(paramMap, PropertiesUtil.getPropertyValue("private_key", "alipay.properties"),
+				false);
+
 		return successCreated(paramStr + "&" + sign);
 	}
 	
 	
-	
-	
+
 }
