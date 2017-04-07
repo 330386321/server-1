@@ -6,6 +6,8 @@ package com.lawu.eshop.user.srv.bo;
  */
 public class StoreDetailBO {
 
+    private Long merchantId;
+
     private String name;
 
     private String regionPath;
@@ -74,5 +76,13 @@ public class StoreDetailBO {
 
     public void setFavCount(Integer favCount) {
         this.favCount = favCount;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
     }
 }

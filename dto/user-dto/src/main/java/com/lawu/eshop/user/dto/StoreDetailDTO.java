@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class StoreDetailDTO {
 
+    @ApiModelProperty(value = "商家ID")
+    private Long merchantId;
+
     @ApiModelProperty(value = "名称")
     private String name;
 
@@ -149,5 +152,13 @@ public class StoreDetailDTO {
 
     public void setConsumeCount(Integer consumeCount) {
         this.consumeCount = consumeCount;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
     }
 }

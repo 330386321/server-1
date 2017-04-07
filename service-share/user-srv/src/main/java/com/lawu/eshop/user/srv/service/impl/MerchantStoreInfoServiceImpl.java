@@ -319,6 +319,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
 
         StoreDetailBO storeDetailBO = new StoreDetailBO();
+        storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
         storeDetailBO.setName(merchantStoreDO.getName());
         storeDetailBO.setAddress(merchantStoreDO.getAddress());
         storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());

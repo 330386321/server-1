@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.dto.NearStoreDTO;
 import com.lawu.eshop.user.srv.bo.NearStoreBO;
 import com.lawu.eshop.user.srv.converter.NearStoreConverter;
 import com.lawu.eshop.user.srv.service.NearStoreService;
@@ -33,7 +34,7 @@ public class NearStoreController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)
-    public Result listNearStore(@RequestParam Double longitude, @RequestParam Double latitude,@RequestParam String industryPath) {
+    public Result<List<NearStoreDTO>> listNearStore(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam String industryPath) {
         List<NearStoreBO> nearStoreBOS = nearStoreService.listNearStore(longitude, latitude, industryPath);
         if (nearStoreBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);

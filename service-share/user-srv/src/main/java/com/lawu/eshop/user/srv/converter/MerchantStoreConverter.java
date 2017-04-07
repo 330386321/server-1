@@ -147,6 +147,7 @@ public class MerchantStoreConverter {
         }
 
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
+        storeDetailDTO.setMerchantId(storeDetailBO.getMerchantId());
         storeDetailDTO.setFavCount(storeDetailBO.getFavCount());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
         storeDetailDTO.setLogoPic(storeDetailBO.getLogoPic());
