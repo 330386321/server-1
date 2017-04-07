@@ -30,6 +30,15 @@ public interface PropertyInfoService {
     Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
 
     /**
+     * 查询是否设置支付密码
+     *
+     * @param userNum
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "propertyInfo/isSetPayPwd/{userNum}")
+    Result isSetPayPwd(@PathVariable("userNum") String userNum);
+
+    /**
      * 根据用户编号获取资产余额
      *
      * @param userNum 用户编号

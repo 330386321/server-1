@@ -42,9 +42,9 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 
 
 	@Override
-	public PropertyInfoBO getPropertyInfoByUserNo(String userNo) {
+	public PropertyInfoBO getPropertyInfoByUserNum(String userNum) {
 		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNo);
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 		return propertyInfoDOS.isEmpty() ? null : PropertyInfoConverter.convertBO(propertyInfoDOS.get(0));
 	}

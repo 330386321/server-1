@@ -20,14 +20,23 @@ public interface PropertyInfoService {
     /**
      * 修改支付密码
      *
-     * @param userNo      会员编号
+     * @param userNum     会员编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
      * @param type        业务类型
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
-    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNum}")
+    Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+
+    /**
+     * 查询是否设置支付密码
+     *
+     * @param userNum
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "propertyInfo/isSetPayPwd/{userNum}")
+    Result isSetPayPwd(@PathVariable("userNum") String userNum);
 
     /**
      * 根据用户编号获取资产余额
@@ -37,7 +46,7 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/propertyBalance/{userNum}", method = RequestMethod.GET)
     Result<PropertyBalanceDTO> getPropertyBalance(@PathVariable("userNum") String userNum);
-    
+
     /**
      * 根据用户编号获取用户积分
      *

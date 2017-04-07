@@ -122,8 +122,17 @@ public class MemberController extends BaseController {
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        String userNo = UserUtil.getCurrentUserNum(getRequest());
-        return propertyInfoService.updatePayPwd(userNo, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return propertyInfoService.updatePayPwd(userNum, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+    }
+
+    @ApiOperation(value = "查询是否设置支付密码", notes = "查询是否设置支付密码(true--已设置，false--未设置)。[1002] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "isSetPayPwd", method = RequestMethod.GET)
+    public Result isSetPayPwd(@RequestHeader (UserConstant.REQ_HEADER_TOKEN) String token) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return propertyInfoService.isSetPayPwd(userNum);
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")

@@ -17,23 +17,23 @@ public interface PropertyInfoService {
 	/**
 	 * 根据用户编号查询用户信息
 	 *
-	 * @param userNo
+	 * @param userNum
 	 *            用户编号
 	 * @return
 	 */
-	PropertyInfoBO getPropertyInfoByUserNo(String userNo);
+	PropertyInfoBO getPropertyInfoByUserNum(String userNum);
 
 	/**
 	 * 根据用户编号修改支付密码
 	 *
-	 * @param userNo
+	 * @param userNum
 	 *            用户编号
 	 * @param originalPwd
 	 *            原始密码
 	 * @param newPwd
 	 *            新密码
 	 */
-	void updatePayPwd(String userNo, String originalPwd, String newPwd);
+	void updatePayPwd(String userNum, String originalPwd, String newPwd);
 
 	/**
 	 * 根据用户编号查询余额

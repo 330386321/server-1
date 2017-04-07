@@ -89,7 +89,7 @@ public interface MemberService {
     /**
      * 修改头像
      *
-     * @param mermberId
+     * @param memberId
      * @param headimg
      * @return
      */
