@@ -1,11 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -23,17 +18,12 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.dto.MemberShoppingCartDTO;
-import com.lawu.eshop.mall.dto.ShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
-import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
 import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementForeignParam;
-import com.lawu.eshop.member.api.service.MerchantStoreService;
-import com.lawu.eshop.member.api.service.ProductModelService;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
-import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,9 +72,9 @@ public class ShoppingCartController extends BaseController {
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    Result<List<MemberShoppingCartDTO>> findListByMemberId(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token*/) {
+    Result<List<MemberShoppingCartDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successGet(shoppingcartExtendService.findListByMemberId(memberId));
@@ -145,9 +135,9 @@ public class ShoppingCartController extends BaseController {
      */
     @ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表生成订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
 	@RequestMapping(value = "settlement", method = RequestMethod.POST)
-	public Result<Integer> settlement(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @RequestBody @ApiParam(name = "param", required = true, value = "购物车结算参数") List<ShoppingOrderSettlementForeignParam> params) {
+	public Result<Integer> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "购物车结算参数") List<ShoppingOrderSettlementForeignParam> params) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successCreated(shoppingcartExtendService.settlement(memberId, params));

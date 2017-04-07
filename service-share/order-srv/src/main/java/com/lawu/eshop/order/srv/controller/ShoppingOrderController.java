@@ -1,17 +1,27 @@
 package com.lawu.eshop.order.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 购物订单
@@ -61,4 +71,23 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(commentOrderDTO);
 	}
 
+	
+	/**
+	 * 根据查询参数分页查询
+	 * 
+	 * @param memberId 会员id
+	 * @param params 查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "page/{memberId}", method = RequestMethod.POST)
+	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignParam param) {
+		Page<ShoppingOrderExtendQueryBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMemberId(memberId, param);
+		
+		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderExtendQueryDTO>();
+		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
+		shoppingOrderExtendQueryDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
+		shoppingOrderExtendQueryDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendQueryDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
+		
+		return successCreated(shoppingOrderExtendQueryDTOPage);
+	}
 }

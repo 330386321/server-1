@@ -15,7 +15,7 @@ import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
  * @author Sunny
  * @date 2017/04/06
  */
-//@Service("shoppingCartSettlementTransactionMainServiceImpl")
+@Service("shoppingCartSettlementTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.SETTLEMENT, topic = "transaction-reg", tags = "product")
 public class ShoppingCartSettlementTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingCartSettlementNotification> {
 	
@@ -26,7 +26,7 @@ public class ShoppingCartSettlementTransactionMainServiceImpl extends AbstractTr
     public ShoppingCartSettlementNotification selectNotification(Long shoppingOrderId) {
         ShoppingCartSettlementNotification regNotification = new ShoppingCartSettlementNotification();
         ShoppingCartDO shoppingCartDO = shoppingCartDOMapper.selectByPrimaryKey(shoppingOrderId);
-        regNotification.setId(shoppingOrderId);
+        regNotification.setProductModelId(shoppingCartDO.getProductModelId());
         regNotification.setQuantity(shoppingCartDO.getQuantity());
         return regNotification;
     }

@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.dto;
+package com.lawu.eshop.mall.dto.foreign;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

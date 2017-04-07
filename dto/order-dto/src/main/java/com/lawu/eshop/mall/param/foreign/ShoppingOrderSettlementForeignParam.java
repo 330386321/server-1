@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.param;
+package com.lawu.eshop.mall.param.foreign;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -3,9 +3,9 @@ package com.lawu.eshop.member.api.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.MemberShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
 
 /**
  * 购物车服务接口

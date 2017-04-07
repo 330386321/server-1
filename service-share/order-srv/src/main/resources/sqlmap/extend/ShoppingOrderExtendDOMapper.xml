@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper">
+	
+	<resultMap id="ShoppingOrderItemAssociationResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO">
+		<id column="item_id" jdbcType="BIGINT" property="id" />
+		<result column="shopping_order_id" jdbcType="BIGINT" property="shoppingOrderId" />
+		<result column="product_id" jdbcType="BIGINT" property="productId" />
+		<result column="product_name" jdbcType="VARCHAR" property="productName" />
+		<result column="product_model_id" jdbcType="BIGINT" property="productModelId" />
+		<result column="product_model_name" jdbcType="VARCHAR" property="productModelName" />
+		<result column="product_feature_image" jdbcType="VARCHAR" property="productFeatureImage" />
+		<result column="regular_price" jdbcType="DECIMAL" property="regularPrice" />
+		<result column="sales_price" jdbcType="DECIMAL" property="salesPrice" />
+		<result column="quantity" jdbcType="INTEGER" property="quantity" />
+		<result column="item_order_status" jdbcType="TINYINT" property="orderStatus" />
+		<result column="gmt_return" jdbcType="TIMESTAMP" property="gmtReturn" />
+		<result column="item_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+		<result column="item_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+	</resultMap>
+	
+	<resultMap id="ShoppingOrderAssociationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="member_id" jdbcType="BIGINT" property="memberId" />
+		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+		<result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
+		<result column="consignee_address" jdbcType="VARCHAR" property="consigneeAddress" />
+		<result column="consignee_mobile" jdbcType="VARCHAR" property="consigneeMobile" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
+		<result column="commodity_total_price" jdbcType="DECIMAL" property="commodityTotalPrice" />
+		<result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
+		<result column="order_status" jdbcType="TINYINT" property="orderStatus" />
+		<result column="status" jdbcType="TINYINT" property="status" />
+		<result column="is_evaluation" jdbcType="BIT" property="isEvaluation" />
+		<result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+		<result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
+		<result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
+		<result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
+		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
+		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
+		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
+		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		<!-- 级联查询 -->
+		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemAssociationResultMap"/>  
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	
+	<sql id="ShoppingOrder_Association_Base_Column_List">
+		so.id, so.member_id, so.merchant_id, so.merchant_name,
+		so.consignee_name,
+		so.consignee_address,
+		so.consignee_mobile,
+		so.message, so.freight_price, so.commodity_total_price,
+		so.order_total_price,
+		so.order_status,
+		so.status,
+		so.is_evaluation,
+		so.order_num, so.waybill_num, so.express_company_id,
+		so.express_company_name,
+		so.gmt_payment, so.gmt_transport,
+		so.gmt_transaction, so.gmt_create, so.gmt_modified
+	</sql>
+
+	<sql id="ShoppingOrderItem_Association_Base_Column_List">
+		soi.id as item_id, soi.shopping_order_id, soi.product_id,
+		soi.product_name,
+		soi.product_model_id,
+		soi.product_model_name,
+		soi.product_feature_image, soi.regular_price, soi.sales_price,
+		soi.quantity, soi.order_status as item_order_status,
+		soi.gmt_return,
+		soi.gmt_create as item_gmt_create, soi.gmt_modified as item_gmt_modified
+	</sql>
+	
+	<select id="selectShoppingOrderIdByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
+		select
+		<if test="distinct">
+			distinct so.id,so.gmt_create
+		</if>
+		from shopping_order so
+		left join shopping_order_item soi on so.id = soi.shopping_order_id
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+		
+	<select id="selectShoppingOrderAssociationByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderAssociationResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="ShoppingOrder_Association_Base_Column_List" />
+		,
+		<include refid="ShoppingOrderItem_Association_Base_Column_List" />
+		from shopping_order so
+		left join shopping_order_item soi on so.id = soi.shopping_order_id
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
+		select count(<if test="distinct">distinct</if> so.id)
+		from shopping_order so
+		left join shopping_order_item soi on so.id = soi.shopping_order_id
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+</mapper>

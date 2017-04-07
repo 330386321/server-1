@@ -1,13 +1,14 @@
 package com.lawu.eshop.order.srv.converter;
 
+import java.util.Date;
+
+import org.springframework.beans.BeanUtils;
+
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.utils.RandomUtil;
-import org.springframework.beans.BeanUtils;
-
-import java.util.Date;
 
 /**
  *
@@ -63,4 +64,5 @@ public class ShoppingOrderConverter {
 		commentOrderDTO.setEvaluation(commentOrderBO.getEvaluation());
 		return commentOrderDTO;
 	}
+	
 }

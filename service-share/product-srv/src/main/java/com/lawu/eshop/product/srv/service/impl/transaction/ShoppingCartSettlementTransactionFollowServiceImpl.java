@@ -1,7 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl.transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
@@ -24,8 +23,8 @@ public class ShoppingCartSettlementTransactionFollowServiceImpl extends Abstract
     @Override
     public void execute(ShoppingCartSettlementNotification notification) {
     	ProductModelDO productModelDO = new ProductModelDO();
-		productModelDO.setId(notification.getId());
-		Integer inventory = productModelDOMapper.selectByPrimaryKey(notification.getId()).getInventory() - notification.getQuantity();
+		productModelDO.setId(notification.getProductModelId());
+		Integer inventory = productModelDOMapper.selectByPrimaryKey(notification.getProductModelId()).getInventory() - notification.getQuantity();
 		productModelDO.setInventory(inventory);
 		productModelDOMapper.updateByPrimaryKey(productModelDO);
     }

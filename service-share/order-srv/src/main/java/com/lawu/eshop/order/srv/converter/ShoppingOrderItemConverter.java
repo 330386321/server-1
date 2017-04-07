@@ -1,13 +1,16 @@
 package com.lawu.eshop.order.srv.converter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
-import com.lawu.eshop.utils.RandomUtil;
 
 /**
  *
@@ -21,6 +24,7 @@ public class ShoppingOrderItemConverter {
 	/**
 	 * ShoppingOrderItemDO转换
 	 * 
+	 * @param shoppingOrderId
 	 * @param param
 	 * @return
 	 */
@@ -30,8 +34,7 @@ public class ShoppingOrderItemConverter {
 		}
 
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		BeanUtils.copyProperties(param, shoppingOrderItemDO,
-				new String[] { "shoppingOrderId", "orderStatus", "gmtCreate", "gmtModified" });
+		BeanUtils.copyProperties(param, shoppingOrderItemDO, new String[] { "shoppingOrderId", "orderStatus", "gmtCreate", "gmtModified" });
 		// 设置订单id
 		shoppingOrderItemDO.setShoppingOrderId(shoppingOrderId);
 		// 设置为未付款状态
@@ -41,6 +44,81 @@ public class ShoppingOrderItemConverter {
 		shoppingOrderItemDO.setGmtModified(new Date());
 
 		return shoppingOrderItemDO;
+	}
+	
+	/**
+	 * ShoppingOrderItemBO转换
+	 * 
+	 * @param shoppingOrderItemDO
+	 * @return
+	 */
+	public static ShoppingOrderItemBO convert(ShoppingOrderItemDO shoppingOrderItemDO) {
+		if (shoppingOrderItemDO == null) {
+			return null;
+		}
+
+		ShoppingOrderItemBO shoppingOrderItemBO = new ShoppingOrderItemBO();
+		BeanUtils.copyProperties(shoppingOrderItemDO, shoppingOrderItemBO, "orderStatus");
+		
+		// 转换为枚举类型
+		shoppingOrderItemBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemDO.getOrderStatus()));
+
+		return shoppingOrderItemBO;
+	}
+	
+	/**
+	 * ShoppingOrderItemBO List转换
+	 * 
+	 * @param shoppingOrderItemDO
+	 * @return
+	 */
+	public static List<ShoppingOrderItemBO> convert(List<ShoppingOrderItemDO> shoppingOrderItemDOList) {
+		if (shoppingOrderItemDOList == null || shoppingOrderItemDOList.isEmpty()) {
+			return null;
+		}
+		
+		List<ShoppingOrderItemBO> shoppingOrderItemBOList = new ArrayList<ShoppingOrderItemBO>();
+		for (ShoppingOrderItemDO shoppingOrderItemDO : shoppingOrderItemDOList) {
+			shoppingOrderItemBOList.add(convert(shoppingOrderItemDO));
+		}
+		
+		return shoppingOrderItemBOList;
+	}
+	
+	/**
+	 * ShoppingOrderItemBO转换
+	 * 
+	 * @param shoppingOrderItemDO
+	 * @return
+	 */
+	public static ShoppingOrderItemDTO convert(ShoppingOrderItemBO shoppingOrderItemBO) {
+		if (shoppingOrderItemBO == null) {
+			return null;
+		}
+
+		ShoppingOrderItemDTO shoppingOrderItemDTO = new ShoppingOrderItemDTO();
+		BeanUtils.copyProperties(shoppingOrderItemBO, shoppingOrderItemDTO);
+
+		return shoppingOrderItemDTO;
+	}
+	
+	/**
+	 * ShoppingOrderItemBO List转换
+	 * 
+	 * @param shoppingOrderItemDO
+	 * @return
+	 */
+	public static List<ShoppingOrderItemDTO> convertShoppingOrderItemDTOList(List<ShoppingOrderItemBO> shoppingOrderItemBOList) {
+		if (shoppingOrderItemBOList == null || shoppingOrderItemBOList.isEmpty()) {
+			return null;
+		}
+		
+		List<ShoppingOrderItemDTO> shoppingOrderItemDTOList = new ArrayList<ShoppingOrderItemDTO>();
+		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderItemBOList) {
+			shoppingOrderItemDTOList.add(convert(shoppingOrderItemBO));
+		}
+		
+		return shoppingOrderItemDTOList;
 	}
 
 }

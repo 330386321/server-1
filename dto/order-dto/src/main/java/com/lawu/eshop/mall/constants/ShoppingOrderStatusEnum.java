@@ -10,7 +10,7 @@ public enum ShoppingOrderStatusEnum {
 	PENDING_PAYMENT((byte) 0x00),
 
 	/**
-	 * |1-待发货
+	 * 1-待发货
 	 */
 	BE_SHIPPED((byte) 0x01),
 
@@ -56,5 +56,14 @@ public enum ShoppingOrderStatusEnum {
 
 	ShoppingOrderStatusEnum(Byte value) {
 		this.value = value;
+	}
+	
+	public static ShoppingOrderStatusEnum getEnum(Byte value){
+		for (ShoppingOrderStatusEnum item : ShoppingOrderStatusEnum.values()) {
+			if (item.getValue().equals(value)) {
+				return item;
+			}
+		}
+		return null;
 	}
 }

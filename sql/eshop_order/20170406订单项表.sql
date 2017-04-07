@@ -1,6 +1,6 @@
 /*20170406 建表*/
 CREATE TABLE `shopping_order_item` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `shopping_order_id` bigint(20) unsigned NOT NULL COMMENT '订单id',
   `product_id` bigint(11) unsigned NOT NULL COMMENT '商品id',
   `product_name` varchar(100) NOT NULL COMMENT '商品名称',

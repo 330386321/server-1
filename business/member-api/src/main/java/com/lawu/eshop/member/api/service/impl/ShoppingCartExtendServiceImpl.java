@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.MemberShoppingCartDTO;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;

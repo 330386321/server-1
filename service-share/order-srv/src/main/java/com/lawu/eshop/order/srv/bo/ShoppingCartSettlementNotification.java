@@ -10,21 +10,21 @@ import com.lawu.eshop.compensating.transaction.Notification;
 public class ShoppingCartSettlementNotification extends Notification {
 
 	/**
-	 * 购物车id
+	 * 产品型号id
 	 */
-	private Long id;
+	private Long productModelId;
 
 	/**
 	 * 数量
 	 */
 	private Integer quantity;
-
-	public Long getId() {
-		return id;
+	
+	public Long getProductModelId() {
+		return productModelId;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setProductModelId(Long productModelId) {
+		this.productModelId = productModelId;
 	}
 
 	public Integer getQuantity() {
