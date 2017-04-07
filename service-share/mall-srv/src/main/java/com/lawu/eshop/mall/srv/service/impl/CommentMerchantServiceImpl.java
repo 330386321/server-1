@@ -164,4 +164,22 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         pages.setRecords(commentMerchantBOS);
         return pages;
     }
+
+    @Override
+    public CommentMerchantBO findMerchantComment(Long commentId) {
+        CommentMerchantDO commentMerchantDO = commentMerchantDOMapper.selectByPrimaryKey(commentId);
+        CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentMerchantDO);
+        return commentMerchantBO;
+    }
+
+    @Override
+    @Transactional
+    public int replyMerchantComment(Long commentId, String replyContent) {
+        CommentMerchantDO commentMerchantDO = new CommentMerchantDO();
+        commentMerchantDO.setId(commentId);
+        commentMerchantDO.setReplyContent(replyContent);
+        commentMerchantDO.setGmtReply(new Date());
+        int row = commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
+        return row;
+    }
 }

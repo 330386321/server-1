@@ -41,13 +41,4 @@ public interface CommentProductService {
     @RequestMapping(method = RequestMethod.POST,value = "commentProduct/getCommentProductsWithImgs")
     public Result<Page<CommentDTO>> getCommentProductsWithImgs(@ModelAttribute CommentProductListParam listParam);
 
-    /**
-     * 商家回复商品评论
-     * @param commentId
-     * @param replyContent
-     * @return
-     */
-    @RequestMapping(value = "commentProduct/replyProductComment/{commentId}", method = RequestMethod.PUT)
-    public Result replyProductComment(@PathVariable("commentId") Long commentId, @RequestParam("replyContent") String replyContent);
-
 }

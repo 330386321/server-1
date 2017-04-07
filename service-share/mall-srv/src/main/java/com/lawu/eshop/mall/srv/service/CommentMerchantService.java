@@ -19,7 +19,32 @@ public interface CommentMerchantService {
      */
     Integer saveCommentMerchantInfo(Long memberId, CommentMerchantParam param, String commentPic);
 
+    /**
+     * 获取全部商家评价列表
+     * @param listParam
+     * @return
+     */
     Page<CommentMerchantBO> getCommentMerchantAllList(CommentMerchantListParam listParam);
 
+    /**
+     * 获取有图评价商家列表
+     * @param listParam
+     * @return
+     */
     Page<CommentMerchantBO> getCommentMerchantListWithImgs(CommentMerchantListParam listParam);
+
+    /**
+     * 根据评价ID找到对应的评价商家信息
+     * @param commentId
+     * @return
+     */
+    CommentMerchantBO findMerchantComment(Long commentId);
+
+    /**
+     * 回复商家评价
+     * @param commentId
+     * @param replyContent
+     * @return
+     */
+    int replyMerchantComment(Long commentId, String replyContent);
 }

@@ -85,4 +85,18 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
+    @RequestMapping(value = "replyMerchantComment/{commentId}", method = RequestMethod.PUT)
+    public Result replyMerchantComment(@PathVariable("commentId") Long commentId, @RequestParam("replyContent") String replyContent) {
+        //查询评论信息
+        CommentMerchantBO commentMerchantBO = commentMerchantService.findMerchantComment(commentId);
+        if (commentMerchantBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        int rows = commentMerchantService.replyMerchantComment(commentId, replyContent);
+        if (rows == 0 || rows < 0) {
+            return successCreated(ResultCode.SAVE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
+    }
+
 }

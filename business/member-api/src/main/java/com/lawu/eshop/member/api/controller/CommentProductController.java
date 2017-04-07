@@ -161,15 +161,6 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
-    @ApiOperation(value = "商家回复商品评价", notes = "商家回复商品评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "replyProductComment/{commentId}",method = RequestMethod.PUT)
-    public Result replyProductComment(@PathVariable("commentId") @ApiParam(required = true, value = "评价ID") Long commentId,
-                                      @RequestParam("replyContent") @ApiParam(required = true, value = "回复内容") String replyContent,
-                                      @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
 
-        return  commentProductService.replyProductComment(commentId,replyContent);
-    }
 
 }

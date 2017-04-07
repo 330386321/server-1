@@ -162,6 +162,7 @@ public class CommentProductServiceImpl implements CommentProductService {
     }
 
     @Override
+    @Transactional
     public Integer replyProductComment(Long commentId, String replyContent) {
         CommentProductDO commentProductDO = new CommentProductDO();
         commentProductDO.setId(commentId);
