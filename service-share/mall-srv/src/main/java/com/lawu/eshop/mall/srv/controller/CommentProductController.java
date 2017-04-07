@@ -6,6 +6,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
+import com.lawu.eshop.mall.dto.CommentOperatorDTO;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
@@ -122,13 +124,13 @@ public class CommentProductController extends BaseController {
      * @param commentId
      * @return
      */
-    @RequestMapping(value = "delCommentProductInfo/{commentId}")
+    @RequestMapping(value = "delCommentProductInfo/{commentId}",method = RequestMethod.DELETE)
     public Result delCommentProductInfo(@PathVariable("commentId") Long commentId){
         if (commentId == null) {
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
         }
         commentProductService.delCommentProductInfo(commentId);
-        return  successDelete();
+        return  successDelete(ResultCode.SUCCESS);
     }
 
     /**
@@ -147,6 +149,23 @@ public class CommentProductController extends BaseController {
         commentGradeDTO.setGoodGrad(commentGradeBO.getGoodGrad());
         commentGradeDTO.setAvgGrade(commentGradeBO.getAvgGrade());
         return successGet(commentGradeDTO);
+    }
+
+
+    @RequestMapping(value = "getCommentProductListOperator",method = RequestMethod.POST)
+    public Result<Page<CommentOperatorDTO>> getCommentProductListOperator(@RequestBody CommentListParam listParam){
+
+        Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProductListOperator(listParam);
+        if(commentProductBOPage.getRecords().isEmpty()){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
+        List<CommentOperatorDTO> commentOperatorDTOS = CommentProductConverter.converterOperatorDTOS(commentProductBOS);
+        Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
+        pages.setRecords(commentOperatorDTOS);
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(commentProductBOPage.getTotalCount());
+        return successGet(pages);
     }
 
 }

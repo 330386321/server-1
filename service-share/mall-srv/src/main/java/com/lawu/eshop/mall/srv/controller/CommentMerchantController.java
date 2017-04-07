@@ -6,6 +6,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
+import com.lawu.eshop.mall.dto.CommentOperatorDTO;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
@@ -61,7 +63,7 @@ public class CommentMerchantController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantAllList(listParam);
-        if(commentMerchantBOPage.getRecords().isEmpty()){
+        if (commentMerchantBOPage.getRecords().isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
@@ -80,7 +82,7 @@ public class CommentMerchantController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListWithImgs(listParam);
-        if(commentMerchantBOPage.getRecords().isEmpty()){
+        if (commentMerchantBOPage.getRecords().isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
@@ -107,17 +109,42 @@ public class CommentMerchantController extends BaseController {
         return successCreated(ResultCode.SUCCESS);
     }
 
-    @RequestMapping(value = "getCommentAvgGrade/{merchantId}",method = RequestMethod.GET)
+    @RequestMapping(value = "getCommentAvgGrade/{merchantId}", method = RequestMethod.GET)
     public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("merchantId") Long merchantId) {
 
         CommentGradeBO commentGradeBO = commentMerchantService.getCommentAvgGrade(merchantId);
-        if(commentGradeBO == null){
-           return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        if (commentGradeBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         CommentGradeDTO commentGradeDTO = new CommentGradeDTO();
         commentGradeDTO.setGoodGrad(commentGradeBO.getGoodGrad());
         commentGradeDTO.setAvgGrade(commentGradeBO.getAvgGrade());
         return successGet(commentGradeDTO);
+    }
+
+    @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.POST)
+    public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@RequestBody CommentListParam listParam) {
+
+        Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListOperator(listParam);
+        if (commentMerchantBOPage.getRecords().isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
+        List<CommentOperatorDTO> commentOperatorDTOS = CommentMerchantConverter.converterOperatorDTOS(commentMerchantBOS);
+        Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
+        pages.setRecords(commentOperatorDTOS);
+        pages.setCurrentPage(listParam.getCurrentPage());
+        pages.setTotalCount(commentMerchantBOPage.getTotalCount());
+        return successGet(pages);
+    }
+
+    @RequestMapping(value = "delCommentMerchantInfo/{commentId}",method = RequestMethod.DELETE)
+    public Result delCommentMerchantInfo(@PathVariable("commentId") Long commentId){
+        if (commentId == null) {
+            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        commentMerchantService.delCommentMerchantInfo(commentId);
+        return  successDelete(ResultCode.SUCCESS);
     }
 
 }

@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantPageParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
@@ -184,10 +185,10 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     @Override
     public CommentGradeBO getCommentAvgGrade(Long merchantId) {
         CommentMerchantDOExample commentMerchantDOExample = new CommentMerchantDOExample();
-        commentMerchantDOExample.createCriteria().andMerchantIdEqualTo (merchantId);
+        commentMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
         List<CommentMerchantDO> commentMerchantDOS = commentMerchantDOMapper.selectByExample(commentMerchantDOExample);
-        if(commentMerchantDOS.isEmpty()){
-            return  null;
+        if (commentMerchantDOS.isEmpty()) {
+            return null;
         }
         Double avgGrade = commentMerchantDOMapperExtend.selectAvgGrade(merchantId);
         avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
@@ -195,11 +196,43 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         CommentMerchantDOExample example = new CommentMerchantDOExample();
         example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
                 andMerchantIdEqualTo(merchantId);
-        Integer totalCount =commentMerchantDOMapper.countByExample(example);
-        double goodGrade = new BigDecimal((double) goodCount/totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        Integer totalCount = commentMerchantDOMapper.countByExample(example);
+        double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
         CommentGradeBO commentGradeBO = new CommentGradeBO();
         commentGradeBO.setAvgGrade(avgGrade);
         commentGradeBO.setGoodGrad(goodGrade);
         return commentGradeBO;
+    }
+
+    @Override
+    public Page<CommentMerchantBO> getCommentMerchantListOperator(CommentListParam listParam) {
+        CommentMerchantDOExample example = new CommentMerchantDOExample();
+        example.setOrderByClause("id desc");
+        RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
+        Page<CommentMerchantBO> page = new Page<>();
+        page.setTotalCount(commentMerchantDOMapper.countByExample(example));
+        page.setCurrentPage(listParam.getCurrentPage());
+
+        //查询评价列表
+        List<CommentMerchantDO> commentMerchantDOS = commentMerchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        if (commentMerchantDOS.isEmpty()) {
+            return null;
+        }
+        List<CommentMerchantBO> commentMerchantBOS = new ArrayList<>();
+        for (CommentMerchantDO commentProductDO : commentMerchantDOS) {
+            CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentProductDO);
+            commentMerchantBOS.add(commentMerchantBO);
+        }
+        page.setRecords(commentMerchantBOS);
+        return page;
+    }
+
+    @Override
+    @Transactional
+    public void delCommentMerchantInfo(Long commentId) {
+        CommentMerchantDO commentMerchantDO = new CommentMerchantDO();
+        commentMerchantDO.setId(commentId);
+        commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+        commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
     }
 }

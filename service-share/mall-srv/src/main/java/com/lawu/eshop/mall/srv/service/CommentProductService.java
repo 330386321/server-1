@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
@@ -41,4 +42,6 @@ public interface CommentProductService {
     void delCommentProductInfo(Long commentId);
 
     CommentGradeBO getCommentAvgGrade(Long productId);
+
+    Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam);
 }

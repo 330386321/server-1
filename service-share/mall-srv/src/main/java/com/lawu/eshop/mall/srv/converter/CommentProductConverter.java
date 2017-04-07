@@ -1,6 +1,7 @@
 package com.lawu.eshop.mall.srv.converter;
 
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.domain.CommentProductDO;
 import com.lawu.eshop.mall.srv.domain.extend.CommentProductDOView;
@@ -61,6 +62,21 @@ public class CommentProductConverter {
         commentProductBO.setReplyContent(commentProductDOView.getReplyContent());
         commentProductBO.setMemberId(commentProductDOView.getMemberId());
         return commentProductBO;
+    }
+
+    public static List<CommentOperatorDTO> converterOperatorDTOS(List<CommentProductBO> commentProductBOS) {
+        if(commentProductBOS.isEmpty()){
+            return null;
+        }
+        List<CommentOperatorDTO> commentOperatorDTOS = new ArrayList<>();
+        for (CommentProductBO commentProductBO : commentProductBOS){
+            CommentOperatorDTO commentOperatorDTO = new CommentOperatorDTO();
+            commentOperatorDTO.setGmtCreate(commentProductBO.getGmtCreate());
+            commentOperatorDTO.setContent(commentProductBO.getContent());
+            commentOperatorDTO.setId(commentProductBO.getId());
+            commentOperatorDTOS.add(commentOperatorDTO);
+        }
+        return commentOperatorDTOS;
     }
 
 

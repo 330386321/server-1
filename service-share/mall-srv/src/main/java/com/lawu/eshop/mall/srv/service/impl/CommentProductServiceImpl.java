@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductPageParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
@@ -210,5 +211,28 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentGradeBO.setAvgGrade(avgGrade);
         commentGradeBO.setGoodGrad(goodGrade);
         return commentGradeBO;
+    }
+
+    @Override
+    public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
+        CommentProductDOExample example = new CommentProductDOExample();
+        example.setOrderByClause("id desc");
+        RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
+        Page<CommentProductBO> page = new Page<>();
+        page.setTotalCount(commentProductDOMapper.countByExample(example));
+        page.setCurrentPage(listParam.getCurrentPage());
+
+        //查询评价列表
+        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        if(commentProductDOS.isEmpty()){
+            return  null;
+        }
+        List<CommentProductBO> commentProductBOS = new ArrayList<>();
+        for (CommentProductDO commentProductDO : commentProductDOS) {
+            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+            commentProductBOS.add(commentProductBO);
+        }
+        page.setRecords(commentProductBOS);
+        return page;
     }
 }
