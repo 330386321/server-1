@@ -63,14 +63,14 @@ public class AdController extends BaseController {
     	}
     	String mediaUrl="http://www.baidu.com";
     	HttpServletRequest request = getRequest();
-    	/*if(adParam.getPutWayEnum().val==1){ //平面投放
+    	if(adParam.getPutWayEnum().val==1){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD);
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl").toString();
             }
     	}else{//视频投放
     		
-    	}*/
+    	}
         Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl);
         return rsAd;
     }
