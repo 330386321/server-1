@@ -5,8 +5,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
 import com.lawu.eshop.mall.srv.service.CommentMerchantService;
@@ -28,12 +30,13 @@ public class CommentMerchantController extends BaseController {
 
     /**
      * 新增商家评价信息
+     *
      * @param memberId
      * @param param
      * @param commentPic
      * @return
      */
-    @RequestMapping(value = "saveCommentMerchantInfo/{memberId}",method = RequestMethod.POST)
+    @RequestMapping(value = "saveCommentMerchantInfo/{memberId}", method = RequestMethod.POST)
     public Result saveCommentMerchantInfo(@PathVariable("memberId") Long memberId, @RequestBody CommentMerchantParam param,
                                           @RequestParam("commentPic") String commentPic) {
         if (param == null) {
@@ -48,16 +51,19 @@ public class CommentMerchantController extends BaseController {
 
     /**
      * 商家评论信息列表（全部）
+     *
      * @param listParam
      * @return
      */
-    @RequestMapping(value = "getCommentMerchantAllList",method = RequestMethod.POST)
-    public Result<Page<CommentDTO>> getCommentMerchantAllList(@RequestBody CommentMerchantListParam listParam){
-        if(listParam == null){
+    @RequestMapping(value = "getCommentMerchantAllList", method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentMerchantAllList(@RequestBody CommentMerchantListParam listParam) {
+        if (listParam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Page<CommentMerchantBO>  commentMerchantBOPage =   commentMerchantService.getCommentMerchantAllList(listParam);
-
+        Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantAllList(listParam);
+        if(commentMerchantBOPage.getRecords().isEmpty()){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
 
         List<CommentDTO> commentDTOS = CommentMerchantConverter.converterDTOS(commentMerchantBOS);
@@ -68,13 +74,15 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
-    @RequestMapping(value = "getCommentMerchantListWithImgs",method = RequestMethod.POST)
-    public Result<Page<CommentDTO>> getCommentMerchantListWithImgs(@RequestBody CommentMerchantListParam listParam){
-        if(listParam == null){
+    @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentMerchantListWithImgs(@RequestBody CommentMerchantListParam listParam) {
+        if (listParam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Page<CommentMerchantBO>  commentMerchantBOPage =   commentMerchantService.getCommentMerchantListWithImgs(listParam);
-
+        Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListWithImgs(listParam);
+        if(commentMerchantBOPage.getRecords().isEmpty()){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
 
         List<CommentDTO> commentDTOS = CommentMerchantConverter.converterDTOS(commentMerchantBOS);
@@ -97,6 +105,19 @@ public class CommentMerchantController extends BaseController {
             return successCreated(ResultCode.SAVE_FAIL);
         }
         return successCreated(ResultCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "getCommentAvgGrade/{merchantId}",method = RequestMethod.GET)
+    public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("merchantId") Long merchantId) {
+
+        CommentGradeBO commentGradeBO = commentMerchantService.getCommentAvgGrade(merchantId);
+        if(commentGradeBO == null){
+           return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        CommentGradeDTO commentGradeDTO = new CommentGradeDTO();
+        commentGradeDTO.setGoodGrad(commentGradeBO.getGoodGrad());
+        commentGradeDTO.setAvgGrade(commentGradeBO.getAvgGrade());
+        return successGet(commentGradeDTO);
     }
 
 }

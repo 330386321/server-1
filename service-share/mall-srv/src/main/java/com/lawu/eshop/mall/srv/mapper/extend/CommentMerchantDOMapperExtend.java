@@ -12,11 +12,11 @@ import java.util.List;
 public interface CommentMerchantDOMapperExtend {
 
     /**
-     * 查询商家中和评分
+     * 查询商家综合评分
      * @param merchantId
      * @return
      */
-    Float selectAvgGrade(Long merchantId);
+    Double selectAvgGrade(Long merchantId);
 
     /**
      * 查询有图评价总数
@@ -31,4 +31,6 @@ public interface CommentMerchantDOMapperExtend {
      * @return
      */
     List<CommentMerchantDOView> selectCommentsWithImg(CommentMerchantPageParam merchantPageParam);
+
+    Integer selectGoodGradeCount(Long merchantId);
 }

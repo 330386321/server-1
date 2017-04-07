@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantPageParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
+import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
 import com.lawu.eshop.mall.srv.domain.CommentImageDO;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +55,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setMerchantId(param.getMerchantId());
         commentMerchantDO.setContent(param.getContent());
         commentMerchantDO.setGrade(param.getGradeEnum().val);
+        commentMerchantDO.setAvgSpend(param.getAvgSpend());
         if (CommentAnonymousEnum.COMMENT_ANONYMOUS_SUCCESS.equals(param.getAnonymousEnum())) {
             commentMerchantDO.setIsAnonymous(true);//匿名
         } else {
@@ -100,9 +104,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         for (CommentMerchantDO commentMerchantDO : commentMerchantDOS) {
 
             CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentMerchantDO);
-            //查询平均评分
-            float grade = commentMerchantDOMapperExtend.selectAvgGrade(commentMerchantDO.getMerchantId());
-            commentMerchantBO.setGrade(grade);
+
             //查询图片
             CommentImageDOExample imageDOExample = new CommentImageDOExample();
             imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);
@@ -141,10 +143,6 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
             for (CommentMerchantDOView commentMerchantDOView : commentMerchantDOViews) {
                 CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converterBOFromView(commentMerchantDOView);
 
-                //查询平均评分
-                float grade = commentMerchantDOMapperExtend.selectAvgGrade(commentMerchantDOView.getMerchantId());
-                commentMerchantBO.setGrade(grade);
-
                 //查询对应的评价图片
                 CommentImageDOExample imageDOExample = new CommentImageDOExample();
                 imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDOView.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);
@@ -181,5 +179,27 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setGmtReply(new Date());
         int row = commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
         return row;
+    }
+
+    @Override
+    public CommentGradeBO getCommentAvgGrade(Long merchantId) {
+        CommentMerchantDOExample commentMerchantDOExample = new CommentMerchantDOExample();
+        commentMerchantDOExample.createCriteria().andMerchantIdEqualTo (merchantId);
+        List<CommentMerchantDO> commentMerchantDOS = commentMerchantDOMapper.selectByExample(commentMerchantDOExample);
+        if(commentMerchantDOS.isEmpty()){
+            return  null;
+        }
+        Double avgGrade = commentMerchantDOMapperExtend.selectAvgGrade(merchantId);
+        avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
+        Integer goodCount = commentMerchantDOMapperExtend.selectGoodGradeCount(merchantId);
+        CommentMerchantDOExample example = new CommentMerchantDOExample();
+        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
+                andMerchantIdEqualTo(merchantId);
+        Integer totalCount =commentMerchantDOMapper.countByExample(example);
+        double goodGrade = new BigDecimal((double) goodCount/totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        CommentGradeBO commentGradeBO = new CommentGradeBO();
+        commentGradeBO.setAvgGrade(avgGrade);
+        commentGradeBO.setGoodGrad(goodGrade);
+        return commentGradeBO;
     }
 }

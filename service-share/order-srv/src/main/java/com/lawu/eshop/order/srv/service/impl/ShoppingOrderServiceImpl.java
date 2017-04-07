@@ -1,14 +1,8 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
@@ -17,6 +11,12 @@ import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ShoppingOrderServiceImpl implements ShoppingOrderService {
@@ -67,6 +67,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		
 		return rtn;
+	}
+
+	@Override
+	public CommentOrderBO getOrderCommentStatusById(Long orderId) {
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(orderId);
+		CommentOrderBO commentOrderBO = ShoppingOrderConverter.coverCommentStatusBO(shoppingOrderDO);
+		return commentOrderBO;
 	}
 
 }

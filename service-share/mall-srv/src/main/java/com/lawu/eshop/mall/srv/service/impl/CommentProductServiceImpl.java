@@ -8,12 +8,10 @@ import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductPageParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
-import com.lawu.eshop.mall.srv.domain.CommentImageDO;
-import com.lawu.eshop.mall.srv.domain.CommentImageDOExample;
-import com.lawu.eshop.mall.srv.domain.CommentProductDO;
-import com.lawu.eshop.mall.srv.domain.CommentProductDOExample;
+import com.lawu.eshop.mall.srv.domain.*;
 import com.lawu.eshop.mall.srv.domain.extend.CommentProductDOView;
 import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
@@ -24,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +41,9 @@ public class CommentProductServiceImpl implements CommentProductService {
     private CommentImageDOMapper commentImageDOMapper;
     @Autowired
     private CommentProductDOMapperExtend commentProductDOMapperExtend;
+
+   /* @Autowired
+    private TransactionMainService transactionMainService;*/
 
     @Override
     @Transactional
@@ -76,6 +79,8 @@ public class CommentProductServiceImpl implements CommentProductService {
                 }
             }
         }
+        // 更新评价状态 发消息
+        /*transactionMainService.sendNotice(param.getOrderId());*/
         return id;
     }
 
@@ -170,5 +175,36 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setGmtReply(new Date());
         int rows = commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
         return rows;
+    }
+
+    @Override
+    @Transactional
+    public void delCommentProductInfo(Long commentId) {
+        CommentProductDO commentProductDO = new CommentProductDO();
+        commentProductDO.setId(commentId);
+        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+    }
+
+    @Override
+    public CommentGradeBO getCommentAvgGrade(Long productId) {
+        CommentProductDOExample commentProductDOExample = new CommentProductDOExample();
+        commentProductDOExample.createCriteria().andProductIdEqualTo (productId);
+        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExample(commentProductDOExample);
+        if(commentProductDOS.isEmpty()){
+            return  null;
+        }
+        Double avgGrade = commentProductDOMapperExtend.selectAvgGrade(productId);
+        avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
+        Integer goodCount = commentProductDOMapperExtend.selectGoodGradeCount(productId);
+        CommentProductDOExample example = new CommentProductDOExample();
+        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
+                andProductIdEqualTo(productId);
+        Integer totalCount =commentProductDOMapper.countByExample(example);
+        double goodGrade = new BigDecimal((double) goodCount/totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        CommentGradeBO commentGradeBO = new CommentGradeBO();
+        commentGradeBO.setAvgGrade(avgGrade);
+        commentGradeBO.setGoodGrad(goodGrade);
+        return commentGradeBO;
     }
 }

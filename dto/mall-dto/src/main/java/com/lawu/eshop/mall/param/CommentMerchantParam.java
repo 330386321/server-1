@@ -4,6 +4,8 @@ import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * @author zhangyong
  * @date 2017/4/6.
@@ -37,6 +39,9 @@ public class CommentMerchantParam {
      */
     @ApiModelProperty(value = "是否匿名（COMMENT_ANONYMOUS_FAILED：否 COMMENT_ANONYMOUS_SUCCESS：是）", required = true)
     private CommentAnonymousEnum anonymousEnum;
+
+    @ApiModelProperty(value = "人均消费", required = true)
+    private BigDecimal avgSpend;
 
     public String getContent() {
         return content;
@@ -76,5 +81,13 @@ public class CommentMerchantParam {
 
     public void setAnonymousEnum(CommentAnonymousEnum anonymousEnum) {
         this.anonymousEnum = anonymousEnum;
+    }
+
+    public BigDecimal getAvgSpend() {
+        return avgSpend;
+    }
+
+    public void setAvgSpend(BigDecimal avgSpend) {
+        this.avgSpend = avgSpend;
     }
 }

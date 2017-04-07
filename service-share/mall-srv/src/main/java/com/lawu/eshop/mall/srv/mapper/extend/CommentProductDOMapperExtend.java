@@ -14,4 +14,8 @@ public interface CommentProductDOMapperExtend {
     List<CommentProductDOView> selectCommentsWithImg(CommentProductPageParam param);
 
     int selectCountByProductId(Long productId);
+
+    int selectGoodGradeCount(Long productId);
+
+    Double selectAvgGrade(Long productId);
 }

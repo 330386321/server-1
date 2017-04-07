@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -40,5 +41,13 @@ public interface CommentProductService {
      */
     @RequestMapping(method = RequestMethod.POST,value = "commentProduct/getCommentProductsWithImgs")
     public Result<Page<CommentDTO>> getCommentProductsWithImgs(@ModelAttribute CommentProductListParam listParam);
+
+    /**
+     * 获取商品好评率
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "commentProduct/getCommentAvgGrade/{productId}",method = RequestMethod.GET)
+    public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("productId") Long productId);
 
 }

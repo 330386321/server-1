@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -632,6 +633,66 @@ public class CommentMerchantDOExample {
 
         public Criteria andIsAnonymousNotBetween(Boolean value1, Boolean value2) {
             addCriterion("is_anonymous not between", value1, value2, "isAnonymous");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendIsNull() {
+            addCriterion("avg_spend is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendIsNotNull() {
+            addCriterion("avg_spend is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendEqualTo(BigDecimal value) {
+            addCriterion("avg_spend =", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendNotEqualTo(BigDecimal value) {
+            addCriterion("avg_spend <>", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendGreaterThan(BigDecimal value) {
+            addCriterion("avg_spend >", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("avg_spend >=", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendLessThan(BigDecimal value) {
+            addCriterion("avg_spend <", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("avg_spend <=", value, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendIn(List<BigDecimal> values) {
+            addCriterion("avg_spend in", values, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendNotIn(List<BigDecimal> values) {
+            addCriterion("avg_spend not in", values, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("avg_spend between", value1, value2, "avgSpend");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvgSpendNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("avg_spend not between", value1, value2, "avgSpend");
             return (Criteria) this;
         }
 

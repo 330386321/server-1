@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -51,11 +52,15 @@ public class CommentMerchantDTO {
     @ApiModelProperty(value = "是否匿名")
     private Boolean isAnonymous;
 
-    @ApiModelProperty(value = "综合评分")
-    private float grade;
+    @ApiModelProperty(value = "单个评分")
+    private Byte grade;
 
     @ApiModelProperty(value = "评价ID")
     private Long id;
+
+    @ApiModelProperty(value = "人均消费")
+    private BigDecimal avgSpend;
+
 
     public String getHeadImg() {
         return headImg;
@@ -105,11 +110,11 @@ public class CommentMerchantDTO {
         isAnonymous = anonymous;
     }
 
-    public float getGrade() {
+    public Byte getGrade() {
         return grade;
     }
 
-    public void setGrade(float grade) {
+    public void setGrade(Byte grade) {
         this.grade = grade;
     }
 
@@ -127,5 +132,13 @@ public class CommentMerchantDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public BigDecimal getAvgSpend() {
+        return avgSpend;
+    }
+
+    public void setAvgSpend(BigDecimal avgSpend) {
+        this.avgSpend = avgSpend;
     }
 }

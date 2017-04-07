@@ -1,18 +1,17 @@
 package com.lawu.eshop.order.srv.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 购物订单
@@ -48,4 +47,18 @@ public class ShoppingOrderController extends BaseController {
 		
 		return successCreated(ids);
 	}
+
+	/**
+	 * 获取商品评价状态
+	 * @param orderId
+	 * @return
+	 */
+	@RequestMapping(value = "getOrderCommentStatus/{orderId}",method = RequestMethod.GET)
+	public Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("orderId") Long orderId){
+		//查询订单商品评价状态
+		CommentOrderBO commentOrderBO = shoppingOrderService.getOrderCommentStatusById(orderId);
+		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(commentOrderBO);
+		return successGet(commentOrderDTO);
+	}
+
 }

@@ -10,12 +10,15 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentGradeDTO;
+import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.dto.CommentProductDTO;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.member.api.service.CommentProductService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.ProductService;
+import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -51,15 +54,25 @@ public class CommentProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
+    @Autowired
+    private ShoppingOrderService shoppingOrderService;
 
 
-    @ApiOperation(value = "用户评价商品", notes = "用户评价商品 [1005，1000]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "用户评价商品", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "saveCommentProductInfo", method = RequestMethod.POST)
     public Result saveCommentProductInfo(@ModelAttribute @ApiParam CommentProductParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
+        //查询订单是否已经评价
+        Result<CommentOrderDTO> commentOrderDTO = shoppingOrderService.getOrderCommentStatus(param.getOrderId());
+        if(commentOrderDTO.getModel()==null){
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if(commentOrderDTO.getModel().getEvaluation()){
+            return successCreated(ResultCode.PRODUCT_EVALUATE_TRUE);
+        }
         StringBuffer headImg = new StringBuffer();
         Collection<Part> parts;
         try {
@@ -76,8 +89,6 @@ public class CommentProductController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
-            //更新订单评价状态
-            //TODO
             return commentProductService.saveCommentProductInfo(memberId, param, headImg.toString());
 
         } catch (Exception e) {
@@ -161,6 +172,14 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
-
+    @ApiOperation(value = "查询商品评价好评率，综合评分", notes = "查询商品评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getCommentProductAvgGrade/{productId}", method = RequestMethod.GET)
+    public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("productId") @ApiParam(value = "商品ID",required = true) Long productId){
+        if(productId == null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        return commentProductService.getCommentAvgGrade(productId);
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.bo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,16 @@ public class CommentMerchantBO {
     /**
      * 综合评分
      */
-    private Float grade;
+    private Float avgGrade;
+
+    /**
+     * 单个评分
+     */
+    private Byte grade;
+    /**
+     * 人均消费
+     */
+    private BigDecimal avgSpend;
 
     public Long getId() {
         return id;
@@ -114,11 +124,27 @@ public class CommentMerchantBO {
         this.merchantId = merchantId;
     }
 
-    public Float getGrade() {
+    public Float getAvgGrade() {
+        return avgGrade;
+    }
+
+    public void setAvgGrade(Float avgGrade) {
+        this.avgGrade = avgGrade;
+    }
+
+    public Byte getGrade() {
         return grade;
     }
 
-    public void setGrade(Float grade) {
+    public void setGrade(Byte grade) {
         this.grade = grade;
+    }
+
+    public BigDecimal getAvgSpend() {
+        return avgSpend;
+    }
+
+    public void setAvgSpend(BigDecimal avgSpend) {
+        this.avgSpend = avgSpend;
     }
 }

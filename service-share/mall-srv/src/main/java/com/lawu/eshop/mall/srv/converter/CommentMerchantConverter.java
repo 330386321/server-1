@@ -30,6 +30,8 @@ public class CommentMerchantConverter {
         commentMerchantBO.setReplyContent(commentMerchantDO.getReplyContent());
         commentMerchantBO.setMemberId(commentMerchantDO.getMemberId());
         commentMerchantBO.setMerchantId(commentMerchantDO.getMerchantId());
+        commentMerchantBO.setGrade(commentMerchantDO.getGrade());
+        commentMerchantBO.setAvgSpend(commentMerchantDO.getAvgSpend());
         return commentMerchantBO;
     }
 
@@ -48,6 +50,7 @@ public class CommentMerchantConverter {
             commentDTO.setId(commentMerchantBO.getId());
             commentDTO.setGrade(commentMerchantBO.getGrade());
             commentDTO.setReplyContent(commentMerchantBO.getReplyContent());
+            commentDTO.setAvgSpend(commentMerchantBO.getAvgSpend());
             commentDTOS.add(commentDTO);
         }
         return commentDTOS;
@@ -63,6 +66,7 @@ public class CommentMerchantConverter {
         commentMerchantBO.setAnonymous(commentMerchantDOView.getAnonymous());
         commentMerchantBO.setReplyContent(commentMerchantDOView.getReplyContent());
         commentMerchantBO.setMemberId(commentMerchantDOView.getMemberId());
+        commentMerchantBO.setGrade(commentMerchantDOView.getGrade());
         return commentMerchantBO;
     }
 }

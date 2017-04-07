@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentMerchantDTO;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
@@ -69,8 +70,6 @@ public class CommentMerchantController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
-            //更新订单评价状态
-            //TODO
             return commentMerchantService.saveCommentMerchantInfo(memberId, param, commentPic.toString());
 
         } catch (Exception e) {
@@ -97,6 +96,7 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setImgUrls(commentDTO.getImgUrls());
                 commentMerchantDTO.setGrade(commentDTO.getGrade());
                 commentMerchantDTO.setId(commentDTO.getId());
+                commentMerchantDTO.setAvgSpend(commentDTO.getAvgSpend());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
@@ -128,6 +128,7 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setImgUrls(commentDTO.getImgUrls());
                 commentMerchantDTO.setGrade(commentDTO.getGrade());
                 commentMerchantDTO.setId(commentDTO.getId());
+                commentMerchantDTO.setAvgSpend(commentDTO.getAvgSpend());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
@@ -141,4 +142,13 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
+    @ApiOperation(value = "查询商家评价好评率，综合评分", notes = "查询商家评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getCommentAvgGrade/{merchantId}", method = RequestMethod.GET)
+    public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("merchantId") @ApiParam(value = "商家ID",required = true) Long merchantId){
+        if(merchantId == null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        return commentMerchantService.getCommentAvgGrade(merchantId);
+    }
 }

@@ -53,4 +53,24 @@
         AND ci.img_url IS NOT NULL
     </select>
 
+    <!-- 查商家好评总数-->
+    <select id="selectGoodGradeCount" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT
+        COUNT(*)
+        FROM
+        comment_product
+        WHERE
+        product_id = #{productId}
+        AND status = 1
+        AND  grade  &gt;= 4
+    </select>
+
+    <select id="selectAvgGrade" resultType="java.lang.Double" parameterType="java.lang.Long">
+        SELECT
+        AVG(grade)
+        FROM
+        comment_product
+        WHERE product_id =#{productId}
+    </select>
+
 </mapper>

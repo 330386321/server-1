@@ -52,6 +52,7 @@ public class ResultCode {
     
     // 订单模块代码 4xxx
     public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
+    public static final int PRODUCT_EVALUATE_TRUE =4100;
 
     // 广告模块代码 5xxx
 
@@ -120,6 +121,7 @@ public class ResultCode {
 
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
+        ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
 
         // 广告模块 5xxx
 

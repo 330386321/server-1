@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 
 /**
@@ -36,4 +37,8 @@ public interface CommentProductService {
     CommentProductBO findProductComment(Long commentId);
 
     Integer replyProductComment(Long commentId, String replyContent);
+
+    void delCommentProductInfo(Long commentId);
+
+    CommentGradeBO getCommentAvgGrade(Long productId);
 }

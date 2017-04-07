@@ -17,7 +17,7 @@
 
     </resultMap>
 
-    <select id="selectAvgGrade" resultType="java.lang.Float" parameterType="java.lang.Long">
+    <select id="selectAvgGrade" resultType="java.lang.Double" parameterType="java.lang.Long">
         SELECT
 	    AVG(grade)
       FROM
@@ -60,6 +60,18 @@
         ORDER  BY
         cm.id DESC
         LIMIT #{currentPage},#{pageSize}
+    </select>
+
+    <!-- 查商家好评总数-->
+    <select id="selectGoodGradeCount" resultType="java.lang.Integer" parameterType="java.lang.Long">
+        SELECT
+        COUNT(*)
+        FROM
+        comment_merchant
+        WHERE
+        merchant_id = #{merchantId}
+        AND status = 1
+        AND  grade  &gt;= 4
     </select>
 
 </mapper>
