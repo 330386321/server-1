@@ -30,6 +30,16 @@
         </dependency>
         <dependency>
             <groupId>com.lawu.eshop</groupId>
+            <artifactId>ad-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+         <dependency>
+            <groupId>com.lawu.eshop</groupId>
+            <artifactId>media</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+         <dependency>
+            <groupId>com.lawu.eshop</groupId>
             <artifactId>mall-dto</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

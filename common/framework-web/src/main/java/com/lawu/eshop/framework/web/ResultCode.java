@@ -49,12 +49,15 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
     public static final int GOODS_DO_NOT_EXIST = 3002;
+    public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
     
     // 订单模块代码 4xxx
     public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
     public static final int PRODUCT_EVALUATE_TRUE =4100;
 
     // 广告模块代码 5xxx
+    public static final int AD_POINT_NOT_ENOUGH = 5000;
+    public static final int AD_PUT_NOT_TIME = 5001;
 
     // 资产模块代码 6xxx
     public static final int BANK_ACCOUNT_ERROR = 6000;
@@ -118,13 +121,15 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品详情图片");
         ResultCode.messageMap.put(GOODS_DO_NOT_EXIST, "商品型号对应的商品信息不存在");
-
+        ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
+        
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
 
         // 广告模块 5xxx
-
+        ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
+        ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
 
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");

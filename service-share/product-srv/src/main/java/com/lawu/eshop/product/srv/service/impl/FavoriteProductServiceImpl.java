@@ -14,6 +14,7 @@ import com.lawu.eshop.product.query.FavoriteProductQuery;
 import com.lawu.eshop.product.srv.bo.FavoriteProductBO;
 import com.lawu.eshop.product.srv.converter.FavoriteProductConverter;
 import com.lawu.eshop.product.srv.domain.FavoriteProductDO;
+import com.lawu.eshop.product.srv.domain.FavoriteProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.extend.FavoriteProductView;
@@ -43,6 +44,12 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 	@Override
 	@Transactional
 	public Integer save(Long memberId, Long productId) {
+		FavoriteProductDOExample example=new FavoriteProductDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
+		int count=favoriteProductDOMapper.countByExample(example);
+		if(count>1){
+			return 0;
+		}
 		FavoriteProductDO favoriteProductDO=new FavoriteProductDO();
 		favoriteProductDO.setMemberId(memberId);
 		favoriteProductDO.setProductId(productId);

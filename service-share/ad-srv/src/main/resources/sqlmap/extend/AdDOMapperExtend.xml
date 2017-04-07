@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend">
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.ad.srv.domain.AdDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="put_way" jdbcType="TINYINT" property="putWay" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="areas" jdbcType="VARCHAR" property="areas" />
+    <result column="radius" jdbcType="INTEGER" property="radius" />
+    <result column="point" jdbcType="DECIMAL" property="point" />
+    <result column="total_point" jdbcType="DECIMAL" property="totalPoint" />
+    <result column="ad_count" jdbcType="INTEGER" property="adCount" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+  </resultMap>
+ 
+</mapper>

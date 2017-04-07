@@ -42,6 +42,8 @@ public class FavoriteProductController extends BaseController{
     	Integer i=favoriteProductService.save(memberId,productId);
     	if(i>0){
     		return successCreated(ResultCode.SUCCESS);
+    	}else if(i==0){
+    		return successCreated(ResultCode.GOODS_PRODUCT_FACORITE_EXIST);
     	}else{
     		return successCreated(ResultCode.SAVE_FAIL);
     	}
@@ -56,11 +58,7 @@ public class FavoriteProductController extends BaseController{
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable Long id) {
     	Integer i=favoriteProductService.remove(id);
-    	if(i>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-    	}
+    	return successDelete();
     	
     }
 	

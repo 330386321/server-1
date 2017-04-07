@@ -42,7 +42,7 @@ public class FavoriteMerchantController extends BaseController{
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
-	@ApiOperation(value = "商家收藏", notes = "商家收藏（张荣成）", httpMethod = "PUT")
+	@ApiOperation(value = "商家收藏", notes = "商家收藏[3003]（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.PUT)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -63,5 +63,17 @@ public class FavoriteMerchantController extends BaseController{
     	Result<Page<FavoriteMerchantDTO>> page = favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
     	return page;
     }
+	
+	@Audit(date = "2017-03-29", reviewer = "孙林青")
+	@Authorization
+	@ApiOperation(value = "取消商家收藏", notes = "取消商家收藏[]（张荣成）", httpMethod = "DELETE")
+	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+	@RequestMapping(value = "remove", method = RequestMethod.DELETE)
+	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+					   @RequestParam @ApiParam(required = true, value = "id") Long id) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result rs = favoriteMerchantService.remove(id);
+		return rs;
+	}
 
 }

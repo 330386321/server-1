@@ -157,8 +157,6 @@ public class MemberConverter {
                 for (MemberProfileDO memberProfileDO : mpList) {
                     if (memberDO.getId().equals(memberProfileDO.getId())) {
                         memberBO.setInviterCount(memberProfileDO.getInviteMemberCount() + memberProfileDO.getInviteMemberCount2());
-                    } else {
-                        memberBO.setInviterCount(0);
                     }
                 }
             }

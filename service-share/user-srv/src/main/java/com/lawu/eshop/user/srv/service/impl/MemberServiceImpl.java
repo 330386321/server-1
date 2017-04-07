@@ -129,6 +129,7 @@ public class MemberServiceImpl implements MemberService {
         for (MemberDO memberDO : memberDOS) {
             MemberProfileDOExample mpExample = new MemberProfileDOExample();
             MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
+            if(memberProfileDO!=null)
             mpList.add(memberProfileDO);
         }
         Page<MemberBO> pageMember = new Page<MemberBO>();
