@@ -453,4 +453,26 @@ public class DateUtil {
         c.add(Calendar.MONTH, -month);
         return c.getTime();
     }
+
+    /**
+     * 两个时间相隔天数
+     * @param fDate 起始天数
+     * @param oDate 最后天数
+     * @return
+     */
+    public static int daysOfTwo(Date fDate, Date oDate) {
+
+        if (null == fDate || null == oDate) {
+
+            return -1;
+
+        }
+
+        long intervalMilli = oDate.getTime() - fDate.getTime();
+
+        return (int) (intervalMilli / (24 * 60 * 60 * 1000));
+
+    }
+
+
 }
