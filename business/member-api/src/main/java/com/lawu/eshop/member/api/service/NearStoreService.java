@@ -1,13 +1,13 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.NearStoreDTO;
+import com.lawu.eshop.user.query.NearStoreParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -19,10 +19,9 @@ public interface NearStoreService {
     /**
      * 查询附近门店
      *
-     * @param longitude 经度
-     * @param latitude  纬度
+     * @param nearStoreParam
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "nearStore/listNearStore")
-    Result<List<NearStoreDTO>> listNearStore(@RequestParam("longitude") Double longitude, @RequestParam("latitude") Double latitude, @RequestParam("industryPath")String industryPath);
+    Result<Page<NearStoreDTO>> listNearStore(@ModelAttribute NearStoreParam nearStoreParam);
 }

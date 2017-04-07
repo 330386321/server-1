@@ -20,7 +20,7 @@ public class NearStoreConverter {
      * @return
      */
     public static List<NearStoreBO> convertBO(List<MerchantStoreDO> merchantStoreDOS) {
-        if (merchantStoreDOS == null) {
+        if (merchantStoreDOS.isEmpty()) {
             return null;
         }
 
@@ -44,7 +44,7 @@ public class NearStoreConverter {
      * @return
      */
     public static List<NearStoreDTO> convertDTO(List<NearStoreBO> nearStoreBOS) {
-        if (nearStoreBOS == null) {
+        if (nearStoreBOS.isEmpty()) {
             return null;
         }
 

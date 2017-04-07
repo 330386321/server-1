@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -25,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -87,7 +89,7 @@ public class FansMerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listFans", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<Page<FansMerchantDTO>> listFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                   @ModelAttribute @ApiParam(required = true, value = "查询条件") ListFansParam listFansParam) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<List<FansMerchantDTO>> fansResult = fansMerchantService.listFans(merchantId, listFansParam);
@@ -127,6 +129,17 @@ public class FansMerchantController extends BaseController {
                 }
             });
         }
-        return successGet(fansMerchantDTOList);
+        Page<FansMerchantDTO> page = new Page<>();
+        page.setTotalCount(fansMerchantDTOList.size());
+        page.setCurrentPage(listFansParam.getCurrentPage());
+        List<FansMerchantDTO> fansMerchantDTOS = new ArrayList<>();
+        for (int i = listFansParam.getOffset(); i < fansMerchantDTOList.size(); i++) {
+            fansMerchantDTOS.add(fansMerchantDTOList.get(i));
+            if (fansMerchantDTOS.size() == listFansParam.getPageSize()) {
+                break;
+            }
+        }
+        page.setRecords(fansMerchantDTOS);
+        return successGet(page);
     }
 }

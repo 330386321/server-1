@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.query.NearStoreParam;
 import com.lawu.eshop.user.srv.bo.NearStoreBO;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -15,10 +15,8 @@ public interface NearStoreService {
     /**
      * 查询附近门店
      *
-     * @param longitude    经度
-     * @param latitude     纬度
-     * @param industryPath 主营业务
+     * @param nearStoreParam
      * @return
      */
-    List<NearStoreBO> listNearStore(Double longitude, Double latitude, String industryPath);
+    Page<NearStoreBO> listNearStore(NearStoreParam nearStoreParam);
 }

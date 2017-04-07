@@ -1,19 +1,18 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.NearStoreDTO;
+import com.lawu.eshop.user.query.NearStoreParam;
 import com.lawu.eshop.user.srv.bo.NearStoreBO;
 import com.lawu.eshop.user.srv.converter.NearStoreConverter;
 import com.lawu.eshop.user.srv.service.NearStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -29,16 +28,16 @@ public class NearStoreController extends BaseController {
     /**
      * 查询附近门店
      *
-     * @param longitude 经度
-     * @param latitude  纬度
+     * @param nearStoreParam
      * @return
      */
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)
-    public Result<List<NearStoreDTO>> listNearStore(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam String industryPath) {
-        List<NearStoreBO> nearStoreBOS = nearStoreService.listNearStore(longitude, latitude, industryPath);
-        if (nearStoreBOS.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        return successGet(NearStoreConverter.convertDTO(nearStoreBOS));
+    public Result<Page<NearStoreDTO>> listNearStore(@RequestBody NearStoreParam nearStoreParam) {
+        Page<NearStoreBO> nearStoreBOPage = nearStoreService.listNearStore(nearStoreParam);
+        Page<NearStoreDTO> page = new Page<>();
+        page.setRecords(NearStoreConverter.convertDTO(nearStoreBOPage.getRecords()));
+        page.setTotalCount(nearStoreBOPage.getTotalCount());
+        page.setCurrentPage(nearStoreBOPage.getCurrentPage());
+        return successGet(page);
     }
 }

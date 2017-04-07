@@ -1,7 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.query.NearStoreParam;
 import com.lawu.eshop.user.srv.bo.NearStoreBO;
 import com.lawu.eshop.user.srv.converter.NearStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
@@ -35,16 +37,16 @@ public class NearStoreServiceImpl implements NearStoreService {
     private FavoriteMerchantDOMapper favoriteMerchantDOMapper;
 
     @Override
-    public List<NearStoreBO> listNearStore(Double longitude, Double latitude, String industryPath) {
+    public Page<NearStoreBO> listNearStore(NearStoreParam nearStoreParam) {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
-        merchantStoreDOExample.createCriteria().andStatusEqualTo(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val).andIndustryPathEqualTo(industryPath);
+        merchantStoreDOExample.createCriteria().andStatusEqualTo(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val).andIndustryPathEqualTo(nearStoreParam.getIndustryPath());
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
         if (merchantStoreDOS.isEmpty()) {
             return null;
         }
         List<NearStoreBO> nearStoreBOS = NearStoreConverter.convertBO(merchantStoreDOS);
         for (NearStoreBO nearStoreBO : nearStoreBOS) {
-            int distance = DistanceUtil.getDistance(longitude, latitude, nearStoreBO.getLongitude().doubleValue(), nearStoreBO.getLatitude().doubleValue());
+            int distance = DistanceUtil.getDistance(nearStoreParam.getLongitude(), nearStoreParam.getLatitude(), nearStoreBO.getLongitude().doubleValue(), nearStoreBO.getLatitude().doubleValue());
             nearStoreBO.setDistance(distance);
         }
 
@@ -57,8 +59,23 @@ public class NearStoreServiceImpl implements NearStoreService {
             }
         });
 
-        List<NearStoreBO> nearStoreBOList = new ArrayList<NearStoreBO>(10);
-        for (NearStoreBO nearStoreBO : nearStoreBOS) {
+        Page<NearStoreBO> page = new Page<>();
+        page.setCurrentPage(nearStoreParam.getCurrentPage());
+        page.setTotalCount(nearStoreBOS.size());
+
+        List<NearStoreBO> nearStoreBOList = new ArrayList<NearStoreBO>(nearStoreParam.getPageSize());
+        for (int i = nearStoreParam.getOffset(); i < nearStoreBOS.size(); i++) {
+            nearStoreBOList.add(nearStoreBOS.get(i));
+            if (nearStoreBOList.size() == nearStoreParam.getPageSize()) {
+                break;
+            }
+        }
+        if (nearStoreBOList.isEmpty()) {
+            page.setRecords(nearStoreBOList);
+            return page;
+        }
+
+        for (NearStoreBO nearStoreBO : nearStoreBOList) {
             //查询门店logo
             MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
             merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
@@ -70,13 +87,9 @@ public class NearStoreServiceImpl implements NearStoreService {
             favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId());
             int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
             nearStoreBO.setFavCount(favCount);
-
-            nearStoreBOList.add(nearStoreBO);
-            if (nearStoreBOList.size() > 10) {
-                break;
-            }
         }
-        return nearStoreBOList;
+        page.setRecords(nearStoreBOList);
+        return page;
     }
 
 }
