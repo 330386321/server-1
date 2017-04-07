@@ -20,7 +20,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.merchant.api.service.PayTestService;
+import com.lawu.eshop.merchant.api.service.AlipayService;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 
@@ -31,21 +31,21 @@ import io.swagger.annotations.ApiParam;
 /**
  * 
  * <p>
- * Description: 支付测试
+ * Description: 支付宝
  * </p>
  * @author Yangqh
  * @date 2017年4月7日 上午9:12:31
  *
  */
-@Api(tags = "payTest")
+@Api(tags = "alipay")
 @RestController
-@RequestMapping(value = "pay/")
-public class PayTestController extends BaseController {
+@RequestMapping(value = "alipay/")
+public class AlipayController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(PayTestController.class);
+	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
 	
 	@Autowired
-	private PayTestService payTestService;
+	private AlipayService alipayService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
@@ -56,7 +56,7 @@ public class PayTestController extends BaseController {
 
 		param.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		
-		return successGet(payTestService.getAppAlipayReqParams(param));
+		return successGet(alipayService.getAppAlipayReqParams(param));
 		
 	}
 	
@@ -68,7 +68,7 @@ public class PayTestController extends BaseController {
 			@ModelAttribute @ApiParam PcAlipayDataParam param) throws IOException {
 
 		param.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		Result result = payTestService.initPcPay(param);
+		Result result = alipayService.initPcPay(param);
 		if(ResultCode.SUCCESS == result.getRet()){
 			Object obj = result.getModel();
 			HttpServletResponse response = getResponse();

@@ -19,7 +19,7 @@ import com.lawu.eshop.property.param.PcAlipayDataParam;
  *
  */
 @FeignClient(value= "pay-srv")
-public interface PayTestService {
+public interface AlipayService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "alipay/getAppAlipayReqParams")
