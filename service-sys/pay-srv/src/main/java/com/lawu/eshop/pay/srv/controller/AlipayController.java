@@ -14,7 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.pay.srv.sdk.alipay.util.AlipaySubmit;
-import com.lawu.eshop.pay.srv.util.SignUtils;
+import com.lawu.eshop.pay.srv.sdk.alipay.util.SignUtils;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
