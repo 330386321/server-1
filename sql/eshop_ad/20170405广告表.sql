@@ -1,5 +1,5 @@
 CREATE TABLE `ad` (
-  `id` bigint(20) unsigned NOT NULL COMMENT '主键',
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `merchant_id` bigint(20) unsigned NOT NULL COMMENT '商家ID',
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '名称',
   `media_url` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '广附件路径',
@@ -10,14 +10,15 @@ CREATE TABLE `ad` (
   `end_time` datetime DEFAULT NULL COMMENT '结束时间',
   `areas` varchar(25) DEFAULT NULL COMMENT '投放区域',
   `radius` int(10) unsigned DEFAULT NULL COMMENT '半径，单位米',
-  `point` decimal(10,2) unsigned NOT NULL COMMENT '单个积分',
+  `point` decimal(10,2) unsigned DEFAULT NULL COMMENT '单个积分',
   `total_point` decimal(10,2) unsigned NOT NULL COMMENT '总投放积分',
-  `ad_count` int(5) unsigned NOT NULL COMMENT '广告数量',
+  `ad_count` int(5) unsigned DEFAULT NULL COMMENT '广告数量',
+  `hits` int(5) unsigned DEFAULT NULL COMMENT '已点击次数',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态(0-删除1-上架2-投放中3-投放结束4-下架)',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='广告表';
+) CHARSET=utf8mb4 COMMENT='广告表';
 
 CREATE TABLE `ad_platform` (
   `id` bigint(20) unsigned NOT NULL COMMENT '主键',
