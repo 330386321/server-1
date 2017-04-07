@@ -78,6 +78,9 @@ public class ResultCode {
     public static final int ALIPAY_INIT_VALIDATOR_USER_NUM_NULL = 6014;
     public static final int ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL = 6015;
 
+    public static final int WEIXIN_PAY_RETURN_CODE_FAIL = 6016;
+    public static final int WEIXIN_PAY_RESULT_CODE_FAIL = 6017;
+
     // 商城模块代码 7xxx
 
 
@@ -142,13 +145,16 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
         
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_SUBJECT_NULL, "app支付宝支付时subject参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_MONEY_NULL, "app支付宝支付时total_amount参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL, "app支付宝支付时out_trade_no参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL, "app支付宝支付时userTypeEnum参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BODY_NULL, "app支付宝支付时body参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_NUM_NULL, "app支付宝支付时userNum参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL, "app支付宝支付时bizFlagEnum参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_SUBJECT_NULL, "app支付时subject参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_MONEY_NULL, "app支付时total_amount参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL, "app支付时out_trade_no参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL, "app支付时userTypeEnum参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BODY_NULL, "app支付时body参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_NUM_NULL, "app支付时userNum参数不能为空");
+        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL, "app支付时bizFlagEnum参数不能为空");
+        
+        ResultCode.messageMap.put(WEIXIN_PAY_RETURN_CODE_FAIL, "app微信支付时预支付接口return_code返回FAIL");
+        ResultCode.messageMap.put(WEIXIN_PAY_RESULT_CODE_FAIL, "app微信支付时预支付接口result_code返回FAIL");
 
 
         // 商城模块 7xxx

@@ -7,26 +7,23 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
-import com.lawu.eshop.property.param.PcAlipayDataParam;
 
 /**
  * 
  * <p>
- * Description: 支付宝
+ * Description: 微信支付
  * </p>
  * @author Yangqh
- * @date 2017年4月7日 上午9:12:31
+ * @date 2017年4月7日 下午9:03:09
  *
  */
 @FeignClient(value= "pay-srv")
-public interface AlipayService {
+public interface WxPayService {
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "alipay/getAppAlipayReqParams")
-	Result getAppAlipayReqParams(@RequestBody AppAlipayDataParam param);
+	@RequestMapping(method = RequestMethod.POST, value = "wxPay/getPrepayInfo")
+	Result getPrepayInfo(@RequestBody AppAlipayDataParam param);
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "alipay/initPcPay")
-	Result initPcPay(PcAlipayDataParam param);
+	
 
 }

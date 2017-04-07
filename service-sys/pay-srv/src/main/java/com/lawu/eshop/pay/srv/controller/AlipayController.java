@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,10 +24,22 @@ import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PropertiesUtil;
 
+/**
+ * 
+ * <p>
+ * Description:
+ * </p>
+ * 
+ * @author Yangqh
+ * @date 2017年4月7日 下午8:00:08
+ *
+ */
 @RestController
 @RequestMapping(value = "alipay/")
 public class AlipayController extends BaseController {
 
+	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
+	
 	public static final String split = "|";
 	public static final String splitStr = "\\|";
 
@@ -39,7 +53,7 @@ public class AlipayController extends BaseController {
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
 	public Result getAppAlipayReqParams(@RequestBody AppAlipayDataParam param) {
 
-		int retCode = ParamValidateor.appAlipayReqValidate(param);
+		int retCode = AlipayParamValidateor.appAlipayReqValidate(param);
 		if (retCode != ResultCode.SUCCESS) {
 			return successCreated(retCode);
 		}
@@ -59,17 +73,8 @@ public class AlipayController extends BaseController {
 		paramMap.put("version", "1.0");
 		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url", "alipay.properties"));
 
-		String passback_params = "";
-		if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
-			passback_params = ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val + split + param.getUserNum() + split
-					+ param.getBody() + split + param.getBizIds();
-
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
-			// TODO
-
-		} else {
-			passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getBody();
-		}
+		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getBody()
+				+ split + param.getBizIds();
 
 		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
 				+ param.getOutTradeNo() + "\",\"total_amount\":\"" + param.getTotalAmount()
@@ -91,8 +96,8 @@ public class AlipayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
 	public Result initPcPay(@RequestBody PcAlipayDataParam param) {
-		
-		int retCode = ParamValidateor.pcAlipayReqValidate(param);
+
+		int retCode = AlipayParamValidateor.pcAlipayReqValidate(param);
 		if (retCode != ResultCode.SUCCESS) {
 			return successCreated(retCode);
 		}
@@ -120,7 +125,7 @@ public class AlipayController extends BaseController {
 					param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P");
 		}
 		paramMap.put("total_fee", param.getTotalAmount());
-		String sHtmlText = AlipaySubmit.buildRequest(paramMap,"get","确认");
+		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认");
 		return successCreated(sHtmlText);
 	}
 

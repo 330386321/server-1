@@ -4,7 +4,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 
-public class ParamValidateor {
+public class WxPayParamValidateor {
 
 	/**
 	 * app支付宝支付时请求服务获取加密参数接口，参数校验
