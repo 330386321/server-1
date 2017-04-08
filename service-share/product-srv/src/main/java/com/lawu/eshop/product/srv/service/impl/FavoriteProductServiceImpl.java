@@ -47,7 +47,7 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 		FavoriteProductDOExample example=new FavoriteProductDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
 		int count=favoriteProductDOMapper.countByExample(example);
-		if(count>1){
+		if(count==1){
 			return 0;
 		}
 		FavoriteProductDO favoriteProductDO=new FavoriteProductDO();
@@ -67,6 +67,9 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 
 	@Override
 	public Page<FavoriteProductBO> selectMyFavoriteProduct(Long memberId, FavoriteProductQuery query) {
+		FavoriteProductDOExample example=new FavoriteProductDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId);
+		int count=favoriteProductDOMapper.countByExample(example);
 		FavoriteProductView favoriteProductView=new FavoriteProductView();
 		favoriteProductView.setMemberId(memberId);
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
@@ -83,7 +86,7 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
         	}
 		}
         Page<FavoriteProductBO> page = new Page<FavoriteProductBO>();
-        page.setTotalCount(DOS.size());
+        page.setTotalCount(count);
         List<FavoriteProductBO> memberBOS = FavoriteProductConverter.convertBOS(DOS,listPM);
         page.setRecords(memberBOS);
         page.setCurrentPage(query.getCurrentPage());

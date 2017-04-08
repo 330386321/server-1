@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.ad.srv.mapper.extend.FavoriteAdDOMapperExtend">
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <id column="ad_id" jdbcType="BIGINT" property="AdId" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+ 
+  <select resultMap="BaseResultMap" parameterType="java.lang.Long" id="selectMyFavoriteAdByRowbounds" >
+     select 
+    	fa.id as id,
+    	fa.id as ad_id,
+    	a.title as title,
+    	a.content as content,
+		a.media_url as media_url,
+		a.merchant_id as merchant_id
+    from favorite_ad fa  
+    	left join ad a on fa.ad_id= a.id
+    where
+    	fa.member_id=#{memberId,jdbcType=BIGINT}
+  </select>
+</mapper>

@@ -32,7 +32,7 @@ public class AdParam {
 	@ApiParam (name="endTime",required = true, value = "投放的结束时间")
     private Date endTime;
 
-	@ApiParam (name="areas", value = "区域 省/市/区")
+	@ApiParam (name="areas", value = "区域 区域最后一位 XX/XX/XX")
     private String areas;
 
 	@ApiParam (name="radius", value = "雷达半径")
@@ -47,7 +47,6 @@ public class AdParam {
 	@ApiParam (name="adCount", value = "广告数量")
     private Integer adCount;
 	
-	private List<String> areasList;
 
 
 	public Long getMerchantId() {
@@ -170,14 +169,6 @@ public class AdParam {
 	}
 
 
-	public List<String> getAreasList() {
-		return areasList;
-	}
-
-
-	public void setAreasList(List<String> areasList) {
-		this.areasList = areasList;
-	}
 
 	
 

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
@@ -105,7 +104,21 @@ public class AdController extends BaseController{
     public Result remove(@PathVariable Long id) {
     	Integer i= adService.remove(id);
  		if(i>0){
- 			//
+     		return successCreated(ResultCode.SUCCESS);
+     	}else{
+     		return successCreated(ResultCode.FAIL);
+     	}
+    }
+	
+	/**
+	 * 对视频广告的审核
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
+    public Result auditVideo(@PathVariable Long id) {
+    	Integer i= adService.auditVideo(id);
+ 		if(i>0){
      		return successCreated(ResultCode.SUCCESS);
      	}else{
      		return successCreated(ResultCode.FAIL);

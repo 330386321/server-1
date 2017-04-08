@@ -2,8 +2,8 @@ package com.lawu.eshop.ad.constants;
 
 public enum TypeEnum {
 	
-	TYPE_LINK((byte) 0x01),      //平面
-	TYPE_PRODUCT((byte) 0x02);     //视频
+	TYPE_LINK((byte) 0x01),      //链接
+	TYPE_PRODUCT((byte) 0x02);     //商品
     public Byte val;
 
     TypeEnum(Byte val) {

@@ -4,7 +4,7 @@ public enum AdTypeEnum {
 	
 	AD_TYPE_FLAT((byte) 0x01),      //平面
 	AD_TYPE_VIDEO((byte) 0x02),     //视频
-	AD_TYPE_PRAISE((byte) 0x02);     //视频
+	AD_TYPE_PRAISE((byte) 0x02);     //E赞
     public Byte val;
 
     AdTypeEnum(Byte val) {

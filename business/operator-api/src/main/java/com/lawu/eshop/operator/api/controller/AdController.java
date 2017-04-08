@@ -67,6 +67,15 @@ public class AdController extends BaseController {
     	Result rs= adService.remove(id);
     	return rs;
     }
+    
+    @ApiOperation(value = "广告审核", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
+    //@Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
+    public Result auditVideo(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	Result rs= adService.auditVideo(id);
+    	return rs;
+    }
 
 
 }

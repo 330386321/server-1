@@ -41,5 +41,14 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/remove/{id}")
     public Result remove(@PathVariable("id") Long id);
+	
+	/**
+	 * 审核视频
+	 * @param statusEnum
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT,value = "ad/auditVideo/{id}")
+    public Result auditVideo(@PathVariable("id") Long id);
 
 }

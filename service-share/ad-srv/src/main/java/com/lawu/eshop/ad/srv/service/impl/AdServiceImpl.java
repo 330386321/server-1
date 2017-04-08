@@ -64,29 +64,31 @@ public class AdServiceImpl implements AdService {
 			adDO.setPoint(adParam.getPoint());
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
-		adDO.setStatus(new Byte("1"));
+		if(adParam.getTypeEnum().val==2){
+			adDO.setStatus(new Byte("5")); //视频广告默认为审核中
+		}else{
+			adDO.setStatus(new Byte("1"));//其余的为上架中
+		}
 		adDO.setGmtCreate(new Date());
 		adDO.setGmtModified(new Date());
+		if(adParam.getAreas()!=null){ 
+			adDO.setAreas(adParam.getAreas());
+		}
 		if(adParam.getContent()!=null)
 		adDO.setContent(adParam.getContent());
 		Integer id=adDOMapper.insert(adDO);
-		if(adParam.getAreasList()!=null){ //不是全国投放
-			for (String str : adParam.getAreasList()) {
-				String[] st=str.split("/");
-				String path=st[st.length-1];
-				String[] stlast=path.split(",");
-				for (String s : stlast) {
-					AdRegionDO adRegionDO=new AdRegionDO();
-					adRegionDO.setAdId(Long.valueOf(id));
-					adRegionDO.setMerchantId(merchantId);
-					adRegionDO.setGmtCreate(new Date());
-					adRegionDO.setRegionId(s);
-					adRegionDOMapper.insert(adRegionDO);
-				}
+		if(adParam.getAreas()!=null){ //不是全国投放
+			String[] path=adParam.getAreas().split("/");
+			for (String s : path) {
+				AdRegionDO adRegionDO=new AdRegionDO();
+				adRegionDO.setAdId(Long.valueOf(id));
+				adRegionDO.setMerchantId(merchantId);
+				adRegionDO.setGmtCreate(new Date());
+				adRegionDO.setRegionId(s);
+				adRegionDOMapper.insert(adRegionDO);
 			}
-			adDO.setAreas(adParam.getAreas());
+			
 		}
-		
 		
 		//发送消息，通知其他模块处理事务 积分的处理
 		//transactionMainService.sendNotice(merchantId);
@@ -223,11 +225,18 @@ public class AdServiceImpl implements AdService {
 		if(DOS==null){
 			return list;
 		}
-		String regionPath="";
+		String regionPath="10/101/10101";
 		for (AdDO adDO : DOS) {
 			if(adDO.getType()==1){//区域投放
-				if(adDO.getAreas().contains(regionPath))
-				list.add(adDO);
+				String[] path=adDO.getAreas().split("/");
+				String[] memberPath=regionPath.split("/");
+				for (String s : path) {
+					for (String mp : memberPath) {
+						if(s.equals(mp))
+							list.add(adDO);
+					}
+				}
+				
 			}else if(adDO.getType()==1){//粉丝投放
 				//当前广告商家的粉丝
 				//List<Fens>
@@ -241,7 +250,7 @@ public class AdServiceImpl implements AdService {
 	}
 	
 	/**
-	 * 查看E赚详情
+	 * 查看E赚详情,点击次数加1,点击次数和投放广告数相等则投放结束
 	 * @param id
 	 * @return
 	 */
@@ -286,6 +295,18 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdDO> list=watchAdList(DOS,memberId);
 		AdConverter.convertBOS(list);
+		return null;
+	}
+
+	/**
+	 * 视频审核
+	 */
+	@Override
+	public Integer auditVideo(Long id) {
+		AdDO adDO=new AdDO();
+		adDO.setId(id);
+		adDO.setStatus(new Byte("1"));
+		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		return null;
 	}
 

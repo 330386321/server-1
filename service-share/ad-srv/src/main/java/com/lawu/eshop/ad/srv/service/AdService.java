@@ -47,6 +47,13 @@ public interface AdService {
 	Integer remove(Long id);
 	
 	/**
+	 * 审核视频广告
+	 * @param id
+	 * @return
+	 */
+	Integer auditVideo(Long id);
+	
+	/**
 	 * 运营平台对E赚的查询
 	 * @param adMerchantParam
 	 * @return
