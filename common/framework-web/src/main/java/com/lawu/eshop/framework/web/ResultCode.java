@@ -72,6 +72,7 @@ public class ResultCode {
     public static final int PROPERTY_CASH_PAY_PWD_ERROR = 6006;
     public static final int PROPERTY_CASH_BANK_NOT_EXIST = 6007;
     public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
+    public static final int PROPERTY_CASH_USER_INFO_NULL = 6018;
     
     public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
     public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
@@ -149,6 +150,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
+        ResultCode.messageMap.put(PROPERTY_CASH_USER_INFO_NULL, "提交查询用户冗余信息为空");
         
         ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_SUBJECT_NULL, "app支付时subject参数不能为空");
         ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_MONEY_NULL, "app支付时total_amount参数不能为空");

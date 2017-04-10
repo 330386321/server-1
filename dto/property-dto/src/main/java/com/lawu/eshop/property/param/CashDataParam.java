@@ -29,7 +29,57 @@ public class CashDataParam extends CashParam{
 	 */
 	private String account;
 	
+	/**
+	 * 名称
+	 */
+	private String name;
 	
+	/**
+	 * 账号注册省
+	 */
+	private Integer provinceId;
+	
+	/**
+	 * 账号注册市
+	 */
+	private Integer cityId;
+	
+	/**
+	 * 账号注册区
+	 */
+	private Integer areaId;
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getProvinceId() {
+		return provinceId;
+	}
+
+	public void setProvinceId(Integer provinceId) {
+		this.provinceId = provinceId;
+	}
+
+	public Integer getCityId() {
+		return cityId;
+	}
+
+	public void setCityId(Integer cityId) {
+		this.cityId = cityId;
+	}
+
+	public Integer getAreaId() {
+		return areaId;
+	}
+
+	public void setAreaId(Integer areaId) {
+		this.areaId = areaId;
+	}
 
 	public String getAccount() {
 		return account;

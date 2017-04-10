@@ -1,5 +1,14 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -9,23 +18,27 @@ import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MemberProfileDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -302,5 +315,21 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setId(mermberId);
         memberDOMapper.updateByPrimaryKeySelective(memberDO);
     }
+
+	@Override
+	public CashUserInfoBO findCashUserInfo(Long id) {
+		MemberDO mdo = memberDOMapper.selectByPrimaryKey(id);
+		if (mdo == null) {
+			return null;
+		} else if(mdo.getRegionPath() == null || mdo.getRegionPath().split("/").length != 3){
+			return null;
+		}
+		CashUserInfoBO cashUserInfoBO = new CashUserInfoBO();
+		cashUserInfoBO.setName(mdo.getName());
+		cashUserInfoBO.setProvinceId(Integer.valueOf(mdo.getRegionPath().split("/")[0]));
+		cashUserInfoBO.setCityId(Integer.valueOf(mdo.getRegionPath().split("/")[1]));
+		cashUserInfoBO.setAreaId(Integer.valueOf(mdo.getRegionPath().split("/")[2]));
+		return cashUserInfoBO;
+	}
 
 }

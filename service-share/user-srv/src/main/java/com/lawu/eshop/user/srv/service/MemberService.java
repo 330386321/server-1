@@ -1,9 +1,12 @@
 package com.lawu.eshop.user.srv.service;
 
+import org.springframework.web.bind.annotation.PathVariable;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 
 /**
@@ -79,4 +82,12 @@ public interface MemberService {
      * @param mermberId
      */
     void updateMemberHeadImg(String headimg, Long mermberId);
+
+    /**
+     * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     * @param merchantId
+     * @return
+     * @author Yangqh
+     */
+    CashUserInfoBO findCashUserInfo(@PathVariable("id") Long id);
 }

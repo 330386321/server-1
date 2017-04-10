@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
@@ -66,5 +67,13 @@ public interface MerchantStoreInfoService {
      * @return
      */
     StoreDetailBO getStoreDetailById(Long id);
+
+    /**
+     * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     * @param id
+     * @return
+     * @author Yangqh
+     */
+	CashUserInfoBO findCashUserInfo(Long id);
 
 }

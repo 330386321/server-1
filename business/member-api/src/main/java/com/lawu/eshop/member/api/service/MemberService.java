@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -101,5 +102,14 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/saveHeadImage/{memberId}")
     Result<UserHeadImgDTO> saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg);
+
+    /**
+     * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     * @param id
+     * @return
+     * @author Yangqh
+     */
+	@RequestMapping(method = RequestMethod.GET, value = "member/findCashUserInfo/{id}")
+    CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id);
 
 }

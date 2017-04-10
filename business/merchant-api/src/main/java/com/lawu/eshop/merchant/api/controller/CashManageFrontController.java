@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
@@ -24,6 +25,7 @@ import com.lawu.eshop.property.param.CashBillParam;
 import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.CashParam;
 import com.lawu.eshop.user.constants.UserTypeEnum;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
@@ -47,6 +49,8 @@ public class CashManageFrontController extends BaseController {
 
 	@Autowired
 	private CashManageFrontService cashManageFrontService;
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家提现", notes = "商家提现，[1018|6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
@@ -68,7 +72,17 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
 		dataParam.setUserType(UserTypeEnum.MEMCHANT.val);
 		dataParam.setCashNumber(StringUtil.getRandomNum(""));
-
+		
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		CashUserInfoDTO cashUserInfoDTO = merchantStoreService.findCashUserInfo(merchantId);
+		if(cashUserInfoDTO == null){
+			return successCreated(ResultCode.PROPERTY_CASH_USER_INFO_NULL);
+		}
+		dataParam.setName(cashUserInfoDTO.getName());
+		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
+		dataParam.setCityId(cashUserInfoDTO.getCityId());
+		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
+		
 		return cashManageFrontService.save(dataParam);
 
 	}

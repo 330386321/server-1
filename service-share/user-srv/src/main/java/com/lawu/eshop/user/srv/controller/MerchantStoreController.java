@@ -15,16 +15,19 @@ import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.ValidateUtil;
 
 
@@ -238,4 +241,21 @@ public class MerchantStoreController extends BaseController {
         return successGet(MerchantStoreConverter.convertDTO(storeDetailBO));
     }
 
+    /**
+     * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     * @param id
+     * @return
+     * @author Yangqh
+     * @throws Exception 
+     */
+    @RequestMapping(value = "findCashUserInfo/{id}", method = RequestMethod.GET)
+    public CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id) throws Exception {
+    	CashUserInfoBO cashUserInfoBO = merchantStoreInfoService.findCashUserInfo(id);
+        if (cashUserInfoBO == null) {
+        	return null;
+        }
+        CashUserInfoDTO dto = new CashUserInfoDTO();
+        BeanUtil.copyProperties(cashUserInfoBO, dto);
+        return dto;
+    }
 }

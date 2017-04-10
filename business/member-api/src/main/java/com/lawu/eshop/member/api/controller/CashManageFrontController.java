@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.CashManageFrontService;
+import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
@@ -24,6 +25,7 @@ import com.lawu.eshop.property.param.CashBillParam;
 import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.CashParam;
 import com.lawu.eshop.user.constants.UserTypeEnum;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
@@ -47,10 +49,12 @@ public class CashManageFrontController extends BaseController {
 
 	@Autowired
 	private CashManageFrontService cashManageFrontService;
+	@Autowired
+	private MemberService memberService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "用户提现", notes = "用户提现，[6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
-	@Authorization
+//	@Authorization
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam CashParam param) {
@@ -68,6 +72,16 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW.getValue());
 		dataParam.setUserType(UserTypeEnum.MEMBER.val);
 		dataParam.setCashNumber(StringUtil.getRandomNum(""));
+		
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		CashUserInfoDTO cashUserInfoDTO = memberService.findCashUserInfo(memberId);
+		if(cashUserInfoDTO == null){
+			return successCreated(ResultCode.PROPERTY_CASH_USER_INFO_NULL);
+		}
+		dataParam.setName(cashUserInfoDTO.getName());
+		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
+		dataParam.setCityId(cashUserInfoDTO.getCityId());
+		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
 
 		return cashManageFrontService.save(dataParam);
 

@@ -8,10 +8,12 @@ import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.query.MemberQuery;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -148,6 +150,24 @@ public class MemberController extends BaseController {
         UserHeadImgDTO userHeadImgDTO = new UserHeadImgDTO();
         userHeadImgDTO.setHeadImg(headimg);
         return successCreated(userHeadImgDTO);
+    }
+    
+    /**
+     * 用户、商家提现时根据用户ID获取账号、名称、省市区信息冗余到提现表中
+     * @param memberId
+     * @return
+     * @throws Exception 
+     * @author Yangqh
+     */
+    @RequestMapping(value = "findCashUserInfo/{id}", method = RequestMethod.GET)
+    public CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id) throws Exception {
+    	CashUserInfoBO cashUserInfoBO = memberService.findCashUserInfo(id);
+        if (cashUserInfoBO == null) {
+            return null;
+        } 
+        CashUserInfoDTO dto = new CashUserInfoDTO();
+        BeanUtil.copyProperties(cashUserInfoBO, dto);
+        return dto;
     }
 
 }

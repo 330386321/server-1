@@ -21,6 +21,7 @@ import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
 import com.lawu.eshop.property.srv.service.CashManageFrontService;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
@@ -79,9 +80,10 @@ public class CashManageFrontController extends BaseController{
 	 * 用户、商家提现详情
 	 * @param id
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "cashDetail", method = RequestMethod.GET)
-	public Result<WithdrawCashDetailDTO> cashDetail(@RequestParam Long id) {
+	public Result<WithdrawCashDetailDTO> cashDetail(@RequestParam Long id) throws Exception {
 		if(id == null){
 			return successGet(ResultCode.ID_EMPTY);
 		}
@@ -90,14 +92,7 @@ public class CashManageFrontController extends BaseController{
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		WithdrawCashDetailDTO dto = new WithdrawCashDetailDTO();
-		dto.setId(cashDetailBO.getId());
-		dto.setTitle(cashDetailBO.getTitle());
-		dto.setCashMoney(cashDetailBO.getCashMoney());
-		dto.setMoney(cashDetailBO.getMoney());
-		dto.setCashNumber(cashDetailBO.getCashNumber());
-		dto.setCdate(cashDetailBO.getCdate());
-		dto.setCashStatus(cashDetailBO.getCashStatus());
-		dto.setBankInfo(cashDetailBO.getBankInfo());
+		BeanUtil.copyProperties(cashDetailBO, dto);
 		
 		return successGet(dto);
 	}
