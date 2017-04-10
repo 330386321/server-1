@@ -1416,6 +1416,76 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andExpressCompanyCodeIsNull() {
+            addCriterion("express_company_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeIsNotNull() {
+            addCriterion("express_company_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeEqualTo(String value) {
+            addCriterion("express_company_code =", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotEqualTo(String value) {
+            addCriterion("express_company_code <>", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeGreaterThan(String value) {
+            addCriterion("express_company_code >", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("express_company_code >=", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLessThan(String value) {
+            addCriterion("express_company_code <", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLessThanOrEqualTo(String value) {
+            addCriterion("express_company_code <=", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLike(String value) {
+            addCriterion("express_company_code like", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotLike(String value) {
+            addCriterion("express_company_code not like", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeIn(List<String> values) {
+            addCriterion("express_company_code in", values, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotIn(List<String> values) {
+            addCriterion("express_company_code not in", values, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeBetween(String value1, String value2) {
+            addCriterion("express_company_code between", value1, value2, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotBetween(String value1, String value2) {
+            addCriterion("express_company_code not between", value1, value2, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
         public Criteria andExpressCompanyNameIsNull() {
             addCriterion("express_company_name is null");
             return (Criteria) this;

@@ -25,6 +25,7 @@
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
     <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
+    <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
     <result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
     <result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
     <result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
@@ -106,7 +107,8 @@
     id, member_id, merchant_id, merchant_name, consignee_name, consignee_address, consignee_mobile, 
     remark, message, freight_price, commodity_total_price, order_total_price, order_status, 
     status, is_no_reason_return, is_evaluation, order_num, waybill_num, express_company_id, 
-    express_company_name, gmt_payment, gmt_transport, gmt_transaction, gmt_create, gmt_modified
+    express_company_code, express_company_name, gmt_payment, gmt_transport, gmt_transaction, 
+    gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample" resultMap="BaseResultMap">
     <!--
@@ -168,18 +170,18 @@
       commodity_total_price, order_total_price, order_status, 
       status, is_no_reason_return, is_evaluation, 
       order_num, waybill_num, express_company_id, 
-      express_company_name, gmt_payment, gmt_transport, 
-      gmt_transaction, gmt_create, gmt_modified
-      )
+      express_company_code, express_company_name, 
+      gmt_payment, gmt_transport, gmt_transaction, 
+      gmt_create, gmt_modified)
     values (#{memberId,jdbcType=BIGINT}, #{merchantId,jdbcType=BIGINT}, #{merchantName,jdbcType=VARCHAR}, 
       #{consigneeName,jdbcType=VARCHAR}, #{consigneeAddress,jdbcType=VARCHAR}, #{consigneeMobile,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{freightPrice,jdbcType=DECIMAL}, 
       #{commodityTotalPrice,jdbcType=DECIMAL}, #{orderTotalPrice,jdbcType=DECIMAL}, #{orderStatus,jdbcType=TINYINT}, 
       #{status,jdbcType=TINYINT}, #{isNoReasonReturn,jdbcType=BIT}, #{isEvaluation,jdbcType=BIT}, 
       #{orderNum,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, 
-      #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
-      )
+      #{expressCompanyCode,jdbcType=VARCHAR}, #{expressCompanyName,jdbcType=VARCHAR}, 
+      #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
     <!--
@@ -244,6 +246,9 @@
       </if>
       <if test="expressCompanyId != null">
         express_company_id,
+      </if>
+      <if test="expressCompanyCode != null">
+        express_company_code,
       </if>
       <if test="expressCompanyName != null">
         express_company_name,
@@ -318,6 +323,9 @@
       </if>
       <if test="expressCompanyId != null">
         #{expressCompanyId,jdbcType=INTEGER},
+      </if>
+      <if test="expressCompanyCode != null">
+        #{expressCompanyCode,jdbcType=VARCHAR},
       </if>
       <if test="expressCompanyName != null">
         #{expressCompanyName,jdbcType=VARCHAR},
@@ -413,6 +421,9 @@
       <if test="record.expressCompanyId != null">
         express_company_id = #{record.expressCompanyId,jdbcType=INTEGER},
       </if>
+      <if test="record.expressCompanyCode != null">
+        express_company_code = #{record.expressCompanyCode,jdbcType=VARCHAR},
+      </if>
       <if test="record.expressCompanyName != null">
         express_company_name = #{record.expressCompanyName,jdbcType=VARCHAR},
       </if>
@@ -461,6 +472,7 @@
       order_num = #{record.orderNum,jdbcType=VARCHAR},
       waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
       express_company_id = #{record.expressCompanyId,jdbcType=INTEGER},
+      express_company_code = #{record.expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{record.expressCompanyName,jdbcType=VARCHAR},
       gmt_payment = #{record.gmtPayment,jdbcType=TIMESTAMP},
       gmt_transport = #{record.gmtTransport,jdbcType=TIMESTAMP},
@@ -532,6 +544,9 @@
       <if test="expressCompanyId != null">
         express_company_id = #{expressCompanyId,jdbcType=INTEGER},
       </if>
+      <if test="expressCompanyCode != null">
+        express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
+      </if>
       <if test="expressCompanyName != null">
         express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
       </if>
@@ -577,6 +592,7 @@
       order_num = #{orderNum,jdbcType=VARCHAR},
       waybill_num = #{waybillNum,jdbcType=VARCHAR},
       express_company_id = #{expressCompanyId,jdbcType=INTEGER},
+      express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
       gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
       gmt_transport = #{gmtTransport,jdbcType=TIMESTAMP},

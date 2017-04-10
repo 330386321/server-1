@@ -657,7 +657,77 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("so.consignee_mobile not between", value1, value2, "consigneeMobile");
             return (Criteria) this;
         }
+        
+        public Criteria andRemarkIsNull() {
+            addCriterion("so.remark is null");
+            return (Criteria) this;
+        }
 
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("so.remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("so.remark <>", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("so.remark >", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("so.remark >=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("so.remark <", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("so.remark not between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+        
         public Criteria andMessageIsNull() {
             addCriterion("so.message is null");
             return (Criteria) this;
@@ -1027,7 +1097,67 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("so.status not between", value1, value2, "status");
             return (Criteria) this;
         }
+        
+        public Criteria andIsNoReasonReturnIsNull() {
+            addCriterion("is_no_reason_return is null");
+            return (Criteria) this;
+        }
 
+        public Criteria andIsNoReasonReturnIsNotNull() {
+            addCriterion("is_no_reason_return is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnEqualTo(Boolean value) {
+            addCriterion("is_no_reason_return =", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnNotEqualTo(Boolean value) {
+            addCriterion("is_no_reason_return <>", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnGreaterThan(Boolean value) {
+            addCriterion("is_no_reason_return >", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_no_reason_return >=", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnLessThan(Boolean value) {
+            addCriterion("is_no_reason_return <", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_no_reason_return <=", value, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnIn(List<Boolean> values) {
+            addCriterion("is_no_reason_return in", values, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnNotIn(List<Boolean> values) {
+            addCriterion("is_no_reason_return not in", values, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_no_reason_return between", value1, value2, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNoReasonReturnNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_no_reason_return not between", value1, value2, "isNoReasonReturn");
+            return (Criteria) this;
+        }
+        
         public Criteria andIsEvaluationIsNull() {
             addCriterion("so.is_evaluation is null");
             return (Criteria) this;
@@ -1287,7 +1417,77 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("so.express_company_id not between", value1, value2, "expressCompanyId");
             return (Criteria) this;
         }
+        
+        public Criteria andExpressCompanyCodeIsNull() {
+            addCriterion("express_company_code is null");
+            return (Criteria) this;
+        }
 
+        public Criteria andExpressCompanyCodeIsNotNull() {
+            addCriterion("express_company_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeEqualTo(String value) {
+            addCriterion("express_company_code =", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotEqualTo(String value) {
+            addCriterion("express_company_code <>", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeGreaterThan(String value) {
+            addCriterion("express_company_code >", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("express_company_code >=", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLessThan(String value) {
+            addCriterion("express_company_code <", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLessThanOrEqualTo(String value) {
+            addCriterion("express_company_code <=", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeLike(String value) {
+            addCriterion("express_company_code like", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotLike(String value) {
+            addCriterion("express_company_code not like", value, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeIn(List<String> values) {
+            addCriterion("express_company_code in", values, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotIn(List<String> values) {
+            addCriterion("express_company_code not in", values, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeBetween(String value1, String value2) {
+            addCriterion("express_company_code between", value1, value2, "expressCompanyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpressCompanyCodeNotBetween(String value1, String value2) {
+            addCriterion("express_company_code not between", value1, value2, "expressCompanyCode");
+            return (Criteria) this;
+        }
+        
         public Criteria andExpressCompanyNameIsNull() {
             addCriterion("so.express_company_name is null");
             return (Criteria) this;

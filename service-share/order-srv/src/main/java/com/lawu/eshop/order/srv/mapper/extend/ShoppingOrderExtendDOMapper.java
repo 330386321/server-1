@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 
@@ -41,5 +42,13 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
     long countByExample(ShoppingOrderExtendDOExample example);
+    
+    /**
+     * 根据id查询购物订单以及订单项
+     * 
+     * @param id 订单id
+     * @return
+     */
+    ShoppingOrderExtendDO getShoppingOrderAssociationByPrimaryKey(Long id);
 	
 }

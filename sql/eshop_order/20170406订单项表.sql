@@ -15,5 +15,5 @@ CREATE TABLE `shopping_order_item` (
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物订单';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物订单项';
 
