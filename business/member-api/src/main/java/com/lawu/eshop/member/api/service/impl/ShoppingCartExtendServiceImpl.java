@@ -212,7 +212,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	
     	// 查询商家是否支持七天退货
-    	List merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
+    	List<Long> merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
     	Result<List<MerchantStoreNoReasonReturnDTO>> resultMerchantStoreNoReasonReturnDTOList = merchantStoreService.selectNoReasonReturnByMerchantIds(merchantIdList);
     	if (!isSuccess(resultMerchantStoreNoReasonReturnDTOList)) {
     		return successCreated(resultMerchantStoreNoReasonReturnDTOList.getRet());

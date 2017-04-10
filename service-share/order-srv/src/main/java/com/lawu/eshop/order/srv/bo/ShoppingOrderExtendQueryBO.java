@@ -7,43 +7,48 @@ import java.util.List;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 
 public class ShoppingOrderExtendQueryBO implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-    /**
-     * 主键 
-     */
-    private Long id;
 
-    /**
-     * 商家ID
-     */
-    private Long merchantId;
+	/**
+	 * 主键
+	 */
+	private Long id;
 
-    /**
-     * 商家名称
-     */
-    private String merchantName;
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
 
-    /**
-     * 运费
-     */
-    private BigDecimal freightPrice;
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
 
-    /**
-     * 订单总价
-     */
-    private BigDecimal orderTotalPrice;
+	/**
+	 * 运费
+	 */
+	private BigDecimal freightPrice;
 
-    /**
-     * 订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
-     */
-    private ShoppingOrderStatusEnum orderStatus;
+	/**
+	 * 订单总价
+	 */
+	private BigDecimal orderTotalPrice;
 
-    /**
-     * 订单项
-     */
-    private List<ShoppingOrderItemBO> items;
+	/**
+	 * 订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+	 */
+	private ShoppingOrderStatusEnum orderStatus;
+
+	/**
+	 * 是否支持无理由退货,0否 1是
+	 */
+	private Boolean isNoReasonReturn;
+
+	/**
+	 * 订单项
+	 */
+	private List<ShoppingOrderItemBO> items;
 
 	public Long getId() {
 		return id;
@@ -91,6 +96,14 @@ public class ShoppingOrderExtendQueryBO implements Serializable {
 
 	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public Boolean getIsNoReasonReturn() {
+		return isNoReasonReturn;
+	}
+
+	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
+		this.isNoReasonReturn = isNoReasonReturn;
 	}
 
 	public List<ShoppingOrderItemBO> getItems() {

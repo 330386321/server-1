@@ -12,7 +12,7 @@
     <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.product.param.ProductRecommendParam" id="listProductBycategoryId">
       select p.feature_image,p.content,pm.name,pm.original_price,pm.price
       from product_model pm left join product p on pm.product_id = p.id
-      where p.status = #{productStatus,jdbcType=TINYINT} and p.category_id = #{categoryId,,jdbcType=INTEGER} and p.id != #{productId,jdbcType=BIGINT} and pm.status = #{productModelStatus,jdbcType=BIT}
+      where p.status = #{productStatus,jdbcType=TINYINT} and p.category_id = #{categoryId,jdbcType=INTEGER} and p.id != #{productId,jdbcType=BIGINT} and pm.status = #{productModelStatus,jdbcType=BIT}
       order by pm.sales_volume desc limit 10
   </select>
 </mapper>

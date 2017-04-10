@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
@@ -48,4 +51,22 @@ public interface ShoppingOrderService {
 	@RequestMapping(value = "shoppingOrder/page/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignParam param);
 	
+	/**
+	 * 根据id查询订单详情
+	 * 
+	 * @param id 购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/get/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/getExpressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
 }

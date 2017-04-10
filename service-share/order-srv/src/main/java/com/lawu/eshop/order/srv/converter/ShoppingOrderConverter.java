@@ -5,8 +5,11 @@ import java.util.Date;
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.utils.RandomUtil;
 
@@ -65,4 +68,33 @@ public class ShoppingOrderConverter {
 		return commentOrderDTO;
 	}
 	
+    public static ShoppingOrderExpressBO covert(ShoppingOrderDO shoppingOrderDO) {
+		if(shoppingOrderDO == null){
+			return null;
+		}
+		ShoppingOrderExpressBO shoppingOrderExpressBO = new ShoppingOrderExpressBO();
+		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderExpressBO);
+		return shoppingOrderExpressBO;
+    }
+    
+    /**
+     * ShoppingOrderExpressDTO转换
+     * 
+     * @param shoppingOrderExpressBO
+     * @param expressInquiriesDetailBO
+     * @return
+     */
+    public static ShoppingOrderExpressDTO covert(ShoppingOrderExpressBO shoppingOrderExpressBO, ExpressInquiriesDetailBO expressInquiriesDetailBO) {
+		if(shoppingOrderExpressBO == null){
+			return null;
+		}
+		
+		ShoppingOrderExpressDTO shoppingOrderExpressDTO = new ShoppingOrderExpressDTO();
+		BeanUtils.copyProperties(shoppingOrderExpressBO, shoppingOrderExpressDTO, "expressInquiriesDetailDTO");
+		
+		shoppingOrderExpressDTO.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
+		
+		return shoppingOrderExpressDTO;
+    }
+    
 }

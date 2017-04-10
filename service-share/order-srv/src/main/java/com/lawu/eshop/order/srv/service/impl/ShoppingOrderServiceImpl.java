@@ -14,11 +14,14 @@ import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
@@ -160,5 +163,46 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		return shoppingOrderItemBOPage;
 	}
-
+	
+	/**
+	 * 根据id获取购物订单以及订单项
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Override
+	public ShoppingOrderExtendDetailBO get(Long id) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.createCriteria().andIdEqualTo(id);
+		
+		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.getShoppingOrderAssociationByPrimaryKey(id);
+		
+		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0
+				|| shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty()) {
+			return null;
+		}
+		
+		return ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDO);
+	}
+	
+	/**
+	 * 根据id获取购物订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Override
+	public ShoppingOrderExpressBO getExpressInfo(Long id) {
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExample.createCriteria().andIdEqualTo(id);
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		return ShoppingOrderConverter.covert(shoppingOrderDO);
+	}
+	
+	
+	
 }

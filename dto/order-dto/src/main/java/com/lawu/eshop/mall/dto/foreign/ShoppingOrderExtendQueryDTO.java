@@ -35,7 +35,7 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "运费", required = true)
 	private BigDecimal freightPrice;
-
+	
 	/**
 	 * 订单总价
 	 */
@@ -47,7 +47,13 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "订单状态<br/>默认全部<br>PENDING_PAYMENT 待付款<br/>BE_SHIPPED 待发货<br/>TRADING_SUCCESS 交易成功<br/>CANCEL_TRANSACTION 交易取消<br/>TO_BE_CONFIRMED 待商家确认<br/>TO_BE_RETURNED 待退货<br/>TO_BE_REFUNDED 待退款<br/>REFUND_SUCCESSFULLY 退款成功", required = true)
 	private ShoppingOrderStatusEnum orderStatus;
-
+	
+	/**
+	 * 是否支持无理由退货,0否 1是
+	 */
+	@ApiModelProperty(value = "是否支持无理由退货(false 不支持|true 支持)", required = true)
+	private Boolean isNoReasonReturn;
+	
 	/**
 	 * 订单项
 	 */
@@ -100,6 +106,14 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 
 	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public Boolean getIsNoReasonReturn() {
+		return isNoReasonReturn;
+	}
+
+	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
+		this.isNoReasonReturn = isNoReasonReturn;
 	}
 
 	public List<ShoppingOrderItemDTO> getItems() {

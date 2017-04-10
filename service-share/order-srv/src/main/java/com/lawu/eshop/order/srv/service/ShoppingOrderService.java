@@ -6,6 +6,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
 
 /**
@@ -15,22 +17,43 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
  * @date 2017/3/27
  */
 public interface ShoppingOrderService {
-	
+
 	/**
 	 * 
-	 * @param params 多个订单参数
+	 * @param params
+	 *            多个订单参数
 	 * @return 返回保存的订单id
 	 */
 	List<Long> save(List<ShoppingOrderSettlementParam> params);
 
-    CommentOrderBO getOrderCommentStatusById(Long orderId);
-	
+	CommentOrderBO getOrderCommentStatusById(Long orderId);
+
 	/**
 	 * 
-	 * @param memberId 会员id
-	 * @param param 查询参数
+	 * @param memberId
+	 *            会员id
+	 * @param param
+	 *            查询参数
 	 * @return 订单列表
 	 */
 	Page<ShoppingOrderExtendQueryBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignParam param);
-	
+
+	/**
+	 * 根据id获取购物订单以及订单项
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	ShoppingOrderExtendDetailBO get(Long id);
+
+	/**
+	 * 根据id获取购物订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	ShoppingOrderExpressBO getExpressInfo(Long id);
+
 }

@@ -217,8 +217,8 @@ public class MerchantStoreConverter {
     	}
     	
     	MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO = new MerchantStoreNoReasonReturnDTO();
-    	merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
-    	merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
+    	merchantStoreNoReasonReturnDTO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
+    	merchantStoreNoReasonReturnDTO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
     	
     	return merchantStoreNoReasonReturnDTO;
     }
