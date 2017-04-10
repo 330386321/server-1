@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -47,7 +49,12 @@ public class SuggestionServiceImpl implements SuggestionService {
     public Page<SuggestionBO> getSuggestionList(SuggestionListParam pageParam) {
         SuggestionDOExample suggestionDOExample = new SuggestionDOExample();
         if (pageParam.getBeginTime() != null && pageParam.getEndTime() != null) {
-            suggestionDOExample.createCriteria().andGmtCreateBetween(pageParam.getBeginTime(),pageParam.getEndTime());
+            Date endDate = pageParam.getEndTime();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(endDate);
+            calendar.add(calendar.DATE, 1);//把日期往后增加一天.整数往后推,负数往前移动
+            endDate = calendar.getTime();   //这个时间就是日期往后推一天的结果
+            suggestionDOExample.createCriteria().andGmtCreateBetween(pageParam.getBeginTime(), endDate);
         }
         suggestionDOExample.setOrderByClause("id desc");
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
@@ -56,9 +63,9 @@ public class SuggestionServiceImpl implements SuggestionService {
         page.setCurrentPage(pageParam.getCurrentPage());
 
         //查询意见反馈记录列表
-        List<SuggestionDO> suggestionDOS = suggestionDOMapper.selectByExampleWithRowbounds(suggestionDOExample,rowBounds);
-        if(suggestionDOS.isEmpty()){
-            return  null;
+        List<SuggestionDO> suggestionDOS = suggestionDOMapper.selectByExampleWithRowbounds(suggestionDOExample, rowBounds);
+        if (suggestionDOS.isEmpty()) {
+            return null;
         }
         List<SuggestionBO> suggestionBOS = SuggestionConverter.convertBOS(suggestionDOS);
 
