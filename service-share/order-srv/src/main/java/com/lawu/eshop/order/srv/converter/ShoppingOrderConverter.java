@@ -9,6 +9,7 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.utils.RandomUtil;
@@ -97,4 +98,13 @@ public class ShoppingOrderConverter {
 		return shoppingOrderExpressDTO;
     }
     
+    public static ShoppingOrderBO convertShoppingOrderBO(ShoppingOrderDO shoppingOrderDO) {
+		if(shoppingOrderDO == null){
+			return null;
+		}
+		ShoppingOrderBO shoppingOrderBO = new ShoppingOrderBO();
+		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO);
+		
+		return shoppingOrderBO;
+    }
 }

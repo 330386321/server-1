@@ -53,7 +53,8 @@ public class ResultCode {
     
     // 订单模块代码 4xxx
     public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
-    public static final int PRODUCT_EVALUATE_TRUE =4100;
+    public static final int PRODUCT_EVALUATE_TRUE = 4001;
+    public static final int STATUS_NOT_CHANGED = 4002;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -131,6 +132,7 @@ public class ResultCode {
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
+        ResultCode.messageMap.put(STATUS_NOT_CHANGED, "订单状态不允许被更改");
 
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");

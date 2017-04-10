@@ -10,6 +10,7 @@ import com.lawu.eshop.product.srv.mapper.RecommendProductCategoryDOMapper;
 import com.lawu.eshop.product.srv.service.RecommendProductCategoryService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/4/10.
  */
+@Service
 public class RecommendProductCategoryServiceImpl implements RecommendProductCategoryService {
 
     @Autowired

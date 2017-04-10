@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
@@ -46,6 +47,14 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	ShoppingOrderExtendDetailBO get(Long id);
+	
+	/**
+	 * 根据id获取购物订单
+	 * 
+	 * @param id
+	 * @return
+	 */
+	ShoppingOrderBO getShoppingOrder(Long id);
 
 	/**
 	 * 根据id获取购物订单物流信息
@@ -55,5 +64,14 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	ShoppingOrderExpressBO getExpressInfo(Long id);
+	
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	Integer cancelOrder(Long id);
 
 }

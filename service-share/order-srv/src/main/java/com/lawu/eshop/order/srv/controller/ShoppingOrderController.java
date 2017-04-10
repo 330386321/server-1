@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -22,6 +23,7 @@ import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
@@ -150,6 +152,38 @@ public class ShoppingOrderController extends BaseController {
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExpressBO.getExpressCompanyCode(), shoppingOrderExpressBO.getWaybillNum());
 
 		return successGet(ShoppingOrderConverter.covert(shoppingOrderExpressBO, expressInquiriesDetailBO));
+	}
+	
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param param
+	 *            更新参数 
+	 * @return
+	 */
+	@RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("id") Long id) {
+
+		if (id == null || id <= 0) {
+			return successCreated(ResultCode.ID_EMPTY);
+		}
+		
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
+		
+		if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		
+		// 被取消的订单必须要是待支付的状态
+		if (!shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue())) {
+			return successCreated(ResultCode.STATUS_NOT_CHANGED);
+		}
+		
+		Integer result = shoppingOrderService.cancelOrder(id);
+
+		return successCreated();
 	}
 
 }

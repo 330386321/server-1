@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
@@ -23,6 +25,7 @@ import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
@@ -79,7 +82,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				shoppingCartDOMapper.deleteByPrimaryKey(item.getShoppingCartId());
 			}
 			
-			// TODO 事务补偿预留
+			// TODO 事务补偿预留(减掉库存)
 			//transactionMainService.sendNotice(id);
 		}
 		
@@ -187,6 +190,20 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 	
 	/**
+	 * 根据id获取购物订单以及订单项
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Override
+	public ShoppingOrderBO getShoppingOrder(Long id) {
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		return ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderDO);
+	}
+	
+	/**
 	 * 根据id获取购物订单物流信息
 	 * 
 	 * @param id
@@ -204,5 +221,29 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 	
 	
+	@Transactional
+	@Override
+	public Integer cancelOrder(Long id) {
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+
+		
+		// 更新购物订单项状态
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+		
+		// TODO 事务补偿预留(释放库存)
+		//transactionMainService.sendNotice(id);
+		return result;
+	}
 	
 }

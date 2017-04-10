@@ -69,4 +69,16 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "shoppingOrder/getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
+	
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param param
+	 *            更新参数 
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("id") Long id);
 }
