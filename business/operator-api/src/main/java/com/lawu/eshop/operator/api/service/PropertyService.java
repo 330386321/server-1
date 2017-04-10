@@ -31,7 +31,7 @@ public interface PropertyService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "deleteProperty/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "property/deleteProperty/{id}")
     Result deletePropertyById(@PathVariable("id") Long id);
 
     /**
@@ -43,7 +43,7 @@ public interface PropertyService {
      * @param remark
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "updateProperty/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "property/updateProperty/{id}")
     Result updatePropertyById(@PathVariable("id") Long id, @RequestParam("name") String name, @RequestParam("value") String value, @RequestParam("remark") String remark);
 
     /**
@@ -52,7 +52,7 @@ public interface PropertyService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "getProperty/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "property/getProperty/{id}")
     Result<PropertyDTO> getPropertyById(@PathVariable("id") Long id);
 
     /**
@@ -61,6 +61,6 @@ public interface PropertyService {
      * @param listPropertyParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "listProperty")
+    @RequestMapping(method = RequestMethod.GET, value = "property/listProperty")
     Result<Page<PropertyDTO>> listProperty(@ModelAttribute ListPropertyParam listPropertyParam);
 }

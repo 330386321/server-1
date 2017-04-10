@@ -54,7 +54,7 @@ public class SearchWordController extends BaseController {
     }
 
     /**
-     * 查询词条
+     * 词条列表
      *
      * @param searchWordParam
      * @return

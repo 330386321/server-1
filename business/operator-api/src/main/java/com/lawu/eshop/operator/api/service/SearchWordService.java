@@ -31,15 +31,15 @@ public interface SearchWordService {
      * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "deleteSearchWord/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "searchWord/deleteSearchWord/{id}")
     Result deleteSearchWordById(@PathVariable("id") Long id);
 
     /**
-     * 查询词条
+     * 词条列表
      *
      * @param searchWordParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "listSearchWord")
+    @RequestMapping(method = RequestMethod.GET, value = "searchWord/listSearchWord")
     Result<Page<SearchWordDTO>> listSearchWord(@ModelAttribute SearchWordParam searchWordParam);
 }
