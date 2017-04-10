@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
@@ -17,8 +18,10 @@ import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
 import com.lawu.eshop.ad.srv.domain.AdRegionDO;
+import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
+import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.framework.core.page.Page;
 
@@ -36,6 +39,9 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private AdRegionDOMapper adRegionDOMapper;
 	
+	@Autowired
+	private FavoriteAdDOMapper favoriteAdDOMapper;
+	
 	//@Autowired
     //private TransactionMainService transactionMainService;
 
@@ -52,36 +58,43 @@ public class AdServiceImpl implements AdService {
 		adDO.setTitle(adParam.getTitle());
 		adDO.setMerchantId(merchantId);
 		adDO.setMediaUrl(mediaUrl);
-		adDO.setAdCount(adParam.getAdCount());
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
-		if(adParam.getPutWayEnum().val==3){
-			adDO.setRadius(adParam.getRadius());
-		}
 		adDO.setBeginTime(adParam.getBeginTime());
 		adDO.setEndTime(adParam.getEndTime());
-		if(adParam.getPoint()!=null){
+		adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+		if(adParam.getTypeEnum().val!=3){
 			adDO.setPoint(adParam.getPoint());
+			adDO.setAdCount(adParam.getAdCount());
+			if(adParam.getPutWayEnum().val==3)
+				adDO.setRadius(adParam.getRadius());
+		}else if(adParam.getTypeEnum().val==2){
+			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
+		}else{ //E赞
+			if(adParam.getPutWayEnum().val==1){ //区域
+				if(adParam.getAreas()==null){ //全国
+					
+				}else{
+					
+				}
+				 
+			}else if(adParam.getPutWayEnum().val==2){ //粉丝
+				
+			}
+			
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
-		if(adParam.getTypeEnum().val==2){
-			adDO.setStatus(new Byte("5")); //视频广告默认为审核中
-		}else{
-			adDO.setStatus(new Byte("1"));//其余的为上架中
-		}
+		
 		adDO.setGmtCreate(new Date());
 		adDO.setGmtModified(new Date());
-		if(adParam.getAreas()!=null){ 
-			adDO.setAreas(adParam.getAreas());
-		}
-		if(adParam.getContent()!=null)
-		adDO.setContent(adParam.getContent());
-		Integer id=adDOMapper.insert(adDO);
+		if(adParam.getAreas()!=null) adDO.setAreas(adParam.getAreas());
+		if(adParam.getContent()!=null) adDO.setContent(adParam.getContent());
+		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getAreas()!=null){ //不是全国投放
 			String[] path=adParam.getAreas().split("/");
 			for (String s : path) {
 				AdRegionDO adRegionDO=new AdRegionDO();
-				adRegionDO.setAdId(Long.valueOf(id));
+				adRegionDO.setAdId(adDO.getId());
 				adRegionDO.setMerchantId(merchantId);
 				adRegionDO.setGmtCreate(new Date());
 				adRegionDO.setRegionId(s);
@@ -92,11 +105,11 @@ public class AdServiceImpl implements AdService {
 		
 		//发送消息，通知其他模块处理事务 积分的处理
 		//transactionMainService.sendNotice(merchantId);
-		return id;
+		return i;
 	}
-
+	
 	/**
-	 * 商家E赚查询
+	 * 商家广告查询
 	 * @param adMerchantParam
 	 * @param merchantId
 	 * @return
@@ -105,7 +118,7 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByMerchant(AdMerchantParam adMerchantParam, Long merchantId) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		cr.andMerchantIdEqualTo(merchantId).andStatusNotEqualTo(new Byte("0"));
+		cr.andMerchantIdEqualTo(merchantId).andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
 		if(adMerchantParam.getPutWayEnum()!=null){
 			cr.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 		}else if(adMerchantParam.getTypeEnum()!=null){
@@ -158,7 +171,7 @@ public class AdServiceImpl implements AdService {
 	public Integer remove( Long id) {
 		AdDO adDO=new AdDO();
 		adDO.setId(id);
-		adDO.setStatus(new Byte("0"));
+		adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val);
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		return i;
 	}
@@ -172,7 +185,7 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByPlatForm(AdMerchantParam adMerchantParam) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		cr.andStatusNotEqualTo(new Byte("0"));
+		cr.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
 		if(adMerchantParam.getPutWayEnum()!=null){
 			cr.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 		}else if(adMerchantParam.getTypeEnum()!=null){
@@ -193,7 +206,7 @@ public class AdServiceImpl implements AdService {
 	}
 
 	/**
-	 * 会员对E赚的观看
+	 * 会员对广告的观看
 	 * @param adMerchantParam
 	 * @return
 	 */
@@ -201,16 +214,27 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByMember(AdMerchantParam adMerchantParam, Long memberId) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		cr.andStatusEqualTo(new Byte("2")) //投放中
+		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val) //投放中
 		  .andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 		RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
-		//所有E赚
 		List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		List<AdDO> list=watchAdList(DOS,memberId);
+		List<AdDO> list=new ArrayList<AdDO>();
+		
+		list=watchAdList(DOS,memberId);
+		list=list.subList(adMerchantParam.getCurrentPage()*10, (adMerchantParam.getCurrentPage()+1)*10);
+		List<AdBO> BOS=new ArrayList<AdBO>();
+		for (AdDO adDO : list) {
+			FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+			adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+			Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+			AdBO BO=AdConverter.convertBO(adDO);
+			BO.setAttenCount(attenCount.intValue());
+			BOS.add(BO);
+		}
 		Page<AdBO> page=new Page<AdBO>();
 		page.setCurrentPage(adMerchantParam.getCurrentPage());
 		page.setTotalCount(list.size());
-		page.setRecords(AdConverter.convertBOS(list));
+		page.setRecords(BOS);
 		return page;
 	}
 	
@@ -232,16 +256,25 @@ public class AdServiceImpl implements AdService {
 				String[] memberPath=regionPath.split("/");
 				for (String s : path) {
 					for (String mp : memberPath) {
-						if(s.equals(mp))
+						if(s.equals(mp)){
 							list.add(adDO);
+							continue;
+						}
 					}
 				}
 				
-			}else if(adDO.getType()==1){//粉丝投放
+			}else if(adDO.getType()==2){//粉丝投放
 				//当前广告商家的粉丝
-				//List<Fens>
-				list.add(adDO);
-			}else{//雷达投放
+				List<Long> fensList=new ArrayList<Long>();
+				fensList.add((long)1);
+				for (Long fens : fensList) {
+					if(memberId.equals(fens)){
+						list.add(adDO);
+						continue;
+					}
+						
+				}
+			}else if(adDO.getType()==3){//雷达投放
 				list.add(adDO);
 			}
 			
@@ -258,12 +291,13 @@ public class AdServiceImpl implements AdService {
 	public AdBO selectAbById(Long id) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		Integer hits= adDO.getHits();
-		if(hits!=null && hits<adDO.getAdCount()){
+		//平面和视频点击次数加一
+		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
 			hits+=1;
 			adDO.setHits(hits);
 			adDOMapper.updateByPrimaryKey(adDO);
-		}else{
-			adDO.setStatus(new Byte("3"));
+		}else if(hits==adDO.getAdCount()){
+			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 			adDOMapper.updateByPrimaryKey(adDO);
 		}
 		AdBO adBO=AdConverter.convertBO(adDO);
@@ -289,13 +323,14 @@ public class AdServiceImpl implements AdService {
 	public List<AdBO> selectPoint(Long memberId) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		cr.andStatusEqualTo(new Byte("2")); //投放中
+		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val); //投放中
 		example.setOrderByClause("total_point desc");
-		//所有E赚
+		//所有广告
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
-		List<AdDO> list=watchAdList(DOS,memberId);
-		AdConverter.convertBOS(list);
-		return null;
+		List<AdDO> list=new ArrayList<AdDO>();
+		list=watchAdList(DOS,memberId);
+		list=list.subList(0, 9);
+		return AdConverter.convertBOS(list);
 	}
 
 	/**

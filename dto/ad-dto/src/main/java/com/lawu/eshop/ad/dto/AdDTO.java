@@ -49,6 +49,8 @@ public class AdDTO {
 
     
     private Date gmtCreate;
+    
+    private Integer attenCount;
 
 
 	public Long getId() {
@@ -193,4 +195,14 @@ public class AdDTO {
 	}
 
 
+	public Integer getAttenCount() {
+		return attenCount;
+	}
+
+
+	public void setAttenCount(Integer attenCount) {
+		this.attenCount = attenCount;
+	}
+
+	
 }

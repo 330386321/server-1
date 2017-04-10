@@ -52,7 +52,7 @@ public class RedPacketDO implements Serializable {
 
     /**
      *
-     * 状态(0-删除1-上架3-下架)
+     * 状态(0-删除1-上架2-下架)
      * red_packet.status
      *
      * @mbg.generated

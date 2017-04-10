@@ -91,6 +91,7 @@ public class AdConverter {
 		adDTO.setTypeEnum(adBO.getTypeEnum());
 		adDTO.setPutWayEnum(adBO.getPutWayEnum());
 		adDTO.setStatusEnum(adBO.getStatusEnum());
+		adDTO.setAttenCount(adBO.getAttenCount());
 		if(adBO.getContent()!=null){
 			adDTO.setContent(adBO.getContent());
 		}

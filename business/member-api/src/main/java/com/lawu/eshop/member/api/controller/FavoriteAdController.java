@@ -62,7 +62,7 @@ public class FavoriteAdController extends BaseController{
 	 * @return
 	 */
 	@ApiOperation(value = "我收藏的广告", notes = "我收藏的广告，[]（张荣成）", httpMethod = "POST")
-   // @Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.POST)
     public Result<Page<FavoriteAdDOViewDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

@@ -55,6 +55,8 @@ public class AdBO{
 
     
     private Date gmtCreate;
+    
+    private Integer attenCount;
 
 
 	public Long getId() {
@@ -216,6 +218,16 @@ public class AdBO{
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+
+	public Integer getAttenCount() {
+		return attenCount;
+	}
+
+
+	public void setAttenCount(Integer attenCount) {
+		this.attenCount = attenCount;
 	}
 
     

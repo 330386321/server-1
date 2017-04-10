@@ -1,7 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
@@ -30,7 +27,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import util.UploadFileUtil;
 
 /**
  * 描述：广告管理
@@ -53,7 +49,7 @@ public class AdController extends BaseController {
     @ApiOperation(value = "添加广告", notes = "添加广告[5000]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
-    public Result saveAd(@ModelAttribute @ApiParam(required = true, value = "E赚信息") AdParam adParam) {
+    public Result saveAd(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
@@ -63,14 +59,14 @@ public class AdController extends BaseController {
     	}
     	String mediaUrl="http://www.baidu.com";
     	HttpServletRequest request = getRequest();
-    	if(adParam.getPutWayEnum().val==1){ //平面投放
+    	/*if(adParam.getPutWayEnum().val==1){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD);
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl").toString();
             }
     	}else{//视频投放
     		
-    	}
+    	}*/
         Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl);
         return rsAd;
     }
