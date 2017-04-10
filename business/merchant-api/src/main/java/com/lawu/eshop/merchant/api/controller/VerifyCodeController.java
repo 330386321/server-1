@@ -1,14 +1,18 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.utils.IpUtil;
+import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.VerifyCodeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -78,7 +82,23 @@ public class VerifyCodeController extends BaseController {
     @ApiOperation(value = "查询验证码", notes = "查询验证码。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getVerifyCode/{id}", method = RequestMethod.GET)
-    public Result getVerifyCode(@PathVariable @ApiParam(required = true, value = "ID") Long  id) {
+    public Result getVerifyCode(@PathVariable @ApiParam(required = true, value = "ID") Long id) {
         return verifyCodeService.getVerifyCodeById(id);
+    }
+
+    @ApiOperation(value = "身份二维码", notes = "身份二维码。 (梅述全)", httpMethod = "GET")
+    @Authorization
+    @RequestMapping(value = "getQrCode", method = RequestMethod.GET)
+    public void getQrCode(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws IOException {
+        HttpServletResponse response = getResponse();
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        BufferedImage buffImg = QrCodeUtil.generateQrCode(UserUtil.getCurrentUserNum(getRequest()));
+        // 将图像输出到Servlet输出流中。
+        ServletOutputStream sos = response.getOutputStream();
+        ImageIO.write(buffImg, "jpeg", sos);
+        sos.close();
     }
 }

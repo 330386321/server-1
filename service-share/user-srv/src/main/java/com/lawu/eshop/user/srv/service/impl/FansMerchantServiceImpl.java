@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.InviteFansParam;
-import com.lawu.eshop.user.param.InviteInviteFansRealParam;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
@@ -31,26 +31,26 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
-    public List<FansMerchantBO> listInviteFans(InviteFansParam inviteFansParam) {
-        InviteInviteFansRealParam inviteFansRealParam = new InviteInviteFansRealParam();
-        inviteFansRealParam.setSex(inviteFansParam.getUserSexEnum().val);
-        inviteFansRealParam.setRegionPath(inviteFansParam.getRegionPath());
-        inviteFansRealParam.setStartAge(inviteFansParam.getStartAge());
-        inviteFansRealParam.setEndAge(inviteFansParam.getEndAge());
-        List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(inviteFansRealParam);
+    public List<FansMerchantBO> listInviteFans(Long merchantId, String regionPath) {
+        InviteFansParam inviteFansParam = new InviteFansParam();
+        inviteFansParam.setMerchantId(merchantId);
+        inviteFansParam.setRegionPath(regionPath);
+        List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(inviteFansParam);
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
     }
 
     @Override
-    public List<FansMerchantBO> listFans(Long merchantId, ListFansParam listFansParam) {
+    public Page<FansMerchantBO> listFans(Long merchantId, ListFansParam listFansParam) {
         ListFansRealParam listFansRealParam = new ListFansRealParam();
         listFansRealParam.setMerchantId(merchantId);
-        listFansRealParam.setSex(listFansParam.getUserSexEnum().val);
         listFansRealParam.setRegionPath(listFansParam.getRegionPath());
-        listFansRealParam.setStartAge(listFansParam.getStartAge());
-        listFansRealParam.setEndAge(listFansParam.getEndAge());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listFans(listFansRealParam);
-        return FansMerchantConverter.convertBO(fansMerchantDOViewList);
+
+        Page<FansMerchantBO> page = new Page<>();
+        page.setRecords(FansMerchantConverter.convertBO(fansMerchantDOViewList));
+        page.setTotalCount(fansMerchantDOMapperExtend.countFans(listFansRealParam));
+        page.setCurrentPage(listFansParam.getCurrentPage());
+        return page;
     }
 
     @Override

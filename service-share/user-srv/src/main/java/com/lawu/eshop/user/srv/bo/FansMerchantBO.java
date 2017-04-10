@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.bo;
 
+import java.util.Date;
+
 /**
  * @author meishuquan
  * @date 2017/4/6.
@@ -12,11 +14,13 @@ public class FansMerchantBO {
 
     private String account;
 
-    private Byte sex;
-
     private String regionPath;
 
-    private String age;
+    private String nickname;
+
+    private String headimg;
+
+    private Date gmtCreate;
 
     public Long getMemberId() {
         return memberId;
@@ -24,6 +28,14 @@ public class FansMerchantBO {
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 
     public String getAccount() {
@@ -34,14 +46,6 @@ public class FansMerchantBO {
         this.account = account;
     }
 
-    public Byte getSex() {
-        return sex;
-    }
-
-    public void setSex(Byte sex) {
-        this.sex = sex;
-    }
-
     public String getRegionPath() {
         return regionPath;
     }
@@ -50,19 +54,27 @@ public class FansMerchantBO {
         this.regionPath = regionPath;
     }
 
-    public String getAge() {
-        return age;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
-    public String getNum() {
-        return num;
+    public String getHeadimg() {
+        return headimg;
     }
 
-    public void setNum(String num) {
-        this.num = num;
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

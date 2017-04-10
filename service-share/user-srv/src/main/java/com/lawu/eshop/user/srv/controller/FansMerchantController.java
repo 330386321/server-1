@@ -1,10 +1,10 @@
 package com.lawu.eshop.user.srv.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
-import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
@@ -28,12 +28,13 @@ public class FansMerchantController extends BaseController {
     /**
      * 查询可邀请的会员
      *
-     * @param inviteFansParam
+     * @param merchantId
+     * @param regionPath
      * @return
      */
-    @RequestMapping(value = "listInviteFans", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listInviteFans(@RequestBody InviteFansParam inviteFansParam) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(inviteFansParam);
+    @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.GET)
+    public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestParam String regionPath) {
+        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, regionPath);
         if (fansMerchantBOList.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
@@ -48,12 +49,13 @@ public class FansMerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listFans/{merchantId}", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listFans(@PathVariable Long merchantId, @RequestBody ListFansParam listFansParam) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listFans(merchantId, listFansParam);
-        if (fansMerchantBOList.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
+    public Result<Page<FansMerchantDTO>> listFans(@PathVariable Long merchantId, @RequestBody ListFansParam listFansParam) {
+        Page<FansMerchantBO> fansMerchantBOPage = fansMerchantService.listFans(merchantId, listFansParam);
+        Page<FansMerchantDTO> page = new Page<>();
+        page.setCurrentPage(fansMerchantBOPage.getCurrentPage());
+        page.setTotalCount(fansMerchantBOPage.getTotalCount());
+        page.setRecords(FansMerchantConverter.convertDTO(fansMerchantBOPage.getRecords()));
+        return successGet(page);
     }
 
     /**
@@ -63,8 +65,8 @@ public class FansMerchantController extends BaseController {
      * @param merchantId
      * @return
      */
-    @RequestMapping(value = "isFansMerchant", method = RequestMethod.GET)
-    public Result<Boolean> isFansMerchant(@RequestParam Long memberId, @RequestParam Long merchantId) {
+    @RequestMapping(value = "isFansMerchant/{merchantId}", method = RequestMethod.GET)
+    public Result<Boolean> isFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
         FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(memberId, merchantId);
         if (fansMerchantBO == null) {
             return successGet(false);

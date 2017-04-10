@@ -1,6 +1,6 @@
 package com.lawu.eshop.user.srv.mapper.extend;
 
-import com.lawu.eshop.user.param.InviteInviteFansRealParam;
+import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.ListFansRealParam;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
 
@@ -12,8 +12,10 @@ import java.util.List;
  */
 public interface FansMerchantDOMapperExtend {
 
-    List<FansMerchantDOView> listInviteFans(InviteInviteFansRealParam inviteFansRealParam);
+    List<FansMerchantDOView> listInviteFans(InviteFansParam inviteFansParam);
 
     List<FansMerchantDOView> listFans(ListFansRealParam listFansRealParam);
+
+    int countFans(ListFansRealParam listFansRealParam);
 
 }

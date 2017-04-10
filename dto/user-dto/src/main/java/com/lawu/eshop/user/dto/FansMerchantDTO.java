@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.dto;
 
-import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -20,23 +19,17 @@ public class FansMerchantDTO {
     @ApiModelProperty(value = "会员账号")
     private String account;
 
-    @ApiModelProperty(value = "性别")
-    private UserSexEnum userSexEnum;
-
-    @ApiModelProperty(value = "区域路劲")
+    @ApiModelProperty(value = "区域路径")
     private String regionPath;
 
-    @ApiModelProperty(value = "年龄")
-    private String age;
+    @ApiModelProperty(value = "昵称")
+    private String nickname;
 
-    @ApiModelProperty(value = "消费次数")
-    private Integer consumeCount;
+    @ApiModelProperty(value = "头像")
+    private String headimg;
 
-    @ApiModelProperty(value = "消费金额")
-    private Double consumeAmount;
-
-    @ApiModelProperty(value = "最近消费时间")
-    private Date lastConsumeTime;
+    @ApiModelProperty(value = "成为粉丝时间")
+    private Date gmtCreate;
 
     public Long getMemberId() {
         return memberId;
@@ -44,38 +37,6 @@ public class FansMerchantDTO {
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public UserSexEnum getUserSexEnum() {
-        return userSexEnum;
-    }
-
-    public void setUserSexEnum(UserSexEnum userSexEnum) {
-        this.userSexEnum = userSexEnum;
-    }
-
-    public String getRegionPath() {
-        return regionPath;
-    }
-
-    public void setRegionPath(String regionPath) {
-        this.regionPath = regionPath;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
     }
 
     public String getNum() {
@@ -86,27 +47,43 @@ public class FansMerchantDTO {
         this.num = num;
     }
 
-    public Integer getConsumeCount() {
-        return consumeCount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setConsumeCount(Integer consumeCount) {
-        this.consumeCount = consumeCount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public Double getConsumeAmount() {
-        return consumeAmount;
+    public String getRegionPath() {
+        return regionPath;
     }
 
-    public void setConsumeAmount(Double consumeAmount) {
-        this.consumeAmount = consumeAmount;
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 
-    public Date getLastConsumeTime() {
-        return lastConsumeTime;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setLastConsumeTime(Date lastConsumeTime) {
-        this.lastConsumeTime = lastConsumeTime;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeadimg() {
+        return headimg;
+    }
+
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.domain.extend;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author meishuquan
@@ -16,46 +17,16 @@ public class FansMerchantDOView implements Serializable {
 
     private String account;
 
-    private Byte sex;
-
     private String regionPath;
 
-    private String age;
+    private String nickname;
+
+    private String headimg;
+
+    private Date gmtCreate;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public Byte getSex() {
-        return sex;
-    }
-
-    public void setSex(Byte sex) {
-        this.sex = sex;
-    }
-
-    public String getRegionPath() {
-        return regionPath;
-    }
-
-    public void setRegionPath(String regionPath) {
-        this.regionPath = regionPath;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    public void setAge(String age) {
-        this.age = age;
     }
 
     public Long getMemberId() {
@@ -72,5 +43,45 @@ public class FansMerchantDOView implements Serializable {
 
     public void setNum(String num) {
         this.num = num;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeadimg() {
+        return headimg;
+    }
+
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

@@ -6,41 +6,33 @@
         <result column="num" property="num" jdbcType="VARCHAR"/>
         <result column="account" property="account" jdbcType="VARCHAR"/>
         <result column="region_path" property="regionPath" jdbcType="VARCHAR"/>
-        <result column="sex" property="sex" jdbcType="TINYINT"/>
-        <result column="age" property="age" jdbcType="INTEGER"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="headimg" property="headimg" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.param.InviteInviteFansRealParam"
-            id="listInviteFans">
+    <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.param.InviteFansParam" id="listInviteFans">
         select id as memberId,num,account from member where region_path = #{regionPath,jdbcType=VARCHAR}
-        <if test="startAge != null">
-            and TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &gt;= #{startAge,jdbcType=INTEGER}
-        </if>
-        <if test="endAge != null">
-            and TIMESTAMPDIFF(YEAR,birthday,CURRENT_DATE) &lt;= #{endAge,jdbcType=INTEGER}
-        </if>
-        <if test="sex != null and sex != 1">
-            and sex = {sex,jdbcType=TINYINT};
-        </if>
         and id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
     </select>
 
     <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.param.ListFansRealParam" id="listFans">
-        select mem.account,mem.region_path,mem.sex,TIMESTAMPDIFF(YEAR,mem.birthday,CURRENT_DATE) as age
+        select mem.account,mem.region_path,mem.nickname,mem.headimg,fm.gmt_create
         from fans_merchant fm inner join member mem on fm.member_id = mem.id
         where fm.merchant_id = #{merchantId,,jdbcType=BIGINT}
         <if test="regionPath != null">
-            and mem.region_path = #{regionPath,jdbcType=VARCHAR}
+            and mem.region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
         </if>
-        <if test="startAge != null">
-            and TIMESTAMPDIFF(YEAR,mem.birthday,CURRENT_DATE) &gt;= #{startAge,jdbcType=INTEGER}
+        order by fm.id desc
+        limit #{offset,,jdbcType=INTEGER},#{pageSize,,jdbcType=INTEGER}
+    </select>
+
+    <select resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.ListFansRealParam" id="countFans">
+        select count(1)
+        from fans_merchant fm inner join member mem on fm.member_id = mem.id
+        where fm.merchant_id = #{merchantId,,jdbcType=BIGINT}
+        <if test="regionPath != null">
+            and mem.region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
         </if>
-        <if test="endAge != null">
-            and TIMESTAMPDIFF(YEAR,mem.birthday,CURRENT_DATE) &lt;= #{endAge,jdbcType=INTEGER}
-        </if>
-        <if test="sex != null and sex != 1">
-            and mem.sex = {sex,jdbcType=TINYINT};
-        </if>
-        and id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
     </select>
 </mapper>

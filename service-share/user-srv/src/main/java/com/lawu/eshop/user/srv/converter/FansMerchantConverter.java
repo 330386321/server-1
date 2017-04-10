@@ -1,10 +1,11 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOView;
+import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +47,12 @@ public class FansMerchantConverter {
         for (FansMerchantDOView fansMerchantDOView : fansMerchantDOViewList) {
             FansMerchantBO fansMerchantBO = new FansMerchantBO();
             fansMerchantBO.setRegionPath(fansMerchantDOView.getRegionPath());
-            fansMerchantBO.setSex(fansMerchantDOView.getSex());
             fansMerchantBO.setAccount(fansMerchantDOView.getAccount());
             fansMerchantBO.setMemberId(fansMerchantDOView.getMemberId());
-            fansMerchantBO.setAge(fansMerchantDOView.getAge());
             fansMerchantBO.setNum(fansMerchantDOView.getNum());
+            fansMerchantBO.setGmtCreate(fansMerchantDOView.getGmtCreate());
+            fansMerchantBO.setHeadimg(fansMerchantDOView.getHeadimg());
+            fansMerchantBO.setNickname(fansMerchantDOView.getNickname());
             fansMerchantBOS.add(fansMerchantBO);
         }
         return fansMerchantBOS;
@@ -70,12 +72,13 @@ public class FansMerchantConverter {
         List<FansMerchantDTO> fansMerchantDTOS = new ArrayList<FansMerchantDTO>(fansMerchantBOList.size());
         for (FansMerchantBO fansMerchantBO : fansMerchantBOList) {
             FansMerchantDTO fansMerchantDTO = new FansMerchantDTO();
-            fansMerchantDTO.setAge(fansMerchantBO.getAge());
             fansMerchantDTO.setMemberId(fansMerchantBO.getMemberId());
-            fansMerchantDTO.setAccount(fansMerchantBO.getAccount());
+            fansMerchantDTO.setAccount(StringUtil.hideUserAccount(fansMerchantBO.getAccount()));
             fansMerchantDTO.setRegionPath(fansMerchantBO.getRegionPath());
-            fansMerchantDTO.setUserSexEnum(UserSexEnum.getEnum(fansMerchantBO.getSex()));
             fansMerchantDTO.setNum(fansMerchantBO.getNum());
+            fansMerchantDTO.setNickname(StringUtils.isEmpty(fansMerchantBO.getNickname()) ? "E店用户" : fansMerchantBO.getNickname());
+            fansMerchantDTO.setHeadimg(fansMerchantBO.getHeadimg());
+            fansMerchantDTO.setGmtCreate(fansMerchantBO.getGmtCreate());
             fansMerchantDTOS.add(fansMerchantDTO);
         }
         return fansMerchantDTOS;
