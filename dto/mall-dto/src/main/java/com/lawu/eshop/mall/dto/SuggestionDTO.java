@@ -1,5 +1,10 @@
 package com.lawu.eshop.mall.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.mall.constants.SuggestionClientType;
+import com.lawu.eshop.mall.constants.SuggestionUserType;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
 
 /**
@@ -10,82 +15,103 @@ import java.util.Date;
  */
 public class SuggestionDTO {
 
-	/**
-	 * 主键
-	 */
-	private Integer id;
-	
-	/**
-	 * 用户编号 
-	 */
-	private String userNum;
-	
-	/**
-	 * 建议内容
-	 */
-	private String content;
-	
-	/**
-	 * 客户端类型，1是android，2是ios
-	 */
-	private Byte userType;
-	
-	/**
-	 * 修改时间
-	 */
-	private Date gmtModified;
-	
-	/**
-	 * 创建时间
-	 */
-	private Date gmtCreate;
+    /**
+     * 主键
+     */
+    @ApiModelProperty(value = "意见反馈ID")
+    private Integer id;
 
-	public Integer getId() {
-		return id;
-	}
+    /**
+     * 用户编号
+     */
+    @ApiModelProperty(value = "用户编号")
+    private String userNum;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    /**
+     * 建议内容
+     */
+    @ApiModelProperty(value = "建议内容")
+    private String content;
 
-	public String getUserNum() {
-		return userNum;
-	}
+    /**
+     * 用户端类型:1是商家，2是会员
+     */
+    @ApiModelProperty(value = "MEMBER:用户,MERCHANT:商家")
+    private SuggestionUserType userType;
 
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
-	}
+    /**
+     * 客户端类型：1是android，2是ios
+     */
+    @ApiModelProperty(value = "ANDROID,IOS")
+    private SuggestionClientType clientType;
 
-	public String getContent() {
-		return content;
-	}
+    /**
+     * 修改时间
+     */
+    @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date gmtModified;
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    /**
+     * 创建时间
+     */
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date gmtCreate;
 
-	public Byte getUserType() {
-		return userType;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setUserType(Byte userType) {
-		this.userType = userType;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Date getGmtModified() {
-		return gmtModified;
-	}
+    public String getUserNum() {
+        return userNum;
+    }
 
-	public void setGmtModified(Date gmtModified) {
-		this.gmtModified = gmtModified;
-	}
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
+    }
 
-	public Date getGmtCreate() {
-		return gmtCreate;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
-	}
-	
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public SuggestionUserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(SuggestionUserType userType) {
+        this.userType = userType;
+    }
+
+    public SuggestionClientType getClientType() {
+        return clientType;
+    }
+
+    public void setClientType(SuggestionClientType clientType) {
+        this.clientType = clientType;
+    }
 }

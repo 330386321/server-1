@@ -1,14 +1,15 @@
 package com.lawu.eshop.mall.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-
+import com.lawu.eshop.mall.constants.SuggestionClientType;
+import com.lawu.eshop.mall.constants.SuggestionUserType;
 import com.lawu.eshop.mall.dto.SuggestionDTO;
 import com.lawu.eshop.mall.param.SuggestionParam;
 import com.lawu.eshop.mall.srv.bo.SuggestionBO;
 import com.lawu.eshop.mall.srv.domain.SuggestionDO;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -32,7 +33,8 @@ public class SuggestionConverter {
 
 		SuggestionBO bo = new SuggestionBO();
 		BeanUtils.copyProperties(suggestionDO, bo);
-
+		bo.setClientType(SuggestionClientType.getEnum(suggestionDO.getClientType()));
+		bo.setUserType(SuggestionUserType.getEnum(suggestionDO.getUserType()));
 		return bo;
 	}
 
@@ -97,7 +99,7 @@ public class SuggestionConverter {
 		}
 		
 		if (param.getClientType() != null) {
-			suggestionDO.setClientType(param.getClientType().getValue());
+			suggestionDO.setClientType(param.getClientType().value);
 		}
 		
 		return suggestionDO;

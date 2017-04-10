@@ -12,14 +12,15 @@ public enum SuggestionClientType {
 		this.value = value;
 	}
 	
-	private Byte value;
-
-	public Byte getValue() {
-		return value;
-	}
-
-	public void setValue(Byte value) {
-		this.value = value;
+	public Byte value;
+	public static SuggestionClientType getEnum(Byte value) {
+		SuggestionClientType[] values = SuggestionClientType.values();
+		for (SuggestionClientType object : values) {
+			if (object.value.equals(value)) {
+				return object;
+			}
+		}
+		return null;
 	}
 	
 }

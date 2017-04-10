@@ -1,5 +1,8 @@
 package com.lawu.eshop.mall.srv.bo;
 
+import com.lawu.eshop.mall.constants.SuggestionClientType;
+import com.lawu.eshop.mall.constants.SuggestionUserType;
+
 import java.util.Date;
 
 /**
@@ -24,11 +27,17 @@ public class SuggestionBO {
 	 * 建议内容
 	 */
 	private String content;
-	
+
 	/**
-	 * 客户端类型，1是android，2是ios
+	 * 用户端类型:1是商家，2是会员
 	 */
-	private Byte userType;
+	private SuggestionUserType userType;
+
+	/**
+	 * 客户端类型：1是android，2是ios
+	 */
+	private SuggestionClientType clientType;
+	;
 	
 	/**
 	 * 修改时间
@@ -64,12 +73,20 @@ public class SuggestionBO {
 		this.content = content;
 	}
 
-	public Byte getUserType() {
+	public SuggestionUserType getUserType() {
 		return userType;
 	}
 
-	public void setUserType(Byte userType) {
+	public void setUserType(SuggestionUserType userType) {
 		this.userType = userType;
+	}
+
+	public SuggestionClientType getClientType() {
+		return clientType;
+	}
+
+	public void setClientType(SuggestionClientType clientType) {
+		this.clientType = clientType;
 	}
 
 	public Date getGmtModified() {
