@@ -32,4 +32,10 @@ public interface ProductCategoryService {
 	 * @return
 	 */
 	String getFullName(Integer id);
+
+	/**
+	 * 查询推荐商品类别
+	 * @return
+	 */
+	List<ProductCategoryBO> listRecommendProductCategory();
 }

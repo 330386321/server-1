@@ -1,5 +1,8 @@
 package com.lawu.eshop.product.srv.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.converter.ProductCategoryConverter;
@@ -18,13 +21,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "productCategory/")
-public class ProductCategoryController {
+public class ProductCategoryController extends BaseController {
 
     @Autowired
     private ProductCategoryService productCategoryService;
 
     /**
      * 查询所有商品分类
+     *
      * @return
      */
     @RequestMapping(value = "findAll", method = RequestMethod.GET)
@@ -35,6 +39,7 @@ public class ProductCategoryController {
 
     /**
      * 根据ID查询商品分类
+     *
      * @param id
      * @return
      */
@@ -42,5 +47,19 @@ public class ProductCategoryController {
     public ProductCategoryDTO getById(@RequestParam Integer id) {
         ProductCategoryBO productCategoryBO = productCategoryService.getById(id);
         return productCategoryBO == null ? null : ProductCategoryConverter.convertDTO(productCategoryBO);
+    }
+
+    /**
+     * 查询推荐商品类别(一级)
+     *
+     * @return
+     */
+    @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)
+    public Result<List<ProductCategoryDTO>> listRecommendProductCategory() {
+        List<ProductCategoryBO> productCategoryBOS = productCategoryService.listRecommendProductCategory();
+        if (productCategoryBOS.isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(ProductCategoryConverter.convertDTOS(productCategoryBOS));
     }
 }

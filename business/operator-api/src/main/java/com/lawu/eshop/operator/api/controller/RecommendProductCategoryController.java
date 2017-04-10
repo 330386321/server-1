@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.operator.api.service.RecommendProductCategoryService;
+import com.lawu.eshop.product.dto.ProductCategoryDTO;
 import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
 import com.lawu.eshop.product.param.ListRecommendProductCategoryParam;
 import io.swagger.annotations.Api;
@@ -15,6 +16,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -54,5 +57,13 @@ public class RecommendProductCategoryController extends BaseController {
     public Result<Page<RecommendProductCategoryDTO>> listRecommendProductCategory(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                                   @ModelAttribute @ApiParam(required = true, value = "查询条件") ListRecommendProductCategoryParam listRecommendProductCategoryParam) {
         return recommendProductCategoryService.listRecommendProductCategory(listRecommendProductCategoryParam);
+    }
+
+    @ApiOperation(value = "查询商品一级类别", notes = "商品一级类别列表。[1002]（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "listLevelOneProductCategory", method = RequestMethod.GET)
+    public Result<List<ProductCategoryDTO>> listLevelOneProductCategory(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        return recommendProductCategoryService.listRecommendProductCategory();
     }
 }
