@@ -11,6 +11,7 @@ import com.lawu.eshop.mall.srv.mapper.SearchWordDOMapper;
 import com.lawu.eshop.mall.srv.service.SearchWordService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/4/7.
  */
+@Service
 public class SearchWordServiceImpl implements SearchWordService {
 
     @Autowired

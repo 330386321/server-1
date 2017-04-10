@@ -39,7 +39,7 @@ public class SearchWordController extends BaseController {
         return searchWordService.saveSearchWord(word, searchWordTypeEnum);
     }
 
-    @ApiOperation(value = "删除词条", notes = "根据ID词条。[1002]（梅述全）", httpMethod = "DELETE")
+    @ApiOperation(value = "删除词条", notes = "根据ID删除词条。[1002]（梅述全）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
     @RequestMapping(value = "deleteSearchWord/{id}", method = RequestMethod.DELETE)
@@ -48,7 +48,7 @@ public class SearchWordController extends BaseController {
         return searchWordService.deleteSearchWordById(id);
     }
 
-    @ApiOperation(value = "查询词条", notes = "查询词条。（梅述全）", httpMethod = "GET")
+    @ApiOperation(value = "词条列表", notes = "词条列表。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listSearchWord", method = RequestMethod.GET)
