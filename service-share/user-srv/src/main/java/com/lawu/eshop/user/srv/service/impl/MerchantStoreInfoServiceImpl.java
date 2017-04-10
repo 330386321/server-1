@@ -1,5 +1,12 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
@@ -7,19 +14,27 @@ import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import net.sf.json.JSONObject;
 
 /**
  * 商家门店service
@@ -281,6 +296,16 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         return MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
     }
 
+    @Override
+    public List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds) {
+        MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
+        merchantStoreDOExample.createCriteria().andMerchantIdNotIn(merchantIds);
+        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+        
+        return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS);
+    }
+
+    
     @Override
     @Transactional
     public void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId) {

@@ -1,8 +1,18 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
@@ -157,5 +167,79 @@ public class MerchantStoreConverter {
         storeDetailDTO.setName(storeDetailBO.getName());
         return storeDetailDTO;
     }
-
+    
+    /**
+     * MerchantStoreNoReasonReturnBO转换
+     * 
+     * @param merchantStoreDO
+     * @return
+     */
+    public static MerchantStoreNoReasonReturnBO convert(MerchantStoreDO merchantStoreDO) {
+    	if (merchantStoreDO == null) {
+    		return null;
+    	}
+    	
+    	MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO = new MerchantStoreNoReasonReturnBO();
+    	merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
+    	merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
+    	
+    	return merchantStoreNoReasonReturnBO;
+    }
+    
+    /**
+     * MerchantStoreNoReasonReturnBO List转换
+     * 
+     * @param merchantStoreDOList
+     * @return
+     */
+    public static List<MerchantStoreNoReasonReturnBO> convertMerchantStoreNoReasonReturnBOList(List<MerchantStoreDO> merchantStoreDOList) {
+        if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()) {
+            return null;
+        }
+        
+        List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = new ArrayList<MerchantStoreNoReasonReturnBO>();
+        for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
+        	merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO));
+        }
+        
+        return merchantStoreNoReasonReturnBOList;
+    }
+    
+    /**
+     * MerchantStoreNoReasonReturnDTO转换
+     * 
+     * @param merchantStoreNoReasonReturnBO
+     * @return
+     */
+    public static MerchantStoreNoReasonReturnDTO convert(MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO) {
+    	if (merchantStoreNoReasonReturnBO == null) {
+    		return null;
+    	}
+    	
+    	MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO = new MerchantStoreNoReasonReturnDTO();
+    	merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
+    	merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
+    	
+    	return merchantStoreNoReasonReturnDTO;
+    }
+    
+    /**
+     * MerchantStoreNoReasonReturnDTO List转换
+     * 
+     * @param merchantStoreNoReasonReturnBOList
+     * @return
+     */
+    public static List<MerchantStoreNoReasonReturnDTO> convertMerchantStoreNoReasonReturnDTOList(List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList) {
+        if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
+            return null;
+        }
+        
+        List<MerchantStoreNoReasonReturnDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<MerchantStoreNoReasonReturnDTO>();
+        for (MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
+        	merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
+        }
+        
+        return merchantStoreNoReasonReturnDTOList;
+    }
+    
 }

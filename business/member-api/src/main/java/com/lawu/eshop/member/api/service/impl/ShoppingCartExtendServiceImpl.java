@@ -29,6 +29,7 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 
 /**
  * 购物车扩展服务实现类
@@ -209,6 +210,20 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		return successCreated(resultAddressDTO.getRet());
     	}
     	
+    	
+    	// 查询商家是否支持七天退货
+    	List merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
+    	Result<List<MerchantStoreNoReasonReturnDTO>> resultMerchantStoreNoReasonReturnDTOList = merchantStoreService.selectNoReasonReturnByMerchantIds(merchantIdList);
+    	if (!isSuccess(resultMerchantStoreNoReasonReturnDTOList)) {
+    		return successCreated(resultMerchantStoreNoReasonReturnDTOList.getRet());
+    	}
+    	
+    	// 把商家信息放入Map
+    	Map<Long, MerchantStoreNoReasonReturnDTO> merchantStoreNoReasonReturnDTOMap =  new HashMap<Long, MerchantStoreNoReasonReturnDTO>();
+    	for (MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO : resultMerchantStoreNoReasonReturnDTOList.getModel()) {
+    		merchantStoreNoReasonReturnDTOMap.put(merchantStoreNoReasonReturnDTO.getMerchantId(), merchantStoreNoReasonReturnDTO);
+    	}
+    	
     	// 组装订单
     	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
     	shoppingCartDTOMap.forEach( (key,value) -> {
@@ -223,6 +238,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setConsigneeAddress(resultAddressDTO.getModel().getRegionPath() + " " + resultAddressDTO.getModel().getAddr());
     		shoppingOrderSettlementParam.setConsigneeName(resultAddressDTO.getModel().getName());
     		shoppingOrderSettlementParam.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
+    		
+    		// 是否支持七天退货
+    		shoppingOrderSettlementParam.setIsNoReasonReturn(merchantStoreNoReasonReturnDTOMap.get(key).getIsNoReasonReturn());
     		
     		BigDecimal commodityTotalPrice = new BigDecimal(0);
     		List<ShoppingOrderSettlementItemParam> items = new ArrayList<ShoppingOrderSettlementItemParam>();

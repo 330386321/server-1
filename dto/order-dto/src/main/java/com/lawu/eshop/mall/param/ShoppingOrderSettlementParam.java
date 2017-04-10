@@ -11,9 +11,9 @@ import java.util.List;
  * @date 2017/4/6
  */
 public class ShoppingOrderSettlementParam implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * 用户id
 	 */
@@ -28,27 +28,27 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	 * 商家名称
 	 */
 	private String merchantName;
-	
+
 	/**
 	 * 买家留言
 	 */
 	private String message;
-	
-    /**
-    * 收货人姓名
-    */
-   private String consigneeName;
 
-   /**
-    * 收货人地址
-    */
-   private String consigneeAddress;
+	/**
+	 * 收货人姓名
+	 */
+	private String consigneeName;
 
-   /**
-    * 收货人手机号码
-    */
-   private String consigneeMobile;
-	
+	/**
+	 * 收货人地址
+	 */
+	private String consigneeAddress;
+
+	/**
+	 * 收货人手机号码
+	 */
+	private String consigneeMobile;
+
 	/**
 	 * 运费
 	 */
@@ -65,10 +65,15 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	private BigDecimal orderTotalPrice;
 
 	/**
+	 * 是否支持无理由退货,0否 1是
+	 */
+	private Boolean isNoReasonReturn;
+
+	/**
 	 * 订单项
 	 */
 	private List<ShoppingOrderSettlementItemParam> items;
-	
+
 	public Long getMemberId() {
 		return memberId;
 	}
@@ -149,6 +154,14 @@ public class ShoppingOrderSettlementParam implements Serializable {
 		this.orderTotalPrice = orderTotalPrice;
 	}
 
+	public Boolean getIsNoReasonReturn() {
+		return isNoReasonReturn;
+	}
+
+	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
+		this.isNoReasonReturn = isNoReasonReturn;
+	}
+
 	public List<ShoppingOrderSettlementItemParam> getItems() {
 		return items;
 	}
@@ -156,5 +169,5 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	public void setItems(List<ShoppingOrderSettlementItemParam> items) {
 		this.items = items;
 	}
-	
+
 }

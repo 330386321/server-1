@@ -1,21 +1,31 @@
 package com.lawu.eshop.user.srv.controller;
 
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.utils.ValidateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -191,6 +201,26 @@ public class MerchantStoreController extends BaseController {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successCreated(storeBO.getIsNoReasonReturn());
+    }
+    
+    /**
+     * 根据商家ID列表批量查询该商家是否支持七天无理由退货
+     *
+     * @param merchantIdList
+     */
+    @RequestMapping(value = "selectNoReasonReturnByMerchantIds", method = RequestMethod.GET)
+    public Result<List<MerchantStoreNoReasonReturnDTO>> selectNoReasonReturnByMerchantIds(@RequestParam List<Long> merchantIdList) {
+        if (merchantIdList == null || merchantIdList.isEmpty()) {
+            return successGet(ResultCode.ID_EMPTY);
+        }
+        
+        List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService.selectNoReasonReturnByMerchantIds(merchantIdList);
+        
+        if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        return successGet(MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
     }
 
     /**

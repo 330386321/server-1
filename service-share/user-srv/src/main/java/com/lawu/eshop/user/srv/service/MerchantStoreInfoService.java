@@ -1,7 +1,10 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 
@@ -45,6 +48,14 @@ public interface MerchantStoreInfoService {
     void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
 
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
+    
+    /**
+     * 根据商家id列表批量查询商家是否支持七天退货
+     * 
+     * @param merchantIds
+     * @return
+     */
+    List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds);
 
     void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
 
