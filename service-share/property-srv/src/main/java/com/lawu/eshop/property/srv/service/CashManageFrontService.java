@@ -1,6 +1,10 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
 
 /**
  * 
@@ -26,6 +30,20 @@ public interface CashManageFrontService {
 	 * @param cashMoney
 	 */
 	int save(CashDataParam cash);
+
+	/**
+	 * 用户、商家提现明细
+	 * @param cash
+	 * @return
+	 */
+	Page<WithdrawCashQueryBO> findCashList(CashBillDataParam cash);
+
+	/**
+	 * 提现明细
+	 * @param id
+	 * @return
+	 */
+	WithdrawCashDetailBO cashDetail(Long id);
 	
 	
 

@@ -4,8 +4,13 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
+import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
+import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
 
 /**
@@ -20,8 +25,31 @@ import com.lawu.eshop.property.param.CashDataParam;
 @FeignClient(value= "property-srv")
 public interface CashManageFrontService {
 	
+	/**
+	 * 用户、商家提现
+	 * @param cash
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "cashFront/save")
 	Result save(@RequestBody CashDataParam cash);
+
+	/**
+	 * 商家提现明细
+	 * @param cparam
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "cashFront/findCashList")
+	Result<Page<WithdrawCashQueryDTO>> findCashList(@RequestBody CashBillDataParam cparam);
+
+	/**
+	 * 商家提现详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "cashFront/cashDetail")
+	Result<WithdrawCashDetailDTO> cashDetail(@RequestParam("id") Long id);
+	
+	
 
 }

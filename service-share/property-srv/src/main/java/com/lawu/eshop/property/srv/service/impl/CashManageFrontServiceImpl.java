@@ -1,21 +1,27 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
@@ -125,6 +131,58 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		propertyInfoDOMapperExtend.updateByPrimaryKeySelective(infoDoView);
 
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public Page<WithdrawCashQueryBO> findCashList(CashBillDataParam cash) {
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum());
+		RowBounds rowBounds = new RowBounds(cash.getOffset(), cash.getPageSize());
+		Page<WithdrawCashQueryBO> page = new Page<WithdrawCashQueryBO>();
+		page.setTotalCount(withdrawCashDOMapper.countByExample(example));
+		page.setCurrentPage(cash.getCurrentPage());
+		List<WithdrawCashDO> listDOS = withdrawCashDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		List<WithdrawCashQueryBO> cbos = new ArrayList<WithdrawCashQueryBO>();
+		for (WithdrawCashDO cdo : listDOS) {
+			WithdrawCashQueryBO bo = new WithdrawCashQueryBO();
+			bo.setId(cdo.getId());
+			bo.setCashMoney(cdo.getCashMoney());
+			bo.setCdate(DateUtil.getDateFormat(cdo.getGmtCreate(), "yyyy-MM-dd"));
+			bo.setCashStatusEnum(CashStatusEnum.getEnum(cdo.getStatus()));
+			bo.setTitle("提现");
+			cbos.add(bo);
+		}
+		page.setRecords(cbos);
+		return page;
+	}
+
+	@Override
+	public WithdrawCashDetailBO cashDetail(Long id) {
+		WithdrawCashDO cdo = withdrawCashDOMapper.selectByPrimaryKey(id);
+		if(cdo == null){
+			return null;
+		}
+		WithdrawCashDetailBO bo = new WithdrawCashDetailBO();
+		bo.setId(cdo.getId());
+		bo.setTitle("提现");
+		bo.setCashMoney(cdo.getCashMoney());
+		bo.setMoney(cdo.getMoney());
+		if (CashStatusEnum.APPLY.val.equals(cdo.getStatus())) {
+			bo.setCashStatus("申请中");
+		} else if (CashStatusEnum.ACCEPT.val.equals(cdo.getStatus())) {
+			bo.setCashStatus("受理中");
+		} else if (CashStatusEnum.SUCCESS.val.equals(cdo.getStatus())) {
+			bo.setCashStatus("成功");
+		} else if (CashStatusEnum.FAILURE.val.equals(cdo.getStatus())) {
+			bo.setCashStatus("失败");
+		}
+		bo.setCashNumber(cdo.getCashNumber());
+		bo.setCdate(DateUtil.getDateFormat(cdo.getGmtCreate(), "yyyy-MM-dd"));
+
+		BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
+		bo.setBankInfo(bankAccountDO.getNote());
+
+		return bo;
 	}
 
 }

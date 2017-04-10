@@ -956,6 +956,76 @@ public class WithdrawCashDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAuditUserNameIsNull() {
+            addCriterion("audit_user_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameIsNotNull() {
+            addCriterion("audit_user_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameEqualTo(String value) {
+            addCriterion("audit_user_name =", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameNotEqualTo(String value) {
+            addCriterion("audit_user_name <>", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameGreaterThan(String value) {
+            addCriterion("audit_user_name >", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameGreaterThanOrEqualTo(String value) {
+            addCriterion("audit_user_name >=", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameLessThan(String value) {
+            addCriterion("audit_user_name <", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameLessThanOrEqualTo(String value) {
+            addCriterion("audit_user_name <=", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameLike(String value) {
+            addCriterion("audit_user_name like", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameNotLike(String value) {
+            addCriterion("audit_user_name not like", value, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameIn(List<String> values) {
+            addCriterion("audit_user_name in", values, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameNotIn(List<String> values) {
+            addCriterion("audit_user_name not in", values, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameBetween(String value1, String value2) {
+            addCriterion("audit_user_name between", value1, value2, "auditUserName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuditUserNameNotBetween(String value1, String value2) {
+            addCriterion("audit_user_name not between", value1, value2, "auditUserName");
+            return (Criteria) this;
+        }
+
         public Criteria andAuditFaildReasonIsNull() {
             addCriterion("audit_faild_reason is null");
             return (Criteria) this;

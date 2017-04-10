@@ -18,7 +18,6 @@ import com.lawu.eshop.merchant.api.service.WxPayService;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
 import com.lawu.eshop.property.param.AppAlipayParam;
-import com.lawu.eshop.property.param.PcAlipayParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +42,7 @@ public class WxPayController extends BaseController {
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用微信生成预支付订单返回签名加密参数", notes = "app调用微信生成预支付订单返回签名加密参数，[]，(杨清华)", httpMethod = "POST")
-//	@Authorization
+	@Authorization
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
 	public Result getPrepayInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam AppAlipayParam param) {
@@ -58,17 +57,28 @@ public class WxPayController extends BaseController {
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 		
-		return successGet(wxPayService.getPrepayInfo(aparam));
+		return wxPayService.getPrepayInfo(aparam);
 		
 	}
 	
-	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
+	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam AppAlipayParam param) throws IOException {
 
+		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		aparam.setTotalAmount(param.getTotalAmount());
+		aparam.setOutTradeNo(param.getOutTradeNo());
+		aparam.setSubject(param.getSubject());
+		aparam.setBizIds(param.getBizIds());
+		aparam.setBody(param.getBody());
+		aparam.setBizFlagEnum(param.getBizFlagEnum());
+		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
 		
+		return wxPayService.getPrepayInfo(aparam);
 	}
 
 }

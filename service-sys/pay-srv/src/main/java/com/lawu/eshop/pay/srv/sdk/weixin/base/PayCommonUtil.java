@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
+@SuppressWarnings("rawtypes")
 public class PayCommonUtil {  
       
     /** 
@@ -47,7 +48,7 @@ public class PayCommonUtil {
      *            请求参数 
      * @return 
      */  
-    public static String createSign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {  
+	public static String createSign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {  
         StringBuffer sb = new StringBuffer();  
         Set es = packageParams.entrySet();  
         Iterator it = es.iterator();  

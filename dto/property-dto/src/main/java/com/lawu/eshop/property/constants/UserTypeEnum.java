@@ -12,7 +12,8 @@ package com.lawu.eshop.property.constants;
 public enum UserTypeEnum {
 
     MEMBER((byte) 0x01),      //用户
-    MEMCHANT((byte) 0x02);     //商家
+    MEMCHANT((byte) 0x02),     //商家
+    MEMCHANT_PC((byte) 0x03);	//商家PC
     public Byte val;
 
     UserTypeEnum(Byte val) {

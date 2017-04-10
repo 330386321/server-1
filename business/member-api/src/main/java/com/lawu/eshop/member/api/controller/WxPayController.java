@@ -1,12 +1,7 @@
-package com.lawu.eshop.merchant.api.controller;
+package com.lawu.eshop.member.api.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,14 +13,11 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.merchant.api.service.AlipayService;
+import com.lawu.eshop.member.api.service.WxPayService;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AppAlipayDataParam;
 import com.lawu.eshop.property.param.AppAlipayParam;
-import com.lawu.eshop.property.param.PcAlipayDataParam;
-import com.lawu.eshop.property.param.PcAlipayParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,27 +26,25 @@ import io.swagger.annotations.ApiParam;
 /**
  * 
  * <p>
- * Description: 支付宝
+ * Description: 微信
  * </p>
  * @author Yangqh
- * @date 2017年4月7日 上午9:12:31
+ * @date 2017年4月7日 下午9:01:21
  *
  */
-@Api(tags = "alipay")
+@Api(tags = "wxPay")
 @RestController
-@RequestMapping(value = "alipay/")
-public class AlipayController extends BaseController {
+@RequestMapping(value = "wxPay/")
+public class WxPayController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
-	
 	@Autowired
-	private AlipayService alipayService;
+	private WxPayService wxPayService;
 
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "app调用微信生成预支付订单返回签名加密参数", notes = "app调用微信生成预支付订单返回签名加密参数，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
-	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
-	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
+	public Result getPrepayInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam AppAlipayParam param) {
 
 		AppAlipayDataParam aparam = new AppAlipayDataParam();
@@ -67,35 +57,28 @@ public class AlipayController extends BaseController {
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 		
-		return alipayService.getAppAlipayReqParams(aparam);
+		return wxPayService.getPrepayInfo(aparam);
 		
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
+	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam AppAlipayParam param) throws IOException {
 
-		PcAlipayDataParam aparam = new PcAlipayDataParam();
+		AppAlipayDataParam aparam = new AppAlipayDataParam();
 		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(param.getOutTradeNo());
 		aparam.setSubject(param.getSubject());
-		aparam.setBizId(param.getBizId());
+		aparam.setBizIds(param.getBizIds());
+		aparam.setBody(param.getBody());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		Result result = alipayService.initPcPay(aparam);
-		if(ResultCode.SUCCESS == result.getRet()){
-			Object obj = result.getModel();
-			HttpServletResponse response = getResponse();
-			PrintWriter out = response.getWriter();
-			logger.info(obj.toString());
-			out.println(obj.toString());
-		}else{
-			logger.error(result.getRet()+"-->"+result.getMsg());
-		}
+		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
 		
+		return wxPayService.getPrepayInfo(aparam);
 	}
 
 }

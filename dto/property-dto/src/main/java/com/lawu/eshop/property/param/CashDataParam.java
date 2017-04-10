@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.param;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class CashDataParam extends CashParam{

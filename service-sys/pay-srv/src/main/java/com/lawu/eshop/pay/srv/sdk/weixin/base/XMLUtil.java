@@ -21,6 +21,7 @@ public class XMLUtil {
      * @throws JDOMException 
      * @throws IOException 
      */  
+	@SuppressWarnings("unchecked")
 	public static Map doXMLParse(String strxml) throws JDOMException, IOException {  
         strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");  
   

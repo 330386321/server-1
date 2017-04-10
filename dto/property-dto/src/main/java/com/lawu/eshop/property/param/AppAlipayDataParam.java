@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.param;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.property.constants.UserTypeEnum;
 
 /**
@@ -13,9 +11,7 @@ import com.lawu.eshop.property.constants.UserTypeEnum;
  * @date 2017年4月6日 下午5:36:40
  *
  */
-public class AppAlipayDataParam extends AppAlipayParam implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class AppAlipayDataParam extends AppAlipayParam {
 	
 	/**
 	 * 用户类型

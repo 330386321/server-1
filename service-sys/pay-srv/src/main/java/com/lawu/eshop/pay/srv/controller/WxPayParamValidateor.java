@@ -43,7 +43,7 @@ public class WxPayParamValidateor {
 	 * @param param
 	 * @return
 	 */
-	public static int pcAlipayReqValidate(PcAlipayDataParam param) {
+	public static int pcAlipayReqValidate(AppAlipayDataParam param) {
 		if(param.getSubject() == null || "".equals(param.getSubject())){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_SUBJECT_NULL;
 		}

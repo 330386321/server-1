@@ -156,8 +156,8 @@ public class ResultCode {
         ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_NUM_NULL, "app支付时userNum参数不能为空");
         ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL, "app支付时bizFlagEnum参数不能为空");
         
-        ResultCode.messageMap.put(WEIXIN_PAY_RETURN_CODE_FAIL, "app微信支付时预支付接口return_code返回FAIL");
-        ResultCode.messageMap.put(WEIXIN_PAY_RESULT_CODE_FAIL, "app微信支付时预支付接口result_code返回FAIL");
+        ResultCode.messageMap.put(WEIXIN_PAY_RETURN_CODE_FAIL, "微信支付时预支付接口return_code返回FAIL");
+        ResultCode.messageMap.put(WEIXIN_PAY_RESULT_CODE_FAIL, "微信支付时预支付接口result_code返回FAIL");
 
 
         // 商城模块 7xxx
