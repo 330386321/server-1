@@ -90,7 +90,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public void saveMessage(String userNum, MessageInfoParam messageInfoParam) {
+    public Integer saveMessage(String userNum, MessageInfoParam messageInfoParam) {
         MessageDO messageDO = new MessageDO();
         messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
         messageDO.setUserNum(userNum);
@@ -101,7 +101,8 @@ public class MessageServiceImpl implements MessageService {
         }
         messageDO.setGmtModified(new Date());
         messageDO.setGmtCreate(new Date());
-        messageDOMapper.insert(messageDO);
+       Integer id =  messageDOMapper.insert(messageDO);
 
+       return  id;
     }
 }

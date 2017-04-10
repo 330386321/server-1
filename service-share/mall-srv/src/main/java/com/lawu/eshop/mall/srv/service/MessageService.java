@@ -1,9 +1,7 @@
 package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
@@ -51,5 +49,5 @@ public interface MessageService {
      *
      * @param messageInfoParam
      */
-    void saveMessage(String userNum, MessageInfoParam messageInfoParam);
+    Integer saveMessage(String userNum, MessageInfoParam messageInfoParam);
 }

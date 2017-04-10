@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.srv.controller;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
@@ -93,8 +94,11 @@ public class MessageController extends BaseController {
      */
     @RequestMapping(value = "saveMessage/{userNum}", method = RequestMethod.POST)
     public Result saveMessage(@PathVariable("userNum") String userNum, @RequestBody MessageInfoParam messageInfoParam) {
-        messageService.saveMessage(userNum, messageInfoParam);
-        return successCreated();
+        Integer id = messageService.saveMessage(userNum, messageInfoParam);
+        if(id == 0 || id<0){
+            return successCreated(ResultCode.SAVE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
     }
 
 }
