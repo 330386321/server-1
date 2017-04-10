@@ -44,7 +44,7 @@ public interface MerchantStoreService {
      * @param merchantIdList
      */
     @RequestMapping(value = "merchantStore/selectNoReasonReturnByMerchantIds", method = RequestMethod.GET)
-    Result<List<MerchantStoreNoReasonReturnDTO>> selectNoReasonReturnByMerchantIds(@RequestParam List<Long> merchantIdList);
+    Result<List<MerchantStoreNoReasonReturnDTO>> selectNoReasonReturnByMerchantIds(@RequestParam("merchantIdList") List<Long> merchantIdList);
     
     /**
      * 根据门店ID查询门店信息
