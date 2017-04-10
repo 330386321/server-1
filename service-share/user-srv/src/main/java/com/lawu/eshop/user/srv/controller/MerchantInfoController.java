@@ -4,16 +4,17 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
+import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,4 +76,16 @@ public class MerchantInfoController extends BaseController{
         }
 
     }
+
+    @RequestMapping(value = "getMerchantSizeLink/{merchantId}",method = RequestMethod.GET)
+    public Result<MerchantSizeLinkDTO> getMerchantSizeLink(@PathVariable("merchantId") Long merchantId){
+        if(merchantId == null || merchantId<=0){
+            return  successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        MerchantSizeLinkBO merchantSizeLinkBO = merchantProfileService.getMerchantSizeLink(merchantId);
+        MerchantSizeLinkDTO merchantSizeLinkDTO = new MerchantSizeLinkDTO();
+        BeanUtils.copyProperties(merchantSizeLinkBO,merchantSizeLinkDTO);
+        return successGet(merchantSizeLinkDTO);
+    }
+
 }

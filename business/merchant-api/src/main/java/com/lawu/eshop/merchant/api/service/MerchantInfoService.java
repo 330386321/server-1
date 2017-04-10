@@ -3,9 +3,13 @@ package com.lawu.eshop.merchant.api.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "user-srv")
 public interface MerchantInfoService {
@@ -24,5 +28,8 @@ public interface MerchantInfoService {
      */
     @RequestMapping(method = RequestMethod.GET, value ="merchantInfo/findMerchantProfileInfo/{merchantProfileId}")
     Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId);
+
+    @RequestMapping(value = "merchantInfo/getMerchantSizeLink/{merchantId}",method = RequestMethod.GET)
+    public Result<MerchantSizeLinkDTO> getMerchantSizeLink(@PathVariable("merchantId") Long merchantId);
 
 }

@@ -44,7 +44,7 @@ public class MerchantStoreController extends BaseController {
     @ApiOperation(value = "根据商家门店id查询门店信息", notes = "根据商家门店id查询门店信息，成功返回门店信息。（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.GET)
-    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId) {
+    public Result<MerchantStoreDTO> selectMerchantStore(@PathVariable("merchantStoreId") @ApiParam(required = true, value = "门店ID") Long merchantStoreId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Result<MerchantStoreDTO> result = merchantStoreService.selectMerchantStore(merchantStoreId);
         return result;
     }
@@ -63,11 +63,11 @@ public class MerchantStoreController extends BaseController {
         StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
         StringBuffer licenseUrls = new StringBuffer();        //营业执照
         StringBuffer otherUrls = new StringBuffer();
-        Collection<Part> parts ;
+        Collection<Part> parts;
         try {
             parts = request.getParts();
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE,part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
                 String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
@@ -153,11 +153,11 @@ public class MerchantStoreController extends BaseController {
         StringBuffer licenseUrls = new StringBuffer();        //营业执照
         StringBuffer otherUrls = new StringBuffer();
 
-        Collection<Part> parts ;
+        Collection<Part> parts;
         try {
             parts = request.getParts();
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE,part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
                 String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
