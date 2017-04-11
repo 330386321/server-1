@@ -1,5 +1,6 @@
 package com.lawu.eshop.mall.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mall.srv.bo.CommentProductNotification;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service("orderCommentTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.COMMENT_PRODUCT, topic = "transaction-comtent_product", tags = "order")
-public class OrderCommentProductTransactionMainServiceImpl extends AbstractTransactionMainService<CommentProductNotification> {
+public class OrderCommentProductTransactionMainServiceImpl extends AbstractTransactionMainService<CommentProductNotification, Reply> {
 
     @Override
     public CommentProductNotification selectNotification(Long orderId) {

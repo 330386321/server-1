@@ -1,6 +1,7 @@
 package com.lawu.eshop.compensating.transaction.impl;
 
 import com.lawu.eshop.compensating.transaction.Notification;
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.mq.message.MessageProducerService;
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Leach
  * @date 2017/3/29
  */
-public abstract class AbstractTransactionFollowService<N extends Notification> implements TransactionFollowService<N, Long> {
+public abstract class AbstractTransactionFollowService<N extends Notification, R extends Reply> implements TransactionFollowService<N, R> {
 
     @Autowired
     private MessageProducerService messageProducerService;
@@ -26,15 +27,16 @@ public abstract class AbstractTransactionFollowService<N extends Notification> i
 
     @Override
     public void receiveNotice(N notification) {
-        execute(notification);
-        sendCallback(notification.getTransactionId());
+        R reply = execute(notification);
+        reply.setTransactionId(notification.getTransactionId());
+        sendCallback(reply);
 
     }
 
     @Override
-    public void sendCallback(Long transactionId) {
+    public void sendCallback(R reply) {
 
-        messageProducerService.sendMessage(topic, tags, transactionId);
+        messageProducerService.sendMessage(topic, tags, reply);
     }
 
     /**
@@ -42,5 +44,5 @@ public abstract class AbstractTransactionFollowService<N extends Notification> i
      *
      * @param notification
      */
-    public abstract void execute(N notification);
+    public abstract R execute(N notification);
 }

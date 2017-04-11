@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
  */
 @Service("shoppingCartSettlementTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.SETTLEMENT, topic = "transaction-reg", tags = "product")
-public class ShoppingCartSettlementTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingCartSettlementNotification> {
+public class ShoppingCartSettlementTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingCartSettlementNotification, Reply> {
 	
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;

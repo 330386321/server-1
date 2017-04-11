@@ -1,6 +1,7 @@
 package com.lawu.eshop.compensating.transaction.impl;
 
 import com.lawu.eshop.compensating.transaction.Notification;
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.compensating.transaction.TransactionStatusService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author Leach
  * @date 2017/3/29
  */
-public abstract class AbstractTransactionMainService<N extends Notification> implements TransactionMainService<Long> {
+public abstract class AbstractTransactionMainService<N extends Notification, R extends Reply> implements TransactionMainService<R> {
 
     @Autowired
     private MessageProducerService messageProducerService;
@@ -44,8 +45,9 @@ public abstract class AbstractTransactionMainService<N extends Notification> imp
      * 默认为空，需要的话可以Override
      * 
      * @param relateId
+     * @param reply
      */
-    public void afterSuccess(Long relateId) {
+    public void afterSuccess(Long relateId, R reply) {
         return;
     }
 
@@ -65,9 +67,9 @@ public abstract class AbstractTransactionMainService<N extends Notification> imp
 
     @Transactional
     @Override
-    public void receiveCallback(Long reply) {
-        Long relateId = transactionStatusService.success(reply);
-        afterSuccess(relateId);
+    public void receiveCallback(R reply) {
+        Long relateId = transactionStatusService.success(reply.getTransactionId());
+        afterSuccess(relateId, reply);
     }
 
     @Override

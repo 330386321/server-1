@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.user.srv.bo.MemberBO;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Service("memberRegTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.REGISTER, topic = MqConstant.MQ_TOPIC_USER_SRV, tags = MqConstant.MQ_TAG_REG)
-public class MemberRegTransactionMainServiceImpl extends AbstractTransactionMainService<RegNotification> {
+public class MemberRegTransactionMainServiceImpl extends AbstractTransactionMainService<RegNotification, Reply> {
 
     @Autowired
     private MemberService memberService;

@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -15,17 +16,19 @@ import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
  */
 //@Service
 @CompensatingTransactionFollow(topic = "transaction-reg", tags = "product")
-public class ShoppingCartSettlementTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingCartSettlementNotification> {
+public class ShoppingCartSettlementTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingCartSettlementNotification, Reply> {
 	
 	@Autowired
 	private ProductModelDOMapper productModelDOMapper;
 	
     @Override
-    public void execute(ShoppingCartSettlementNotification notification) {
+    public Reply execute(ShoppingCartSettlementNotification notification) {
     	ProductModelDO productModelDO = new ProductModelDO();
 		productModelDO.setId(notification.getProductModelId());
 		Integer inventory = productModelDOMapper.selectByPrimaryKey(notification.getProductModelId()).getInventory() - notification.getQuantity();
 		productModelDO.setInventory(inventory);
 		productModelDOMapper.updateByPrimaryKey(productModelDO);
+
+		return new Reply();
     }
 }

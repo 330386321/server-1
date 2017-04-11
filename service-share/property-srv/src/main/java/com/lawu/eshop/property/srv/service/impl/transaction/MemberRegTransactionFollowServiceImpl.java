@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
@@ -19,23 +20,25 @@ import java.util.List;
  */
 @Service
 @CompensatingTransactionFollow(topic = MqConstant.MQ_TOPIC_USER_SRV, tags = MqConstant.MQ_TAG_REG)
-public class MemberRegTransactionFollowServiceImpl extends AbstractTransactionFollowService<RegNotification> {
+public class MemberRegTransactionFollowServiceImpl extends AbstractTransactionFollowService<RegNotification, Reply> {
 
     @Autowired
     private PropertyInfoDOMapper propertyInfoDOMapper;
 
     @Override
-    public void execute(RegNotification notification) {
+    public Reply execute(RegNotification notification) {
         PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
         propertyInfoDOExample.createCriteria().andUserNumEqualTo(notification.getUserNum());
         List<PropertyInfoDO> propertyInfoDOList = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
         if (!propertyInfoDOList.isEmpty()) {
-            return;
+            return new Reply();
         }
 
         PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
         propertyInfoDO.setUserNum(notification.getUserNum());
         propertyInfoDO.setGmtCreate(new Date());
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
+        return new Reply();
     }
 }
