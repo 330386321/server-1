@@ -4,6 +4,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
+import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
+import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import com.lawu.eshop.member.api.service.MerchantStoreImageService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
@@ -36,6 +39,9 @@ public class MerchantDetailController extends BaseController {
     @Autowired
     private MerchantStoreImageService merchantStoreImageService;
 
+    @Autowired
+    private MerchantFavoredService merchantFavoredService;
+
     @ApiOperation(value = "会员查看商家门店详情", notes = "会员查看商家门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "store/{id}", method = RequestMethod.GET)
@@ -45,7 +51,19 @@ public class MerchantDetailController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         StoreDetailDTO storeDetailDTO = stoResult.getModel();
-        //TODO 人均消费、优惠信息、综合评分，好评率
+        Result<MerchantFavoredDTO> merResult = merchantFavoredService.findFavoredByMerchantId(storeDetailDTO.getMerchantId());
+        if (isSuccess(merResult)) {
+            MerchantFavoredDTO merchantFavoredDTO = merResult.getModel();
+            if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val) {
+                storeDetailDTO.setPreferentialClause("每满" + merchantFavoredDTO.getReachAmount() + "减" + merchantFavoredDTO.getFavoredAmount());
+            } else if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
+                storeDetailDTO.setPreferentialClause("满" + merchantFavoredDTO.getReachAmount() + "减" + merchantFavoredDTO.getFavoredAmount());
+            } else {
+                storeDetailDTO.setPreferentialClause(merchantFavoredDTO.getDiscountRate() + "折");
+            }
+            storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
+        }
+        //TODO 人均消费、已买笔数、综合评分、好评率
         return successGet(storeDetailDTO);
     }
 
