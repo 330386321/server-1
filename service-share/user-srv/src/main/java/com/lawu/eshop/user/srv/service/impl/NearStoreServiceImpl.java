@@ -81,12 +81,6 @@ public class NearStoreServiceImpl implements NearStoreService {
             merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
             List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
             nearStoreBO.setStorePic(merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath());
-
-            //查询门店收藏数
-            FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-            favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId());
-            int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
-            nearStoreBO.setFavCount(favCount);
         }
         page.setRecords(nearStoreBOList);
         return page;

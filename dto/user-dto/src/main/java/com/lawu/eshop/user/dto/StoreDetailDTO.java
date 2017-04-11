@@ -2,6 +2,8 @@ package com.lawu.eshop.user.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * @author meishuquan
  * @date 2017/4/7.
@@ -30,16 +32,16 @@ public class StoreDetailDTO {
     private String intro;
 
     @ApiModelProperty(value = "收藏人数")
-    private Integer favCount;
+    private Integer favoriteNumber;
 
     @ApiModelProperty(value = "人均消费")
-    private Double avgConsume;
+    private BigDecimal averageConsumeAmount;
 
     @ApiModelProperty(value = "综合评分")
-    private Double score;
+    private BigDecimal averageScore;
 
     @ApiModelProperty(value = "好评率")
-    private Double goodCommentRate;
+    private BigDecimal feedbackRate;
 
     @ApiModelProperty(value = "优惠信息")
     private String preferentialClause;
@@ -47,8 +49,8 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "优惠时间")
     private String preferentialTime;
 
-    @ApiModelProperty(value = "买单笔数")
-    private Integer consumeCount;
+    @ApiModelProperty(value = "已买笔数")
+    private Integer buyNumbers;
 
     public String getName() {
         return name;
@@ -98,38 +100,6 @@ public class StoreDetailDTO {
         this.intro = intro;
     }
 
-    public Integer getFavCount() {
-        return favCount;
-    }
-
-    public void setFavCount(Integer favCount) {
-        this.favCount = favCount;
-    }
-
-    public Double getAvgConsume() {
-        return avgConsume;
-    }
-
-    public void setAvgConsume(Double avgConsume) {
-        this.avgConsume = avgConsume;
-    }
-
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
-    public Double getGoodCommentRate() {
-        return goodCommentRate;
-    }
-
-    public void setGoodCommentRate(Double goodCommentRate) {
-        this.goodCommentRate = goodCommentRate;
-    }
-
     public String getPreferentialClause() {
         return preferentialClause;
     }
@@ -146,19 +116,51 @@ public class StoreDetailDTO {
         this.preferentialTime = preferentialTime;
     }
 
-    public Integer getConsumeCount() {
-        return consumeCount;
-    }
-
-    public void setConsumeCount(Integer consumeCount) {
-        this.consumeCount = consumeCount;
-    }
-
     public Long getMerchantId() {
         return merchantId;
     }
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Integer getFavoriteNumber() {
+        return favoriteNumber;
+    }
+
+    public void setFavoriteNumber(Integer favoriteNumber) {
+        this.favoriteNumber = favoriteNumber;
+    }
+
+    public void setAverageConsumeAmount(BigDecimal averageConsumeAmount) {
+        this.averageConsumeAmount = averageConsumeAmount;
+    }
+
+    public BigDecimal getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(BigDecimal averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public BigDecimal getFeedbackRate() {
+        return feedbackRate;
+    }
+
+    public void setFeedbackRate(BigDecimal feedbackRate) {
+        this.feedbackRate = feedbackRate;
+    }
+
+    public Integer getBuyNumbers() {
+        return buyNumbers;
+    }
+
+    public void setBuyNumbers(Integer buyNumbers) {
+        this.buyNumbers = buyNumbers;
+    }
+
+    public BigDecimal getAverageConsumeAmount() {
+        return averageConsumeAmount;
     }
 }

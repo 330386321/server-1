@@ -22,7 +22,11 @@ public class NearStoreBO {
 
     private Integer distance;
 
-    private Integer favCount;
+    private Integer favoriteNumber;
+
+    private BigDecimal averageConsumeAmount;
+
+    private BigDecimal averageScore;
 
     public Long getMerchantId() {
         return merchantId;
@@ -80,11 +84,27 @@ public class NearStoreBO {
         this.distance = distance;
     }
 
-    public Integer getFavCount() {
-        return favCount;
+    public Integer getFavoriteNumber() {
+        return favoriteNumber;
     }
 
-    public void setFavCount(Integer favCount) {
-        this.favCount = favCount;
+    public void setFavoriteNumber(Integer favoriteNumber) {
+        this.favoriteNumber = favoriteNumber;
+    }
+
+    public BigDecimal getAverageConsumeAmount() {
+        return averageConsumeAmount;
+    }
+
+    public void setAverageConsumeAmount(BigDecimal averageConsumeAmount) {
+        this.averageConsumeAmount = averageConsumeAmount;
+    }
+
+    public BigDecimal getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(BigDecimal averageScore) {
+        this.averageScore = averageScore;
     }
 }

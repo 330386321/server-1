@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.bo;
 
+import java.math.BigDecimal;
+
 /**
  * @author meishuquan
  * @date 2017/4/7.
@@ -20,7 +22,15 @@ public class StoreDetailBO {
 
     private String intro;
 
-    private Integer favCount;
+    private Integer favoriteNumber;
+
+    private BigDecimal averageConsumeAmount;
+
+    private BigDecimal averageScore;
+
+    private BigDecimal feedbackRate;
+
+    private Integer buyNumbers;
 
     public String getName() {
         return name;
@@ -70,14 +80,6 @@ public class StoreDetailBO {
         this.intro = intro;
     }
 
-    public Integer getFavCount() {
-        return favCount;
-    }
-
-    public void setFavCount(Integer favCount) {
-        this.favCount = favCount;
-    }
-
     public Long getMerchantId() {
         return merchantId;
     }
@@ -85,4 +87,45 @@ public class StoreDetailBO {
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
     }
+
+    public Integer getFavoriteNumber() {
+        return favoriteNumber;
+    }
+
+    public void setFavoriteNumber(Integer favoriteNumber) {
+        this.favoriteNumber = favoriteNumber;
+    }
+
+    public BigDecimal getAverageConsumeAmount() {
+        return averageConsumeAmount;
+    }
+
+    public void setAverageConsumeAmount(BigDecimal averageConsumeAmount) {
+        this.averageConsumeAmount = averageConsumeAmount;
+    }
+
+    public BigDecimal getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(BigDecimal averageScore) {
+        this.averageScore = averageScore;
+    }
+
+    public BigDecimal getFeedbackRate() {
+        return feedbackRate;
+    }
+
+    public void setFeedbackRate(BigDecimal feedbackRate) {
+        this.feedbackRate = feedbackRate;
+    }
+
+    public Integer getBuyNumbers() {
+        return buyNumbers;
+    }
+
+    public void setBuyNumbers(Integer buyNumbers) {
+        this.buyNumbers = buyNumbers;
+    }
+
 }

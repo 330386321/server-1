@@ -32,6 +32,9 @@ public class NearStoreConverter {
             nearStoreBO.setLongitude(merchantStoreDO.getLongitude());
             nearStoreBO.setLatitude(merchantStoreDO.getLatitude());
             nearStoreBO.setIndustryPath(merchantStoreDO.getIndustryPath());
+            nearStoreBO.setFavoriteNumber(merchantStoreDO.getFavoriteNumber());
+            nearStoreBO.setAverageScore(merchantStoreDO.getAverageScore());
+            nearStoreBO.setAverageConsumeAmount(merchantStoreDO.getAverageConsumeAmount());
             nearStoreBOS.add(nearStoreBO);
         }
         return nearStoreBOS;
@@ -56,7 +59,9 @@ public class NearStoreConverter {
             nearStoreDTO.setIndustryPath(nearStoreBO.getIndustryPath());
             nearStoreDTO.setStorePic(nearStoreBO.getStorePic());
             nearStoreDTO.setDistance(nearStoreBO.getDistance());
-            nearStoreDTO.setFavCount(nearStoreBO.getFavCount());
+            nearStoreDTO.setFavoriteNumber(nearStoreBO.getFavoriteNumber());
+            nearStoreDTO.setAverageConsumeAmount(nearStoreBO.getAverageConsumeAmount());
+            nearStoreDTO.setAverageScore(nearStoreBO.getAverageScore());
             nearStoreDTOS.add(nearStoreDTO);
         }
         return nearStoreDTOS;

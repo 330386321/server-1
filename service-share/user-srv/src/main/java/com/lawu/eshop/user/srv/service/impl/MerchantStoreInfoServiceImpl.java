@@ -326,20 +326,9 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
         String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-        //查询门店收藏数
-        FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-        favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
-        int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
 
-        StoreDetailBO storeDetailBO = new StoreDetailBO();
-        storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
-        storeDetailBO.setName(merchantStoreDO.getName());
-        storeDetailBO.setAddress(merchantStoreDO.getAddress());
-        storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
-        storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
-        storeDetailBO.setIntro(merchantStoreDO.getIntro());
-        storeDetailBO.setStorePic(storePic);
-        storeDetailBO.setFavCount(favCount);
+        StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
+		storeDetailBO.setStorePic(storePic);
         return storeDetailBO;
     }
 

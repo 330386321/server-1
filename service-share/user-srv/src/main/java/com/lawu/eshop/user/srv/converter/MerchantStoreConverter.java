@@ -152,37 +152,67 @@ public class MerchantStoreConverter {
 
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
         storeDetailDTO.setMerchantId(storeDetailBO.getMerchantId());
-        storeDetailDTO.setFavCount(storeDetailBO.getFavCount());
+        storeDetailDTO.setName(storeDetailBO.getName());
+        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
+        storeDetailDTO.setAddress(storeDetailBO.getAddress());
+        storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
         storeDetailDTO.setIntro(storeDetailBO.getIntro());
-        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
-        storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
-        storeDetailDTO.setAddress(storeDetailBO.getAddress());
-        storeDetailDTO.setName(storeDetailBO.getName());
+        storeDetailDTO.setFavoriteNumber(storeDetailBO.getFavoriteNumber());
+        storeDetailDTO.setAverageConsumeAmount(storeDetailBO.getAverageConsumeAmount());
+        storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore());
+        storeDetailDTO.setFeedbackRate(storeDetailBO.getFeedbackRate());
+        storeDetailDTO.setBuyNumbers(storeDetailBO.getBuyNumbers());
         return storeDetailDTO;
     }
-    
+
+    /**
+     * BO转换
+     *
+     * @param merchantStoreDO
+     * @return
+     */
+    public static StoreDetailBO convertBO(MerchantStoreDO merchantStoreDO) {
+        if (merchantStoreDO == null) {
+            return null;
+        }
+
+        StoreDetailBO storeDetailBO = new StoreDetailBO();
+        storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
+        storeDetailBO.setName(merchantStoreDO.getName());
+        storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
+        storeDetailBO.setAddress(merchantStoreDO.getAddress());
+        storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+        storeDetailBO.setIntro(merchantStoreDO.getIntro());
+        storeDetailBO.setFavoriteNumber(merchantStoreDO.getFavoriteNumber());
+        storeDetailBO.setAverageConsumeAmount(merchantStoreDO.getAverageConsumeAmount());
+        storeDetailBO.setAverageScore(merchantStoreDO.getAverageScore());
+        storeDetailBO.setFeedbackRate(merchantStoreDO.getFeedbackRate());
+        storeDetailBO.setBuyNumbers(merchantStoreDO.getBuyNumbers());
+        return storeDetailBO;
+    }
+
     /**
      * MerchantStoreNoReasonReturnBO转换
-     * 
+     *
      * @param merchantStoreDO
      * @return
      */
     public static MerchantStoreNoReasonReturnBO convert(MerchantStoreDO merchantStoreDO) {
-    	if (merchantStoreDO == null) {
-    		return null;
-    	}
-    	
-    	MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO = new MerchantStoreNoReasonReturnBO();
-    	merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
-    	merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
-    	
-    	return merchantStoreNoReasonReturnBO;
+        if (merchantStoreDO == null) {
+            return null;
+        }
+
+        MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO = new MerchantStoreNoReasonReturnBO();
+        merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
+        merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
+
+        return merchantStoreNoReasonReturnBO;
     }
-    
+
     /**
      * MerchantStoreNoReasonReturnBO List转换
-     * 
+     *
      * @param merchantStoreDOList
      * @return
      */
@@ -190,36 +220,36 @@ public class MerchantStoreConverter {
         if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()) {
             return null;
         }
-        
+
         List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = new ArrayList<MerchantStoreNoReasonReturnBO>();
         for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
-        	merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO));
+            merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO));
         }
-        
+
         return merchantStoreNoReasonReturnBOList;
     }
-    
+
     /**
      * MerchantStoreNoReasonReturnDTO转换
-     * 
+     *
      * @param merchantStoreNoReasonReturnBO
      * @return
      */
     public static MerchantStoreNoReasonReturnDTO convert(MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO) {
-    	if (merchantStoreNoReasonReturnBO == null) {
-    		return null;
-    	}
-    	
-    	MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO = new MerchantStoreNoReasonReturnDTO();
-    	merchantStoreNoReasonReturnDTO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
-    	merchantStoreNoReasonReturnDTO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
-    	
-    	return merchantStoreNoReasonReturnDTO;
+        if (merchantStoreNoReasonReturnBO == null) {
+            return null;
+        }
+
+        MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO = new MerchantStoreNoReasonReturnDTO();
+        merchantStoreNoReasonReturnDTO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
+        merchantStoreNoReasonReturnDTO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
+
+        return merchantStoreNoReasonReturnDTO;
     }
-    
+
     /**
      * MerchantStoreNoReasonReturnDTO List转换
-     * 
+     *
      * @param merchantStoreNoReasonReturnBOList
      * @return
      */
@@ -227,13 +257,13 @@ public class MerchantStoreConverter {
         if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
             return null;
         }
-        
+
         List<MerchantStoreNoReasonReturnDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<MerchantStoreNoReasonReturnDTO>();
         for (MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
-        	merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
+            merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
         }
-        
+
         return merchantStoreNoReasonReturnDTOList;
     }
-    
+
 }

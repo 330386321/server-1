@@ -6,7 +6,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.member.api.service.CommentMerchantService;
 import com.lawu.eshop.member.api.service.NearStoreService;
 import com.lawu.eshop.user.dto.NearStoreDTO;
@@ -17,8 +16,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -41,18 +38,6 @@ public class NearStoreController extends BaseController {
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)
     public Result<Page<NearStoreDTO>> sendSms(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                               @ModelAttribute @ApiParam(required = true, value = "查询条件") NearStoreParam nearStoreParam) {
-        Result<Page<NearStoreDTO>> result = nearStoreService.listNearStore(nearStoreParam);
-        List<NearStoreDTO> nearStoreDTOS = result.getModel().getRecords();
-        if (!nearStoreDTOS.isEmpty()) {
-            //TODO 人均消费
-            for (NearStoreDTO nearStoreDTO : nearStoreDTOS) {
-                Result<CommentGradeDTO> comResult = commentMerchantService.getCommentAvgGrade(nearStoreDTO.getMerchantId());
-                if (isSuccess(comResult)) {
-                    CommentGradeDTO commentGradeDTO = comResult.getModel();
-                    nearStoreDTO.setAverageScore(commentGradeDTO.getAvgGrade());
-                }
-            }
-        }
-        return successGet(result.getModel());
+        return nearStoreService.listNearStore(nearStoreParam);
     }
 }

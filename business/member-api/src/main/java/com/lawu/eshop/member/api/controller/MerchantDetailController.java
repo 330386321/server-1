@@ -63,7 +63,6 @@ public class MerchantDetailController extends BaseController {
             }
             storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
         }
-        //TODO 人均消费、已买笔数、综合评分、好评率
         return successGet(storeDetailDTO);
     }
 

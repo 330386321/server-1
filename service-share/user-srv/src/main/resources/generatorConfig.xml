@@ -60,10 +60,10 @@
         </table>
         <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
         <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <!--<table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>-->
@@ -81,10 +81,10 @@
         </table>
         <table tableName="fans_merchant" domainObjectName="FansMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="property" domainObjectName="PropertyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
 	
     </context>
 </generatorConfiguration>
