@@ -16,8 +16,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.WxPayService;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
-import com.lawu.eshop.property.param.AppAlipayParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.param.ThirdPayParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,9 +45,9 @@ public class WxPayController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
 	public Result getPrepayInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam AppAlipayParam param) {
+			@ModelAttribute @ApiParam ThirdPayParam param) {
 
-		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(param.getOutTradeNo());
 		aparam.setSubject(param.getSubject());
@@ -66,9 +66,9 @@ public class WxPayController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
 	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam AppAlipayParam param) throws IOException {
+			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
 
-		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(param.getOutTradeNo());
 		aparam.setSubject(param.getSubject());

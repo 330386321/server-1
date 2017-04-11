@@ -1,7 +1,7 @@
 package com.lawu.eshop.pay.srv.controller;
 
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 
 public class WxPayParamValidateor {
@@ -11,7 +11,7 @@ public class WxPayParamValidateor {
 	 * @param param
 	 * @return
 	 */
-	public static int appAlipayReqValidate(AppAlipayDataParam param){
+	public static int appAlipayReqValidate(ThirdPayDataParam param){
 		if(param.getSubject() == null || "".equals(param.getSubject())){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_SUBJECT_NULL;
 		}
@@ -43,7 +43,7 @@ public class WxPayParamValidateor {
 	 * @param param
 	 * @return
 	 */
-	public static int pcAlipayReqValidate(AppAlipayDataParam param) {
+	public static int pcAlipayReqValidate(ThirdPayDataParam param) {
 		if(param.getSubject() == null || "".equals(param.getSubject())){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_SUBJECT_NULL;
 		}

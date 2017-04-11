@@ -151,7 +151,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "自然月提现次数大于1次时，提现金额必须大于5元");
         ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
         ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
-        ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "提现余额不足");
+        ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "余额不足");
         ResultCode.messageMap.put(PROPERTY_CASH_SCALE_NULL, "提现比例系统参数未配置");
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
