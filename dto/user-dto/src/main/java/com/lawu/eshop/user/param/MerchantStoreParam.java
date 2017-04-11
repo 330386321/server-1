@@ -26,6 +26,12 @@ public class MerchantStoreParam {
     private String regionPath;
 
     /**
+     * 省市区
+     */
+    @ApiParam(name = "regionName", value = "省市区名称",required = true)
+    private String regionName;
+
+    /**
      * 店铺地址信息
      */
     @ApiParam(name = "address", value = "店铺地址信息",required = true)
@@ -329,5 +335,13 @@ public class MerchantStoreParam {
 
     public void setOtherUrl(String otherUrl) {
         this.otherUrl = otherUrl;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

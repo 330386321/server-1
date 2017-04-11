@@ -118,6 +118,7 @@ public class MerchantStoreConverter {
             merchantStoreDO.setLongitude(merchantStoreParam.getLongitude());
             merchantStoreDO.setPrincipalMobile(merchantStoreParam.getPrincipalMobile());
             merchantStoreDO.setRegionPath(merchantStoreParam.getRegionPath());
+            merchantStoreDO.setRegionName(merchantStoreParam.getRegionName());
 
             return merchantStoreDO;
         } else if (type == 2) {
