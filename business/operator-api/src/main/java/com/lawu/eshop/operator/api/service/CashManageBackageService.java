@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
+import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 
 /**
  * 
@@ -29,6 +31,14 @@ public interface CashManageBackageService {
 	 */
 	@RequestMapping(value = "cashBackage/findCashInfo",method = RequestMethod.POST)
 	Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryDataParam param);
+
+	/**
+	 * 运营平台提现管理统计成功总笔数和成功总金额
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "cashBackage/getTotalNum",method = RequestMethod.POST)
+	Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody CashBackageQuerySumParam param);
 	
 	
 

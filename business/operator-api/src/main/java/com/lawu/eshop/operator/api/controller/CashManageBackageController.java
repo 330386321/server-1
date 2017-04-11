@@ -9,18 +9,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.operator.api.service.CashManageBackageService;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
+import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryParam;
-import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
 
 /**
  * 
@@ -59,9 +58,15 @@ public class CashManageBackageController extends BaseController {
 		dparam.setEndDate(param.getEndDate());
 		dparam.setCashStatsuEnum(param.getCashStatsuEnum());
 		dparam.setUserTypeEnum(param.getUserTypeEnum());
-		
+
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfo(dparam);
 		return dtos;
 	}
 
+	@ApiOperation(value = "商家、用户提现管理总数统计", notes = "商家、用户提现明细查询总数统计,[]（杨清华）", httpMethod = "POST")
+	// @Authorization
+	@RequestMapping(value = "getTotalNum", method = RequestMethod.POST)
+	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@ModelAttribute @ApiParam CashBackageQuerySumParam param) {
+		return cashManageBackageService.getTotalNum(param);
+	}
 }

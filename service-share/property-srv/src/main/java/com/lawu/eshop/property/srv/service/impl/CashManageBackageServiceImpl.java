@@ -10,14 +10,19 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.extend.WithdrawCashDOView;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.WithdrawCashDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
+import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
 
 @Service
@@ -27,6 +32,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	private WithdrawCashDOMapper withdrawCashDOMapper;
 	@Autowired
 	private BankAccountDOMapper bankAccountDOMapper;
+	@Autowired
+	private WithdrawCashDOMapperExtend withdrawCashDOMapperExtend;
 
 	@Override
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
@@ -45,8 +52,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 				criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
 			}
 		}
-		
-		if(param.getContent() != null && !"".equals(param.getContent().trim())){
+
+		if (param.getContent() != null && !"".equals(param.getContent().trim())) {
 			Criteria criteria2 = example.createCriteria();
 			criteria2.andAccountEqualTo(param.getContent());
 
@@ -72,7 +79,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setId(cdo.getId());
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
-			bqbo.setRegionFullName(cdo.getRegionFullName());;
+			bqbo.setRegionFullName(cdo.getRegionFullName());
+			;
 			if (CashStatusEnum.APPLY.val.equals(cdo.getStatus())) {
 				bqbo.setStatus("申请中");
 			} else if (CashStatusEnum.ACCEPT.val.equals(cdo.getStatus())) {
@@ -95,7 +103,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setGmtCreate(DateUtil.getDateFormat(cdo.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
 			if (cdo.getGmtModified() != null) {
 				bqbo.setGmtModified(DateUtil.getDateFormat(cdo.getGmtModified(), "yyyy-MM-dd HH:mm:ss"));
-			}else{
+			} else {
 				bqbo.setGmtModified("");
 			}
 			bqbo.setMoney(cdo.getMoney());
@@ -103,6 +111,17 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		}
 		page.setRecords(cbos);
 		return page;
+	}
+
+	@Override
+	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) throws Exception {
+		WithdrawCashDOView view = new WithdrawCashDOView();
+		view.setUserType(param.getUserTypeEnum().val);
+		view = withdrawCashDOMapperExtend.getTotalNum(view);
+		
+		WithdrawCashBackageQuerySumBO bo = new WithdrawCashBackageQuerySumBO();
+		BeanUtil.copyProperties(view, bo);
+		return bo;
 	}
 
 }
