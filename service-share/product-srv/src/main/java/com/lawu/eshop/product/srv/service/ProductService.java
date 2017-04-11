@@ -59,11 +59,4 @@ public interface ProductService {
      */
     void eidtProduct(Long productId, EditProductDataParam product);
 
-    /**
-     * 查询同类商品
-     *
-     * @param productRecommendParam
-     * @return
-     */
-    List<ProductRecommendBO> listProductBycategoryId(ProductRecommendParam productRecommendParam);
 }

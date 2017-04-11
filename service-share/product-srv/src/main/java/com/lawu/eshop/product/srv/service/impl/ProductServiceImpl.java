@@ -5,18 +5,17 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductImgTypeEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ProductRecommendParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
-import com.lawu.eshop.product.srv.bo.*;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductModelBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.converter.ProductRecommendConverter;
 import com.lawu.eshop.product.srv.domain.*;
-import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
-import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import org.apache.ibatis.session.RowBounds;
@@ -42,9 +41,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductCategoryService productCategoryService;
-
-    @Autowired
-    private ProductDOMapperExtend productDOMapperExtend;
 
     @Override
     public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
@@ -295,12 +291,6 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
             productImageDOMapper.insert(pcDO);
         }
-    }
-
-    @Override
-    public List<ProductRecommendBO> listProductBycategoryId(ProductRecommendParam productRecommendParam) {
-        List<ProductDOView> productDOViewList = productDOMapperExtend.listProductBycategoryId(productRecommendParam);
-        return ProductRecommendConverter.convertBO(productDOViewList);
     }
 
 }

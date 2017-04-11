@@ -8,16 +8,12 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.dto.ProductRecommendDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ProductRecommendParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
-import com.lawu.eshop.product.srv.bo.ProductRecommendBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
-import com.lawu.eshop.product.srv.converter.ProductRecommendConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -128,27 +124,6 @@ public class ProductController extends BaseController {
     public Result saveProduct(@RequestParam Long productId, @RequestBody EditProductDataParam product) {
         productService.eidtProduct(productId, product);
         return successCreated(ResultCode.SUCCESS);
-    }
-
-    /**
-     * 同类型商品推荐
-     *
-     * @param categoryId
-     * @param productId
-     * @return
-     */
-    @RequestMapping(value = "recommend/{categoryId}", method = RequestMethod.GET)
-    public Result<List<ProductRecommendDTO>> recommend(@PathVariable Integer categoryId, @RequestParam Long productId) {
-        ProductRecommendParam productRecommendParam = new ProductRecommendParam();
-        productRecommendParam.setCategoryId(categoryId);
-        productRecommendParam.setProductId(productId);
-        productRecommendParam.setProductStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
-        productRecommendParam.setProductModelStatus(true);
-        List<ProductRecommendBO> productRecommendBOS = productService.listProductBycategoryId(productRecommendParam);
-        if (productRecommendBOS.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        return successGet(ProductRecommendConverter.convertDTO(productRecommendBOS));
     }
 
 }
