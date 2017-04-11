@@ -6,12 +6,13 @@ import com.lawu.eshop.order.srv.bo.CommentProductNotification;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong
  * @date 2017/4/7.
  */
-//@Service
+@Service
 @CompensatingTransactionFollow(topic = "transaction-comtent_product", tags = "order")
 public class OrderCommentProductTransactionFollowServiceImpl extends AbstractTransactionFollowService<CommentProductNotification> {
 

@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.PayOrderListParam;
@@ -11,6 +10,7 @@ import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
+import com.lawu.eshop.order.srv.service.impl.transaction.PayOrderTransactionMainServiceImpl;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class PayOrderServiceImpl implements PayOrderService {
     private PayOrderDOMapper payOrderDOMapper;
 
     @Autowired
-    private TransactionMainService transactionMainService;
+    private PayOrderTransactionMainServiceImpl payOrderTransactionMainService;
 
     @Override
     @Transactional
@@ -48,7 +48,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setStatus(StatusEnum.STATUS_VALID.val);
         int id = payOrderDOMapper.insert(payOrderDO);
         // 发消息更新门店买单笔数
-        transactionMainService.sendNotice(param.getMerchantId());
+        payOrderTransactionMainService.sendNotice(param.getMerchantId());
         return id;
     }
 
