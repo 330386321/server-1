@@ -46,14 +46,20 @@
         <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <table tableName="shopping_order_item" domainObjectName="ShoppingOrderItemDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         -->
         <table tableName="pay_order" domainObjectName="PayOrderDO">
+         	<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="shopping_refund_detail" domainObjectName="ShoppingRefundDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

@@ -886,63 +886,63 @@ public class ShoppingOrderItemDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnIsNull() {
-            addCriterion("gmt_return is null");
+        public Criteria andRefundStatusIsNull() {
+            addCriterion("refund_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnIsNotNull() {
-            addCriterion("gmt_return is not null");
+        public Criteria andRefundStatusIsNotNull() {
+            addCriterion("refund_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnEqualTo(Date value) {
-            addCriterion("gmt_return =", value, "gmtReturn");
+        public Criteria andRefundStatusEqualTo(Byte value) {
+            addCriterion("refund_status =", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnNotEqualTo(Date value) {
-            addCriterion("gmt_return <>", value, "gmtReturn");
+        public Criteria andRefundStatusNotEqualTo(Byte value) {
+            addCriterion("refund_status <>", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnGreaterThan(Date value) {
-            addCriterion("gmt_return >", value, "gmtReturn");
+        public Criteria andRefundStatusGreaterThan(Byte value) {
+            addCriterion("refund_status >", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnGreaterThanOrEqualTo(Date value) {
-            addCriterion("gmt_return >=", value, "gmtReturn");
+        public Criteria andRefundStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("refund_status >=", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnLessThan(Date value) {
-            addCriterion("gmt_return <", value, "gmtReturn");
+        public Criteria andRefundStatusLessThan(Byte value) {
+            addCriterion("refund_status <", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnLessThanOrEqualTo(Date value) {
-            addCriterion("gmt_return <=", value, "gmtReturn");
+        public Criteria andRefundStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("refund_status <=", value, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnIn(List<Date> values) {
-            addCriterion("gmt_return in", values, "gmtReturn");
+        public Criteria andRefundStatusIn(List<Byte> values) {
+            addCriterion("refund_status in", values, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnNotIn(List<Date> values) {
-            addCriterion("gmt_return not in", values, "gmtReturn");
+        public Criteria andRefundStatusNotIn(List<Byte> values) {
+            addCriterion("refund_status not in", values, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnBetween(Date value1, Date value2) {
-            addCriterion("gmt_return between", value1, value2, "gmtReturn");
+        public Criteria andRefundStatusBetween(Byte value1, Byte value2) {
+            addCriterion("refund_status between", value1, value2, "refundStatus");
             return (Criteria) this;
         }
 
-        public Criteria andGmtReturnNotBetween(Date value1, Date value2) {
-            addCriterion("gmt_return not between", value1, value2, "gmtReturn");
+        public Criteria andRefundStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("refund_status not between", value1, value2, "refundStatus");
             return (Criteria) this;
         }
 

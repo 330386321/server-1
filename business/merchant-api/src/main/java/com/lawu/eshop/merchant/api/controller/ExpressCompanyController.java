@@ -43,7 +43,7 @@ public class ExpressCompanyController extends BaseController {
     @ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "list", method = RequestMethod.GET)
     public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.list());
     }

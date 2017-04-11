@@ -11,7 +11,7 @@ CREATE TABLE `shopping_order` (
   `freight_price` decimal(10,2) unsigned NOT NULL COMMENT '运费',
   `commodity_total_price` decimal(10,2) unsigned NOT NULL COMMENT '商品总价',
   `order_total_price` decimal(10,2) unsigned NOT NULL COMMENT '订单总价',
-  `order_status` tinyint(2) unsigned NOT NULL COMMENT '订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)',
+  `order_status` tinyint(2) unsigned NOT NULL COMMENT '订单的总状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易取消|5-待商家确认|6-待退货|7-待退款|8-退款成功)',
   `status` tinyint(2) NOT NULL COMMENT '状态(0删除1正常)',
   `is_no_reason_return` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否支持无理由退货,0否 1是',
   `is_evaluation` tinyint(1) unsigned NOT NULL COMMENT '是否评价',
@@ -22,7 +22,7 @@ CREATE TABLE `shopping_order` (
   `express_company_name` varchar(25) DEFAULT NULL COMMENT '快递公司名称',
   `gmt_payment` datetime DEFAULT NULL COMMENT '付款时间',
   `gmt_transport` datetime DEFAULT NULL COMMENT '发货时间',
-  `gmt_transaction` datetime DEFAULT NULL COMMENT '交易时间',
+  `gmt_transaction` datetime DEFAULT NULL COMMENT '成交时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)

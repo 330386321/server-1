@@ -21,4 +21,13 @@ public interface ExpressCompanyService {
 	 */
 	List<ExpressCompanyBO> list();
 
+	/**
+	 * 根据快递公司id查询快递公司
+	 * 
+	 * @param id
+	 *            快递公司id
+	 * @return
+	 */
+	ExpressCompanyBO get(Integer id);
+
 }

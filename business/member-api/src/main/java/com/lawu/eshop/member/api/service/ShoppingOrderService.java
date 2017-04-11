@@ -15,8 +15,11 @@ import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 
 /**
  * @author Sunny
@@ -48,7 +51,7 @@ public interface ShoppingOrderService {
 	 * @param params 查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/page/{memberId}", method = RequestMethod.POST)
+	@RequestMapping(value = "shoppingOrder/selectPageByMemberId/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignParam param);
 	
 	/**
@@ -75,10 +78,69 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
-	 * @param param
-	 *            更新参数 
 	 * @return
 	 */
 	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
 	public Result cancelOrder(@PathVariable("id") Long id);
+	
+	/**
+	 * 删除购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/deleteOrder/{id}", method = RequestMethod.PUT)
+	Result deleteOrder(@PathVariable("id") Long id);
+	
+	/**
+	 * 确认收货之后
+	 * 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/tradingSuccess/{id}", method = RequestMethod.PUT)
+	Result tradingSuccess(@PathVariable("id") Long id);
+	
+	/**
+	 * 买家申请退款
+	 * 修改订单状态为待商家确认
+	 * 
+	 * @param shoppingOrderitemId 购物订单项id
+	 * @param param 退款参数
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
+	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundForeignParam param);
+	
+	/**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * 
+	 * @param memberId
+	 *            会员id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
+	Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param);
+	
+	/**
+	 * 支付成功之后
+	 * 回调修改购物订单以及订单项状态为待发货
+	 * 提供给api接口调用，也可以在api内部调用
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/paymentSuccessful/{id}", method = RequestMethod.PUT)
+	Result paymentSuccessful(@PathVariable("id") Long id);
 }

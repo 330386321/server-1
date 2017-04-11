@@ -1,23 +1,20 @@
-package com.lawu.eshop.order.srv.bo;
+package com.lawu.eshop.order.srv.domain.extend;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
-
-public class ShoppingOrderItemBO implements Serializable {
+public class ShoppingOrderItemRefundDO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 主键
+	 * 购物订单项id
 	 */
 	private Long id;
 
 	/**
-	 * 订单id
+	 * 购物订单id
 	 */
 	private Long shoppingOrderId;
 
@@ -62,14 +59,14 @@ public class ShoppingOrderItemBO implements Serializable {
 	private Integer quantity;
 
 	/**
-	 * 订单项状态
+	 * 订单项状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易关闭|5-退款中)
 	 */
-	private ShoppingOrderStatusEnum orderStatus;
+	private Byte orderStatus;
 
 	/**
-	 * 退款状态
+	 * 退款状态(0-待商家确认|1-待退货|2-待退款|3-退款成功|4-退款失败|5-平台介入)
 	 */
-	private ShoppingOrderItemRefundStatusEnum refundStatus;
+	private Byte refundStatus;
 
 	/**
 	 * 创建时间
@@ -80,6 +77,31 @@ public class ShoppingOrderItemBO implements Serializable {
 	 * 修改时间
 	 */
 	private Date gmtModified;
+	
+	/**
+	 * 购物退款详情id
+	 */
+	private Long shoppingRefundDetailId;
+	
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
+
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
+	
+	/**
+	 * 退款类型(0-退款|1-退货退款)
+	 */
+	private Byte type;
+
+	/**
+	 * 退款金额
+	 */
+	private BigDecimal amount;
 
 	public Long getId() {
 		return id;
@@ -95,6 +117,38 @@ public class ShoppingOrderItemBO implements Serializable {
 
 	public void setShoppingOrderId(Long shoppingOrderId) {
 		this.shoppingOrderId = shoppingOrderId;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public Byte getType() {
+		return type;
+	}
+
+	public void setType(Byte type) {
+		this.type = type;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 
 	public Long getProductId() {
@@ -161,19 +215,19 @@ public class ShoppingOrderItemBO implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public ShoppingOrderStatusEnum getOrderStatus() {
+	public Byte getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
+	public void setOrderStatus(Byte orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
-	public ShoppingOrderItemRefundStatusEnum getRefundStatus() {
+	public Byte getRefundStatus() {
 		return refundStatus;
 	}
 
-	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
+	public void setRefundStatus(Byte refundStatus) {
 		this.refundStatus = refundStatus;
 	}
 
@@ -192,4 +246,13 @@ public class ShoppingOrderItemBO implements Serializable {
 	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
 	}
+
+	public Long getShoppingRefundDetailId() {
+		return shoppingRefundDetailId;
+	}
+
+	public void setShoppingRefundDetailId(Long shoppingRefundDetailId) {
+		this.shoppingRefundDetailId = shoppingRefundDetailId;
+	}
+	
 }

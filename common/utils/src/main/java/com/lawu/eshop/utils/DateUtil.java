@@ -473,6 +473,30 @@ public class DateUtil {
         return (int) (intervalMilli / (24 * 60 * 60 * 1000));
 
     }
-
-
+    
+    /**
+     * 判断从开始的时间到现在的时间是否超过overTime数值的时间
+     * 以毫秒作为判断
+     * 
+     * @param fromDate 开始时间
+     * @param now 现在时间
+     * @param overTime 超过的时间
+     * @return
+     */
+    public static boolean isExceeds(Date fromDate, Date now, int overTime) {
+    	// 所有参数不能为空
+    	if (fromDate == null || now == null) {
+    		return false;
+    	}
+    	Calendar calendar = Calendar.getInstance();  //得到日历  
+        calendar.setTime(fromDate);//把当前时间赋给日历  
+        calendar.add(Calendar.MILLISECOND, overTime);  //添加超过时间
+        Date afterDate = calendar.getTime();  
+        
+        if (now.getTime() >= afterDate.getTime()) {
+        	return true;
+        }
+        
+        return false;
+    }
 }

@@ -1,6 +1,6 @@
 package com.lawu.eshop.mall.constants;
 
-public enum ShoppingOrderStatusEnum {
+public enum ShoppingOrderStatusToMemberEnum {
 
 	// 订单状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易关闭|5-退款中)
 
@@ -20,19 +20,9 @@ public enum ShoppingOrderStatusEnum {
 	TO_BE_RECEIVED((byte) 0x02),
 
 	/**
-	 * 3-交易成功
+	 * 3-待评价(订单状态处于交易完成的状态并且未评价)
 	 */
-	TRADING_SUCCESS((byte) 0x03),
-
-	/**
-	 * 4-交易关闭
-	 */
-	CANCEL_TRANSACTION((byte) 0x04),
-
-	/**
-	 * 5-退款中
-	 */
-	REFUNDING((byte) 0x05);
+	BE_EVALUATED((byte)0x03);
 
 	private Byte value;
 
@@ -44,12 +34,12 @@ public enum ShoppingOrderStatusEnum {
 		this.value = value;
 	}
 
-	ShoppingOrderStatusEnum(Byte value) {
+	ShoppingOrderStatusToMemberEnum(Byte value) {
 		this.value = value;
 	}
 	
-	public static ShoppingOrderStatusEnum getEnum(Byte value){
-		for (ShoppingOrderStatusEnum item : ShoppingOrderStatusEnum.values()) {
+	public static ShoppingOrderStatusToMemberEnum getEnum(Byte value){
+		for (ShoppingOrderStatusToMemberEnum item : ShoppingOrderStatusToMemberEnum.values()) {
 			if (item.getValue().equals(value)) {
 				return item;
 			}

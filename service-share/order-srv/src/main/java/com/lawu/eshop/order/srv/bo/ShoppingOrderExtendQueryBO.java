@@ -36,10 +36,10 @@ public class ShoppingOrderExtendQueryBO implements Serializable {
 	private BigDecimal orderTotalPrice;
 
 	/**
-	 * 订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+	 * 订单的总状态
 	 */
 	private ShoppingOrderStatusEnum orderStatus;
-
+	
 	/**
 	 * 是否支持无理由退货,0否 1是
 	 */

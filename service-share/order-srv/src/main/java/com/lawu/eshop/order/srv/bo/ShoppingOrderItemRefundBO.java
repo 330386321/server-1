@@ -1,91 +1,158 @@
-package com.lawu.eshop.mall.dto.foreign;
+package com.lawu.eshop.order.srv.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-@ApiModel
-public class ShoppingOrderItemDTO implements Serializable {
+public class ShoppingOrderItemRefundBO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-	 * 购物订单项id
+	 * 主键
 	 */
-	@ApiModelProperty(value = "购物订单项id", required = true)
 	private Long id;
-	
+
+	/**
+	 * 订单id
+	 */
+	private Long shoppingOrderId;
+
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
+
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
+
+	/**
+	 * 退款类型(0-退款|1-退货退款)
+	 */
+	private ShoppingRefundTypeEnum type;
+
+	/**
+	 * 退款金额
+	 */
+	private BigDecimal amount;
+
 	/**
 	 * 商品id
 	 */
-	@ApiModelProperty(value = "商品id", required = true)
 	private Long productId;
 
 	/**
 	 * 商品名称
 	 */
-	@ApiModelProperty(value = "商品名称", required = true)
 	private String productName;
 
 	/**
 	 * 商品型号id
 	 */
-	@ApiModelProperty(value = "商品型号id", required = true)
 	private Long productModelId;
 
 	/**
 	 * 商品型号名称
 	 */
-	@ApiModelProperty(value = "商品型号名称", required = true)
 	private String productModelName;
 
 	/**
 	 * 商品特征图片
 	 */
-	@ApiModelProperty(value = "商品特征图片", required = true)
 	private String productFeatureImage;
 
 	/**
 	 * 原价
 	 */
-	@ApiModelProperty(value = "原价", required = true)
 	private BigDecimal regularPrice;
 
 	/**
 	 * 现价
 	 */
-	@ApiModelProperty(value = "现价", required = true)
 	private BigDecimal salesPrice;
 
 	/**
 	 * 数量
 	 */
-	@ApiModelProperty(value = "数量", required = true)
 	private Integer quantity;
+
+	/**
+	 * 订单项状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易关闭|5-退款中)
+	 */
+	private ShoppingOrderStatusEnum orderStatus;
+
+	/**
+	 * 退款状态(0-待商家确认|1-待退货|2-待退款|3-退款成功|4-退款失败|5-平台介入)
+	 */
+	private ShoppingOrderItemRefundStatusEnum refundStatus;
+
+	/**
+	 * 创建时间
+	 */
+	private Date gmtCreate;
+
+	/**
+	 * 修改时间
+	 */
+	private Date gmtModified;
 	
 	/**
-	 * 订单项状态
+	 * 购物退款详情id
 	 */
-	@ApiModelProperty(value = "订单状态|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
-	private ShoppingOrderStatusEnum orderStatus;
-	
-    /**
-    * 退款状态
-    */
-	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 商家填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
-    private ShoppingOrderItemRefundStatusEnum refundStatus;
-	
+	private Long shoppingRefundDetailId;
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getShoppingOrderId() {
+		return shoppingOrderId;
+	}
+
+	public void setShoppingOrderId(Long shoppingOrderId) {
+		this.shoppingOrderId = shoppingOrderId;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public ShoppingRefundTypeEnum getType() {
+		return type;
+	}
+
+	public void setType(ShoppingRefundTypeEnum type) {
+		this.type = type;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 
 	public Long getProductId() {
@@ -166,6 +233,30 @@ public class ShoppingOrderItemDTO implements Serializable {
 
 	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
 		this.refundStatus = refundStatus;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+
+	public Date getGmtModified() {
+		return gmtModified;
+	}
+
+	public void setGmtModified(Date gmtModified) {
+		this.gmtModified = gmtModified;
+	}
+
+	public Long getShoppingRefundDetailId() {
+		return shoppingRefundDetailId;
+	}
+
+	public void setShoppingRefundDetailId(Long shoppingRefundDetailId) {
+		this.shoppingRefundDetailId = shoppingRefundDetailId;
 	}
 	
 }

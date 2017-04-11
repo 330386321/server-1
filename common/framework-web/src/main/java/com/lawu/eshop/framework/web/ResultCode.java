@@ -54,7 +54,14 @@ public class ResultCode {
     // 订单模块代码 4xxx
     public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
-    public static final int STATUS_NOT_CHANGED = 4002;
+    public static final int ORDER_NOT_CANCELED = 4002;
+    public static final int ORDER_NOT_DELETE = 4003;
+    public static final int ORDER_NOT_PENDING_PAYMENT = 4004;
+    public static final int ORDER_NOT_RECEIVED = 4005;
+    public static final int ORDER_NOT_REFUND = 4006;
+    public static final int EXCEEDS_RETURN_TIME = 4007;
+    public static final int NOT_SHIPPING_STATUS = 4008;
+    public static final int NOT_RETURNED_STATE = 4009;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -139,7 +146,14 @@ public class ResultCode {
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
-        ResultCode.messageMap.put(STATUS_NOT_CHANGED, "订单状态不允许被更改");
+        ResultCode.messageMap.put(ORDER_NOT_CANCELED, "订单不能被取消");
+        ResultCode.messageMap.put(ORDER_NOT_DELETE, "订单不能被删除");
+        ResultCode.messageMap.put(ORDER_NOT_PENDING_PAYMENT, "订单不是待支付状态");
+        ResultCode.messageMap.put(ORDER_NOT_RECEIVED, "订单不是待收货状态");
+        ResultCode.messageMap.put(ORDER_NOT_REFUND, "订单不能被退款");
+        ResultCode.messageMap.put(EXCEEDS_RETURN_TIME, "订单超过退货时间");
+        ResultCode.messageMap.put(NOT_SHIPPING_STATUS, "订单不是待发货状态");
+        ResultCode.messageMap.put(NOT_RETURNED_STATE, "订单退款状态不是待退货状态");
 
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
