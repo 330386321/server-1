@@ -1,15 +1,23 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.param.CashDataParam;
-import com.lawu.eshop.property.srv.service.CashManageFrontService;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
+import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
+import com.lawu.eshop.property.srv.service.CashManageBackageService;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
@@ -25,12 +33,35 @@ import com.lawu.eshop.property.srv.service.CashManageFrontService;
 public class CashManageBackageController extends BaseController{
 	
 	@Autowired
-	private CashManageFrontService cashManageService;
+	private CashManageBackageService cashManageBackageService;
 
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestBody CashDataParam cash) {
-		return successCreated(cashManageService.save(cash));
+	/**
+	 * 运营平台财务提现管理
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "findCashInfo", method = RequestMethod.POST)
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryDataParam param) throws Exception {
+		if(param.getUserTypeEnum() == null){
+			return successCreated(ResultCode.CASH_BACKAGE_USER_TYPE_NULL);
+		}
+		if(param.getBeginDate() == null || param.getEndDate() == null){
+			return successCreated(ResultCode.DATE_RANGE_NULL);
+		}
+		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfo(param);
+		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
+		List<WithdrawCashBackageQueryDTO> dtos = new ArrayList<WithdrawCashBackageQueryDTO>();
+		for(WithdrawCashBackageQueryBO bo : cbos){
+			WithdrawCashBackageQueryDTO dto = new WithdrawCashBackageQueryDTO();
+			BeanUtil.copyProperties(bo, dto);
+			dtos.add(dto);
+		}
+		Page<WithdrawCashBackageQueryDTO> pageResult = new Page<WithdrawCashBackageQueryDTO>();
+		pageResult.setTotalCount(page.getTotalCount());
+		pageResult.setCurrentPage(page.getCurrentPage());
+		pageResult.setRecords(dtos);
+		return successCreated(pageResult);
 	}
 	
 }

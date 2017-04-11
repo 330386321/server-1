@@ -84,6 +84,9 @@ public class ResultCode {
 
     public static final int WEIXIN_PAY_RETURN_CODE_FAIL = 6016;
     public static final int WEIXIN_PAY_RESULT_CODE_FAIL = 6017;
+    
+    public static final int CASH_BACKAGE_USER_TYPE_NULL = 6019;
+    public static final int DATE_RANGE_NULL = 6020;
 
     // 商城模块代码 7xxx
 
@@ -162,6 +165,9 @@ public class ResultCode {
         
         ResultCode.messageMap.put(WEIXIN_PAY_RETURN_CODE_FAIL, "微信支付时预支付接口return_code返回FAIL");
         ResultCode.messageMap.put(WEIXIN_PAY_RESULT_CODE_FAIL, "微信支付时预支付接口result_code返回FAIL");
+        
+        ResultCode.messageMap.put(CASH_BACKAGE_USER_TYPE_NULL, "用户类型不能为空");
+        ResultCode.messageMap.put(DATE_RANGE_NULL, "时间区间不能为空");
 
 
         // 商城模块 7xxx

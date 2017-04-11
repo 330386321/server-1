@@ -116,6 +116,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		withdrawCashDO.setProvinceId(cash.getProvinceId());
 		withdrawCashDO.setCityId(cash.getCityId());
 		withdrawCashDO.setAreaId(cash.getAreaId());
+		withdrawCashDO.setRegionFullName(cash.getRegionFullName());
 		withdrawCashDOMapper.insertSelective(withdrawCashDO);
 
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();

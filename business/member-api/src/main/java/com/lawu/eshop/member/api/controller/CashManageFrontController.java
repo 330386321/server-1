@@ -82,6 +82,9 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
 		dataParam.setCityId(cashUserInfoDTO.getCityId());
 		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
+		
+		//TODO 需要查询地区全路径查询
+		dataParam.setRegionFullName("");
 
 		return cashManageFrontService.save(dataParam);
 

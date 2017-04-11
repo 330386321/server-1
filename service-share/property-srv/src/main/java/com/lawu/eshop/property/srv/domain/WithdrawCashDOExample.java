@@ -646,6 +646,76 @@ public class WithdrawCashDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRegionFullNameIsNull() {
+            addCriterion("region_full_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameIsNotNull() {
+            addCriterion("region_full_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameEqualTo(String value) {
+            addCriterion("region_full_name =", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameNotEqualTo(String value) {
+            addCriterion("region_full_name <>", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameGreaterThan(String value) {
+            addCriterion("region_full_name >", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameGreaterThanOrEqualTo(String value) {
+            addCriterion("region_full_name >=", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameLessThan(String value) {
+            addCriterion("region_full_name <", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameLessThanOrEqualTo(String value) {
+            addCriterion("region_full_name <=", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameLike(String value) {
+            addCriterion("region_full_name like", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameNotLike(String value) {
+            addCriterion("region_full_name not like", value, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameIn(List<String> values) {
+            addCriterion("region_full_name in", values, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameNotIn(List<String> values) {
+            addCriterion("region_full_name not in", values, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameBetween(String value1, String value2) {
+            addCriterion("region_full_name between", value1, value2, "regionFullName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionFullNameNotBetween(String value1, String value2) {
+            addCriterion("region_full_name not between", value1, value2, "regionFullName");
+            return (Criteria) this;
+        }
+
         public Criteria andCashMoneyIsNull() {
             addCriterion("cash_money is null");
             return (Criteria) this;

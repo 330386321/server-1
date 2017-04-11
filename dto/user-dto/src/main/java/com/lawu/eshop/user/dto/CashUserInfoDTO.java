@@ -33,6 +33,8 @@ public class CashUserInfoDTO {
 	 * 账号注册区
 	 */
 	private Integer areaId;
+	
+	private String regionFullName;
 
 	public String getAccount() {
 		return account;
@@ -72,6 +74,14 @@ public class CashUserInfoDTO {
 
 	public void setAreaId(Integer areaId) {
 		this.areaId = areaId;
+	}
+
+	public String getRegionFullName() {
+		return regionFullName;
+	}
+
+	public void setRegionFullName(String regionFullName) {
+		this.regionFullName = regionFullName;
 	}
 
 }

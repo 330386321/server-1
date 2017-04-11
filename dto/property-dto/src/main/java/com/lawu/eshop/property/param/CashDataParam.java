@@ -49,6 +49,16 @@ public class CashDataParam extends CashParam{
 	 */
 	private Integer areaId;
 	
+	private String regionFullName;
+	
+	public String getRegionFullName() {
+		return regionFullName;
+	}
+
+	public void setRegionFullName(String regionFullName) {
+		this.regionFullName = regionFullName;
+	}
+
 	public String getName() {
 		return name;
 	}

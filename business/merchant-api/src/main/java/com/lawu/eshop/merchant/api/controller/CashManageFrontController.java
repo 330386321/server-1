@@ -82,6 +82,7 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
 		dataParam.setCityId(cashUserInfoDTO.getCityId());
 		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
+		dataParam.setRegionFullName(cashUserInfoDTO.getRegionFullName());
 		
 		return cashManageFrontService.save(dataParam);
 
