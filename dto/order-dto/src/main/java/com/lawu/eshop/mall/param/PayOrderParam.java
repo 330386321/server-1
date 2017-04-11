@@ -26,7 +26,7 @@ public class PayOrderParam {
     @ApiModelProperty(value = "优惠金额")
     private BigDecimal favoredAmount;
 
-    @ApiModelProperty(value = "BALANCE:余额，ALIPAY：支付宝,WX:微信")
+    @ApiModelProperty(value = "BALANCE:余额，ALIPAY：支付宝,WX:微信",required = true)
     private TransactionPayTypeEnum payTypeEnum;
 
     public Long getMerchantId() {
