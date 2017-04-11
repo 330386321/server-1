@@ -24,8 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 商家门店service
- * Created by Administrator on 2017/3/24.
+ * 商家门店service Created by Administrator on 2017/3/24.
  */
 @Service
 public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
@@ -349,5 +348,25 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		bo.setAreaId(Integer.valueOf(stores.get(0).getRegionPath().split("/")[2]));
 		return bo;
 	}
+
+    @Override
+    public MerchantStoreInfoBO findStoreNameAndImgByMerchantId(Long merchantId) {
+        MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> stores = merchantStoreDOMapper.selectByExample(example);
+        if (stores == null || stores.isEmpty()) {
+            return null;
+        }
+        MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).
+                andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);//门店照
+        List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
+        merchantStoreInfoBO.setName(stores.get(0).getName());
+        if (!merchantStoreImageDOS.isEmpty()) {
+            merchantStoreInfoBO.setPath(merchantStoreImageDOS.get(0).getPath());
+        }
+        return merchantStoreInfoBO;
+    }
 
 }

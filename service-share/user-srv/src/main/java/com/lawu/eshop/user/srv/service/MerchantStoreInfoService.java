@@ -1,13 +1,9 @@
 package com.lawu.eshop.user.srv.service;
 
-import java.util.List;
-
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
+
+import java.util.List;
 
 /**
  * 门店信息接口
@@ -76,4 +72,5 @@ public interface MerchantStoreInfoService {
      */
 	CashUserInfoBO findCashUserInfo(Long id);
 
+    MerchantStoreInfoBO findStoreNameAndImgByMerchantId(Long merchantId);
 }
