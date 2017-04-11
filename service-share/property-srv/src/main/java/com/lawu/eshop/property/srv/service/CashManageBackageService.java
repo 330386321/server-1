@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
@@ -38,6 +39,13 @@ public interface CashManageBackageService {
 	 * @return
 	 */
 	Page<WithdrawCashBackageQueryBO> findCashInfoDetail(CashBackageQueryDetailParam param);
+
+	/**
+	 * 提现后台处理
+	 * @param param
+	 * @return
+	 */
+	int updateWithdrawCash(CashBackageOperDataParam param);
 	
 	
 

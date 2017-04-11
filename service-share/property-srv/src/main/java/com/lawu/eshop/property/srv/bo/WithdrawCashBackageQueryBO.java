@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 public class WithdrawCashBackageQueryBO {
 
 	private Long id;
+	
+	private String userNum;
 
 	private String account;
 
@@ -33,6 +35,14 @@ public class WithdrawCashBackageQueryBO {
 	private String gmtCreate;
 
 	private String gmtModified;
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
 
 	public Long getId() {
 		return id;

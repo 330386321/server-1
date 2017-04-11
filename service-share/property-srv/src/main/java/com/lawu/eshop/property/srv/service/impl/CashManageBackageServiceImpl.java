@@ -1,28 +1,42 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashStatusEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.domain.extend.WithdrawCashDOView;
+import com.lawu.eshop.property.srv.domain.extend.WithdrawCashOperDOView;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
+import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.WithdrawCashDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -35,6 +49,10 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	private BankAccountDOMapper bankAccountDOMapper;
 	@Autowired
 	private WithdrawCashDOMapperExtend withdrawCashDOMapperExtend;
+	@Autowired
+	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
+	@Autowired
+	private TransactionDetailDOMapper transactionDetailDOMapper;
 
 	@Override
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
@@ -78,6 +96,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		for (WithdrawCashDO cdo : listDOS) {
 			WithdrawCashBackageQueryBO bqbo = new WithdrawCashBackageQueryBO();
 			bqbo.setId(cdo.getId());
+			bqbo.setUserNum(cdo.getUserNum());
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());
@@ -175,6 +194,62 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		}
 		page.setRecords(cbos);
 		return page;
+	}
+
+	@Override
+	@Transactional
+	public int updateWithdrawCash(CashBackageOperDataParam param) {
+
+		// 批量修改提现表状态
+		List<WithdrawCashOperDOView> paramList = new ArrayList<WithdrawCashOperDOView>();
+		String ids = param.getIds();
+		String idsArray[] = ids.split(",");
+		for (int i = 0; i < idsArray.length; i++) {
+			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
+			view.setId(Integer.valueOf(idsArray[i]));
+			view.setStatus(param.getCashOperEnum().val);
+			view.setAuditFailReason(param.getAuditFailReason() == null ? "" : param.getAuditFailReason());
+			view.setAuditUserId(param.getAuditUserId() == null ? 0 : param.getAuditUserId());
+			view.setAuditUserName(param.getAuditUserName() == null ? "" : param.getAuditUserName());
+			view.setGmtModified(new Date());
+			paramList.add(view);
+		}
+		withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
+		if (!CashStatusEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
+			return ResultCode.SUCCESS;
+		}
+
+		// 失败的情况要回滚数据
+		for (int i = 0; i < idsArray.length; i++) {
+
+			// 余额新增
+			WithdrawCashDO wcdo = withdrawCashDOMapper.selectByPrimaryKey(Long.valueOf(idsArray[i]));
+			PropertyInfoDOEiditView infoView = new PropertyInfoDOEiditView();
+			infoView.setBalance(wcdo.getCashMoney());
+			infoView.setUserNum(wcdo.getUserNum());
+			infoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoView);
+
+			// 新增退回交易明细
+			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
+			transactionDetailDO.setTitle(TransactionTitle.CASH_FAIL_BACK);
+			transactionDetailDO.setTransactionNum(wcdo.getCashNumber());
+			transactionDetailDO.setUserNum(wcdo.getUserNum());
+			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				transactionDetailDO.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
+			} else if (wcdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				transactionDetailDO.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue());
+			}
+			transactionDetailDO.setTransactionAccount(wcdo.getAccount());
+			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+			transactionDetailDO.setAmount(wcdo.getCashMoney());
+			transactionDetailDO.setBizId(wcdo.getId());
+			transactionDetailDO.setRemark("");
+			transactionDetailDO.setGmtCreate(new Date());
+			transactionDetailDOMapper.insertSelective(transactionDetailDO);
+		}
+
+		return ResultCode.SUCCESS;
 	}
 
 }

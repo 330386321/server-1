@@ -4,8 +4,8 @@
 	namespace="com.lawu.eshop.property.srv.mapper.extend.WithdrawCashDOMapperExtend">
 	<resultMap id="BaseResultMap"
 		type="com.lawu.eshop.property.srv.domain.extend.WithdrawCashDOView">
-		<result column="successNums" property="successNums" jdbcType="INTEGER"/>
-		<result column="total" property="successMoney" jdbcType="DECIMAL"/>
+		<result column="successNums" property="successNums" jdbcType="INTEGER" />
+		<result column="total" property="successMoney" jdbcType="DECIMAL" />
 	</resultMap>
 
 	<select resultMap="BaseResultMap"
@@ -14,4 +14,20 @@
 		select count(1) as successNums,sum(money) as total from
 		withdraw_cash where user_type = #{userType,jdbcType=TINYINT}
 	</select>
+
+	<update id="updateBatchWithdrawCashStatus" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" open=""
+			close="" separator=";">
+			update withdraw_cash 
+				set 
+				status = #{item.status,jdbcType=TINYINT},
+				audit_faild_reason = #{item.auditFailReason,jdbcType=VARCHAR},
+				audit_user_id = #{item.auditUserId,jdbcType=BIGINT},
+				audit_user_name = #{item.auditUserName,jdbcType=VARCHAR},
+				gmt_modified = #{item.gmtModified,jdbcType=TIMESTAMP}
+			where id =
+				#{item.id,jdbcType=BIGINT}
+		</foreach>
+	</update>
+
 </mapper>

@@ -51,7 +51,12 @@ public enum MemberTransactionTypeEnum {
 	/**
 	 * 提现
 	 */
-	WITHDRAW((byte)0x09);
+	WITHDRAW((byte)0x09),
+	
+	/**
+	 * 提现退回
+	 */
+	WITHDRAW_BACK((byte)0x10);
 	
 	MemberTransactionTypeEnum(Byte value){
 		this.value = value;

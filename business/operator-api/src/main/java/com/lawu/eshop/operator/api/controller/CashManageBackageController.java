@@ -2,6 +2,7 @@ package com.lawu.eshop.operator.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.operator.api.service.CashManageBackageService;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
+import com.lawu.eshop.property.param.CashBackageOperDataParam;
+import com.lawu.eshop.property.param.CashBackageOperParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQueryParam;
@@ -79,5 +82,18 @@ public class CashManageBackageController extends BaseController {
 
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfoDetail(param);
 		return dtos;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "商家、用户提现数据操作", notes = "商家、用户提现数据操作,[]（杨清华）", httpMethod = "POST")
+	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
+	public Result updateWithdrawCash(@ModelAttribute @ApiParam CashBackageOperParam param) {
+		CashBackageOperDataParam dparam = new CashBackageOperDataParam();
+		dparam.setIds(param.getIds());
+		dparam.setCashOperEnum(param.getCashOperEnum());
+		dparam.setAuditFailReason(param.getAuditFailReason());
+		dparam.setAuditUserId(1L);
+		dparam.setAuditUserName("super");
+		return cashManageBackageService.updateWithdrawCash(dparam);
 	}
 }

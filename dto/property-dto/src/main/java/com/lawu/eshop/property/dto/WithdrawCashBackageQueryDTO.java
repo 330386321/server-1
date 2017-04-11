@@ -8,6 +8,9 @@ public class WithdrawCashBackageQueryDTO {
 
 	@ApiModelProperty(value = "主键")
 	private Long id;
+	
+	@ApiModelProperty(value = "用户编号")
+	private String userNum;
 
 	@ApiModelProperty(value = "账户")
 	private String account;
@@ -50,6 +53,14 @@ public class WithdrawCashBackageQueryDTO {
 
 	@ApiModelProperty(value = "修改时间")
 	private String gmtModified;
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
 
 	public Long getId() {
 		return id;
