@@ -11,4 +11,9 @@ public class TransactionConstant {
      * 注册
      */
     public static final byte SETTLEMENT = 0x01;
+
+    /**
+     * 买单
+     */
+    public static final byte PAYORDER = 0x02;
 }

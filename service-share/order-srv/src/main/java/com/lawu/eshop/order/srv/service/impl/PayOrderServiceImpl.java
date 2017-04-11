@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.PayOrderListParam;
@@ -28,6 +29,9 @@ public class PayOrderServiceImpl implements PayOrderService {
     @Autowired
     private PayOrderDOMapper payOrderDOMapper;
 
+    @Autowired
+    private TransactionMainService transactionMainService;
+
     @Override
     @Transactional
     public Integer savePayOrderInfo(Long memberId, PayOrderParam param) {
@@ -43,8 +47,8 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(StatusEnum.STATUS_VALID.val);
         int id = payOrderDOMapper.insert(payOrderDO);
-        //TODO 发消息更新门店买单笔数
-
+        // 发消息更新门店买单笔数
+        transactionMainService.sendNotice(param.getMerchantId());
         return id;
     }
 
