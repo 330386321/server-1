@@ -4,7 +4,7 @@ import com.lawu.eshop.compensating.transaction.Notification;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.compensating.transaction.TransactionStatusService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
-import com.lawu.eshop.compensating.transaction.mq.MqService;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public abstract class AbstractTransactionMainService<T extends Notification> implements TransactionMainService<Long> {
 
     @Autowired
-    private MqService mqService;
+    private MessageProducerService messageProducerService;
 
     @Autowired
     private TransactionStatusService transactionStatusService;
@@ -53,10 +53,14 @@ public abstract class AbstractTransactionMainService<T extends Notification> imp
     public void sendNotice(Long relateId) {
 
         T notification = selectNotification(relateId);
+
+        if (notification == null) {
+            throw new IllegalArgumentException("Can't find the notification by relateId: " + relateId);
+        }
         Long transactionId = transactionStatusService.save(relateId, type);
         notification.setTransactionId(transactionId);
 
-        mqService.sendMessage(topic, tags, notification);
+        messageProducerService.sendMessage(topic, tags, notification);
     }
 
     @Transactional

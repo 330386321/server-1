@@ -3,7 +3,7 @@ package com.lawu.eshop.compensating.transaction.impl;
 import com.lawu.eshop.compensating.transaction.Notification;
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
-import com.lawu.eshop.compensating.transaction.mq.MqService;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractTransactionFollowService<V extends Notification> implements TransactionFollowService<V, Long> {
 
     @Autowired
-    private MqService mqService;
+    private MessageProducerService messageProducerService;
 
     CompensatingTransactionFollow annotation = this.getClass().getAnnotation(CompensatingTransactionFollow.class);
 
@@ -34,7 +34,7 @@ public abstract class AbstractTransactionFollowService<V extends Notification> i
     @Override
     public void sendCallback(Long transactionId) {
 
-        mqService.sendMessage(topic, tags, transactionId);
+        messageProducerService.sendMessage(topic, tags, transactionId);
     }
 
     /**

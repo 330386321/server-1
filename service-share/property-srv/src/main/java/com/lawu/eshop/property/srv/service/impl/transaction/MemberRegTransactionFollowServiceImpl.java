@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service.impl.transaction;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
+import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.property.srv.bo.RegNotification;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
@@ -17,7 +18,7 @@ import java.util.List;
  * @date 2017/3/29
  */
 @Service
-@CompensatingTransactionFollow(topic = "transaction-reg", tags = "property")
+@CompensatingTransactionFollow(topic = MqConstant.MQ_TOPIC_USER_SRV, tags = MqConstant.MQ_TAG_REG)
 public class MemberRegTransactionFollowServiceImpl extends AbstractTransactionFollowService<RegNotification> {
 
     @Autowired
