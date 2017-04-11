@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 
 /**
@@ -39,6 +40,14 @@ public interface CashManageBackageService {
 	 */
 	@RequestMapping(value = "cashBackage/getTotalNum",method = RequestMethod.POST)
 	Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody CashBackageQuerySumParam param);
+
+	/**
+	 * 提现详情
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "cashBackage/findCashInfoDetail",method = RequestMethod.POST)
+	Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(@RequestBody CashBackageQueryDetailParam param);
 	
 	
 

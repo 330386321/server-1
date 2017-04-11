@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
@@ -86,5 +87,34 @@ public class CashManageBackageController extends BaseController{
 			dto.setSuccessMoney(new BigDecimal(0));
 		}
 		return successCreated(dto);
+	}
+	
+	/**
+	 * 运营平台提现详情
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(@RequestBody CashBackageQueryDetailParam param) throws Exception {
+		if(param.getUserTypeEnum() == null){
+			return successCreated(ResultCode.CASH_BACKAGE_USER_TYPE_NULL);
+		}
+		if(param.getAccount() == null || "".equals(param.getAccount())){
+			return successCreated(ResultCode.CASH_BACKAGE_ACCOUNT_NULL);
+		}
+		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfoDetail(param);
+		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
+		List<WithdrawCashBackageQueryDTO> dtos = new ArrayList<WithdrawCashBackageQueryDTO>();
+		for(WithdrawCashBackageQueryBO bo : cbos){
+			WithdrawCashBackageQueryDTO dto = new WithdrawCashBackageQueryDTO();
+			BeanUtil.copyProperties(bo, dto);
+			dtos.add(dto);
+		}
+		Page<WithdrawCashBackageQueryDTO> pageResult = new Page<WithdrawCashBackageQueryDTO>();
+		pageResult.setTotalCount(page.getTotalCount());
+		pageResult.setCurrentPage(page.getCurrentPage());
+		pageResult.setRecords(dtos);
+		return successCreated(pageResult);
 	}
 }

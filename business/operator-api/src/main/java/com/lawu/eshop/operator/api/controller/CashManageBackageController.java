@@ -2,7 +2,6 @@ package com.lawu.eshop.operator.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +13,7 @@ import com.lawu.eshop.operator.api.service.CashManageBackageService;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
+import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQueryParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 
@@ -66,7 +66,18 @@ public class CashManageBackageController extends BaseController {
 	@ApiOperation(value = "商家、用户提现管理总数统计", notes = "商家、用户提现明细查询总数统计,[]（杨清华）", httpMethod = "POST")
 	// @Authorization
 	@RequestMapping(value = "getTotalNum", method = RequestMethod.POST)
-	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@ModelAttribute @ApiParam CashBackageQuerySumParam param) {
+	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(
+			@ModelAttribute @ApiParam CashBackageQuerySumParam param) {
 		return cashManageBackageService.getTotalNum(param);
+	}
+
+	@ApiOperation(value = "商家、用户提现详情", notes = "商家、用户提现详情查询,[]（杨清华）", httpMethod = "POST")
+	// @Authorization
+	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(
+			@ModelAttribute @ApiParam CashBackageQueryDetailParam param) {
+
+		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfoDetail(param);
+		return dtos;
 	}
 }

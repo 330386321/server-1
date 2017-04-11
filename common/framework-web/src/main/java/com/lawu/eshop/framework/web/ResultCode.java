@@ -87,6 +87,7 @@ public class ResultCode {
     
     public static final int CASH_BACKAGE_USER_TYPE_NULL = 6019;
     public static final int DATE_RANGE_NULL = 6020;
+    public static final int CASH_BACKAGE_ACCOUNT_NULL = 6021;
 
     // 商城模块代码 7xxx
 
@@ -168,6 +169,7 @@ public class ResultCode {
         
         ResultCode.messageMap.put(CASH_BACKAGE_USER_TYPE_NULL, "用户类型不能为空");
         ResultCode.messageMap.put(DATE_RANGE_NULL, "时间区间不能为空");
+        ResultCode.messageMap.put(CASH_BACKAGE_ACCOUNT_NULL, "账号account不能为空");
 
 
         // 商城模块 7xxx
