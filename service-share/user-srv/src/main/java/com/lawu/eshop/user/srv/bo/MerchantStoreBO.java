@@ -7,6 +7,8 @@ import java.math.BigDecimal;
  * Created by Administrator on 2017/3/24.
  */
 public class MerchantStoreBO {
+	
+	private Long id;
 
     /**
      *
@@ -154,4 +156,13 @@ public class MerchantStoreBO {
         this.principalMobile = principalMobile;
     }
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+    
 }

@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AdService;
+import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 
@@ -43,6 +46,9 @@ public class AdController extends BaseController {
     
     @Autowired
     private PropertyInfoService propertyInfoService;
+    
+    @Autowired
+    private MemberCountService memberCountService;
  
 
     //@Authorization
@@ -67,16 +73,22 @@ public class AdController extends BaseController {
     	}else{//视频投放
     		
     	}*/
-        Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl);
+    	Integer count=0;
+    	if(adParam.getPutWayEnum().val==1){
+    		count=memberCountService.findMemberCount(adParam.getAreas());
+    	}else if(adParam.getPutWayEnum().val==2){
+    		count=memberCountService.findFensCount(merchantId);
+    	}
+        Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl,count);
         return rsAd;
     }
     
 
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
-    @Authorization
+    //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMerchant(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/
+    public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMerchantParam adMerchantParam) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<AdDTO>>  pageDTOS=adService.selectListByMerchant(adMerchantParam, memberId);
@@ -85,10 +97,10 @@ public class AdController extends BaseController {
     
 
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
-    @Authorization
+   // @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    public Result updateStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.updateStatus(id);
     	return rs;
     }
@@ -96,10 +108,10 @@ public class AdController extends BaseController {
     
     
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
-    @Authorization
+    //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
-    public Result remove(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.remove(id);
     	return rs;
     }

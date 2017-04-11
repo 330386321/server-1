@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
@@ -10,15 +9,11 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductRecommendDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * <p>Description:商品 </p>
@@ -58,16 +53,6 @@ public class ProductController extends BaseController {
         //TODO 商品评价额外调用服务
 
         return result;
-    }
-
-    @ApiOperation(value = "商品推荐", notes = "按销量推荐同类型商品，[1002]，（梅述全）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "recommend/{categoryId}", method = RequestMethod.GET)
-    public Result<List<ProductRecommendDTO>> recommend(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                       @PathVariable @ApiParam(name = "categoryId", required = true, value = "商品类别ID") Long categoryId,
-                                                       @RequestParam @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
-        return productService.recommend(categoryId, productId);
     }
 
 }

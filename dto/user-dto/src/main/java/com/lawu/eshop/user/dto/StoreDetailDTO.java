@@ -49,6 +49,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "优惠时间")
     private String preferentialTime;
 
+    @ApiModelProperty(value = "有效时间")
+    private String validTime;
+
     @ApiModelProperty(value = "已买笔数")
     private Integer buyNumbers;
 
@@ -162,5 +165,13 @@ public class StoreDetailDTO {
 
     public BigDecimal getAverageConsumeAmount() {
         return averageConsumeAmount;
+    }
+
+    public String getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(String validTime) {
+        this.validTime = validTime;
     }
 }

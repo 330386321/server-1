@@ -153,6 +153,7 @@ public class MemberController extends BaseController {
     }
     
     /**
+<<<<<<< Updated upstream
      * 用户、商家提现时根据用户ID获取账号、名称、省市区信息冗余到提现表中
      * @param memberId
      * @return
@@ -168,6 +169,16 @@ public class MemberController extends BaseController {
         CashUserInfoDTO dto = new CashUserInfoDTO();
         BeanUtil.copyProperties(cashUserInfoBO, dto);
         return dto;
+    }
+    /**
+     * 根据地区查询人数
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "findMemberCount", method = RequestMethod.GET)
+    public Integer findMemberCount( @RequestParam("areas") String regionPath) {
+    	Integer  count = memberService.findMemberCount(regionPath);
+        return count;
     }
 
 }

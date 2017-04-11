@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
 import java.util.List;
 
 /**
@@ -53,6 +57,22 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/storeDetail/{id}")
     Result<StoreDetailDTO> getStoreDetailById(@PathVariable("id") Long id);
+
+    /**
+     * 根据商家查询门店信息
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/selectMerchantStoreByMerchantId")
+    Result<MerchantStoreDTO> selectMerchantStoreByMerchantId(@PathVariable("merchantId") Long merchantId);
+
+    /**
+     * 根据商家查询门店信息
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/selectMerchantStoreByMId", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long merchantId);
 
     /**
      * 根据商家ID查询门店信息

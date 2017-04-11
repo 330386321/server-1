@@ -155,6 +155,16 @@ public class DateUtil {
         return Double.valueOf(dateTimeIntFormat.format(date));
     }
 
+    /**
+     * 日期格式化yyyy-MM-dd HH:mm:ss
+     *
+     * @param date
+     * @return
+     */
+    public static String getDateTimeFormat(Date date) {
+        return dateTimeFormat.format(date);
+    }
+
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
@@ -181,16 +191,6 @@ public class DateUtil {
      */
     public static String getDateFormat(Date date) {
         return dateFormat.format(date);
-    }
-
-    /**
-     * 日期格式化yyyy-MM-dd HH:mm:ss
-     *
-     * @param date
-     * @return
-     */
-    public static String getDateTimeFormat(Date date) {
-        return dateTimeFormat.format(date);
     }
 
     /**

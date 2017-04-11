@@ -165,6 +165,8 @@ public class MerchantStoreDTO  {
      */
     @ApiParam(name = "auditSuccess",value = "门店审核状态 false未审核，true 已审核/审核")
     private boolean auditSuccess =false;
+    
+   
 
     public Long getMerchantStoreId() {
         return merchantStoreId;

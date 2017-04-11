@@ -1,16 +1,23 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商家门店信息转换
@@ -266,5 +273,57 @@ public class MerchantStoreConverter {
 
         return merchantStoreNoReasonReturnDTOList;
     }
+    
+    public static MerchantStoreBO convertStoreBO(MerchantStoreDO merchantStoreDO){
+    	if(merchantStoreDO==null){
+    		return null;
+    	}
+    	MerchantStoreBO bo=new MerchantStoreBO();
+    	bo.setLongitude(merchantStoreDO.getLongitude());
+    	bo.setLatitude(merchantStoreDO.getLatitude());
+    	bo.setName(merchantStoreDO.getName());
+    	bo.setId(merchantStoreDO.getId());
+    	return bo;
+    }
+    
+    public static MerchantStoreDTO convertStoreDTO(MerchantStoreBO merchantStoreBO){
+    	if(merchantStoreBO==null){
+    		return null;
+    	}
+    	MerchantStoreDTO dto=new MerchantStoreDTO();
+    	dto.setLongitude(merchantStoreBO.getLongitude());
+    	dto.setLatitude(merchantStoreBO.getLatitude());
+    	dto.setName(merchantStoreBO.getName());
+    	dto.setMerchantStoreId(merchantStoreBO.getId());
+    	return dto;
+    }
+ 
+    
 
+    
+    
+    public static MerchantStoreBO convertStoreBO(MerchantStoreDO merchantStoreDO){
+    	if(merchantStoreDO==null){
+    		return null;
+    	}
+    	MerchantStoreBO bo=new MerchantStoreBO();
+    	bo.setLongitude(merchantStoreDO.getLongitude());
+    	bo.setLatitude(merchantStoreDO.getLatitude());
+    	bo.setName(merchantStoreDO.getName());
+    	bo.setId(merchantStoreDO.getId());
+    	return bo;
+    }
+    
+    public static MerchantStoreDTO convertStoreDTO(MerchantStoreBO merchantStoreBO){
+    	if(merchantStoreBO==null){
+    		return null;
+    	}
+    	MerchantStoreDTO dto=new MerchantStoreDTO();
+    	dto.setLongitude(merchantStoreBO.getLongitude());
+    	dto.setLatitude(merchantStoreBO.getLatitude());
+    	dto.setName(merchantStoreBO.getName());
+    	dto.setMerchantStoreId(merchantStoreBO.getId());
+    	return dto;
+    }
+    
 }

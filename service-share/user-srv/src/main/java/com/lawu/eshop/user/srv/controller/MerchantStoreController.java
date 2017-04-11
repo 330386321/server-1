@@ -1,6 +1,16 @@
 package com.lawu.eshop.user.srv.controller;
 
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -10,9 +20,15 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +47,30 @@ public class MerchantStoreController extends BaseController {
 
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
+
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+
+
+    /**
+     * 门店信息查询
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "selectMerchantStoreByMId", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long merchantId) {
+
+        MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantId);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.convertStoreDTO(merchantStoreBO);
+        return successGet(merchantStoreDTO);
+
+
+    }
+
 
     /**
      * 门店信息查询
@@ -195,7 +235,7 @@ public class MerchantStoreController extends BaseController {
         }
         return successCreated(storeBO.getIsNoReasonReturn());
     }
-
+    
     /**
      * 根据商家ID列表批量查询该商家是否支持七天无理由退货
      *
@@ -206,13 +246,13 @@ public class MerchantStoreController extends BaseController {
         if (merchantIdList == null || merchantIdList.isEmpty()) {
             return successGet(ResultCode.ID_EMPTY);
         }
-
+        
         List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService.selectNoReasonReturnByMerchantIds(merchantIdList);
-
+        
         if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-
+        
         return successGet(MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
     }
 
@@ -233,17 +273,16 @@ public class MerchantStoreController extends BaseController {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
-     *
      * @param id
      * @return
-     * @throws Exception
      * @author Yangqh
+     * @throws Exception 
      */
     @RequestMapping(value = "findCashUserInfo/{id}", method = RequestMethod.GET)
     public CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id) throws Exception {
-        CashUserInfoBO cashUserInfoBO = merchantStoreInfoService.findCashUserInfo(id);
+    	CashUserInfoBO cashUserInfoBO = merchantStoreInfoService.findCashUserInfo(id);
         if (cashUserInfoBO == null) {
-            return null;
+        	return null;
         }
         CashUserInfoDTO dto = new CashUserInfoDTO();
         BeanUtil.copyProperties(cashUserInfoBO, dto);

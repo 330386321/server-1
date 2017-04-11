@@ -12,6 +12,7 @@ import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.utils.DateUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,6 +63,7 @@ public class MerchantDetailController extends BaseController {
                 storeDetailDTO.setPreferentialClause(merchantFavoredDTO.getDiscountRate() + "折");
             }
             storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
+            storeDetailDTO.setValidTime(DateUtil.getDateTimeFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateTimeFormat(merchantFavoredDTO.getEntireEndTime()));
         }
         return successGet(storeDetailDTO);
     }

@@ -57,6 +57,8 @@ public class AdBO{
     private Date gmtCreate;
     
     private Integer attenCount;
+    
+    private Integer number;
 
 
 	public Long getId() {
@@ -207,8 +209,6 @@ public class AdBO{
 	public void setStatusEnum(AdStatusEnum statusEnum) {
 		this.statusEnum = statusEnum;
 	}
-
-
 	
 
 	public Date getGmtCreate() {
@@ -230,6 +230,17 @@ public class AdBO{
 		this.attenCount = attenCount;
 	}
 
+
+	public Integer getNumber() {
+		return number;
+	}
+
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	
     
     
 }

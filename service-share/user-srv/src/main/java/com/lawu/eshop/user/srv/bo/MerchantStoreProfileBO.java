@@ -1,8 +1,5 @@
 package com.lawu.eshop.user.srv.bo;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * 商家门店信息
  * Created by zhangyong on 2017/3/24.

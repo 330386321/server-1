@@ -41,11 +41,13 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.ad.srv.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-
-        <table tableName="ad" domainObjectName="AdDO">
+		<table tableName="point_pool" domainObjectName="PointPoolDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!-- <table tableName="ad_platform" domainObjectName="AdPlatformDO">
+        <!--<table tableName="ad" domainObjectName="AdDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+         <table tableName="ad_platform" domainObjectName="AdPlatformDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">

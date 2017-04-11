@@ -75,6 +75,7 @@ public class AdMerchantParam extends AbstractPageParam{
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
+
     
     
     
