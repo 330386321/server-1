@@ -29,5 +29,20 @@
 			 <artifactId>QRCode</artifactId>
 			 <version>1.0</version>
 		 </dependency>
+		 <dependency>
+			 <groupId>com.gexin</groupId>
+			 <artifactId>gexin-rp-sdk-template</artifactId>
+			 <version>4.0.0.8</version>
+		 </dependency>
+		 <dependency>
+			 <groupId>com.gexin</groupId>
+			 <artifactId>gexin-rp-sdk-http</artifactId>
+			 <version>4.0.1.9</version>
+		 </dependency>
+		 <dependency>
+			 <groupId>com.gexin</groupId>
+			 <artifactId>gexin-rp-sdk-base</artifactId>
+			 <version>4.0.0.14</version>
+		 </dependency>
 	 </dependencies>
 </project>
