@@ -76,11 +76,11 @@ public class NearStoreServiceImpl implements NearStoreService {
         }
 
         for (NearStoreBO nearStoreBO : nearStoreBOList) {
-            //查询门店logo
+            //查询门店照
             MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-            merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+            merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(nearStoreBO.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
             List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-            nearStoreBO.setLogo(merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath());
+            nearStoreBO.setStorePic(merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath());
 
             //查询门店收藏数
             FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();

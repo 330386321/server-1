@@ -18,7 +18,7 @@ public class NearStoreBO {
 
     private String industryPath;
 
-    private String logo;
+    private String storePic;
 
     private Integer distance;
 
@@ -64,12 +64,12 @@ public class NearStoreBO {
         this.industryPath = industryPath;
     }
 
-    public String getLogo() {
-        return logo;
+    public String getStorePic() {
+        return storePic;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setStorePic(String storePic) {
+        this.storePic = storePic;
     }
 
     public Integer getDistance() {

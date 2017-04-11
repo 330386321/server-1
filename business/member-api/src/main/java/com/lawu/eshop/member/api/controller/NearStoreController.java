@@ -35,7 +35,7 @@ public class NearStoreController extends BaseController {
     @Autowired
     private CommentMerchantService commentMerchantService;
 
-    @ApiOperation(value = "猜你喜欢", notes = "猜你喜欢，按距离查询门店信息。(梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "猜你喜欢/更多商家", notes = "猜你喜欢/更多商家(查询同类型商家)，按距离查询门店信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listNearStore", method = RequestMethod.GET)

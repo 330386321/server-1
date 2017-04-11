@@ -54,7 +54,7 @@ public class NearStoreConverter {
             nearStoreDTO.setMerchantId(nearStoreBO.getMerchantId());
             nearStoreDTO.setName(nearStoreBO.getName());
             nearStoreDTO.setIndustryPath(nearStoreBO.getIndustryPath());
-            nearStoreDTO.setLogo(nearStoreBO.getLogo());
+            nearStoreDTO.setStorePic(nearStoreBO.getStorePic());
             nearStoreDTO.setDistance(nearStoreBO.getDistance());
             nearStoreDTO.setFavCount(nearStoreBO.getFavCount());
             nearStoreDTOS.add(nearStoreDTO);

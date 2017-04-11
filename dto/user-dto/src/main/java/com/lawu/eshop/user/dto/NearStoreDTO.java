@@ -17,8 +17,8 @@ public class NearStoreDTO {
     @ApiModelProperty(value = "主营业务")
     private String industryPath;
 
-    @ApiModelProperty(value = "门店logo")
-    private String logo;
+    @ApiModelProperty(value = "门店照")
+    private String storePic;
 
     @ApiModelProperty(value = "距离")
     private Integer distance;
@@ -56,12 +56,12 @@ public class NearStoreDTO {
         this.industryPath = industryPath;
     }
 
-    public String getLogo() {
-        return logo;
+    public String getStorePic() {
+        return storePic;
     }
 
-    public void setLogo(String logo) {
-        this.logo = logo;
+    public void setStorePic(String storePic) {
+        this.storePic = storePic;
     }
 
     public Integer getDistance() {

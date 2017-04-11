@@ -15,7 +15,7 @@ public class NearStoreParam extends AbstractPageParam {
     @ApiModelProperty(value = "纬度", required = true)
     private Double latitude;
 
-    @ApiModelProperty(value = "主营业务")
+    @ApiModelProperty(value = "主营业务(商家详情下更多商家参数)")
     private String industryPath;
 
     public Double getLongitude() {
