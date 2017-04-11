@@ -1,12 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
@@ -19,26 +12,20 @@ import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
-import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
- * 商家门店service Created by Administrator on 2017/3/24.
+ * 商家门店service
+ * Created by Administrator on 2017/3/24.
  */
 @Service
 public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
@@ -327,42 +314,34 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
 	}
 
-	@Override
-	public StoreDetailBO getStoreDetailById(Long id) {
-		// 查询门店信息
-		MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
-		if (merchantStoreDO == null) {
-			return null;
-		}
-		// 查询门店照
-		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true)
-				.andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.STORE_IMAGE_STORE.val);
-		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper
-				.selectByExample(merchantStoreImageDOExample);
-		String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-		// 查询门店logo
-		merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true)
-				.andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.STORE_IMAGE_LOGO.val);
-		merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-		String logoPic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-		// 查询门店收藏数
-		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-		favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
-		int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
+    @Override
+    public StoreDetailBO getStoreDetailById(Long id) {
+        //查询门店信息
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        if (merchantStoreDO == null) {
+            return null;
+        }
+        //查询门店照
+        MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
+        List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+        //查询门店收藏数
+        FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
+        favoriteMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        int favCount = favoriteMerchantDOMapper.countByExample(favoriteMerchantDOExample);
 
-		StoreDetailBO storeDetailBO = new StoreDetailBO();
-		storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
-		storeDetailBO.setName(merchantStoreDO.getName());
-		storeDetailBO.setAddress(merchantStoreDO.getAddress());
-		storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
-		storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
-		storeDetailBO.setStorePic(storePic);
-		storeDetailBO.setLogoPic(logoPic);
-		storeDetailBO.setFavCount(favCount);
-		return storeDetailBO;
-	}
+        StoreDetailBO storeDetailBO = new StoreDetailBO();
+        storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
+        storeDetailBO.setName(merchantStoreDO.getName());
+        storeDetailBO.setAddress(merchantStoreDO.getAddress());
+        storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
+        storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
+        storeDetailBO.setIntro(merchantStoreDO.getIntro());
+        storeDetailBO.setStorePic(storePic);
+        storeDetailBO.setFavCount(favCount);
+        return storeDetailBO;
+    }
 
 	@Override
 	public CashUserInfoBO findCashUserInfo(Long id) {

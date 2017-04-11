@@ -4,9 +4,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.dto.CommentGradeDTO;
-import com.lawu.eshop.member.api.service.CommentMerchantService;
+import com.lawu.eshop.member.api.service.MerchantStoreImageService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -31,7 +34,7 @@ public class MerchantDetailController extends BaseController {
     private MerchantStoreService merchantStoreService;
 
     @Autowired
-    private CommentMerchantService commentMerchantService;
+    private MerchantStoreImageService merchantStoreImageService;
 
     @ApiOperation(value = "会员查看商家门店详情", notes = "会员查看商家门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -42,13 +45,15 @@ public class MerchantDetailController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         StoreDetailDTO storeDetailDTO = stoResult.getModel();
-        Result<CommentGradeDTO> comResult = commentMerchantService.getCommentAvgGrade(storeDetailDTO.getMerchantId());
-        if (isSuccess(comResult)) {
-            CommentGradeDTO commentGradeDTO = comResult.getModel();
-            storeDetailDTO.setScore(commentGradeDTO.getAvgGrade());
-            storeDetailDTO.setGoodCommentRate(commentGradeDTO.getGoodGrad());
-        }
-        //TODO 人均消费、优惠信息
+        //TODO 人均消费、优惠信息、综合评分，好评率
         return successGet(storeDetailDTO);
+    }
+
+    @ApiOperation(value = "会员查看商家相册", notes = "会员查看商家相册(店内环境照)。[1002]（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listMerchantStoreImage/{merchantId}", method = RequestMethod.GET)
+    public Result<List<MerchantStoreImageDTO>> listMerchantStoreImage(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId,
+                                                                      MerchantStoreImageEnum merchantStoreImageEnum) {
+        return merchantStoreImageService.listMerchantStoreImageByType(merchantId, merchantStoreImageEnum);
     }
 }

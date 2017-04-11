@@ -26,8 +26,8 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "门店照")
     private String storePic;
 
-    @ApiModelProperty(value = "logo照")
-    private String logoPic;
+    @ApiModelProperty(value = "店铺介绍")
+    private String intro;
 
     @ApiModelProperty(value = "收藏人数")
     private Integer favCount;
@@ -90,12 +90,12 @@ public class StoreDetailDTO {
         this.storePic = storePic;
     }
 
-    public String getLogoPic() {
-        return logoPic;
+    public String getIntro() {
+        return intro;
     }
 
-    public void setLogoPic(String logoPic) {
-        this.logoPic = logoPic;
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 
     public Integer getFavCount() {

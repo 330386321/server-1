@@ -18,7 +18,7 @@ public class StoreDetailBO {
 
     private String storePic;
 
-    private String logoPic;
+    private String intro;
 
     private Integer favCount;
 
@@ -62,12 +62,12 @@ public class StoreDetailBO {
         this.storePic = storePic;
     }
 
-    public String getLogoPic() {
-        return logoPic;
+    public String getIntro() {
+        return intro;
     }
 
-    public void setLogoPic(String logoPic) {
-        this.logoPic = logoPic;
+    public void setIntro(String intro) {
+        this.intro = intro;
     }
 
     public Integer getFavCount() {
