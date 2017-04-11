@@ -12,6 +12,7 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.UserDTO;
 
 @FeignClient(value = "ad-srv")
 public interface AdService {
@@ -24,7 +25,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/saveAd")
-	Result saveAd(@RequestBody AdParam adParam,@RequestParam("merchantId") Long merchantId,@RequestParam("mediaUrl") String mediaUrl);
+	Result saveAd(@RequestBody AdParam adParam,@RequestParam("merchantId") Long merchantId,@RequestParam("mediaUrl") String mediaUrl,@RequestParam("count") Integer count);
 	
 	/**
 	 * 查询广告
@@ -52,5 +53,13 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/remove/{id}")
     public Result remove(@PathVariable("id") Long id);
+	
+	/**
+	 * 广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/selectAbById/{id}", method = RequestMethod.GET)
+    public Result<AdDTO> selectAbById(@PathVariable("id") Long id);
 
 }

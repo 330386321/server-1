@@ -169,5 +169,15 @@ public class MemberController extends BaseController {
         BeanUtil.copyProperties(cashUserInfoBO, dto);
         return dto;
     }
+    /**
+     * 根据地区查询人数
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "findMemberCount", method = RequestMethod.GET)
+    public Integer findMemberCount( @RequestParam("areas") String regionPath) {
+    	Integer  count = memberService.findMemberCount(regionPath);
+        return count;
+    }
 
 }

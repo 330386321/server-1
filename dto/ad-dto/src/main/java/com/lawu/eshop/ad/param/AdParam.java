@@ -2,7 +2,6 @@ package com.lawu.eshop.ad.param;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -10,9 +9,6 @@ import com.lawu.eshop.ad.constants.PutWayEnum;
 import io.swagger.annotations.ApiParam;
 
 public class AdParam {
-
-	@ApiParam (name="merchantId",required = true, value = "商家id")
-    private Long merchantId;
 
 	@ApiParam (name="title",required = true, value = "广告标题")
     private String title;
@@ -46,17 +42,6 @@ public class AdParam {
 
 	@ApiParam (name="adCount", value = "广告数量")
     private Integer adCount;
-	
-
-
-	public Long getMerchantId() {
-		return merchantId;
-	}
-
-
-	public void setMerchantId(Long merchantId) {
-		this.merchantId = merchantId;
-	}
 
 
 	public String getTitle() {

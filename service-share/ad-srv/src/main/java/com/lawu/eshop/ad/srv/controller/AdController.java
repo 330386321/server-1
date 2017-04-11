@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
@@ -44,8 +46,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-    public Result saveAd(@RequestBody AdParam adParam,@RequestParam Long merchantId, @RequestParam String mediaUrl) {
-		Integer id= adService.saveAd(adParam, merchantId, mediaUrl);
+    public Result saveAd(@RequestBody AdParam adParam,@RequestParam Long merchantId, @RequestParam String mediaUrl,@RequestParam Integer count) {
+		Integer id= adService.saveAd(adParam, merchantId, mediaUrl,count);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else{
@@ -111,6 +113,17 @@ public class AdController extends BaseController{
     }
 	
 	/**
+	 * 广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectAbById/{id}", method = RequestMethod.GET)
+    public Result<AdDTO> selectAbById(@PathVariable Long id) {
+		AdBO bo=adService.selectAbById(id);
+ 		return successAccepted(AdConverter.convertDTO(bo));
+    }
+	
+	/**
 	 * 对视频广告的审核
 	 * @param id
 	 * @return
@@ -133,6 +146,40 @@ public class AdController extends BaseController{
 	@RequestMapping(value = "selectListByPlatForm", method = RequestMethod.POST)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam) {
 		Page<AdBO> pageBO=  adService.selectListByPlatForm(adMerchantParam);
+		Page<AdDTO> pageDTO=new Page<AdDTO>();
+		pageDTO.setCurrentPage(pageBO.getCurrentPage());
+		pageDTO.setTotalCount(pageBO.getTotalCount());
+		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
+		return  successAccepted(pageDTO);
+    }
+	
+	
+	/**
+	 * 会员查询广告
+	 * @param adMerchantParam
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "selectListByMember", method = RequestMethod.POST)
+    public Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam) {
+		Page<AdBO> pageBO=  adService.selectListByMember(adMemberParam);
+		Page<AdDTO> pageDTO=new Page<AdDTO>();
+		pageDTO.setCurrentPage(pageBO.getCurrentPage());
+		pageDTO.setTotalCount(pageBO.getTotalCount());
+		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
+		return  successAccepted(pageDTO);
+    }
+	
+	
+	/**
+	 * 会员E赞
+	 * @param adMerchantParam
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.POST)
+    public Result<Page<AdDTO>> selectPraiseListByMember(@RequestBody AdPraiseParam adPraiseParam) {
+		Page<AdBO> pageBO=  adService.selectPraiseListByMember(adPraiseParam);
 		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());

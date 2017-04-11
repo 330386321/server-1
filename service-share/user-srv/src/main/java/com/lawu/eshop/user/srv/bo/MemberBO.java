@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
 
-import com.lawu.eshop.user.constants.UserSexEnum;
-
 import java.util.Date;
+
+import com.lawu.eshop.user.constants.UserSexEnum;
 
 /**
  * 会员BO

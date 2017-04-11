@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 
 /**
  * 商家门店信息

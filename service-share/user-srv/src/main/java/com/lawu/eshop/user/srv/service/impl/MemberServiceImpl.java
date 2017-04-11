@@ -331,5 +331,31 @@ public class MemberServiceImpl implements MemberService {
 		cashUserInfoBO.setAreaId(Integer.valueOf(mdo.getRegionPath().split("/")[2]));
 		return cashUserInfoBO;
 	}
+	
+	public Integer findMemberCount(String regionPath) {
+		MemberDOExample example = new MemberDOExample();
+        Criteria c1 = example.createCriteria();
+        c1.andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        int count = 0;
+		if(regionPath==null){ //所有用户
+			count=memberDOMapper.countByExample(example);
+			return count;
+		}else{
+			String[] path=regionPath.split("/");
+			List<MemberDO> list=memberDOMapper.selectByExample(example);
+			for (MemberDO memberDO : list) {
+				String[] memberPath=memberDO.getRegionPath().split("/");
+				for (String s : memberPath) {
+					for (String p : path) {
+						if(s.equals(p))
+							count++;
+					}
+					
+				}
+			}
+			return count;
+		}
+		
+	}
 
 }

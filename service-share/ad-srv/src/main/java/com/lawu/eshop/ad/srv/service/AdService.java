@@ -1,10 +1,9 @@
 package com.lawu.eshop.ad.srv.service;
 
-import java.util.List;
-
-import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.framework.core.page.Page;
 
@@ -22,7 +21,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	Integer saveAd(AdParam adParam,Long merchantId,String mediaUrl);
+	Integer saveAd(AdParam adParam,Long merchantId,String mediaUrl,Integer count);
 	
 	/**
 	 * 商家E赚查询
@@ -65,7 +64,7 @@ public interface AdService {
 	 * @param adMerchantParam
 	 * @return
 	 */
-	Page<AdBO> selectListByMember(AdMerchantParam adMerchantParam,Long memberId);
+	Page<AdBO> selectListByMember(AdMemberParam adMemberParam);
 	
 	/**
 	 * 查看E赚详情
@@ -74,18 +73,13 @@ public interface AdService {
 	 */
 	AdBO selectAbById(Long id);
 	
-	/**
-	 * 人气榜
-	 * @param userNum
-	 * @return
-	 */
-	List<AdBO> selectMoods(Long memberId);
 	
 	/**
-	 * 积分榜
-	 * @param userNum
+	 * 会员对E赚的观看
+	 * @param adMerchantParam
 	 * @return
 	 */
-	List<AdBO> selectPoint(Long memberId);
+	Page<AdBO> selectPraiseListByMember(AdPraiseParam adPraiseParam);
+	
 
 }

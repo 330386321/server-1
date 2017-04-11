@@ -7,6 +7,7 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 
@@ -40,6 +41,7 @@ public class AdConverter {
 		adBO.setTypeEnum(AdTypeEnum.getEnum(adDO.getType()));
 		adBO.setPutWayEnum(PutWayEnum.getEnum(adDO.getPutWay()));
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+		adBO.setTotalPoint(adDO.getTotalPoint());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){
@@ -92,8 +94,16 @@ public class AdConverter {
 		adDTO.setPutWayEnum(adBO.getPutWayEnum());
 		adDTO.setStatusEnum(adBO.getStatusEnum());
 		adDTO.setAttenCount(adBO.getAttenCount());
+		adDTO.setTotalPoint(adBO.getTotalPoint());
+		adDTO.setNumber(adBO.getNumber());
+		if(adBO.getAreas()!=null){
+			adDTO.setAreas(adBO.getAreas());
+		}
 		if(adBO.getContent()!=null){
 			adDTO.setContent(adBO.getContent());
+		}
+		if(adBO.getRadius()!=null){
+			adDTO.setRadius(adBO.getRadius());
 		}
         return adDTO;
 	}
@@ -111,6 +121,23 @@ public class AdConverter {
 		for (AdBO adBO : adBOS) {
 			AdDTO DTO=convertDTO(adBO);
 			DTOS.add(DTO);
+		}
+		return DTOS;
+	}
+
+	public static List<AdPraiseDTO> convertPraiseDTOS(List<AdBO> records) {
+		
+		List<AdPraiseDTO> DTOS=new ArrayList<AdPraiseDTO>();
+		if(records==null){
+			return DTOS;
+		}
+		for (AdBO adBO : records) {
+			AdPraiseDTO praise=new AdPraiseDTO();
+			praise.setId(adBO.getId());
+			praise.setTitle(adBO.getTitle());
+			praise.setBeginTime(adBO.getBeginTime());
+			praise.setEndTime(adBO.getEndTime());
+			praise.setTotalPoint(adBO.getTotalPoint());
 		}
 		return DTOS;
 	}

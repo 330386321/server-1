@@ -46,11 +46,22 @@ public class AdDTO {
 
     
     private AdStatusEnum statusEnum;
+    
+    
+    private String areas;
 
     
     private Date gmtCreate;
     
     private Integer attenCount;
+    
+    private String name;
+    
+    private Integer radius;
+    
+    private Long  merchantStoreId;
+    
+    private Integer number;
 
 
 	public Long getId() {
@@ -204,5 +215,56 @@ public class AdDTO {
 		this.attenCount = attenCount;
 	}
 
+
+	public String getAreas() {
+		return areas;
+	}
+
+
+	public void setAreas(String areas) {
+		this.areas = areas;
+	}
+
+
+	public String getName() {
+		return name;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public Integer getRadius() {
+		return radius;
+	}
+
+
+	public void setRadius(Integer radius) {
+		this.radius = radius;
+	}
+
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
+
+	public Integer getNumber() {
+		return number;
+	}
+
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	
 	
 }

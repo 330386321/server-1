@@ -1,7 +1,5 @@
 package com.lawu.eshop.user.srv.bo;
 
-import java.util.Date;
-
 /**
  * 商家扩展信息表
  * Created by zhangyong on 2017/3/23.

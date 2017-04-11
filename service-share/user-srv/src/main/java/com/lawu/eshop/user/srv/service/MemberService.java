@@ -90,4 +90,11 @@ public interface MemberService {
      * @author Yangqh
      */
     CashUserInfoBO findCashUserInfo(@PathVariable("id") Long id);
+    
+    /**
+     * 根据区域查询用户数量
+     * @param regionPath
+     * @return
+     */
+    Integer findMemberCount(String regionPath);
 }

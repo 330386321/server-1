@@ -21,12 +21,14 @@ import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.ValidateUtil;
 
@@ -41,7 +43,30 @@ public class MerchantStoreController extends BaseController {
 
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
+    
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
+    /**
+     * 门店信息查询
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "selectMerchantStoreByMId", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long merchantId) {
+
+        MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantId);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.convertStoreDTO(merchantStoreBO);
+        return successGet(merchantStoreDTO);
+
+
+    }
+    
+    
     /**
      * 门店信息查询
      *

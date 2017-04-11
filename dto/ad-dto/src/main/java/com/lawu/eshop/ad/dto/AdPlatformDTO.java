@@ -1,15 +1,22 @@
 package com.lawu.eshop.ad.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdPlatformDTO {
 
+	@ApiModelProperty(value = "主键")
 	private Long id;
 
+	@ApiModelProperty(value = "商品id")
 	private Long productId;
 
+	@ApiModelProperty(value = "广告标题")
 	private String title;
 
+	@ApiModelProperty(value = "广告附件地址")
 	private String mediaUrl;
 
+	@ApiModelProperty(value = "链接地址")
 	private String linkUrl;
 
 	public Long getId() {
