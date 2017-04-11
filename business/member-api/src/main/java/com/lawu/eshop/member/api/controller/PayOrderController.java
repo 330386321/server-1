@@ -40,8 +40,8 @@ public class PayOrderController extends BaseController {
 
     @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "payOrder/savePayOrderInfo", method = RequestMethod.POST)
+    // @Authorization
+    @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
     public Result savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         Result result = payOrderService.savePayOrderInfo(memberId, param);
@@ -56,7 +56,7 @@ public class PayOrderController extends BaseController {
 
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<Page<PayOrderDTO>> pageResult = payOrderService.getpayOrderList(memberId, param);
-        if (pageResult == null || pageResult.getModel().getRecords().isEmpty()) {
+        if (pageResult == null || pageResult.getModel() == null) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         List<PayOrderInfoDTO> payOrderInfoDTOS = new ArrayList<>();

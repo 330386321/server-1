@@ -43,6 +43,8 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(StatusEnum.STATUS_VALID.val);
         int id = payOrderDOMapper.insert(payOrderDO);
+        //TODO 发消息更新门店买单笔数
+
         return id;
     }
 
@@ -50,9 +52,9 @@ public class PayOrderServiceImpl implements PayOrderService {
     public Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param) {
         PayOrderDOExample example = new PayOrderDOExample();
         if (param.getEvaluationEnum() == null) {
-            example.createCriteria().andMemberIdEqualTo(memberId);
+            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
         } else {
-            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val);
+            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
         }
         example.setOrderByClause("id desc");
         //分页
