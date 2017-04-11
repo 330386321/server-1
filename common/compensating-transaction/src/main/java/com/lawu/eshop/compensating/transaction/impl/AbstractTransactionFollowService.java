@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Leach
  * @date 2017/3/29
  */
-public abstract class AbstractTransactionFollowService<V extends Notification> implements TransactionFollowService<V, Long> {
+public abstract class AbstractTransactionFollowService<N extends Notification> implements TransactionFollowService<N, Long> {
 
     @Autowired
     private MessageProducerService messageProducerService;
@@ -25,7 +25,7 @@ public abstract class AbstractTransactionFollowService<V extends Notification> i
 
 
     @Override
-    public void receiveNotice(V notification) {
+    public void receiveNotice(N notification) {
         execute(notification);
         sendCallback(notification.getTransactionId());
 
@@ -42,5 +42,5 @@ public abstract class AbstractTransactionFollowService<V extends Notification> i
      *
      * @param notification
      */
-    public abstract void execute(V notification);
+    public abstract void execute(N notification);
 }

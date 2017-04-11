@@ -7,7 +7,7 @@ package com.lawu.eshop.compensating.transaction;
  * @author Leach
  * @date 2017/3/28
  */
-public interface TransactionMainService<T> {
+public interface TransactionMainService<R> {
 
     /**
      * 通知其它模块进行补偿性事务处理
@@ -20,7 +20,7 @@ public interface TransactionMainService<T> {
      *
      * @param reply
      */
-    void receiveCallback(T reply);
+    void receiveCallback(R reply);
 
     /**
      * 检查需要补偿的数据

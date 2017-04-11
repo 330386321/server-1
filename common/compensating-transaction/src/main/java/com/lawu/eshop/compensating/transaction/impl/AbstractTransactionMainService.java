@@ -15,7 +15,7 @@ import java.util.List;
  * @author Leach
  * @date 2017/3/29
  */
-public abstract class AbstractTransactionMainService<T extends Notification> implements TransactionMainService<Long> {
+public abstract class AbstractTransactionMainService<N extends Notification> implements TransactionMainService<Long> {
 
     @Autowired
     private MessageProducerService messageProducerService;
@@ -37,7 +37,7 @@ public abstract class AbstractTransactionMainService<T extends Notification> imp
      * @param relateId
      * @return
      */
-    public abstract T selectNotification(Long relateId);
+    public abstract N selectNotification(Long relateId);
 
     /**
      * 事务成功回调时，需要执行的逻辑
@@ -52,7 +52,7 @@ public abstract class AbstractTransactionMainService<T extends Notification> imp
     @Override
     public void sendNotice(Long relateId) {
 
-        T notification = selectNotification(relateId);
+        N notification = selectNotification(relateId);
 
         if (notification == null) {
             throw new IllegalArgumentException("Can't find the notification by relateId: " + relateId);
