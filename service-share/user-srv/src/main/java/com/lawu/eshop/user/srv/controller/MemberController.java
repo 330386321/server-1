@@ -153,6 +153,7 @@ public class MemberController extends BaseController {
     }
     
     /**
+<<<<<<< Updated upstream
      * 用户、商家提现时根据用户ID获取账号、名称、省市区信息冗余到提现表中
      * @param memberId
      * @return

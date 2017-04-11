@@ -47,6 +47,7 @@ public class MerchantStoreController extends BaseController {
     @Autowired
     private MerchantStoreService merchantStoreService;
 
+
     /**
      * 门店信息查询
      *

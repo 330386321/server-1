@@ -316,7 +316,6 @@ public class MemberServiceImpl implements MemberService {
         memberDOMapper.updateByPrimaryKeySelective(memberDO);
     }
 
-	@Override
 	public CashUserInfoBO findCashUserInfo(Long id) {
 		MemberDO mdo = memberDOMapper.selectByPrimaryKey(id);
 		if (mdo == null) {
