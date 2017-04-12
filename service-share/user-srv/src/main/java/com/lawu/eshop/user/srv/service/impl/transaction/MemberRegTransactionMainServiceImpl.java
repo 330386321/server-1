@@ -1,15 +1,16 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
+import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.RegNotification;
 import com.lawu.eshop.user.srv.constants.TransactionConstant;
-import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.user.srv.service.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * @author Leach

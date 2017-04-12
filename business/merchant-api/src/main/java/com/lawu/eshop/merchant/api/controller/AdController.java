@@ -71,7 +71,7 @@ public class AdController extends BaseController {
     	}else if(adParam.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
-        Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl,count);
+        Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl,count,userNum);
         return rsAd;
     }
     
@@ -92,7 +92,7 @@ public class AdController extends BaseController {
    // @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    public Result updateStatus(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.updateStatus(id);
     	return rs;
     }

@@ -16,5 +16,13 @@ public interface PointPoolService {
 	 * @return
 	 */
 	List<Long> selectMemberList(Long adId);
+	
+	
+	/**
+	 * 根据用户查询是否已经抢到赞
+	 * @param memberId
+	 * @return
+	 */
+	Boolean selectStatusByMember(Long adId,Long memberId);
 
 }

@@ -25,7 +25,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "ad/selectListByMember")
+	@RequestMapping(method = RequestMethod.GET, value = "ad/selectListByMember")
     Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam);
 	
 	
@@ -41,7 +41,7 @@ public interface AdService {
 	 * @param adPraiseParam
 	 * @return
 	 */
-	@RequestMapping(value = "ad/selectPraiseListByMember", method = RequestMethod.POST)
+	@RequestMapping(value = "ad/selectPraiseListByMember", method = RequestMethod.GET)
     public Result<Page<AdDTO>> selectPraiseListByMember(@RequestBody AdPraiseParam adPraiseParam);
 	
 	/**
@@ -49,7 +49,7 @@ public interface AdService {
 	 * @param adId
 	 * @return
 	 */
-	@RequestMapping(value = "pointPool/selectMemberList", method = RequestMethod.POST)
+	@RequestMapping(value = "pointPool/selectMemberList", method = RequestMethod.GET)
     public Result<List<Long>> selectMemberList(@RequestParam("id") Long id);
 	
 

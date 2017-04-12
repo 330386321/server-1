@@ -3,17 +3,21 @@ package com.lawu.eshop.ad.srv.service.impl;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.RedPacketParam;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.RedPacketDO;
 import com.lawu.eshop.ad.srv.domain.RedPacketDOExample;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.mapper.RedPacketDOMapper;
 import com.lawu.eshop.ad.srv.service.RedPacketService;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 
 /**
@@ -30,11 +34,16 @@ public class RedPacketServiceImpl implements RedPacketService {
 	
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
+	
+	@Autowired
+	@Qualifier("adUserAddPointTransactionMainServiceImpl")
+	private TransactionMainService transactionMainService;
 
 	@Override
-	public Integer save(RedPacketParam param,Long merchantId) {
+	public Integer save(RedPacketParam param,Long merchantId,String num) {
 		RedPacketDO redPacketDO=new RedPacketDO();
 		redPacketDO.setMerchantId(merchantId);
+		redPacketDO.setMerchantNum(num);
 		if(param.getPutWayEnum().val==1){
 			redPacketDO.setPackageCount(param.getPackageCount());
 		}
@@ -90,6 +99,30 @@ public class RedPacketServiceImpl implements RedPacketService {
 		example.createCriteria().andStatusEqualTo(new Byte("1")).andMerchantIdEqualTo(merchantId);
 		Long count=redPacketDOMapper.countByExample(example);
 		return count.intValue();
+	}
+
+
+	@Override
+	public BigDecimal getRedPacket(Long id,Long memberId) {
+		PointPoolDOExample ppexample=new PointPoolDOExample();
+		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("2"))
+				                   .andStatusEqualTo(new Byte("0"));
+		//查询出没有领取的积分，取出一个给用户
+		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample); 
+		if(list.isEmpty()){ //说明积分领取完
+			RedPacketDO redPacketDO=new RedPacketDO();
+			redPacketDO.setId(id);
+			redPacketDO.setStatus(new Byte("3"));
+			redPacketDOMapper.updateByPrimaryKeySelective(redPacketDO);
+		}else{
+			PointPoolDO pointPoolDO=list.get(0);
+			pointPoolDO.setStatus(new Byte("1"));
+			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
+			//给用户加积分
+			transactionMainService.sendNotice(pointPoolDO.getId());
+		}
+		
+		return null;
 	}
 	
 	

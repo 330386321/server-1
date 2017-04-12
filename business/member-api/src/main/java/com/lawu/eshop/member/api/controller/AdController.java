@@ -57,20 +57,20 @@ public class AdController extends BaseController {
     
     
 
-    @ApiOperation(value = "会员查询广告列表(精选推荐,E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
-    @Authorization
+    @ApiOperation(value = "会员查询广告列表(精选推荐,E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectListByMember", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "selectListByMember", method = RequestMethod.GET)
+    public Result<Page<AdDTO>> selectListByMember(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMemberParam adMemberParam) {
     	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectListByMember(adMemberParam);
     	return pageDTOS;
     }
     
-     @ApiOperation(value = "会员查询广告列表(积分榜，人气榜)", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
+     @ApiOperation(value = "会员查询广告列表(积分榜，人气榜)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectListPointTotle", method = RequestMethod.POST)
+     @RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
      public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                   @ModelAttribute @ApiParam( value = "查询信息") AdMemberParam adMemberParam) {
     	 Result<List<AdDTO>> rs= adExtendService.selectListPointTotle(adMemberParam);
@@ -81,7 +81,7 @@ public class AdController extends BaseController {
     @Authorization
     @ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectAbById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
     public Result<AdDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result<AdDTO> adDTO = adService.selectAbById(id);
@@ -92,10 +92,10 @@ public class AdController extends BaseController {
     }
     
     
-     @ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
+     @ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.POST)
+     @RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
      public Result<Page<AdPraiseDTO>> selectPraiseListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                   @ModelAttribute @ApiParam( value = "查询信息") AdPraiseParam adPraiseParam) {
     	 Result<Page<AdPraiseDTO>> rs= adExtendService.selectPraiseListByMember(adPraiseParam);
@@ -106,7 +106,7 @@ public class AdController extends BaseController {
     @Authorization
     @ApiOperation(value = "查询单个E赞", notes = "查询单个E赞[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectAbPraiseById/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "selectAbPraise/{id}", method = RequestMethod.GET)
     public Result<AdPraiseDTO> selectAbPraiseById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result<AdPraiseDTO> adDTO = adExtendService.selectAbPraiseById(id);
@@ -114,10 +114,10 @@ public class AdController extends BaseController {
     }
     
     
-     @ApiOperation(value = "Top3排行榜", notes = "Top3排行榜,[]（张荣成）", httpMethod = "POST")
+     @ApiOperation(value = "Top3排行榜", notes = "Top3排行榜,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectMemberList/{id}", method = RequestMethod.POST)
+     @RequestMapping(value = "selectMemberList/{id}", method = RequestMethod.GET)
      public Result<List<UserDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		 @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
      

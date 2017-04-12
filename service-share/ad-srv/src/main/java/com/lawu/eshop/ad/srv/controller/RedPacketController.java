@@ -33,8 +33,8 @@ public class RedPacketController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody RedPacketParam param,@RequestParam  Long  merchantId ) {
-    	Integer i=redPacketService.save(param, merchantId);
+    public Result save(@RequestBody RedPacketParam param,@RequestParam  Long  merchantId,@RequestParam  String  num ) {
+    	Integer i=redPacketService.save(param, merchantId,num);
     	if(i>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else{

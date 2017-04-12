@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.math.BigDecimal;
+
 import com.lawu.eshop.ad.param.RedPacketParam;
 
 /**
@@ -15,7 +17,7 @@ public interface RedPacketService {
 	 * @param param
 	 * @return
 	 */
-	Integer save(RedPacketParam param,Long merchantId);
+	Integer save(RedPacketParam param,Long merchantId,String num);
 	
 	/**
 	 * 根据商家查询发的红包
@@ -23,5 +25,12 @@ public interface RedPacketService {
 	 * @return
 	 */
 	Integer selectCount(Long merchantId);
+	
+	/**
+	 * 领取红包
+	 * @param memberId
+	 * @return
+	 */
+	BigDecimal getRedPacket(Long id,Long memberId);
 
 }

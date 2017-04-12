@@ -24,6 +24,6 @@ public interface RedPacketService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "redPacket/save")
-	Result save(@RequestBody RedPacketParam param,@RequestParam("merchantId") Long merchantId);
+	Result save(@RequestBody RedPacketParam param,@RequestParam("merchantId") Long merchantId,@RequestParam("num") String num);
 
 }

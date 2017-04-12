@@ -21,7 +21,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	Integer saveAd(AdParam adParam,Long merchantId,String mediaUrl,Integer count);
+	Integer saveAd(AdParam adParam,Long merchantId,String mediaUrl,Integer count,String num);
 	
 	/**
 	 * 商家E赚查询
@@ -84,9 +84,10 @@ public interface AdService {
 	/**
 	 * 抢赞
 	 * @param id
+	 * @param memberId
 	 * @return
 	 */
-	Integer clickPraise(Long id);
+	Integer clickPraise(Long id,Long memberId,String num);
 	
 
 }

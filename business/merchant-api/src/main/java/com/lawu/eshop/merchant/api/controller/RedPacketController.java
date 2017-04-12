@@ -48,7 +48,7 @@ public class RedPacketController extends BaseController{
     	if(param.getTotlePoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
-    	Result redPacket=redPacketService.save(param, merchantId);
+    	Result redPacket=redPacketService.save(param, merchantId,userNum);
     	return redPacket;
     	
     	

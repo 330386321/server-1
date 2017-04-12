@@ -46,8 +46,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-    public Result saveAd(@RequestBody AdParam adParam,@RequestParam Long merchantId, @RequestParam String mediaUrl,@RequestParam Integer count) {
-		Integer id= adService.saveAd(adParam, merchantId, mediaUrl,count);
+    public Result saveAd(@RequestBody AdParam adParam,@RequestParam Long merchantId, @RequestParam String mediaUrl,@RequestParam Integer count,@RequestParam String num) {
+		Integer id= adService.saveAd(adParam, merchantId, mediaUrl,count,num);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else{

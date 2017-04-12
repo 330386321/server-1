@@ -343,14 +343,17 @@ public class MemberServiceImpl implements MemberService {
 			String[] path=regionPath.split("/");
 			List<MemberDO> list=memberDOMapper.selectByExample(example);
 			for (MemberDO memberDO : list) {
-				String[] memberPath=memberDO.getRegionPath().split("/");
-				for (String s : memberPath) {
-					for (String p : path) {
-						if(s.equals(p))
-							count++;
+				if(memberDO.getRegionPath()!=null){
+					String[] memberPath=memberDO.getRegionPath().split("/");
+					for (String s : memberPath) {
+						for (String p : path) {
+							if(s.equals(p))
+								count++;
+						}
+						
 					}
-					
 				}
+				
 			}
 			return count;
 		}

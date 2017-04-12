@@ -12,7 +12,6 @@ import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.UserDTO;
 
 @FeignClient(value = "ad-srv")
 public interface AdService {
@@ -25,7 +24,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/saveAd")
-	Result saveAd(@RequestBody AdParam adParam,@RequestParam("merchantId") Long merchantId,@RequestParam("mediaUrl") String mediaUrl,@RequestParam("count") Integer count);
+	Result saveAd(@RequestBody AdParam adParam,@RequestParam("merchantId") Long merchantId,@RequestParam("mediaUrl") String mediaUrl,@RequestParam("count") Integer count,@RequestParam("num") String num);
 	
 	/**
 	 * 查询广告

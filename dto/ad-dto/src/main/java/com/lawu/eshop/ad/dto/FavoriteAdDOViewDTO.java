@@ -1,35 +1,25 @@
 package com.lawu.eshop.ad.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class FavoriteAdDOViewDTO {
 
-	/**
-	 * 广告id
-	 */
+	@ApiModelProperty(value = "主键")
 	private Long id;
 	
-	/**
-	 * 广告id
-	 */
+	@ApiModelProperty(value = "广告id")
 	private Long AdId;
 	
-	/**
-	 * 商家id
-	 */
+	@ApiModelProperty(value = "商家id")
 	private Long merchantId;
 	
-	/**
-	 * 广告标题
-	 */
+	@ApiModelProperty(value = "广告标题")
 	private String title;
 	
-	/**
-	 * 广告附件图
-	 */
+	@ApiModelProperty(value = "广告附件路径")
 	private String mediaUrl;
 	
-	/**
-	 * 广告内容
-	 */
+	@ApiModelProperty(value = "广告内容")
 	private String content;
 
 	public Long getId() {

@@ -11,19 +11,22 @@ public class AdClickPraiseThread implements Runnable {
 	private AdService adService;
 	
 	private Long id;
+	
+	private Long memberId;
 
 	
-	public AdClickPraiseThread(Long id) {
+	public AdClickPraiseThread(Long id,Long memberId) {
 		this.id=id;
+		this.memberId=memberId;
 	}
 	
 
 	/**
-	 * 描述：抢赞
+	 * 描述：抢赞线程
 	 */
 	@Override
 	public void run() {
-		adService.clickPraise(id);
+		//adService.clickPraise(id,memberId);
 	}
 	
 	

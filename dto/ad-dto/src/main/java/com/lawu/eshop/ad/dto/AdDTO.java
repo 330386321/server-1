@@ -7,60 +7,68 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class AdDTO {
 	
+	@ApiModelProperty(value = "主键")
 	private Long id;
 
-
+	@ApiModelProperty(value = "商家id")
     private Long merchantId;
 
-
+	@ApiModelProperty(value = "广告标题")
     private String title;
 
-
+	@ApiModelProperty(value = "广告附件路径")
     private String mediaUrl;
 
-
+	@ApiModelProperty(value = "广告内容")
     private String content;
 
- 
+	@ApiModelProperty(value = "广告类型(AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞)")
     private AdTypeEnum typeEnum;
 
-  
+	@ApiModelProperty(value = "投放方式(PUT_WAY_AREAS 区域 PUT_WAY_FENS 粉丝 PUT_WAY_RADAR 雷达)")
     private PutWayEnum putWayEnum;
 
- 
+	@ApiModelProperty(value = "投放开始时间")
     private Date beginTime;
 
-  
+	@ApiModelProperty(value = "投放所需时间")
     private Date endTime;
-
-    
-    private BigDecimal point;
-
-    
-    private BigDecimal totalPoint;
-
-    
-    private Integer adCount;
-
-    
-    private AdStatusEnum statusEnum;
-    
-    
+	
+	@ApiModelProperty(value = "区域")
     private String areas;
 
-    
+	@ApiModelProperty(value = "雷达半径")
+    private Integer radius;
+
+	@ApiModelProperty(value = "积分")
+    private BigDecimal point;
+
+	@ApiModelProperty(value = "总积分")
+    private BigDecimal totalPoint;
+
+	@ApiModelProperty(value = "积分")
+    private Integer adCount;
+
+	@ApiModelProperty(value = "状态")
+    private AdStatusEnum statusEnum;
+
+	@ApiModelProperty(value = "创建时间")
     private Date gmtCreate;
     
+	@ApiModelProperty(value = "关注数量")
     private Integer attenCount;
     
+	@ApiModelProperty(value = "店铺名称")
     private String name;
     
-    private Integer radius;
-    
+	@ApiModelProperty(value = "店铺id")
     private Long  merchantStoreId;
     
+	@ApiModelProperty(value = "已抢人数")
     private Integer number;
 
 
@@ -216,16 +224,6 @@ public class AdDTO {
 	}
 
 
-	public String getAreas() {
-		return areas;
-	}
-
-
-	public void setAreas(String areas) {
-		this.areas = areas;
-	}
-
-
 	public String getName() {
 		return name;
 	}
@@ -235,15 +233,6 @@ public class AdDTO {
 		this.name = name;
 	}
 
-
-	public Integer getRadius() {
-		return radius;
-	}
-
-
-	public void setRadius(Integer radius) {
-		this.radius = radius;
-	}
 
 
 	public Long getMerchantStoreId() {
@@ -263,6 +252,26 @@ public class AdDTO {
 
 	public void setNumber(Integer number) {
 		this.number = number;
+	}
+
+
+	public String getAreas() {
+		return areas;
+	}
+
+
+	public void setAreas(String areas) {
+		this.areas = areas;
+	}
+
+
+	public Integer getRadius() {
+		return radius;
+	}
+
+
+	public void setRadius(Integer radius) {
+		this.radius = radius;
 	}
 
 	

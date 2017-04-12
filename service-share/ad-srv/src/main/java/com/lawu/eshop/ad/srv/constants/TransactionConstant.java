@@ -6,9 +6,10 @@ package com.lawu.eshop.ad.srv.constants;
  * @date 2017/3/29
  */
 public class TransactionConstant {
-
-    /**
-     * 注册
-     */
-    public static final byte REGISTER = 0x01;
+    
+    public static final byte AD_ME_CUT_POINT = 0x01;
+    
+    public static final byte AD_ME_ADD_POINT = 0x02;
+    
+    public static final byte AD_USER_ADD_POINT = 0x03;
 }

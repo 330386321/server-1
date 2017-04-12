@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 
@@ -53,8 +55,17 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
 	
-	//@Autowired
-    //private TransactionMainService transactionMainService;
+	@Autowired
+	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
+    private TransactionMainService mctransactionMainAddService;
+	
+	@Autowired
+	@Qualifier("adMerchantAddPointTransactionMainServiceImpl")
+    private TransactionMainService matransactionMainAddService;
+	
+	@Autowired
+	@Qualifier("adUserAddPointTransactionMainServiceImpl")
+    private TransactionMainService adtransactionMainAddService;
 
 	/**
 	 * 商家发布E赚
@@ -64,10 +75,11 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	@Transactional
-	public Integer saveAd(AdParam adParam, Long merchantId,String mediaUrl,Integer count) {
+	public Integer saveAd(AdParam adParam, Long merchantId,String mediaUrl,Integer count,String num) {
 		AdDO adDO=new AdDO();
 		adDO.setTitle(adParam.getTitle());
 		adDO.setMerchantId(merchantId);
+		adDO.setMerchantNum(num);
 		adDO.setMediaUrl(mediaUrl);
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
@@ -186,12 +198,13 @@ public class AdServiceImpl implements AdService {
 				BigDecimal  point=pointPoolDO.getPoint();
 				sum=sum.add(point);
 			}
+			//matransactionMainAddService.sendNotice(id);
 		}else{
 			int point= ad.getPoint().intValue();
 			Integer hits=ad.getHits();
 			int count=point*hits;
 			if(count<ad.getTotalPoint().intValue()){//退还积分
-				
+				matransactionMainAddService.sendNotice(id);
 			}
 		}
 		return i;
@@ -369,7 +382,27 @@ public class AdServiceImpl implements AdService {
 	 * 抢赞
 	 */
 	@Override
-	public Integer clickPraise(Long id) {
+	public Integer clickPraise(Long id,Long memberId,String num) {
+		PointPoolDOExample ppexample=new PointPoolDOExample();
+		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("1"))
+				                   .andStatusEqualTo(new Byte("0"));
+		//查询出没有领取的积分，取出一个给用户
+		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample); 
+		if(list.isEmpty()){ //说明积分领取完
+			AdDO ad=new AdDO();
+			ad.setId(memberId);
+			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+			adDOMapper.updateByPrimaryKeySelective(ad);
+		}else{
+			PointPoolDO pointPoolDO=list.get(0);
+			pointPoolDO.setMemberId(memberId);
+			pointPoolDO.setNum(num);
+			pointPoolDO.setStatus(new Byte("1"));
+			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
+			//给用户加积分
+			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
+		}
+		
 		return null;
 	}
 

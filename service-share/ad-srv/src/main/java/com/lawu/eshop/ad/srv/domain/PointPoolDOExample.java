@@ -376,6 +376,76 @@ public class PointPoolDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNumIsNull() {
+            addCriterion("member_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIsNotNull() {
+            addCriterion("member_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumEqualTo(String value) {
+            addCriterion("member_num =", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotEqualTo(String value) {
+            addCriterion("member_num <>", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThan(String value) {
+            addCriterion("member_num >", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThanOrEqualTo(String value) {
+            addCriterion("member_num >=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThan(String value) {
+            addCriterion("member_num <", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThanOrEqualTo(String value) {
+            addCriterion("member_num <=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLike(String value) {
+            addCriterion("member_num like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotLike(String value) {
+            addCriterion("member_num not like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIn(List<String> values) {
+            addCriterion("member_num in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotIn(List<String> values) {
+            addCriterion("member_num not in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumBetween(String value1, String value2) {
+            addCriterion("member_num between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotBetween(String value1, String value2) {
+            addCriterion("member_num not between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
         public Criteria andAdIdIsNull() {
             addCriterion("ad_id is null");
             return (Criteria) this;
@@ -853,6 +923,76 @@ public class PointPoolDOExample {
 
         public Criteria andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIsNull() {
+            addCriterion("num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIsNotNull() {
+            addCriterion("num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumEqualTo(String value) {
+            addCriterion("num =", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotEqualTo(String value) {
+            addCriterion("num <>", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumGreaterThan(String value) {
+            addCriterion("num >", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumGreaterThanOrEqualTo(String value) {
+            addCriterion("num >=", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumLessThan(String value) {
+            addCriterion("num <", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumLessThanOrEqualTo(String value) {
+            addCriterion("num <=", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumLike(String value) {
+            addCriterion("num like", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotLike(String value) {
+            addCriterion("num not like", value, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumIn(List<String> values) {
+            addCriterion("num in", values, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotIn(List<String> values) {
+            addCriterion("num not in", values, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumBetween(String value1, String value2) {
+            addCriterion("num between", value1, value2, "num");
+            return (Criteria) this;
+        }
+
+        public Criteria andNumNotBetween(String value1, String value2) {
+            addCriterion("num not between", value1, value2, "num");
             return (Criteria) this;
         }
     }
