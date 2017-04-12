@@ -13,7 +13,18 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
  */
 public interface PropertyInfoDataService {
 
+	/**
+	 * 业务消费减积分
+	 * @param param
+	 * @return
+	 */
+	int doHanlderMinusPoint(PropertyInfoDataParam param);
 	
-	int doHanlder(PropertyInfoDataParam param);
+	/**
+	 * 业务消费加积分
+	 * @param param
+	 * @return
+	 */
+	int doHanlderAddPoint(PropertyInfoDataParam param);
 	
 }

@@ -15,6 +15,8 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ShoppingCartDTO;
 import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingCartSettlementDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingCartSettlementItemDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
@@ -159,7 +161,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @return 返回订单的id列表
 	 */
 	@Override
-	public Result<List<Long>> settlement(Long memberId, List<ShoppingOrderSettlementForeignParam> params) {
+	public Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params) {
 		
 		// 组装ids查询购物车列表
 		Map<Long, ShoppingOrderSettlementForeignParam> shoppingOrderSettlementForeignParamMap = new HashMap<Long, ShoppingOrderSettlementForeignParam>();
@@ -281,6 +283,100 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	return successCreated(resultIds);
+	}
+	
+	/**
+	 * 根据购物车id列表生成结算数据
+	 * 
+	 * @param idList 购物车id列表
+	 * @return 返回结算数据
+	 */
+	@Override
+	public Result<ShoppingCartSettlementDTO> settlement(List<Long> idList) {
+    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(idList);
+    	
+    	if (!isSuccess(resultShoppingCartDTOS)) {
+    		return successGet(resultShoppingCartDTOS.getRet());
+    	}
+    	
+    	// 把要查询的id放入set,统一一次性查询
+    	Set<Long> ids = new HashSet<Long>();
+    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
+    		ids.add(shoppingCartDTO.getProductModelId());
+    	}
+    	
+    	// 通过商品型号id列表查询商品信息
+    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(ids));
+    	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
+    		return successGet(resultShoppingCartProductModelDTOS.getRet());
+    	}
+    	
+    	// 组装数据
+    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<Long, ShoppingCartProductModelDTO>();
+    	for (ShoppingCartProductModelDTO shoppingCartProductModelDTO : resultShoppingCartProductModelDTOS.getModel()) {
+    		if (!shoppingCartProductModelDTOMap.containsKey(shoppingCartProductModelDTO.getId())) {
+    			shoppingCartProductModelDTOMap.put(shoppingCartProductModelDTO.getId(), shoppingCartProductModelDTO);
+    		}
+    	}
+    	
+    	Map<Long, List<MemberShoppingCartDTO>> memberShoppingCartDTOMap = new HashMap<Long, List<MemberShoppingCartDTO>>();
+    	
+    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
+    	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
+    		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
+    		memberShoppingCartDTO.setId(shoppingCartDTO.getId());
+    		memberShoppingCartDTO.setMerchantId(shoppingCartDTO.getMerchantId());
+    		memberShoppingCartDTO.setMerchantName(shoppingCartDTO.getMerchantName());
+    		memberShoppingCartDTO.setProductId(shoppingCartDTO.getProductId());
+    		memberShoppingCartDTO.setProductModelId(shoppingCartDTO.getProductModelId());
+    		memberShoppingCartDTO.setQuantity(shoppingCartDTO.getQuantity());
+    		
+    		shoppingCartProductModelDTO = shoppingCartProductModelDTOMap.get(shoppingCartDTO.getProductModelId());
+    		if (shoppingCartProductModelDTO == null) {
+    			continue;
+    		}
+    		memberShoppingCartDTO.setProductModelName(shoppingCartProductModelDTO.getName());
+    		memberShoppingCartDTO.setProductName(shoppingCartProductModelDTO.getProductName());
+    		memberShoppingCartDTO.setFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
+    		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
+    		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
+    		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
+    		if (shoppingCartProductModelDTO.getStatus().equals(((byte)0x01)) || shoppingCartProductModelDTO.getStatus().equals(((byte)0x03))) {
+    			memberShoppingCartDTO.setIsInvalid(true);
+    		} else {
+    			memberShoppingCartDTO.setIsInvalid(false);
+    		}
+    		
+    		if (!memberShoppingCartDTOMap.containsKey(shoppingCartDTO.getMerchantId())) {
+    			memberShoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
+    		}
+    		
+    		memberShoppingCartDTOMap.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
+    		
+    	}
+    	
+    	ShoppingCartSettlementDTO shoppingCartSettlementDTO = new ShoppingCartSettlementDTO();
+    	
+    	BigDecimal total = new BigDecimal(0);
+    	// 每一个商家的商品会合并在一起，小计金额
+    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<ShoppingCartSettlementItemDTO>();
+    	for (Map.Entry<Long, List<MemberShoppingCartDTO>> entry : memberShoppingCartDTOMap.entrySet()) {
+    		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
+    		BigDecimal subtotal = new BigDecimal(0);
+    		for (MemberShoppingCartDTO memberShoppingCartDTO : entry.getValue()) {
+    			subtotal = subtotal.add(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
+    		}
+    		shoppingCartSettlementItemDTO.setSubtotal(subtotal);
+    		shoppingCartSettlementItemDTO.setItems(entry.getValue());
+    		items.add(shoppingCartSettlementItemDTO);
+    		
+    		total = total.add(subtotal);
+    	}
+    	
+    	shoppingCartSettlementDTO.setTotal(total);
+    	shoppingCartSettlementDTO.setItems(items);
+    	
+    	return successCreated(shoppingCartSettlementDTO);
 	}
 
 }

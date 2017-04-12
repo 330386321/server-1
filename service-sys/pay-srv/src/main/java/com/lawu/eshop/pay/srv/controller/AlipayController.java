@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,10 +36,9 @@ import com.lawu.eshop.utils.PropertiesUtil;
 @RequestMapping(value = "alipay/")
 public class AlipayController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
+	//private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
 	
 	public static final String split = "|";
-	public static final String splitStr = "\\|";
 
 	/**
 	 * 客户端调用支付宝获取请求参数
@@ -73,7 +70,7 @@ public class AlipayController extends BaseController {
 		paramMap.put("version", "1.0");
 		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url", "alipay.properties"));
 
-		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getBody()
+		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds();
 
 		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""

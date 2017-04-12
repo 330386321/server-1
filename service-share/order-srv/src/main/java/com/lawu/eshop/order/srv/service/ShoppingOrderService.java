@@ -138,4 +138,12 @@ public interface ShoppingOrderService {
 	 */
 	Integer fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param);
 
+	/**
+	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+	 * @param orderIds
+	 * @return
+	 * @author Yangqh
+	 */
+	double selectOrderMoney(String orderIds);
+
 }

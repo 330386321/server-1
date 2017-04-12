@@ -15,7 +15,7 @@ import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
@@ -232,7 +232,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
 			// 新增退回交易明细
 			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
-			transactionDetailDO.setTitle(TransactionTitle.CASH_FAIL_BACK);
+			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.val);
 			transactionDetailDO.setTransactionNum(wcdo.getCashNumber());
 			transactionDetailDO.setUserNum(wcdo.getUserNum());
 			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {

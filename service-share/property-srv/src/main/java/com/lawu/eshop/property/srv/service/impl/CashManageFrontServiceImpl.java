@@ -16,7 +16,7 @@ import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
@@ -122,7 +122,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 
 		//新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTitle(TransactionTitle.CASH);
+		tdsParam.setTitle(TransactionTitleEnum.CASH.val);
 		tdsParam.setTransactionNum(cash.getCashNumber());
 		tdsParam.setUserNum(cash.getUserNum());
 		tdsParam.setTransactionType(cash.getTransactionType());

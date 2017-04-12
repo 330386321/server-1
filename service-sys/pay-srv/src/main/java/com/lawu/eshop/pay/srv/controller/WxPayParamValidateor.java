@@ -2,7 +2,6 @@ package com.lawu.eshop.pay.srv.controller;
 
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.property.param.PcAlipayDataParam;
 
 public class WxPayParamValidateor {
 
@@ -26,7 +25,7 @@ public class WxPayParamValidateor {
 		if(param.getUserTypeEnum() == null || "".equals(param.getUserTypeEnum())){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL;
 		}
-		if(param.getBody() == null || "".equals(param.getBody())){
+		if(param.getThirdPayBodyEnum().val == null || "".equals(param.getThirdPayBodyEnum().val)){
 			return ResultCode.ALIPAY_INIT_VALIDATOR_BODY_NULL;
 		}
 		if(param.getUserNum() == null || "".equals(param.getUserNum())){

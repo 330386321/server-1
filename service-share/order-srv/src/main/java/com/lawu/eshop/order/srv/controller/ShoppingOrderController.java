@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
@@ -400,6 +401,7 @@ public class ShoppingOrderController extends BaseController {
 	}
 	
 	/**
+<<<<<<< HEAD
 	 * To商家
 	 * 根据查询参数分页查询
 	 * 
@@ -419,6 +421,17 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderExtendQueryDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToMerchantDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
 
 		return successCreated(shoppingOrderExtendQueryDTOPage);
+	}
+	 
+	/** 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+	 * @param orderIds
+	 * @return
+	 * @author Yangqh
+	 */
+	@RequestMapping(value = "selectOrderMoney", method = RequestMethod.GET)
+	public double selectOrderMoney(@RequestParam String orderIds) {
+		double totalMoney = shoppingOrderService.selectOrderMoney(orderIds);
+		return totalMoney;
 	}
 	
 }

@@ -1,17 +1,18 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.srv.service.InviteFansService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -31,7 +32,7 @@ public class InviteFansServiceImpl implements InviteFansService {
     public void inviteFans(String userNum, Integer consumePoint) {
         //插入积分明细
         PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-        pointDetailSaveDataParam.setTitle(TransactionTitle.INVITE_FANS);
+        pointDetailSaveDataParam.setTitle(TransactionTitleEnum.INVITE_FANS.val);
         pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
         pointDetailSaveDataParam.setUserNum(userNum);
         pointDetailSaveDataParam.setPointType(MerchantTransactionTypeEnum.INVITE_FANS.getValue());

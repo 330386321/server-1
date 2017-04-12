@@ -23,6 +23,16 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	 */
 	private String userNum;
 	
+	/**
+	 * 商户订单号
+	 */
+	private String outTradeNo;
+	
+	/**
+	 * 主题
+	 */
+	private String subject;
+	
 	public String getUserNum() {
 		return userNum;
 	}
@@ -35,4 +45,17 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	public void setUserTypeEnum(UserTypeEnum userTypeEnum) {
 		this.userTypeEnum = userTypeEnum;
 	}
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
+	public String getSubject() {
+		return subject;
+	}
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
 }

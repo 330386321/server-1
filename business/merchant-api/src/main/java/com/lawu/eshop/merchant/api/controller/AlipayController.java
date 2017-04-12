@@ -21,11 +21,16 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AlipayService;
+import com.lawu.eshop.merchant.api.service.OrderService;
+import com.lawu.eshop.merchant.api.service.PropertySrvPropertyService;
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.property.param.ThirdPayParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.property.param.PcAlipayParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.param.ThirdPayParam;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +41,7 @@ import io.swagger.annotations.ApiParam;
  * <p>
  * Description: 支付宝
  * </p>
+ * 
  * @author Yangqh
  * @date 2017年4月7日 上午9:12:31
  *
@@ -46,9 +52,13 @@ import io.swagger.annotations.ApiParam;
 public class AlipayController extends BaseController {
 
 	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
-	
+
 	@Autowired
 	private AlipayService alipayService;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private PropertySrvPropertyService propertyService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
@@ -58,19 +68,34 @@ public class AlipayController extends BaseController {
 			@ModelAttribute @ApiParam ThirdPayParam param) {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setTotalAmount(param.getTotalAmount());
-		aparam.setOutTradeNo(param.getOutTradeNo());
-		aparam.setSubject(param.getSubject());
+		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
+		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizIds(param.getBizIds());
-		aparam.setBody(param.getBody());
+		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
-		
+
+		// 查询支付金额
+		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
+			aparam.setTotalAmount(param.getTotalAmount());
+
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
+			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(orderMoney));
+
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getThirdPayBodyEnum().val)) {
+			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			if ("".equals(bond)) {
+				bond = PropertyType.MERCHANT_BONT_DEFAULT;
+			}
+			aparam.setTotalAmount(bond);
+		}
+
 		return alipayService.getAppAlipayReqParams(aparam);
-		
+
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
@@ -86,16 +111,16 @@ public class AlipayController extends BaseController {
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		Result result = alipayService.initPcPay(aparam);
-		if(ResultCode.SUCCESS == result.getRet()){
+		if (ResultCode.SUCCESS == result.getRet()) {
 			Object obj = result.getModel();
 			HttpServletResponse response = getResponse();
 			PrintWriter out = response.getWriter();
 			logger.info(obj.toString());
 			out.println(obj.toString());
-		}else{
-			logger.error(result.getRet()+"-->"+result.getMsg());
+		} else {
+			logger.error(result.getRet() + "-->" + result.getMsg());
 		}
-		
+
 	}
 
 }

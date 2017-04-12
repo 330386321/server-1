@@ -1,18 +1,18 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-
-import io.swagger.annotations.ApiParam;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 
 /**
  * 
  * <p>
- * Description: 余额支付参数对象
+ * Description: 业务操作需要处理财产积分
  * </p>
  * 
  * @author Yangqh
@@ -25,16 +25,18 @@ public class PropertyInfoDataParam {
 	@NotBlank(message = "userNum不能为空")
 	private String userNum;
 	
-	// 积分-api传入
+	//积分
 	@NotBlank(message = "point不能为空")
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
-	@ApiParam(name = "point", required = true, value = "金额")
 	private String point;
 	
+	@NotNull(message="transactionTitleEnum不能为空")
+	private TransactionTitleEnum transactionTitleEnum;
 	
-	//api不需要传
-	private String title;
+	//业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
+	
+	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 
 	public String getUserNum() {
@@ -53,14 +55,6 @@ public class PropertyInfoDataParam {
 		this.point = point;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
 	public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
 		return memberTransactionTypeEnum;
 	}
@@ -75,6 +69,14 @@ public class PropertyInfoDataParam {
 
 	public void setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum merchantTransactionTypeEnum) {
 		this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
+	}
+
+	public TransactionTitleEnum getTransactionTitleEnum() {
+		return transactionTitleEnum;
+	}
+
+	public void setTransactionTitleEnum(TransactionTitleEnum transactionTitleEnum) {
+		this.transactionTitleEnum = transactionTitleEnum;
 	}
 
 }

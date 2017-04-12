@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -16,9 +17,11 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
@@ -52,6 +55,7 @@ public class ShoppingCartController extends BaseController {
      * @param param
      * @return
      */
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "加入购物车", notes = "加入购物车。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -69,6 +73,7 @@ public class ShoppingCartController extends BaseController {
      * @param token
      * @return
      */
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -88,6 +93,7 @@ public class ShoppingCartController extends BaseController {
      * @param parm
      * @return
      */
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1002|1003|4000]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -112,7 +118,8 @@ public class ShoppingCartController extends BaseController {
      * @param token
      * @return
      */
-    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    @SuppressWarnings({ "rawtypes", "deprecation" })
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1002|1003|4000]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -129,19 +136,39 @@ public class ShoppingCartController extends BaseController {
     }
     
     /**
-     * 根据参数列表结算购物车的商品。
+     * 根据购物车id列表结算购物车的商品生成结算数据
      * 
      * @param params 购物车参数
      * @return
      */
-    @ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表生成订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @SuppressWarnings("unchecked")
+	@ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表结算购物车的商品生成结算数据。[1003]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+	@RequestMapping(value = "settlement", method = RequestMethod.GET)
+	public Result<ShoppingCartSettlementDTO> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "购物车id") List<Long> idList) {
+    	if (idList == null || idList.isEmpty()) {
+    		return successGet(ResultCode.ID_EMPTY);
+    	}
+    	
+    	return successCreated(shoppingcartExtendService.settlement(idList));
+    }
+    
+    /**
+     * 根据订单参数列表批量创建订单
+     * 
+     * @param params 订单参数
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@ApiOperation(value = "创建订单", notes = "根据订单参数创建订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-	@RequestMapping(value = "settlement", method = RequestMethod.POST)
-	public Result<Integer> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "购物车结算参数") List<ShoppingOrderSettlementForeignParam> params) {
+	@RequestMapping(value = "createOrder", method = RequestMethod.POST)
+	public Result createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	return successCreated(shoppingcartExtendService.settlement(memberId, params));
+    	return successCreated(shoppingcartExtendService.createOrder(memberId, params));
     }
     
 }
