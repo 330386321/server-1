@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
@@ -43,6 +44,7 @@ public class MerchantDetailController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "会员查看商家门店详情", notes = "会员查看商家门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "store/{id}", method = RequestMethod.GET)
@@ -68,6 +70,7 @@ public class MerchantDetailController extends BaseController {
         return successGet(storeDetailDTO);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "会员查看商家相册", notes = "会员查看商家相册(店内环境照)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listMerchantStoreImage/{merchantId}", method = RequestMethod.GET)

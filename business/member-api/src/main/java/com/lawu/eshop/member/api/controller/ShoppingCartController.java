@@ -112,6 +112,7 @@ public class ShoppingCartController extends BaseController {
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1002|1003|4000]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization

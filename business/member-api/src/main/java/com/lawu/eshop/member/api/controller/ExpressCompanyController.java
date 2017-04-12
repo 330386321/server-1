@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class ExpressCompanyController extends BaseController {
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

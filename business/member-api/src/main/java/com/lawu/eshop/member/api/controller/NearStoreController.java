@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.CommentMerchantService;
 import com.lawu.eshop.member.api.service.NearStoreService;
 import com.lawu.eshop.user.dto.NearStoreDTO;
@@ -32,6 +33,7 @@ public class NearStoreController extends BaseController {
     @Autowired
     private CommentMerchantService commentMerchantService;
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "猜你喜欢/更多商家", notes = "猜你喜欢/更多商家(查询同类型商家)，按距离查询门店信息。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

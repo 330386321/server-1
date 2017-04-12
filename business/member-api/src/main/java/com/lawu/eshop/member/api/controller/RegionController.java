@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.member.api.service.RegionService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class RegionController extends BaseController {
     @Autowired
     private RegionService regionService;
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "城市列表", notes = "城市列表 [1004,1000] 章勇", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "region/getRegionList", method = RequestMethod.GET)

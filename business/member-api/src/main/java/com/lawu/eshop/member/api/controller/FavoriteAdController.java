@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -78,6 +79,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "取消收藏的广告", notes = "取消收藏的广告[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

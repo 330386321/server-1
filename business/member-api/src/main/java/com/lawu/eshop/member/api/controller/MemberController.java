@@ -93,6 +93,7 @@ public class MemberController extends BaseController {
         return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1002|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
@@ -126,6 +127,7 @@ public class MemberController extends BaseController {
         return propertyInfoService.updatePayPwd(userNum, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询是否设置支付密码", notes = "查询是否设置支付密码(true--已设置，false--未设置)。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

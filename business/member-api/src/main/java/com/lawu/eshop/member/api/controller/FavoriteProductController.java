@@ -81,6 +81,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "取消收藏的商品", notes = "取消收藏的商品[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,9 +53,10 @@ public class CashManageFrontController extends BaseController {
 	@Autowired
 	private MemberService memberService;
 
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "用户提现", notes = "用户提现，[6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
-//	@Authorization
+	@Authorization
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam CashParam param) {

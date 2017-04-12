@@ -9,6 +9,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
@@ -98,6 +99,7 @@ public class CommentProductController extends BaseController {
 
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
@@ -135,6 +137,7 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.GET)
@@ -172,6 +175,7 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询商品评价好评率，综合评分", notes = "查询商品评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductAvgGrade/{productId}", method = RequestMethod.GET)

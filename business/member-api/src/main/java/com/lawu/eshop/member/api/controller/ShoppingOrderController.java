@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +59,7 @@ public class ShoppingOrderController extends BaseController {
      * @param param
      * @return
      */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询购物订单", notes = "根据订单状态和是否评论分页查询购物订单。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -76,6 +78,7 @@ public class ShoppingOrderController extends BaseController {
      * @param id
      * @return
      */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -99,6 +102,7 @@ public class ShoppingOrderController extends BaseController {
      * @param id
      * @return
      */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -122,6 +126,7 @@ public class ShoppingOrderController extends BaseController {
      * @param id
      * @return
      */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -165,6 +170,7 @@ public class ShoppingOrderController extends BaseController {
 	 *            购物订单id
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "删除购物订单", notes = "根据购物订单id删除购物订单。[1002|1003|4003]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
@@ -212,6 +218,7 @@ public class ShoppingOrderController extends BaseController {
 	 *            购物订单id
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "确认收货", notes = "根据购物订单id确认收货。[1002|1003|4005]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -235,6 +242,7 @@ public class ShoppingOrderController extends BaseController {
 	 * @param param 退款参数
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "申请退款", notes = "根据购物订单项id申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -262,12 +270,13 @@ public class ShoppingOrderController extends BaseController {
 	 *            查询参数
 	 * @return
 	 */
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "selectRefundPageByMemberId", method = RequestMethod.GET)
-    public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
+    public Result<Page<ShoppingOrderItemRefundDTO>> requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	Result<Page<ShoppingOrderItemRefundDTO>> result = shoppingOrderService.selectRefundPageByMemberId(memberId, param);

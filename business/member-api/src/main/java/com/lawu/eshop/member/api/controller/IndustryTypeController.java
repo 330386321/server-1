@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.IndustryTypeDTO;
 import com.lawu.eshop.member.api.service.IndustryTypeService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class IndustryTypeController extends BaseController {
     @Autowired
     private IndustryTypeService industryTypeService;
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询行业", notes = "查询所有行业。 [1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)

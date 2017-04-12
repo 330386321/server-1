@@ -9,6 +9,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentMerchantDTO;
@@ -142,6 +143,7 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询商家评价好评率，综合评分", notes = "查询商家评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentAvgGrade/{merchantId}", method = RequestMethod.GET)

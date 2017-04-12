@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.PayOrderDTO;
 import com.lawu.eshop.mall.dto.PayOrderInfoDTO;
 import com.lawu.eshop.mall.param.PayOrderListParam;
@@ -48,6 +49,7 @@ public class PayOrderController extends BaseController {
         return result;
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "买单记录列表", notes = "买单记录列表  [1004,1002,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -84,6 +86,7 @@ public class PayOrderController extends BaseController {
         return successGet(list);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "删除买单记录", notes = "删除买单记录  [1004,1000]", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
