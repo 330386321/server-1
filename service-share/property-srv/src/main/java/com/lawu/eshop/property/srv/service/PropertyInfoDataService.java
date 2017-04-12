@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.srv.service;
 
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 /**
@@ -14,19 +13,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
  */
 public interface PropertyInfoDataService {
 
-    /**
-     * 邀请粉丝消费积分
-     *
-     * @param userNum      商户编号
-     * @param consumePoint 消费积分
-     */
-    void inviteFans(String userNum, Integer consumePoint);
-
-    /**
-     * 商家发广告
-     * @param param
-     * @return
-     */
-	@SuppressWarnings("rawtypes")
-	int addAd(PropertyInfoDataParam param);
+	
+	int doHanlder(PropertyInfoDataParam param);
+	
 }

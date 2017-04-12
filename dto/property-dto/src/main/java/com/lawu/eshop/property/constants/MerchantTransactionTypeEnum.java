@@ -54,7 +54,7 @@ public enum MerchantTransactionTypeEnum {
 	WITHDRAW_BACK((byte)0x72),
 	
 	/**
-	 * 提现109
+	 * 邀请粉丝109
 	 */
 	INVITE_FANS((byte)0x73),
 	

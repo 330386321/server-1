@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PointDetailService;
@@ -37,24 +35,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	@Override
 	@Transactional
-	public void inviteFans(String userNum, Integer consumePoint) {
-		// 插入积分明细
-		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-		pointDetailSaveDataParam.setTitle(TransactionTitle.INVITE_FANS);
-		pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
-		pointDetailSaveDataParam.setUserNum(userNum);
-		pointDetailSaveDataParam.setPointType(MerchantTransactionTypeEnum.INVITE_FANS.getValue());
-		pointDetailSaveDataParam.setPoint(new BigDecimal(consumePoint));
-		pointDetailService.save(pointDetailSaveDataParam);
-
-		// 更新用户资产
-		BigDecimal decimal = new BigDecimal(consumePoint);
-		propertyInfoService.updatePropertyNumbers(userNum, "P", "M", decimal);
-	}
-
-	@Override
-	public int addAd(PropertyInfoDataParam param) {
-
+	public int doHanlder(PropertyInfoDataParam param) {
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
