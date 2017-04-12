@@ -75,7 +75,7 @@ public class MessageController extends BaseController {
     @Authorization
     @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
     public Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        messageService.delMessageStatus(messageId);
-        return successCreated();
+       Result result = messageService.delMessageStatus(messageId);
+        return successDelete(result);
     }
 }
