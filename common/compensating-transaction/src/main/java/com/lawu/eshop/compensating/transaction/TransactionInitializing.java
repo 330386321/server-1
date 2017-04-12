@@ -53,7 +53,7 @@ public class TransactionInitializing implements InitializingBean, ApplicationCon
 
             CompensatingTransactionMain annotation = transactionMainService.getClass().getAnnotation(CompensatingTransactionMain.class);
 
-            customConsumerRegister.registerConsumers(new CustomConsumer(annotation.topic(), annotation.tags()) {
+            customConsumerRegister.registerConsumers(new CustomConsumer(annotation.topic(), annotation.tags() + "-reply") {
                 @Override
                 public void consumeMessage(Object message) {
                     transactionMainService.receiveCallback(message);

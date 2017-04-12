@@ -22,7 +22,7 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
 
     private String topic= annotation.topic();
 
-    private String tags = annotation.tags();
+    private String tags = annotation.tags() + "-reply";
 
 
     @Override
