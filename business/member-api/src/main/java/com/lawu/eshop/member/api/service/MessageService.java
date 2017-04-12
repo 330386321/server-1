@@ -1,18 +1,15 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.MessageDTO;
+import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
+import com.lawu.eshop.mall.param.MessageParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
-import com.lawu.eshop.mall.dto.MessageDTO;
-import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
-import com.lawu.eshop.mall.param.MessageParam;
 
 /**
  * 站内信息接口
@@ -41,10 +38,13 @@ public interface MessageService {
     Result<Page<MessageDTO>> getMessageList(@PathVariable("userNum") String userNum, @ModelAttribute MessageParam pageParam);
 
     /**
-     * 站内信息操作（已读未读）
+     * 站内信息操作（已读）
      * @param messageId
      * @param statusEnum
      */
     @RequestMapping(method = RequestMethod.PUT, value = "message/updateMessageStatus/{messageId}")
-    void updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("statusEnum") MessageStatusEnum statusEnum);
+    Result updateMessageStatus(@PathVariable("messageId") Long messageId);
+
+    @RequestMapping(value = "message/delMessageStatus/{messageId}", method = RequestMethod.DELETE)
+    Result delMessageStatus(@PathVariable("messageId") Long messageId);
 }

@@ -183,8 +183,9 @@ public class MemberController extends BaseController {
     @Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
     @RequestMapping(value = "saveHeadImage", method = RequestMethod.POST)
-    public Result<UserHeadImgDTO> saveHeadImage() {
+    public Result<UserHeadImgDTO> saveHeadImage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         String headImg = "";

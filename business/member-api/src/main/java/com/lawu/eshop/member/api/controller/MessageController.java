@@ -3,13 +3,11 @@ package com.lawu.eshop.member.api.controller;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageParam;
@@ -63,12 +61,21 @@ public class MessageController extends BaseController {
         return messageDTOPage;
     }
 
-    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（已读未读） [1000]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（已读） [1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
-    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("statusEnum") MessageStatusEnum statusEnum, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        messageService.updateMessageStatus(messageId, statusEnum);
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        messageService.updateMessageStatus(messageId);
+        return successCreated();
+    }
+
+    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
+    public Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        messageService.delMessageStatus(messageId);
         return successCreated();
     }
 }

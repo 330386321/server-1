@@ -90,13 +90,13 @@ public class MerchantStoreController extends BaseController {
         //判断门店是否存在
         MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
         if (merchantStoreInfoBO != null) {
-            return failCreated(ResultCode.RECORD_EXIST);
+            return successCreated(ResultCode.RECORD_EXIST);
         }
         //判断该营业执照是否存在相同记录
         if (!StringUtils.isEmpty(merchantStoreParam.getRegNumber())) {
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
             if (merchantStoreProfileBO != null) {
-                return failCreated(ResultCode.RECORD_EXIST);
+                return successCreated(ResultCode.RECORD_EXIST);
             }
         }
 
@@ -104,7 +104,7 @@ public class MerchantStoreController extends BaseController {
         if (!StringUtils.isEmpty(merchantStoreParam.getOperatorCardId())) {
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getOperatorCardId(), 2);
             if (merchantStoreProfileBO != null) {
-                return failCreated(ResultCode.RECORD_EXIST);
+                return successCreated(ResultCode.RECORD_EXIST);
             }
         }
 

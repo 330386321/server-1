@@ -73,15 +73,27 @@ public class MessageController extends BaseController {
     }
 
     /**
-     * 站内信息操作（已读未读）
+     * 站内信息操作（已读）
      *
      * @param messageId
      * @param statusEnum
      * @return
      */
     @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
-    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam MessageStatusEnum statusEnum) {
-        messageService.updateMessageStatus(messageId, statusEnum);
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId) {
+        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_READ);
+        return successCreated();
+    }
+    /**
+     * 站内信息操作（删除）
+     *
+     * @param messageId
+     * @param statusEnum
+     * @return
+     */
+    @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
+    public Result delMessageStatus(@PathVariable("messageId") Long messageId) {
+        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_DELETE);
         return successCreated();
     }
 

@@ -1,6 +1,6 @@
 package com.lawu.eshop.mall.dto;
 
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageStatusReturnEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import io.swagger.annotations.ApiParam;
 
@@ -31,7 +31,7 @@ public class MessageDTO {
      * 消息状态
      */
     @ApiParam(name = "status",value = "消息状态")
-    private MessageStatusEnum statusEnum;
+    private MessageStatusReturnEnum statusEnum;
 
     /**
      * 消息状态
@@ -63,11 +63,11 @@ public class MessageDTO {
         this.messageTypeEnum = messageTypeEnum;
     }
 
-    public MessageStatusEnum getStatusEnum() {
+    public MessageStatusReturnEnum getStatusEnum() {
         return statusEnum;
     }
 
-    public void setStatusEnum(MessageStatusEnum statusEnum) {
+    public void setStatusEnum(MessageStatusReturnEnum statusEnum) {
         this.statusEnum = statusEnum;
     }
 

@@ -95,52 +95,52 @@ public class MerchantStoreController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
-
-            //判断回显照片
-            if (!"".equals(merchantStoreParam.getStoreUrl()) && !"null".equals(merchantStoreParam.getStoreUrl()) && merchantStoreParam.getStoreUrl() != null) {
-                merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
-            } else {
-                merchantStoreParam.setStoreUrl(otherUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getEnvironmentUrl()) && !"null".equals(merchantStoreParam.getEnvironmentUrl()) && merchantStoreParam.getEnvironmentUrl() != null) {
-                merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
-            } else {
-                merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getLogoUrl()) && !"null".equals(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl() != null) {
-                merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
-            } else {
-                merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getIdcardUrl()) && !"null".equals(merchantStoreParam.getIdcardUrl()) && merchantStoreParam.getIdcardUrl() != null) {
-                merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
-            } else {
-                merchantStoreParam.setIdcardUrl(idCardUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getLicenseUrl()) && !"null".equals(merchantStoreParam.getLicenseUrl()) && merchantStoreParam.getLicenseUrl() != null) {
-                merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
-            } else {
-                merchantStoreParam.setLicenseUrl(licenseUrls.toString());
-            }
-            if (!"".equals(merchantStoreParam.getOtherUrl()) && !"null".equals(merchantStoreParam.getOtherUrl()) && merchantStoreParam.getOtherUrl() != null) {
-                merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
-            } else {
-                merchantStoreParam.setOtherUrl(otherUrls.toString());
-            }
-
-            return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
-
         } catch (Exception e) {
             e.printStackTrace();
             return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
         }
+        //判断回显照片
+        if (!"".equals(merchantStoreParam.getStoreUrl()) && !"null".equals(merchantStoreParam.getStoreUrl()) && merchantStoreParam.getStoreUrl() != null) {
+            merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
+        } else {
+            merchantStoreParam.setStoreUrl(otherUrls.toString());
+        }
+        if (!"".equals(merchantStoreParam.getEnvironmentUrl()) && !"null".equals(merchantStoreParam.getEnvironmentUrl()) && merchantStoreParam.getEnvironmentUrl() != null) {
+            merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
+        } else {
+            merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
+        }
+        if (!"".equals(merchantStoreParam.getLogoUrl()) && !"null".equals(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl() != null) {
+            merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
+        } else {
+            merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
+        }
+        if (!"".equals(merchantStoreParam.getIdcardUrl()) && !"null".equals(merchantStoreParam.getIdcardUrl()) && merchantStoreParam.getIdcardUrl() != null) {
+            merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
+        } else {
+            merchantStoreParam.setIdcardUrl(idCardUrls.toString());
+        }
+        if (!"".equals(merchantStoreParam.getLicenseUrl()) && !"null".equals(merchantStoreParam.getLicenseUrl()) && merchantStoreParam.getLicenseUrl() != null) {
+            merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
+        } else {
+            merchantStoreParam.setLicenseUrl(licenseUrls.toString());
+        }
+        if (!"".equals(merchantStoreParam.getOtherUrl()) && !"null".equals(merchantStoreParam.getOtherUrl()) && merchantStoreParam.getOtherUrl() != null) {
+            merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
+        } else {
+            merchantStoreParam.setOtherUrl(otherUrls.toString());
+        }
+
+        return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
+
+
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.PUT)
+    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.POST)
     public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
                                              @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();

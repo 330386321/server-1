@@ -111,9 +111,9 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
-    @ApiOperation(value = "用户评价商家列表（有图）", notes = "用户评价商家（有图） [1005，1000]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "用户评价商家列表（有图）", notes = "用户评价商家（有图） [1005，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.POST)
+    @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.GET)
     public Result<Page<CommentMerchantDTO>> getCommentMerchantListWithImgs(@ModelAttribute @ApiParam CommentMerchantListParam listParam) {
         List<CommentMerchantDTO> commentMerchantDTOS = new ArrayList<>();
         Page<CommentMerchantDTO> pages = new Page<>();
