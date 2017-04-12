@@ -222,7 +222,6 @@ public class MerchantStoreController extends BaseController {
                 merchantStoreParam.setOtherUrl(otherUrls.toString());
             }
 
-            merchantStoreParam.setStoreUrl(storeUrls.toString());
             return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
 
     }
