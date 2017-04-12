@@ -297,33 +297,4 @@ public class MerchantStoreConverter {
     	dto.setMerchantStoreId(merchantStoreBO.getId());
     	return dto;
     }
- 
-    
-
-    
-    
-    public static MerchantStoreBO convertStoreBO(MerchantStoreDO merchantStoreDO){
-    	if(merchantStoreDO==null){
-    		return null;
-    	}
-    	MerchantStoreBO bo=new MerchantStoreBO();
-    	bo.setLongitude(merchantStoreDO.getLongitude());
-    	bo.setLatitude(merchantStoreDO.getLatitude());
-    	bo.setName(merchantStoreDO.getName());
-    	bo.setId(merchantStoreDO.getId());
-    	return bo;
-    }
-    
-    public static MerchantStoreDTO convertStoreDTO(MerchantStoreBO merchantStoreBO){
-    	if(merchantStoreBO==null){
-    		return null;
-    	}
-    	MerchantStoreDTO dto=new MerchantStoreDTO();
-    	dto.setLongitude(merchantStoreBO.getLongitude());
-    	dto.setLatitude(merchantStoreBO.getLatitude());
-    	dto.setName(merchantStoreBO.getName());
-    	dto.setMerchantStoreId(merchantStoreBO.getId());
-    	return dto;
-    }
-    
 }
