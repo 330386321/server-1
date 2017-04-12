@@ -34,6 +34,8 @@ public class ResultCode {
     public static final int IMAGE_IS_NULL = 1017;
     public static final int MONEY_IS_POINT_2 = 1018;
     public static final int UPDATE_FAIL = 1019;
+    public static final int UPLOAD_VEDIO_FAIL = 1020;
+    public static final int UPLOAD_SIZE_BIGER = 1021;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -120,6 +122,9 @@ public class ResultCode {
         ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
         ResultCode.messageMap.put(IMAGE_IS_NULL, "图片格式不正确");
         ResultCode.messageMap.put(MONEY_IS_POINT_2, "金额请保留两位小数");
+
+        ResultCode.messageMap.put(UPLOAD_VEDIO_FAIL, "上传视频失败");
+        ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件大于50M");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "超过发送限制（一小时内同一手机号码只能发送2次)");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "超过发送限制（单个IP 24小时内只能发送5次)");

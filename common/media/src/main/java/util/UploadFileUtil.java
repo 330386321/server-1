@@ -297,7 +297,12 @@ public class UploadFileUtil {
 
     }
 
-
+    /**
+     * 上传单个视频
+     * @param request
+     * @param dir
+     * @return
+     */
     public static Map<String, String> uploadVideo(HttpServletRequest request, String dir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
