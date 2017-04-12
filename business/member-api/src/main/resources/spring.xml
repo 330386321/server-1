@@ -17,7 +17,8 @@
                      <property name="unauthorizedErrorMessage" value="令牌失效，请重新登录" />
                      <!--管理验证信息的bean-->
                      <property name="manager" ref="tokenManager" />
-                     <!--测试 TODO remove-->
+                     <!--debug模式-->
+                     <property name="debug" value="true" />
                      <property name="testNum" value="M000001"/>
                      <property name="testId" value="8"/>
                      <property name="testAccount" value="test" />

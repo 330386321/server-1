@@ -60,6 +60,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     private String testAccount;
 
+    private boolean isDebug = false;
+
     public void setTestId(Long testId) {
         this.testId = testId;
     }
@@ -70,6 +72,10 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     public void setTestAccount(String testAccount) {
         this.testAccount = testAccount;
+    }
+
+    public void setDebug(boolean debug) {
+        isDebug = debug;
     }
 
     public void setManager(TokenManager manager) {
@@ -147,15 +153,17 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        // 用户未授权测试 TODO remove
-        request.setAttribute(REQUEST_CURRENT_USER_NUM, testNum);
-        request.setAttribute(REQUEST_CURRENT_USER_ID, testId);
-        request.setAttribute(REQUEST_CURRENT_ACCOUNT, testAccount);
+        if (isDebug) {
+            request.setAttribute(REQUEST_CURRENT_USER_NUM, testNum);
+            request.setAttribute(REQUEST_CURRENT_USER_ID, testId);
+            request.setAttribute(REQUEST_CURRENT_ACCOUNT, testAccount);
+        } else {
 
-        // 为了防止以恶意操作直接在REQUEST_CURRENT_USER_ID、REQUEST_CURRENT_ACCOUNT中写入数据，将其设为null
-        // request.setAttribute(REQUEST_CURRENT_USER_NUM, null);
-        //request.setAttribute(REQUEST_CURRENT_USER_ID, null);
-        //request.setAttribute(REQUEST_CURRENT_ACCOUNT, null);
+            // 为了防止以恶意操作直接在REQUEST_CURRENT_USER_ID、REQUEST_CURRENT_ACCOUNT中写入数据，将其设为null
+            request.setAttribute(REQUEST_CURRENT_USER_NUM, null);
+            request.setAttribute(REQUEST_CURRENT_USER_ID, null);
+            request.setAttribute(REQUEST_CURRENT_ACCOUNT, null);
+        }
         return true;
     }
 }
