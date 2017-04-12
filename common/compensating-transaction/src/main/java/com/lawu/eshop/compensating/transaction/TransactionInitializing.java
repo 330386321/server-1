@@ -21,7 +21,7 @@ import java.util.Map;
  * @date 2017/3/29
  */
 @Component
-public class JobsInitializing implements InitializingBean, ApplicationContextAware {
+public class TransactionInitializing implements InitializingBean, ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
