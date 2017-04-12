@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
 
 /**
  * 关联查询订单和订单项表
@@ -50,5 +50,14 @@ public interface ShoppingOrderExtendDOMapper {
      * @return
      */
     ShoppingOrderExtendDO getShoppingOrderAssociationByPrimaryKey(Long id);
+    
+	/**
+	 * 分页查询订单退款列表
+	 * 
+	 * @param example 查询参数
+	 * @param rowBounds 分页参数
+	 * @return
+	 */
+	List<ShoppingOrderItemRefundDO> selectShoppingOrderItemRefundResultMapByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
 	
 }

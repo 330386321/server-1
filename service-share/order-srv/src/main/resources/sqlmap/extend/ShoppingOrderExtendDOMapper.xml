@@ -14,7 +14,7 @@
 		<result column="sales_price" jdbcType="DECIMAL" property="salesPrice" />
 		<result column="quantity" jdbcType="INTEGER" property="quantity" />
 		<result column="item_order_status" jdbcType="TINYINT" property="orderStatus" />
-		<result column="gmt_return" jdbcType="TIMESTAMP" property="gmtReturn" />
+		<result column="refund_status" jdbcType="TINYINT" property="refundStatus" />
 		<result column="item_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="item_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>
@@ -49,7 +49,31 @@
 		<!-- 级联查询 -->
 		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemAssociationResultMap"/>  
 	</resultMap>
-
+	
+	<resultMap id="ShoppingOrderItemRefundResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO">
+		<id column="item_id" jdbcType="BIGINT" property="id" />
+		<result column="shopping_order_id" jdbcType="BIGINT" property="shoppingOrderId" />
+		<result column="product_id" jdbcType="BIGINT" property="productId" />
+		<result column="product_name" jdbcType="VARCHAR" property="productName" />
+		<result column="product_model_id" jdbcType="BIGINT" property="productModelId" />
+		<result column="product_model_name" jdbcType="VARCHAR" property="productModelName" />
+		<result column="product_feature_image" jdbcType="VARCHAR" property="productFeatureImage" />
+		<result column="regular_price" jdbcType="DECIMAL" property="regularPrice" />
+		<result column="sales_price" jdbcType="DECIMAL" property="salesPrice" />
+		<result column="quantity" jdbcType="INTEGER" property="quantity" />
+		<result column="order_status" jdbcType="TINYINT" property="orderStatus" />
+		<result column="refund_status" jdbcType="TINYINT" property="refundStatus" />
+		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		
+		<!-- extends -->
+		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+	    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+		<result column="type" jdbcType="TINYINT" property="type" />
+		<result column="amount" jdbcType="DECIMAL" property="amount" />
+		<result column="shopping_refund_detail_id" jdbcType="BIGINT" property="shoppingRefundDetailId" />
+	</resultMap>
+	
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -104,8 +128,7 @@
 		soi.product_model_id,
 		soi.product_model_name,
 		soi.product_feature_image, soi.regular_price, soi.sales_price,
-		soi.quantity, soi.order_status as item_order_status,
-		soi.gmt_return,
+		soi.quantity, soi.order_status as item_order_status, soi.refund_status,
 		soi.gmt_create as item_gmt_create, soi.gmt_modified as item_gmt_modified
 	</sql>
 	
@@ -151,7 +174,6 @@
 		</if>
 	</select>
 	
-	
 	<select id="getShoppingOrderAssociationByPrimaryKey" parameterType="java.lang.Long" resultMap="ShoppingOrderAssociationResultMap">
 	  select 
 	  <include refid="ShoppingOrder_Association_Base_Column_List" />
@@ -160,5 +182,20 @@
 	  from shopping_order so
 	  left join shopping_order_item soi on so.id = soi.shopping_order_id
 	  where so.id = #{id,jdbcType=BIGINT}
+	</select>
+	
+	<select id="selectShoppingOrderItemRefundResultMapByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderItemRefundResultMap">
+	  select
+	  <include refid="ShoppingOrderItem_Association_Base_Column_List" />
+	  ,so.merchant_id, so.merchant_name, srd.type, srd.amount, srd.id as shopping_refund_detail_id
+	  from shopping_order_item soi
+	  left join shopping_order so on so.id = soi.shopping_order_id
+	  left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+  	  <if test="_parameter != null">
+		<include refid="Example_Where_Clause" />
+	  </if>
+	  <if test="orderByClause != null">
+		order by ${orderByClause}
+	  </if>
 	</select>
 </mapper>

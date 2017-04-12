@@ -100,6 +100,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		double dCurrentScale = new Double(currentScale).doubleValue();
 		double money = dCashMoney * dCurrentScale;
 
+		//保存提现表记录
 		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
 		withdrawCashDO.setCashMoney(new BigDecimal(cashMoney));
 		withdrawCashDO.setCurrentScale(currentScale);
@@ -119,6 +120,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		withdrawCashDO.setRegionFullName(cash.getRegionFullName());
 		withdrawCashDOMapper.insertSelective(withdrawCashDO);
 
+		//新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitle.CASH);
 		tdsParam.setTransactionNum(cash.getCashNumber());
@@ -130,6 +132,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setBizId(withdrawCashDO.getId());
 		transactionDetailService.save(tdsParam);
 
+		//更新财产记录，减
 		PropertyInfoDOView infoDoView = new PropertyInfoDOView();
 		infoDoView.setId(infoList.get(0).getId());
 		infoDoView.setBalance(new BigDecimal(cashMoney));

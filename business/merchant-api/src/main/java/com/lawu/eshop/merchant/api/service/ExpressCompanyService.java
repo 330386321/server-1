@@ -19,7 +19,7 @@ public interface ExpressCompanyService {
     /**
      * 查询全部快递公司，根据ordinal排序
      */
-    @RequestMapping(method = RequestMethod.GET, value = "expressCompany/")
+    @RequestMapping(method = RequestMethod.GET, value = "expressCompany/list")
     Result<List<ExpressCompanyDTO>> list();
     
 }

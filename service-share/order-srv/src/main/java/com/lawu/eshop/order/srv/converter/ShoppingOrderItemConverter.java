@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
@@ -58,11 +59,11 @@ public class ShoppingOrderItemConverter {
 		}
 
 		ShoppingOrderItemBO shoppingOrderItemBO = new ShoppingOrderItemBO();
-		BeanUtils.copyProperties(shoppingOrderItemDO, shoppingOrderItemBO, "orderStatus");
+		BeanUtils.copyProperties(shoppingOrderItemDO, shoppingOrderItemBO, new String[]{"orderStatus", "refundStatus"});
 		
-		// 转换为枚举类型
 		shoppingOrderItemBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemDO.getOrderStatus()));
-
+		shoppingOrderItemBO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.getEnum(shoppingOrderItemDO.getRefundStatus()));
+		
 		return shoppingOrderItemBO;
 	}
 	
@@ -98,7 +99,7 @@ public class ShoppingOrderItemConverter {
 
 		ShoppingOrderItemDTO shoppingOrderItemDTO = new ShoppingOrderItemDTO();
 		BeanUtils.copyProperties(shoppingOrderItemBO, shoppingOrderItemDTO);
-
+		
 		return shoppingOrderItemDTO;
 	}
 	

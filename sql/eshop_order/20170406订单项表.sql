@@ -10,7 +10,7 @@ CREATE TABLE `shopping_order_item` (
   `regular_price` decimal(10,2) unsigned NOT NULL COMMENT '原价',
   `sales_price` decimal(10,2) unsigned NOT NULL COMMENT '现价',
   `quantity` int(11) unsigned NOT NULL COMMENT '数量',
-  `order_status` tinyint(2) unsigned NOT NULL COMMENT '订单项状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)',
+  `order_status` tinyint(2) unsigned NOT NULL COMMENT '订单项状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易取消|5-待商家确认|6-待退货|7-待退款|8-退款成功)',
   `gmt_return` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',

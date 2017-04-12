@@ -22,8 +22,8 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AlipayService;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
-import com.lawu.eshop.property.param.AppAlipayParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.param.ThirdPayParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.property.param.PcAlipayParam;
 
@@ -55,9 +55,9 @@ public class AlipayController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
 	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam AppAlipayParam param) {
+			@ModelAttribute @ApiParam ThirdPayParam param) {
 
-		AppAlipayDataParam aparam = new AppAlipayDataParam();
+		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(param.getOutTradeNo());
 		aparam.setSubject(param.getSubject());

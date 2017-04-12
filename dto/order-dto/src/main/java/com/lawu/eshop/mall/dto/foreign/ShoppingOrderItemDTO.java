@@ -3,6 +3,7 @@ package com.lawu.eshop.mall.dto.foreign;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 
 import io.swagger.annotations.ApiModel;
@@ -12,6 +13,12 @@ import io.swagger.annotations.ApiModelProperty;
 public class ShoppingOrderItemDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 购物订单项id
+	 */
+	@ApiModelProperty(value = "购物订单项id", required = true)
+	private Long id;
 	
 	/**
 	 * 商品id
@@ -62,10 +69,24 @@ public class ShoppingOrderItemDTO implements Serializable {
 	private Integer quantity;
 	
 	/**
-	 * 订单项状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+	 * 订单项状态
 	 */
-	@ApiModelProperty(value = "订单状态<br/>默认全部<br>PENDING_PAYMENT 待付款<br/>BE_SHIPPED 待发货<br/>TRADING_SUCCESS 交易成功<br/>CANCEL_TRANSACTION 交易取消<br/>TO_BE_CONFIRMED 待商家确认<br/>TO_BE_RETURNED 待退货<br/>TO_BE_REFUNDED 待退款<br/>REFUND_SUCCESSFULLY 退款成功", required = true)
+	@ApiModelProperty(value = "订单状态|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
 	private ShoppingOrderStatusEnum orderStatus;
+	
+    /**
+    * 退款状态
+    */
+	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 商家填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
+    private ShoppingOrderItemRefundStatusEnum refundStatus;
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -137,6 +158,14 @@ public class ShoppingOrderItemDTO implements Serializable {
 
 	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public ShoppingOrderItemRefundStatusEnum getRefundStatus() {
+		return refundStatus;
+	}
+
+	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
+		this.refundStatus = refundStatus;
 	}
 	
 }

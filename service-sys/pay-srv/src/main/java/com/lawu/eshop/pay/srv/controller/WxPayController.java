@@ -22,7 +22,7 @@ import com.lawu.eshop.pay.srv.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.srv.sdk.weixin.base.RandomStringGenerator;
 import com.lawu.eshop.pay.srv.sdk.weixin.base.XMLUtil;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
@@ -54,7 +54,7 @@ public class WxPayController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
-	public Result getPrepayInfo(@RequestBody AppAlipayDataParam param) throws JDOMException, IOException {
+	public Result getPrepayInfo(@RequestBody ThirdPayDataParam param) throws JDOMException, IOException {
 		int retCode = ResultCode.SUCCESS;
 		if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
 			retCode = WxPayParamValidateor.pcAlipayReqValidate(param);

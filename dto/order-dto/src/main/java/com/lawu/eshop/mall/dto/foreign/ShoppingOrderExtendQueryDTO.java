@@ -43,9 +43,9 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	private BigDecimal orderTotalPrice;
 
 	/**
-	 * 订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+	 * 订单的总状态
 	 */
-	@ApiModelProperty(value = "订单状态<br/>默认全部<br>PENDING_PAYMENT 待付款<br/>BE_SHIPPED 待发货<br/>TRADING_SUCCESS 交易成功<br/>CANCEL_TRANSACTION 交易取消<br/>TO_BE_CONFIRMED 待商家确认<br/>TO_BE_RETURNED 待退货<br/>TO_BE_REFUNDED 待退款<br/>REFUND_SUCCESSFULLY 退款成功", required = true)
+	@ApiModelProperty(value = "订单状态|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
 	private ShoppingOrderStatusEnum orderStatus;
 	
 	/**

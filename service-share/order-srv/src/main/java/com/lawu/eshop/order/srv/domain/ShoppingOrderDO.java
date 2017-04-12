@@ -115,7 +115,7 @@ public class ShoppingOrderDO implements Serializable {
 
     /**
      *
-     * 订单的总状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+     * 订单的总状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易关闭|5-退款中)
      * shopping_order.order_status
      *
      * @mbg.generated
@@ -214,7 +214,7 @@ public class ShoppingOrderDO implements Serializable {
 
     /**
      *
-     * 交易时间
+     * 成交时间
      * shopping_order.gmt_transaction
      *
      * @mbg.generated

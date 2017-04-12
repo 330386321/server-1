@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
 
 /**
  * 
@@ -22,7 +22,7 @@ public interface WxPayService {
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "wxPay/getPrepayInfo")
-	Result getPrepayInfo(@RequestBody AppAlipayDataParam param);
+	Result getPrepayInfo(@RequestBody ThirdPayDataParam param);
 
 	
 

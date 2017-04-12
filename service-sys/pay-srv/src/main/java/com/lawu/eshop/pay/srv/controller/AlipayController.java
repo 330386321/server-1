@@ -19,7 +19,7 @@ import com.lawu.eshop.pay.srv.sdk.alipay.util.AlipaySubmit;
 import com.lawu.eshop.pay.srv.sdk.alipay.util.SignUtils;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.AppAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PropertiesUtil;
@@ -51,7 +51,7 @@ public class AlipayController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
-	public Result getAppAlipayReqParams(@RequestBody AppAlipayDataParam param) {
+	public Result getAppAlipayReqParams(@RequestBody ThirdPayDataParam param) {
 
 		int retCode = AlipayParamValidateor.appAlipayReqValidate(param);
 		if (retCode != ResultCode.SUCCESS) {

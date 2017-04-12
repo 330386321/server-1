@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2017年4月6日 下午5:36:40
  *
  */
-public class AppAlipayParam {
+public class ThirdPayParam {
 	
 	@ApiParam (name="totalAmount",required = true, value = "金额")
 	private String totalAmount;

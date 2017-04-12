@@ -9,7 +9,12 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/3/24
  */
 public class ExpressCompanyDTO {
-
+	
+	/**
+	 * 快递公司id
+	 */
+	@ApiModelProperty(value = "快递公司id", required = true)
+	private Integer id;
 	
 	/**
 	 * 编码
@@ -23,6 +28,14 @@ public class ExpressCompanyDTO {
 	@ApiModelProperty(value = "名称", required = true)
 	private String name;
 	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public String getCode() {
 		return code;
 	}

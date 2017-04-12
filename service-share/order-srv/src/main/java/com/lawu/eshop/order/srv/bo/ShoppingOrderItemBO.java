@@ -2,13 +2,25 @@ package com.lawu.eshop.order.srv.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
+import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 
 public class ShoppingOrderItemBO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
+	/**
+	 * 主键
+	 */
+	private Long id;
+
+	/**
+	 * 订单id
+	 */
+	private Long shoppingOrderId;
+
 	/**
 	 * 商品id
 	 */
@@ -48,11 +60,42 @@ public class ShoppingOrderItemBO implements Serializable {
 	 * 数量
 	 */
 	private Integer quantity;
-	
+
 	/**
-	 * 订单项状态(0-待付款|1-待发货|2-交易成功|3-交易取消|4-待商家确认|5-待退货|6-待退款|7-退款成功)
+	 * 订单项状态
 	 */
 	private ShoppingOrderStatusEnum orderStatus;
+
+	/**
+	 * 退款状态
+	 */
+	private ShoppingOrderItemRefundStatusEnum refundStatus;
+
+	/**
+	 * 创建时间
+	 */
+	private Date gmtCreate;
+
+	/**
+	 * 修改时间
+	 */
+	private Date gmtModified;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getShoppingOrderId() {
+		return shoppingOrderId;
+	}
+
+	public void setShoppingOrderId(Long shoppingOrderId) {
+		this.shoppingOrderId = shoppingOrderId;
+	}
 
 	public Long getProductId() {
 		return productId;
@@ -125,5 +168,28 @@ public class ShoppingOrderItemBO implements Serializable {
 	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
 	}
-	
+
+	public ShoppingOrderItemRefundStatusEnum getRefundStatus() {
+		return refundStatus;
+	}
+
+	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
+		this.refundStatus = refundStatus;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+
+	public Date getGmtModified() {
+		return gmtModified;
+	}
+
+	public void setGmtModified(Date gmtModified) {
+		this.gmtModified = gmtModified;
+	}
 }

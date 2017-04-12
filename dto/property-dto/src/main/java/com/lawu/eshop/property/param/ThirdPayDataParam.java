@@ -11,7 +11,7 @@ import com.lawu.eshop.property.constants.UserTypeEnum;
  * @date 2017年4月6日 下午5:36:40
  *
  */
-public class AppAlipayDataParam extends AppAlipayParam {
+public class ThirdPayDataParam extends ThirdPayParam {
 	
 	/**
 	 * 用户类型

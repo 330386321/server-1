@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -10,10 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.mall.constants.ShoppingOrderStatusToMemberEnum;
+import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
@@ -26,12 +32,14 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
+import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
@@ -49,6 +57,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	
 	@Autowired
 	private ShoppingOrderItemDOMapper shoppingOrderItemDOMapper;
+	
+	@Autowired
+	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
 	
     //@Autowired
     //private TransactionMainService transactionMainService;
@@ -110,12 +121,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			baseCriteria.andMemberIdEqualTo(memberId);
 		}
 		
-		if (param.getIsEvaluation() != null) {
-			baseCriteria.andIsEvaluationEqualTo(param.getIsEvaluation());
-		}
-		
 		if (param.getOrderStatus() != null) {
 			baseCriteria.andOrderStatusEqualTo(param.getOrderStatus().getValue());
+			
+			// 查找待评价的订单
+			if (param.getOrderStatus().equals(ShoppingOrderStatusToMemberEnum.BE_EVALUATED)) {
+				baseCriteria.andIsEvaluationEqualTo(false);
+			}
 		}
 		
 		if (!StringUtils.isEmpty(param.getKeyword())) {
@@ -190,7 +202,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 	
 	/**
-	 * 根据id获取购物订单以及订单项
+	 * 根据id获取购物订单
 	 * 
 	 * @param id
 	 *            购物订单id
@@ -220,16 +232,83 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return ShoppingOrderConverter.covert(shoppingOrderDO);
 	}
 	
-	
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
 	@Transactional
 	@Override
 	public Integer cancelOrder(Long id) {
 		// 更新购物订单的状态
 		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更新订单状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		// 更新成交时间
+		shoppingOrderDO.setGmtTransaction(new Date());
 		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
+		// 更新购物订单项状态
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+		
+		// TODO 事务补偿预留(释放库存)
+		//transactionMainService.sendNotice(id);
+		return result;
+	}
+	
+	/**
+	 * 删除购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Integer deleteOrder(Long id) {
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更改数据状态为删除
+		shoppingOrderDO.setStatus((byte)0x00);
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+
+		return result;
+	}
+
+	/**
+	 * 支付成功之后
+	 * 修改购物订单以及订单项状态为待发货
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Integer paymentSuccessful(Long id) {
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更改订单状态为待发货
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+		// 更新付款时间
+		shoppingOrderDO.setGmtPayment(new Date());
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
@@ -237,12 +316,153 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		
 		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 		
-		// TODO 事务补偿预留(释放库存)
-		//transactionMainService.sendNotice(id);
+		return result;
+	}
+	
+	/**
+	 * 确认收货之后
+	 * 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Integer tradingSuccess(Long id) {
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更改订单状态为
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		// 更新成交时间交易成功
+		shoppingOrderDO.setGmtTransaction(new Date());
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		
+		// 更新购物订单项状态
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+		return result;
+	}
+	
+	/**
+	 * 买家申请退款 
+	 * 修改订单状态为退款中
+	 * 修改订单项的退款状态为待商家确认
+	 * 
+	 * @param shoppingOrderitemId
+	 *            购物订单项id
+	 * @param shoppingOrderBO
+	 *            购物订单
+	 * @param param
+	 *            退款参数
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Integer requestRefund(Long shoppingOrderitemId, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param) {
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(shoppingOrderBO.getId());
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更改订单状态为待商家确认
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		// 更新成交时间
+		shoppingOrderDO.setGmtTransaction(new Date());
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		
+		// 更新购物订单项状态
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderitemId);
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		
+		// 如果卖家支持七天无理由退货，跳过商家确认这个阶段
+		if (shoppingOrderBO.getIsNoReasonReturn()) {
+			// 系统内部自动判断买家是否需要退货
+			if (shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED)) {
+				shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_REFUNDED.getValue());
+			} else {
+				shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+			}
+		} else {
+			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_CONFIRMED.getValue());
+		}
+		
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		
+		// 保存退货详情记录
+		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderitemId);
+		// 根据订单状态是否需要退货
+		if (shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED)) {
+			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.REFUND.getValue());
+		} else{
+			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
+		}
+		shoppingRefundDetailDO.setAmount(shoppingOrderBO.getOrderTotalPrice());
+		shoppingRefundDetailDO.setReason(param.getReason());
+		shoppingRefundDetailDO.setGmtCreate(new Date());
+		shoppingRefundDetailDO.setGmtModified(new Date());
+		
+		shoppingRefundDetailDOMapper.insertSelective(shoppingRefundDetailDO);
+		
+		return result;
+	}
+	
+	/**
+	 * 商家填写物流信息
+	 * 更改购物订单的状态为待收货
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param param
+	 *            物流信息参数
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public Integer fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param) {
+		
+		// 更新购物订单的状态
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setGmtModified(new Date());
+		// 更改订单状态为待商家确认
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		
+		// 更新购物订单的物流信息
+		shoppingOrderDO.setExpressCompanyId(param.getExpressCompanyId());
+		shoppingOrderDO.setExpressCompanyCode(param.getExpressCompanyCode());
+		shoppingOrderDO.setExpressCompanyName(param.getExpressCompanyName());
+		shoppingOrderDO.setWaybillNum(param.getWaybillNum());
+		
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		
+		// 更新购物订单项状态
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+		
 		return result;
 	}
 	
