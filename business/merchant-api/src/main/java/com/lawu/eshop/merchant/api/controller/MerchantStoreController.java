@@ -17,6 +17,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
@@ -34,7 +36,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/")
 public class MerchantStoreController extends BaseController {
-
+    private static Logger logger = LoggerFactory.getLogger(MerchantStoreController.class);
     @Autowired
     private MerchantStoreService merchantStoreService;
 
@@ -96,7 +98,7 @@ public class MerchantStoreController extends BaseController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("上传失败==================");
             return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
         }
         //判断回显照片
@@ -184,7 +186,10 @@ public class MerchantStoreController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
-
+        } catch (Exception e) {
+            logger.info("上传失败==================");
+            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+        }
             //判断回显照片
             if (!"".equals(merchantStoreParam.getStoreUrl())) {
                 merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
@@ -220,10 +225,6 @@ public class MerchantStoreController extends BaseController {
             merchantStoreParam.setStoreUrl(storeUrls.toString());
             return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
-        }
     }
 
 }
