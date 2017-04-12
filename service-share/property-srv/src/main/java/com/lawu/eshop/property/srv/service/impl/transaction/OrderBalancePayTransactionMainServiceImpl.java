@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.mq.constants.MqConstant;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
@@ -17,8 +19,8 @@ import com.lawu.eshop.property.srv.constans.TransactionConstant;
  *
  */
 @Service("orderBalancePayTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.ORDER_BALANCE_PAY, topic = "transaction-orderBalancePay", tags = "property")
-public class OrderBalancePayTransactionMainServiceImpl extends AbstractTransactionMainService<BalancePayNotification> {
+@CompensatingTransactionMain(value = TransactionConstant.ORDER_BALANCE_PAY, topic = MqConstant.TOPIC_PROPERTY_SRV, tags = "property")
+public class OrderBalancePayTransactionMainServiceImpl extends AbstractTransactionMainService<BalancePayNotification, Reply> {
 
     @Override
     public BalancePayNotification selectNotification(Long id) {

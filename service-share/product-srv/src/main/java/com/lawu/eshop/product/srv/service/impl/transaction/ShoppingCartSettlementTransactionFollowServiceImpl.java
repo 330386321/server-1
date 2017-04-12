@@ -1,6 +1,7 @@
 package com.lawu.eshop.product.srv.service.impl.transaction;
 
 import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.mq.constants.MqConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -15,7 +16,7 @@ import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
  * @date 2017/04/06
  */
 //@Service
-@CompensatingTransactionFollow(topic = "transaction-reg", tags = "product")
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = "product")
 public class ShoppingCartSettlementTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingCartSettlementNotification, Reply> {
 	
 	@Autowired

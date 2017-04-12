@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2017/3/29
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.MQ_TOPIC_USER_SRV, tags = MqConstant.MQ_TAG_REG)
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_USER_SRV, tags = MqConstant.TAG_REG)
 public class MemberRegTransactionFollowServiceImpl extends AbstractTransactionFollowService<RegNotification, Reply> {
 
     @Autowired

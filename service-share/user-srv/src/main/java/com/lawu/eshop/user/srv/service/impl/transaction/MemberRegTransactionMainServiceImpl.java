@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @date 2017/3/29
  */
 @Service("memberRegTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.REGISTER, topic = MqConstant.MQ_TOPIC_USER_SRV, tags = MqConstant.MQ_TAG_REG)
+@CompensatingTransactionMain(value = TransactionConstant.REGISTER, topic = MqConstant.TOPIC_USER_SRV, tags = MqConstant.TAG_REG)
 public class MemberRegTransactionMainServiceImpl extends AbstractTransactionMainService<RegNotification, Reply> {
 
     @Autowired
