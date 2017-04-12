@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
@@ -44,6 +45,7 @@ public class FansMerchantController extends BaseController {
     @Autowired
     private MessageService messageService;
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -54,6 +56,7 @@ public class FansMerchantController extends BaseController {
         return fansMerchantService.listInviteFans(merchantId, regionPath);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "邀请粉丝", notes = "邀请会员成为粉丝。[1004|6002|6024] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -86,6 +89,7 @@ public class FansMerchantController extends BaseController {
         return successCreated();
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "粉丝列表", notes = "商户粉丝列表。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

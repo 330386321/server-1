@@ -86,6 +86,7 @@ public class VerifyCodeController extends BaseController {
         return verifyCodeService.getVerifyCodeById(id);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "身份二维码", notes = "身份二维码。 (梅述全)", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "getQrCode", method = RequestMethod.GET)

@@ -68,7 +68,7 @@ public class BankAccountController extends BaseController{
     public Result remove(@RequestParam Long id) {
 		Integer i = bankAccountService.remove(id);
 		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
+    		return successDelete();
     	}else{
     		return successCreated(ResultCode.FAIL);
     	}

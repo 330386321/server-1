@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class PropertyInfoController extends BaseController {
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -53,6 +55,7 @@ public class PropertyInfoController extends BaseController {
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "获取积分", notes = "根据用户编号获取积分。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

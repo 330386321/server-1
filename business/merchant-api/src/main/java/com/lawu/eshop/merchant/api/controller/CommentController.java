@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,7 @@ public class CommentController extends BaseController{
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "商家回复商品评价", notes = "商家回复商品评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -50,6 +52,7 @@ public class CommentController extends BaseController{
      * @param token
      * @return
      */
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "商家回复商品评价", notes = "商家回复商品评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

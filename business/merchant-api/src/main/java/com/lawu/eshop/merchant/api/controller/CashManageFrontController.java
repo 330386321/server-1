@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +53,7 @@ public class CashManageFrontController extends BaseController {
 	@Autowired
 	private MerchantStoreService merchantStoreService;
 
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家提现", notes = "商家提现，[1018|6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
 	@Authorization
