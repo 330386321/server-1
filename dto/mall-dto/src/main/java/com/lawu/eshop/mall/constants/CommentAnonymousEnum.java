@@ -5,16 +5,16 @@ package com.lawu.eshop.mall.constants;
  * @date 2017/4/5.
  */
 public enum CommentAnonymousEnum {
-    COMMENT_ANONYMOUS_SUCCESS((byte) 0x01),//匿名
-    COMMENT_ANONYMOUS_FAILED((byte) 0x00);//不匿名
+    COMMENT_ANONYMOUS((boolean) true),//匿名
+    UN_COMMENT_ANONYMOUS((boolean) false);//不匿名
 
-    public Byte val;
+    public Boolean val;
 
-    CommentAnonymousEnum(Byte val) {
+    CommentAnonymousEnum(Boolean val) {
         this.val = val;
     }
 
-    public static CommentAnonymousEnum getEnum(Byte val) {
+    public static CommentAnonymousEnum getEnum(Boolean val) {
         CommentAnonymousEnum[] values = CommentAnonymousEnum.values();
         for (CommentAnonymousEnum object : values) {
             if (object.val.equals(val)) {

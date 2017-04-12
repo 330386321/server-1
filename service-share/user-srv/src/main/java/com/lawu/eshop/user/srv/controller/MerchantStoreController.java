@@ -1,16 +1,6 @@
 package com.lawu.eshop.user.srv.controller;
 
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -20,17 +10,11 @@ import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
-import com.lawu.eshop.utils.ValidateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,36 +92,6 @@ public class MerchantStoreController extends BaseController {
         if (merchantStoreInfoBO != null) {
             return failCreated(ResultCode.RECORD_EXIST);
         }
-
-        switch (merchantStoreParam.getManageType()) {
-            case ENTITY_MERCHANT:
-                if ("".equals(merchantStoreParam.getStoreUrl())) {
-                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_STORE);
-                }
-                if ("".equals(merchantStoreParam.getEnvironmentUrl())) {
-                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_STORE_ENVIRONMENT);
-                }
-                break;
-            default:
-                break;
-        }
-        switch (merchantStoreParam.getCertifType()) {
-            case CERTIF_TYPE_LICENSE:
-                if ("".equals(merchantStoreParam.getLicenseUrl())) {
-                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_LICENSE);
-                }
-                break;
-            case CERTIF_TYPE_IDCARD:
-                if ("".equals(merchantStoreParam.getOperatorCardId())) {
-                    return failCreated(ResultCode.IMAGE_WRONG_UPLOAD_IDCARD);
-                }
-                if (!ValidateUtil.isIDCard(merchantStoreParam.getOperatorCardId())) {
-                    return failCreated(ResultCode.USER_WRONG_IDCARD);
-                }
-                break;
-            default:
-                break;
-        }
         //判断该营业执照是否存在相同记录
         if (!StringUtils.isEmpty(merchantStoreParam.getRegNumber())) {
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
@@ -148,7 +102,7 @@ public class MerchantStoreController extends BaseController {
 
         //判断该身份证号是否存在相同记录
         if (!StringUtils.isEmpty(merchantStoreParam.getOperatorCardId())) {
-            MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 2);
+            MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getOperatorCardId(), 2);
             if (merchantStoreProfileBO != null) {
                 return failCreated(ResultCode.RECORD_EXIST);
             }

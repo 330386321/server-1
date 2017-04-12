@@ -102,6 +102,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam,
 				1);
 		merchantStoreDO.setMerchantId(merchantId);
+		merchantStoreDO.setIsNoReasonReturn(false);
 		merchantStoreDO.setGmtCreate(new Date());
 		merchantStoreDO.setGmtModified(new Date());
 		// 设置门店待审核状态
@@ -111,14 +112,14 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		} else {
 			merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
 		}
-		Integer merchantStoreId = merchantStoreDOMapper.insert(merchantStoreDO);
+		Integer row = merchantStoreDOMapper.insert(merchantStoreDO);
 
 		// 新增商家店铺扩展信息
 		MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter
 				.couverDOByParam(merchantStoreParam, 2);
 		merchantStoreProfileDO.setMerchantId(merchantId);
 
-		merchantStoreProfileDO.setId(Long.valueOf(merchantStoreId));
+		merchantStoreProfileDO.setId(merchantStoreDO.getId());
 
 		merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
 		merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
@@ -129,7 +130,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		MerchantStoreImageDO merchantStoreImageDO = new MerchantStoreImageDO();
 		merchantStoreImageDO.setMerchantId(merchantId);
-		merchantStoreImageDO.setMerchantStoreId(Long.valueOf(merchantStoreId));
+		merchantStoreImageDO.setMerchantStoreId(merchantStoreDO.getId());
 		merchantStoreImageDO.setGmtCreate(new Date());
 		merchantStoreImageDO.setGmtModified(new Date());
 		merchantStoreImageDO.setStatus(true);
@@ -173,7 +174,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		// 增加门店审核信息
 		MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
 		merchantStoreAuditDO.setMerchantId(merchantId);
-		merchantStoreAuditDO.setMerchantStoreId(Long.valueOf(merchantStoreId));
+		merchantStoreAuditDO.setMerchantStoreId(merchantStoreDO.getId());
 		merchantStoreAuditDO.setContent(JSONObject.fromObject(merchantStoreParam).toString());
 		merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);// 待审核
 		merchantStoreAuditDO.setGmtCreate(new Date());

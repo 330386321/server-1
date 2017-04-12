@@ -172,7 +172,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = request.getServletContext().getRealPath("/");// 根路径
+        String bashdir = "G:\\upload";// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         String urlImg = "";
@@ -297,12 +297,7 @@ public class UploadFileUtil {
 
     }
 
-    /**
-     * 上传单个视频
-     * @param request
-     * @param dir
-     * @return
-     */
+
     public static Map<String, String> uploadVideo(HttpServletRequest request, String dir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功

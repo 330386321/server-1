@@ -3,7 +3,6 @@ package com.lawu.eshop.mall.srv.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentListParam;
@@ -59,15 +58,13 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setMemberId(memberId);
         commentProductDO.setContent(param.getContent());
         commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
-        if (CommentAnonymousEnum.COMMENT_ANONYMOUS_SUCCESS.equals(param.getAnonymousEnum())) {
-            commentProductDO.setIsAnonymous(true);//匿名
-        } else {
-            commentProductDO.setIsAnonymous(false);
-        }
+        commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
+
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());
         commentProductDO.setGmtModified(new Date());
-        Integer id = commentProductDOMapper.insert(commentProductDO);//新增评价信息
+         commentProductDOMapper.insert(commentProductDO);//新增评价信息
+        Long id =commentProductDO.getId();
         if (!StringUtils.isEmpty(headImg)) {
             String imgs[] = headImg.split(",");
             if (id != null && id > 0) {
@@ -75,7 +72,7 @@ public class CommentProductServiceImpl implements CommentProductService {
                 for (int i = 0; i < imgs.length; i++) {
                     if (!StringUtils.isEmpty(imgs[i])) {
                         CommentImageDO commentImageDO = new CommentImageDO();
-                        commentImageDO.setCommentId(Long.valueOf(id));
+                        commentImageDO.setCommentId(id);
                         commentImageDO.setImgUrl(imgs[i]);
                         commentImageDO.setStatus(true);//有效
                         commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);//评论商品
@@ -88,7 +85,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         }
         // 更新评价状态 发消息
         transactionMainService.sendNotice(param.getOrderId());
-        return id;
+        return id.intValue();
     }
 
     @Override
@@ -196,10 +193,10 @@ public class CommentProductServiceImpl implements CommentProductService {
     @Override
     public CommentGradeBO getCommentAvgGrade(Long productId) {
         CommentProductDOExample commentProductDOExample = new CommentProductDOExample();
-        commentProductDOExample.createCriteria().andProductIdEqualTo (productId);
+        commentProductDOExample.createCriteria().andProductIdEqualTo(productId);
         List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExample(commentProductDOExample);
-        if(commentProductDOS.isEmpty()){
-            return  null;
+        if (commentProductDOS.isEmpty()) {
+            return null;
         }
         Double avgGrade = commentProductDOMapperExtend.selectAvgGrade(productId);
         avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
@@ -207,8 +204,8 @@ public class CommentProductServiceImpl implements CommentProductService {
         CommentProductDOExample example = new CommentProductDOExample();
         example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
                 andProductIdEqualTo(productId);
-        Integer totalCount =commentProductDOMapper.countByExample(example);
-        double goodGrade = new BigDecimal((double) goodCount/totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        Integer totalCount = commentProductDOMapper.countByExample(example);
+        double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
         CommentGradeBO commentGradeBO = new CommentGradeBO();
         commentGradeBO.setAvgGrade(avgGrade);
         commentGradeBO.setGoodGrad(goodGrade);
@@ -226,8 +223,8 @@ public class CommentProductServiceImpl implements CommentProductService {
 
         //查询评价列表
         List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        if(commentProductDOS.isEmpty()){
-            return  null;
+        if (commentProductDOS.isEmpty()) {
+            return null;
         }
         List<CommentProductBO> commentProductBOS = new ArrayList<>();
         for (CommentProductDO commentProductDO : commentProductDOS) {

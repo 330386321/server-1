@@ -97,38 +97,37 @@ public class MerchantStoreController extends BaseController {
             }
 
             //判断回显照片
-            if (!"".equals(merchantStoreParam.getStoreUrl())) {
+            if (!"".equals(merchantStoreParam.getStoreUrl()) && !"null".equals(merchantStoreParam.getStoreUrl()) && merchantStoreParam.getStoreUrl() != null) {
                 merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
             } else {
                 merchantStoreParam.setStoreUrl(otherUrls.toString());
             }
-            if (!"".equals(merchantStoreParam.getEnvironmentUrl())) {
+            if (!"".equals(merchantStoreParam.getEnvironmentUrl()) && !"null".equals(merchantStoreParam.getEnvironmentUrl()) && merchantStoreParam.getEnvironmentUrl() != null) {
                 merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
             } else {
                 merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
             }
-            if (!"".equals(merchantStoreParam.getLogoUrl())) {
+            if (!"".equals(merchantStoreParam.getLogoUrl()) && !"null".equals(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl() != null) {
                 merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
             } else {
                 merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
             }
-            if (!"".equals(merchantStoreParam.getIdcardUrl())) {
+            if (!"".equals(merchantStoreParam.getIdcardUrl()) && !"null".equals(merchantStoreParam.getIdcardUrl()) && merchantStoreParam.getIdcardUrl() != null) {
                 merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
             } else {
                 merchantStoreParam.setIdcardUrl(idCardUrls.toString());
             }
-            if (!"".equals(merchantStoreParam.getLicenseUrl())) {
+            if (!"".equals(merchantStoreParam.getLicenseUrl()) && !"null".equals(merchantStoreParam.getLicenseUrl()) && merchantStoreParam.getLicenseUrl() != null) {
                 merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
             } else {
                 merchantStoreParam.setLicenseUrl(licenseUrls.toString());
             }
-            if (!"".equals(merchantStoreParam.getOtherUrl())) {
+            if (!"".equals(merchantStoreParam.getOtherUrl()) && !"null".equals(merchantStoreParam.getOtherUrl()) && merchantStoreParam.getOtherUrl() != null) {
                 merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
             } else {
                 merchantStoreParam.setOtherUrl(otherUrls.toString());
             }
 
-            merchantStoreParam.setStoreUrl(storeUrls.toString());
             return merchantStoreService.saveMerchantStoreInfo(merchantId, merchantStoreParam);
 
         } catch (Exception e) {

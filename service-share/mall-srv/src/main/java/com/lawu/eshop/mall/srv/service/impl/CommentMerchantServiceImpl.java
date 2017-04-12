@@ -3,7 +3,6 @@ package com.lawu.eshop.mall.srv.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentListParam;
@@ -63,15 +62,13 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setContent(param.getContent());
         commentMerchantDO.setGrade(param.getGradeEnum().val);
         commentMerchantDO.setAvgSpend(param.getAvgSpend());
-        if (CommentAnonymousEnum.COMMENT_ANONYMOUS_SUCCESS.equals(param.getAnonymousEnum())) {
-            commentMerchantDO.setIsAnonymous(true);//匿名
-        } else {
-            commentMerchantDO.setIsAnonymous(false);//不匿名
-        }
+        commentMerchantDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
+
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO.setGmtCreate(new Date());
         commentMerchantDO.setGmtModified(new Date());
-        Integer id = commentMerchantDOMapper.insert(commentMerchantDO);
+       commentMerchantDOMapper.insert(commentMerchantDO);
+        Long id = commentMerchantDO.getId();
         if (!StringUtils.isEmpty(commentPic)) {
             String imgs[] = commentPic.split(",");
             if (id != null && id > 0) {
@@ -79,7 +76,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
                 for (int i = 0; i < imgs.length; i++) {
                     if (!StringUtils.isEmpty(imgs[i])) {
                         CommentImageDO commentImageDO = new CommentImageDO();
-                        commentImageDO.setCommentId(Long.valueOf(id));
+                        commentImageDO.setCommentId(id);
                         commentImageDO.setImgUrl(imgs[i]);
                         commentImageDO.setStatus(true);//有效
                         commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);//评论商家
@@ -91,7 +88,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
             }
         }
         transactionMainService.sendNotice(param.getOrderId());
-        return id;
+        return id.intValue();
     }
 
     @Override
