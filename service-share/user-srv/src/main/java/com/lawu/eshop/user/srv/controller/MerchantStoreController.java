@@ -124,7 +124,7 @@ public class MerchantStoreController extends BaseController {
     public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
         MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantStoreId);
         if (merchantStoreInfoBO == null) {
-            return failCreated(ResultCode.RESOURCE_NOT_FOUND);
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
 
         merchantStoreInfoService.updateMerchantStoreInfo(merchantId, merchantStoreParam, merchantStoreId);
@@ -163,7 +163,7 @@ public class MerchantStoreController extends BaseController {
         //判断门店是否存在
         MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
         if (merchantStoreInfoBO != null) {
-            return failCreated(ResultCode.RECORD_EXIST);
+            return successCreated(ResultCode.RECORD_EXIST);
         }
         merchantStoreInfoService.saveMerchantStoreAuditInfo(merchantId, merchantStoreParam, merchantStoreId);
         return successCreated();
