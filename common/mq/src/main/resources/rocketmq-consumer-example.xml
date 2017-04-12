@@ -18,13 +18,16 @@
 
         <property name="topicsTags">
             <map>
-                <entry key="user_topic" value="tag-reg || tag-xxx|| tag-yyy" />
+                <entry key="user_topic" value="tag-reg || tag-xxx || tag-yyy" />
                 <entry key="order_topic" value="tag-finish" />
             </map>
         </property>
 
+        <!--<property name="messageListenerConcurrently" ref="messageConsumerListener" />-->
+
     </bean>
 
-    <bean id="customConsumerRegister" class="com.lawu.eshop.mq.consumer.CustomConsumerRegister" />
+    <!--需要继承实现监听器-->
+    <!--<bean id="messageConsumerListener" class="com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener" />-->
 
 </beans>
