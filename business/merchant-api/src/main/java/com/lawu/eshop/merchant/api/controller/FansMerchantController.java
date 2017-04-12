@@ -13,7 +13,7 @@ import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
-import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
 import io.swagger.annotations.Api;
@@ -54,23 +54,28 @@ public class FansMerchantController extends BaseController {
         return fansMerchantService.listInviteFans(merchantId, regionPath);
     }
 
-    @ApiOperation(value = "邀请粉丝", notes = "邀请会员成为粉丝。[1004|2007] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "邀请粉丝", notes = "邀请会员成为粉丝。[1004|6002|6024] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "inviteFans", method = RequestMethod.POST)
-    public Result<List<FansMerchantDTO>> inviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                    @RequestParam @ApiParam(required = true, value = "会员编号,以逗号分隔") String nums) {
+    public Result inviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                             @RequestParam @ApiParam(required = true, value = "会员编号,以逗号分隔") String nums) {
         if (StringUtils.isEmpty(nums)) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         String[] numArray = nums.split(",");
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);
-        if (numArray.length > result.getModel().getPoint()) {
-            return successCreated(ResultCode.USER_POINT_NOT_ENOUGH);
+
+        //邀请粉丝扣除积分
+        PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
+        propertyInfoDataParam.setUserNum(userNum);
+        propertyInfoDataParam.setPoint(String.valueOf(numArray.length));
+        Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
+        if (!isSuccess(result)) {
+            return result;
         }
 
-        propertyInfoService.inviteFans(userNum, numArray.length);
+        //发送站内消息
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_STORE);
