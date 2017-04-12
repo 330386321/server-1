@@ -10,6 +10,7 @@ import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.mq.utils.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ import java.io.IOException;
  * @author Leach
  * @date 2017/4/9
  */
+@Service
 public class RocketMQMessageProducerServiceImpl implements MessageProducerService {
 
     private Logger logger = LoggerFactory.getLogger(RocketMQMessageProducerServiceImpl.class);
