@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.param;
 
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.ThirdPayBodyEnum;
 
 import io.swagger.annotations.ApiParam;
 
@@ -15,35 +16,23 @@ import io.swagger.annotations.ApiParam;
  */
 public class ThirdPayParam {
 	
-	@ApiParam (name="totalAmount",required = true, value = "金额")
+	@ApiParam (name="totalAmount",required = true, value = "金额(买单时必传)")
 	private String totalAmount;
 	
-	@ApiParam (name="outTradeNo",required = true, value = "商户订单号")
-	private String outTradeNo;
-	
-	@ApiParam (name="subject",required = true, value = "交易标题")
-	private String subject;
-	
-	@ApiParam (name="bizIds", value = "业务表ID-非必填(订单付款时必填，订单付款时支持多个,用英文逗号分割)")
+	@ApiParam (name="bizIds", value = "业务表ID-非必填(支持多个,用英文逗号分割)")
 	private String bizIds;
 	
-	/**
-	 * 商品描述
-	 * 苹果：商家充值余额I、商家充值积分I、缴纳保证金I、用户充值余额I、用户充值积分I、订单付款I、买单I
-	 * 安卓：商家充值余额A、商家充值积分A、缴纳保证金A、用户充值余额A、用户充值积分A、订单付款A、买单A
-	 * PC：商家充值余额P、商家充值积分P、缴纳保证金P
-	 */
 	@ApiParam (name="body", required = true, value = "商品描述（苹果：商家充值余额I、商家充值积分I、缴纳保证金I、用户充值余额I、用户充值积分I、订单付款I、买单I；安卓：商家充值余额A、商家充值积分A、缴纳保证金A、用户充值余额A、用户充值积分A、订单付款A、买单A；网页：PC：商家充值余额P、商家充值积分P、缴纳保证金P）")
-	private String body;
+	private ThirdPayBodyEnum thirdPayBodyEnum;
 	
 	@ApiParam (name="bizFlagEnum",required = true, value = "交易类型（BUSINESS_PAY_BALANCE:商家充值余额;BUSINESS_PAY_POINT:商家充值积分;BUSINESS_PAY_BOND:缴纳保证金;MEMBER_PAY_BALANCE:用户充值余额;MEMBER_PAY_POINT:用户充值积分;MEMBER_PAY_ORDER：订单付款；MEMBER_PAY_BILL:买单）")
 	private ThirdPartyBizFlagEnum bizFlagEnum;
 	
-	public String getBody() {
-		return body;
+	public ThirdPayBodyEnum getThirdPayBodyEnum() {
+		return thirdPayBodyEnum;
 	}
-	public void setBody(String body) {
-		this.body = body;
+	public void setThirdPayBodyEnum(ThirdPayBodyEnum thirdPayBodyEnum) {
+		this.thirdPayBodyEnum = thirdPayBodyEnum;
 	}
 	public String getBizIds() {
 		return bizIds;
@@ -63,18 +52,4 @@ public class ThirdPayParam {
 	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
 	}
-	public String getOutTradeNo() {
-		return outTradeNo;
-	}
-	public void setOutTradeNo(String outTradeNo) {
-		this.outTradeNo = outTradeNo;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	
-	
 }

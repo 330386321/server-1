@@ -17,7 +17,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.srv.service.BalancePayService;
 
@@ -57,7 +57,7 @@ public class BalancePayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
-		param.setTitle(TransactionTitle.ORDER_PAY);
+		param.setTitle(TransactionTitleEnum.ORDER_PAY.val);
 		int retCode = balancePayService.balancePay(param);
 		return successCreated(retCode);
 	}
@@ -81,7 +81,7 @@ public class BalancePayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
-		param.setTitle(TransactionTitle.PAY);
+		param.setTitle(TransactionTitleEnum.PAY.val);
 		int retCode = balancePayService.balancePay(param);
 		return successCreated(retCode);
 	}
@@ -106,7 +106,7 @@ public class BalancePayController extends BaseController {
 		}
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
-		param.setTitle(TransactionTitle.INTEGRAL_RECHARGE);
+		param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);
 		int retCode = balancePayService.balancePayPoint(param);
 		return successCreated(retCode);
 	}

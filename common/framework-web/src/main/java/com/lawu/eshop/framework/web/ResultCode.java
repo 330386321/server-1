@@ -89,6 +89,7 @@ public class ResultCode {
     public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
     public static final int PROPERTY_CASH_USER_INFO_NULL = 6018;
     public static final int PROPERTY_INFO_POINT_LESS = 6024;
+    public static final int BIZ_TYPE_NULL = 6025;
     
     public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
     public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
@@ -207,6 +208,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CASH_BACKAGE_ACCOUNT_NULL, "账号account不能为空");
         ResultCode.messageMap.put(CASH_BACKAGE_OPER_NULL, "操作类型不能为空");
         ResultCode.messageMap.put(CASH_BACKAGE_FAILURE_REASON_NULL, "操作失败时原因不能为空");
+        ResultCode.messageMap.put(BIZ_TYPE_NULL, "业务类型不能为空");
 
 
         // 商城模块 7xxx

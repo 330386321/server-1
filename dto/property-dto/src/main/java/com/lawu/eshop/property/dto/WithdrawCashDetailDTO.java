@@ -2,14 +2,24 @@ package com.lawu.eshop.property.dto;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class WithdrawCashDetailDTO {
+	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
+	@ApiModelProperty(value = "出账金额", required = true)
 	private BigDecimal cashMoney;//出账金额
+	@ApiModelProperty(value = "商品", required = true)
 	private String title;//商品
+	@ApiModelProperty(value = "提现金额", required = true)
 	private BigDecimal money;//提现金额
+	@ApiModelProperty(value = "状态", required = true)
 	private String cashStatus;
+	@ApiModelProperty(value = "提现时间", required = true)
 	private String cdate;
+	@ApiModelProperty(value = "银行信息", required = true)
 	private String bankInfo;
+	@ApiModelProperty(value = "提现单号", required = true)
 	private String cashNumber;
 	public Long getId() {
 		return id;

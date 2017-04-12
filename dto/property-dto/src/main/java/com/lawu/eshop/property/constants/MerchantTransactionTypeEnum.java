@@ -61,7 +61,12 @@ public enum MerchantTransactionTypeEnum {
 	/**
 	 * 发广告109
 	 */
-	ADD_AD((byte)0x74);
+	ADD_AD((byte)0x74),
+	
+	/**
+	 * 发红包110
+	 */
+	ADD_RED_PACKET((byte)0x75);
 	
 	MerchantTransactionTypeEnum(Byte value){
 		this.value = value;

@@ -4,11 +4,18 @@ import java.math.BigDecimal;
 
 import com.lawu.eshop.property.constants.CashStatusEnum;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class WithdrawCashQueryDTO {
+	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
+	@ApiModelProperty(value = "提现时间", required = true)
 	private String cdate;
+	@ApiModelProperty(value = "提现金额", required = true)
 	private BigDecimal cashMoney;
+	@ApiModelProperty(value = "状态", required = true)
 	private CashStatusEnum cashStatusEnum;
+	@ApiModelProperty(value = "标题", required = true)
 	private String title;
 	public Long getId() {
 		return id;

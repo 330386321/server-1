@@ -35,24 +35,55 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	@Override
 	@Transactional
-	public int doHanlder(PropertyInfoDataParam param) {
+	public int doHanlderMinusPoint(PropertyInfoDataParam param) {
 		int retCode = propertyInfoService.validatePoint(param.getUserNum(), param.getPoint());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
-
 		// 插入积分明细
 		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-		pointDetailSaveDataParam.setTitle(param.getTitle());
+		pointDetailSaveDataParam.setTitle(param.getTransactionTitleEnum().val);
 		pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
 		pointDetailSaveDataParam.setUserNum(param.getUserNum());
-		pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
+		if(param.getMemberTransactionTypeEnum() != null){
+			pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
+		}else if(param.getMerchantTransactionTypeEnum() != null){
+			pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
+		}else{
+			return ResultCode.BIZ_TYPE_NULL;
+		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal("-" + param.getPoint()));
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "M", point);
+
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	@Transactional
+	public int doHanlderAddPoint(PropertyInfoDataParam param) {
+		
+		// 插入积分明细
+		PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
+		pointDetailSaveDataParam.setTitle(param.getTransactionTitleEnum().val);
+		pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
+		pointDetailSaveDataParam.setUserNum(param.getUserNum());
+		if(param.getMemberTransactionTypeEnum() != null){
+			pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
+		}else if(param.getMerchantTransactionTypeEnum() != null){
+			pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
+		}else{
+			return ResultCode.BIZ_TYPE_NULL;
+		}
+		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
+		pointDetailService.save(pointDetailSaveDataParam);
+
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "A", point);
 
 		return ResultCode.SUCCESS;
 	}

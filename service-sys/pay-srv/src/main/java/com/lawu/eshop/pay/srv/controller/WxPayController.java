@@ -81,14 +81,14 @@ public class WxPayController extends BaseController {
 			key = Configure.key;
 		}
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
-		packageParams.put("body", param.getBody());
+		packageParams.put("body", param.getThirdPayBodyEnum().val);
 		packageParams.put("out_trade_no", param.getOutTradeNo());
 		Float fTotalAmount = Float.valueOf(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
 		packageParams.put("total_fee", iTotalAmount + "");
 		packageParams.put("spbill_create_ip", Configure.ip);
 		packageParams.put("notify_url", Configure.notify_url);
-		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getBody()
+		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds());
 
 		String sign = PayCommonUtil.createSign("UTF-8", packageParams, key);

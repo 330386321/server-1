@@ -523,5 +523,18 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		return result;
 	}
+
+	
+	@Override
+	public double selectOrderMoney(String orderIds) {
+		String []orderIdsArray = orderIds.split(",");
+		BigDecimal total = new BigDecimal("0");
+		for(int i = 0 ; i < orderIdsArray.length ; i++){
+			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
+			BigDecimal price = orderDO.getCommodityTotalPrice();
+			total.add(price);
+		}
+		return total.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
 	
 }
