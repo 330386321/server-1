@@ -12,6 +12,11 @@
     <artifactId>business</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>member-api</module>
+        <module>merchant-api</module>
+    </modules>
+
     <dependencies>
 
         <dependency>

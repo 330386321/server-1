@@ -12,6 +12,15 @@
     <artifactId>service-share</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>ad-srv</module>
+        <module>mall-srv</module>
+        <module>order-srv</module>
+        <module>product-srv</module>
+        <module>property-srv</module>
+        <module>user-srv</module>
+    </modules>
+
     <properties>
         <mysql.connector.java.version>5.1.34</mysql.connector.java.version>
         <mybatis.spring.version>1.2.2</mybatis.spring.version>
