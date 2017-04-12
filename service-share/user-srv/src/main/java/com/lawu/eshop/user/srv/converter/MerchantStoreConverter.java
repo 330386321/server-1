@@ -5,6 +5,7 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import org.apache.solr.common.SolrInputDocument;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -263,28 +264,50 @@ public class MerchantStoreConverter {
 
         return merchantStoreNoReasonReturnDTOList;
     }
-    
-    public static MerchantStoreBO convertStoreBO(MerchantStoreDO merchantStoreDO){
-    	if(merchantStoreDO==null){
-    		return null;
-    	}
-    	MerchantStoreBO bo=new MerchantStoreBO();
-    	bo.setLongitude(merchantStoreDO.getLongitude());
-    	bo.setLatitude(merchantStoreDO.getLatitude());
-    	bo.setName(merchantStoreDO.getName());
-    	bo.setId(merchantStoreDO.getId());
-    	return bo;
+
+    public static MerchantStoreBO convertStoreBO(MerchantStoreDO merchantStoreDO) {
+        if (merchantStoreDO == null) {
+            return null;
+        }
+        MerchantStoreBO bo = new MerchantStoreBO();
+        bo.setLongitude(merchantStoreDO.getLongitude());
+        bo.setLatitude(merchantStoreDO.getLatitude());
+        bo.setName(merchantStoreDO.getName());
+        bo.setId(merchantStoreDO.getId());
+        return bo;
     }
-    
-    public static MerchantStoreDTO convertStoreDTO(MerchantStoreBO merchantStoreBO){
-    	if(merchantStoreBO==null){
-    		return null;
-    	}
-    	MerchantStoreDTO dto=new MerchantStoreDTO();
-    	dto.setLongitude(merchantStoreBO.getLongitude());
-    	dto.setLatitude(merchantStoreBO.getLatitude());
-    	dto.setName(merchantStoreBO.getName());
-    	dto.setMerchantStoreId(merchantStoreBO.getId());
-    	return dto;
+
+    public static MerchantStoreDTO convertStoreDTO(MerchantStoreBO merchantStoreBO) {
+        if (merchantStoreBO == null) {
+            return null;
+        }
+        MerchantStoreDTO dto = new MerchantStoreDTO();
+        dto.setLongitude(merchantStoreBO.getLongitude());
+        dto.setLatitude(merchantStoreBO.getLatitude());
+        dto.setName(merchantStoreBO.getName());
+        dto.setMerchantStoreId(merchantStoreBO.getId());
+        return dto;
+    }
+
+    /**
+     * SolrInputDocument
+     *
+     * @param merchantStoreId
+     * @param merchantStoreParam
+     * @return
+     */
+    public static SolrInputDocument convertSolrInputDocument(Long merchantStoreId, MerchantStoreParam merchantStoreParam) {
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField("id", merchantStoreId);
+        document.addField("name_s", merchantStoreParam.getName());
+        document.addField("regionPath_s", merchantStoreParam.getRegionName());
+        document.addField("address_s", merchantStoreParam.getAddress());
+        document.addField("longitude_d", merchantStoreParam.getLongitude());
+        document.addField("latitude_d", merchantStoreParam.getLatitude());
+        document.addField("industryPath_s", merchantStoreParam.getIndustryPath());
+        document.addField("intro_s", merchantStoreParam.getIntro());
+        document.addField("principalName_s", merchantStoreParam.getPrincipalName());
+        document.addField("principalMobile_s", merchantStoreParam.getPrincipalMobile());
+        return document;
     }
 }

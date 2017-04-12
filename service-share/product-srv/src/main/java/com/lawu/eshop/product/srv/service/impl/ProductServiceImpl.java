@@ -18,7 +18,9 @@ import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
+import com.lawu.eshop.solr.SolrUtil;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +102,48 @@ public class ProductServiceImpl implements ProductService {
             productDO.setGmtModified(new Date());
             int row = productDOMapper.updateByPrimaryKeySelective(productDO);
             rows = rows + row;
+        }
+        if (rows == idArray.length) {
+            if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DEL.val || productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DOWN.val) {
+                for (String id : idArray) {
+                    SolrUtil.delSolrDocsById(Long.valueOf(id), SolrUtil.SOLR_PRODUCT_CORE);
+                }
+            } else if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
+                for (String id : idArray) {
+                    ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(id));
+                    SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+
+                    ProductModelDOExample example = new ProductModelDOExample();
+                    example.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
+                    List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(example);
+                    int inventory = 0;
+                    int salesVolume = 0;
+                    double originalPrice = 0;
+                    double price = 0;
+                    int traverseCnt = 0;
+                    if (!productModelDOS.isEmpty()) {
+                        for (ProductModelDO productModelDO : productModelDOS) {
+                            if (traverseCnt == 0) {
+                                price = productModelDO.getPrice().doubleValue();
+                            }
+                            if (productModelDO.getOriginalPrice().doubleValue() > originalPrice) {
+                                originalPrice = productModelDO.getOriginalPrice().doubleValue();
+                            }
+                            if (productModelDO.getPrice().doubleValue() < price) {
+                                price = productModelDO.getPrice().doubleValue();
+                            }
+                            inventory += productModelDO.getInventory();
+                            salesVolume += productModelDO.getSalesVolume();
+                            traverseCnt++;
+                        }
+                    }
+                    document.addField("originalPrice_d", originalPrice);
+                    document.addField("price_d", price);
+                    document.addField("inventory_i", inventory);
+                    document.addField("sales_volume_i", salesVolume);
+                    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+                }
+            }
         }
         return rows;
     }
@@ -213,6 +257,10 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void eidtProduct(Long productId, EditProductDataParam product) {
 
+        int inventory = 0;
+        double originalPrice = 0;
+        double price = 0;
+        int traverseCnt = 0;
         boolean isEdit = true;
         if (productId == 0L || productId == null || productId < 0) {
             //保存商品信息
@@ -249,10 +297,22 @@ public class ProductServiceImpl implements ProductService {
             pmDO.setSalesVolume(dataBO.getSalesVolume());
             pmDO.setOriginalPrice(dataBO.getOriginalPrice());
             pmDO.setPrice(dataBO.getPrice());
-            pmDO.setInventory(Integer.valueOf(dataBO.getInventory()));
+            pmDO.setInventory(dataBO.getInventory());
             pmDO.setGmtCreate(new Date());
             pmDO.setGmtModified(new Date());
             productModelDOMapper.insertSelective(pmDO);
+
+            if (traverseCnt == 0) {
+                price = dataBO.getPrice().doubleValue();
+            }
+            if (dataBO.getOriginalPrice().doubleValue() > originalPrice) {
+                originalPrice = dataBO.getOriginalPrice().doubleValue();
+            }
+            if (dataBO.getPrice().doubleValue() < price) {
+                price = dataBO.getPrice().doubleValue();
+            }
+            inventory += dataBO.getInventory();
+            traverseCnt++;
         }
 
         if (isEdit) {
@@ -291,6 +351,12 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
             productImageDOMapper.insert(pcDO);
         }
+
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productId, product);
+        document.addField("originalPrice_d", originalPrice);
+        document.addField("price_d", price);
+        document.addField("inventory_i", inventory);
+        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
     }
 
 }

@@ -1,10 +1,12 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
@@ -12,6 +14,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import net.sf.json.JSONObject;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,9 +142,16 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                     }
 
+                    SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(auditParam.getMerchantStoreId(),merchantStoreParam);
+                    document.addField("storePic_s", merchantStoreParam.getStoreUrl());
+                    document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
+                    document.addField("buyNumbers_i", merchantStoreDO.getFavoriteNumber());
+                    document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount());
+                    document.addField("averageScore_d", merchantStoreDO.getAverageScore());
+                    document.addField("feedbackRate_d", merchantStoreDO.getFeedbackRate());
+                    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
                 }
             }
-
         }
     }
 }

@@ -42,10 +42,11 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 		
-		<!-- 
+
         <table tableName="product" domainObjectName="ProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <!--
         <table tableName="product_model" domainObjectName="ProductModelDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -57,9 +58,9 @@
         </table>
         <table tableName="product_category" domainObjectName="ProductCategoryeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="recommend_product_category" domainObjectName="RecommendProductCategoryDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
     </context>
 </generatorConfiguration>
