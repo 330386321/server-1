@@ -1,23 +1,13 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商家门店信息转换
