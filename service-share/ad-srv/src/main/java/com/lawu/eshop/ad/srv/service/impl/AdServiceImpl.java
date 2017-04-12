@@ -175,27 +175,24 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setStatus(new Byte("4"));
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
-		if(i>0){
-			AdDO ad= adDOMapper.selectByPrimaryKey(id);
-			if(ad.getType()==3){ //E赞 下架 退还积分
-				PointPoolDOExample ppexample=new PointPoolDOExample();
-				ppexample.createCriteria().andAdIdEqualTo(ad.getId()).andTypeEqualTo(new Byte("1"))
-						                   .andStatusEqualTo(new Byte("0"));
-				List<PointPoolDO> list=pointPoolDOMapper.selectByExample(ppexample);
-				BigDecimal sum=new BigDecimal(0);
-				for (PointPoolDO pointPoolDO : list) {
-					BigDecimal  point=pointPoolDO.getPoint();
-					sum=sum.add(point);
-				}
-			}else{
-				int point= ad.getPoint().intValue();
-				Integer hits=ad.getHits();
-				int count=point*hits;
-				if(count<ad.getTotalPoint().intValue()){//退还积分
-					
-				}
+		AdDO ad= adDOMapper.selectByPrimaryKey(id);
+		if(ad.getType()==3){ //E赞 下架 退还积分
+			PointPoolDOExample ppexample=new PointPoolDOExample();
+			ppexample.createCriteria().andAdIdEqualTo(ad.getId()).andTypeEqualTo(new Byte("1"))
+					                   .andStatusEqualTo(new Byte("0"));
+			List<PointPoolDO> list=pointPoolDOMapper.selectByExample(ppexample);
+			BigDecimal sum=new BigDecimal(0);
+			for (PointPoolDO pointPoolDO : list) {
+				BigDecimal  point=pointPoolDO.getPoint();
+				sum=sum.add(point);
 			}
-			
+		}else{
+			int point= ad.getPoint().intValue();
+			Integer hits=ad.getHits();
+			int count=point*hits;
+			if(count<ad.getTotalPoint().intValue()){//退还积分
+				
+			}
 		}
 		return i;
 	}
@@ -260,9 +257,11 @@ public class AdServiceImpl implements AdService {
 				example.setOrderByClause("gmt_create desc");
 			}else if(adMemberParam.getOrderTypeEnum().val==2){
 				example.setOrderByClause("total_point desc");
+				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
 			}else if(adMemberParam.getOrderTypeEnum().val==3){
 				example.setOrderByClause("point desc");
 				cr.andAdCountGreaterThanOrEqualTo(20);
+				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
 			}
 		}
 		if(adMemberParam.getTypeEnum()!=null){
@@ -364,6 +363,14 @@ public class AdServiceImpl implements AdService {
 		page.setCurrentPage(adPraiseParam.getCurrentPage());
 		page.setRecords(BOS);
 		return page;
+	}
+
+	/**
+	 * 抢赞
+	 */
+	@Override
+	public Integer clickPraise(Long id) {
+		return null;
 	}
 
 }

@@ -81,5 +81,12 @@ public interface AdService {
 	 */
 	Page<AdBO> selectPraiseListByMember(AdPraiseParam adPraiseParam);
 	
+	/**
+	 * 抢赞
+	 * @param id
+	 * @return
+	 */
+	Integer clickPraise(Long id);
+	
 
 }

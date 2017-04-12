@@ -16,5 +16,12 @@ public interface RedPacketService {
 	 * @return
 	 */
 	Integer save(RedPacketParam param,Long merchantId);
+	
+	/**
+	 * 根据商家查询发的红包
+	 * @param merchantId
+	 * @return
+	 */
+	Integer selectCount(Long merchantId);
 
 }

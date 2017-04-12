@@ -41,7 +41,7 @@ public class RedPacketController extends BaseController{
     private PropertyInfoService propertyInfoService;
 	
 	//@Authorization
-    @ApiOperation(value = "红包生成", notes = "红包生成[5000]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "红包生成", notes = "红包生成[5000,5003]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/@ModelAttribute @ApiParam(required = true, value = "红包信息") RedPacketParam param) {

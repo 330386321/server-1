@@ -67,6 +67,7 @@ public class ResultCode {
     public static final int AD_POINT_NOT_ENOUGH = 5000;
     public static final int AD_PUT_NOT_TIME = 5001;
     public static final int AD_FACORITE_EXIST = 5002;
+    public static final int AD_RED_PACKGE_EXIST = 5003;
     
 
     // 资产模块代码 6xxx
@@ -159,6 +160,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
         ResultCode.messageMap.put(AD_FACORITE_EXIST, "广告已经被收藏");
+        ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
 
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
