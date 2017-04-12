@@ -8,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 积分明细转换器
@@ -25,7 +24,6 @@ public class PointDetailConverter {
 
 		PointDetailBO pointDetailBO = new PointDetailBO();
 		BeanUtils.copyProperties(pointDetailDO, pointDetailBO);
-		pointDetailBO.setIntegralDate(DateUtil.getDateFormat(pointDetailDO.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
 
 		return pointDetailBO;
 	}

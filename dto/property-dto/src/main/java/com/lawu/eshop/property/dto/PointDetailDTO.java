@@ -1,6 +1,8 @@
 package com.lawu.eshop.property.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -18,13 +20,13 @@ public class PointDetailDTO implements Serializable {
      * 积分
      */
 	@ApiModelProperty(value = "积分", required = true)
-    private Integer point;
+    private BigDecimal point;
 	
     /**
      * 积分时间
      */
 	@ApiModelProperty(value = "积分时间", required = true)
-    private String integralDate;
+    private Date integralDate;
 
 	public String getTitle() {
 		return title;
@@ -34,19 +36,19 @@ public class PointDetailDTO implements Serializable {
 		this.title = title;
 	}
 
-	public Integer getPoint() {
+	public BigDecimal getPoint() {
 		return point;
 	}
 
-	public void setPoint(Integer point) {
+	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
 
-	public String getIntegralDate() {
+	public Date getIntegralDate() {
 		return integralDate;
 	}
 
-	public void setIntegralDate(String integralDate) {
+	public void setIntegralDate(Date integralDate) {
 		this.integralDate = integralDate;
 	}
 	

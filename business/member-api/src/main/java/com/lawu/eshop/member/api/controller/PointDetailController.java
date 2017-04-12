@@ -15,7 +15,10 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.PointDetailService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PointDetailDTO;
+import com.lawu.eshop.property.dto.PointDetailPageDTO;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 
 import io.swagger.annotations.Api;
@@ -35,6 +38,9 @@ public class PointDetailController extends BaseController {
     @Autowired
     private PointDetailService pointDetailService;
     
+    @Autowired
+    private PropertyInfoService propertyInfoService;
+    
     /**
      * 根据用户编号分页获取积分明细列表。
      * 
@@ -46,12 +52,25 @@ public class PointDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "page", method = RequestMethod.GET)
-    public Result<Page<PointDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
+    public Result<PointDetailPageDTO> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
     		@ModelAttribute @ApiParam(name = "param", value = "查询资料") PointDetailQueryParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
-    	return successGet(pointDetailService.findPageByUserNum(userNum, param));
+    	Result<Page<PointDetailDTO>> resultPagePointDetailDTO = pointDetailService.findPageByUserNum(userNum, param);
+    	if (!isSuccess(resultPagePointDetailDTO)) {
+    		return successGet(resultPagePointDetailDTO.getRet());
+    	}
+    	
+    	Result<PropertyPointDTO> resultResultPropertyPointDTO = propertyInfoService.getPropertyPoint(userNum);
+    	if (!isSuccess(resultResultPropertyPointDTO)) {
+    		return successGet(resultPagePointDetailDTO.getRet());
+    	}
+    	
+    	PointDetailPageDTO pointDetailPageDTO = new PointDetailPageDTO();
+    	pointDetailPageDTO.setPoint(resultResultPropertyPointDTO.getModel().getPoint());
+    	pointDetailPageDTO.setPage(resultPagePointDetailDTO.getModel());
+    	
+    	return successGet(pointDetailPageDTO);
     }
-    
     
 }

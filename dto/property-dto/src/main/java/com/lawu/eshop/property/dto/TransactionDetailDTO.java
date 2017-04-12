@@ -32,7 +32,7 @@ public class TransactionDetailDTO implements Serializable {
      * 交易时间
      */
 	@ApiModelProperty(value = "交易时间", required = true)
-    private String transactionDate;
+    private Date transactionDate;
 
 	public String getTitle() {
 		return title;
@@ -50,12 +50,12 @@ public class TransactionDetailDTO implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getTransactionDate() {
+	public Date getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(String transactionDate) {
+	public void setTransactionDate(Date transactionDate) {
 		this.transactionDate = transactionDate;
 	}
-
+	
 }

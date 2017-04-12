@@ -27,7 +27,7 @@ public class TransactionDetailBO implements Serializable {
     /**
      * 交易时间
      */
-    private String transactionDate;
+    private Date transactionDate;
 
 	public String getTitle() {
 		return title;
@@ -45,11 +45,11 @@ public class TransactionDetailBO implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getTransactionDate() {
+	public Date getTransactionDate() {
 		return transactionDate;
 	}
 
-	public void setTransactionDate(String transactionDate) {
+	public void setTransactionDate(Date transactionDate) {
 		this.transactionDate = transactionDate;
 	}
 	
