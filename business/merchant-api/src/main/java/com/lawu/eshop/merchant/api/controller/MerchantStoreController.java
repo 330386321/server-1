@@ -69,7 +69,7 @@ public class MerchantStoreController extends BaseController {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
-                String fileName = part.getSubmittedFileName();
+                String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
