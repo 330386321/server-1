@@ -12,7 +12,6 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
-import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,6 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	private PropertyInfoDOMapper propertyInfoDOMapper;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
-
-	@Autowired
-	private PointDetailService pointDetailService;
-
 
 
 	@Override
@@ -117,6 +112,46 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			return 0;
 		}
 
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int validateBalance(String userNum, String amount) {
+		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+
+		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+			return ResultCode.PROPERTY_INFO_NULL;
+		}
+
+		PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
+		
+		BigDecimal dbBalance = balanceBO.getBalance();
+		double dBalacne = dbBalance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		double dOrderMoney = new Double(amount).doubleValue();
+		if(dBalacne < dOrderMoney){
+			return ResultCode.PROPERTY_INFO_BALANCE_LESS;
+		}
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int validatePoint(String userNum, String point) {
+		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+
+		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+			return ResultCode.PROPERTY_INFO_NULL;
+		}
+
+		BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
+		double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		double drPoint = new Double(point).doubleValue();
+		if(dPoint < drPoint){
+			return ResultCode.PROPERTY_INFO_POINT_LESS;
+		}
 		return ResultCode.SUCCESS;
 	}
 

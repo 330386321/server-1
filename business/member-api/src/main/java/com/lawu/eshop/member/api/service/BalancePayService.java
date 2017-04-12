@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.BalancePayDataParam;
+import com.lawu.eshop.property.param.BalancePayParam;
 
 @FeignClient(value = "property-srv")
 public interface BalancePayService {
@@ -29,5 +30,14 @@ public interface BalancePayService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.POST, value = "balancePay/billPay")
 	Result billPay(BalancePayDataParam dparam);
+
+	/**
+	 * 余额充值积分
+	 * @param param
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.POST, value = "balancePay/balancePayPoint")
+	Result balancePayPoint(BalancePayParam param);
 
 }

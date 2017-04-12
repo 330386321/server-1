@@ -51,7 +51,17 @@ public enum MerchantTransactionTypeEnum {
 	/**
 	 * 提现108
 	 */
-	WITHDRAW_BACK((byte)0x72);
+	WITHDRAW_BACK((byte)0x72),
+	
+	/**
+	 * 提现109
+	 */
+	INVITE_FANS((byte)0x73),
+	
+	/**
+	 * 发广告109
+	 */
+	ADD_AD((byte)0x74);
 	
 	MerchantTransactionTypeEnum(Byte value){
 		this.value = value;

@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.param;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class PointDetailSaveDataParam implements Serializable {
 	/**
 	 * 积分
 	 */
-	private Integer point;
+	private BigDecimal point;
 
 	/**
 	 * 备注
@@ -78,11 +79,11 @@ public class PointDetailSaveDataParam implements Serializable {
 		this.pointType = pointType;
 	}
 
-	public Integer getPoint() {
+	public BigDecimal getPoint() {
 		return point;
 	}
 
-	public void setPoint(Integer point) {
+	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
 

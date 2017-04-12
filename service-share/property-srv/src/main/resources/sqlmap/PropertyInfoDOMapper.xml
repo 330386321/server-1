@@ -9,7 +9,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_num" property="userNum" jdbcType="VARCHAR" />
     <result column="balance" property="balance" jdbcType="DECIMAL" />
-    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="point" property="point" jdbcType="DECIMAL" />
     <result column="love_account" property="loveAccount" jdbcType="DECIMAL" />
     <result column="pay_password" property="payPassword" jdbcType="CHAR" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
@@ -145,7 +145,7 @@
     insert into property_info (user_num, balance, point, 
       love_account, pay_password, gmt_modified, 
       gmt_create)
-    values (#{userNum,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{point,jdbcType=INTEGER}, 
+    values (#{userNum,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{point,jdbcType=DECIMAL}, 
       #{loveAccount,jdbcType=DECIMAL}, #{payPassword,jdbcType=CHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
@@ -189,7 +189,7 @@
         #{balance,jdbcType=DECIMAL},
       </if>
       <if test="point != null" >
-        #{point,jdbcType=INTEGER},
+        #{point,jdbcType=DECIMAL},
       </if>
       <if test="loveAccount != null" >
         #{loveAccount,jdbcType=DECIMAL},
@@ -232,7 +232,7 @@
         balance = #{record.balance,jdbcType=DECIMAL},
       </if>
       <if test="record.point != null" >
-        point = #{record.point,jdbcType=INTEGER},
+        point = #{record.point,jdbcType=DECIMAL},
       </if>
       <if test="record.loveAccount != null" >
         love_account = #{record.loveAccount,jdbcType=DECIMAL},
@@ -260,7 +260,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       user_num = #{record.userNum,jdbcType=VARCHAR},
       balance = #{record.balance,jdbcType=DECIMAL},
-      point = #{record.point,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=DECIMAL},
       love_account = #{record.loveAccount,jdbcType=DECIMAL},
       pay_password = #{record.payPassword,jdbcType=CHAR},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
@@ -283,7 +283,7 @@
         balance = #{balance,jdbcType=DECIMAL},
       </if>
       <if test="point != null" >
-        point = #{point,jdbcType=INTEGER},
+        point = #{point,jdbcType=DECIMAL},
       </if>
       <if test="loveAccount != null" >
         love_account = #{loveAccount,jdbcType=DECIMAL},
@@ -308,7 +308,7 @@
     update property_info
     set user_num = #{userNum,jdbcType=VARCHAR},
       balance = #{balance,jdbcType=DECIMAL},
-      point = #{point,jdbcType=INTEGER},
+      point = #{point,jdbcType=DECIMAL},
       love_account = #{loveAccount,jdbcType=DECIMAL},
       pay_password = #{payPassword,jdbcType=CHAR},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},

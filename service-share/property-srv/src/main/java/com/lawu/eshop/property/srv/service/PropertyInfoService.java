@@ -66,5 +66,21 @@ public interface PropertyInfoService {
 	 * @return
 	 */
 	int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number);
+	
+	/**
+	 * 校验余额是否足够
+	 * @param userNum 用户编号
+	 * @param amount 金额
+	 * @return
+	 */
+	int validateBalance(String userNum,String amount);
+	
+	/**
+	 * 校验积分是否足够
+	 * @param userNum 用户编号
+	 * @param amount 金额
+	 * @return
+	 */
+	int validatePoint(String userNum,String point);
 
 }

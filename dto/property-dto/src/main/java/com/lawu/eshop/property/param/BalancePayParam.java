@@ -24,13 +24,7 @@ public class BalancePayParam {
 	@ApiParam (name="amount",required = true, value = "金额")
 	private String amount;
 
-	// 交易标题
-	@NotBlank(message = "title不能为空")
-	@ApiParam (name="title",required = true, value = "标题")
-	private String title;
-
 	// 业务表ID(支持多个,用英文逗号分割)
-	@NotBlank(message = "bizIds不能为空")
 	@ApiParam (name="bizIds",required = true, value = "业务表ID(支持多个,用英文逗号分割)")
 	private String bizIds;
 
@@ -40,14 +34,6 @@ public class BalancePayParam {
 
 	public void setAmount(String amount) {
 		this.amount = amount;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	public String getBizIds() {

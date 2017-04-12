@@ -1,10 +1,11 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitle;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.srv.service.InviteFansService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
-import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,11 +31,11 @@ public class InviteFansServiceImpl implements InviteFansService {
     public void inviteFans(String userNum, Integer consumePoint) {
         //插入积分明细
         PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-        pointDetailSaveDataParam.setTitle("邀请粉丝");
+        pointDetailSaveDataParam.setTitle(TransactionTitle.INVITE_FANS);
         pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
         pointDetailSaveDataParam.setUserNum(userNum);
-        pointDetailSaveDataParam.setPointType(DataTransUtil.intToByte(0));
-        pointDetailSaveDataParam.setPoint(consumePoint);
+        pointDetailSaveDataParam.setPointType(MerchantTransactionTypeEnum.INVITE_FANS.getValue());
+        pointDetailSaveDataParam.setPoint(new BigDecimal(consumePoint));
         pointDetailService.save(pointDetailSaveDataParam);
 
         //更新用户资产

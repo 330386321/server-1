@@ -11,7 +11,7 @@
     <result column="point_num" property="pointNum" jdbcType="VARCHAR" />
     <result column="user_num" property="userNum" jdbcType="VARCHAR" />
     <result column="point_type" property="pointType" jdbcType="TINYINT" />
-    <result column="point" property="point" jdbcType="INTEGER" />
+    <result column="point" property="point" jdbcType="DECIMAL" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -146,7 +146,7 @@
       point_type, point, remark, 
       gmt_create)
     values (#{title,jdbcType=VARCHAR}, #{pointNum,jdbcType=VARCHAR}, #{userNum,jdbcType=VARCHAR}, 
-      #{pointType,jdbcType=TINYINT}, #{point,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{pointType,jdbcType=TINYINT}, #{point,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.property.srv.domain.PointDetailDO" >
@@ -195,7 +195,7 @@
         #{pointType,jdbcType=TINYINT},
       </if>
       <if test="point != null" >
-        #{point,jdbcType=INTEGER},
+        #{point,jdbcType=DECIMAL},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -238,7 +238,7 @@
         point_type = #{record.pointType,jdbcType=TINYINT},
       </if>
       <if test="record.point != null" >
-        point = #{record.point,jdbcType=INTEGER},
+        point = #{record.point,jdbcType=DECIMAL},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -262,7 +262,7 @@
       point_num = #{record.pointNum,jdbcType=VARCHAR},
       user_num = #{record.userNum,jdbcType=VARCHAR},
       point_type = #{record.pointType,jdbcType=TINYINT},
-      point = #{record.point,jdbcType=INTEGER},
+      point = #{record.point,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -289,7 +289,7 @@
         point_type = #{pointType,jdbcType=TINYINT},
       </if>
       <if test="point != null" >
-        point = #{point,jdbcType=INTEGER},
+        point = #{point,jdbcType=DECIMAL},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -310,7 +310,7 @@
       point_num = #{pointNum,jdbcType=VARCHAR},
       user_num = #{userNum,jdbcType=VARCHAR},
       point_type = #{pointType,jdbcType=TINYINT},
-      point = #{point,jdbcType=INTEGER},
+      point = #{point,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

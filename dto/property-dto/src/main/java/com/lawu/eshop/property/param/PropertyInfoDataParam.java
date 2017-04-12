@@ -1,9 +1,13 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * 
@@ -15,19 +19,23 @@ import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
  * @date 2017年4月11日 下午5:35:25
  *
  */
-public class BalancePayDataParam extends BalancePayParam{
+public class PropertyInfoDataParam {
 
-	// 用户编号
+	// 用户编号-api传入
 	@NotBlank(message = "userNum不能为空")
 	private String userNum;
-
-	// 用户账号
-	@NotBlank(message = "account不能为空")
-	private String account;
 	
+	// 积分-api传入
+	@NotBlank(message = "point不能为空")
+	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
+	@ApiParam(name = "point", required = true, value = "金额")
+	private String point;
+	
+	
+	//api不需要传
+	private String title;
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
-	private String title;
 
 	public String getUserNum() {
 		return userNum;
@@ -37,20 +45,12 @@ public class BalancePayDataParam extends BalancePayParam{
 		this.userNum = userNum;
 	}
 
-	public String getAccount() {
-		return account;
+	public String getPoint() {
+		return point;
 	}
 
-	public void setAccount(String account) {
-		this.account = account;
-	}
-
-	public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
-		return memberTransactionTypeEnum;
-	}
-
-	public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
-		this.memberTransactionTypeEnum = memberTransactionTypeEnum;
+	public void setPoint(String point) {
+		this.point = point;
 	}
 
 	public String getTitle() {
@@ -59,6 +59,14 @@ public class BalancePayDataParam extends BalancePayParam{
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
+		return memberTransactionTypeEnum;
+	}
+
+	public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
+		this.memberTransactionTypeEnum = memberTransactionTypeEnum;
 	}
 
 	public MerchantTransactionTypeEnum getMerchantTransactionTypeEnum() {

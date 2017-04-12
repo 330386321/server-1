@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.bo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author Sunny
@@ -13,13 +14,13 @@ public class PropertyPointBO implements Serializable {
 	/**
     * 积分
     */
-   private Integer point;
+   private BigDecimal point;
 
-	public Integer getPoint() {
+	public BigDecimal getPoint() {
 		return point;
 	}
 
-	public void setPoint(Integer point) {
+	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
    

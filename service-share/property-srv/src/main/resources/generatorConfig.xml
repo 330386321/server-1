@@ -48,12 +48,7 @@
         <table tableName="bank_account" domainObjectName="BankAccountDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="property_info" domainObjectName="PropertyInfoDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="point_detail" domainObjectName="PointDetailDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        
         <table tableName="love_detail" domainObjectName="LoveDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -62,8 +57,14 @@
         </table>
         <table tableName="property" domainObjectName="PropertyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="withdraw_cash" domainObjectName="WithdrawCashDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="property_info" domainObjectName="PropertyInfoDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="point_detail" domainObjectName="PointDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

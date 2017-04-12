@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,13 +17,13 @@ public class PropertyPointDTO implements Serializable {
     * 积分
     */
 	@ApiModelProperty(name = "point", value= "积分", required = true)
-   private Integer point;
+   private BigDecimal point;
 
-	public Integer getPoint() {
+	public BigDecimal getPoint() {
 		return point;
 	}
 
-	public void setPoint(Integer point) {
+	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
    

@@ -83,6 +83,7 @@ public class ResultCode {
     public static final int PROPERTY_CASH_BANK_NOT_EXIST = 6007;
     public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
     public static final int PROPERTY_CASH_USER_INFO_NULL = 6018;
+    public static final int PROPERTY_INFO_POINT_LESS = 6024;
     
     public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
     public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
@@ -173,6 +174,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
         ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
         ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "余额不足");
+        ResultCode.messageMap.put(PROPERTY_INFO_POINT_LESS, "积分不足");
         ResultCode.messageMap.put(PROPERTY_CASH_SCALE_NULL, "提现比例系统参数未配置");
         ResultCode.messageMap.put(PROPERTY_CASH_PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
