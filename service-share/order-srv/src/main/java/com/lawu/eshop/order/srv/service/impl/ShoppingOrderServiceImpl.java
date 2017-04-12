@@ -1,6 +1,8 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -18,13 +20,14 @@ import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
@@ -108,7 +111,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 	
 	@Override
-	public Page<ShoppingOrderExtendQueryBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignParam param) {
+	public Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		
 		// 组装Criteria
@@ -148,7 +151,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询总记录数
 		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 		
-		Page<ShoppingOrderExtendQueryBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendQueryBO>();
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
 		shoppingOrderItemBOPage.setTotalCount(count.intValue());
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 		
@@ -174,7 +177,60 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
 		
-		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convert(shoppingOrderExtendDOList));
+		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
+		
+		return shoppingOrderItemBOPage;
+	}
+	
+	@Override
+	public Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		
+		// 组装Criteria
+		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
+		
+		if (merchantId != null) {
+			baseCriteria.andMemberIdEqualTo(merchantId);
+		}
+		
+		if (param.getOrderStatus() != null) {
+			// 参数的订单状态是一个数组类型，查询多个参数状态
+			baseCriteria.andOrderStatusIn(Arrays.asList(param.getOrderStatus().getValue()));
+		}
+		
+		if (!StringUtils.isEmpty(param.getKeyword())) {
+			shoppingOrderExtendDOExample.clear();
+			
+			Criteria orderNumCriteria = shoppingOrderExtendDOExample.or();
+			orderNumCriteria.andOrderNumEqualTo(param.getKeyword());
+			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
+			
+			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
+			paroductCriteria.andConsigneeNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
+		}
+		
+		// 查询总记录数
+		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
+		
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
+		shoppingOrderItemBOPage.setTotalCount(count.intValue());
+		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
+		
+		// 如果总记录为0，不再执行后续操作直接返回
+		if (count == null || count <= 0) {
+			return shoppingOrderItemBOPage;
+		}
+		
+		// 分页参数
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		
+		// 默认创建时间排序
+		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
 		return shoppingOrderItemBOPage;
 	}
@@ -187,7 +243,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @return
 	 */
 	@Override
-	public ShoppingOrderExtendDetailBO get(Long id) {
+	public ShoppingOrderExtendBO get(Long id) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.createCriteria().andIdEqualTo(id);
 		
@@ -363,8 +419,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * 修改订单状态为退款中
 	 * 修改订单项的退款状态为待商家确认
 	 * 
-	 * @param shoppingOrderitemId
-	 *            购物订单项id
+	 * @param shoppingOrderItemBO
+	 *            购物订单项
 	 * @param shoppingOrderBO
 	 *            购物订单
 	 * @param param
@@ -373,7 +429,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public Integer requestRefund(Long shoppingOrderitemId, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param) {
+	public Integer requestRefund(ShoppingOrderItemBO shoppingOrderItemBO, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param) {
 		// 更新购物订单的状态
 		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		shoppingOrderDO.setId(shoppingOrderBO.getId());
@@ -386,7 +442,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		// 更新购物订单项状态
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingOrderitemId);
+		shoppingOrderItemDO.setId(shoppingOrderItemBO.getId());
 		shoppingOrderItemDO.setGmtModified(new Date());
 		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		
@@ -406,14 +462,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		// 保存退货详情记录
 		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderitemId);
+		shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemBO.getId());
 		// 根据订单状态是否需要退货
 		if (shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED)) {
 			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.REFUND.getValue());
 		} else{
 			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
 		}
-		shoppingRefundDetailDO.setAmount(shoppingOrderBO.getOrderTotalPrice());
+		// 计算退款金额
+		BigDecimal amount = shoppingOrderItemBO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemBO.getQuantity()));
+		shoppingRefundDetailDO.setAmount(amount);
 		shoppingRefundDetailDO.setReason(param.getReason());
 		shoppingRefundDetailDO.setGmtCreate(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());

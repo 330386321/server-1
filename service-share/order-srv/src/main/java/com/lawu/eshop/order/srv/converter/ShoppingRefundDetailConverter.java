@@ -3,6 +3,10 @@ package com.lawu.eshop.order.srv.converter;
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 
@@ -32,5 +36,42 @@ public class ShoppingRefundDetailConverter {
 		
 		return shoppingRefundDetailBO;
 	}
+	
+	/**
+	 * ShoppingRefundDetailDTO转换
+	 * 
+	 * @param shoppingRefundDetailBO
+	 * @return
+	 */
+	public static ShoppingRefundDetailDTO convert(ShoppingRefundDetailBO shoppingRefundDetailBO) {
+		if (shoppingRefundDetailBO == null) {
+			return null;
+		}
+
+		ShoppingRefundDetailDTO shoppingRefundDetailDTO = new ShoppingRefundDetailDTO();
+		BeanUtils.copyProperties(shoppingRefundDetailBO, shoppingRefundDetailDTO);
+		
+		return shoppingRefundDetailDTO;
+	}
+	
+    /**
+     * ShoppingOrderExpressDTO转换
+     * 
+     * @param shoppingRefundDetailBO
+     * @param expressInquiriesDetailBO
+     * @return
+     */
+    public static ShoppingOrderExpressDTO covert(ShoppingRefundDetailBO shoppingRefundDetailBO, ExpressInquiriesDetailBO expressInquiriesDetailBO) {
+		if(shoppingRefundDetailBO == null){
+			return null;
+		}
+		
+		ShoppingOrderExpressDTO shoppingOrderExpressDTO = new ShoppingOrderExpressDTO();
+		BeanUtils.copyProperties(shoppingRefundDetailBO, shoppingOrderExpressDTO, "expressInquiriesDetailDTO");
+		
+		shoppingOrderExpressDTO.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
+		
+		return shoppingOrderExpressDTO;
+    }
 
 }

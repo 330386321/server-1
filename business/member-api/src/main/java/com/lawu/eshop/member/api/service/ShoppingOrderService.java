@@ -17,7 +17,7 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 
@@ -52,7 +52,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@RequestMapping(value = "shoppingOrder/selectPageByMemberId/{memberId}", method = RequestMethod.POST)
-	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignParam param);
+	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param);
 	
 	/**
 	 * 根据id查询订单详情

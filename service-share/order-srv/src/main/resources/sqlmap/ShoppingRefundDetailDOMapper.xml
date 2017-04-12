@@ -18,10 +18,12 @@
     <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
     <result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
     <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
+    <result column="is_agree" jdbcType="BIT" property="isAgree" />
     <result column="gmt_refund" jdbcType="TIMESTAMP" property="gmtRefund" />
     <result column="gmt_confirmed" jdbcType="TIMESTAMP" property="gmtConfirmed" />
     <result column="gmt_fill" jdbcType="TIMESTAMP" property="gmtFill" />
     <result column="gmt_submit" jdbcType="TIMESTAMP" property="gmtSubmit" />
+    <result column="gmt_intervention" jdbcType="TIMESTAMP" property="gmtIntervention" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
   </resultMap>
@@ -98,7 +100,8 @@
     -->
     id, shopping_order_item_id, type, reason, amount, consignee_name, consignee_address, 
     consignee_mobile, express_company_id, express_company_code, express_company_name, 
-    waybill_num, gmt_refund, gmt_confirmed, gmt_fill, gmt_submit, gmt_create, gmt_modified
+    waybill_num, is_agree, gmt_refund, gmt_confirmed, gmt_fill, gmt_submit, gmt_intervention, 
+    gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample" resultMap="BaseResultMap">
     <!--
@@ -157,15 +160,17 @@
     insert into shopping_refund_detail (shopping_order_item_id, type, reason, 
       amount, consignee_name, consignee_address, 
       consignee_mobile, express_company_id, express_company_code, 
-      express_company_name, waybill_num, gmt_refund, 
-      gmt_confirmed, gmt_fill, gmt_submit, 
-      gmt_create, gmt_modified)
+      express_company_name, waybill_num, is_agree, 
+      gmt_refund, gmt_confirmed, gmt_fill, 
+      gmt_submit, gmt_intervention, gmt_create, 
+      gmt_modified)
     values (#{shoppingOrderItemId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
       #{amount,jdbcType=DECIMAL}, #{consigneeName,jdbcType=VARCHAR}, #{consigneeAddress,jdbcType=VARCHAR}, 
       #{consigneeMobile,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{gmtRefund,jdbcType=TIMESTAMP}, 
-      #{gmtConfirmed,jdbcType=TIMESTAMP}, #{gmtFill,jdbcType=TIMESTAMP}, #{gmtSubmit,jdbcType=TIMESTAMP}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+      #{expressCompanyName,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{isAgree,jdbcType=BIT}, 
+      #{gmtRefund,jdbcType=TIMESTAMP}, #{gmtConfirmed,jdbcType=TIMESTAMP}, #{gmtFill,jdbcType=TIMESTAMP}, 
+      #{gmtSubmit,jdbcType=TIMESTAMP}, #{gmtIntervention,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO">
     <!--
@@ -210,6 +215,9 @@
       <if test="waybillNum != null">
         waybill_num,
       </if>
+      <if test="isAgree != null">
+        is_agree,
+      </if>
       <if test="gmtRefund != null">
         gmt_refund,
       </if>
@@ -221,6 +229,9 @@
       </if>
       <if test="gmtSubmit != null">
         gmt_submit,
+      </if>
+      <if test="gmtIntervention != null">
+        gmt_intervention,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
@@ -263,6 +274,9 @@
       <if test="waybillNum != null">
         #{waybillNum,jdbcType=VARCHAR},
       </if>
+      <if test="isAgree != null">
+        #{isAgree,jdbcType=BIT},
+      </if>
       <if test="gmtRefund != null">
         #{gmtRefund,jdbcType=TIMESTAMP},
       </if>
@@ -274,6 +288,9 @@
       </if>
       <if test="gmtSubmit != null">
         #{gmtSubmit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtIntervention != null">
+        #{gmtIntervention,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
@@ -336,6 +353,9 @@
       <if test="record.waybillNum != null">
         waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.isAgree != null">
+        is_agree = #{record.isAgree,jdbcType=BIT},
+      </if>
       <if test="record.gmtRefund != null">
         gmt_refund = #{record.gmtRefund,jdbcType=TIMESTAMP},
       </if>
@@ -347,6 +367,9 @@
       </if>
       <if test="record.gmtSubmit != null">
         gmt_submit = #{record.gmtSubmit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtIntervention != null">
+        gmt_intervention = #{record.gmtIntervention,jdbcType=TIMESTAMP},
       </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
@@ -377,10 +400,12 @@
       express_company_code = #{record.expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{record.expressCompanyName,jdbcType=VARCHAR},
       waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
+      is_agree = #{record.isAgree,jdbcType=BIT},
       gmt_refund = #{record.gmtRefund,jdbcType=TIMESTAMP},
       gmt_confirmed = #{record.gmtConfirmed,jdbcType=TIMESTAMP},
       gmt_fill = #{record.gmtFill,jdbcType=TIMESTAMP},
       gmt_submit = #{record.gmtSubmit,jdbcType=TIMESTAMP},
+      gmt_intervention = #{record.gmtIntervention,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -427,6 +452,9 @@
       <if test="waybillNum != null">
         waybill_num = #{waybillNum,jdbcType=VARCHAR},
       </if>
+      <if test="isAgree != null">
+        is_agree = #{isAgree,jdbcType=BIT},
+      </if>
       <if test="gmtRefund != null">
         gmt_refund = #{gmtRefund,jdbcType=TIMESTAMP},
       </if>
@@ -438,6 +466,9 @@
       </if>
       <if test="gmtSubmit != null">
         gmt_submit = #{gmtSubmit,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtIntervention != null">
+        gmt_intervention = #{gmtIntervention,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
@@ -465,10 +496,12 @@
       express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
       waybill_num = #{waybillNum,jdbcType=VARCHAR},
+      is_agree = #{isAgree,jdbcType=BIT},
       gmt_refund = #{gmtRefund,jdbcType=TIMESTAMP},
       gmt_confirmed = #{gmtConfirmed,jdbcType=TIMESTAMP},
       gmt_fill = #{gmtFill,jdbcType=TIMESTAMP},
       gmt_submit = #{gmtSubmit,jdbcType=TIMESTAMP},
+      gmt_intervention = #{gmtIntervention,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

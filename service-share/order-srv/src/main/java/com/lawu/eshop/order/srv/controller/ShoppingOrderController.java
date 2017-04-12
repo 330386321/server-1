@@ -21,17 +21,18 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
@@ -99,6 +100,7 @@ public class ShoppingOrderController extends BaseController {
 	}
 
 	/**
+	 * To 用户
 	 * 根据查询参数分页查询
 	 * 
 	 * @param memberId
@@ -108,8 +110,8 @@ public class ShoppingOrderController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectPageByMemberId/{memberId}", method = RequestMethod.POST)
-	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignParam param) {
-		Page<ShoppingOrderExtendQueryBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMemberId(memberId, param);
+	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param) {
+		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMemberId(memberId, param);
 
 		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderExtendQueryDTO>();
 		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
@@ -133,7 +135,7 @@ public class ShoppingOrderController extends BaseController {
 			return successGet(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingOrderExtendDetailBO shoppingOrderExtendDetailBO = shoppingOrderService.get(id);
+		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = shoppingOrderService.get(id);
 
 		if (shoppingOrderExtendDetailBO == null || shoppingOrderExtendDetailBO.getId() == null || shoppingOrderExtendDetailBO.getId() <= 0 || shoppingOrderExtendDetailBO.getItems() == null || shoppingOrderExtendDetailBO.getItems().isEmpty()) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
@@ -264,7 +266,7 @@ public class ShoppingOrderController extends BaseController {
 	}
 	
 	/**
-	 * 商家填写物流信息
+	 * 商家发货填写物流信息
 	 * 并修改购物订单以及购物订单项的状态为待收货
 	 * 
 	 * @param id
@@ -369,7 +371,7 @@ public class ShoppingOrderController extends BaseController {
 		}
 		
 		// 修改购物订单以及订单项状态，保存退款详情记录
-		shoppingOrderService.requestRefund(shoppingOrderitemId, shoppingOrderBO, param);
+		shoppingOrderService.requestRefund(shoppingOrderItemBO, shoppingOrderBO, param);
 
 		return successCreated();
 	}
@@ -395,6 +397,28 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderItemRefundDTOPage.setRecords(ShoppingOrderItemRefundConverter.convertShoppingOrderItemRefundDTOList(shoppingOrderItemRefundBOPage.getRecords()));
 		
 		return successCreated(shoppingOrderItemRefundDTOPage);
+	}
+	
+	/**
+	 * To商家
+	 * 根据查询参数分页查询
+	 * 
+	 * @param merchantId
+	 *            商家id
+	 * @param params
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "selectPageByMerchantId/{merchantId}", method = RequestMethod.POST)
+	public Result<Page<ShoppingOrderQueryToMerchantDTO>> selectPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingOrderQueryForeignToMerchantParam param) {
+		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMerchantId(merchantId, param);
+
+		Page<ShoppingOrderQueryToMerchantDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderQueryToMerchantDTO>();
+		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
+		shoppingOrderExtendQueryDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
+		shoppingOrderExtendQueryDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToMerchantDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
+
+		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
 	
 }

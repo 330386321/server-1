@@ -5,13 +5,14 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendDetailBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendQueryBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 
 /**
  * 购物订单服务接口
@@ -32,6 +33,7 @@ public interface ShoppingOrderService {
 	CommentOrderBO getOrderCommentStatusById(Long orderId);
 
 	/**
+	 * 根据会员id和查询参数分页查询订单列表
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -39,7 +41,16 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return 订单列表
 	 */
-	Page<ShoppingOrderExtendQueryBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignParam param);
+	Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param);
+	
+	/**
+	 * 根据商家id和查询参数分页查询订单列表
+	 * 
+	 * @param merchantId 商家id
+	 * @param param	查询参数
+	 * @return
+	 */
+	Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param);
 
 	/**
 	 * 根据id获取购物订单以及订单项
@@ -48,7 +59,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	ShoppingOrderExtendDetailBO get(Long id);
+	ShoppingOrderExtendBO get(Long id);
 
 	/**
 	 * 根据id获取购物订单
@@ -106,15 +117,15 @@ public interface ShoppingOrderService {
 	/**
 	 * 买家申请退款 修改订单状态为待商家确认
 	 * 
-	 * @param shoppingOrderitemId
-	 *            购物订单项id
+	 * @param shoppingOrderItemBO
+	 *            购物订单项
 	 * @param shoppingOrderBO
 	 *            购物订单
 	 * @param param
 	 *            退款参数
 	 * @return
 	 */
-	Integer requestRefund(Long shoppingOrderitemId, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param);
+	Integer requestRefund(ShoppingOrderItemBO shoppingOrderItemBO, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param);
 
 	/**
 	 * 商家填写物流信息

@@ -70,7 +70,7 @@ public class ShoppingOrderExtendDetailDTO implements Serializable {
     /**
      * 订单的总状态
      */
-	@ApiModelProperty(value = "订单状态|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
+	@ApiModelProperty(value = "订单状态|PENDING 待处理|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
     private ShoppingOrderStatusEnum orderStatus;
 
     /**

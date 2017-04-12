@@ -1,4 +1,4 @@
-package com.lawu.eshop.order.srv.bo;
+package com.lawu.eshop.mall.dto.foreign;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -6,109 +6,107 @@ import java.util.Date;
 
 import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 
-public class ShoppingRefundDetailBO implements Serializable {
+import io.swagger.annotations.ApiModelProperty;
+
+public class ShoppingRefundDetailDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 主键
+	 * 退款详情id
 	 */
+	@ApiModelProperty(value = "退款详情id", required = true)
 	private Long id;
-
-	/**
-	 * 购物订单项id
-	 */
-	private Long shoppingOrderItemId;
 
 	/**
 	 * 退款类型
 	 */
+	@ApiModelProperty(value = "退款类型", required = true)
 	private ShoppingRefundTypeEnum type;
 
 	/**
 	 * 退货原因
 	 */
+	@ApiModelProperty(value = "退款类型", required = true)
 	private String reason;
 
 	/**
 	 * 退款金额
 	 */
+	@ApiModelProperty(value = "退款类型", required = true)
 	private BigDecimal amount;
 
 	/**
 	 * 收货人姓名
 	 */
+	@ApiModelProperty(value = "收货人姓名", required = true)
 	private String consigneeName;
 
 	/**
 	 * 收货人地址
 	 */
+	@ApiModelProperty(value = "收货人地址", required = true)
 	private String consigneeAddress;
 
 	/**
 	 * 收货人手机号码
 	 */
+	@ApiModelProperty(value = "收货人手机号码", required = true)
 	private String consigneeMobile;
-
-	/**
-	 * 快递公司id
-	 */
-	private Integer expressCompanyId;
-
-	/**
-	 * 快递公司编码
-	 */
-	private String expressCompanyCode;
 
 	/**
 	 * 快递公司名称
 	 */
+	@ApiModelProperty(value = "快递公司名称", required = true)
 	private String expressCompanyName;
 
 	/**
 	 * 物流编号
 	 */
+	@ApiModelProperty(value = "物流编号", required = true)
 	private String waybillNum;
 	
     /**
     * 商家是否同意退货申请
     */
+	@ApiModelProperty(value = "商家是否同意退货申请", required = true)
 	private Boolean isAgree;
 	
 	/**
 	 * 退款时间
 	 */
+	@ApiModelProperty(value = "退款时间", required = true)
 	private Date gmtRefund;
 
 	/**
 	 * 商家确认时间
 	 */
+	@ApiModelProperty(value = "商家确认时间", required = true)
 	private Date gmtConfirmed;
 
 	/**
 	 * 商家填写退货地址时间
 	 */
+	@ApiModelProperty(value = "商家填写退货地址时间", required = true)
 	private Date gmtFill;
 
 	/**
 	 * 买家提交退货物流时间
 	 */
+	@ApiModelProperty(value = "买家提交退货物流时间", required = true)
 	private Date gmtSubmit;
 	
     /**
     * 平台介入时间
     */
+	@ApiModelProperty(value = "平台介入时间", required = true)
     private Date gmtIntervention;
 	
 	/**
-	 * 创建时间
+	 * 退款申请时间
 	 */
+	@ApiModelProperty(value = "退款申请时间", required = true)
 	private Date gmtCreate;
-
-	/**
-	 * 更新时间
-	 */
-	private Date gmtModified;
 
 	public Long getId() {
 		return id;
@@ -116,14 +114,6 @@ public class ShoppingRefundDetailBO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getShoppingOrderItemId() {
-		return shoppingOrderItemId;
-	}
-
-	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
-		this.shoppingOrderItemId = shoppingOrderItemId;
 	}
 
 	public ShoppingRefundTypeEnum getType() {
@@ -172,22 +162,6 @@ public class ShoppingRefundDetailBO implements Serializable {
 
 	public void setConsigneeMobile(String consigneeMobile) {
 		this.consigneeMobile = consigneeMobile;
-	}
-
-	public Integer getExpressCompanyId() {
-		return expressCompanyId;
-	}
-
-	public void setExpressCompanyId(Integer expressCompanyId) {
-		this.expressCompanyId = expressCompanyId;
-	}
-
-	public String getExpressCompanyCode() {
-		return expressCompanyCode;
-	}
-
-	public void setExpressCompanyCode(String expressCompanyCode) {
-		this.expressCompanyCode = expressCompanyCode;
 	}
 
 	public String getExpressCompanyName() {
@@ -260,14 +234,6 @@ public class ShoppingRefundDetailBO implements Serializable {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
-	}
-
-	public Date getGmtModified() {
-		return gmtModified;
-	}
-
-	public void setGmtModified(Date gmtModified) {
-		this.gmtModified = gmtModified;
 	}
 
 }

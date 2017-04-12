@@ -25,7 +25,7 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.member.api.service.ProductModelService;
@@ -65,7 +65,7 @@ public class ShoppingOrderController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "selectPageByMemberId", method = RequestMethod.GET)
-    public Result<Page<ShoppingOrderExtendQueryDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "购物订单查询参数") ShoppingOrderQueryForeignParam param) {
+    public Result<Page<ShoppingOrderExtendQueryDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "购物订单查询参数") ShoppingOrderQueryForeignToMemberParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successCreated(shoppingOrderService.selectPageByMemberId(memberId, param));

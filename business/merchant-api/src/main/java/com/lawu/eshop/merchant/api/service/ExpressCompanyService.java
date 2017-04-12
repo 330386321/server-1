@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.service;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -21,5 +22,14 @@ public interface ExpressCompanyService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "expressCompany/list")
     Result<List<ExpressCompanyDTO>> list();
+ 
+	/**
+	 * 根据id查询快递公司
+	 * 
+	 * @param id 快递公司id
+	 * @return
+	 */
+	@RequestMapping(value = "expressCompany/get/{id}", method = RequestMethod.GET)
+	Result<ExpressCompanyDTO> get(@PathVariable("id") Integer id);
     
 }

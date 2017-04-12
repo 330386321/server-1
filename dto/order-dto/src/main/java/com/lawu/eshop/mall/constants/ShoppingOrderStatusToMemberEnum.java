@@ -2,8 +2,6 @@ package com.lawu.eshop.mall.constants;
 
 public enum ShoppingOrderStatusToMemberEnum {
 
-	// 订单状态(0-待付款|1-待发货|2-待收货|3-交易成功|4-交易关闭|5-退款中)
-
 	/**
 	 * 0-待付款
 	 */

@@ -986,6 +986,66 @@ public class ShoppingRefundDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsAgreeIsNull() {
+            addCriterion("is_agree is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeIsNotNull() {
+            addCriterion("is_agree is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeEqualTo(Boolean value) {
+            addCriterion("is_agree =", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeNotEqualTo(Boolean value) {
+            addCriterion("is_agree <>", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeGreaterThan(Boolean value) {
+            addCriterion("is_agree >", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_agree >=", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeLessThan(Boolean value) {
+            addCriterion("is_agree <", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_agree <=", value, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeIn(List<Boolean> values) {
+            addCriterion("is_agree in", values, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeNotIn(List<Boolean> values) {
+            addCriterion("is_agree not in", values, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_agree between", value1, value2, "isAgree");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAgreeNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_agree not between", value1, value2, "isAgree");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtRefundIsNull() {
             addCriterion("gmt_refund is null");
             return (Criteria) this;
@@ -1223,6 +1283,66 @@ public class ShoppingRefundDetailDOExample {
 
         public Criteria andGmtSubmitNotBetween(Date value1, Date value2) {
             addCriterion("gmt_submit not between", value1, value2, "gmtSubmit");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionIsNull() {
+            addCriterion("gmt_intervention is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionIsNotNull() {
+            addCriterion("gmt_intervention is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionEqualTo(Date value) {
+            addCriterion("gmt_intervention =", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionNotEqualTo(Date value) {
+            addCriterion("gmt_intervention <>", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionGreaterThan(Date value) {
+            addCriterion("gmt_intervention >", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_intervention >=", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionLessThan(Date value) {
+            addCriterion("gmt_intervention <", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_intervention <=", value, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionIn(List<Date> values) {
+            addCriterion("gmt_intervention in", values, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionNotIn(List<Date> values) {
+            addCriterion("gmt_intervention not in", values, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionBetween(Date value1, Date value2) {
+            addCriterion("gmt_intervention between", value1, value2, "gmtIntervention");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtInterventionNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_intervention not between", value1, value2, "gmtIntervention");
             return (Criteria) this;
         }
 
