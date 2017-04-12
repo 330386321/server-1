@@ -3,6 +3,7 @@ package com.lawu.eshop.user.param;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import io.swagger.annotations.ApiParam;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -95,6 +96,7 @@ public class MerchantStoreParam {
      * 营业执照有效期
      */
     @ApiParam(name = "licenseIndate", value = "营业执照有效期")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date licenseIndate;
 
     /**

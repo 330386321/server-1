@@ -1,172 +1,164 @@
 package com.lawu.eshop.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiParam;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class MerchantStoreDTO  {
+public class MerchantStoreDTO {
 
 
-    @ApiParam(name = "merchantStoreId",value = "门店id")
+    @ApiParam(name = "merchantStoreId", value = "门店id")
     private Long merchantStoreId;
     /**
-     *
      * 店铺名称
      * merchant_store.name
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "name",value = "店铺名称")
+    @ApiParam(name = "name", value = "店铺名称")
     private String name;
 
     /**
-     *
      * 省市区
      * merchant_store.region_path
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "regionPath",value = "省市区")
+    @ApiParam(name = "regionPath", value = "省市区")
     private String regionPath;
 
     /**
-     *
      * 店铺地址信息
      * merchant_store.address
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "address",value = "店铺地址信息")
+    @ApiParam(name = "address", value = "店铺地址信息")
     private String address;
 
     /**
-     *
      * 经度
      * merchant_store.longitude
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "longitude",value = "经度")
+    @ApiParam(name = "longitude", value = "经度")
     private BigDecimal longitude;
 
     /**
-     *
      * 纬度
      * merchant_store.latitude
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "latitude",value = "纬度")
+    @ApiParam(name = "latitude", value = "纬度")
     private BigDecimal latitude;
 
     /**
-     *
      * 主营业务
      * merchant_store.industry_path
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "industryPath",value = "主营业务")
+    @ApiParam(name = "industryPath", value = "主营业务")
     private String industryPath;
 
     /**
-     *
      * 店铺介绍
      * merchant_store.intro
      *
      * @mbg.generated 2017-03-24 10:29:55
      */
-    @ApiParam(name = "intro",value = "店铺介绍")
+    @ApiParam(name = "intro", value = "店铺介绍")
     private String intro;
 
     /**
      * 负责人
-     *
      */
-    @ApiParam(name = "principalName",value = "负责人")
+    @ApiParam(name = "principalName", value = "负责人")
     private String principalName;
 
     /**
      * 负责人电话
      */
-    @ApiParam(name = "principalMobile",value = "负责人电话")
+    @ApiParam(name = "principalMobile", value = "负责人电话")
     private String principalMobile;
 
     /**
      * 注册公司名称
      */
-    @ApiParam(name = "companyName",value = "注册公司名称")
+    @ApiParam(name = "companyName", value = "注册公司名称")
     private String companyName;
 
     /**
      * 营业执照号码
      */
-    @ApiParam(name = "regNumber",value = "营业执照号码")
+    @ApiParam(name = "regNumber", value = "营业执照号码")
     private String regNumber;
 
     /**
      * 经营住所
      */
-    @ApiParam(name = "companyAddress",value = "经营住所")
+    @ApiParam(name = "companyAddress", value = "经营住所")
     private String companyAddress;
 
     /**
      * 营业执照有效期
      */
-    @ApiParam(name = "licenseIndate",value = "营业执照有效期")
+    @ApiParam(name = "licenseIndate", value = "营业执照有效期")
     private Date licenseIndate;
 
     /**
      * 经营类型
      */
-    @ApiParam(name = "manageType",value = "经营类型")
+    @ApiParam(name = "manageType", value = "经营类型")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private MerchantStoreTypeEnum manageType;
 
     /**
      * 证件类型
      */
-    @ApiParam(name = "certifType",value = "证件类型")
+    @ApiParam(name = "certifType", value = "证件类型")
     private CertifTypeEnum certifType;
 
     /**
-     *
      * 个人经营者身份证号码
      */
-    @ApiParam(name = "operatorCardId",value = "个人经营者身份证号码")
+    @ApiParam(name = "operatorCardId", value = "个人经营者身份证号码")
     private String operatorCardId;
 
     /**
      * 个人经营者姓名
      */
-    @ApiParam(name = "operatorName",value = "个人经营者姓名")
+    @ApiParam(name = "operatorName", value = "个人经营者姓名")
     private String operatorName;
 
     /**
      * 图片类型
      */
-    @ApiParam(name = "type",value = "图片类型")
+    @ApiParam(name = "type", value = "图片类型")
     private MerchantStoreImageEnum type;
 
     /**
      * 图片路径
      */
-    @ApiParam(name = "path",value = "图片路径")
+    @ApiParam(name = "path", value = "图片路径")
     private String path;
 
     /**
      * 门店状态
      */
-    @ApiParam(name = "merchantStatus",value = "门店状态")
+    @ApiParam(name = "merchantStatus", value = "门店状态")
     private MerchantStatusEnum merchantStatus;
 
     /**
      * 门店审核状态
      */
-    @ApiParam(name = "auditSuccess",value = "门店审核状态 false未审核，true 已审核/审核")
-    private boolean auditSuccess =false;
-    
-   
+    @ApiParam(name = "auditSuccess", value = "门店审核状态 false未审核，true 已审核/审核")
+    private boolean auditSuccess = false;
+
 
     public Long getMerchantStoreId() {
         return merchantStoreId;

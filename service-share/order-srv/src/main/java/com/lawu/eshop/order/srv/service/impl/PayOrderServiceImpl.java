@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.PayOrderListParam;
@@ -10,9 +11,9 @@ import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
-import com.lawu.eshop.order.srv.service.impl.transaction.PayOrderTransactionMainServiceImpl;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +31,8 @@ public class PayOrderServiceImpl implements PayOrderService {
     private PayOrderDOMapper payOrderDOMapper;
 
     @Autowired
-    private PayOrderTransactionMainServiceImpl payOrderTransactionMainService;
+    @Qualifier("payOrderTransactionMainServiceImpl")
+    private TransactionMainService payOrderTransactionMainService;
 
     @Override
     @Transactional
