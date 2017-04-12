@@ -22,6 +22,7 @@
         <module>media</module>
         <module>mq</module>
         <module>compensating-transaction</module>
+        <module>solr-util</module>
     </modules>
 
 </project>
