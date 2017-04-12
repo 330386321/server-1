@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.foreign.MemberShoppingCartDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.mall.param.ShoppingCartParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
 
@@ -16,11 +17,12 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderSettlementForeignParam;
 public interface ShoppingCartExtendService {
 	
 	/**
-	 * 
+	 * 保存到购物车
 	 * 
 	 * @param param
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public Result save(Long memberId, ShoppingCartParam param);
 	
 	/**
@@ -32,11 +34,19 @@ public interface ShoppingCartExtendService {
 	Result<List<MemberShoppingCartDTO>> findListByMemberId(Long memberId);
 	
 	/**
-	 * 根据购物车id列表结算购物车的商品。
-	 * 生成多个订单
+	 * 根据购物车id列表生成结算数据
 	 * 
+	 * @param idList 购物车id列表
+	 * @return 返回结算数据
+	 */
+	Result<ShoppingCartSettlementDTO> settlement(List<Long> idList);
+	
+	/**
+	 * 根据结算参数列表批量创建订单
+	 * 
+	 * @param params 订单参数列表
 	 * @return 返回订单的id列表
 	 */
-	Result<List<Long>> settlement(Long memberId, List<ShoppingOrderSettlementForeignParam> params);
+	Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params);
 	
 }
