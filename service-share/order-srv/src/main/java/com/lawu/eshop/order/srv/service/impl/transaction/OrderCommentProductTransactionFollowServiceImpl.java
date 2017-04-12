@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * @date 2017/4/7.
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_MALL_SRV, tags = "order")
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_MALL_SRV, tags = MqConstant.TAG_COMMENT_PRODUCT)
 public class OrderCommentProductTransactionFollowServiceImpl extends AbstractTransactionFollowService<CommentProductNotification, Reply> {
 
     @Autowired

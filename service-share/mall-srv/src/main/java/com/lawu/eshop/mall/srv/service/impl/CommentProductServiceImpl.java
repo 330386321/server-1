@@ -1,7 +1,6 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
@@ -22,6 +21,7 @@ import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
+import com.lawu.eshop.mall.srv.service.impl.transaction.OrderCommentProductTransactionMainServiceImpl;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class CommentProductServiceImpl implements CommentProductService {
     private CommentProductDOMapperExtend commentProductDOMapperExtend;
 
     @Autowired
-    private TransactionMainService transactionMainService;
+    private OrderCommentProductTransactionMainServiceImpl transactionMainService;
 
     @Override
     @Transactional

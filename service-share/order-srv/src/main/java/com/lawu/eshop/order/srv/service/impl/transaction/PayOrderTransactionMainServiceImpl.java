@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @date 2017/4/11.
  */
 @Service("payOrderTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.PAYORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = "store")
+@CompensatingTransactionMain(value = TransactionConstant.PAYORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_PAYORDER)
 public class PayOrderTransactionMainServiceImpl extends AbstractTransactionMainService<PayOrderNotification, Reply> {
 
     @Override

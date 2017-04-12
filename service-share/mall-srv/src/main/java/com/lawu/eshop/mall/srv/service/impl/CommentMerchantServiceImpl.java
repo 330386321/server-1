@@ -21,6 +21,7 @@ import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentMerchantDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentMerchantDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentMerchantService;
+import com.lawu.eshop.mall.srv.service.impl.transaction.OrderCommentMerchantTransactionMainServiceImpl;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,8 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     private CommentImageDOMapper commentImageDOMapper;
     @Autowired
     private CommentMerchantDOMapperExtend commentMerchantDOMapperExtend;
+
+    private OrderCommentMerchantTransactionMainServiceImpl transactionMainService;
 
 
     @Override
@@ -84,6 +87,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
                 }
             }
         }
+        transactionMainService.sendNotice(param.getOrderId());
         return id;
     }
 

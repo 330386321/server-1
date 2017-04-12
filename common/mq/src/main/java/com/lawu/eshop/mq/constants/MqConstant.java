@@ -45,10 +45,23 @@ public class MqConstant {
 
     /******************************************/
     /*******mall-srv模块tag **********/
+    /**
+     * 评论商品时发布的MQ消息
+     */
+    public static final String TAG_COMMENT_PRODUCT = "comment_product";
+    /**
+     * 评论商家时发布MQ消息
+     */
+    public static final String TAG_COMMENT_MERCHANT = "comment_merchant";
 
 
     /******************************************/
     /*******order-srv模块tag **********/
+
+    /**
+     * 买单时发布的MQ消息
+     */
+    public static final String TAG_PAYORDER = "payorder";
 
 
     /******************************************/
@@ -66,9 +79,6 @@ public class MqConstant {
      * 注册时发布的MQ消息tag
      */
     public static final String TAG_REG = "reg";
-
-
-
 
 
 }

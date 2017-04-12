@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
  */
 
 
-@Service("orderCommentTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.COMMENT_PRODUCT, topic = MqConstant.TOPIC_MALL_SRV, tags = "order")
+@Service("orderCommentProductTransactionMainServiceImpl")
+@CompensatingTransactionMain(value = TransactionConstant.COMMENT_PRODUCT, topic = MqConstant.TOPIC_MALL_SRV, tags = MqConstant.TAG_COMMENT_PRODUCT)
 public class OrderCommentProductTransactionMainServiceImpl extends AbstractTransactionMainService<CommentProductNotification, Reply> {
 
     @Override
