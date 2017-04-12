@@ -12,7 +12,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitle;
-import com.lawu.eshop.property.param.BalancePayParam;
+import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
@@ -37,7 +37,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 
 	@Override
 	@Transactional
-	public int orderPay(BalancePayParam param) {
+	public int orderPay(BalancePayDataParam param) {
 		
 		PropertyBalanceBO balanceBO = propertyInfoService.getPropertyBalanceByUserNum(param.getUserNum());
 		BigDecimal dbBalance = balanceBO.getBalance();

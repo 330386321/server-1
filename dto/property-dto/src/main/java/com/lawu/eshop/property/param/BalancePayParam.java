@@ -4,6 +4,8 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * 
  * <p>
@@ -19,23 +21,18 @@ public class BalancePayParam {
 	// 金额
 	@NotBlank(message = "amount不能为空")
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "amount格式错误或小数位不超过2位")
+	@ApiParam (name="amount",required = true, value = "金额")
 	private String amount;
 
 	// 交易标题
 	@NotBlank(message = "title不能为空")
+	@ApiParam (name="title",required = true, value = "标题")
 	private String title;
 
-	// 业务表ID(支持多个,用英文逗号分割，必须与outTradeNo位置一一对应)
+	// 业务表ID(支持多个,用英文逗号分割)
 	@NotBlank(message = "bizIds不能为空")
+	@ApiParam (name="bizIds",required = true, value = "业务表ID(支持多个,用英文逗号分割)")
 	private String bizIds;
-
-	// 用户编号
-	@NotBlank(message = "userNum不能为空")
-	private String userNum;
-
-	// 用户账号
-	@NotBlank(message = "account不能为空")
-	private String account;
 
 	public String getAmount() {
 		return amount;
@@ -59,22 +56,6 @@ public class BalancePayParam {
 
 	public void setBizIds(String bizIds) {
 		this.bizIds = bizIds;
-	}
-
-	public String getUserNum() {
-		return userNum;
-	}
-
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
-	}
-
-	public String getAccount() {
-		return account;
-	}
-
-	public void setAccount(String account) {
-		this.account = account;
 	}
 
 }

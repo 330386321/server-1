@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.BalancePayParam;
+import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.srv.service.BalancePayService;
 
 /**
@@ -47,7 +45,7 @@ public class BalancePayController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "orderPay", method = RequestMethod.POST)
-	public Result orderPay(@RequestBody @Valid BalancePayParam param, BindingResult result) {
+	public Result orderPay(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
 			StringBuffer es = new StringBuffer();
