@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitle;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.srv.service.BalancePayService;
 
@@ -32,8 +34,6 @@ import com.lawu.eshop.property.srv.service.BalancePayService;
 @RequestMapping(value = "balancePay/")
 public class BalancePayController extends BaseController {
 
-//	private static Logger logger = LoggerFactory.getLogger(BalancePayController.class);
-	
 	@Autowired
 	private BalancePayService balancePayService;
 
@@ -55,8 +55,33 @@ public class BalancePayController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		int retCode = balancePayService.orderPay(param);
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
+		param.setTitle(TransactionTitle.ORDER_PAY);
+		int retCode = balancePayService.balancePay(param);
 		return successCreated(retCode);
 	}
 
+	/**
+	 *  买单余额支付
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "billPay", method = RequestMethod.POST)
+	public Result billPay(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
+		param.setTitle(TransactionTitle.PAY);
+		int retCode = balancePayService.balancePay(param);
+		return successCreated(retCode);
+	}
 }

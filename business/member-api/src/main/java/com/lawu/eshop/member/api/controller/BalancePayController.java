@@ -58,5 +58,20 @@ public class BalancePayController extends BaseController {
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 		return balancePayService.orderPay(dparam);
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@Authorization
+	@ApiOperation(value = "买单余额支付", notes = "买单余额支付,[]（杨清华）", httpMethod = "POST")
+	@RequestMapping(value = "billPay", method = RequestMethod.POST)
+	public Result billPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam BalancePayParam param) {
+		BalancePayDataParam dparam = new BalancePayDataParam();
+		dparam.setAmount(param.getAmount());
+		dparam.setBizIds(param.getBizIds());
+		dparam.setTitle(param.getTitle());
+		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+		return balancePayService.billPay(dparam);
+	}
 
 }

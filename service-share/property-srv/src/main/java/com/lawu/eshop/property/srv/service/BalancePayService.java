@@ -5,7 +5,7 @@ import com.lawu.eshop.property.param.BalancePayDataParam;
 public interface BalancePayService {
 
 	/**
-	 * 订单余额支付
+	 * 余额支付(商品订单、买单）
 	 * 
 	 * 1、校验接口参数规则
 	 * 2、判断用户余额是否足够
@@ -15,6 +15,6 @@ public interface BalancePayService {
 	 * @param param
 	 * @return
 	 */
-	int orderPay(BalancePayDataParam param);
+	int balancePay(BalancePayDataParam param);
 
 }

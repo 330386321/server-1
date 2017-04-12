@@ -21,4 +21,13 @@ public interface BalancePayService {
 	@RequestMapping(method = RequestMethod.POST, value = "balancePay/orderPay")
 	Result orderPay(@RequestBody BalancePayDataParam param);
 
+	/**
+	 * 买单余额支付
+	 * @param dparam
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.POST, value = "balancePay/billPay")
+	Result billPay(BalancePayDataParam dparam);
+
 }

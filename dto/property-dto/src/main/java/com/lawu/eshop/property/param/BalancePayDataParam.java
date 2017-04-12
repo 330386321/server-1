@@ -2,6 +2,8 @@ package com.lawu.eshop.property.param;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+
 /**
  * 
  * <p>
@@ -21,6 +23,9 @@ public class BalancePayDataParam extends BalancePayParam{
 	// 用户账号
 	@NotBlank(message = "account不能为空")
 	private String account;
+	
+	private MemberTransactionTypeEnum memberTransactionTypeEnum;
+	private String title;
 
 	public String getUserNum() {
 		return userNum;
@@ -36,6 +41,22 @@ public class BalancePayDataParam extends BalancePayParam{
 
 	public void setAccount(String account) {
 		this.account = account;
+	}
+
+	public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
+		return memberTransactionTypeEnum;
+	}
+
+	public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
+		this.memberTransactionTypeEnum = memberTransactionTypeEnum;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 }

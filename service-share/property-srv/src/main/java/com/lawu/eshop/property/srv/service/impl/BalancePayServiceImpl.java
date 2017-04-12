@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
@@ -37,7 +35,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 
 	@Override
 	@Transactional
-	public int orderPay(BalancePayDataParam param) {
+	public int balancePay(BalancePayDataParam param) {
 		
 		PropertyBalanceBO balanceBO = propertyInfoService.getPropertyBalanceByUserNum(param.getUserNum());
 		BigDecimal dbBalance = balanceBO.getBalance();
@@ -49,10 +47,10 @@ public class BalancePayServiceImpl implements BalancePayService {
 		
 		//新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTitle(TransactionTitle.ORDER_PAY);
+		tdsParam.setTitle(param.getTitle());
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 		tdsParam.setUserNum(param.getUserNum());
-		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
+		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(param.getAmount()));
@@ -66,7 +64,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		infoDoView.setGmtModified(new Date());
 		propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
 		
-		//发消息更新订单状态
+		//发异步消息更新状态
 		String []bizIds = param.getBizIds().split(",");
 		for(int i = 0 ; i < bizIds.length ; i++){
 			transactionMainService.sendNotice(Long.valueOf(bizIds[i]));
@@ -74,5 +72,5 @@ public class BalancePayServiceImpl implements BalancePayService {
 		
 		return ResultCode.SUCCESS;
 	}
-	
+
 }
