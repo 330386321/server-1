@@ -6,11 +6,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import java.io.*;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 文件上传工具类
@@ -291,6 +291,67 @@ public class UploadFileUtil {
         } catch (Exception e) {
             valsMap.put("resultFlag", "1010");
             valsMap.put("msg", "上传图片失败");
+            e.printStackTrace();
+        }
+        return valsMap;
+
+    }
+
+
+    public static Map<String, String> uploadVideo(HttpServletRequest request, String dir) {
+        Map<String, String> valsMap = new HashMap<>();
+        // 设置默认返回类型成功
+        valsMap.put("resultFlag", "0");
+        String bashdir = "G:\\test";// 上传文件根路径
+        FileOutputStream out = null;
+        byte b[] = new byte[1024 * 1024];
+        Collection<Part> parts;
+
+        String videoUrl = "";
+        try {
+            parts = request.getParts();
+            for (Part part : parts) {
+                if (part.getContentType() == null) {
+                    valsMap.put(part.getName(), request.getParameter(part.getName()));
+                } else {
+
+                    String extension = part.getSubmittedFileName();
+                    extension = extension.substring(extension.lastIndexOf("."));
+                    String newfileName = RandomUtil.buildFileName(extension);
+
+                    // 1M=1024k=1048576字节
+                    long fileSize = part.getSize();
+                    if (fileSize > 50 * 1048576) {
+                        valsMap.put("resultFlag", "1021");
+                        valsMap.put("msg", "文件大于50M");
+                        return valsMap;
+                    }
+                    File file = new File(bashdir, dir);
+                    if (!file.exists()) {
+                        file.mkdirs();
+                    }
+
+                    InputStream in = part.getInputStream();
+                    out = new FileOutputStream(new File(file, newfileName));
+
+                    int index = 0;
+                    while ((index = in.read(b)) != -1) {
+                        out.write(b, 0, index);
+                    }
+                    out.flush();
+                    out.close();
+                    in.close();
+
+                    //文件路径，文件类型
+                    videoUrl = bashdir + dir + "/" + newfileName;
+
+                }
+            }
+            valsMap.put("videoUrl", videoUrl);
+            valsMap.put("resultFlag", "0");
+        } catch (Exception e) {
+            valsMap.put("resultFlag", "1020");
+            valsMap.put("msg", "上传视频失败");
             e.printStackTrace();
         }
         return valsMap;
