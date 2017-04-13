@@ -31,7 +31,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 
     @Override
     @Transactional
-    public Integer savePayOrderInfo(Long memberId, PayOrderParam param) {
+    public Long savePayOrderInfo(Long memberId, PayOrderParam param) {
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setMemberId(memberId);
         payOrderDO.setMerchantId(param.getMerchantId());
@@ -41,10 +41,11 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setPayType(param.getPayTypeEnum().val);
         payOrderDO.setGmtCreate(new Date());
         payOrderDO.setGmtModified(new Date());
+        payOrderDO.setMerchantNum(param.getMerchantNum());
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(StatusEnum.STATUS_UNPAY.val);//待支付
-        int id = payOrderDOMapper.insert(payOrderDO);
-        return id;
+        payOrderDOMapper.insert(payOrderDO);
+        return payOrderDO.getId();
     }
 
     @Override

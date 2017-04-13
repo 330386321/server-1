@@ -16,7 +16,7 @@ public interface PayOrderService {
      * @param param
      * @return
      */
-    Integer savePayOrderInfo(Long memberId, PayOrderParam param);
+    Long savePayOrderInfo(Long memberId, PayOrderParam param);
 
     /**
      * 买单记录列表

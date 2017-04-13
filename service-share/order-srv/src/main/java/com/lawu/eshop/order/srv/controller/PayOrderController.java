@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.PayOrderDTO;
+import com.lawu.eshop.mall.dto.PayOrderIdDTO;
 import com.lawu.eshop.mall.param.PayOrderListParam;
 import com.lawu.eshop.mall.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -34,15 +35,17 @@ public class PayOrderController extends BaseController {
      * @return
      */
     @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    public Result savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param) {
+    public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param) {
         if (memberId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Integer id = payOrderService.savePayOrderInfo(memberId, param);
+        Long id = payOrderService.savePayOrderInfo(memberId, param);
         if (id == null || id < 0) {
             return successCreated(ResultCode.SAVE_FAIL);
         }
-        return successCreated(ResultCode.SUCCESS);
+        PayOrderIdDTO orderIdDTO = new PayOrderIdDTO();
+        orderIdDTO.setId(id);
+        return successCreated(orderIdDTO);
     }
 
     @RequestMapping(value = "getpayOrderList/{memberId}", method = RequestMethod.POST)

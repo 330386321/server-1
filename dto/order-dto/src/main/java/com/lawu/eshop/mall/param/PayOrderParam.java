@@ -28,6 +28,8 @@ public class PayOrderParam {
 
     @ApiModelProperty(value = "BALANCE:余额，ALIPAY：支付宝,WX:微信",required = true)
     private TransactionPayTypeEnum payTypeEnum;
+    @ApiModelProperty(value = "商家编号")
+    private String merchantNum;
 
     public Long getMerchantId() {
         return merchantId;
@@ -67,5 +69,13 @@ public class PayOrderParam {
 
     public void setPayTypeEnum(TransactionPayTypeEnum payTypeEnum) {
         this.payTypeEnum = payTypeEnum;
+    }
+
+    public String getMerchantNum() {
+        return merchantNum;
+    }
+
+    public void setMerchantNum(String merchantNum) {
+        this.merchantNum = merchantNum;
     }
 }

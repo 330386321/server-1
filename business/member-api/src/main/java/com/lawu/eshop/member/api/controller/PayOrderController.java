@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.PayOrderDTO;
+import com.lawu.eshop.mall.dto.PayOrderIdDTO;
 import com.lawu.eshop.mall.dto.PayOrderInfoDTO;
 import com.lawu.eshop.mall.param.PayOrderListParam;
 import com.lawu.eshop.mall.param.PayOrderParam;
@@ -43,9 +44,9 @@ public class PayOrderController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     // @Authorization
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
-    public Result savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<PayOrderIdDTO> savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
-        Result result = payOrderService.savePayOrderInfo(memberId, param);
+        Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param);
         return result;
     }
 
