@@ -3,40 +3,40 @@ package com.lawu.eshop.mall.constants;
 public enum ShoppingOrderStatusToMerchantEnum {
 	
 	/**
-	 * 0-待付款|1-待发货|2-待收货|5-退款中
+	 * 1-待付款|2-待发货|3-待收货|6-退款中
 	 * 进行中
 	 */
-	PROCESSING((byte) 0x00, (byte) 0x01, (byte) 0x02, (byte) 0x05),
+	PROCESSING((byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x06),
 	
 	/**
-	 * 0-待付款
+	 * 1-待付款
 	 */
-	PENDING_PAYMENT((byte) 0x00),
+	PENDING_PAYMENT((byte) 0x01),
 
 	/**
-	 * 1-待发货
+	 * 2-待发货
 	 */
-	BE_SHIPPED((byte) 0x01),
+	BE_SHIPPED((byte) 0x02),
 	
 	/**
-	 * 2-待收货
+	 * 3-待收货
 	 */
-	TO_BE_RECEIVED((byte) 0x02),
+	TO_BE_RECEIVED((byte) 0x03),
 	
 	/**
-	 * 5-退款中
+	 * 6-退款中
 	 */
-	REFUNDING((byte) 0x05),
+	REFUNDING((byte) 0x06),
 	
 	/**
 	 * 4-已完成
 	 */
-	COMPLETED((byte) 0x03),
+	COMPLETED((byte) 0x04),
 	
 	/**
-	 * 4-已关闭
+	 * 5-已关闭
 	 */
-	CLOSED((byte) 0x04);
+	CLOSED((byte) 0x05);
 	
 	private Byte[] value;
 

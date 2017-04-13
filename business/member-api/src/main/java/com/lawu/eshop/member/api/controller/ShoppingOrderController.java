@@ -19,6 +19,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -86,13 +87,17 @@ public class ShoppingOrderController extends BaseController {
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public Result<ShoppingOrderExtendDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
+		if (id == null || id <= 0) {
+			return successGet(ResultCode.ID_EMPTY);
+		}
+		
     	Result<ShoppingOrderExtendDetailDTO> resultShoppingOrderExtendDetailDTO = shoppingOrderService.get(id);
     	
     	if (!isSuccess(resultShoppingOrderExtendDetailDTO)) {
     		return successGet(resultShoppingOrderExtendDetailDTO.getRet());
     	}
     	
-    	return successCreated(resultShoppingOrderExtendDetailDTO);
+    	return successGet(resultShoppingOrderExtendDetailDTO);
     }
     
     /**

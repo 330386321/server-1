@@ -9,6 +9,7 @@ import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToMerchantDTO;
+import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 
@@ -157,6 +158,46 @@ public class ShoppingOrderExtendConverter {
 		}
 		
 		return shoppingOrderQueryToMerchantDTOList;
+	}
+	
+	/**
+	 * ShoppingOrderQueryToOperatorDTO转换
+	 * 
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 */
+	public static ShoppingOrderQueryToOperatorDTO convertShoppingOrderQueryToOperatorDTO(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		if (shoppingOrderExtendBO == null) {
+			return null;
+		}
+
+		ShoppingOrderQueryToOperatorDTO shoppingOrderQueryToOperatorDTO = new ShoppingOrderQueryToOperatorDTO();
+		BeanUtils.copyProperties(shoppingOrderExtendBO, shoppingOrderQueryToOperatorDTO, new String[]{"items"});
+		
+		if (shoppingOrderExtendBO.getItems() != null && !shoppingOrderExtendBO.getItems().isEmpty()) {
+			shoppingOrderQueryToOperatorDTO.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
+		}
+		
+		return shoppingOrderQueryToOperatorDTO;
+	}
+	
+	/**
+	 * ShoppingOrderQueryToOperatorDTO List转换
+	 * 
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 */
+	public static List<ShoppingOrderQueryToOperatorDTO> convertShoppingOrderQueryToOperatorDTOList(List<ShoppingOrderExtendBO> shoppingOrderExtendBOList) {
+		if (shoppingOrderExtendBOList == null || shoppingOrderExtendBOList.isEmpty()) {
+			return null;
+		}
+		
+		List<ShoppingOrderQueryToOperatorDTO> shoppingOrderQueryToOperatorDTOList = new ArrayList<ShoppingOrderQueryToOperatorDTO>();
+		for (ShoppingOrderExtendBO shoppingOrderExtendBO : shoppingOrderExtendBOList) {
+			shoppingOrderQueryToOperatorDTOList.add(convertShoppingOrderQueryToOperatorDTO(shoppingOrderExtendBO));
+		}
+		
+		return shoppingOrderQueryToOperatorDTOList;
 	}
 	
 }

@@ -22,6 +22,7 @@ import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
@@ -131,6 +132,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			if (param.getOrderStatus().equals(ShoppingOrderStatusToMemberEnum.BE_EVALUATED)) {
 				baseCriteria.andIsEvaluationEqualTo(false);
 			}
+		} else {
+			//如果查询全部状态的订单,不显示待处理的订单
+			baseCriteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.PENDING.getValue());
 		}
 		
 		if (!StringUtils.isEmpty(param.getKeyword())) {
@@ -196,6 +200,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (param.getOrderStatus() != null) {
 			// 参数的订单状态是一个数组类型，查询多个参数状态
 			baseCriteria.andOrderStatusIn(Arrays.asList(param.getOrderStatus().getValue()));
+		} else {
+			//如果查询全部状态的订单,不显示待处理的订单
+			baseCriteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.PENDING.getValue());
 		}
 		
 		if (!StringUtils.isEmpty(param.getKeyword())) {
@@ -224,6 +231,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		
+		// 默认创建时间排序
+		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		
+		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
+		List<Long> shoppingOrderIdList = shoppingOrderDOExtendMapper.selectShoppingOrderIdByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
@@ -535,6 +551,68 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			total.add(price);
 		}
 		return total.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
+
+	/**
+	 * 根据查询参数分页查询订单列表
+	 * 
+	 * @param param	查询参数
+	 * @return
+	 */
+	@Override
+	public Page<ShoppingOrderExtendBO> selectPage(ShoppingOrderQueryForeignToOperatorParam param) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		// 组装Criteria
+		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
+		
+		if (param.getOrderStatus() != null) {
+			baseCriteria.andOrderStatusEqualTo(param.getOrderStatus().getValue());
+		}
+		
+		if (!StringUtils.isEmpty(param.getKeyword())) {
+			shoppingOrderExtendDOExample.clear();
+			
+			Criteria orderNumCriteria = shoppingOrderExtendDOExample.or();
+			orderNumCriteria.andOrderNumEqualTo(param.getKeyword());
+			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
+			
+			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
+			paroductCriteria.andProductNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
+		}
+		
+		// 过滤重复记录
+		shoppingOrderExtendDOExample.setDistinct(true);
+		
+		// 查询总记录数
+		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
+		
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
+		shoppingOrderItemBOPage.setTotalCount(count.intValue());
+		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
+		
+		// 如果总记录为0，不再执行后续操作直接返回
+		if (count == null || count <= 0) {
+			return shoppingOrderItemBOPage;
+		}
+		
+		// 分页参数
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		
+		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
+		List<Long> shoppingOrderIdList = shoppingOrderDOExtendMapper.selectShoppingOrderIdByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
+		
+		// 默认创建时间排序
+		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
+		
+		return shoppingOrderItemBOPage;
 	}
 	
 }

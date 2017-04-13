@@ -3,24 +3,24 @@ package com.lawu.eshop.mall.constants;
 public enum ShoppingOrderStatusToMemberEnum {
 
 	/**
-	 * 0-待付款
+	 * 1-待付款
 	 */
-	PENDING_PAYMENT((byte) 0x00),
+	PENDING_PAYMENT((byte) 0x01),
 
 	/**
-	 * 1-待发货
+	 * 2-待发货
 	 */
-	BE_SHIPPED((byte) 0x01),
+	BE_SHIPPED((byte) 0x02),
 	
 	/**
-	 * 2-待收货
+	 * 3-待收货
 	 */
-	TO_BE_RECEIVED((byte) 0x02),
+	TO_BE_RECEIVED((byte) 0x03),
 
 	/**
-	 * 3-待评价(订单状态处于交易完成的状态并且未评价)
+	 * 4-待评价(订单状态处于交易完成的状态并且未评价)
 	 */
-	BE_EVALUATED((byte)0x03);
+	BE_EVALUATED((byte)0x04);
 
 	private Byte value;
 

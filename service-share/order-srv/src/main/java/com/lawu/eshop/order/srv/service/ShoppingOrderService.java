@@ -7,6 +7,7 @@ import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
@@ -51,6 +52,14 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param);
+	
+	/**
+	 * 根据查询参数分页查询订单列表
+	 * 
+	 * @param param	查询参数
+	 * @return
+	 */
+	Page<ShoppingOrderExtendBO> selectPage(ShoppingOrderQueryForeignToOperatorParam param);
 
 	/**
 	 * 根据id获取购物订单以及订单项

@@ -7,7 +7,7 @@ import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderQueryToMerchantDTO implements Serializable {
+public class ShoppingOrderQueryToOperatorDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
