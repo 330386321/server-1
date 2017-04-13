@@ -75,7 +75,7 @@ public class PayOrderController extends BaseController {
             MerchantStoreDTO storeInfo = merchantStoreService.findStoreNameAndImgByMerchantId(payOrderDTO.getMerchantId());
             if (storeInfo != null) {
                 payOrderInfoDTO.setName(storeInfo.getName());
-                payOrderInfoDTO.setImgUrl(storeInfo.getPath());
+                payOrderInfoDTO.setImgUrl(storeInfo.getStoreUrl());
             }
             payOrderInfoDTOS.add(payOrderInfoDTO);
         }
