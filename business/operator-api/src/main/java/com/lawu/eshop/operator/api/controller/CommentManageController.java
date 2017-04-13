@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * @author zhangyong
  * @date 2017/4/7.
  */
-@Api(value = "commentManage")
+@Api(tags = "commentManage")
 @RestController
 @RequestMapping("commentManage/")
 public class CommentManageController extends BaseController{
