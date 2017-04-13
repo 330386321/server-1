@@ -40,6 +40,8 @@ public class MerchantStoreProfileBO {
      */
     private String principalMobile;
 
+    private Byte manageType;
+
 
 
     public Long getMerchantId() {
@@ -80,5 +82,13 @@ public class MerchantStoreProfileBO {
 
     public void setPrincipalMobile(String principalMobile) {
         this.principalMobile = principalMobile;
+    }
+
+    public Byte getManageType() {
+        return manageType;
+    }
+
+    public void setManageType(Byte manageType) {
+        this.manageType = manageType;
     }
 }

@@ -30,6 +30,7 @@ public class MerchantStoreConverter {
         merchantStoreProfileBO.setMerchantId(merchantStoreProfileDO.getMerchantId());
         merchantStoreProfileBO.setRegNumber(merchantStoreProfileDO.getRegNumber());
         merchantStoreProfileBO.setOperatorCardId(merchantStoreProfileDO.getOperatorCardId());
+        merchantStoreProfileBO.setManageType(merchantStoreProfileDO.getManageType());
         return merchantStoreProfileBO;
 
     }
@@ -95,6 +96,7 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setStoreUrl(merchantStoreInfoBO.getStoreUrl());
         merchantStoreDTO.setAuditSuccess(merchantStoreInfoBO.isAuditSuccess());
         merchantStoreDTO.setMerchantStatus(merchantStoreInfoBO.getStatusEnum());
+        merchantStoreDTO.setRegionName(merchantStoreInfoBO.getRegionName());
 
         return merchantStoreDTO;
     }

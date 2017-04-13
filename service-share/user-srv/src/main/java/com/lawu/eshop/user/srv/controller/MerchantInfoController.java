@@ -3,17 +3,16 @@ package com.lawu.eshop.user.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
-import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +34,9 @@ public class MerchantInfoController extends BaseController{
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
+    @Autowired
+    private MerchantStoreProfileService merchantStoreProfileService;
+
     /**
      * 设置网站链接
      * @param merchantProfileParam
@@ -55,30 +57,39 @@ public class MerchantInfoController extends BaseController{
      * @param merchantProfileId
      * @return
      */
-    @RequestMapping(value = "findMerchantProfileInfo/{merchantProfileId}", method = RequestMethod.GET)
-    public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId){
-        //商家扩展信息
-        MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
-        if(merchantProfileBO == null){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+    @RequestMapping(value = "getCurrentMerchantInfo/{merchantId}", method = RequestMethod.GET)
+    public Result<MerchantInfoDTO> getCurrentMerchantInfo(@PathVariable("merchantId") Long merchantId){
+
+        MerchantInfoDTO merchantInfoDTO = new MerchantInfoDTO();
         // 商家基本信息
-        MerchantInfoBO merchantInfoBO = merchantService.findMerchantInfo(merchantProfileId);
+        MerchantInfoBO merchantInfoBO = merchantService.findMerchantInfo(merchantId);
         if(merchantInfoBO == null){
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        MerchantInfoDTO merchantInfoDTO = MerchantInfoConverter.coverConverDTO(merchantProfileBO,merchantInfoBO);
-        if(merchantInfoDTO == null){
-            return successGet();
-        }else{
-            //门店信息
-            MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantProfileId);
-            if(merchantStoreBO != null){
-                merchantInfoDTO.setAccount(merchantStoreBO.getPrincipalMobile());
-                merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
+        //门店信息
+        merchantInfoDTO.setAccount(merchantInfoBO.getAccount());
+        merchantInfoDTO.setHeadimg(merchantInfoBO.getHeadimg());
+        MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+        if(merchantStoreBO != null){
+            //门店ID
+            merchantInfoDTO.setMerchantStoreId(merchantStoreBO.getMerchantStoreId());
+            merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
+            //门店类型
+            MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreProfileService.findMerchantStoreInfo(merchantId);
+            merchantInfoDTO.setStoreTypeEnum(MerchantStoreTypeEnum.getEnum(merchantStoreProfileBO.getManageType()));
+
+            //商家扩展信息
+            MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
+            merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());
+            merchantInfoDTO.setInviteMerchantCount(merchantProfileBO.getInviteMerchantCount());
+            //查询门店审核状态
+            MerchantStoreAuditBO auditBO = merchantStoreInfoService.findStoreAuditInfo(merchantId);
+            if(auditBO != null){
+                merchantInfoDTO.setAuditStatusEnum(MerchantAuditStatusEnum.getEnum(auditBO.getStatus()));
             }
-            return successGet(merchantInfoDTO);
         }
+        return successGet(merchantInfoDTO);
+
 
     }
 

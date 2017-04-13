@@ -1,8 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import io.swagger.annotations.ApiParam;
-
-import java.util.Date;
 
 /**
  * 商家扩展信息表
@@ -40,6 +39,15 @@ public class MerchantInfoDTO {
      */
     @ApiParam(name = "principalName ",value = "负责人名字")
     private String principalName;
+
+    @ApiParam(name = "merchantStoreId ",value = "门店ID")
+    private Long merchantStoreId;
+
+    @ApiParam(name = "merchantStoreId ",value = "门店审核状态")
+    private MerchantAuditStatusEnum auditStatusEnum;
+
+    @ApiParam(name = "merchantStoreId ",value = "门店类型:NORMAL_MERCHANT:普通商铺,ENTITY_MERCHANT:实体商铺")
+    private MerchantStoreTypeEnum storeTypeEnum;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -79,5 +87,29 @@ public class MerchantInfoDTO {
 
     public void setPrincipalName(String principalName) {
         this.principalName = principalName;
+    }
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
+    }
+
+    public MerchantAuditStatusEnum getAuditStatusEnum() {
+        return auditStatusEnum;
+    }
+
+    public void setAuditStatusEnum(MerchantAuditStatusEnum auditStatusEnum) {
+        this.auditStatusEnum = auditStatusEnum;
+    }
+
+    public MerchantStoreTypeEnum getStoreTypeEnum() {
+        return storeTypeEnum;
+    }
+
+    public void setStoreTypeEnum(MerchantStoreTypeEnum storeTypeEnum) {
+        this.storeTypeEnum = storeTypeEnum;
     }
 }

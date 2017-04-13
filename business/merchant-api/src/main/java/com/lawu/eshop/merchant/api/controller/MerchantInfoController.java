@@ -46,10 +46,10 @@ public class MerchantInfoController extends BaseController {
     @ApiOperation(value = "查询商家主页基本信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getMerchantByAccount", method = RequestMethod.GET)
-    public Result<MerchantInfoDTO> getMerchantByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    @RequestMapping(value = "getCurrentMerchantInfo", method = RequestMethod.GET)
+    public Result<MerchantInfoDTO> getCurrentMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
-        Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(id);
+        Result<MerchantInfoDTO> result = merchantProfileService.getCurrentMerchantInfo(id);
         return result;
     }
 

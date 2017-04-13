@@ -259,7 +259,7 @@ public class MerchantStoreController extends BaseController {
         }
         MerchantStoreDTO merchantStoreDTO = new MerchantStoreDTO();
         merchantStoreDTO.setName(merchantStoreInfoBO.getName());
-        merchantStoreDTO.setPath(merchantStoreInfoBO.getPath());
+        merchantStoreDTO.setStoreUrl(merchantStoreInfoBO.getStoreUrl());
         return merchantStoreDTO;
     }
 }

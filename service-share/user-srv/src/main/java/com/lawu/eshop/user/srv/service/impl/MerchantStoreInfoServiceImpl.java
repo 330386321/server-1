@@ -6,11 +6,7 @@ import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.*;
@@ -459,6 +455,20 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             }
         }
         return merchantStoreInfoBO;
+    }
+
+    @Override
+    public MerchantStoreAuditBO findStoreAuditInfo(Long merchantId) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
+        if(merchantStoreAuditDOS.isEmpty()){
+            return  null;
+        }
+        MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
+        merchantStoreAuditBO.setId(merchantStoreAuditDOS.get(0).getId());
+        merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
+        return merchantStoreAuditBO;
     }
 
 }

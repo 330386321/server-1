@@ -73,4 +73,6 @@ public interface MerchantStoreInfoService {
 	CashUserInfoBO findCashUserInfo(Long id);
 
     MerchantStoreInfoBO findStoreNameAndImgByMerchantId(Long merchantId);
+
+    MerchantStoreAuditBO findStoreAuditInfo(Long merchantId);
 }

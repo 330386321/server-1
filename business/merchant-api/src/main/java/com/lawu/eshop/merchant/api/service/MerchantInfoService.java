@@ -26,8 +26,8 @@ public interface MerchantInfoService {
      * @param merchantProfileId
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value ="merchantInfo/findMerchantProfileInfo/{merchantProfileId}")
-    Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId);
+    @RequestMapping(method = RequestMethod.GET, value ="merchantInfo/getCurrentMerchantInfo/{merchantId}")
+    Result<MerchantInfoDTO> getCurrentMerchantInfo(@PathVariable("merchantId") Long merchantId);
 
     @RequestMapping(value = "merchantInfo/getMerchantSizeLink/{merchantId}",method = RequestMethod.GET)
     public Result<MerchantSizeLinkDTO> getMerchantSizeLink(@PathVariable("merchantId") Long merchantId);
