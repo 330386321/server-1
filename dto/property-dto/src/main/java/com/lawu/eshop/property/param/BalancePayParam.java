@@ -20,7 +20,7 @@ public class BalancePayParam {
 
 	// 金额
 	@NotBlank(message = "amount不能为空")
-	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "amount格式错误或小数位不超过2位")
+	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "amount格式错误要求数字或小数位不超过2位")
 	@ApiParam (name="amount",required = true, value = "金额")
 	private String amount;
 

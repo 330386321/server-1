@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.constants;
 
+import io.swagger.annotations.ApiParam;
+
 /**
  * 
  * <p>
@@ -11,6 +13,7 @@ package com.lawu.eshop.property.constants;
  */
 public enum ThirdPayBodyEnum {
 	
+	@ApiParam(name="B_RECHARGE_BALANCE_I",value="商家充值余额I")
 	B_RECHARGE_BALANCE_I("商家充值余额I"),
 	B_RECHARGE_POINT_I("商家充值积分I"),
 	B_PAY_BOND_I("缴纳保证金I"),

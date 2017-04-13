@@ -60,12 +60,15 @@
         </table>
         <table tableName="withdraw_cash" domainObjectName="WithdrawCashDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="property_info" domainObjectName="PropertyInfoDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="point_detail" domainObjectName="PointDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="recharge" domainObjectName="RechargeDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
     </context>
 </generatorConfiguration>

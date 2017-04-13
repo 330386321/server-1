@@ -11,4 +11,10 @@ public class PropertyType {
 	//保证金
 	public final static String MERCHANT_BONT = "merchant_bont";
 	public final static String MERCHANT_BONT_DEFAULT = "1000";
+	
+	//商家第三方充值积分比例
+	public final static String MERCHANT_THIRD_PAY_POINT = "b_third_pay_point";
+	//用户第三方充值积分比例
+	public final static String MEMBER_THIRD_PAY_POINT = "m_third_pay_point";
+	public final static String THIRD_PAY_POINT_DEFAULT = "1";
 }
