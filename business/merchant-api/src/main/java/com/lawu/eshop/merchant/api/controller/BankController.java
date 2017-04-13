@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiResponse;
  */
 @Api(tags = "bank")
 @RestController
-@RequestMapping(value = "merchant/bank/")
+@RequestMapping(value = "bank/")
 public class BankController extends BaseController{
 	
 	@Resource 
