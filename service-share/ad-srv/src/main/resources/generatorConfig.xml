@@ -45,15 +45,16 @@
 		<table tableName="point_pool" domainObjectName="PointPoolDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="ad" domainObjectName="AdDO">
+       
+        <!-- <table tableName="ad_platform" domainObjectName="AdPlatformDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+         <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="red_packet" domainObjectName="RedPacketDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table> 
-        <!-- <table tableName="ad_platform" domainObjectName="AdPlatformDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="favorite_ad" domainObjectName="FavoriteAdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

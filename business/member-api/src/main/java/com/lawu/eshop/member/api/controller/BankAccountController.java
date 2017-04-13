@@ -2,13 +2,13 @@ package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -17,7 +17,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.BankAccountService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
 
@@ -38,6 +40,9 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private BankAccountService bankAccountService;
+	
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
@@ -56,10 +61,16 @@ public class BankAccountController extends BaseController{
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    						 @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                              @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-        Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
-        return rs;
+		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
+		if(flag.getModel()!=null && (Boolean)flag.getModel()){
+			 Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
+			 return rs;
+		}else{
+			 return flag;
+		}
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")

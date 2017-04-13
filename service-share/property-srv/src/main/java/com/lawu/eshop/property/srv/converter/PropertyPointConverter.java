@@ -24,6 +24,7 @@ public class PropertyPointConverter {
         }
 
         PropertyPointBO propertyPointBO = new PropertyPointBO();
+        propertyPointBO.setId(propertyInfoDO.getId());
         propertyPointBO.setPoint(propertyInfoDO.getPoint());
         return  propertyPointBO;
     }

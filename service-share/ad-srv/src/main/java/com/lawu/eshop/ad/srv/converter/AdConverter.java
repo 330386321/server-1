@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.solr.common.SolrInputDocument;
+
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -141,5 +143,21 @@ public class AdConverter {
 		}
 		return DTOS;
 	}
+	
+	
+	 /**
+     * SolrInputDocument
+     *
+     * @param productDO
+     * @return
+     */
+    public static SolrInputDocument convertSolrInputDocument(AdDO adDO) {
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField("id", adDO.getId());
+        document.addField("mediaUrl_s", adDO.getMediaUrl());
+        document.setField("title_s", adDO.getTitle());
+        document.addField("content_s", adDO.getContent());
+        return document;
+    }
 
 }

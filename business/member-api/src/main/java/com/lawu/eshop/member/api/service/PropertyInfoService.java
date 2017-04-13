@@ -55,4 +55,14 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/propertyPoint/{userNum}", method = RequestMethod.GET)
     public Result<PropertyPointDTO> getPropertyPoint(@PathVariable("userNum") String userNum);
+    
+    /**
+     * 验证支付密码
+     *
+     * @param userNum
+     * @param payPwd
+     * @return
+     */
+    @RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
+    Result varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -92,7 +93,7 @@ public class AdServiceImpl implements AdService {
 			if(adParam.getPutWayEnum().val==3)
 				adDO.setRadius(adParam.getRadius());
 		}else if(adParam.getTypeEnum().val==2){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
+			adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val); //视频广告默认为审核中
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
@@ -115,9 +116,13 @@ public class AdServiceImpl implements AdService {
 			}
 			
 		}
-		
 		//发送消息，通知其他模块处理事务 积分的处理
-		//transactionMainService.sendNotice(merchantId);
+		mctransactionMainAddService.sendNotice(adDO.getId());
+		 SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+	       /* document.addField("originalPrice_d", originalPrice);
+	        document.addField("price_d", price);
+	        document.addField("inventory_i", inventory);
+	        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);*/
 		return i;
 	}
 	
@@ -189,21 +194,12 @@ public class AdServiceImpl implements AdService {
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad= adDOMapper.selectByPrimaryKey(id);
 		if(ad.getType()==3){ //E赞 下架 退还积分
-			PointPoolDOExample ppexample=new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(ad.getId()).andTypeEqualTo(new Byte("1"))
-					                   .andStatusEqualTo(new Byte("0"));
-			List<PointPoolDO> list=pointPoolDOMapper.selectByExample(ppexample);
-			BigDecimal sum=new BigDecimal(0);
-			for (PointPoolDO pointPoolDO : list) {
-				BigDecimal  point=pointPoolDO.getPoint();
-				sum=sum.add(point);
-			}
-			//matransactionMainAddService.sendNotice(id);
+			matransactionMainAddService.sendNotice(ad.getId());
 		}else{
-			int point= ad.getPoint().intValue();
+			BigDecimal point= ad.getPoint();
 			Integer hits=ad.getHits();
-			int count=point*hits;
-			if(count<ad.getTotalPoint().intValue()){//退还积分
+			BigDecimal count=point.multiply(new BigDecimal(hits));
+			if(ad.getTotalPoint().compareTo(count)==1){//退还积分
 				matransactionMainAddService.sendNotice(id);
 			}
 		}
@@ -393,17 +389,18 @@ public class AdServiceImpl implements AdService {
 			ad.setId(memberId);
 			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 			adDOMapper.updateByPrimaryKeySelective(ad);
+			return 1;
 		}else{
 			PointPoolDO pointPoolDO=list.get(0);
 			pointPoolDO.setMemberId(memberId);
-			pointPoolDO.setNum(num);
+			pointPoolDO.setMemberNum(num);
 			pointPoolDO.setStatus(new Byte("1"));
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
+			return 2;
 		}
 		
-		return null;
 	}
 
 }

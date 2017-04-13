@@ -20,6 +20,8 @@ import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.ad.srv.thread.AdClickPraiseThread;
+import com.lawu.eshop.ad.srv.thread.ClickPraisePoolManager;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -185,6 +187,26 @@ public class AdController extends BaseController{
 		pageDTO.setTotalCount(pageBO.getTotalCount());
 		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
 		return  successAccepted(pageDTO);
+    }
+	
+	
+	/**
+	 * 会员E赞
+	 * @param adMerchantParam
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "clickPraise", method = RequestMethod.GET)
+    public Result clickPraise(@RequestParam Long id,@RequestParam Long memberId,@RequestParam String num) {
+		Integer  i=adService.clickPraise(id, memberId, num);
+		if(i==1){
+			return successCreated(ResultCode.AD_PRAISE_PUTED);
+		}else if(i==2){
+			return successCreated(ResultCode.SUCCESS);
+		}else{
+			return successCreated(ResultCode.FAIL);
+		}
+	
     }
 
 }

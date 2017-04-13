@@ -18,8 +18,8 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
  * @date 2017/4/12
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_ME_CUT_POINT)
-public class AdMerchantCutPointTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_RP_ME_CUT_POINT)
+public class RedPacketMerchantCutPointTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
 
 	    
 	    @Autowired

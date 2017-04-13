@@ -24,5 +24,9 @@ public interface PointPoolService {
 	 * @return
 	 */
 	Boolean selectStatusByMember(Long adId,Long memberId);
+	
+
+	
+	
 
 }

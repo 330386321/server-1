@@ -23,6 +23,6 @@ public interface RedPacketService {
 	 * @return
 	 */
 	@RequestMapping(value = "redPacket/getRedPacket", method = RequestMethod.GET)
-    public Result<RedPacketDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId);
+    public Result<RedPacketDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
 
 }

@@ -11,10 +11,22 @@ public class PropertyPointBO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Long id;
+	
 	/**
     * 积分
     */
    private BigDecimal point;
+   
+   
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public BigDecimal getPoint() {
 		return point;

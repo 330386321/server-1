@@ -31,6 +31,14 @@ public interface RedPacketService {
 	 * @param memberId
 	 * @return
 	 */
-	BigDecimal getRedPacket(Long merchantId ,Long  memberId);
+	BigDecimal getRedPacket(Long merchantId ,Long  memberId,String memberNum);
+	
+	
+	/**
+	 * 根据用户查询是否已经抢到红包
+	 * @param memberId
+	 * @return
+	 */
+	Boolean selectRedPacketByMember(Long merchantId,Long memberId);
 
 }

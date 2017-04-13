@@ -45,12 +45,11 @@ public class RedPacketController extends BaseController{
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
     	PropertyPointDTO propertyPointDTO=rs.getModel();
-    	if(param.getTotlePoint().intValue()>propertyPointDTO.getPoint().intValue()){
+    	if(param.getTotlePoint().compareTo(propertyPointDTO.getPoint())==1){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	Result redPacket=redPacketService.save(param, merchantId,userNum);
     	return redPacket;
-    	
     	
     }
 

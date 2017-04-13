@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.service.impl.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.srv.bo.AdPointNotification;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -32,5 +33,15 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
         return notification;
     }
 
-
+    @Override
+    public void afterSuccess(Long relateId, Reply reply) {
+    	AdDO  ad=adDOMapper.selectByPrimaryKey(relateId);
+    	if(ad.getType()==2){
+    		ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
+    	}else{
+    		ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
+    	}
+    	adDOMapper.updateByPrimaryKeySelective(ad);
+        return;
+    }
 }

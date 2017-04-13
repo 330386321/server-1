@@ -61,4 +61,14 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfoData/inviteFans/{userNum}", method = RequestMethod.POST)
     Result inviteFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam);
+    
+    /**
+     * 验证支付密码
+     *
+     * @param userNum
+     * @param payPwd
+     * @return
+     */
+    @RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
+    Result varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,6 +189,21 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	
     }
 
+	
+	
+
+	@Override
+	public Result clickPraise(Long id) {
+		int d = new Random().nextInt(200);
+		if (d ==1){
+			
+		}
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		AdClickPraiseThread thread=new AdClickPraiseThread(id, memberId,userNum);
+		ClickPraisePoolManager.getInstance().addThread(thread);
+		return null;
+	}
 	
 
 	

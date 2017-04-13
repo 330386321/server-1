@@ -13,6 +13,7 @@ public class AdPointNotification extends Notification {
 	private String userNum;
 	
 	private BigDecimal point;
+	
 
 	public String getUserNum() {
 		return userNum;
@@ -29,6 +30,7 @@ public class AdPointNotification extends Notification {
 	public void setPoint(BigDecimal point) {
 		this.point = point;
 	}
+
 	
 	
 }

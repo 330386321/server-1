@@ -42,5 +42,5 @@ public interface AdExtendService {
     Result<AdPraiseDTO> selectAbPraiseById(Long id);
 	
 	
-
+    Result clickPraise(Long id);
 }

@@ -41,11 +41,13 @@ public class MqConstant {
 
     /******************************************/
     /*******ad-srv模块tag **********/
-    public static final String TAG_AD_ME_CUT_POINT = "adMeCutPoint";
+   public static final String TAG_AD_ME_CUT_POINT = "adMeCutPoint";
     
     public static final String TAG_AD_ME_ADD_POINT = "adMeAddPoint";
     
     public static final String TAG_AD_USER_ADD_POINT = "adUserAddPoint";
+    
+    public static final String TAG_RP_ME_CUT_POINT = "rpMeCutPoint";
 
 
     /******************************************/

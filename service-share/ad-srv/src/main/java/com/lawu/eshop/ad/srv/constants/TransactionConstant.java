@@ -12,4 +12,6 @@ public class TransactionConstant {
     public static final byte AD_ME_ADD_POINT = 0x02;
     
     public static final byte AD_USER_ADD_POINT = 0x03;
+    
+    public static final byte RP_ME_CUT_POINT = 0x04;
 }

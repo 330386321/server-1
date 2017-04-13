@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
 import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.param.RedPacketParam;
+import com.lawu.eshop.ad.srv.service.PointPoolService;
 import com.lawu.eshop.ad.srv.service.RedPacketService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -30,6 +31,9 @@ public class RedPacketController extends BaseController{
 	@Autowired
 	private RedPacketService redPacketService;
 	
+	@Autowired
+	private PointPoolService pointPoolService;
+	
 	/**
 	 * 红包生成
 	 * @param param
@@ -37,7 +41,11 @@ public class RedPacketController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestBody RedPacketParam param,@RequestParam  Long  merchantId,@RequestParam  String  num ) {
+    public Result save(@RequestBody RedPacketParam param,@RequestParam  Long  merchantId,@RequestParam String num ) {
+		Integer count=redPacketService.selectCount(merchantId);
+		if(count>0){
+			return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
+		}
     	Integer i=redPacketService.save(param, merchantId,num);
     	if(i>0){
     		return successCreated(ResultCode.SUCCESS);
@@ -54,8 +62,11 @@ public class RedPacketController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
-    public Result<RedPacketDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId) {
-    	BigDecimal point=redPacketService.getRedPacket(merchantId,memberId);
+    public Result<RedPacketDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId,@RequestParam String memberNum) {
+		Boolean flag=redPacketService.selectRedPacketByMember(merchantId,memberId);
+		if(flag)
+			 successCreated(ResultCode.AD_RED_PACKGE_GET);
+    	BigDecimal point=redPacketService.getRedPacket(merchantId,memberId,memberNum);
     	RedPacketDTO dto=new RedPacketDTO();
     	dto.setPoint(point);
     	if(point.compareTo(new BigDecimal(0))==1)

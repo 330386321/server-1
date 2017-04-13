@@ -52,5 +52,15 @@ public interface AdService {
 	@RequestMapping(value = "pointPool/selectMemberList", method = RequestMethod.GET)
     public Result<List<Long>> selectMemberList(@RequestParam("id") Long id);
 	
+	/**
+	 * 抢赞
+	 * @param id
+	 * @param memberId
+	 * @param num
+	 * @return
+	 */
+	@RequestMapping(value = "ad/clickPraise", method = RequestMethod.GET)
+    public Result clickPraise(@RequestParam("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
+	
 
 }

@@ -87,7 +87,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	Integer clickPraise(Long id,Long merchantId,String num);
+	Integer clickPraise(Long id,Long memberId,String num);
 	
 
 }

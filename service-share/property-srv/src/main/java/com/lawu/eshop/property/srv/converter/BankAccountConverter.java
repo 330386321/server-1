@@ -82,14 +82,13 @@ public class BankAccountConverter {
 	 * @return
 	 */
 	public static List<BankAccountDTO> convertDTOS(List<BankAccountBO> bankAccountBOS ) {
-        if (bankAccountBOS == null) {
-            return null;
-        }
         List<BankAccountDTO> DTOS=new ArrayList<BankAccountDTO>();
+        if(bankAccountBOS==null){
+        	return DTOS;
+        }
         for (BankAccountBO bankAccountBO: bankAccountBOS) {
         	DTOS.add(convertDTO(bankAccountBO));
 		}
-        
         return DTOS;
     }
 

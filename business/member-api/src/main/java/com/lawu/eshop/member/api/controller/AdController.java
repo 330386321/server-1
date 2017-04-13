@@ -133,5 +133,16 @@ public class AdController extends BaseController {
      	
      	return successGet(user);
      }
+     
+     
+    // @Authorization
+     @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "GET")
+     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+     @RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
+     public Result clickPraise(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/
+                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+         Result rs = adExtendService.clickPraise(id);
+         return rs;
+     }
 
 }

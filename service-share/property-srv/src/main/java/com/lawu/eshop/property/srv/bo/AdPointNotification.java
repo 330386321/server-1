@@ -13,6 +13,7 @@ public class AdPointNotification extends Notification {
 	private String userNum;
 	
 	private BigDecimal point;
+	
 
 	public String getUserNum() {
 		return userNum;
