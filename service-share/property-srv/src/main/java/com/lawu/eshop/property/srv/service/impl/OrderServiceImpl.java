@@ -12,6 +12,7 @@ import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
 
 	@Autowired
+	@Qualifier("payOrderTransactionMainServiceImpl")
 	private TransactionMainService transactionMainService;
 
 	@Override
