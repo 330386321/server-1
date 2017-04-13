@@ -150,7 +150,7 @@ public class MerchantStoreDTO {
     /**
      * 门店状态
      */
-    @ApiParam(name = "merchantStatus", value = "门店状态")
+    @ApiParam(name = "merchantStatus", value = "门店状态:MERCHANT_STATUS_UNCHECK:未审核,MERCHANT_STATUS_CHECKED:审核通过,MERCHANT_STATUS_CHECK_FAILED:审核不通过,MERCHANT_STATUS_NOT_MONEY:未提交保证金,MERCHANT_STATUS_GIVE_MONEY_CHECK:已提交保证金待财务核实,MERCHANT_STATUS_GIVE_MONEY_CHECK_FAILED:财务审核不通过")
     private MerchantStatusEnum merchantStatus;
 
     /**
