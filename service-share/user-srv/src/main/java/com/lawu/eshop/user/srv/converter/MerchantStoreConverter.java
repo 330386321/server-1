@@ -31,6 +31,7 @@ public class MerchantStoreConverter {
         merchantStoreProfileBO.setRegNumber(merchantStoreProfileDO.getRegNumber());
         merchantStoreProfileBO.setOperatorCardId(merchantStoreProfileDO.getOperatorCardId());
         merchantStoreProfileBO.setManageType(merchantStoreProfileDO.getManageType());
+        merchantStoreProfileBO.setCertifType(merchantStoreProfileDO.getCertifType());
         return merchantStoreProfileBO;
 
     }

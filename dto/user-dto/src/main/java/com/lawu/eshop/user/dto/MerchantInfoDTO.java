@@ -46,8 +46,11 @@ public class MerchantInfoDTO {
     @ApiParam(name = "merchantStoreId ",value = "门店审核状态")
     private MerchantAuditStatusEnum auditStatusEnum;
 
-    @ApiParam(name = "merchantStoreId ",value = "门店类型:NORMAL_MERCHANT:普通商铺,ENTITY_MERCHANT:实体商铺")
+    @ApiParam(name = "storeTypeEnum ",value = "门店类型:NORMAL_MERCHANT:普通商铺,ENTITY_MERCHANT:实体商铺")
     private MerchantStoreTypeEnum storeTypeEnum;
+
+    @ApiParam(name = "certifTypeEnum ",value = "门店类型:CERTIF_TYPE_IDCARD:身份证,CERTIF_TYPE_LICENSE:营业执照")
+    private CertifTypeEnum certifTypeEnum;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -111,5 +114,13 @@ public class MerchantInfoDTO {
 
     public void setStoreTypeEnum(MerchantStoreTypeEnum storeTypeEnum) {
         this.storeTypeEnum = storeTypeEnum;
+    }
+
+    public CertifTypeEnum getCertifTypeEnum() {
+        return certifTypeEnum;
+    }
+
+    public void setCertifTypeEnum(CertifTypeEnum certifTypeEnum) {
+        this.certifTypeEnum = certifTypeEnum;
     }
 }

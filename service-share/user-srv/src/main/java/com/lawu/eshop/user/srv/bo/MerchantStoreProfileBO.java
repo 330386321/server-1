@@ -42,6 +42,8 @@ public class MerchantStoreProfileBO {
 
     private Byte manageType;
 
+    private Byte certifType;
+
 
 
     public Long getMerchantId() {
@@ -90,5 +92,13 @@ public class MerchantStoreProfileBO {
 
     public void setManageType(Byte manageType) {
         this.manageType = manageType;
+    }
+
+    public Byte getCertifType() {
+        return certifType;
+    }
+
+    public void setCertifType(Byte certifType) {
+        this.certifType = certifType;
     }
 }
