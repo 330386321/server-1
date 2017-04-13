@@ -1,9 +1,13 @@
 package com.lawu.eshop.pay.srv.sdk.weixin.sdk.bridge;
 
 /**
- * User: rizenguo
- * Date: 2014/12/1
- * Time: 17:11
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:45:29
+ *
  */
 public interface IBridge {
 

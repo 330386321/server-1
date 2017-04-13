@@ -51,6 +51,8 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	 */
 	private Byte transactionAccountType;
 
+	private String thirdTransactionNum;
+	
 	/**
 	 * 金额
 	 */
@@ -144,6 +146,14 @@ public class TransactionDetailSaveDataParam implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getThirdTransactionNum() {
+		return thirdTransactionNum;
+	}
+
+	public void setThirdTransactionNum(String thirdTransactionNum) {
+		this.thirdTransactionNum = thirdTransactionNum;
 	}
 
 }

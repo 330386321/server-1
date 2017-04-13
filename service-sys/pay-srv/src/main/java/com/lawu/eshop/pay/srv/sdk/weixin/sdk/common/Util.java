@@ -5,14 +5,16 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 /**
- * User: rizenguo
- * Date: 2014/10/23
- * Time: 14:59
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:46:18
+ *
  */
 public class Util {
 

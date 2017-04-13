@@ -1,9 +1,13 @@
 package com.lawu.eshop.pay.srv.sdk.weixin.sdk.protocol.refund_protocol;
 
 /**
- * User: rizenguo
- * Date: 2014/10/25
- * Time: 16:12
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:46:45
+ *
  */
 public class RefundResData {
 

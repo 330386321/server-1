@@ -13,9 +13,13 @@ import org.xml.sax.SAXException;
 import com.lawu.eshop.pay.srv.sdk.weixin.base.Configure;
 
 /**
- * User: rizenguo
- * Date: 2014/10/29
- * Time: 15:23
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:46:11
+ *
  */
 @SuppressWarnings("rawtypes")
 public class Signature {

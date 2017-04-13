@@ -68,6 +68,7 @@ public class WxPayController extends BaseController {
 		String key = Configure.key_app;
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
 		packageParams.put("trade_type", "APP");
+		packageParams.put("notify_url", Configure.notify_url);
 		if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
 			packageParams.put("appid", Configure.appID_member);
 			packageParams.put("mch_id", Configure.mchID_member);
@@ -78,6 +79,7 @@ public class WxPayController extends BaseController {
 			packageParams.put("appid", Configure.appID);
 			packageParams.put("mch_id", Configure.mchID);
 			packageParams.put("trade_type", "NATIVE");
+			packageParams.put("notify_url", Configure.notify_url_pc);
 			key = Configure.key;
 		}
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
@@ -87,7 +89,6 @@ public class WxPayController extends BaseController {
 		int iTotalAmount = (int) (fTotalAmount * 100);
 		packageParams.put("total_fee", iTotalAmount + "");
 		packageParams.put("spbill_create_ip", Configure.ip);
-		packageParams.put("notify_url", Configure.notify_url);
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds());
 

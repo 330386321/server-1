@@ -3,9 +3,13 @@ package com.lawu.eshop.pay.srv.sdk.weixin.sdk.common;
 import org.slf4j.Logger;
 
 /**
- * User: rizenguo
- * Date: 2014/11/12
- * Time: 14:32
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:45:59
+ *
  */
 public class Log {
 

@@ -24,7 +24,7 @@ public enum MerchantTransactionTypeEnum {
 	LOWER_INCOME((byte)0x66),
 	
 	/**
-	 * 充值103
+	 * 余额充值103
 	 */
 	RECHARGE((byte)0x67),
 	

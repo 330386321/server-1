@@ -1,6 +1,8 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 
 /**
@@ -14,7 +16,22 @@ import com.lawu.eshop.property.param.RechargeSaveDataParam;
  */
 public interface RechargeService {
 
+	/**
+	 * 用户商家第三方充值余额积分保存充值记录
+	 * 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
 	RechargeSaveDTO save(RechargeSaveDataParam param);
+
+	/**
+	 * 用户商家充值余额积分回调
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	Result doHandleRechargeNotify(NotifyCallBackParam param);
 
 
 

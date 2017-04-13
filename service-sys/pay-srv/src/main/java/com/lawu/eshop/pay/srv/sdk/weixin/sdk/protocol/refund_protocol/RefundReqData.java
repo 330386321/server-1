@@ -9,9 +9,13 @@ import com.lawu.eshop.pay.srv.sdk.weixin.base.RandomStringGenerator;
 import com.lawu.eshop.pay.srv.sdk.weixin.sdk.common.Signature;
 
 /**
- * User: rizenguo
- * Date: 2014/10/25
- * Time: 16:12
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:46:40
+ *
  */
 public class RefundReqData {
 

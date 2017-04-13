@@ -9,7 +9,7 @@ package com.lawu.eshop.property.constants;
 public enum MemberTransactionTypeEnum {
 	
 	/**
-	 * 充值
+	 * 余额充值
 	 */
 	RECHARGE((byte)0x01),
 	

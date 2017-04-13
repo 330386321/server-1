@@ -35,9 +35,13 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 
 /**
- * User: rizenguo
- * Date: 2014/10/29
- * Time: 14:36
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:45:36
+ *
  */
 public class HttpsRequest implements IServiceRequest{
 

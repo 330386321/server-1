@@ -5,9 +5,13 @@ import com.lawu.eshop.pay.srv.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.pay.srv.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
 
 /**
- * User: rizenguo
- * Date: 2014/10/29
- * Time: 16:04
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:47:09
+ *
  */
 public class RefundService extends BaseService{
 

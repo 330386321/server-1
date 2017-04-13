@@ -6,7 +6,13 @@ import com.lawu.eshop.pay.srv.sdk.weixin.sdk.protocol.refund_protocol.RefundReqD
 import com.lawu.eshop.pay.srv.sdk.weixin.sdk.service.RefundService;
 
 /**
- * SDK总入口
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:47:17
+ *
  */
 public class WXPay {
 

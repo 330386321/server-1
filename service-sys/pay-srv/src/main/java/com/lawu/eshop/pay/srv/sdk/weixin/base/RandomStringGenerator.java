@@ -4,8 +4,12 @@ import java.util.Random;
 
 /**
  * 
- * @author 杨清华
- * @dete 2016年6月21日
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:45:10
+ *
  */
 public class RandomStringGenerator {
 

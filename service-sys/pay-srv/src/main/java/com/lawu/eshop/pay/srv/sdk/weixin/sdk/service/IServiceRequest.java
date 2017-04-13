@@ -9,10 +9,13 @@ import java.security.UnrecoverableKeyException;
 import com.lawu.eshop.pay.srv.sdk.weixin.sdk.common.JsonResult;
 
 /**
- * User: rizenguo
- * Date: 2014/12/10
- * Time: 15:16
- * 这里定义服务层需要请求器标准接口
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:47:03
+ *
  */
 public interface IServiceRequest {
 

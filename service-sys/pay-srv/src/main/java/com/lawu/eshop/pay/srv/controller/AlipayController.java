@@ -104,8 +104,8 @@ public class AlipayController extends BaseController {
 		paramMap.put("seller_id", PropertiesUtil.getPropertyValue("seller_id", "alipay.properties"));
 		paramMap.put("_input_charset", PropertiesUtil.getPropertyValue("input_charset", "alipay.properties"));
 		paramMap.put("payment_type", "1");
-		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url", "alipay.properties"));
-		paramMap.put("return_url", PropertiesUtil.getPropertyValue("return_url", "alipay.properties"));
+		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url_pc", "alipay.properties"));
+		paramMap.put("return_url", PropertiesUtil.getPropertyValue("notify_url_pc", "alipay.properties"));
 		paramMap.put("anti_phishing_key", "");
 		paramMap.put("exter_invoke_ip", "");
 

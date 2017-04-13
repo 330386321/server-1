@@ -9,7 +9,8 @@ public enum TransactionTitleEnum {
 	INTEGRAL_RECHARGE("积分充值"),
 	INVITE_FANS("邀请粉丝"),
 	ADD_AD("发广告"),
-	ADD_RED_PACKET("发红包");
+	ADD_RED_PACKET("发红包"),
+	RECHARGE("余额充值");
 	
 	public String val;
 

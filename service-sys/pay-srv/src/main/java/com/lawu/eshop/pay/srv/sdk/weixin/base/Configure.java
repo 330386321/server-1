@@ -39,7 +39,9 @@ public class Configure {
 	
 	public static String HttpsRequestClassName = "com.love.controller.thirdPlatform.wx.sdk.common.HttpsRequest";
 	
-	public static String notify_url = "http://www.love-86.com:8888/";
+	public static String notify_url = "http://www.love-86.com:8888/wxpay/appNotifyHandle";
+	
+	public static String notify_url_pc = "http://www.love-86.com:8888/wxpay/pcNotifyHandle";
 
 	public static void setKey(String key) {
 		Configure.key = key;

@@ -5,7 +5,6 @@ package com.lawu.eshop.pay.srv.sdk.alipay.sign;
  * All right reserved.
  * author: shiqun.shi@alipay.com
  */
-
 public final class Base64 {
 
 	static private final int BASELENGTH = 128;

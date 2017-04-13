@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
@@ -43,7 +44,7 @@ public class RechargeController extends BaseController {
 	private PropertyService propertySrevice;
 
 	/**
-	 * 运营平台财务提现管理
+	 * 用户商家第三方充值余额积分保存充值记录
 	 * 
 	 * @param param
 	 * @return
@@ -81,5 +82,27 @@ public class RechargeController extends BaseController {
 		}
 		return successCreated(dto);
 	}
+	
+	/**
+	 * 用户/商家微信/支付宝充值余额积分回调
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "doHandleRechargeNotify", method = RequestMethod.POST)
+	public Result doHandleRechargeNotify(@RequestBody @Valid NotifyCallBackParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		return rechargeService.doHandleRechargeNotify(param);
+	}
 
+	
 }

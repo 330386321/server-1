@@ -12,6 +12,15 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+/**
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年4月13日 下午1:45:21
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class XMLUtil {  
     /** 
