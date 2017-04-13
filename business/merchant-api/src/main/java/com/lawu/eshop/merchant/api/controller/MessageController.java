@@ -8,7 +8,6 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageParam;
@@ -57,8 +56,16 @@ public class MessageController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
    // @Authorization
     @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
-    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("statusEnum") MessageStatusEnum statusEnum) {
-        messageService.updateMessageStatus(messageId, statusEnum);
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId) {
+        messageService.updateMessageStatus(messageId);
         return successCreated();
+    }
+    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
+    public Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Result result = messageService.delMessageStatus(messageId);
+        return successDelete(result);
     }
 }
