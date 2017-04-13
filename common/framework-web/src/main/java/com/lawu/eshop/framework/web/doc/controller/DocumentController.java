@@ -13,6 +13,7 @@ import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -69,6 +70,9 @@ public class DocumentController extends BaseController{
 	            	ApiDocumentVO vo = new ApiDocumentVO();
 	            	if (api != null && api.tags() != null) {
 	            		vo.setApiName(Arrays.toString(api.tags()));
+	            	} else {
+	            		//如果Api注解为空,或者tags为空，设置ApiName为空串
+	            		vo.setApiName("");
 	            	}
 	            	vo.setDate(df.parse(audit.date()));
 	            	vo.setReviewer(audit.reviewer());
