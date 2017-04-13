@@ -145,7 +145,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
 
-                        SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(auditParam.getMerchantStoreId(), merchantStoreParam);
+                        SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO.getMerchantId(),auditParam.getMerchantStoreId(), merchantStoreParam);
                         document.addField("storePic_s", merchantStoreParam.getStoreUrl());
                         document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
                         document.addField("buyNumbers_i", merchantStoreDO.getFavoriteNumber());

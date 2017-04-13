@@ -33,11 +33,20 @@ public interface MerchantService {
      * @param id          ID
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "merchant/updateLoginPwd/{id}")
-    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 重置登录密码
+     *
+     * @param mobile 账号
+     * @param newPwd 新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "merchant/resetLoginPwd/{mobile}")
+    Result updateLoginPwd(@PathVariable("mobile") String mobile, @RequestParam("newPwd") String newPwd);
 
     /**
      * 根据邀请人账号查询邀请人信息

@@ -26,53 +26,81 @@ import java.math.BigDecimal;
 @RequestMapping(value = "propertyInfo/")
 public class PropertyInfoController extends BaseController {
 
-	@Autowired
-	private PropertyInfoService propertyInfoService;
+    @Autowired
+    private PropertyInfoService propertyInfoService;
 
-	/**
-	 * 修改用户支付密码
-	 *
-	 * @param userNum
-	 *            用户编号
-	 * @param originalPwd
-	 *            原始密码
-	 * @param newPwd
-	 *            新密码
-	 * @param type
-	 *            业务类型(1--设置密码，2--修改密码)
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "updatePayPwd/{userNum}", method = RequestMethod.PUT)
-	public Result updatePayPwd(@PathVariable String userNum, @RequestParam String originalPwd,
-			@RequestParam String newPwd, @RequestParam Integer type) {
-		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-		if (type == 2 && !MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
-			return successGet(ResultCode.VERIFY_PWD_FAIL);
-		}
-		propertyInfoService.updatePayPwd(userNum, originalPwd, newPwd);
-		return successCreated();
-	}
+    /**
+     * 修改用户支付密码
+     *
+     * @param userNum     用户编号
+     * @param originalPwd 原始密码
+     * @param newPwd      新密码
+     * @return
+     */
+    @RequestMapping(value = "updatePayPwd/{userNum}", method = RequestMethod.PUT)
+    public Result updatePayPwd(@PathVariable String userNum, @RequestParam String originalPwd, @RequestParam String newPwd) {
+        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+        if (propertyInfoBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
+            return successGet(ResultCode.VERIFY_PWD_FAIL);
+        }
+        propertyInfoService.updatePayPwd(userNum,  newPwd);
+        return successCreated();
+    }
 
-	/**
-	 * 查询用户是否设置支付密码
-	 *
-	 * @param userNum
-	 *            用户编号
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "isSetPayPwd/{userNum}", method = RequestMethod.GET)
-	public Result isSetPayPwd(@PathVariable String userNum) {
-		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-		if (propertyInfoBO == null) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
-			return successGet(false);
-		}
-		return successGet(true);
-	}
+    /**
+     * 重置用户支付密码
+     *
+     * @param userNum 用户编号
+     * @param newPwd  新密码
+     * @return
+     */
+    @RequestMapping(value = "resetPayPwd/{userNum}", method = RequestMethod.PUT)
+    public Result resetPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
+        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+        if (propertyInfoBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        propertyInfoService.updatePayPwd(userNum, newPwd);
+        return successCreated();
+    }
+
+    /**
+     * 设置用户支付密码
+     *
+     * @param userNum 用户编号
+     * @param newPwd  新密码
+     * @return
+     */
+    @RequestMapping(value = "setPayPwd/{userNum}", method = RequestMethod.PUT)
+    public Result setPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
+        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+        if (propertyInfoBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        propertyInfoService.updatePayPwd(userNum, newPwd);
+        return successCreated();
+    }
+
+    /**
+     * 查询用户是否设置支付密码
+     *
+     * @param userNum 用户编号
+     * @return
+     */
+    @RequestMapping(value = "isSetPayPwd/{userNum}", method = RequestMethod.GET)
+    public Result isSetPayPwd(@PathVariable String userNum) {
+        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+        if (propertyInfoBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
+            return successGet(false);
+        }
+        return successGet(true);
+    }
 
 	/**
 	 * 校验支付密码

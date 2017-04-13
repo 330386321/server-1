@@ -95,7 +95,7 @@ public class FansMerchantController extends BaseController {
     @Authorization
     @RequestMapping(value = "listFans", method = RequestMethod.GET)
     public Result<Page<FansMerchantDTO>> listFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                  @ModelAttribute @ApiParam(required = true, value = "查询条件") ListFansParam listFansParam) {
+                                                  @ModelAttribute @ApiParam ListFansParam listFansParam) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         return fansMerchantService.listFans(merchantId, listFansParam);
     }

@@ -83,15 +83,33 @@ public class MemberController extends BaseController {
      * @param id          ID
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型(1--忘记密码，2--修改密码)
      */
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
         MemberBO memberBO = memberService.getMemberById(id);
-        if (type == 2 && !MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
+        if (memberBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
-        memberService.updateLoginPwd(id, originalPwd, newPwd);
+        memberService.updateLoginPwd(id, newPwd);
+        return successCreated();
+    }
+
+    /**
+     * 重置登录密码
+     *
+     * @param mobile 账号
+     * @param newPwd 新密码
+     */
+    @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
+    public Result resetLoginPwd(@PathVariable String mobile, @RequestParam String newPwd) {
+        MemberBO memberBO = memberService.getMemberByAccount(mobile);
+        if (memberBO == null) {
+            return successCreated(ResultCode.NOT_FOUND_DATA);
+        }
+        memberService.updateLoginPwd(memberBO.getId(), newPwd);
         return successCreated();
     }
 
@@ -140,7 +158,7 @@ public class MemberController extends BaseController {
     /**
      * 修改头像
      *
-     * @param mermberId
+     * @param memberId
      * @param headimg
      * @return
      */
@@ -151,33 +169,35 @@ public class MemberController extends BaseController {
         userHeadImgDTO.setHeadImg(headimg);
         return successCreated(userHeadImgDTO);
     }
-    
+
     /**
-<<<<<<< Updated upstream
      * 用户、商家提现时根据用户ID获取账号、名称、省市区信息冗余到提现表中
-     * @param memberId
+     *
+     * @param id
      * @return
-     * @throws Exception 
+     * @throws Exception
      * @author Yangqh
      */
     @RequestMapping(value = "findCashUserInfo/{id}", method = RequestMethod.GET)
     public CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id) throws Exception {
-    	CashUserInfoBO cashUserInfoBO = memberService.findCashUserInfo(id);
+        CashUserInfoBO cashUserInfoBO = memberService.findCashUserInfo(id);
         if (cashUserInfoBO == null) {
             return null;
-        } 
+        }
         CashUserInfoDTO dto = new CashUserInfoDTO();
         BeanUtil.copyProperties(cashUserInfoBO, dto);
         return dto;
     }
+
     /**
      * 根据地区查询人数
+     *
      * @param regionPath
      * @return
      */
     @RequestMapping(value = "findMemberCount", method = RequestMethod.GET)
-    public Integer findMemberCount( @RequestParam("areas") String regionPath) {
-    	Integer  count = memberService.findMemberCount(regionPath);
+    public Integer findMemberCount(@RequestParam("areas") String regionPath) {
+        Integer count = memberService.findMemberCount(regionPath);
         return count;
     }
 

@@ -5,8 +5,11 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -302,16 +305,19 @@ public class MerchantStoreConverter {
     /**
      * SolrInputDocument
      *
+     * @param merchantId
      * @param merchantStoreId
      * @param merchantStoreParam
      * @return
      */
-    public static SolrInputDocument convertSolrInputDocument(Long merchantStoreId, MerchantStoreParam merchantStoreParam) {
+    public static SolrInputDocument convertSolrInputDocument(Long merchantId, Long merchantStoreId, MerchantStoreParam merchantStoreParam) {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", merchantStoreId);
+        document.addField("merchantId_l", merchantId);
         document.addField("name_s", merchantStoreParam.getName());
         document.addField("regionPath_s", merchantStoreParam.getRegionName());
         document.addField("address_s", merchantStoreParam.getAddress());
+        document.addField("latLon_p", merchantStoreParam.getLatitude() + "," + merchantStoreParam.getLongitude());
         document.addField("longitude_d", merchantStoreParam.getLongitude());
         document.addField("latitude_d", merchantStoreParam.getLatitude());
         document.addField("industryPath_s", merchantStoreParam.getIndustryPath());
@@ -320,4 +326,33 @@ public class MerchantStoreConverter {
         document.addField("principalMobile_s", merchantStoreParam.getPrincipalMobile());
         return document;
     }
+
+    /**
+     * SolrInputDocument
+     *
+     * @param solrDocumentList
+     * @return
+     */
+    public static List<NearStoreDTO> convertDTO(SolrDocumentList solrDocumentList) {
+        if (solrDocumentList.isEmpty()) {
+            return null;
+        }
+
+        List<NearStoreDTO> nearStoreDTOS = new ArrayList<>();
+        for (SolrDocument solrDocument : solrDocumentList) {
+            NearStoreDTO nearStoreDTO = new NearStoreDTO();
+            nearStoreDTO.setMerchantId(Long.valueOf(solrDocument.get("merchantId_l").toString()));
+            nearStoreDTO.setMerchantStoreId(Long.valueOf(solrDocument.get("id").toString()));
+            nearStoreDTO.setName(solrDocument.get("name_s").toString());
+            nearStoreDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
+            nearStoreDTO.setStorePic(solrDocument.get("storePic_s").toString());
+            nearStoreDTO.setDistance(Integer.valueOf(solrDocument.get("distance").toString()));
+            nearStoreDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
+            nearStoreDTO.setAverageConsumeAmount(new BigDecimal(solrDocument.get("averageConsumeAmount_d").toString()));
+            nearStoreDTO.setAverageScore(new BigDecimal(solrDocument.get("averageScore_d").toString()));
+            nearStoreDTOS.add(nearStoreDTO);
+        }
+        return nearStoreDTOS;
+    }
+
 }

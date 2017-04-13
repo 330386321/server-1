@@ -60,11 +60,20 @@ public interface MemberService {
      * @param id          主键
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "member/updateLoginPwd/{id}")
-    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+    Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 重置密码
+     *
+     * @param mobile 账号
+     * @param newPwd 新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "member/resetLoginPwd/{mobile}")
+    Result resetLoginPwd(@PathVariable("mobile") String mobile, @RequestParam("newPwd") String newPwd);
 
     /**
      * 查询我的E友
@@ -105,11 +114,12 @@ public interface MemberService {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     *
      * @param id
      * @return
      * @author Yangqh
      */
-	@RequestMapping(method = RequestMethod.GET, value = "member/findCashUserInfo/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "member/findCashUserInfo/{id}")
     CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id);
 
 }

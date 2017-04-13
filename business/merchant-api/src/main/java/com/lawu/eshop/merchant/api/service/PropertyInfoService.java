@@ -20,11 +20,30 @@ public interface PropertyInfoService {
      * @param userNo      商户编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
-    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 重置支付密码
+     *
+     * @param userNo 商户编号
+     * @param newPwd 新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/resetPayPwd/{userNo}")
+    Result resetPayPwd(@PathVariable("userNo") String userNo, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 设置支付密码
+     *
+     * @param userNo 商户编号
+     * @param newPwd 新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/setPayPwd/{userNo}")
+    Result setPayPwd(@PathVariable("userNo") String userNo, @RequestParam("newPwd") String newPwd);
 
     /**
      * 查询是否设置支付密码
@@ -61,7 +80,7 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfoData/inviteFans/{userNum}", method = RequestMethod.POST)
     Result inviteFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam);
-    
+
     /**
      * 验证支付密码
      *

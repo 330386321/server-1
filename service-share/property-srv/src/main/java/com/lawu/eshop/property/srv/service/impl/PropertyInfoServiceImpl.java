@@ -30,129 +30,129 @@ import java.util.List;
 @Service
 public class PropertyInfoServiceImpl implements PropertyInfoService {
 
-	@Autowired
-	private PropertyInfoDOMapper propertyInfoDOMapper;
-	@Autowired
-	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
+    @Autowired
+    private PropertyInfoDOMapper propertyInfoDOMapper;
+    @Autowired
+    private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
 
 
-	@Override
-	public PropertyInfoBO getPropertyInfoByUserNum(String userNum) {
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
-		return propertyInfoDOS.isEmpty() ? null : PropertyInfoConverter.convertBO(propertyInfoDOS.get(0));
-	}
+    @Override
+    public PropertyInfoBO getPropertyInfoByUserNum(String userNum) {
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+        return propertyInfoDOS.isEmpty() ? null : PropertyInfoConverter.convertBO(propertyInfoDOS.get(0));
+    }
 
-	@Override
-	@Transactional
-	public void updatePayPwd(String userNum, String originalPwd, String newPwd) {
-		PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
-		propertyInfoDO.setUserNum(userNum);
-		propertyInfoDO.setPayPassword(MD5.MD5Encode(newPwd));
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum).andPayPasswordEqualTo(MD5.MD5Encode(newPwd));
-		propertyInfoDOMapper.updateByExampleSelective(propertyInfoDO, propertyInfoDOExample);
-	}
+    @Override
+    @Transactional
+    public void updatePayPwd(String userNum, String newPwd) {
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum(userNum);
+        propertyInfoDO.setPayPassword(MD5.MD5Encode(newPwd));
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        propertyInfoDOMapper.updateByExampleSelective(propertyInfoDO, propertyInfoDOExample);
+    }
 
-	@Override
-	public PropertyBalanceBO getPropertyBalanceByUserNum(String userNum) {
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+    @Override
+    public PropertyBalanceBO getPropertyBalanceByUserNum(String userNum) {
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 
-		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
-			return null;
-		}
+        if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+            return null;
+        }
 
-		return PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
-	}
+        return PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
+    }
 
-	@Override
-	public PropertyPointBO getPropertyPointByUserNum(String userNum) {
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+    @Override
+    public PropertyPointBO getPropertyPointByUserNum(String userNum) {
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 
-		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
-			return null;
-		}
+        if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+            return null;
+        }
 
-		return PropertyPointConverter.convert(propertyInfoDOS.get(0));
-	}
+        return PropertyPointConverter.convert(propertyInfoDOS.get(0));
+    }
 
-	@Override
-	public int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number) {
-		if(("B".equals(column) || "P".equals(column) || "L".equals(column)) && ("A".equals(flag) || "M".equals(flag))) {
-			PropertyInfoDOEiditView editView = new PropertyInfoDOEiditView();
-			editView.setUserNum(userNum);
-			if("B".equals(column)){
-				editView.setBalance(number);
-				if ("A".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
-				} else if ("M".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(editView);
-				}
-			}else if("P".equals(column)){
-				editView.setPoint(number);
-				if ("A".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
-				} else if ("M".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoMinusPoint(editView);
-				}
-			}else if("L".equals(column)){
-				editView.setLoveAccount(number);
-				if ("A".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoAddLove(editView);
-				} else if ("M".equals(flag)) {
-					propertyInfoDOMapperExtend.updatePropertyInfoMinusLove(editView);
-				}
-			}
-		}else{
-			return 0;
-		}
+    @Override
+    public int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number) {
+        if (("B".equals(column) || "P".equals(column) || "L".equals(column)) && ("A".equals(flag) || "M".equals(flag))) {
+            PropertyInfoDOEiditView editView = new PropertyInfoDOEiditView();
+            editView.setUserNum(userNum);
+            if ("B".equals(column)) {
+                editView.setBalance(number);
+                if ("A".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
+                } else if ("M".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(editView);
+                }
+            } else if ("P".equals(column)) {
+                editView.setPoint(number);
+                if ("A".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
+                } else if ("M".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoMinusPoint(editView);
+                }
+            } else if ("L".equals(column)) {
+                editView.setLoveAccount(number);
+                if ("A".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoAddLove(editView);
+                } else if ("M".equals(flag)) {
+                    propertyInfoDOMapperExtend.updatePropertyInfoMinusLove(editView);
+                }
+            }
+        } else {
+            return 0;
+        }
 
-		return ResultCode.SUCCESS;
-	}
+        return ResultCode.SUCCESS;
+    }
 
-	@Override
-	public int validateBalance(String userNum, String amount) {
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+    @Override
+    public int validateBalance(String userNum, String amount) {
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 
-		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
-			return ResultCode.PROPERTY_INFO_NULL;
-		}
+        if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+            return ResultCode.PROPERTY_INFO_NULL;
+        }
 
-		PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
-		
-		BigDecimal dbBalance = balanceBO.getBalance();
-		double dBalacne = dbBalance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		double dOrderMoney = new Double(amount).doubleValue();
-		if(dBalacne < dOrderMoney){
-			return ResultCode.PROPERTY_INFO_BALANCE_LESS;
-		}
-		return ResultCode.SUCCESS;
-	}
+        PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
 
-	@Override
-	public int validatePoint(String userNum, String point) {
-		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
-		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+        BigDecimal dbBalance = balanceBO.getBalance();
+        double dBalacne = dbBalance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double dOrderMoney = new Double(amount).doubleValue();
+        if (dBalacne < dOrderMoney) {
+            return ResultCode.PROPERTY_INFO_BALANCE_LESS;
+        }
+        return ResultCode.SUCCESS;
+    }
 
-		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
-			return ResultCode.PROPERTY_INFO_NULL;
-		}
+    @Override
+    public int validatePoint(String userNum, String point) {
+        PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 
-		BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
-		double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		double drPoint = new Double(point).doubleValue();
-		if(dPoint < drPoint){
-			return ResultCode.PROPERTY_INFO_POINT_LESS;
-		}
-		return ResultCode.SUCCESS;
-	}
+        if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+            return ResultCode.PROPERTY_INFO_NULL;
+        }
+
+        BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
+        double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double drPoint = new Double(point).doubleValue();
+        if (dPoint < drPoint) {
+            return ResultCode.PROPERTY_INFO_POINT_LESS;
+        }
+        return ResultCode.SUCCESS;
+    }
 
 }

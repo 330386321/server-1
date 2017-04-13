@@ -192,7 +192,7 @@ public class ProductConverter {
         document.addField("categoryId_i", param.getCategoryId());
         document.addField("content_s", param.getContent());
         document.addField("averageDailySales_d", 0);
-        document.addField("sales_volume_i", 0);
+        document.addField("salesVolume_i", 0);
         return document;
     }
 

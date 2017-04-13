@@ -15,12 +15,10 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.param.UpdatePwdParam;
 import com.lawu.eshop.user.param.UserParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,52 +77,70 @@ public class MemberController extends BaseController {
     }
 
     @Audit(date = "2017-03-29", reviewer = "孙林青")
-    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1009|1013] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改登录密码", notes = "根据会员ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updateLoginPwd", method = RequestMethod.PUT)
     public Result updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                 @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
-        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
-        if (!isSuccess(smsResult)) {
-            return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
-        }
+                                 @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+                                 @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         long id = UserUtil.getCurrentUserId(getRequest());
-        return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+        return memberService.updateLoginPwd(id, originalPwd, newPwd);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1002|1013] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1100|1013] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
     public Result resetLoginPwd(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
-                                @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
-        Result<MemberDTO> memResult = memberService.getMemberByAccount(mobile);
-        if (!isSuccess(memResult)) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
-        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
+                                @RequestParam @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
+                                @RequestParam @ApiParam(required = true, value = "手机验证码") String smsCode,
+                                @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
-        MemberDTO memberDTO = memResult.getModel();
-        long id = memberDTO.getId();
-        return memberService.updateLoginPwd(id, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+        return memberService.resetLoginPwd(mobile,newPwd );
     }
 
     @Audit(date = "2017-03-29", reviewer = "孙林青")
-    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009|1013] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "修改支付密码", notes = "根据会员编号修改支付密码。[1009|1100] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "updatePayPwd", method = RequestMethod.PUT)
     public Result updatePayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                               @ModelAttribute @ApiParam(required = true, value = "修改密码信息") UpdatePwdParam updatePwdParam) {
-        Result smsResult = verifyCodeService.verifySmsCode(updatePwdParam.getVerifyCodeId(), updatePwdParam.getSmsCode());
+                               @RequestParam @ApiParam(required = true, value = "原始密码") String originalPwd,
+                               @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return propertyInfoService.updatePayPwd(userNum, originalPwd, newPwd);
+    }
+
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
+    @ApiOperation(value = "忘记支付密码", notes = "根据会员编号重置支付密码。[1013|1100] (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "resetPayPwd", method = RequestMethod.PUT)
+    public Result resetPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                              @RequestParam @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
+                              @RequestParam @ApiParam(required = true, value = "手机验证码") String smsCode,
+                              @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        Result smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
         }
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        return propertyInfoService.updatePayPwd(userNum, updatePwdParam.getOriginalPwd(), updatePwdParam.getNewPwd(), updatePwdParam.getType());
+        return propertyInfoService.resetPayPwd(userNum, newPwd);
+    }
+
+    @Audit(date = "2017-03-29", reviewer = "孙林青")
+    @ApiOperation(value = "设置支付密码", notes = "根据会员编号设置支付密码。[1100] (梅述全)", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "setPayPwd", method = RequestMethod.PUT)
+    public Result setPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                            @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return propertyInfoService.setPayPwd(userNum, newPwd);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
@@ -142,7 +158,7 @@ public class MemberController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
-                           @ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterParam registerParam) {
+                           @ModelAttribute @ApiParam RegisterParam registerParam) {
         RegisterRealParam registerRealParam = new RegisterRealParam();
         if (StringUtils.isNotEmpty(registerParam.getInviterAccount())) {
             Result<InviterDTO> inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
@@ -168,16 +184,6 @@ public class MemberController extends BaseController {
         registerRealParam.setAccount(registerParam.getAccount());
         registerRealParam.setPwd(registerParam.getPwd());
         return memberService.register(registerRealParam);
-    }
-
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "查询当前会员信息", notes = "查询当前会员信息。[1002] (梅述全)", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
-    @RequestMapping(value = "getMember", method = RequestMethod.GET)
-    public Result<MemberDTO> getMemberByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        String account = UserUtil.getCurrentAccount(getRequest());
-        return memberService.getMemberByAccount(account);
     }
 
     @Audit(date = "2017-03-29", reviewer = "孙林青")

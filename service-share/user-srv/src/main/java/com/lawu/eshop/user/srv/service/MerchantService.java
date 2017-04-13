@@ -18,12 +18,10 @@ public interface MerchantService {
     /**
      * 修改登录密码
      *
-     * @param id          主键
-     * @param originalPwd 原始密码
-     * @param newPwd      新密码
-     * @return 0--成功，1--原始密码不正确
+     * @param id     主键
+     * @param newPwd 新密码
      */
-    void updateLoginPwd(Long id, String originalPwd, String newPwd);
+    void updateLoginPwd(Long id, String newPwd);
 
     /**
      * 商家信息

@@ -13,6 +13,9 @@ public class NearStoreDTO {
     @ApiModelProperty(value = "商户ID")
     private Long merchantId;
 
+    @ApiModelProperty(value = "门店ID")
+    private Long merchantStoreId;
+
     @ApiModelProperty(value = "门店名称")
     private String name;
 
@@ -96,5 +99,13 @@ public class NearStoreDTO {
 
     public void setAverageScore(BigDecimal averageScore) {
         this.averageScore = averageScore;
+    }
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
     }
 }

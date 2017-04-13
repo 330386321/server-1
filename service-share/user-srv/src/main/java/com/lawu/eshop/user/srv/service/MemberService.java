@@ -40,11 +40,10 @@ public interface MemberService {
      * 修改登录密码
      *
      * @param id          主键
-     * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @return 0--成功，1--原始密码不正确
+     * @return
      */
-    void updateLoginPwd(Long id, String originalPwd, String newPwd);
+    void updateLoginPwd(Long id,  String newPwd);
 
     /**
      * 根据账号查询会员信息
@@ -85,7 +84,7 @@ public interface MemberService {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
-     * @param merchantId
+     * @param id
      * @return
      * @author Yangqh
      */

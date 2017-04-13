@@ -46,15 +46,33 @@ public class MerchantController extends BaseController {
      * @param id          ID
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型(1--忘记密码，2--修改密码)
      */
     @RequestMapping(value = "updateLoginPwd/{id}", method = RequestMethod.PUT)
-    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd, @RequestParam Integer type) {
+    public Result updateLoginPwd(@PathVariable Long id, @RequestParam String originalPwd, @RequestParam String newPwd) {
         MerchantBO merchantBO = merchantService.getMerchantBOById(id);
-        if (type == 2 && !MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
+        if (merchantBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if (!MD5.MD5Encode(originalPwd).equals(merchantBO.getPwd())) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
-        merchantService.updateLoginPwd(id, originalPwd, newPwd);
+        merchantService.updateLoginPwd(id, newPwd);
+        return successCreated();
+    }
+
+    /**
+     * 重置登录密码
+     *
+     * @param mobile 账号
+     * @param newPwd 新密码
+     */
+    @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
+    public Result resetLoginPwd(@PathVariable String mobile, @RequestParam String newPwd) {
+        MerchantBO merchantBO = merchantService.getMerchantByAccount(mobile);
+        if (merchantBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        merchantService.updateLoginPwd(merchantBO.getId(), newPwd);
         return successCreated();
     }
 

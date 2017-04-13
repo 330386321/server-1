@@ -23,11 +23,30 @@ public interface PropertyInfoService {
      * @param userNum     会员编号
      * @param originalPwd 原始密码
      * @param newPwd      新密码
-     * @param type        业务类型
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNum}")
-    Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
+    Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 重置支付密码
+     *
+     * @param userNum 会员编号
+     * @param newPwd  新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/resetPayPwd/{userNum}")
+    Result resetPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd);
+
+    /**
+     * 设置支付密码
+     *
+     * @param userNum 会员编号
+     * @param newPwd  新密码
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/setPayPwd/{userNum}")
+    Result setPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd);
 
     /**
      * 查询是否设置支付密码

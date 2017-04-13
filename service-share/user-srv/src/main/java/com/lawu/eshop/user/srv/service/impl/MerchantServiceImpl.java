@@ -57,14 +57,13 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private TransactionMainService transactionMainService;
-    
+
     @Autowired
     private InviterMerchantDOMapperExtend inviterMerchantDOMapper;
 
     @Override
     @Transactional
-    public void updateLoginPwd(Long id, String originalPwd, String newPwd) {
-
+    public void updateLoginPwd(Long id, String newPwd) {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setId(id);
         merchantDO.setPwd(MD5.MD5Encode(newPwd));
@@ -233,9 +232,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam) {
-    	InviterMerchantDOView inviterMerchantDO=new InviterMerchantDOView();
-    	inviterMerchantDO.setInviterId(userId);
-    	inviterMerchantDO.setMobileAndName(pageParam.getMobileOrName());
+        InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
+        inviterMerchantDO.setInviterId(userId);
+        inviterMerchantDO.setMobileAndName(pageParam.getMobileOrName());
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
         List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
@@ -245,8 +244,7 @@ public class MerchantServiceImpl implements MerchantService {
         pageMerchantInviter.setRecords(memberBOS);
         return pageMerchantInviter;
     }
-    
-    
+
 
     @Override
     public MerchantBO find(String account, String pwd) {
