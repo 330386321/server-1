@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.PayOrderListParam;
 import com.lawu.eshop.mall.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 
 /**
  * @author zhangyong
@@ -34,5 +35,5 @@ public interface PayOrderService {
      * @return
      * @author Yangqh
      */
-	double selectPayOrderActueMoney(String orderId);
+    ThirdPayCallBackQueryPayOrderBO selectThirdPayCallBackPayOrder(String orderId);
 }

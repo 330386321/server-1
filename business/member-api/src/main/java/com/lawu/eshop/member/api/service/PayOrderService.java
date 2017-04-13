@@ -27,4 +27,13 @@ public interface PayOrderService {
 
     @RequestMapping(value = "payOrder/delPayOrderInfo/{id}", method = RequestMethod.DELETE)
     public Result delPayOrderInfo(@PathVariable("id") Long id);
+    
+    /**
+     * 第三方支付时获取买单的实际总金额，用于调用第三方支付平台
+     * @param orderId
+     * @return
+     * @author Yangqh
+     */
+	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectPayOrderActueMoney")
+	double selectPayOrderActueMoney(@RequestParam("orderId") String orderId);
 }

@@ -14,9 +14,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
 import com.lawu.eshop.member.api.service.OrderService;
-import com.lawu.eshop.member.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.member.api.service.RechargeService;
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
@@ -47,8 +45,6 @@ public class AlipayController extends BaseController {
 	@Autowired
 	private OrderService orderService;
 	@Autowired
-	private PropertySrvPropertyService propertyService;
-	@Autowired
 	private RechargeService rechargeService;
 
 	@SuppressWarnings("rawtypes")
@@ -75,16 +71,7 @@ public class AlipayController extends BaseController {
 			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(orderMoney));
 
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getThirdPayBodyEnum().val)) {
-			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
-			if ("".equals(bond)) {
-				bond = PropertyType.MERCHANT_BONT_DEFAULT;
-			}
-			aparam.setTotalAmount(bond);
-
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(money));

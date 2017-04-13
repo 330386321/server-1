@@ -1,24 +1,26 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.constants.StatusEnum;
-import com.lawu.eshop.mall.param.PayOrderListParam;
-import com.lawu.eshop.mall.param.PayOrderParam;
-import com.lawu.eshop.order.srv.bo.PayOrderBO;
-import com.lawu.eshop.order.srv.converter.PayOrderConverter;
-import com.lawu.eshop.order.srv.domain.PayOrderDO;
-import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
-import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
-import com.lawu.eshop.order.srv.service.PayOrderService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.StatusEnum;
+import com.lawu.eshop.mall.param.PayOrderListParam;
+import com.lawu.eshop.mall.param.PayOrderParam;
+import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
+import com.lawu.eshop.order.srv.converter.PayOrderConverter;
+import com.lawu.eshop.order.srv.domain.PayOrderDO;
+import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
+import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
+import com.lawu.eshop.order.srv.service.PayOrderService;
 
 /**
  * @author zhangyong
@@ -86,8 +88,11 @@ public class PayOrderServiceImpl implements PayOrderService {
     }
 
 	@Override
-	public double selectPayOrderActueMoney(String orderId) {
+	public ThirdPayCallBackQueryPayOrderBO selectThirdPayCallBackPayOrder(String orderId) {
 		PayOrderDO payDO = payOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderId));
-		return payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		ThirdPayCallBackQueryPayOrderBO bo = new ThirdPayCallBackQueryPayOrderBO();
+		bo.setActualMoney(payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		//bo.setBusinessUserNum(payDO.get);
+		return bo;
 	}
 }

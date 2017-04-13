@@ -1,5 +1,16 @@
 package com.lawu.eshop.order.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -9,13 +20,11 @@ import com.lawu.eshop.mall.dto.PayOrderIdDTO;
 import com.lawu.eshop.mall.param.PayOrderListParam;
 import com.lawu.eshop.mall.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
+import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.service.PayOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * @author zhangyong
@@ -82,13 +91,16 @@ public class PayOrderController extends BaseController {
 	 * @param orderIds
 	 * @return
 	 * @author Yangqh
+     * @throws Exception 
 	 */
 	@RequestMapping(value = "selectPayOrderActueMoney", method = RequestMethod.GET)
-	public double selectPayOrderActueMoney(@RequestParam String orderId) {
+	public ThirdPayCallBackQueryPayOrderDTO selectPayOrderActueMoney(@RequestParam String orderId) throws Exception {
 		if(orderId == null || "".equals(orderId.trim())){
-			return 0L;
+			return null;
 		}
-		double actualMoney = payOrderService.selectPayOrderActueMoney(orderId);
-		return actualMoney;
+		ThirdPayCallBackQueryPayOrderBO bo = payOrderService.selectThirdPayCallBackPayOrder(orderId);
+		ThirdPayCallBackQueryPayOrderDTO dto = new ThirdPayCallBackQueryPayOrderDTO();
+		BeanUtil.copyProperties(bo, dto);
+		return dto;
 	}
 }
