@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(value = "commentManage")
 @RestController
-@RequestMapping("/")
+@RequestMapping("commentManage/")
 public class CommentManageController extends BaseController{
 
     @Autowired

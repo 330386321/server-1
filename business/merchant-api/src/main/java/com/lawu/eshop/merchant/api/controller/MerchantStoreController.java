@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Api(tags = "merchantStore")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "merchantStore/")
 public class MerchantStoreController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(MerchantStoreController.class);
     @Autowired

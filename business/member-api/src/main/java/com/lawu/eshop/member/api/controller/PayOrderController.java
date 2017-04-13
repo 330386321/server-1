@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "payOrder")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "payOrder/")
 public class PayOrderController extends BaseController {
 
     @Autowired

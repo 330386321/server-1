@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "merchantAudit")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "merchantAudit/")
 public class MerchantAuditController extends BaseController {
 
     @Autowired

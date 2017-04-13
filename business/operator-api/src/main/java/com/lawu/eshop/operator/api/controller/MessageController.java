@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "message")
 @RestController
-@RequestMapping("/")
+@RequestMapping("message/")
 public class MessageController extends BaseController {
 
     @Autowired

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "merchantInfo")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "merchantInfo/")
 public class MerchantInfoController extends BaseController {
 
     @Autowired

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "merchantFavored")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "merchantFavored/")
 public class MerchantFavoredController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;

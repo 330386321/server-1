@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Api(tags = "region")
 @RestController
-@RequestMapping("/")
+@RequestMapping("region/")
 public class RegionController extends BaseController {
 
     @Autowired
