@@ -39,7 +39,7 @@ public interface MessageService {
      * @param statusEnum
      */
     @RequestMapping(method = RequestMethod.PUT, value = "message/updateMessageStatus/{messageId}")
-    void updateMessageStatus(@PathVariable("messageId") Long messageId);
+    Result updateMessageStatus(@PathVariable("messageId") Long messageId);
 
     /**
      * 插入站内消息
@@ -48,7 +48,7 @@ public interface MessageService {
      * @param messageInfoParam 消息参数
      */
     @RequestMapping(method = RequestMethod.POST, value = "message/saveMessage/{userNum}")
-    void saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute MessageInfoParam messageInfoParam);
+    Result saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute MessageInfoParam messageInfoParam);
 
     @RequestMapping(value = "message/delMessageStatus/{messageId}", method = RequestMethod.DELETE)
     Result delMessageStatus(@PathVariable("messageId") Long messageId);
