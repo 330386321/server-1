@@ -40,7 +40,7 @@ import java.util.Map;
  */
 @Api("commentMerchant")
 @RestController
-@RequestMapping("/")
+@RequestMapping("commentMerchant/")
 public class CommentMerchantController extends BaseController {
 
     @Autowired
