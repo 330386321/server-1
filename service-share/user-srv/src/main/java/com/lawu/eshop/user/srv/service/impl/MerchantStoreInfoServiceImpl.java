@@ -79,8 +79,31 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         }
 
         if (!merchantStoreImageDOS.isEmpty()) {
-            merchantStoreInfoBO.setType(merchantStoreImageDOS.get(0).getType());
-            merchantStoreInfoBO.setPath(merchantStoreImageDOS.get(0).getPath());
+
+            for (MerchantStoreImageDO merchantStoreImageDO : merchantStoreImageDOS) {
+                Byte type = merchantStoreImageDO.getType();
+                merchantStoreInfoBO.setType(type);
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_STORE.val) {
+                    merchantStoreInfoBO.setStoreUrl(merchantStoreImageDO.getPath());
+                }
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val) {
+                    merchantStoreInfoBO.setLicenseUrl(merchantStoreImageDO.getPath());
+                }
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_LOGO.val) {
+                    merchantStoreInfoBO.setLogoUrl(merchantStoreImageDO.getPath());
+                }
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_OTHER.val) {
+                    merchantStoreInfoBO.setOtherUrl(merchantStoreImageDO.getPath());
+                }
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val) {
+                    merchantStoreInfoBO.setIdcardUrl(merchantStoreImageDO.getPath());
+                }
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val) {
+                    merchantStoreInfoBO.setEnvironmentUrl(merchantStoreImageDO.getPath());
+                }
+
+            }
+
 
         }
         // 查询门店审核记录
@@ -427,7 +450,13 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
         merchantStoreInfoBO.setName(stores.get(0).getName());
         if (!merchantStoreImageDOS.isEmpty()) {
-            merchantStoreInfoBO.setPath(merchantStoreImageDOS.get(0).getPath());
+            for (MerchantStoreImageDO merchantStoreImageDO : merchantStoreImageDOS) {
+                Byte type = merchantStoreImageDO.getType();
+                merchantStoreInfoBO.setType(type);
+                if (type == MerchantStoreImageEnum.STORE_IMAGE_STORE.val) {
+                    merchantStoreInfoBO.setStoreUrl(merchantStoreImageDO.getPath());
+                }
+            }
         }
         return merchantStoreInfoBO;
     }

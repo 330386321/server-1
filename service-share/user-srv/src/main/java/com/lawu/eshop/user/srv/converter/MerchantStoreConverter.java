@@ -51,7 +51,7 @@ public class MerchantStoreConverter {
         merchantStoreInfoBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
         merchantStoreInfoBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
         merchantStoreInfoBO.setStatusEnum(MerchantStatusEnum.getEnum(merchantStoreDO.getStatus()));
-
+        merchantStoreInfoBO.setRegionName(merchantStoreDO.getRegionName());
         return merchantStoreInfoBO;
     }
 
@@ -87,7 +87,12 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setOperatorName(merchantStoreInfoBO.getOperatorName());
 
         merchantStoreDTO.setType(MerchantStoreImageEnum.getEnum(merchantStoreInfoBO.getType()));
-        merchantStoreDTO.setPath(merchantStoreInfoBO.getPath());
+        merchantStoreDTO.setEnvironmentUrl(merchantStoreInfoBO.getEnvironmentUrl());
+        merchantStoreDTO.setIdcardUrl(merchantStoreInfoBO.getIdcardUrl());
+        merchantStoreDTO.setLicenseUrl(merchantStoreInfoBO.getLicenseUrl());
+        merchantStoreDTO.setLogoUrl(merchantStoreInfoBO.getLogoUrl());
+        merchantStoreDTO.setOtherUrl(merchantStoreInfoBO.getOtherUrl());
+        merchantStoreDTO.setStoreUrl(merchantStoreInfoBO.getStoreUrl());
         merchantStoreDTO.setAuditSuccess(merchantStoreInfoBO.isAuditSuccess());
         merchantStoreDTO.setMerchantStatus(merchantStoreInfoBO.getStatusEnum());
 

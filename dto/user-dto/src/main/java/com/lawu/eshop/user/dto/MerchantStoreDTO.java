@@ -142,10 +142,28 @@ public class MerchantStoreDTO {
     private MerchantStoreImageEnum type;
 
     /**
-     * 图片路径
+     * logo图片路径
      */
-    @ApiParam(name = "path", value = "图片路径")
-    private String path;
+    @ApiParam(name = "logoUrl", value = "logo图片路径")
+    private String logoUrl;
+
+    @ApiParam(name = "environmentUrl", value = "门店环境图片路径")
+    private String environmentUrl;
+
+    @ApiParam(name = "otherUrl", value = "其他证件图片路径")
+    private String otherUrl;
+
+    @ApiParam(name = "idcardUrl", value = "身份证图片路径")
+    private String idcardUrl;
+
+    @ApiParam(name = "licenseUrl", value = "执照图片路径")
+    private String licenseUrl;
+
+    @ApiParam(name = "storeUrl", value = "门店图片路径")
+    private String storeUrl;
+
+    @ApiParam(name = "regionName", value = "区域名称")
+    private String regionName;
 
     /**
      * 门店状态
@@ -312,14 +330,6 @@ public class MerchantStoreDTO {
         this.type = type;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public MerchantStatusEnum getMerchantStatus() {
         return merchantStatus;
     }
@@ -334,5 +344,61 @@ public class MerchantStoreDTO {
 
     public void setAuditSuccess(boolean auditSuccess) {
         this.auditSuccess = auditSuccess;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public String getEnvironmentUrl() {
+        return environmentUrl;
+    }
+
+    public void setEnvironmentUrl(String environmentUrl) {
+        this.environmentUrl = environmentUrl;
+    }
+
+    public String getOtherUrl() {
+        return otherUrl;
+    }
+
+    public void setOtherUrl(String otherUrl) {
+        this.otherUrl = otherUrl;
+    }
+
+    public String getIdcardUrl() {
+        return idcardUrl;
+    }
+
+    public void setIdcardUrl(String idcardUrl) {
+        this.idcardUrl = idcardUrl;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
+
+    public String getStoreUrl() {
+        return storeUrl;
+    }
+
+    public void setStoreUrl(String storeUrl) {
+        this.storeUrl = storeUrl;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

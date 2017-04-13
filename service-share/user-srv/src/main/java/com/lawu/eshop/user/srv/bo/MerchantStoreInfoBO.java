@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
 
 /**
  * 商家门店信息
@@ -132,10 +132,20 @@ public class MerchantStoreInfoBO {
      */
     private Byte type;
 
-    /**
-     * 图片路径
-     */
-    private String path;
+
+    private String logoUrl;
+
+    private String environmentUrl;
+
+    private String otherUrl;
+
+    private String idcardUrl;
+
+    private String licenseUrl;
+
+    private String storeUrl;
+
+    private String regionName;
     
     /**
     *
@@ -308,13 +318,6 @@ public class MerchantStoreInfoBO {
         this.type = type;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
 
 	public Boolean getIsNoReasonReturn() {
 		return isNoReasonReturn;
@@ -338,5 +341,61 @@ public class MerchantStoreInfoBO {
 
     public void setAuditSuccess(boolean auditSuccess) {
         this.auditSuccess = auditSuccess;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
+    }
+
+    public String getEnvironmentUrl() {
+        return environmentUrl;
+    }
+
+    public void setEnvironmentUrl(String environmentUrl) {
+        this.environmentUrl = environmentUrl;
+    }
+
+    public String getOtherUrl() {
+        return otherUrl;
+    }
+
+    public void setOtherUrl(String otherUrl) {
+        this.otherUrl = otherUrl;
+    }
+
+    public String getIdcardUrl() {
+        return idcardUrl;
+    }
+
+    public void setIdcardUrl(String idcardUrl) {
+        this.idcardUrl = idcardUrl;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
+
+    public String getStoreUrl() {
+        return storeUrl;
+    }
+
+    public void setStoreUrl(String storeUrl) {
+        this.storeUrl = storeUrl;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }
