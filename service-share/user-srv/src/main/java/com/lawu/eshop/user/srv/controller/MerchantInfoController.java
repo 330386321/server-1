@@ -59,9 +59,14 @@ public class MerchantInfoController extends BaseController{
     public Result<MerchantInfoDTO> findMerchantProfileInfo(@PathVariable("merchantProfileId") Long merchantProfileId){
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantProfileId);
+        if(merchantProfileBO == null){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         // 商家基本信息
         MerchantInfoBO merchantInfoBO = merchantService.findMerchantInfo(merchantProfileId);
-
+        if(merchantInfoBO == null){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
         MerchantInfoDTO merchantInfoDTO = MerchantInfoConverter.coverConverDTO(merchantProfileBO,merchantInfoBO);
         if(merchantInfoDTO == null){
             return successGet();

@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
+import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import io.swagger.annotations.Api;
@@ -42,7 +43,7 @@ public class MerchantInfoController extends BaseController {
     }
 
 
-    /*@ApiOperation(value = "查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "查询商家信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findMerchantProfileInfo", method = RequestMethod.GET)
@@ -50,7 +51,7 @@ public class MerchantInfoController extends BaseController {
         Long id = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantInfoDTO> result = merchantProfileService.findMerchantProfileInfo(id);
         return result;
-    }*/
+    }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询门店网站链接信息", notes = "查询门店网站链接信息 [1004]（章勇）", httpMethod = "GET")
