@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.param.PayOrderListParam;
@@ -13,7 +12,6 @@ import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,10 +28,6 @@ public class PayOrderServiceImpl implements PayOrderService {
     @Autowired
     private PayOrderDOMapper payOrderDOMapper;
 
-    @Autowired
-    @Qualifier("payOrderTransactionMainServiceImpl")
-    private TransactionMainService payOrderTransactionMainService;
-
     @Override
     @Transactional
     public Integer savePayOrderInfo(Long memberId, PayOrderParam param) {
@@ -47,10 +41,8 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setGmtCreate(new Date());
         payOrderDO.setGmtModified(new Date());
         payOrderDO.setIsEvaluation(false);//未评
-        payOrderDO.setStatus(StatusEnum.STATUS_VALID.val);
+        payOrderDO.setStatus(StatusEnum.STATUS_UNPAY.val);//待支付
         int id = payOrderDOMapper.insert(payOrderDO);
-        // 发消息更新门店买单笔数
-        payOrderTransactionMainService.sendNotice(param.getMerchantId());
         return id;
     }
 
@@ -58,9 +50,9 @@ public class PayOrderServiceImpl implements PayOrderService {
     public Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param) {
         PayOrderDOExample example = new PayOrderDOExample();
         if (param.getEvaluationEnum() == null) {
-            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
+            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(StatusEnum.STATUS_PAY_SUCCESS.val);
         } else {
-            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
+            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(StatusEnum.STATUS_PAY_SUCCESS.val);
         }
         example.setOrderByClause("id desc");
         //分页
@@ -87,7 +79,7 @@ public class PayOrderServiceImpl implements PayOrderService {
     public void delPayOrderInfo(Long id) {
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setId(id);
-        payOrderDO.setStatus(StatusEnum.STATUS_INVALID.val);
+        payOrderDO.setStatus(StatusEnum.STATUS_DEL.val);
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
     }
 }
