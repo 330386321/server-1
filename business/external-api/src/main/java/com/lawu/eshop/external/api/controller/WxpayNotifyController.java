@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -52,7 +53,10 @@ public class WxpayNotifyController extends BaseController {
 
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private OrderService orderService;
 
+	
 	/**
 	 * APP微信异步回调接口
 	 * 
@@ -83,6 +87,8 @@ public class WxpayNotifyController extends BaseController {
 							: packageParams.get("out_trade_no").toString();
 
 					String extra[] = attach.split(splitStr);
+					double dmoney = new Double(total_fee).doubleValue();
+					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
 					String bizFlag = extra[0];
 					NotifyCallBackParam param = new NotifyCallBackParam();
@@ -90,7 +96,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setUserNum(extra[1]);
 					param.setBody(extra[2]);
 					param.setBizIds(extra[3]);
-					param.setTotalFee(total_fee);
+					param.setTotalFee(String.valueOf(dmoney));
 					param.setOutTradeNo(out_trade_no);
 					param.setTradeNo(transaction_id);
 					param.setBuyerLogonId("回调没返回");
@@ -106,9 +112,11 @@ public class WxpayNotifyController extends BaseController {
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
 
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
-
+						result = orderService.doHandleOrderPayNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(bizFlagInt)) {
-
+						result = orderService.doHandlePayOrderNotify(param);
+						
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -167,6 +175,8 @@ public class WxpayNotifyController extends BaseController {
 							: packageParams.get("out_trade_no").toString();
 
 					String extra[] = attach.split(splitStr);
+					double dmoney = new Double(total_fee).doubleValue();
+					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金
 					String bizFlag = extra[0];
 					NotifyCallBackParam param = new NotifyCallBackParam();
@@ -174,7 +184,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setUserNum(extra[1]);
 					param.setBody(extra[2]);
 					param.setBizIds(extra[3]);
-					param.setTotalFee(total_fee);
+					param.setTotalFee(String.valueOf(dmoney));
 					param.setOutTradeNo(out_trade_no);
 					param.setTradeNo(transaction_id);
 					param.setBuyerLogonId("回调没返回");

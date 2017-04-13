@@ -37,6 +37,7 @@ public class ResultCode {
     public static final int UPDATE_FAIL = 1019;
     public static final int UPLOAD_VEDIO_FAIL = 1020;
     public static final int UPLOAD_SIZE_BIGER = 1021;
+    public static final int PAY_PWD_NULL = 1022;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -141,6 +142,7 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
+        ResultCode.messageMap.put(PAY_PWD_NULL, "支付密码尚未设置");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");

@@ -31,7 +31,15 @@ public interface RechargeService {
 	 * @param result
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	Result doHandleRechargeNotify(NotifyCallBackParam param);
+
+	/**
+	 * 调用第三方支付时获取需要支付的金额
+	 * @param rechargeId
+	 * @return
+	 */
+	double getRechargeMoney(String rechargeId);
 
 
 

@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiParam;
  */
 public class ThirdPayParam {
 	
-	@ApiParam (name="totalAmount",required = true, value = "金额(买单时必传)")
+	@ApiParam (name="totalAmount",required = true, value = "金额")
 	private String totalAmount;
 	
 	@ApiParam (name="bizIds", value = "业务表ID-非必填(支持多个,用英文逗号分割)")

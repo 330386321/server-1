@@ -22,7 +22,9 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AlipayService;
 import com.lawu.eshop.merchant.api.service.OrderService;
+import com.lawu.eshop.merchant.api.service.PayOrderService;
 import com.lawu.eshop.merchant.api.service.PropertySrvPropertyService;
+import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
@@ -59,6 +61,10 @@ public class AlipayController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private PropertySrvPropertyService propertyService;
+	@Autowired
+	private RechargeService rechargeService;
+	@Autowired
+	private PayOrderService payOrderService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
@@ -78,7 +84,8 @@ public class AlipayController extends BaseController {
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
-			aparam.setTotalAmount(param.getTotalAmount());
+			double payMoney = payOrderService.selectPayOrderActueMoney(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(payMoney));
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
 			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
@@ -90,6 +97,12 @@ public class AlipayController extends BaseController {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
 			aparam.setTotalAmount(bond);
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+			double money = rechargeService.getRechargeMoney(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(money));
 		}
 
 		return alipayService.getAppAlipayReqParams(aparam);

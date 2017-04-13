@@ -75,4 +75,17 @@ public class PayOrderController extends BaseController {
         return successDelete();
     }
 
+    /** 第三方支付时获取买单的实际总金额，用于调用第三方支付平台
+	 * @param orderIds
+	 * @return
+	 * @author Yangqh
+	 */
+	@RequestMapping(value = "selectPayOrderActueMoney", method = RequestMethod.GET)
+	public double selectPayOrderActueMoney(@RequestParam String orderId) {
+		if(orderId == null || "".equals(orderId.trim())){
+			return 0L;
+		}
+		double actualMoney = payOrderService.selectPayOrderActueMoney(orderId);
+		return actualMoney;
+	}
 }

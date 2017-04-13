@@ -1,7 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -17,6 +15,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
 import com.lawu.eshop.member.api.service.OrderService;
 import com.lawu.eshop.member.api.service.PropertySrvPropertyService;
+import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
@@ -43,14 +42,14 @@ import io.swagger.annotations.ApiParam;
 @RequestMapping(value = "alipay/")
 public class AlipayController extends BaseController {
 
-	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
-
 	@Autowired
 	private AlipayService alipayService;
 	@Autowired
 	private OrderService orderService;
 	@Autowired
 	private PropertySrvPropertyService propertyService;
+	@Autowired
+	private RechargeService rechargeService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
@@ -63,7 +62,6 @@ public class AlipayController extends BaseController {
 		aparam.setBizIds(param.getBizIds());
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
-		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
@@ -71,7 +69,7 @@ public class AlipayController extends BaseController {
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
-			aparam.setTotalAmount(param.getTotalAmount());
+			aparam.setTotalAmount(param.getTotalAmount());// app传入
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
 			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
@@ -83,6 +81,13 @@ public class AlipayController extends BaseController {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
 			aparam.setTotalAmount(bond);
+
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+			double money = rechargeService.getRechargeMoney(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(money));
 		}
 
 		return successGet(alipayService.getAppAlipayReqParams(aparam));

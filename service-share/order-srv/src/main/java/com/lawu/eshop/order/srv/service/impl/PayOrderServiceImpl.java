@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,4 +83,10 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setStatus(StatusEnum.STATUS_DEL.val);
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
     }
+
+	@Override
+	public double selectPayOrderActueMoney(String orderId) {
+		PayOrderDO payDO = payOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderId));
+		return payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
 }

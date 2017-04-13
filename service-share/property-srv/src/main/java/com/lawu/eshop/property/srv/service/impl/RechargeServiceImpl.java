@@ -13,7 +13,6 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
@@ -162,6 +161,12 @@ public class RechargeServiceImpl implements RechargeService {
 		
 		result.setRet(ResultCode.SUCCESS);
 		return result;
+	}
+
+	@Override
+	public double getRechargeMoney(String rechargeId) {
+		RechargeDO recharge = rechargeDOMapper.selectByPrimaryKey(Long.valueOf(rechargeId));
+		return recharge.getRechargeMoney().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
 }

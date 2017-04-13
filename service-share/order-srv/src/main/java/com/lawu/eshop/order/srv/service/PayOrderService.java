@@ -27,4 +27,12 @@ public interface PayOrderService {
     Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param);
 
     void delPayOrderInfo(Long id);
+
+    /**
+     * 第三方支付时获取买单的实际总金额，用于调用第三方支付平台
+     * @param orderId
+     * @return
+     * @author Yangqh
+     */
+	double selectPayOrderActueMoney(String orderId);
 }

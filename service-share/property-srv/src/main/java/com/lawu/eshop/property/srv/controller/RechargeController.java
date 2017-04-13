@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -104,5 +105,17 @@ public class RechargeController extends BaseController {
 		return rechargeService.doHandleRechargeNotify(param);
 	}
 
-	
+	/**
+	 * 调用第三方时获取支付金额
+	 * @param rechargeId
+	 * @return
+	 */
+	@RequestMapping(value = "getRechargeMoney", method = RequestMethod.GET)
+	public double getRechargeMoney(@RequestParam String rechargeId) {
+		if(rechargeId == null || "".equals(rechargeId)){
+			return 0L;
+		}
+		double rechargeMoney = rechargeService.getRechargeMoney(rechargeId);
+		return rechargeMoney;
+	}
 }

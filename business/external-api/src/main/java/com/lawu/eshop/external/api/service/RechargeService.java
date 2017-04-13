@@ -21,7 +21,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 public interface RechargeService {
 
 	/**
-	 * 
+	 * 处理第三方充值回调
 	 * @param param
 	 * @return
 	 */

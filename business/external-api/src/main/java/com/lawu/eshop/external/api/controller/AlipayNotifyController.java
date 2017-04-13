@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alipay.api.internal.util.AlipaySignature;
+import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -47,6 +48,8 @@ public class AlipayNotifyController extends BaseController {
 
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private OrderService orderService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -138,9 +141,11 @@ public class AlipayNotifyController extends BaseController {
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
 
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
-
+						result = orderService.doHandleOrderPayNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(bizFlagInt)) {
-
+						result = orderService.doHandlePayOrderNotify(param);
+						
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -160,7 +165,6 @@ public class AlipayNotifyController extends BaseController {
 		logger.info("#####################APP支付宝回调结束#####################");
 	}
 
-	
 	/**
 	 * 支付宝异步回调接口
 	 * 
@@ -239,8 +243,8 @@ public class AlipayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						//TODO 保证金支付回调
-						
+						// TODO 保证金支付回调
+
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}

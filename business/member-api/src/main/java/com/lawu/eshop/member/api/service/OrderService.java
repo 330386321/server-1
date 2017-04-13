@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface OrderService {
 
 	
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
 	double selectOrderMoney(@RequestParam("orderIds") String orderIds);
 
