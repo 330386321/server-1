@@ -139,7 +139,7 @@ public class MerchantController extends BaseController {
         return merchantService.register(registerRealParam);
     }
 
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
+    /*@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询当前商户信息", notes = "查询当前商户信息。[1002] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -147,6 +147,6 @@ public class MerchantController extends BaseController {
     public Result<MerchantDTO> getMerchantByAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String account = UserUtil.getCurrentAccount(getRequest());
         return merchantService.getMerchantByAccount(account);
-    }
+    }*/
 
 }
