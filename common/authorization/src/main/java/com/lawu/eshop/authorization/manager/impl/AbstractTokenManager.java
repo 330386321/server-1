@@ -5,6 +5,8 @@ import com.lawu.eshop.authorization.manager.TokenManager;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.Calendar;
+
 /**
  * Token管理的基础类
  * 引入JWT 2017/03/15
@@ -51,6 +53,8 @@ public abstract class AbstractTokenManager implements TokenManager {
     @Override
     public String createToken(String type, String userNo, Long userId, String account) {
         String id = String.valueOf(userId);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.SECOND, tokenExpireSeconds);
         // JWT
         String token = Jwts
                 .builder()
@@ -58,11 +62,13 @@ public abstract class AbstractTokenManager implements TokenManager {
                 .setId(userNo)
                 .setSubject(account)
                 .setAudience(id)
+                .setExpiration(calendar.getTime())
                 .signWith(SignatureAlgorithm.HS512, AbstractTokenManager.TOKEN_KEY)
                 .compact();
 
         // 根据设置的每个用户是否只允许绑定一个Token，调用不同的方法
         if (singleTokenWithUser) {
+            delSingleRelationshipByKey(account);
             createSingleRelationship(account, token);
         } else {
             createMultipleRelationship(account, token);

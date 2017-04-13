@@ -42,7 +42,7 @@ public class UserTokenServiceImpl implements UserTokenService {
     @Override
     public String getMemberAccount(String token, Boolean flushExpireAfterOperation, Integer expireSeconds, Boolean singleTokenWithUser) {
         String tokenKey = formatMemberToken(token);
-        String account = getValue(tokenKey).toString();
+        String account = getValue(tokenKey);
         //根据设置，在每次有效操作后刷新过期时间
         if (account != null && flushExpireAfterOperation) {
             if (singleTokenWithUser) {
