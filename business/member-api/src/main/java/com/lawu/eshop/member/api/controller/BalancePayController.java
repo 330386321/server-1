@@ -1,14 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,12 +11,12 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.BalancePayService;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitle;
+import com.lawu.eshop.member.api.service.OrderService;
+import com.lawu.eshop.member.api.service.PayOrderService;
+import com.lawu.eshop.member.api.service.RechargeService;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
 
@@ -48,6 +41,12 @@ public class BalancePayController extends BaseController {
 
 	@Autowired
 	private BalancePayService balancePayService;
+	@Autowired
+	private PayOrderService payOrderService;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private RechargeService rechargeService;
 
 	/**
 	 * 余额支付订单
@@ -62,10 +61,13 @@ public class BalancePayController extends BaseController {
 	public Result orderPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {
 		BalancePayDataParam dparam = new BalancePayDataParam();
-		dparam.setAmount(param.getAmount());
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+		// 获取订单金额
+		double orderMoney = orderService.selectOrderMoney(param.getBizIds());
+		dparam.setTotalAmount(String.valueOf(orderMoney));
+
 		return balancePayService.orderPay(dparam);
 	}
 
@@ -76,24 +78,31 @@ public class BalancePayController extends BaseController {
 	public Result billPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {
 		BalancePayDataParam dparam = new BalancePayDataParam();
-		dparam.setAmount(param.getAmount());
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+		ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+				.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+		dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+		dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+
 		return balancePayService.billPay(dparam);
 	}
 
 	@SuppressWarnings("rawtypes")
-	// @Authorization
+	@Authorization
 	@ApiOperation(value = "余额充值积分", notes = "余额充值积分,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "balancePayPoint", method = RequestMethod.POST)
 	public Result balancePayPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {
 		BalancePayDataParam dparam = new BalancePayDataParam();
-		dparam.setAmount(param.getAmount());
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
+
+		double money = rechargeService.getRechargeMoney(param.getBizIds());
+		dparam.setTotalAmount(String.valueOf(money));
+
 		return balancePayService.balancePayPoint(dparam);
 	}
 }

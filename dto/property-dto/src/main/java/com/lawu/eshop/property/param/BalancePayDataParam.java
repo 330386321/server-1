@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -20,10 +22,16 @@ public class BalancePayDataParam extends BalancePayParam{
 	// 用户编号
 	@NotBlank(message = "userNum不能为空")
 	private String userNum;
+	
+	private String sideUserNum;
 
 	// 用户账号
 	@NotBlank(message = "account不能为空")
 	private String account;
+	
+	@NotBlank(message = "totalAmount不能为空")
+	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
+	private String totalAmount;
 	
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
@@ -69,4 +77,21 @@ public class BalancePayDataParam extends BalancePayParam{
 		this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
 	}
 
+	public String getSideUserNum() {
+		return sideUserNum;
+	}
+
+	public void setSideUserNum(String sideUserNum) {
+		this.sideUserNum = sideUserNum;
+	}
+
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	
 }

@@ -140,7 +140,8 @@ public class AlipayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-
+						//TODO 保证金回调
+						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
 						result = orderService.doHandleOrderPayNotify(param);
 						

@@ -58,7 +58,7 @@ public class BalancePayController extends BaseController {
 		}
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
 		param.setTitle(TransactionTitleEnum.ORDER_PAY.val);
-		int retCode = balancePayService.balancePay(param);
+		int retCode = balancePayService.balancePayProductOrder(param);
 		return successCreated(retCode);
 	}
 
@@ -81,6 +81,7 @@ public class BalancePayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
+		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
 		param.setTitle(TransactionTitleEnum.PAY.val);
 		int retCode = balancePayService.balancePay(param);
 		return successCreated(retCode);

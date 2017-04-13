@@ -77,7 +77,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam1.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam1.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
-		transactionDetailService.save(tdsParam);
+		transactionDetailService.save(tdsParam1);
 
 		// 加商家财产余额
 		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
