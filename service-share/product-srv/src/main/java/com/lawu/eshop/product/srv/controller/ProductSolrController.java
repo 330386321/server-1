@@ -39,7 +39,7 @@ public class ProductSolrController extends BaseController {
         query.setRows(productSolrParam.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
         Page<ProductSolrDTO> page = new Page<>();
@@ -65,7 +65,7 @@ public class ProductSolrController extends BaseController {
         query.setRows(productSolrParam.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
         Page<ProductSolrDTO> page = new Page<>();
@@ -91,7 +91,7 @@ public class ProductSolrController extends BaseController {
         query.setRows(productSolrParam.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
         Page<ProductSolrDTO> page = new Page<>();

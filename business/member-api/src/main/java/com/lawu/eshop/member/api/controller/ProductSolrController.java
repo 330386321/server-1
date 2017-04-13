@@ -29,21 +29,21 @@ public class ProductSolrController extends BaseController {
     @Autowired
     private ProductSolrService productSolrService;
 
-    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.GET)
     public Result<Page<ProductSolrDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listProductByCategoryId(productSolrParam);
     }
 
-    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
     public Result<Page<ProductSolrDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listRecommendProduct(productSolrParam);
     }
 
-    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)
     public Result<Page<ProductSolrDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {

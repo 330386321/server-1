@@ -113,7 +113,7 @@ public class MerchantController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "查询是否设置支付密码", notes = "查询是否设置支付密码(true--已设置，false--未设置)。[1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "查询是否设置支付密码", notes = "查询是否设置支付密码(true--已设置，false--未设置)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "isSetPayPwd", method = RequestMethod.GET)

@@ -7,15 +7,17 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
 import com.lawu.eshop.user.dto.NearStoreDTO;
+import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -43,7 +45,7 @@ public class StoreSolrController extends BaseController {
             stringBuffer.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
-            stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath());
+            stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
         }
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
             stringBuffer.append(" AND d:").append(storeSolrParam.getDistance());
@@ -64,7 +66,7 @@ public class StoreSolrController extends BaseController {
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -74,6 +76,39 @@ public class StoreSolrController extends BaseController {
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(storeSolrParam.getCurrentPage());
         return successGet(page);
+    }
+
+    /**
+     * 根据输入搜索词查询关联搜索词
+     *
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
+    public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
+        SolrQuery query = new SolrQuery();
+        query.setQuery("name_s:" + name + "*");
+        query.setFields("name_s");
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+
+        List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
+        for (SolrDocument solrDocument : solrDocumentList) {
+            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
+            storeSearchWordDTO.setName(solrDocument.get("name_s").toString());
+
+            query = new SolrQuery();
+            query.setQuery("name_s:" + storeSearchWordDTO.getName());
+            query.setFields("name_s");
+            solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+            if (solrDocumentList != null) {
+                storeSearchWordDTO.setCount((int) solrDocumentList.getNumFound());
+            }
+            storeSearchWordDTOS.add(storeSearchWordDTO);
+        }
+        return successGet(storeSearchWordDTOS);
     }
 
 }

@@ -58,6 +58,15 @@ public class VerifyCodeController extends BaseController {
         return smsRecordService.sendSms(mobile, ip, purpose);
     }
 
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码(不需要图形验证码)。[1006|1007|1008] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getSmsCode/{mobile}", method = RequestMethod.GET)
+    public Result getSmsCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
+                             VerifyCodePurposeEnum purpose) {
+        String ip = IpUtil.getIpAddress(getRequest());
+        return smsRecordService.sendSms(mobile, ip, purpose);
+    }
+
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "获取图形验证码", notes = "获取图形验证码。 (梅述全)", httpMethod = "GET")
     @RequestMapping(value = "getPicCode/{mobile}", method = RequestMethod.GET)

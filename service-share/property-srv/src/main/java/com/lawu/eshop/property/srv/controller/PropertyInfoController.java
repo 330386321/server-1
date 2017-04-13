@@ -94,7 +94,7 @@ public class PropertyInfoController extends BaseController {
     public Result isSetPayPwd(@PathVariable String userNum) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
         if (propertyInfoBO == null) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
         if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
             return successGet(false);
