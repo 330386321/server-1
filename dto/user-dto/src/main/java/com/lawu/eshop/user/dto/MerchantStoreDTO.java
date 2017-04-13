@@ -164,6 +164,8 @@ public class MerchantStoreDTO {
 
     @ApiParam(name = "regionName", value = "区域名称")
     private String regionName;
+    @ApiParam(name = "industryName", value = "主营业务")
+    private String industryName;
 
     /**
      * 门店状态
@@ -400,5 +402,13 @@ public class MerchantStoreDTO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
     }
 }

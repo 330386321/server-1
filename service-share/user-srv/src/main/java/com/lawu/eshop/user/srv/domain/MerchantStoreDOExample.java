@@ -786,6 +786,76 @@ public class MerchantStoreDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIndustryNameIsNull() {
+            addCriterion("industry_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameIsNotNull() {
+            addCriterion("industry_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameEqualTo(String value) {
+            addCriterion("industry_name =", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameNotEqualTo(String value) {
+            addCriterion("industry_name <>", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameGreaterThan(String value) {
+            addCriterion("industry_name >", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameGreaterThanOrEqualTo(String value) {
+            addCriterion("industry_name >=", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameLessThan(String value) {
+            addCriterion("industry_name <", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameLessThanOrEqualTo(String value) {
+            addCriterion("industry_name <=", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameLike(String value) {
+            addCriterion("industry_name like", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameNotLike(String value) {
+            addCriterion("industry_name not like", value, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameIn(List<String> values) {
+            addCriterion("industry_name in", values, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameNotIn(List<String> values) {
+            addCriterion("industry_name not in", values, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameBetween(String value1, String value2) {
+            addCriterion("industry_name between", value1, value2, "industryName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIndustryNameNotBetween(String value1, String value2) {
+            addCriterion("industry_name not between", value1, value2, "industryName");
+            return (Criteria) this;
+        }
+
         public Criteria andIntroIsNull() {
             addCriterion("intro is null");
             return (Criteria) this;

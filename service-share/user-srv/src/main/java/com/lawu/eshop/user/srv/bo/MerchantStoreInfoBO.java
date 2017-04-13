@@ -66,6 +66,9 @@ public class MerchantStoreInfoBO {
      */
     private String industryPath;
 
+
+     private String industryName;
+
     /**
      *
      * 店铺介绍
@@ -397,5 +400,13 @@ public class MerchantStoreInfoBO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
     }
 }

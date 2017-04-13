@@ -57,6 +57,12 @@ public class MerchantStoreParam {
     private String industryPath;
 
     /**
+     * 主营业务
+     */
+    @ApiParam(name = "industryName", value = "主营业务名称",required = true)
+    private String industryName;
+
+    /**
      * 店铺介绍
      */
     @ApiParam(name = "intro", value = "店铺介绍",required = true)
@@ -345,5 +351,13 @@ public class MerchantStoreParam {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
     }
 }
