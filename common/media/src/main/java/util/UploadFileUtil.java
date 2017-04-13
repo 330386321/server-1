@@ -172,7 +172,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = "G:\\upload";// 根路径
+        String bashdir = request.getServletContext().getRealPath("/");// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         String urlImg = "";
@@ -302,7 +302,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = "G:\\test";// 上传文件根路径
+        String bashdir = request.getServletContext().getRealPath("/");// 上传文件根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         Collection<Part> parts;
