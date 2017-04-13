@@ -135,11 +135,6 @@ public class MerchantStoreDTO {
     @ApiModelProperty(name = "operatorName", value = "个人经营者姓名")
     private String operatorName;
 
-    /**
-     * 图片类型
-     */
-    @ApiModelProperty(name = "type", value = "图片类型")
-    private MerchantStoreImageEnum type;
 
     /**
      * logo图片路径
@@ -324,13 +319,6 @@ public class MerchantStoreDTO {
         this.operatorName = operatorName;
     }
 
-    public MerchantStoreImageEnum getType() {
-        return type;
-    }
-
-    public void setType(MerchantStoreImageEnum type) {
-        this.type = type;
-    }
 
     public MerchantStatusEnum getMerchantStatus() {
         return merchantStatus;

@@ -88,7 +88,6 @@ public class MerchantStoreConverter {
         merchantStoreDTO.setOperatorCardId(merchantStoreInfoBO.getOperatorCardId());
         merchantStoreDTO.setOperatorName(merchantStoreInfoBO.getOperatorName());
 
-        merchantStoreDTO.setType(MerchantStoreImageEnum.getEnum(merchantStoreInfoBO.getType()));
         merchantStoreDTO.setEnvironmentUrl(merchantStoreInfoBO.getEnvironmentUrl());
         merchantStoreDTO.setIdcardUrl(merchantStoreInfoBO.getIdcardUrl());
         merchantStoreDTO.setLicenseUrl(merchantStoreInfoBO.getLicenseUrl());

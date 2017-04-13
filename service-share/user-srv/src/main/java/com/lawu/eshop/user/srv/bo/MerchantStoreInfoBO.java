@@ -130,11 +130,6 @@ public class MerchantStoreInfoBO {
      */
     private String operatorName;
 
-    /**
-     * 图片类型
-     */
-    private Byte type;
-
 
     private String logoUrl;
 
@@ -313,13 +308,6 @@ public class MerchantStoreInfoBO {
         this.operatorName = operatorName;
     }
 
-    public Byte getType() {
-        return type;
-    }
-
-    public void setType(Byte type) {
-        this.type = type;
-    }
 
 
 	public Boolean getIsNoReasonReturn() {

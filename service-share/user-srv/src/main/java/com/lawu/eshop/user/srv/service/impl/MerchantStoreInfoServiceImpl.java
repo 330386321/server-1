@@ -78,7 +78,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
             for (MerchantStoreImageDO merchantStoreImageDO : merchantStoreImageDOS) {
                 Byte type = merchantStoreImageDO.getType();
-                merchantStoreInfoBO.setType(type);
+                //merchantStoreInfoBO.setType(type);
                 if (type == MerchantStoreImageEnum.STORE_IMAGE_STORE.val) {
                     merchantStoreInfoBO.setStoreUrl(merchantStoreImageDO.getPath());
                 }
@@ -448,7 +448,6 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         if (!merchantStoreImageDOS.isEmpty()) {
             for (MerchantStoreImageDO merchantStoreImageDO : merchantStoreImageDOS) {
                 Byte type = merchantStoreImageDO.getType();
-                merchantStoreInfoBO.setType(type);
                 if (type == MerchantStoreImageEnum.STORE_IMAGE_STORE.val) {
                     merchantStoreInfoBO.setStoreUrl(merchantStoreImageDO.getPath());
                 }
