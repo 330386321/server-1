@@ -29,7 +29,7 @@ public class IndustryTypeController extends BaseController {
     private IndustryTypeService industryTypeService;
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "查询行业", notes = "查询所有行业。 [1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "查询行业", notes = "查询所有行业。 [1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)
     public Result<List<IndustryTypeDTO>> listIndustryType() {

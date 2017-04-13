@@ -16,6 +16,7 @@ public class ResultCode {
     // 公共代码
     public static final int SUCCESS = 1000;
     public static final int FAIL = 1001;
+    public static final int NOT_FOUND_DATA = 1100;
     public static final int RESOURCE_NOT_FOUND = 1002;
     public static final int ID_EMPTY = 1003;
     public static final int REQUIRED_PARM_EMPTY = 1004;
@@ -117,6 +118,7 @@ public class ResultCode {
         // 公共代码 1xxx
         ResultCode.messageMap.put(SUCCESS, "success");
         ResultCode.messageMap.put(FAIL, "fail");
+        ResultCode.messageMap.put(NOT_FOUND_DATA, "数据不存在");
         ResultCode.messageMap.put(RESOURCE_NOT_FOUND, "ID对应数据不存在");
         ResultCode.messageMap.put(ID_EMPTY, "ID不能为空");
         ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "必填参数不能为空");

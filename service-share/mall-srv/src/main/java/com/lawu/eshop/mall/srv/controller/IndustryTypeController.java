@@ -34,7 +34,7 @@ public class IndustryTypeController extends BaseController {
     public Result<List<IndustryTypeDTO>> listIndustryType() {
         List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryType();
         if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
         return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
     }
