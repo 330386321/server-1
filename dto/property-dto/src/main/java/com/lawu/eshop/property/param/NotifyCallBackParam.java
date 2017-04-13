@@ -15,6 +15,8 @@ public class NotifyCallBackParam {
 	@NotBlank(message = "userNum不能为空")
 	private String userNum;
 	
+	private String sideUserNum;
+	
 	@NotBlank(message = "body不能为空")
 	private String body;
 	
@@ -94,6 +96,12 @@ public class NotifyCallBackParam {
 	}
 	public void setTransactionPayTypeEnum(TransactionPayTypeEnum transactionPayTypeEnum) {
 		this.transactionPayTypeEnum = transactionPayTypeEnum;
+	}
+	public String getSideUserNum() {
+		return sideUserNum;
+	}
+	public void setSideUserNum(String sideUserNum) {
+		this.sideUserNum = sideUserNum;
 	}
 	
 }

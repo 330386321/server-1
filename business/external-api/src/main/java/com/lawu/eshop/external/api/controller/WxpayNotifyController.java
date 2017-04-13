@@ -96,6 +96,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setUserNum(extra[1]);
 					param.setBody(extra[2]);
 					param.setBizIds(extra[3]);
+					param.setSideUserNum(extra[4]);
 					param.setTotalFee(String.valueOf(dmoney));
 					param.setOutTradeNo(out_trade_no);
 					param.setTradeNo(transaction_id);

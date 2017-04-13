@@ -33,6 +33,9 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	 */
 	private String subject;
 	
+	//对方用户编号
+	private String sideUserNum;
+	
 	public String getUserNum() {
 		return userNum;
 	}
@@ -56,6 +59,12 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	}
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+	public String getSideUserNum() {
+		return sideUserNum;
+	}
+	public void setSideUserNum(String sideUserNum) {
+		this.sideUserNum = sideUserNum;
 	}
 	
 }

@@ -52,7 +52,8 @@ public class OrderController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		return orderService.doHandleOrderPayNotify(param);
+		int retCode = orderService.doHandleOrderPayNotify(param);
+		return successCreated(retCode);
 	}
 	
 	/**
@@ -73,7 +74,8 @@ public class OrderController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		return orderService.doHandlePayOrderNotify(param);
+		int retCode = orderService.doHandlePayOrderNotify(param);
+		return successCreated(retCode);
 	}
 
 	

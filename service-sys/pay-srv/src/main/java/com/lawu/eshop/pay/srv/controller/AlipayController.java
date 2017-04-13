@@ -71,7 +71,7 @@ public class AlipayController extends BaseController {
 		paramMap.put("notify_url", PropertiesUtil.getPropertyValue("notify_url", "alipay.properties"));
 
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
-				+ split + param.getBizIds();
+				+ split + param.getBizIds() + split + param.getSideUserNum();
 
 		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
 				+ param.getOutTradeNo() + "\",\"total_amount\":\"" + param.getTotalAmount()

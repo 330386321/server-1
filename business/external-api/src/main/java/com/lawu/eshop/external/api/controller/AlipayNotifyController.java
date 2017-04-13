@@ -125,6 +125,7 @@ public class AlipayNotifyController extends BaseController {
 					param.setUserNum(extra[1]);
 					param.setBody(extra[2]);
 					param.setBizIds(extra[3]);
+					param.setSideUserNum(extra[4]);
 					param.setTotalFee(total_amount);
 					param.setOutTradeNo(out_trade_no);
 					param.setTradeNo(trade_no);

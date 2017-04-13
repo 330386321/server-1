@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.srv.service;
 
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 
 /**
@@ -18,18 +17,18 @@ public interface OrderService {
 	/**
 	 * 商品订单第三方付款后回调处理：新增会员交易记录，<更新订单状态>
 	 * 
+	 *  此时暂不保存商家交易明细和加余额，确认收货后处理
+	 * 
 	 * @param param
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	Result doHandleOrderPayNotify(NotifyCallBackParam param);
+	int doHandleOrderPayNotify(NotifyCallBackParam param);
 
 	/**
 	 * 处理第三方买单支付回调处理：新增会员交易记录，加商家财产余额，<更新订单状态>
 	 * @param param
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	Result doHandlePayOrderNotify(NotifyCallBackParam param);
+	int doHandlePayOrderNotify(NotifyCallBackParam param);
 
 }

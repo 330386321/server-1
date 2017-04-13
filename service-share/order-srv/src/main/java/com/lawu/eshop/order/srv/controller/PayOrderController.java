@@ -93,8 +93,8 @@ public class PayOrderController extends BaseController {
 	 * @author Yangqh
      * @throws Exception 
 	 */
-	@RequestMapping(value = "selectPayOrderActueMoney", method = RequestMethod.GET)
-	public ThirdPayCallBackQueryPayOrderDTO selectPayOrderActueMoney(@RequestParam String orderId) throws Exception {
+	@RequestMapping(value = "selectThirdPayCallBackQueryPayOrder", method = RequestMethod.GET)
+	public ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam String orderId) throws Exception {
 		if(orderId == null || "".equals(orderId.trim())){
 			return null;
 		}

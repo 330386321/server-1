@@ -90,7 +90,7 @@ public class WxPayController extends BaseController {
 		packageParams.put("total_fee", iTotalAmount + "");
 		packageParams.put("spbill_create_ip", Configure.ip);
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
-				+ split + param.getBizIds());
+				+ split + param.getBizIds() + split + param.getSideUserNum());
 
 		String sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
 		packageParams.put("sign", sign);

@@ -92,7 +92,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 		PayOrderDO payDO = payOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderId));
 		ThirdPayCallBackQueryPayOrderBO bo = new ThirdPayCallBackQueryPayOrderBO();
 		bo.setActualMoney(payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-		//bo.setBusinessUserNum(payDO.get);
+		bo.setBusinessUserNum(payDO.getMerchantNum());
 		return bo;
 	}
 }

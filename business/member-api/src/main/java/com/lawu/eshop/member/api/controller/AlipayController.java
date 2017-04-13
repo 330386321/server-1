@@ -14,9 +14,11 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
 import com.lawu.eshop.member.api.service.OrderService;
+import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.ThirdPayParam;
 import com.lawu.eshop.utils.StringUtil;
@@ -46,6 +48,8 @@ public class AlipayController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private RechargeService rechargeService;
+	@Autowired
+	private PayOrderService payOrderService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
@@ -65,8 +69,10 @@ public class AlipayController extends BaseController {
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
-			aparam.setTotalAmount(param.getTotalAmount());// app传入
-
+			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+			
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
 			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(orderMoney));

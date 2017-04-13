@@ -1,16 +1,19 @@
 package com.lawu.eshop.member.api.service;
 
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.PayOrderDTO;
 import com.lawu.eshop.mall.dto.PayOrderIdDTO;
 import com.lawu.eshop.mall.param.PayOrderListParam;
 import com.lawu.eshop.mall.param.PayOrderParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 
 /**
  * @author zhangyong
@@ -34,6 +37,6 @@ public interface PayOrderService {
      * @return
      * @author Yangqh
      */
-	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectPayOrderActueMoney")
-	double selectPayOrderActueMoney(@RequestParam("orderId") String orderId);
+	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectThirdPayCallBackQueryPayOrder")
+	ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam("orderId") String orderId);
 }
