@@ -1,12 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
@@ -17,6 +11,12 @@ import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -25,6 +25,9 @@ public class OrderServiceImpl implements OrderService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
+
+	@Autowired
+	private TransactionMainService transactionMainService;
 
 	@Override
 	public int doHandleOrderPayNotify(NotifyCallBackParam param) {
@@ -87,8 +90,7 @@ public class OrderServiceImpl implements OrderService {
 		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 		// 更新订单状态
-		// TODO 发送MQ消息更新买单状态
-		
+		transactionMainService.sendNotice(Long.valueOf(param.getBizIds()));
 
 		return ResultCode.SUCCESS;
 	}
