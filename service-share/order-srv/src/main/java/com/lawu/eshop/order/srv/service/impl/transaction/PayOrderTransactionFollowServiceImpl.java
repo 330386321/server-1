@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author zhangyong
  * @date 2017/4/11.
  */
-@Service
+@Service("payOrderTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_PAYORDER)
 public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<PayOrderNotification, Reply> {
 
