@@ -37,7 +37,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param adId
 	 * @return
 	 */
-	@RequestMapping(value = "save", method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.PUT)
     public Result save(@RequestParam Long memberId,@RequestParam  Long  adId ) {
     	Integer i=favoriteAdService.save(memberId,adId);
     	if(i>0){

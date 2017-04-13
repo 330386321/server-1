@@ -103,29 +103,24 @@ public class RedPacketServiceImpl implements RedPacketService {
 
 
 	@Override
-	public BigDecimal getRedPacket(Long id,Long memberId) {
+	public BigDecimal getRedPacket(Long merchantId,Long memberId) {
 		PointPoolDOExample ppexample=new PointPoolDOExample();
-		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("2"))
+		ppexample.createCriteria().andMemberIdEqualTo(merchantId).andTypeEqualTo(new Byte("2"))
 				                   .andStatusEqualTo(new Byte("0"));
 		//查询出没有领取的积分，取出一个给用户
-		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample); 
-		if(list.isEmpty()){ //说明积分领取完
-			RedPacketDO redPacketDO=new RedPacketDO();
-			redPacketDO.setId(id);
-			redPacketDO.setStatus(new Byte("3"));
-			redPacketDOMapper.updateByPrimaryKeySelective(redPacketDO);
-		}else{
+		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample);
+		if(!list.isEmpty()){ 
 			PointPoolDO pointPoolDO=list.get(0);
 			pointPoolDO.setStatus(new Byte("1"));
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			transactionMainService.sendNotice(pointPoolDO.getId());
+			return pointPoolDO.getPoint();
+		}else{
+			return new BigDecimal(0);
 		}
 		
-		return null;
 	}
-	
-	
 	
 
 }

@@ -61,7 +61,7 @@ public class AdController extends BaseController {
     //@Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectListByMember", method = RequestMethod.GET)
-    public Result<Page<AdDTO>> selectListByMember(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/
+    public Result<Page<AdDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMemberParam adMemberParam) {
     	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectListByMember(adMemberParam);
     	return pageDTOS;

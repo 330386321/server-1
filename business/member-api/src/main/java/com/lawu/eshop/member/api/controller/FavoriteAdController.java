@@ -46,9 +46,9 @@ public class FavoriteAdController extends BaseController{
 	 * @return
 	 */
 	@Authorization
-    @ApiOperation(value = "收藏广告", notes = "收藏广告[5002]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "收藏广告", notes = "收藏广告[5002]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "save", method = RequestMethod.POST)
+    @RequestMapping(value = "save", method = RequestMethod.PUT)
     public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						@RequestParam @ApiParam(required = true, value = "商品id") Long adId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());

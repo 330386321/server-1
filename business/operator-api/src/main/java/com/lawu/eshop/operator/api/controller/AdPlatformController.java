@@ -83,7 +83,7 @@ public class AdPlatformController extends BaseController {
     public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
     	 HttpServletRequest request = getRequest();
     	 String mediaUrl = "";
-         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD);
+         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE);
          if(!"".equals(retMap.get("imgUrl"))){
         	 mediaUrl = retMap.get("imgUrl").toString();
          }

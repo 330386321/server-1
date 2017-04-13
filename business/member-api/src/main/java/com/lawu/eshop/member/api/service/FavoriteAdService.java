@@ -21,7 +21,7 @@ import com.lawu.eshop.framework.web.Result;
 @FeignClient(value = "ad-srv")
 public interface FavoriteAdService {
 	
-	@RequestMapping(method = RequestMethod.POST, value = "favoriteAd/save")
+	@RequestMapping(method = RequestMethod.PUT, value = "favoriteAd/save")
 	Result save(@RequestParam("memberId") Long memberId,@RequestParam("adId") Long adId);
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteAd/remove/{id}")

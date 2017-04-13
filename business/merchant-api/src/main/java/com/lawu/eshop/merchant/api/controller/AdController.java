@@ -1,27 +1,39 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
+import util.UploadFileUtil;
 
 /**
  * 描述：广告管理
@@ -55,16 +67,19 @@ public class AdController extends BaseController {
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
-    	String mediaUrl="http://www.baidu.com";
+    	String mediaUrl="";
     	HttpServletRequest request = getRequest();
-    	/*if(adParam.getPutWayEnum().val==1){ //平面投放
-    		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD);
+    	if(adParam.getPutWayEnum().val==1){ //平面投放
+    		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE);
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl").toString();
             }
     	}else{//视频投放
-    		
-    	}*/
+    		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO);
+    		if(!"".equals(retMap.get("videoUrl"))){
+            	mediaUrl = retMap.get("videoUrl").toString();
+            }
+    	}
     	Integer count=0;
     	if(adParam.getPutWayEnum().val==1){
     		count=memberCountService.findMemberCount(adParam.getAreas());
@@ -77,7 +92,7 @@ public class AdController extends BaseController {
     
 
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -89,7 +104,7 @@ public class AdController extends BaseController {
     
 
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
-   // @Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
     public Result updateStatus(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
@@ -100,7 +115,7 @@ public class AdController extends BaseController {
     
     
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
-    //@Authorization
+    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {

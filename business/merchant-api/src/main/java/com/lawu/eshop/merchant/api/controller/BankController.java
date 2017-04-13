@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.merchant.api.service.BankService;
 import com.lawu.eshop.property.dto.BankDTO;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 
@@ -23,6 +24,7 @@ import io.swagger.annotations.ApiResponse;
  * @author zhangrc
  * @date 2017/3/29
  */
+@Api(tags = "bank")
 @RestController
 @RequestMapping(value = "merchant/bank/")
 public class BankController extends BaseController{

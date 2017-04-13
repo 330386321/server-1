@@ -31,6 +31,6 @@ public interface RedPacketService {
 	 * @param memberId
 	 * @return
 	 */
-	BigDecimal getRedPacket(Long id,Long memberId);
+	BigDecimal getRedPacket(Long merchantId ,Long  memberId);
 
 }
