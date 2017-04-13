@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -105,6 +106,11 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreDO.setIsNoReasonReturn(false);
         merchantStoreDO.setGmtCreate(new Date());
         merchantStoreDO.setGmtModified(new Date());
+        merchantStoreDO.setBuyNumbers(0);
+        merchantStoreDO.setFavoriteNumber(0);
+        merchantStoreDO.setAverageConsumeAmount(BigDecimal.ZERO);
+        merchantStoreDO.setAverageScore(BigDecimal.ZERO);
+        merchantStoreDO.setFeedbackRate(BigDecimal.ZERO);
         // 设置门店待审核状态
         if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val.equals(merchantStoreParam.getCertifType())) {
             // 填写身份证用户需要交保证金
