@@ -38,7 +38,7 @@ import java.util.Map;
  * @author zhangyong
  * @date 2017/4/6.
  */
-@Api("commentMerchant")
+@Api(tags = "commentMerchant")
 @RestController
 @RequestMapping("commentMerchant/")
 public class CommentMerchantController extends BaseController {

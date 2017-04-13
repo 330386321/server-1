@@ -42,7 +42,7 @@ import java.util.Map;
  * @author zhangyong
  * @date 2017/4/5.
  */
-@Api("commentProduct")
+@Api(tags = "commentProduct")
 @RestController
 @RequestMapping(value = "commentProduct/")
 public class CommentProductController extends BaseController {
