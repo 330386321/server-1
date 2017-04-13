@@ -10,6 +10,7 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Autowired
     private FavoriteMerchantDOMapper favoriteMerchantDOMapper;
+
+    @Autowired
+    private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
 
     @Override
     public MerchantStoreInfoBO selectMerchantStore(Long merchantStoreId) {
@@ -468,6 +472,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditBO.setId(merchantStoreAuditDOS.get(0).getId());
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         return merchantStoreAuditBO;
+    }
+
+    @Override
+    @Transactional
+    public void addMerchantStoreBuyNums(Long merchantId) {
+        merchantStoreDOMapperExtend.addMerchantStoreBuyNums(merchantId);
     }
 
 }

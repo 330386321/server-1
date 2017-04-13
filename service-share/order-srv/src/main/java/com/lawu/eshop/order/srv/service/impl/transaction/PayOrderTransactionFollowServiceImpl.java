@@ -11,6 +11,7 @@ import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhangyong
@@ -28,6 +29,7 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
     private MessageProducerService messageProducerService;
 
     @Override
+    @Transactional
     public Reply execute(PayOrderNotification notification) {
         Long payOrderId = notification.getPayOrderId();
         //更改订单状态

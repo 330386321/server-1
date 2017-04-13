@@ -48,6 +48,12 @@
         <property name="consumeMessageBatchMaxSize" value="5"/>
         <property name="messageListenerConcurrently" ref="messageConsumerListener" />
 
+        <property name="topicsTags">
+            <map>
+                <entry key="order_srv" value="tag-buy_numbers" />
+            </map>
+        </property>
+
     </bean>
 
     <bean id="messageConsumerListener" class="com.lawu.eshop.user.srv.mq.MessageConsumerListener" />

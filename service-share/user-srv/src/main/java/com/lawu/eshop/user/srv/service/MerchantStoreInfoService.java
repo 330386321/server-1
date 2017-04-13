@@ -75,4 +75,10 @@ public interface MerchantStoreInfoService {
     MerchantStoreInfoBO findStoreNameAndImgByMerchantId(Long merchantId);
 
     MerchantStoreAuditBO findStoreAuditInfo(Long merchantId);
+
+    /**
+     * 增加门店买单笔数
+     * @param merchantId
+     */
+    void addMerchantStoreBuyNums(Long merchantId);
 }
