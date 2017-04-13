@@ -105,8 +105,8 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "设置支付密码", notes = "根据商户编号设置支付密码。[1100] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "resetPayPwd", method = RequestMethod.PUT)
-    public Result resetPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    @RequestMapping(value = "setPayPwd", method = RequestMethod.PUT)
+    public Result setPayPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                               @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
         String userNo = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.setPayPwd(userNo,  newPwd);
