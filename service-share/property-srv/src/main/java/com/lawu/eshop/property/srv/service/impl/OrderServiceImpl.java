@@ -43,9 +43,10 @@ public class OrderServiceImpl implements OrderService {
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Result doHandlePayOrderNotify(NotifyCallBackParam param) {
-		//新增会员交易记录，加商家财产余额，<更新订单状态>
+		//新增会员交易记录，加商家交易明细，加商家财产余额，<更新订单状态>
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.PAY.val);
 		tdsParam.setTransactionNum(param.getOutTradeNo());
