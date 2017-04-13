@@ -35,7 +35,7 @@ public class FansMerchantController extends BaseController {
     @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.GET)
     public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestParam String regionPath) {
         List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, regionPath);
-        if (fansMerchantBOList.isEmpty()) {
+        if (fansMerchantBOList == null || fansMerchantBOList.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
@@ -48,7 +48,7 @@ public class FansMerchantController extends BaseController {
      * @param listFansParam
      * @return
      */
-    @RequestMapping(value = "listFans/{merchantId}", method = RequestMethod.GET)
+    @RequestMapping(value = "listFans/{merchantId}", method = RequestMethod.POST)
     public Result<Page<FansMerchantDTO>> listFans(@PathVariable Long merchantId, @RequestBody ListFansParam listFansParam) {
         Page<FansMerchantBO> fansMerchantBOPage = fansMerchantService.listFans(merchantId, listFansParam);
         Page<FansMerchantDTO> page = new Page<>();

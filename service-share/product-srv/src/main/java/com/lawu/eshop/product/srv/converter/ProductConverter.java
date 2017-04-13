@@ -4,12 +4,15 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductSolrDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.util.ArrayList;
@@ -208,6 +211,30 @@ public class ProductConverter {
         document.addField("content_s", productDO.getContent());
         document.addField("averageDailySales_d", productDO.getAverageDailySales());
         return document;
+    }
+
+    /**
+     * SolrInputDocument
+     *
+     * @param solrDocumentList
+     * @return
+     */
+    public static List<ProductSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
+        if (solrDocumentList.isEmpty()) {
+            return null;
+        }
+
+        List<ProductSolrDTO> productSolrDTOS = new ArrayList<>();
+        for (SolrDocument solrDocument : solrDocumentList) {
+            ProductSolrDTO productSolrDTO = new ProductSolrDTO();
+            productSolrDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
+            productSolrDTO.setName(solrDocument.get("name_s").toString());
+            productSolrDTO.setContent(solrDocument.get("content_s").toString());
+            productSolrDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
+            productSolrDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
+            productSolrDTOS.add(productSolrDTO);
+        }
+        return productSolrDTOS;
     }
 
 }

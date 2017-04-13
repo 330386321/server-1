@@ -50,7 +50,7 @@ public class FansMerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listInviteFans", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> updateLoginPwd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<List<FansMerchantDTO>> listInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                         @RequestParam @ApiParam(required = true, value = "区域路径") String regionPath) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         return fansMerchantService.listInviteFans(merchantId, regionPath);

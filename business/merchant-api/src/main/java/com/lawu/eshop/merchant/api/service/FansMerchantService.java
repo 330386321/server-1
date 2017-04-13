@@ -33,6 +33,6 @@ public interface FansMerchantService {
      * @param listFansParam 查询参数
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "fansMerchant/listFans/{merchantId}")
+    @RequestMapping(method = RequestMethod.POST, value = "fansMerchant/listFans/{merchantId}")
     Result<Page<FansMerchantDTO>> listFans(@PathVariable("merchantId") Long merchantId, @ModelAttribute ListFansParam listFansParam);
 }

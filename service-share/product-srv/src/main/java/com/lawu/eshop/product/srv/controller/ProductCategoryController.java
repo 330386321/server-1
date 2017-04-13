@@ -57,7 +57,7 @@ public class ProductCategoryController extends BaseController {
     @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)
     public Result<List<ProductCategoryDTO>> listRecommendProductCategory() {
         List<ProductCategoryBO> productCategoryBOS = productCategoryService.listRecommendProductCategory();
-        if (productCategoryBOS.isEmpty()) {
+        if (productCategoryBOS == null || productCategoryBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(ProductCategoryConverter.convertDTOS(productCategoryBOS));

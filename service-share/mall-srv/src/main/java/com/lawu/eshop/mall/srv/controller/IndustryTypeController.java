@@ -27,12 +27,13 @@ public class IndustryTypeController extends BaseController {
 
     /**
      * 查询行业
+     *
      * @return
      */
     @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)
-    public Result<List<IndustryTypeDTO>> listTrade() {
+    public Result<List<IndustryTypeDTO>> listIndustryType() {
         List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryType();
-        if (industryTypeBOS.isEmpty()) {
+        if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));

@@ -30,6 +30,9 @@ public class SolrUtil {
     //商品索引库
     public static final String SOLR_PRODUCT_CORE = "product";
 
+    //广告索引库
+    public static final String SOLR_AD_CORE = "ad";
+
 
     /**
      * 获取solr客户端

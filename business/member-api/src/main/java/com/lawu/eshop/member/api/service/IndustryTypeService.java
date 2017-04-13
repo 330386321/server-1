@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.Result;
-
 /**
  * @author meishuquan
  * @date 2017/4/5.
@@ -17,6 +15,11 @@ import com.lawu.eshop.framework.web.Result;
 @FeignClient(value = "mall-srv")
 public interface IndustryTypeService {
 
+    /**
+     * 查询所有行业
+     *
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET, value = "industryType/listIndustryType")
     Result<List<IndustryTypeDTO>> listIndustryType();
 }
