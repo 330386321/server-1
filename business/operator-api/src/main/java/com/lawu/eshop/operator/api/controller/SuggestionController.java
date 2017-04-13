@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "suggestionOperator")
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "suggestionOperator/")
 public class SuggestionController extends BaseController {
 
     @Autowired
