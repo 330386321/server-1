@@ -19,4 +19,9 @@ public class TransactionConstant {
      * 买余额支付
      */
     public static final byte BILL_BALANCE_PAY = 0x02;
+
+    /**
+     * 买单
+     */
+    public static final byte PAYORDER = 0x03;
 }

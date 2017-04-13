@@ -1,10 +1,10 @@
-package com.lawu.eshop.order.srv.bo;
+package com.lawu.eshop.property.srv.bo;
 
 import com.lawu.eshop.compensating.transaction.Notification;
 
 /**
  * @author zhangyong
- * @date 2017/4/11.
+ * @date 2017/4/13.
  */
 public class PayOrderNotification extends Notification {
 
@@ -17,4 +17,5 @@ public class PayOrderNotification extends Notification {
     public void setPayOrderId(Long payOrderId) {
         this.payOrderId = payOrderId;
     }
+
 }

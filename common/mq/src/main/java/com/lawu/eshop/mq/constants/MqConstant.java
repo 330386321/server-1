@@ -64,9 +64,9 @@ public class MqConstant {
     /*******order-srv模块tag **********/
 
     /**
-     * 买单时发布的MQ消息
+     * 买单更改状态发布MQ增加买单笔数
      */
-    public static final String TAG_PAYORDER = "payorder";
+    public static final String TAG_BUY_NUMBERS = "buy_numbers";
 
 
     /******************************************/
@@ -76,6 +76,10 @@ public class MqConstant {
     /******************************************/
     /*******property-srv模块tag **********/
 
+    /**
+     * 买单时支付成功发布的MQ消息改状态
+     */
+    public static final String TAG_PAYORDER = "payorder";
 
     /******************************************/
     /*******user-srv模块tag **********/
@@ -84,6 +88,7 @@ public class MqConstant {
      * 注册时发布的MQ消息tag
      */
     public static final String TAG_REG = "reg";
+
 
 
 }

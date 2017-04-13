@@ -138,8 +138,8 @@ public class MerchantStoreConverter {
             merchantStoreProfileDO.setOperatorCardId(merchantStoreParam.getOperatorCardId());
             merchantStoreProfileDO.setCompanyName(merchantStoreParam.getCompanyName());
             merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
-            merchantStoreProfileDO.setOperatorName(merchantStoreProfileDO.getOperatorName());
-            merchantStoreProfileDO.setRegNumber(merchantStoreProfileDO.getRegNumber());
+            merchantStoreProfileDO.setOperatorName(merchantStoreParam.getOperatorName());
+            merchantStoreProfileDO.setRegNumber(merchantStoreParam.getRegNumber());
 
             return merchantStoreProfileDO;
         } else {
