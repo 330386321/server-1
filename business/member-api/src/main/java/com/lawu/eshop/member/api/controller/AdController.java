@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,8 +55,7 @@ public class AdController extends BaseController {
 	    
     @Autowired
     private MerchantStoreService merchantStoreService;
-    
-    
+
 
     @ApiOperation(value = "会员查询广告列表(精选推荐,E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
@@ -76,8 +76,9 @@ public class AdController extends BaseController {
     	 Result<List<AdDTO>> rs= adExtendService.selectListPointTotle(adMemberParam);
      	return rs;
      }
-    
-    
+
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -90,19 +91,21 @@ public class AdController extends BaseController {
         adDTO.getModel().setName(merchantStoreDTO.getModel().getName());
         return adDTO;
     }
-    
-    
-     @ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-     @Authorization
-     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
-     public Result<Page<AdPraiseDTO>> selectPraiseListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdPraiseParam adPraiseParam) {
-    	 Result<Page<AdPraiseDTO>> rs= adExtendService.selectPraiseListByMember(adPraiseParam);
-     	return rs;
-     }
-    
-    
+
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
+    @ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
+    public Result<Page<AdPraiseDTO>> selectPraiseListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                              @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
+        Result<Page<AdPraiseDTO>> rs = adExtendService.selectPraiseListByMember(adPraiseParam);
+        return rs;
+    }
+
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "查询单个E赞", notes = "查询单个E赞[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -112,12 +115,12 @@ public class AdController extends BaseController {
         Result<AdPraiseDTO> adDTO = adExtendService.selectAbPraiseById(id);
         return adDTO;
     }
-    
-    
+
+
      @ApiOperation(value = "Top3排行榜", notes = "Top3排行榜,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectMemberList/{id}", method = RequestMethod.GET)
+     @RequestMapping(value = "memberRanking/{id}", method = RequestMethod.GET)
      public Result<List<UserDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		 @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
      
