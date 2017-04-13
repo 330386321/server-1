@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @author zhangyong
  * @date 2017/4/7.
  */
-@Api("comment")
+@Api(tags = "comment")
 @RestController
 @RequestMapping("comment/")
 public class CommentController extends BaseController{
