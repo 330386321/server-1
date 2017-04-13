@@ -47,16 +47,24 @@ public class TransactionInitializing implements InitializingBean, ApplicationCon
         while (mainIterator.hasNext()) {
             Map.Entry<String, Object> mainTransactionServiceBean = mainIterator.next();
 
-            Advised advised = (Advised) applicationContext.getBean(mainTransactionServiceBean.getKey());
-            SingletonTargetSource singTarget = (SingletonTargetSource) advised.getTargetSource();
-            TransactionMainService transactionMainService = (TransactionMainService) singTarget.getTarget();
+            TransactionMainService transactionMainService = (TransactionMainService) mainTransactionServiceBean.getValue();
 
             CompensatingTransactionMain annotation = transactionMainService.getClass().getAnnotation(CompensatingTransactionMain.class);
 
+            if (annotation == null) {
+
+                Advised advised = (Advised) applicationContext.getBean(mainTransactionServiceBean.getKey());
+                SingletonTargetSource singTarget = (SingletonTargetSource) advised.getTargetSource();
+                transactionMainService = (TransactionMainService) singTarget.getTarget();
+
+                annotation = transactionMainService.getClass().getAnnotation(CompensatingTransactionMain.class);
+            }
+
+            TransactionMainService finalTransactionMainService = transactionMainService;
             customConsumerRegister.registerConsumers(new CustomConsumer(annotation.topic(), annotation.tags() + "-reply") {
                 @Override
                 public void consumeMessage(Object message) {
-                    transactionMainService.receiveCallback(message);
+                    finalTransactionMainService.receiveCallback(message);
                 }
             });
 
@@ -76,10 +84,19 @@ public class TransactionInitializing implements InitializingBean, ApplicationCon
 
             CompensatingTransactionFollow annotation = transactionFollowService.getClass().getAnnotation(CompensatingTransactionFollow.class);
 
+            if (annotation == null) {
+
+                Advised advised = (Advised) applicationContext.getBean(followTransactionServiceBean.getKey());
+                SingletonTargetSource singTarget = (SingletonTargetSource) advised.getTargetSource();
+                transactionFollowService = (TransactionFollowService) singTarget.getTarget();
+                annotation = transactionFollowService.getClass().getAnnotation(CompensatingTransactionFollow.class);
+            }
+
+            TransactionFollowService finalTransactionFollowService = transactionFollowService;
             customConsumerRegister.registerConsumers(new CustomConsumer(annotation.topic(), annotation.tags()) {
                 @Override
                 public void consumeMessage(Object message) {
-                    transactionFollowService.receiveNotice((Notification) message);
+                    finalTransactionFollowService.receiveNotice((Notification) message);
                 }
             });
 
