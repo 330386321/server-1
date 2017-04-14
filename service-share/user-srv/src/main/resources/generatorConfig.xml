@@ -61,7 +61,10 @@
         <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="merchant_store" domainObjectName="MerchantStoreDO">
+        <table tableName="member" domainObjectName="MemberDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="merchant" domainObjectName="MerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <!--<table tableName="merchant_profile" domainObjectName="MerchantProfileDO">

@@ -200,5 +200,10 @@ public class MemberController extends BaseController {
         Integer count = memberService.findMemberCount(regionPath);
         return count;
     }
+    @RequestMapping(value = "setGtAndRongYunInfo",method = RequestMethod.PUT)
+    public Result setGtAndRongYunInfo(@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken){
+
+        return successCreated();
+    }
 
 }
