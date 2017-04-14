@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,7 @@ import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
 import com.lawu.eshop.property.param.OrderRefundDataParam;
+import com.lawu.eshop.property.param.OrderReleaseFreezeParam;
 import com.lawu.eshop.property.param.ThirdPayRefundParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
@@ -57,15 +59,15 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
 	private TransactionMainService<Reply> payOrderTransactionMainServiceImpl;
-	
+
 	@Autowired
 	@Qualifier("shoppingOrderPaymentTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderPaymentTransactionMainServiceImpl;
-	
+
 	/**
 	 * 商品订单第三方付款后回调处理：新增会员交易记录，<更新订单状态>
 	 * 
-	 *  此时暂不保存商家交易明细和加余额，确认收货后处理
+	 * 此时暂不保存商家交易明细和加余额，确认收货后处理
 	 * 
 	 * @param param
 	 * @return
@@ -86,14 +88,14 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 
-		/* 更新订单状态
-	   	 * 发送MQ消息更新订单状态
+		/*
+		 * 更新订单状态 发送MQ消息更新订单状态
 		 */
 		String[] bizIds = param.getBizIds().split(",");
-		for(int i = 0 ; i < bizIds.length ; i++){
+		for (int i = 0; i < bizIds.length; i++) {
 			shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
 		}
-		
+
 		return ResultCode.SUCCESS;
 	}
 
@@ -139,8 +141,8 @@ public class OrderServiceImpl implements OrderService {
 		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 		// 更新订单状态
-		String []bizIds = param.getBizIds().split(",");
-		for(int i = 0 ; i < bizIds.length ; i++){
+		String[] bizIds = param.getBizIds().split(",");
+		for (int i = 0; i < bizIds.length; i++) {
 			payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
 		}
 
@@ -183,7 +185,9 @@ public class OrderServiceImpl implements OrderService {
 			freezeDO.setMoney(new BigDecimal("0"));
 			freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
 			freezeDO.setGmtModified(new Date());
-			example.createCriteria().andUserNumEqualTo(param.getUserNum());
+			example.createCriteria().andUserNumEqualTo(param.getUserNum())
+					.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
+					.andBizIdEqualTo(Long.valueOf(param.getOrderId())).andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
 			freezeDOMapper.updateByExample(freezeDO, example);
 		} else {
 			// 校验退款金额不能大于冻结金额
@@ -251,10 +255,72 @@ public class OrderServiceImpl implements OrderService {
 		if (jsonResult.isSuccess()) {
 			// TODO 更新订单item状态
 
-			
 		} else {
 			throw new Exception(jsonResult.getMessage());
 		}
+		return ResultCode.SUCCESS;
+	}
+
+	/**
+	 *  定时任务调用
+	 * 确认收货后7天，订单冻结金额自动加入商家余额账户 :新增商家订单付款交易记录，释放冻结资金，加商家财产余额 <发消息通知订单修改状态>
+	 */
+	@Override
+	public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
+		String[] userNums = param.getUserNums().split(",");
+		String[] orderIds = param.getOrderIds().split(",");
+		String[] accounts = param.getAccounts().split(",");
+		Byte[] payWays = param.getPayWays();
+		FreezeDOExample example = new FreezeDOExample();
+		List<String> finishOrderIds = new ArrayList<String>();
+		List<FreezeDO> freezeDOS = null;
+		for (int i = 0; i < userNums.length; i++) {
+			example.clear();
+			example.createCriteria().andUserNumEqualTo(userNums[i]).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
+					.andBizIdEqualTo(Long.valueOf(orderIds[i])).andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
+			freezeDOS = freezeDOMapper.selectByExample(example);
+			if (freezeDOS != null && !freezeDOS.isEmpty() && freezeDOS.size() == 1) {
+				FreezeDO freeze = freezeDOS.get(0);
+				Long freezeId = freeze.getId();
+
+				//新增商家订单付款交易记录
+				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+				tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY.val);
+				tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+				tdsParam.setUserNum(userNums[i]);
+				tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
+				tdsParam.setTransactionAccount(accounts[i]);
+				tdsParam.setTransactionAccountType(payWays[i]);
+				tdsParam.setAmount(freeze.getMoney());
+				tdsParam.setBizId(Long.valueOf(orderIds[i]));
+				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+				transactionDetailService.save(tdsParam);
+
+				//释放冻结资金
+				FreezeDO freezeDO = new FreezeDO();
+				freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
+				freezeDO.setGmtModified(new Date());
+				example.createCriteria().andIdEqualTo(freezeId);
+				freezeDOMapper.updateByExample(freezeDO, example);
+
+				// 加会员财产余额
+				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+				infoDoView.setUserNum(userNums[i]);
+				infoDoView.setBalance(freeze.getMoney());
+				infoDoView.setGmtModified(new Date());
+				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+				
+				finishOrderIds.add(orderIds[i]);
+			}
+		}
+		
+		for(String orderId : finishOrderIds){
+			//TODO 发送消息修改订单状态
+			
+			
+			
+		}
+		
 		return ResultCode.SUCCESS;
 	}
 
