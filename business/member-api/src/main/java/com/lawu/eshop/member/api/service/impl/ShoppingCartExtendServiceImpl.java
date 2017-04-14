@@ -29,7 +29,6 @@ import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
-import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 
@@ -60,7 +59,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     /**
      *  加入购物车。
      */
-    public Result save(Long memberId, ShoppingCartParam param) {
+    @SuppressWarnings("rawtypes")
+	public Result save(Long memberId, ShoppingCartParam param) {
     	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
     	
     	if (!isSuccess(resultShoppingCartProductModelDTO)) {
@@ -160,6 +160,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * 
 	 * @return 返回订单的id列表
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params) {
 		
@@ -182,17 +183,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingCartDTOMap.get(shoppingCartDTO.getMerchantId()).add(shoppingCartDTO);
     	}
     	
-    	// 更新商品型号库存参数
-    	List<ProductModeUpdateInventoryParam> productModeUpdateInventoryParams = new ArrayList<ProductModeUpdateInventoryParam>();
-    	
     	// 把要查询的id放入set,统一一次性查询
     	Set<Long> idSet = new HashSet<Long>();
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		idSet.add(shoppingCartDTO.getProductModelId());
-    		ProductModeUpdateInventoryParam productModeUpdateInventoryParam = new ProductModeUpdateInventoryParam();
-    		productModeUpdateInventoryParam.setId(shoppingCartDTO.getProductModelId());
-    		productModeUpdateInventoryParam.setQuantity(shoppingCartDTO.getQuantity());
-    		productModeUpdateInventoryParams.add(productModeUpdateInventoryParam);
     	}
     	
     	// 通过商品型号id列表查询商品信息
@@ -274,12 +268,6 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	Result<List<Long>> resultIds = shoppingOrderService.save(shoppingOrderSettlementParams);
     	if (!isSuccess(resultIds)) {
     		return successCreated(resultIds.getRet());
-    	}
-    	
-    	// TODO 从商品模型表中扣除库存(跨库事务通过事务补偿处理)
-    	Result updateInventoryResult = productModelService.updateInventory(productModeUpdateInventoryParams);
-    	if (!isSuccess(updateInventoryResult)) {
-    		return successCreated(updateInventoryResult.getRet());
     	}
     	
     	return successCreated(resultIds);

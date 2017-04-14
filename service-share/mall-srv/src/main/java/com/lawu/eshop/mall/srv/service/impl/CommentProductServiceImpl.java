@@ -84,7 +84,7 @@ public class CommentProductServiceImpl implements CommentProductService {
             }
         }
         // 更新评价状态 发消息
-        transactionMainService.sendNotice(param.getOrderId());
+        transactionMainService.sendNotice(param.getShoppingOrderItemId());
         return id.intValue();
     }
 

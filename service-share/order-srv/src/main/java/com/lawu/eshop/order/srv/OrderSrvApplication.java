@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.ImportResource;
 
 /**
  * 订单服务启动类
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ComponentScan({"com.lawu.eshop"})
+@ImportResource(locations={"classpath:spring.xml"})
 public class OrderSrvApplication {
 
     private static Logger logger = LoggerFactory.getLogger(OrderSrvApplication.class);

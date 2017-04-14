@@ -826,6 +826,66 @@ public class ShoppingOrderItemDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsEvaluationIsNull() {
+            addCriterion("is_evaluation is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationIsNotNull() {
+            addCriterion("is_evaluation is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationEqualTo(Boolean value) {
+            addCriterion("is_evaluation =", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationNotEqualTo(Boolean value) {
+            addCriterion("is_evaluation <>", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationGreaterThan(Boolean value) {
+            addCriterion("is_evaluation >", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_evaluation >=", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationLessThan(Boolean value) {
+            addCriterion("is_evaluation <", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_evaluation <=", value, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationIn(List<Boolean> values) {
+            addCriterion("is_evaluation in", values, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationNotIn(List<Boolean> values) {
+            addCriterion("is_evaluation not in", values, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_evaluation between", value1, value2, "isEvaluation");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsEvaluationNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_evaluation not between", value1, value2, "isEvaluation");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderStatusIsNull() {
             addCriterion("order_status is null");
             return (Criteria) this;

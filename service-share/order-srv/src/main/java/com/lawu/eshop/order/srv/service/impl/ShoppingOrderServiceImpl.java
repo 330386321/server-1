@@ -6,12 +6,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
@@ -24,16 +26,14 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
-import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
+import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
@@ -65,8 +65,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Autowired
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
 	
-    //@Autowired
-    //private TransactionMainService transactionMainService;
+	@SuppressWarnings("rawtypes")
+	@Autowired
+    @Qualifier("shoppingOrderCreateOrderTransactionMainServiceImpl")
+    private TransactionMainService transactionMainService;
 	
 	/**
 	 * 
@@ -82,35 +84,37 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 插入订单
 		for (ShoppingOrderSettlementParam shoppingOrderSettlementParam : params) {
 			ShoppingOrderDO shoppingOrderDO =  ShoppingOrderConverter.convert(shoppingOrderSettlementParam);
+			
+			List<Long> shoppingCartIdList = new ArrayList<Long>();
+			for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
+				shoppingCartIdList.add(item.getShoppingCartId());
+			}
+			
+			// 把购物车id用逗号分隔保存在购物订单表中，用于删除购物车记录
+			shoppingOrderDO.setShoppingCartIdsStr(StringUtils.join(shoppingCartIdList, ","));
+			
 			shoppingOrderDOMapper.insertSelective(shoppingOrderDO);
 			Long id = shoppingOrderDO.getId();
-			
-			// 把订单id放入list返回
-			rtn.add(id);
 			
 			//插入订单项
 			for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
 				ShoppingOrderItemDO shoppingOrderItemDO = ShoppingOrderItemConverter.convert(id, item);
 				shoppingOrderItemDOMapper.insertSelective(shoppingOrderItemDO);
 				
-				//删除购物车记录,保证在同一个事务中进行
-				shoppingCartDOMapper.deleteByPrimaryKey(item.getShoppingCartId());
 			}
 			
-			// TODO 事务补偿预留(减掉库存)
-			//transactionMainService.sendNotice(id);
+			// 考虑订单是否保存失败处理
+			if (id != null && id > 0) {
+				// 把订单id放入list返回
+				rtn.add(id);
+				// 事务补偿(减掉库存)
+				transactionMainService.sendNotice(id);
+			}
 		}
 		
 		return rtn;
 	}
 
-	@Override
-	public CommentOrderBO getOrderCommentStatusById(Long orderId) {
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(orderId);
-		CommentOrderBO commentOrderBO = ShoppingOrderConverter.coverCommentStatusBO(shoppingOrderDO);
-		return commentOrderBO;
-	}
-	
 	@Override
 	public Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
@@ -285,23 +289,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 		
 		return ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderDO);
-	}
-	
-	/**
-	 * 根据id获取购物订单物流信息
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
-	@Override
-	public ShoppingOrderExpressBO getExpressInfo(Long id) {
-		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
-		shoppingOrderDOExample.createCriteria().andIdEqualTo(id);
-		
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-		
-		return ShoppingOrderConverter.covert(shoppingOrderDO);
 	}
 	
 	/**
@@ -613,6 +600,52 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
 		return shoppingOrderItemBOPage;
+	}
+	
+	/**
+	 * 减少产品库存成功回调 更改订单的状态为待支付状态
+	 * 删除对应的购物车记录
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public void minusInventorySuccess(Long id) {
+		// 设置订单状态为待支付状态
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		shoppingOrderDO.setId(id);
+		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		
+		// 设置购物订单项为待支付状态
+		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+		
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+		
+		/*
+		 * 删除购物车记录
+		 */
+		// 拆分购物车id
+		String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
+		List<Long> shoppingCartIdList = new ArrayList<Long>();
+		for (String shoppingCartIdStr : shoppingCartIdStrAry) {
+			shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
+		}
+		
+		ShoppingCartDOExample shoppingCartDOExample = new ShoppingCartDOExample();
+		shoppingCartDOExample.createCriteria().andIdIn(shoppingCartIdList);
+		
+		shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
+		
 	}
 	
 }

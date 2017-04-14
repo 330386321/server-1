@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
@@ -89,6 +90,30 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		shoppingOrderItemRefundBOPage.setRecords(ShoppingOrderItemRefundConverter.convertShoppingOrderItemRefundBOList(shoppingOrderItemRefundDOList));
 		
 		return shoppingOrderItemRefundBOPage;
+	}
+
+	/**
+	 * 评论成功更新订单项为已评论
+	 * 
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public Integer commentsSuccessful(Long id) {
+		if (id == null || id <= 0) {
+			return null;
+		}
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(id);
+		// 设置为已评论
+		shoppingOrderItemDO.setIsEvaluation(true);
+		
+		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		
+		return result;
 	}
 	
 }

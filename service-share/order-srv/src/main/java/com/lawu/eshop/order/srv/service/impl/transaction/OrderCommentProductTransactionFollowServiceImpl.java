@@ -1,14 +1,14 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.order.srv.bo.CommentProductNotification;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
-import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 
 /**
  * @author zhangyong
@@ -19,19 +19,11 @@ import org.springframework.stereotype.Service;
 public class OrderCommentProductTransactionFollowServiceImpl extends AbstractTransactionFollowService<CommentProductNotification, Reply> {
 
     @Autowired
-    private ShoppingOrderDOMapper shoppingOrderDOMapper;
+    private ShoppingOrderItemService ShoppingOrderItemService;
+    
     @Override
     public Reply execute(CommentProductNotification notification) {
-        Long orderId = notification.getOrderId();
-        ShoppingOrderDO order = shoppingOrderDOMapper.selectByPrimaryKey(orderId);
-        if(order == null){
-            return new Reply();
-        }
-        ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-        shoppingOrderDO.setId(orderId);
-        shoppingOrderDO.setIsEvaluation(true);//设置评价
-        shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-
+        ShoppingOrderItemService.commentsSuccessful(notification.getShoppingOrderItemId());
         return new Reply();
     }
 }

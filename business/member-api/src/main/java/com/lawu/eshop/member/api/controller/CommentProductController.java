@@ -1,5 +1,21 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -23,20 +39,12 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhangyong
@@ -66,8 +74,8 @@ public class CommentProductController extends BaseController {
     public Result saveCommentProductInfo(@ModelAttribute @ApiParam CommentProductParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
-        //查询订单是否已经评价
-        Result<CommentOrderDTO> commentOrderDTO = shoppingOrderService.getOrderCommentStatus(param.getOrderId());
+        //查询订单项是否已经评价
+        Result<CommentOrderDTO> commentOrderDTO = shoppingOrderService.getOrderCommentStatus(param.getShoppingOrderItemId());
         if(commentOrderDTO.getModel()==null){
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }

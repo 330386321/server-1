@@ -3,8 +3,9 @@ package com.lawu.eshop.product.srv.service;
 
 import java.util.List;
 
-import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
+import com.lawu.eshop.product.srv.bo.transaction.ProductModeUpdateInventoryBO;
+import com.lawu.eshop.product.srv.bo.transaction.ShoppingCartCreateOrderNotification;
 
 /**
  * 
@@ -30,11 +31,11 @@ public interface ProductModelService {
 	List<ShoppingCartProductModelBO> getShoppingCartProductModel(List<Long> ids);
 	
 	/**
-	 * 批量更新商品库存
+	 * 订单模块发送消息更新商品库存，并且保存商品库存流水记录
 	 * 
-	 * @param params 商品模型更新库存参数
-	 * @return 受影响的行数
+	 * @param shoppingCartCreateOrderNotification 发送的数据
+	 * @author Sunny
 	 */
-	public List<Integer> updateInventory(List<ProductModeUpdateInventoryParam> params);
+	void updateInventory(ShoppingCartCreateOrderNotification shoppingCartCreateOrderNotification);
 
 }

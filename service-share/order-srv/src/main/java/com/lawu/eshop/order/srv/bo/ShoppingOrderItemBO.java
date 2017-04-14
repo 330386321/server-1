@@ -60,7 +60,12 @@ public class ShoppingOrderItemBO implements Serializable {
 	 * 数量
 	 */
 	private Integer quantity;
-
+	
+    /**
+    * 是否评价(0-未评价|1-已评价)
+    */
+    private Boolean isEvaluation;
+	
 	/**
 	 * 订单项状态
 	 */
@@ -159,6 +164,14 @@ public class ShoppingOrderItemBO implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public Boolean getIsEvaluation() {
+		return isEvaluation;
+	}
+
+	public void setIsEvaluation(Boolean isEvaluation) {
+		this.isEvaluation = isEvaluation;
 	}
 
 	public ShoppingOrderStatusEnum getOrderStatus() {

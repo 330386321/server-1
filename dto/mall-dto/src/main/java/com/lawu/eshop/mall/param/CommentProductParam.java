@@ -27,11 +27,12 @@ public class CommentProductParam {
      */
     @ApiModelProperty(value = "商品ID", required = true)
     private Long productId;
+    
     /**
-     * 订单ID
+     * 订单项ID
      */
-    @ApiModelProperty(value = "订单ID", required = true)
-    private Long orderId;
+    @ApiModelProperty(value = "订单项ID", required = true)
+    private Long shoppingOrderItemId;
 
     /**
      * 是否匿名（0：否1：是）
@@ -72,11 +73,12 @@ public class CommentProductParam {
         this.anonymousEnum = anonymousEnum;
     }
 
-    public Long getOrderId() {
-        return orderId;
-    }
+	public Long getShoppingOrderItemId() {
+		return shoppingOrderItemId;
+	}
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
+		this.shoppingOrderItemId = shoppingOrderItemId;
+	}
+    
 }

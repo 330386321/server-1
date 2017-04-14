@@ -13,7 +13,9 @@ import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
+import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -27,6 +29,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
+	
+	@Autowired
+	private ShoppingOrderDOMapper shoppingOrderDOMapper;
 
 	@Override
 	public List<ShoppingCartBO> findListByMemberId(Long memberId) {
@@ -92,5 +97,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	public ShoppingCartDO get(Long id){
 		return shoppingCartDOMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
+	public Integer deleteByShoppingOrderId(Long shoppingOrderId) {
+		if (shoppingOrderId == null || shoppingOrderId <= 0) {
+			return null;
+		}
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderId);
+		String shoppingCartIdsStr = shoppingOrderDO.getShoppingCartIdsStr();
+		
+		
+		return null;
 	}
 }

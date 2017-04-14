@@ -9,9 +9,7 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
-import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 
@@ -31,8 +29,6 @@ public interface ShoppingOrderService {
 	 */
 	List<Long> save(List<ShoppingOrderSettlementParam> params);
 
-	CommentOrderBO getOrderCommentStatusById(Long orderId);
-
 	/**
 	 * 根据会员id和查询参数分页查询订单列表
 	 * 
@@ -43,20 +39,23 @@ public interface ShoppingOrderService {
 	 * @return 订单列表
 	 */
 	Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param);
-	
+
 	/**
 	 * 根据商家id和查询参数分页查询订单列表
 	 * 
-	 * @param merchantId 商家id
-	 * @param param	查询参数
+	 * @param merchantId
+	 *            商家id
+	 * @param param
+	 *            查询参数
 	 * @return
 	 */
 	Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param);
-	
+
 	/**
 	 * 根据查询参数分页查询订单列表
 	 * 
-	 * @param param	查询参数
+	 * @param param
+	 *            查询参数
 	 * @return
 	 */
 	Page<ShoppingOrderExtendBO> selectPage(ShoppingOrderQueryForeignToOperatorParam param);
@@ -77,15 +76,6 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	ShoppingOrderBO getShoppingOrder(Long id);
-
-	/**
-	 * 根据id获取购物订单物流信息
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
-	ShoppingOrderExpressBO getExpressInfo(Long id);
 
 	/**
 	 * 取消购物订单
@@ -149,10 +139,20 @@ public interface ShoppingOrderService {
 
 	/**
 	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+	 * 
 	 * @param orderIds
 	 * @return
 	 * @author Yangqh
 	 */
 	double selectOrderMoney(String orderIds);
 
+	/**
+	 * 减少产品库存成功回调 更改订单的状态为待支付状态
+	 * 删除对应的购物车记录
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @author Sunny
+	 */
+	void minusInventorySuccess(Long id);
 }

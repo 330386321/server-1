@@ -6,7 +6,6 @@ import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,7 +14,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
-import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.service.ProductModelService;
@@ -73,23 +71,5 @@ public class ProductModelController extends BaseController {
 		}
 
 		return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBOS));
-	}
-
-	/**
-	 * 批量更新商品型号库存
-	 * 
-	 * @param param
-	 *            更新商品型号库存参数
-	 * @return
-	 */
-	@RequestMapping(value = "shoppingCart/updateInventory", method = RequestMethod.PUT)
-	public Result updateInventory(@RequestBody List<ProductModeUpdateInventoryParam> params) {
-		if (params == null || params.isEmpty()) {
-			successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-		}
-
-		productModelService.updateInventory(params);
-
-		return successCreated();
 	}
 }

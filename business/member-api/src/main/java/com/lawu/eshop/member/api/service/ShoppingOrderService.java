@@ -41,8 +41,8 @@ public interface ShoppingOrderService {
 	 * @param orderId
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/getOrderCommentStatus/{orderId}", method = RequestMethod.GET)
-    Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("orderId") Long orderId);
+	@RequestMapping(value = "shoppingOrder/getOrderCommentStatus/{shoppingOrderItemId}", method = RequestMethod.GET)
+    Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
 	
 	/**
 	 * 根据查询参数分页查询

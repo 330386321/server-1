@@ -4,10 +4,10 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="G:/lib/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
-    	<property name="mergeable" value="false"></property>
+    	<property name="mergeable" value="false"/>
         <property name="javaFileEncoding" value="UTF-8"/>
         <!-- 分页相关 -->
         <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
@@ -43,23 +43,23 @@
         </javaClientGenerator>
 		
 		<!--
-        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
+        <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+        <table tableName="pay_order" domainObjectName="PayOrderDO">
+         	<generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+         <table tableName="shopping_refund_detail" domainObjectName="ShoppingRefundDetailDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="shopping_order_item" domainObjectName="ShoppingOrderItemDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="pay_order" domainObjectName="PayOrderDO">
-         	<generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        -->
-        <table tableName="pay_order" domainObjectName="PayOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

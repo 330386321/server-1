@@ -68,6 +68,12 @@ public class ShoppingOrderItemDTO implements Serializable {
 	@ApiModelProperty(value = "数量", required = true)
 	private Integer quantity;
 	
+    /**
+    * 是否评价
+    */
+	@ApiModelProperty(value = "是否评价", required = true)
+    private Boolean isEvaluation;
+	
 	/**
 	 * 订单项状态
 	 */
@@ -150,6 +156,14 @@ public class ShoppingOrderItemDTO implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public Boolean getIsEvaluation() {
+		return isEvaluation;
+	}
+
+	public void setIsEvaluation(Boolean isEvaluation) {
+		this.isEvaluation = isEvaluation;
 	}
 
 	public ShoppingOrderStatusEnum getOrderStatus() {

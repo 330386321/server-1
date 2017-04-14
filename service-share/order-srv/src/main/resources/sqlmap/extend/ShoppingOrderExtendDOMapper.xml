@@ -12,6 +12,7 @@
 		<result column="product_feature_image" jdbcType="VARCHAR" property="productFeatureImage" />
 		<result column="regular_price" jdbcType="DECIMAL" property="regularPrice" />
 		<result column="sales_price" jdbcType="DECIMAL" property="salesPrice" />
+		<result column="is_evaluation" jdbcType="BIT" property="isEvaluation" />
 		<result column="quantity" jdbcType="INTEGER" property="quantity" />
 		<result column="item_order_status" jdbcType="TINYINT" property="orderStatus" />
 		<result column="refund_status" jdbcType="TINYINT" property="refundStatus" />
@@ -35,7 +36,7 @@
 	    <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
 	    <result column="status" jdbcType="TINYINT" property="status" />
 	    <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
-	    <result column="is_evaluation" jdbcType="BIT" property="isEvaluation" />
+	    <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
 	    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
 	    <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
 	    <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
@@ -115,7 +116,7 @@
 		so.order_total_price,
 		so.order_status,
 		so.status,
-		so.is_no_reason_return, so.is_evaluation,
+		so.is_no_reason_return, so.shopping_cart_ids_str,
 		so.order_num, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name,
 		so.gmt_payment, so.gmt_transport,
@@ -128,7 +129,7 @@
 		soi.product_model_id,
 		soi.product_model_name,
 		soi.product_feature_image, soi.regular_price, soi.sales_price,
-		soi.quantity, soi.order_status as item_order_status, soi.refund_status,
+		soi.quantity,  soi.is_evaluation, soi.order_status as item_order_status, soi.refund_status,
 		soi.gmt_create as item_gmt_create, soi.gmt_modified as item_gmt_modified
 	</sql>
 	

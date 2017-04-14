@@ -1156,66 +1156,76 @@ public class ShoppingOrderExtendDOExample {
             return (Criteria) this;
         }
         
-        public Criteria andIsEvaluationIsNull() {
-            addCriterion("so.is_evaluation is null");
+        public Criteria andShoppingCartIdsStrIsNull() {
+            addCriterion("shopping_cart_ids_str is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationIsNotNull() {
-            addCriterion("so.is_evaluation is not null");
+        public Criteria andShoppingCartIdsStrIsNotNull() {
+            addCriterion("shopping_cart_ids_str is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationEqualTo(Boolean value) {
-            addCriterion("so.is_evaluation =", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrEqualTo(String value) {
+            addCriterion("shopping_cart_ids_str =", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationNotEqualTo(Boolean value) {
-            addCriterion("so.is_evaluation <>", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrNotEqualTo(String value) {
+            addCriterion("shopping_cart_ids_str <>", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationGreaterThan(Boolean value) {
-            addCriterion("so.is_evaluation >", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrGreaterThan(String value) {
+            addCriterion("shopping_cart_ids_str >", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationGreaterThanOrEqualTo(Boolean value) {
-            addCriterion("so.is_evaluation >=", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrGreaterThanOrEqualTo(String value) {
+            addCriterion("shopping_cart_ids_str >=", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationLessThan(Boolean value) {
-            addCriterion("so.is_evaluation <", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrLessThan(String value) {
+            addCriterion("shopping_cart_ids_str <", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationLessThanOrEqualTo(Boolean value) {
-            addCriterion("so.is_evaluation <=", value, "isEvaluation");
+        public Criteria andShoppingCartIdsStrLessThanOrEqualTo(String value) {
+            addCriterion("shopping_cart_ids_str <=", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationIn(List<Boolean> values) {
-            addCriterion("so.is_evaluation in", values, "isEvaluation");
+        public Criteria andShoppingCartIdsStrLike(String value) {
+            addCriterion("shopping_cart_ids_str like", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationNotIn(List<Boolean> values) {
-            addCriterion("so.is_evaluation not in", values, "isEvaluation");
+        public Criteria andShoppingCartIdsStrNotLike(String value) {
+            addCriterion("shopping_cart_ids_str not like", value, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationBetween(Boolean value1, Boolean value2) {
-            addCriterion("so.is_evaluation between", value1, value2, "isEvaluation");
+        public Criteria andShoppingCartIdsStrIn(List<String> values) {
+            addCriterion("shopping_cart_ids_str in", values, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
-        public Criteria andIsEvaluationNotBetween(Boolean value1, Boolean value2) {
-            addCriterion("so.is_evaluation not between", value1, value2, "isEvaluation");
+        public Criteria andShoppingCartIdsStrNotIn(List<String> values) {
+            addCriterion("shopping_cart_ids_str not in", values, "shoppingCartIdsStr");
             return (Criteria) this;
         }
 
+        public Criteria andShoppingCartIdsStrBetween(String value1, String value2) {
+            addCriterion("shopping_cart_ids_str between", value1, value2, "shoppingCartIdsStr");
+            return (Criteria) this;
+        }
+
+        public Criteria andShoppingCartIdsStrNotBetween(String value1, String value2) {
+            addCriterion("shopping_cart_ids_str not between", value1, value2, "shoppingCartIdsStr");
+            return (Criteria) this;
+        }
+        
         public Criteria andOrderNumIsNull() {
             addCriterion("so.order_num is null");
             return (Criteria) this;
@@ -1861,8 +1871,14 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("soi.product_name like", value, "productName");
             return (Criteria) this;
         }
+        
         public Criteria andItemOrderStatusEqualTo(Byte value) {
             addCriterion("soi.order_status =", value, "orderStatus");
+            return (Criteria) this;
+        }
+        
+        public Criteria andIsEvaluationEqualTo(Boolean value) {
+            addCriterion("soi.is_evaluation =", value, "isEvaluation");
             return (Criteria) this;
         }
     }

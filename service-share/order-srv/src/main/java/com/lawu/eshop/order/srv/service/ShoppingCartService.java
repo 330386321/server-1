@@ -62,4 +62,12 @@ public interface ShoppingCartService {
 	 */
 	List<ShoppingCartBO> findListByIds(List<Long> ids);
 	
+	/**
+	 * 根据购物订单id列表查询购物车列表
+	 * 
+	 * @param shoppingOrderId 购物订单id
+	 * @return
+	 */
+	Integer deleteByShoppingOrderId(Long shoppingOrderId);
+	
 }

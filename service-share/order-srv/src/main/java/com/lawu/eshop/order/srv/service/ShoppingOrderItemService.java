@@ -31,4 +31,13 @@ public interface ShoppingOrderItemService {
 	 * @return 订单列表
 	 */
 	Page<ShoppingOrderItemRefundBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param);
+	
+	/**
+	 * 评论成功更新订单项为已评论
+	 * 
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 */
+	Integer commentsSuccessful(Long id);
 }

@@ -38,9 +38,10 @@ public class ShoppingOrderItemConverter {
 		BeanUtils.copyProperties(param, shoppingOrderItemDO, new String[] { "shoppingOrderId", "orderStatus", "gmtCreate", "gmtModified" });
 		// 设置订单id
 		shoppingOrderItemDO.setShoppingOrderId(shoppingOrderId);
-		// 设置为未付款状态
-		shoppingOrderItemDO.setOrderStatus((byte) 0x00);
-		// 设置为待评价
+		// 设置为待处理
+		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
+		// 设置为未评价
+		shoppingOrderItemDO.setIsEvaluation(false);
 		shoppingOrderItemDO.setGmtCreate(new Date());
 		shoppingOrderItemDO.setGmtModified(new Date());
 

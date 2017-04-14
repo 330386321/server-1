@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 public class OrderCommentProductTransactionMainServiceImpl extends AbstractTransactionMainService<CommentProductNotification, Reply> {
 
     @Override
-    public CommentProductNotification selectNotification(Long orderId) {
+    public CommentProductNotification selectNotification(Long shoppingOrderItemId) {
         CommentProductNotification regNotification = new CommentProductNotification();
-        regNotification.setOrderId(orderId);
+        regNotification.setShoppingOrderItemId(shoppingOrderItemId);
         return regNotification;
     }
 }

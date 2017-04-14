@@ -31,10 +31,8 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantPara
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
-import com.lawu.eshop.order.srv.bo.CommentOrderBO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExpressBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
@@ -191,15 +189,15 @@ public class ShoppingOrderController extends BaseController {
 			return successGet(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingOrderExpressBO shoppingOrderExpressBO = shoppingOrderService.getExpressInfo(id);
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
 
-		if (shoppingOrderExpressBO == null) {
+		if (shoppingOrderBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExpressBO.getExpressCompanyCode(), shoppingOrderExpressBO.getWaybillNum());
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
 
-		return successGet(ShoppingOrderConverter.covert(shoppingOrderExpressBO, expressInquiriesDetailBO));
+		return successGet(ShoppingOrderConverter.covert(shoppingOrderBO, expressInquiriesDetailBO));
 	}
 	
 	/**
@@ -429,11 +427,11 @@ public class ShoppingOrderController extends BaseController {
 	 * @param orderId
 	 * @return
 	 */
-	@RequestMapping(value = "getOrderCommentStatus/{orderId}", method = RequestMethod.GET)
-	public Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("orderId") Long orderId) {
+	@RequestMapping(value = "getOrderCommentStatus/{shoppingOrderItemId}", method = RequestMethod.GET)
+	public Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId) {
 		// 查询订单商品评价状态
-		CommentOrderBO commentOrderBO = shoppingOrderService.getOrderCommentStatusById(orderId);
-		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(commentOrderBO);
+		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingOrderItemId);
+		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(shoppingOrderItemBO);
 		return successGet(commentOrderDTO);
 	}
 }

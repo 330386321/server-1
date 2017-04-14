@@ -28,6 +28,7 @@ public interface ShoppingCartService {
 	 * @param parm
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingCart/{memberId}", method = RequestMethod.POST)
 	Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam parm);
 	
@@ -48,7 +49,8 @@ public interface ShoppingCartService {
      * @param parm
      * @return
      */
-    @RequestMapping(value = "shoppingCart/update/{id}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingCart/update/{id}", method = RequestMethod.PUT)
 	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam parm);
     
 	/**
@@ -56,6 +58,7 @@ public interface ShoppingCartService {
 	 * 
 	 * @param id
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingCart/delete/{id}", method = RequestMethod.PUT)
 	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId);
 	

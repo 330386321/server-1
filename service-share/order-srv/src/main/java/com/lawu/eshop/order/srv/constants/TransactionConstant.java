@@ -16,4 +16,9 @@ public class TransactionConstant {
      * 买单
      */
     public static final byte PAYORDER = 0x02;
+    
+    /**
+     * 创建购物订单
+     */
+    public static final byte CREATEORDER = 0x03;
 }

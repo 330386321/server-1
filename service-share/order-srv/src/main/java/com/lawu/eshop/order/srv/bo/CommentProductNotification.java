@@ -8,13 +8,16 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class CommentProductNotification extends Notification{
 
-    private Long orderId;
+	private static final long serialVersionUID = 1L;
+	
+	private Long shoppingOrderItemId;
 
-    public Long getOrderId() {
-        return orderId;
-    }
+	public Long getShoppingOrderItemId() {
+		return shoppingOrderItemId;
+	}
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
+		this.shoppingOrderItemId = shoppingOrderItemId;
+	}
+	
 }

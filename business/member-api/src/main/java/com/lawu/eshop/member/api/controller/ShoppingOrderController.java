@@ -1,9 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +17,16 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.member.api.service.ProductModelService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
-import com.lawu.eshop.product.param.ProductModeUpdateInventoryParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -143,26 +138,6 @@ public class ShoppingOrderController extends BaseController {
     	
     	if (!isSuccess(resultShoppingOrderExpressDTO)) {
     		return successCreated(resultShoppingOrderExpressDTO.getRet());
-    	}
-    	
-    	// TODO 从商品模型表中释放库存(跨库事务通过事务补偿处理)
-    	Result<ShoppingOrderExtendDetailDTO> resultShoppingOrderExtendDetailDTO = shoppingOrderService.get(id);
-    	if (!isSuccess(resultShoppingOrderExtendDetailDTO)) {
-    		return successCreated(resultShoppingOrderExtendDetailDTO.getRet());
-    	}
-    	
-    	List<ProductModeUpdateInventoryParam> productModeUpdateInventoryParams = new ArrayList<ProductModeUpdateInventoryParam>();
-    	for (ShoppingOrderItemDTO shoppingOrderItemDTO : resultShoppingOrderExtendDetailDTO.getModel().getItems()) {
-    		ProductModeUpdateInventoryParam productModeUpdateInventoryParam = new ProductModeUpdateInventoryParam();
-    		productModeUpdateInventoryParam.setId(shoppingOrderItemDTO.getProductModelId());
-    		// 释放库存为负数
-    		productModeUpdateInventoryParam.setQuantity(shoppingOrderItemDTO.getQuantity() * -1);
-    		productModeUpdateInventoryParams.add(productModeUpdateInventoryParam);
-    	}
-    	
-    	Result updateInventoryResult = productModelService.updateInventory(productModeUpdateInventoryParams);
-    	if (!isSuccess(updateInventoryResult)) {
-    		return successCreated(updateInventoryResult.getRet());
     	}
     	
     	return successCreated();

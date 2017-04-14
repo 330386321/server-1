@@ -377,7 +377,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     @Override
     public List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds) {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
-        merchantStoreDOExample.createCriteria().andMerchantIdNotIn(merchantIds);
+        merchantStoreDOExample.createCriteria().andMerchantIdIn(merchantIds);
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
 
         return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS);
