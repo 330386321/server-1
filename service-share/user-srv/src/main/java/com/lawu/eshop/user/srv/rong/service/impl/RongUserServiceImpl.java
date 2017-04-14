@@ -1,12 +1,13 @@
 package com.lawu.eshop.user.srv.rong.service.impl;
 
+import org.springframework.stereotype.Service;
+
+import com.lawu.eshop.user.srv.rong.RongCloud;
 import com.lawu.eshop.user.srv.rong.constant.RongYunConstant;
 import com.lawu.eshop.user.srv.rong.models.CheckOnlineResult;
 import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
-import com.lawu.eshop.user.srv.rong.util.RongCloud;
-import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong

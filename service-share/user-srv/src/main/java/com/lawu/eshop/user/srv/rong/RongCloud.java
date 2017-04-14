@@ -5,7 +5,7 @@
  * 
  * v2.0.1
  */
-package com.lawu.eshop.user.srv.rong.util;
+package com.lawu.eshop.user.srv.rong;
 
 import com.lawu.eshop.user.srv.rong.methods.*;
 
