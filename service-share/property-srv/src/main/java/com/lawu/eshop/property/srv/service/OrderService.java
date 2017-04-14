@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
+import com.lawu.eshop.property.param.OrderRefundDataParam;
 
 /**
  * 
@@ -40,5 +41,19 @@ public interface OrderService {
 	 * @return
 	 */
 	int comfirmDelivery(OrderComfirmDataParam param);
+
+	/**
+	 * 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
+	 * 余额支付：处理商家冻结资金（区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额），新增会员交易订单退款交易记录，
+	 * 加会员财产余额
+	 * 第三方支付：处理商家冻结资金（区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额），新增会员交易订单退款交易记录，
+	 * 原路退回会员支付账户
+	 *
+	 * <异步通知修改订单状态>
+	 * 
+	 * @param param
+	 * @return
+	 */
+	int doRefundScopeInside(OrderRefundDataParam param) throws Exception;
 
 }

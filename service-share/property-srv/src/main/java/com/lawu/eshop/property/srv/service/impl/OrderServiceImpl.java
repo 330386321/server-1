@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,22 +12,32 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.srv.controller.AlipayBusinessHandle;
+import com.lawu.eshop.pay.srv.controller.WxpayBusinessHandle;
+import com.lawu.eshop.pay.srv.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
 import com.lawu.eshop.property.constants.FreezeTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
+import com.lawu.eshop.property.param.OrderRefundDataParam;
+import com.lawu.eshop.property.param.ThirdPayRefundParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
+import com.lawu.eshop.property.srv.domain.FreezeDOExample;
+import com.lawu.eshop.property.srv.domain.extend.FreezeDOView;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.FreezeDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -39,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
 	private FreezeDOMapper freezeDOMapper;
 	@Autowired
 	private PropertyService propertyService;
+	@Autowired
+	private FreezeDOMapperExtend freezeDOMapperExtend;
 
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
@@ -135,20 +148,108 @@ public class OrderServiceImpl implements OrderService {
 		FreezeDO freezeDO = new FreezeDO();
 		freezeDO.setUserNum(param.getUserNum());
 		freezeDO.setMoney(new BigDecimal(param.getTotalOrderMoney()));
+		freezeDO.setOriginalMoney(new BigDecimal(param.getTotalOrderMoney()));
 		freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.val);
 		freezeDO.setBizId(Long.valueOf(param.getBizId()));
 		freezeDO.setStatus(FreezeStatusEnum.FREEZE.val);
 		freezeDO.setGmtCreate(new Date());
 		String days = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
-		if("".equals(days)){
+		if ("".equals(days)) {
 			days = PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS_DEFAULT;
 		}
 		freezeDO.setDays(Integer.valueOf(days));
 		freezeDOMapper.insertSelective(freezeDO);
-		
-		//TODO 发送消息，更新订单状态
-		
-		
+
+		// TODO 发送消息，更新订单状态
+
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	@Transactional
+	public int doRefundScopeInside(OrderRefundDataParam param) throws Exception {
+
+		// 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
+		// 余额支付：处理商家冻结资金（区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额），新增会员交易订单退款交易记录，加会员财产余额
+		// 第三方支付：处理商家冻结资金（区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额），新增会员交易订单退款交易记录，原路退回会员支付账户
+		// <异步通知修改订单状态>
+		FreezeDOExample example = new FreezeDOExample();
+		if (param.isLast()) {
+			FreezeDO freezeDO = new FreezeDO();
+			freezeDO.setMoney(new BigDecimal("0"));
+			freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
+			freezeDO.setGmtModified(new Date());
+			example.createCriteria().andUserNumEqualTo(param.getUserNum());
+			freezeDOMapper.updateByExample(freezeDO, example);
+		} else {
+			// 校验退款金额不能大于冻结金额
+			example.createCriteria().andUserNumEqualTo(param.getUserNum())
+					.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
+					.andBizIdEqualTo(Long.valueOf(param.getOrderId()));
+			List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
+			Long freezeId = 0L;
+			if (freezeDOS == null || freezeDOS.isEmpty()) {
+				return ResultCode.FREEZE_NULL;
+			} else if (freezeDOS.size() > 1) {
+				return ResultCode.FREEZE_ROWS_OUT;
+			} else {
+				FreezeDO freeze = freezeDOS.get(0);
+				if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
+					return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
+				}
+				freezeId = freeze.getId();
+			}
+
+			FreezeDOView freezeDoView = new FreezeDOView();
+			freezeDoView.setId(freezeId);
+			freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
+			freezeDoView.setGmtModified(new Date());
+			freezeDOMapperExtend.updateMinusMoney(freezeDoView);
+		}
+
+		// 新增会员订单退款交易记录
+		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+		tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY_REFUND.val);
+		tdsParam.setTransactionNum(param.getTradeNo());
+		tdsParam.setUserNum(param.getSideUserNum());
+		tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
+		tdsParam.setTransactionAccount("");
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
+		tdsParam.setBizId(Long.valueOf(param.getOrderItemIds().split(",")[0]));
+		transactionDetailService.save(tdsParam);
+
+		JsonResult jsonResult = new JsonResult();
+		if (TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)) {
+			// 加会员财产余额
+			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+			infoDoView.setUserNum(param.getSideUserNum());
+			infoDoView.setBalance(new BigDecimal(param.getRefundMoney()));
+			infoDoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+			jsonResult.setSuccess(true);
+
+		} else {
+			ThirdPayRefundParam rparam = new ThirdPayRefundParam();
+			rparam.setRefundId(StringUtil.getRandomNumAppend(param.getOrderItemIds().replaceAll(",", "")));
+			rparam.setRefundMoney(param.getRefundMoney());
+			rparam.setTotalMoney(rparam.getTotalMoney());
+			rparam.setTradeNo(param.getTradeNo());
+			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
+				AlipayBusinessHandle.refund(rparam, jsonResult);
+
+			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
+				WxpayBusinessHandle.refund(rparam, jsonResult);
+			}
+		}
+
+		if (jsonResult.isSuccess()) {
+			// TODO 更新订单item状态
+
+			
+		} else {
+			throw new Exception(jsonResult.getMessage());
+		}
 		return ResultCode.SUCCESS;
 	}
 

@@ -386,6 +386,66 @@ public class FreezeDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andOriginalMoneyIsNull() {
+            addCriterion("original_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyIsNotNull() {
+            addCriterion("original_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyEqualTo(BigDecimal value) {
+            addCriterion("original_money =", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("original_money <>", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyGreaterThan(BigDecimal value) {
+            addCriterion("original_money >", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("original_money >=", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyLessThan(BigDecimal value) {
+            addCriterion("original_money <", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("original_money <=", value, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyIn(List<BigDecimal> values) {
+            addCriterion("original_money in", values, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("original_money not in", values, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("original_money between", value1, value2, "originalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andOriginalMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("original_money not between", value1, value2, "originalMoney");
+            return (Criteria) this;
+        }
+
         public Criteria andFundTypeIsNull() {
             addCriterion("fund_type is null");
             return (Criteria) this;

@@ -17,6 +17,17 @@ public class StringUtil {
         DateFormat df = new SimpleDateFormat("yyyyMMddHHmmssssss");
         return prefix + df.format(new Date()) + getRandom(1, 7);
     }
+    
+    /**
+     * 获取随机数
+     *
+     * @param prefix 业务后缀
+     * @return
+     */
+    public static String getRandomNumAppend(String suffix) {
+        DateFormat df = new SimpleDateFormat("yyMMddHHmmssssss");
+        return df.format(new Date()) + suffix;
+    }
 
     /**
      * 获取随机数

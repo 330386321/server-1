@@ -23,12 +23,8 @@ public class Configure {
 	
 	public static String key_app = "lovechuanmeiAppAndroidIos2017011";		//APP
 
-	public static String certLocalPathMember = File.separator+"WEB-INF"+File.separator+"classes"+File.separator+"cert"+File.separator+"apiclient_cert-member.p12";
-	//HTTPS证书密码，默认密码等于商户号MCHID
-	public static String certPasswordMember = mchID_member;
-
 	//机器IP
-	public static String ip = "192.168.1.240";
+	public static String ip = "192.168.1.207";
 	
 	//企业付款API
 	public static String TRANSFERS_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
@@ -42,6 +38,19 @@ public class Configure {
 	public static String notify_url = "http://www.love-86.com:8888/wxpay/appNotifyHandle";
 	
 	public static String notify_url_pc = "http://www.love-86.com:8888/wxpay/pcNotifyHandle";
+	
+	
+	public static String certLocalPathMember = File.separator+"WEB-INF"+File.separator+"classes"+File.separator+"cert"+File.separator+"apiclient_cert-member.p12";
+	//HTTPS证书密码，默认密码等于商户号MCHID
+	public static String certPasswordMember = mchID_member;
+	//证书路径
+	public static String cert_base_path = "";
+	public static String getCert_base_path() {
+		return cert_base_path;
+	}
+	public static void setCert_base_path(String cert_base_path) {
+		Configure.cert_base_path = cert_base_path;
+	}
 
 	public static void setKey(String key) {
 		Configure.key = key;

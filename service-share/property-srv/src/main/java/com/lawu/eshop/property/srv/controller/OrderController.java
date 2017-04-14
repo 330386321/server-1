@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.srv.sdk.weixin.base.Configure;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
 import com.lawu.eshop.property.param.OrderRefundDataParam;
@@ -107,15 +109,18 @@ public class OrderController extends BaseController {
 	}
 
 	/**
-	 * 商家订单退款
+	 * 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
+	 * 	
+	 * 	<7天外用户可以申请售后>
 	 * 
 	 * @param param
 	 * @param result
 	 * @return
+	 * @throws Exception 
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "doRefund", method = RequestMethod.POST)
-	public Result doRefund(@RequestBody @Valid OrderRefundDataParam param, BindingResult result) {
+	@RequestMapping(value = "doRefundScopeInside", method = RequestMethod.POST)
+	public Result doRefundScopeInside(@RequestBody @Valid OrderRefundDataParam param, BindingResult result) throws Exception {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
 			StringBuffer es = new StringBuffer();
@@ -125,9 +130,11 @@ public class OrderController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		int retCode = 0;
-		// TODO
-
+		if(TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)){
+			String certPath = getRequest().getSession().getServletContext().getRealPath(Configure.certLocalPathMember);
+			Configure.setCert_base_path(certPath);
+		}
+		int retCode = orderService.doRefundScopeInside(param);
 		return successCreated(retCode);
 	}
 }

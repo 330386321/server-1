@@ -5,6 +5,7 @@ public enum TransactionTitleEnum {
 	CASH("提现"),
 	CASH_FAIL_BACK("提现失败退回"),
 	ORDER_PAY("订单付款"),
+	ORDER_PAY_REFUND("订单退款"),
 	PAY("买单"),
 	INTEGRAL_RECHARGE("积分充值"),
 	INVITE_FANS("邀请粉丝"),

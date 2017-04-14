@@ -54,9 +54,14 @@ public enum MemberTransactionTypeEnum {
 	WITHDRAW((byte)0x09),
 	
 	/**
-	 * 提现退回
+	 * 提现退回11
 	 */
-	WITHDRAW_BACK((byte)0x10);
+	WITHDRAW_BACK((byte)0x0A),
+	
+	/**
+	 * 退商品订单12
+	 */
+	REFUND_ORDERS((byte)0x0B);
 	
 	MemberTransactionTypeEnum(Byte value){
 		this.value = value;

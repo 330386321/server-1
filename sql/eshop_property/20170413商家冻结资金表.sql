@@ -15,3 +15,4 @@ CREATE TABLE `freeze` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='冻结资金表';
 
 alter table property modify column `name` varchar(50) NOT NULL COMMENT '键';
+alter table freeze add column `original_money` decimal(10,6) NOT NULL COMMENT '冻结金额(原始冗余)' after `money`;
