@@ -1,15 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductImgTypeEnum;
@@ -22,12 +12,7 @@ import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.domain.ProductDOExample;
-import com.lawu.eshop.product.srv.domain.ProductImageDO;
-import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
@@ -35,6 +20,15 @@ import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -44,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductModelDOMapper productModelDOMapper;
-    
+
     @Autowired
     private ProductModelInventoryDOMapper productModelInventoryDOMapper;
 
@@ -150,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("originalPrice_d", originalPrice);
                     document.addField("price_d", price);
                     document.addField("inventory_i", inventory);
-                    document.addField("sales_volume_i", salesVolume);
+                    document.addField("salesVolume_i", salesVolume);
                     SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
                 }
             }
@@ -268,6 +262,7 @@ public class ProductServiceImpl implements ProductService {
     public void eidtProduct(Long productId, EditProductDataParam product) {
 
         int inventory = 0;
+        int salesVolume = 0;
         double originalPrice = 0;
         double price = 0;
         int traverseCnt = 0;
@@ -311,7 +306,7 @@ public class ProductServiceImpl implements ProductService {
             pmDO.setGmtCreate(new Date());
             pmDO.setGmtModified(new Date());
             productModelDOMapper.insertSelective(pmDO);
-            
+
             if (traverseCnt == 0) {
                 price = dataBO.getPrice().doubleValue();
             }
@@ -322,6 +317,7 @@ public class ProductServiceImpl implements ProductService {
                 price = dataBO.getPrice().doubleValue();
             }
             inventory += dataBO.getInventory();
+            salesVolume += dataBO.getSalesVolume();
             traverseCnt++;
         }
 
@@ -366,6 +362,7 @@ public class ProductServiceImpl implements ProductService {
         document.addField("originalPrice_d", originalPrice);
         document.addField("price_d", price);
         document.addField("inventory_i", inventory);
+        document.addField("salesVolume_i", salesVolume);
         SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
     }
 
