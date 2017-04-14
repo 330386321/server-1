@@ -2,7 +2,7 @@ package com.lawu.eshop.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.UserSexEnum;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
@@ -12,30 +12,36 @@ import java.util.Date;
  */
 public class UserDTO {
 
-    @ApiParam(name = "num",value = "编号")
+    @ApiModelProperty(name = "num",value = "编号")
     private String num;
 
-    @ApiParam(name = "account",value = "账号")
+    @ApiModelProperty(name = "account",value = "账号")
     private String account;
 
-    @ApiParam(name = "nickname",value = "昵称")
+    @ApiModelProperty(name = "nickname",value = "昵称")
     private String nickname;
 
-    @ApiParam(name = "regionPath",value = "地区路径")
+    @ApiModelProperty(name = "regionPath",value = "地区路径")
     private String regionPath;
 
-    @ApiParam(name = "birthday",value = "生日")
+    @ApiModelProperty(name = "birthday",value = "生日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birthday;
 
-    @ApiParam(name = "headimg",value = "头像")
+    @ApiModelProperty(name = "headimg",value = "头像")
     private String headimg;
 
-    @ApiParam(name = "userSex",value = "性别")
+    @ApiModelProperty(name = "userSex",value = "性别")
     private UserSexEnum userSex;
 
-    @ApiParam(name = "level",value = "等级")
+    @ApiModelProperty(name = "level",value = "等级")
     private int level;
+
+    @ApiModelProperty(name = "level",value = "个推CID")
+    private String gtCid;
+
+    @ApiModelProperty(name = "level",value = "融云token")
+    private String ryToken;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -99,5 +105,21 @@ public class UserDTO {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public String getGtCid() {
+        return gtCid;
+    }
+
+    public void setGtCid(String gtCid) {
+        this.gtCid = gtCid;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
     }
 }

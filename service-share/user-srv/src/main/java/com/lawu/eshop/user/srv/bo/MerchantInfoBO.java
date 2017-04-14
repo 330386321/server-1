@@ -15,6 +15,10 @@ public class MerchantInfoBO {
      */
     private String headimg;
 
+    private String gtCid;
+
+    private String ryToken;
+
     public String getAccount() {
         return account;
     }
@@ -29,5 +33,21 @@ public class MerchantInfoBO {
 
     public void setHeadimg(String headimg) {
         this.headimg = headimg;
+    }
+
+    public String getGtCid() {
+        return gtCid;
+    }
+
+    public void setGtCid(String gtCid) {
+        this.gtCid = gtCid;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
     }
 }

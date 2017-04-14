@@ -1,9 +1,9 @@
 package com.lawu.eshop.user.srv.bo;
 
 
-import java.util.Date;
-
 import com.lawu.eshop.user.constants.UserSexEnum;
+
+import java.util.Date;
 
 /**
  * 会员BO
@@ -50,6 +50,10 @@ public class MemberBO {
     private Integer inviterCount;
 
     private UserSexEnum userSex;
+
+    private String gtCid;
+
+    private String ryToken;
 
     public UserSexEnum getUserSex() {
         return userSex;
@@ -206,6 +210,20 @@ public class MemberBO {
 	public void setInviterCount(Integer inviterCount) {
 		this.inviterCount = inviterCount;
 	}
-    
-    
+
+    public String getGtCid() {
+        return gtCid;
+    }
+
+    public void setGtCid(String gtCid) {
+        this.gtCid = gtCid;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
+    }
 }

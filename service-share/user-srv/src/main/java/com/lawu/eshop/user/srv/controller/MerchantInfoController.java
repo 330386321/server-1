@@ -70,6 +70,8 @@ public class MerchantInfoController extends BaseController{
         //门店信息
         merchantInfoDTO.setAccount(merchantInfoBO.getAccount());
         merchantInfoDTO.setHeadimg(merchantInfoBO.getHeadimg());
+        merchantInfoDTO.setGtCid(merchantInfoBO.getGtCid());
+        merchantInfoDTO.setRyToken(merchantInfoBO.getRyToken());
         MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
         if(merchantStoreBO != null){
             //门店ID

@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.dto.RongYunTokenDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
@@ -14,6 +15,8 @@ import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
+import com.lawu.eshop.user.srv.rong.models.TokenResult;
+import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private RongUserService rongUserService;
 
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
     public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
@@ -116,4 +122,42 @@ public class MerchantController extends BaseController {
         merchantService.register(registerRealParam);
         return successCreated();
     }
+
+    /**
+     * 增加推送、即时通讯token
+     * @param id
+     * @param cid
+     * @param ryToken
+     * @return
+     */
+    @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
+    public Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken){
+        Integer row =  merchantService.setGtAndRongYunInfo(id,cid,ryToken);
+        if(row == null || row <=0){
+            successCreated(ResultCode.SAVE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 获取融云token
+     * @param userId 用户 Id
+     * @param name 用户名称
+     * @param portraitUri 用户头像 URI
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "getRongToken",method = RequestMethod.GET)
+    public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception{
+        TokenResult token = rongUserService.getRongToken(userId,name,portraitUri);
+        RongYunTokenDTO rongYunTokenDTO = new RongYunTokenDTO();
+        rongYunTokenDTO.setCode(token.getCode());
+        rongYunTokenDTO.setRyToken(token.getToken());
+        rongYunTokenDTO.setErrorMessage(token.getErrorMessage());
+        rongYunTokenDTO.setUserId(token.getUserId());
+        return successGet(rongYunTokenDTO);
+    }
+
+
+
 }

@@ -46,6 +46,8 @@ public class MemberConverter {
         memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
         memberBO.setRegionPath(memberDO.getRegionPath());
         memberBO.setNickname(memberDO.getNickname());
+        memberBO.setGtCid(memberDO.getGtCid());
+        memberBO.setRyToken(memberDO.getRyToken());
         return memberBO;
     }
 
@@ -101,6 +103,8 @@ public class MemberConverter {
         userDTO.setNickname(memberBO.getNickname());
         userDTO.setHeadimg(memberBO.getHeadimg());
         userDTO.setLevel(memberBO.getLevel());
+        userDTO.setGtCid(memberBO.getGtCid());
+        userDTO.setRyToken(memberBO.getRyToken());
         return userDTO;
     }
 

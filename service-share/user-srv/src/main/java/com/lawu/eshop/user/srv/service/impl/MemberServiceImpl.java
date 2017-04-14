@@ -347,4 +347,15 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+    @Override
+    @Transactional
+    public Integer setGtAndRongYunInfo(Long id, String cid, String ryToken) {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setId(id);
+        memberDO.setGtCid(cid);
+        memberDO.setRyToken(ryToken);
+        Integer row = memberDOMapper.updateByPrimaryKeySelective(memberDO);
+        return row;
+    }
+
 }

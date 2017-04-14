@@ -108,7 +108,8 @@ public class MerchantConverter {
         MerchantInfoBO merchantBO = new MerchantInfoBO();
         merchantBO.setAccount(merchantDO.getAccount());
         merchantBO.setHeadimg(merchantDO.getHeadimg());
-
+        merchantBO.setGtCid(merchantDO.getGtCid());
+        merchantBO.setRyToken(merchantDO.getRyToken());
         return merchantBO;
     }
 

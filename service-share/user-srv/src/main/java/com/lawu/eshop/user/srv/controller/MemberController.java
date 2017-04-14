@@ -29,6 +29,8 @@ public class MemberController extends BaseController {
     @Autowired
     private MemberService memberService;
 
+
+
     /**
      * 根据用户名密码查找会员
      *
@@ -200,10 +202,23 @@ public class MemberController extends BaseController {
         Integer count = memberService.findMemberCount(regionPath);
         return count;
     }
-    @RequestMapping(value = "setGtAndRongYunInfo",method = RequestMethod.PUT)
-    public Result setGtAndRongYunInfo(@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken){
 
-        return successCreated();
+    /**
+     * 增加推送、即时通讯token
+     * @param id
+     * @param cid
+     * @param ryToken
+     * @return
+     */
+    @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
+    public Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken){
+       Integer row =  memberService.setGtAndRongYunInfo(id,cid,ryToken);
+       if(row == null || row <=0){
+        successCreated(ResultCode.SAVE_FAIL);
+       }
+        return successCreated(ResultCode.SUCCESS);
     }
+
+
 
 }

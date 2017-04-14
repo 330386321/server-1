@@ -84,4 +84,14 @@ public interface MerchantService {
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
     Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
 
+    /**
+     * 增加推送、融云 CID，token
+     * @param id
+     * @param cid
+     * @param ryToken
+     * @return
+     */
+    @RequestMapping(value = "merchant/setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
+    Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken);
+
 }

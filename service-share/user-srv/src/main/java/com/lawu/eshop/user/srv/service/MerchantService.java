@@ -71,4 +71,6 @@ public interface MerchantService {
      * @return
      */
     MerchantBO find(String account, String pwd);
+
+    Integer setGtAndRongYunInfo(Long id, String cid, String ryToken);
 }

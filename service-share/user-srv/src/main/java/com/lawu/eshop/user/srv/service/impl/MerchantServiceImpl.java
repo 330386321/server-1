@@ -79,8 +79,8 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public MerchantInfoBO findMerchantInfo(Long merchantProfileId) {
-        MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantProfileId);
+    public MerchantInfoBO findMerchantInfo(Long merchantId) {
+        MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
 
         return MerchantConverter.convertInfoBO(merchantDO);
     }
@@ -255,5 +255,15 @@ public class MerchantServiceImpl implements MerchantService {
         List<MerchantDO> merchantDOs = merchantDOMapper.selectByExample(example);
 
         return merchantDOs.isEmpty() ? null : MerchantConverter.convertBO(merchantDOs.get(0));
+    }
+
+    @Override
+    public Integer setGtAndRongYunInfo(Long id, String cid, String ryToken) {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setId(id);
+        merchantDO.setGtCid(cid);
+        merchantDO.setRyToken(ryToken);
+        Integer row = merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
+        return row;
     }
 }
