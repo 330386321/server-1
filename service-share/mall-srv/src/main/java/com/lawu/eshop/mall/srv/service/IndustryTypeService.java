@@ -11,9 +11,17 @@ import java.util.List;
 public interface IndustryTypeService {
 
     /**
-     * 查询行业
+     * 查询所有行业
      *
      * @return
      */
     List<IndustryTypeBO> listIndustryType();
+
+    /**
+     * 查询父行业下的行业
+     *
+     * @param parentId
+     * @return
+     */
+    List<IndustryTypeBO> listIndustryTypeByParentId(Short parentId);
 }

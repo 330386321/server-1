@@ -8,9 +8,7 @@ import com.lawu.eshop.mall.srv.bo.IndustryTypeBO;
 import com.lawu.eshop.mall.srv.converter.IndustryTypeConverter;
 import com.lawu.eshop.mall.srv.service.IndustryTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,13 +24,28 @@ public class IndustryTypeController extends BaseController {
     private IndustryTypeService industryTypeService;
 
     /**
-     * 查询行业
+     * 查询所有行业
      *
      * @return
      */
     @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)
     public Result<List<IndustryTypeDTO>> listIndustryType() {
         List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryType();
+        if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
+    }
+
+    /**
+     * 查询父行业下的行业
+     *
+     * @param parentId
+     * @return
+     */
+    @RequestMapping(value = "listIndustryType/{parentId}", method = RequestMethod.GET)
+    public Result<List<IndustryTypeDTO>> listIndustryTypeByParentId(@PathVariable Short parentId) {
+        List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryTypeByParentId(parentId);
         if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
