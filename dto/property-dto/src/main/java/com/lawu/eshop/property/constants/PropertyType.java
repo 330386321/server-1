@@ -17,4 +17,8 @@ public class PropertyType {
 	//用户第三方充值积分比例
 	public final static String MEMBER_THIRD_PAY_POINT = "m_third_pay_point";
 	public final static String THIRD_PAY_POINT_DEFAULT = "1";
+	
+	//确认收货后订单进入计入商家冻结资金，资金冻结天数
+	public final static String PRODUCT_ORDER_MONEY_FREEZE_DAYS = "product_order_money_freeze_days";
+	public final static String PRODUCT_ORDER_MONEY_FREEZE_DAYS_DEFAULT = "7";
 }

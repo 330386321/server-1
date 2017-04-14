@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
 
 import java.math.BigDecimal;
@@ -72,5 +73,12 @@ public interface PropertyInfoService {
      * @return
      */
     int validatePoint(String userNum, String point);
+
+	/**
+	 * 获取用户商家积分余额信息
+	 * @param userNum
+	 * @return
+	 */
+	PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception;
 
 }

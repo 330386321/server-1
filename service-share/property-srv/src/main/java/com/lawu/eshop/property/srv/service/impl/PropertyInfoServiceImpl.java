@@ -1,8 +1,16 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
 import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.converter.PropertyInfoConverter;
@@ -13,13 +21,8 @@ import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
+import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -154,5 +157,21 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
         }
         return ResultCode.SUCCESS;
     }
+
+	@Override
+	public PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception {
+		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+		PropertyPointAndBalanceBO bo = new PropertyPointAndBalanceBO();
+		if(propertyInfoDOS == null || propertyInfoDOS.isEmpty()){
+			bo.setBalance(new BigDecimal("0"));
+			bo.setPoint(new BigDecimal("0"));
+			return bo;
+		}
+		PropertyInfoDO pdo = propertyInfoDOS.get(0);
+		BeanUtil.copyProperties(pdo, bo);
+		return bo;
+	}
 
 }

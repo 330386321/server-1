@@ -34,7 +34,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
-
+	@SuppressWarnings("rawtypes")
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
     private TransactionMainService transactionMainService;

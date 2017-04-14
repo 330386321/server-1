@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.converter;
 
+import java.math.BigDecimal;
+
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
@@ -36,9 +38,10 @@ public class PropertyBalanceConverter {
      */
     public static PropertyBalanceDTO convert(PropertyBalanceBO propertyBalanceBO) {
         if (propertyBalanceBO == null) {
-            return null;
+        	PropertyBalanceDTO dto = new PropertyBalanceDTO();
+        	dto.setBalance(new BigDecimal("0"));
+            return dto;
         }
-
         PropertyBalanceDTO propertyBalanceDTO = new PropertyBalanceDTO();
         propertyBalanceDTO.setBalance(propertyBalanceBO.getBalance());
         return  propertyBalanceDTO;

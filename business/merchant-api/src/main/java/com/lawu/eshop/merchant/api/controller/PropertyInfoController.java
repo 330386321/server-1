@@ -39,7 +39,8 @@ public class PropertyInfoController extends BaseController {
      * @param token
      * @return
      */
-    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    @SuppressWarnings("unchecked")
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -55,7 +56,8 @@ public class PropertyInfoController extends BaseController {
      * @param token
      * @return
      */
-    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    @SuppressWarnings("unchecked")
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "获取积分", notes = "根据用户编号获取积分。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -63,5 +65,15 @@ public class PropertyInfoController extends BaseController {
     public Result<PropertyPointDTO> getPropertyPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyPoint(userNum));
+    }
+    
+    @SuppressWarnings("unchecked")
+	@ApiOperation(value = "获取资产余额积分", notes = "根据用户编号获取资产余额积分。[]（杨清华）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "getPropertyInfoMoney", method = RequestMethod.GET)
+    public Result<PropertyBalanceDTO> getPropertyInfoMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	return successGet(propertyInfoService.getPropertyInfoMoney(userNum));
     }
 }

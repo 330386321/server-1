@@ -25,7 +25,8 @@ public interface PropertyInfoService {
      * @param newPwd      新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNum}")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNum}")
     Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
 
     /**
@@ -35,7 +36,8 @@ public interface PropertyInfoService {
      * @param newPwd  新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/resetPayPwd/{userNum}")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/resetPayPwd/{userNum}")
     Result resetPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd);
 
     /**
@@ -45,8 +47,13 @@ public interface PropertyInfoService {
      * @param newPwd  新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/setPayPwd/{userNum}")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/setPayPwd/{userNum}")
     Result setPayPwd(@PathVariable("userNum") String userNum, @RequestParam("newPwd") String newPwd);
+
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNum}")
+    Result updatePayPwd(@PathVariable("userNum") String userNum, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
 
     /**
      * 查询是否设置支付密码
@@ -54,7 +61,8 @@ public interface PropertyInfoService {
      * @param userNum
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "propertyInfo/isSetPayPwd/{userNum}")
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.GET, value = "propertyInfo/isSetPayPwd/{userNum}")
     Result isSetPayPwd(@PathVariable("userNum") String userNum);
 
     /**
@@ -82,6 +90,16 @@ public interface PropertyInfoService {
      * @param payPwd
      * @return
      */
-    @RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
     Result varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
+     
+    
+    /** 获取商家积分余额
+     * @param userNum
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "propertyInfo/getPropertyInfoMoney/{userNum}", method = RequestMethod.GET)
+	Result getPropertyInfoMoney(@PathVariable("userNum") String userNum);
 }

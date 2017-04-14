@@ -1,23 +1,31 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
-import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
-import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
-import com.lawu.eshop.property.srv.service.OrderService;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.constants.FreezeTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.OrderComfirmDataParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.domain.FreezeDO;
+import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
+import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
+import com.lawu.eshop.property.srv.service.OrderService;
+import com.lawu.eshop.property.srv.service.PropertyService;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -26,7 +34,12 @@ public class OrderServiceImpl implements OrderService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
+	@Autowired
+	private FreezeDOMapper freezeDOMapper;
+	@Autowired
+	private PropertyService propertyService;
 
+	@SuppressWarnings("rawtypes")
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
 	private TransactionMainService transactionMainService;
@@ -94,6 +107,28 @@ public class OrderServiceImpl implements OrderService {
 		// 更新订单状态
 		transactionMainService.sendNotice(Long.valueOf(param.getBizIds()));
 
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int comfirmDelivery(OrderComfirmDataParam param) {
+		FreezeDO freezeDO = new FreezeDO();
+		freezeDO.setUserNum(param.getUserNum());
+		freezeDO.setMoney(new BigDecimal(param.getTotalOrderMoney()));
+		freezeDO.setFundType(FreezeTypeEnum.PRODUCT_ORDER.val);
+		freezeDO.setBizId(Long.valueOf(param.getBizId()));
+		freezeDO.setStatus(FreezeStatusEnum.FREEZE.val);
+		freezeDO.setGmtCreate(new Date());
+		String days = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
+		if("".equals(days)){
+			days = PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS_DEFAULT;
+		}
+		freezeDO.setDays(Integer.valueOf(days));
+		freezeDOMapper.insertSelective(freezeDO);
+		
+		//TODO 发送消息，更新订单状态
+		
+		
 		return ResultCode.SUCCESS;
 	}
 

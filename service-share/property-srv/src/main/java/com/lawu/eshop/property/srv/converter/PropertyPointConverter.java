@@ -1,5 +1,7 @@
 package com.lawu.eshop.property.srv.converter;
 
+import java.math.BigDecimal;
+
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
@@ -24,7 +26,6 @@ public class PropertyPointConverter {
         }
 
         PropertyPointBO propertyPointBO = new PropertyPointBO();
-        propertyPointBO.setId(propertyInfoDO.getId());
         propertyPointBO.setPoint(propertyInfoDO.getPoint());
         return  propertyPointBO;
     }
@@ -37,7 +38,9 @@ public class PropertyPointConverter {
      */
     public static PropertyPointDTO convert(PropertyPointBO propertyPointBO) {
         if (propertyPointBO == null) {
-            return null;
+        	PropertyPointDTO dto = new PropertyPointDTO();
+        	dto.setPoint(new BigDecimal("0"));
+            return dto;
         }
 
         PropertyPointDTO propertyPointDTO = new PropertyPointDTO();
