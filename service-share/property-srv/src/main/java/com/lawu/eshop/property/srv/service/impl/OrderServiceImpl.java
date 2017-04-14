@@ -19,6 +19,7 @@ import com.lawu.eshop.property.constants.FreezeStatusEnum;
 import com.lawu.eshop.property.constants.FreezeTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
@@ -82,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(Long.valueOf(param.getBizIds().split(",")[0]));
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 
 		/* 更新订单状态
@@ -110,6 +112,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		transactionDetailService.save(tdsParam);
@@ -125,6 +128,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam1.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam1.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
+		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam1);
 
 		// 加商家财产余额
@@ -217,6 +221,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
 		tdsParam.setBizId(Long.valueOf(param.getOrderItemIds().split(",")[0]));
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);
 
 		JsonResult jsonResult = new JsonResult();

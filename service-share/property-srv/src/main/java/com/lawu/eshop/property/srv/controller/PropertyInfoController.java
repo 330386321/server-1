@@ -45,7 +45,8 @@ public class PropertyInfoController extends BaseController {
      * @param newPwd      新密码
      * @return
      */
-    @RequestMapping(value = "updatePayPwd/{userNum}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updatePayPwd/{userNum}", method = RequestMethod.PUT)
     public Result updatePayPwd(@PathVariable String userNum, @RequestParam String originalPwd, @RequestParam String newPwd) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
         if (propertyInfoBO == null) {
@@ -65,7 +66,8 @@ public class PropertyInfoController extends BaseController {
      * @param newPwd  新密码
      * @return
      */
-    @RequestMapping(value = "resetPayPwd/{userNum}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "resetPayPwd/{userNum}", method = RequestMethod.PUT)
     public Result resetPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
         if (propertyInfoBO == null) {
@@ -82,7 +84,8 @@ public class PropertyInfoController extends BaseController {
      * @param newPwd  新密码
      * @return
      */
-    @RequestMapping(value = "setPayPwd/{userNum}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "setPayPwd/{userNum}", method = RequestMethod.PUT)
     public Result setPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
         if (propertyInfoBO == null) {
@@ -98,7 +101,8 @@ public class PropertyInfoController extends BaseController {
      * @param userNum 用户编号
      * @return
      */
-    @RequestMapping(value = "isSetPayPwd/{userNum}", method = RequestMethod.GET)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "isSetPayPwd/{userNum}", method = RequestMethod.GET)
     public Result isSetPayPwd(@PathVariable String userNum) {
         PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
         if (propertyInfoBO == null) {

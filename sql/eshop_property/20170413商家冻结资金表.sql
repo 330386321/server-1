@@ -16,3 +16,5 @@ CREATE TABLE `freeze` (
 
 alter table property modify column `name` varchar(50) NOT NULL COMMENT '键';
 alter table freeze add column `original_money` decimal(10,6) NOT NULL COMMENT '冻结金额(原始冗余)' after `money`;
+alter table transaction_detail add column `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入' after `amount`;
+alter table point_detail add column `direction` tinyint(2) NOT NULL COMMENT '1-支出2-收入' after `point`;

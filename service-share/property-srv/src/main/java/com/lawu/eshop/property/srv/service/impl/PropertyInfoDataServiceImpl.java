@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PointDetailService;
@@ -17,7 +18,7 @@ import com.lawu.eshop.utils.StringUtil;
 /**
  * 
  * <p>
- * Description:
+ * Description:与积分相关业务处理(加、减)
  * </p>
  * 
  * @author Yangqh
@@ -52,7 +53,8 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}else{
 			return ResultCode.BIZ_TYPE_NULL;
 		}
-		pointDetailSaveDataParam.setPoint(new BigDecimal("-" + param.getPoint()));
+		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
+		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 更新用户资产
@@ -79,6 +81,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			return ResultCode.BIZ_TYPE_NULL;
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
+		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 更新用户资产

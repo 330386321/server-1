@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
@@ -243,6 +244,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setTransactionAccount(wcdo.getAccount());
 			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 			transactionDetailDO.setAmount(wcdo.getCashMoney());
+			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.val);
 			transactionDetailDO.setBizId(wcdo.getId());
 			transactionDetailDO.setRemark("");
 			transactionDetailDO.setGmtCreate(new Date());

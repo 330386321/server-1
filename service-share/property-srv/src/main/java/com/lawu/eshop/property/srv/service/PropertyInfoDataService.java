@@ -5,7 +5,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
 /**
  * 
  * <p>
- * Description: 
+ * Description: 与积分相关业务处理
  * </p>
  * @author Yangqh
  * @date 2017年4月12日 下午12:53:13

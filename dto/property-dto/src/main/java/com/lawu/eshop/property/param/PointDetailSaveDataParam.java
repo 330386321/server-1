@@ -46,6 +46,8 @@ public class PointDetailSaveDataParam implements Serializable {
 	 * 备注
 	 */
 	private String remark;
+	
+	private Byte direction;
 
 	public String getTitle() {
 		return title;
@@ -93,6 +95,14 @@ public class PointDetailSaveDataParam implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Byte getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Byte direction) {
+		this.direction = direction;
 	}
 
 }

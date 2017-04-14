@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
@@ -129,6 +130,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setTransactionAccount(cash.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(cashMoney));
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(withdrawCashDO.getId());
 		transactionDetailService.save(tdsParam);
 

@@ -3,6 +3,8 @@ package com.lawu.eshop.property.param;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+
 /**
  * 
  * <p>
@@ -67,6 +69,8 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	 * 备注
 	 */
 	private String remark;
+	
+	private Byte direction;
 
 	public String getTitle() {
 		return title;
@@ -155,5 +159,15 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	public void setThirdTransactionNum(String thirdTransactionNum) {
 		this.thirdTransactionNum = thirdTransactionNum;
 	}
+
+	public Byte getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Byte direction) {
+		this.direction = direction;
+	}
+
+	
 
 }

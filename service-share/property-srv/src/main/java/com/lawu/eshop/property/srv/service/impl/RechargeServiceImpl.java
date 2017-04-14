@@ -11,6 +11,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
@@ -124,6 +125,7 @@ public class RechargeServiceImpl implements RechargeService {
 				pdsParam.setPointType(MerchantTransactionTypeEnum.RECHARGE.getValue());
 			}
 			pdsParam.setPoint(recharge.getMoney());
+			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 			pdsParam.setRemark("");
 			pointDetailService.save(pdsParam);
 			
@@ -148,6 +150,7 @@ public class RechargeServiceImpl implements RechargeService {
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);
 		
 		//更新充值表状态

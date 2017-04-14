@@ -97,6 +97,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setTransactionAccount(param.getTransactionAccount());
 		transactionDetailDO.setTransactionAccountType(param.getTransactionAccountType());
 		transactionDetailDO.setAmount(param.getAmount());
+		transactionDetailDO.setDirection(param.getDirection());
 		transactionDetailDO.setThirdTransactionNum(param.getThirdTransactionNum());
 		transactionDetailDO.setBizId(param.getBizId());
 		transactionDetailDO.setRemark(param.getRemark());

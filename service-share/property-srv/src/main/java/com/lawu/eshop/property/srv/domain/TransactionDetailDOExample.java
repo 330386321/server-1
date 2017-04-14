@@ -716,6 +716,66 @@ public class TransactionDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andDirectionIsNull() {
+            addCriterion("direction is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionIsNotNull() {
+            addCriterion("direction is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionEqualTo(Byte value) {
+            addCriterion("direction =", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionNotEqualTo(Byte value) {
+            addCriterion("direction <>", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionGreaterThan(Byte value) {
+            addCriterion("direction >", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionGreaterThanOrEqualTo(Byte value) {
+            addCriterion("direction >=", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionLessThan(Byte value) {
+            addCriterion("direction <", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionLessThanOrEqualTo(Byte value) {
+            addCriterion("direction <=", value, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionIn(List<Byte> values) {
+            addCriterion("direction in", values, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionNotIn(List<Byte> values) {
+            addCriterion("direction not in", values, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionBetween(Byte value1, Byte value2) {
+            addCriterion("direction between", value1, value2, "direction");
+            return (Criteria) this;
+        }
+
+        public Criteria andDirectionNotBetween(Byte value1, Byte value2) {
+            addCriterion("direction not between", value1, value2, "direction");
+            return (Criteria) this;
+        }
+
         public Criteria andThirdTransactionNumIsNull() {
             addCriterion("third_transaction_num is null");
             return (Criteria) this;

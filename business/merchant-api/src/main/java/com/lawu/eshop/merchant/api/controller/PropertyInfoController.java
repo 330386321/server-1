@@ -63,7 +63,8 @@ public class PropertyInfoController extends BaseController {
         return successGet(propertyInfoService.getPropertyPoint(userNum));
     }
 
-    @ApiOperation(value = "验证支付密码", notes = "验证支付密码(true--正确，false--错误)。[1002|1022]（梅述全）", httpMethod = "GET")
+    @SuppressWarnings("rawtypes")
+	@ApiOperation(value = "验证支付密码", notes = "验证支付密码(true--正确，false--错误)。[1002|1022]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "varifyPayPwd", method = RequestMethod.GET)
