@@ -24,4 +24,9 @@ public class TransactionConstant {
      * 买单
      */
     public static final byte PAYORDER = 0x03;
+    
+    /**
+     * 支付商品订单成功
+     */
+    public static final byte PAY_SHOPPING_ORDER = 0x04;
 }

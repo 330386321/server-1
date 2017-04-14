@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
@@ -39,11 +40,22 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private PropertyService propertyService;
 
-	@SuppressWarnings("rawtypes")
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
-	private TransactionMainService transactionMainService;
-
+	private TransactionMainService<Reply> payOrderTransactionMainServiceImpl;
+	
+	@Autowired
+	@Qualifier("shoppingOrderPaymentTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderPaymentTransactionMainServiceImpl;
+	
+	/**
+	 * 商品订单第三方付款后回调处理：新增会员交易记录，<更新订单状态>
+	 * 
+	 *  此时暂不保存商家交易明细和加余额，确认收货后处理
+	 * 
+	 * @param param
+	 * @return
+	 */
 	@Override
 	public int doHandleOrderPayNotify(NotifyCallBackParam param) {
 		// 新增会员交易记录
@@ -59,9 +71,14 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		transactionDetailService.save(tdsParam);
 
-		// 更新订单状态
-		// TODO 发送MQ消息更新订单状态
-
+		/* 更新订单状态
+	   	 * 发送MQ消息更新订单状态
+		 */
+		String[] bizIds = param.getBizIds().split(",");
+		for(int i = 0 ; i < bizIds.length ; i++){
+			shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
+		}
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -105,7 +122,10 @@ public class OrderServiceImpl implements OrderService {
 		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 		// 更新订单状态
-		transactionMainService.sendNotice(Long.valueOf(param.getBizIds()));
+		String []bizIds = param.getBizIds().split(",");
+		for(int i = 0 ; i < bizIds.length ; i++){
+			payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
+		}
 
 		return ResultCode.SUCCESS;
 	}

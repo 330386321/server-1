@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyType;
@@ -34,10 +35,15 @@ public class BalancePayServiceImpl implements BalancePayService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PropertyInfoDOMapperExtend propertyInfoDOMapperExtend;
-	@SuppressWarnings("rawtypes")
+
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
-    private TransactionMainService transactionMainService;
+    private TransactionMainService<Reply> payOrderTransactionMainServiceImpl;
+	
+	@Autowired
+	@Qualifier("shoppingOrderPaymentTransactionMainServiceImpl")
+    private TransactionMainService<Reply> shoppingOrderPaymentTransactionMainServiceImpl;
+	
 	@Autowired
 	private PropertyService propertyService;
 	@Autowired
@@ -71,10 +77,10 @@ public class BalancePayServiceImpl implements BalancePayService {
 		infoDoView.setGmtModified(new Date());
 		propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
 		
-		//TODO 发异步消息更新订单状态
+		//发异步消息更新购物订单状态
 		String []bizIds = param.getBizIds().split(",");
 		for(int i = 0 ; i < bizIds.length ; i++){
-			transactionMainService.sendNotice(Long.valueOf(bizIds[i]));
+			shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
 		}
 		
 		return ResultCode.SUCCESS;
@@ -126,8 +132,11 @@ public class BalancePayServiceImpl implements BalancePayService {
 		infoDoView1.setGmtModified(new Date());
 		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView1);
 		
-		//TODO 发异步消息更新买单状态
-		
+		//发异步消息更新买单状态
+		String []bizIds = param.getBizIds().split(",");
+		for(int i = 0 ; i < bizIds.length ; i++){
+			payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
+		}
 		
 		
 		return ResultCode.SUCCESS;

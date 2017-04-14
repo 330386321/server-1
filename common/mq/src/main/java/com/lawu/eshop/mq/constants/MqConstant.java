@@ -92,6 +92,11 @@ public class MqConstant {
      * 买单时支付成功发布的MQ消息改状态
      */
     public static final String TAG_PAYORDER = "payorder";
+    
+    /**
+     * 购物订单支付时发布的MQ消息改状态
+     */
+    public static final String TAG_PAY_SHOPPING_ORDER = "pay_shopping_order";
 
     /******************************************/
     /*******user-srv模块tag **********/

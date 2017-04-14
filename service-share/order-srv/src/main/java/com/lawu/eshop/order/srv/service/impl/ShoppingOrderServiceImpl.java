@@ -360,20 +360,31 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
-	 * @return
 	 */
 	@Transactional
 	@Override
-	public Integer paymentSuccessful(Long id) {
+	public void paymentSuccessful(Long id) {
+		if (id == null || id <= 0) {
+			return;
+		}
+		
+		/*
+		 * 实现MQ幂等性
+		 * 只有订单是待支付的状态才允许更新购物订单的状态
+		 */
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+			return;
+		}
+		
 		// 更新购物订单的状态
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更改订单状态为待发货
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		// 更新付款时间
 		shoppingOrderDO.setGmtPayment(new Date());
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
@@ -385,8 +396,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		
 		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
-		
-		return result;
 	}
 	
 	/**
@@ -622,17 +631,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	public void minusInventorySuccess(Long id) {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 		
-		/**
+		/*
 		 * 实现MQ消息的幂等性
-		 * 如果订单的状态已经是待支付的状态不再去更新订单的状态
+		 * 如果订单的状态已经不是待确认的状态不再去更新订单的状态
 		 */
-		if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+		if (!ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderDO.getOrderStatus())) {
 			return;
 		}
 		
 		// 设置订单状态为待支付状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		
 		// 设置购物订单项为待支付状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
