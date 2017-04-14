@@ -29,7 +29,7 @@ public class StoreSolrController extends BaseController {
     @Autowired
     private StoreSolrService storeSolrService;
 
-    @ApiOperation(value = "搜索门店", notes = "搜索门店。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStore", method = RequestMethod.GET)
     public Result<Page<NearStoreDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {

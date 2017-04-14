@@ -35,34 +35,33 @@ public class StoreSolrController extends BaseController {
      */
     @RequestMapping(value = "listStore", method = RequestMethod.POST)
     public Result<Page<NearStoreDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
-        SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-
         String latLon = storeSolrParam.getLatitude() + "," + storeSolrParam.getLongitude();
-        StringBuffer stringBuffer = new StringBuffer("{!geofilt} AND sfield:latLon_p");
-        stringBuffer.append(" AND pt:").append(latLon);
+        SolrQuery query = new SolrQuery();
+        query.setParam("q", "*:*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            stringBuffer.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
+            query.setParam("q", "name_s:" + storeSolrParam.getName() + "*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
-            stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
+            query.setParam("q", "industryPath_s:" + storeSolrParam.getIndustryPath() + "*");
         }
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
-            stringBuffer.append(" AND d:").append(storeSolrParam.getDistance());
+            query.setParam("d", String.valueOf(storeSolrParam.getDistance()));
+        } else {
+            query.setParam("d", "1000");
         }
-        query.setFields("*,distance:geodist(latLon_p," + latLon + ")");
-        query.setFilterQueries(stringBuffer.toString());
+        query.setParam("pt", latLon);
+        query.setParam("fq", "{!geofilt}");
+        query.setParam("sfield", "latLon_p");
+        query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
 
         if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.DISTANCE_SORT.val) {
-            query.setSort("geodist()", SolrQuery.ORDER.asc);
+            query.setParam("sort", "geodist() asc");
         } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.FEEDBACK_SORT.val) {
-            query.setSort("feedbackRate_d", SolrQuery.ORDER.desc);
+            query.setParam("sort", "feedbackRate_d desc");
         } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.POPULARITY_SORT.val) {
-            query.setSort("favoriteNumber_i", SolrQuery.ORDER.desc);
+            query.setParam("sort", "favoriteNumber_i desc");
         } else {
-            query.setSort("favoriteNumber_i", SolrQuery.ORDER.desc);
-            query.setSort("feedbackRate_d", SolrQuery.ORDER.desc);
-            query.setSort("geodist()", SolrQuery.ORDER.asc);
+            query.setParam("sort", "favoriteNumber_i desc,feedbackRate_d desc,geodist() asc");
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
