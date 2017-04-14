@@ -30,7 +30,7 @@ public interface AdService {
 	
 	
 	 /**
-	  * 单个查询地址
+	  * 单个查询广告
 	  * @return
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
@@ -59,8 +59,15 @@ public interface AdService {
 	 * @param num
 	 * @return
 	 */
-	@RequestMapping(value = "ad/clickPraise", method = RequestMethod.GET)
-    public Result clickPraise(@RequestParam("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
+	@RequestMapping(value = "ad/clickPraise/{id}", method = RequestMethod.GET)
+    public Result clickPraise(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
-
+	/**
+	 * 点击广告
+	 * @param id
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "ad/clickAd/{id}", method = RequestMethod.GET)
+    public Result clickAd(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 }

@@ -8,7 +8,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.AdPointNotification;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -18,8 +18,9 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
  * @date 2017/4/12
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_ME_ADD_POINT)
-public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_ADD_POINT)
+public class UserClickAdTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
+
     
     @Autowired
     private PropertyInfoDataService propertyInfoDataService;
@@ -29,8 +30,8 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 	    PropertyInfoDataParam param=new PropertyInfoDataParam();
 	    param.setPoint(notification.getPoint().toString());
 	    param.setUserNum(notification.getUserNum());
-	    param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
-	    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
+	    param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
+	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
 	    propertyInfoDataService.doHanlderAddPoint(param);
         return new Reply();
     }

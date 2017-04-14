@@ -20,6 +20,8 @@ import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
+import com.lawu.eshop.ad.srv.service.PointPoolService;
 import com.lawu.eshop.ad.srv.thread.AdClickPraiseThread;
 import com.lawu.eshop.ad.srv.thread.ClickPraisePoolManager;
 import com.lawu.eshop.framework.core.page.Page;
@@ -39,6 +41,12 @@ public class AdController extends BaseController{
 	
 	@Resource
 	private AdService adService;
+	
+	@Resource
+	private MemberAdRecordService memberAdRecordService;
+	
+	@Resource
+	private PointPoolService pointPoolService;
 	
 	/**
 	 * 添加E赚
@@ -126,6 +134,27 @@ public class AdController extends BaseController{
     }
 	
 	/**
+	 * 点击广告
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
+    public Result clickAd(@PathVariable Long id, @RequestParam Long memberId) {
+		boolean flag=memberAdRecordService.isClickToDay(memberId, id);
+		if(flag){
+			return successCreated(ResultCode.AD_CLICK_EXIST);
+		}else{
+			Integer i=adService.clickAd(id, memberId);
+			if(i>0){
+	     		return successCreated(ResultCode.SUCCESS);
+	     	}else{
+	     		return successCreated(ResultCode.FAIL);
+	     	}
+		}
+		
+	}
+	
+	/**
 	 * 对视频广告的审核
 	 * @param id
 	 * @return
@@ -196,8 +225,11 @@ public class AdController extends BaseController{
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(value = "clickPraise", method = RequestMethod.GET)
-    public Result clickPraise(@RequestParam Long id,@RequestParam Long memberId,@RequestParam String num) {
+	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
+    public Result clickPraise(@PathVariable Long id,@RequestParam Long memberId,@RequestParam String num) {
+		Boolean flag=pointPoolService.selectStatusByMember(id, memberId);
+		if(flag)
+			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
 		Integer  i=adService.clickPraise(id, memberId, num);
 		if(i==1){
 			return successCreated(ResultCode.AD_PRAISE_PUTED);

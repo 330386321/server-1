@@ -25,15 +25,18 @@ import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
 import com.lawu.eshop.ad.srv.domain.AdRegionDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 
 /**
@@ -55,6 +58,9 @@ public class AdServiceImpl implements AdService {
 	
 	@Autowired
 	private PointPoolDOMapper pointPoolDOMapper;
+	
+	@Autowired
+	private MemberAdRecordDOMapper memberAdRecordDOMapper;
 	
 	@Autowired
 	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
@@ -118,11 +124,6 @@ public class AdServiceImpl implements AdService {
 		}
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
-		 SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-	       /* document.addField("originalPrice_d", originalPrice);
-	        document.addField("price_d", price);
-	        document.addField("inventory_i", inventory);
-	        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);*/
 		return i;
 	}
 	
@@ -196,12 +197,7 @@ public class AdServiceImpl implements AdService {
 		if(ad.getType()==3){ //E赞 下架 退还积分
 			matransactionMainAddService.sendNotice(ad.getId());
 		}else{
-			BigDecimal point= ad.getPoint();
-			Integer hits=ad.getHits();
-			BigDecimal count=point.multiply(new BigDecimal(hits));
-			if(ad.getTotalPoint().compareTo(count)==1){//退还积分
-				matransactionMainAddService.sendNotice(id);
-			}
+			matransactionMainAddService.sendNotice(id);
 		}
 		return i;
 	}
@@ -301,31 +297,46 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public AdBO selectAbById(Long id) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
-		Integer hits= adDO.getHits();
-		if(hits==null)
-			hits=0;
-		//平面和视频点击次数加一
+		FavoriteAdDOExample example=new FavoriteAdDOExample();
+		example.createCriteria().andAdIdEqualTo(adDO.getId());
+		Long count=favoriteAdDOMapper.countByExample(example);
+		AdBO adBO=AdConverter.convertBO(adDO);
 		Long number=0l;
-		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
-			hits+=1;
-			adDO.setHits(hits);
-			adDOMapper.updateByPrimaryKey(adDO);
-		}else if(hits==adDO.getAdCount()){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
-			adDOMapper.updateByPrimaryKey(adDO);
-		}else{
+		if(adDO.getType()==3){
 			PointPoolDOExample ppexample=new PointPoolDOExample();
 			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
 					                   .andStatusEqualTo(new Byte("1"));
 			number=pointPoolDOMapper.countByExample(ppexample);
 		}
-		FavoriteAdDOExample example=new FavoriteAdDOExample();
-		example.createCriteria().andAdIdEqualTo(adDO.getId());
-		Long count=favoriteAdDOMapper.countByExample(example);
-		AdBO adBO=AdConverter.convertBO(adDO);
 		adBO.setNumber(number.intValue());
 		adBO.setAttenCount(count.intValue());
 		return adBO;
+	}
+	
+	@Override
+	public Integer clickAd(Long id, Long memberId) {
+		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
+		Integer hits= adDO.getHits();
+		if(hits==null)
+			hits=0;
+		//平面和视频点击次数加一
+		int i=0;
+		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
+			hits+=1;
+			adDO.setHits(hits);
+			adDOMapper.updateByPrimaryKey(adDO);
+			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
+			memberAdRecordD.setAdId(adDO.getId());
+			memberAdRecordD.setMemberId(memberId);
+			memberAdRecordD.setGmtCreate(new Date());
+			memberAdRecordD.setClickDate(new Date());
+			i=memberAdRecordDOMapper.insert(memberAdRecordD);
+			adtransactionMainAddService.sendNotice(adDO.getId());
+		}else if(hits==adDO.getAdCount()){
+			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
+			adDOMapper.updateByPrimaryKey(adDO);
+		}
+		return i;
 	}
 
 
@@ -402,5 +413,7 @@ public class AdServiceImpl implements AdService {
 		}
 		
 	}
+
+	
 
 }

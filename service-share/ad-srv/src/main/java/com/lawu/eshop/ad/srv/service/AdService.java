@@ -89,5 +89,13 @@ public interface AdService {
 	 */
 	Integer clickPraise(Long id,Long memberId,String num);
 	
+	/**
+	 * 点击广告
+	 * @param id
+	 * @param memberId
+	 * @return
+	 */
+	Integer clickAd(Long id,Long memberId);
+	
 
 }

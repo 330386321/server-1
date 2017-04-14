@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.eshop.ad.srv.bo.AdPointNotification;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
@@ -17,6 +16,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 
 /**
  * @author zhangrc
@@ -51,7 +51,10 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
     	 }else{
     		 Integer hits=ad.getHits();
         	 BigDecimal point=ad.getPoint();
-        	 notification.setPoint(point.subtract(point.multiply(new BigDecimal(hits)))); 
+        	 BigDecimal totalPoint=ad.getTotalPoint();
+        	 if(hits==null)
+        		 hits=0;
+        	 notification.setPoint(totalPoint.subtract(point.multiply(new BigDecimal(hits)))); 
     	 }
     	
         return notification;

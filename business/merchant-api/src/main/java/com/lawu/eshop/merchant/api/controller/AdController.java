@@ -55,7 +55,7 @@ public class AdController extends BaseController {
     private MemberCountService memberCountService;
  
 
-    //@Authorization
+    @Authorization
     @ApiOperation(value = "添加广告", notes = "添加广告[5000]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
@@ -107,7 +107,7 @@ public class AdController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    public Result updateStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.updateStatus(id);
     	return rs;
     }

@@ -2,16 +2,25 @@ package com.lawu.eshop.product.dto;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class FavoriteProductDTO {
+	 @ApiModelProperty(value = "商品id")
+	 private Long id;
 	
+	 @ApiModelProperty(value = "商品名称")
 	 private String name;
 	 
+	 @ApiModelProperty(value = "商品图片")
 	 private String featureImage;
 	 
+	 @ApiModelProperty(value = "原价")
 	 private BigDecimal originalPrice;
 	 
+	 @ApiModelProperty(value = "现价")
 	 private BigDecimal price;
 	 
+	 @ApiModelProperty(value = "销量")
 	 private Integer salesVolume;
 
 	public String getName() {
@@ -52,6 +61,14 @@ public class FavoriteProductDTO {
 
 	public void setSalesVolume(Integer salesVolume) {
 		this.salesVolume = salesVolume;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	 
 	 

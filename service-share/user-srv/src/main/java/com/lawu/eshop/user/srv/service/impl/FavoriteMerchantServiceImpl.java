@@ -41,6 +41,13 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 		int id=favoriteMerchantDOMapper.insert(favoriteMerchant);
 		return id; 
 	}
+	
+	@Override
+	@Transactional
+	public Integer remove(Long id) {
+		Integer i=favoriteMerchantDOMapper.deleteByPrimaryKey(id);
+		return i;
+	}
 
 	@Override
 	public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId,FavoriteMerchantParam pageQuery) {

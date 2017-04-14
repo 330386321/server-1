@@ -11,6 +11,9 @@ public enum TransactionTitleEnum {
 	INVITE_FANS("邀请粉丝"),
 	ADD_AD("发广告"),
 	ADD_RED_PACKET("发红包"),
+	AD_RETURN_POINT("广告退还"),
+	USER_GET_REDPACKET("领红包"),
+	CLICK_AD("点广告"),
 	RECHARGE("余额充值");
 	
 	public String val;

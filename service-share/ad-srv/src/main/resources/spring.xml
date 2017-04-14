@@ -6,7 +6,7 @@
     <!-- 消息生产者 -->
     <bean id="defaultMQProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton" init-method="start" destroy-method="shutdown">
         <!-- Name Server地址列表，多个用分号隔开 -->
-        <property name="namesrvAddr" value="127.0.0.1:9876"/>
+        <property name="namesrvAddr" value="192.168.1.22:9876"/>
         <!-- 客户端实例名 -->
         <property name="instanceName" value="producer"/>
 
@@ -22,7 +22,7 @@
         <!-- <property name="persistConsumerOffsetInterval" value="${rocketmq.persistConsumerOffsetInterval}" /> -->
 
         <!-- Producer组名，多个Producer如果属于一 个应用，发送同样的消息，则应该将它们 归为同一组 -->
-        <property name="producerGroup" value="userSrvProducerGroup"/>
+        <property name="producerGroup" value="adSrvProducerGroup"/>
         <!-- 发送消息超时时间，单位毫秒 -->
         <!-- <property name="sendMsgTimeout" value="${rocketmq.producer.sendMsgTimeout}" />-->
 
@@ -37,11 +37,11 @@
     <!-- 消息消费者 -->
     <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >
         <!-- Name Server地址列表，多个用分号隔开 -->
-        <property name="namesrvAddr" value="127.0.0.1:9876"/>
+        <property name="namesrvAddr" value="192.168.1.22:9876"/>
         <!-- 客户端实例名 -->
         <property name="instanceName" value="consumer"/>
 
-        <property name="consumerGroup" value="userSrvConsumerGroup"/>
+        <property name="consumerGroup" value="adSrvConsumerGroup"/>
         <!-- 批量拉消息，一次最多拉多少条， 默认设置为32 -->
         <property name="pullBatchSize" value="35"/>
         <!-- 批量消费，一次消费多少条消息， 默认设置为1 -->
@@ -50,7 +50,7 @@
 
     </bean>
 
-    <bean id="messageConsumerListener" class="com.lawu.eshop.user.srv.mq.MessageConsumerListener" />
+    <bean id="messageConsumerListener" class="com.lawu.eshop.ad.srv.mq.MessageConsumerListener" />
 
 
 </beans>

@@ -3,7 +3,6 @@ package com.lawu.eshop.ad.srv.service.impl.transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.eshop.ad.srv.bo.AdPointNotification;
 import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.RedPacketDO;
 import com.lawu.eshop.ad.srv.mapper.RedPacketDOMapper;
@@ -11,6 +10,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 
 /**
  * @author zhangrc

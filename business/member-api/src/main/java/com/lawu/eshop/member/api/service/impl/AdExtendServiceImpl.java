@@ -5,7 +5,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +28,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
@@ -41,6 +52,37 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     
     @Autowired
     private FansMerchantService fansMerchantService;
+    
+    /**
+     * 核心线程数，指保留的线程池大小
+     */
+    private static final Integer CORE_POOL_SIZE=20;
+    
+    /**
+     *  指的是线程池的最大数
+     */
+    private static final Integer MAXIMUM_POLL_SIZE=60;
+    
+    /**
+     * 指的是空闲线程结束的超时时间
+     */ 
+    private static final Integer KEEP_ALIVE_TIME=1;
+    
+    /**
+     * 分子
+     */
+    private static final Integer A=5;
+    
+    /**
+     * 分母
+     */
+    private static final Integer B=1000;
+    
+    private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
+    
+    private ExecutorService  service=new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POLL_SIZE, KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
+    
+    private static Logger logger = LoggerFactory.getLogger(AdExtendServiceImpl.class);
 
 	@Override
 	public Result<Page<AdDTO>> selectListByMember(AdMemberParam adMemberParam) {
@@ -189,19 +231,33 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	
     }
 
-	
-	
 
 	@Override
 	public Result clickPraise(Long id) {
-		int d = new Random().nextInt(200);
-		if (d ==1){
-			
-		}
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		AdClickPraiseThread thread=new AdClickPraiseThread(id, memberId,userNum);
-		ClickPraisePoolManager.getInstance().addThread(thread);
+		String num = UserUtil.getCurrentUserNum(getRequest());
+		
+		Future<Result> future=null;
+		try {
+			 Random random = new Random();  
+			 Integer r=random.nextInt()*B;
+			 if(r>0 && r<A){
+				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
+			 }else{
+				 return successCreated(ResultCode.SUCCESS);
+			 }
+			 
+		} catch (RejectedExecutionException  e) {
+			// 队列已满，直接失败
+			return successCreated(ResultCode.FAIL);
+		}
+		try {
+			Result rs=future.get();
+			return rs;
+				
+		} catch (InterruptedException | ExecutionException e) {
+			logger.error("抢赞失败",e);
+		}
 		return null;
 	}
 	

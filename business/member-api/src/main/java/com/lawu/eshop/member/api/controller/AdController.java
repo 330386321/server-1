@@ -17,6 +17,7 @@ import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -138,13 +139,24 @@ public class AdController extends BaseController {
      }
      
      
-    // @Authorization
+     @Authorization
      @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
      @RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
-     public Result clickPraise(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/
+     public Result clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
          Result rs = adExtendService.clickPraise(id);
+         return rs;
+     }
+     
+     @Authorization
+     @ApiOperation(value = "点击广告", notes = "点击广告[]（张荣成）", httpMethod = "GET")
+     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+     @RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
+     public Result clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	 Long memberId=UserUtil.getCurrentUserId(getRequest());
+         Result rs = adService.clickAd(id,memberId);
          return rs;
      }
 

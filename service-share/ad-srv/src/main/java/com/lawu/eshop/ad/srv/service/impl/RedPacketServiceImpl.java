@@ -135,7 +135,7 @@ public class RedPacketServiceImpl implements RedPacketService {
 	@Override
 	public Boolean selectRedPacketByMember(Long merchantId, Long memberId) {
 		RedPacketDOExample rpexample =new RedPacketDOExample();
-		rpexample.createCriteria().andStatusEqualTo(new Byte("2")).andMerchantIdEqualTo(merchantId);
+		rpexample.createCriteria().andStatusEqualTo(new Byte("1")).andMerchantIdEqualTo(merchantId);
 		RedPacketDO redPacket=redPacketDOMapper.selectByExample(rpexample).get(0);
 		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(new Byte("1")).andAdIdEqualTo(redPacket.getId());

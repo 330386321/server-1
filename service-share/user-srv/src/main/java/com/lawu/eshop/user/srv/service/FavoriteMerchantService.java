@@ -25,5 +25,12 @@ public interface FavoriteMerchantService {
 	 * @return
 	 */
 	Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId,FavoriteMerchantParam pageQuery);
+	
+	/**
+	 * 取消收藏
+	 * @param id
+	 * @return
+	 */
+	Integer remove(Long id);
 
 }

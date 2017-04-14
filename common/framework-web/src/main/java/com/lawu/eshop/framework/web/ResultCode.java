@@ -79,6 +79,8 @@ public class ResultCode {
     public static final int AD_RED_PACKGE_EXIST = 5003;
     public static final int AD_RED_PACKGE_GET = 5004;
     public static final int AD_PRAISE_PUTED = 5005;
+    public static final int AD_CLICK_EXIST = 5006;
+    public static final int AD_PRAISE_POINT_GET = 5007;
     
 
     // 资产模块代码 6xxx
@@ -189,6 +191,8 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
         ResultCode.messageMap.put(AD_RED_PACKGE_GET, "红包已经领取");
         ResultCode.messageMap.put(AD_PRAISE_PUTED, "抢赞已经结束");
+        ResultCode.messageMap.put(AD_CLICK_EXIST, "你今天已经点击过该广告");
+        ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "自然月提现次数大于1次时，提现金额必须大于5元");

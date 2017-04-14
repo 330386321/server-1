@@ -39,6 +39,7 @@ public class FavoriteProductConverter {
         	for (ProductModelDO productModelDO : listPM) {
         		if(favoriteProductExtendDO.getProductId().equals(productModelDO.getProductId())){
         			FavoriteProductBO favoriteProductBO=new FavoriteProductBO();
+        			favoriteProductBO.setId(favoriteProductExtendDO.getProductId());
         	        favoriteProductBO.setName(favoriteProductExtendDO.getName());
         	        favoriteProductBO.setFeatureImage(favoriteProductExtendDO.getFeatureImage());
         	        favoriteProductBO.setOriginalPrice(productModelDO.getOriginalPrice());
@@ -63,6 +64,7 @@ public class FavoriteProductConverter {
             return null;
         }
         FavoriteProductDTO bankAccountDTO=new FavoriteProductDTO();
+        bankAccountDTO.setId(favoriteProductBO.getId());
         bankAccountDTO.setName(favoriteProductBO.getName());
         bankAccountDTO.setFeatureImage(favoriteProductBO.getFeatureImage());
         bankAccountDTO.setOriginalPrice(favoriteProductBO.getOriginalPrice());

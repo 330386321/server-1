@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
@@ -10,6 +12,7 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 
@@ -153,11 +156,37 @@ public class AdConverter {
      */
     public static SolrInputDocument convertSolrInputDocument(AdDO adDO) {
         SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", adDO.getId());
+        document.addField("id_l", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
         document.setField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
         return document;
     }
+    
+    
+    /**
+     * SolrInputDocument
+     *
+     * @param solrDocumentList
+     * @return
+     */
+    public static List<AdSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
+        if (solrDocumentList.isEmpty()) {
+            return null;
+        }
+
+        List<AdSolrDTO> adSolrDTOS = new ArrayList<>();
+        for (SolrDocument solrDocument : solrDocumentList) {
+        	AdSolrDTO adSolrDTO = new AdSolrDTO();
+        	adSolrDTO.setId((long)solrDocument.get("id_l"));
+        	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
+        	adSolrDTO.setTitle(solrDocument.get("tilte_s").toString());
+        	adSolrDTO.setContent(solrDocument.get("content_s").toString());
+        	adSolrDTO.setCount((int)solrDocument.get("content_i"));
+        	adSolrDTOS.add(adSolrDTO);
+        }
+        return adSolrDTOS;
+    }
+
 
 }

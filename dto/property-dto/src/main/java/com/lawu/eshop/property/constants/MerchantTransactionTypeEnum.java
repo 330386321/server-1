@@ -66,7 +66,14 @@ public enum MerchantTransactionTypeEnum {
 	/**
 	 * 发红包110
 	 */
-	ADD_RED_PACKET((byte)0x75);
+	ADD_RED_PACKET((byte)0x75),
+	
+	/**
+	 * 退还积分
+	 */
+	AD_RETURN_POINT((byte)0x76);
+	
+	
 	
 	MerchantTransactionTypeEnum(Byte value){
 		this.value = value;

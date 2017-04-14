@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.controller;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,6 +52,18 @@ public class FavoriteMerchantController extends BaseController{
        Page<FavoriteMerchantBO> pageBO =favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
        Page<FavoriteMerchantDTO> page=FavoriteMerchantConverter.convertPageDOTS(pageBO);
        return successGet(page);
+   }
+   
+   
+   /**
+	 * 取消收藏
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+   public Result remove(@PathVariable Long id) {
+   	  Integer i=favoriteMerchantService.remove(id);
+      return successDelete();
    }
 
 }

@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 public class FavoriteProductBO {
 	
+	 private Long id;
+	
 	 private String name;
 	 
 	 private String featureImage;
@@ -52,6 +54,14 @@ public class FavoriteProductBO {
 
 	public void setSalesVolume(Integer salesVolume) {
 		this.salesVolume = salesVolume;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	 
 	 

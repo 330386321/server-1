@@ -20,7 +20,7 @@
 
                      <!--debug模式-->
                      <property name="debug" value="true" />
-                     <property name="testNum" value="Bsfsa"/>
+                     <property name="testNum" value="sfsa"/>
                      <property name="testId" value="1"/>
                      <property name="testAccount" value="18696523658" />
               </bean>

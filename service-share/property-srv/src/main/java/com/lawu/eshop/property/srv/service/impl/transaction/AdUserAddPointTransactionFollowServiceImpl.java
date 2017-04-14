@@ -7,10 +7,10 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.srv.bo.AdPointNotification;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
@@ -18,7 +18,7 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
  * @date 2017/4/12
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_ADD_POINT)
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_CLICK_POINT)
 public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
 
     
