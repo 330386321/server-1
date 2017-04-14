@@ -54,6 +54,7 @@ public class VerifyCodeController extends BaseController {
         return smsRecordService.sendSms(mobile, ip, purpose);
     }
 
+    @Audit(date = "2017-03-09", reviewer = "孙林青")
     @ApiOperation(value = "获取短信验证码(无需图形验证码)", notes = "获取短信验证码。[1006|1007|1008] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getSmsCode/{mobile}", method = RequestMethod.GET)

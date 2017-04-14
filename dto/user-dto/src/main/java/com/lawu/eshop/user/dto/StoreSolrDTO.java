@@ -2,13 +2,11 @@ package com.lawu.eshop.user.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.math.BigDecimal;
-
 /**
  * @author meishuquan
  * @date 2017/4/5.
  */
-public class NearStoreDTO {
+public class StoreSolrDTO {
 
     @ApiModelProperty(value = "商户ID")
     private Long merchantId;
@@ -32,10 +30,10 @@ public class NearStoreDTO {
     private Integer favoriteNumber;
 
     @ApiModelProperty(value = "人均消费")
-    private BigDecimal averageConsumeAmount;
+    private Double averageConsumeAmount;
 
     @ApiModelProperty(value = "平均评分")
-    private BigDecimal averageScore;
+    private Double averageScore;
 
     public Long getMerchantId() {
         return merchantId;
@@ -85,27 +83,27 @@ public class NearStoreDTO {
         this.favoriteNumber = favoriteNumber;
     }
 
-    public BigDecimal getAverageConsumeAmount() {
-        return averageConsumeAmount;
-    }
-
-    public void setAverageConsumeAmount(BigDecimal averageConsumeAmount) {
-        this.averageConsumeAmount = averageConsumeAmount;
-    }
-
-    public BigDecimal getAverageScore() {
-        return averageScore;
-    }
-
-    public void setAverageScore(BigDecimal averageScore) {
-        this.averageScore = averageScore;
-    }
-
     public Long getMerchantStoreId() {
         return merchantStoreId;
     }
 
     public void setMerchantStoreId(Long merchantStoreId) {
         this.merchantStoreId = merchantStoreId;
+    }
+
+    public Double getAverageConsumeAmount() {
+        return averageConsumeAmount;
+    }
+
+    public void setAverageConsumeAmount(Double averageConsumeAmount) {
+        this.averageConsumeAmount = averageConsumeAmount;
+    }
+
+    public Double getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(Double averageScore) {
+        this.averageScore = averageScore;
     }
 }

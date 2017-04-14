@@ -93,7 +93,7 @@ public class PropertyController extends BaseController {
      * @param listPropertyParam
      * @return
      */
-    @RequestMapping(value = "listProperty", method = RequestMethod.GET)
+    @RequestMapping(value = "listProperty", method = RequestMethod.POST)
     public Result<Page<PropertyDTO>> listProperty(@RequestBody ListPropertyParam listPropertyParam) {
         Page<PropertyBO> propertyBOPage = propertyService.listProperty(listPropertyParam);
         Page<PropertyDTO> page = new Page<>();

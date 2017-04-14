@@ -59,7 +59,7 @@ public class SearchWordController extends BaseController {
      * @param searchWordParam
      * @return
      */
-    @RequestMapping(value = "listSearchWord", method = RequestMethod.GET)
+    @RequestMapping(value = "listSearchWord", method = RequestMethod.POST)
     public Result<Page<SearchWordDTO>> listSearchWord(@RequestBody SearchWordParam searchWordParam) {
         Page<SearchWordBO> searchWordBOPage = searchWordService.listSearchWord(searchWordParam);
         Page<SearchWordDTO> page = new Page<>();

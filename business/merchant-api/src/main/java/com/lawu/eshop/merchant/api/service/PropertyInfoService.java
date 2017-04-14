@@ -87,7 +87,7 @@ public interface PropertyInfoService {
      * @return
      */
     @SuppressWarnings("rawtypes")
-	@RequestMapping(value = "propertyInfoData/inviteFans/{userNum}", method = RequestMethod.POST)
+	@RequestMapping(value = "propertyInfoData/doHanlderMinusPoint/{userNum}", method = RequestMethod.POST)
     Result inviteFans(@ModelAttribute PropertyInfoDataParam propertyInfoDataParam);
 
     /**

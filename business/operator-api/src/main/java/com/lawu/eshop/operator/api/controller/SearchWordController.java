@@ -53,7 +53,7 @@ public class SearchWordController extends BaseController {
     @Authorization
     @RequestMapping(value = "listSearchWord", method = RequestMethod.GET)
     public Result<Page<SearchWordDTO>> listSearchWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                      @ModelAttribute @ApiParam(required = true, value = "查询条件") SearchWordParam searchWordParam) {
+                                                      @ModelAttribute @ApiParam SearchWordParam searchWordParam) {
         return searchWordService.listSearchWord(searchWordParam);
     }
 }

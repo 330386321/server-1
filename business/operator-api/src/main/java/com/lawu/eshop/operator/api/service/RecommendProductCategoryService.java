@@ -42,7 +42,7 @@ public interface RecommendProductCategoryService {
      * @param listRecommendProductCategoryParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "recommendProductCategory/listRecommendProductCategory")
+    @RequestMapping(method = RequestMethod.POST, value = "recommendProductCategory/listRecommendProductCategory")
     Result<Page<RecommendProductCategoryDTO>> listRecommendProductCategory(@ModelAttribute ListRecommendProductCategoryParam listRecommendProductCategoryParam);
 
     /**

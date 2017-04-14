@@ -31,11 +31,10 @@ public class ProductAuditController extends BaseController {
     @Autowired
     private ProductAuditService productAuditService;
 
-
-    @ApiOperation(value = "商品审核", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
+    @ApiOperation(value = "商品审核", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "listProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "listProduct", method = RequestMethod.GET)
     public Result<Page<ProductQueryDTO>> listProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                        @ModelAttribute @ApiParam ProductQuery query) {
         ProductDataQuery queryData = new ProductDataQuery();

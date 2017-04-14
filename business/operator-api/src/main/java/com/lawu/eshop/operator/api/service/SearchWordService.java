@@ -40,6 +40,6 @@ public interface SearchWordService {
      * @param searchWordParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "searchWord/listSearchWord")
+    @RequestMapping(method = RequestMethod.POST, value = "searchWord/listSearchWord")
     Result<Page<SearchWordDTO>> listSearchWord(@ModelAttribute SearchWordParam searchWordParam);
 }

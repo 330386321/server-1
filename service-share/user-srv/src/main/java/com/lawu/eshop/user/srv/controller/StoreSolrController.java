@@ -6,7 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
-import com.lawu.eshop.user.dto.NearStoreDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
@@ -34,7 +34,7 @@ public class StoreSolrController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listStore", method = RequestMethod.POST)
-    public Result<Page<NearStoreDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
+    public Result<Page<StoreSolrDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
         String latLon = storeSolrParam.getLatitude() + "," + storeSolrParam.getLongitude();
         SolrQuery query = new SolrQuery();
         query.setParam("q", "*:*");
@@ -70,7 +70,7 @@ public class StoreSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
-        Page<NearStoreDTO> page = new Page<>();
+        Page<StoreSolrDTO> page = new Page<>();
         page.setRecords(MerchantStoreConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(storeSolrParam.getCurrentPage());

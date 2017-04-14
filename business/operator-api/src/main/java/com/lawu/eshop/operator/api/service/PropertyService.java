@@ -61,6 +61,6 @@ public interface PropertyService {
      * @param listPropertyParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "property/listProperty")
+    @RequestMapping(method = RequestMethod.POST, value = "property/listProperty")
     Result<Page<PropertyDTO>> listProperty(@ModelAttribute ListPropertyParam listPropertyParam);
 }

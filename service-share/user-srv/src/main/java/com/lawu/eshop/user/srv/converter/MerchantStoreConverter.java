@@ -9,7 +9,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -333,26 +332,26 @@ public class MerchantStoreConverter {
      * @param solrDocumentList
      * @return
      */
-    public static List<NearStoreDTO> convertDTO(SolrDocumentList solrDocumentList) {
+    public static List<StoreSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
         if (solrDocumentList.isEmpty()) {
             return null;
         }
 
-        List<NearStoreDTO> nearStoreDTOS = new ArrayList<>();
+        List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
         for (SolrDocument solrDocument : solrDocumentList) {
-            NearStoreDTO nearStoreDTO = new NearStoreDTO();
-            nearStoreDTO.setMerchantId(Long.valueOf(solrDocument.get("merchantId_l").toString()));
-            nearStoreDTO.setMerchantStoreId(Long.valueOf(solrDocument.get("id").toString()));
-            nearStoreDTO.setName(solrDocument.get("name_s").toString());
-            nearStoreDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
-            nearStoreDTO.setStorePic(solrDocument.get("storePic_s").toString());
-            nearStoreDTO.setDistance(Integer.valueOf(solrDocument.get("distance").toString()));
-            nearStoreDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
-            nearStoreDTO.setAverageConsumeAmount(new BigDecimal(solrDocument.get("averageConsumeAmount_d").toString()));
-            nearStoreDTO.setAverageScore(new BigDecimal(solrDocument.get("averageScore_d").toString()));
-            nearStoreDTOS.add(nearStoreDTO);
+            StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
+            storeSolrDTO.setMerchantId(Long.valueOf(solrDocument.get("merchantId_l").toString()));
+            storeSolrDTO.setMerchantStoreId(Long.valueOf(solrDocument.get("id").toString()));
+            storeSolrDTO.setName(solrDocument.get("name_s").toString());
+            storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
+            storeSolrDTO.setStorePic(solrDocument.get("storePic_s").toString());
+            storeSolrDTO.setDistance(Integer.valueOf(solrDocument.get("distance").toString()));
+            storeSolrDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
+            storeSolrDTO.setAverageConsumeAmount(Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
+            storeSolrDTO.setAverageScore(Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTOS.add(storeSolrDTO);
         }
-        return nearStoreDTOS;
+        return storeSolrDTOS;
     }
 
 }

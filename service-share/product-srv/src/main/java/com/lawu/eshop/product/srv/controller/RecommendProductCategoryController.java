@@ -58,7 +58,7 @@ public class RecommendProductCategoryController extends BaseController {
      * @param listRecommendProductCategoryParam
      * @return
      */
-    @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)
+    @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.POST)
     public Result<Page<RecommendProductCategoryDTO>> listRecommendProductCategory(@RequestBody ListRecommendProductCategoryParam listRecommendProductCategoryParam) {
         Page<RecommendProductCategoryBO> recommendProductCategoryBOPage = recommendProductCategoryService.listRecommendProductCategory(listRecommendProductCategoryParam);
         Page<RecommendProductCategoryDTO> page = new Page<>();

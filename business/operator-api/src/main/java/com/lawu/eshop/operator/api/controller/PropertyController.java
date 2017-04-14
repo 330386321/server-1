@@ -74,7 +74,7 @@ public class PropertyController extends BaseController {
     @Authorization
     @RequestMapping(value = "listProperty", method = RequestMethod.GET)
     public Result<Page<PropertyDTO>> listSearchWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                    @ModelAttribute @ApiParam(required = true, value = "查询条件") ListPropertyParam listPropertyParam) {
+                                                    @ModelAttribute @ApiParam ListPropertyParam listPropertyParam) {
         return propertyService.listProperty(listPropertyParam);
     }
 }

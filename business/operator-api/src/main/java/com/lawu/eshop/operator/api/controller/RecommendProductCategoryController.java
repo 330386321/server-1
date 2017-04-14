@@ -55,7 +55,7 @@ public class RecommendProductCategoryController extends BaseController {
     @Authorization
     @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)
     public Result<Page<RecommendProductCategoryDTO>> listRecommendProductCategory(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                                  @ModelAttribute @ApiParam(required = true, value = "查询条件") ListRecommendProductCategoryParam listRecommendProductCategoryParam) {
+                                                                                  @ModelAttribute @ApiParam ListRecommendProductCategoryParam listRecommendProductCategoryParam) {
         return recommendProductCategoryService.listRecommendProductCategory(listRecommendProductCategoryParam);
     }
 

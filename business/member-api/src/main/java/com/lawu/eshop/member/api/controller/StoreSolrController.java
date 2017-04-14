@@ -5,7 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.StoreSolrService;
-import com.lawu.eshop.user.dto.NearStoreDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import io.swagger.annotations.Api;
@@ -32,7 +32,7 @@ public class StoreSolrController extends BaseController {
     @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStore", method = RequestMethod.GET)
-    public Result<Page<NearStoreDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {
+    public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {
         return storeSolrService.listStore(storeSolrParam);
     }
 
