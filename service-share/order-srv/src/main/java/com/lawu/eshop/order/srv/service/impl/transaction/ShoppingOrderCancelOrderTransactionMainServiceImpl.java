@@ -5,14 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
-import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
@@ -23,18 +22,20 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
  * @author Sunny
  * @date 2017/04/06
  */
-@Service("shoppingOrderCreateOrderTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.CREATE_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATEORDER)
-public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCreateOrderNotification, Reply> {
+@Service("shoppingOrderCancelOrderTransactionMainServiceImpl")
+@CompensatingTransactionMain(value = TransactionConstant.CANCEL_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCELORDER)
+public class ShoppingOrderCancelOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCancelOrderNotification, Reply> {
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
 	
 	/**
 	 * 组装其他模块发送的数组
+	 * 
+	 * 取消订单向产品模块发送MQ消息，通过产品模块释放库存
 	 */
     @Override
-    public ShoppingOrderCreateOrderNotification selectNotification(Long shoppingOrderId) {
+    public ShoppingOrderCancelOrderNotification selectNotification(Long shoppingOrderId) {
         // 获取购物订单以及订单项
         ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.get(shoppingOrderId);
         
@@ -43,10 +44,10 @@ public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends Abstract
         	return null;
         }
         
-        ShoppingOrderCreateOrderNotification shoppingCartCreateOrderNotification = new ShoppingOrderCreateOrderNotification();
+        ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification = new ShoppingOrderCancelOrderNotification();
         
         // 组装发送数据
-        shoppingCartCreateOrderNotification.setShoppingOrderId(shoppingOrderId);
+        shoppingOrderCancelOrderNotification.setShoppingOrderId(shoppingOrderId);
         
         List<ProductModeUpdateInventoryDTO> params = new ArrayList<ProductModeUpdateInventoryDTO>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
@@ -56,23 +57,8 @@ public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends Abstract
         	params.add(productModeUpdateInventoryParam);
         }
         
-        shoppingCartCreateOrderNotification.setParams(params);
+        shoppingOrderCancelOrderNotification.setParams(params);
         
-        return shoppingCartCreateOrderNotification;
-    }
-    
-    /**
-     * 事务成功回调时
-     * 根据购物订单id更新订单状态
-     * 删除对应的购物车记录
-     */
-    @Transactional
-    @Override
-    public void afterSuccess(Long shoppingOrderId, Reply reply) {
-    	/*
-    	 * 更新购物订单以及购物订单的状态为待支付状态
-    	 * 删除购物车记录
-    	 */
-    	shoppingOrderService.minusInventorySuccess(shoppingOrderId);
+        return shoppingOrderCancelOrderNotification;
     }
 }

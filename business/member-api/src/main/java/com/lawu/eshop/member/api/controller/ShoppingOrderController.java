@@ -25,7 +25,6 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
-import com.lawu.eshop.member.api.service.ProductModelService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 
 import io.swagger.annotations.Api;
@@ -44,9 +43,6 @@ public class ShoppingOrderController extends BaseController {
 
     @Autowired
     private ShoppingOrderService shoppingOrderService;
-    
-    @Autowired
-    private ProductModelService productModelService;
     
     /**
      * 分页查询购物订单
@@ -130,9 +126,9 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
+    //@Authorization
     @RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
-    public Result cancelOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    public Result cancelOrder(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
     	Result resultShoppingOrderExpressDTO = shoppingOrderService.cancelOrder(id);
     	
@@ -251,12 +247,11 @@ public class ShoppingOrderController extends BaseController {
 	 * @return
 	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
-    @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "selectRefundPageByMemberId", method = RequestMethod.GET)
-    public Result<Page<ShoppingOrderItemRefundDTO>> requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
+    public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	Result<Page<ShoppingOrderItemRefundDTO>> result = shoppingOrderService.selectRefundPageByMemberId(memberId, param);

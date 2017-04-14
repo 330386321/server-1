@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
-import com.lawu.eshop.product.srv.bo.transaction.ProductModeUpdateInventoryBO;
-import com.lawu.eshop.product.srv.bo.transaction.ShoppingCartCreateOrderNotification;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
@@ -73,19 +74,20 @@ public class ProductModelServiceImpl implements ProductModelService {
 	}
 	
 	/**
+	 * 创建购物订单
 	 * 订单模块发送消息更新商品库存，并且保存商品库存流水记录
 	 * 
-	 * @param shoppingCartCreateOrderNotification 接收的数据
+	 * @param shoppingOrderCreateOrderNotification 接收的数据
 	 * @author Sunny
 	 */
 	@Transactional
 	@Override
-	public void updateInventory(ShoppingCartCreateOrderNotification shoppingCartCreateOrderNotification) {
-		if (shoppingCartCreateOrderNotification == null) {
+	public void lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
+		if (shoppingOrderCreateOrderNotification == null) {
 			return;
 		}
 		
-		for (ProductModeUpdateInventoryBO param : shoppingCartCreateOrderNotification.getParams()) {
+		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
 			
 			/*
 	    	 * 可能重复收到MQ消息
@@ -99,7 +101,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
 			
 			// 如果记录已经存在。继续循环
-			if (count >= 0) {
+			if (count > 0) {
 				continue;
 			}
 			
@@ -122,9 +124,70 @@ public class ProductModelServiceImpl implements ProductModelService {
 			ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
 			productModelInventoryDO.setProductModelId(param.getProdecutModelid());
 			productModelInventoryDO.setQuantity(param.getQuantity());
-			productModelInventoryDO.setShoppingOrderId(shoppingCartCreateOrderNotification.getShoppingOrderId());
+			productModelInventoryDO.setShoppingOrderId(shoppingOrderCreateOrderNotification.getShoppingOrderId());
 			// 类型为创建订单
 			productModelInventoryDO.setType(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
+			productModelInventoryDO.setGmtCreate(new Date());
+			productModelInventoryDO.setGmtModified(new Date());
+			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
+			
+		}
+	}
+	
+	/**
+	 * 取消购物订单
+	 * 订单模块发送消息释放商品库存，并且保存商品库存流水记录
+	 * 
+	 * @param shoppingOrderCancelOrderNotification 发送的数据
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public void releaseInventory(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
+		if (shoppingOrderCancelOrderNotification == null) {
+			return;
+		}
+		
+		for (ProductModeUpdateInventoryDTO param : shoppingOrderCancelOrderNotification.getParams()) {
+			
+			/*
+	    	 * 可能重复收到MQ消息
+	    	 * 需要实现幂等性
+	    	 */
+			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
+			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
+			criteria.andShoppingOrderIdEqualTo(param.getProdecutModelid());
+			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CANCEL_ORDER.getValue());
+			criteria.andProductModelIdEqualTo(param.getProdecutModelid());
+			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
+			
+			// 如果记录已经存在。继续循环
+			if (count > 0) {
+				continue;
+			}
+			
+			
+			// 获取商品型号之前的库存数据
+			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelid());
+			
+			if (productModelDO == null || productModelDO.getId() == null || productModelDO.getId() <= 0) {
+				return;
+			}
+			
+			// 计算库存
+			Integer inventory = productModelDO.getInventory() + param.getQuantity();
+			
+			productModelDO.setInventory(inventory);
+			productModelDO.setGmtModified(new Date());
+			productModelDOMapper.updateByPrimaryKeySelective(productModelDO);
+			
+			// 保存库存流程记录
+			ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
+			productModelInventoryDO.setProductModelId(param.getProdecutModelid());
+			productModelInventoryDO.setQuantity(param.getQuantity());
+			productModelInventoryDO.setShoppingOrderId(shoppingOrderCancelOrderNotification.getShoppingOrderId());
+			// 类型为创建订单
+			productModelInventoryDO.setType(ProductModelInventoryTypeEnum.CANCEL_ORDER.getValue());
 			productModelInventoryDO.setGmtCreate(new Date());
 			productModelInventoryDO.setGmtModified(new Date());
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);

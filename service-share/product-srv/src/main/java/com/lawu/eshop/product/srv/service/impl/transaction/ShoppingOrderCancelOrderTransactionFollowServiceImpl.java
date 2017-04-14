@@ -8,7 +8,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 
 /**
@@ -17,27 +17,27 @@ import com.lawu.eshop.product.srv.service.ProductModelService;
  * @date 2017/04/06
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATEORDER)
-public class ShoppingOrderCreateOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCreateOrderNotification, Reply> {
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCELORDER)
+public class ShoppingOrderCancelOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCancelOrderNotification, Reply> {
 	
 	@Autowired
 	private ProductModelService productModelService;
 	
 	/**
-	 * 减库存
+	 * 释放库存
 	 */
 	@Transactional
     @Override
-    public Reply execute(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
+    public Reply execute(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
     	Reply rtn = new Reply();
     	
     	// 如果接收的消息为空直接返回
-    	if (shoppingOrderCreateOrderNotification == null) {
+    	if (shoppingOrderCancelOrderNotification == null) {
     		return rtn;
     	}
     	
-    	// 减商品库存，以及在商品型号库存表添加记录
-    	productModelService.lessInventory(shoppingOrderCreateOrderNotification);
+    	// 释放商品库存，以及在商品型号库存表添加记录
+    	productModelService.releaseInventory(shoppingOrderCancelOrderNotification);
     	
 		return rtn;
     }

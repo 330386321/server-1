@@ -68,7 +68,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@SuppressWarnings("rawtypes")
 	@Autowired
     @Qualifier("shoppingOrderCreateOrderTransactionMainServiceImpl")
-    private TransactionMainService transactionMainService;
+    private TransactionMainService shoppingOrderCreateOrderTransactionMainServiceImpl;
+	
+	@SuppressWarnings("rawtypes")
+	@Autowired
+    @Qualifier("shoppingOrderCancelOrderTransactionMainServiceImpl")
+    private TransactionMainService shoppingOrderCancelOrderTransactionMainServiceImpl;
 	
 	/**
 	 * 
@@ -108,7 +113,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				// 把订单id放入list返回
 				rtn.add(id);
 				// 事务补偿(减掉库存)
-				transactionMainService.sendNotice(id);
+				shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
 			}
 		}
 		
@@ -322,8 +327,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 		
-		// TODO 事务补偿预留(释放库存)
-		//transactionMainService.sendNotice(id);
+		// 事务补偿(释放库存)
+		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(id);
+		
 		return result;
 	}
 	
@@ -614,9 +620,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public void minusInventorySuccess(Long id) {
-		// 设置订单状态为待支付状态
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-		shoppingOrderDO.setId(id);
+		
+		/**
+		 * 实现MQ消息的幂等性
+		 * 如果订单的状态已经是待支付的状态不再去更新订单的状态
+		 */
+		if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+			return;
+		}
+		
+		// 设置订单状态为待支付状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
 		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		

@@ -1,4 +1,4 @@
-package com.lawu.eshop.product.srv.bo.transaction;
+package com.lawu.eshop.mq.dto.order;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @author Sunny
  * @date 2017/04/06
  */
-public class ShoppingCartCreateOrderNotification extends Notification {
+public class ShoppingOrderCancelOrderNotification extends Notification {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,8 +21,8 @@ public class ShoppingCartCreateOrderNotification extends Notification {
 	/**
 	 * 批量更新库存的参数
 	 */
-	private List<ProductModeUpdateInventoryBO> params;
-	
+	private List<ProductModeUpdateInventoryDTO> params;
+
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
 	}
@@ -31,11 +31,11 @@ public class ShoppingCartCreateOrderNotification extends Notification {
 		this.shoppingOrderId = shoppingOrderId;
 	}
 
-	public List<ProductModeUpdateInventoryBO> getParams() {
+	public List<ProductModeUpdateInventoryDTO> getParams() {
 		return params;
 	}
 
-	public void setParams(List<ProductModeUpdateInventoryBO> params) {
+	public void setParams(List<ProductModeUpdateInventoryDTO> params) {
 		this.params = params;
 	}
 }

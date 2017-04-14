@@ -20,5 +20,10 @@ public class TransactionConstant {
     /**
      * 创建购物订单
      */
-    public static final byte CREATEORDER = 0x03;
+    public static final byte CREATE_ORDER = 0x03;
+    
+    /**
+     * 取消购物订单
+     */
+    public static final byte CANCEL_ORDER = 0x04;
 }
