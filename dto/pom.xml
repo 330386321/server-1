@@ -18,6 +18,7 @@
         <module>product-dto</module>
         <module>property-dto</module>
         <module>user-dto</module>
+        <module>mq-dto</module>
     </modules>
     <dependencies>
 
