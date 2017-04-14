@@ -281,23 +281,12 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	public Result tradingSuccess(@PathVariable("id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+		
+		int resultCode = shoppingOrderService.tradingSuccess(id);
+		
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
-		
-		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-		
-		if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		// 被删除的订单必须要是待支付的状态
-		if (!shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())){
-			return successCreated(ResultCode.ORDER_NOT_RECEIVED);
-		}
-		
-		shoppingOrderService.tradingSuccess(id);
 
 		return successCreated();
 	}

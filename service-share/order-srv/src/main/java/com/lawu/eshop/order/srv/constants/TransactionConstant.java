@@ -22,4 +22,9 @@ public class TransactionConstant {
      * 取消购物订单
      */
     public static final byte CANCEL_ORDER = 0x03;
+    
+    /**
+     * 确认收货
+     */
+    public static final byte TRADING_SUCCESS = 0x04;
 }

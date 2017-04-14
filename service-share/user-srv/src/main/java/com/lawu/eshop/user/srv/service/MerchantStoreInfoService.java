@@ -47,7 +47,8 @@ public interface MerchantStoreInfoService {
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
     
     /**
-     * 根据商家id列表批量查询商家是否支持七天退货
+     * 根据商家id列表批量查询
+     * 商家是否支持七天退货以及商家的用户编号
      * 
      * @param merchantIds
      * @return

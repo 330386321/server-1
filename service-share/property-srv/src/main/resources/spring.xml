@@ -58,7 +58,7 @@
     <reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="property-job"/>
 
     <!-- 配置作业-->
+    <!-- 
     <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
-
-
+	-->
 </beans>

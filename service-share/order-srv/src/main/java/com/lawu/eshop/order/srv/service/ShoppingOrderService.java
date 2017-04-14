@@ -110,7 +110,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	Integer tradingSuccess(Long id);
+	int tradingSuccess(Long id);
 
 	/**
 	 * 买家申请退款 修改订单状态为待商家确认

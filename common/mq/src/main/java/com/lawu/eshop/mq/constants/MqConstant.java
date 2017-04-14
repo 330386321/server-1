@@ -80,12 +80,17 @@ public class MqConstant {
     /**
      * 创建购物订单时发布的MQ消息
      */
-    public static final String TAG_CREATEORDER = "create_order";
+    public static final String TAG_CREATE_ORDER = "create_order";
     
     /**
      * 取消购物订单时发布的MQ消息
      */
-    public static final String TAG_CANCELORDER = "cancel_order";
+    public static final String TAG_CANCEL_ORDER = "cancel_order";
+    
+    /**
+     * 确认收货时发布的MQ消息
+     */
+    public static final String TAG_TRADING_SUCCESS = "trading_success";
 
 
     /******************************************/

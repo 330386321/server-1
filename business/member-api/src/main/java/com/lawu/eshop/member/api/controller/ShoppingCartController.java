@@ -59,9 +59,9 @@ public class ShoppingCartController extends BaseController {
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "加入购物车", notes = "加入购物车。[1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") ShoppingCartParam param) {
+    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") ShoppingCartParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successCreated(shoppingcartExtendService.save(memberId, param));
@@ -163,9 +163,9 @@ public class ShoppingCartController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建订单", notes = "根据订单参数创建订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
 	@RequestMapping(value = "createOrder", method = RequestMethod.POST)
-	public Result createOrder(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
+	public Result createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successCreated(shoppingcartExtendService.createOrder(memberId, params));

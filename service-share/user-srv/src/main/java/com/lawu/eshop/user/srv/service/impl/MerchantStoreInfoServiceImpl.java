@@ -1,32 +1,56 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import net.sf.json.JSONObject;
 
 /**
  * 商家门店service Created by Administrator on 2017/3/24.
  */
 @Service
 public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
-
+	
+    @Autowired
+    private MerchantDOMapper merchantDOMapper;
+	
     @Autowired
     private MerchantStoreDOMapper merchantStoreDOMapper;
 
@@ -373,14 +397,26 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         }
         return MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
     }
-
+    
+    /**
+     * 根据商家id列表批量查询
+     * 商家是否支持七天退货以及商家的用户编号
+     * 
+     * @param merchantIds
+     * @return
+     */
     @Override
     public List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds) {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
         merchantStoreDOExample.createCriteria().andMerchantIdIn(merchantIds);
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-
-        return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS);
+        
+        
+        MerchantDOExample merchantDOExample = new MerchantDOExample();
+        merchantDOExample.createCriteria().andIdIn(merchantIds);
+        List<MerchantDO> merchantDOList = merchantDOMapper.selectByExample(merchantDOExample);
+        
+        return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS, merchantDOList);
     }
 
     @Override

@@ -19,12 +19,13 @@ import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
 /**
+ * 创建购物订单事务-主模块
  * 
  * @author Sunny
  * @date 2017/04/06
  */
 @Service("shoppingOrderCreateOrderTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.CREATE_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATEORDER)
+@CompensatingTransactionMain(value = TransactionConstant.CREATE_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATE_ORDER)
 public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCreateOrderNotification, Reply> {
 	
 	@Autowired

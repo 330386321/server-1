@@ -13,8 +13,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusToMemberEnum;
@@ -65,15 +67,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Autowired
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
 	
-	@SuppressWarnings("rawtypes")
+	@Autowired
+	@Qualifier("shoppingOrderTradingSuccessTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderTradingSuccessTransactionMainServiceImpl;
+	
 	@Autowired
     @Qualifier("shoppingOrderCreateOrderTransactionMainServiceImpl")
-    private TransactionMainService shoppingOrderCreateOrderTransactionMainServiceImpl;
+    private TransactionMainService<Reply> shoppingOrderCreateOrderTransactionMainServiceImpl;
 	
-	@SuppressWarnings("rawtypes")
 	@Autowired
     @Qualifier("shoppingOrderCancelOrderTransactionMainServiceImpl")
-    private TransactionMainService shoppingOrderCancelOrderTransactionMainServiceImpl;
+    private TransactionMainService<Reply> shoppingOrderCancelOrderTransactionMainServiceImpl;
 	
 	/**
 	 * 
@@ -408,16 +412,32 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public Integer tradingSuccess(Long id) {
+	public int tradingSuccess(Long id) {
+		
+		// 验证
+		if (id == null || id <= 0) {
+			return ResultCode.ID_EMPTY;
+		}
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 订单的当前状态必须是待收货
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())){
+			return ResultCode.ORDER_NOT_RECEIVED;
+		}
+		
 		// 更新购物订单的状态
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更改订单状态为
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		// 更新成交时间交易成功
 		shoppingOrderDO.setGmtTransaction(new Date());
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
@@ -429,7 +449,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		
 		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
-		return result;
+		
+		// 发送MQ消息通知资产保存资金冻结表
+		shoppingOrderTradingSuccessTransactionMainServiceImpl.sendNotice(id);
+		
+		return ResultCode.SUCCESS;
 	}
 	
 	/**

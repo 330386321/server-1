@@ -18,12 +18,13 @@ import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
 /**
+ * 取消购物订单-主模块
  * 
  * @author Sunny
  * @date 2017/04/06
  */
 @Service("shoppingOrderCancelOrderTransactionMainServiceImpl")
-@CompensatingTransactionMain(value = TransactionConstant.CANCEL_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCELORDER)
+@CompensatingTransactionMain(value = TransactionConstant.CANCEL_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCEL_ORDER)
 public class ShoppingOrderCancelOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCancelOrderNotification, Reply> {
 	
 	@Autowired

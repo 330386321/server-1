@@ -226,6 +226,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
     		shoppingOrderSettlementParam.setMemberId(memberId);
     		shoppingOrderSettlementParam.setMerchantId(key);
+    		shoppingOrderSettlementParam.setMerchantNum(merchantStoreNoReasonReturnDTOMap.get(key).getMerchantNum());
     		shoppingOrderSettlementParam.setMerchantName(value.get(0).getMerchantName());
     		shoppingOrderSettlementParam.setMessage(shoppingOrderSettlementForeignParamMap.get(key).getMessage());
     		shoppingOrderSettlementParam.setFreightPrice(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice());

@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 门店是否七天无理由退货
+ * 以及商家的用户编号
  * 
  * @author Sunny
  * @date 2017/4/10
@@ -16,7 +17,12 @@ public class MerchantStoreNoReasonReturnDTO implements Serializable {
 	 * 商家Id
 	 */
 	private Long merchantId;
-
+	
+    /**
+    * 商家编号
+    */
+    private String merchantNum;
+	
 	/**
 	 * 商家是否无理由退货
 	 */
@@ -28,6 +34,14 @@ public class MerchantStoreNoReasonReturnDTO implements Serializable {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+	
+	public String getMerchantNum() {
+		return merchantNum;
+	}
+
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
 	}
 
 	public Boolean getIsNoReasonReturn() {

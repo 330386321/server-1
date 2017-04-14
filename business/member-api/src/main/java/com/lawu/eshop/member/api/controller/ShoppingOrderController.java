@@ -126,9 +126,9 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
-    public Result cancelOrder(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    public Result cancelOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
     	Result resultShoppingOrderExpressDTO = shoppingOrderService.cancelOrder(id);
     	
@@ -163,30 +163,6 @@ public class ShoppingOrderController extends BaseController {
     }
     
 	/**
-	 * 支付成功之后
-	 * 回调修改购物订单以及订单项状态为待发货
-	 * 提供给api接口调用，也可以在api内部调用
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
-    @SuppressWarnings("rawtypes")
-	@ApiOperation(value = "支付成功", notes = "支付成功之后的回调方法。[1002|1003|4004]（蒋鑫俊）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
-    @RequestMapping(value = "paymentSuccessful/{id}", method = RequestMethod.PUT)
-    public Result paymentSuccessful(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-    	
-    	Result result = shoppingOrderService.paymentSuccessful(id);
-    	
-    	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
-    	}
-    	return successCreated();
-    }
-    
-	/**
 	 * 确认收货之后
 	 * 修改购物订单以及订单项状态为交易成功
 	 * 
@@ -198,9 +174,9 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "确认收货", notes = "根据购物订单id确认收货。[1002|1003|4005]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
+    //@Authorization
     @RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
-    public Result tradingSuccess(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    public Result tradingSuccess(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
     	Result result = shoppingOrderService.tradingSuccess(id);
     	

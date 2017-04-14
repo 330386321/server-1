@@ -148,9 +148,21 @@ public class OrderServiceImpl implements OrderService {
 
 		return ResultCode.SUCCESS;
 	}
-
+	
+	@Transactional
 	@Override
 	public int comfirmDelivery(OrderComfirmDataParam param) {
+		/*
+		 * 保证MQ事务的幂等性
+		 */
+		FreezeDOExample freezeDOExample = new FreezeDOExample();
+		FreezeDOExample.Criteria criteria = freezeDOExample.createCriteria();
+		criteria.andBizIdEqualTo(Long.valueOf(param.getBizId()));
+		int count = freezeDOMapper.countByExample(freezeDOExample);
+		if (count > 0) {
+			return ResultCode.SUCCESS;
+		}
+		
 		FreezeDO freezeDO = new FreezeDO();
 		freezeDO.setUserNum(param.getUserNum());
 		freezeDO.setMoney(new BigDecimal(param.getTotalOrderMoney()));
@@ -165,8 +177,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 		freezeDO.setDays(Integer.valueOf(days));
 		freezeDOMapper.insertSelective(freezeDO);
-
-		// TODO 发送消息，更新订单状态
 
 		return ResultCode.SUCCESS;
 	}
@@ -320,7 +330,6 @@ public class OrderServiceImpl implements OrderService {
 			
 			
 		}
-		
 		return ResultCode.SUCCESS;
 	}
 

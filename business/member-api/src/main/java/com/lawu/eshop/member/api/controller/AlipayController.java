@@ -13,9 +13,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
-import com.lawu.eshop.member.api.service.OrderService;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
+import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
@@ -45,7 +45,7 @@ public class AlipayController extends BaseController {
 	@Autowired
 	private AlipayService alipayService;
 	@Autowired
-	private OrderService orderService;
+	private ShoppingOrderService shoppingOrderService;
 	@Autowired
 	private RechargeService rechargeService;
 	@Autowired
@@ -74,7 +74,7 @@ public class AlipayController extends BaseController {
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
-			double orderMoney = orderService.selectOrderMoney(param.getBizIds());
+			double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(orderMoney));
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)

@@ -17,5 +17,10 @@ CREATE TABLE `shopping_order_item` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物订单项';
 
+/**
+ * 20170414
+ * 添加是否评价字段
+ * 用户商品评价
+ */
 ALTER TABLE shopping_order_item ADD COLUMN `is_evaluation` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否评价(0-未评价|1-已评价)' AFTER `order_status`
 

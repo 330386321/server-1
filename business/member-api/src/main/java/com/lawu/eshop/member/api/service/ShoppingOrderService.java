@@ -80,6 +80,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
 	public Result cancelOrder(@PathVariable("id") Long id);
 	
@@ -132,15 +133,11 @@ public interface ShoppingOrderService {
 	Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param);
 	
 	/**
-	 * 支付成功之后
-	 * 回调修改购物订单以及订单项状态为待发货
-	 * 提供给api接口调用，也可以在api内部调用
-	 * 
-	 * @param id
-	 *            购物订单id
+	 * 获取商品订单的总金额
+	 * @param orderIds
 	 * @return
+	 * @author Sunny
 	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/paymentSuccessful/{id}", method = RequestMethod.PUT)
-	Result paymentSuccessful(@PathVariable("id") Long id);
+	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
+	double selectOrderMoney(@RequestParam("orderIds") String orderIds);
 }

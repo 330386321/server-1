@@ -1,16 +1,30 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 
 /**
  * 商家门店信息转换
@@ -209,7 +223,7 @@ public class MerchantStoreConverter {
      * @param merchantStoreDO
      * @return
      */
-    public static MerchantStoreNoReasonReturnBO convert(MerchantStoreDO merchantStoreDO) {
+    public static MerchantStoreNoReasonReturnBO convert(MerchantStoreDO merchantStoreDO, MerchantDO merchantDO) {
         if (merchantStoreDO == null) {
             return null;
         }
@@ -227,14 +241,20 @@ public class MerchantStoreConverter {
      * @param merchantStoreDOList
      * @return
      */
-    public static List<MerchantStoreNoReasonReturnBO> convertMerchantStoreNoReasonReturnBOList(List<MerchantStoreDO> merchantStoreDOList) {
-        if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()) {
+    public static List<MerchantStoreNoReasonReturnBO> convertMerchantStoreNoReasonReturnBOList(List<MerchantStoreDO> merchantStoreDOList, List<MerchantDO> merchantDOList) {
+        if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()
+        		|| merchantDOList == null || merchantDOList.isEmpty()) {
             return null;
         }
-
+        
+        Map<Long, MerchantDO> merchantDOMap = new HashMap<Long, MerchantDO>();
+        for (MerchantDO merchantDO : merchantDOList) {
+        	merchantDOMap.put(merchantDO.getId(), merchantDO);
+        }
+        
         List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = new ArrayList<MerchantStoreNoReasonReturnBO>();
         for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
-            merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO));
+            merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO, merchantDOMap.get(merchantStoreDO.getMerchantId())));
         }
 
         return merchantStoreNoReasonReturnBOList;

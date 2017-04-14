@@ -17,7 +17,7 @@ import com.lawu.eshop.product.srv.service.ProductModelService;
  * @date 2017/04/06
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCELORDER)
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCEL_ORDER)
 public class ShoppingOrderCancelOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCancelOrderNotification, Reply> {
 	
 	@Autowired

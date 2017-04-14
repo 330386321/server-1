@@ -13,9 +13,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.BalancePayService;
-import com.lawu.eshop.member.api.service.OrderService;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
+import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
@@ -44,7 +44,7 @@ public class BalancePayController extends BaseController {
 	@Autowired
 	private PayOrderService payOrderService;
 	@Autowired
-	private OrderService orderService;
+	private ShoppingOrderService shoppingOrderService;
 	@Autowired
 	private RechargeService rechargeService;
 
@@ -65,7 +65,7 @@ public class BalancePayController extends BaseController {
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 		// 获取订单金额
-		double orderMoney = orderService.selectOrderMoney(param.getBizIds());
+		double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
 		dparam.setTotalAmount(String.valueOf(orderMoney));
 
 		return balancePayService.orderPay(dparam);

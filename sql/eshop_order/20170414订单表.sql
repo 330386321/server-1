@@ -36,3 +36,10 @@ CREATE TABLE `shopping_order` (
  * */
 ALTER TABLE shopping_order DROP COLUMN `is_evaluation`
 ALTER TABLE shopping_order ADD COLUMN `shopping_cart_ids_str` varchar(50) NOT NULL COMMENT '对应的购物车相应的id(多个id用,分隔)' AFTER `order_num`
+
+/*
+ * 20170414
+ * 添加商家编号字段
+ * 用于用户确认收货保存到资金冻结表
+ */
+ALTER TABLE shopping_order  ADD COLUMN `merchant_num` varchar(19) DEFAULT '' COMMENT '商家编号' AFTER `merchant_id`
