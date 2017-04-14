@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.srv.rong.messages;
 
-import com.lawu.eshop.user.srv.rong.messages.BaseMessage;
 import com.lawu.eshop.user.srv.rong.util.GsonUtil;
 
 /**
