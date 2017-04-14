@@ -49,6 +49,11 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
         if (transactionRecord == null) {
             return null;
         }
+        TransactionRecordDO record = new TransactionRecordDO();
+        record.setId(transactionId);
+        record.setIsProcessed(true);
+        record.setGmtModified(new Date());
+        transactionRecordDOMapper.updateByPrimaryKey(record);
         return transactionRecord.getRelateId();
     }
 
