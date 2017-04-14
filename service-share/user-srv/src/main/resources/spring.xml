@@ -53,7 +53,8 @@
 
         <property name="topicsTags">
             <map>
-                <entry key="order_srv" value="tag-buy_numbers" />
+                <entry key="order_srv" value="buy_numbers" />
+                <entry key="mall_srv" value="gtpush" />
             </map>
         </property>
 

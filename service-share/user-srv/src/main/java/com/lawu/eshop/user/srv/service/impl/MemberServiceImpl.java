@@ -358,4 +358,15 @@ public class MemberServiceImpl implements MemberService {
         return row;
     }
 
+    @Override
+    public MemberBO findMemberByNum(String userNum) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andNumEqualTo(userNum);
+        List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+        if(memberDOS.isEmpty()){
+            return null;
+        }
+        return MemberConverter.convertBO(memberDOS.get(0));
+    }
+
 }

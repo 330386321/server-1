@@ -48,7 +48,7 @@ public class MqConstant {
     public static final String TAG_AD_USER_ADD_POINT = "ad_user_addPoint";
     
     public static final String TAG_RP_ME_CUT_POINT = "rp_me_cutPoint";
-    
+
     public static final String TAG_AD_USER_CLICK_POINT = "rp_user_cutPoint";
 
 
@@ -62,6 +62,11 @@ public class MqConstant {
      * 评论商家时发布MQ消息
      */
     public static final String TAG_COMMENT_MERCHANT = "comment_merchant";
+
+    /**
+     * 增加站内消息发推送
+     */
+    public static final String TAG_GTPUSH = "gtpush";
 
 
     /******************************************/

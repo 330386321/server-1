@@ -266,4 +266,15 @@ public class MerchantServiceImpl implements MerchantService {
         Integer row = merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
         return row;
     }
+
+    @Override
+    public MerchantBO findMemberByNum(String userNum) {
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andNumEqualTo(userNum);
+        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+        if(merchantDOS.isEmpty()){
+            return null;
+        }
+        return MerchantConverter.convertBO(merchantDOS.get(0));
+    }
 }

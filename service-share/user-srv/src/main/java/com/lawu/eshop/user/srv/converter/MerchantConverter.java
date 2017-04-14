@@ -41,6 +41,8 @@ public class MerchantConverter {
         merchantBO.setLevel(merchantDO.getLevel());
         merchantBO.setGmtModified(merchantDO.getGmtModified());
         merchantBO.setGmtCreate(merchantDO.getGmtCreate());
+        merchantBO.setGtCid(merchantDO.getGtCid());
+        merchantBO.setRyToken(merchantDO.getRyToken());
         return merchantBO;
     }
 

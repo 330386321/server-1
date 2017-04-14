@@ -4,16 +4,22 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessagePushInfo;
 import com.lawu.eshop.mall.param.MessageQueryParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
 import com.lawu.eshop.mall.srv.domain.MessageDOExample;
+import com.lawu.eshop.mall.srv.domain.MessageTemplateDO;
+import com.lawu.eshop.mall.srv.domain.MessageTemplateDOExample;
 import com.lawu.eshop.mall.srv.domain.extend.MessageDOView;
 import com.lawu.eshop.mall.srv.mapper.MessageDOMapper;
+import com.lawu.eshop.mall.srv.mapper.MessageTemplateDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.MessageDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.MessageService;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +40,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Autowired
     private MessageDOMMapperExtend messageDOMMapperExtend;
+
+    @Autowired
+    private MessageProducerService messageProducerService;
+
+    @Autowired
+    private MessageTemplateDOMapper messageTemplateDOMapper;
 
     @Override
     public int selectNoReadCount(String userNum) {
@@ -102,7 +114,18 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setGmtModified(new Date());
         messageDO.setGmtCreate(new Date());
        Integer id =  messageDOMapper.insert(messageDO);
-
+       //发送推送
+        MessageTemplateDOExample example = new MessageTemplateDOExample();
+        example.createCriteria().andTypeEqualTo(messageInfoParam.getTypeEnum().val);
+        List<MessageTemplateDO> templateDOS = messageTemplateDOMapper.selectByExample(example);
+        MessagePushInfo pushInfo = new MessagePushInfo();
+        if(!templateDOS.isEmpty()){
+            pushInfo.setTitle(pushInfo.getTitle());
+        }
+        pushInfo.setContent(messageDO.getContent());
+        pushInfo.setMessageId(messageDO.getId());
+        pushInfo.setUserNum(messageDO.getUserNum());
+        messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH,pushInfo);
        return  id;
     }
 }

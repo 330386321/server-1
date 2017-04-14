@@ -33,6 +33,10 @@ public class MerchantBO {
 
     private Date gmtCreate;
 
+    private String gtCid;
+
+    private String ryToken;
+
     public Long getId() {
         return id;
     }
@@ -127,5 +131,21 @@ public class MerchantBO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getGtCid() {
+        return gtCid;
+    }
+
+    public void setGtCid(String gtCid) {
+        this.gtCid = gtCid;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
     }
 }

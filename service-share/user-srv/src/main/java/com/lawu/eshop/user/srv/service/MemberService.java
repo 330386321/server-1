@@ -98,4 +98,6 @@ public interface MemberService {
     Integer findMemberCount(String regionPath);
 
     Integer setGtAndRongYunInfo(Long id, String cid, String ryToken);
+
+    MemberBO findMemberByNum(String userNum);
 }
