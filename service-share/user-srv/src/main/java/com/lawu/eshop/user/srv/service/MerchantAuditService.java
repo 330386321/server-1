@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.user.param.MerchantAuditParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 
 /**
  * @author zhangyong
@@ -13,4 +14,6 @@ public interface MerchantAuditService {
      * @param storeAuditId
      */
     void updateMerchantAudit(Long storeAuditId, MerchantAuditParam auditParam);
+
+    MerchantStoreAuditBO getMerchantAuditInfo(Long merchantId);
 }

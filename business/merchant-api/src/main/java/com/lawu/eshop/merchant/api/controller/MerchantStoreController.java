@@ -11,6 +11,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
+import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import io.swagger.annotations.Api;
@@ -224,6 +225,16 @@ public class MerchantStoreController extends BaseController {
 
             return merchantStoreService.saveMerchantStoreAuditInfo(merchantStoreId, merchantId, merchantStoreParam);
 
+    }
+
+    @ApiOperation(value = "查询门店审核成功和失败审核信息", notes = "查询门店审核成功和失败审核信息 [1012]（章勇）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getMerchantAuditInfo", method = RequestMethod.GET)
+    Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result<MerchantAuditInfoDTO> result = merchantStoreService.getMerchantAuditInfo(merchantId);
+        return result;
     }
 
 }

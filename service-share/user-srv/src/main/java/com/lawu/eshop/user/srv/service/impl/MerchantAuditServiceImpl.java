@@ -7,6 +7,7 @@ import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -160,5 +162,19 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                 }
             }
         }
+    }
+
+    @Override
+    public MerchantStoreAuditBO getMerchantAuditInfo(Long merchantId) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusNotEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+       List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
+       if(merchantStoreAuditDOS.isEmpty()){
+           return  null;
+       }
+        MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
+        merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
+        merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
+        return merchantStoreAuditBO;
     }
 }
