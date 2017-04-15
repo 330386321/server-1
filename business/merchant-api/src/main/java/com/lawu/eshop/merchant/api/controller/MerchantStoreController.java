@@ -143,7 +143,7 @@ public class MerchantStoreController extends BaseController {
     @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMerchantStoreAuditInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
     public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
                                              @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
@@ -161,7 +161,7 @@ public class MerchantStoreController extends BaseController {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
-                String fileName = part.getSubmittedFileName();
+                String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
