@@ -1,14 +1,9 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
@@ -23,6 +18,12 @@ import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Service
 public class BusinessDepositServiceImpl implements BusinessDepositService {
@@ -31,6 +32,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	private BusinessDepositDOMapper businessDepositDOMapper;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+
+	@Autowired
+	private MessageProducerService messageProducerService;
 
 	@Override
 	@Transactional
@@ -99,7 +103,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
 		businessDepositDOMapper.updateByExample(depositDO, example);
 		
-		//TODO 发送MQ消息修改门店状态
+		// 发送MQ消息修改门店状态
+		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV,MqConstant.TAG_HANDLE_DEPOSIT,param.getUserNum());
 		
 		
 		result.setRet(ResultCode.SUCCESS);

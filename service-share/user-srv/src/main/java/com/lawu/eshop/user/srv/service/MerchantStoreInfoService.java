@@ -82,4 +82,10 @@ public interface MerchantStoreInfoService {
      * @param merchantId
      */
     void addMerchantStoreBuyNums(Long merchantId);
+
+    /**
+     * 根据商家Id修改门店状态
+     * @param merchantId
+     */
+    void updateMerchantStoreStatus(Long merchantId,Byte status);
 }

@@ -115,6 +115,11 @@ public class MqConstant {
      */
     public static final String TAG_PAY_SHOPPING_ORDER = "pay_shopping_order";
 
+    /**
+     * 缴纳保证金发布的MQ消息改门店状态
+     */
+    public static final String TAG_HANDLE_DEPOSIT = "handle_deposit";
+
     /******************************************/
     /*******user-srv模块tag **********/
 
