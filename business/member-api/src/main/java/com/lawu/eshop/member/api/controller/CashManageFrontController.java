@@ -92,6 +92,7 @@ public class CashManageFrontController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@ApiOperation(value = "提现明细", notes = "用户提现明细，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "findCashList", method = RequestMethod.POST)
@@ -102,6 +103,7 @@ public class CashManageFrontController extends BaseController {
 		return cashManageFrontService.findCashList(cparam);
 	}
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@ApiOperation(value = "提现详情", notes = "用户提现详情，[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "cashDetail/{id}", method = RequestMethod.GET)

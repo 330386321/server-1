@@ -45,6 +45,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param adId
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "收藏广告", notes = "收藏广告[5002]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -62,10 +63,11 @@ public class FavoriteAdController extends BaseController{
 	 * @param pageQuery
 	 * @return
 	 */
-	@ApiOperation(value = "我收藏的广告", notes = "我收藏的广告，[]（张荣成）", httpMethod = "POST")
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
+	@ApiOperation(value = "我收藏的广告", notes = "我收藏的广告，[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.POST)
+    @RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.GET)
     public Result<Page<FavoriteAdDOViewDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") FavoriteAdParam param) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());

@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.StoreSolrService;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
@@ -29,6 +30,7 @@ public class StoreSolrController extends BaseController {
     @Autowired
     private StoreSolrService storeSolrService;
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStore", method = RequestMethod.GET)
@@ -36,6 +38,7 @@ public class StoreSolrController extends BaseController {
         return storeSolrService.listStore(storeSolrParam);
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)

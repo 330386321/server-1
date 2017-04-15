@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.RongUserService;
 import com.lawu.eshop.user.dto.RongYunOnlineDTO;
 import com.lawu.eshop.user.dto.RongYunRefreshDTO;
@@ -45,6 +46,7 @@ public class RongUserController extends BaseController{
         return rongYunDTO;
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "检查在线状态", notes = "检查在线状态。[1000] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

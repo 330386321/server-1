@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -54,6 +55,7 @@ public class BalancePayController extends BaseController {
 	 * @param param
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付,[]（杨清华）", httpMethod = "POST")
@@ -71,6 +73,7 @@ public class BalancePayController extends BaseController {
 		return balancePayService.orderPay(dparam);
 	}
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "买单余额支付", notes = "买单余额支付,[]（杨清华）", httpMethod = "POST")
@@ -89,6 +92,7 @@ public class BalancePayController extends BaseController {
 		return balancePayService.billPay(dparam);
 	}
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "余额充值积分", notes = "余额充值积分,[]（杨清华）", httpMethod = "POST")

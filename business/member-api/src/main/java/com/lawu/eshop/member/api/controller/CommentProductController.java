@@ -67,6 +67,7 @@ public class CommentProductController extends BaseController {
     private ShoppingOrderService shoppingOrderService;
 
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商品", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

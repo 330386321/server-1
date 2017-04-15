@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.ProductSolrService;
 import com.lawu.eshop.product.dto.ProductSolrDTO;
 import com.lawu.eshop.product.param.ProductSolrParam;
@@ -29,6 +30,7 @@ public class ProductSolrController extends BaseController {
     @Autowired
     private ProductSolrService productSolrService;
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.GET)
@@ -36,6 +38,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductByCategoryId(productSolrParam);
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
@@ -43,6 +46,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listRecommendProduct(productSolrParam);
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)

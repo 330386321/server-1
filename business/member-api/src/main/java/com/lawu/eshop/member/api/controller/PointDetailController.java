@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -48,6 +49,7 @@ public class PointDetailController extends BaseController {
      * @param param
      * @return
      */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "获取积分明细列表", notes = "根据用户编号分页获取积分明细列表。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

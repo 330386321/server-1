@@ -141,6 +141,7 @@ public class ShoppingCartController extends BaseController {
      * @param params 购物车参数
      * @return
      */
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表结算购物车的商品生成结算数据。[1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -160,12 +161,13 @@ public class ShoppingCartController extends BaseController {
      * @param params 订单参数
      * @return
      */
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "创建订单", notes = "根据订单参数创建订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "createOrder", method = RequestMethod.POST)
-	public Result createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
+	public Result<List<Long>> createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
     	return successCreated(shoppingcartExtendService.createOrder(memberId, params));

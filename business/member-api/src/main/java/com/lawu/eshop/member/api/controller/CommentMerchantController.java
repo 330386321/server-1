@@ -48,6 +48,7 @@ public class CommentMerchantController extends BaseController {
     @Autowired
     private MemberService memberService;
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商家", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -79,9 +80,10 @@ public class CommentMerchantController extends BaseController {
         }
     }
 
-    @ApiOperation(value = "用户评价商家列表（全部）", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "POST")
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @ApiOperation(value = "用户评价商家列表（全部）", notes = "用户评价商家 [1005，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getCommentMerchantList", method = RequestMethod.POST)
+    @RequestMapping(value = "getCommentMerchantList", method = RequestMethod.GET)
     public Result<Page<CommentMerchantDTO>> getCommentMerchantList(@ModelAttribute @ApiParam CommentMerchantListParam listParam) {
         List<CommentMerchantDTO> commentMerchantDTOS = new ArrayList<>();
         Page<CommentMerchantDTO> pages = new Page<>();
@@ -111,6 +113,7 @@ public class CommentMerchantController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商家列表（有图）", notes = "用户评价商家（有图） [1005，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.GET)

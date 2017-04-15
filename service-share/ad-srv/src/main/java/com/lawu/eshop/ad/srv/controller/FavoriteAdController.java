@@ -68,7 +68,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param query
 	 * @return
 	 */
-	@RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.POST)
+	@RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.GET)
     public Result<Page<FavoriteAdDOViewDTO>> selectMyFavoriteAd(@RequestParam Long memberId,@RequestBody FavoriteAdParam param ) {
 		Page<FavoriteAdDOViewBO>   pageBO=favoriteAdService.selectMyFavoriteAd(param, memberId);
 		Page<FavoriteAdDOViewDTO> pageDTO=new Page<FavoriteAdDOViewDTO>();

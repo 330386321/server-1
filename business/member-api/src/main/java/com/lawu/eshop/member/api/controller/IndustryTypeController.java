@@ -35,6 +35,7 @@ public class IndustryTypeController extends BaseController {
         return industryTypeService.listIndustryType();
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "查询父行业下的行业", notes = "根据父行业ID查询行业。 [1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "listIndustryType/{parentId}", method = RequestMethod.GET)
