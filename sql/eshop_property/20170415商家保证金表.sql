@@ -27,3 +27,4 @@ CREATE TABLE `business_deposit` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家保证金表';
 
+alter table transaction_detail modify column `biz_id` varchar(500) DEFAULT '0' COMMENT '业务类型操作对应的业务表ID';
