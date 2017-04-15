@@ -10,7 +10,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
-import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 
 /**
@@ -40,4 +40,26 @@ public interface ShoppingOrderService {
 	@RequestMapping(value = "shoppingOrder/get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
 	
+	/**
+	 * 更新订单信息
+	 * @param id
+	 * 			     购物订单id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/updateInformation/{id}", method = RequestMethod.PUT)
+	Result updateInformation(@PathVariable Long id , @RequestBody ShoppingOrderUpdateInfomationParam param);
+	
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("id") Long id);
 }

@@ -25,6 +25,7 @@ import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
@@ -342,7 +343,27 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderQueryToOperatorDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
 		shoppingOrderQueryToOperatorDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToOperatorDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
 
-		return successCreated(shoppingOrderQueryToOperatorDTOPage);
+		return successGet(shoppingOrderQueryToOperatorDTOPage);
+	}
+	
+	/**
+	 * 更新订单信息
+	 * 
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateInformation/{id}", method = RequestMethod.PUT)
+	public Result updateInformation(@PathVariable Long id , @RequestBody ShoppingOrderUpdateInfomationParam param) {
+		
+		int result = shoppingOrderService.updateInformation(id, param);
+		
+		if (result != ResultCode.SUCCESS) {
+			return successCreated(result);
+		}
+
+		return successCreated();
 	}
 	
 	/*********************************************************

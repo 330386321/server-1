@@ -25,6 +25,7 @@ import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
@@ -717,6 +718,33 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
 		
+	}
+	
+	/**
+	 * 更新订单信息
+	 * @param id
+	 * 			     购物订单id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param) {
+		
+		if (id == null || id <= 0) {
+			return ResultCode.ID_EMPTY;
+		}
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		shoppingOrderDOMapper.updateByPrimaryKey(ShoppingOrderConverter.convert(shoppingOrderDO, param));
+		
+		return ResultCode.SUCCESS;
 	}
 	
 }

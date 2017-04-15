@@ -5,13 +5,13 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 
 /**
  * 购物订单服务接口
@@ -153,4 +153,14 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	void minusInventorySuccess(Long id);
+	
+	/**
+	 * 更新订单信息
+	 * @param id
+	 * 			     购物订单id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
 }

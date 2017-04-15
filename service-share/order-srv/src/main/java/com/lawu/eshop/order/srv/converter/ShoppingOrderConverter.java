@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
@@ -86,5 +87,22 @@ public class ShoppingOrderConverter {
 		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO);
 		
 		return shoppingOrderBO;
+    }
+    
+    /**
+     * 组装更新订单参数
+     * 
+     * @param shoppingOrderDO
+     * @return
+     * @author Sunny
+     */
+    public static ShoppingOrderDO convert(ShoppingOrderDO shoppingOrderDO, ShoppingOrderUpdateInfomationParam param) {
+		if(shoppingOrderDO == null || param == null){
+			return null;
+		}
+		
+		BeanUtils.copyProperties(param, shoppingOrderDO);
+		
+		return shoppingOrderDO;
     }
 }
