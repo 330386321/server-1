@@ -2,12 +2,14 @@ package com.lawu.eshop.mall.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.param.MessagePushInfo;
 import com.lawu.eshop.mall.param.MessageQueryParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
 import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
 import com.lawu.eshop.mall.srv.domain.MessageDOExample;
@@ -115,17 +117,23 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setGmtCreate(new Date());
        Integer id =  messageDOMapper.insert(messageDO);
        //发送推送
-        MessageTemplateDOExample example = new MessageTemplateDOExample();
-        example.createCriteria().andTypeEqualTo(messageInfoParam.getTypeEnum().val);
-        List<MessageTemplateDO> templateDOS = messageTemplateDOMapper.selectByExample(example);
         MessagePushInfo pushInfo = new MessagePushInfo();
-        if(!templateDOS.isEmpty()){
-            pushInfo.setTitle(pushInfo.getTitle());
-        }
+        pushInfo.setTitle(messageInfoParam.getTitle());
         pushInfo.setContent(messageDO.getContent());
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(messageDO.getUserNum());
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH,pushInfo);
        return  id;
+    }
+
+    @Override
+    public MessageTemplateBO getTemplateByType(MessageTypeEnum typeEnum) {
+        MessageTemplateDOExample example = new MessageTemplateDOExample();
+        example.createCriteria().andTypeEqualTo(typeEnum.val);
+        List<MessageTemplateDO> dos = messageTemplateDOMapper.selectByExample(example);
+        if(dos.isEmpty()){
+            return null;
+        }
+        return MessageConverter.coverTemplateBO(dos.get(0));
     }
 }

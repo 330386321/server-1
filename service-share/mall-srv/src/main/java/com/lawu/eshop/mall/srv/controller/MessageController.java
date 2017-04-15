@@ -8,10 +8,12 @@ import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
+import com.lawu.eshop.mall.dto.MessageTemplateDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
 import com.lawu.eshop.mall.srv.converter.MessageConverter;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +113,25 @@ public class MessageController extends BaseController {
             return successCreated(ResultCode.SAVE_FAIL);
         }
         return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 查询模板信心
+     * @param type
+     * @return
+     */
+    public Result<MessageTemplateDTO> getTemplateByType(@RequestParam("type") MessageTypeEnum type){
+
+        MessageTemplateBO templateBO = messageService.getTemplateByType(type);
+        if(templateBO == null){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MessageTemplateDTO messageTemplateDTO = new MessageTemplateDTO();
+        messageTemplateDTO.setTitle(templateBO.getTitle());
+        messageTemplateDTO.setContent(templateBO.getContent());
+        messageTemplateDTO.setId(templateBO.getId());
+
+        return successGet(messageTemplateDTO);
     }
 
 }

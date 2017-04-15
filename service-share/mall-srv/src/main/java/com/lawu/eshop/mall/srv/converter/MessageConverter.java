@@ -5,7 +5,9 @@ import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
 import com.lawu.eshop.mall.srv.domain.MessageDO;
+import com.lawu.eshop.mall.srv.domain.MessageTemplateDO;
 import com.lawu.eshop.mall.srv.domain.extend.MessageDOView;
 
 import java.util.ArrayList;
@@ -55,5 +57,17 @@ public class MessageConverter {
             messageDTOS.add(messageDTO);
         }
         return messageDTOS;
+    }
+
+    public static MessageTemplateBO coverTemplateBO(MessageTemplateDO messageTemplateDO) {
+        if(messageTemplateDO == null){
+            return null;
+        }
+        MessageTemplateBO messageTemplateBO = new MessageTemplateBO();
+        messageTemplateBO.setId(messageTemplateDO.getId());
+        messageTemplateBO.setContent(messageTemplateDO.getContent());
+        messageTemplateBO.setTitle(messageTemplateDO.getTitle());
+        messageTemplateBO.setType(messageTemplateDO.getType());
+        return messageTemplateBO;
     }
 }

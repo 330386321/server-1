@@ -24,8 +24,11 @@ public class MessageInfoParam {
     /**
      * 消息内容
      */
-    @ApiParam(name = "content", value = "消息内容")
+    @ApiParam(name = "content", value = "消息内容",required = true)
     private String content;
+
+    @ApiParam(name = "title", value = "消息title",required = true)
+    private String title;
 
     public Long getRelateId() {
         return relateId;
@@ -49,5 +52,13 @@ public class MessageInfoParam {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

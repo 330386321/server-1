@@ -2,10 +2,12 @@ package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
+import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
 
 /**
  * 站内消息接口
@@ -50,4 +52,6 @@ public interface MessageService {
      * @param messageInfoParam
      */
     Integer saveMessage(String userNum, MessageInfoParam messageInfoParam);
+
+    MessageTemplateBO getTemplateByType(MessageTypeEnum typeEnum);
 }
