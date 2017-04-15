@@ -5,6 +5,8 @@ import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 
+import java.util.List;
+
 /**
  * 购物订单项服务接口
  *
@@ -40,4 +42,6 @@ public interface ShoppingOrderItemService {
 	 * @author Sunny
 	 */
 	Integer commentsSuccessful(Long id);
+
+	List<ShoppingOrderItemBO> findOrderItemByEvaluation(Boolean isEvaluation);
 }

@@ -92,6 +92,11 @@ public class MqConstant {
      */
     public static final String TAG_TRADING_SUCCESS = "trading_success";
 
+    /**
+     * 定时器发送增加评论信息消息
+     */
+    public static final String TAG_ADD_COMMENT = "add_comment_job";
+
 
     /******************************************/
     /*******product-srv模块tag **********/

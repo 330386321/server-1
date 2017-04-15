@@ -27,4 +27,9 @@ public class TransactionConstant {
      * 确认收货
      */
     public static final byte TRADING_SUCCESS = 0x04;
+
+    /**
+     * 增加评论记录
+     */
+    public static final  byte ADD_COMMENT = 0x05;
 }

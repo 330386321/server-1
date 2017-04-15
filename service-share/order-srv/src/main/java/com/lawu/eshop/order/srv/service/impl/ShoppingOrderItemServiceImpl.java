@@ -1,12 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingRefundDetailStatusEnum;
@@ -16,12 +9,19 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
@@ -118,5 +118,17 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		
 		return result;
 	}
-	
+
+	@Override
+	public List<ShoppingOrderItemBO> findOrderItemByEvaluation(Boolean isEvaluation) {
+		//交易成功且未评价订单项
+		ShoppingOrderItemDOExample example = new ShoppingOrderItemDOExample();
+		example.createCriteria().andIsEvaluationEqualTo(isEvaluation).andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+			List<ShoppingOrderItemDO> orderItemDOS = shoppingOrderItemDOMapper.selectByExample(example);
+			if(orderItemDOS.isEmpty()){
+				return null;
+			}
+		return ShoppingOrderItemConverter.convert(orderItemDOS);
+	}
+
 }
