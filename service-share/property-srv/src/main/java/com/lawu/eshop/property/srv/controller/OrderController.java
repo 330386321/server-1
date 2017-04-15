@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.srv.sdk.weixin.base.Configure;
+//import com.lawu.eshop.pay.srv.sdk.weixin.base.Configure;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
@@ -133,8 +133,8 @@ public class OrderController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
-			String certPath = getRequest().getSession().getServletContext().getRealPath(Configure.certLocalPathMember);
-			Configure.setCert_base_path(certPath);
+//			String certPath = getRequest().getSession().getServletContext().getRealPath(Configure.certLocalPathMember);
+//			Configure.setCert_base_path(certPath);
 		}
 		int retCode = orderService.doRefundScopeInside(param);
 		return successCreated(retCode);
