@@ -96,7 +96,11 @@ public class MqConstant {
      * 定时器发送增加评论信息消息
      */
     public static final String TAG_AUTO_COMMENT = "auto_comment";
-
+    
+    /**
+     * 商家同意退款发布的MQ消息
+     */
+    public static final String TAG_AGREE_TO_REFUND = "agree_to_refund";
 
     /******************************************/
     /*******product-srv模块tag **********/

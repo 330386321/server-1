@@ -3,6 +3,8 @@ package com.lawu.eshop.mall.dto.foreign;
 import java.io.Serializable;
 import java.util.List;
 
+import com.lawu.eshop.mall.constants.ExpressInquiriesDetailStateEnum;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -31,11 +33,9 @@ public class ExpressInquiriesDetailDTO implements Serializable {
 	
 	/**
 	 * 物流状态
-	 * 
-	 * 2-在途中,3-签收,4-问题件
 	 */
-	@ApiModelProperty(value = "物流状态(2-在途中,3-签收,4-问题件)", required = true)
-	private String state;
+	@ApiModelProperty(value = "物流状态(ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
+	private ExpressInquiriesDetailStateEnum state;
 	
 	/**
 	 * 物流轨迹
@@ -59,11 +59,11 @@ public class ExpressInquiriesDetailDTO implements Serializable {
 		this.reason = reason;
 	}
 
-	public String getState() {
+	public ExpressInquiriesDetailStateEnum getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(ExpressInquiriesDetailStateEnum state) {
 		this.state = state;
 	}
 

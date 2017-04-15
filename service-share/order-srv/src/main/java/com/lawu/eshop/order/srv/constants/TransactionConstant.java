@@ -32,4 +32,10 @@ public class TransactionConstant {
      * 定时任务自动评论
      */
     public static final  byte AUTO_COMMENT = 0x05;
+    
+    /**
+     * 商家同意退款
+     */
+    public static final  byte AGREE_TO_REFUND = 0x06;
+    
 }

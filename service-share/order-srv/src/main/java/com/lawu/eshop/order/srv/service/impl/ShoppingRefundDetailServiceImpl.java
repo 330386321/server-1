@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
@@ -40,6 +43,10 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Autowired
 	private ShoppingOrderDOMapper shoppingOrderDOMapper;
 
+	@Autowired
+	@Qualifier("shoppingOrderAgreeToRefundTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderAgreeToRefundTransactionMainServiceImpl;
+	
 	/**
 	 * 根据购物退货详情id 获取购物退货详情
 	 * 
@@ -280,7 +287,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
 		
 		if (param.getIsAgree()) {
-			// TODO 事务补偿退款给用户
+			shoppingOrderAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
 		}
 		
 		return result;

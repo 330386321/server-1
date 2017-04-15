@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.mall.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.mall.dto.foreign.ExpressInquiriesDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
@@ -66,7 +67,7 @@ public class ExpressInquiriesDetailConverter {
 		BeanUtils.copyProperties(expressInquiriesDetailBO, expressInquiriesDetailDTO, "traces");
 		expressInquiriesDetailDTO.setSuccess(expressInquiriesDetailBO.getSuccess());
 		expressInquiriesDetailDTO.setReason(expressInquiriesDetailBO.getReason());
-		expressInquiriesDetailDTO.setState(expressInquiriesDetailBO.getState());
+		expressInquiriesDetailDTO.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState()));
 		
 		List<TraceDTO> TraceDTOList = new ArrayList<TraceDTO>();
 		for (TraceBO traceBO : expressInquiriesDetailBO.getTraces()) {
