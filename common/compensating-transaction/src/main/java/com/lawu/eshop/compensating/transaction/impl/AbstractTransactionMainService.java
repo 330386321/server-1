@@ -76,7 +76,12 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
     public void check() {
         List<Long> notDoneList = transactionStatusService.selectNotDoneList(type);
         for (int i = 0; i < notDoneList.size(); i++) {
-            selectNotification(notDoneList.get(i));
+            Long relateId = notDoneList.get(i);
+            N notification = selectNotification(relateId);
+            if (notification == null) {
+                throw new IllegalArgumentException("Can't find the notification by relateId: " + relateId);
+            }
+            messageProducerService.sendMessage(topic, tags, notification);
         }
     }
 
