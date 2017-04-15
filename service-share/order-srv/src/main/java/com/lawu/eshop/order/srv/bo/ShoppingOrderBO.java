@@ -89,6 +89,11 @@ public class ShoppingOrderBO implements Serializable {
     private Boolean isNoReasonReturn;
     
     /**
+     * 是否自动收货(0-否|1-是)
+     */
+    private Boolean isAutomaticReceipt;
+    
+    /**
     * 对应的购物车相应的id(多个id用,分隔)
     */
    private String shoppingCartIdsStr;
@@ -269,6 +274,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
 		this.isNoReasonReturn = isNoReasonReturn;
+	}
+
+	public Boolean getIsAutomaticReceipt() {
+		return isAutomaticReceipt;
+	}
+
+	public void setIsAutomaticReceipt(Boolean isAutomaticReceipt) {
+		this.isAutomaticReceipt = isAutomaticReceipt;
 	}
 
 	public String getShoppingCartIdsStr() {

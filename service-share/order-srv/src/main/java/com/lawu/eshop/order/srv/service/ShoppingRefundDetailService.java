@@ -46,13 +46,13 @@ public interface ShoppingRefundDetailService {
 	/**
 	 * 商家填写退货地址信息
 	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
 	 * @param param
-	 *            退款详情物流信息
+	 *            退货地址信息
 	 * @return
 	 */
-	Integer fillReturnAddress(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailRerurnAddressForeignParam param);
+	int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressForeignParam param);
 
 	/**
 	 * 买家填写退货的物流信息
@@ -84,4 +84,13 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	Integer platformIntervention(ShoppingRefundDetailBO shoppingRefundDetailBO);
+	
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	int revokeRefundRequest(Long id);
 }

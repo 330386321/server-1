@@ -1156,6 +1156,66 @@ public class ShoppingOrderExtendDOExample {
             return (Criteria) this;
         }
         
+        public Criteria andIsAutomaticReceiptIsNull() {
+            addCriterion("is_automatic_receipt is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptIsNotNull() {
+            addCriterion("is_automatic_receipt is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptEqualTo(Boolean value) {
+            addCriterion("is_automatic_receipt =", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptNotEqualTo(Boolean value) {
+            addCriterion("is_automatic_receipt <>", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptGreaterThan(Boolean value) {
+            addCriterion("is_automatic_receipt >", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_automatic_receipt >=", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptLessThan(Boolean value) {
+            addCriterion("is_automatic_receipt <", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_automatic_receipt <=", value, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptIn(List<Boolean> values) {
+            addCriterion("is_automatic_receipt in", values, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptNotIn(List<Boolean> values) {
+            addCriterion("is_automatic_receipt not in", values, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_automatic_receipt between", value1, value2, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAutomaticReceiptNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_automatic_receipt not between", value1, value2, "isAutomaticReceipt");
+            return (Criteria) this;
+        }
+        
         public Criteria andShoppingCartIdsStrIsNull() {
             addCriterion("shopping_cart_ids_str is null");
             return (Criteria) this;
@@ -1879,6 +1939,11 @@ public class ShoppingOrderExtendDOExample {
         
         public Criteria andIsEvaluationEqualTo(Boolean value) {
             addCriterion("soi.is_evaluation =", value, "isEvaluation");
+            return (Criteria) this;
+        }
+        
+        public Criteria andShoppingRefundDetailStatusEqualTo(Byte value) {
+            addCriterion("srd.status =", value, "status");
             return (Criteria) this;
         }
     }

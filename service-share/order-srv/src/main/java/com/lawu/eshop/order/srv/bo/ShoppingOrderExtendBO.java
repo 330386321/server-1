@@ -8,113 +8,118 @@ import java.util.List;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 
 public class ShoppingOrderExtendBO implements Serializable {
-    
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-     * 主键 
-     */
-    private Long id;
+	 * 主键
+	 */
+	private Long id;
 
-    /**
-     * 商家ID
-     */
-    private Long merchantId;
-    
-    /**
-    * 商家编号
-    */
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
+
+	/**
+	 * 商家编号
+	 */
 	private String merchantNum;
-	
-    /**
-     * 商家名称
-     */
-    private String merchantName;
 
-    /**
-     * 收货人姓名
-     */
-    private String consigneeName;
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
 
-    /**
-     * 收货人地址
-     */
-    private String consigneeAddress;
+	/**
+	 * 收货人姓名
+	 */
+	private String consigneeName;
 
-    /**
-     * 收货人手机号码
-     */
-    private String consigneeMobile;
-    
-    /**
-     * 运费
-     */
-    private BigDecimal freightPrice;
+	/**
+	 * 收货人地址
+	 */
+	private String consigneeAddress;
 
-    /**
-     * 商品总价
-     */
-    private BigDecimal commodityTotalPrice;
+	/**
+	 * 收货人手机号码
+	 */
+	private String consigneeMobile;
 
-    /**
-     * 订单总价
-     */
-    private BigDecimal orderTotalPrice;
+	/**
+	 * 运费
+	 */
+	private BigDecimal freightPrice;
 
-    /**
-     * 订单的总状态
-     */
-    private ShoppingOrderStatusEnum orderStatus;
+	/**
+	 * 商品总价
+	 */
+	private BigDecimal commodityTotalPrice;
 
-    /**
-    * 是否支持无理由退货,0否 1是
-    */
-   private Boolean isNoReasonReturn;
-    
-    /**
-     * 订单编号
-     */
-    private String orderNum;
+	/**
+	 * 订单总价
+	 */
+	private BigDecimal orderTotalPrice;
 
-    /**
-     * 运单编号
-     */
-    private String waybillNum;
+	/**
+	 * 订单的总状态
+	 */
+	private ShoppingOrderStatusEnum orderStatus;
 
-    /**
-     * 快递公司id
-     */
-    private Integer expressCompanyId;
+	/**
+	 * 是否支持无理由退货,0否 1是
+	 */
+	private Boolean isNoReasonReturn;
 
-    /**
-     * 快递公司名称
-     */
-    private String expressCompanyName;
+	/**
+	 * 是否自动收货(0-否|1-是)
+	 */
+	private Boolean isAutomaticReceipt;
 
-    /**
-     * 付款时间
-     */
-    private Date gmtPayment;
+	/**
+	 * 订单编号
+	 */
+	private String orderNum;
 
-    /**
-     * 发货时间
-     */
-    private Date gmtTransport;
+	/**
+	 * 运单编号
+	 */
+	private String waybillNum;
 
-    /**
-     * 交易时间
-     */
-    private Date gmtTransaction;
+	/**
+	 * 快递公司id
+	 */
+	private Integer expressCompanyId;
 
-    /**
-     * 创建时间
-     */
-    private Date gmtCreate;
-    
-    /**
-     * 订单项
-     */
-    private List<ShoppingOrderItemBO> items;
+	/**
+	 * 快递公司名称
+	 */
+	private String expressCompanyName;
+
+	/**
+	 * 付款时间
+	 */
+	private Date gmtPayment;
+
+	/**
+	 * 发货时间
+	 */
+	private Date gmtTransport;
+
+	/**
+	 * 交易时间
+	 */
+	private Date gmtTransaction;
+
+	/**
+	 * 创建时间
+	 */
+	private Date gmtCreate;
+
+	/**
+	 * 订单项
+	 */
+	private List<ShoppingOrderItemBO> items;
 
 	public Long getId() {
 		return id;
@@ -212,6 +217,14 @@ public class ShoppingOrderExtendBO implements Serializable {
 		this.isNoReasonReturn = isNoReasonReturn;
 	}
 
+	public Boolean getIsAutomaticReceipt() {
+		return isAutomaticReceipt;
+	}
+
+	public void setIsAutomaticReceipt(Boolean isAutomaticReceipt) {
+		this.isAutomaticReceipt = isAutomaticReceipt;
+	}
+
 	public String getOrderNum() {
 		return orderNum;
 	}
@@ -283,5 +296,5 @@ public class ShoppingOrderExtendBO implements Serializable {
 	public void setItems(List<ShoppingOrderItemBO> items) {
 		this.items = items;
 	}
-    
+
 }

@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.srv.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,6 @@ import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 购物订单
@@ -235,38 +233,13 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
 	public Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundForeignParam param) {
 
-		if (shoppingOrderitemId == null || shoppingOrderitemId <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
-		
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingOrderitemId);
-		
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderItemBO.getShoppingOrderId());
-		
-		if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		// 只有待发货、待收货、交易成功才能被允许退款
-		if (!shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())
-				&& !shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())
-			    && !shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())){
-			return successCreated(ResultCode.ORDER_NOT_RECEIVED);
-		}
-		
-		// 买家收货(交易成功|成交时间)七天之内才能被允许退款
-		if (shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) 
-				&& DateUtil.isExceeds(shoppingOrderBO.getGmtTransaction(), new Date(), 7*24*60*60*1000)) {
-			return successCreated(ResultCode.EXCEEDS_RETURN_TIME);
-		}
-		
 		// 修改购物订单以及订单项状态，保存退款详情记录
-		shoppingOrderService.requestRefund(shoppingOrderItemBO, shoppingOrderBO, param);
-
+		int result = shoppingOrderService.requestRefund(shoppingOrderitemId, param);
+		
+		if (result != ResultCode.SUCCESS) {
+			return successCreated(result);
+		}
+		
 		return successCreated();
 	}
 	

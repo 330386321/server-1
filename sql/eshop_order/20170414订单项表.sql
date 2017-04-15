@@ -23,4 +23,3 @@ CREATE TABLE `shopping_order_item` (
  * 用户商品评价
  */
 ALTER TABLE shopping_order_item ADD COLUMN `is_evaluation` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否评价(0-未评价|1-已评价)' AFTER `order_status`
-

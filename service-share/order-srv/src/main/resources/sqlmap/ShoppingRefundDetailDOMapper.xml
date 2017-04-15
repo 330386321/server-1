@@ -18,6 +18,7 @@
     <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
     <result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
     <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="is_agree" jdbcType="BIT" property="isAgree" />
     <result column="gmt_refund" jdbcType="TIMESTAMP" property="gmtRefund" />
     <result column="gmt_confirmed" jdbcType="TIMESTAMP" property="gmtConfirmed" />
@@ -100,7 +101,7 @@
     -->
     id, shopping_order_item_id, type, reason, amount, consignee_name, consignee_address, 
     consignee_mobile, express_company_id, express_company_code, express_company_name, 
-    waybill_num, is_agree, gmt_refund, gmt_confirmed, gmt_fill, gmt_submit, gmt_intervention, 
+    waybill_num, status, is_agree, gmt_refund, gmt_confirmed, gmt_fill, gmt_submit, gmt_intervention, 
     gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample" resultMap="BaseResultMap">
@@ -160,17 +161,17 @@
     insert into shopping_refund_detail (shopping_order_item_id, type, reason, 
       amount, consignee_name, consignee_address, 
       consignee_mobile, express_company_id, express_company_code, 
-      express_company_name, waybill_num, is_agree, 
-      gmt_refund, gmt_confirmed, gmt_fill, 
-      gmt_submit, gmt_intervention, gmt_create, 
-      gmt_modified)
+      express_company_name, waybill_num, status, 
+      is_agree, gmt_refund, gmt_confirmed, 
+      gmt_fill, gmt_submit, gmt_intervention, 
+      gmt_create, gmt_modified)
     values (#{shoppingOrderItemId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{reason,jdbcType=VARCHAR}, 
       #{amount,jdbcType=DECIMAL}, #{consigneeName,jdbcType=VARCHAR}, #{consigneeAddress,jdbcType=VARCHAR}, 
       #{consigneeMobile,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{isAgree,jdbcType=BIT}, 
-      #{gmtRefund,jdbcType=TIMESTAMP}, #{gmtConfirmed,jdbcType=TIMESTAMP}, #{gmtFill,jdbcType=TIMESTAMP}, 
-      #{gmtSubmit,jdbcType=TIMESTAMP}, #{gmtIntervention,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+      #{expressCompanyName,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{isAgree,jdbcType=BIT}, #{gmtRefund,jdbcType=TIMESTAMP}, #{gmtConfirmed,jdbcType=TIMESTAMP}, 
+      #{gmtFill,jdbcType=TIMESTAMP}, #{gmtSubmit,jdbcType=TIMESTAMP}, #{gmtIntervention,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO">
     <!--
@@ -214,6 +215,9 @@
       </if>
       <if test="waybillNum != null">
         waybill_num,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="isAgree != null">
         is_agree,
@@ -273,6 +277,9 @@
       </if>
       <if test="waybillNum != null">
         #{waybillNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
       </if>
       <if test="isAgree != null">
         #{isAgree,jdbcType=BIT},
@@ -353,6 +360,9 @@
       <if test="record.waybillNum != null">
         waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
       <if test="record.isAgree != null">
         is_agree = #{record.isAgree,jdbcType=BIT},
       </if>
@@ -400,6 +410,7 @@
       express_company_code = #{record.expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{record.expressCompanyName,jdbcType=VARCHAR},
       waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
       is_agree = #{record.isAgree,jdbcType=BIT},
       gmt_refund = #{record.gmtRefund,jdbcType=TIMESTAMP},
       gmt_confirmed = #{record.gmtConfirmed,jdbcType=TIMESTAMP},
@@ -452,6 +463,9 @@
       <if test="waybillNum != null">
         waybill_num = #{waybillNum,jdbcType=VARCHAR},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
       <if test="isAgree != null">
         is_agree = #{isAgree,jdbcType=BIT},
       </if>
@@ -496,6 +510,7 @@
       express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
       express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
       waybill_num = #{waybillNum,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
       is_agree = #{isAgree,jdbcType=BIT},
       gmt_refund = #{gmtRefund,jdbcType=TIMESTAMP},
       gmt_confirmed = #{gmtConfirmed,jdbcType=TIMESTAMP},

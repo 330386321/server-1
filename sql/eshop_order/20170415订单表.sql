@@ -43,3 +43,9 @@ ALTER TABLE shopping_order ADD COLUMN `shopping_cart_ids_str` varchar(50) NOT NU
  * 用于用户确认收货保存到资金冻结表
  */
 ALTER TABLE shopping_order  ADD COLUMN `merchant_num` varchar(19) DEFAULT '' COMMENT '商家编号' AFTER `merchant_id`
+
+/*
+ * 20170415
+ * 判断订单是否自动收货
+ */
+ALTER TABLE shopping_order  ADD COLUMN `is_automatic_receipt` tinyint(1) unsigned NULL COMMENT '是否自动收货,0否 1是' AFTER `is_no_reason_return`

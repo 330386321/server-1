@@ -38,7 +38,7 @@ import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 public class ShoppingRefundDetailController extends BaseController {
 
 	@Autowired
-	private ShoppingRefundDetailService shoppingRefundDetailservice;
+	private ShoppingRefundDetailService shoppingRefundDetailService;
 
 	@Autowired
 	private ShoppingOrderItemService shoppingOrderItemService;
@@ -60,7 +60,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.getByShoppingOrderitemId(shoppingOrderItemId);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.getByShoppingOrderitemId(shoppingOrderItemId);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -89,7 +89,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -111,7 +111,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.NOT_AGREE_TO_APPLY);
 		}
 
-		shoppingRefundDetailservice.agreeToApply(shoppingRefundDetailBO, param);
+		shoppingRefundDetailService.agreeToApply(shoppingRefundDetailBO, param);
 
 		return successCreated();
 	}
@@ -122,39 +122,14 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * @param id
 	 *            退款详情id
 	 * @param param
-	 *            参数 退货信息参数
+	 *            退货信息参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
 	public Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressForeignParam param) {
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
-
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
-
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
-
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		// 订单状态必须为退款中
-		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
-			return successCreated(ResultCode.NOT_REFUNDING);
-		}
-
-		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemBO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.FILL_RETURN_ADDRESS)) {
-			return successCreated(ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS);
-		}
-
-		shoppingRefundDetailservice.fillReturnAddress(shoppingRefundDetailBO, param);
+		
+		shoppingRefundDetailService.fillReturnAddress(id, param);
 
 		return successCreated();
 	}
@@ -175,7 +150,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -198,7 +173,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		}
 
 		// 修改订单项的退款状态为待退款状态，更新退款详情的物流信息
-		shoppingRefundDetailservice.fillLogisticsInformation(shoppingRefundDetailBO, param);
+		shoppingRefundDetailService.fillLogisticsInformation(shoppingRefundDetailBO, param);
 
 		return successCreated();
 	}
@@ -223,7 +198,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -245,7 +220,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ORDER_NOT_TO_BE_REFUNDED);
 		}
 
-		shoppingRefundDetailservice.agreeToRefund(shoppingRefundDetailBO, param);
+		shoppingRefundDetailService.agreeToRefund(shoppingRefundDetailBO, param);
 
 		return successCreated();
 	}
@@ -264,7 +239,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -286,7 +261,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ORDER_NOT_REFUND_FAILED);
 		}
 
-		shoppingRefundDetailservice.platformIntervention(shoppingRefundDetailBO);
+		shoppingRefundDetailService.platformIntervention(shoppingRefundDetailBO);
 
 		return successCreated();
 	}
@@ -305,7 +280,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successGet(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailservice.get(id);
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
@@ -314,5 +289,25 @@ public class ShoppingRefundDetailController extends BaseController {
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingRefundDetailBO.getExpressCompanyCode(), shoppingRefundDetailBO.getWaybillNum());
 
 		return successGet(ShoppingRefundDetailConverter.covert(shoppingRefundDetailBO, expressInquiriesDetailBO));
+	}
+	
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	public Result revokeRefundRequest(@PathVariable("id") Long id) {
+
+		int result = shoppingRefundDetailService.revokeRefundRequest(id);
+		
+		if (result != ResultCode.SUCCESS) {
+			successCreated(result);
+		}
+
+		return successCreated();
 	}
 }

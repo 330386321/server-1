@@ -113,17 +113,16 @@ public interface ShoppingOrderService {
 	int tradingSuccess(Long id);
 
 	/**
-	 * 买家申请退款 修改订单状态为待商家确认
+	 * 买家申请退款
+	 * 修改订单项状态为待商家确认
 	 * 
-	 * @param shoppingOrderItemBO
-	 *            购物订单项
-	 * @param shoppingOrderBO
-	 *            购物订单
+	 * @param shoppingOrderitemId
+	 *            购物订单项id
 	 * @param param
 	 *            退款参数
 	 * @return
 	 */
-	Integer requestRefund(ShoppingOrderItemBO shoppingOrderItemBO, ShoppingOrderBO shoppingOrderBO, ShoppingOrderRequestRefundForeignParam param);
+	int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundForeignParam param);
 
 	/**
 	 * 商家填写物流信息

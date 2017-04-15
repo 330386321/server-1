@@ -90,6 +90,11 @@ public class ShoppingOrderExtendDO implements Serializable {
 	 * 是否支持无理由退货,0否 1是
 	 */
 	private Boolean isNoReasonReturn;
+	
+    /**
+     * 是否自动收货(0-否|1-是)
+     */
+    private Boolean isAutomaticReceipt;
 
 	/**
 	 * 对应的购物车相应的id(多个id用,分隔)
@@ -277,6 +282,14 @@ public class ShoppingOrderExtendDO implements Serializable {
 
 	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
 		this.isNoReasonReturn = isNoReasonReturn;
+	}
+
+	public Boolean getIsAutomaticReceipt() {
+		return isAutomaticReceipt;
+	}
+
+	public void setIsAutomaticReceipt(Boolean isAutomaticReceipt) {
+		this.isAutomaticReceipt = isAutomaticReceipt;
 	}
 
 	public String getShoppingCartIdsStr() {

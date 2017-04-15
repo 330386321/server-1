@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.mall.constants.ShoppingRefundDetailStatusEnum;
 import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.mall.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
@@ -69,7 +71,10 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		ShoppingRefundDetailDOExample shoppingRefundDetailDOExample = new ShoppingRefundDetailDOExample();
-		shoppingRefundDetailDOExample.createCriteria().andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
+		ShoppingRefundDetailDOExample.Criteria criteria = shoppingRefundDetailDOExample.createCriteria();
+		criteria.andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
+		// 找到有效记录
+		criteria.andStatusEqualTo(ShoppingRefundDetailStatusEnum.VALID.getValue());
 
 		List<ShoppingRefundDetailDO> shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByExample(shoppingRefundDetailDOExample);
 
@@ -118,35 +123,64 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	/**
 	 * 商家填写退货地址信息
 	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
 	 * @param param
 	 *            退款详情物流信息
 	 * @return
 	 */
 	@Transactional
 	@Override
-	public Integer fillReturnAddress(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailRerurnAddressForeignParam param) {
-		// 更新订单项状态为待退款
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingRefundDetailBO.getShoppingOrderItemId());
-		shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_RETURNED.getValue());
+	public int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressForeignParam param) {
+		
+		if (id == null || id <= 0) {
+			return ResultCode.ID_EMPTY;
+		}
+		
+		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		
+		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+
+		// 订单状态必须为退款中
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
+			return ResultCode.NOT_REFUNDING;
+		}
+
+		// 退款状态必须为填写退货地址
+		if (!shoppingOrderItemDO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.FILL_RETURN_ADDRESS)) {
+			return ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS;
+		}
+		
+		// 商家判断是否需要寄回货物
+		if (param.getIsNeedReturn()) {
+			// 更新订单项退款状态为待退货
+			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_RETURNED.getValue());
+	
+			// 更新退款详情的退货地址信息
+			shoppingRefundDetailDO.setGmtFill(new Date());
+			shoppingRefundDetailDO.setConsigneeName(param.getConsigneeName());
+			shoppingRefundDetailDO.setConsigneeMobile(param.getConsigneeMobile());
+			shoppingRefundDetailDO.setConsigneeAddress(param.getConsigneeAddress());
+			shoppingRefundDetailDO.setGmtModified(new Date());
+	
+			shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		} else {
+			// 更新订单项退款状态为待退货
+			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_REFUNDED.getValue());
+		}
+		
 		shoppingOrderItemDO.setGmtModified(new Date());
-		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
-		// 更新退款详情的退货地址信息
-		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		shoppingRefundDetailDO.setId(shoppingRefundDetailBO.getId());
-
-		shoppingRefundDetailDO.setGmtFill(new Date());
-		shoppingRefundDetailDO.setConsigneeName(param.getConsigneeName());
-		shoppingRefundDetailDO.setConsigneeMobile(param.getConsigneeMobile());
-		shoppingRefundDetailDO.setConsigneeAddress(param.getConsigneeAddress());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-
-		return result;
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		
+		return ResultCode.SUCCESS;
 	}
 
 	/**
@@ -269,6 +303,61 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 		return result;
 
+	}
+
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public int revokeRefundRequest(Long id) {
+		
+		if (id == null || id <= 0) {
+			return ResultCode.ID_EMPTY;
+		}
+		
+		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		
+		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 订单项状态必须为退款中
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
+			return ResultCode.NOT_REFUNDING;
+		}
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+		
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 清空退款状态
+		shoppingOrderItemDO.setRefundStatus(null);
+		// 还原订单之前状态
+		shoppingOrderItemDO.setOrderStatus(shoppingOrderDO.getOrderStatus());
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+
+		// 更新退款详情
+		// 设置订单的状态为无效
+		shoppingRefundDetailDO.setStatus(ShoppingRefundDetailStatusEnum.INVALID.getValue());
+		shoppingRefundDetailDO.setGmtIntervention(new Date());
+		shoppingRefundDetailDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		
+		return ResultCode.SUCCESS;
 	}
 
 }

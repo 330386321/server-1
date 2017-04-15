@@ -50,4 +50,15 @@ public interface ShoppingRefundDetailService {
 	@RequestMapping(value = "shoppingRefundDetail/getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
 	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
 	
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	Result revokeRefundRequest(@PathVariable("id") Long id);
+	
 }

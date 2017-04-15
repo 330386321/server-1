@@ -18,22 +18,36 @@ public class ShoppingRefundDetailRerurnAddressForeignParam implements Serializab
 	private static final long serialVersionUID = 1L;
 	
 	/**
+	 * 是否需要退货
+	 */
+	@ApiModelProperty(value = "是否需要退货", required = true)
+	private Boolean isNeedReturn;
+	
+	/**
 	 * 收货人姓名
 	 */
-	@ApiModelProperty(value = "收货人姓名", required = true)
+	@ApiModelProperty(value = "收货人姓名", required = false)
 	private String consigneeName;
 
 	/**
 	 * 收货人地址
 	 */
-	@ApiModelProperty(value = "收货人地址", required = true)
+	@ApiModelProperty(value = "收货人地址", required = false)
 	private String consigneeAddress;
 
 	/**
 	 * 收货人手机号码
 	 */
-	@ApiModelProperty(value = "收货人手机号码", required = true)
+	@ApiModelProperty(value = "收货人手机号码", required = false)
 	private String consigneeMobile;
+
+	public Boolean getIsNeedReturn() {
+		return isNeedReturn;
+	}
+
+	public void setIsNeedReturn(Boolean isNeedReturn) {
+		this.isNeedReturn = isNeedReturn;
+	}
 
 	public String getConsigneeName() {
 		return consigneeName;

@@ -483,14 +483,14 @@ public class DateUtil {
      * @param overTime 超过的时间
      * @return
      */
-    public static boolean isExceeds(Date fromDate, Date now, int overTime) {
+    public static boolean isExceeds(Date fromDate, Date now, int overTime, int field) {
     	// 所有参数不能为空
     	if (fromDate == null || now == null) {
     		return false;
     	}
     	Calendar calendar = Calendar.getInstance();  //得到日历  
         calendar.setTime(fromDate);//把当前时间赋给日历  
-        calendar.add(Calendar.MILLISECOND, overTime);  //添加超过时间
+        calendar.add(field, overTime);  //添加超过时间
         Date afterDate = calendar.getTime();  
         
         if (now.getTime() >= afterDate.getTime()) {

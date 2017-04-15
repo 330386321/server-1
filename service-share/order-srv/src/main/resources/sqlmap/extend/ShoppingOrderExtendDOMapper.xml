@@ -35,6 +35,7 @@
 	    <result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
 	    <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
 	    <result column="status" jdbcType="TINYINT" property="status" />
+	    <result column="is_automatic_receipt" jdbcType="BIT" property="isAutomaticReceipt" />
 	    <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
 	    <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
 	    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
@@ -116,7 +117,7 @@
 		so.order_total_price,
 		so.order_status,
 		so.status,
-		so.is_no_reason_return, so.shopping_cart_ids_str,
+		so.is_no_reason_return, so.is_automatic_receipt, so.shopping_cart_ids_str,
 		so.order_num, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name,
 		so.gmt_payment, so.gmt_transport,
