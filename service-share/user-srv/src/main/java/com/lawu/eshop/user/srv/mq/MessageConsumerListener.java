@@ -2,7 +2,7 @@ package com.lawu.eshop.user.srv.mq;
 
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.user.param.MessagePushInfo;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
@@ -50,9 +50,10 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             }
         } else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic) && MqConstant.TAG_HANDLE_DEPOSIT.equals(tags)){
             //根据商家编号查询商家
-            MerchantBO merchantBO = merchantService.findMemberByNum(message.toString());
-            //设置未审核
-            merchantStoreInfoService.updateMerchantStoreStatus(merchantBO.getId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+            HandleDepostMessage info = (HandleDepostMessage) message;
+            MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
+            //修改门店状态
+            merchantStoreInfoService.updateMerchantStoreStatus(merchantBO.getId(), info.getStatusEnum().val);
         }
     }
 }

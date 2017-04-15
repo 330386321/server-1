@@ -1,33 +1,13 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
-import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
-import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
-import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
-import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
-import com.lawu.eshop.property.param.BusinessRefundDepositParam;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
 import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
@@ -38,8 +18,19 @@ import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class BusinessDepositServiceImpl implements BusinessDepositService {
@@ -121,9 +112,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
 		businessDepositDOMapper.updateByExample(depositDO, example);
 
-		// TODO 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
-		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,
-				param.getUserNum());
+		//  回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
+		HandleDepostMessage message = new HandleDepostMessage();
+		message.setUserNum(param.getUserNum());
+		message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_GIVE_MONEY_CHECK);
+		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
 
 		result.setRet(ResultCode.SUCCESS);
 		return result;
@@ -222,14 +215,18 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
 		businessDepositDOMapper.updateByExampleSelective(bddo, example);
-
+		HandleDepostMessage message = new HandleDepostMessage();
+		message.setUserNum(param.getUserNum());
 		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
-			// TODO 核实操作成功后，发送MQ消息修改门店状态为：待审核
-			
+			// 核实操作成功后，发送MQ消息修改门店状态为：待审核
+
+			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
 
 		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.val.equals(param.getBusinessDepositOperEnum().val)) {
-			// TODO 退款成功操作后，发送MQ消息修改门店状态为：注销
-
+			// 退款成功操作后，发送MQ消息修改门店状态为：注销
+			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
 		}
 		return ResultCode.SUCCESS;
 	}
