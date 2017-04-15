@@ -224,7 +224,8 @@ public class ShoppingOrderController extends BaseController {
 	
 	/**
 	 * 买家申请退款
-	 * 修改订单状态为待商家确认
+	 * 修改订单项订单状态为退款中
+	 * 修改订单项退款状态为待商家确认
 	 * 
 	 * @param shoppingOrderitemId 购物订单项id
 	 * @param param 退款参数

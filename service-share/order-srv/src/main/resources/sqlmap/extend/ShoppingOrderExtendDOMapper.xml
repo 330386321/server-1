@@ -53,6 +53,11 @@
 	</resultMap>
 	
 	<resultMap id="ShoppingOrderItemRefundResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO">
+		<result column="member_id" jdbcType="BIGINT" property="memberId" />
+		<result column="product_id" jdbcType="BIGINT" property="productId" />
+	</resultMap>
+	
+	<resultMap id="ShoppingOrderItemEvaluationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO">
 		<id column="item_id" jdbcType="BIGINT" property="id" />
 		<result column="shopping_order_id" jdbcType="BIGINT" property="shoppingOrderId" />
 		<result column="product_id" jdbcType="BIGINT" property="productId" />
@@ -193,6 +198,19 @@
 	  from shopping_order_item soi
 	  left join shopping_order so on so.id = soi.shopping_order_id
 	  left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+  	  <if test="_parameter != null">
+		<include refid="Example_Where_Clause" />
+	  </if>
+	  <if test="orderByClause != null">
+		order by ${orderByClause}
+	  </if>
+	</select>
+	
+	<select id="selectShoppingOrderItemEvaluationDOByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderItemEvaluationResultMap">
+	  select
+	  so.member_id, soi.product_id
+	  from shopping_order_item soi
+	  left join shopping_order so on so.id = soi.shopping_order_id
   	  <if test="_parameter != null">
 		<include refid="Example_Where_Clause" />
 	  </if>

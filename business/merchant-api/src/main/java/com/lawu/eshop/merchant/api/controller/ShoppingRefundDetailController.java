@@ -157,12 +157,12 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            参数 是否同意申请
 	 * @return
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "商家是否同意退款", notes = "商家是否同意退款。[1002|1003|4011|4013]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
-    public Result<ShoppingOrderExpressDTO> agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "同意退款参数") ShoppingRefundDetailAgreeToRefundForeignParam param) {
+    public Result agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "同意退款参数") ShoppingRefundDetailAgreeToRefundForeignParam param) {
     	if (id == null || id <= 0) {
     		return successCreated(ResultCode.ID_EMPTY);
     	}

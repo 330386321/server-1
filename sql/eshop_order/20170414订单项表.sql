@@ -23,3 +23,9 @@ CREATE TABLE `shopping_order_item` (
  * 用户商品评价
  */
 ALTER TABLE shopping_order_item ADD COLUMN `is_evaluation` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT '是否评价(0-未评价|1-已评价)' AFTER `order_status`
+
+/*
+ * 20170415
+ * 添加用户id,用户商品评价
+ */
+ALTER TABLE shopping_order_item ADD COLUMN `member_id` bigint(20) unsigned NOT NULL COMMENT '用户ID' AFTER `shopping_order_id`

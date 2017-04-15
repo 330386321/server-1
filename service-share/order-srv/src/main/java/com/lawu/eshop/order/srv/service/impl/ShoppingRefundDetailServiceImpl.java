@@ -20,6 +20,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
@@ -250,19 +251,25 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 
 			// 更新购物订单的订单状态
-			ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-			shoppingOrderDO.setId(shoppingOrderItemDO.getShoppingOrderId());
-			shoppingOrderDO.setGmtModified(new Date());
-			shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-			shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-
-			// TODO 事务补偿退款给用户
+			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+			shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdNotEqualTo(shoppingOrderItemDO.getShoppingOrderId()).andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+			
+			long count = shoppingOrderItemDOMapper.countByExample(shoppingOrderItemDOExample);
+			
+			// 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
+			if (count <= 0) {
+				ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+				shoppingOrderDO.setId(shoppingOrderItemDO.getShoppingOrderId());
+				shoppingOrderDO.setGmtModified(new Date());
+				shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+				shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+			}
 		} else {
 			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.REFUND_FAILED.getValue());
 		}
 
 		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
+		
 		// 更新退款详情
 		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
 		shoppingRefundDetailDO.setId(shoppingRefundDetailBO.getId());
@@ -271,7 +278,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setGmtModified(new Date());
 
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-
+		
+		if (param.getIsAgree()) {
+			// TODO 事务补偿退款给用户
+		}
+		
 		return result;
 	}
 

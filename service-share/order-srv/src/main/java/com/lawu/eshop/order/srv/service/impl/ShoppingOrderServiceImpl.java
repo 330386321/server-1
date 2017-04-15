@@ -32,10 +32,13 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorPara
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
 import com.lawu.eshop.order.srv.constants.OrderConstant;
+import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderItemEvaluationConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
@@ -44,11 +47,13 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
+import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.utils.DateUtil;
 
@@ -74,6 +79,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
 	
 	@Autowired
+	private PropertyService propertyService;
+	
+	@Autowired
 	@Qualifier("shoppingOrderTradingSuccessTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderTradingSuccessTransactionMainServiceImpl;
 	
@@ -84,6 +92,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Autowired
     @Qualifier("shoppingOrderCancelOrderTransactionMainServiceImpl")
     private TransactionMainService<Reply> shoppingOrderCancelOrderTransactionMainServiceImpl;
+	
+    @Autowired
+    @Qualifier("shoppingOrderAutoCommentTransactionMainServiceImpl")
+    private TransactionMainService<Reply> shoppingOrderAutoCommentTransactionMainServiceImpl;
 	
 	/**
 	 * 
@@ -746,5 +758,55 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		return ResultCode.SUCCESS;
 	}
+	
+	/**
+	 * 
+	 */
+	@Transactional
+	@Override
+	public void executetAutoComment() {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
+		shoppingOrderExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		shoppingOrderExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
+		
+		// 查找配置表获取自动好评时间
+		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
+		Date identifyTime = DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation), Calendar.DAY_OF_YEAR);
+		
+		// 如果交易时间大于identifyTime
+		shoppingOrderExtendDOExampleCriteria.andGmtTransactionGreaterThanOrEqualTo(identifyTime);
+		
+		List<ShoppingOrderItemEvaluationDO> shoppingOrderItemEvaluationDOList = shoppingOrderDOExtendMapper.selectShoppingOrderItemEvaluationDOByExample(shoppingOrderExtendDOExample);
+		
+		ShoppingOrderItemDO shoppingOrderItemDO = null;
+		for (ShoppingOrderItemEvaluationDO shoppingOrderItemEvaluationDO : shoppingOrderItemEvaluationDOList) {
+			
+			// 更新为已评论
+			shoppingOrderItemDO = new ShoppingOrderItemDO();
+			shoppingOrderItemDO.setId(shoppingOrderItemEvaluationDO.getShoppingOrderItem());
+			shoppingOrderItemDO.setIsEvaluation(true);
+			shoppingOrderItemDOMapper.updateByPrimaryKey(shoppingOrderItemDO);
+			
+			// 发送MQ消息，通知mall模块添加默认好评记录
+			shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemEvaluationDO.getShoppingOrderItem());
+		}
+	}
+
+	@Override
+	public ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
+		shoppingOrderExtendDOExampleCriteria.andShoppingOrderItemIdEqualTo(ShoppingOrderItemId);
+		
+		List<ShoppingOrderItemEvaluationDO> shoppingOrderItemEvaluationDOList = shoppingOrderDOExtendMapper.selectShoppingOrderItemEvaluationDOByExample(shoppingOrderExtendDOExample);
+		
+		if (shoppingOrderItemEvaluationDOList == null || shoppingOrderItemEvaluationDOList.isEmpty()) {
+			return null;
+		}
+		
+		return ShoppingOrderItemEvaluationConverter.convert(shoppingOrderItemEvaluationDOList.get(0));
+	}
+	
 	
 }

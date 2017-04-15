@@ -13,8 +13,8 @@ public interface TransactionMainService<R> {
      * 通知其它模块进行补偿性事务处理
      *
      */
-    void sendNotice(Long relateId);
 
+	void sendNotice(Long relateId);
     /**
      * 补偿成功回调
      *

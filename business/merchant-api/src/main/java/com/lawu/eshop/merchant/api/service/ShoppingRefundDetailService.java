@@ -62,6 +62,7 @@ public interface ShoppingRefundDetailService {
 	 *            参数 退货信息参数
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingRefundDetail/fillReturnAddress/{id}", method = RequestMethod.PUT)
 	Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressForeignParam param);
 	
@@ -74,6 +75,7 @@ public interface ShoppingRefundDetailService {
 	 *            参数 是否同意申请
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingRefundDetail/agreeToRefund/{id}", method = RequestMethod.PUT)
 	Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
 }

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
 
 /**
@@ -59,5 +60,13 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
 	List<ShoppingOrderItemRefundDO> selectShoppingOrderItemRefundResultMapByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
+	
+	/**
+	 * 商品评价定时任务查询未评价商品
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+	List<ShoppingOrderItemEvaluationDO> selectShoppingOrderItemEvaluationDOByExample(ShoppingOrderExtendDOExample example);
 	
 }

@@ -95,7 +95,7 @@ public class MqConstant {
     /**
      * 定时器发送增加评论信息消息
      */
-    public static final String TAG_ADD_COMMENT = "add_comment_job";
+    public static final String TAG_AUTO_COMMENT = "auto_comment";
 
 
     /******************************************/

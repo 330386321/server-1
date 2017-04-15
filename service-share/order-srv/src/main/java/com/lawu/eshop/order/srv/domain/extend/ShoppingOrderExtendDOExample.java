@@ -1946,6 +1946,11 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("srd.status =", value, "status");
             return (Criteria) this;
         }
+        
+        public Criteria andShoppingOrderItemIdEqualTo(Long value) {
+            addCriterion("soi.id =", value, "id");
+            return (Criteria) this;
+        }
     }
 
     /**

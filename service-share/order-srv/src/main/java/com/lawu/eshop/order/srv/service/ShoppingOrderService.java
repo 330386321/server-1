@@ -12,6 +12,7 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorPara
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
 
 /**
  * 购物订单服务接口
@@ -163,4 +164,14 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
+	
+	/**
+	 * 执行自动评论
+	 */
+	void executetAutoComment();
+	
+	/**
+	 * 获取自动评论参数
+	 */
+	ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId);
 }

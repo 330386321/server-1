@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-@PropertySource(value = "classpath:/order.properties", ignoreResourceNotFound = true)
+@PropertySource(value = "classpath:order.properties", ignoreResourceNotFound = true)
 @Component
 public class OrderConstant {
 	
-	@Value("${refund.request.time}")
+	@Value("${order.refund.request.time}")
 	private  int refundRequestTime;
 
 	public int getRefundRequestTime() {
