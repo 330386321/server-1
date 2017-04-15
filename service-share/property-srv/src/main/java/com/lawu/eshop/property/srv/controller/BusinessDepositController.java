@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -12,21 +13,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
+import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
+import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.PropertyService;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
  * <p>
  * Description: 商家保证金
  * </p>
+ * 
  * @author Yangqh
  * @date 2017年4月15日 上午10:57:34
  *
@@ -42,12 +49,14 @@ public class BusinessDepositController extends BaseController {
 
 	/**
 	 * 初始化保证金记录
+	 * 
 	 * @param param
 	 * @param result
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result<BusinessDepositInitDTO> save(@RequestBody @Valid BusinessDepositSaveDataParam param, BindingResult result) {
+	public Result<BusinessDepositInitDTO> save(@RequestBody @Valid BusinessDepositSaveDataParam param,
+			BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
 			StringBuffer es = new StringBuffer();
@@ -68,6 +77,7 @@ public class BusinessDepositController extends BaseController {
 
 	/**
 	 * 处理第三方支付回调
+	 * 
 	 * @param param
 	 * @param result
 	 * @return
@@ -85,5 +95,29 @@ public class BusinessDepositController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		return businessDepositService.doHandleDepositNotify(param);
+	}
+
+	/**
+	 * 运营平台查询保证金
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
+	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param)
+			throws Exception {
+		Page<BusinessDepositQueryBO> page = businessDepositService.selectDepositList(param);
+		List<BusinessDepositQueryBO> list = page.getRecords();
+		List<BusinessDepositQueryDTO> newList = new ArrayList<BusinessDepositQueryDTO>();
+		for (BusinessDepositQueryBO bo : list) {
+			BusinessDepositQueryDTO dto = new BusinessDepositQueryDTO();
+			BeanUtil.copyProperties(bo, dto);
+			newList.add(dto);
+		}
+		Page<BusinessDepositQueryDTO> pageResult = new Page<BusinessDepositQueryDTO>();
+		pageResult.setTotalCount(page.getTotalCount());
+		pageResult.setCurrentPage(page.getCurrentPage());
+		pageResult.setRecords(newList);
+		return successCreated(pageResult);
 	}
 }

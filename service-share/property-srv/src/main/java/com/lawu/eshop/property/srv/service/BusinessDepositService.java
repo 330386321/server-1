@@ -1,9 +1,12 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
+import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 
 public interface BusinessDepositService {
 
@@ -22,6 +25,13 @@ public interface BusinessDepositService {
 	 */
 	@SuppressWarnings("rawtypes")
 	Result doHandleDepositNotify(NotifyCallBackParam param);
+
+	/**
+	 * 运营平台列表查询
+	 * @param param
+	 * @return
+	 */
+	Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param);
 
 	
 

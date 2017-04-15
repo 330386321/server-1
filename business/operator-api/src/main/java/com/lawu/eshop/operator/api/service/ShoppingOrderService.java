@@ -50,7 +50,7 @@ public interface ShoppingOrderService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/updateInformation/{id}", method = RequestMethod.PUT)
-	Result updateInformation(@PathVariable Long id , @RequestBody ShoppingOrderUpdateInfomationParam param);
+	Result updateInformation(@PathVariable("id") Long id , @RequestBody ShoppingOrderUpdateInfomationParam param);
 	
 	/**
 	 * 取消购物订单

@@ -1,5 +1,16 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
@@ -7,23 +18,24 @@ import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
+import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
+import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDOExample;
+import com.lawu.eshop.property.srv.domain.BusinessDepositDOExample.Criteria;
+import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Service
 public class BusinessDepositServiceImpl implements BusinessDepositService {
@@ -32,6 +44,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	private BusinessDepositDOMapper businessDepositDOMapper;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+	@Autowired
+	private BankAccountDOMapper bankAccountDOMapper;
 
 	@Autowired
 	private MessageProducerService messageProducerService;
@@ -109,6 +123,85 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		
 		result.setRet(ResultCode.SUCCESS);
 		return result;
+	}
+
+	@Override
+	public Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param) {
+		BusinessDepositDOExample example = new BusinessDepositDOExample();
+		Criteria criteria1 = example.createCriteria();
+		criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate())
+				.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
+		if(param.getTransactionPayTypeEnum() != null){
+			criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().val);
+		}
+		if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
+			if (param.getRegionPath().split("/").length == 1) {
+				criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[0]));
+			} else if (param.getRegionPath().split("/").length == 2) {
+				criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[1]));
+			} else if (param.getRegionPath().split("/").length == 3) {
+				criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
+			}
+		}
+
+		if (param.getContent() != null && !"".equals(param.getContent().trim())) {
+			Criteria criteria2 = example.createCriteria();
+			criteria2.andDepositNumberEqualTo(param.getContent());
+
+			Criteria criteria3 = example.createCriteria();
+			criteria3.andThirdNumberEqualTo(param.getContent());
+
+			example.or(criteria2);
+			example.or(criteria3);
+		}
+
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		Page<BusinessDepositQueryBO> page = new Page<BusinessDepositQueryBO>();
+		page.setTotalCount(businessDepositDOMapper.countByExample(example));
+		page.setCurrentPage(param.getCurrentPage());
+		List<BusinessDepositDO> bddos = businessDepositDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		List<BusinessDepositQueryBO> newList = new ArrayList<BusinessDepositQueryBO>();
+		for(BusinessDepositDO bddo : bddos){
+			BusinessDepositQueryBO ddqbo = new BusinessDepositQueryBO();
+			ddqbo.setId(bddo.getId());
+			ddqbo.setGmtPay(DateUtil.getDateFormat(bddo.getGmtPay(), "yyyy-MM-dd HH:mm:ss"));
+			ddqbo.setThirdNumber(bddo.getThirdNumber());
+			ddqbo.setBusinessAccount(bddo.getBusinessAccount());
+			ddqbo.setDepositNumber(bddo.getDepositNumber());
+			ddqbo.setBusinessName(bddo.getBusinessName());
+			ddqbo.setAmount(bddo.getAmount());
+			if(TransactionPayTypeEnum.ALIPAY.val.equals(bddo.getPaymentMethod())){
+				ddqbo.setPayMethod("支付宝");
+			} else if(TransactionPayTypeEnum.WX.val.equals(bddo.getPaymentMethod())){
+				ddqbo.setPayMethod("微信");
+			}
+			
+			if(BusinessDepositStatusEnum.VERIFY.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("待核实");
+			} else if(BusinessDepositStatusEnum.VERIFYD.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("已核实");
+			} else if(BusinessDepositStatusEnum.APPLY_REFUND.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("申请退款");
+			} else if(BusinessDepositStatusEnum.ACCPET_REFUND.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("退款已受理");
+			} else if(BusinessDepositStatusEnum.REFUND_SUCCESS.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("退款成功");
+			} else if(BusinessDepositStatusEnum.REFUND_FAILURE.val.equals(bddo.getStatus())){
+				ddqbo.setStatus("退款失败");
+			}
+			
+			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
+			ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
+			ddqbo.setBankNo(bankAccountDO.getAccountNumber());
+			ddqbo.setBankName(bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+			ddqbo.setBankBranchName(bankAccountDO.getSubBranchName());
+			
+			ddqbo.setAuditUserName(bddo.getOperUserName());
+			ddqbo.setRemark(bddo.getRemark());
+			newList.add(ddqbo);
+		}
+		page.setRecords(newList);
+		return page;
 	}
 
 }
