@@ -78,7 +78,7 @@
         <table tableName="search_word" domainObjectName="SearchWordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="merchant_favored" domainObjectName="MerchantFavoredDO">
+        <table tableName="comment_product" domainObjectName="CommentProductDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

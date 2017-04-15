@@ -50,5 +50,5 @@ public interface CommentProductService {
      * @param memberId
      * @param productId
      */
-    void saveCommentProductInfoOrderJob(Long memberId, Long productId);
+    void saveCommentProductInfoOrderJob(Long memberId, Long productId,Long orderItemId);
 }

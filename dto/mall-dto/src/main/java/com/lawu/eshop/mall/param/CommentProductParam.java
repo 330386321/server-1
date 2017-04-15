@@ -40,6 +40,9 @@ public class CommentProductParam {
     @ApiModelProperty(value = "是否匿名（COMMENT_ANONYMOUS_FAILED：否 COMMENT_ANONYMOUS_SUCCESS：是）", required = true)
     private CommentAnonymousEnum anonymousEnum;
 
+    @ApiModelProperty(value = "订单项ID")
+    private Long orderItemId;
+
 
     public String getContent() {
         return content;
@@ -80,5 +83,12 @@ public class CommentProductParam {
 	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
 		this.shoppingOrderItemId = shoppingOrderItemId;
 	}
-    
+
+    public Long getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(Long orderItemId) {
+        this.orderItemId = orderItemId;
+    }
 }

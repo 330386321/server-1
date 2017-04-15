@@ -61,6 +61,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setContent(param.getContent());
         commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
+        commentProductDO.setOrderItemId(param.getOrderItemId());
         commentProductDO.setGrade(param.getGradeEnum().val);
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());
@@ -239,10 +240,17 @@ public class CommentProductServiceImpl implements CommentProductService {
 
     @Override
     @Transactional
-    public void saveCommentProductInfoOrderJob(Long memberId, Long productId) {
+    public void saveCommentProductInfoOrderJob(Long memberId, Long productId,Long orderItemId) {
+        CommentProductDOExample example = new CommentProductDOExample();
+        example.createCriteria().andOrderItemIdEqualTo(orderItemId);
+        List<CommentProductDO> oldComment = commentProductDOMapper.selectByExample(example);
+        if(!oldComment.isEmpty()){
+            return;
+        }
         CommentProductDO productDO = new CommentProductDO();
         productDO.setMemberId(memberId);
         productDO.setProductId(productId);
+        productDO.setOrderItemId(orderItemId);
         productDO.setIsAnonymous(CommentAnonymousEnum.COMMENT_ANONYMOUS.val);//匿名
         productDO.setContent("好评");
         productDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);

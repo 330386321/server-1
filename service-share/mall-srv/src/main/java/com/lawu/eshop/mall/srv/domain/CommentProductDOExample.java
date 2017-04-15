@@ -575,6 +575,66 @@ public class CommentProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderItemIdIsNull() {
+            addCriterion("order_item_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdIsNotNull() {
+            addCriterion("order_item_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdEqualTo(Long value) {
+            addCriterion("order_item_id =", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdNotEqualTo(Long value) {
+            addCriterion("order_item_id <>", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdGreaterThan(Long value) {
+            addCriterion("order_item_id >", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("order_item_id >=", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdLessThan(Long value) {
+            addCriterion("order_item_id <", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdLessThanOrEqualTo(Long value) {
+            addCriterion("order_item_id <=", value, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdIn(List<Long> values) {
+            addCriterion("order_item_id in", values, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdNotIn(List<Long> values) {
+            addCriterion("order_item_id not in", values, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdBetween(Long value1, Long value2) {
+            addCriterion("order_item_id between", value1, value2, "orderItemId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderItemIdNotBetween(Long value1, Long value2) {
+            addCriterion("order_item_id not between", value1, value2, "orderItemId");
+            return (Criteria) this;
+        }
+
         public Criteria andIsAnonymousIsNull() {
             addCriterion("is_anonymous is null");
             return (Criteria) this;
