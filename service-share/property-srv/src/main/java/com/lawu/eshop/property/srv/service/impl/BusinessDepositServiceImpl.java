@@ -5,7 +5,13 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
@@ -17,6 +23,7 @@ import com.lawu.eshop.property.srv.domain.BusinessDepositDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
+import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.HandleDepostMessage;
@@ -41,9 +48,10 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private BankAccountDOMapper bankAccountDOMapper;
-
 	@Autowired
 	private MessageProducerService messageProducerService;
+	@Autowired
+	private PropertyService propertyService;
 
 	@Override
 	@Transactional
@@ -215,11 +223,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
 		businessDepositDOMapper.updateByExampleSelective(bddo, example);
+		
 		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
 		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 核实操作成功后，发送MQ消息修改门店状态为：待审核
-
 			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
 			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
 
@@ -233,6 +241,17 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 
 	@Override
 	public int refundDeposit(BusinessRefundDepositParam param) {
+		
+		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(param.getId()));
+		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
+		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
+		if ("".equals(sysDays)) {
+			sysDays = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
+		}
+		if(diffDays <= Integer.valueOf(sysDays).intValue()){
+			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
+		}
+		
 		BusinessDepositDO bddo = new BusinessDepositDO();
 		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.val);
 		bddo.setBusinessBankAccountId(Long.valueOf(param.getBusinessBankAccountId()));

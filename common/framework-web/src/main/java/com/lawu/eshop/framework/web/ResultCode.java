@@ -116,6 +116,7 @@ public class ResultCode {
     public static final int FREEZE_NULL = 6026;
     public static final int FREEZE_ROWS_OUT = 6027;
     public static final int FREEZE_MONEY_LESS_REFUND_MONEY = 6028;
+    public static final int DEPOSIT_IN_SYSTEM_DAYS = 6029;
 
     // 商城模块代码 7xxx
 
@@ -226,6 +227,7 @@ public class ResultCode {
         ResultCode.messageMap.put(FREEZE_NULL, "冻结资金记录为空");
         ResultCode.messageMap.put(FREEZE_ROWS_OUT, "冻结资金记录条数已大于1");
         ResultCode.messageMap.put(FREEZE_MONEY_LESS_REFUND_MONEY, "冻结金额不能小于退款金额");
+        ResultCode.messageMap.put(DEPOSIT_IN_SYSTEM_DAYS, "不满足申请退保证金要求(保证金核实后90天)");
 
 
         // 商城模块 7xxx

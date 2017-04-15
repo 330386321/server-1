@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.BusinessDepositService;
+import com.lawu.eshop.merchant.api.service.OrderService;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveParam;
@@ -40,6 +41,8 @@ public class BusinessDepositController extends BaseController {
 
 	@Autowired
 	private BusinessDepositService businessDepositService;
+	@Autowired
+	private OrderService orderService;
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家缴纳保证金初始化记录", notes = "商家缴纳保证金初始化记录，支付前需要调该接口初始化一条保证金记录，[]，(杨清华)", httpMethod = "POST")
@@ -70,6 +73,10 @@ public class BusinessDepositController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
 	public Result refundDeposit(@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
+		
+		//TODO 需要判断是否满足退保证金条件：无未完结订单、三个月()
+		//orderService.
+		
 		return businessDepositService.refundDeposit(param);
 	}
 }

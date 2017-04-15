@@ -44,7 +44,7 @@ public interface BusinessDepositService {
 	int updateBusinessDeposit(BusinessDepositOperDataParam param);
 
 	/**
-	 * 商家申请退保证金
+	 * 商家申请退保证金:无未完结订单、保证金核实后90天
 	 * @param param
 	 * @return
 	 */
