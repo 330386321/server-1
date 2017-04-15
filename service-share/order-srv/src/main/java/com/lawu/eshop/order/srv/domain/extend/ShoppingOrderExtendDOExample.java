@@ -1932,7 +1932,7 @@ public class ShoppingOrderExtendDOExample {
             return (Criteria) this;
         }
         
-        public Criteria andItemOrderStatusEqualTo(Byte value) {
+        public Criteria andShoppingOrderItemOrderStatusEqualTo(Byte value) {
             addCriterion("soi.order_status =", value, "orderStatus");
             return (Criteria) this;
         }
@@ -1951,6 +1951,12 @@ public class ShoppingOrderExtendDOExample {
             addCriterion("soi.id =", value, "id");
             return (Criteria) this;
         }
+        
+        public Criteria andShoppingOrderItemOrderStatusNotIn(List<Byte> values) {
+            addCriterion("soi.order_status not in", values, "id");
+            return (Criteria) this;
+        }
+        
     }
 
     /**

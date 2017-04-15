@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
@@ -55,4 +56,14 @@ public interface ShoppingOrderService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/fillLogisticsInformation/{id}", method = RequestMethod.PUT)
 	Result fillLogisticsInformation(@PathVariable("id") Long id, ShoppingOrderLogisticsInformationParam param);
+	
+	/**
+	 * 查询商家是否有正在进行中的订单
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "shoppingOrder/isNoOnGoingOrder/{merchantId}", method = RequestMethod.GET)
+	Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId);
 }

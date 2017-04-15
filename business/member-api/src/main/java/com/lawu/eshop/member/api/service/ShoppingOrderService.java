@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;

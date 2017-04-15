@@ -32,6 +32,7 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorPara
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
 import com.lawu.eshop.order.srv.constants.OrderConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
@@ -806,6 +807,23 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		
 		return ShoppingOrderItemEvaluationConverter.convert(shoppingOrderItemEvaluationDOList.get(0));
+	}
+
+	@Override
+	public ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
+		shoppingOrderExtendDOExampleCriteria.andMerchantIdEqualTo(merchantId);
+		
+		List<Byte> processingStatus = new ArrayList<Byte>();
+		processingStatus.add(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		processingStatus.add(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+		
+		shoppingOrderExtendDOExampleCriteria.andShoppingOrderItemOrderStatusNotIn(processingStatus);
+		
+		long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
+		
+		return ShoppingOrderConverter.convert(count);
 	}
 	
 	

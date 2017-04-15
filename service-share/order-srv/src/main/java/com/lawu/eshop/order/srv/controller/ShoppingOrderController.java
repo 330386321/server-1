@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
@@ -34,6 +35,7 @@ import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
@@ -417,5 +419,20 @@ public class ShoppingOrderController extends BaseController {
 		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingOrderItemId);
 		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(shoppingOrderItemBO);
 		return successGet(commentOrderDTO);
+	}
+	
+	/**
+	 * 查询商家是否有正在进行中的订单
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "isNoOnGoingOrder/{merchantId}", method = RequestMethod.GET)
+	public Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId) {
+		// 查询订单商品评价状态
+		ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = shoppingOrderService.isNoOnGoingOrder(merchantId);
+		
+		return successGet(ShoppingOrderConverter.convert(shoppingOrderIsNoOnGoingOrderBO));
 	}
 }

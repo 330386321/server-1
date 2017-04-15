@@ -6,11 +6,13 @@ import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.mall.dto.CommentOrderDTO;
+import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.utils.RandomUtil;
@@ -104,5 +106,42 @@ public class ShoppingOrderConverter {
 		BeanUtils.copyProperties(param, shoppingOrderDO);
 		
 		return shoppingOrderDO;
+    }
+    
+    /**
+     * 组装订单是否有正在进行中的订单参数
+     * 
+     * @param count
+     * @return
+     * @author Sunny
+     */
+    public static ShoppingOrderIsNoOnGoingOrderBO convert(long count) {
+    	ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = new ShoppingOrderIsNoOnGoingOrderBO();
+    			
+    	if (count <= 0){
+    		shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(true);
+    	} else {
+    		shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(false);
+    	}
+		
+		return shoppingOrderIsNoOnGoingOrderBO;
+    }
+    
+    /**
+     * 组装订单是否有正在进行中的订单参数
+     * 
+     * @param ShoppingOrderIsNoOnGoingOrderBO
+     * @return
+     * @author Sunny
+     */
+    public static ShoppingOrderIsNoOnGoingOrderDTO convert(ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO) {
+    	if (shoppingOrderIsNoOnGoingOrderBO == null) {
+    		return null;
+    	}
+    	
+    	ShoppingOrderIsNoOnGoingOrderDTO shoppingOrderIsNoOnGoingOrderDTO = new ShoppingOrderIsNoOnGoingOrderDTO();
+    	BeanUtils.copyProperties(shoppingOrderIsNoOnGoingOrderBO, shoppingOrderIsNoOnGoingOrderDTO);
+    	
+		return shoppingOrderIsNoOnGoingOrderDTO;
     }
 }

@@ -12,6 +12,7 @@ import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorPara
 import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
 
 /**
@@ -166,12 +167,28 @@ public interface ShoppingOrderService {
 	int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
 	
 	/**
+	 * 检查数据库中超时评论的订单
 	 * 执行自动评论
+	 * 
+	 * @author Sunny
 	 */
 	void executetAutoComment();
 	
 	/**
 	 * 获取自动评论参数
+	 * 
+	 * @param ShoppingOrderItemId 购物订单项id
+	 * @return
+	 * @author Sunny
 	 */
 	ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId);
+	
+	/**
+	 * 根据商家的id查询商家是否有进行中的订单
+	 * 
+	 * @param merchantId 商家的id
+	 * @return
+	 * @author Sunny
+	 */
+	ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId);
 }

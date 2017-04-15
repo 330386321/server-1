@@ -65,7 +65,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 查找所有处于退款中的订单项
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-		criteria.andItemOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		criteria.andShoppingOrderItemOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 查询退款申请中有效的记录
 		criteria.andShoppingRefundDetailStatusEqualTo(ShoppingRefundDetailStatusEnum.VALID.getValue());
 		if (memberId != null && memberId > 0) {
