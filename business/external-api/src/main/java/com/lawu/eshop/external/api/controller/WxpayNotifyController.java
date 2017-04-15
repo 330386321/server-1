@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
@@ -55,6 +56,8 @@ public class WxpayNotifyController extends BaseController {
 	private RechargeService rechargeService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private DepositService depositService;
 
 	
 	/**
@@ -111,7 +114,7 @@ public class WxpayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						//TODO 保证金回调
+						result = depositService.doHandleDepositNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
 						result = orderService.doHandleOrderPayNotify(param);

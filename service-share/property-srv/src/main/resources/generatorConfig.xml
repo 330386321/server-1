@@ -72,6 +72,9 @@
         </table>
         <table tableName="freeze" domainObjectName="FreezeDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="business_deposit" domainObjectName="BusinessDepositDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>
 </generatorConfiguration>

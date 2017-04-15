@@ -41,37 +41,47 @@ public enum MerchantTransactionTypeEnum {
 	/**
 	 * 退款106
 	 */
-	REFUNDS((byte)0x70),
+	REFUNDS((byte)0x6A),
 	
 	/**
 	 * 提现107
 	 */
-	WITHDRAW((byte)0x71),
+	WITHDRAW((byte)0x6B),
 	
 	/**
 	 * 提现108
 	 */
-	WITHDRAW_BACK((byte)0x72),
+	WITHDRAW_BACK((byte)0x6C),
 	
 	/**
 	 * 邀请粉丝109
 	 */
-	INVITE_FANS((byte)0x73),
+	INVITE_FANS((byte)0x6D),
 	
 	/**
-	 * 发广告109
+	 * 发广告110
 	 */
-	ADD_AD((byte)0x74),
+	ADD_AD((byte)0x6E),
 	
 	/**
-	 * 发红包110
+	 * 发红包111
 	 */
-	ADD_RED_PACKET((byte)0x75),
+	ADD_RED_PACKET((byte)0x6F),
 	
 	/**
-	 * 退还积分
+	 * 退还积分112
 	 */
-	AD_RETURN_POINT((byte)0x76);
+	AD_RETURN_POINT((byte)0x70),
+	
+	/**
+	 * 缴纳保证金113
+	 */
+	DEPOSIT((byte)0x71),
+	
+	/**
+	 * 退缴纳保证金114
+	 */
+	DEPOSIT_REFUND((byte)0x72);
 	
 	
 	

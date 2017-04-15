@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alipay.api.internal.util.AlipaySignature;
+import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
@@ -50,6 +51,8 @@ public class AlipayNotifyController extends BaseController {
 	private RechargeService rechargeService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private DepositService depositService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -140,7 +143,7 @@ public class AlipayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						//TODO 保证金回调
+						result = depositService.doHandleDepositNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
 						result = orderService.doHandleOrderPayNotify(param);

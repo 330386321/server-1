@@ -14,7 +14,9 @@ public enum TransactionTitleEnum {
 	AD_RETURN_POINT("广告退还"),
 	USER_GET_REDPACKET("领红包"),
 	CLICK_AD("点广告"),
-	RECHARGE("余额充值");
+	RECHARGE("余额充值"),
+	DEPOSIT("缴纳保证金"),
+	DEPOSIT_REFUND("缴纳保证金退款");
 	
 	public String val;
 
