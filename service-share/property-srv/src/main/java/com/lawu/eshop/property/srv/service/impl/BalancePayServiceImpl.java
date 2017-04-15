@@ -68,7 +68,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccount(param.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds().split(",")[0]));
+		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 		

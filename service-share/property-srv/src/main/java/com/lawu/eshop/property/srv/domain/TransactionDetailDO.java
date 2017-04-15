@@ -102,7 +102,7 @@ public class TransactionDetailDO implements Serializable {
      *
      * @mbg.generated
      */
-    private Long bizId;
+    private String bizId;
 
     /**
      *
@@ -378,7 +378,7 @@ public class TransactionDetailDO implements Serializable {
      *
      * @mbg.generated
      */
-    public Long getBizId() {
+    public String getBizId() {
         return bizId;
     }
 
@@ -390,8 +390,8 @@ public class TransactionDetailDO implements Serializable {
      *
      * @mbg.generated
      */
-    public void setBizId(Long bizId) {
-        this.bizId = bizId;
+    public void setBizId(String bizId) {
+        this.bizId = bizId == null ? null : bizId.trim();
     }
 
     /**

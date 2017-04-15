@@ -99,7 +99,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setAmount(param.getAmount());
 		transactionDetailDO.setDirection(param.getDirection());
 		transactionDetailDO.setThirdTransactionNum(param.getThirdTransactionNum());
-		transactionDetailDO.setBizId(param.getBizId());
+		transactionDetailDO.setBizId(param.getBizId() == null ? "" : param.getBizId().toString());
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);

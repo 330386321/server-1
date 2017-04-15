@@ -48,7 +48,6 @@
         <table tableName="bank_account" domainObjectName="BankAccountDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        
         <table tableName="love_detail" domainObjectName="LoveDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -74,6 +73,9 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="business_deposit" domainObjectName="BusinessDepositDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="transaction_detail" domainObjectName="TransactionDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
     </context>

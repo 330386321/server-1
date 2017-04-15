@@ -16,7 +16,7 @@
     <result column="amount" property="amount" jdbcType="DECIMAL" />
     <result column="direction" property="direction" jdbcType="TINYINT" />
     <result column="third_transaction_num" property="thirdTransactionNum" jdbcType="VARCHAR" />
-    <result column="biz_id" property="bizId" jdbcType="BIGINT" />
+    <result column="biz_id" property="bizId" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -156,7 +156,7 @@
     values (#{title,jdbcType=VARCHAR}, #{transactionNum,jdbcType=VARCHAR}, #{userNum,jdbcType=VARCHAR}, 
       #{transactionType,jdbcType=TINYINT}, #{transactionAccount,jdbcType=VARCHAR}, #{transactionAccountType,jdbcType=TINYINT}, 
       #{amount,jdbcType=DECIMAL}, #{direction,jdbcType=TINYINT}, #{thirdTransactionNum,jdbcType=VARCHAR}, 
-      #{bizId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}
+      #{bizId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.property.srv.domain.TransactionDetailDO" >
@@ -235,7 +235,7 @@
         #{thirdTransactionNum,jdbcType=VARCHAR},
       </if>
       <if test="bizId != null" >
-        #{bizId,jdbcType=BIGINT},
+        #{bizId,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -293,7 +293,7 @@
         third_transaction_num = #{record.thirdTransactionNum,jdbcType=VARCHAR},
       </if>
       <if test="record.bizId != null" >
-        biz_id = #{record.bizId,jdbcType=BIGINT},
+        biz_id = #{record.bizId,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -322,7 +322,7 @@
       amount = #{record.amount,jdbcType=DECIMAL},
       direction = #{record.direction,jdbcType=TINYINT},
       third_transaction_num = #{record.thirdTransactionNum,jdbcType=VARCHAR},
-      biz_id = #{record.bizId,jdbcType=BIGINT},
+      biz_id = #{record.bizId,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
@@ -364,7 +364,7 @@
         third_transaction_num = #{thirdTransactionNum,jdbcType=VARCHAR},
       </if>
       <if test="bizId != null" >
-        biz_id = #{bizId,jdbcType=BIGINT},
+        biz_id = #{bizId,jdbcType=VARCHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -390,7 +390,7 @@
       amount = #{amount,jdbcType=DECIMAL},
       direction = #{direction,jdbcType=TINYINT},
       third_transaction_num = #{thirdTransactionNum,jdbcType=VARCHAR},
-      biz_id = #{bizId,jdbcType=BIGINT},
+      biz_id = #{bizId,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

@@ -245,7 +245,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 			transactionDetailDO.setAmount(wcdo.getCashMoney());
 			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.val);
-			transactionDetailDO.setBizId(wcdo.getId());
+			transactionDetailDO.setBizId(wcdo.getId() == null ? "" : wcdo.getId().toString());
 			transactionDetailDO.setRemark("");
 			transactionDetailDO.setGmtCreate(new Date());
 			transactionDetailDOMapper.insertSelective(transactionDetailDO);

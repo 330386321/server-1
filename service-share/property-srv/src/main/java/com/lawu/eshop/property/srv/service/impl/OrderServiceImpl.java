@@ -83,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds().split(",")[0]));
+		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);

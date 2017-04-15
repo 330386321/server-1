@@ -856,52 +856,62 @@ public class TransactionDetailDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andBizIdEqualTo(Long value) {
+        public Criteria andBizIdEqualTo(String value) {
             addCriterion("biz_id =", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdNotEqualTo(Long value) {
+        public Criteria andBizIdNotEqualTo(String value) {
             addCriterion("biz_id <>", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdGreaterThan(Long value) {
+        public Criteria andBizIdGreaterThan(String value) {
             addCriterion("biz_id >", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdGreaterThanOrEqualTo(Long value) {
+        public Criteria andBizIdGreaterThanOrEqualTo(String value) {
             addCriterion("biz_id >=", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdLessThan(Long value) {
+        public Criteria andBizIdLessThan(String value) {
             addCriterion("biz_id <", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdLessThanOrEqualTo(Long value) {
+        public Criteria andBizIdLessThanOrEqualTo(String value) {
             addCriterion("biz_id <=", value, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdIn(List<Long> values) {
+        public Criteria andBizIdLike(String value) {
+            addCriterion("biz_id like", value, "bizId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizIdNotLike(String value) {
+            addCriterion("biz_id not like", value, "bizId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizIdIn(List<String> values) {
             addCriterion("biz_id in", values, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdNotIn(List<Long> values) {
+        public Criteria andBizIdNotIn(List<String> values) {
             addCriterion("biz_id not in", values, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdBetween(Long value1, Long value2) {
+        public Criteria andBizIdBetween(String value1, String value2) {
             addCriterion("biz_id between", value1, value2, "bizId");
             return (Criteria) this;
         }
 
-        public Criteria andBizIdNotBetween(Long value1, Long value2) {
+        public Criteria andBizIdNotBetween(String value1, String value2) {
             addCriterion("biz_id not between", value1, value2, "bizId");
             return (Criteria) this;
         }
