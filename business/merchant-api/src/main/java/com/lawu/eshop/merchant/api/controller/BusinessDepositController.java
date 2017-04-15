@@ -12,7 +12,9 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.merchant.api.service.BusinessDepositService;
 import com.lawu.eshop.merchant.api.service.OrderService;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
@@ -74,8 +76,11 @@ public class BusinessDepositController extends BaseController {
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
 	public Result refundDeposit(@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
 		
-		//TODO 需要判断是否满足退保证金条件：无未完结订单、三个月()
-		//orderService.
+		//需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
+		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
+		if(!dto.getModel().getIsNoOnGoingOrder()){
+			return successCreated(ResultCode.DEPOSIT_EXIST_ING_ORDER);
+		}
 		
 		return businessDepositService.refundDeposit(param);
 	}
