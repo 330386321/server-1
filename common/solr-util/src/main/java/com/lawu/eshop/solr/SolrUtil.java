@@ -57,7 +57,6 @@ public class SolrUtil {
                 solrClient.close();
             } catch (IOException e) {
                 logger.error("solr关闭异常：{}", e.getMessage());
-                e.printStackTrace();
             }
         }
     }
@@ -80,7 +79,6 @@ public class SolrUtil {
             }
         } catch (Exception e) {
             logger.error("solr新增异常：{}", e.getMessage());
-            e.printStackTrace();
         }
         return false;
     }
@@ -103,7 +101,6 @@ public class SolrUtil {
             }
         } catch (Exception e) {
             logger.error("solr删除异常：{}", e.getMessage());
-            e.printStackTrace();
         }
         return false;
     }
@@ -125,7 +122,6 @@ public class SolrUtil {
             return docsList;
         } catch (Exception e) {
             logger.error("solr查询异常：{}", e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }
@@ -151,7 +147,6 @@ public class SolrUtil {
             }
         } catch (Exception e) {
             logger.error("solr查询异常：{}", e.getMessage());
-            e.printStackTrace();
         }
         return solrDocument;
     }
@@ -172,7 +167,6 @@ public class SolrUtil {
             return termsResponse;
         } catch (Exception e) {
             logger.error("solr查询异常：{}", e.getMessage());
-            e.printStackTrace();
         }
         return null;
     }
