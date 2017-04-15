@@ -47,6 +47,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            退款详情id
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退货的物流信息", notes = "查询退货的物流信息。[1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -73,6 +74,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            购物订单项id
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退款详情", notes = "根据购物订单项id查询退款详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -101,6 +103,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            参数 是否同意申请
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1002|1003|1004|4009|4011]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -130,6 +133,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            参数 退货信息参数
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "商家填写退货地址 ", notes = "商家填写退货地址 。[1002|1003|4011|4012]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

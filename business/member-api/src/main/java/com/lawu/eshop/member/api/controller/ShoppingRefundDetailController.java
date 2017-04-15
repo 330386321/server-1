@@ -50,6 +50,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            购物订单项id
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退款详情", notes = "根据购物订单项id查询退款详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
