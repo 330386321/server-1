@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
@@ -16,6 +17,8 @@ import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.rong.models.TokenResult;
+import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
@@ -60,6 +63,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private InviterMerchantDOMapperExtend inviterMerchantDOMapper;
+
+    @Autowired
+    private RongUserService rongUserService;
 
     @Override
     @Transactional
@@ -221,6 +227,15 @@ public class MerchantServiceImpl implements MerchantService {
                 }
             }
         }
+        //获取融云token
+        TokenResult tokenResult = rongUserService.getRongToken(merchantDO.getNum(),merchantDO.getMobile(), FileDirConstant.DEFAULT_PIC);
+        if(!"".equals(tokenResult.getToken())){
+            MemberDO memberDO2 = new MemberDO();
+            memberDO2.setRyToken(tokenResult.getToken());
+            memberDO2.setId(merchantDO.getId());
+            memberDOMapper.updateByPrimaryKeySelective(memberDO2);
+        }
+
         transactionMainService.sendNotice(merchantId);
     }
 
@@ -258,11 +273,10 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Integer setGtAndRongYunInfo(Long id, String cid, String ryToken) {
+    public Integer setGtAndRongYunInfo(Long id, String cid) {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setId(id);
         merchantDO.setGtCid(cid);
-        merchantDO.setRyToken(ryToken);
         Integer row = merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
         return row;
     }

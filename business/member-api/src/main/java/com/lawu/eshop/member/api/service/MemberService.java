@@ -119,6 +119,6 @@ public interface MemberService {
      * @return
      */
     @RequestMapping(value = "member/setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
-    Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken);
+    Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid);
 
 }

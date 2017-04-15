@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserSexEnum;
@@ -15,6 +16,8 @@ import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
 import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.rong.models.TokenResult;
+import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
@@ -58,6 +61,9 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private FansMerchantDOMapper fansMerchantDOMapper;
 
+    @Autowired
+    private RongUserService rongUserService;
+
     @Override
     public MemberBO find(String account, String pwd) {
 
@@ -86,6 +92,14 @@ public class MemberServiceImpl implements MemberService {
         MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
         memberDO.setId(id);
         int result = memberDOMapper.updateByPrimaryKeySelective(memberDO);
+        if(!"".equals(memberDO.getNickname())){
+            MemberDO old = memberDOMapper.selectByPrimaryKey(id);
+            String headImg = FileDirConstant.DEFAULT_PIC;
+            if(!"".equals(old.getHeadimg())){
+                headImg = old.getHeadimg();
+            }
+            rongUserService.refreshUserInfo(old.getNum(),memberDO.getNickname(),headImg);
+        }
         return result;
 
     }
@@ -285,6 +299,14 @@ public class MemberServiceImpl implements MemberService {
                 }
             }
         }
+        //获取ryToken
+        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(),memberDO.getMobile(), FileDirConstant.DEFAULT_PIC);
+        if(!"".equals(tokenResult.getToken())){
+            MemberDO memberDO2 = new MemberDO();
+            memberDO2.setRyToken(tokenResult.getToken());
+            memberDO2.setId(memberDO.getId());
+            memberDOMapper.updateByPrimaryKeySelective(memberDO2);
+        }
         transactionMainService.sendNotice(memberId);
     }
 
@@ -301,6 +323,8 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setHeadimg(headimg);
         memberDO.setId(mermberId);
         memberDOMapper.updateByPrimaryKeySelective(memberDO);
+        MemberDO old = memberDOMapper.selectByPrimaryKey(mermberId);
+        rongUserService.refreshUserInfo(old.getNum(),memberDO.getNickname(),headimg);
     }
 
 	public CashUserInfoBO findCashUserInfo(Long id) {
@@ -349,11 +373,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public Integer setGtAndRongYunInfo(Long id, String cid, String ryToken) {
+    public Integer setGtAndRongYunInfo(Long id, String cid) {
         MemberDO memberDO = new MemberDO();
         memberDO.setId(id);
         memberDO.setGtCid(cid);
-        memberDO.setRyToken(ryToken);
         Integer row = memberDOMapper.updateByPrimaryKeySelective(memberDO);
         return row;
     }

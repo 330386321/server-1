@@ -72,7 +72,7 @@ public interface MerchantService {
      */
     MerchantBO find(String account, String pwd);
 
-    Integer setGtAndRongYunInfo(Long id, String cid, String ryToken);
+    Integer setGtAndRongYunInfo(Long id, String cid);
 
     MerchantBO findMemberByNum(String userNum);
 }

@@ -97,7 +97,7 @@ public interface MemberService {
      */
     Integer findMemberCount(String regionPath);
 
-    Integer setGtAndRongYunInfo(Long id, String cid, String ryToken);
+    Integer setGtAndRongYunInfo(Long id, String cid);
 
     MemberBO findMemberByNum(String userNum);
 }

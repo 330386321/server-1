@@ -4,13 +4,17 @@ import com.lawu.eshop.user.srv.rong.models.*;
 import com.lawu.eshop.user.srv.rong.util.GsonUtil;
 import com.lawu.eshop.user.srv.rong.util.HostType;
 import com.lawu.eshop.user.srv.rong.util.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 
 
 public class User {
-
+    private static Logger logger = LoggerFactory.getLogger(User.class);
     private static final String UTF8 = "UTF-8";
     private String appKey;
     private String appSecret;
@@ -30,32 +34,37 @@ public class User {
      * @param portraitUri:用户头像 URI，最大长度 1024 字节.用来在 Push 推送时显示用户的头像。（必传）
      * @return TokenResult
      **/
-    public TokenResult getToken(String userId, String name, String portraitUri) throws Exception {
-        if (userId == null) {
-            throw new IllegalArgumentException("Paramer 'userId' is required");
-        }
+    public TokenResult getToken(String userId, String name, String portraitUri) {
 
-        if (name == null) {
-            throw new IllegalArgumentException("Paramer 'name' is required");
-        }
-
-        if (portraitUri == null) {
-            throw new IllegalArgumentException("Paramer 'portraitUri' is required");
-        }
 
         StringBuilder sb = new StringBuilder();
-        sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
-        sb.append("&name=").append(URLEncoder.encode(name.toString(), UTF8));
-        sb.append("&portraitUri=").append(URLEncoder.encode(portraitUri.toString(), UTF8));
+        try {
+            sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
+            sb.append("&name=").append(URLEncoder.encode(name.toString(), UTF8));
+            sb.append("&portraitUri=").append(URLEncoder.encode(portraitUri.toString(), UTF8));
+        } catch (UnsupportedEncodingException e) {
+            logger.info("获取token失败");
+        }
+
         String body = sb.toString();
         if (body.indexOf("&") == 0) {
             body = body.substring(1, body.length());
         }
 
-        HttpURLConnection conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/getToken.json", "application/x-www-form-urlencoded");
-        HttpUtil.setBodyParameter(body, conn);
-
-        return (TokenResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), TokenResult.class);
+        HttpURLConnection conn = null;
+        try {
+            conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/getToken.json", "application/x-www-form-urlencoded");
+            HttpUtil.setBodyParameter(body, conn);
+        } catch (IOException e) {
+            logger.info("获取token失败");
+        }
+        TokenResult result = null ;
+        try {
+            result = (TokenResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), TokenResult.class);
+        } catch (Exception e) {
+            logger.info("获取token失败");
+        }
+        return result;
     }
 
     /**
@@ -66,30 +75,42 @@ public class User {
      * @param portraitUri:用户头像 URI，最大长度 1024 字节。用来在 Push 推送时显示。（可选，提供即刷新，不提供忽略）
      * @return CodeSuccessResult
      **/
-    public CodeSuccessResult refresh(String userId, String name, String portraitUri) throws Exception {
-        if (userId == null) {
-            throw new IllegalArgumentException("Paramer 'userId' is required");
-        }
+    public CodeSuccessResult refresh(String userId, String name, String portraitUri) {
+
 
         StringBuilder sb = new StringBuilder();
-        sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
+        try {
+            sb.append("&userId=").append(URLEncoder.encode(userId.toString(), UTF8));
+            if (name != null) {
+                sb.append("&name=").append(URLEncoder.encode(name.toString(), UTF8));
+            }
 
-        if (name != null) {
-            sb.append("&name=").append(URLEncoder.encode(name.toString(), UTF8));
-        }
-
-        if (portraitUri != null) {
-            sb.append("&portraitUri=").append(URLEncoder.encode(portraitUri.toString(), UTF8));
+            if (portraitUri != null) {
+                sb.append("&portraitUri=").append(URLEncoder.encode(portraitUri.toString(), UTF8));
+            }
+        } catch (UnsupportedEncodingException e) {
+            logger.info("更新用户信息失败");
         }
         String body = sb.toString();
         if (body.indexOf("&") == 0) {
             body = body.substring(1, body.length());
         }
 
-        HttpURLConnection conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/refresh.json", "application/x-www-form-urlencoded");
-        HttpUtil.setBodyParameter(body, conn);
+        HttpURLConnection conn = null;
+        try {
+            conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/user/refresh.json", "application/x-www-form-urlencoded");
+            HttpUtil.setBodyParameter(body, conn);
+        } catch (IOException e) {
+            logger.info("更新用户信息失败");
+        }
+        CodeSuccessResult result = null;
+        try {
+            result = (CodeSuccessResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), CodeSuccessResult.class);
+        } catch (Exception e) {
+            logger.info("更新用户信息失败");
+        }
 
-        return (CodeSuccessResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), CodeSuccessResult.class);
+        return result;
     }
 
     /**

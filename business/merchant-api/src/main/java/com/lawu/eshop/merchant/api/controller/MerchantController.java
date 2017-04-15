@@ -155,16 +155,16 @@ public class MerchantController extends BaseController {
         return merchantService.register(registerRealParam);
     }
 
-    @ApiOperation(value = "增加推送、融云 CID，token", notes = "增加推送、融云 CID，token。[1005] (章勇)", httpMethod = "PUT")
+    @ApiOperation(value = "增加推送 CID", notes = "增加推送 CID，。[1005] (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "setGtAndRongYunInfo",method = RequestMethod.PUT)
-    public Result setGtAndRongYunInfo(@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    public Result setGtAndRongYunInfo(@RequestParam("cid") String cid,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         Long id = UserUtil.getCurrentUserId(getRequest());
-        if(id == null || id <= 0 || "".equals(ryToken) || "".equals(cid)){
+        if(id == null || id <= 0 ||  "".equals(cid)){
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Result result = merchantService.setGtAndRongYunInfo(id,cid,ryToken);
+        Result result = merchantService.setGtAndRongYunInfo(id,cid);
         return result;
     }
 

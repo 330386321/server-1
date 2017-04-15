@@ -18,14 +18,14 @@ public class RongUserServiceImpl implements RongUserService {
     RongCloud rongCloud = RongCloud.getInstance(RongYunConstant.APP_KEY, RongYunConstant.APP_SECRET);
 
     @Override
-    public TokenResult getRongToken(String userId, String name, String portraitUri) throws Exception {
+    public TokenResult getRongToken(String userId, String name, String portraitUri){
         // 获取 Token 方法
         TokenResult userGetTokenResult = rongCloud.user.getToken(userId, name, portraitUri);
         return userGetTokenResult;
     }
 
     @Override
-    public CodeSuccessResult refreshUserInfo(String userId, String name, String portraitUri) throws Exception {
+    public CodeSuccessResult refreshUserInfo(String userId, String name, String portraitUri){
         CodeSuccessResult userRefreshResult = rongCloud.user.refresh(userId, name, portraitUri);
         return userRefreshResult;
     }

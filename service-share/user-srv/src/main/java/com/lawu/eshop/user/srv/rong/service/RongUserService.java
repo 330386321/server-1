@@ -18,7 +18,7 @@ public interface RongUserService {
      * @return
      * @throws Exception
      */
-    TokenResult getRongToken(String userId, String name, String portraitUri) throws Exception;
+    TokenResult getRongToken(String userId, String name, String portraitUri);
 
     /**
      * 刷新用户信息
@@ -28,7 +28,7 @@ public interface RongUserService {
      * @return
      * @throws Exception
      */
-    CodeSuccessResult refreshUserInfo(String userId, String name, String portraitUri) throws Exception;
+    CodeSuccessResult refreshUserInfo(String userId, String name, String portraitUri);
 
     /**
      * 检查用户在线状态

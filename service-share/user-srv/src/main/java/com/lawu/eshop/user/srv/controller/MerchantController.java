@@ -131,8 +131,8 @@ public class MerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
-    public Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid,@RequestParam("ryToken") String ryToken){
-        Integer row =  merchantService.setGtAndRongYunInfo(id,cid,ryToken);
+    public Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid){
+        Integer row =  merchantService.setGtAndRongYunInfo(id,cid);
         if(row == null || row <=0){
             successCreated(ResultCode.SAVE_FAIL);
         }
