@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,8 +54,9 @@ public class AdController extends BaseController {
     
     @Autowired
     private MemberCountService memberCountService;
- 
 
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "添加广告", notes = "添加广告[5000]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -89,8 +91,9 @@ public class AdController extends BaseController {
         Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl,count,userNum);
         return rsAd;
     }
-    
 
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -101,23 +104,24 @@ public class AdController extends BaseController {
     	Result<Page<AdDTO>>  pageDTOS=adService.selectListByMerchant(adMerchantParam, memberId);
     	return pageDTOS;
     }
-    
 
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
+    public Result unShelve(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.updateStatus(id);
     	return rs;
     }
-    
-    
-    
-    @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
+
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "DELETE")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.remove(id);
     	return rs;

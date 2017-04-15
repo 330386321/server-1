@@ -42,6 +42,7 @@ public class MessageController extends BaseController {
         return messageService.getMessageStatistics(userNum);
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 [1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -52,19 +53,23 @@ public class MessageController extends BaseController {
         return messageDTOPage;
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作", notes = "站内信息操作（已读未读） [1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-   // @Authorization
-    @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
-    public Result updateMessageStatus(@PathVariable("messageId") Long messageId) {
+    @Authorization
+    @RequestMapping(value = "read/{messageId}", method = RequestMethod.PUT)
+    public Result read(@PathVariable("messageId") Long messageId) {
         messageService.updateMessageStatus(messageId);
         return successCreated();
     }
+
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
-    @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
-    public Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    @RequestMapping(value = "del/{messageId}", method = RequestMethod.DELETE)
+    public Result del(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Result result = messageService.delMessageStatus(messageId);
         return successDelete(result);
     }

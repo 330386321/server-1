@@ -43,6 +43,7 @@ public class MerchantInfoController extends BaseController {
     }
 
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "查询商家主页基本信息", notes = "查询商家主页基本信息，成功返回merchantInfo。（章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

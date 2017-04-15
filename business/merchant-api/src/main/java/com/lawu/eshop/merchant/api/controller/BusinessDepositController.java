@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,7 @@ public class BusinessDepositController extends BaseController {
 	@Autowired
 	private OrderService orderService;
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家缴纳保证金初始化记录", notes = "商家缴纳保证金初始化记录，支付前需要调该接口初始化一条保证金记录，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
@@ -63,13 +65,15 @@ public class BusinessDepositController extends BaseController {
 		return businessDepositService.save(bparam);
 	}
 
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@ApiOperation(value = "查看我的保证金", notes = "查看我的保证金,[]（杨清华）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "selectDeposit/{businessId}", method = RequestMethod.GET)
 	public Result<BusinessDepositDetailDTO> selectDeposit(@PathVariable("businessId") String businessId) {
 		return businessDepositService.selectDeposit(businessId);
 	}
-	
+
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "申请退保证金操作", notes = "申请退保证金,[]（杨清华）", httpMethod = "POST")
 	@Authorization

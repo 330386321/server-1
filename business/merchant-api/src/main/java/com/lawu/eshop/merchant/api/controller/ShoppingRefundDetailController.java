@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -157,6 +158,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	 *            参数 是否同意申请
 	 * @return
 	 */
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "商家是否同意退款", notes = "商家是否同意退款。[1002|1003|4011|4013]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -63,6 +63,7 @@ public class PropertyInfoController extends BaseController {
         return successGet(propertyInfoService.getPropertyPoint(userNum));
     }
 
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "验证支付密码", notes = "验证支付密码(true--正确，false--错误)。[1002|1022]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -73,7 +74,8 @@ public class PropertyInfoController extends BaseController {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.varifyPayPwd(userNum, payPwd);
     }
-    
+
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "获取资产余额积分", notes = "根据用户编号获取资产余额积分。[]（杨清华）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

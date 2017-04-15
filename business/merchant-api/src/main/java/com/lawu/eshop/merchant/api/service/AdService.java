@@ -50,7 +50,7 @@ public interface AdService {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.PUT,value = "ad/remove/{id}")
+	@RequestMapping(method = RequestMethod.DELETE,value = "ad/remove/{id}")
     public Result remove(@PathVariable("id") Long id);
 	
 	/**

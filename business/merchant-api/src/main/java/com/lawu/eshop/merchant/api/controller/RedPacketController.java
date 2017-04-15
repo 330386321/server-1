@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,7 +41,8 @@ public class RedPacketController extends BaseController{
 	
 	@Autowired
     private PropertyInfoService propertyInfoService;
-	
+
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "红包生成", notes = "红包生成[5000,5003]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
