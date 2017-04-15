@@ -27,7 +27,7 @@ public class PropertyServiceImpl implements PropertyService {
 		propertyDOExampleCriteria.andNameEqualTo(name);
 		List<PropertyDO> propertyDOList = propertyDOMapper.selectByExample(propertyDOExample);
 		
-		if (propertyDOList != null && propertyDOList.isEmpty()) {
+		if (propertyDOList != null && !propertyDOList.isEmpty()) {
 			return propertyDOList.get(0) == null ? null : propertyDOList.get(0).getValue();
 		}
 		
