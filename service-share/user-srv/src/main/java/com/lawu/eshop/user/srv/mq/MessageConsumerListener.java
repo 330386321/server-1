@@ -2,10 +2,13 @@ package com.lawu.eshop.user.srv.mq;
 
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.user.param.MessagePushInfo;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
@@ -54,6 +57,15 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
             //修改门店状态
             merchantStoreInfoService.updateMerchantStoreStatus(merchantBO.getId(), info.getStatusEnum().val);
+            if(info.getStatusEnum().val == MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val){
+                //查询门店信息
+                MerchantStoreInfoBO storeInfoBO= merchantStoreInfoService.selectMerchantStoreByMId(merchantBO.getId());
+                if(storeInfoBO == null){
+                    return;
+                }
+                //删除solr门店信息
+                SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(),SolrUtil.SOLR_MERCHANT_CORE);
+            }
         }
     }
 }
