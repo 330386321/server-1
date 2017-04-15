@@ -30,7 +30,7 @@ public interface StoreSolrService {
     Result<Page<StoreSolrDTO>> listStore(@ModelAttribute StoreSolrParam storeSolrParam);
 
     /**
-     * 根据搜索词推荐关联搜索词
+     * 搜索词关联词频查询
      *
      * @param name
      * @return

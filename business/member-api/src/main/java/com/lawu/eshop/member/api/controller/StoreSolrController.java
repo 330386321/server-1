@@ -36,7 +36,7 @@ public class StoreSolrController extends BaseController {
         return storeSolrService.listStore(storeSolrParam);
     }
 
-    @ApiOperation(value = "搜索词关联推荐", notes = "根据搜索词推荐关联词搜索。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
     public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam @ApiParam(name = "name", required = true, value = "门店名称") String name) {

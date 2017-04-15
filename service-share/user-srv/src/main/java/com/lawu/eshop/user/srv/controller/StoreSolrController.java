@@ -12,12 +12,13 @@ import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocument;
+import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author meishuquan
@@ -78,7 +79,7 @@ public class StoreSolrController extends BaseController {
     }
 
     /**
-     * 根据输入搜索词查询关联搜索词
+     * 搜索词关联词频查询
      *
      * @param name
      * @return
@@ -86,25 +87,30 @@ public class StoreSolrController extends BaseController {
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
     public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("name_s:" + name + "*");
-        query.setFields("name_s");
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
-        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
+        query.set("q", "*:*");
+        query.set("qt", "/terms");
+        query.set("terms", "true");
+        query.set("terms.fl", "name_s");
+        query.set("terms.regex", name + "+.*");
+        query.set("terms.regex.flag", "case_insensitive");
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
 
         List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
-        for (SolrDocument solrDocument : solrDocumentList) {
-            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
-            storeSearchWordDTO.setName(solrDocument.get("name_s").toString());
-
-            query = new SolrQuery();
-            query.setQuery("name_s:" + storeSearchWordDTO.getName());
-            query.setFields("name_s");
-            solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
-            if (solrDocumentList != null) {
-                storeSearchWordDTO.setCount((int) solrDocumentList.getNumFound());
+        if (termsResponse != null) {
+            Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
+            for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
+                List<TermsResponse.Term> termList = termsEntry.getValue();
+                for (TermsResponse.Term term : termList) {
+                    StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
+                    storeSearchWordDTO.setName(term.getTerm());
+                    storeSearchWordDTO.setCount((int) term.getFrequency());
+                    storeSearchWordDTOS.add(storeSearchWordDTO);
+                }
             }
+        } else {
+            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
+            storeSearchWordDTO.setName(name);
+            storeSearchWordDTO.setCount(0);
             storeSearchWordDTOS.add(storeSearchWordDTO);
         }
         return successGet(storeSearchWordDTOS);

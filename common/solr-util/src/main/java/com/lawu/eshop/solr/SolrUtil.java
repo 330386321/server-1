@@ -4,6 +4,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -153,6 +154,27 @@ public class SolrUtil {
             e.printStackTrace();
         }
         return solrDocument;
+    }
+
+    /**
+     * 词频统计
+     *
+     * @param query
+     * @param solrCore
+     * @return
+     */
+    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrCore);
+        try {
+            QueryResponse rsp = client.query(query);
+            TermsResponse termsResponse = rsp.getTermsResponse();
+            closeSolrClient(client);
+            return termsResponse;
+        } catch (Exception e) {
+            logger.error("solr查询异常：{}", e.getMessage());
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
