@@ -203,11 +203,12 @@ public class MemberController extends BaseController {
         return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
     }
 
-    @ApiOperation(value = "增加推送、融云 CID，token", notes = "增加推送、融云 CID，token。[1005] (章勇)", httpMethod = "PUT")
+    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @ApiOperation(value = "设置推送CID", notes = "设置推送CID。[1005] (章勇)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
-    @RequestMapping(value = "setGtAndRongYunInfo",method = RequestMethod.PUT)
-    public Result setGtAndRongYunInfo(@RequestParam("cid") String cid,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    @RequestMapping(value = "setGetuiCid",method = RequestMethod.PUT)
+    public Result setGetuiCid(@RequestParam("cid") String cid, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         Long id = UserUtil.getCurrentUserId(getRequest());
         if(id == null || id <= 0 ||  "".equals(cid)){
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
