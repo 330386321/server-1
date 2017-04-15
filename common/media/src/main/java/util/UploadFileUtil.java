@@ -2,11 +2,16 @@ package util;
 
 import com.lawu.eshop.utils.RandomUtil;
 import com.lawu.eshop.utils.ValidateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,6 +22,7 @@ import java.util.Map;
  * Created by zhangyong on 2017/3/29.
  */
 public class UploadFileUtil {
+    private static Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
     /**
      * @param request
      * @param file    单个文件
@@ -58,7 +64,7 @@ public class UploadFileUtil {
                 valsMap.put("resultFlag", "0");
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info("上传图片失败");
                 valsMap.put("resultFlag", "1010");
                 valsMap.put("msg", "上传图片失败");
             }
@@ -153,7 +159,7 @@ public class UploadFileUtil {
         } catch (Exception e) {
             valsMap.put("resultFlag", "1010");
             valsMap.put("msg", "上传图片失败");
-            e.printStackTrace();
+            logger.info("上传图片失败");
         }
         return valsMap;
 
@@ -215,7 +221,7 @@ public class UploadFileUtil {
                 //文件路径，文件类型
                 urlImg = bashdir + dir + "/" + newfileName;
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.info("上传图片失败");
             }
         }
         valsMap.put("imgUrl", urlImg);
@@ -291,7 +297,7 @@ public class UploadFileUtil {
         } catch (Exception e) {
             valsMap.put("resultFlag", "1010");
             valsMap.put("msg", "上传图片失败");
-            e.printStackTrace();
+            logger.info("上传图片失败");
         }
         return valsMap;
 
@@ -352,7 +358,7 @@ public class UploadFileUtil {
         } catch (Exception e) {
             valsMap.put("resultFlag", "1020");
             valsMap.put("msg", "上传视频失败");
-            e.printStackTrace();
+            logger.info("上传视频失败");
         }
         return valsMap;
 
