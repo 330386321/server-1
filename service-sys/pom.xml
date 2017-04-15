@@ -12,5 +12,9 @@
     <artifactId>service-sys</artifactId>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>cache-srv</module>
+        <module>pay-srv</module>
+    </modules>
 
 </project>
