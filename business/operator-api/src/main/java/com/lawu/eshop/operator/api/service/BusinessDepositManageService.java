@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
+import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 
 /**
@@ -29,6 +30,15 @@ public interface BusinessDepositManageService {
 	 */
 	@RequestMapping(value = "businessDeposit/selectDepositList",method = RequestMethod.POST)
 	Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param);
+
+	/**
+	 * 保证金操作
+	 * @param dparam
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "businessDeposit/updateBusinessDeposit",method = RequestMethod.POST)
+	Result updateBusinessDeposit(@RequestBody BusinessDepositOperDataParam param);
 
 
 }

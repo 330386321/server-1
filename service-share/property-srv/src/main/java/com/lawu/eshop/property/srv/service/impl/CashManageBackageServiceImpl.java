@@ -67,9 +67,9 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			if (param.getRegionPath().split("/").length == 1) {
 				criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[0]));
 			} else if (param.getRegionPath().split("/").length == 2) {
-				criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[1]));
+				criteria1.andCityIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[1]));
 			} else if (param.getRegionPath().split("/").length == 3) {
-				criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
+				criteria1.andAreaIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
 			}
 		}
 

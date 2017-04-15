@@ -2,7 +2,6 @@ package com.lawu.eshop.operator.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,6 +91,7 @@ public class CashManageBackageController extends BaseController {
 		dparam.setIds(param.getIds());
 		dparam.setCashOperEnum(param.getCashOperEnum());
 		dparam.setAuditFailReason(param.getAuditFailReason());
+		//TODO 
 		dparam.setAuditUserId(1L);
 		dparam.setAuditUserName("super");
 		return cashManageBackageService.updateWithdrawCash(dparam);

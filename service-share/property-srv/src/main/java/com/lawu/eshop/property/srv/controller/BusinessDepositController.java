@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,12 +18,17 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.BusinessDepositOperEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
+import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
 import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.PropertyService;
@@ -99,13 +105,24 @@ public class BusinessDepositController extends BaseController {
 
 	/**
 	 * 运营平台查询保证金
+	 * 
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
-	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param)
-			throws Exception {
+	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param,
+			BindingResult result) throws Exception {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+
 		Page<BusinessDepositQueryBO> page = businessDepositService.selectDepositList(param);
 		List<BusinessDepositQueryBO> list = page.getRecords();
 		List<BusinessDepositQueryDTO> newList = new ArrayList<BusinessDepositQueryDTO>();
@@ -119,5 +136,73 @@ public class BusinessDepositController extends BaseController {
 		pageResult.setCurrentPage(page.getCurrentPage());
 		pageResult.setRecords(newList);
 		return successCreated(pageResult);
+	}
+
+	/**
+	 * 运营平台处理：核实、受理、成功、失败
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateBusinessDeposit", method = RequestMethod.POST)
+	public Result updateBusinessDeposit(@RequestBody BusinessDepositOperDataParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		if (BusinessDepositOperEnum.REFUND_FAILURE.val.equals(param.getBusinessDepositOperEnum().val)
+				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {
+			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
+		}
+		int retCode = businessDepositService.updateBusinessDeposit(param);
+		return successCreated(retCode);
+
+	}
+	
+	/**
+	 * 商家我的保证金
+	 * @param businessId
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "selectDeposit/{businessId}", method = RequestMethod.GET)
+	public Result<BusinessDepositDetailDTO> selectDeposit(@PathVariable("businessId") String businessId) throws Exception {
+		BusinessDepositDetailBO bo = businessDepositService.selectDeposit(businessId);
+		if(bo == null){
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		BusinessDepositDetailDTO dto = new BusinessDepositDetailDTO();
+		BeanUtil.copyProperties(bo, dto);
+		return successCreated(dto);
+
+	}
+
+	/**
+	 * 商家申请退保证金
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
+	public Result refundDeposit(@RequestBody BusinessRefundDepositParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		int retCode = businessDepositService.refundDeposit(param);
+		return successCreated(retCode);
+
 	}
 }

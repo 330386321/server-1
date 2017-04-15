@@ -11,14 +11,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.operator.api.service.BusinessDepositManageService;
 import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
-import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
-import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
+import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
+import com.lawu.eshop.property.param.BusinessDepositOperParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryParam;
-import com.lawu.eshop.property.param.CashBackageOperDataParam;
-import com.lawu.eshop.property.param.CashBackageOperParam;
-import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
-import com.lawu.eshop.property.param.CashBackageQuerySumParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,7 +45,6 @@ public class BusinessDepositManageController extends BaseController {
 	 * @throws Exception
 	 */
 	@ApiOperation(value = "保证金明细查询", notes = "保证金明细查询,[]（杨清华）", httpMethod = "POST")
-	// @Authorization
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
 	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@ModelAttribute @ApiParam BusinessDepositQueryParam param)
 			throws Exception {
@@ -64,4 +59,18 @@ public class BusinessDepositManageController extends BaseController {
 		return dtos;
 	}
 
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "保证金运营处理操作", notes = "保证金运营处理操作(核实、受理、成功、失败),[]（杨清华）", httpMethod = "POST")
+	@RequestMapping(value = "updateBusinessDeposit", method = RequestMethod.POST)
+	public Result updateBusinessDeposit(@ModelAttribute @ApiParam BusinessDepositOperParam param) {
+		BusinessDepositOperDataParam dparam = new BusinessDepositOperDataParam();
+		dparam.setId(param.getId());
+		dparam.setBusinessDepositOperEnum(param.getBusinessDepositOperEnum());
+		dparam.setFailReason(param.getFailReason());
+		dparam.setUserNum(param.getUserNum());
+		//TODO 
+		dparam.setOperUserId(1L);
+		dparam.setOperUserName("super");
+		return businessDepositManageService.updateBusinessDeposit(dparam);
+	}
 }

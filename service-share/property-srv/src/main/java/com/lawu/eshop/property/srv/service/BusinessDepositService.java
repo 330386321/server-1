@@ -3,9 +3,12 @@ package com.lawu.eshop.property.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
+import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
 import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 
 public interface BusinessDepositService {
@@ -32,6 +35,27 @@ public interface BusinessDepositService {
 	 * @return
 	 */
 	Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param);
+
+	/**
+	 * 保证金操作
+	 * @param param
+	 * @return
+	 */
+	int updateBusinessDeposit(BusinessDepositOperDataParam param);
+
+	/**
+	 * 商家申请退保证金
+	 * @param param
+	 * @return
+	 */
+	int refundDeposit(BusinessRefundDepositParam param);
+
+	/**
+	 * 商家我的保证金
+	 * @param businessId
+	 * @return
+	 */
+	BusinessDepositDetailBO selectDeposit(String businessId);
 
 	
 
