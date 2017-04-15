@@ -44,4 +44,11 @@ public interface CommentProductService {
     CommentGradeBO getCommentAvgGrade(Long productId);
 
     Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam);
+
+    /**
+     * 定时器增加默认好评
+     * @param memberId
+     * @param productId
+     */
+    void saveCommentProductInfoOrderJob(Long memberId, Long productId);
 }

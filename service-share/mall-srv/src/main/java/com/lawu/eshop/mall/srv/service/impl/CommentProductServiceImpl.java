@@ -3,6 +3,8 @@ package com.lawu.eshop.mall.srv.service.impl;
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
+import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.param.CommentListParam;
@@ -59,7 +61,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setContent(param.getContent());
         commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
-
+        commentProductDO.setGrade(param.getGradeEnum().val);
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());
         commentProductDO.setGmtModified(new Date());
@@ -233,5 +235,20 @@ public class CommentProductServiceImpl implements CommentProductService {
         }
         page.setRecords(commentProductBOS);
         return page;
+    }
+
+    @Override
+    @Transactional
+    public void saveCommentProductInfoOrderJob(Long memberId, Long productId) {
+        CommentProductDO productDO = new CommentProductDO();
+        productDO.setMemberId(memberId);
+        productDO.setProductId(productId);
+        productDO.setIsAnonymous(CommentAnonymousEnum.COMMENT_ANONYMOUS.val);//匿名
+        productDO.setContent("好评");
+        productDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
+        productDO.setGmtModified(new Date());
+        productDO.setGmtCreate(new Date());
+        productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
+        commentProductDOMapper.insert(productDO);
     }
 }
