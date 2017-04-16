@@ -56,8 +56,8 @@ public class AlipayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
+	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam ThirdPayParam param) {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
@@ -70,17 +70,17 @@ public class AlipayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
+		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
 			double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(orderMoney));
 
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(money));
 		}

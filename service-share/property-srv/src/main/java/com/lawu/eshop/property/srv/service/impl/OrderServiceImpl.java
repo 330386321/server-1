@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
-//import com.lawu.eshop.pay.srv.controller.AlipayBusinessHandle;
-//import com.lawu.eshop.pay.srv.controller.WxpayBusinessHandle;
-//import com.lawu.eshop.pay.srv.sdk.weixin.sdk.common.JsonResult;
+import com.lawu.eshop.pay.handle.AlipayBusinessHandle;
+import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
+import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
 import com.lawu.eshop.property.constants.FreezeTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -239,7 +239,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);
 
-//		JsonResult jsonResult = new JsonResult();
+		JsonResult jsonResult = new JsonResult();
 		if (TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)) {
 			// 加会员财产余额
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -247,7 +247,7 @@ public class OrderServiceImpl implements OrderService {
 			infoDoView.setBalance(new BigDecimal(param.getRefundMoney()));
 			infoDoView.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
-//			jsonResult.setSuccess(true);
+			jsonResult.setSuccess(true);
 
 		} else {
 			ThirdPayRefundParam rparam = new ThirdPayRefundParam();
@@ -256,19 +256,19 @@ public class OrderServiceImpl implements OrderService {
 			rparam.setTotalMoney(rparam.getTotalMoney());
 			rparam.setTradeNo(param.getTradeNo());
 			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
-				//AlipayBusinessHandle.refund(rparam, jsonResult);
+				AlipayBusinessHandle.refund(rparam, jsonResult);
 
 			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
-				//WxpayBusinessHandle.refund(rparam, jsonResult);
+				WxpayBusinessHandle.refund(rparam, jsonResult);
 			}
 		}
 
-//		if (jsonResult.isSuccess()) {
-//			// TODO 更新订单item状态
-//
-//		} else {
-//			throw new Exception(jsonResult.getMessage());
-//		}
+		if (jsonResult.isSuccess()) {
+			// TODO 更新订单item状态
+
+		} else {
+			throw new Exception(jsonResult.getMessage());
+		}
 		return ResultCode.SUCCESS;
 	}
 

@@ -79,14 +79,14 @@ public class AlipayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getThirdPayBodyEnum().val)) {
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
 			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
 			aparam.setTotalAmount(bond);
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(money));
 		}
@@ -104,12 +104,25 @@ public class AlipayController extends BaseController {
 			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
 
 		PcAlipayDataParam aparam = new PcAlipayDataParam();
-		aparam.setTotalAmount(param.getTotalAmount());
-		aparam.setOutTradeNo(param.getOutTradeNo());
+		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getSubject());
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+
+		// 查询支付金额
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			if ("".equals(bond)) {
+				bond = PropertyType.MERCHANT_BONT_DEFAULT;
+			}
+			aparam.setTotalAmount(bond);
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+			double money = rechargeService.getRechargeMoney(param.getBizId());
+			aparam.setTotalAmount(String.valueOf(money));
+		}
+
 		Result result = alipayService.initPcPay(aparam);
 		if (ResultCode.SUCCESS == result.getRet()) {
 			Object obj = result.getModel();

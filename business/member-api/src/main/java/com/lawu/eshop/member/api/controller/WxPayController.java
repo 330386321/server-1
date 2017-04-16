@@ -1,7 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.io.IOException;
-
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -72,17 +70,18 @@ public class WxPayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getThirdPayBodyEnum().val)) {
-			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
+			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
 			double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(orderMoney));
 
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(money));
 		}
@@ -91,24 +90,36 @@ public class WxPayController extends BaseController {
 
 	}
 
-	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
-	@Authorization
-	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
+//	@SuppressWarnings("rawtypes")
+//	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
+//	@Authorization
+//	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
+//	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+//			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
 
-		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setTotalAmount(param.getTotalAmount());
-		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
-		aparam.setSubject(param.getThirdPayBodyEnum().val);
-		aparam.setBizIds(param.getBizIds());
-		aparam.setBizFlagEnum(param.getBizFlagEnum());
-		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
+//		ThirdPayDataParam aparam = new ThirdPayDataParam();
+//		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
+//		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
+//		aparam.setSubject(param.getThirdPayBodyEnum().val);
+//		aparam.setBizIds(param.getBizIds());
+//		aparam.setBizFlagEnum(param.getBizFlagEnum());
+//		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+//		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
+//
+//		// 查询支付金额
+//		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+//			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+//			if ("".equals(bond)) {
+//				bond = PropertyType.MERCHANT_BONT_DEFAULT;
+//			}
+//			aparam.setTotalAmount(bond);
+//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+//				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+//			double money = rechargeService.getRechargeMoney(param.getBizIds());
+//			aparam.setTotalAmount(String.valueOf(money));
+//		}
 
-		return wxPayService.getPrepayInfo(aparam);
-	}
+//		return wxPayService.getPrepayInfo(aparam);
+//	}
 
 }

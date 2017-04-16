@@ -18,7 +18,7 @@ import com.lawu.eshop.property.param.PcAlipayDataParam;
  * @date 2017年4月7日 上午9:12:31
  *
  */
-@FeignClient(value= "pay-srv")
+@FeignClient(value= "property-srv")
 public interface AlipayService {
 	
 	@SuppressWarnings("rawtypes")

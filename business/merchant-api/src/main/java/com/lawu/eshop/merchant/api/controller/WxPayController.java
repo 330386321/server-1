@@ -60,7 +60,6 @@ public class WxPayController extends BaseController {
 			@ModelAttribute @ApiParam ThirdPayParam param) {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizIds(param.getBizIds());
@@ -70,14 +69,14 @@ public class WxPayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getThirdPayBodyEnum().val)) {
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
 			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
 			aparam.setTotalAmount(bond);
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getThirdPayBodyEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getThirdPayBodyEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
 			aparam.setTotalAmount(String.valueOf(money));
 		}
@@ -95,7 +94,6 @@ public class WxPayController extends BaseController {
 			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
-		aparam.setTotalAmount(param.getTotalAmount());
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizIds(param.getBizIds());
@@ -103,6 +101,19 @@ public class WxPayController extends BaseController {
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
+
+		// 查询支付金额
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			if ("".equals(bond)) {
+				bond = PropertyType.MERCHANT_BONT_DEFAULT;
+			}
+			aparam.setTotalAmount(bond);
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+			double money = rechargeService.getRechargeMoney(param.getBizIds());
+			aparam.setTotalAmount(String.valueOf(money));
+		}
 
 		return wxPayService.getPrepayInfo(aparam);
 	}

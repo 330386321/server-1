@@ -17,7 +17,7 @@ import com.lawu.eshop.property.param.ThirdPayDataParam;
  * @date 2017年4月7日 下午9:03:09
  *
  */
-@FeignClient(value= "pay-srv")
+@FeignClient(value= "property-srv")
 public interface WxPayService {
 	
 	@SuppressWarnings("rawtypes")
