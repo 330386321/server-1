@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

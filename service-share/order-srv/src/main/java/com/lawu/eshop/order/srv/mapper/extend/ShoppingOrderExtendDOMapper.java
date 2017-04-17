@@ -68,5 +68,12 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
 	List<ShoppingOrderItemEvaluationDO> selectShoppingOrderItemEvaluationDOByExample(ShoppingOrderExtendDOExample example);
-	
+
+	/**
+	 * 查询订单表以及级联订单项表
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+	List<ShoppingOrderExtendDO> selectShoppingOrderAssociationByExample(ShoppingOrderExtendDOExample example);
 }

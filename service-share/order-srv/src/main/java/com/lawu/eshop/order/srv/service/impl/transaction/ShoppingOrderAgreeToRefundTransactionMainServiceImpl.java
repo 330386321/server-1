@@ -1,5 +1,7 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,10 +9,14 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessNotification;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderAgreeToRefundNotification;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
+import com.lawu.eshop.utils.NumberUtil;
 
 /**
  * 商家确认退款-主模块
@@ -20,7 +26,7 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
  */
 @Service("shoppingOrderAgreeToRefundTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.AGREE_TO_REFUND, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_AGREE_TO_REFUND)
-public class ShoppingOrderAgreeToRefundTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderTradingSuccessNotification, Reply> {
+public class ShoppingOrderAgreeToRefundTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderAgreeToRefundNotification, Reply> {
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
@@ -29,17 +35,35 @@ public class ShoppingOrderAgreeToRefundTransactionMainServiceImpl extends Abstra
 	 * 组装其他模块发送的数组
 	 */
     @Override
-    public ShoppingOrderTradingSuccessNotification selectNotification(Long shoppingOrderId) {
-    	ShoppingOrderTradingSuccessNotification rtn = null;
+    public ShoppingOrderAgreeToRefundNotification selectNotification(Long shoppingOrderItemId) {
+    	ShoppingOrderAgreeToRefundNotification rtn = new ShoppingOrderAgreeToRefundNotification();
     	
-    	ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderId);
+    	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId, true);
     	
-    	if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
+    	if (shoppingOrderExtendBO == null || shoppingOrderExtendBO.getId() == null || shoppingOrderExtendBO.getId() <= 0) {
     		return rtn;
     	}
     	
-    	rtn = new ShoppingOrderTradingSuccessNotification();
+    	boolean isLast = true;
+    	BigDecimal refundMoney = null;
+    	for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
+    		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION) && !shoppingOrderItemBO.getId().equals(shoppingOrderItemId)) {
+    			isLast = false;
+    		}
+    		
+    		if (shoppingOrderItemBO.getId().equals(shoppingOrderItemId)) {
+    			refundMoney = shoppingOrderItemBO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemBO.getQuantity()));
+    		}
+    	}
     	
+    	rtn.setMenberNum(shoppingOrderExtendBO.getMemberNum());
+    	rtn.setMerchantNum(shoppingOrderExtendBO.getMerchantNum());
+    	rtn.setShoppingOrderId(shoppingOrderExtendBO.getId());
+    	rtn.setShoppingOrderItemId(shoppingOrderItemId);
+    	rtn.setPaymentMethod(TransactionPayTypeEnum.valueOf(shoppingOrderExtendBO.getPaymentMethod().name()));
+    	rtn.setRefundMoney(NumberUtil.format(refundMoney));
+    	rtn.setIsLast(isLast);
+    	rtn.setThirdNumber(shoppingOrderExtendBO.getThirdNumber());
     	
         return rtn;
     }

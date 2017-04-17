@@ -1,6 +1,7 @@
 package com.lawu.eshop.mq.dto.order;
 
 import com.lawu.eshop.compensating.transaction.Notification;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 
 /**
  * 
@@ -16,15 +17,40 @@ public class ShoppingOrderAgreeToRefundNotification extends Notification {
 	 */
 	private Long shoppingOrderId;
 	
+	/**
+	 * 购物订单项id
+	 */
+	private Long shoppingOrderItemId;
+	
     /**
     * 商家编号
     */
     private String merchantNum;
     
     /**
-     * 订单总价
+    * 会员编号
+    */
+    private String menberNum;
+    
+    /**
+     * 退款金额
      */
-    private String orderTotalPrice;
+    private String refundMoney;
+    
+    /**
+     * 支付方式
+     */
+	private TransactionPayTypeEnum paymentMethod;
+	
+	/**
+	 * 是否是最后一个订单项
+	 */
+	private boolean isLast;
+	
+	/**
+	 * 第三方支付交易号
+	 */
+	private String thirdNumber;
 
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -32,6 +58,14 @@ public class ShoppingOrderAgreeToRefundNotification extends Notification {
 
 	public void setShoppingOrderId(Long shoppingOrderId) {
 		this.shoppingOrderId = shoppingOrderId;
+	}
+
+	public Long getShoppingOrderItemId() {
+		return shoppingOrderItemId;
+	}
+
+	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
+		this.shoppingOrderItemId = shoppingOrderItemId;
 	}
 
 	public String getMerchantNum() {
@@ -42,11 +76,43 @@ public class ShoppingOrderAgreeToRefundNotification extends Notification {
 		this.merchantNum = merchantNum;
 	}
 
-	public String getOrderTotalPrice() {
-		return orderTotalPrice;
+	public String getMenberNum() {
+		return menberNum;
 	}
 
-	public void setOrderTotalPrice(String orderTotalPrice) {
-		this.orderTotalPrice = orderTotalPrice;
+	public void setMenberNum(String menberNum) {
+		this.menberNum = menberNum;
+	}
+
+	public String getRefundMoney() {
+		return refundMoney;
+	}
+
+	public void setRefundMoney(String refundMoney) {
+		this.refundMoney = refundMoney;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public boolean getIsLast() {
+		return isLast;
+	}
+
+	public void setIsLast(boolean isLast) {
+		this.isLast = isLast;
+	}
+
+	public String getThirdNumber() {
+		return thirdNumber;
+	}
+
+	public void setThirdNumber(String thirdNumber) {
+		this.thirdNumber = thirdNumber;
 	}
 }

@@ -192,4 +192,14 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId);
+	
+	/**
+	 * 根据购物订单项查询订单以及订单项
+	 * 
+	 * @param ShoppingOrderItemId 购物订单项id
+	 * @param isAll 是否查找全部的订单项 
+	 * @return
+	 * @author Sunny
+	 */
+	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId, boolean isAll);
 }

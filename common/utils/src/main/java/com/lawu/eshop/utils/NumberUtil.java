@@ -14,6 +14,7 @@ public class NumberUtil {
 	
 	/**
 	 * 数字的一般格式
+	 * 保留两位小数，没有留0
 	 */
 	private final static String PATTERN_GENERAL = "#.00";
 	

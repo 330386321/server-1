@@ -807,6 +807,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 	}
 
+	/**
+	 * 获取自动评论参数
+	 * 
+	 * @param ShoppingOrderItemId 购物订单项id
+	 * @return
+	 * @author Sunny
+	 */
 	@Override
 	public ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
@@ -821,7 +828,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		return ShoppingOrderItemEvaluationConverter.convert(shoppingOrderItemEvaluationDOList.get(0));
 	}
-
+	
+	/**
+	 * 根据商家的id查询商家是否有进行中的订单
+	 * 
+	 * @param merchantId 商家的id
+	 * @return
+	 * @author Sunny
+	 */
 	@Override
 	public ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
@@ -839,5 +853,39 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return ShoppingOrderConverter.convert(count);
 	}
 	
+	/**
+	 * 根据购物订单项查询订单以及订单项
+	 * 
+	 * @param ShoppingOrderItemId 购物订单项id
+	 * @param isAll 是否查找全部的订单项 
+	 * @return
+	 * @author Sunny
+	 */
+	@Override
+	public ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId, boolean isAll) {
+		ShoppingOrderExtendBO rtn = null;
+		
+		if (isAll) {
+			ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+			shoppingOrderExtendDOExample.createCriteria().andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
+			
+			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList =  shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExample(shoppingOrderExtendDOExample);
+			
+			if (shoppingOrderExtendDOList == null || shoppingOrderExtendDOList.isEmpty()) {
+				return rtn;
+			}
+			
+			rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDOList.get(0));
+		} else {
+			ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemId);
+			if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
+				return rtn;
+			}
+			
+			rtn = get(shoppingOrderItemDO.getShoppingOrderId());
+		}
+		
+		return rtn;
+	}
 	
 }
