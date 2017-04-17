@@ -28,12 +28,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +51,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "commentProduct/")
 public class CommentProductController extends BaseController {
-
+    private static Logger logger = LoggerFactory.getLogger(CommentProductController.class);
     @Autowired
     private CommentProductService commentProductService;
 
@@ -77,28 +81,30 @@ public class CommentProductController extends BaseController {
             return successCreated(ResultCode.PRODUCT_EVALUATE_TRUE);
         }
         StringBuffer headImg = new StringBuffer();
-        Collection<Part> parts;
+        Collection<Part> parts = null;
         try {
-            parts = request.getParts();
-            for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
-                String flag = map.get("resultFlag");
-                String fileName = part.getSubmittedFileName();
-                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                    //有图片上传成功返回,拼接图片url
-                    String imgUrl = map.get("imgUrl");
-                    headImg.append(imgUrl + ",");
-                } else {
-                    return successCreated(Integer.valueOf(flag));
-                }
-            }
-            return commentProductService.saveCommentProductInfo(memberId, param, headImg.toString());
+                parts = request.getParts();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+        } catch (IOException e) {
+            logger.error(e.getStackTrace().toString());
+            return successCreated(e.getMessage());
         }
-
+        catch (ServletException ex){
+            logger.info("Servlet异常");
+        }
+        for (Part part : parts) {
+            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+            String flag = map.get("resultFlag");
+            String fileName = part.getSubmittedFileName();
+            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                //有图片上传成功返回,拼接图片url
+                String imgUrl = map.get("imgUrl");
+                headImg.append(imgUrl + ",");
+            } else {
+                return successCreated(Integer.valueOf(flag));
+            }
+        }
+        return commentProductService.saveCommentProductInfo(memberId, param, headImg.toString());
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")

@@ -23,12 +23,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,7 +46,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("commentMerchant/")
 public class CommentMerchantController extends BaseController {
-
+    private static Logger logger = LoggerFactory.getLogger(CommentMerchantController.class);
     @Autowired
     private CommentMerchantService commentMerchantService;
     @Autowired
@@ -57,9 +61,17 @@ public class CommentMerchantController extends BaseController {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         StringBuffer commentPic = new StringBuffer();
-        Collection<Part> parts;
+        Collection<Part> parts = null;
         try {
             parts = request.getParts();
+
+        } catch (IOException e) {
+            logger.error(e.getStackTrace().toString());
+            return successCreated(e.getMessage());
+        }
+        catch (ServletException ex){
+            logger.info("Servlet异常");
+        }
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
@@ -72,12 +84,8 @@ public class CommentMerchantController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
-            return commentMerchantService.saveCommentMerchantInfo(memberId, param, commentPic.toString());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
-        }
+        return commentMerchantService.saveCommentMerchantInfo(memberId, param, commentPic.toString());
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")

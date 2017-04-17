@@ -10,7 +10,7 @@ import java.util.List;
  * @author zhangyong
  * @date 2017/4/17.
  */
-public class ProductCommentListDTO {
+public class MerchantProductCommentListDTO {
     /**
      * 头像
      */
@@ -58,11 +58,7 @@ public class ProductCommentListDTO {
     private String priceMin;
     @ApiModelProperty(value = "评价ID")
     private Long id;
-    @ApiModelProperty(value = "会员等级")
-    private Integer level;
-    @ApiModelProperty(value = "商品特征图片")
-    private String featureImage;
-    @ApiModelProperty(value = "商品评分")
+    @ApiModelProperty(value = "评分")
     private Byte grade;
     @ApiModelProperty(value = "回复内容")
     private String replyContent;
@@ -153,22 +149,6 @@ public class ProductCommentListDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public String getFeatureImage() {
-        return featureImage;
-    }
-
-    public void setFeatureImage(String featureImage) {
-        this.featureImage = featureImage;
     }
 
     public Byte getGrade() {

@@ -309,7 +309,8 @@ public class CommentProductServiceImpl implements CommentProductService {
         List<CommentProductDOView> productDOViews = commentProductDOMapperExtend.getProductCommentIdsByMerchantId(pageParam);
         List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
         for(CommentProductDOView commentProductDOView : productDOViews){
-            CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
+            CommentProductBO commentProductBO = new CommentProductBO();
+            commentProductBO.setProductId(commentProductDOView.getProductId());
             commentProductBOS.add(commentProductBO);
         }
        Page<CommentProductBO> page = new Page<>();

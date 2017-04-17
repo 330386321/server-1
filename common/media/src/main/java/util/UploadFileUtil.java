@@ -60,7 +60,7 @@ public class UploadFileUtil {
                     localFile.getParentFile().mkdirs();
                 }
                 file.transferTo(localFile);
-                valsMap.put("imgUrl", basePath + imagePath + newfileName);
+                valsMap.put("imgUrl",imagePath + newfileName);
                 valsMap.put("resultFlag", "0");
 
             } catch (Exception e) {
@@ -150,7 +150,7 @@ public class UploadFileUtil {
                     in.close();
 
                     //文件路径，文件类型
-                    urlImg = bashdir + dir + "/" + newfileName;
+                    urlImg =   dir + "/" + newfileName;
 
                 }
             }
@@ -219,7 +219,7 @@ public class UploadFileUtil {
                 out.close();
                 in.close();
                 //文件路径，文件类型
-                urlImg = bashdir + dir + "/" + newfileName;
+                urlImg =   dir + "/" + newfileName;
             } catch (IOException e) {
                 logger.error("上传图片失败");
             }
@@ -349,7 +349,7 @@ public class UploadFileUtil {
                     in.close();
 
                     //文件路径，文件类型
-                    videoUrl = bashdir + dir + "/" + newfileName;
+                    videoUrl =  dir + "/" + newfileName;
 
                 }
             }

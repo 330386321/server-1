@@ -37,7 +37,7 @@ public class CommentMerchantParam {
     /**
      * 是否匿名（0：否1：是）
      */
-    @ApiModelProperty(value = "是否匿名（COMMENT_ANONYMOUS_FAILED：否 COMMENT_ANONYMOUS_SUCCESS：是）", required = true)
+    @ApiModelProperty(value = "是否匿名（UN_COMMENT_ANONYMOUS：否 COMMENT_ANONYMOUS：是）", required = true)
     private CommentAnonymousEnum anonymousEnum;
 
     @ApiModelProperty(value = "人均消费", required = true)

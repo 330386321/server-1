@@ -50,6 +50,7 @@ public class CommentProductConverter {
             commentDTO.setMemberId(commentProductBO.getMemberId());
             commentDTO.setProductId(commentProductBO.getProductId());
             commentDTO.setGrade(commentProductBO.getGrade());
+            commentDTO.setReplyContent(commentProductBO.getReplyContent());
             commentDTO.setId(commentProductBO.getId());
             commentDTOS.add(commentDTO);
         }
