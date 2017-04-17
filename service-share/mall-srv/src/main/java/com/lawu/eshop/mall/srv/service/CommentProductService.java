@@ -7,6 +7,7 @@ import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
 
 /**
  * @author zhangyong
@@ -51,7 +52,7 @@ public interface CommentProductService {
      * @param memberId
      * @param productId
      */
-    void saveCommentProductInfoOrderJob(Long memberId, Long productId,Long orderItemId);
+    void saveCommentProductInfoOrderJob(ShoppingOrderAutoCommentNotification notification);
 
     Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam);
 }

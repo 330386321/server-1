@@ -20,6 +20,11 @@ public class ShoppingOrderAutoCommentNotification extends Notification {
     * 用户ID
     */
     private Long memberId;
+    
+    /**
+     * 商家ID
+     */
+    private Long merchantId;
 	
     /**
     * 商品id
@@ -40,6 +45,14 @@ public class ShoppingOrderAutoCommentNotification extends Notification {
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	public Long getProductId() {

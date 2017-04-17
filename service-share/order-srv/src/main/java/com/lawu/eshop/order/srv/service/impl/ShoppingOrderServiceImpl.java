@@ -34,22 +34,19 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
-import com.lawu.eshop.order.srv.constants.OrderConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
-import com.lawu.eshop.order.srv.converter.ShoppingOrderItemEvaluationConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
@@ -61,9 +58,6 @@ import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class ShoppingOrderServiceImpl implements ShoppingOrderService {
-	
-	@Autowired
-	private OrderConstant orderConstant;
 	
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
@@ -527,9 +521,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
+		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
+		
 		// 买家收货(交易成功)七天之内才能被允许退款
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) 
-				&& DateUtil.isExceeds(shoppingOrderDO.getGmtTransaction(), new Date(), orderConstant.getRefundRequestTime(), Calendar.DAY_OF_YEAR)) {
+				&& DateUtil.isExceeds(shoppingOrderDO.getGmtTransaction(), new Date(), Integer.valueOf(refundRequestTime), Calendar.DAY_OF_YEAR)) {
 			return ResultCode.EXCEEDS_RETURN_TIME;
 		}
 		
@@ -774,9 +770,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 	
 	/**
-	 * 
+	 * 自动评论超时未评论的订单项
 	 */
-	@Transactional
 	@Override
 	public void executetAutoComment() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
@@ -786,49 +781,20 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		// 查找配置表获取自动好评时间
 		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
-		Date identifyTime = DateUtil.add(new Date(), Integer.valueOf(automaticEvaluation), Calendar.DAY_OF_YEAR);
 		
-		// 如果交易时间大于identifyTime
-		shoppingOrderExtendDOExampleCriteria.andGmtTransactionGreaterThanOrEqualTo(identifyTime);
+		// 如果交易时间超过automaticEvaluation的记录
+		shoppingOrderExtendDOExampleCriteria.andGmtTransactionDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticEvaluation), new Date());
 		
-		List<ShoppingOrderItemEvaluationDO> shoppingOrderItemEvaluationDOList = shoppingOrderDOExtendMapper.selectShoppingOrderItemEvaluationDOByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExample(shoppingOrderExtendDOExample);
 		
-		ShoppingOrderItemDO shoppingOrderItemDO = null;
-		for (ShoppingOrderItemEvaluationDO shoppingOrderItemEvaluationDO : shoppingOrderItemEvaluationDOList) {
-			
-			// 更新为已评论
-			shoppingOrderItemDO = new ShoppingOrderItemDO();
-			shoppingOrderItemDO.setId(shoppingOrderItemEvaluationDO.getShoppingOrderItem());
-			shoppingOrderItemDO.setIsEvaluation(true);
-			shoppingOrderItemDOMapper.updateByPrimaryKey(shoppingOrderItemDO);
-			
-			// 发送MQ消息，通知mall模块添加默认好评记录
-			shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemEvaluationDO.getShoppingOrderItem());
+		for (ShoppingOrderExtendDO shoppingOrderExtendDO : shoppingOrderExtendDOList) {
+			for (ShoppingOrderItemDO item : shoppingOrderExtendDO.getItems()) {
+				// 将事务拆解成单个事务
+				commentShoppingOrder(item.getId());
+			}
 		}
 	}
 
-	/**
-	 * 获取自动评论参数
-	 * 
-	 * @param ShoppingOrderItemId 购物订单项id
-	 * @return
-	 * @author Sunny
-	 */
-	@Override
-	public ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId) {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
-		shoppingOrderExtendDOExampleCriteria.andShoppingOrderItemIdEqualTo(ShoppingOrderItemId);
-		
-		List<ShoppingOrderItemEvaluationDO> shoppingOrderItemEvaluationDOList = shoppingOrderDOExtendMapper.selectShoppingOrderItemEvaluationDOByExample(shoppingOrderExtendDOExample);
-		
-		if (shoppingOrderItemEvaluationDOList == null || shoppingOrderItemEvaluationDOList.isEmpty()) {
-			return null;
-		}
-		
-		return ShoppingOrderItemEvaluationConverter.convert(shoppingOrderItemEvaluationDOList.get(0));
-	}
-	
 	/**
 	 * 根据商家的id查询商家是否有进行中的订单
 	 * 
@@ -888,4 +854,47 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return rtn;
 	}
 	
+	/**
+	 * 自动取消未付款的订单
+	 * 
+	 * @author Sunny
+	 */
+	@Override
+	public void executeAutoCancelOrder() {
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+		
+		String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+		Date identifyTime = DateUtil.add(new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
+		
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+		criteria.andGmtCreateLessThanOrEqualTo(identifyTime);
+		
+		// 查找所有超时未付款的订单
+		List<ShoppingOrderDO> ShoppingOrderDOList = shoppingOrderDOMapper.selectByExample(shoppingOrderDOExample);
+		
+		for (ShoppingOrderDO item : ShoppingOrderDOList) {
+			cancelOrder(item.getId());
+		}
+	}
+	
+	/**************************************************************
+	 * PRIVATE METHOD
+	 **************************************************************/
+	/**
+	 * 自动取消为付款的订单
+	 * 
+	 * @author Sunny
+	 */
+	@Transactional
+	private void commentShoppingOrder(Long shoppingOrderItemId) {
+		// 更新为已评论
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderItemId);
+		shoppingOrderItemDO.setIsEvaluation(true);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		
+		// 发送MQ消息，通知mall模块添加默认好评记录
+		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
+	}
 }

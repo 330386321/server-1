@@ -1957,6 +1957,12 @@ public class ShoppingOrderExtendDOExample {
             return (Criteria) this;
         }
         
+        
+        public Criteria andGmtTransactionDateAddDayLessThanOrEqualTo(int expr, Date value) {
+            addCriterion("DATE_ADD(so.gmt_transaction,INTERVAL " + expr + " DAY) <=", value, "gmt_transaction");
+            return (Criteria) this;
+        }
+        
     }
 
     /**

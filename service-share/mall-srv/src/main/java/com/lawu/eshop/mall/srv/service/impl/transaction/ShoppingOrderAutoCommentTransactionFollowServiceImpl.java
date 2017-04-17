@@ -2,7 +2,6 @@ package com.lawu.eshop.mall.srv.service.impl.transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -24,7 +23,6 @@ public class ShoppingOrderAutoCommentTransactionFollowServiceImpl extends Abstra
 	@Autowired
 	private CommentProductService commentProductService;
 	
-	@Transactional
     @Override
     public Reply execute(ShoppingOrderAutoCommentNotification notification) {
 		Reply rtn = new Reply();
@@ -33,7 +31,7 @@ public class ShoppingOrderAutoCommentTransactionFollowServiceImpl extends Abstra
 			return rtn;
 		}
 		
-		commentProductService.saveCommentProductInfoOrderJob(notification.getMemberId(), notification.getProductId(), notification.getShoppingOrderItem());
+		commentProductService.saveCommentProductInfoOrderJob(notification);
     	
         return rtn;
     }

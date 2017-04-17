@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +8,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
@@ -31,11 +30,14 @@ public class ShoppingOrderAutoCommentTransactionMainServiceImpl extends Abstract
 	 * 组装其他模块发送的数组
 	 */
     @Override
-    public ShoppingOrderAutoCommentNotification selectNotification(Long shoppingOrderId) {
+    public ShoppingOrderAutoCommentNotification selectNotification(Long shoppingOrderItemId) {
     	ShoppingOrderAutoCommentNotification rtn = new ShoppingOrderAutoCommentNotification();
     	
-    	ShoppingOrderItemEvaluationBO shoppingOrderItemEvaluationBO = shoppingOrderService.getShoppingOrderItemEvaluationBOByShoppingOrderItemId(shoppingOrderId);
-    	BeanUtils.copyProperties(shoppingOrderItemEvaluationBO, rtn);
+    	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId, false);
+    	rtn.setMemberId(shoppingOrderExtendBO.getMemberId());
+    	rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+    	rtn.setProductId(shoppingOrderExtendBO.getItems().get(0).getProductId());
+    	rtn.setShoppingOrderItem(shoppingOrderExtendBO.getItems().get(0).getId());
     	
         return rtn;
     }

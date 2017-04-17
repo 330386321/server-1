@@ -14,7 +14,6 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemEvaluationBO;
 
 /**
  * 购物订单服务接口
@@ -176,15 +175,6 @@ public interface ShoppingOrderService {
 	void executetAutoComment();
 	
 	/**
-	 * 获取自动评论参数
-	 * 
-	 * @param ShoppingOrderItemId 购物订单项id
-	 * @return
-	 * @author Sunny
-	 */
-	ShoppingOrderItemEvaluationBO getShoppingOrderItemEvaluationBOByShoppingOrderItemId(Long ShoppingOrderItemId);
-	
-	/**
 	 * 根据商家的id查询商家是否有进行中的订单
 	 * 
 	 * @param merchantId 商家的id
@@ -202,4 +192,11 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId, boolean isAll);
+	
+	/**
+	 * 自动取消为付款的订单
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoCancelOrder();
 }

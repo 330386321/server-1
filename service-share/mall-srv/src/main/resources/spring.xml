@@ -25,7 +25,7 @@
         <!-- <property name="persistConsumerOffsetInterval" value="${rocketmq.persistConsumerOffsetInterval}" /> -->
 
         <!-- Producer组名，多个Producer如果属于一 个应用，发送同样的消息，则应该将它们 归为同一组 -->
-        <property name="producerGroup" value="orderSrvProducerGroup"/>
+        <property name="producerGroup" value="mallSrvProducerGroup"/>
         <!-- 发送消息超时时间，单位毫秒 -->
         <!-- <property name="sendMsgTimeout" value="${rocketmq.producer.sendMsgTimeout}" />-->
 
@@ -42,24 +42,14 @@
         <!-- 客户端实例名 -->
         <property name="instanceName" value="consumer"/>
 
-        <property name="consumerGroup" value="orderSrvConsumerGroup"/>
+        <property name="consumerGroup" value="mallSrvConsumerGroup"/>
         <!-- 批量拉消息，一次最多拉多少条， 默认设置为32 -->
         <property name="pullBatchSize" value="35"/>
         <!-- 批量消费，一次消费多少条消息， 默认设置为1 -->
         <property name="consumeMessageBatchMaxSize" value="5"/>
         <property name="messageListenerConcurrently" ref="messageConsumerListener" />
-		
+        
     </bean>
 
-    <bean id="messageConsumerListener" class="com.lawu.eshop.order.srv.mq.MessageConsumerListener" />
-
-    <!--配置作业注册中心 -->
-    <reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="order-job"/>
-
-    <!-- 配置作业-->
-    <!--
-    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
-	<job:simple id="shoppingOrderAutoCancelOrderJob" description="自动取消购物订单" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCancelOrderJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
-	<job:simple id="shoppingOrderAutoCommentOrderJob" description="自动评论购物订单" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCommentOrderJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
-	-->
+    <bean id="messageConsumerListener" class="com.lawu.eshop.mall.srv.mq.MessageConsumerListener" />
 </beans>

@@ -18,4 +18,9 @@ public class PropertyNameConstant {
 	 */
 	public final static String AUTOMATIC_EVALUATION = "automatic_evaluation";
 	
+	/**
+	 * 自动取消未付款订单时间
+	 */
+	public final static String AUTOMATIC_CANCEL_ORDER = "automatic_cancel_order";
+	
 }
