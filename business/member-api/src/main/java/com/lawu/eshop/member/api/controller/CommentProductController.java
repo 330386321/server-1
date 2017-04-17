@@ -21,6 +21,7 @@ import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
@@ -135,11 +136,10 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setNickName(user.getModel().getNickname());
                 commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
-                Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
+                Result<ShoppingCartProductModelDTO>  product = productService.getShoppingCartProductModel(commentDTO.getProductModelId());
                 commentProductDTO.setName(product.getModel().getName());
-                commentProductDTO.setPriceMax(product.getModel().getPriceMax());
-                commentProductDTO.setPriceMin(product.getModel().getPriceMin());
-                commentProductDTO.setSpec(product.getModel().getSpec());
+              //  commentProductDTO.setPriceMax(product.getModel().getPrice());
+                commentProductDTO.setSpec(product.getModel().get);
                 commentProductDTOS.add(commentProductDTO);
             }
         pages.setCurrentPage(result.getModel().getCurrentPage());

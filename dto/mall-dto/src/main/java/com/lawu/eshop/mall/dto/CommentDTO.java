@@ -60,6 +60,8 @@ public class CommentDTO {
     private BigDecimal avgSpend;
     @ApiModelProperty(value = "商品ID")
     private Long productId;
+    @ApiModelProperty(value = "商品型号ID")
+    private Long productModelId;
 
     public String getContent() {
         return content;
@@ -147,5 +149,13 @@ public class CommentDTO {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public Long getProductModelId() {
+        return productModelId;
+    }
+
+    public void setProductModelId(Long productModelId) {
+        this.productModelId = productModelId;
     }
 }

@@ -32,6 +32,7 @@ public class CommentProductConverter {
         commentProductBO.setReplyContent(commentProductDO.getReplyContent());
         commentProductBO.setMemberId(commentProductDO.getMemberId());
         commentProductBO.setProductId(commentProductDO.getProductId());
+        commentProductBO.setProductModelId(commentProductDO.getProductModelId());
         commentProductBO.setGrade(commentProductDO.getGrade());
         return commentProductBO;
     }
@@ -49,6 +50,7 @@ public class CommentProductConverter {
             commentDTO.setImgUrls(commentProductBO.getUrlImgs());
             commentDTO.setMemberId(commentProductBO.getMemberId());
             commentDTO.setProductId(commentProductBO.getProductId());
+            commentDTO.setProductModelId(commentProductBO.getProductModelId());
             commentDTO.setGrade(commentProductBO.getGrade());
             commentDTO.setReplyContent(commentProductBO.getReplyContent());
             commentDTO.setId(commentProductBO.getId());

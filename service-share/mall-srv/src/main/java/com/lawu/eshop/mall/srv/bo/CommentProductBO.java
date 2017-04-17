@@ -44,6 +44,8 @@ public class CommentProductBO {
 
     private Byte grade;
 
+    private Long productModelId;
+
     public Long getId() {
         return id;
     }
@@ -114,5 +116,13 @@ public class CommentProductBO {
 
     public void setGrade(Byte grade) {
         this.grade = grade;
+    }
+
+    public Long getProductModelId() {
+        return productModelId;
+    }
+
+    public void setProductModelId(Long productModelId) {
+        this.productModelId = productModelId;
     }
 }
