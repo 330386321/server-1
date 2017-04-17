@@ -13,10 +13,13 @@ import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.service.ProductModelService;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
@@ -72,4 +75,28 @@ public class ProductModelController extends BaseController {
 
 		return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBOS));
 	}
+
+	/**
+	 * 商家查看评价时，显示商品信息和其型号信息
+	 * 
+	 * @param productModelId
+	 * @return
+	 * @author Yangqh
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
+	public Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception {
+
+		CommentProductInfoBO commentProductInfoBO = productModelService.selectCommentProductInfo(productModelId);
+
+		if (commentProductInfoBO == null) {
+			successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+
+		CommentProductInfoDTO dto = new CommentProductInfoDTO();
+		BeanUtil.copyProperties(commentProductInfoBO, dto);
+
+		return successGet(dto);
+	}
+
 }

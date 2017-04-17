@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 
 /**
@@ -47,5 +48,13 @@ public interface ProductModelService {
 	 * @author Sunny
 	 */
 	void releaseInventory(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification);
+
+	/**
+	 * 商家查看评价时，显示商品信息和其型号信息
+	 * @param productModelId
+	 * @return
+	 * @author Yangqh
+	 */
+	CommentProductInfoBO selectCommentProductInfo(Long productModelId);
 
 }

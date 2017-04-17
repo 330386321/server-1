@@ -14,6 +14,7 @@ import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
+import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
@@ -193,5 +194,25 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 			
 		}
+	}
+
+	/**
+	 * 
+	 * @author Yangqh
+	 */
+	@Override
+	public CommentProductInfoBO selectCommentProductInfo(Long productModelId) {
+		ProductModelDO model = productModelDOMapper.selectByPrimaryKey(Long.valueOf(productModelId));
+		Long productId = model.getProductId();
+		if(productId == null){
+			return null;
+		}
+		ProductDO product = productDOMapper.selectByPrimaryKey(productId);
+		CommentProductInfoBO bo = new CommentProductInfoBO();
+		bo.setName(product.getName());
+		bo.setPrice(model.getPrice().toString());
+		bo.setModelName(model.getName());
+		bo.setFeatureImage(product.getFeatureImage());
+		return bo;
 	}
 }
