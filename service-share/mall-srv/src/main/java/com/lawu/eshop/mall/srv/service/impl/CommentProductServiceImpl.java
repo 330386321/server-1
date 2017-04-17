@@ -1,17 +1,5 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -19,11 +7,7 @@ import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
-import com.lawu.eshop.mall.param.CommentListParam;
-import com.lawu.eshop.mall.param.CommentMerchantListParam;
-import com.lawu.eshop.mall.param.CommentProductListParam;
-import com.lawu.eshop.mall.param.CommentProductPageParam;
-import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
@@ -37,6 +21,17 @@ import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -66,6 +61,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
         commentProductDO.setOrderItemId(param.getShoppingOrderItemId());
         commentProductDO.setMerchantId(param.getMerchantId());
+        commentProductDO.setProductModelId(param.getProductModelId());
         commentProductDO.setGrade(param.getGradeEnum().val);
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());

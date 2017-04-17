@@ -695,6 +695,66 @@ public class CommentProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andProductModelIdIsNull() {
+            addCriterion("product_model_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdIsNotNull() {
+            addCriterion("product_model_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdEqualTo(Long value) {
+            addCriterion("product_model_id =", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdNotEqualTo(Long value) {
+            addCriterion("product_model_id <>", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdGreaterThan(Long value) {
+            addCriterion("product_model_id >", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("product_model_id >=", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdLessThan(Long value) {
+            addCriterion("product_model_id <", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdLessThanOrEqualTo(Long value) {
+            addCriterion("product_model_id <=", value, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdIn(List<Long> values) {
+            addCriterion("product_model_id in", values, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdNotIn(List<Long> values) {
+            addCriterion("product_model_id not in", values, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdBetween(Long value1, Long value2) {
+            addCriterion("product_model_id between", value1, value2, "productModelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductModelIdNotBetween(Long value1, Long value2) {
+            addCriterion("product_model_id not between", value1, value2, "productModelId");
+            return (Criteria) this;
+        }
+
         public Criteria andIsAnonymousIsNull() {
             addCriterion("is_anonymous is null");
             return (Criteria) this;

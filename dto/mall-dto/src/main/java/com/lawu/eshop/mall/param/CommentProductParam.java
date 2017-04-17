@@ -37,11 +37,13 @@ public class CommentProductParam {
     /**
      * 是否匿名（0：否1：是）
      */
-    @ApiModelProperty(value = "是否匿名（COMMENT_ANONYMOUS_FAILED：否 COMMENT_ANONYMOUS_SUCCESS：是）", required = true)
+    @ApiModelProperty(value = "是否匿名（UN_COMMENT_ANONYMOUS：否 COMMENT_ANONYMOUS：是）", required = true)
     private CommentAnonymousEnum anonymousEnum;
 
     @ApiModelProperty(value = "商家ID", required = true)
     private Long merchantId;
+    @ApiModelProperty(value = "商品型号ID", required = true)
+    private Long productModelId;
 
     public String getContent() {
         return content;
@@ -89,5 +91,13 @@ public class CommentProductParam {
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Long getProductModelId() {
+        return productModelId;
+    }
+
+    public void setProductModelId(Long productModelId) {
+        this.productModelId = productModelId;
     }
 }
