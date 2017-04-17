@@ -5,7 +5,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import com.lawu.eshop.order.constants.StatusEnum;
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.srv.bo.PayOrderNotification;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
@@ -35,7 +35,7 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
         //更改订单状态
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setId(payOrderId);
-        payOrderDO.setStatus(StatusEnum.STATUS_PAY_SUCCESS.val);
+        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
 
         PayOrderDO oldOrder = payOrderDOMapper.selectByPrimaryKey(payOrderId);

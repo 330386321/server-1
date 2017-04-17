@@ -101,7 +101,12 @@ public class MqConstant {
      * 商家同意退款发布的MQ消息
      */
     public static final String TAG_AGREE_TO_REFUND = "agree_to_refund";
-
+    
+    /**
+     * 提醒卖家发货时发布的MQ消息
+     */
+    public static final String TAG_REMIND_SHIPMENTS = "remind_shipments";
+    
     /******************************************/
     /*******product-srv模块tag **********/
 

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.order.constants.ShoppingRefundDetailStatusEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
@@ -67,7 +67,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 		criteria.andShoppingOrderItemOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 查询退款申请中有效的记录
-		criteria.andShoppingRefundDetailStatusEqualTo(ShoppingRefundDetailStatusEnum.VALID.getValue());
+		criteria.andShoppingRefundDetailStatusEqualTo(StatusEnum.VALID.getValue());
 		if (memberId != null && memberId > 0) {
 			criteria.andMemberIdEqualTo(memberId);
 		}

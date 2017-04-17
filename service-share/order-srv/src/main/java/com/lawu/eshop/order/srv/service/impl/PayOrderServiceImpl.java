@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.order.constants.StatusEnum;
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -45,7 +45,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setGmtModified(new Date());
         payOrderDO.setMerchantNum(param.getMerchantNum());
         payOrderDO.setIsEvaluation(false);//未评
-        payOrderDO.setStatus(StatusEnum.STATUS_UNPAY.val);//待支付
+        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.val);//待支付
         payOrderDOMapper.insert(payOrderDO);
         return payOrderDO.getId();
     }
@@ -54,9 +54,9 @@ public class PayOrderServiceImpl implements PayOrderService {
     public Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param) {
         PayOrderDOExample example = new PayOrderDOExample();
         if (param.getEvaluationEnum() == null) {
-            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(StatusEnum.STATUS_PAY_SUCCESS.val);
+            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
         } else {
-            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(StatusEnum.STATUS_PAY_SUCCESS.val);
+            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
         }
         example.setOrderByClause("id desc");
         //分页
@@ -83,7 +83,7 @@ public class PayOrderServiceImpl implements PayOrderService {
     public void delPayOrderInfo(Long id) {
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setId(id);
-        payOrderDO.setStatus(StatusEnum.STATUS_DEL.val);
+        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_DEL.val);
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
     }
 

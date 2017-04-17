@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
@@ -67,4 +68,12 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
 	List<ShoppingOrderExtendDO> selectShoppingOrderAssociationByExample(ShoppingOrderExtendDOExample example);
+	
+	/**
+	 * 查询订单表
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+	List<ShoppingOrderDO> selectByExample(ShoppingOrderExtendDOExample example);
 }

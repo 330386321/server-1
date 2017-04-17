@@ -40,7 +40,6 @@ import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
@@ -861,28 +860,51 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public void executeAutoCancelOrder() {
-		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
-		ShoppingOrderDOExample.Criteria criteria = shoppingOrderDOExample.createCriteria();
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 		
 		String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
-		Date identifyTime = DateUtil.add(new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
 		
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		criteria.andGmtCreateLessThanOrEqualTo(identifyTime);
+		criteria.andGmtCreateDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticCancelOrderTime), new Date());
 		
 		// 查找所有超时未付款的订单
-		List<ShoppingOrderDO> ShoppingOrderDOList = shoppingOrderDOMapper.selectByExample(shoppingOrderDOExample);
+		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		for (ShoppingOrderDO item : ShoppingOrderDOList) {
+		for (ShoppingOrderDO item : shoppingOrderDOList) {
 			cancelOrder(item.getId());
 		}
+	}
+	
+	/**
+	 * 自动提醒发货
+	 * 
+	 * @author Sunny
+	 */
+	@Override
+	public void executeAutoRemindShipments() {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
+		
+		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
+		
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
+		
+		// 查找所有超时未发货的订单，提醒卖家发货
+		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		
+		for (ShoppingOrderDO item : shoppingOrderDOList) {
+			
+		}
+		
 	}
 	
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/
 	/**
-	 * 自动取消为付款的订单
+	 * 评论商品订单
 	 * 
 	 * @author Sunny
 	 */
@@ -895,6 +917,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 发送MQ消息，通知mall模块添加默认好评记录
+		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
+	}
+	
+	/**
+	 * 提醒卖家发货
+	 * 
+	 * @author Sunny
+	 */
+	@Transactional
+	private void remindShipments(Long shoppingOrderItemId) {
+		// 发送MQ消息，通知mall模块发送推送和站内信
 		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
 	}
 }

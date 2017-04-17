@@ -22,6 +22,7 @@
     <result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
     <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
     <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="send_time" jdbcType="INTEGER" property="sendTime" />
     <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
     <result column="is_automatic_receipt" jdbcType="BIT" property="isAutomaticReceipt" />
     <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
@@ -111,7 +112,7 @@
     -->
     id, member_id, member_num, merchant_id, merchant_num, merchant_name, consignee_name, 
     consignee_address, consignee_mobile, remark, message, freight_price, commodity_total_price, 
-    order_total_price, order_status, status, is_no_reason_return, is_automatic_receipt, 
+    order_total_price, order_status, status, send_time, is_no_reason_return, is_automatic_receipt, 
     shopping_cart_ids_str, order_num, payment_method, third_number, waybill_num, express_company_id, 
     express_company_code, express_company_name, gmt_payment, gmt_transport, gmt_transaction, 
     gmt_create, gmt_modified
@@ -175,23 +176,23 @@
       consignee_address, consignee_mobile, remark, 
       message, freight_price, commodity_total_price, 
       order_total_price, order_status, status, 
-      is_no_reason_return, is_automatic_receipt, shopping_cart_ids_str, 
-      order_num, payment_method, third_number, 
-      waybill_num, express_company_id, express_company_code, 
-      express_company_name, gmt_payment, gmt_transport, 
-      gmt_transaction, gmt_create, gmt_modified
-      )
+      send_time, is_no_reason_return, is_automatic_receipt, 
+      shopping_cart_ids_str, order_num, payment_method, 
+      third_number, waybill_num, express_company_id, 
+      express_company_code, express_company_name, 
+      gmt_payment, gmt_transport, gmt_transaction, 
+      gmt_create, gmt_modified)
     values (#{memberId,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{merchantId,jdbcType=BIGINT}, 
       #{merchantNum,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{consigneeName,jdbcType=VARCHAR}, 
       #{consigneeAddress,jdbcType=VARCHAR}, #{consigneeMobile,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{message,jdbcType=VARCHAR}, #{freightPrice,jdbcType=DECIMAL}, #{commodityTotalPrice,jdbcType=DECIMAL}, 
       #{orderTotalPrice,jdbcType=DECIMAL}, #{orderStatus,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
-      #{isNoReasonReturn,jdbcType=BIT}, #{isAutomaticReceipt,jdbcType=BIT}, #{shoppingCartIdsStr,jdbcType=VARCHAR}, 
-      #{orderNum,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=TINYINT}, #{thirdNumber,jdbcType=VARCHAR}, 
-      #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, 
-      #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
-      )
+      #{sendTime,jdbcType=INTEGER}, #{isNoReasonReturn,jdbcType=BIT}, #{isAutomaticReceipt,jdbcType=BIT}, 
+      #{shoppingCartIdsStr,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=TINYINT}, 
+      #{thirdNumber,jdbcType=VARCHAR}, #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, 
+      #{expressCompanyCode,jdbcType=VARCHAR}, #{expressCompanyName,jdbcType=VARCHAR}, 
+      #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
     <!--
@@ -247,6 +248,9 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="sendTime != null">
+        send_time,
       </if>
       <if test="isNoReasonReturn != null">
         is_no_reason_return,
@@ -339,6 +343,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=INTEGER},
       </if>
       <if test="isNoReasonReturn != null">
         #{isNoReasonReturn,jdbcType=BIT},
@@ -452,6 +459,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
+      <if test="record.sendTime != null">
+        send_time = #{record.sendTime,jdbcType=INTEGER},
+      </if>
       <if test="record.isNoReasonReturn != null">
         is_no_reason_return = #{record.isNoReasonReturn,jdbcType=BIT},
       </if>
@@ -524,6 +534,7 @@
       order_total_price = #{record.orderTotalPrice,jdbcType=DECIMAL},
       order_status = #{record.orderStatus,jdbcType=TINYINT},
       status = #{record.status,jdbcType=TINYINT},
+      send_time = #{record.sendTime,jdbcType=INTEGER},
       is_no_reason_return = #{record.isNoReasonReturn,jdbcType=BIT},
       is_automatic_receipt = #{record.isAutomaticReceipt,jdbcType=BIT},
       shopping_cart_ids_str = #{record.shoppingCartIdsStr,jdbcType=VARCHAR},
@@ -595,6 +606,9 @@
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=INTEGER},
+      </if>
       <if test="isNoReasonReturn != null">
         is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
       </if>
@@ -664,6 +678,7 @@
       order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
       order_status = #{orderStatus,jdbcType=TINYINT},
       status = #{status,jdbcType=TINYINT},
+      send_time = #{sendTime,jdbcType=INTEGER},
       is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
       is_automatic_receipt = #{isAutomaticReceipt,jdbcType=BIT},
       shopping_cart_ids_str = #{shoppingCartIdsStr,jdbcType=VARCHAR},

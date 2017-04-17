@@ -1,27 +1,39 @@
 package com.lawu.eshop.order.constants;
 
-/**
- * @author zhangyong
- * @date 2017/4/11.
- */
 public enum StatusEnum {
-    STATUS_DEL((byte) 0x00),//0：删除
-    STATUS_UNPAY((byte) 0x01),//1-待支付
-    STATUS_PAY_SUCCESS((byte) 0x02),//2-成功
-    STATUS_PAY_fAIL((byte) 0x03);//3-失败
-    public Byte val;
 
-    StatusEnum(Byte val) {
-        this.val = val;
-    }
+	// 状态(0-无效|1-有效)
+	
+	/**
+	 * 0-无效
+	 */
+	INVALID((byte)0x00),
+	
+	/**
+	 * 1-有效
+	 */
+	VALID((byte)0x01);
 
-    public static StatusEnum getEnum(Byte val) {
-        StatusEnum[] values = StatusEnum.values();
-        for (StatusEnum object : values) {
-            if (object.val.equals(val)) {
-                return object;
-            }
-        }
-        return null;
-    }
+	private Byte value;
+
+	public Byte getValue() {
+		return value;
+	}
+
+	public void setValue(Byte value) {
+		this.value = value;
+	}
+
+	StatusEnum(Byte value) {
+		this.value = value;
+	}
+	
+	public static StatusEnum getEnum(Byte value){
+		for (StatusEnum item : StatusEnum.values()) {
+			if (item.getValue().equals(value)) {
+				return item;
+			}
+		}
+		return null;
+	}
 }

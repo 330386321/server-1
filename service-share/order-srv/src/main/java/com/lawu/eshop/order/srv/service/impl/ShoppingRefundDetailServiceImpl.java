@@ -13,7 +13,7 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.order.constants.ShoppingRefundDetailStatusEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
@@ -82,7 +82,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingRefundDetailDOExample.Criteria criteria = shoppingRefundDetailDOExample.createCriteria();
 		criteria.andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
 		// 找到有效记录
-		criteria.andStatusEqualTo(ShoppingRefundDetailStatusEnum.VALID.getValue());
+		criteria.andStatusEqualTo(StatusEnum.VALID.getValue());
 
 		List<ShoppingRefundDetailDO> shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByExample(shoppingRefundDetailDOExample);
 
@@ -370,7 +370,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 		// 更新退款详情
 		// 设置订单的状态为无效
-		shoppingRefundDetailDO.setStatus(ShoppingRefundDetailStatusEnum.INVALID.getValue());
+		shoppingRefundDetailDO.setStatus(StatusEnum.INVALID.getValue());
 		shoppingRefundDetailDO.setGmtIntervention(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);

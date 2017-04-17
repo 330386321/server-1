@@ -90,7 +90,12 @@ public class ShoppingOrderExtendDO implements Serializable {
 	 * 状态(0删除1正常)
 	 */
 	private Byte status;
-
+	
+    /**
+    * 发送提醒的次数
+    */
+    private Integer sendTime;
+	
 	/**
 	 * 是否支持无理由退货,0否 1是
 	 */
@@ -297,6 +302,14 @@ public class ShoppingOrderExtendDO implements Serializable {
 
 	public void setStatus(Byte status) {
 		this.status = status;
+	}
+
+	public Integer getSendTime() {
+		return sendTime;
+	}
+
+	public void setSendTime(Integer sendTime) {
+		this.sendTime = sendTime;
 	}
 
 	public Boolean getIsNoReasonReturn() {

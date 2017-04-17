@@ -38,4 +38,8 @@ public class TransactionConstant {
      */
     public static final  byte AGREE_TO_REFUND = 0x06;
     
+    /**
+     * 提醒卖家发货
+     */
+    public static final  byte REMIND_SHIPMENTS = 0x07;
 }

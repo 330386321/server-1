@@ -199,4 +199,12 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	void executeAutoCancelOrder();
+	
+	/**
+	 * 自动提醒发货
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoRemindShipments();
+	
 }
