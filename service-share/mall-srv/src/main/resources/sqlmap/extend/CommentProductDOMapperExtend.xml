@@ -9,6 +9,7 @@
         <result column="grade" property="grade" jdbcType="TINYINT"/>
         <result column="member_id" property="memberId" jdbcType="BIGINT"/>
         <result column="product_id" property="productId" jdbcType="BIGINT"/>
+        <result column="merchant_id" property="merchantId" jdbcType="BIGINT"/>
         <result column="is_anonymous" property="isAnonymous" jdbcType="BIT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
@@ -71,6 +72,22 @@
         FROM
         comment_product
         WHERE product_id =#{productId}
+    </select>
+
+
+    <!-- 查询评论id总数按商品ID分组-->
+    <select id="getCommentIdsCountByMerchantId" resultType="java.lang.Integer" parameterType="java.lang.Long">
+      select count(DISTINCT product_id,product_id) FROM comment_product WHERE status =1 AND merchant_id = #{merchantId}
+    </select>
+
+    <select id="getProductCommentIdsByMerchantId" resultMap="BaseResultMap" parameterType="com.lawu.eshop.mall.param.CommentMerchantListParam">
+        SELECT DISTINCT
+	p.product_id
+    FROM
+        comment_product as p
+    WHERE
+        p.status = 1
+    AND p.merchant_id = #{merchantId} LIMIT #{currentPage},#{pageSize}
     </select>
 
 </mapper>

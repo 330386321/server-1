@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.CommentProductIdDTO;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,14 @@ public interface CommentService {
      * @return
      */
     @RequestMapping(value = "commentProduct/getProductCommentListByMerchantId",method = RequestMethod.POST)
-    public Result<Page<CommentDTO>> getProductCommentListByMerchantId(@RequestBody CommentMerchantListParam pageParam);
+    public Result<Page<CommentDTO>> getProductCommentListByMerchantId(@ModelAttribute CommentMerchantListParam pageParam);
+
+    /**
+     * 获取用户评价商品ids
+     * @param pageParam
+     * @return
+     */
+    @RequestMapping(value = "commentProduct/getProductCommentIdsByMerchantId",method = RequestMethod.POST)
+    public Result<Page<CommentProductIdDTO>> getProductCommentIdsByMerchantId(@ModelAttribute CommentMerchantListParam pageParam);
+
 }

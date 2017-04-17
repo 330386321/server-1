@@ -55,4 +55,6 @@ public interface CommentProductService {
     void saveCommentProductInfoOrderJob(ShoppingOrderAutoCommentNotification notification);
 
     Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam);
+
+    Page<CommentProductBO> getProductCommentIdsByMerchantId(CommentMerchantListParam pageParam);
 }

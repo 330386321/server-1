@@ -60,6 +60,8 @@ public class CommentMerchantDTO {
 
     @ApiModelProperty(value = "人均消费")
     private BigDecimal avgSpend;
+    @ApiModelProperty(value = "会员等级")
+    private Integer level;
 
 
     public String getHeadImg() {
@@ -140,5 +142,13 @@ public class CommentMerchantDTO {
 
     public void setAvgSpend(BigDecimal avgSpend) {
         this.avgSpend = avgSpend;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

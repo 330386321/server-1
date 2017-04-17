@@ -106,6 +106,7 @@ public class CommentMerchantController extends BaseController {
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
                 commentMerchantDTO.setNickName(user.getModel().getNickname());
+                commentMerchantDTO.setLevel(user.getModel().getLevel());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }
         pages.setCurrentPage(result.getModel().getCurrentPage());
@@ -140,6 +141,7 @@ public class CommentMerchantController extends BaseController {
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
                 commentMerchantDTO.setNickName(user.getModel().getNickname());
+                commentMerchantDTO.setLevel(user.getModel().getLevel());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }
 

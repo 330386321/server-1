@@ -298,4 +298,24 @@ public class CommentProductServiceImpl implements CommentProductService {
         page.setRecords(commentProductBOS);
         return page;
     }
+
+    @Override
+    public Page<CommentProductBO> getProductCommentIdsByMerchantId(CommentMerchantListParam pageParam) {
+
+        int totalCount = commentProductDOMapperExtend.getCommentIdsCountByMerchantId(pageParam.getMerchantId());
+        if(totalCount == 0 || totalCount <0){
+            return null;
+        }
+        List<CommentProductDOView> productDOViews = commentProductDOMapperExtend.getProductCommentIdsByMerchantId(pageParam);
+        List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
+        for(CommentProductDOView commentProductDOView : productDOViews){
+            CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
+            commentProductBOS.add(commentProductBO);
+        }
+       Page<CommentProductBO> page = new Page<>();
+        page.setRecords(commentProductBOS);
+        page.setCurrentPage(pageParam.getCurrentPage());
+        page.setTotalCount(totalCount);
+        return page;
+    }
 }
