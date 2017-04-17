@@ -140,7 +140,7 @@ public class MerchantStoreController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1012]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1002]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
