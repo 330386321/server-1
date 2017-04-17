@@ -63,6 +63,10 @@ public class CommentProductDTO {
     private Long id;
     @ApiModelProperty(value = "评分")
     private Byte grade;
+    @ApiModelProperty(value = "会员等级")
+    private Integer level;
+    @ApiModelProperty(value = "回复内容")
+    private String replyContent;
 
 
     public String getHeadImg() {
@@ -159,5 +163,21 @@ public class CommentProductDTO {
 
     public void setGrade(Byte grade) {
         this.grade = grade;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public String getReplyContent() {
+        return replyContent;
+    }
+
+    public void setReplyContent(String replyContent) {
+        this.replyContent = replyContent;
     }
 }

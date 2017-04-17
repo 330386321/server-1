@@ -10,7 +10,6 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentProductDTO;
@@ -124,6 +123,7 @@ public class CommentProductController extends BaseController {
                 //设置评论信息
                 CommentProductDTO commentProductDTO = new CommentProductDTO();
                 commentProductDTO.setContent(commentDTO.getContent());
+                commentProductDTO.setReplyContent(commentDTO.getReplyContent());
                 commentProductDTO.setAnonymous(commentDTO.getAnonymous());
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
@@ -133,6 +133,7 @@ public class CommentProductController extends BaseController {
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
                 commentProductDTO.setNickName(user.getModel().getNickname());
+                commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
                 Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
                 commentProductDTO.setName(product.getModel().getName());
@@ -164,6 +165,7 @@ public class CommentProductController extends BaseController {
                 //设置评论信息
                 CommentProductDTO commentProductDTO = new CommentProductDTO();
                 commentProductDTO.setContent(commentDTO.getContent());
+                commentProductDTO.setReplyContent(commentDTO.getReplyContent());
                 commentProductDTO.setAnonymous(commentDTO.getAnonymous());
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
@@ -172,6 +174,7 @@ public class CommentProductController extends BaseController {
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
                 commentProductDTO.setNickName(user.getModel().getNickname());
+                commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
                 Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
                 commentProductDTO.setName(product.getModel().getName());
