@@ -121,7 +121,7 @@ public class ProductController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-    public Result saveProduct(@RequestParam Long productId, @RequestBody EditProductDataParam product) {
+    public Result saveProduct(@RequestParam Long productId, @RequestBody  EditProductDataParam product) {
         productService.eidtProduct(productId, product);
         return successCreated(ResultCode.SUCCESS);
     }

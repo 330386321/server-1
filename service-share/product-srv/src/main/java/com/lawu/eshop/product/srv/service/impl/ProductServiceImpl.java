@@ -332,7 +332,7 @@ public class ProductServiceImpl implements ProductService {
         }
         //保存商品滚动图片信息
         ProductImageDO pcDO = null;
-        String imageUrl = product.getProductImage();
+        String imageUrl = product.getProductImages();
         String[] imageUrls = imageUrl.split(",");
         for (int i = 0; i < imageUrls.length; i++) {
             pcDO = new ProductImageDO();
@@ -345,7 +345,7 @@ public class ProductServiceImpl implements ProductService {
             productImageDOMapper.insert(pcDO);
         }
         //保存商品详情图片
-        String imageDetailUrl = product.getProductDetailImage();
+        String imageDetailUrl = product.getProductDetailImages();
         String[] imageDetailUrls = imageDetailUrl.split(",");
         for (int i = 0; i < imageDetailUrls.length; i++) {
             pcDO = new ProductImageDO();

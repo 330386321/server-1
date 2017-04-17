@@ -1,5 +1,31 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.TypeReference;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -20,18 +46,7 @@ import com.lawu.eshop.product.query.ProductQuery;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author Yangqh
@@ -84,106 +99,9 @@ public class ProductController extends BaseController {
 
 	}
 
-	/*@SuppressWarnings({ "rawtypes" })
-	// @Audit(date="2017-04-05",reviewer="杨清华")
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
-	@Authorization
-	@RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
-	public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId,
-			@ModelAttribute @ApiParam EditProductParam product, MultipartFile file1) {
-
-		StringBuffer featureImageStr = new StringBuffer();
-		StringBuffer productImageStr = new StringBuffer();
-		StringBuffer productDetailImageStr = new StringBuffer();
-		HttpServletRequest request = getRequest();
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-				request.getSession().getServletContext());
-		if ((productId == null || productId == 0L || productId < 0) && !multipartResolver.isMultipart(request)) {
-			return successCreated(ResultCode.IMAGE_IS_NULL);
-		}
-		if (multipartResolver.isMultipart(request)) {
-			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			Iterator<String> iter = multiRequest.getFileNames();
-			while (iter.hasNext()) {
-				MultipartFile file = multiRequest.getFile(iter.next());
-				if (file != null) {
-					String originalFilename = file.getOriginalFilename();
-					String fieldName = file.getName();
-					String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
-					prefix = prefix.toLowerCase();
-					Map<String, String> retMap = UploadFileUtil.uploadOnePic(request, file,
-							FileDirConstant.DIR_PRODUCT);
-					String resultFlag = retMap.get("resultFlag");
-					if (!"0".equals(resultFlag)) {
-						return successCreated(resultFlag);
-					}
-
-					String imgUrl = retMap.get("imgUrl");
-					if (fieldName.contains("featureImage")) {
-						featureImageStr.append(imgUrl).append(",");
-					} else if (fieldName.contains("productIamge")) {
-						productImageStr.append(imgUrl).append(",");
-					} else if (fieldName.contains("productDetailImage")) {
-						productDetailImageStr.append(imgUrl).append(",");
-					}
-				}
-			}
-		}
-		String featureImage = "";
-		String productImage = "";
-		String productDetailImage = "";
-		if (productId == null || productId == 0L || productId < 0) {
-			featureImage = featureImageStr.toString();
-			productImage = productImageStr.toString();
-			productDetailImage = productDetailImageStr.toString();
-			if ("".equals(productImage)) {
-				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
-			}
-			if ("".equals(productDetailImage)) {
-				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
-			}
-
-			if ("".equals(featureImage)) {
-				featureImage = productImage.split(",")[0];
-			}
-		} else {
-			if ("".equals(product.getBackProductImageUrls()) && "".equals(productImage)) {
-				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
-			}
-			if ("".equals(product.getBackProductDetailImageUrls()) && "".equals(productDetailImage)) {
-				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
-			}
-
-			if (!"".equals(product.getBackProductImageUrls())) {
-				productImage = product.getBackProductImageUrls() + "," + productImage;
-			}
-			if (!"".equals(product.getBackProductDetailImageUrls())) {
-				productDetailImage = product.getBackProductDetailImageUrls() + "," + productDetailImage;
-			}
-		}
-		productImage = productImage.substring(0, productImage.lastIndexOf(","));
-		productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
-
-		Long merchantId = UserUtil.getCurrentUserId(getRequest());
-
-		EditProductDataParam dataProduct = new EditProductDataParam();
-		dataProduct.setMerchantId(merchantId);
-		dataProduct.setName(product.getName());
-		dataProduct.setCategoryId(product.getCategoryId());
-		dataProduct.setContent(product.getContent());
-		dataProduct.setSpec(product.getSpec());
-		dataProduct.setFeatureImage(featureImage);
-		dataProduct.setProductImage(productImage);
-		dataProduct.setBackProductDetailImageUrls(productDetailImage);
-
-		return productService.saveProduct(productId, dataProduct);
-
-	}*/
-
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
-//	@Authorization
+	// @Authorization
 	@RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
 	public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId,
@@ -195,9 +113,16 @@ public class ProductController extends BaseController {
 			return successCreated(ResultCode.IMAGE_IS_NULL);
 		}
 
+		String imageContents = product.getImageContents();
+		List<Object> imageContentsList = JSONArray.parseArray(imageContents, Object.class);
+		if (imageContentsList == null || imageContentsList.isEmpty() || imageContentsList.size() < 1) {
+			return successCreated(ResultCode.FAIL, "商品详情图片描述不能为空");
+		}
+		int imageContentsSize = imageContentsList.size();
+
 		StringBuffer featureImageStr = new StringBuffer();
 		StringBuffer productImageStr = new StringBuffer();
-		StringBuffer productDetailImageStr = new StringBuffer();
+		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
 		Collection<Part> parts;
 		try {
 			parts = request.getParts();
@@ -217,12 +142,23 @@ public class ProductController extends BaseController {
 				String fileName = part.getName();
 				if (fileName.contains("featureImage")) {
 					featureImageStr.append(imgUrl).append(",");
+
 				} else if (fileName.contains("productIamge")) {
 					productImageStr.append(imgUrl).append(",");
-				} else if (fileName.contains("productDetailImage")) {
-					productDetailImageStr.append(imgUrl).append(",");
-				}
 
+				} else if (fileName.contains("productDetailImage")) {
+					for (int i = 1; i <= imageContentsSize; i++) {
+						if (fileName.contains("productDetailImage-" + i)) {
+							List<String> images = detailImageMap.get("productDetailImage-" + i);
+							if (images == null || images.isEmpty()) {
+								images = new ArrayList<String>();
+							}
+							images.add(imgUrl);
+							detailImageMap.put("productDetailImage-" + i, images);
+							break;
+						}
+					}
+				}
 			}
 		} catch (Exception e) {
 			logger.error("上传商品图片异常，失败(productId={})", productId);
@@ -231,15 +167,13 @@ public class ProductController extends BaseController {
 
 		String featureImage = "";
 		String productImage = "";
-		String productDetailImage = "";
 		if (productId == null || productId == 0L || productId < 0) {
 			featureImage = featureImageStr.toString();
 			productImage = productImageStr.toString();
-			productDetailImage = productDetailImageStr.toString();
 			if ("".equals(productImage)) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
 			}
-			if ("".equals(productDetailImage)) {
+			if (detailImageMap == null || detailImageMap.isEmpty()) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
 			}
 
@@ -250,31 +184,43 @@ public class ProductController extends BaseController {
 			if ("".equals(product.getBackProductImageUrls()) && "".equals(productImage)) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
 			}
-			if ("".equals(product.getBackProductDetailImageUrls()) && "".equals(productDetailImage)) {
+			if ("".equals(product.getBackProductDetailImageUrls())
+					&& (detailImageMap == null || detailImageMap.isEmpty())) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
 			}
 
 			if (!"".equals(product.getBackProductImageUrls())) {
 				productImage = product.getBackProductImageUrls() + "," + productImage;
 			}
+			
 			if (!"".equals(product.getBackProductDetailImageUrls())) {
-				productDetailImage = product.getBackProductDetailImageUrls() + "," + productDetailImage;
+				//将回显图片url直接存入增量图片前面
+				Map<String, Object> retMap = JSON.parseObject(product.getBackProductDetailImageUrls(),new TypeReference<Map<String, Object>>(){} );
+				Iterator itr = retMap.keySet().iterator();
+				while(itr.hasNext()){
+					String key = itr.next().toString();
+					Object obj = retMap.get(key);
+					List<String> backList = (List<String>) obj;
+					if(backList != null && !backList.isEmpty() && backList.size() > 0){
+						List<String> eList = detailImageMap.get(key);
+						for(int i = 0 ; i < backList.size() ; i++){
+							eList.add(i,backList.get(i));
+						}
+					}
+				}
 			}
 		}
 		productImage = productImage.substring(0, productImage.lastIndexOf(","));
-		productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
-
-		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
-		dataProduct.setMerchantId(merchantId);
+		dataProduct.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 		dataProduct.setName(product.getName());
 		dataProduct.setCategoryId(product.getCategoryId());
 		dataProduct.setContent(product.getContent());
 		dataProduct.setSpec(product.getSpec());
-		dataProduct.setFeatureImage(featureImage);
+		dataProduct.setFeatureImage(featureImage);		
 		dataProduct.setProductImage(productImage);
-		dataProduct.setBackProductDetailImageUrls(productDetailImage);
+		dataProduct.setDetailImageMap(detailImageMap);
 
 		return productService.saveProduct(productId, dataProduct);
 

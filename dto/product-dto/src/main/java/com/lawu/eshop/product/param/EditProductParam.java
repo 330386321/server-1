@@ -22,25 +22,29 @@ public class EditProductParam {
 	@ApiModelProperty(value = "商品描述", required = true)
 	private String content;
 
-	@ApiModelProperty(value = "商品型号信息[{name,originalPrice,price,inventory}]", required = true)
+	@ApiModelProperty(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans},{},...],修改时inventoryTrans透传不做修改", required = true)
 	private String spec;
 	
-	@ApiModelProperty(value = "特征图片(新增、修改都非必填)", required = false)
+	@ApiModelProperty(value = "特征图片(非必填,如果为空则取滚动图片第一张作为特征图片)")
 	private String featureImage;
 	
-	@ApiModelProperty(value = "滚动图片，多张提交key为productIamge-*(新增时必填，修改非必填)", required = false)
-	private String productImage;
+	@ApiModelProperty(value = "滚动图片，多张提交key为productIamge-N(修改时上传增量，例如：第1张：productIamge-1、第2张：productIamge-2...)")
+	private String productImages;
 	
-	@ApiModelProperty(value = "详情图片，多张提交key为productDetailImage-*(新增时必填，修改非必填)", required = false)
-	private String productDetailImage;
 	
-	@ApiModelProperty(value = "修改时回显的特征图片url(新增时传空)", required = false)
+	@ApiModelProperty(value = "详情图片描述(以json字符串的格式传输，格式：[\"xxxxxx\",\"zzzzzzz\",...]，其顺序要和其详情图片index一致，没有文字描述空字符串处理)")
+	private String imageContents;
+	@ApiModelProperty(value = "详情图片，多张提交key为productDetailImage-'index'-N(例如：productDetailImage-1-1、productDetailImage-1-2,productDetailImage-2-1、productDetailImage-2-2,....)")
+	private String productDetailImages;
+	
+	
+	@ApiModelProperty(value = "修改时回显的特征图片url(新增时传空,格式：url1,url2,url3....)")
 	private String backFeatureImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的滚动图片(新增时传空)", required = false)
+	@ApiModelProperty(value = "修改时回显的滚动图片url(新增时传空,格式：url1,url2,url3....)")
 	private String backProductImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的详情图片(新增时传空)", required = false)
+	@ApiModelProperty(value = "修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
 	private String backProductDetailImageUrls;
 	
 	public String getBackFeatureImageUrls() {
@@ -91,20 +95,20 @@ public class EditProductParam {
 		this.featureImage = featureImage;
 	}
 
-	public String getProductImage() {
-		return productImage;
+	public String getProductImages() {
+		return productImages;
 	}
 
-	public void setProductImage(String productImage) {
-		this.productImage = productImage;
+	public void setProductImage(String productImages) {
+		this.productImages = productImages;
 	}
 
-	public String getProductDetailImage() {
-		return productDetailImage;
+	public String getProductDetailImages() {
+		return productDetailImages;
 	}
 
-	public void setProductDetailImage(String productDetailImage) {
-		this.productDetailImage = productDetailImage;
+	public void setProductDetailImages(String productDetailImages) {
+		this.productDetailImages = productDetailImages;
 	}
 
 	public String getBackProductImageUrls() {
@@ -123,5 +127,16 @@ public class EditProductParam {
 		this.backProductDetailImageUrls = backProductDetailImageUrls;
 	}
 
+	public String getImageContents() {
+		return imageContents;
+	}
+
+	public void setImageContents(String imageContents) {
+		this.imageContents = imageContents;
+	}
+
+	public void setProductImages(String productImages) {
+		this.productImages = productImages;
+	}
 
 }

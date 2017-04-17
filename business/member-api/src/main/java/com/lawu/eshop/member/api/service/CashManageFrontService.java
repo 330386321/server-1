@@ -40,7 +40,7 @@ public interface CashManageFrontService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "cashFront/findCashList")
-	Result<Page<WithdrawCashQueryDTO>> findCashList(CashBillDataParam cparam);
+	Result<Page<WithdrawCashQueryDTO>> findCashList(@RequestBody CashBillDataParam cparam);
 	
 	/**
 	 * 用户提现详情

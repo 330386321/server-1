@@ -66,6 +66,6 @@
         </table>
         <table tableName="product_image" domainObjectName="ProductImageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> -->
+        </table>--> 
     </context>
 </generatorConfiguration>
