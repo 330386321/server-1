@@ -58,6 +58,8 @@ public class CommentDTO {
 
     @ApiModelProperty(value = "人均消费")
     private BigDecimal avgSpend;
+    @ApiModelProperty(value = "商品ID")
+    private Long productId;
 
     public String getContent() {
         return content;
@@ -137,5 +139,13 @@ public class CommentDTO {
 
     public void setAvgSpend(BigDecimal avgSpend) {
         this.avgSpend = avgSpend;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }

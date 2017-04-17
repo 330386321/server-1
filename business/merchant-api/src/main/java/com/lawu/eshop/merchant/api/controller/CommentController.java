@@ -9,16 +9,25 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.ProductCommentListDTO;
+import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.merchant.api.service.CommentService;
+import com.lawu.eshop.merchant.api.service.MemberService;
+import com.lawu.eshop.merchant.api.service.ProductService;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -31,6 +40,10 @@ public class CommentController extends BaseController{
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 商家回复商品评价
@@ -74,13 +87,46 @@ public class CommentController extends BaseController{
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "getProductCommentListByMerchantId",method = RequestMethod.GET)
-    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentMerchantListParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        if(param ==null){
+        if(listparam ==null){
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
+        CommentMerchantListParam param = new CommentMerchantListParam();
         param.setMerchantId(merchantId);
+        param.setCurrentPage(listparam.getCurrentPage());
+        param.setPageSize(listparam.getPageSize());
+        List<ProductCommentListDTO> productCommentListDTOS = new ArrayList<>();
+        Page<ProductCommentListDTO> pages = new Page<>();
         Result<Page<CommentDTO>> comments = commentService.getProductCommentListByMerchantId(param);
-        return  successGet();
+        if(comments.getModel() == null || comments.getModel() .getRecords().isEmpty()){
+            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+            for (CommentDTO commentDTO : comments.getModel().getRecords()) {
+                //设置评论信息
+                ProductCommentListDTO commentListDTO = new ProductCommentListDTO();
+                commentListDTO.setContent(commentDTO.getContent());
+                commentListDTO.setAnonymous(commentDTO.getAnonymous());
+                commentListDTO.setGmtCreate(commentDTO.getGmtCreate());
+                commentListDTO.setImgUrls(commentDTO.getImgUrls());
+                commentListDTO.setId(commentDTO.getId());
+                commentListDTO.setGradeEnum(CommentGradeEnum.getEnum(commentDTO.getGrade()));
+                //查询评论用户信息
+                Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
+                commentListDTO.setHeadImg(user.getModel().getHeadimg());
+                commentListDTO.setNickName(user.getModel().getNickname());
+                commentListDTO.setLevel(user.getModel().getLevel());
+                //查询商品信息
+                Result<ProductInfoDTO> product = productService.selectProductById(commentDTO.getProductId());
+                commentListDTO.setName(product.getModel().getName());
+                commentListDTO.setPriceMax(product.getModel().getPriceMax());
+                commentListDTO.setPriceMin(product.getModel().getPriceMin());
+                commentListDTO.setFeatureImage(product.getModel().getFeatureImage());
+                productCommentListDTOS.add(commentListDTO);
+            }
+        pages.setCurrentPage(param.getCurrentPage());
+        pages.setTotalCount(comments.getModel().getTotalCount());
+        pages.setRecords(productCommentListDTOS);
+        return  successGet(pages);
     }
 }

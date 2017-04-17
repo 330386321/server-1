@@ -1,30 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -33,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
@@ -41,12 +17,21 @@ import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
-import com.lawu.eshop.user.constants.UploadFileTypeConstant;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * @author Yangqh
@@ -99,7 +84,7 @@ public class ProductController extends BaseController {
 
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	/*@SuppressWarnings({ "rawtypes" })
 	// @Audit(date="2017-04-05",reviewer="杨清华")
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
@@ -194,7 +179,7 @@ public class ProductController extends BaseController {
 
 		return productService.saveProduct(productId, dataProduct);
 
-	}
+	}*/
 
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")

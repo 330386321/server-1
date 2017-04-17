@@ -89,7 +89,9 @@ public class CommentMerchantController extends BaseController {
         Page<CommentMerchantDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentMerchantService.getCommentMerchantAllList(listParam);
-        if (!result.getModel().getRecords().isEmpty()) {
+        if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
+            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 CommentMerchantDTO commentMerchantDTO = new CommentMerchantDTO();
                 commentMerchantDTO.setAnonymous(commentDTO.getAnonymous());
@@ -106,7 +108,6 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setNickName(user.getModel().getNickname());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }
-        }
         pages.setCurrentPage(result.getModel().getCurrentPage());
         pages.setTotalCount(result.getModel().getTotalCount());
         pages.setRecords(commentMerchantDTOS);
@@ -122,7 +123,9 @@ public class CommentMerchantController extends BaseController {
         Page<CommentMerchantDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentMerchantService.getCommentMerchantListWithImgs(listParam);
-        if (!result.getModel().getRecords().isEmpty()) {
+        if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
+            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 CommentMerchantDTO commentMerchantDTO = new CommentMerchantDTO();
                 commentMerchantDTO.setAnonymous(commentDTO.getAnonymous());
@@ -139,7 +142,7 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setNickName(user.getModel().getNickname());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }
-        }
+
         pages.setCurrentPage(result.getModel().getCurrentPage());
         pages.setTotalCount(result.getModel().getTotalCount());
         pages.setRecords(commentMerchantDTOS);

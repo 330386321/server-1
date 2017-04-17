@@ -1,21 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -26,6 +10,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentProductDTO;
@@ -39,12 +24,20 @@ import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyong
@@ -109,7 +102,7 @@ public class CommentProductController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
     public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) {
@@ -118,7 +111,9 @@ public class CommentProductController extends BaseController {
         Page<CommentProductDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentProductService.getCommentProducts(listParam);
-        if (!result.getModel().getRecords().isEmpty()) {
+        if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
+            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 //设置评论信息
                 CommentProductDTO commentProductDTO = new CommentProductDTO();
@@ -127,6 +122,7 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
                 commentProductDTO.setId(commentDTO.getId());
+                commentProductDTO.setGradeEnum(CommentGradeEnum.getEnum(commentDTO.getGrade()));
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
@@ -139,7 +135,6 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setSpec(product.getModel().getSpec());
                 commentProductDTOS.add(commentProductDTO);
             }
-        }
         pages.setCurrentPage(result.getModel().getCurrentPage());
         pages.setTotalCount(result.getModel().getTotalCount());
         pages.setRecords(commentProductDTOS);
@@ -147,7 +142,7 @@ public class CommentProductController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1004，1000]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.GET)
     public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) {
@@ -156,7 +151,9 @@ public class CommentProductController extends BaseController {
         Page<CommentProductDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentProductService.getCommentProductsWithImgs(listParam);
-        if (!result.getModel().getRecords().isEmpty()) {
+        if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
+            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 //设置评论信息
                 CommentProductDTO commentProductDTO = new CommentProductDTO();
@@ -177,7 +174,6 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setSpec(product.getModel().getSpec());
                 commentProductDTOS.add(commentProductDTO);
             }
-        }
         pages.setCurrentPage(result.getModel().getCurrentPage());
         pages.setTotalCount(result.getModel().getTotalCount());
         pages.setRecords(commentProductDTOS);
