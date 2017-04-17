@@ -1,30 +1,20 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
-import com.lawu.eshop.user.dto.StoreSolrDTO;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 商家门店信息转换
@@ -243,15 +233,15 @@ public class MerchantStoreConverter {
      */
     public static List<MerchantStoreNoReasonReturnBO> convertMerchantStoreNoReasonReturnBOList(List<MerchantStoreDO> merchantStoreDOList, List<MerchantDO> merchantDOList) {
         if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()
-        		|| merchantDOList == null || merchantDOList.isEmpty()) {
+                || merchantDOList == null || merchantDOList.isEmpty()) {
             return null;
         }
-        
+
         Map<Long, MerchantDO> merchantDOMap = new HashMap<Long, MerchantDO>();
         for (MerchantDO merchantDO : merchantDOList) {
-        	merchantDOMap.put(merchantDO.getId(), merchantDO);
+            merchantDOMap.put(merchantDO.getId(), merchantDO);
         }
-        
+
         List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = new ArrayList<MerchantStoreNoReasonReturnBO>();
         for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
             merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO, merchantDOMap.get(merchantStoreDO.getMerchantId())));
@@ -365,7 +355,7 @@ public class MerchantStoreConverter {
             storeSolrDTO.setName(solrDocument.get("name_s").toString());
             storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
             storeSolrDTO.setStorePic(solrDocument.get("storePic_s").toString());
-            storeSolrDTO.setDistance(Integer.valueOf(solrDocument.get("distance").toString()));
+            storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
             storeSolrDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
             storeSolrDTO.setAverageConsumeAmount(Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
             storeSolrDTO.setAverageScore(Double.valueOf(solrDocument.get("averageScore_d").toString()));

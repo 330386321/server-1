@@ -23,8 +23,8 @@ public class StoreSolrDTO {
     @ApiModelProperty(value = "门店照")
     private String storePic;
 
-    @ApiModelProperty(value = "距离")
-    private Integer distance;
+    @ApiModelProperty(value = "距离,单位km")
+    private Double distance;
 
     @ApiModelProperty(value = "收藏数")
     private Integer favoriteNumber;
@@ -67,14 +67,6 @@ public class StoreSolrDTO {
         this.storePic = storePic;
     }
 
-    public Integer getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Integer distance) {
-        this.distance = distance;
-    }
-
     public Integer getFavoriteNumber() {
         return favoriteNumber;
     }
@@ -105,5 +97,13 @@ public class StoreSolrDTO {
 
     public void setAverageScore(Double averageScore) {
         this.averageScore = averageScore;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 }

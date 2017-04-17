@@ -55,14 +55,16 @@ public class StoreSolrController extends BaseController {
         query.setParam("sfield", "latLon_p");
         query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
 
-        if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.DISTANCE_SORT.val) {
-            query.setParam("sort", "geodist() asc");
-        } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.FEEDBACK_SORT.val) {
-            query.setParam("sort", "feedbackRate_d desc");
-        } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.POPULARITY_SORT.val) {
-            query.setParam("sort", "favoriteNumber_i desc");
-        } else {
-            query.setParam("sort", "favoriteNumber_i desc,feedbackRate_d desc,geodist() asc");
+        if (storeSolrParam.getStoreSolrEnum() != null) {
+            if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.DISTANCE_SORT.val) {
+                query.setParam("sort", "geodist() asc");
+            } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.FEEDBACK_SORT.val) {
+                query.setParam("sort", "feedbackRate_d desc");
+            } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.POPULARITY_SORT.val) {
+                query.setParam("sort", "favoriteNumber_i desc");
+            } else {
+                query.setParam("sort", "favoriteNumber_i desc,feedbackRate_d desc,geodist() asc");
+            }
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
