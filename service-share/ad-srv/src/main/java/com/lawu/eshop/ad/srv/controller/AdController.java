@@ -274,8 +274,8 @@ public class AdController extends BaseController{
     	String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
         SolrQuery query = new SolrQuery();
         query.setParam("q", "*:*");
-        if (StringUtils.isNotEmpty(adSolrParam.getTilte())) {  //标题过滤
-            query.setParam("q", "title_s:" + adSolrParam.getTilte() + "*");
+        if (StringUtils.isNotEmpty(adSolrParam.getTitle())) {  //标题过滤
+            query.setParam("q", "title_s:" + adSolrParam.getTitle() + "*");
         }
         query.setParam("pt", latLon);
         query.setParam("fq", "{!geofilt}");

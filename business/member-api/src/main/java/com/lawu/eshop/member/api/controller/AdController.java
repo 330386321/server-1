@@ -70,9 +70,9 @@ public class AdController extends BaseController {
     
     @Autowired
     private FansMerchantService fansMerchantService;
-   
 
 
+    @Audit(date = "2017-04-17", reviewer = "孙林青")
     @ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -82,7 +82,8 @@ public class AdController extends BaseController {
     	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectListByMember(adEgainParam);
     	return pageDTOS;
     }
-    
+
+    @Audit(date = "2017-04-17", reviewer = "孙林青")
     @ApiOperation(value = "会员查询广告列表(精选推荐)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -92,16 +93,17 @@ public class AdController extends BaseController {
     	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectChoiceness(param);
     	return pageDTOS;
     }
-    
-     @ApiOperation(value = "会员查询广告列表(积分榜，人气榜)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
-     @Authorization
-     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
-     public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdPointParam adPointParam) {
-    	 Result<List<AdDTO>> rs= adExtendService.selectListPointTotle(adPointParam);
-     	 return rs;
-     }
+
+    @Audit(date = "2017-04-17", reviewer = "孙林青")
+    @ApiOperation(value = "会员查询广告列表(积分榜，人气榜)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
+    public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                    @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
+        Result<List<AdDTO>> rs = adExtendService.selectListPointTotle(adPointParam);
+        return rs;
+    }
 
 
     @Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -143,6 +145,7 @@ public class AdController extends BaseController {
     }
 
 
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
      @ApiOperation(value = "Top3排行榜", notes = "Top3排行榜,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -169,8 +172,9 @@ public class AdController extends BaseController {
      	
      	return successGet(user);
      }
-     
-     
+
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -180,7 +184,8 @@ public class AdController extends BaseController {
          Result rs = adExtendService.clickPraise(id);
          return rs;
      }
-     
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "点击广告", notes = "点击广告[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -191,8 +196,9 @@ public class AdController extends BaseController {
          Result rs = adService.clickAd(id,memberId);
          return rs;
      }
-     
 
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -201,8 +207,9 @@ public class AdController extends BaseController {
          Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adId);
          return adLexiconDTOS;
      }
-     
-     
+
+
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
      @ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")

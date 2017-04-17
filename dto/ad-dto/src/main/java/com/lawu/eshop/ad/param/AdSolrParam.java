@@ -12,7 +12,7 @@ public class AdSolrParam extends AbstractPageParam {
 
 
     @ApiModelProperty(value = "广告标题")
-    private String tilte;
+    private String title;
     
     @ApiParam (name="longitude", value = "经度")
 	private Double longitude;
@@ -20,12 +20,12 @@ public class AdSolrParam extends AbstractPageParam {
 	@ApiParam (name="latitude", value = "纬度")
 	private Double latitude;
 
-	public String getTilte() {
-		return tilte;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setTilte(String tilte) {
-		this.tilte = tilte;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Double getLongitude() {
