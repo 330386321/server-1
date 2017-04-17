@@ -185,11 +185,10 @@ public class AdConverter {
      * @return
      */
     public static List<AdSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
-        if (solrDocumentList.isEmpty()) {
-            return null;
+    	 List<AdSolrDTO> adSolrDTOS = new ArrayList<>();
+        if (solrDocumentList==null) {
+            return adSolrDTOS;
         }
-
-        List<AdSolrDTO> adSolrDTOS = new ArrayList<>();
         for (SolrDocument solrDocument : solrDocumentList) {
         	AdSolrDTO adSolrDTO = new AdSolrDTO();
         	adSolrDTO.setId((long)solrDocument.get("id_l"));

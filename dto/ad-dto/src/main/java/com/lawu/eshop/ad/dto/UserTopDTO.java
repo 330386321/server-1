@@ -2,14 +2,20 @@ package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class UserTopDTO {
 
+	@ApiModelProperty(value = "头像")
 	private String headimg;
 
+	@ApiModelProperty(value = "手机")
 	private String mobile;
 	
+	@ApiModelProperty(value = "地区")
 	private String regionPath;
 	
+	@ApiModelProperty(value = "积分")
 	private BigDecimal money;
 
 	public String getHeadimg() {

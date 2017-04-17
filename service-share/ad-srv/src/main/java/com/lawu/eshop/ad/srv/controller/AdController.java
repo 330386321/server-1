@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.srv.controller;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -277,23 +278,33 @@ public class AdController extends BaseController{
         if (StringUtils.isNotEmpty(adSolrParam.getTitle())) {  //标题过滤
             query.setParam("q", "title_s:" + adSolrParam.getTitle() + "*");
         }
+        query.setSort("status_s", SolrQuery.ORDER.desc);
         query.setParam("pt", latLon);
         query.setParam("fq", "{!geofilt}");
         query.setParam("sfield", "latLon_p");
         query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
         String[] path=adSolrParam.getRegionPath().split("/");
         query.setQuery("area_ss : 0");
-        query.setQuery("status_s : 2");
-        query.setQuery("(merchantId_s: "+adSolrParam.getMemberId()+") or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        List<Long> merchantIds=adSolrParam.getMerchantIds();
+        String str="";
+        if(!merchantIds.isEmpty()){
+        	for (Long id : merchantIds) {
+    			str+="merchantId_s:"+id +" or ";
+    		}
+        	str=str.substring(0,str.length()-3);
+        }
+        query.setQuery(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_AD_CORE);
-        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
+        SolrDocumentList solrDocumentList =new SolrDocumentList();
+        solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_AD_CORE);
         Page<AdSolrDTO> page = new Page<AdSolrDTO>();
         page.setRecords(AdConverter.convertDTO(solrDocumentList));
-        page.setTotalCount((int) solrDocumentList.getNumFound());
+        if(solrDocumentList==null){
+        	page.setTotalCount(0);
+        }else{
+        	page.setTotalCount((int) solrDocumentList.getNumFound());
+        }
         page.setCurrentPage(adSolrParam.getCurrentPage());
         return successGet(page);
     }

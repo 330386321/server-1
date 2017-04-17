@@ -367,6 +367,12 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setStatus(new Byte("1"));
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
+		FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+		adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+		Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+		SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+		document.addField("count_i", attenCount.intValue());
+	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		return i;
 	}
 
@@ -445,6 +451,10 @@ public class AdServiceImpl implements AdService {
 				if(adDO.getBeginTime().getTime()==date.getTime()){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDOMapper.updateByPrimaryKey(adDO);
+					SolrInputDocument document = new SolrInputDocument();
+					document.addField("id", adDO.getId());
+					document.addField("status_s", 3);
+				    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 				}
 			}
 		 
@@ -458,7 +468,10 @@ public class AdServiceImpl implements AdService {
 						adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 						adDOMapper.updateByPrimaryKey(adDO);
 						//删除solr中的数据
-						SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
+						SolrInputDocument document = new SolrInputDocument();
+						document.addField("id", adDO.getId());
+						document.addField("status_s", 1);
+					    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 					}
 				}
 		
