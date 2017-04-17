@@ -115,7 +115,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
                 claimsJws = Jwts.parser().setSigningKey(AbstractTokenManager.TOKEN_KEY).parseClaimsJws(token);
                 // OK, we can trust this JWT
 
-            } catch (SignatureException | MalformedJwtException e) {
+            } catch (SignatureException | MalformedJwtException | ExpiredJwtException e) {
                 // don't trust the JWT!
                 logger.warn("Wrong token: {}", token);
             }

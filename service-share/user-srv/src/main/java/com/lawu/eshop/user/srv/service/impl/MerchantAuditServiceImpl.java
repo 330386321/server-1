@@ -81,6 +81,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         newStoreDO.setIntro(merchantStoreParam.getIntro());
                         newStoreDO.setPrincipalName(merchantStoreParam.getPrincipalName());
                         newStoreDO.setPrincipalMobile(merchantStoreParam.getPrincipalMobile());
+                        newStoreDO.setIndustryName(merchantStoreParam.getIndustryName());
                         merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                         //修改更新门店扩展信息
                         MerchantStoreProfileDO profile = new MerchantStoreProfileDO();
@@ -172,6 +173,20 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
        if(merchantStoreAuditDOS.isEmpty()){
            return  null;
        }
+        MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
+        merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
+        merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
+        return merchantStoreAuditBO;
+    }
+
+    @Override
+    public MerchantStoreAuditBO getMerchantAuditInfoByUncheck(Long merchantId, Byte status) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(status);
+        List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
+        if(merchantStoreAuditDOS.isEmpty()){
+            return  null;
+        }
         MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());

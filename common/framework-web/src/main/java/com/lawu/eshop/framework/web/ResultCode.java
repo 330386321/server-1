@@ -48,6 +48,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_LICENSE = 2005;
     public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
     public static final int USER_POINT_NOT_ENOUGH = 2007;
+    public static final int MERCHANT_STORE_AUDIT_EXIST = 2008;
 
     // 商品模块代码 3xxx
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
@@ -162,6 +163,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_LICENSE, "请上传营业执照");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
         ResultCode.messageMap.put(USER_POINT_NOT_ENOUGH, "用户积分不足");
+        ResultCode.messageMap.put(MERCHANT_STORE_AUDIT_EXIST, "已经存在未审核记录");
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");

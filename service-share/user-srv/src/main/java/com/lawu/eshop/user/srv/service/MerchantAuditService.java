@@ -16,4 +16,6 @@ public interface MerchantAuditService {
     void updateMerchantAudit(Long storeAuditId, MerchantAuditParam auditParam);
 
     MerchantStoreAuditBO getMerchantAuditInfo(Long merchantId);
+
+    MerchantStoreAuditBO getMerchantAuditInfoByUncheck(Long merchantId, Byte status);
 }

@@ -100,7 +100,7 @@ public class MerchantStoreController extends BaseController {
             }
         } catch (Exception e) {
             logger.info("上传失败==================");
-            return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+           // return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
         }
         //判断回显照片
         if (!"".equals(merchantStoreParam.getStoreUrl()) && !"null".equals(merchantStoreParam.getStoreUrl()) && merchantStoreParam.getStoreUrl() != null) {
@@ -140,7 +140,7 @@ public class MerchantStoreController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [1002]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "修改门店信息TO审核", notes = "错误信息 [2008]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
