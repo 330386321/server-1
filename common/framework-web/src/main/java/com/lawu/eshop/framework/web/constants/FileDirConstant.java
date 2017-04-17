@@ -17,5 +17,8 @@ public class FileDirConstant {
     //广告视频路径
     public static final String DIR_AD_VIDEO = "ad_video";
 
-    public static final String DEFAULT_PIC = "";
+    /**
+     * 默认图片
+     */
+    public static final String DEFAULT_PIC = "http://www.rongcloud.cn/images/logo.png";
 }
