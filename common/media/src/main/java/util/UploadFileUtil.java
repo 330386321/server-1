@@ -159,7 +159,7 @@ public class UploadFileUtil {
         } catch (Exception e) {
             valsMap.put("resultFlag", "1010");
             valsMap.put("msg", "上传图片失败");
-            logger.info("上传图片失败");
+            logger.error("上传图片失败");
         }
         return valsMap;
 
@@ -221,7 +221,7 @@ public class UploadFileUtil {
                 //文件路径，文件类型
                 urlImg = bashdir + dir + "/" + newfileName;
             } catch (IOException e) {
-                logger.info("上传图片失败");
+                logger.error("上传图片失败");
             }
         }
         valsMap.put("imgUrl", urlImg);

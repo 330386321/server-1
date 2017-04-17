@@ -586,6 +586,66 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andAverageDailySalesIsNull() {
+            addCriterion("average_daily_sales is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesIsNotNull() {
+            addCriterion("average_daily_sales is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesEqualTo(BigDecimal value) {
+            addCriterion("average_daily_sales =", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesNotEqualTo(BigDecimal value) {
+            addCriterion("average_daily_sales <>", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesGreaterThan(BigDecimal value) {
+            addCriterion("average_daily_sales >", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("average_daily_sales >=", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesLessThan(BigDecimal value) {
+            addCriterion("average_daily_sales <", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("average_daily_sales <=", value, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesIn(List<BigDecimal> values) {
+            addCriterion("average_daily_sales in", values, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesNotIn(List<BigDecimal> values) {
+            addCriterion("average_daily_sales not in", values, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("average_daily_sales between", value1, value2, "averageDailySales");
+            return (Criteria) this;
+        }
+
+        public Criteria andAverageDailySalesNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("average_daily_sales not between", value1, value2, "averageDailySales");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -646,63 +706,243 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesIsNull() {
-            addCriterion("average_daily_sales is null");
+        public Criteria andTotalInventoryIsNull() {
+            addCriterion("total_inventory is null");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesIsNotNull() {
-            addCriterion("average_daily_sales is not null");
+        public Criteria andTotalInventoryIsNotNull() {
+            addCriterion("total_inventory is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesEqualTo(BigDecimal value) {
-            addCriterion("average_daily_sales =", value, "averageDailySales");
+        public Criteria andTotalInventoryEqualTo(Integer value) {
+            addCriterion("total_inventory =", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesNotEqualTo(BigDecimal value) {
-            addCriterion("average_daily_sales <>", value, "averageDailySales");
+        public Criteria andTotalInventoryNotEqualTo(Integer value) {
+            addCriterion("total_inventory <>", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesGreaterThan(BigDecimal value) {
-            addCriterion("average_daily_sales >", value, "averageDailySales");
+        public Criteria andTotalInventoryGreaterThan(Integer value) {
+            addCriterion("total_inventory >", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("average_daily_sales >=", value, "averageDailySales");
+        public Criteria andTotalInventoryGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_inventory >=", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesLessThan(BigDecimal value) {
-            addCriterion("average_daily_sales <", value, "averageDailySales");
+        public Criteria andTotalInventoryLessThan(Integer value) {
+            addCriterion("total_inventory <", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("average_daily_sales <=", value, "averageDailySales");
+        public Criteria andTotalInventoryLessThanOrEqualTo(Integer value) {
+            addCriterion("total_inventory <=", value, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesIn(List<BigDecimal> values) {
-            addCriterion("average_daily_sales in", values, "averageDailySales");
+        public Criteria andTotalInventoryIn(List<Integer> values) {
+            addCriterion("total_inventory in", values, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesNotIn(List<BigDecimal> values) {
-            addCriterion("average_daily_sales not in", values, "averageDailySales");
+        public Criteria andTotalInventoryNotIn(List<Integer> values) {
+            addCriterion("total_inventory not in", values, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("average_daily_sales between", value1, value2, "averageDailySales");
+        public Criteria andTotalInventoryBetween(Integer value1, Integer value2) {
+            addCriterion("total_inventory between", value1, value2, "totalInventory");
             return (Criteria) this;
         }
 
-        public Criteria andAverageDailySalesNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("average_daily_sales not between", value1, value2, "averageDailySales");
+        public Criteria andTotalInventoryNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_inventory not between", value1, value2, "totalInventory");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeIsNull() {
+            addCriterion("total_sales_volume is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeIsNotNull() {
+            addCriterion("total_sales_volume is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeEqualTo(Integer value) {
+            addCriterion("total_sales_volume =", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeNotEqualTo(Integer value) {
+            addCriterion("total_sales_volume <>", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeGreaterThan(Integer value) {
+            addCriterion("total_sales_volume >", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_sales_volume >=", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeLessThan(Integer value) {
+            addCriterion("total_sales_volume <", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeLessThanOrEqualTo(Integer value) {
+            addCriterion("total_sales_volume <=", value, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeIn(List<Integer> values) {
+            addCriterion("total_sales_volume in", values, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeNotIn(List<Integer> values) {
+            addCriterion("total_sales_volume not in", values, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeBetween(Integer value1, Integer value2) {
+            addCriterion("total_sales_volume between", value1, value2, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesVolumeNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_sales_volume not between", value1, value2, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceIsNull() {
+            addCriterion("min_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceIsNotNull() {
+            addCriterion("min_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceEqualTo(BigDecimal value) {
+            addCriterion("min_price =", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceNotEqualTo(BigDecimal value) {
+            addCriterion("min_price <>", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceGreaterThan(BigDecimal value) {
+            addCriterion("min_price >", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("min_price >=", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceLessThan(BigDecimal value) {
+            addCriterion("min_price <", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("min_price <=", value, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceIn(List<BigDecimal> values) {
+            addCriterion("min_price in", values, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceNotIn(List<BigDecimal> values) {
+            addCriterion("min_price not in", values, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("min_price between", value1, value2, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMinPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("min_price not between", value1, value2, "minPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceIsNull() {
+            addCriterion("max_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceIsNotNull() {
+            addCriterion("max_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceEqualTo(BigDecimal value) {
+            addCriterion("max_price =", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceNotEqualTo(BigDecimal value) {
+            addCriterion("max_price <>", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceGreaterThan(BigDecimal value) {
+            addCriterion("max_price >", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("max_price >=", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceLessThan(BigDecimal value) {
+            addCriterion("max_price <", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("max_price <=", value, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceIn(List<BigDecimal> values) {
+            addCriterion("max_price in", values, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceNotIn(List<BigDecimal> values) {
+            addCriterion("max_price not in", values, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("max_price between", value1, value2, "maxPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("max_price not between", value1, value2, "maxPrice");
             return (Criteria) this;
         }
 

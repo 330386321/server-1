@@ -248,7 +248,7 @@ public class AlipayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						// TODO 保证金支付回调
+						result = depositService.doHandleDepositNotify(param);
 
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
