@@ -69,16 +69,24 @@ public interface PropertyInfoService {
      * 校验积分是否足够
      *
      * @param userNum 用户编号
-     * @param point  金额
+     * @param point   金额
      * @return
      */
     int validatePoint(String userNum, String point);
 
-	/**
-	 * 获取用户商家积分余额信息
-	 * @param userNum
-	 * @return
-	 */
-	PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception;
+    /**
+     * 获取用户商家积分余额信息
+     *
+     * @param userNum
+     * @return
+     */
+    PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception;
+
+    /**
+     * 新增用户资产信息
+     *
+     * @param userNum
+     */
+    void savePropertyInfo(String userNum);
 
 }

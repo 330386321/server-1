@@ -23,8 +23,10 @@ import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +61,7 @@ public class MerchantServiceImpl implements MerchantService {
     private MerchantStoreDOMapper merchantStoreDOMapper;
 
     @Autowired
+    @Qualifier("merchantRegTransactionMainServiceImpl")
     private TransactionMainService transactionMainService;
 
     @Autowired
@@ -229,7 +232,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
         //获取融云token
         TokenResult tokenResult = rongUserService.getRongToken(merchantDO.getNum(),merchantDO.getMobile(), FileDirConstant.DEFAULT_PIC);
-        if(!"".equals(tokenResult.getToken())){
+        if(StringUtils.isNotEmpty(tokenResult.getToken())){
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());
             memberDO2.setId(merchantDO.getId());
