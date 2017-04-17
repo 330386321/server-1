@@ -1,7 +1,6 @@
 package com.lawu.eshop.mall.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -63,7 +62,7 @@ public class CommentProductDTO {
     @ApiModelProperty(value = "评价ID")
     private Long id;
     @ApiModelProperty(value = "评分")
-    private CommentGradeEnum gradeEnum;
+    private Byte grade;
 
 
     public String getHeadImg() {
@@ -154,11 +153,11 @@ public class CommentProductDTO {
         this.id = id;
     }
 
-    public CommentGradeEnum getGradeEnum() {
-        return gradeEnum;
+    public Byte getGrade() {
+        return grade;
     }
 
-    public void setGradeEnum(CommentGradeEnum gradeEnum) {
-        this.gradeEnum = gradeEnum;
+    public void setGrade(Byte grade) {
+        this.grade = grade;
     }
 }

@@ -128,7 +128,7 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
                 commentProductDTO.setId(commentDTO.getId());
-                commentProductDTO.setGradeEnum(CommentGradeEnum.getEnum(commentDTO.getGrade()));
+                commentProductDTO.setGrade(commentDTO.getGrade());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
