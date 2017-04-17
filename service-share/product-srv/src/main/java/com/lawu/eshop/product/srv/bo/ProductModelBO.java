@@ -9,12 +9,15 @@ import java.math.BigDecimal;
  * @date 2017/3/22
  */
 public class ProductModelBO {
-
+	
 	private Long id;
     private String name;
     private BigDecimal originalPrice;
     private BigDecimal price;
     private Integer inventory;
+    private Integer inventoryTrans;
+    private String isDelete;
+    
     private Integer salesVolume;
     
 	public Long getId() {
@@ -47,11 +50,23 @@ public class ProductModelBO {
 	public void setInventory(Integer inventory) {
 		this.inventory = inventory;
 	}
+	public Integer getInventoryTrans() {
+		return inventoryTrans;
+	}
+	public void setInventoryTrans(Integer inventoryTrans) {
+		this.inventoryTrans = inventoryTrans;
+	}
+	public String getIsDelete() {
+		return isDelete;
+	}
+	public void setIsDelete(String isDelete) {
+		this.isDelete = isDelete;
+	}
 	public Integer getSalesVolume() {
 		return salesVolume;
 	}
 	public void setSalesVolume(Integer salesVolume) {
 		this.salesVolume = salesVolume;
 	}
-    
+	
 }

@@ -16,6 +16,8 @@ public class ProductEditInfoBO {
     private String featureImage;
     private String imagesUrl;
     private String spec;
+    private String imageContent;
+    private String imageDetailUrl;
 	public Long getId() {
 		return id;
 	}
@@ -64,4 +66,17 @@ public class ProductEditInfoBO {
 	public void setCategory(Long category) {
 		this.category = category;
 	}
+	public String getImageContent() {
+		return imageContent;
+	}
+	public void setImageContent(String imageContent) {
+		this.imageContent = imageContent;
+	}
+	public String getImageDetailUrl() {
+		return imageDetailUrl;
+	}
+	public void setImageDetailUrl(String imageDetailUrl) {
+		this.imageDetailUrl = imageDetailUrl;
+	}
+	
 }

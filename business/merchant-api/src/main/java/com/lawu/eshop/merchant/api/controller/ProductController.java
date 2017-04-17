@@ -36,6 +36,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.ProductService;
+import com.lawu.eshop.product.constant.ProductImagePrefix;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
@@ -68,12 +69,14 @@ public class ProductController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "selectProduct", method = RequestMethod.POST)
 	public Result<Page<ProductQueryDTO>> selectProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			ProductStatusEnum productStatus, @ModelAttribute @ApiParam ProductQuery query) {
+			@ModelAttribute @ApiParam ProductQuery query) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		ProductDataQuery queryData = new ProductDataQuery();
-		queryData.setStatus(productStatus);
+		queryData.setProductStatus(query.getProductStatus());
 		queryData.setMerchantId(merchantId);
 		queryData.setName(query.getName());
+		queryData.setProductSortFieldEnum(query.getProductSortFieldEnum());
+		queryData.setOrderType(query.getOrderType());
 		Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);
 		return successCreated(page);
 	}
@@ -99,9 +102,9 @@ public class ProductController extends BaseController {
 
 	}
 
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
-	// @Authorization
+	@Authorization
 	@RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
 	public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId,
@@ -140,21 +143,21 @@ public class ProductController extends BaseController {
 				}
 
 				String fileName = part.getName();
-				if (fileName.contains("featureImage")) {
+				if (fileName.contains(ProductImagePrefix.featureImage)) {
 					featureImageStr.append(imgUrl).append(",");
 
-				} else if (fileName.contains("productIamge")) {
+				} else if (fileName.contains(ProductImagePrefix.productIamge)) {
 					productImageStr.append(imgUrl).append(",");
 
-				} else if (fileName.contains("productDetailImage")) {
+				} else if (fileName.contains(ProductImagePrefix.productDetailImage)) {
 					for (int i = 1; i <= imageContentsSize; i++) {
-						if (fileName.contains("productDetailImage-" + i)) {
-							List<String> images = detailImageMap.get("productDetailImage-" + i);
+						if (fileName.contains(ProductImagePrefix.productDetailImage+"-" + i)) {
+							List<String> images = detailImageMap.get(ProductImagePrefix.productDetailImage+"-" + i);
 							if (images == null || images.isEmpty()) {
 								images = new ArrayList<String>();
 							}
 							images.add(imgUrl);
-							detailImageMap.put("productDetailImage-" + i, images);
+							detailImageMap.put(ProductImagePrefix.productDetailImage+"-" + i, images);
 							break;
 						}
 					}
@@ -192,19 +195,21 @@ public class ProductController extends BaseController {
 			if (!"".equals(product.getBackProductImageUrls())) {
 				productImage = product.getBackProductImageUrls() + "," + productImage;
 			}
-			
+
 			if (!"".equals(product.getBackProductDetailImageUrls())) {
-				//将回显图片url直接存入增量图片前面
-				Map<String, Object> retMap = JSON.parseObject(product.getBackProductDetailImageUrls(),new TypeReference<Map<String, Object>>(){} );
+				// 将回显图片url直接存入增量图片前面
+				Map<String, Object> retMap = JSON.parseObject(product.getBackProductDetailImageUrls(),
+						new TypeReference<Map<String, Object>>() {
+						});
 				Iterator itr = retMap.keySet().iterator();
-				while(itr.hasNext()){
+				while (itr.hasNext()) {
 					String key = itr.next().toString();
 					Object obj = retMap.get(key);
 					List<String> backList = (List<String>) obj;
-					if(backList != null && !backList.isEmpty() && backList.size() > 0){
+					if (backList != null && !backList.isEmpty() && backList.size() > 0) {
 						List<String> eList = detailImageMap.get(key);
-						for(int i = 0 ; i < backList.size() ; i++){
-							eList.add(i,backList.get(i));
+						for (int i = 0; i < backList.size(); i++) {
+							eList.add(i, backList.get(i));
 						}
 					}
 				}
@@ -218,8 +223,8 @@ public class ProductController extends BaseController {
 		dataProduct.setCategoryId(product.getCategoryId());
 		dataProduct.setContent(product.getContent());
 		dataProduct.setSpec(product.getSpec());
-		dataProduct.setFeatureImage(featureImage);		
-		dataProduct.setProductImage(productImage);
+		dataProduct.setFeatureImage(featureImage);
+		dataProduct.setProductImages(productImage);
 		dataProduct.setDetailImageMap(detailImageMap);
 
 		return productService.saveProduct(productId, dataProduct);

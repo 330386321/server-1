@@ -1,6 +1,10 @@
 package com.lawu.eshop.product.param;
 
-import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import io.swagger.annotations.ApiParam;
 
 /**
  * api接收app提交参数对象
@@ -13,38 +17,32 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class EditProductParam {
 
-	@ApiModelProperty(value = "商品类型ID", required = true)
+	@ApiParam(value = "商品类型ID", required = true)
+	@NotNull(message="categoryId不能为空")
 	private Integer categoryId;
 
-	@ApiModelProperty(value = "商品名称", required = true)
+	@ApiParam(value = "商品名称", required = true)
+	@NotBlank(message="name不能为空")
 	private String name;
 
-	@ApiModelProperty(value = "商品描述", required = true)
+	@ApiParam(value = "商品描述", required = true)
 	private String content;
 
-	@ApiModelProperty(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans},{},...],修改时inventoryTrans透传不做修改", required = true)
+	@ApiParam(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans,isDelete,salesVolume},{},...],修改时inventoryTrans透传不做修改,isDelete(0-否1-是)", required = true)
+	@NotBlank(message="spec不能为空")
 	private String spec;
 	
-	@ApiModelProperty(value = "特征图片(非必填,如果为空则取滚动图片第一张作为特征图片)")
-	private String featureImage;
-	
-	@ApiModelProperty(value = "滚动图片，多张提交key为productIamge-N(修改时上传增量，例如：第1张：productIamge-1、第2张：productIamge-2...)")
-	private String productImages;
-	
-	
-	@ApiModelProperty(value = "详情图片描述(以json字符串的格式传输，格式：[\"xxxxxx\",\"zzzzzzz\",...]，其顺序要和其详情图片index一致，没有文字描述空字符串处理)")
+	@ApiParam(value = "详情图片描述(以json字符串的格式传输，格式：[\"xxxxxx\",\"zzzzzzz\",...]，其顺序要和其详情图片index一致，没有文字描述空字符串处理)")
+	@NotBlank(message="imageContents不能为空")
 	private String imageContents;
-	@ApiModelProperty(value = "详情图片，多张提交key为productDetailImage-'index'-N(例如：productDetailImage-1-1、productDetailImage-1-2,productDetailImage-2-1、productDetailImage-2-2,....)")
-	private String productDetailImages;
 	
-	
-	@ApiModelProperty(value = "修改时回显的特征图片url(新增时传空,格式：url1,url2,url3....)")
+	@ApiParam(value = "修改时回显的特征图片url(新增时传空,格式：url1,url2,url3....)")
 	private String backFeatureImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的滚动图片url(新增时传空,格式：url1,url2,url3....)")
+	@ApiParam(value = "修改时回显的滚动图片url(新增时传空,格式：url1,url2,url3....)")
 	private String backProductImageUrls;
 	
-	@ApiModelProperty(value = "修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
+	@ApiParam(value = "修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
 	private String backProductDetailImageUrls;
 	
 	public String getBackFeatureImageUrls() {
@@ -87,30 +85,6 @@ public class EditProductParam {
 		this.spec = spec;
 	}
 
-	public String getFeatureImage() {
-		return featureImage;
-	}
-
-	public void setFeatureImage(String featureImage) {
-		this.featureImage = featureImage;
-	}
-
-	public String getProductImages() {
-		return productImages;
-	}
-
-	public void setProductImage(String productImages) {
-		this.productImages = productImages;
-	}
-
-	public String getProductDetailImages() {
-		return productDetailImages;
-	}
-
-	public void setProductDetailImages(String productDetailImages) {
-		this.productDetailImages = productDetailImages;
-	}
-
 	public String getBackProductImageUrls() {
 		return backProductImageUrls;
 	}
@@ -133,10 +107,6 @@ public class EditProductParam {
 
 	public void setImageContents(String imageContents) {
 		this.imageContents = imageContents;
-	}
-
-	public void setProductImages(String productImages) {
-		this.productImages = productImages;
 	}
 
 }

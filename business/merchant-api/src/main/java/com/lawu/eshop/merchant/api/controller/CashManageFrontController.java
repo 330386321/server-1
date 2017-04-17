@@ -55,7 +55,7 @@ public class CashManageFrontController extends BaseController {
 
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "商家提现", notes = "商家提现，[1018|6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "商家提现", notes = "商家提现，[]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

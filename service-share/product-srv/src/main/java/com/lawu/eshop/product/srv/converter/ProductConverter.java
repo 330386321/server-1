@@ -111,6 +111,7 @@ public class ProductConverter {
         productEditInfoBO.setFeatureImage(productDO.getFeatureImage());
         productEditInfoBO.setContent(productDO.getContent());
         productEditInfoBO.setMerchantId(productDO.getMerchantId());
+        productEditInfoBO.setImageContent(productDO.getImageContent());
         return productEditInfoBO;
     }
 
@@ -166,11 +167,11 @@ public class ProductConverter {
         productDO.setName(param.getName());
         productDO.setCategoryId(param.getCategoryId());
         productDO.setMerchantId(param.getMerchantId());
-//		productDO.setName(param.getNum());
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
-//		productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        productDO.setImageContent(param.getImageContents());
         if (id == 0L) {
+        	productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());

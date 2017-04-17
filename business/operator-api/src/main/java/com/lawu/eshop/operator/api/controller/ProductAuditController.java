@@ -38,7 +38,7 @@ public class ProductAuditController extends BaseController {
     public Result<Page<ProductQueryDTO>> listProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                        @ModelAttribute @ApiParam ProductQuery query) {
         ProductDataQuery queryData = new ProductDataQuery();
-        queryData.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
+        queryData.setProductStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
         queryData.setName(query.getName());
         return productAuditService.listProduct(queryData);
     }
