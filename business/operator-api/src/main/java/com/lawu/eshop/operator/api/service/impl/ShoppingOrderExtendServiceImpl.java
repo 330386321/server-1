@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
-import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 import com.lawu.eshop.operator.api.service.ExpressCompanyService;
 import com.lawu.eshop.operator.api.service.ShoppingOrderExtendService;
 import com.lawu.eshop.operator.api.service.ShoppingOrderService;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 
 @Service
 public class ShoppingOrderExtendServiceImpl extends BaseController implements ShoppingOrderExtendService {

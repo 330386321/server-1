@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 
 public class ShoppingRefundDetailBO implements Serializable {
 

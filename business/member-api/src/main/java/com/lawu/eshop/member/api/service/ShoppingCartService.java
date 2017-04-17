@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.ShoppingCartDTO;
-import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
-import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.order.dto.ShoppingCartDTO;
+import com.lawu.eshop.order.param.ShoppingCartSaveParam;
+import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 
 /**
  * @author Sunny

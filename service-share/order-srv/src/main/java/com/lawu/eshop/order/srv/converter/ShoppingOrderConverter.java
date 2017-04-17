@@ -4,12 +4,13 @@ import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.mall.dto.CommentOrderDTO;
-import com.lawu.eshop.mall.dto.ShoppingOrderIsNoOnGoingOrderDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
@@ -85,8 +86,12 @@ public class ShoppingOrderConverter {
 		if(shoppingOrderDO == null){
 			return null;
 		}
+		
 		ShoppingOrderBO shoppingOrderBO = new ShoppingOrderBO();
-		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO);
+		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO, "orderStatus", "paymentMethod");
+		
+		shoppingOrderBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderDO.getOrderStatus()));
+		shoppingOrderBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderDO.getPaymentMethod()));
 		
 		return shoppingOrderBO;
     }

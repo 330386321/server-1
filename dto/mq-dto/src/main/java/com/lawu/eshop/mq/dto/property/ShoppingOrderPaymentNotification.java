@@ -13,16 +13,42 @@ public class ShoppingOrderPaymentNotification extends Notification {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 购物订单id
+	 * 购物订单id,多个订单id用逗号分隔
 	 */
-	private Long shoppingOrderId;
+	private String shoppingOrderIds;
+	
+	/**
+	 * 支付方式(1-余额 2-微信 3-支付宝)
+	 */
+	private Byte paymentMethod;
 
-	public Long getShoppingOrderId() {
-		return shoppingOrderId;
+	/**
+	 * 第三方支付交易号
+	 */
+	private String thirdNumber; 
+
+	public String getShoppingOrderIds() {
+		return shoppingOrderIds;
 	}
 
-	public void setShoppingOrderId(Long shoppingOrderId) {
-		this.shoppingOrderId = shoppingOrderId;
+	public void setShoppingOrderIds(String shoppingOrderIds) {
+		this.shoppingOrderIds = shoppingOrderIds;
+	}
+
+	public Byte getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(Byte paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getThirdNumber() {
+		return thirdNumber;
+	}
+
+	public void setThirdNumber(String thirdNumber) {
+		this.thirdNumber = thirdNumber;
 	}
 	
 }

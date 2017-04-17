@@ -25,11 +25,11 @@ public class ShoppingOrderExtendDO implements Serializable {
 	 * 商家ID
 	 */
 	private Long merchantId;
-	
-    /**
-    * 商家编号
-    */
-    private String merchantNum;
+
+	/**
+	 * 商家编号
+	 */
+	private String merchantNum;
 
 	/**
 	 * 商家名称
@@ -90,11 +90,11 @@ public class ShoppingOrderExtendDO implements Serializable {
 	 * 是否支持无理由退货,0否 1是
 	 */
 	private Boolean isNoReasonReturn;
-	
-    /**
-     * 是否自动收货(0-否|1-是)
-     */
-    private Boolean isAutomaticReceipt;
+
+	/**
+	 * 是否自动收货(0-否|1-是)
+	 */
+	private Boolean isAutomaticReceipt;
 
 	/**
 	 * 对应的购物车相应的id(多个id用,分隔)
@@ -105,6 +105,16 @@ public class ShoppingOrderExtendDO implements Serializable {
 	 * 订单编号
 	 */
 	private String orderNum;
+
+	/**
+	 * 支付方式(1-余额 2-微信 3-支付宝)
+	 */
+	private Byte paymentMethod;
+
+	/**
+	 * 第三方支付交易号
+	 */
+	private String thirdNumber;
 
 	/**
 	 * 运单编号
@@ -179,7 +189,7 @@ public class ShoppingOrderExtendDO implements Serializable {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
-	
+
 	public String getMerchantNum() {
 		return merchantNum;
 	}
@@ -306,6 +316,22 @@ public class ShoppingOrderExtendDO implements Serializable {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public Byte getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(Byte paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getThirdNumber() {
+		return thirdNumber;
+	}
+
+	public void setThirdNumber(String thirdNumber) {
+		this.thirdNumber = thirdNumber;
 	}
 
 	public String getWaybillNum() {

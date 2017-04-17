@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendQueryDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToMerchantDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 
@@ -38,6 +39,7 @@ public class ShoppingOrderExtendConverter {
 		
 		// 转换为枚举类型
 		shoppingOrderExtendDetailBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderExtendDO.getOrderStatus()));
+		shoppingOrderExtendDetailBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendDO.getPaymentMethod()));
 		
 		if (shoppingOrderExtendDO.getItems() != null) {
 			shoppingOrderExtendDetailBO.setItems(ShoppingOrderItemConverter.convert(shoppingOrderExtendDO.getItems()));

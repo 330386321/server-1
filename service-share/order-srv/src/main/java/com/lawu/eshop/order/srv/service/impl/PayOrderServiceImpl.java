@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.constants.StatusEnum;
-import com.lawu.eshop.mall.param.PayOrderListParam;
-import com.lawu.eshop.mall.param.PayOrderParam;
+import com.lawu.eshop.order.constants.StatusEnum;
+import com.lawu.eshop.order.param.PayOrderListParam;
+import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
@@ -40,7 +40,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setFavoredAmount(param.getFavoredAmount());
         payOrderDO.setActualAmount(param.getActualAmount());
         payOrderDO.setTotalAmount(param.getTotalAmount());
-        payOrderDO.setPayType(param.getPayTypeEnum().val);
+        payOrderDO.setPayType(param.getPayTypeEnum().getVal());
         payOrderDO.setGmtCreate(new Date());
         payOrderDO.setGmtModified(new Date());
         payOrderDO.setMerchantNum(param.getMerchantNum());

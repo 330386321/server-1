@@ -39,6 +39,8 @@
 	    <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
 	    <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
 	    <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+	    <result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
+    	<result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
 	    <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
 	    <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
 	    <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
@@ -52,12 +54,13 @@
 		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemAssociationResultMap"/>  
 	</resultMap>
 	
-	<resultMap id="ShoppingOrderItemRefundResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO">
+	<resultMap id="ShoppingOrderItemEvaluationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO">
+		<id column="id" jdbcType="BIGINT" property="shoppingOrderItem" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
 		<result column="product_id" jdbcType="BIGINT" property="productId" />
 	</resultMap>
 	
-	<resultMap id="ShoppingOrderItemEvaluationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemEvaluationDO">
+	<resultMap id="ShoppingOrderItemRefundResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO">
 		<id column="item_id" jdbcType="BIGINT" property="id" />
 		<result column="shopping_order_id" jdbcType="BIGINT" property="shoppingOrderId" />
 		<result column="product_id" jdbcType="BIGINT" property="productId" />
@@ -123,7 +126,7 @@
 		so.order_status,
 		so.status,
 		so.is_no_reason_return, so.is_automatic_receipt, so.shopping_cart_ids_str,
-		so.order_num, so.waybill_num, so.express_company_id, so.express_company_code,
+		so.order_num, so.payment_method, so.third_number, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name,
 		so.gmt_payment, so.gmt_transport,
 		so.gmt_transaction, so.gmt_create, so.gmt_modified
@@ -208,7 +211,7 @@
 	
 	<select id="selectShoppingOrderItemEvaluationDOByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderItemEvaluationResultMap">
 	  select
-	  so.member_id, soi.product_id
+	  soi.id, so.member_id, soi.product_id
 	  from shopping_order_item soi
 	  left join shopping_order so on so.id = soi.shopping_order_id
   	  <if test="_parameter != null">

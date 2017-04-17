@@ -2,8 +2,8 @@ package com.lawu.eshop.order.srv.service;
 
 import java.util.List;
 
-import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
-import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.order.param.ShoppingCartSaveParam;
+import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 

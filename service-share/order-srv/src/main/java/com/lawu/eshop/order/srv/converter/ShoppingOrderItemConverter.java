@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderItemDTO;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
+import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 

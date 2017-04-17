@@ -1426,6 +1426,136 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPaymentMethodIsNull() {
+            addCriterion("payment_method is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodIsNotNull() {
+            addCriterion("payment_method is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodEqualTo(Byte value) {
+            addCriterion("payment_method =", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotEqualTo(Byte value) {
+            addCriterion("payment_method <>", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodGreaterThan(Byte value) {
+            addCriterion("payment_method >", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodGreaterThanOrEqualTo(Byte value) {
+            addCriterion("payment_method >=", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodLessThan(Byte value) {
+            addCriterion("payment_method <", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodLessThanOrEqualTo(Byte value) {
+            addCriterion("payment_method <=", value, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodIn(List<Byte> values) {
+            addCriterion("payment_method in", values, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotIn(List<Byte> values) {
+            addCriterion("payment_method not in", values, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodBetween(Byte value1, Byte value2) {
+            addCriterion("payment_method between", value1, value2, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andPaymentMethodNotBetween(Byte value1, Byte value2) {
+            addCriterion("payment_method not between", value1, value2, "paymentMethod");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNull() {
+            addCriterion("third_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNotNull() {
+            addCriterion("third_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberEqualTo(String value) {
+            addCriterion("third_number =", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotEqualTo(String value) {
+            addCriterion("third_number <>", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThan(String value) {
+            addCriterion("third_number >", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("third_number >=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThan(String value) {
+            addCriterion("third_number <", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThanOrEqualTo(String value) {
+            addCriterion("third_number <=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLike(String value) {
+            addCriterion("third_number like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotLike(String value) {
+            addCriterion("third_number not like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIn(List<String> values) {
+            addCriterion("third_number in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotIn(List<String> values) {
+            addCriterion("third_number not in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberBetween(String value1, String value2) {
+            addCriterion("third_number between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotBetween(String value1, String value2) {
+            addCriterion("third_number not between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andWaybillNumIsNull() {
             addCriterion("waybill_num is null");
             return (Criteria) this;

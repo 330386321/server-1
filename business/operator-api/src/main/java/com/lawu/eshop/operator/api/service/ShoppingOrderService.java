@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
-import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 
 /**
  * @author Sunny

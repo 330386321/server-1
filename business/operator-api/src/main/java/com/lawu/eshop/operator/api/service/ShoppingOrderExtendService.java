@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 
 /**
  * @author Sunny

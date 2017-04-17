@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
 public class ShoppingOrderItemBO implements Serializable {
 

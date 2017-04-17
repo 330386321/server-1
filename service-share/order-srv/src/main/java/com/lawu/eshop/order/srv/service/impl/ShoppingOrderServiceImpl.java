@@ -18,18 +18,19 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.constants.ShoppingOrderItemRefundStatusEnum;
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusToMemberEnum;
-import com.lawu.eshop.mall.constants.ShoppingRefundTypeEnum;
-import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementItemParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
+import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
+import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
+import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
@@ -386,39 +387,43 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public void paymentSuccessful(Long id) {
-		if (id == null || id <= 0) {
+	public void paymentSuccessful(ShoppingOrderPaymentNotification notification) {
+		if (notification == null) {
 			return;
 		}
 		
-		/*
-		 * 实现MQ幂等性
-		 * 只有订单是待支付的状态才允许更新购物订单的状态
-		 */
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-		if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
-			return;
+		String [] shoppingOrderIds = StringUtils.split(notification.getShoppingOrderIds(), ",");
+		
+		for (String shoppingOrderId : shoppingOrderIds) {
+			/*
+			 * 实现MQ幂等性
+			 * 只有订单是待支付的状态才允许更新购物订单的状态
+			 */
+			Long id = Long.valueOf(shoppingOrderId);
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+			if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
+				return;
+			}
+			
+			// 更新购物订单的状态
+			shoppingOrderDO.setGmtModified(new Date());
+			// 更改订单状态为待发货
+			shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+			// 更新付款时间
+			shoppingOrderDO.setGmtPayment(new Date());
+			shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+			
+			// 更新购物订单项状态
+			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
+			com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+			shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+			
+			ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+			shoppingOrderItemDO.setGmtModified(new Date());
+			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+			
+			shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 		}
-		
-		// 更新购物订单的状态
-		shoppingOrderDO.setId(id);
-		shoppingOrderDO.setGmtModified(new Date());
-		// 更改订单状态为待发货
-		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
-		// 更新付款时间
-		shoppingOrderDO.setGmtPayment(new Date());
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-		
-		// 更新购物订单项状态
-		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
-		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
-		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
-		
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
-		
-		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 	}
 	
 	/**

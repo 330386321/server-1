@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.mall.dto.ShoppingCartDTO;
-import com.lawu.eshop.mall.param.ShoppingCartSaveParam;
-import com.lawu.eshop.mall.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.order.dto.ShoppingCartDTO;
+import com.lawu.eshop.order.param.ShoppingCartSaveParam;
+import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 

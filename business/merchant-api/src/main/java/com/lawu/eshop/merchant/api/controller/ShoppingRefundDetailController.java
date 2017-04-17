@@ -15,12 +15,12 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExpressDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingRefundDetailDTO;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

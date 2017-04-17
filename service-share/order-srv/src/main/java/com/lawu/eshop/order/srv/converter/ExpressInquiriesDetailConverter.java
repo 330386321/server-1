@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.mall.constants.ExpressInquiriesDetailStateEnum;
-import com.lawu.eshop.mall.dto.foreign.ExpressInquiriesDetailDTO;
-import com.lawu.eshop.mall.dto.foreign.TraceDTO;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
+import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
+import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.utils.express.kdniao.bo.ExpressInquiriesDetail;

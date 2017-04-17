@@ -1,8 +1,8 @@
 package com.lawu.eshop.order.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.param.PayOrderListParam;
-import com.lawu.eshop.mall.param.PayOrderParam;
+import com.lawu.eshop.order.param.PayOrderListParam;
+import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 

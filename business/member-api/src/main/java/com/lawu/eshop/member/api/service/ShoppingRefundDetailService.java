@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.dto.foreign.ShoppingRefundDetailDTO;
-import com.lawu.eshop.mall.param.ShoppingRefundDetailLogisticsInformationParam;
+import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 
 /**
  * @author Sunny

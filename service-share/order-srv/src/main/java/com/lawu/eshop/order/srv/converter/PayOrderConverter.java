@@ -1,7 +1,7 @@
 package com.lawu.eshop.order.srv.converter;
 
-import com.lawu.eshop.mall.constants.EvaluationEnum;
-import com.lawu.eshop.mall.dto.PayOrderDTO;
+import com.lawu.eshop.order.constants.EvaluationEnum;
+import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 

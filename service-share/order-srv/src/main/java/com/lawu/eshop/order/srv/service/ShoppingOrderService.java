@@ -3,13 +3,14 @@ package com.lawu.eshop.order.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.param.ShoppingOrderLogisticsInformationParam;
-import com.lawu.eshop.mall.param.ShoppingOrderSettlementParam;
-import com.lawu.eshop.mall.param.ShoppingOrderUpdateInfomationParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMemberParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderRequestRefundForeignParam;
+import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
+import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
@@ -103,7 +104,7 @@ public interface ShoppingOrderService {
 	 * @param id
 	 *            购物订单id
 	 */
-	void paymentSuccessful(Long id);
+	void paymentSuccessful(ShoppingOrderPaymentNotification notification);
 
 	/**
 	 * 确认收货之后 修改购物订单以及订单项状态为交易成功

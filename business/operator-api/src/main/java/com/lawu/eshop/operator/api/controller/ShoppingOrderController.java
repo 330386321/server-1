@@ -15,12 +15,12 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderExtendDetailDTO;
-import com.lawu.eshop.mall.dto.foreign.ShoppingOrderQueryToOperatorDTO;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 import com.lawu.eshop.operator.api.service.ShoppingOrderExtendService;
 import com.lawu.eshop.operator.api.service.ShoppingOrderService;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

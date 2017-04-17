@@ -1,7 +1,7 @@
 package com.lawu.eshop.order.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundQueryForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 

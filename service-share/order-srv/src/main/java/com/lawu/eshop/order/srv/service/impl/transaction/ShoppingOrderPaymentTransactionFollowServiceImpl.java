@@ -36,7 +36,7 @@ public class ShoppingOrderPaymentTransactionFollowServiceImpl extends AbstractTr
     		return null;
     	}
     	
-    	shoppingOrderService.paymentSuccessful(notification.getShoppingOrderId());
+    	shoppingOrderService.paymentSuccessful(notification);
     	
         return rtn;
     }

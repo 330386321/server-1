@@ -1,7 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.param.TransactionDetailQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;

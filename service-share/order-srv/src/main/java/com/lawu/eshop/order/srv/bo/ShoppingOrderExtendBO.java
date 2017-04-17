@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.mall.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 public class ShoppingOrderExtendBO implements Serializable {
 
@@ -80,7 +81,17 @@ public class ShoppingOrderExtendBO implements Serializable {
 	 * 订单编号
 	 */
 	private String orderNum;
+	
+	/**
+	 * 支付方式(1-余额 2-微信 3-支付宝)
+	 */
+	private TransactionPayTypeEnum paymentMethod;
 
+	/**
+	 * 第三方支付交易号
+	 */
+	private String thirdNumber;
+	
 	/**
 	 * 运单编号
 	 */
@@ -227,6 +238,22 @@ public class ShoppingOrderExtendBO implements Serializable {
 
 	public String getOrderNum() {
 		return orderNum;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getThirdNumber() {
+		return thirdNumber;
+	}
+
+	public void setThirdNumber(String thirdNumber) {
+		this.thirdNumber = thirdNumber;
 	}
 
 	public void setOrderNum(String orderNum) {

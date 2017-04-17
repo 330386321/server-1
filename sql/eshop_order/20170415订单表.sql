@@ -49,3 +49,10 @@ ALTER TABLE shopping_order  ADD COLUMN `merchant_num` varchar(19) DEFAULT '' COM
  * 判断订单是否自动收货
  */
 ALTER TABLE shopping_order  ADD COLUMN `is_automatic_receipt` tinyint(1) unsigned NULL COMMENT '是否自动收货,0否 1是' AFTER `is_no_reason_return`
+
+/**
+ * 20170415
+ * 在订单表中添加第三方交易号和支付方式，用于退款
+ */
+ALTER TABLE shopping_order ADD COLUMN `third_number` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '第三方支付交易号' AFTER `order_num`;
+ALTER TABLE shopping_order ADD COLUMN `payment_method` tinyint(2) unsigned DEFAULT '0' COMMENT '支付方式(1-余额 2-微信 3-支付宝)' AFTER `order_num`;

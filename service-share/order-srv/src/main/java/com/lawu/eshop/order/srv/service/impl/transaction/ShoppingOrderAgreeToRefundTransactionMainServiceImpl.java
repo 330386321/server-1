@@ -32,6 +32,7 @@ public class ShoppingOrderAgreeToRefundTransactionMainServiceImpl extends Abstra
     	ShoppingOrderTradingSuccessNotification rtn = null;
     	
     	shoppingOrderService.get(shoppingOrderId);
+    	
         return rtn;
     }
 }

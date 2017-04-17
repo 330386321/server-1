@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+
 public class ShoppingOrderBO implements Serializable {
     
 	private static final long serialVersionUID = 1L;
@@ -76,7 +79,7 @@ public class ShoppingOrderBO implements Serializable {
     /**
      * 订单的总状态
      */
-    private Byte orderStatus;
+    private ShoppingOrderStatusEnum orderStatus;
 
     /**
      * 状态(0删除1正常)
@@ -103,6 +106,16 @@ public class ShoppingOrderBO implements Serializable {
      */
     private String orderNum;
 
+	/**
+	 * 支付方式(1-余额 2-微信 3-支付宝)
+	 */
+	private TransactionPayTypeEnum paymentMethod;
+
+	/**
+	 * 第三方支付交易号
+	 */
+	private String thirdNumber;
+    
     /**
      * 运单编号
      */
@@ -252,11 +265,11 @@ public class ShoppingOrderBO implements Serializable {
 		this.orderTotalPrice = orderTotalPrice;
 	}
 
-	public Byte getOrderStatus() {
+	public ShoppingOrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
 
-	public void setOrderStatus(Byte orderStatus) {
+	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
@@ -298,6 +311,22 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getThirdNumber() {
+		return thirdNumber;
+	}
+
+	public void setThirdNumber(String thirdNumber) {
+		this.thirdNumber = thirdNumber;
 	}
 
 	public String getWaybillNum() {

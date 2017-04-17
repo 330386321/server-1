@@ -15,15 +15,15 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.dto.PayOrderDTO;
-import com.lawu.eshop.mall.dto.PayOrderIdDTO;
-import com.lawu.eshop.mall.param.PayOrderListParam;
-import com.lawu.eshop.mall.param.PayOrderParam;
+import com.lawu.eshop.order.dto.PayOrderDTO;
+import com.lawu.eshop.order.dto.PayOrderIdDTO;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.order.param.PayOrderListParam;
+import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.service.PayOrderService;
-import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.utils.BeanUtil;
 
 /**
@@ -78,7 +78,8 @@ public class PayOrderController extends BaseController {
         return successGet(payOrderDTOPage);
     }
 
-    @RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.DELETE)
+    @SuppressWarnings({ "rawtypes", "deprecation" })
+	@RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.DELETE)
     public Result delPayOrderInfo(@PathVariable("id") Long id){
         if(id == null){
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);

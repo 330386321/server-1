@@ -1,9 +1,9 @@
 package com.lawu.eshop.order.srv.service;
 
-import com.lawu.eshop.mall.param.ShoppingRefundDetailLogisticsInformationParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
-import com.lawu.eshop.mall.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
+import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 
 /**
