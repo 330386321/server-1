@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
+import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
@@ -168,11 +169,29 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
-  /*  @RequestMapping(value = "getProductCommentListByMerchantId",method = RequestMethod.GET)
-    public Result<ProductCommentListDTO> getProductCommentListByMerchantId(@PathVariable(value = "merchantId") Long merchantId){
+    /**
+     * 根据商家ID查询商品评论信息
+     * @param pageParam
+     * @return
+     */
+    @RequestMapping(value = "getProductCommentListByMerchantId",method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getProductCommentListByMerchantId(@RequestBody CommentMerchantListParam pageParam){
 
+        if (pageParam == null) {
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        Page<CommentProductBO> commentProductBOPage = commentProductService.getProductCommentListByMerchantId(pageParam);
+        if(commentProductBOPage.getRecords().isEmpty()){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
-        return  successGet();
-    }*/
+        List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
+        Page<CommentDTO> pages = new Page<>();
+        pages.setRecords(commentProductDTOS);
+        pages.setCurrentPage(pageParam.getCurrentPage());
+        pages.setTotalCount(commentProductBOPage.getTotalCount());
+        return successGet(pages);
+    }
 
 }

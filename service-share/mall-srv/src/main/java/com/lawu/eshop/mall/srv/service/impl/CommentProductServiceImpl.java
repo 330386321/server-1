@@ -7,10 +7,7 @@ import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
-import com.lawu.eshop.mall.param.CommentListParam;
-import com.lawu.eshop.mall.param.CommentProductListParam;
-import com.lawu.eshop.mall.param.CommentProductPageParam;
-import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
@@ -259,5 +256,38 @@ public class CommentProductServiceImpl implements CommentProductService {
         productDO.setGmtCreate(new Date());
         productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
         commentProductDOMapper.insert(productDO);
+    }
+
+    @Override
+    public Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam) {
+        CommentProductDOExample example = new CommentProductDOExample();
+        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
+                andMerchantIdEqualTo(pageParam.getMerchantId());
+        example.setOrderByClause("id desc");
+        RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
+        Page<CommentProductBO> page = new Page<>();
+        page.setTotalCount(commentProductDOMapper.countByExample(example));
+        page.setCurrentPage(pageParam.getCurrentPage());
+
+        //查询评价列表
+        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        List<CommentProductBO> commentProductBOS = new ArrayList<>();
+        for (CommentProductDO commentProductDO : commentProductDOS) {
+            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+            CommentImageDOExample imageDOExample = new CommentImageDOExample();
+            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+            List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+            List<String> images = new ArrayList<String>();
+            if (!commentImageDOS.isEmpty()) {
+                for (int i = 0; i < commentImageDOS.size(); i++) {
+                    images.add(commentImageDOS.get(i).getImgUrl());
+                }
+                commentProductBO.setUrlImgs(images);
+            }
+
+            commentProductBOS.add(commentProductBO);
+        }
+        page.setRecords(commentProductBOS);
+        return page;
     }
 }

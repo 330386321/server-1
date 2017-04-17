@@ -1,11 +1,17 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.dto.CommentDTO;
+import com.lawu.eshop.mall.dto.ProductCommentListDTO;
+import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.merchant.api.service.CommentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,5 +68,19 @@ public class CommentController extends BaseController{
                                       @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
 
         return  commentService.replyMerchantComment(commentId,replyContent);
+    }
+
+    @ApiOperation(value = "根据商家ID查询商品评论信息", notes = "根据商家ID查询商品评论信息 [1002，1004,1000]（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "getProductCommentListByMerchantId",method = RequestMethod.GET)
+    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentMerchantListParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        if(param ==null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        param.setMerchantId(merchantId);
+        Result<Page<CommentDTO>> comments = commentService.getProductCommentListByMerchantId(param);
+        return  successGet();
     }
 }

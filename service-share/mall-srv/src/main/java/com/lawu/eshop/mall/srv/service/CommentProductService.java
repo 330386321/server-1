@@ -2,6 +2,7 @@ package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.CommentListParam;
+import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
@@ -51,4 +52,6 @@ public interface CommentProductService {
      * @param productId
      */
     void saveCommentProductInfoOrderJob(Long memberId, Long productId,Long orderItemId);
+
+    Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam);
 }
