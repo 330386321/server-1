@@ -18,6 +18,11 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	 * 用户id
 	 */
 	private Long memberId;
+	
+	/**
+	 * 用户编号
+	 */
+	private String memberNum;
 
 	/**
 	 * 商家id
@@ -85,6 +90,14 @@ public class ShoppingOrderSettlementParam implements Serializable {
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 
 	public Long getMerchantId() {

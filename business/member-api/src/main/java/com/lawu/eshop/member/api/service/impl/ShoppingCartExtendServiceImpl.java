@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.AddressService;
+import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;
 import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
@@ -30,6 +31,7 @@ import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 
 /**
@@ -52,6 +54,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     
     @Autowired
     private MerchantStoreService merchantStoreService;
+    
+    @Autowired
+    private MemberService memberService;
 	
     @Autowired
     private AddressService addressService;
@@ -206,7 +211,6 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		return successCreated(resultAddressDTO.getRet());
     	}
     	
-    	
     	// 查询商家是否支持七天退货
     	List<Long> merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
     	Result<List<MerchantStoreNoReasonReturnDTO>> resultMerchantStoreNoReasonReturnDTOList = merchantStoreService.selectNoReasonReturnByMerchantIds(merchantIdList);
@@ -220,11 +224,17 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		merchantStoreNoReasonReturnDTOMap.put(merchantStoreNoReasonReturnDTO.getMerchantId(), merchantStoreNoReasonReturnDTO);
     	}
     	
+    	Result<MemberInfoForShoppingOrderDTO> resultMemberInfoForShoppingOrderDTO = memberService.getMemberInfoForShoppingOrder(memberId);
+    	if (!isSuccess(resultMemberInfoForShoppingOrderDTO)) {
+    		return successCreated(resultMemberInfoForShoppingOrderDTO.getRet());
+    	}
+    	
     	// 组装订单
     	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
     	shoppingCartDTOMap.forEach( (key,value) -> {
     		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
     		shoppingOrderSettlementParam.setMemberId(memberId);
+    		shoppingOrderSettlementParam.setMemberNum(resultMemberInfoForShoppingOrderDTO.getModel().getNum());
     		shoppingOrderSettlementParam.setMerchantId(key);
     		shoppingOrderSettlementParam.setMerchantNum(merchantStoreNoReasonReturnDTOMap.get(key).getMerchantNum());
     		shoppingOrderSettlementParam.setMerchantName(value.get(0).getMerchantName());

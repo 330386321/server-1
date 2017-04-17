@@ -150,16 +150,16 @@ public class ShoppingOrderExtendConverter {
 	 * @return
 	 */
 	public static List<ShoppingOrderQueryToMerchantDTO> convertShoppingOrderQueryToMerchantDTOList(List<ShoppingOrderExtendBO> shoppingOrderExtendBOList) {
-		if (shoppingOrderExtendBOList == null || shoppingOrderExtendBOList.isEmpty()) {
-			return null;
+		List<ShoppingOrderQueryToMerchantDTO> rtn = new ArrayList<ShoppingOrderQueryToMerchantDTO>();
+		if (shoppingOrderExtendBOList == null) {
+			return rtn;
 		}
 		
-		List<ShoppingOrderQueryToMerchantDTO> shoppingOrderQueryToMerchantDTOList = new ArrayList<ShoppingOrderQueryToMerchantDTO>();
 		for (ShoppingOrderExtendBO shoppingOrderExtendBO : shoppingOrderExtendBOList) {
-			shoppingOrderQueryToMerchantDTOList.add(convertShoppingOrderQueryToMerchantDTO(shoppingOrderExtendBO));
+			rtn.add(convertShoppingOrderQueryToMerchantDTO(shoppingOrderExtendBO));
 		}
 		
-		return shoppingOrderQueryToMerchantDTOList;
+		return rtn;
 	}
 	
 	/**

@@ -227,7 +227,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
 		
 		if (merchantId != null) {
-			baseCriteria.andMemberIdEqualTo(merchantId);
+			baseCriteria.andMerchantIdEqualTo(merchantId);
 		}
 		
 		if (param.getOrderStatus() != null) {
@@ -256,9 +256,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
 		shoppingOrderItemBOPage.setTotalCount(count.intValue());
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
+		// 初始一条空记录
+		shoppingOrderItemBOPage.setRecords(new ArrayList<ShoppingOrderExtendBO>());
 		
-		// 如果总记录为0，不再执行后续操作直接返回
-		if (count == null || count <= 0) {
+		/*
+		 *  如果count为0，或者offset大于count
+		 *  不再执行后续操作直接返回
+		 */
+		if (count == null || count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
 		
@@ -274,11 +279,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
+		// 分页参数
+		rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
-		
+			
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
 		return shoppingOrderItemBOPage;

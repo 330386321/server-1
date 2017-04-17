@@ -316,6 +316,76 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNumIsNull() {
+            addCriterion("member_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIsNotNull() {
+            addCriterion("member_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumEqualTo(String value) {
+            addCriterion("member_num =", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotEqualTo(String value) {
+            addCriterion("member_num <>", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThan(String value) {
+            addCriterion("member_num >", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThanOrEqualTo(String value) {
+            addCriterion("member_num >=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThan(String value) {
+            addCriterion("member_num <", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThanOrEqualTo(String value) {
+            addCriterion("member_num <=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLike(String value) {
+            addCriterion("member_num like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotLike(String value) {
+            addCriterion("member_num not like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIn(List<String> values) {
+            addCriterion("member_num in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotIn(List<String> values) {
+            addCriterion("member_num not in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumBetween(String value1, String value2) {
+            addCriterion("member_num between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotBetween(String value1, String value2) {
+            addCriterion("member_num not between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantIdIsNull() {
             addCriterion("merchant_id is null");
             return (Criteria) this;

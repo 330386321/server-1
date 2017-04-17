@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -33,7 +35,19 @@ public class TransactionDetailDTO implements Serializable {
      */
 	@ApiModelProperty(value = "交易时间", required = true)
     private Date transactionDate;
-
+	
+	/**
+	 * 消费类型
+	 */
+	@ApiModelProperty(value = "消费类型", required = true)
+	private ConsumptionTypeEnum direction;
+	
+	/**
+	 * 备注
+	 */
+	@ApiModelProperty(value = "备注", required = true)
+	private String remark;
+	
 	public String getTitle() {
 		return title;
 	}
@@ -57,5 +71,20 @@ public class TransactionDetailDTO implements Serializable {
 	public void setTransactionDate(Date transactionDate) {
 		this.transactionDate = transactionDate;
 	}
-	
+
+	public ConsumptionTypeEnum getDirection() {
+		return direction;
+	}
+
+	public void setDirection(ConsumptionTypeEnum direction) {
+		this.direction = direction;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
@@ -23,22 +24,25 @@ public class TransactionDetailConverter {
 		}
 
 		TransactionDetailBO transactionDetailBO = new TransactionDetailBO();
-		BeanUtils.copyProperties(transactionDetailDO, transactionDetailBO);
-
+		BeanUtils.copyProperties(transactionDetailDO, transactionDetailBO, "direction");
+		
+		transactionDetailBO.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
+		
 		return transactionDetailBO;
 	}
 
 	public static List<TransactionDetailBO> convertBOS(List<TransactionDetailDO> transactionDetailDOS) {
-		if (transactionDetailDOS == null || transactionDetailDOS.isEmpty()) {
-			return null;
+		List<TransactionDetailBO> rtn = new ArrayList<TransactionDetailBO>();
+		
+		if (transactionDetailDOS == null) {
+			return rtn;
 		}
 
-		List<TransactionDetailBO> transactionDetailBOS = new ArrayList<TransactionDetailBO>();
 		for (TransactionDetailDO transactionDetailDO : transactionDetailDOS) {
-			transactionDetailBOS.add(convert(transactionDetailDO));
+			rtn.add(convert(transactionDetailDO));
 		}
 
-		return transactionDetailBOS;
+		return rtn;
 	}
 	
 	public static TransactionDetailDTO convert(TransactionDetailBO transactionDetailBO) {
@@ -53,16 +57,17 @@ public class TransactionDetailConverter {
 	}
 	
 	public static List<TransactionDetailDTO> convertDTOS(List<TransactionDetailBO> transactionDetailBOS) {
-		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
-			return null;
+		List<TransactionDetailDTO> rtn = new ArrayList<TransactionDetailDTO>();
+		
+		if (transactionDetailBOS == null) {
+			return rtn;
 		}
 
-		List<TransactionDetailDTO> transactionDetailDTOS = new ArrayList<TransactionDetailDTO>();
 		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
-			transactionDetailDTOS.add(convert(transactionDetailBO));
+			rtn.add(convert(transactionDetailBO));
 		}
 
-		return transactionDetailDTOS;
+		return rtn;
 	}
 
 }

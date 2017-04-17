@@ -2,9 +2,10 @@ package com.lawu.eshop.property.param;
 
 import java.io.Serializable;
 
-import com.lawu.eshop.framework.core.page.PageParam;
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -13,7 +14,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Sunny
  * @date 2017/3/29
  */
-public class TransactionDetailQueryParam extends PageParam implements Serializable {
+@ApiModel
+public class TransactionDetailQueryParam extends AbstractPageParam implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

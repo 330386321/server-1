@@ -23,7 +23,9 @@
 	<resultMap id="ShoppingOrderAssociationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
 		<id column="id" jdbcType="BIGINT" property="id" />
 	    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+	    <result column="member_num" jdbcType="VARCHAR" property="memberNum" />
 	    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+	    <result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
 	    <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
 	    <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
 	    <result column="consignee_address" jdbcType="VARCHAR" property="consigneeAddress" />
@@ -117,7 +119,7 @@
 	</sql>
 	
 	<sql id="ShoppingOrder_Association_Base_Column_List">
-		so.id, so.member_id, so.merchant_id, so.merchant_name,
+		so.id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
 		so.consignee_mobile, so.remark,
@@ -144,9 +146,7 @@
 	
 	<select id="selectShoppingOrderIdByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
 		select
-		<if test="distinct">
-			distinct so.id,so.gmt_create
-		</if>
+		<if test="distinct">distinct</if> so.id
 		from shopping_order so
 		left join shopping_order_item soi on so.id = soi.shopping_order_id
 		<if test="_parameter != null">

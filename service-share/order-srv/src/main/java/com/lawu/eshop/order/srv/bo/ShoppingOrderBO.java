@@ -20,7 +20,12 @@ public class ShoppingOrderBO implements Serializable {
      * 用户ID
      */
     private Long memberId;
-
+    
+    /**
+    * 会员编号
+    */
+    private String memberNum;
+    
     /**
      * 商家ID
      */
@@ -175,6 +180,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setMemberId(Long memberId) {
 		this.memberId = memberId;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 
 	public Long getMerchantId() {

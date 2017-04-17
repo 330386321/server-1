@@ -39,12 +39,11 @@ public class ShoppingOrderConverter {
 		}
 
 		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-		BeanUtils.copyProperties(param, shoppingOrderDO,
-				new String[] { "status", "isEvaluation", "gmtCreate", "gmtModified" });
+		BeanUtils.copyProperties(param, shoppingOrderDO, new String[] { "status", "isEvaluation", "gmtCreate", "gmtModified" });
 		// 设置为待处理状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
 		// 记录状态设置为正常
-		shoppingOrderDO.setStatus((byte)0x01);
+		shoppingOrderDO.setStatus((byte) 0x01);
 		// 设置为待评价
 		shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
 		shoppingOrderDO.setGmtCreate(new Date());
@@ -54,99 +53,99 @@ public class ShoppingOrderConverter {
 	}
 
 	public static CommentOrderDTO coverCommentStatusDTO(ShoppingOrderItemBO shoppingOrderItemBO) {
-		if(shoppingOrderItemBO == null){
+		if (shoppingOrderItemBO == null) {
 			return null;
 		}
 		CommentOrderDTO commentOrderDTO = new CommentOrderDTO();
 		commentOrderDTO.setEvaluation(shoppingOrderItemBO.getIsEvaluation());
 		return commentOrderDTO;
 	}
-	
-    /**
-     * ShoppingOrderExpressDTO转换
-     * 
-     * @param shoppingOrderBO
-     * @param expressInquiriesDetailBO
-     * @return
-     */
-    public static ShoppingOrderExpressDTO covert(ShoppingOrderBO shoppingOrderBO, ExpressInquiriesDetailBO expressInquiriesDetailBO) {
-		if(shoppingOrderBO == null){
+
+	/**
+	 * ShoppingOrderExpressDTO转换
+	 * 
+	 * @param shoppingOrderBO
+	 * @param expressInquiriesDetailBO
+	 * @return
+	 */
+	public static ShoppingOrderExpressDTO covert(ShoppingOrderBO shoppingOrderBO, ExpressInquiriesDetailBO expressInquiriesDetailBO) {
+		if (shoppingOrderBO == null) {
 			return null;
 		}
-		
+
 		ShoppingOrderExpressDTO shoppingOrderExpressDTO = new ShoppingOrderExpressDTO();
 		BeanUtils.copyProperties(shoppingOrderBO, shoppingOrderExpressDTO, "expressInquiriesDetailDTO");
-		
+
 		shoppingOrderExpressDTO.setExpressInquiriesDetailDTO(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO));
-		
+
 		return shoppingOrderExpressDTO;
-    }
-    
-    public static ShoppingOrderBO convertShoppingOrderBO(ShoppingOrderDO shoppingOrderDO) {
-		if(shoppingOrderDO == null){
+	}
+
+	public static ShoppingOrderBO convertShoppingOrderBO(ShoppingOrderDO shoppingOrderDO) {
+		if (shoppingOrderDO == null) {
 			return null;
 		}
-		
+
 		ShoppingOrderBO shoppingOrderBO = new ShoppingOrderBO();
 		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO, "orderStatus", "paymentMethod");
-		
+
 		shoppingOrderBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderDO.getOrderStatus()));
 		shoppingOrderBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderDO.getPaymentMethod()));
-		
+
 		return shoppingOrderBO;
-    }
-    
-    /**
-     * 组装更新订单参数
-     * 
-     * @param shoppingOrderDO
-     * @return
-     * @author Sunny
-     */
-    public static ShoppingOrderDO convert(ShoppingOrderDO shoppingOrderDO, ShoppingOrderUpdateInfomationParam param) {
-		if(shoppingOrderDO == null || param == null){
+	}
+
+	/**
+	 * 组装更新订单参数
+	 * 
+	 * @param shoppingOrderDO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderDO convert(ShoppingOrderDO shoppingOrderDO, ShoppingOrderUpdateInfomationParam param) {
+		if (shoppingOrderDO == null || param == null) {
 			return null;
 		}
-		
+
 		BeanUtils.copyProperties(param, shoppingOrderDO);
-		
+
 		return shoppingOrderDO;
-    }
-    
-    /**
-     * 组装订单是否有正在进行中的订单参数
-     * 
-     * @param count
-     * @return
-     * @author Sunny
-     */
-    public static ShoppingOrderIsNoOnGoingOrderBO convert(long count) {
-    	ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = new ShoppingOrderIsNoOnGoingOrderBO();
-    			
-    	if (count <= 0){
-    		shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(true);
-    	} else {
-    		shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(false);
-    	}
-		
+	}
+
+	/**
+	 * 组装订单是否有正在进行中的订单参数
+	 * 
+	 * @param count
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderIsNoOnGoingOrderBO convert(long count) {
+		ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = new ShoppingOrderIsNoOnGoingOrderBO();
+
+		if (count <= 0) {
+			shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(true);
+		} else {
+			shoppingOrderIsNoOnGoingOrderBO.setIsNoOnGoingOrder(false);
+		}
+
 		return shoppingOrderIsNoOnGoingOrderBO;
-    }
-    
-    /**
-     * 组装订单是否有正在进行中的订单参数
-     * 
-     * @param ShoppingOrderIsNoOnGoingOrderBO
-     * @return
-     * @author Sunny
-     */
-    public static ShoppingOrderIsNoOnGoingOrderDTO convert(ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO) {
-    	if (shoppingOrderIsNoOnGoingOrderBO == null) {
-    		return null;
-    	}
-    	
-    	ShoppingOrderIsNoOnGoingOrderDTO shoppingOrderIsNoOnGoingOrderDTO = new ShoppingOrderIsNoOnGoingOrderDTO();
-    	BeanUtils.copyProperties(shoppingOrderIsNoOnGoingOrderBO, shoppingOrderIsNoOnGoingOrderDTO);
-    	
+	}
+
+	/**
+	 * 组装订单是否有正在进行中的订单参数
+	 * 
+	 * @param ShoppingOrderIsNoOnGoingOrderBO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderIsNoOnGoingOrderDTO convert(ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO) {
+		if (shoppingOrderIsNoOnGoingOrderBO == null) {
+			return null;
+		}
+
+		ShoppingOrderIsNoOnGoingOrderDTO shoppingOrderIsNoOnGoingOrderDTO = new ShoppingOrderIsNoOnGoingOrderDTO();
+		BeanUtils.copyProperties(shoppingOrderIsNoOnGoingOrderBO, shoppingOrderIsNoOnGoingOrderDTO);
+
 		return shoppingOrderIsNoOnGoingOrderDTO;
-    }
+	}
 }

@@ -8,6 +8,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessNotification;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
@@ -31,7 +32,14 @@ public class ShoppingOrderAgreeToRefundTransactionMainServiceImpl extends Abstra
     public ShoppingOrderTradingSuccessNotification selectNotification(Long shoppingOrderId) {
     	ShoppingOrderTradingSuccessNotification rtn = null;
     	
-    	shoppingOrderService.get(shoppingOrderId);
+    	ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderId);
+    	
+    	if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
+    		return rtn;
+    	}
+    	
+    	rtn = new ShoppingOrderTradingSuccessNotification();
+    	
     	
         return rtn;
     }

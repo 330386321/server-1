@@ -121,4 +121,13 @@ public interface MemberService {
     @RequestMapping(value = "member/setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
     Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid);
 
+	/**
+	 * 创建商品订单需要添加用户的一些信息
+	 * 
+	 * @param id
+	 *            用户id
+	 * @return
+	 */
+	@RequestMapping(value = "member/getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
+	Result<MemberInfoForShoppingOrderDTO> getMemberInfoForShoppingOrder(@PathVariable("id") Long id);
 }
