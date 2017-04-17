@@ -1,17 +1,5 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -35,6 +23,17 @@ import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -62,7 +61,8 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setContent(param.getContent());
         commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
-        commentProductDO.setOrderItemId(param.getOrderItemId());
+        commentProductDO.setOrderItemId(param.getShoppingOrderItemId());
+        commentProductDO.setMerchantId(param.getMerchantId());
         commentProductDO.setGrade(param.getGradeEnum().val);
         commentProductDO.setProductId(param.getProductId());
         commentProductDO.setGmtCreate(new Date());

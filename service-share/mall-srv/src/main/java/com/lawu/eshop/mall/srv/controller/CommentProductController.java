@@ -168,4 +168,11 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+  /*  @RequestMapping(value = "getProductCommentListByMerchantId",method = RequestMethod.GET)
+    public Result<ProductCommentListDTO> getProductCommentListByMerchantId(@PathVariable(value = "merchantId") Long merchantId){
+
+
+        return  successGet();
+    }*/
+
 }
