@@ -19,6 +19,7 @@
         <module>product-srv</module>
         <module>property-srv</module>
         <module>user-srv</module>
+        <module>operator-srv</module>
     </modules>
 
     <properties>
