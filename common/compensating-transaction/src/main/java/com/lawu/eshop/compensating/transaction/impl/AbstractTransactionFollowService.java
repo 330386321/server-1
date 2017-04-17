@@ -28,8 +28,10 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
     @Override
     public void receiveNotice(N notification) {
         R reply = execute(notification);
-        reply.setTransactionId(notification.getTransactionId());
-        sendCallback(reply);
+        if ( reply != null ) {
+            reply.setTransactionId(notification.getTransactionId());
+            sendCallback(reply);
+        }
 
     }
 
