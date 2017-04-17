@@ -386,6 +386,126 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchantLongitudeIsNull() {
+            addCriterion("merchant_longitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeIsNotNull() {
+            addCriterion("merchant_longitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeEqualTo(BigDecimal value) {
+            addCriterion("merchant_longitude =", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeNotEqualTo(BigDecimal value) {
+            addCriterion("merchant_longitude <>", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeGreaterThan(BigDecimal value) {
+            addCriterion("merchant_longitude >", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_longitude >=", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeLessThan(BigDecimal value) {
+            addCriterion("merchant_longitude <", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_longitude <=", value, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeIn(List<BigDecimal> values) {
+            addCriterion("merchant_longitude in", values, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeNotIn(List<BigDecimal> values) {
+            addCriterion("merchant_longitude not in", values, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_longitude between", value1, value2, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLongitudeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_longitude not between", value1, value2, "merchantLongitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeIsNull() {
+            addCriterion("merchant_latitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeIsNotNull() {
+            addCriterion("merchant_latitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeEqualTo(BigDecimal value) {
+            addCriterion("merchant_latitude =", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeNotEqualTo(BigDecimal value) {
+            addCriterion("merchant_latitude <>", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeGreaterThan(BigDecimal value) {
+            addCriterion("merchant_latitude >", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_latitude >=", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeLessThan(BigDecimal value) {
+            addCriterion("merchant_latitude <", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_latitude <=", value, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeIn(List<BigDecimal> values) {
+            addCriterion("merchant_latitude in", values, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeNotIn(List<BigDecimal> values) {
+            addCriterion("merchant_latitude not in", values, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_latitude between", value1, value2, "merchantLatitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantLatitudeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_latitude not between", value1, value2, "merchantLatitude");
+            return (Criteria) this;
+        }
+
         public Criteria andTitleIsNull() {
             addCriterion("title is null");
             return (Criteria) this;

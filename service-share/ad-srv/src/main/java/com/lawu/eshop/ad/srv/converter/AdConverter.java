@@ -156,10 +156,23 @@ public class AdConverter {
      */
     public static SolrInputDocument convertSolrInputDocument(AdDO adDO) {
         SolrInputDocument document = new SolrInputDocument();
-        document.addField("id_l", adDO.getId());
+        document.addField("id", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
-        document.setField("title_s", adDO.getTitle());
+        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
+        document.addField("longitude_s", adDO.getMerchantLongitude());
+        document.addField("latitude_s", adDO.getMerchantLatitude());
+        if(adDO.getPutWay()==1){
+        	if(adDO.getAreas()!=null){
+        		String[] location=adDO.getAreas().split("/");
+            	for (String area : location) {
+            		document.addField("area_ss", area);
+    			}
+        	}else{
+        		document.addField("area_ss", 0);
+        	}
+        }
         return document;
     }
     

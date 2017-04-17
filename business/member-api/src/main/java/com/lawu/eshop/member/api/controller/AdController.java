@@ -3,19 +3,23 @@ package com.lawu.eshop.member.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSolrParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -23,8 +27,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
+import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -56,6 +62,10 @@ public class AdController extends BaseController {
 	    
     @Autowired
     private MerchantStoreService merchantStoreService;
+    
+    @Autowired
+    private FansMerchantService fansMerchantService;
+   
 
 
     @ApiOperation(value = "会员查询广告列表(精选推荐,E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
@@ -158,6 +168,36 @@ public class AdController extends BaseController {
     	 Long memberId=UserUtil.getCurrentUserId(getRequest());
          Result rs = adService.clickAd(id,memberId);
          return rs;
+     }
+     
+
+     @Authorization
+     @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "POST")
+     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+     @RequestMapping(value = "selectByPosition", method = RequestMethod.POST)
+     public Result<List<AdLexiconDTO>> selectList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long adId) {
+         Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adId);
+         return adLexiconDTOS;
+     }
+     
+     
+     @ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
+     @Authorization
+     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+     @RequestMapping(value = "", method = RequestMethod.GET)
+     public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    		 @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
+    	 Long memberId=UserUtil.getCurrentUserId(getRequest());
+    	 List<Long> merchantIds=fansMerchantService.findMerchant(memberId);
+    	 Result<UserDTO> userRS= memberService.findMemberInfo(memberId);
+    	 AdsolrFindParam findParam=new AdsolrFindParam();
+    	 findParam.setAdSolrParam(adSolrParam);
+    	 findParam.setMemberId(memberId);
+    	 if(userRS.getModel().getRegionPath()!=null){
+    		 findParam.setRegionPath(userRS.getModel().getRegionPath());
+    	 }
+     	 Result<Page<AdSolrDTO>>  page=adService.queryAdByTitle(findParam);
+     	 return page;
      }
 
 }

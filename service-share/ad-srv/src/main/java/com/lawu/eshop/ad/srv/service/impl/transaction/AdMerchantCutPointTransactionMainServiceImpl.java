@@ -34,8 +34,8 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
     }
 
     @Override
-    public void afterSuccess(Long relateId, Reply reply) {
-    	AdDO  ad=adDOMapper.selectByPrimaryKey(relateId);
+    public void afterSuccess(Long adId, Reply reply) {
+    	AdDO  ad=adDOMapper.selectByPrimaryKey(adId);
     	if(ad.getType()==2){
     		ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
     	}else{

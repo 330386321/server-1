@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdSolrAddParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -27,8 +31,10 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,13 +61,18 @@ public class AdController extends BaseController {
     @Autowired
     private MemberCountService memberCountService;
 
+    
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+ 
+
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "添加广告", notes = "添加广告[5000]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
-    public Result saveAd(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
+    public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
@@ -82,13 +93,24 @@ public class AdController extends BaseController {
             	mediaUrl = retMap.get("videoUrl").toString();
             }
     	}
+    	List<Long> fens=new ArrayList<>();
     	Integer count=0;
     	if(adParam.getPutWayEnum().val==1){
     		count=memberCountService.findMemberCount(adParam.getAreas());
     	}else if(adParam.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
-        Result rsAd = adService.saveAd(adParam, merchantId, mediaUrl,count,userNum);
+    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStore(merchantId);
+    	MerchantStoreDTO storeDTO= storeRs.getModel();
+    	AdSaveParam adSave=new AdSaveParam();
+    	adSave.setAdParam(adParam);
+    	adSave.setLatitude(storeDTO.getLatitude());
+    	adSave.setLongitude(storeDTO.getLongitude());
+    	adSave.setCount(count);
+    	adSave.setMediaUrl(mediaUrl);
+    	adSave.setMerchantId(merchantId);
+    	adSave.setUserNum(userNum);
+    	Result rsAd = adService.saveAd(adSave);
         return rsAd;
     }
 

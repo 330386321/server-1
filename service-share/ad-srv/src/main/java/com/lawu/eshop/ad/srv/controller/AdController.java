@@ -5,6 +5,9 @@ import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,21 +16,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.ad.srv.service.PointPoolService;
-import com.lawu.eshop.ad.srv.thread.AdClickPraiseThread;
-import com.lawu.eshop.ad.srv.thread.ClickPraisePoolManager;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.solr.SolrUtil;
 
 /**
  * E赚接口提供
@@ -56,8 +60,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
-    public Result saveAd(@RequestBody AdParam adParam,@RequestParam Long merchantId, @RequestParam String mediaUrl,@RequestParam Integer count,@RequestParam String num) {
-		Integer id= adService.saveAd(adParam, merchantId, mediaUrl,count,num);
+    public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
+		Integer id= adService.saveAd(adSaveParam);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
     	}else{
@@ -239,6 +243,42 @@ public class AdController extends BaseController{
 			return successCreated(ResultCode.FAIL);
 		}
 	
+	}
+	
+	
+	 /**
+     * 根据广告名称查询广告
+     *
+     * @param adSolrParam
+     * @return
+     */
+    @RequestMapping(value = "queryAdByTitle", method = RequestMethod.POST)
+    public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
+    	String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
+        SolrQuery query = new SolrQuery();
+        query.setParam("q", "*:*");
+        if (StringUtils.isNotEmpty(adSolrParam.getTilte())) {  //标题过滤
+            query.setParam("q", "title_s:" + adSolrParam.getTilte() + "*");
+        }
+        query.setParam("pt", latLon);
+        query.setParam("fq", "{!geofilt}");
+        query.setParam("sfield", "latLon_p");
+        query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+        String[] path=adSolrParam.getRegionPath().split("/");
+        query.setQuery("area_ss : 0");
+        query.setQuery("status_s : 2");
+        query.setQuery("(merchantId_s: "+adSolrParam.getMemberId()+") or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        query.setStart(adSolrParam.getOffset());
+        query.setRows(adSolrParam.getPageSize());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_AD_CORE);
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        Page<AdSolrDTO> page = new Page<AdSolrDTO>();
+        page.setRecords(AdConverter.convertDTO(solrDocumentList));
+        page.setTotalCount((int) solrDocumentList.getNumFound());
+        page.setCurrentPage(adSolrParam.getCurrentPage());
+        return successGet(page);
     }
 
 }

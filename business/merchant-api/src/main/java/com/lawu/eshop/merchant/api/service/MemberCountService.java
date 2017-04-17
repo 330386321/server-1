@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,11 +25,11 @@ public interface MemberCountService {
     Integer findMemberCount(@RequestParam("areas") String areas);
 	
 	/**
-	 * 根据当前商家获取当前粉丝数量
+	 * 根据当前商家获取当前粉丝
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "member/findFensCount", method = RequestMethod.GET)
+	@RequestMapping(value = "fansMerchant/findFensCount", method = RequestMethod.GET)
     Integer findFensCount( @RequestParam("merchantId") Long merchantId);
 
 }

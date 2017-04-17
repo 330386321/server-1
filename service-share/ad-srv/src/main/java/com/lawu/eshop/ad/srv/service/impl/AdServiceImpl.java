@@ -18,6 +18,8 @@ import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSolrAddParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -82,12 +84,15 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	@Transactional
-	public Integer saveAd(AdParam adParam, Long merchantId,String mediaUrl,Integer count,String num) {
+	public Integer saveAd(AdSaveParam adSaveParam) {
+		AdParam adParam= adSaveParam.getAdParam();
 		AdDO adDO=new AdDO();
 		adDO.setTitle(adParam.getTitle());
-		adDO.setMerchantId(merchantId);
-		adDO.setMerchantNum(num);
-		adDO.setMediaUrl(mediaUrl);
+		adDO.setMerchantId(adSaveParam.getMerchantId());
+		adDO.setMerchantNum(adSaveParam.getUserNum());
+		adDO.setMerchantLatitude(adSaveParam.getLatitude());
+		adDO.setMerchantLongitude(adSaveParam.getLongitude());
+		adDO.setMediaUrl(adSaveParam.getMediaUrl());
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
 		adDO.setBeginTime(adParam.getBeginTime());
@@ -108,14 +113,14 @@ public class AdServiceImpl implements AdService {
 		if(adParam.getContent()!=null) adDO.setContent(adParam.getContent());
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum().val==3){ //E赞
-			savePointPool(adDO,count);
+			savePointPool(adDO,adSaveParam.getCount());
 		}
 		if(adParam.getAreas()!=null){ //不是全国投放
 			String[] path=adParam.getAreas().split("/");
 			for (String s : path) {
 				AdRegionDO adRegionDO=new AdRegionDO();
 				adRegionDO.setAdId(adDO.getId());
-				adRegionDO.setMerchantId(merchantId);
+				adRegionDO.setMerchantId(adSaveParam.getMerchantId());
 				adRegionDO.setGmtCreate(new Date());
 				adRegionDO.setRegionId(s);
 				adRegionDOMapper.insert(adRegionDO);
@@ -411,6 +416,46 @@ public class AdServiceImpl implements AdService {
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
 			return 2;
 		}
+		
+	}
+
+	/**
+	 * 定时器改变状态
+	 */
+	@Override
+	public void updateRacking() {
+		AdDOExample example=new AdDOExample();
+		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		 List<AdDO> listADD=adDOMapper.selectByExample(example);
+		 if(!listADD.isEmpty())
+			for (AdDO adDO : listADD) {
+				Date date=new Date();
+				if(adDO.getBeginTime().getTime()==date.getTime()){
+					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+					adDOMapper.updateByPrimaryKey(adDO);
+					//将广告添加到solr中
+					FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+					adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+					Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+					document.addField("count_i", attenCount.intValue());
+				    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+				}
+			}
+		 
+		 AdDOExample example2=new AdDOExample();
+		 example2.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		 List<AdDO> listPutIng=adDOMapper.selectByExample(example);
+		 if(!listPutIng.isEmpty())
+				for (AdDO adDO : listPutIng) {
+					Date date=new Date();
+					if((date.getTime()-adDO.getBeginTime().getTime())>adDO.getEndTime().getTime()){
+						adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+						adDOMapper.updateByPrimaryKey(adDO);
+						//删除solr中的数据
+						SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
+					}
+				}
 		
 	}
 

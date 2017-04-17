@@ -73,5 +73,27 @@ public class FansMerchantController extends BaseController {
         }
         return successGet(true);
     }
+    
+    /**
+     * 粉丝列表
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "findMerchant", method = RequestMethod.GET)
+    public List<Long> listFans(@RequestParam Long memberId) {
+    	List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
+        return merchantIds;
+    }
+    
+    /**
+     * 当前用户属于的商家
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "findFensCount", method = RequestMethod.GET)
+    public  Integer  findFensCount(@RequestParam Long memberId) {
+    	 Integer  count = fansMerchantService.findFensCount(memberId);
+        return count;
+    }
 
 }

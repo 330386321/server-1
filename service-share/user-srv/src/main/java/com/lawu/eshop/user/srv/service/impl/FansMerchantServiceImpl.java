@@ -15,6 +15,7 @@ import com.lawu.eshop.user.srv.service.FansMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,5 +61,25 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
         return fansMerchantDOS.isEmpty() ? null : FansMerchantConverter.convertBO(fansMerchantDOS.get(0));
     }
+
+	@Override
+	public List<Long> findMerchant(Long memberId) {
+		  FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+	      fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId);
+	      List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
+	      List<Long> merchantIds=new ArrayList<>();
+	      for (FansMerchantDO fansMerchantDO : fansMerchantDOS) {
+	    	  merchantIds.add(fansMerchantDO.getMerchantId());
+	      }
+	      return merchantIds;
+	}
+
+	@Override
+	public Integer findFensCount(Long merchantId) {
+		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+	      fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantId);
+	      int count = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
+		return count;
+	}
 
 }

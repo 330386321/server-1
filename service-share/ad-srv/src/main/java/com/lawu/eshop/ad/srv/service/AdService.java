@@ -2,8 +2,8 @@ package com.lawu.eshop.ad.srv.service;
 
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.framework.core.page.Page;
 
@@ -21,7 +21,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	Integer saveAd(AdParam adParam,Long merchantId,String mediaUrl,Integer count,String num);
+	Integer saveAd(AdSaveParam adSaveParam);
 	
 	/**
 	 * 商家E赚查询
@@ -96,6 +96,13 @@ public interface AdService {
 	 * @return
 	 */
 	Integer clickAd(Long id,Long memberId);
+	
+	/**
+	 * 通过定时器改变广告的状态
+	 * 投放中 或者投放结束
+	 */
+	void updateRacking();
+	
 	
 
 }

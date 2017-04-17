@@ -78,8 +78,14 @@
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="red_packet" domainObjectName="RedPacketDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="ad_lexicon" domainObjectName="AdLexiconDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         -->
-          <table tableName="red_packet" domainObjectName="RedPacketDO">
+          <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
