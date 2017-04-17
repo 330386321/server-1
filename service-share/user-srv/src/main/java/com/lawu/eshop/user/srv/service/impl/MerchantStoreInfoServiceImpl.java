@@ -330,6 +330,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             if (",".equals(lastChar)) {
                 licenseUrl = licenseUrl.substring(0, licenseUrl.length() - 1);
             }
+            merchantStoreImageDO.setPath(licenseUrl);
             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val);
             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
         }
@@ -340,6 +341,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             if (",".equals(lastChar)) {
                 otherUrl = otherUrl.substring(0, otherUrl.length() - 1);
             }
+            merchantStoreImageDO.setPath(otherUrl);
             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_OTHER.val);
             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
         }
@@ -350,6 +352,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             if (",".equals(lastChar)) {
                 logoUrl = logoUrl.substring(0, logoUrl.length() - 1);
             }
+            merchantStoreImageDO.setPath(logoUrl);
             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
         }
@@ -360,6 +363,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             if (",".equals(lastChar)) {
                 idcardUrl = idcardUrl.substring(0, idcardUrl.length() - 1);
             }
+            merchantStoreImageDO.setPath(idcardUrl);
             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
         }

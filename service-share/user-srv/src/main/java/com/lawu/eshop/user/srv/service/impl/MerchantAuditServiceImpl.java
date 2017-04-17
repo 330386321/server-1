@@ -113,37 +113,67 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         merchantStoreImageDO.setStatus(true);
                         //新增门店照
                         if (!StringUtils.isEmpty(merchantStoreParam.getStoreUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getStoreUrl());
+                            String storeUrl = merchantStoreParam.getStoreUrl();
+                            String lastChar = storeUrl.substring(storeUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                storeUrl = storeUrl.substring(0, storeUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(storeUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
                         //新增门店环境照
                         if (!StringUtils.isEmpty(merchantStoreParam.getEnvironmentUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getEnvironmentUrl());
+                            String evUrl = merchantStoreParam.getEnvironmentUrl();
+                            String lastChar = evUrl.substring(evUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                evUrl = evUrl.substring(0, evUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(evUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
                         //新增营业执照
                         if (!StringUtils.isEmpty(merchantStoreParam.getLicenseUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getLicenseUrl());
+                            String licenseUrl = merchantStoreParam.getLicenseUrl();
+                            String lastChar = licenseUrl.substring(licenseUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                licenseUrl = licenseUrl.substring(0, licenseUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(licenseUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
                         //新增其他许可证
                         if (!StringUtils.isEmpty(merchantStoreParam.getOtherUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getOtherUrl());
+                            String otherUrl = merchantStoreParam.getOtherUrl();
+                            String lastChar = otherUrl.substring(otherUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                otherUrl = otherUrl.substring(0, otherUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(otherUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_OTHER.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
                         //新增门店LOGO
                         if (!StringUtils.isEmpty(merchantStoreParam.getLogoUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getLogoUrl());
+                            String logoUrl = merchantStoreParam.getLogoUrl();
+                            String lastChar = logoUrl.substring(logoUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                logoUrl = logoUrl.substring(0, logoUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(logoUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
                         //新增门店手持身份证照
                         if (!StringUtils.isEmpty(merchantStoreParam.getIdcardUrl())) {
-                            merchantStoreImageDO.setPath(merchantStoreParam.getIdcardUrl());
+                            String idcardUrl = merchantStoreParam.getIdcardUrl();
+                            String lastChar = idcardUrl.substring(idcardUrl.length() - 1);
+                            if (",".equals(lastChar)) {
+                                idcardUrl = idcardUrl.substring(0, idcardUrl.length() - 1);
+                            }
+                            merchantStoreImageDO.setPath(idcardUrl);
                             merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
