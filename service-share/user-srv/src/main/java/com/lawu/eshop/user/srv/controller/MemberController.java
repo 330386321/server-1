@@ -255,5 +255,16 @@ public class MemberController extends BaseController {
 		}
 		return successCreated(MemberConverter.convert(memberBO));
 	}
+	
+	
+	@RequestMapping(value = "findMember/{memberId}", method = RequestMethod.GET)
+	public Result<MemberDTO> findMember(@PathVariable("memberId") Long memberId) {
+		MemberBO memberBO = memberService.findMemberInfoById(memberId);
+		if (memberBO == null) {
+			return successGet();
+		} else {
+			return successGet(MemberConverter.convertMDTO(memberBO));
+		}
+	}
 
 }

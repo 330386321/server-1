@@ -49,7 +49,7 @@ public class AdLexiconController extends BaseController{
 	 * @param adId
 	 * @return
 	 */
-	@RequestMapping(value = "selectList", method = RequestMethod.POST)
+	@RequestMapping(value = "selectList", method = RequestMethod.GET)
     public Result<List<AdLexiconDTO>> selectList(@RequestParam Long adId) {
 		List<AdLexiconBO> BOS = adLexiconService.selectList(adId);
 		return  successAccepted(AdLexiconConverter.convertDTOS(BOS));

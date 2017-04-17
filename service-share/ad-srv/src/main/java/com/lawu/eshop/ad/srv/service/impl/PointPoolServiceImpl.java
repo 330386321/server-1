@@ -21,9 +21,9 @@ public class PointPoolServiceImpl implements PointPoolService {
 	private PointPoolDOMapper pointPoolDOMapper;
 
 	@Override
-	public List<Long> selectMemberList(Long adId) {
-		 List<Long>  memberIds=pointPoolDOMapperExtend.selectMember(adId);
-		return memberIds;
+	public List<PointPoolDO> selectMemberList(Long adId) {
+		 List<PointPoolDO>  pointPoolDO=pointPoolDOMapperExtend.selectMember(adId);
+		return pointPoolDO;
 	}
 
 	@Override

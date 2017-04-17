@@ -163,6 +163,7 @@ public class AdConverter {
         document.addField("content_s", adDO.getContent());
         document.addField("longitude_s", adDO.getMerchantLongitude());
         document.addField("latitude_s", adDO.getMerchantLatitude());
+        document.addField("status_s", 2);
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){
         		String[] location=adDO.getAreas().split("/");

@@ -2,6 +2,8 @@ package com.lawu.eshop.ad.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+
 /**
  * 积分池
  * @author zhangrc
@@ -15,7 +17,7 @@ public interface PointPoolService {
 	 * @param adId
 	 * @return
 	 */
-	List<Long> selectMemberList(Long adId);
+	List<PointPoolDO> selectMemberList(Long adId);
 	
 	
 	/**

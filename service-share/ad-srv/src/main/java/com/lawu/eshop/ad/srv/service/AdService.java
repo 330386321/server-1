@@ -102,6 +102,13 @@ public interface AdService {
 	 * 投放中 或者投放结束
 	 */
 	void updateRacking();
+
+	/**
+	 * 今日精选
+	 * @param adMemberParam
+	 * @return
+	 */
+	Page<AdBO> selectChoiceness(AdMemberParam adMemberParam);
 	
 	
 

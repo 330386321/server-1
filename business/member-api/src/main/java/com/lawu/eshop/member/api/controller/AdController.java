@@ -16,7 +16,11 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.dto.PointPoolDTO;
+import com.lawu.eshop.ad.dto.UserTopDTO;
+import com.lawu.eshop.ad.param.AdChoicenessParam;
+import com.lawu.eshop.ad.param.AdEgainParam;
+import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
@@ -33,6 +37,7 @@ import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 
@@ -68,13 +73,23 @@ public class AdController extends BaseController {
    
 
 
-    @ApiOperation(value = "会员查询广告列表(精选推荐,E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectListByMember", method = RequestMethod.GET)
-    public Result<Page<AdDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                 @ModelAttribute @ApiParam( value = "查询信息") AdMemberParam adMemberParam) {
-    	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectListByMember(adMemberParam);
+    @RequestMapping(value = "selectEgain", method = RequestMethod.GET)
+    public Result<Page<AdDTO>> selectEgain(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                                 @ModelAttribute @ApiParam( value = "查询信息") AdEgainParam adEgainParam) {
+    	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectListByMember(adEgainParam);
+    	return pageDTOS;
+    }
+    
+    @ApiOperation(value = "会员查询广告列表(精选推荐)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
+    public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                                 @ModelAttribute @ApiParam( value = "查询信息") AdChoicenessParam param) {
+    	Result<Page<AdDTO>>  pageDTOS=adExtendService.selectChoiceness(param);
     	return pageDTOS;
     }
     
@@ -83,9 +98,9 @@ public class AdController extends BaseController {
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
      @RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
      public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMemberParam adMemberParam) {
-    	 Result<List<AdDTO>> rs= adExtendService.selectListPointTotle(adMemberParam);
-     	return rs;
+                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdPointParam adPointParam) {
+    	 Result<List<AdDTO>> rs= adExtendService.selectListPointTotle(adPointParam);
+     	 return rs;
      }
 
 
@@ -132,17 +147,24 @@ public class AdController extends BaseController {
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
      @RequestMapping(value = "memberRanking/{id}", method = RequestMethod.GET)
-     public Result<List<UserDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+     public Result<List<UserTopDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		 @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
      
-     	Result<List<Long>>  member=adService.selectMemberList(id);
-     	List<Long>  memberIds=member.getModel();
-     	Result<UserDTO> userRs=new Result<UserDTO>();
-     	List<UserDTO> user=new ArrayList<>();
+     	Result<List<PointPoolDTO>>  member=adService.selectMemberList(id);
+     	List<PointPoolDTO>  memberIds=member.getModel();
+     	List<UserTopDTO> user=new ArrayList<>();
      	if(memberIds!=null)
-     		for (Long mid : memberIds) {
-     			userRs=memberService.findMemberInfo(mid);
-     			user.add(userRs.getModel());
+     		for (PointPoolDTO pointPoolDTO : memberIds) {
+     			UserTopDTO userTop=new UserTopDTO();
+     			userTop.setMoney(pointPoolDTO.getPoint());
+     			MemberDTO userDTO=memberService.findMemberInfoById(pointPoolDTO.getMemberId()).getModel();
+     			userTop.setHeadimg(userDTO.getHeadimg());
+     			if(userDTO.getRegionPath()!=null)
+     				userTop.setRegionPath(userDTO.getRegionPath());
+     			if(userDTO.getMobile()!=null){
+     				userTop.setMobile(userDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+     			}
+     			user.add(userTop);
 			}
      	
      	return successGet(user);
@@ -172,9 +194,9 @@ public class AdController extends BaseController {
      
 
      @Authorization
-     @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "POST")
+     @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectByPosition", method = RequestMethod.POST)
+     @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
      public Result<List<AdLexiconDTO>> selectList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long adId) {
          Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adId);
          return adLexiconDTOS;
@@ -184,7 +206,7 @@ public class AdController extends BaseController {
      @ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "", method = RequestMethod.GET)
+     @RequestMapping(value = "selectAdByTitle", method = RequestMethod.GET)
      public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		 @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
     	 Long memberId=UserUtil.getCurrentUserId(getRequest());
@@ -192,6 +214,7 @@ public class AdController extends BaseController {
     	 Result<UserDTO> userRS= memberService.findMemberInfo(memberId);
     	 AdsolrFindParam findParam=new AdsolrFindParam();
     	 findParam.setAdSolrParam(adSolrParam);
+    	 findParam.setMerchantIds(merchantIds);
     	 findParam.setMemberId(memberId);
     	 if(userRS.getModel().getRegionPath()!=null){
     		 findParam.setRegionPath(userRS.getModel().getRegionPath());

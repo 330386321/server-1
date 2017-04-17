@@ -18,7 +18,6 @@ import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSolrAddParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -129,6 +128,15 @@ public class AdServiceImpl implements AdService {
 		}
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
+		//将广告添加到solr中
+		if(adDO.getType()!=2){
+			FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+			adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+			Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+			document.addField("count_i", attenCount.intValue());
+		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+		}
 		return i;
 	}
 	
@@ -173,9 +181,8 @@ public class AdServiceImpl implements AdService {
 			cr.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
 		}else if(adMerchantParam.getStatusEnum()!=null){
 			cr.andStatusEqualTo(adMerchantParam.getStatusEnum().val);
-		}else if(adMerchantParam.getBeginTime()!=null && adMerchantParam.getEndTime()!=null){
-			cr.andGmtCreateBetween(adMerchantParam.getBeginTime(), adMerchantParam.getEndTime());
 		}
+		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
 		 Long count=adDOMapper.countByExample(example);
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -204,6 +211,8 @@ public class AdServiceImpl implements AdService {
 		}else{
 			matransactionMainAddService.sendNotice(id);
 		}
+		//删除solr中的数据
+		SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
 		return i;
 	}
 	
@@ -220,6 +229,8 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val);
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
+		//删除solr中的数据
+		SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
 		return i;
 	}
 
@@ -239,8 +250,6 @@ public class AdServiceImpl implements AdService {
 			cr.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
 		}else if(adMerchantParam.getStatusEnum()!=null){
 			cr.andStatusEqualTo(adMerchantParam.getStatusEnum().val);
-		}else if(adMerchantParam.getBeginTime()!=null && adMerchantParam.getEndTime()!=null){
-			cr.andGmtCreateBetween(adMerchantParam.getBeginTime(), adMerchantParam.getEndTime());
 		}
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
 		 Long count=adDOMapper.countByExample(example);
@@ -261,22 +270,25 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByMember(AdMemberParam adMemberParam) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val); //投放中
+		Criteria cr2= example.createCriteria();
+		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		cr2.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val); //投放中
+		example.or(cr2);
+		if(adMemberParam.getTypeEnum()!=null){
+			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
+			cr2.andTypeEqualTo(adMemberParam.getTypeEnum().val);
+		}
 		if(adMemberParam.getOrderTypeEnum()!=null){
 			if(adMemberParam.getOrderTypeEnum().val==1){
-				example.setOrderByClause("gmt_create desc");
-			}else if(adMemberParam.getOrderTypeEnum().val==2){
 				example.setOrderByClause("total_point desc");
 				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
-			}else if(adMemberParam.getOrderTypeEnum().val==3){
+			}else{
 				example.setOrderByClause("point desc");
 				cr.andAdCountGreaterThanOrEqualTo(20);
 				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
 			}
 		}
-		if(adMemberParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
-		}
+		
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
@@ -433,13 +445,6 @@ public class AdServiceImpl implements AdService {
 				if(adDO.getBeginTime().getTime()==date.getTime()){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDOMapper.updateByPrimaryKey(adDO);
-					//将广告添加到solr中
-					FavoriteAdDOExample adExample=new FavoriteAdDOExample();
-					adExample.createCriteria().andAdIdEqualTo(adDO.getId());
-					Long attenCount=favoriteAdDOMapper.countByExample(adExample);
-					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-					document.addField("count_i", attenCount.intValue());
-				    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 				}
 			}
 		 
@@ -457,6 +462,46 @@ public class AdServiceImpl implements AdService {
 					}
 				}
 		
+	}
+
+	@Override
+	public Page<AdBO> selectChoiceness(AdMemberParam adMemberParam) {
+		AdDOExample example=new AdDOExample();
+		Criteria cr= example.createCriteria();
+		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		Criteria cr2= example.createCriteria();
+		cr2.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		example.or(cr2);
+		example.setOrderByClause("gmt_create desc");
+		if(adMemberParam.getTypeEnum()!=null){
+			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
+		}
+		List<AdDO> DOS=adDOMapper.selectByExample(example);
+		List<AdBO> BOS=new ArrayList<AdBO>();
+		for (AdDO adDO : DOS) {
+			if(adDO.getType()==3){
+				FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+				adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+				Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+				AdBO BO=AdConverter.convertBO(adDO);
+				BO.setAttenCount(attenCount.intValue());
+				BOS.add(BO);
+			}else{
+				if(adDO.getStatus()==2){
+					FavoriteAdDOExample adExample=new FavoriteAdDOExample();
+					adExample.createCriteria().andAdIdEqualTo(adDO.getId());
+					Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+					AdBO BO=AdConverter.convertBO(adDO);
+					BO.setAttenCount(attenCount.intValue());
+					BOS.add(BO);
+				}
+			}
+			
+		}
+		Page<AdBO> page=new Page<AdBO>();
+		page.setCurrentPage(adMemberParam.getCurrentPage());
+		page.setRecords(BOS);
+		return page;
 	}
 
 	

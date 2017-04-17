@@ -22,7 +22,10 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.param.AdChoicenessParam;
+import com.lawu.eshop.ad.param.AdEgainParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -85,13 +88,19 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     private static Logger logger = LoggerFactory.getLogger(AdExtendServiceImpl.class);
 
 	@Override
-	public Result<Page<AdDTO>> selectListByMember(AdMemberParam adMemberParam) {
+	public Result<Page<AdDTO>> selectListByMember(AdEgainParam adEgainParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(adMemberParam);
+		AdMemberParam param=new AdMemberParam();
+   	    param.setCurrentPage(adEgainParam.getCurrentPage());
+   	    param.setPageSize(adEgainParam.getPageSize());
+   	    param.setTypeEnum(adEgainParam.getTypeEnum());
+   	    param.setLatitude(adEgainParam.getLatitude());
+   	    param.setLongitude(adEgainParam.getLongitude());
+		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param);
     	List<AdDTO> list =pageDTOS.getModel().getRecords();
-    	List<AdDTO> newList=screem(adMemberParam,list,memberId);
+    	List<AdDTO> newList=screem(param,list,memberId);
     	AdPage<AdDTO> adpage=new AdPage<>();
-    	List<AdDTO>  screenList=adpage.page(newList, adMemberParam.getPageSize(), adMemberParam.getCurrentPage());
+    	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
@@ -105,12 +114,18 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	}
 	
 	@Override
-	public Result<List<AdDTO>> selectListPointTotle(AdMemberParam adMemberParam) {
+	public Result<List<AdDTO>> selectListPointTotle(AdPointParam adPointParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(adMemberParam);
+		 AdMemberParam param=new AdMemberParam();
+    	 param.setCurrentPage(adPointParam.getCurrentPage());
+    	 param.setPageSize(adPointParam.getPageSize());
+    	 param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
+    	 param.setLatitude(adPointParam.getLatitude());
+    	 param.setLongitude(adPointParam.getLongitude());
+		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
      	List<AdDTO> newList= new ArrayList<AdDTO>();
-     	newList=screem(adMemberParam,list,memberId);
+     	newList=screem(param,list,memberId);
      	if(newList.size()>9)
      		newList=newList.subList(0, 9);
      	else
@@ -259,6 +274,31 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			logger.error("抢赞失败",e);
 		}
 		return null;
+	}
+
+	@Override
+	public Result<Page<AdDTO>> selectChoiceness(AdChoicenessParam adChoicenessParam) {
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
+		AdMemberParam param=new AdMemberParam();
+   	    param.setCurrentPage(adChoicenessParam.getCurrentPage());
+   	    param.setPageSize(adChoicenessParam.getPageSize());
+   	    param.setLatitude(adChoicenessParam.getLatitude());
+   	    param.setLongitude(adChoicenessParam.getLongitude());
+		Result<Page<AdDTO>>  pageDTOS=adService.selectChoiceness(param);
+    	List<AdDTO> list =pageDTOS.getModel().getRecords();
+    	List<AdDTO> newList=screem(param,list,memberId);
+    	AdPage<AdDTO> adpage=new AdPage<>();
+    	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
+    	for (AdDTO adDTO : screenList) {
+    		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+     		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     		adDTO.setName(merchantStoreDTO.getModel().getName());
+		}
+    	Page<AdDTO> newPage=new Page<AdDTO>();
+    	newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
+    	newPage.setTotalCount(newList.size());
+    	newPage.setRecords(screenList);
+		return successGet(newPage);
 	}
 	
 

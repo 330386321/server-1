@@ -19,9 +19,10 @@ public class MemberDTO {
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
-    @ApiModelProperty(value = "生日")
+    @ApiModelProperty(value = "区域")
     private String regionPath;
 
+    @ApiModelProperty(value = "出生年月")
     private Date birthday;
 
     @ApiModelProperty(value = "头像")
@@ -29,6 +30,9 @@ public class MemberDTO {
 
     @ApiModelProperty(value = "等级")
     private Integer level;
+    
+    @ApiModelProperty(value = "手机")
+    private String mobile;
 
     private Date gmtCreate;
 
@@ -114,6 +118,14 @@ public class MemberDTO {
     public void setUserSex(UserSexEnum userSex) {
         this.userSex = userSex;
     }
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
 
 
 }

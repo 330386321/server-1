@@ -130,4 +130,12 @@ public interface MemberService {
 	 */
 	@RequestMapping(value = "member/getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
 	Result<MemberInfoForShoppingOrderDTO> getMemberInfoForShoppingOrder(@PathVariable("id") Long id);
+	
+	/**
+	 * 查询用户信息
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "member/findMember/{memberId}")
+    Result<MemberDTO> findMemberInfoById(@PathVariable("memberId") Long memberId);
 }

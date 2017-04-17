@@ -43,14 +43,19 @@ public class AdLexiconServiceImpl implements AdLexiconService {
 		List<AdLexiconDO> newDOS=new ArrayList<>();
 		if(dos!=null){
 			int s=0;
-			for(int i=1;i<4;i++){
+			String str="";
+			while(true){
 				Random random = new Random();  
 				Integer r=random.nextInt(dos.size());
+				AdLexiconDO adLexiconDO=new AdLexiconDO();
 				if(r!=s){
-					AdLexiconDO adLexiconDO=dos.get(r);
-					newDOS.add(adLexiconDO);
+					adLexiconDO=dos.get(r);
+					if(adLexiconDO.getTitle()!=str)
+						newDOS.add(adLexiconDO);
 				}
 				s=r;
+				str=adLexiconDO.getTitle();
+				if(newDOS.size()>2) break;
 			}
 		}
 		List<AdLexiconBO> list=AdLexiconConverter.convertBOS(newDOS);

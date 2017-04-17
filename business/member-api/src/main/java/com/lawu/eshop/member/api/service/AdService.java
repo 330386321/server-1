@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.PointPoolDTO;
+import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
@@ -54,7 +56,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "pointPool/selectMemberList", method = RequestMethod.GET)
-    public Result<List<Long>> selectMemberList(@RequestParam("id") Long id);
+    public Result<List<PointPoolDTO>> selectMemberList(@RequestParam("id") Long id);
 	
 	/**
 	 * 抢赞
@@ -92,4 +94,14 @@ public interface AdService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "ad/queryAdByTitle")
     Result<Page<AdSolrDTO>> queryAdByTitle(@ModelAttribute AdsolrFindParam adSolrParam);
+
+
+
+    /**
+     * 今日精选
+     * @param adChoicenessParam
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "ad/selectChoiceness")
+	Result<Page<AdDTO>> selectChoiceness(AdMemberParam param);
 }

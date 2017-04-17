@@ -207,6 +207,23 @@ public class AdController extends BaseController{
 	
 	
 	/**
+	 * 会员查询广告
+	 * @param adMerchantParam
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
+    public Result<Page<AdDTO>> selectChoiceness(@RequestBody AdMemberParam adMemberParam) {
+		Page<AdBO> pageBO=  adService.selectChoiceness(adMemberParam);
+		Page<AdDTO> pageDTO=new Page<AdDTO>();
+		pageDTO.setCurrentPage(pageBO.getCurrentPage());
+		pageDTO.setTotalCount(pageBO.getTotalCount());
+		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
+		return  successAccepted(pageDTO);
+    }
+	
+	
+	/**
 	 * 会员E赞
 	 * @param adMerchantParam
 	 * @param memberId

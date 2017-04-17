@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.BankService;
 import com.lawu.eshop.property.dto.BankDTO;
 
@@ -41,7 +44,7 @@ public class BankController extends BaseController{
 	@ApiOperation(value = "银行数据信息查询", notes = "银行数据信息查询[1000|1001]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "findBank", method = RequestMethod.GET)
-    public Result<List<BankDTO>> findBank() {
+    public Result<List<BankDTO>> findBank(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		Result<List<BankDTO>> DTOS = bankService.findBank();
 		return  DTOS;
     }

@@ -151,7 +151,7 @@ public class MemberConverter {
             MemberBO memberBO = new MemberBO();
             memberBO.setAccount(memberDO.getAccount());
             memberBO.setName(memberDO.getName());
-            memberBO.setMobile(memberDO.getMobile());
+            memberBO.setMobile(memberDO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
             memberBO.setHeadimg(memberDO.getHeadimg());
             memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
             memberBO.setRegionPath(memberDO.getRegionPath());
@@ -191,6 +191,8 @@ public class MemberConverter {
         memberDTO.setBirthday(memberBO.getBirthday());
         memberDTO.setHeadimg(memberBO.getHeadimg());
         memberDTO.setLevel(memberBO.getLevel());
+        memberDTO.setMobile(memberBO.getMobile());
+        memberDTO.setRegionPath(memberBO.getRegionPath());
         return memberDTO;
     }
 

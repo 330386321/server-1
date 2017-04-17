@@ -1,15 +1,13 @@
 package com.lawu.eshop.ad.param;
 
-import java.util.Date;
-
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.framework.core.page.AbstractPageParam;
+import com.lawu.eshop.framework.core.page.PageParam;
 
 import io.swagger.annotations.ApiParam;
 
-public class AdMerchantParam extends AbstractPageParam{
+public class AdMerchantParam extends PageParam{
 	
 	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞")
 	private AdTypeEnum typeEnum;
@@ -20,12 +18,6 @@ public class AdMerchantParam extends AbstractPageParam{
 	@ApiParam (name="statusEnum", value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中 AD_STATUS_PUTED 投放结束"
 			+ "AD_STATUS_OUT 下架")
     private AdStatusEnum statusEnum;
-
-	@ApiParam (name="beginTime", value = "查询起始时间")
-    private Date beginTime;
-    
-	@ApiParam (name="endTime", value = "查询结束时间")
-    private Date endTime;
 
 	public AdTypeEnum getTypeEnum() {
 		return typeEnum;
@@ -55,27 +47,6 @@ public class AdMerchantParam extends AbstractPageParam{
 	public void setStatusEnum(AdStatusEnum statusEnum) {
 		this.statusEnum = statusEnum;
 	}
-
-
-	public Date getBeginTime() {
-		return beginTime;
-	}
-
-
-	public void setBeginTime(Date beginTime) {
-		this.beginTime = beginTime;
-	}
-
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
-
     
     
     
