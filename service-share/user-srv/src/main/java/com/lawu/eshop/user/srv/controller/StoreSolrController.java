@@ -40,7 +40,7 @@ public class StoreSolrController extends BaseController {
         SolrQuery query = new SolrQuery();
         query.setParam("q", "*:*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            query.setParam("q", "name_s:" + storeSolrParam.getName() + "*");
+            query.setParam("q", "name_s:*" + storeSolrParam.getName() + "*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
             query.setParam("q", "industryPath_s:" + storeSolrParam.getIndustryPath() + "*");

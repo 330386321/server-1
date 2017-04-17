@@ -300,7 +300,7 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         //获取ryToken
-        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(),memberDO.getMobile(), FileDirConstant.DEFAULT_PIC);
+        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(),"E店会员", FileDirConstant.DEFAULT_PIC);
         if(!"".equals(tokenResult.getToken())){
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());
