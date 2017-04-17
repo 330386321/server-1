@@ -1,8 +1,8 @@
 package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +29,7 @@ public interface ProductService {
     @RequestMapping(method = RequestMethod.GET, value = "product/selectProductById")
     Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId);
 
-    @RequestMapping(value = "productModel/shoppingCart/{id}", method = RequestMethod.GET)
-    Result<ShoppingCartProductModelDTO> getShoppingCartProductModel(@PathVariable("id") Long id);
+    @RequestMapping(value = "productModel/selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
+    Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception;
 
 }

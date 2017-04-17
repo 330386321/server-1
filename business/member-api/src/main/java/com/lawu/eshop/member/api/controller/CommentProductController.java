@@ -20,8 +20,8 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
@@ -111,7 +111,7 @@ public class CommentProductController extends BaseController {
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
-    public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) {
+    public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception{
 
         List<CommentProductDTO> commentProductDTOS = new ArrayList<>();
         Page<CommentProductDTO> pages = new Page<>();
@@ -136,10 +136,10 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setNickName(user.getModel().getNickname());
                 commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
-                Result<ShoppingCartProductModelDTO>  product = productService.getShoppingCartProductModel(commentDTO.getProductModelId());
+                Result<CommentProductInfoDTO>  product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
                 commentProductDTO.setName(product.getModel().getName());
-              //  commentProductDTO.setPriceMax(product.getModel().getPrice());
-                commentProductDTO.setSpec(product.getModel().get);
+                commentProductDTO.setPriceMax(product.getModel().getPrice());
+                commentProductDTO.setSpec(product.getModel().getModelName());
                 commentProductDTOS.add(commentProductDTO);
             }
         pages.setCurrentPage(result.getModel().getCurrentPage());
