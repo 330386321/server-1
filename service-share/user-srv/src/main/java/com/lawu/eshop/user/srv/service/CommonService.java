@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.srv.bo.InviterBO;
 
 /**
@@ -17,4 +19,12 @@ public interface CommonService {
      * @return
      */
     InviterBO getInviterByAccount(String account);
+
+    /**
+     * 根据被邀请人查询出该人所有level邀请人编号
+     * @param invitedUserNum
+     * @param level
+     * @return
+     */
+	List<String> selectHigherLevelInviters(String invitedUserNum, int level);
 }

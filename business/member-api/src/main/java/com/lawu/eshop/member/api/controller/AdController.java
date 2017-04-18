@@ -35,6 +35,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.MemberDTO;
@@ -70,6 +71,8 @@ public class AdController extends BaseController {
     
     @Autowired
     private FansMerchantService fansMerchantService;
+    @Autowired
+    private InviterService inviterService;
 
 
     @Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -193,7 +196,7 @@ public class AdController extends BaseController {
      public Result clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	 Long memberId=UserUtil.getCurrentUserId(getRequest());
-         Result rs = adService.clickAd(id,memberId);
+    	 Result rs = adService.clickAd(id,memberId);
          return rs;
      }
 

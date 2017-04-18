@@ -163,6 +163,11 @@ public class RechargeServiceImpl implements RechargeService {
 		rechargeDOMapper.updateByExampleSelective(rechargeDO, example);
 		
 		result.setRet(ResultCode.SUCCESS);
+		
+		//TODO 发送站内消息
+		
+		
+		
 		return result;
 	}
 

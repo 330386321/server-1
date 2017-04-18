@@ -252,6 +252,10 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setGmtCreate(new Date());
 			transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		}
+		
+		//TODO 发送站内消息---待模板
+		
+		
 
 		return ResultCode.SUCCESS;
 	}

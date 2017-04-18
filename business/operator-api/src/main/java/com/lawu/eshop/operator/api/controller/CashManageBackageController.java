@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.operator.api.service.CashManageBackageService;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
@@ -94,6 +95,11 @@ public class CashManageBackageController extends BaseController {
 		//TODO 
 		dparam.setAuditUserId(1L);
 		dparam.setAuditUserName("super");
-		return cashManageBackageService.updateWithdrawCash(dparam);
+		Result result = cashManageBackageService.updateWithdrawCash(dparam);
+		if(ResultCode.SUCCESS != result.getRet()){
+			return result;
+		}
+		
+		return result;
 	}
 }

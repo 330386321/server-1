@@ -56,4 +56,11 @@ public class CommonServiceImpl implements CommonService {
         }
         return null;
     }
+
+	@Override
+	public List<String> selectHigherLevelInviters(String invitedUserNum, int level) {
+		InviteRelationDOExample example = new InviteRelationDOExample();
+		//example.createCriteria().and
+		return null;
+	}
 }

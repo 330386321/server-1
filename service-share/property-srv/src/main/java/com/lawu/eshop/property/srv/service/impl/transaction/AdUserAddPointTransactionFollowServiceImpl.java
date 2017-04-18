@@ -30,7 +30,7 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
 	    PropertyInfoDataParam param=new PropertyInfoDataParam();
 	    param.setPoint(notification.getPoint().toString());
 	    param.setUserNum(notification.getUserNum());
-	    param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
+	    param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
 	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
 	    propertyInfoDataService.doHanlderAddPoint(param);
         return new Reply();
