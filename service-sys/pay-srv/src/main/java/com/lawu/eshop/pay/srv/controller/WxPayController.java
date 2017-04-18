@@ -56,11 +56,11 @@ public class WxPayController extends BaseController {
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
 	public Result getPrepayInfo(@RequestBody ThirdPayDataParam param) throws JDOMException, IOException {
 		int retCode = ResultCode.SUCCESS;
-		if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
-			retCode = WxPayParamValidateor.pcAlipayReqValidate(param);
-		} else {
-			retCode = WxPayParamValidateor.appAlipayReqValidate(param);
-		}
+//		if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
+//			retCode = WxPayParamValidateor.pcAlipayReqValidate(param);
+//		} else {
+//			retCode = WxPayParamValidateor.appAlipayReqValidate(param);
+//		}
 		if (retCode != ResultCode.SUCCESS) {
 			return successCreated(retCode);
 		}
@@ -104,7 +104,7 @@ public class WxPayController extends BaseController {
 		if (return_code.equals("FAIL")) {
 			String return_msg = map.get("return_msg") == null ? "" : map.get("return_msg").toString();
 			logger.error("微信支付预支付订单失败，return_code={},return_msg={}", return_code, return_msg);
-			return successCreated(ResultCode.WEIXIN_PAY_RETURN_CODE_FAIL);
+//			return successCreated(ResultCode.WEIXIN_PAY_RETURN_CODE_FAIL);
 
 		} else {
 			String result_code = map.get("result_code") == null ? "" : map.get("result_code").toString();
@@ -113,7 +113,7 @@ public class WxPayController extends BaseController {
 				String err_code_des = map.get("err_code_des") == null ? "" : map.get("err_code_des").toString();
 				logger.error("微信支付预支付订单失败，result_code={},err_code={},err_code_des={}", result_code, err_code,
 						err_code_des);
-				return successCreated(ResultCode.WEIXIN_PAY_RESULT_CODE_FAIL);
+//				return successCreated(ResultCode.WEIXIN_PAY_RESULT_CODE_FAIL);
 
 			} else {
 				if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {

@@ -4,7 +4,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,13 +55,16 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "findCashInfo", method = RequestMethod.POST)
-	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryDataParam param)
-			throws Exception {
-		if (param.getUserTypeEnum() == null) {
-			return successCreated(ResultCode.CASH_BACKAGE_USER_TYPE_NULL);
-		}
-		if (param.getBeginDate() == null || param.getEndDate() == null) {
-			return successCreated(ResultCode.DATE_RANGE_NULL);
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody @Valid CashBackageQueryDataParam param,
+			BindingResult result) throws Exception {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfo(param);
 		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
@@ -82,10 +89,16 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "getTotalNum", method = RequestMethod.POST)
-	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody CashBackageQuerySumParam param)
-			throws Exception {
-		if (param.getUserTypeEnum() == null) {
-			return successCreated(ResultCode.CASH_BACKAGE_USER_TYPE_NULL);
+	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody @Valid CashBackageQuerySumParam param,
+			BindingResult result) throws Exception {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		WithdrawCashBackageQuerySumDTO dto = new WithdrawCashBackageQuerySumDTO();
 		WithdrawCashBackageQuerySumBO bo = cashManageBackageService.getTotalNum(param);
@@ -104,13 +117,16 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
-	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(@RequestBody CashBackageQueryDetailParam param)
-			throws Exception {
-		if (param.getUserTypeEnum() == null) {
-			return successCreated(ResultCode.CASH_BACKAGE_USER_TYPE_NULL);
-		}
-		if (param.getAccount() == null || "".equals(param.getAccount())) {
-			return successCreated(ResultCode.CASH_BACKAGE_ACCOUNT_NULL);
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(
+			@RequestBody @Valid CashBackageQueryDetailParam param, BindingResult result) throws Exception {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfoDetail(param);
 		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
@@ -129,25 +145,30 @@ public class CashManageBackageController extends BaseController {
 
 	/**
 	 * 提现后台处理
+	 * 
 	 * @param param
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
-	public Result updateWithdrawCash(@RequestBody CashBackageOperDataParam param) {
-		if (param.getCashOperEnum() == null) {
-			return successCreated(ResultCode.CASH_BACKAGE_OPER_NULL);
+	public Result updateWithdrawCash(@RequestBody @Valid CashBackageOperDataParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		if (param.getIds() == null || "".equals(param.getIds())) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
+
 		if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)
 				&& (param.getAuditFailReason() == null || "".equals(param.getAuditFailReason()))) {
 			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
 		}
-		
+
 		int retCode = cashManageBackageService.updateWithdrawCash(param);
 		return successCreated(retCode);
-		
+
 	}
 }

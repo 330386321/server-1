@@ -12,6 +12,7 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
@@ -70,56 +71,67 @@ public class WxPayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
 
 		// 查询支付金额
+		double money = 0;
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+			money = payOrderCallback.getActualMoney();
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
-			double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(orderMoney));
+			money = shoppingOrderService.selectOrderMoney(param.getBizIds());
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			double money = rechargeService.getRechargeMoney(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(money));
+			money = rechargeService.getRechargeMoney(param.getBizIds());
+
 		}
+		if (money == 0) {
+			return successCreated(ResultCode.MONEY_IS_ZERO);
+		}
+		aparam.setTotalAmount(String.valueOf(money));
 
 		return wxPayService.getPrepayInfo(aparam);
 
 	}
 
-//	@SuppressWarnings("rawtypes")
-//	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
-//	@Authorization
-//	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-//	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-//			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
+	// @SuppressWarnings("rawtypes")
+	// @ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes =
+	// "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
+	// @Authorization
+	// @RequestMapping(value = "initPcPay", method = RequestMethod.POST)
+	// public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN)
+	// String token,
+	// @ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
 
-//		ThirdPayDataParam aparam = new ThirdPayDataParam();
-//		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-//		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
-//		aparam.setSubject(param.getThirdPayBodyEnum().val);
-//		aparam.setBizIds(param.getBizIds());
-//		aparam.setBizFlagEnum(param.getBizFlagEnum());
-//		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-//		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
-//
-//		// 查询支付金额
-//		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-//			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
-//			if ("".equals(bond)) {
-//				bond = PropertyType.MERCHANT_BONT_DEFAULT;
-//			}
-//			aparam.setTotalAmount(bond);
-//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
-//				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-//			double money = rechargeService.getRechargeMoney(param.getBizIds());
-//			aparam.setTotalAmount(String.valueOf(money));
-//		}
+	// ThirdPayDataParam aparam = new ThirdPayDataParam();
+	// aparam.setOutTradeNo(StringUtil.getRandomNum(""));
+	// aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
+	// aparam.setSubject(param.getThirdPayBodyEnum().val);
+	// aparam.setBizIds(param.getBizIds());
+	// aparam.setBizFlagEnum(param.getBizFlagEnum());
+	// aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+	// aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
+	//
+	// // 查询支付金额
+	// if
+	// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val))
+	// {
+	// String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+	// if ("".equals(bond)) {
+	// bond = PropertyType.MERCHANT_BONT_DEFAULT;
+	// }
+	// aparam.setTotalAmount(bond);
+	// } else if
+	// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
+	// ||
+	// ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val))
+	// {
+	// double money = rechargeService.getRechargeMoney(param.getBizIds());
+	// aparam.setTotalAmount(String.valueOf(money));
+	// }
 
-//		return wxPayService.getPrepayInfo(aparam);
-//	}
+	// return wxPayService.getPrepayInfo(aparam);
+	// }
 
 }

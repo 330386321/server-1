@@ -12,6 +12,7 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.AlipayService;
 import com.lawu.eshop.member.api.service.PayOrderService;
@@ -70,22 +71,27 @@ public class AlipayController extends BaseController {
 		aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
 
 		// 查询支付金额
+		double money = 0;
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
-			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
-			
+			money = payOrderCallback.getActualMoney();
+
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
-			double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(orderMoney));
+			money = shoppingOrderService.selectOrderMoney(param.getBizIds());
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			double money = rechargeService.getRechargeMoney(param.getBizIds());
-			aparam.setTotalAmount(String.valueOf(money));
+			money = rechargeService.getRechargeMoney(param.getBizIds());
+			
 		}
-
-		return successGet(alipayService.getAppAlipayReqParams(aparam));
+		if(money == 0){
+			return successCreated(ResultCode.MONEY_IS_ZERO);
+		}
+		aparam.setTotalAmount(String.valueOf(money));
+		
+		return successCreated(alipayService.getAppAlipayReqParams(aparam));
 
 	}
 

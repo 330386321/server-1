@@ -138,6 +138,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) throws Exception {
 		WithdrawCashDOView view = new WithdrawCashDOView();
 		view.setUserType(param.getUserTypeEnum().val);
+		view.setStatus(CashStatusEnum.SUCCESS.val);
 		view = withdrawCashDOMapperExtend.getTotalNum(view);
 
 		WithdrawCashBackageQuerySumBO bo = new WithdrawCashBackageQuerySumBO();
@@ -161,6 +162,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		for (WithdrawCashDO cdo : listDOS) {
 			WithdrawCashBackageQueryBO bqbo = new WithdrawCashBackageQueryBO();
 			bqbo.setId(cdo.getId());
+			bqbo.setUserNum(cdo.getUserNum());
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());

@@ -111,7 +111,7 @@ public class WxPayController extends BaseController {
 		if (return_code.equals("FAIL")) {
 			String return_msg = map.get("return_msg") == null ? "" : map.get("return_msg").toString();
 			logger.error("微信支付预支付订单失败，return_code={},return_msg={}", return_code, return_msg);
-			return successCreated(ResultCode.WEIXIN_PAY_RETURN_CODE_FAIL);
+			return successCreated(ResultCode.FAIL, return_code + ":" + return_msg);
 
 		} else {
 			String result_code = map.get("result_code") == null ? "" : map.get("result_code").toString();
@@ -120,7 +120,7 @@ public class WxPayController extends BaseController {
 				String err_code_des = map.get("err_code_des") == null ? "" : map.get("err_code_des").toString();
 				logger.error("微信支付预支付订单失败，result_code={},err_code={},err_code_des={}", result_code, err_code,
 						err_code_des);
-				return successCreated(ResultCode.WEIXIN_PAY_RESULT_CODE_FAIL);
+				return successCreated(ResultCode.FAIL, err_code + ":" + err_code_des);
 
 			} else {
 				if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {

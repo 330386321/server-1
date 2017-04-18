@@ -10,6 +10,7 @@ public class WithdrawCashDOView implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Byte userType;
+	private Byte status;
 
 	private Integer successNums;
 	private BigDecimal successMoney;
@@ -36,6 +37,14 @@ public class WithdrawCashDOView implements Serializable {
 
 	public void setSuccessMoney(BigDecimal successMoney) {
 		this.successMoney = successMoney;
+	}
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 
 }

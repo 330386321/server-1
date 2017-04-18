@@ -2,6 +2,8 @@ package com.lawu.eshop.property.param;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
@@ -20,13 +22,16 @@ public class CashBackageQueryParam  extends AbstractPageParam{
 
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiParam(name = "beginDate", required = true, value = "开始时间")
+	@NotNull(message="开始时间不能为空")
 	private Date beginDate;
 	
 	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiParam(name = "endDate", required = true, value = "结束时间")
+	@NotNull(message="结束时间不能为空")
 	private Date endDate;
 
 	@ApiParam(name = "cashStatsuEnum", required = true, value = "提现状态(全部传空字符串)")
+	@NotNull(message="cashStatsuEnum不能为空")
 	private CashStatusEnum cashStatsuEnum;
 	
 	@ApiParam(name = "userTypeEnum", required = true, value = "用户类型")

@@ -14,6 +14,7 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
@@ -78,6 +79,9 @@ public class WxPayController extends BaseController {
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
+			if (money == 0) {
+				return successCreated(ResultCode.MONEY_IS_ZERO);
+			}
 			aparam.setTotalAmount(String.valueOf(money));
 		}
 
@@ -112,6 +116,9 @@ public class WxPayController extends BaseController {
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			double money = rechargeService.getRechargeMoney(param.getBizIds());
+			if (money == 0) {
+				return successCreated(ResultCode.MONEY_IS_ZERO);
+			}
 			aparam.setTotalAmount(String.valueOf(money));
 		}
 

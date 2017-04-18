@@ -50,10 +50,10 @@ public class AlipayController extends BaseController {
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
 	public Result getAppAlipayReqParams(@RequestBody ThirdPayDataParam param) {
 
-		int retCode = AlipayParamValidateor.appAlipayReqValidate(param);
-		if (retCode != ResultCode.SUCCESS) {
-			return successCreated(retCode);
-		}
+//		int retCode = AlipayParamValidateor.appAlipayReqValidate(param);
+//		if (retCode != ResultCode.SUCCESS) {
+//			return successCreated(retCode);
+//		}
 
 		SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
@@ -94,10 +94,10 @@ public class AlipayController extends BaseController {
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
 	public Result initPcPay(@RequestBody PcAlipayDataParam param) {
 
-		int retCode = AlipayParamValidateor.pcAlipayReqValidate(param);
-		if (retCode != ResultCode.SUCCESS) {
-			return successCreated(retCode);
-		}
+//		int retCode = AlipayParamValidateor.pcAlipayReqValidate(param);
+//		if (retCode != ResultCode.SUCCESS) {
+//			return successCreated(retCode);
+//		}
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("service", "create_direct_pay_by_user");
 		paramMap.put("partner", PropertiesUtil.getPropertyValue("partner", "alipay.properties"));

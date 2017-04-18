@@ -95,31 +95,17 @@ public class ResultCode {
     public static final int PROPERTY_CASH_PAY_PWD_ERROR = 6006;
     public static final int PROPERTY_CASH_BANK_NOT_EXIST = 6007;
     public static final int PROPERTY_CASH_BANK_NOT_MATCH = 6008;
-    public static final int PROPERTY_CASH_USER_INFO_NULL = 6018;
-    public static final int PROPERTY_INFO_POINT_LESS = 6024;
-    public static final int BIZ_TYPE_NULL = 6025;
+    public static final int PROPERTY_CASH_USER_INFO_NULL = 6009;
+    public static final int PROPERTY_INFO_POINT_LESS = 6010;
+    public static final int BIZ_TYPE_NULL = 6011;
     
-    public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
-    public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
-    public static final int ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL = 6011;
-    public static final int ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL = 6012;
-    public static final int ALIPAY_INIT_VALIDATOR_BODY_NULL = 6013;
-    public static final int ALIPAY_INIT_VALIDATOR_USER_NUM_NULL = 6014;
-    public static final int ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL = 6015;
-
-    public static final int WEIXIN_PAY_RETURN_CODE_FAIL = 6016;
-    public static final int WEIXIN_PAY_RESULT_CODE_FAIL = 6017;
-    
-    public static final int CASH_BACKAGE_USER_TYPE_NULL = 6019;
-    public static final int DATE_RANGE_NULL = 6020;
-    public static final int CASH_BACKAGE_ACCOUNT_NULL = 6021;
-    public static final int CASH_BACKAGE_OPER_NULL = 6022;
-    public static final int CASH_BACKAGE_FAILURE_REASON_NULL = 6023;
-    public static final int FREEZE_NULL = 6026;
-    public static final int FREEZE_ROWS_OUT = 6027;
-    public static final int FREEZE_MONEY_LESS_REFUND_MONEY = 6028;
-    public static final int DEPOSIT_IN_SYSTEM_DAYS = 6029;
-    public static final int DEPOSIT_EXIST_ING_ORDER = 6030;
+    public static final int CASH_BACKAGE_FAILURE_REASON_NULL = 6012;
+    public static final int FREEZE_NULL = 6013;
+    public static final int FREEZE_ROWS_OUT = 6014;
+    public static final int FREEZE_MONEY_LESS_REFUND_MONEY = 6015;
+    public static final int DEPOSIT_IN_SYSTEM_DAYS = 6016;
+    public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
+    public static final int MONEY_IS_ZERO = 6018;
 
     // 商城模块代码 7xxx
 
@@ -212,21 +198,6 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
         ResultCode.messageMap.put(PROPERTY_CASH_USER_INFO_NULL, "提交查询用户冗余信息为空");
         
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_SUBJECT_NULL, "app支付时subject参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_MONEY_NULL, "app支付时total_amount参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL, "app支付时out_trade_no参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL, "app支付时userTypeEnum参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BODY_NULL, "app支付时body参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_USER_NUM_NULL, "app支付时userNum参数不能为空");
-        ResultCode.messageMap.put(ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL, "app支付时bizFlagEnum参数不能为空");
-        
-        ResultCode.messageMap.put(WEIXIN_PAY_RETURN_CODE_FAIL, "微信支付时预支付接口return_code返回FAIL");
-        ResultCode.messageMap.put(WEIXIN_PAY_RESULT_CODE_FAIL, "微信支付时预支付接口result_code返回FAIL");
-        
-        ResultCode.messageMap.put(CASH_BACKAGE_USER_TYPE_NULL, "用户类型不能为空");
-        ResultCode.messageMap.put(DATE_RANGE_NULL, "时间区间不能为空");
-        ResultCode.messageMap.put(CASH_BACKAGE_ACCOUNT_NULL, "账号account不能为空");
-        ResultCode.messageMap.put(CASH_BACKAGE_OPER_NULL, "操作类型不能为空");
         ResultCode.messageMap.put(CASH_BACKAGE_FAILURE_REASON_NULL, "操作失败时原因不能为空");
         ResultCode.messageMap.put(BIZ_TYPE_NULL, "业务类型不能为空");
         ResultCode.messageMap.put(FREEZE_NULL, "冻结资金记录为空");
@@ -234,6 +205,7 @@ public class ResultCode {
         ResultCode.messageMap.put(FREEZE_MONEY_LESS_REFUND_MONEY, "冻结金额不能小于退款金额");
         ResultCode.messageMap.put(DEPOSIT_IN_SYSTEM_DAYS, "不满足申请退保证金要求(保证金核实后90天)");
         ResultCode.messageMap.put(DEPOSIT_EXIST_ING_ORDER, "不满足申请退保证金要求(存在未完结订单)");
+        ResultCode.messageMap.put(MONEY_IS_ZERO, "查询出金额为0");
 
 
         // 商城模块 7xxx

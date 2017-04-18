@@ -169,6 +169,9 @@ public class RechargeServiceImpl implements RechargeService {
 	@Override
 	public double getRechargeMoney(String rechargeId) {
 		RechargeDO recharge = rechargeDOMapper.selectByPrimaryKey(Long.valueOf(rechargeId));
+		if(recharge == null){
+			return 0;
+		}
 		return recharge.getRechargeMoney().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
 
