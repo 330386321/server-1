@@ -216,6 +216,12 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+    /**
+     * 根据商品ID删除评论
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "delCommentByProductId",method = RequestMethod.DELETE)
     public Result delCommentByProductId(@RequestParam(value = "productId") Long productId){
         if(productId == null){
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
