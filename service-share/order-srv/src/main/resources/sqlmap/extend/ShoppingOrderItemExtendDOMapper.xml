@@ -141,17 +141,17 @@
     <if test="distinct">distinct</if>
     <include refid="ShoppingOrderItem_Column_List" />
     <if test="isIncludeShoppingOrder">
-    <include refid="ShoppingOrder_Column_List" />	
+    	,<include refid="ShoppingOrder_Column_List" />	
     </if>
     <if test="isIncludeShoppingRefundDetail">
-    <include refid="ShoppingRefundDetail_Column_List" />	
+    	,<include refid="ShoppingRefundDetail_Column_List" />	
     </if>
     from shopping_order_item soi
     <if test="isIncludeShoppingOrder">
-    left join shopping_order so on soi.shopping_order_id = so.id
+    	left join shopping_order so on soi.shopping_order_id = so.id
     </if>
     <if test="isIncludeShoppingRefundDetail">
-    left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+    	left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
     </if>    
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

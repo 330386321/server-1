@@ -114,10 +114,34 @@ public interface ShoppingRefundDetailService {
 	/**
 	 * 退款中-退款失败
 	 * 商家拒绝退款
-	 * 平台提示买家操作是否申请平台介入
+	 * 平台提示买家操作，是否申请平台介入
 	 * 否则自动撤销退款申请
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoRefundFailed();
+	
+	/**
+	 * 退款中-商家填写退货地址
+	 * 平台提醒商家操作，否则自动退款
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoForFillReturnAddress();
+	
+	/**
+	 * 退款中 - 等待买家退货
+	 * 平台提醒买家操作，否则自动撤销退款申请
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoForToBeReturn();
+	
+	/**
+	 * 退款中 - 等待商家退款
+	 * 平台提醒商家操作，否则自动退款
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoForToBeRefund();
 }

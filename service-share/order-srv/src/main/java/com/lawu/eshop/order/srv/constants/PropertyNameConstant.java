@@ -70,6 +70,41 @@ public class PropertyNameConstant {
 	/**
 	 * 商家拒绝退款，买家未处理，平台自动撤销退款时间
 	 */
-	public final static String REFUND_FAILED_REVOKE_REFUND_TIME = "refund_failed_revoke_refund_time";
+	public final static String REFUND_FAILED_REVOKE_TIME = "refund_failed_revoke_refund_time";
+	
+	/**
+	 * 商家填写退货地址,平台提醒商家操作时间
+	 */
+	public final static String FILL_RETURN_ADDRESS_REMIND_TIME = "fill_return_address_remind_time";
+	
+	/**
+	 * 商家填写退货地址,商家未操作，平台自动退款时间
+	 */
+	public final static String FILL_RETURN_ADDRESS_REFUND_TIME = "fill_return_address_refund_time";
+	
+	/**
+	 * 买家填写退货物流信息,平台提醒买家操作时间
+	 */
+	public final static String TO_BE_RETURNED_REMIND_TIME = "to_be_returned_remind_time";
+	
+	/**
+	 * 买家填写退货物流信息,买家未操作，平台自动撤销退款申请时间
+	 */
+	public final static String TO_BE_RETURNED_REVOKE_TIME = "to_be_returned_revoke_time";
+	
+	/**
+	 * 等待商家退款,平台第一次提醒商家操作时间
+	 */
+	public final static String TO_BE_REFUNDED_REMIND_FIRST_TIME = "to_be_refunded_remind_first_time";
+	
+	/**
+	 * 等待商家退款,平台第二次提醒商家操作时间
+	 */
+	public final static String TO_BE_REFUNDED_REMIND_SECOND_TIME = "to_be_refunded_remind_second_time";
+	
+	/**
+	 * 等待商家退款,商家未操作，平台自动退款时间
+	 */
+	public final static String TO_BE_REFUNDED_REFUND_TIME = "to_be_returned_refund_time";
 	
 }

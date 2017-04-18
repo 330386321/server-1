@@ -103,6 +103,12 @@ public class MqConstant {
     public static final String TAG_AGREE_TO_REFUND = "agree_to_refund";
     
     /**
+     * 商家同意退款
+     * 发布给mall模块的MQ消息，删除商品评论
+     */
+    public static final String TAG_AGREE_TO_REFUND_DELETE_COMMENT = "agree_to_refund_delete_comment";
+    
+    /**
      * 提醒卖家发货时发布的MQ消息
      */
     public static final String TAG_REMIND_SHIPMENTS = "remind_shipments";
@@ -120,10 +126,39 @@ public class MqConstant {
     public static final String TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND = "to_be_confirmed_for_refund_remind";
     
     /**
-     * 商家同意退款
-     * 发布给mall模块的MQ消息，删除商品评论
+     * 退款中-待商家处理
+	 * 退款类型-退货退款
+	 * 商家处理超时发布的MQ消息
      */
-    public static final String TAG_AGREE_TO_REFUND_DELETE_COMMENT = "agree_to_refund_delete_comment";
+    public static final String TAG_TO_BE_CONFIRMED_FOR_RETURN_REFUND_REMIND = "to_be_confirmed_for_return_refund_remind";
+    
+    /**
+     * 退款中-商家拒绝退款
+	 * 买家处理超时发布的MQ消息
+	 * 发送到mall模块，提醒买家操作
+     */
+    public static final String TAG_REFUND_FAILED_REMIND = "refund_failed_remind";
+    
+    /**
+     * 退款中-商家填写退货地址
+	 * 商家处理超时发布的MQ消息
+	 * 发送到mall模块，提醒商家操作
+     */
+    public static final String TAG_FILL_RETURN_ADDRESS_REMIND = "fill_return_address_remind";
+    
+    /**
+     * 退款中-等待买家退货
+	 * 买家处理超时发布的MQ消息
+	 * 发送到mall模块，提醒商家操作
+     */
+    public static final String TAG_TO_BE_RETURN_REMIND = "to_be_return_remind";
+    
+    /**
+     * 退款中-等待商家退款
+	 * 买家处理超时发布的MQ消息
+	 * 发送到mall模块，提醒买家操作
+     */
+    public static final String TAG_TO_BE_REFUND_REMIND = "to_be_refund_remind";
     
     /******************************************/
     /*******product-srv模块tag **********/
