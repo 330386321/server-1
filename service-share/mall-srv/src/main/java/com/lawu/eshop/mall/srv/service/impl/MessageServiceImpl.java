@@ -109,7 +109,16 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
         messageDO.setUserNum(userNum);
         messageDO.setType(messageInfoParam.getTypeEnum().val);
-        messageDO.setContent(messageInfoParam.getContent());
+        //查询类型对应的消息模板
+        MessageTemplateDOExample example = new MessageTemplateDOExample();
+        example.createCriteria().andTypeEqualTo(messageInfoParam.getTypeEnum().val);
+        List<MessageTemplateDO> dos = messageTemplateDOMapper.selectByExample(example);
+        if(dos.isEmpty()){
+            return  null;
+        }
+        //TODO 根据模板类型设置content
+        /*if(MessageTypeEnum.MESSAGE_TYPE_INCOME.val == messageInfoParam.getTypeEnum().val){
+        }*/
         if (messageInfoParam.getRelateId() != null && messageInfoParam.getRelateId() > 0) {
             messageDO.setRelateId(messageInfoParam.getRelateId());
         }
@@ -118,7 +127,7 @@ public class MessageServiceImpl implements MessageService {
        Integer id =  messageDOMapper.insert(messageDO);
        //发送推送
         MessagePushInfo pushInfo = new MessagePushInfo();
-        pushInfo.setTitle(messageInfoParam.getTitle());
+        pushInfo.setTitle(dos.get(0).getTitle());
         pushInfo.setContent(messageDO.getContent());
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(messageDO.getUserNum());

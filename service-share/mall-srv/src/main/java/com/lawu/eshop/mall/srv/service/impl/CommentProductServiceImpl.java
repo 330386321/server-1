@@ -316,4 +316,13 @@ public class CommentProductServiceImpl implements CommentProductService {
         page.setTotalCount(totalCount);
         return page;
     }
+
+    @Override
+    @Transactional
+    public void delCommentByProductId(Long productId) {
+        CommentProductDO commentProductDO = new CommentProductDO();
+        commentProductDO.setProductId(productId);
+        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+    }
 }

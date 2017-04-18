@@ -57,4 +57,6 @@ public interface CommentProductService {
     Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam);
 
     Page<CommentProductBO> getProductCommentIdsByMerchantId(CommentMerchantListParam pageParam);
+
+    void delCommentByProductId(Long productId);
 }

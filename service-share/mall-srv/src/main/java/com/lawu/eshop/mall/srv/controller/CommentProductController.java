@@ -216,4 +216,12 @@ public class CommentProductController extends BaseController {
         return successGet(pages);
     }
 
+    public Result delCommentByProductId(@RequestParam(value = "productId") Long productId){
+        if(productId == null){
+            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        commentProductService.delCommentByProductId(productId);
+        return successDelete();
+    }
+
 }
