@@ -11,10 +11,13 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductImagePrefix;
 import com.lawu.eshop.product.constant.ProductImgTypeEnum;
@@ -60,6 +63,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductCategoryService productCategoryService;
+	
+	@Autowired
+	@Qualifier("delProductCommentTransactionMainServiceImpl")
+	private TransactionMainService<Reply> delProductCommentTransactionMainServiceImpl;
 
 	@Override
 	public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
@@ -359,8 +366,9 @@ public class ProductServiceImpl implements ProductService {
 					modelDO.setGmtModified(new Date());
 					productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
 
-					// TODO 逻辑删除商品型号评价
-
+					//  逻辑删除商品型号评价
+					delProductCommentTransactionMainServiceImpl.sendNotice(dataBO.getId());
+					
 				} else {
 					modelDO.setOriginalPrice(dataBO.getOriginalPrice());
 					modelDO.setPrice(dataBO.getPrice());

@@ -114,7 +114,7 @@ public class MqConstant {
     
     /******************************************/
     /*******product-srv模块tag **********/
-
+    public static final String TAG_DEL_COMMENT = "del_comment";
 
     /******************************************/
     /*******property-srv模块tag **********/
