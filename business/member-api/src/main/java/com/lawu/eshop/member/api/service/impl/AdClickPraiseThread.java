@@ -2,10 +2,11 @@ package com.lawu.eshop.member.api.service.impl;
 
 import java.util.concurrent.Callable;
 
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.member.api.service.AdService;
 
-public class AdClickPraiseThread implements Callable<Result>{
+public class AdClickPraiseThread implements Callable<Result<PraisePointDTO>>{
 	
 	
 	private AdService adService;
@@ -29,8 +30,8 @@ public class AdClickPraiseThread implements Callable<Result>{
 	 * 描述：抢赞线程
 	 */
 	@Override
-	public Result call() throws Exception {
-		Result rs=adService.clickPraise(id,memberId,num);
+	public Result<PraisePointDTO> call() throws Exception {
+		Result<PraisePointDTO> rs=adService.clickPraise(id,memberId,num);
 		return rs;
 	} 
 	

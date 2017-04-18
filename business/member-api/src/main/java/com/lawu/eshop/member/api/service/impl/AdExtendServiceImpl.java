@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
@@ -252,14 +254,16 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
 		
-		Future<Result> future=null;
+		Future<Result<PraisePointDTO>> future=null;
 		try {
 			 Random random = new Random();  
 			 Integer r=random.nextInt()*B;
 			 if(r>0 && r<A){
 				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
 			 }else{
-				 return successCreated(ResultCode.SUCCESS);
+				 PraisePointDTO dto=new PraisePointDTO();
+				 dto.setPoint(new BigDecimal(0));
+				 return successCreated(dto);
 			 }
 			 
 		} catch (RejectedExecutionException  e) {
@@ -267,7 +271,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			return successCreated(ResultCode.FAIL);
 		}
 		try {
-			Result rs=future.get();
+			Result<PraisePointDTO> rs=future.get();
 			return rs;
 				
 		} catch (InterruptedException | ExecutionException e) {

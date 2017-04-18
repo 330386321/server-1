@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.math.BigDecimal;
+
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
@@ -87,7 +89,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	Integer clickPraise(Long id,Long memberId,String num);
+	BigDecimal clickPraise(Long id,Long memberId,String num);
 	
 	/**
 	 * 点击广告

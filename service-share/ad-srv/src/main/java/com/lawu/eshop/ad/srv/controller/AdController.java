@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
@@ -248,17 +250,17 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
-    public Result clickPraise(@PathVariable Long id,@RequestParam Long memberId,@RequestParam String num) {
+    public Result<PraisePointDTO> clickPraise(@PathVariable Long id,@RequestParam Long memberId,@RequestParam String num) {
 		Boolean flag=pointPoolService.selectStatusByMember(id, memberId);
 		if(flag)
 			return successCreated(ResultCode.AD_PRAISE_POINT_GET);
-		Integer  i=adService.clickPraise(id, memberId, num);
-		if(i==1){
+		BigDecimal  point=adService.clickPraise(id, memberId, num);
+		if(point.compareTo(new BigDecimal(0))==0){
 			return successCreated(ResultCode.AD_PRAISE_PUTED);
-		}else if(i==2){
-			return successCreated(ResultCode.SUCCESS);
 		}else{
-			return successCreated(ResultCode.FAIL);
+			PraisePointDTO dto=new PraisePointDTO();
+			dto.setPoint(point);
+			return successCreated(dto);
 		}
 	
 	}

@@ -49,6 +49,10 @@ public class BankAccountServiceImpl implements BankAccountService {
 		bankAccountDO.setBankId(bankAccountParam.getBankId());
 		bankAccountDO.setSubBranchName(bankAccountParam.getSubBranchName());
 		bankAccountDO.setStatus(new Byte("1"));
+		BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountParam.getBankId());
+		String str=accountNumber.substring(accountNumber.length()-4, accountNumber.length());
+		String number=bankDO.getName()+"("+str+")";
+		bankAccountDO.setNote(number);
 		Integer id= bankAccountDOMapper.insert(bankAccountDO);
 		return id;
 	}

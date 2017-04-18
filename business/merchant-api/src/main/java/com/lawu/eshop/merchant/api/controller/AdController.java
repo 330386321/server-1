@@ -93,7 +93,6 @@ public class AdController extends BaseController {
             	mediaUrl = retMap.get("videoUrl").toString();
             }
     	}
-    	List<Long> fens=new ArrayList<>();
     	Integer count=0;
     	if(adParam.getPutWayEnum().val==1){
     		count=memberCountService.findMemberCount(adParam.getAreas());

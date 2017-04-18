@@ -14,7 +14,7 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
-import com.lawu.eshop.ad.param.AdChoicenessParam;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
@@ -66,7 +66,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/clickPraise/{id}", method = RequestMethod.GET)
-    public Result clickPraise(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
+    public Result<PraisePointDTO> clickPraise(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
 	/**
 	 * 点击广告

@@ -307,7 +307,7 @@ public class AdServiceImpl implements AdService {
 	
 	
 	/**
-	 * 查看E赚详情,点击次数加1,点击次数和投放广告数相等则投放结束
+	 * 查看E赚详情
 	 * @param id
 	 * @return
 	 */
@@ -412,7 +412,7 @@ public class AdServiceImpl implements AdService {
 	 * 抢赞
 	 */
 	@Override
-	public Integer clickPraise(Long id,Long memberId,String num) {
+	public BigDecimal clickPraise(Long id,Long memberId,String num) {
 		PointPoolDOExample ppexample=new PointPoolDOExample();
 		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("1"))
 				                   .andStatusEqualTo(new Byte("0"));
@@ -423,7 +423,7 @@ public class AdServiceImpl implements AdService {
 			ad.setId(memberId);
 			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 			adDOMapper.updateByPrimaryKeySelective(ad);
-			return 1;
+			return new BigDecimal(0);
 		}else{
 			PointPoolDO pointPoolDO=list.get(0);
 			pointPoolDO.setMemberId(memberId);
@@ -432,7 +432,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
-			return 2;
+			return pointPoolDO.getPoint();
 		}
 		
 	}
