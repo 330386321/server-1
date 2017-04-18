@@ -9,7 +9,9 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
 /**
- * 自动取消为付款的订单
+ * 商家发货，买家超时收货
+ * 平台自动收货
+ * 定时任务
  * 
  * @author Sunny
  * @date 2017年4月17日

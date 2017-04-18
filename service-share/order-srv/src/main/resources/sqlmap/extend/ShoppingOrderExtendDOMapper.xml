@@ -262,7 +262,7 @@
 		<if test="distinct">
 			distinct
 		</if>
-		<include refid="ShoppingOrder_Base_Column_List" />
+		<include refid="ShoppingOrder_Association_Base_Column_List" />
 		from shopping_order so
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
