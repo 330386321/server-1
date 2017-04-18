@@ -52,10 +52,9 @@ public class ProductCommentListDTO {
     private String name;
     @ApiModelProperty(value = "型号信息")
     private String spec;
-    @ApiModelProperty(value = "型号最大价格")
-    private String priceMax;
-    @ApiModelProperty(value = "型号最小价格")
-    private String priceMin;
+    @ApiModelProperty(value = "型号价格")
+    private String price;
+
     @ApiModelProperty(value = "评价ID")
     private Long id;
     @ApiModelProperty(value = "会员等级")
@@ -131,20 +130,12 @@ public class ProductCommentListDTO {
         this.spec = spec;
     }
 
-    public String getPriceMax() {
-        return priceMax;
+    public String getPrice() {
+        return price;
     }
 
-    public void setPriceMax(String priceMax) {
-        this.priceMax = priceMax;
-    }
-
-    public String getPriceMin() {
-        return priceMin;
-    }
-
-    public void setPriceMin(String priceMin) {
-        this.priceMin = priceMin;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public Long getId() {

@@ -307,6 +307,7 @@ public class CommentProductServiceImpl implements CommentProductService {
         for(CommentProductDOView commentProductDOView : productDOViews){
             CommentProductBO commentProductBO = new CommentProductBO();
             commentProductBO.setProductId(commentProductDOView.getProductId());
+            commentProductBO.setProductModelId(commentProductDOView.getProductModelId());
             commentProductBOS.add(commentProductBO);
         }
        Page<CommentProductBO> page = new Page<>();

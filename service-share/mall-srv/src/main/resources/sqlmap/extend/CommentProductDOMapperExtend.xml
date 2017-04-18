@@ -3,18 +3,20 @@
 <mapper namespace="com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend">
     <resultMap id="BaseResultMap" type="com.lawu.eshop.mall.srv.domain.extend.CommentProductDOView">
 
-        <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="content" property="content" jdbcType="VARCHAR"/>
-        <result column="reply_content" property="replyContent" jdbcType="VARCHAR"/>
-        <result column="grade" property="grade" jdbcType="TINYINT"/>
-        <result column="member_id" property="memberId" jdbcType="BIGINT"/>
-        <result column="product_id" property="productId" jdbcType="BIGINT"/>
-        <result column="merchant_id" property="merchantId" jdbcType="BIGINT"/>
-        <result column="is_anonymous" property="isAnonymous" jdbcType="BIT"/>
-        <result column="status" property="status" jdbcType="TINYINT"/>
-        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
-        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
-        <result column="gmt_reply" property="gmtReply" jdbcType="TIMESTAMP"/>
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="VARCHAR" />
+        <result column="reply_content" property="replyContent" jdbcType="VARCHAR" />
+        <result column="grade" property="grade" jdbcType="TINYINT" />
+        <result column="member_id" property="memberId" jdbcType="BIGINT" />
+        <result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+        <result column="product_id" property="productId" jdbcType="BIGINT" />
+        <result column="order_item_id" property="orderItemId" jdbcType="BIGINT" />
+        <result column="product_model_id" property="productModelId" jdbcType="BIGINT" />
+        <result column="is_anonymous" property="isAnonymous" jdbcType="BIT" />
+        <result column="status" property="status" jdbcType="TINYINT" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_reply" property="gmtReply" jdbcType="TIMESTAMP" />
 
     </resultMap>
 
@@ -28,7 +30,9 @@
         cp.member_id,
         cp.is_anonymous,
         cp.status,
-        cp.gmt_create
+        cp.gmt_create,
+        cp.order_item_id,
+        cp.product_model_id
         FROM
         comment_product cp
         LEFT JOIN comment_image ci ON cp.id = ci.comment_id
@@ -82,7 +86,7 @@
 
     <select id="getProductCommentIdsByMerchantId" resultMap="BaseResultMap" parameterType="com.lawu.eshop.mall.param.CommentMerchantListParam">
         SELECT DISTINCT
-	p.product_id
+	p.product_id,product_model_id
     FROM
         comment_product as p
     WHERE

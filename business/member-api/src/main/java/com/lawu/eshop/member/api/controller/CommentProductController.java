@@ -21,7 +21,6 @@ import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
@@ -138,7 +137,7 @@ public class CommentProductController extends BaseController {
                 //查询商品信息
                 Result<CommentProductInfoDTO>  product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
                 commentProductDTO.setName(product.getModel().getName());
-                commentProductDTO.setPriceMax(product.getModel().getPrice());
+                commentProductDTO.setPrice(product.getModel().getPrice());
                 commentProductDTO.setSpec(product.getModel().getModelName());
                 commentProductDTOS.add(commentProductDTO);
             }
@@ -152,7 +151,7 @@ public class CommentProductController extends BaseController {
     @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.GET)
-    public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) {
+    public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception{
 
         List<CommentProductDTO> commentProductDTOS = new ArrayList<>();
         Page<CommentProductDTO> pages = new Page<>();
@@ -170,17 +169,18 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setGmtCreate(commentDTO.getGmtCreate());
                 commentProductDTO.setImgUrls(commentDTO.getImgUrls());
                 commentProductDTO.setId(commentDTO.getId());
+                commentProductDTO.setGrade(commentDTO.getGrade());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
                 commentProductDTO.setHeadImg(user.getModel().getHeadimg());
                 commentProductDTO.setNickName(user.getModel().getNickname());
                 commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
-                Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
+                //查询商品信息
+                Result<CommentProductInfoDTO>  product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
                 commentProductDTO.setName(product.getModel().getName());
-                commentProductDTO.setPriceMax(product.getModel().getPriceMax());
-                commentProductDTO.setPriceMin(product.getModel().getPriceMin());
-                commentProductDTO.setSpec(product.getModel().getSpec());
+                commentProductDTO.setPrice(product.getModel().getPrice());
+                commentProductDTO.setSpec(product.getModel().getModelName());
                 commentProductDTOS.add(commentProductDTO);
             }
         pages.setCurrentPage(result.getModel().getCurrentPage());
@@ -190,7 +190,7 @@ public class CommentProductController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "查询商品评价好评率，综合评分", notes = "查询商品评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
+   // @ApiOperation(value = "查询商品评价好评率，综合评分", notes = "查询商品评价好评率，综合评分 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductAvgGrade/{productId}", method = RequestMethod.GET)
     public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("productId") @ApiParam(value = "商品ID",required = true) Long productId){

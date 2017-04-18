@@ -70,6 +70,8 @@ public class CommentProductConverter {
         commentProductBO.setReplyContent(commentProductDOView.getReplyContent());
         commentProductBO.setMemberId(commentProductDOView.getMemberId());
         commentProductBO.setProductId(commentProductDOView.getProductId());
+        commentProductBO.setProductModelId(commentProductDOView.getProductModelId());
+        commentProductBO.setGrade(commentProductDOView.getGrade());
         return commentProductBO;
     }
 
@@ -97,6 +99,7 @@ public class CommentProductConverter {
         for (CommentProductBO commentProductBO : commentProductBOS){
             CommentProductIdDTO commentProductIdDTO = new CommentProductIdDTO();
             commentProductIdDTO.setProductId(commentProductBO.getProductId());
+            commentProductIdDTO.setProductModelId(commentProductBO.getProductModelId());
             commentProductIdDTOS.add(commentProductIdDTO);
         }
         return commentProductIdDTOS;

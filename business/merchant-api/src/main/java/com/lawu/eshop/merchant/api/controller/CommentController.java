@@ -16,7 +16,6 @@ import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.merchant.api.service.CommentService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.ProductService;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -88,7 +87,7 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductCommentListByMerchantId", method = RequestMethod.GET)
-    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws Exception {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
@@ -119,10 +118,9 @@ public class CommentController extends BaseController {
             commentListDTO.setNickName(user.getModel().getNickname());
             commentListDTO.setLevel(user.getModel().getLevel());
             //查询商品信息
-            Result<ProductInfoDTO> product = productService.selectProductById(commentDTO.getProductId());
+            Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
             commentListDTO.setName(product.getModel().getName());
-            commentListDTO.setPriceMax(product.getModel().getPriceMax());
-            commentListDTO.setPriceMin(product.getModel().getPriceMin());
+            commentListDTO.setPrice(product.getModel().getPrice());
             commentListDTO.setFeatureImage(product.getModel().getFeatureImage());
             productCommentListDTOS.add(commentListDTO);
         }
@@ -137,7 +135,7 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductsByMerchantId", method = RequestMethod.GET)
-    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws Exception {
 
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
@@ -156,7 +154,7 @@ public class CommentController extends BaseController {
         for (CommentProductIdDTO commentProductIdDTO : productIds.getModel().getRecords()) {
             //查询商品信息
             CommentProductInfoDTO commentProductInfoDTO = new CommentProductInfoDTO();
-            Result<ProductInfoDTO> product = productService.selectProductById(commentProductIdDTO.getProductId());
+            Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentProductIdDTO.getProductModelId());
             commentProductInfoDTO.setName(product.getModel().getName());
             commentProductInfoDTO.setImgUrl(product.getModel().getFeatureImage());
             commentProductInfoDTOS.add(commentProductInfoDTO);
@@ -170,7 +168,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
-    public Result<Page<MerchantProductCommentListDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) {
+    public Result<Page<MerchantProductCommentListDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception {
 
         List<MerchantProductCommentListDTO> commentProductDTOS = new ArrayList<>();
         Page<MerchantProductCommentListDTO> pages = new Page<>();
@@ -194,11 +192,10 @@ public class CommentController extends BaseController {
             commentProductDTO.setHeadImg(user.getModel().getHeadimg());
             commentProductDTO.setNickName(user.getModel().getNickname());
             //查询商品信息
-            Result<ProductInfoDTO> product = productService.selectProductById(listParam.getProductId());
+            Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
             commentProductDTO.setName(product.getModel().getName());
-            commentProductDTO.setPriceMax(product.getModel().getPriceMax());
-            commentProductDTO.setPriceMin(product.getModel().getPriceMin());
-            commentProductDTO.setSpec(product.getModel().getSpec());
+            commentProductDTO.setPrice(product.getModel().getPrice());
+            commentProductDTO.setSpec(product.getModel().getModelName());
             commentProductDTOS.add(commentProductDTO);
         }
         pages.setCurrentPage(result.getModel().getCurrentPage());
