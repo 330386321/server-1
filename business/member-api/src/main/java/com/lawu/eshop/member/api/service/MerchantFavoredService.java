@@ -23,4 +23,13 @@ public interface MerchantFavoredService {
     @RequestMapping(value = "merchantFavored/findFavoredByMerchantId/{merchantId}", method = RequestMethod.GET)
     Result<MerchantFavoredDTO> findFavoredByMerchantId(@PathVariable("merchantId") Long merchantId);
 
+    /**
+     * 根据ID查询商家优惠信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "merchantFavored/findFavoredById/{id}", method = RequestMethod.GET)
+    public Result<MerchantFavoredDTO> findFavoredById(@PathVariable("id") Long id);
+
 }

@@ -446,6 +446,146 @@ public class PayOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrderNumIsNull() {
+            addCriterion("order_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumIsNotNull() {
+            addCriterion("order_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumEqualTo(String value) {
+            addCriterion("order_num =", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotEqualTo(String value) {
+            addCriterion("order_num <>", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumGreaterThan(String value) {
+            addCriterion("order_num >", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumGreaterThanOrEqualTo(String value) {
+            addCriterion("order_num >=", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLessThan(String value) {
+            addCriterion("order_num <", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLessThanOrEqualTo(String value) {
+            addCriterion("order_num <=", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumLike(String value) {
+            addCriterion("order_num like", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotLike(String value) {
+            addCriterion("order_num not like", value, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumIn(List<String> values) {
+            addCriterion("order_num in", values, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotIn(List<String> values) {
+            addCriterion("order_num not in", values, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumBetween(String value1, String value2) {
+            addCriterion("order_num between", value1, value2, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrderNumNotBetween(String value1, String value2) {
+            addCriterion("order_num not between", value1, value2, "orderNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNull() {
+            addCriterion("third_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIsNotNull() {
+            addCriterion("third_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberEqualTo(String value) {
+            addCriterion("third_number =", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotEqualTo(String value) {
+            addCriterion("third_number <>", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThan(String value) {
+            addCriterion("third_number >", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("third_number >=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThan(String value) {
+            addCriterion("third_number <", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLessThanOrEqualTo(String value) {
+            addCriterion("third_number <=", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberLike(String value) {
+            addCriterion("third_number like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotLike(String value) {
+            addCriterion("third_number not like", value, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberIn(List<String> values) {
+            addCriterion("third_number in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotIn(List<String> values) {
+            addCriterion("third_number not in", values, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberBetween(String value1, String value2) {
+            addCriterion("third_number between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andThirdNumberNotBetween(String value1, String value2) {
+            addCriterion("third_number not between", value1, value2, "thirdNumber");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalAmountIsNull() {
             addCriterion("total_amount is null");
             return (Criteria) this;
@@ -623,6 +763,66 @@ public class PayOrderDOExample {
 
         public Criteria andFavoredAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("favored_amount not between", value1, value2, "favoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountIsNull() {
+            addCriterion("not_favored_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountIsNotNull() {
+            addCriterion("not_favored_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountEqualTo(BigDecimal value) {
+            addCriterion("not_favored_amount =", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountNotEqualTo(BigDecimal value) {
+            addCriterion("not_favored_amount <>", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountGreaterThan(BigDecimal value) {
+            addCriterion("not_favored_amount >", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("not_favored_amount >=", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountLessThan(BigDecimal value) {
+            addCriterion("not_favored_amount <", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("not_favored_amount <=", value, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountIn(List<BigDecimal> values) {
+            addCriterion("not_favored_amount in", values, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountNotIn(List<BigDecimal> values) {
+            addCriterion("not_favored_amount not in", values, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("not_favored_amount between", value1, value2, "notFavoredAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotFavoredAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("not_favored_amount not between", value1, value2, "notFavoredAmount");
             return (Criteria) this;
         }
 

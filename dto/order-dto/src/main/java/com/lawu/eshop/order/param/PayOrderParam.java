@@ -2,10 +2,6 @@ package com.lawu.eshop.order.param;
 
 import io.swagger.annotations.ApiModelProperty;
 
-import java.math.BigDecimal;
-
-import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
-
 /**
  * @author zhangyong
  * @date 2017/4/11.
@@ -18,19 +14,20 @@ public class PayOrderParam {
     /**
      * 原价
      */
-    @ApiModelProperty(value = "原价")
-    private BigDecimal totalAmount;
+    @ApiModelProperty(value = "原价" ,required = true)
+    private double totalAmount;
 
-    @ApiModelProperty(value = "实际金额")
-    private BigDecimal actualAmount;
+    @ApiModelProperty(value = "不参与优惠金额" ,required = true)
+    private double not_favoredAmount;
 
-    @ApiModelProperty(value = "优惠金额")
-    private BigDecimal favoredAmount;
+    @ApiModelProperty(value = "优惠金额",required = true)
+    private double favoredAmount;
 
-    @ApiModelProperty(value = "BALANCE:余额，ALIPAY：支付宝,WX:微信",required = true)
-    private TransactionPayTypeEnum payTypeEnum;
-    @ApiModelProperty(value = "商家编号")
+    @ApiModelProperty(value = "商家编号",required = true)
     private String merchantNum;
+
+    @ApiModelProperty(value = "商家优惠ID")
+    private Long merchantFavoredId;
 
     public Long getMerchantId() {
         return merchantId;
@@ -40,36 +37,12 @@ public class PayOrderParam {
         this.merchantId = merchantId;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public Long getMerchantFavoredId() {
+        return merchantFavoredId;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public BigDecimal getActualAmount() {
-        return actualAmount;
-    }
-
-    public void setActualAmount(BigDecimal actualAmount) {
-        this.actualAmount = actualAmount;
-    }
-
-    public BigDecimal getFavoredAmount() {
-        return favoredAmount;
-    }
-
-    public void setFavoredAmount(BigDecimal favoredAmount) {
-        this.favoredAmount = favoredAmount;
-    }
-
-    public TransactionPayTypeEnum getPayTypeEnum() {
-        return payTypeEnum;
-    }
-
-    public void setPayTypeEnum(TransactionPayTypeEnum payTypeEnum) {
-        this.payTypeEnum = payTypeEnum;
+    public void setMerchantFavoredId(Long merchantFavoredId) {
+        this.merchantFavoredId = merchantFavoredId;
     }
 
     public String getMerchantNum() {
@@ -78,5 +51,29 @@ public class PayOrderParam {
 
     public void setMerchantNum(String merchantNum) {
         this.merchantNum = merchantNum;
+    }
+
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public double getNot_favoredAmount() {
+        return not_favoredAmount;
+    }
+
+    public void setNot_favoredAmount(double not_favoredAmount) {
+        this.not_favoredAmount = not_favoredAmount;
+    }
+
+    public double getFavoredAmount() {
+        return favoredAmount;
+    }
+
+    public void setFavoredAmount(double favoredAmount) {
+        this.favoredAmount = favoredAmount;
     }
 }

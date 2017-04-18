@@ -9,6 +9,9 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
+import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
+import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.order.dto.PayOrderDTO;
@@ -23,6 +26,7 @@ import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +44,39 @@ public class PayOrderController extends BaseController {
     @Autowired
     private MerchantStoreService merchantStoreService;
 
+    @Autowired
+    private MerchantFavoredService merchantFavoredService;
+
     @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     // @Authorization
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
     public Result<PayOrderIdDTO> savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
+        //查询优惠信息记录
+        double realFavoredAmount = 0;//实际优惠金额
+        double canFavoredAmount = param.getTotalAmount()-param.getNot_favoredAmount();//参与优惠金额
+        if(param.getMerchantFavoredId() !=null && param.getMerchantFavoredId() >0){
+            Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredById(param.getMerchantFavoredId());
+            if(favoredDTOResult.getModel() !=null){
+                if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val){
+                    //每满xxx减xxx
+                    realFavoredAmount = (canFavoredAmount/(favoredDTOResult.getModel().getReachAmount().doubleValue()))*favoredDTOResult.getModel().getFavoredAmount().doubleValue();
+                }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val){
+                    //满xxx减xxx
+                    if((canFavoredAmount-favoredDTOResult.getModel().getReachAmount().doubleValue()) >=0){
+                        realFavoredAmount = favoredDTOResult.getModel().getFavoredAmount().doubleValue();
+                    }
+                }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val){
+                    realFavoredAmount = canFavoredAmount*((10-favoredDTOResult.getModel().getDiscountRate().doubleValue())/10);
+                }
+                BigDecimal realFavoredAmount2 =   new   BigDecimal(realFavoredAmount);
+                double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                if(rfa2 != param.getFavoredAmount()){
+                    return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
+                }
+            }
+        }
         Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param);
         return result;
     }

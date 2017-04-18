@@ -95,4 +95,29 @@ public class MerchantFavoredController extends BaseController {
         return successCreated(ResultCode.SUCCESS);
     }
 
+    /**
+     * 根据优惠配置ID查询优惠信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "findFavoredById/{id}", method = RequestMethod.GET)
+    public Result<MerchantFavoredDTO> findFavoredById(@PathVariable("id") Long id) {
+        if (id == null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        MerchantFavoredBO merchantFavoredBO = merchantFavoredService.findFavoredById(id);
+        if (merchantFavoredBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MerchantFavoredDTO merchantFavoredDTO = MerchantFavoredConverter.coverDTO(merchantFavoredBO);
+        if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
+            merchantFavoredDTO.setReachAmount(null);
+            merchantFavoredDTO.setFavoredAmount(null);
+        } else {
+            merchantFavoredDTO.setDiscountRate(null);
+        }
+
+        return successGet(merchantFavoredDTO);
+    }
+
 }
