@@ -221,12 +221,12 @@ public class CommentProductController extends BaseController {
      * @param productId
      * @return
      */
-    @RequestMapping(value = "delCommentByProductId",method = RequestMethod.DELETE)
-    public Result delCommentByProductId(@RequestParam(value = "productId") Long productId){
-        if(productId == null){
+    @RequestMapping(value = "delCommentByProductModelId",method = RequestMethod.DELETE)
+    public Result delCommentByProductModelId(@RequestParam(value = "productModelId") Long productModelId){
+        if(productModelId == null){
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        commentProductService.delCommentByProductId(productId);
+        commentProductService.delCommentByProductModelId(productModelId);
         return successDelete();
     }
 
