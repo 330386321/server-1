@@ -39,13 +39,27 @@ public class PropertyNameConstant {
 	public final static String DELETE_ORDER = "delete_order";
 	
 	/**
-	 * 买家申请退款，提醒处理商家时间
+	 * 买家申请退款，提醒商家处理时间
+	 * 退款类型-退款
 	 */
 	public final static String TO_BE_CONFIRMED_FOR_REFUND_REMIND_TIME = "to_be_confirmed_for_refund_remind_time";
 	
 	/**
 	 * 买家申请退款，商家未处理，平台自动退款时间
+	 * 退款类型-退款
 	 */
 	public final static String TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME = "to_be_confirmed_for_refund_refund_time";
+	
+	/**
+	 * 买家申请退款，提醒商家处理时间
+	 * 退款类型-退货退款
+	 */
+	public final static String TO_BE_CONFIRMED_FOR_RETURN_REFUND_REMIND_TIME = "to_be_confirmed_for_return_refund_remind_time";
+	
+	/**
+	 * 买家申请退款，商家未处理，平台自动退款时间
+	 * 退款类型-退货退款
+	 */
+	public final static String TO_BE_CONFIRMED_FOR_RETURN_REFUND_REFUND_TIME = "to_be_confirmed_for_return_refund_refund_time";
 	
 }

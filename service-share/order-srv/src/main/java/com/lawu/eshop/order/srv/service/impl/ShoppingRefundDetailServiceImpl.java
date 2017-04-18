@@ -429,6 +429,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 	/**
 	 * 买家申请退款，商家未操作处理
+	 * 退款类型-退款
 	 * 平台提醒商家，否则自动退款给买家
 	 * 
 	 * @author Sunny
@@ -470,7 +471,52 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
 			}
 		}
+	}
+	
+	/**
+	 * 买家申请退款，商家未操作处理
+	 * 退款类型-退货退款
+	 * 平台提醒商家，否则自动退款给买家
+	 * 
+	 * @author Sunny
+	 */
+	@Override
+	public void executeAutoToBeConfirmedForReturnRefund() {
+		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
 		
+		// 查询结果包括退款详情
+		example.setIsIncludeShoppingRefundDetail(true);
+		
+		ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
+		
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+		criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
+		
+		// 提醒时间
+		String remindTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_RETURN_REFUND_REMIND_TIME);
+		// 超过提醒时间
+		criteria.andGmtModifiedAddDayLessThanOrEqualTo(Integer.valueOf(remindTime), new Date());
+		
+		// 退款时间
+		String refundTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_RETURN_REFUND_REFUND_TIME);
+		
+		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
+		
+		boolean isExceeds = false;
+		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
+			// 发送次数为0，发送站内信和推送
+			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+			}
+			
+			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
+			
+			// 如果商家未处理时间超过退款时间，平台自动退款
+			if (isExceeds) {
+				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
+			}
+		}
 	}
 	
 	/************************************************

@@ -2,7 +2,6 @@ package com.lawu.eshop.order.srv.service;
 
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 
@@ -96,9 +95,19 @@ public interface ShoppingRefundDetailService {
 	
 	/**
 	 * 买家申请退款，商家未操作处理
+	 * 退款类型-退款
 	 * 平台提醒商家，否则自动退款给买家
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoToBeConfirmedForRefund();
+	
+	/**
+	 * 买家申请退款，商家未操作处理
+	 * 退款类型-退货退款
+	 * 平台提醒商家，否则自动退款给买家
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoToBeConfirmedForReturnRefund();
 }
