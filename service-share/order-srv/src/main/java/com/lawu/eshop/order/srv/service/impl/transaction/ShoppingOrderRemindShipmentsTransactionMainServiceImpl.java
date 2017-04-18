@@ -19,7 +19,7 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
  * @author Sunny
  * @date 2017/04/18
  */
-@Service("shoppingOrderAutoRemindShipmentsTransactionMainServiceImpl")
+@Service("shoppingOrderRemindShipmentsTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.REMIND_SHIPMENTS, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_REMIND_SHIPMENTS)
 public class ShoppingOrderRemindShipmentsTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderRemindShipmentsNotification, Reply> {
 	
