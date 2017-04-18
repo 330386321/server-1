@@ -67,7 +67,7 @@ public class MerchantDetailController extends BaseController {
                 storeDetailDTO.setPreferentialClause(merchantFavoredDTO.getDiscountRate() + "折");
             }
             storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
-            storeDetailDTO.setValidTime(DateUtil.getDateTimeFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateTimeFormat(merchantFavoredDTO.getEntireEndTime()));
+            storeDetailDTO.setValidTime(DateUtil.getDateFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateFormat(merchantFavoredDTO.getEntireEndTime()));
         }
         return successGet(storeDetailDTO);
     }

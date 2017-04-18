@@ -165,6 +165,16 @@ public class DateUtil {
         return dateTimeFormat.format(date);
     }
 
+    /**
+     * 日期格式化yyyy-MM-dd
+     *
+     * @param date
+     * @return
+     */
+    public static String getDateFormat(Date date) {
+        return dateFormat.format(date);
+    }
+
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
@@ -181,16 +191,6 @@ public class DateUtil {
             e.printStackTrace();
         }
         return null;
-    }
-
-    /**
-     * 日期格式化yyyy-MM-dd
-     *
-     * @param date
-     * @return
-     */
-    public static String getDateFormat(Date date) {
-        return dateFormat.format(date);
     }
 
     /**
@@ -456,6 +456,7 @@ public class DateUtil {
 
     /**
      * 两个时间相隔天数
+     *
      * @param fDate 起始天数
      * @param oDate 最后天数
      * @return
@@ -473,50 +474,50 @@ public class DateUtil {
         return (int) (intervalMilli / (24 * 60 * 60 * 1000));
 
     }
-    
+
     /**
      * 判断从开始的时间到现在的时间是否超过overTime数值的时间
-     * 
+     *
      * @param fromDate 开始时间
-     * @param now 现在时间
+     * @param now      现在时间
      * @param overTime 超过的时间
-     * @param field 单位
+     * @param field    单位
      * @return
      */
     public static boolean isExceeds(Date fromDate, Date now, int overTime, int field) {
-    	// 所有参数不能为空
-    	if (fromDate == null || now == null) {
-    		return false;
-    	}
-    	Calendar calendar = Calendar.getInstance();  //得到日历  
+        // 所有参数不能为空
+        if (fromDate == null || now == null) {
+            return false;
+        }
+        Calendar calendar = Calendar.getInstance();  //得到日历
         calendar.setTime(fromDate);//把当前时间赋给日历  
         calendar.add(field, overTime);  //添加超过时间
-        Date afterDate = calendar.getTime();  
-        
+        Date afterDate = calendar.getTime();
+
         if (now.getTime() >= afterDate.getTime()) {
-        	return true;
+            return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * 获取now之后overTime的时间
-     * 
-     * @param now 现在时间
+     *
+     * @param now      现在时间
      * @param overTime 超过的时间
-     * @param field 单位
+     * @param field    单位
      * @return
      */
     public static Date add(Date now, int overTime, int field) {
-    	// 所有参数不能为空
-    	if (now == null) {
-    		return null;
-    	}
-    	Calendar calendar = Calendar.getInstance();  //得到日历  
+        // 所有参数不能为空
+        if (now == null) {
+            return null;
+        }
+        Calendar calendar = Calendar.getInstance();  //得到日历
         calendar.setTime(now);//把当前时间赋给日历  
         calendar.add(field, overTime);  //添加超过时间
-        
+
         return calendar.getTime();
     }
 }
