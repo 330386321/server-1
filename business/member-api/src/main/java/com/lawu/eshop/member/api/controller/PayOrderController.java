@@ -55,7 +55,7 @@ public class PayOrderController extends BaseController {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         //查询优惠信息记录
         double realFavoredAmount = 0;//实际优惠金额
-        double canFavoredAmount = param.getTotalAmount()-param.getNot_favoredAmount();//参与优惠金额
+        double canFavoredAmount = param.getTotalAmount()-param.getNotFavoredAmount();//参与优惠金额
         if(param.getMerchantFavoredId() !=null && param.getMerchantFavoredId() >0){
             Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredById(param.getMerchantFavoredId());
             if(favoredDTOResult.getModel() !=null){

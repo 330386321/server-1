@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class PayOrderParam {
 
-    @ApiModelProperty(value = "商家ID")
+    @ApiModelProperty(value = "商家ID",required = true)
     private Long merchantId;
 
     /**
@@ -18,7 +18,7 @@ public class PayOrderParam {
     private double totalAmount;
 
     @ApiModelProperty(value = "不参与优惠金额" ,required = true)
-    private double not_favoredAmount;
+    private double notFavoredAmount;
 
     @ApiModelProperty(value = "优惠金额",required = true)
     private double favoredAmount;
@@ -61,12 +61,12 @@ public class PayOrderParam {
         this.totalAmount = totalAmount;
     }
 
-    public double getNot_favoredAmount() {
-        return not_favoredAmount;
+    public double getNotFavoredAmount() {
+        return notFavoredAmount;
     }
 
-    public void setNot_favoredAmount(double not_favoredAmount) {
-        this.not_favoredAmount = not_favoredAmount;
+    public void setNotFavoredAmount(double notFavoredAmount) {
+        this.notFavoredAmount = notFavoredAmount;
     }
 
     public double getFavoredAmount() {

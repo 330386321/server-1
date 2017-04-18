@@ -38,7 +38,8 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setMemberId(memberId);
         payOrderDO.setMerchantId(param.getMerchantId());
         payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
-        payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()-param.getFavoredAmount()+param.getNot_favoredAmount()));
+        payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()-param.getFavoredAmount()+param.getNotFavoredAmount()));
+        payOrderDO.setNotFavoredAmount(BigDecimal.valueOf(param.getNotFavoredAmount()));
         payOrderDO.setTotalAmount(BigDecimal.valueOf(param.getTotalAmount()));
         payOrderDO.setOrderNum(StringUtil.getRandomNum(""));
         payOrderDO.setGmtCreate(new Date());
