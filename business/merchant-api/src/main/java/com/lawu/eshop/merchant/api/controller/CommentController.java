@@ -87,7 +87,7 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductCommentListByMerchantId", method = RequestMethod.GET)
-    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws Exception {
+    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) throws Exception {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
@@ -135,7 +135,7 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductsByMerchantId", method = RequestMethod.GET)
-    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@ModelAttribute @ApiParam(required = true) CommentListParam listparam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws Exception {
+    public Result<Page<CommentProductInfoDTO>> getProductsByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) throws Exception {
 
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
@@ -174,8 +174,8 @@ public class CommentController extends BaseController {
         Page<MerchantProductCommentListDTO> pages = new Page<>();
         //获取评论列表
         Result<Page<CommentDTO>> result = commentService.getCommentProducts(listParam);
-        if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
-            return  successGet(ResultCode.RESOURCE_NOT_FOUND);
+        if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         for (CommentDTO commentDTO : result.getModel().getRecords()) {
             //设置评论信息
@@ -201,6 +201,50 @@ public class CommentController extends BaseController {
         pages.setCurrentPage(result.getModel().getCurrentPage());
         pages.setTotalCount(result.getModel().getTotalCount());
         pages.setRecords(commentProductDTOS);
+        return successGet(pages);
+    }
+
+    @ApiOperation(value = "评价商家列表", notes = "评价商家列表 [1005，1000]（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "getCommentMerchantList", method = RequestMethod.GET)
+    public Result<Page<CommentMerchantInfoDTO>> getCommentMerchantAllList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam param) {
+
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        CommentMerchantListParam listParam = new CommentMerchantListParam();
+        listParam.setMerchantId(merchantId);
+        listParam.setCurrentPage(param.getCurrentPage());
+        listParam.setPageSize(param.getPageSize());
+        List<CommentMerchantInfoDTO> commentMerchantDTOS = new ArrayList<>();
+        Page<CommentMerchantInfoDTO> pages = new Page<>();
+        //获取评论列表
+        Result<Page<CommentDTO>> result = commentService.getCommentMerchantAllList(listParam);
+        if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        for (CommentDTO commentDTO : result.getModel().getRecords()) {
+            CommentMerchantInfoDTO commentMerchantDTO = new CommentMerchantInfoDTO();
+            commentMerchantDTO.setAnonymous(commentDTO.getAnonymous());
+            commentMerchantDTO.setContent(commentDTO.getContent());
+            commentMerchantDTO.setGmtCreate(commentDTO.getGmtCreate());
+            commentMerchantDTO.setReplyContent(commentDTO.getReplyContent());
+            List imgs = commentDTO.getImgUrls();
+            if (imgs == null) {
+                imgs = new ArrayList();
+            }
+            commentMerchantDTO.setImgUrls(imgs);
+            commentMerchantDTO.setGrade(commentDTO.getGrade());
+            commentMerchantDTO.setId(commentDTO.getId());
+            //查询评论用户信息
+            Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
+            commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
+            commentMerchantDTO.setNickName(user.getModel().getNickname());
+            commentMerchantDTO.setLevel(user.getModel().getLevel());
+            commentMerchantDTOS.add(commentMerchantDTO);
+        }
+        pages.setCurrentPage(result.getModel().getCurrentPage());
+        pages.setTotalCount(result.getModel().getTotalCount());
+        pages.setRecords(commentMerchantDTOS);
         return successGet(pages);
     }
 

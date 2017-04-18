@@ -33,6 +33,7 @@ public class CommentMerchantConverter {
         commentMerchantBO.setMerchantId(commentMerchantDO.getMerchantId());
         commentMerchantBO.setGrade(commentMerchantDO.getGrade());
         commentMerchantBO.setAvgSpend(commentMerchantDO.getAvgSpend());
+        commentMerchantBO.setId(commentMerchantDO.getId());
         return commentMerchantBO;
     }
 

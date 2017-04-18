@@ -58,4 +58,7 @@ public interface CommentService {
     @RequestMapping(method = RequestMethod.POST,value = "commentProduct/getCommentProducts")
     public Result<Page<CommentDTO>> getCommentProducts(@ModelAttribute CommentProductListParam listParam);
 
+    @RequestMapping(value = "commentMerchant/getCommentMerchantAllList", method = RequestMethod.POST)
+    public Result<Page<CommentDTO>> getCommentMerchantAllList(@ModelAttribute CommentMerchantListParam listParam);
+
 }
