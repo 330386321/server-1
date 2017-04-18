@@ -62,4 +62,14 @@ public class PropertyNameConstant {
 	 */
 	public final static String TO_BE_CONFIRMED_FOR_RETURN_REFUND_REFUND_TIME = "to_be_confirmed_for_return_refund_refund_time";
 	
+	/**
+	 * 商家拒绝退款，提醒买家处理时间
+	 */
+	public final static String REFUND_FAILED_REMIND_TIME = "refund_failed_remind_time";
+	
+	/**
+	 * 商家拒绝退款，买家未处理，平台自动撤销退款时间
+	 */
+	public final static String REFUND_FAILED_REVOKE_REFUND_TIME = "refund_failed_revoke_refund_time";
+	
 }

@@ -110,4 +110,14 @@ public interface ShoppingRefundDetailService {
 	 * @author Sunny
 	 */
 	void executeAutoToBeConfirmedForReturnRefund();
+	
+	/**
+	 * 退款中-退款失败
+	 * 商家拒绝退款
+	 * 平台提示买家操作是否申请平台介入
+	 * 否则自动撤销退款申请
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoRefundFailed();
 }

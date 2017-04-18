@@ -64,5 +64,6 @@
 	<job:simple id="shoppingOrderAutoRemindShipmentsJob" description="自动取消购物订单" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoRemindShipmentsJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 	<job:simple id="shoppingRefundAutoToBeConfirmedForRefundJob" description="买家申请退款，商家超时操作，退款类型为退款" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoToBeConfirmedForRefundJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 	<job:simple id="shoppingRefundAutoToBeConfirmedForReturnRefundJob" description="买家申请退款，商家超时操作，退款类型为退货退款" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundAutoToBeConfirmedForReturnRefundJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
+	<job:simple id="shoppingRefundRefundFailedJob" description="商家拒绝退款，买家超时操作，自动撤销退款申请" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundRefundFailedJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 	-->
 </beans>
