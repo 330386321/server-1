@@ -1,5 +1,7 @@
 package com.lawu.eshop.framework.core.page;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +14,16 @@ public class Page<T> {
     /**
      * 当前页码
      */
+    @ApiModelProperty(value = "当前页码", required = true)
     private Integer currentPage;
 
     /**
      * 数据总条数
      */
+    @ApiModelProperty(value = "数据总条数", required = true)
     private Integer totalCount;
 
+    @ApiModelProperty(value = "当前页数据列表", required = true)
     private List<T> records = new ArrayList<>();
 
     public Integer getCurrentPage() {
