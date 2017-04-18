@@ -37,6 +37,7 @@ import com.lawu.eshop.property.srv.service.CashManageFrontService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.MD5;
 
 @Service
 public class CashManageFrontServiceImpl implements CashManageFrontService {
@@ -58,21 +59,28 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 	@Transactional
 	public int save(CashDataParam cash) {
 
-		String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
-		if ("".equals(currentScale)) {
-			return ResultCode.PROPERTY_CASH_SCALE_NULL;
+		/*
+		 * String cashMoney = cash.getCashMoney(); WithdrawCashDOExample example
+		 * = new WithdrawCashDOExample();
+		 * example.createCriteria().andUserNumEqualTo(cash.getUserNum())
+		 * .andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth()); int
+		 * count = withdrawCashDOMapper.countByExample(example); double
+		 * dCashMoney = new Double(cashMoney).doubleValue(); if (count > 1 &&
+		 * dCashMoney <= 5) { return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR; }
+		 */
+		
+		//校验最小金额
+		String minMoney = propertyService.getValue(PropertyType.CASH_MIN_MONEY);
+		if ("".equals(minMoney)) {
+			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
-
 		String cashMoney = cash.getCashMoney();
-		WithdrawCashDOExample example = new WithdrawCashDOExample();
-		example.createCriteria().andUserNumEqualTo(cash.getUserNum())
-				.andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
-		int count = withdrawCashDOMapper.countByExample(example);
 		double dCashMoney = new Double(cashMoney).doubleValue();
-		if (count > 1 && dCashMoney <= 5) {
+		if (dCashMoney < Double.valueOf(dCashMoney).doubleValue()) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
 		}
 
+		//校验提交的银行卡是否正确
 		BankAccountDO bankAccountDo = bankAccountDOMapper.selectByPrimaryKey(cash.getBusinessBankAccountId());
 		if (bankAccountDo == null) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
@@ -80,6 +88,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
 		}
 
+		//校验资产财产记录、余额、支付密码
 		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
 		infoExample.createCriteria().andUserNumEqualTo(cash.getUserNum());
 		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
@@ -94,15 +103,36 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			if (dBalacne < dCashMoney) {
 				return ResultCode.PROPERTY_INFO_BALANCE_LESS;
 			}
-			// TODO 校验支付密码
 
+			// 校验支付密码
+			if (!MD5.MD5Encode(cash.getPayPwd()).equals(info.getPayPassword())) {
+				return ResultCode.PAY_PWD_ERROR;
+			}
 		}
 
+		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
+
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum())
+				.andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+		int count = withdrawCashDOMapper.countByExample(example);
+		if (count > 0) {
+			String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
+			if ("".equals(minusMoney)) {
+				minusMoney = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
+			}
+			dCashMoney = dCashMoney - Double.valueOf(dCashMoney).doubleValue();
+			withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
+		}
+
+		String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
+		if ("".equals(currentScale)) {
+			currentScale = PropertyType.CASH_SCALE_DEFAULT;
+		}
 		double dCurrentScale = new Double(currentScale).doubleValue();
 		double money = dCashMoney * dCurrentScale;
 
-		//保存提现表记录
-		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
+		// 保存提现表记录
 		withdrawCashDO.setCashMoney(new BigDecimal(cashMoney));
 		withdrawCashDO.setCurrentScale(currentScale);
 		withdrawCashDO.setMoney(new BigDecimal(money));
@@ -121,7 +151,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		withdrawCashDO.setRegionFullName(cash.getRegionFullName());
 		withdrawCashDOMapper.insertSelective(withdrawCashDO);
 
-		//新增交易明细
+		// 新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.CASH.val);
 		tdsParam.setTransactionNum(cash.getCashNumber());
@@ -134,7 +164,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setBizId(withdrawCashDO.getId());
 		transactionDetailService.save(tdsParam);
 
-		//更新财产记录，减
+		// 更新财产记录，减
 		PropertyInfoDOView infoDoView = new PropertyInfoDOView();
 		infoDoView.setId(infoList.get(0).getId());
 		infoDoView.setBalance(new BigDecimal(cashMoney));
@@ -170,7 +200,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 	@Override
 	public WithdrawCashDetailBO cashDetail(Long id) {
 		WithdrawCashDO cdo = withdrawCashDOMapper.selectByPrimaryKey(id);
-		if(cdo == null){
+		if (cdo == null) {
 			return null;
 		}
 		WithdrawCashDetailBO bo = new WithdrawCashDetailBO();

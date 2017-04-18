@@ -38,6 +38,7 @@ public class ResultCode {
     public static final int UPLOAD_VEDIO_FAIL = 1020;
     public static final int UPLOAD_SIZE_BIGER = 1021;
     public static final int PAY_PWD_NULL = 1022;
+    public static final int PAY_PWD_ERROR = 1023;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -141,6 +142,7 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
         ResultCode.messageMap.put(PAY_PWD_NULL, "支付密码尚未设置");
+        ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
@@ -188,7 +190,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
-        ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "自然月提现次数大于1次时，提现金额必须大于5元");
+        ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "提现金额必须大于等于10元");
         ResultCode.messageMap.put(PROPERTY_INFO_NULL, "用户对应财产记录为空");
         ResultCode.messageMap.put(PROPERTY_INFO_OUT_INDEX, "用户对应财产记录错误，存在大于1条记录");
         ResultCode.messageMap.put(PROPERTY_INFO_BALANCE_LESS, "余额不足");

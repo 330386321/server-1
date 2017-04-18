@@ -1,16 +1,23 @@
 package com.lawu.eshop.property.param;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 import io.swagger.annotations.ApiParam;
 
 public class CashParam {
 
 	@ApiParam(name = "cashMoney", required = true, value = "提现金额")
+	@NotBlank(message = "提现金额不能为空")
 	private String cashMoney;
 
 	@ApiParam(name = "businessBankAccountId", required = true, value = "银行卡账户ID")
+	@NotNull(message = "提现银行卡不能为空")
 	private Long businessBankAccountId;
 
 	@ApiParam(name = "payPwd", required = true, value = "支付密码")
+	@NotBlank(message = "支付密码不能为空")
 	private String payPwd;
 
 	public String getPayPwd() {

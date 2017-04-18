@@ -5,6 +5,7 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.lawu.eshop.property.constants.OrderRefundStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 
 /**
@@ -51,6 +52,10 @@ public class OrderRefundDataParam extends OrderRefundParam {
 	// 第三方平台订单号
 	@NotBlank(message = "tradeNo不能为空")
 	private String tradeNo;
+
+	//用于区分确认收货后的退款还是在途中退款
+	@NotNull(message = "orderRefundStatusEnum不能为空")
+	private OrderRefundStatusEnum orderRefundStatusEnum;
 
 	public String getUserNum() {
 		return userNum;
@@ -114,6 +119,14 @@ public class OrderRefundDataParam extends OrderRefundParam {
 
 	public void setTradeNo(String tradeNo) {
 		this.tradeNo = tradeNo;
+	}
+
+	public OrderRefundStatusEnum getOrderRefundStatusEnum() {
+		return orderRefundStatusEnum;
+	}
+
+	public void setOrderRefundStatusEnum(OrderRefundStatusEnum orderRefundStatusEnum) {
+		this.orderRefundStatusEnum = orderRefundStatusEnum;
 	}
 
 }

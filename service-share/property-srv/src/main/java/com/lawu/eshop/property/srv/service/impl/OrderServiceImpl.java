@@ -20,6 +20,7 @@ import com.lawu.eshop.property.constants.FreezeStatusEnum;
 import com.lawu.eshop.property.constants.FreezeTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.OrderRefundStatusEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
@@ -187,41 +188,44 @@ public class OrderServiceImpl implements OrderService {
 		// 余额支付：处理商家冻结资金，新增会员交易订单退款交易记录，加会员财产余额
 		// 第三方支付：处理商家冻结资金，新增会员交易订单退款交易记录，原路退回会员支付账户
 		// <异步通知修改订单状态>
-		FreezeDOExample example = new FreezeDOExample();
-		if (param.isLast()) {
-			FreezeDO freezeDO = new FreezeDO();
-			freezeDO.setMoney(new BigDecimal("0"));
-			freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
-			freezeDO.setGmtModified(new Date());
-			example.createCriteria().andUserNumEqualTo(param.getUserNum())
-					.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
-					.andBizIdEqualTo(Long.valueOf(param.getOrderId())).andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
-			freezeDOMapper.updateByExample(freezeDO, example);
-		} else {
-			// 校验退款金额不能大于冻结金额
-			example.createCriteria().andUserNumEqualTo(param.getUserNum())
-					.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
-					.andBizIdEqualTo(Long.valueOf(param.getOrderId()));
-			List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
-			Long freezeId = 0L;
-			if (freezeDOS == null || freezeDOS.isEmpty()) {
-				return ResultCode.FREEZE_NULL;
-			} else if (freezeDOS.size() > 1) {
-				return ResultCode.FREEZE_ROWS_OUT;
+		if(OrderRefundStatusEnum.FINISH.val.equals(param.getOrderRefundStatusEnum().val)){
+			FreezeDOExample example = new FreezeDOExample();
+			if (param.isLast()) {
+				FreezeDO freezeDO = new FreezeDO();
+				freezeDO.setMoney(new BigDecimal("0"));
+				freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
+				freezeDO.setGmtModified(new Date());
+				example.createCriteria().andUserNumEqualTo(param.getUserNum())
+						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
+						.andBizIdEqualTo(Long.valueOf(param.getOrderId())).andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
+				freezeDOMapper.updateByExample(freezeDO, example);
 			} else {
-				FreezeDO freeze = freezeDOS.get(0);
-				if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
-					return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
+				// 校验退款金额不能大于冻结金额
+				example.createCriteria().andUserNumEqualTo(param.getUserNum())
+						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
+						.andBizIdEqualTo(Long.valueOf(param.getOrderId()));
+				List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
+				Long freezeId = 0L;
+				if (freezeDOS == null || freezeDOS.isEmpty()) {
+					return ResultCode.FREEZE_NULL;
+				} else if (freezeDOS.size() > 1) {
+					return ResultCode.FREEZE_ROWS_OUT;
+				} else {
+					FreezeDO freeze = freezeDOS.get(0);
+					if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
+						return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
+					}
+					freezeId = freeze.getId();
 				}
-				freezeId = freeze.getId();
-			}
 
-			FreezeDOView freezeDoView = new FreezeDOView();
-			freezeDoView.setId(freezeId);
-			freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
-			freezeDoView.setGmtModified(new Date());
-			freezeDOMapperExtend.updateMinusMoney(freezeDoView);
+				FreezeDOView freezeDoView = new FreezeDOView();
+				freezeDoView.setId(freezeId);
+				freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
+				freezeDoView.setGmtModified(new Date());
+				freezeDOMapperExtend.updateMinusMoney(freezeDoView);
+			}
 		}
+		
 
 		// 新增会员订单退款交易记录
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
