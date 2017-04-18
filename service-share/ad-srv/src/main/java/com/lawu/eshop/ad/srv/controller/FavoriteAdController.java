@@ -55,9 +55,9 @@ public class FavoriteAdController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
-    public Result remove(@PathVariable Long id) {
-    	favoriteAdService.remove(id);
+	@RequestMapping(value = "remove/{adId}", method = RequestMethod.DELETE)
+    public Result remove(@PathVariable Long adId,@RequestParam Long memberId) {
+    	favoriteAdService.remove(adId, memberId);
     	return successDelete();
     	
     }

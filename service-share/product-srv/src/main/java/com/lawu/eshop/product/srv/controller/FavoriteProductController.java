@@ -55,9 +55,9 @@ public class FavoriteProductController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
-    public Result remove(@PathVariable Long id) {
-    	Integer i=favoriteProductService.remove(id);
+	@RequestMapping(value = "remove/{productId}", method = RequestMethod.DELETE)
+    public Result remove(@PathVariable Long productId,@RequestParam Long memberId) {
+    	Integer i=favoriteProductService.remove(productId,memberId);
     	return successDelete();
     	
     }

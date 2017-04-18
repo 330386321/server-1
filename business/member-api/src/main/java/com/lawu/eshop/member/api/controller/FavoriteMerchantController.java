@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -68,11 +69,11 @@ public class FavoriteMerchantController extends BaseController{
 	@Authorization
 	@ApiOperation(value = "取消商家收藏", notes = "取消商家收藏[]（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "remove", method = RequestMethod.DELETE)
+	@RequestMapping(value = "remove/{merchantId}", method = RequestMethod.DELETE)
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-					   @RequestParam @ApiParam(required = true, value = "id") Long id) {
+			      @PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = favoriteMerchantService.remove(id);
+		Result rs = favoriteMerchantService.remove(merchantId,memberId);
 		return rs;
 	}
 

@@ -24,8 +24,8 @@ public interface FavoriteProductService {
 	@RequestMapping(method = RequestMethod.POST, value = "favoriteProduct/save")
 	Result save(@RequestParam("memberId") Long memberId,@RequestParam("productId") Long productId);
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteProduct/remove/{id}")
-    Result remove(@PathVariable("id") Long id);
+	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteProduct/remove/{productId}")
+    Result remove(@PathVariable("productId") Long productId,@RequestParam("memberId") Long memberId);
 	
 	@RequestMapping(method = RequestMethod.POST, value = "favoriteProduct/selectMyFavoriteProduct")
 	Result<Page<FavoriteProductDTO>> selectMyFavoriteProduct(@RequestParam("memberId") Long id, @RequestBody FavoriteProductQuery query);

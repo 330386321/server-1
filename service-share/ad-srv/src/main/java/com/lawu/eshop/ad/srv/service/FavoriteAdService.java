@@ -24,7 +24,7 @@ public interface FavoriteAdService {
 	 * 取消收藏
 	 * @param id
 	 */
-	void remove(Long id);
+	void remove(Long adId ,Long memberId);
 	
 	/**
 	 * 我收藏的广告列表

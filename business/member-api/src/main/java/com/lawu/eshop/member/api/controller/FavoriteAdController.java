@@ -85,10 +85,11 @@ public class FavoriteAdController extends BaseController{
 	@Authorization
     @ApiOperation(value = "取消收藏的广告", notes = "取消收藏的广告[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "remove/{adId}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                         @PathVariable @ApiParam(required = true, value = "收藏id") Long id) {
-        Result rs = favoriteAdService.remove(id);
+                         @PathVariable @ApiParam(required = true, value = "广告id") Long adId) {
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
+        Result rs = favoriteAdService.remove(adId,memberId);
         return rs;
     }
 }

@@ -85,10 +85,11 @@ public class FavoriteProductController extends BaseController{
 	@Authorization
     @ApiOperation(value = "取消收藏的商品", notes = "取消收藏的商品[1002]（张荣成）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "remove/{productId}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                         @PathVariable @ApiParam(required = true, value = "收藏id") Long id) {
-        Result rs = favoriteProductService.remove(id);
+                         @PathVariable @ApiParam(required = true, value = "商品id") Long productId) {
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
+        Result rs = favoriteProductService.remove(productId,memberId);
         return rs;
     }
 }

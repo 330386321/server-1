@@ -56,8 +56,10 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	 * 取消收藏
 	 */
 	@Override
-	public void remove(Long id) {
-		favoriteAdDOMapper.deleteByPrimaryKey(id);
+	public void remove(Long adId,Long memberId) {
+		FavoriteAdDOExample example = new FavoriteAdDOExample();
+        example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
+        Integer i = favoriteAdDOMapper.deleteByExample(example);
 	}
 
 	/**

@@ -64,21 +64,19 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Override
     @Transactional
-    public Integer remove(Long id) {
-        FavoriteMerchantDO favoriteMerchantDO = favoriteMerchantDOMapper.selectByPrimaryKey(id);
-        Integer i = favoriteMerchantDOMapper.deleteByPrimaryKey(id);
-        MerchantStoreDOExample example = new MerchantStoreDOExample();
-        example.createCriteria().andMerchantIdEqualTo(favoriteMerchantDO.getMerchantId());
-        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
-        if (!list.isEmpty()) {
-            MerchantStoreDO merchantStoreDO = list.get(0);
+    public Integer remove(Long merchantId,Long memberId) {
+    	FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
+        example.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantId);
+        Integer i = favoriteMerchantDOMapper.deleteByExample(example);
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(merchantId);
+        if (merchantStoreDO!=null) {
             Integer count = merchantStoreDO.getFavoriteNumber();
             count -= 1;
             merchantStoreDO.setFavoriteNumber(count);
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
             //更新solr门店收藏人数
-            SolrDocument solrDocument = SolrUtil.getSolrDocsById(list.get(0).getId(), SolrUtil.SOLR_MERCHANT_CORE);
+            SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), SolrUtil.SOLR_MERCHANT_CORE);
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
                 document.addField("favoriteNumber_i", count);

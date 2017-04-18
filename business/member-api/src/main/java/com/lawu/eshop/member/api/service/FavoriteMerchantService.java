@@ -26,6 +26,6 @@ public interface FavoriteMerchantService {
 	 @RequestMapping(method = RequestMethod.POST,value = "favoriteMerchant/getMyFavoriteMerchant")
 	 Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam("memberId")  Long memberId ,@RequestBody FavoriteMerchantParam pageQuery);
 	 
-	 @RequestMapping(method = RequestMethod.DELETE, value = "favoriteMerchant/remove/{id}")
-	 Result remove(@PathVariable("id")  Long id );
+	 @RequestMapping(method = RequestMethod.DELETE, value = "favoriteMerchant/remove/{merchantId}")
+	 Result remove(@PathVariable("merchantId")  Long merchantId ,@RequestParam("memberId")  Long memberId);
 }

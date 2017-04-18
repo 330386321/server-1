@@ -28,9 +28,10 @@ public interface FavoriteMerchantService {
 
 	/**
 	 * 取消收藏
-	 * @param id
+	 * @param merchantId
+	 * @param memberId
 	 * @return
 	 */
-	Integer remove(Long id);
+	Integer remove(Long merchantId,Long memberId);
 
 }

@@ -60,8 +60,10 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 
 	@Override
 	@Transactional
-	public Integer remove(Long id) {
-		Integer i=favoriteProductDOMapper.deleteByPrimaryKey(id);
+	public Integer remove(Long productId,Long memberId) {
+		FavoriteProductDOExample example = new FavoriteProductDOExample();
+        example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
+        Integer i = favoriteProductDOMapper.deleteByExample(example);
 		return i;
 	}
 

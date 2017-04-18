@@ -25,7 +25,7 @@ public interface FavoriteProductService {
 	 * @param id
 	 * @return
 	 */
-	Integer remove(Long id);
+	Integer remove(Long productId,Long memberId);
 	
 	/**
 	 * 我收藏的商品

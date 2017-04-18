@@ -24,8 +24,8 @@ public interface FavoriteAdService {
 	@RequestMapping(method = RequestMethod.PUT, value = "favoriteAd/save")
 	Result save(@RequestParam("memberId") Long memberId,@RequestParam("adId") Long adId);
 	
-	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteAd/remove/{id}")
-    Result remove(@PathVariable("id") Long id);
+	@RequestMapping(method = RequestMethod.DELETE, value = "favoriteAd/remove/{adId}")
+    Result remove(@PathVariable("adId") Long adId,@RequestParam("memberId") Long memberId);
 	
 	@RequestMapping(method = RequestMethod.GET, value = "favoriteAd/selectMyFavoriteAd")
 	Result<Page<FavoriteAdDOViewDTO>> selectMyFavoriteAd(@RequestParam("memberId") Long id, @RequestBody FavoriteAdParam param);
