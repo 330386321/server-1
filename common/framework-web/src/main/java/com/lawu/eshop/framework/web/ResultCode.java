@@ -107,6 +107,7 @@ public class ResultCode {
     public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
     public static final int MONEY_IS_ZERO = 6018;
 
+
     // 商城模块代码 7xxx
 
 
@@ -183,7 +184,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
         ResultCode.messageMap.put(AD_RED_PACKGE_GET, "红包已经领取");
         ResultCode.messageMap.put(AD_PRAISE_PUTED, "抢赞已经结束");
-        ResultCode.messageMap.put(AD_CLICK_EXIST, "你今天已经点击过该广告");
+        ResultCode.messageMap.put(AD_CLICK_EXIST, "今天已经点击过该广告");
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");

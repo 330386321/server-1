@@ -352,7 +352,7 @@ public class AdServiceImpl implements AdService {
 		}else if(hits==adDO.getAdCount()){
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 			adDOMapper.updateByPrimaryKey(adDO);
-		}
+		}  
 		return i;
 	}
 
