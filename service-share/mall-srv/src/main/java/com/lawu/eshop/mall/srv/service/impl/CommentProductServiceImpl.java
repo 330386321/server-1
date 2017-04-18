@@ -326,4 +326,14 @@ public class CommentProductServiceImpl implements CommentProductService {
         commentProductDO.setGmtModified(new Date());
         commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
     }
+
+    @Override
+    @Transactional
+    public void delCommentByOrderItemId(Long orderItemId) {
+        CommentProductDO commentProductDO = new CommentProductDO();
+        commentProductDO.setOrderItemId(orderItemId);
+        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+        commentProductDO.setGmtModified(new Date());
+        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+    }
 }

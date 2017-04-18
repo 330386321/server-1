@@ -230,4 +230,18 @@ public class CommentProductController extends BaseController {
         return successDelete();
     }
 
+    /**
+     * 根据订单项删除评价商品
+     * @param orderItemId
+     * @return
+     */
+    @RequestMapping(value = "delCommentByOrderItemId",method = RequestMethod.DELETE)
+    public Result delCommentByOrderItemId(@RequestParam(value = "orderItemId") Long orderItemId){
+        if(orderItemId == null){
+            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        commentProductService.delCommentByOrderItemId(orderItemId);
+        return successDelete();
+    }
+
 }
