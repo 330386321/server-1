@@ -15,8 +15,8 @@
     <result column="valid_week_time" property="validWeekTime" jdbcType="VARCHAR" />
     <result column="valid_day_begin_time" property="validDayBeginTime" jdbcType="VARCHAR" />
     <result column="valid_day_end_time" property="validDayEndTime" jdbcType="VARCHAR" />
-    <result column="entire_begin_time" property="entireBeginTime" jdbcType="TIMESTAMP" />
-    <result column="entire_end_time" property="entireEndTime" jdbcType="TIMESTAMP" />
+    <result column="entire_begin_time" property="entireBeginTime" jdbcType="DATE" />
+    <result column="entire_end_time" property="entireEndTime" jdbcType="DATE" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
@@ -157,8 +157,8 @@
       gmt_create)
     values (#{merchantId,jdbcType=BIGINT}, #{type,jdbcType=TINYINT}, #{reachAmount,jdbcType=DECIMAL}, 
       #{favoredAmount,jdbcType=DECIMAL}, #{discountRate,jdbcType=DECIMAL}, #{validWeekTime,jdbcType=VARCHAR}, 
-      #{validDayBeginTime,jdbcType=VARCHAR}, #{validDayEndTime,jdbcType=VARCHAR}, #{entireBeginTime,jdbcType=TIMESTAMP}, 
-      #{entireEndTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{validDayBeginTime,jdbcType=VARCHAR}, #{validDayEndTime,jdbcType=VARCHAR}, #{entireBeginTime,jdbcType=DATE}, 
+      #{entireEndTime,jdbcType=DATE}, #{status,jdbcType=TINYINT}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{gmtCreate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.mall.srv.domain.MerchantFavoredDO" >
@@ -237,10 +237,10 @@
         #{validDayEndTime,jdbcType=VARCHAR},
       </if>
       <if test="entireBeginTime != null" >
-        #{entireBeginTime,jdbcType=TIMESTAMP},
+        #{entireBeginTime,jdbcType=DATE},
       </if>
       <if test="entireEndTime != null" >
-        #{entireEndTime,jdbcType=TIMESTAMP},
+        #{entireEndTime,jdbcType=DATE},
       </if>
       <if test="status != null" >
         #{status,jdbcType=TINYINT},
@@ -298,10 +298,10 @@
         valid_day_end_time = #{record.validDayEndTime,jdbcType=VARCHAR},
       </if>
       <if test="record.entireBeginTime != null" >
-        entire_begin_time = #{record.entireBeginTime,jdbcType=TIMESTAMP},
+        entire_begin_time = #{record.entireBeginTime,jdbcType=DATE},
       </if>
       <if test="record.entireEndTime != null" >
-        entire_end_time = #{record.entireEndTime,jdbcType=TIMESTAMP},
+        entire_end_time = #{record.entireEndTime,jdbcType=DATE},
       </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=TINYINT},
@@ -332,8 +332,8 @@
       valid_week_time = #{record.validWeekTime,jdbcType=VARCHAR},
       valid_day_begin_time = #{record.validDayBeginTime,jdbcType=VARCHAR},
       valid_day_end_time = #{record.validDayEndTime,jdbcType=VARCHAR},
-      entire_begin_time = #{record.entireBeginTime,jdbcType=TIMESTAMP},
-      entire_end_time = #{record.entireEndTime,jdbcType=TIMESTAMP},
+      entire_begin_time = #{record.entireBeginTime,jdbcType=DATE},
+      entire_end_time = #{record.entireEndTime,jdbcType=DATE},
       status = #{record.status,jdbcType=TINYINT},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
@@ -373,10 +373,10 @@
         valid_day_end_time = #{validDayEndTime,jdbcType=VARCHAR},
       </if>
       <if test="entireBeginTime != null" >
-        entire_begin_time = #{entireBeginTime,jdbcType=TIMESTAMP},
+        entire_begin_time = #{entireBeginTime,jdbcType=DATE},
       </if>
       <if test="entireEndTime != null" >
-        entire_end_time = #{entireEndTime,jdbcType=TIMESTAMP},
+        entire_end_time = #{entireEndTime,jdbcType=DATE},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=TINYINT},
@@ -404,8 +404,8 @@
       valid_week_time = #{validWeekTime,jdbcType=VARCHAR},
       valid_day_begin_time = #{validDayBeginTime,jdbcType=VARCHAR},
       valid_day_end_time = #{validDayEndTime,jdbcType=VARCHAR},
-      entire_begin_time = #{entireBeginTime,jdbcType=TIMESTAMP},
-      entire_end_time = #{entireEndTime,jdbcType=TIMESTAMP},
+      entire_begin_time = #{entireBeginTime,jdbcType=DATE},
+      entire_end_time = #{entireEndTime,jdbcType=DATE},
       status = #{status,jdbcType=TINYINT},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
