@@ -32,6 +32,8 @@ public class StoreDetailBO {
 
     private Integer buyNumbers;
 
+    private Boolean isFavorite;
+
     public String getName() {
         return name;
     }
@@ -126,5 +128,13 @@ public class StoreDetailBO {
 
     public void setPicCount(Integer picCount) {
         this.picCount = picCount;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 }

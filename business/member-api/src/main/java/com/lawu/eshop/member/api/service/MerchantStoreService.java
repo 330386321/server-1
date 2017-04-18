@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
 import java.util.List;
 
 /**
@@ -53,10 +49,11 @@ public interface MerchantStoreService {
     /**
      * 根据门店ID查询门店信息
      * @param id
+     * @param memberId
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/storeDetail/{id}")
-    Result<StoreDetailDTO> getStoreDetailById(@PathVariable("id") Long id);
+    Result<StoreDetailDTO> getStoreDetailById(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
     /**
      * 根据商家查询门店信息

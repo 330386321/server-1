@@ -61,9 +61,10 @@ public interface MerchantStoreInfoService {
      * 根据门店ID查询门店详细信息
      *
      * @param id
+     * @param memberId
      * @return
      */
-    StoreDetailBO getStoreDetailById(Long id);
+    StoreDetailBO getStoreDetailById(Long id, Long memberId);
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中

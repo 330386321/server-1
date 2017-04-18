@@ -174,6 +174,7 @@ public class MerchantStoreConverter {
         storeDetailDTO.setPicCount(storeDetailBO.getPicCount());
         storeDetailDTO.setIntro(storeDetailBO.getIntro());
         storeDetailDTO.setFavoriteNumber(storeDetailBO.getFavoriteNumber());
+        storeDetailDTO.setFavorite(storeDetailBO.getFavorite());
         storeDetailDTO.setAverageConsumeAmount(storeDetailBO.getAverageConsumeAmount());
         storeDetailDTO.setAverageScore(storeDetailBO.getAverageScore());
         storeDetailDTO.setFeedbackRate(storeDetailBO.getFeedbackRate());

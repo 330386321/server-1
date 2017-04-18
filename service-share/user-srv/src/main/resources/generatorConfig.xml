@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="E:/maven/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -49,9 +49,6 @@
         <table tableName="merchant" domainObjectName="MerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="invite_relation" domainObjectName="InviteRelationDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="address" domainObjectName="AddressDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -60,14 +57,14 @@
         </table>
         <table tableName="favorite_merchant" domainObjectName="FavoriteMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
         <table tableName="member" domainObjectName="MemberDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="merchant" domainObjectName="MerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--<table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
+        <table tableName="merchant_profile" domainObjectName="MerchantProfileDO">
             <generatedKey column="id_1" sqlStatement="MySql" identity="true"/>
         </table>-->
         <!--<table tableName="member_profile" domainObjectName="MemberProfileDO">
@@ -88,6 +85,8 @@
         <table tableName="property" domainObjectName="PropertyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-	
+        <table tableName="invite_relation" domainObjectName="InviteRelationDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

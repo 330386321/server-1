@@ -194,7 +194,7 @@ public class MerchantStoreController extends BaseController {
         }
         return successCreated(storeBO.getIsNoReasonReturn());
     }
-    
+
     /**
      * 根据商家ID列表批量查询该商家是否支持七天无理由退货
      *
@@ -205,13 +205,13 @@ public class MerchantStoreController extends BaseController {
         if (merchantIdList == null || merchantIdList.isEmpty()) {
             return successGet(ResultCode.ID_EMPTY);
         }
-        
+
         List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService.selectNoReasonReturnByMerchantIds(merchantIdList);
-        
+
         if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
-        
+
         return successGet(MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
     }
 
@@ -222,8 +222,8 @@ public class MerchantStoreController extends BaseController {
      * @return
      */
     @RequestMapping(value = "storeDetail/{id}", method = RequestMethod.GET)
-    public Result<StoreDetailDTO> storeDetail(@PathVariable("id") Long id) {
-        StoreDetailBO storeDetailBO = merchantStoreInfoService.getStoreDetailById(id);
+    public Result<StoreDetailDTO> storeDetail(@PathVariable Long id, @RequestParam Long memberId) {
+        StoreDetailBO storeDetailBO = merchantStoreInfoService.getStoreDetailById(id, memberId);
         if (storeDetailBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
@@ -232,16 +232,17 @@ public class MerchantStoreController extends BaseController {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     *
      * @param id
      * @return
+     * @throws Exception
      * @author Yangqh
-     * @throws Exception 
      */
     @RequestMapping(value = "findCashUserInfo/{id}", method = RequestMethod.GET)
     public CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id) throws Exception {
-    	CashUserInfoBO cashUserInfoBO = merchantStoreInfoService.findCashUserInfo(id);
+        CashUserInfoBO cashUserInfoBO = merchantStoreInfoService.findCashUserInfo(id);
         if (cashUserInfoBO == null) {
-        	return null;
+            return null;
         }
         CashUserInfoDTO dto = new CashUserInfoDTO();
         BeanUtil.copyProperties(cashUserInfoBO, dto);
@@ -250,6 +251,7 @@ public class MerchantStoreController extends BaseController {
 
     /**
      * 买单查询商家名称和门店图片
+     *
      * @param merchantId
      * @return
      */

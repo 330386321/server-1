@@ -34,6 +34,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "收藏人数")
     private Integer favoriteNumber;
 
+    @ApiModelProperty(value = "是否收藏：true--已收藏，false--未收藏")
+    private Boolean isFavorite;
+
     @ApiModelProperty(value = "人均消费")
     private BigDecimal averageConsumeAmount;
 
@@ -173,5 +176,13 @@ public class StoreDetailDTO {
 
     public void setPicCount(Integer picCount) {
         this.picCount = picCount;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 }

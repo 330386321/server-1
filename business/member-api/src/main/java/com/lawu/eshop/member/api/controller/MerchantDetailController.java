@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -49,7 +50,8 @@ public class MerchantDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "store/{id}", method = RequestMethod.GET)
     public Result<StoreDetailDTO> storeDetail(@PathVariable @ApiParam(required = true, value = "门店ID") Long id) {
-        Result<StoreDetailDTO> stoResult = merchantStoreService.getStoreDetailById(id);
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        Result<StoreDetailDTO> stoResult = merchantStoreService.getStoreDetailById(id, memberId);
         if (!isSuccess(stoResult)) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }

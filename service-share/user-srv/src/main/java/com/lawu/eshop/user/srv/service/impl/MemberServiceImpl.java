@@ -94,13 +94,13 @@ public class MemberServiceImpl implements MemberService {
         MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
         memberDO.setId(id);
         int result = memberDOMapper.updateByPrimaryKeySelective(memberDO);
-        if(!"".equals(memberDO.getNickname())){
+        if (!"".equals(memberDO.getNickname())) {
             MemberDO old = memberDOMapper.selectByPrimaryKey(id);
             String headImg = FileDirConstant.DEFAULT_PIC;
-            if(!"".equals(old.getHeadimg())){
+            if (!"".equals(old.getHeadimg())) {
                 headImg = old.getHeadimg();
             }
-            rongUserService.refreshUserInfo(old.getNum(),memberDO.getNickname(),headImg);
+            rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headImg);
         }
         return result;
 
@@ -145,8 +145,8 @@ public class MemberServiceImpl implements MemberService {
         for (MemberDO memberDO : memberDOS) {
             MemberProfileDOExample mpExample = new MemberProfileDOExample();
             MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
-            if(memberProfileDO!=null)
-            mpList.add(memberProfileDO);
+            if (memberProfileDO != null)
+                mpList.add(memberProfileDO);
         }
         Page<MemberBO> pageMember = new Page<MemberBO>();
         pageMember.setTotalCount(totalCount);
@@ -175,8 +175,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         //插入会员信息
+        String userNum = RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG);
         MemberDO memberDO = new MemberDO();
-        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setNum(userNum);
         memberDO.setAccount(registerRealParam.getAccount());
         memberDO.setPwd(MD5.MD5Encode(registerRealParam.getPwd()));
         memberDO.setMobile(registerRealParam.getAccount());
@@ -192,14 +193,12 @@ public class MemberServiceImpl implements MemberService {
         //插入会员扩展信息
         MemberProfileDO memberProfileDO = new MemberProfileDO();
         memberProfileDO.setId(memberId);
-        memberProfileDO.setInviteMemberCount(0);
-        memberProfileDO.setInviteMerchantCount(0);
         memberProfileDO.setGmtCreate(new Date());
         memberProfileDOMapper.insertSelective(memberProfileDO);
 
         //注册会员成为商户粉丝
         if (inviterId > 0 && inviterType == UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val) {
-            FansMerchantDO fansMerchantDO=new FansMerchantDO();
+            FansMerchantDO fansMerchantDO = new FansMerchantDO();
             fansMerchantDO.setMerchantId(inviterId);
             fansMerchantDO.setMemberId(memberId);
             fansMerchantDO.setGmtCreate(new Date());
@@ -208,22 +207,22 @@ public class MemberServiceImpl implements MemberService {
 
         //插入会员推荐关系
         InviteRelationDO inviteRelationDO = new InviteRelationDO();
-        inviteRelationDO.setUserId(memberId);
-        inviteRelationDO.setInvitedUserId(memberId);
+        inviteRelationDO.setUserNum(userNum);
+        inviteRelationDO.setInviteUserNum(userNum);
         inviteRelationDO.setDepth(0);
         inviteRelationDO.setType(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val);
         inviteRelationDOMapper.insert(inviteRelationDO);
         if (inviterId > 0) {
             //查询推荐人推荐关系
             InviteRelationDOExample inviteRelationDOExample = new InviteRelationDOExample();
-            inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(inviterId);
+            inviteRelationDOExample.createCriteria().andInviteUserNumEqualTo(registerRealParam.getUserNum());
             List<InviteRelationDO> inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
             if (!inviteRelationDOS.isEmpty()) {
                 //更新推荐关系
                 for (InviteRelationDO inviteRelationDO1 : inviteRelationDOS) {
                     inviteRelationDO = new InviteRelationDO();
-                    inviteRelationDO.setUserId(inviteRelationDO1.getUserId());
-                    inviteRelationDO.setInvitedUserId(memberId);
+                    inviteRelationDO.setUserNum(inviteRelationDO1.getUserNum());
+                    inviteRelationDO.setInviteUserNum(userNum);
                     inviteRelationDO.setDepth(inviteRelationDO1.getDepth() + 1);
                     inviteRelationDO.setType(inviteRelationDO1.getType());
                     inviteRelationDOMapper.insert(inviteRelationDO);
@@ -232,13 +231,13 @@ public class MemberServiceImpl implements MemberService {
 
             //查询会员的三级推荐人
             inviteRelationDOExample = new InviteRelationDOExample();
-            inviteRelationDOExample.createCriteria().andInvitedUserIdEqualTo(memberId).andDepthBetween(1, 3);
+            inviteRelationDOExample.createCriteria().andInviteUserNumEqualTo(userNum).andDepthBetween(1, 3);
             inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
             if (!inviteRelationDOS.isEmpty()) {
                 for (InviteRelationDO inviteRelationDO1 : inviteRelationDOS) {
                     //查询会员推荐人的推荐人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andDepthBetween(1, 3);
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andDepthBetween(1, 3);
                     int inviteCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
                     //更新会员推荐人的等级
                     int level = UserCommonConstant.LEVEL_1;
@@ -252,58 +251,63 @@ public class MemberServiceImpl implements MemberService {
                         level = UserCommonConstant.LEVEL_2;
                     }
                     if (inviteRelationDO1.getType() == UserInviterTypeEnum.INVITER_TYPE_MEMBER.val) {
+                        MemberDOExample memberDOExample = new MemberDOExample();
+                        memberDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
+                        List<MemberDO> memberDOS = memberDOMapper.selectByExample(memberDOExample);
+                        Long inviterInviteId = memberDOS.get(0).getId();
                         memberDO = new MemberDO();
                         memberDO.setLevel(level);
-                        memberDO.setId(inviteRelationDO1.getUserId());
-                        memberDOMapper.updateByPrimaryKeySelective(memberDO);
+                        memberDO.setId(inviterInviteId);
+                        memberDOMapper.updateByPrimaryKey(memberDO);
+
+                        //查询推荐的一级会员总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
+                        int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //查询推荐的二级级会员总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
+                        int inviteMemberCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //查询推荐的三级会员总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
+                        int inviteMemberCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //查询推荐的一级商户总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
+                        int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //查询推荐的二级商户总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
+                        int inviteMerchantCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //查询推荐的三级级商户总人数
+                        inviteRelationDOExample = new InviteRelationDOExample();
+                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
+                        int inviteMerchantCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                        //更新会员扩展信息
+                        memberProfileDO = new MemberProfileDO();
+                        memberProfileDO.setId(inviterInviteId);
+                        memberProfileDO.setInviteMemberCount(inviteMemberCount);
+                        memberProfileDO.setInviteMemberCount2(inviteMemberCount2);
+                        memberProfileDO.setInviteMemberCount3(inviteMemberCount3);
+                        memberProfileDO.setInviteMerchantCount(inviteMerchantCount);
+                        memberProfileDO.setInviteMerchantCount2(inviteMerchantCount2);
+                        memberProfileDO.setInviteMerchantCount3(inviteMerchantCount3);
+                        memberProfileDO.setGmtModified(new Date());
+                        memberProfileDOMapper.updateByPrimaryKeySelective(memberProfileDO);
                     } else {
                         MerchantDO merchantDO = new MerchantDO();
                         merchantDO.setLevel(level);
-                        merchantDO.setId(inviteRelationDO1.getUserId());
-                        merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
+                        MerchantDOExample merchantDOExample = new MerchantDOExample();
+                        merchantDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
+                        merchantDOMapper.updateByExample(merchantDO, merchantDOExample);
                     }
-
-                    //查询推荐的一级会员总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                    int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的二级级会员总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                    int inviteMemberCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的三级会员总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                    int inviteMemberCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的一级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                    int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的二级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                    int inviteMerchantCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的三级级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserIdEqualTo(inviteRelationDO1.getUserId()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                    int inviteMerchantCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //更新会员扩展信息
-                    memberProfileDO = new MemberProfileDO();
-                    memberProfileDO.setId(inviteRelationDO1.getUserId());
-                    memberProfileDO.setInviteMemberCount(inviteMemberCount);
-                    memberProfileDO.setInviteMemberCount2(inviteMemberCount2);
-                    memberProfileDO.setInviteMemberCount3(inviteMemberCount3);
-                    memberProfileDO.setInviteMerchantCount(inviteMerchantCount);
-                    memberProfileDO.setInviteMerchantCount2(inviteMerchantCount2);
-                    memberProfileDO.setInviteMerchantCount3(inviteMerchantCount3);
-                    memberProfileDO.setGmtModified(new Date());
-                    memberProfileDOMapper.updateByPrimaryKeySelective(memberProfileDO);
                 }
             }
         }
         //获取ryToken
-        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(),"E店会员", FileDirConstant.DEFAULT_PIC);
-        if(!"".equals(tokenResult.getToken())){
+        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(), "E店会员", FileDirConstant.DEFAULT_PIC);
+        if (!"".equals(tokenResult.getToken())) {
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());
             memberDO2.setId(memberDO.getId());
@@ -326,52 +330,52 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setId(mermberId);
         memberDOMapper.updateByPrimaryKeySelective(memberDO);
         MemberDO old = memberDOMapper.selectByPrimaryKey(mermberId);
-        rongUserService.refreshUserInfo(old.getNum(),memberDO.getNickname(),headimg);
+        rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headimg);
     }
 
-	public CashUserInfoBO findCashUserInfo(Long id) {
-		MemberDO mdo = memberDOMapper.selectByPrimaryKey(id);
-		if (mdo == null) {
-			return null;
-		} else if(mdo.getRegionPath() == null || mdo.getRegionPath().split("/").length != 3){
-			return null;
-		}
-		CashUserInfoBO cashUserInfoBO = new CashUserInfoBO();
-		cashUserInfoBO.setName(mdo.getName());
-		cashUserInfoBO.setProvinceId(Integer.valueOf(mdo.getRegionPath().split("/")[0]));
-		cashUserInfoBO.setCityId(Integer.valueOf(mdo.getRegionPath().split("/")[1]));
-		cashUserInfoBO.setAreaId(Integer.valueOf(mdo.getRegionPath().split("/")[2]));
-		return cashUserInfoBO;
-	}
-	
-	public Integer findMemberCount(String regionPath) {
-		MemberDOExample example = new MemberDOExample();
+    public CashUserInfoBO findCashUserInfo(Long id) {
+        MemberDO mdo = memberDOMapper.selectByPrimaryKey(id);
+        if (mdo == null) {
+            return null;
+        } else if (mdo.getRegionPath() == null || mdo.getRegionPath().split("/").length != 3) {
+            return null;
+        }
+        CashUserInfoBO cashUserInfoBO = new CashUserInfoBO();
+        cashUserInfoBO.setName(mdo.getName());
+        cashUserInfoBO.setProvinceId(Integer.valueOf(mdo.getRegionPath().split("/")[0]));
+        cashUserInfoBO.setCityId(Integer.valueOf(mdo.getRegionPath().split("/")[1]));
+        cashUserInfoBO.setAreaId(Integer.valueOf(mdo.getRegionPath().split("/")[2]));
+        return cashUserInfoBO;
+    }
+
+    public Integer findMemberCount(String regionPath) {
+        MemberDOExample example = new MemberDOExample();
         Criteria c1 = example.createCriteria();
         c1.andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         int count = 0;
-		if(regionPath==null){ //所有用户
-			count=memberDOMapper.countByExample(example);
-			return count;
-		}else{
-			String[] path=regionPath.split("/");
-			List<MemberDO> list=memberDOMapper.selectByExample(example);
-			for (MemberDO memberDO : list) {
-				if(memberDO.getRegionPath()!=null){
-					String[] memberPath=memberDO.getRegionPath().split("/");
-					for (String s : memberPath) {
-						for (String p : path) {
-							if(s.equals(p))
-								count++;
-						}
-						
-					}
-				}
-				
-			}
-			return count;
-		}
-		
-	}
+        if (regionPath == null) { //所有用户
+            count = memberDOMapper.countByExample(example);
+            return count;
+        } else {
+            String[] path = regionPath.split("/");
+            List<MemberDO> list = memberDOMapper.selectByExample(example);
+            for (MemberDO memberDO : list) {
+                if (memberDO.getRegionPath() != null) {
+                    String[] memberPath = memberDO.getRegionPath().split("/");
+                    for (String s : memberPath) {
+                        for (String p : path) {
+                            if (s.equals(p))
+                                count++;
+                        }
+
+                    }
+                }
+
+            }
+            return count;
+        }
+
+    }
 
     @Override
     @Transactional
@@ -388,7 +392,7 @@ public class MemberServiceImpl implements MemberService {
         MemberDOExample example = new MemberDOExample();
         example.createCriteria().andNumEqualTo(userNum);
         List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
-        if(memberDOS.isEmpty()){
+        if (memberDOS.isEmpty()) {
             return null;
         }
         return MemberConverter.convertBO(memberDOS.get(0));

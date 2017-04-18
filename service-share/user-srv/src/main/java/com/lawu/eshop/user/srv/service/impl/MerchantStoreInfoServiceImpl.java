@@ -419,7 +419,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     }
 
     @Override
-    public StoreDetailBO getStoreDetailById(Long id) {
+    public StoreDetailBO getStoreDetailById(Long id, Long memberId) {
         //查询门店信息
         MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
         if (merchantStoreDO == null) {
@@ -431,6 +431,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
         String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
 
+        //查询店内环境照数量
         merchantStoreImageDOExample = new MerchantStoreImageDOExample();
         merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
         int picCount = merchantStoreImageDOMapper.countByExample(merchantStoreImageDOExample);
@@ -438,6 +439,20 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
         storeDetailBO.setStorePic(storePic);
         storeDetailBO.setPicCount(picCount);
+
+        //查询是否被收藏
+        if (memberId > 0) {
+            FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
+            favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+            List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
+            if (favoriteMerchantDOS.isEmpty()) {
+                storeDetailBO.setFavorite(false);
+            } else {
+                storeDetailBO.setFavorite(true);
+            }
+        } else {
+            storeDetailBO.setFavorite(false);
+        }
         return storeDetailBO;
     }
 
