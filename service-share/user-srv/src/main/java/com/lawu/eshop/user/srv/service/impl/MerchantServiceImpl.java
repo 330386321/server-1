@@ -18,7 +18,7 @@ import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
-import com.lawu.eshop.user.srv.rong.service.RongUserService;
+import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
@@ -68,7 +68,7 @@ public class MerchantServiceImpl implements MerchantService {
     private InviterMerchantDOMapperExtend inviterMerchantDOMapper;
 
     @Autowired
-    private RongUserService rongUserService;
+    private RongMerchantService rongMerchantService;
 
     @Override
     @Transactional
@@ -231,7 +231,7 @@ public class MerchantServiceImpl implements MerchantService {
             }
         }
         //获取融云token
-        TokenResult tokenResult = rongUserService.getRongToken(merchantDO.getNum(),merchantDO.getMobile(), FileDirConstant.DEFAULT_PIC);
+        TokenResult tokenResult = rongMerchantService.getRongToken(merchantDO.getNum(),"E店商家", FileDirConstant.DEFAULT_PIC);
         if(StringUtils.isNotEmpty(tokenResult.getToken())){
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());

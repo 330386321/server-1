@@ -16,7 +16,7 @@ import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
-import com.lawu.eshop.user.srv.rong.service.RongUserService;
+import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class MerchantController extends BaseController {
     private MerchantService merchantService;
 
     @Autowired
-    private RongUserService rongUserService;
+    private RongMerchantService rongMerchantService;
 
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
     public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {
@@ -149,7 +149,7 @@ public class MerchantController extends BaseController {
      */
     @RequestMapping(value = "getRongToken",method = RequestMethod.GET)
     public Result<RongYunTokenDTO> getRongToken(@RequestParam("userId") String userId, @RequestParam("name") String name, @RequestParam("portraitUri") String portraitUri) throws Exception{
-        TokenResult token = rongUserService.getRongToken(userId,name,portraitUri);
+        TokenResult token = rongMerchantService.getRongToken(userId,name,portraitUri);
         RongYunTokenDTO rongYunTokenDTO = new RongYunTokenDTO();
         rongYunTokenDTO.setCode(token.getCode());
         rongYunTokenDTO.setRyToken(token.getToken());
