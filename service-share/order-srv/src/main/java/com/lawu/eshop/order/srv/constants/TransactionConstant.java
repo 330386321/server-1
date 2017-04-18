@@ -47,4 +47,12 @@ public class TransactionConstant {
      * 删除订单
      */
     public static final  byte DELETE_SHOPPING_ORDER = 0x08;
+    
+    /**
+     * 退款中-待商家处理
+	 * 退款类型-退款
+	 * 商家处理超时事务
+     */
+    public static final  byte TO_BE_CONFIRMED_FOR_REFUND_REMIND = 0x09;
+    
 }

@@ -68,13 +68,13 @@ public interface ShoppingRefundDetailService {
 	/**
 	 * 商家是否同意退款
 	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
-	 * @param param
-	 *            参数 是否同意退款
+	 * @param id
+	 *            退款详情Id
+	 * @param isAgree
+	 *            是否同意退款
 	 * @return
 	 */
-	Integer agreeToRefund(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailAgreeToRefundForeignParam param);
+	int agreeToRefund(Long id, boolean isAgree);
 
 	/**
 	 * 如果商家拒绝买家的退款申请或者拒绝退款 买家可以申请平台介入
@@ -93,4 +93,12 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	int revokeRefundRequest(Long id);
+	
+	/**
+	 * 买家申请退款，商家未操作处理
+	 * 平台提醒商家，否则自动退款给买家
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoToBeConfirmedForRefund();
 }

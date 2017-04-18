@@ -19,7 +19,7 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
-import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
@@ -161,7 +161,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			
 			// 查找待评价的订单
 			if (param.getOrderStatus().equals(ShoppingOrderStatusToMemberEnum.BE_EVALUATED)) {
-				baseCriteria.andIsEvaluationEqualTo(false);
+				baseCriteria.andSOIIsEvaluationEqualTo(false);
 			}
 		} else {
 			//如果查询全部状态的订单,不显示待处理的订单
@@ -176,7 +176,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 			
 			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
-			paroductCriteria.andProductNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.andSOIProductNameLike("%"+ param.getKeyword() + "%");
 			paroductCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 		}
 		
@@ -584,9 +584,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		 *  如果卖家支持七天无理由退货并且已经收到货，跳过商家确认这个阶段
 		 */
 		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())) {
-			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
 		} else {
-			shoppingOrderItemDO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.TO_BE_CONFIRMED.getValue());
+			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
 		}
 		
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
@@ -692,7 +692,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 			
 			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
-			paroductCriteria.andProductNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.andSOIProductNameLike("%"+ param.getKeyword() + "%");
 			paroductCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 		}
 		
@@ -819,7 +819,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
 		shoppingOrderExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		shoppingOrderExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
+		shoppingOrderExtendDOExampleCriteria.andSOIIsEvaluationEqualTo(false);
 		
 		// 查找配置表获取自动好评时间
 		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
@@ -854,7 +854,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		processingStatus.add(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		processingStatus.add(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 		
-		shoppingOrderExtendDOExampleCriteria.andShoppingOrderItemOrderStatusNotIn(processingStatus);
+		shoppingOrderExtendDOExampleCriteria.andSOIOrderStatusNotIn(processingStatus);
 		
 		long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 		
@@ -875,7 +875,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		if (isAll) {
 			ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-			shoppingOrderExtendDOExample.createCriteria().andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
+			shoppingOrderExtendDOExample.createCriteria().andSOIIdEqualTo(shoppingOrderItemId);
 			
 			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList =  shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExample(shoppingOrderExtendDOExample);
 			
@@ -931,7 +931,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
 		
-		criteria.andShoppingOrderItemOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
 		
@@ -957,7 +957,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
 		
-		criteria.andShoppingOrderItemOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
 		

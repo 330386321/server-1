@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
@@ -35,7 +35,7 @@ public class ShoppingOrderItemRefundConverter {
 		BeanUtils.copyProperties(shoppingOrderItemRefundDO, shoppingOrderItemRefundBO, new String[] {"orderStatus", "refundStatus", "type"});
 		
 		shoppingOrderItemRefundBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemRefundDO.getOrderStatus()));
-		shoppingOrderItemRefundBO.setRefundStatus(ShoppingOrderItemRefundStatusEnum.getEnum(shoppingOrderItemRefundDO.getRefundStatus()));
+		shoppingOrderItemRefundBO.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemRefundDO.getRefundStatus()));
 		shoppingOrderItemRefundBO.setType(ShoppingRefundTypeEnum.getEnum(shoppingOrderItemRefundDO.getType()));
 		
 		return shoppingOrderItemRefundBO;

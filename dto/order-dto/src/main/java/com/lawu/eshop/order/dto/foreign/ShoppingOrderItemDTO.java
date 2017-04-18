@@ -3,7 +3,7 @@ package com.lawu.eshop.order.dto.foreign;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
 import io.swagger.annotations.ApiModel;
@@ -84,7 +84,7 @@ public class ShoppingOrderItemDTO implements Serializable {
     * 退款状态
     */
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 商家填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
-    private ShoppingOrderItemRefundStatusEnum refundStatus;
+    private RefundStatusEnum refundStatus;
 	
 	public Long getId() {
 		return id;
@@ -174,11 +174,11 @@ public class ShoppingOrderItemDTO implements Serializable {
 		this.orderStatus = orderStatus;
 	}
 
-	public ShoppingOrderItemRefundStatusEnum getRefundStatus() {
+	public RefundStatusEnum getRefundStatus() {
 		return refundStatus;
 	}
 
-	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
+	public void setRefundStatus(RefundStatusEnum refundStatus) {
 		this.refundStatus = refundStatus;
 	}
 	

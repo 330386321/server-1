@@ -112,6 +112,19 @@ public class MqConstant {
      */
     public static final String TAG_DELETE_SHOPPING_ORDER = "delete_shopping_order";
     
+    /**
+     * 退款中-待商家处理
+	 * 退款类型-退款
+	 * 商家处理超时发布的MQ消息
+     */
+    public static final String TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND = "to_be_confirmed_for_refund_remind";
+    
+    /**
+     * 商家同意退款
+     * 发布给mall模块的MQ消息，删除商品评论
+     */
+    public static final String TAG_AGREE_TO_REFUND_DELETE_COMMENT = "agree_to_refund_delete_comment";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";

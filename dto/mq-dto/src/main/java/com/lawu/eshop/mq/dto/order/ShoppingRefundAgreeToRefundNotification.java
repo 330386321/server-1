@@ -1,6 +1,7 @@
 package com.lawu.eshop.mq.dto.order;
 
 import com.lawu.eshop.compensating.transaction.Notification;
+import com.lawu.eshop.mq.dto.order.constants.OrderRefundStatusEnum;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 
 /**
@@ -8,7 +9,7 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
  * @author Sunny
  * @date 2017/04/06
  */
-public class ShoppingOrderAgreeToRefundNotification extends Notification {
+public class ShoppingRefundAgreeToRefundNotification extends Notification {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -51,6 +52,11 @@ public class ShoppingOrderAgreeToRefundNotification extends Notification {
 	 * 第三方支付交易号
 	 */
 	private String thirdNumber;
+	
+	/**
+	 * 订单是否完成
+	 */
+	private OrderRefundStatusEnum status;
 
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
@@ -114,5 +120,13 @@ public class ShoppingOrderAgreeToRefundNotification extends Notification {
 
 	public void setThirdNumber(String thirdNumber) {
 		this.thirdNumber = thirdNumber;
+	}
+
+	public OrderRefundStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(OrderRefundStatusEnum status) {
+		this.status = status;
 	}
 }

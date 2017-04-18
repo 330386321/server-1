@@ -65,9 +65,9 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 查找所有处于退款中的订单项
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-		criteria.andShoppingOrderItemOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 查询退款申请中有效的记录
-		criteria.andShoppingRefundDetailStatusEqualTo(StatusEnum.VALID.getValue());
+		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		if (memberId != null && memberId > 0) {
 			criteria.andMemberIdEqualTo(memberId);
 		}
@@ -118,5 +118,4 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		
 		return result;
 	}
-
 }

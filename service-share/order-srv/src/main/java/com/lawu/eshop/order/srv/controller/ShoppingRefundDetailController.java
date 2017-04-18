@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
@@ -107,7 +107,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		}
 
 		// 退款状态必须为待商家确认
-		if (!shoppingOrderItemBO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.TO_BE_CONFIRMED)) {
+		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.TO_BE_CONFIRMED)) {
 			return successCreated(ResultCode.NOT_AGREE_TO_APPLY);
 		}
 
@@ -168,7 +168,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		}
 
 		// 只有退款状态为待退货才能被允许填写退货物流
-		if (!shoppingOrderItemBO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.TO_BE_RETURNED)) {
+		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.TO_BE_RETURNED)) {
 			return successCreated(ResultCode.NOT_RETURNED_STATE);
 		}
 
@@ -190,37 +190,8 @@ public class ShoppingRefundDetailController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	public Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
 
-		if (param.getIsAgree() == null) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-		}
-
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
-
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
-
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		// 订单状态必须为退款中
-		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
-			return successCreated(ResultCode.NOT_REFUNDING);
-		}
-
-		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemBO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.TO_BE_REFUNDED)) {
-			return successCreated(ResultCode.ORDER_NOT_TO_BE_REFUNDED);
-		}
-
-		shoppingRefundDetailService.agreeToRefund(shoppingRefundDetailBO, param);
+		shoppingRefundDetailService.agreeToRefund(id, param.getIsAgree());
 
 		return successCreated();
 	}
@@ -257,7 +228,7 @@ public class ShoppingRefundDetailController extends BaseController {
 		}
 
 		// 只有退款失败才能申请平台介入
-		if (!shoppingOrderItemBO.getRefundStatus().equals(ShoppingOrderItemRefundStatusEnum.REFUND_FAILED)) {
+		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.REFUND_FAILED)) {
 			return successCreated(ResultCode.ORDER_NOT_REFUND_FAILED);
 		}
 

@@ -40,4 +40,5 @@ public interface ShoppingOrderItemService {
 	 * @author Sunny
 	 */
 	Integer commentsSuccessful(Long id);
+	
 }

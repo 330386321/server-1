@@ -16,6 +16,7 @@
 		<result column="quantity" jdbcType="INTEGER" property="quantity" />
 		<result column="item_order_status" jdbcType="TINYINT" property="orderStatus" />
 		<result column="refund_status" jdbcType="TINYINT" property="refundStatus" />
+		<result column="send_time" jdbcType="INTEGER" property="sendTime" />
 		<result column="item_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="item_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>

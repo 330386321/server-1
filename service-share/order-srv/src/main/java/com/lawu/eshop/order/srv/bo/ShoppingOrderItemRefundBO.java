@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.lawu.eshop.order.constants.ShoppingOrderItemRefundStatusEnum;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 
@@ -90,7 +90,7 @@ public class ShoppingOrderItemRefundBO implements Serializable {
 	/**
 	 * 退款状态(0-待商家确认|1-待退货|2-待退款|3-退款成功|4-退款失败|5-平台介入)
 	 */
-	private ShoppingOrderItemRefundStatusEnum refundStatus;
+	private RefundStatusEnum refundStatus;
 
 	/**
 	 * 创建时间
@@ -227,11 +227,11 @@ public class ShoppingOrderItemRefundBO implements Serializable {
 		this.orderStatus = orderStatus;
 	}
 
-	public ShoppingOrderItemRefundStatusEnum getRefundStatus() {
+	public RefundStatusEnum getRefundStatus() {
 		return refundStatus;
 	}
 
-	public void setRefundStatus(ShoppingOrderItemRefundStatusEnum refundStatus) {
+	public void setRefundStatus(RefundStatusEnum refundStatus) {
 		this.refundStatus = refundStatus;
 	}
 
