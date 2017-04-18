@@ -29,7 +29,7 @@ public class DelProductCommentTransactionFollowServiceImpl extends AbstractTrans
     @Override
     public Reply execute(DelProductCommentNotification notification) {
         Long productModelId = notification.getProductModelId();
-        commentProductService.delCommentByProductId(productModelId);
+        commentProductService.delCommentByProductModelId(productModelId);
         return new Reply();
     }
 
