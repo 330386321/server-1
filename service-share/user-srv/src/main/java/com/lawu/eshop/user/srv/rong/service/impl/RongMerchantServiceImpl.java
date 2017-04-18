@@ -6,11 +6,13 @@ import com.lawu.eshop.user.srv.rong.models.CheckOnlineResult;
 import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong
  * @date 2017/4/18.
  */
+@Service
 public class RongMerchantServiceImpl implements RongMerchantService {
     RongCloud rongCloud = RongCloud.getInstance(RongYunConstant.M_APP_KEY, RongYunConstant.M_APP_SECRET);
 

@@ -74,8 +74,7 @@ public class MerchantDetailController extends BaseController {
     @ApiOperation(value = "会员查看商家相册", notes = "会员查看商家相册(店内环境照)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listMerchantStoreImage/{merchantId}", method = RequestMethod.GET)
-    public Result<List<MerchantStoreImageDTO>> listMerchantStoreImage(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId,
-                                                                      MerchantStoreImageEnum merchantStoreImageEnum) {
-        return merchantStoreImageService.listMerchantStoreImageByType(merchantId, merchantStoreImageEnum);
+    public Result<List<MerchantStoreImageDTO>> listMerchantStoreImage(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) {
+        return merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT);
     }
 }

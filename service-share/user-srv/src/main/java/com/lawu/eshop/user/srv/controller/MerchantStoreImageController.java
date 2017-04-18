@@ -34,7 +34,7 @@ public class MerchantStoreImageController extends BaseController {
     @RequestMapping(value = "listMerchantStoreImage/{merchantId}", method = RequestMethod.GET)
     public Result<List<MerchantStoreImageDTO>> listMerchantStoreImage(@PathVariable Long merchantId, @RequestParam MerchantStoreImageEnum merchantStoreImageEnum) {
         List<MerchantStoreImageBO> merchantStoreImageBOS = merchantStoreImageService.listMerchantStoreImageByType(merchantId, merchantStoreImageEnum);
-        if (merchantStoreImageBOS.isEmpty()) {
+        if (merchantStoreImageBOS == null || merchantStoreImageBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(MerchantStoreImageConverter.convertDTO(merchantStoreImageBOS));

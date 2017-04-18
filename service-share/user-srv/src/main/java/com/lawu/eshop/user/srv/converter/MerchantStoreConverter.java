@@ -330,7 +330,7 @@ public class MerchantStoreConverter {
     }
 
     /**
-     * SolrInputDocument
+     * StoreSolrDTO
      *
      * @param solrDocumentList
      * @return
@@ -356,6 +356,26 @@ public class MerchantStoreConverter {
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;
+    }
+
+    /**
+     * SolrInputDocument
+     *
+     * @param solrDocument
+     * @return
+     */
+    public static SolrInputDocument convertSolrInputDocument(SolrDocument solrDocument) {
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField("id", solrDocument.get("id"));
+        document.addField("merchantId_l", solrDocument.get("merchantId_l"));
+        document.addField("name_s", solrDocument.get("name_s"));
+        document.addField("latLon_p", solrDocument.get("latLon_p"));
+        document.addField("industryPath_s", solrDocument.get("industryPath_s"));
+        document.addField("industryName_s", solrDocument.get("industryName_s"));
+        document.addField("storePic_s", solrDocument.get("storePic_s"));
+        document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d"));
+        document.addField("averageScore_d", solrDocument.get("averageScore_d"));
+        return document;
     }
 
 }
