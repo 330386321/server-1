@@ -239,4 +239,5 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
         commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
     }
+
 }

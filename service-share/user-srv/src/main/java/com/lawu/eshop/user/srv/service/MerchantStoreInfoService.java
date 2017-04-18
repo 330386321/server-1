@@ -45,11 +45,11 @@ public interface MerchantStoreInfoService {
     void updateMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
 
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
-    
+
     /**
      * 根据商家id列表批量查询
      * 商家是否支持七天退货以及商家的用户编号
-     * 
+     *
      * @param merchantIds
      * @return
      */
@@ -67,11 +67,12 @@ public interface MerchantStoreInfoService {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     *
      * @param id
      * @return
      * @author Yangqh
      */
-	CashUserInfoBO findCashUserInfo(Long id);
+    CashUserInfoBO findCashUserInfo(Long id);
 
     MerchantStoreInfoBO findStoreNameAndImgByMerchantId(Long merchantId);
 
@@ -79,13 +80,16 @@ public interface MerchantStoreInfoService {
 
     /**
      * 增加门店买单笔数
+     *
      * @param merchantId
      */
     void addMerchantStoreBuyNums(Long merchantId);
 
     /**
      * 根据商家Id修改门店状态
+     *
      * @param merchantId
      */
-    void updateMerchantStoreStatus(Long merchantId,Byte status);
+    void updateMerchantStoreStatus(Long merchantId, Byte status);
+
 }

@@ -82,7 +82,8 @@ public class FansMerchantController extends BaseController {
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_STORE);
-        messageInfoParam.setContent(UserUtil.getCurrentAccount(getRequest()) + "邀请你成为店铺粉丝");
+        // TODO 发送消息实体内容
+        messageInfoParam.setMessageParam("");
         for (String num : numArray) {
             messageService.saveMessage(num, messageInfoParam);
         }

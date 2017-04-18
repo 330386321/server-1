@@ -55,4 +55,5 @@ public interface CommentMerchantService {
     Page<CommentMerchantBO> getCommentMerchantListOperator(CommentListParam listParam);
 
     void delCommentMerchantInfo(Long commentId);
+
 }
