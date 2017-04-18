@@ -52,17 +52,17 @@
         <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="shopping_order_item" domainObjectName="ShoppingOrderItemDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         <table tableName="shopping_refund_detail" domainObjectName="ShoppingRefundDetailDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="property" domainObjectName="PropertyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         -->
-        <table tableName="shopping_order_item" domainObjectName="ShoppingOrderItemDO">
+        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
