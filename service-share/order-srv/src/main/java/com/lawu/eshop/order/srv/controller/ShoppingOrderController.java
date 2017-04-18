@@ -154,25 +154,12 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.PUT)
 	public Result deleteOrder(@PathVariable("id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+		int resultCode = shoppingOrderService.deleteOrder(id);
+		
+		if (resultCode == ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
 		
-		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-		
-		if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		// 被删除的订单必须要是完成的状态(交易完成|交易关闭)
-		if (!shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())
-				&& !shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
-			return successCreated(ResultCode.ORDER_NOT_DELETE);
-		}
-		
-		shoppingOrderService.deleteOrder(id);
-
 		return successCreated();
 	}
 	
@@ -259,7 +246,7 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	public Result tradingSuccess(@PathVariable("id") Long id) {
 		
-		int resultCode = shoppingOrderService.tradingSuccess(id);
+		int resultCode = shoppingOrderService.tradingSuccess(id, false);
 		
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);

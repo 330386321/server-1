@@ -107,6 +107,11 @@ public class MqConstant {
      */
     public static final String TAG_REMIND_SHIPMENTS = "remind_shipments";
     
+    /**
+     * 删除购物订单时发布的MQ消息
+     */
+    public static final String TAG_DELETE_SHOPPING_ORDER = "delete_shopping_order";
+    
     /******************************************/
     /*******product-srv模块tag **********/
 

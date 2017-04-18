@@ -42,4 +42,9 @@ public class TransactionConstant {
      * 提醒卖家发货
      */
     public static final  byte REMIND_SHIPMENTS = 0x07;
+    
+    /**
+     * 删除订单
+     */
+    public static final  byte DELETE_SHOPPING_ORDER = 0x08;
 }

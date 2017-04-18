@@ -28,4 +28,14 @@ public class PropertyNameConstant {
 	 */
 	public final static String AUTOMATIC_REMIND_SHIPMENTS = "automatic_remind_shipments";
 	
+	/**
+	 * 自动收货时间
+	 */
+	public final static String AUTOMATIC_RECEIPT = "automatic_receipt";
+	
+	/**
+	 * 删除订单时间
+	 */
+	public final static String DELETE_ORDER = "delete_order";
+	
 }

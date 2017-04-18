@@ -95,7 +95,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	Integer deleteOrder(Long id);
+	int deleteOrder(Long id);
 
 	/**
 	 * 支付成功之后 修改购物订单以及订单项状态为待发货
@@ -112,7 +112,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	int tradingSuccess(Long id);
+	int tradingSuccess(Long id, boolean isAutomaticReceipt);
 
 	/**
 	 * 买家申请退款
@@ -206,5 +206,12 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	void executeAutoRemindShipments();
+	
+	/**
+	 * 自动收货
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoReceipt();
 	
 }
