@@ -26,10 +26,10 @@ import java.util.List;
  */
 @Service
 public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
-	
+
     @Autowired
     private MerchantDOMapper merchantDOMapper;
-	
+
     @Autowired
     private MerchantStoreDOMapper merchantStoreDOMapper;
 
@@ -380,11 +380,11 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         }
         return MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
     }
-    
+
     /**
      * 根据商家id列表批量查询
      * 商家是否支持七天退货以及商家的用户编号
-     * 
+     *
      * @param merchantIds
      * @return
      */
@@ -393,12 +393,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
         merchantStoreDOExample.createCriteria().andMerchantIdIn(merchantIds);
         List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-        
-        
+
+
         MerchantDOExample merchantDOExample = new MerchantDOExample();
         merchantDOExample.createCriteria().andIdIn(merchantIds);
         List<MerchantDO> merchantDOList = merchantDOMapper.selectByExample(merchantDOExample);
-        
+
         return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS, merchantDOList);
     }
 
@@ -431,8 +431,13 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
         String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
 
+        merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
+        int picCount = merchantStoreImageDOMapper.countByExample(merchantStoreImageDOExample);
+
         StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
         storeDetailBO.setStorePic(storePic);
+        storeDetailBO.setPicCount(picCount);
         return storeDetailBO;
     }
 
@@ -484,8 +489,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId);
         List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
-        if(merchantStoreAuditDOS.isEmpty()){
-            return  null;
+        if (merchantStoreAuditDOS.isEmpty()) {
+            return null;
         }
         MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
         merchantStoreAuditBO.setId(merchantStoreAuditDOS.get(0).getId());
@@ -501,12 +506,12 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
     @Override
     @Transactional
-    public void updateMerchantStoreStatus(Long merchantId,Byte status) {
+    public void updateMerchantStoreStatus(Long merchantId, Byte status) {
         MerchantStoreDOExample example = new MerchantStoreDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId);
         MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
         merchantStoreDO.setStatus(status);
-        merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO,example);
+        merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO, example);
     }
 
 }

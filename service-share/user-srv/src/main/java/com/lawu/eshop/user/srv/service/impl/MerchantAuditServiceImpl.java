@@ -181,10 +181,8 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO.getMerchantId(),auditParam.getMerchantStoreId(), merchantStoreParam);
                         document.addField("storePic_s", merchantStoreParam.getStoreUrl());
                         document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
-                        document.addField("buyNumbers_i", merchantStoreDO.getFavoriteNumber());
                         document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount());
                         document.addField("averageScore_d", merchantStoreDO.getAverageScore());
-                        document.addField("feedbackRate_d", merchantStoreDO.getFeedbackRate());
                         SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
                     }
                 } else {

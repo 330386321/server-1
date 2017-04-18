@@ -14,13 +14,13 @@ public class IndustryTypeDTO {
     @ApiModelProperty(value = "父ID")
     private Short parentId;
 
-    @ApiModelProperty(value = "路劲")
+    @ApiModelProperty(value = "路径")
     private String path;
 
     @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "图片路劲")
+    @ApiModelProperty(value = "图片路径")
     private String imageUrl;
 
     public Integer getId() {

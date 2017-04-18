@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -23,9 +24,11 @@ public class PropertyDTO {
     private String remark;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtModified;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
     public Long getId() {

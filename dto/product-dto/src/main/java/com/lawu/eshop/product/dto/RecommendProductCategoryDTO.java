@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ public class RecommendProductCategoryDTO {
     private String categoryName;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
     public Long getId() {

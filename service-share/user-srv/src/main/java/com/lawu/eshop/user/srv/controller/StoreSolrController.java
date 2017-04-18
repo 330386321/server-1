@@ -7,7 +7,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
-import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
+import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;

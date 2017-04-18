@@ -168,10 +168,10 @@ public class MerchantStoreConverter {
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
         storeDetailDTO.setMerchantId(storeDetailBO.getMerchantId());
         storeDetailDTO.setName(storeDetailBO.getName());
-        storeDetailDTO.setRegionPath(storeDetailBO.getRegionPath());
         storeDetailDTO.setAddress(storeDetailBO.getAddress());
         storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
+        storeDetailDTO.setPicCount(storeDetailBO.getPicCount());
         storeDetailDTO.setIntro(storeDetailBO.getIntro());
         storeDetailDTO.setFavoriteNumber(storeDetailBO.getFavoriteNumber());
         storeDetailDTO.setAverageConsumeAmount(storeDetailBO.getAverageConsumeAmount());
@@ -195,7 +195,6 @@ public class MerchantStoreConverter {
         StoreDetailBO storeDetailBO = new StoreDetailBO();
         storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
         storeDetailBO.setName(merchantStoreDO.getName());
-        storeDetailBO.setRegionPath(merchantStoreDO.getRegionPath());
         storeDetailBO.setAddress(merchantStoreDO.getAddress());
         storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
         storeDetailBO.setIntro(merchantStoreDO.getIntro());
@@ -324,15 +323,9 @@ public class MerchantStoreConverter {
         document.addField("id", merchantStoreId);
         document.addField("merchantId_l", merchantId);
         document.addField("name_s", merchantStoreParam.getName());
-        document.addField("regionPath_s", merchantStoreParam.getRegionName());
-        document.addField("address_s", merchantStoreParam.getAddress());
         document.addField("latLon_p", merchantStoreParam.getLatitude() + "," + merchantStoreParam.getLongitude());
-        document.addField("longitude_d", merchantStoreParam.getLongitude());
-        document.addField("latitude_d", merchantStoreParam.getLatitude());
         document.addField("industryPath_s", merchantStoreParam.getIndustryPath());
-        document.addField("intro_s", merchantStoreParam.getIntro());
-        document.addField("principalName_s", merchantStoreParam.getPrincipalName());
-        document.addField("principalMobile_s", merchantStoreParam.getPrincipalMobile());
+        document.addField("industryName_s", merchantStoreParam.getIndustryName());
         return document;
     }
 
@@ -354,6 +347,7 @@ public class MerchantStoreConverter {
             storeSolrDTO.setMerchantStoreId(Long.valueOf(solrDocument.get("id").toString()));
             storeSolrDTO.setName(solrDocument.get("name_s").toString());
             storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
+            storeSolrDTO.setIndustryName(solrDocument.get("industryName_s").toString());
             storeSolrDTO.setStorePic(solrDocument.get("storePic_s").toString());
             storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
             storeSolrDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));

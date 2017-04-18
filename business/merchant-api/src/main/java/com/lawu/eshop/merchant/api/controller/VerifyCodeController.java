@@ -1,18 +1,14 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.authorization.annotation.Authorization;
-import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.utils.IpUtil;
-import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.VerifyCodeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -96,7 +92,7 @@ public class VerifyCodeController extends BaseController {
         return verifyCodeService.getVerifyCodeById(id);
     }
 
-    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    /*@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "身份二维码", notes = "身份二维码。 (梅述全)", httpMethod = "GET")
     @Authorization
     @RequestMapping(value = "getQrCode", method = RequestMethod.GET)
@@ -111,5 +107,5 @@ public class VerifyCodeController extends BaseController {
         ServletOutputStream sos = response.getOutputStream();
         ImageIO.write(buffImg, "jpeg", sos);
         sos.close();
-    }
+    }*/
 }

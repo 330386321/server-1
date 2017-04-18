@@ -17,11 +17,4 @@ public interface IndustryTypeService {
      */
     List<IndustryTypeBO> listIndustryType();
 
-    /**
-     * 查询父行业下的行业
-     *
-     * @param parentId
-     * @return
-     */
-    List<IndustryTypeBO> listIndustryTypeByParentId(Short parentId);
 }

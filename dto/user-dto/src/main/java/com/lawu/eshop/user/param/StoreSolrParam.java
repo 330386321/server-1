@@ -28,7 +28,7 @@ public class StoreSolrParam extends AbstractPageParam {
     @ApiModelProperty(value = "纬度", required = true)
     private Double latitude;
 
-    @ApiModelProperty(value = "排序类型")
+    @ApiModelProperty(value = "排序类型:INTELLIGENT_SORT--智能排序，DISTANCE_SORT--离我最近，FEEDBACK_SORT--好评优先，POPULARITY_SORT--人气最高")
     private StoreSolrEnum storeSolrEnum;
 
     public String getName() {

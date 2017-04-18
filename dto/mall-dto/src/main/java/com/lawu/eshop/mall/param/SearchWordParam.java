@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class SearchWordParam extends AbstractPageParam {
 
-    @ApiModelProperty(value = "词条类型")
+    @ApiModelProperty(value = "词条类型：WORD_TYPE_STORE--门店词条，WORD_TYPE_PRODUCT--商品词条")
     private SearchWordTypeEnum searchWordTypeEnum;
 
     public SearchWordTypeEnum getSearchWordTypeEnum() {

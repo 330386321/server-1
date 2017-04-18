@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -30,14 +31,16 @@ public class MemberDTO {
 
     @ApiModelProperty(value = "等级")
     private Integer level;
-    
+
     @ApiModelProperty(value = "手机")
     private String mobile;
 
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
+    @ApiModelProperty(value = "性别：SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--保密")
     private UserSexEnum userSex;
-
 
     public String getNum() {
         return num;
@@ -119,13 +122,13 @@ public class MemberDTO {
         this.userSex = userSex;
     }
 
-	public String getMobile() {
-		return mobile;
-	}
+    public String getMobile() {
+        return mobile;
+    }
 
-	public void setMobile(String mobile) {
-		this.mobile = mobile;
-	}
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
 
 }

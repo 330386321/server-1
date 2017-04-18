@@ -20,6 +20,9 @@ public class StoreSolrDTO {
     @ApiModelProperty(value = "主营业务")
     private String industryPath;
 
+    @ApiModelProperty(value = "主营业务名称")
+    private String industryName;
+
     @ApiModelProperty(value = "门店照")
     private String storePic;
 
@@ -105,5 +108,13 @@ public class StoreSolrDTO {
 
     public void setDistance(Double distance) {
         this.distance = distance;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
     }
 }

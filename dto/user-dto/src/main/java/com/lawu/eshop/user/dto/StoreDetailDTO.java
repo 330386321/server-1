@@ -16,9 +16,6 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "区域")
-    private String regionPath;
-
     @ApiModelProperty(value = "地址")
     private String address;
 
@@ -27,6 +24,9 @@ public class StoreDetailDTO {
 
     @ApiModelProperty(value = "门店照")
     private String storePic;
+
+    @ApiModelProperty(value = "环境照数量")
+    private Integer picCount;
 
     @ApiModelProperty(value = "店铺介绍")
     private String intro;
@@ -37,7 +37,7 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "人均消费")
     private BigDecimal averageConsumeAmount;
 
-    @ApiModelProperty(value = "综合评分")
+    @ApiModelProperty(value = "平均评分")
     private BigDecimal averageScore;
 
     @ApiModelProperty(value = "好评率")
@@ -61,14 +61,6 @@ public class StoreDetailDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRegionPath() {
-        return regionPath;
-    }
-
-    public void setRegionPath(String regionPath) {
-        this.regionPath = regionPath;
     }
 
     public String getAddress() {
@@ -173,5 +165,13 @@ public class StoreDetailDTO {
 
     public void setValidTime(String validTime) {
         this.validTime = validTime;
+    }
+
+    public Integer getPicCount() {
+        return picCount;
+    }
+
+    public void setPicCount(Integer picCount) {
+        this.picCount = picCount;
     }
 }

@@ -4,14 +4,10 @@ package com.lawu.eshop.product.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ProductRecommendParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
-import com.lawu.eshop.product.srv.bo.ProductRecommendBO;
-
-import java.util.List;
 
 /**
  * Created by Yangqh on 2017/3/23.

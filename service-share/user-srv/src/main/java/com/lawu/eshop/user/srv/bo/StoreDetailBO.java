@@ -12,13 +12,13 @@ public class StoreDetailBO {
 
     private String name;
 
-    private String regionPath;
-
     private String address;
 
     private String principalMobile;
 
     private String storePic;
+
+    private Integer picCount;
 
     private String intro;
 
@@ -38,14 +38,6 @@ public class StoreDetailBO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getRegionPath() {
-        return regionPath;
-    }
-
-    public void setRegionPath(String regionPath) {
-        this.regionPath = regionPath;
     }
 
     public String getAddress() {
@@ -128,4 +120,11 @@ public class StoreDetailBO {
         this.buyNumbers = buyNumbers;
     }
 
+    public Integer getPicCount() {
+        return picCount;
+    }
+
+    public void setPicCount(Integer picCount) {
+        this.picCount = picCount;
+    }
 }

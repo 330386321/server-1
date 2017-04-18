@@ -3,7 +3,7 @@ package com.lawu.eshop.member.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
-import com.lawu.eshop.user.dto.param.StoreSearchWordDTO;
+import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
