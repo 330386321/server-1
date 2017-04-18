@@ -24,52 +24,73 @@ import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
 
 @Service
 public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
-	
+
 	@Resource
 	private FavoriteMerchantDOMapper favoriteMerchantDOMapper;
-	
+
 	@Resource
 	private MerchantStoreDOMapper merchantStoreDOMapper;
 
 	@Override
 	@Transactional
-	public Integer save(Long memberId ,Long merchantId) {
-		FavoriteMerchantDO favoriteMerchant=new FavoriteMerchantDO();
+	public Integer save(Long memberId, Long merchantId) {
+		FavoriteMerchantDO favoriteMerchant = new FavoriteMerchantDO();
 		favoriteMerchant.setMemberId(memberId);
 		favoriteMerchant.setMerchantId(merchantId);
 		favoriteMerchant.setGmtCreate(new Date());
-		int id=favoriteMerchantDOMapper.insert(favoriteMerchant);
-		return id; 
+		int row = favoriteMerchantDOMapper.insert(favoriteMerchant);
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId);
+		List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+		if (!list.isEmpty()) {
+			MerchantStoreDO merchantStoreDO = list.get(0);
+			Integer count = merchantStoreDO.getFavoriteNumber();
+			count += 1;
+			merchantStoreDO.setFavoriteNumber(count);
+			merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
+		}
+		return row;
 	}
-	
+
 	@Override
 	@Transactional
 	public Integer remove(Long id) {
-		Integer i=favoriteMerchantDOMapper.deleteByPrimaryKey(id);
+		FavoriteMerchantDO favoriteMerchantDO = favoriteMerchantDOMapper.selectByPrimaryKey(id);
+		Integer i = favoriteMerchantDOMapper.deleteByPrimaryKey(id);
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+		example.createCriteria().andMerchantIdEqualTo(favoriteMerchantDO.getMerchantId());
+		List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+		if (!list.isEmpty()) {
+			MerchantStoreDO merchantStoreDO = list.get(0);
+			Integer count = merchantStoreDO.getFavoriteNumber();
+			count -= 1;
+			merchantStoreDO.setFavoriteNumber(count);
+			merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
+		}
 		return i;
 	}
 
 	@Override
-	public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId,FavoriteMerchantParam pageQuery) {
+	public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId, FavoriteMerchantParam pageQuery) {
 		FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		int totalCount=favoriteMerchantDOMapper.countByExample(example);
+		int totalCount = favoriteMerchantDOMapper.countByExample(example);
 		RowBounds rowBounds = new RowBounds(pageQuery.getCurrentPage(), pageQuery.getPageSize());
-		List<FavoriteMerchantDO> FMDOS=favoriteMerchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		List<MerchantStoreDO> MDOS=new ArrayList<MerchantStoreDO>();
+		List<FavoriteMerchantDO> FMDOS = favoriteMerchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		List<MerchantStoreDO> MDOS = new ArrayList<MerchantStoreDO>();
 		for (FavoriteMerchantDO favoriteMerchantDO : FMDOS) {
-			MerchantStoreDOExample msExample =new MerchantStoreDOExample();
+			MerchantStoreDOExample msExample = new MerchantStoreDOExample();
 			msExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDO.getMerchantId())
-									  .andStatusEqualTo(new Byte("1"));
-			 List<MerchantStoreDO> list=merchantStoreDOMapper.selectByExample(msExample);
-			 if(!list.isEmpty()){
-				 MerchantStoreDO merchantStoreDO=list.get(0);
-				 MDOS.add(merchantStoreDO);
-			 }
-			 
+					.andStatusEqualTo(new Byte("1"));
+			List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(msExample);
+			if (!list.isEmpty()) {
+				MerchantStoreDO merchantStoreDO = list.get(0);
+				MDOS.add(merchantStoreDO);
+			}
+
 		}
-		List<FavoriteMerchantBO> fmBOS= FavoriteMerchantConverter.convertListBOS(MDOS, FMDOS);
-		Page<FavoriteMerchantBO> page=new Page<FavoriteMerchantBO>();
+		List<FavoriteMerchantBO> fmBOS = FavoriteMerchantConverter.convertListBOS(MDOS, FMDOS);
+		Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();
 		page.setTotalCount(totalCount);
 		page.setCurrentPage(pageQuery.getCurrentPage());
 		page.setRecords(fmBOS);
