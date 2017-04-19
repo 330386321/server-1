@@ -48,9 +48,9 @@ public class AlipayConfig {
 	public static String service = "create_direct_pay_by_user";
 
 	// app回调地址
-	public static String notify_url = "http://www.love-86.com:8888/external-api/alipay/appNotifyHandle";
+	public static String notify_url = "http://www.love-86.com:8088/external-api/alipay/appNotifyHandle";
 	// pc回调地址
-	public static String notify_url_pc = "http://www.love-86.com:8888/external-api/alipay/pcNotifyHandle";
+	public static String notify_url_pc = "http://www.love-86.com:8088/external-api/alipay/pcNotifyHandle";
 	public static String return_url_pc = "http://www.love-86.com:8888/";
 
 	// ↓↓↓↓↓↓↓↓↓↓ 请在这里配置防钓鱼信息，如果没开通防钓鱼功能，为空即可 ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓

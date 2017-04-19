@@ -464,6 +464,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         }
         CashUserInfoBO bo = new CashUserInfoBO();
         bo.setName(stores.get(0).getName());
+        bo.setRegionFullName(stores.get(0).getRegionName());
         bo.setProvinceId(Integer.valueOf(stores.get(0).getRegionPath().split("/")[0]));
         bo.setCityId(Integer.valueOf(stores.get(0).getRegionPath().split("/")[1]));
         bo.setAreaId(Integer.valueOf(stores.get(0).getRegionPath().split("/")[2]));

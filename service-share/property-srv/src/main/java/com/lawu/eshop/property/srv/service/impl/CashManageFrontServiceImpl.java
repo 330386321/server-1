@@ -68,19 +68,19 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		 * dCashMoney = new Double(cashMoney).doubleValue(); if (count > 1 &&
 		 * dCashMoney <= 5) { return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR; }
 		 */
-		
-		//校验最小金额
+
+		// 校验最小金额
 		String minMoney = propertyService.getValue(PropertyType.CASH_MIN_MONEY);
 		if ("".equals(minMoney)) {
 			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
 		String cashMoney = cash.getCashMoney();
 		double dCashMoney = new Double(cashMoney).doubleValue();
-		if (dCashMoney < Double.valueOf(dCashMoney).doubleValue()) {
+		if (dCashMoney < Double.valueOf(minMoney).doubleValue()) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
 		}
 
-		//校验提交的银行卡是否正确
+		// 校验提交的银行卡是否正确
 		BankAccountDO bankAccountDo = bankAccountDOMapper.selectByPrimaryKey(cash.getBusinessBankAccountId());
 		if (bankAccountDo == null) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
@@ -88,7 +88,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
 		}
 
-		//校验资产财产记录、余额、支付密码
+		// 校验资产财产记录、余额、支付密码
 		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
 		infoExample.createCriteria().andUserNumEqualTo(cash.getUserNum());
 		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
@@ -113,7 +113,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
 
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
-		example.createCriteria().andUserNumEqualTo(cash.getUserNum())
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.val)
 				.andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
 		int count = withdrawCashDOMapper.countByExample(example);
 		if (count > 0) {
@@ -121,7 +121,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			if ("".equals(minusMoney)) {
 				minusMoney = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
 			}
-			dCashMoney = dCashMoney - Double.valueOf(dCashMoney).doubleValue();
+			dCashMoney = dCashMoney - Double.valueOf(minusMoney).doubleValue();
 			withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
 		}
 

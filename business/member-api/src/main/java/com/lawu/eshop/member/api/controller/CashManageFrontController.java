@@ -74,6 +74,7 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setTransactionType(MemberTransactionTypeEnum.WITHDRAW.getValue());
 		dataParam.setUserType(UserTypeEnum.MEMBER.val);
 		dataParam.setCashNumber(StringUtil.getRandomNum(""));
+		dataParam.setPayPwd(param.getPayPwd());
 		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		CashUserInfoDTO cashUserInfoDTO = memberService.findCashUserInfo(memberId);
@@ -84,9 +85,7 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setProvinceId(cashUserInfoDTO.getProvinceId());
 		dataParam.setCityId(cashUserInfoDTO.getCityId());
 		dataParam.setAreaId(cashUserInfoDTO.getAreaId());
-		
-		//TODO 需要查询地区全路径查询
-		dataParam.setRegionFullName("");
+		dataParam.setRegionFullName(cashUserInfoDTO.getRegionFullName());
 
 		return cashManageFrontService.save(dataParam);
 

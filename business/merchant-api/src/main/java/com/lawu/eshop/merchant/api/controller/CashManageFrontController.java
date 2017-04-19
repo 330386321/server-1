@@ -74,6 +74,7 @@ public class CashManageFrontController extends BaseController {
 		dataParam.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW.getValue());
 		dataParam.setUserType(UserTypeEnum.MEMCHANT.val);
 		dataParam.setCashNumber(StringUtil.getRandomNum(""));
+		dataParam.setPayPwd(param.getPayPwd());
 		
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		CashUserInfoDTO cashUserInfoDTO = merchantStoreService.findCashUserInfo(merchantId);

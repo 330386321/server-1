@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.param;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -10,6 +11,7 @@ public class CashParam {
 
 	@ApiParam(name = "cashMoney", required = true, value = "提现金额")
 	@NotBlank(message = "提现金额不能为空")
+	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "cashMoney格式错误要求数字或小数位不超过2位")
 	private String cashMoney;
 
 	@ApiParam(name = "businessBankAccountId", required = true, value = "银行卡账户ID")

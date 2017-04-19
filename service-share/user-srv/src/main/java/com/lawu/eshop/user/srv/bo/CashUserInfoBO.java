@@ -32,6 +32,8 @@ public class CashUserInfoBO {
 	 */
 	private Integer areaId;
 	
+	private String regionFullName;
+	
 	public String getName() {
 		return name;
 	}
@@ -62,6 +64,14 @@ public class CashUserInfoBO {
 
 	public void setAreaId(Integer areaId) {
 		this.areaId = areaId;
+	}
+
+	public String getRegionFullName() {
+		return regionFullName;
+	}
+
+	public void setRegionFullName(String regionFullName) {
+		this.regionFullName = regionFullName;
 	}
 
 }
