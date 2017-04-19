@@ -24,9 +24,9 @@ import java.util.Map;
 public class UploadFileUtil {
     private static Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
 
-    private static final String baseImageDir =File.separator+"usr"+File.separator+"local"+File.separator+"eshop"+File.separator+"images";
+    private static final String baseImageDir =File.separator+"usr"+File.separator+"local"+File.separator+"media"+File.separator+"images";
 
-    private static final String baseVideoDir =File.separator+"usr"+File.separator+"local"+File.separator+"eshop"+File.separator+"videos";
+    private static final String baseVideoDir =File.separator+"usr"+File.separator+"local"+File.separator+"media"+File.separator+"videos";
     /**
      * @param request
      * @param file    单个文件
