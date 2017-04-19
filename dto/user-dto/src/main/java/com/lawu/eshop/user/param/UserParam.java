@@ -61,4 +61,11 @@ public class UserParam {
         this.birthday = birthday;
     }
 
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
 }

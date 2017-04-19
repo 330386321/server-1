@@ -22,6 +22,7 @@ import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -94,10 +95,10 @@ public class MemberServiceImpl implements MemberService {
         MemberDO memberDO = MemberConverter.convertDOOther(memberParam);
         memberDO.setId(id);
         int result = memberDOMapper.updateByPrimaryKeySelective(memberDO);
-        if (!"".equals(memberDO.getNickname())) {
+        if (StringUtils.isNotEmpty(memberDO.getNickname())) {
             MemberDO old = memberDOMapper.selectByPrimaryKey(id);
             String headImg = FileDirConstant.DEFAULT_PIC;
-            if (!"".equals(old.getHeadimg())) {
+            if (StringUtils.isNotEmpty(old.getHeadimg())) {
                 headImg = old.getHeadimg();
             }
             rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headImg);

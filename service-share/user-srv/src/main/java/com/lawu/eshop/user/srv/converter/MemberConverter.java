@@ -1,10 +1,5 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.dto.EfriendDTO;
@@ -15,6 +10,10 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 会员信息转换器
@@ -129,6 +128,7 @@ public class MemberConverter {
             memberDO.setSex(userParam.getUserSexEnum().val);
         }
         memberDO.setBirthday(userParam.getBirthday());
+        memberDO.setRegionName(userParam.getRegionName());
 
         return memberDO;
     }
