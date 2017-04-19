@@ -18,7 +18,8 @@
 		<module>property-dto</module>
 		<module>user-dto</module>
 		<module>mq-dto</module>
-	</modules>
+        <module>operator-dto</module>
+    </modules>
 	<dependencies>
 
 		<dependency>
