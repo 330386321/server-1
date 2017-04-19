@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
+import com.lawu.eshop.mall.dto.ConfigDTO;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import io.swagger.annotations.Api;
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -25,6 +27,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "/")
 public class CommonController extends BaseController {
+
+    @Value(value="${image.url}")
+    private String imageUrl;
+    @Value(value="${video.url}")
+    private String videoUrl;
 
     @Autowired
     private MemberService memberService;
@@ -63,6 +70,16 @@ public class CommonController extends BaseController {
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         tokenManager.delRelationshipByToken(token);
         return successDelete();
+    }
+
+    @Audit(date = "2017-04-19", reviewer = "孙林青")
+    @ApiOperation(value = "获取配置信息", notes = "获取配置信息。（章勇）", httpMethod = "GET")
+    @RequestMapping(value = "getConfig", method = RequestMethod.GET)
+    public Result<ConfigDTO> getConfig() {
+        ConfigDTO configDTO = new ConfigDTO();
+        configDTO.setImageUrl(imageUrl);
+        configDTO.setVideoUrl(videoUrl);
+        return successCreated(configDTO);
     }
 
 }

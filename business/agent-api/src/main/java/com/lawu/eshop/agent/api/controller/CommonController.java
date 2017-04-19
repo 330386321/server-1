@@ -3,7 +3,7 @@ package com.lawu.eshop.agent.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.dto.ConfigDTO;
+import com.lawu.eshop.mall.dto.ConfigDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/")
 public class CommonController extends BaseController {
 
-    @Value(value="${swagger.api.imagePathUrl}")
-    private String imagePathUrl;
-    @Value(value="${swagger.api.videoPathUrl}")
-    private String videoPathUrl;
+    @Value(value="${image.url}")
+    private String imageUrl;
+    @Value(value="${video.url}")
+    private String videoUrl;
 
 
     @ApiOperation(value = "登录", notes = "根据账号密码登录。[2000]（孙林青）", httpMethod = "POST")
@@ -52,8 +52,8 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "getConfig", method = RequestMethod.GET)
     public Result<ConfigDTO> getConfig() {
         ConfigDTO configDTO = new ConfigDTO();
-        configDTO.setImagePathUrl(imagePathUrl);
-        configDTO.setVideoPathUrl(videoPathUrl);
+        configDTO.setImageUrl(imageUrl);
+        configDTO.setVideoUrl(videoUrl);
         return successCreated(configDTO);
     }
 }
