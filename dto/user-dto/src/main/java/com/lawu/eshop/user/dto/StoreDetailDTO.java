@@ -58,6 +58,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "已买笔数")
     private Integer buyNumbers;
 
+    @ApiModelProperty(value = "优惠信息ID")
+    private Long merchantFavoredId;
+
     public String getName() {
         return name;
     }
@@ -184,5 +187,13 @@ public class StoreDetailDTO {
 
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public Long getMerchantFavoredId() {
+        return merchantFavoredId;
+    }
+
+    public void setMerchantFavoredId(Long merchantFavoredId) {
+        this.merchantFavoredId = merchantFavoredId;
     }
 }

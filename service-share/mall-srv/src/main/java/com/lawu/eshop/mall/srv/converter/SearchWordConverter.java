@@ -59,7 +59,7 @@ public class SearchWordConverter {
      * @return
      */
     public static List<SearchWordBO> convertBO(List<SearchWordDO> searchWordDOList) {
-        if (searchWordDOList.isEmpty()) {
+        if (searchWordDOList == null || searchWordDOList.isEmpty()) {
             return null;
         }
 
@@ -82,7 +82,7 @@ public class SearchWordConverter {
      * @return
      */
     public static List<SearchWordDTO> convertDTO(List<SearchWordBO> searchWordBOList) {
-        if (searchWordBOList.isEmpty()) {
+        if (searchWordBOList == null || searchWordBOList.isEmpty()) {
             return null;
         }
 

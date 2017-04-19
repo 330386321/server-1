@@ -6,8 +6,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
-import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;
@@ -37,14 +37,16 @@ public class StoreSolrController extends BaseController {
     @RequestMapping(value = "listStore", method = RequestMethod.POST)
     public Result<Page<StoreSolrDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
         String latLon = storeSolrParam.getLatitude() + "," + storeSolrParam.getLongitude();
-        SolrQuery query = new SolrQuery();
-        query.setParam("q", "*:*");
+        StringBuffer stringBuffer = new StringBuffer("regionPath_s:");
+        stringBuffer.append(storeSolrParam.getRegionPath()).append("*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            query.setParam("q", "name_s:*" + storeSolrParam.getName() + "*");
+            stringBuffer.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
-            query.setParam("q", "industryPath_s:" + storeSolrParam.getIndustryPath() + "*");
+            stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
         }
+        SolrQuery query = new SolrQuery();
+        query.setParam("q", stringBuffer.toString());
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
             query.setParam("d", String.valueOf(storeSolrParam.getDistance()));
         } else {

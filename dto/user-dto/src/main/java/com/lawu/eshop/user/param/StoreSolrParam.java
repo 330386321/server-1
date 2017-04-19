@@ -19,7 +19,7 @@ public class StoreSolrParam extends AbstractPageParam {
     @ApiModelProperty(value = "距离(1,3,5...单位km,附近和全部为0)")
     private Integer distance;
 
-    @ApiModelProperty(value = "区域，全部为空字符串")
+    @ApiModelProperty(value = "区域", required = true)
     private String regionPath;
 
     @ApiModelProperty(value = "经度", required = true)
