@@ -11,6 +11,7 @@ import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.dto.MessageTemplateDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -132,6 +133,22 @@ public class MessageController extends BaseController {
         messageTemplateDTO.setId(templateBO.getId());
 
         return successGet(messageTemplateDTO);
+    }
+
+    /**
+     * 运营平台新增站内信息
+     *
+     * @param userNum
+     * @param messageInfoParam
+     * @return
+     */
+    @RequestMapping(value = "saveMessageOperator/{userNum}", method = RequestMethod.POST)
+    public Result saveMessageOperator(@RequestBody OperatorMessageInfoParam messageInfoParam) {
+        Integer id = messageService.saveMessageOperator(messageInfoParam);
+        if(id == 0 || id<0){
+            return successCreated(ResultCode.SAVE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
     }
 
 }

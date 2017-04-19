@@ -122,6 +122,7 @@ public class CommentController extends BaseController {
             commentListDTO.setName(product.getModel().getName());
             commentListDTO.setPrice(product.getModel().getPrice());
             commentListDTO.setFeatureImage(product.getModel().getFeatureImage());
+            commentListDTO.setSpec(product.getModel().getModelName());
             productCommentListDTOS.add(commentListDTO);
         }
         pages.setCurrentPage(param.getCurrentPage());

@@ -3,10 +3,7 @@ package com.lawu.eshop.mall.srv.service.impl;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.param.MessageInfoParam;
-import com.lawu.eshop.mall.param.MessageParam;
-import com.lawu.eshop.mall.param.MessagePushInfo;
-import com.lawu.eshop.mall.param.MessageQueryParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -144,5 +141,11 @@ public class MessageServiceImpl implements MessageService {
             return null;
         }
         return MessageConverter.coverTemplateBO(dos.get(0));
+    }
+
+    @Override
+    @Transactional
+    public Integer saveMessageOperator(OperatorMessageInfoParam messageInfoParam) {
+        return null;
     }
 }
