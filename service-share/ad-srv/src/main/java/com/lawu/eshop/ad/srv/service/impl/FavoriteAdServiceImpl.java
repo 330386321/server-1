@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.FavoriteAdDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
 
 /**
  * 广告收藏接口实现
@@ -48,8 +50,16 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		favoriteAd.setAdId(adId);
 		favoriteAd.setMemberId(memberId);
 		favoriteAd.setGmtCreate(new Date());
-		int id=favoriteAdDOMapper.insert(favoriteAd);
-		return id;
+		int row=favoriteAdDOMapper.insert(favoriteAd);
+		
+		FavoriteAdDOExample example2=new FavoriteAdDOExample();
+		example2.createCriteria().andAdIdEqualTo(adId);
+		Long attend=favoriteAdDOMapper.countByExample(example2);
+		SolrInputDocument document = new SolrInputDocument();
+		document.addField("id", adId);
+		document.addField("count_i", attend);
+	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+		return row;
 	}
 
 	/**
@@ -60,6 +70,13 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		FavoriteAdDOExample example = new FavoriteAdDOExample();
         example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
         Integer i = favoriteAdDOMapper.deleteByExample(example);
+        
+        FavoriteAdDOExample example2=new FavoriteAdDOExample();
+		example2.createCriteria().andAdIdEqualTo(adId);
+		Long attend=favoriteAdDOMapper.countByExample(example2);
+		SolrInputDocument document = new SolrInputDocument();
+		document.addField("count_i", attend-1);
+	    SolrUtil.delSolrDocsById(adId, SolrUtil.SOLR_AD_CORE);
 	}
 
 	/**
