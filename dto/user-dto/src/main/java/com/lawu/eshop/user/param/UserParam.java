@@ -26,6 +26,9 @@ public class UserParam {
     @DateTimeFormat( pattern =  "yyyy-MM-dd")
     private Date birthday;
 
+    @ApiParam(name = "regionName", value = "区域名称")
+    private String regionName;
+
     public String getNickname() {
         return nickname;
     }

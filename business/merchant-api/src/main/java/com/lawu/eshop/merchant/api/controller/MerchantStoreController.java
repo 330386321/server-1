@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,32 +109,32 @@ public class MerchantStoreController extends BaseController {
         }
 
         //判断回显照片
-        if (!"".equals(merchantStoreParam.getStoreUrl()) && !"null".equals(merchantStoreParam.getStoreUrl()) && merchantStoreParam.getStoreUrl() != null) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
             merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
         } else {
             merchantStoreParam.setStoreUrl(otherUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getEnvironmentUrl()) && !"null".equals(merchantStoreParam.getEnvironmentUrl()) && merchantStoreParam.getEnvironmentUrl() != null) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getEnvironmentUrl())) {
             merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
         } else {
             merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getLogoUrl()) && !"null".equals(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl() != null) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl())) {
             merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
         } else {
             merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getIdcardUrl()) && !"null".equals(merchantStoreParam.getIdcardUrl()) && merchantStoreParam.getIdcardUrl() != null) {
+        if (StringUtils.isNotEmpty( merchantStoreParam.getIdcardUrl())) {
             merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
         } else {
             merchantStoreParam.setIdcardUrl(idCardUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getLicenseUrl()) && !"null".equals(merchantStoreParam.getLicenseUrl()) && merchantStoreParam.getLicenseUrl() != null) {
+        if (StringUtils.isNotEmpty( merchantStoreParam.getLicenseUrl() )) {
             merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
         } else {
             merchantStoreParam.setLicenseUrl(licenseUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getOtherUrl()) && !"null".equals(merchantStoreParam.getOtherUrl()) && merchantStoreParam.getOtherUrl() != null) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getOtherUrl())) {
             merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
         } else {
             merchantStoreParam.setOtherUrl(otherUrls.toString());
@@ -200,32 +201,32 @@ public class MerchantStoreController extends BaseController {
             }
         }
         //判断回显照片
-        if (!"".equals(merchantStoreParam.getStoreUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
             merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
         } else {
             merchantStoreParam.setStoreUrl(otherUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getEnvironmentUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getEnvironmentUrl())) {
             merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
         } else {
             merchantStoreParam.setEnvironmentUrl(environmentUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getLogoUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl())) {
             merchantStoreParam.setLogoUrl(storeLogoUrls + merchantStoreParam.getLogoUrl());
         } else {
             merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getIdcardUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getIdcardUrl())) {
             merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
         } else {
             merchantStoreParam.setIdcardUrl(idCardUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getLicenseUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getLicenseUrl())) {
             merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
         } else {
             merchantStoreParam.setLicenseUrl(licenseUrls.toString());
         }
-        if (!"".equals(merchantStoreParam.getOtherUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getOtherUrl())) {
             merchantStoreParam.setOtherUrl(otherUrls + merchantStoreParam.getOtherUrl());
         } else {
             merchantStoreParam.setOtherUrl(otherUrls.toString());

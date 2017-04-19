@@ -772,6 +772,76 @@ public class MemberDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRegionNameIsNull() {
+            addCriterion("region_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameIsNotNull() {
+            addCriterion("region_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameEqualTo(String value) {
+            addCriterion("region_name =", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameNotEqualTo(String value) {
+            addCriterion("region_name <>", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameGreaterThan(String value) {
+            addCriterion("region_name >", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameGreaterThanOrEqualTo(String value) {
+            addCriterion("region_name >=", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameLessThan(String value) {
+            addCriterion("region_name <", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameLessThanOrEqualTo(String value) {
+            addCriterion("region_name <=", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameLike(String value) {
+            addCriterion("region_name like", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameNotLike(String value) {
+            addCriterion("region_name not like", value, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameIn(List<String> values) {
+            addCriterion("region_name in", values, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameNotIn(List<String> values) {
+            addCriterion("region_name not in", values, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameBetween(String value1, String value2) {
+            addCriterion("region_name between", value1, value2, "regionName");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionNameNotBetween(String value1, String value2) {
+            addCriterion("region_name not between", value1, value2, "regionName");
+            return (Criteria) this;
+        }
+
         public Criteria andSexIsNull() {
             addCriterion("sex is null");
             return (Criteria) this;
