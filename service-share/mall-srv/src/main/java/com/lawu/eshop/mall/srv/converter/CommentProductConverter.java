@@ -34,6 +34,7 @@ public class CommentProductConverter {
         commentProductBO.setProductId(commentProductDO.getProductId());
         commentProductBO.setProductModelId(commentProductDO.getProductModelId());
         commentProductBO.setGrade(commentProductDO.getGrade());
+        commentProductBO.setId(commentProductDO.getId());
         return commentProductBO;
     }
 
