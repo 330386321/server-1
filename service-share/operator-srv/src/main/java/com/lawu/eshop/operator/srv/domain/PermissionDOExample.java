@@ -325,63 +325,73 @@ public class PermissionDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdIsNull() {
-            addCriterion("role_id is null");
+        public Criteria andPermissionKeyIsNull() {
+            addCriterion("permission_key is null");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdIsNotNull() {
-            addCriterion("role_id is not null");
+        public Criteria andPermissionKeyIsNotNull() {
+            addCriterion("permission_key is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdEqualTo(Integer value) {
-            addCriterion("role_id =", value, "roleId");
+        public Criteria andPermissionKeyEqualTo(String value) {
+            addCriterion("permission_key =", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdNotEqualTo(Integer value) {
-            addCriterion("role_id <>", value, "roleId");
+        public Criteria andPermissionKeyNotEqualTo(String value) {
+            addCriterion("permission_key <>", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdGreaterThan(Integer value) {
-            addCriterion("role_id >", value, "roleId");
+        public Criteria andPermissionKeyGreaterThan(String value) {
+            addCriterion("permission_key >", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("role_id >=", value, "roleId");
+        public Criteria andPermissionKeyGreaterThanOrEqualTo(String value) {
+            addCriterion("permission_key >=", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdLessThan(Integer value) {
-            addCriterion("role_id <", value, "roleId");
+        public Criteria andPermissionKeyLessThan(String value) {
+            addCriterion("permission_key <", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdLessThanOrEqualTo(Integer value) {
-            addCriterion("role_id <=", value, "roleId");
+        public Criteria andPermissionKeyLessThanOrEqualTo(String value) {
+            addCriterion("permission_key <=", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdIn(List<Integer> values) {
-            addCriterion("role_id in", values, "roleId");
+        public Criteria andPermissionKeyLike(String value) {
+            addCriterion("permission_key like", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdNotIn(List<Integer> values) {
-            addCriterion("role_id not in", values, "roleId");
+        public Criteria andPermissionKeyNotLike(String value) {
+            addCriterion("permission_key not like", value, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdBetween(Integer value1, Integer value2) {
-            addCriterion("role_id between", value1, value2, "roleId");
+        public Criteria andPermissionKeyIn(List<String> values) {
+            addCriterion("permission_key in", values, "permissionKey");
             return (Criteria) this;
         }
 
-        public Criteria andRoleIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("role_id not between", value1, value2, "roleId");
+        public Criteria andPermissionKeyNotIn(List<String> values) {
+            addCriterion("permission_key not in", values, "permissionKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionKeyBetween(String value1, String value2) {
+            addCriterion("permission_key between", value1, value2, "permissionKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionKeyNotBetween(String value1, String value2) {
+            addCriterion("permission_key not between", value1, value2, "permissionKey");
             return (Criteria) this;
         }
 

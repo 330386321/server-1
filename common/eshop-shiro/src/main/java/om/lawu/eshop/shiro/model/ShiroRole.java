@@ -8,23 +8,23 @@ import java.util.List;
  */
 public class ShiroRole {
 
-    private String roleName;
+    private String roleKey;
 
-    private List<String> permissionsName;
+    private List<String> permissionsKey;
 
-    public String getRoleName() {
-        return roleName;
+    public String getRoleKey() {
+        return roleKey;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
+    public void setRoleKey(String roleKey) {
+        this.roleKey = roleKey;
     }
 
-    public List<String> getPermissionsName() {
-        return permissionsName;
+    public List<String> getPermissionsKey() {
+        return permissionsKey;
     }
 
-    public void setPermissionsName(List<String> permissionsName) {
-        this.permissionsName = permissionsName;
+    public void setPermissionsKey(List<String> permissionsKey) {
+        this.permissionsKey = permissionsKey;
     }
 }

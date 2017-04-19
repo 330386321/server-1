@@ -325,6 +325,76 @@ public class RoleDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRoleKeyIsNull() {
+            addCriterion("role_key is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyIsNotNull() {
+            addCriterion("role_key is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyEqualTo(String value) {
+            addCriterion("role_key =", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyNotEqualTo(String value) {
+            addCriterion("role_key <>", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyGreaterThan(String value) {
+            addCriterion("role_key >", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyGreaterThanOrEqualTo(String value) {
+            addCriterion("role_key >=", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyLessThan(String value) {
+            addCriterion("role_key <", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyLessThanOrEqualTo(String value) {
+            addCriterion("role_key <=", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyLike(String value) {
+            addCriterion("role_key like", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyNotLike(String value) {
+            addCriterion("role_key not like", value, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyIn(List<String> values) {
+            addCriterion("role_key in", values, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyNotIn(List<String> values) {
+            addCriterion("role_key not in", values, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyBetween(String value1, String value2) {
+            addCriterion("role_key between", value1, value2, "roleKey");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoleKeyNotBetween(String value1, String value2) {
+            addCriterion("role_key not between", value1, value2, "roleKey");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

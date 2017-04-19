@@ -17,7 +17,7 @@ public class ShiroUser {
 
     private List<ShiroRole> roles = new ArrayList<>();
 
-    private Set<String> rolesName = new HashSet<>();
+    private Set<String> rolesKey = new HashSet<>();
 
     public String getAccount() {
         return account;
@@ -43,11 +43,11 @@ public class ShiroUser {
         this.roles = roles;
     }
 
-    public Set<String> getRolesName() {
-        return rolesName;
+    public Set<String> getRolesKey() {
+        return rolesKey;
     }
 
-    public void setRolesName(Set<String> rolesName) {
-        this.rolesName = rolesName;
+    public void setRolesKey(Set<String> rolesKey) {
+        this.rolesKey = rolesKey;
     }
 }

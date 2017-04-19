@@ -40,14 +40,14 @@ public class AuthServiceImpl implements AuthService {
         Set<String> rolesName = new HashSet<>();
 
         ShiroRole shiroRole = new ShiroRole();
-        shiroRole.setRoleName("admin");
+        shiroRole.setRoleKey("admin");
         List<String> permissionsName = new ArrayList<>();
         permissionsName.add("user:edit");
-        shiroRole.setPermissionsName(permissionsName);
+        shiroRole.setPermissionsKey(permissionsName);
         roles.add(shiroRole);
 
         shiroUser.setRoles(roles);
-        shiroUser.setRolesName(rolesName);
+        shiroUser.setRolesKey(rolesName);
 
         return shiroUser;
     }
