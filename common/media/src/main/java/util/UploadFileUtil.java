@@ -23,6 +23,10 @@ import java.util.Map;
  */
 public class UploadFileUtil {
     private static Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
+
+    private static final String baseImageDir =File.separator+"usr"+File.separator+"local"+File.separator+"eshop"+File.separator+"images";
+
+    private static final String baseVideoDir =File.separator+"usr"+File.separator+"local"+File.separator+"eshop"+File.separator+"videos";
     /**
      * @param request
      * @param file    单个文件
@@ -34,7 +38,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String basePath = request.getServletContext().getRealPath("/");// 根路径
+        String basePath = baseImageDir;// 根路径
         String originalFilename = file.getOriginalFilename();
         if (originalFilename != null && !"".equals(originalFilename)) {
             String prefix = originalFilename.substring(originalFilename.lastIndexOf("."));
@@ -105,7 +109,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = request.getServletContext().getRealPath("/");// 根路径
+        String bashdir = baseImageDir;// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         Collection<Part> parts;
@@ -150,7 +154,7 @@ public class UploadFileUtil {
                     in.close();
 
                     //文件路径，文件类型
-                    urlImg =   dir + "/" + newfileName;
+                    urlImg =   dir + File.separator + newfileName;
 
                 }
             }
@@ -178,7 +182,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = request.getServletContext().getRealPath("/");// 根路径
+        String bashdir = baseImageDir;// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         String urlImg = "";
@@ -219,7 +223,7 @@ public class UploadFileUtil {
                 out.close();
                 in.close();
                 //文件路径，文件类型
-                urlImg =   dir + "/" + newfileName;
+                urlImg =   dir + File.separator + newfileName;
             } catch (IOException e) {
                 logger.error("上传图片失败");
             }
@@ -243,7 +247,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = request.getServletContext().getRealPath("/");// 根路径
+        String bashdir = baseImageDir;// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         Collection<Part> parts;
@@ -288,7 +292,7 @@ public class UploadFileUtil {
                     in.close();
 
                     //文件路径，文件类型
-                    urlImg = bashdir + dir + "/" + newfileName;
+                    urlImg = dir + File.separator + newfileName;
 
                 }
             }
@@ -308,7 +312,7 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put("resultFlag", "0");
-        String bashdir = request.getServletContext().getRealPath("/");// 上传文件根路径
+        String bashdir = baseVideoDir;// 上传文件根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         Collection<Part> parts;
@@ -349,7 +353,7 @@ public class UploadFileUtil {
                     in.close();
 
                     //文件路径，文件类型
-                    videoUrl =  dir + "/" + newfileName;
+                    videoUrl =  dir + File.separator + newfileName;
 
                 }
             }
