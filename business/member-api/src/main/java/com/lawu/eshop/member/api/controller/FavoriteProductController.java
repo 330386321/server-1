@@ -90,6 +90,6 @@ public class FavoriteProductController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "商品id") Long productId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
         Result rs = favoriteProductService.remove(productId,memberId);
-        return rs;
+        return successDelete();
     }
 }

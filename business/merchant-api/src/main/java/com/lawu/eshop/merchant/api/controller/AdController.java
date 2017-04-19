@@ -139,7 +139,7 @@ public class AdController extends BaseController {
 
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "DELETE")
+    @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)

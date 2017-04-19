@@ -119,7 +119,7 @@ public class AdController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@PathVariable Long id) {
     	Integer i= adService.remove(id);
  		if(i>0){

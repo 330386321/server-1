@@ -90,6 +90,6 @@ public class FavoriteAdController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "广告id") Long adId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
         Result rs = favoriteAdService.remove(adId,memberId);
-        return rs;
+        return successDelete();
     }
 }

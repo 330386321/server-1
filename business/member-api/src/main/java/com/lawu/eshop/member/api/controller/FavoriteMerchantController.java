@@ -74,7 +74,7 @@ public class FavoriteMerchantController extends BaseController{
 			      @PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result rs = favoriteMerchantService.remove(merchantId,memberId);
-		return rs;
+		return successDelete();
 	}
 
 }

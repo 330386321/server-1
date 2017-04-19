@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdSolrAddParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -52,7 +50,7 @@ public interface AdService {
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.DELETE,value = "ad/remove/{id}")
+	@RequestMapping(method = RequestMethod.PUT,value = "ad/remove/{id}")
     public Result remove(@PathVariable("id") Long id);
 	
 	/**
