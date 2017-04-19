@@ -28,7 +28,7 @@ public class EditProductParam {
 	@ApiParam(value = "商品描述", required = true)
 	private String content;
 
-	@ApiParam(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans,isDelete,salesVolume},{},...],修改时inventoryTrans透传不做修改,isDelete(0-否1-是)", required = true)
+	@ApiParam(value = "商品型号信息，json格式：[{id,name,originalPrice,price,inventory,inventoryTrans,isDelete,salesVolume},{},...],新增时id=0,inventoryTrans=0,salesVolume=0,isDelete=1，修改时inventoryTrans透传不做修改,isDelete(0-否1-是)", required = true)
 	@NotBlank(message="spec不能为空")
 	private String spec;
 	
@@ -36,22 +36,22 @@ public class EditProductParam {
 	@NotBlank(message="imageContents不能为空")
 	private String imageContents;
 	
-	@ApiParam(value = "修改时回显的特征图片url(新增时传空,格式：url1,url2,url3....)")
-	private String backFeatureImageUrls;
+//	@ApiParam(value = "新增为空，修改时回显的特征图片url(新增时传空,格式：url1,url2,url3....)")
+//	private String backFeatureImageUrls;
 	
-	@ApiParam(value = "修改时回显的滚动图片url(新增时传空,格式：url1,url2,url3....)")
+	@ApiParam(value = "新增为空，修改时回显的滚动图片url(新增时传空,格式：url1,url2,url3....)")
 	private String backProductImageUrls;
 	
-	@ApiParam(value = "修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
+	@ApiParam(value = "新增为空，修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
 	private String backProductDetailImageUrls;
 	
-	public String getBackFeatureImageUrls() {
-		return backFeatureImageUrls;
-	}
-
-	public void setBackFeatureImageUrls(String backFeatureImageUrls) {
-		this.backFeatureImageUrls = backFeatureImageUrls;
-	}
+//	public String getBackFeatureImageUrls() {
+//		return backFeatureImageUrls;
+//	}
+//
+//	public void setBackFeatureImageUrls(String backFeatureImageUrls) {
+//		this.backFeatureImageUrls = backFeatureImageUrls;
+//	}
 
 	public Integer getCategoryId() {
 		return categoryId;

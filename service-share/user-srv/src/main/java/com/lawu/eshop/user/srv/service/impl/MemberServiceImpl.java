@@ -144,7 +144,6 @@ public class MemberServiceImpl implements MemberService {
 
         List<MemberProfileDO> mpList = new ArrayList<MemberProfileDO>();
         for (MemberDO memberDO : memberDOS) {
-            MemberProfileDOExample mpExample = new MemberProfileDOExample();
             MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
             if (memberProfileDO != null)
                 mpList.add(memberProfileDO);
@@ -343,6 +342,7 @@ public class MemberServiceImpl implements MemberService {
         }
         CashUserInfoBO cashUserInfoBO = new CashUserInfoBO();
         cashUserInfoBO.setName(mdo.getName());
+        cashUserInfoBO.setRegionFullName(mdo.getRegionName());
         cashUserInfoBO.setProvinceId(Integer.valueOf(mdo.getRegionPath().split("/")[0]));
         cashUserInfoBO.setCityId(Integer.valueOf(mdo.getRegionPath().split("/")[1]));
         cashUserInfoBO.setAreaId(Integer.valueOf(mdo.getRegionPath().split("/")[2]));
