@@ -198,6 +198,7 @@ public class CommentController extends BaseController {
             commentProductDTO.setName(product.getModel().getName());
             commentProductDTO.setPrice(product.getModel().getPrice());
             commentProductDTO.setSpec(product.getModel().getModelName());
+            commentProductDTO.setFeatureImag(product.getModel().getFeatureImage());
             commentProductDTOS.add(commentProductDTO);
         }
         pages.setCurrentPage(result.getModel().getCurrentPage());

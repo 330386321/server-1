@@ -61,6 +61,8 @@ public class MerchantProductCommentListDTO {
     private Byte grade;
     @ApiModelProperty(value = "回复内容")
     private String replyContent;
+    @ApiModelProperty(value = "商品图片")
+    private String featureImag;
 
     public String getHeadImg() {
         return headImg;
@@ -156,5 +158,13 @@ public class MerchantProductCommentListDTO {
 
     public void setReplyContent(String replyContent) {
         this.replyContent = replyContent;
+    }
+
+    public String getFeatureImag() {
+        return featureImag;
+    }
+
+    public void setFeatureImag(String featureImag) {
+        this.featureImag = featureImag;
     }
 }
