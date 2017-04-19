@@ -65,7 +65,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
         // 商家店铺图片信息
         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId).andStatusEqualTo(false);
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId).andStatusEqualTo(true);
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper
                 .selectByExample(merchantStoreImageDOExample);
 
