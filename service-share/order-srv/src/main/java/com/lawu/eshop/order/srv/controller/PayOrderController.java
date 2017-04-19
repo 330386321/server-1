@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,12 +49,12 @@ public class PayOrderController extends BaseController {
         if (memberId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Long id = payOrderService.savePayOrderInfo(memberId, param);
-        if (id == null || id < 0) {
+        String orderNum = payOrderService.savePayOrderInfo(memberId, param);
+        if (StringUtils.isEmpty(orderNum)) {
             return successCreated(ResultCode.SAVE_FAIL);
         }
         PayOrderIdDTO orderIdDTO = new PayOrderIdDTO();
-        orderIdDTO.setId(id);
+        orderIdDTO.setOrderNum(orderNum);
         return successCreated(orderIdDTO);
     }
 
