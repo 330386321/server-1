@@ -395,6 +395,76 @@ public class PermissionDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPermissionUrlIsNull() {
+            addCriterion("permission_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlIsNotNull() {
+            addCriterion("permission_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlEqualTo(String value) {
+            addCriterion("permission_url =", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlNotEqualTo(String value) {
+            addCriterion("permission_url <>", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlGreaterThan(String value) {
+            addCriterion("permission_url >", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("permission_url >=", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlLessThan(String value) {
+            addCriterion("permission_url <", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlLessThanOrEqualTo(String value) {
+            addCriterion("permission_url <=", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlLike(String value) {
+            addCriterion("permission_url like", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlNotLike(String value) {
+            addCriterion("permission_url not like", value, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlIn(List<String> values) {
+            addCriterion("permission_url in", values, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlNotIn(List<String> values) {
+            addCriterion("permission_url not in", values, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlBetween(String value1, String value2) {
+            addCriterion("permission_url between", value1, value2, "permissionUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPermissionUrlNotBetween(String value1, String value2) {
+            addCriterion("permission_url not between", value1, value2, "permissionUrl");
+            return (Criteria) this;
+        }
+
         public Criteria andParentIdIsNull() {
             addCriterion("parent_id is null");
             return (Criteria) this;
