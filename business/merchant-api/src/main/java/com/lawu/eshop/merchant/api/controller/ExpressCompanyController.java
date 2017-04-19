@@ -2,7 +2,6 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 
@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 
 /**
- * @author Sunny 
+ * @author Sunny
  * @date 2017/3/27
  */
 @Api(tags = "expressCompany")
@@ -30,22 +30,30 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping(value = "expressCompany/")
 public class ExpressCompanyController extends BaseController {
 
-    @Autowired
-    private ExpressCompanyService expressCompanyService;
-    
-    /**
-     * 查询全部快递公司，根据ordinal排序。
-     * 
-     * @param token
-     * @return
-     */
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-    	return successGet(expressCompanyService.list());
-    }
-    
+	@Autowired
+	private ExpressCompanyService expressCompanyService;
+
+	/**
+	 * 查询全部快递公司，根据ordinal排序。
+	 * 
+	 * @param token
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Audit(date = "2017-04-01", reviewer = "孙林青")
+	@ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@Authorization
+	@RequestMapping(value = "list", method = RequestMethod.GET)
+	public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+
+		Result<List<ExpressCompanyDTO>> result = expressCompanyService.list();
+
+		if (!isSuccess(result)) {
+			return successGet(result.getRet());
+		}
+
+		return successGet(result);
+	}
+
 }

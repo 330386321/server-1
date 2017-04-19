@@ -15,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/3/29
  */
 @ApiModel
-public class TransactionDetailQueryParam extends AbstractPageParam implements Serializable {
+public class TransactionDetailQueryForMerchantParam extends AbstractPageParam implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	

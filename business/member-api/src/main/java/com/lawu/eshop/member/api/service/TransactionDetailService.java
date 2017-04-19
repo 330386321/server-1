@@ -5,13 +5,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
-import com.lawu.eshop.property.param.TransactionDetailQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 
 /**
  * @author Sunny
@@ -19,18 +17,17 @@ import com.lawu.eshop.property.param.TransactionDetailQueryParam;
  */
 @FeignClient(value = "property-srv")
 public interface TransactionDetailService {
-	
+
 	/**
-     * 根据用户编号和查询参数查询交易明细
-     * 
-     * @param userNo 用户编号
-     * @param transactionType 交易类型
-     * @param transactionDetailQueryParam 查询参数
-     * @return
-     */
-    @RequestMapping(value = "transactionDetail/findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
-    public Result<Page<TransactionDetailDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum, 
-    		@RequestParam(name = "transactionType", required = false) MemberTransactionTypeEnum transactionType, 
-    		@RequestBody TransactionDetailQueryParam transactionDetailQueryParam);
-	
+	 * 根据用户编号和查询参数查询交易明细
+	 * 
+	 * @param userNum
+	 *            用户编号
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "transactionDetail/findPageByUserNumForMember/{userNum}", method = RequestMethod.POST)
+	public Result<Page<TransactionDetailDTO>> findPageByUserNumForMember(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMemberParam param);
+
 }

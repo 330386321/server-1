@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 
 /**
- * @author Sunny 
+ * @author Sunny
  * @date 2017/3/30
  */
 @Api(tags = "pointDetail")
@@ -33,27 +33,32 @@ import io.swagger.annotations.ApiResponse;
 @RequestMapping(value = "pointDetail/")
 public class PointDetailController extends BaseController {
 
-    @Autowired
-    private PointDetailService pointDetailService;
-    
-    /**
-     * 根据用户编号分页获取积分明细列表。
-     * 
-     * @param token
-     * @param param
-     * @return
-     */
-    @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "获取积分明细列表", notes = "根据用户编号分页获取积分明细列表。[]（蒋鑫俊）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
-    @RequestMapping(value = "page", method = RequestMethod.GET)
-    public Result<Page<PointDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, 
-    		@ModelAttribute @ApiParam(name = "param", value = "查询资料") PointDetailQueryParam param) {
-    	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	
-    	return successGet(pointDetailService.findPageByUserNum(userNum, param));
-    }
-    
-    
+	@Autowired
+	private PointDetailService pointDetailService;
+
+	/**
+	 * 根据用户编号分页获取积分明细列表。
+	 * 
+	 * @param token
+	 * @param param
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
+	@ApiOperation(value = "获取积分明细列表", notes = "根据用户编号分页获取积分明细列表。[]（蒋鑫俊）", httpMethod = "GET")
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@Authorization
+	@RequestMapping(value = "page", method = RequestMethod.GET)
+	public Result<Page<PointDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询资料") PointDetailQueryParam param) {
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+
+		Result<Page<PointDetailDTO>> result = pointDetailService.findPageByUserNum(userNum, param);
+
+		if (!isSuccess(result)) {
+			return successGet(result.getRet());
+		}
+
+		return successGet(result);
+	}
+
 }

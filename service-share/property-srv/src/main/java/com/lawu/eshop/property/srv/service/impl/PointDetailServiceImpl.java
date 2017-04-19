@@ -31,38 +31,41 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 	@Autowired
 	private PointDetailDOMapper pointDetailDOMapper;
-	
+
 	/**
 	 * 根据用户编号、查询参数分页查询积分明细
 	 * 
-	 * @param userNo 用户编号
-	 * @param transactionDetailQueryParam 查询参数
-	 * @return 
+	 * @param userNo
+	 *            用户编号
+	 * @param pointDetailQueryParam
+	 *            查询参数
+	 * @return
 	 */
 	@Override
 	public Page<PointDetailBO> findPageByUserNum(String userNum, PointDetailQueryParam pointDetailQueryParam) {
 		PointDetailDOExample pointDetailDOExample = new PointDetailDOExample();
 		Criteria criteria = pointDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
-		
+
 		Page<PointDetailBO> page = new Page<PointDetailBO>();
 		page.setCurrentPage(pointDetailQueryParam.getCurrentPage());
 		page.setTotalCount(findCountByUserNum(userNum));
-		
+
 		// 如果返回的总记录为0，直接返回page
 		if (page.getTotalCount() == null || page.getTotalCount() <= 0) {
 			return page;
 		}
-		
+
 		pointDetailDOExample.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(pointDetailQueryParam.getOffset(), pointDetailQueryParam.getPageSize());
-		
-		List<PointDetailBO> pointDetailBOS = PointDetailConverter.convertBOS(pointDetailDOMapper.selectByExampleWithRowbounds(pointDetailDOExample, rowBounds));
-		page.setRecords(pointDetailBOS);
-		
+
+		List<PointDetailDO> list = pointDetailDOMapper.selectByExampleWithRowbounds(pointDetailDOExample, rowBounds);
+
+		page.setRecords(PointDetailConverter.convertBOS(list));
+
 		return page;
 	}
-	
+
 	/**
 	 * 根据用户编号和交易类型查询交易的总条数
 	 * 
@@ -75,7 +78,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 		PointDetailDOExample pointDetailDOExample = new PointDetailDOExample();
 		Criteria criteria = pointDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
-		
+
 		return pointDetailDOMapper.countByExample(pointDetailDOExample);
 	}
 

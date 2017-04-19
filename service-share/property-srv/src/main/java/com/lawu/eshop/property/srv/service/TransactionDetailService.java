@@ -1,7 +1,8 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.param.TransactionDetailQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 
@@ -14,24 +15,23 @@ import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 public interface TransactionDetailService {
 
 	/**
-	 * 根据用户编号、交易类型、查询参数分页查询交易明细
+	 * 根据用户编号、查询参数分页查询交易明细  - 商家
 	 * 
-	 * @param userNo 用户编号
-	 * @param transactionType 交易类型
-	 * @param transactionDetailQueryParam 查询参数
+	 * @param userNum 用户编号
+	 * @param param 查询参数
 	 * @return 
 	 */
-	Page<TransactionDetailBO> findPageByUserNum(String userNo, Byte transactionType, TransactionDetailQueryParam transactionDetailQueryParam);
+	Page<TransactionDetailBO> findPageByUserNumForMerchant(String userNum, TransactionDetailQueryForMerchantParam param);
 	
 	/**
-	 * 根据用户编号和交易类型查询交易的总条数
+	 * 根据用户编号、查询参数分页查询交易明细 - 用户
 	 * 
-	 * @param userNo
-	 * @param transactionType
-	 * @return
+	 * @param userNum 用户编号
+	 * @param param 查询参数
+	 * @return 
 	 */
-	Integer findCountByUserNum(String userNo, Byte transactionType);
-
+	Page<TransactionDetailBO> findPageByUserNumForMember(String userNum, TransactionDetailQueryForMemberParam param);
+	
 	/**
 	 * 保存交易记录表
 	 * @param param

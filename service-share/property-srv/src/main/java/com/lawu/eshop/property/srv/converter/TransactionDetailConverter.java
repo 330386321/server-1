@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
@@ -17,49 +19,57 @@ import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
  * @date 2017/3/29
  */
 public class TransactionDetailConverter {
-	
+
 	public static TransactionDetailBO convert(TransactionDetailDO transactionDetailDO) {
-		if (transactionDetailDO == null) {
-			return null;
-		}
+		TransactionDetailBO rtn = null;
 
-		TransactionDetailBO transactionDetailBO = new TransactionDetailBO();
-		BeanUtils.copyProperties(transactionDetailDO, transactionDetailBO, "direction");
-		
-		transactionDetailBO.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
-		
-		return transactionDetailBO;
-	}
-
-	public static List<TransactionDetailBO> convertBOS(List<TransactionDetailDO> transactionDetailDOS) {
-		List<TransactionDetailBO> rtn = new ArrayList<TransactionDetailBO>();
-		
-		if (transactionDetailDOS == null) {
+		if (transactionDetailDO == null || transactionDetailDO.getId() == null || transactionDetailDO.getId() <= 0) {
 			return rtn;
 		}
 
-		for (TransactionDetailDO transactionDetailDO : transactionDetailDOS) {
-			rtn.add(convert(transactionDetailDO));
+		rtn = new TransactionDetailBO();
+		BeanUtils.copyProperties(transactionDetailDO, rtn, "direction", "transactionAccountType");
+
+		rtn.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
+		rtn.setTransactionAccountType(TransactionPayTypeEnum.getEnum(transactionDetailDO.getTransactionType()));
+
+		return rtn;
+	}
+
+	public static List<TransactionDetailBO> convertBOS(List<TransactionDetailDO> transactionDetailDOS) {
+		List<TransactionDetailBO> rtn = null;
+
+		if (transactionDetailDOS == null || transactionDetailDOS.isEmpty()) {
+			return rtn;
+		}
+
+		rtn = new ArrayList<TransactionDetailBO>();
+		for (TransactionDetailDO item : transactionDetailDOS) {
+			rtn.add(convert(item));
 		}
 
 		return rtn;
 	}
-	
+
 	public static TransactionDetailDTO convert(TransactionDetailBO transactionDetailBO) {
+		TransactionDetailDTO rtn = null;
+
 		if (transactionDetailBO == null) {
-			return null;
+			return rtn;
 		}
 
-		TransactionDetailDTO transactionDetailDTO = new TransactionDetailDTO();
-		BeanUtils.copyProperties(transactionDetailBO, transactionDetailDTO);
+		rtn = new TransactionDetailDTO();
+		BeanUtils.copyProperties(transactionDetailBO, rtn);
 
-		return transactionDetailDTO;
+		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
+
+		return rtn;
 	}
-	
+
 	public static List<TransactionDetailDTO> convertDTOS(List<TransactionDetailBO> transactionDetailBOS) {
 		List<TransactionDetailDTO> rtn = new ArrayList<TransactionDetailDTO>();
-		
-		if (transactionDetailBOS == null) {
+
+		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
 			return rtn;
 		}
 
@@ -67,6 +77,14 @@ public class TransactionDetailConverter {
 			rtn.add(convert(transactionDetailBO));
 		}
 
+		return rtn;
+	}
+
+	public static Page<TransactionDetailDTO> convertDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+		Page<TransactionDetailDTO> rtn = new Page<TransactionDetailDTO>();
+		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+		rtn.setRecords(convertDTOS(transactionDetailBOPage.getRecords()));
 		return rtn;
 	}
 

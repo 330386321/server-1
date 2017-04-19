@@ -1,5 +1,12 @@
 package com.lawu.eshop.member.api.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -9,13 +16,13 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Sunny 
@@ -29,7 +36,7 @@ public class PropertyInfoController extends BaseController {
     @Autowired
     private PropertyInfoService propertyInfoService;
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
     @ApiOperation(value = "获取资产余额", notes = "根据用户编号获取资产余额。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -37,7 +44,13 @@ public class PropertyInfoController extends BaseController {
     @RequestMapping(value = "balance", method = RequestMethod.GET)
     public Result<PropertyBalanceDTO> getPropertyBalance(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	return successGet(propertyInfoService.getPropertyBalance(userNum));
+    	
+    	Result<PropertyBalanceDTO> result = propertyInfoService.getPropertyBalance(userNum);
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+    	
+    	return successGet(result);
     }
     
     /**
@@ -54,7 +67,13 @@ public class PropertyInfoController extends BaseController {
     @RequestMapping(value = "point", method = RequestMethod.GET)
     public Result<PropertyPointDTO> getPropertyPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	return successGet(propertyInfoService.getPropertyPoint(userNum));
+    	
+    	Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+    	
+    	return successGet(result);
     }
 
     @SuppressWarnings("unchecked")
@@ -62,7 +81,7 @@ public class PropertyInfoController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getPropertyInfoMoney", method = RequestMethod.GET)
-    public Result<PropertyBalanceDTO> getPropertyInfoMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyInfoMoney(userNum));
     }
