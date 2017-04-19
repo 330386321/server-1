@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
@@ -20,10 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,7 +47,8 @@ public class MerchantDetailController extends BaseController {
     @ApiOperation(value = "会员查看商家门店详情", notes = "会员查看商家门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "store/{id}", method = RequestMethod.GET)
-    public Result<StoreDetailDTO> storeDetail(@PathVariable @ApiParam(required = true, value = "门店ID") Long id) {
+    public Result<StoreDetailDTO> storeDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                              @PathVariable @ApiParam(required = true, value = "门店ID") Long id) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<StoreDetailDTO> stoResult = merchantStoreService.getStoreDetailById(id, memberId);
         if (!isSuccess(stoResult)) {

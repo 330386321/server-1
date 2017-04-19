@@ -219,6 +219,7 @@ public class MerchantStoreController extends BaseController {
      * 根据门店ID查询门店详细信息
      *
      * @param id
+     * @param memberId
      * @return
      */
     @RequestMapping(value = "storeDetail/{id}", method = RequestMethod.GET)

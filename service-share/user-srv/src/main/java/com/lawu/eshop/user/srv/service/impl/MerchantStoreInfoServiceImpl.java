@@ -441,17 +441,13 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         storeDetailBO.setPicCount(picCount);
 
         //查询是否被收藏
-        if (memberId > 0) {
-            FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-            favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
-            List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
-            if (favoriteMerchantDOS.isEmpty()) {
-                storeDetailBO.setFavorite(false);
-            } else {
-                storeDetailBO.setFavorite(true);
-            }
-        } else {
+        FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
+        favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
+        if (favoriteMerchantDOS.isEmpty()) {
             storeDetailBO.setFavorite(false);
+        } else {
+            storeDetailBO.setFavorite(true);
         }
         return storeDetailBO;
     }
