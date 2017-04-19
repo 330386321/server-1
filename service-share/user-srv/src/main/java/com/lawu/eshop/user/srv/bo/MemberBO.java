@@ -55,6 +55,8 @@ public class MemberBO {
 
     private String ryToken;
 
+    private String regionName;
+
     public UserSexEnum getUserSex() {
         return userSex;
     }
@@ -225,5 +227,13 @@ public class MemberBO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

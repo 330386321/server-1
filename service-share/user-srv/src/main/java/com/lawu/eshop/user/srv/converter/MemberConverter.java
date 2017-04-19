@@ -50,6 +50,7 @@ public class MemberConverter {
         memberBO.setNickname(memberDO.getNickname());
         memberBO.setGtCid(memberDO.getGtCid());
         memberBO.setRyToken(memberDO.getRyToken());
+        memberBO.setRegionName(memberDO.getRegionName());
         return memberBO;
     }
 
@@ -107,6 +108,7 @@ public class MemberConverter {
         userDTO.setLevel(memberBO.getLevel());
         userDTO.setGtCid(memberBO.getGtCid());
         userDTO.setRyToken(memberBO.getRyToken());
+        userDTO.setRegionName(memberBO.getRegionName());
         return userDTO;
     }
 

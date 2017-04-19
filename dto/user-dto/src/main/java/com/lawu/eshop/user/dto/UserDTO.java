@@ -23,6 +23,8 @@ public class UserDTO {
 
     @ApiModelProperty(name = "regionPath",value = "地区路径")
     private String regionPath;
+    @ApiModelProperty(name = "regionName",value = "地区名称")
+    private String regionName;
 
     @ApiModelProperty(name = "birthday",value = "生日")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
@@ -121,5 +123,13 @@ public class UserDTO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

@@ -18,6 +18,8 @@ public class UserParam {
     @ApiParam(name = "regionPath", value = "地区路径")
     private String regionPath;
 
+    @ApiParam(name = "regionName", value = "区域名称")
+    private String regionName;
 
     @ApiParam(name = "sex", value = "性别", required = true)
     private UserSexEnum userSexEnum;
@@ -26,8 +28,7 @@ public class UserParam {
     @DateTimeFormat( pattern =  "yyyy-MM-dd")
     private Date birthday;
 
-    @ApiParam(name = "regionName", value = "区域名称")
-    private String regionName;
+
 
     public String getNickname() {
         return nickname;
