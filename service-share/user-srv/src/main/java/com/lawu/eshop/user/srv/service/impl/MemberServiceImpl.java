@@ -259,7 +259,7 @@ public class MemberServiceImpl implements MemberService {
                         memberDO = new MemberDO();
                         memberDO.setLevel(level);
                         memberDO.setId(inviterInviteId);
-                        memberDOMapper.updateByPrimaryKey(memberDO);
+                        memberDOMapper.updateByPrimaryKeySelective(memberDO);
 
                         //查询推荐的一级会员总人数
                         inviteRelationDOExample = new InviteRelationDOExample();
@@ -301,17 +301,17 @@ public class MemberServiceImpl implements MemberService {
                         merchantDO.setLevel(level);
                         MerchantDOExample merchantDOExample = new MerchantDOExample();
                         merchantDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
-                        merchantDOMapper.updateByExample(merchantDO, merchantDOExample);
+                        merchantDOMapper.updateByExampleSelective(merchantDO, merchantDOExample);
                     }
                 }
             }
         }
         //获取ryToken
-        TokenResult tokenResult = rongUserService.getRongToken(memberDO.getNum(), "E店会员", FileDirConstant.DEFAULT_PIC);
-        if (!"".equals(tokenResult.getToken())) {
+        TokenResult tokenResult = rongUserService.getRongToken(userNum, "E店会员", FileDirConstant.DEFAULT_PIC);
+        if (StringUtils.isNotEmpty(tokenResult.getToken())) {
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());
-            memberDO2.setId(memberDO.getId());
+            memberDO2.setId(memberId);
             memberDOMapper.updateByPrimaryKeySelective(memberDO2);
         }
         transactionMainService.sendNotice(memberId);

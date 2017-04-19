@@ -144,7 +144,7 @@ public class MerchantServiceImpl implements MerchantService {
         if (inviterId > 0) {
             //查询推荐人推荐关系
             InviteRelationDOExample inviteRelationDOExample = new InviteRelationDOExample();
-            inviteRelationDOExample.createCriteria().andInviteUserNumEqualTo(userNum);
+            inviteRelationDOExample.createCriteria().andInviteUserNumEqualTo(registerRealParam.getUserNum());
             List<InviteRelationDO> inviteRelationDOS = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
             if (!inviteRelationDOS.isEmpty()) {
                 //更新推荐关系
@@ -184,7 +184,7 @@ public class MerchantServiceImpl implements MerchantService {
                         memberDO.setLevel(level);
                         MemberDOExample memberDOExample = new MemberDOExample();
                         memberDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
-                        memberDOMapper.updateByExample(memberDO, memberDOExample);
+                        memberDOMapper.updateByExampleSelective(memberDO, memberDOExample);
                     } else {
                         MerchantDOExample merchantDOExample = new MerchantDOExample();
                         merchantDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
@@ -235,11 +235,11 @@ public class MerchantServiceImpl implements MerchantService {
             }
         }
         //获取融云token
-        TokenResult tokenResult = rongMerchantService.getRongToken(merchantDO.getNum(), "E店商家", FileDirConstant.DEFAULT_PIC);
+        TokenResult tokenResult = rongMerchantService.getRongToken(userNum, "E店商家", FileDirConstant.DEFAULT_PIC);
         if (StringUtils.isNotEmpty(tokenResult.getToken())) {
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());
-            memberDO2.setId(merchantDO.getId());
+            memberDO2.setId(merchantId);
             memberDOMapper.updateByPrimaryKeySelective(memberDO2);
         }
         transactionMainService.sendNotice(merchantId);
