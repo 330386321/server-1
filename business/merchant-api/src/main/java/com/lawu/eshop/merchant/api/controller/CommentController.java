@@ -158,6 +158,7 @@ public class CommentController extends BaseController {
             Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentProductIdDTO.getProductModelId());
             commentProductInfoDTO.setName(product.getModel().getName());
             commentProductInfoDTO.setImgUrl(product.getModel().getFeatureImage());
+            commentProductInfoDTO.setProductId(commentProductIdDTO.getProductId());
             commentProductInfoDTOS.add(commentProductInfoDTO);
         }
         pages.setTotalCount(productIds.getModel().getTotalCount());
