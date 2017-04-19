@@ -56,5 +56,7 @@ public interface MessageService {
 
     MessageTemplateBO getTemplateByType(MessageTypeEnum typeEnum);
 
-    Integer saveMessageOperator(OperatorMessageInfoParam messageInfoParam);
+    Integer saveMessageOperator(String userNum ,OperatorMessageInfoParam messageInfoParam);
+
+    Long saveMessageToAll(OperatorMessageInfoParam messageInfoParam);
 }

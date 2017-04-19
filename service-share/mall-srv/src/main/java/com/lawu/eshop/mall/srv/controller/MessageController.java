@@ -136,15 +136,29 @@ public class MessageController extends BaseController {
     }
 
     /**
-     * 运营平台新增站内信息
+     * 运营平台新增站内信息-单个用户
      *
      * @param userNum
      * @param messageInfoParam
      * @return
      */
     @RequestMapping(value = "saveMessageOperator/{userNum}", method = RequestMethod.POST)
-    public Result saveMessageOperator(@RequestBody OperatorMessageInfoParam messageInfoParam) {
-        Integer id = messageService.saveMessageOperator(messageInfoParam);
+    public Result saveMessageOperator(@PathVariable("userNum") String userNum,@RequestBody OperatorMessageInfoParam messageInfoParam) {
+        Integer id = messageService.saveMessageOperator(userNum,messageInfoParam);
+        if(id == 0 || id<0){
+            return successCreated(ResultCode.SAVE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 运营平台给一类用户推送消息
+     * @param messageInfoParam
+     * @return
+     */
+    @RequestMapping(value = "saveMessageToAll", method = RequestMethod.POST)
+    public Result saveMessageToAll(@RequestBody OperatorMessageInfoParam messageInfoParam){
+        Long id = messageService.saveMessageToAll(messageInfoParam);
         if(id == 0 || id<0){
             return successCreated(ResultCode.SAVE_FAIL);
         }

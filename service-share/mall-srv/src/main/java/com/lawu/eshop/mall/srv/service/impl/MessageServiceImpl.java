@@ -145,7 +145,28 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public Integer saveMessageOperator(OperatorMessageInfoParam messageInfoParam) {
+    public Integer saveMessageOperator(String userNum,OperatorMessageInfoParam messageInfoParam) {
+        MessageDO messageDO = new MessageDO();
+        messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
+        messageDO.setUserNum(userNum);
+        messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+        messageDO.setContent(messageInfoParam.getContent());
+        messageDO.setGmtCreate(new Date());
+        messageDO.setGmtModified(new Date());
+       int row =  messageDOMapper.insert(messageDO);
+        //发送推送
+        MessagePushInfo pushInfo = new MessagePushInfo();
+        pushInfo.setTitle(messageInfoParam.getTitle());
+        pushInfo.setContent(messageInfoParam.getContent());
+        pushInfo.setMessageId(messageDO.getId());
+        pushInfo.setUserNum(messageDO.getUserNum());
+        messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH,pushInfo);
+        return row;
+    }
+
+    @Override
+    public Long saveMessageToAll(OperatorMessageInfoParam messageInfoParam) {
+        //TODO 批量查询新增站内消息
         return null;
     }
 }
