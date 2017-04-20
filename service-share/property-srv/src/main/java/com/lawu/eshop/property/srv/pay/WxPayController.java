@@ -133,16 +133,16 @@ public class WxPayController extends BaseController {
 					packageParams.clear();
 					if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
 						packageParams.put("appid", Configure.appID_member);
-						packageParams.put("mch_id", Configure.mchID_member);
+						packageParams.put("partnerid", Configure.mchID_member);
 					} else if (UserTypeEnum.MEMCHANT.val == param.getUserTypeEnum().val) {
 						packageParams.put("appid", Configure.appID_business);
-						packageParams.put("mch_id", Configure.mchID_business);
+						packageParams.put("partnerid", Configure.mchID_business);
 					}
 					packageParams.put("prepayid", prepay_id);
 					packageParams.put("package", "Sign=WXPay");
 					packageParams.put("noncestr", RandomStringGenerator.getRandomStringByLength(32));
-					packageParams.put("timestamp", DateUtil.getDateTime());
-					sign = PayCommonUtil.createSign("UTF-8", packageParams, Configure.key_app);
+					packageParams.put("timestamp", String.valueOf(System.currentTimeMillis()));
+					sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
 					packageParams.put("sign", sign);
 				}
 

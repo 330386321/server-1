@@ -2,6 +2,8 @@ package com.lawu.eshop.product.dto;
 
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * 商品列表查询，封装的DTO
  *
@@ -10,18 +12,34 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
  */
 public class ProductQueryDTO {
 
+	@ApiModelProperty(value = "商品ID", required = true)
     private Long id;
 	
+	@ApiModelProperty(value = "分类名称(PC)", required = true)
     private String category;
 	
+	@ApiModelProperty(value = "商品名称", required = true)
     private String name;
 	
+	@ApiModelProperty(value = "商品状态", required = true)
     private ProductStatusEnum status;
+    
+	@ApiModelProperty(value = "库存", required = true)
+    private String totalInventory;
+    
+	@ApiModelProperty(value = "销量", required = true)
+    private String totalSalesVolume;
+    
+	@ApiModelProperty(value = "收藏", required = true)
+    private String totalFavorite;
 	
+	@ApiModelProperty(value = "创建时间", required = true)
     private String gmtCreate;
 	
+	@ApiModelProperty(value = "封面图片", required = true)
     private String featureImage;
 	
+	@ApiModelProperty(value = "商品型号(PC)", required = true)
     private String spec;
 	
 	public Long getId() {
@@ -66,4 +84,23 @@ public class ProductQueryDTO {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
+	public String getTotalInventory() {
+		return totalInventory;
+	}
+	public void setTotalInventory(String totalInventory) {
+		this.totalInventory = totalInventory;
+	}
+	public String getTotalSalesVolume() {
+		return totalSalesVolume;
+	}
+	public void setTotalSalesVolume(String totalSalesVolume) {
+		this.totalSalesVolume = totalSalesVolume;
+	}
+	public String getTotalFavorite() {
+		return totalFavorite;
+	}
+	public void setTotalFavorite(String totalFavorite) {
+		this.totalFavorite = totalFavorite;
+	}
+	
 }

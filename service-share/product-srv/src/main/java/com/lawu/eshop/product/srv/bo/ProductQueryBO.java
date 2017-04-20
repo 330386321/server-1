@@ -15,6 +15,9 @@ public class ProductQueryBO {
     private String name;
     private ProductStatusEnum status;
     private String gmtCreate;
+    private String totalInventory;
+    private String totalSalesVolume;
+    private String totalFavorite;
     private String featureImage;
     private String spec;
 	public Long getId() {
@@ -58,6 +61,24 @@ public class ProductQueryBO {
 	}
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
+	}
+	public String getTotalInventory() {
+		return totalInventory;
+	}
+	public void setTotalInventory(String totalInventory) {
+		this.totalInventory = totalInventory;
+	}
+	public String getTotalSalesVolume() {
+		return totalSalesVolume;
+	}
+	public void setTotalSalesVolume(String totalSalesVolume) {
+		this.totalSalesVolume = totalSalesVolume;
+	}
+	public String getTotalFavorite() {
+		return totalFavorite;
+	}
+	public void setTotalFavorite(String totalFavorite) {
+		this.totalFavorite = totalFavorite;
 	}
     
 }

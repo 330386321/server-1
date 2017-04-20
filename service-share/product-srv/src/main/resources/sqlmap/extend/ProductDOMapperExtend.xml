@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend">
+
+	<update id="editTotalInventory"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductNumsView">
+		update product set
+		<if test='flag == "M"'>
+			total_inventory = total_inventory -
+			#{num,jdbcType=INTEGER},
+		</if>
+		<if test='flag == "A"'>
+			total_inventory = total_inventory +
+			#{num,jdbcType=INTEGER},
+		</if>
+		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+		where id =
+		#{productId,jdbcType=BIGINT}
+	</update>
+	<update id="editTotalSaleVolume"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductNumsView">
+		update product set
+		<if test='flag == "M"'>
+			total_sales_volume = total_sales_volume -
+			#{num,jdbcType=INTEGER},
+		</if>
+		<if test='flag == "A"'>
+			total_sales_volume = total_sales_volume +
+			#{num,jdbcType=INTEGER},
+		</if>
+		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+		where id =
+		#{productId,jdbcType=BIGINT}
+	</update>
+	<update id="editTotalFavorite"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductNumsView">
+		update product set
+		<if test='flag == "M"'>
+			total_favorite = total_favorite -
+			#{num,jdbcType=INTEGER},
+		</if>
+		<if test='flag == "A"'>
+			total_favorite = total_favorite +
+			#{num,jdbcType=INTEGER},
+		</if>
+		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+		where id =
+		#{productId,jdbcType=BIGINT}
+	</update>
+</mapper>

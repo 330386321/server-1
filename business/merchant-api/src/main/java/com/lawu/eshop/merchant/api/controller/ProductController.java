@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,6 +77,7 @@ public class ProductController extends BaseController {
 		queryData.setName(query.getName());
 		queryData.setProductSortFieldEnum(query.getProductSortFieldEnum());
 		queryData.setOrderType(query.getOrderType());
+		queryData.setApp(query.isApp());
 		Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);
 		return successCreated(page);
 	}
@@ -105,18 +106,19 @@ public class ProductController extends BaseController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
-	@RequestMapping(value = "saveProduct/{productId}", method = RequestMethod.POST)
+	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
 	public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "商品ID(新增时传0)") Long productId,
 			@ModelAttribute @ApiParam EditProductParam product) throws IOException, ServletException {
 
 		HttpServletRequest request = getRequest();
+		Long productId = product.getProductId();
 		if ((productId == null || productId == 0L || productId < 0)
 				&& (request.getParts() == null || request.getParts().isEmpty() || request.getParts().size() < 1)) {
 			return successCreated(ResultCode.IMAGE_IS_NULL);
 		}
 
 		String imageContents = product.getImageContents();
+		imageContents = URLDecoder.decode(imageContents);
 		List<Object> imageContentsList = JSONArray.parseArray(imageContents, Object.class);
 		if (imageContentsList == null || imageContentsList.isEmpty() || imageContentsList.size() < 1) {
 			return successCreated(ResultCode.FAIL, "商品详情图片描述不能为空");
@@ -218,16 +220,19 @@ public class ProductController extends BaseController {
 		productImage = productImage.substring(0, productImage.lastIndexOf(","));
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
+		dataProduct.setProductId(productId);
 		dataProduct.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 		dataProduct.setName(product.getName());
 		dataProduct.setCategoryId(product.getCategoryId());
 		dataProduct.setContent(product.getContent());
-		dataProduct.setSpec(product.getSpec());
+		dataProduct.setSpec(URLDecoder.decode(product.getSpec()));
+		dataProduct.setImageContents(imageContents);
 		dataProduct.setFeatureImage(featureImage);
 		dataProduct.setProductImages(productImage);
 		dataProduct.setDetailImageMap(detailImageMap);
+		dataProduct.setIsAllowRefund(product.getIsAllowRefund());
 
-		return productService.saveProduct(productId, dataProduct);
+		return productService.saveProduct(dataProduct);
 
 	}
 

@@ -33,15 +33,18 @@ import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
 import com.lawu.eshop.product.srv.domain.ProductImageDO;
 import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
 import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
+import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
+import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
@@ -65,14 +68,21 @@ public class ProductServiceImpl implements ProductService {
 	private ProductCategoryService productCategoryService;
 	
 	@Autowired
+	private ProductDOMapperExtend productDOMapperExtend;
+	
+	@Autowired
 	@Qualifier("delProductCommentTransactionMainServiceImpl")
 	private TransactionMainService<Reply> delProductCommentTransactionMainServiceImpl;
 
 	@Override
 	public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
 		ProductDOExample example = new ProductDOExample();
-		example.createCriteria().andMerchantIdEqualTo(query.getMerchantId()).andNameLike("%" + query.getName() + "%")
+		Criteria criteria = example.createCriteria();
+		criteria.andMerchantIdEqualTo(query.getMerchantId())
 				.andStatusEqualTo(query.getProductStatus().val);
+		if(query.getName() != null  && !"".equals(query.getName())){
+			criteria.andNameLike("%" + query.getName() + "%");
+		}
 		example.setOrderByClause(query.getProductSortFieldEnum().val + " " + query.getOrderType());
 
 		// 查询总数
@@ -87,21 +97,24 @@ public class ProductServiceImpl implements ProductService {
 		ProductModelDOExample modelExample = null;
 		for (ProductDO productDO : productDOS) {
 
-			modelExample = new ProductModelDOExample();
-			modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
-			// 查询商品型号
-			List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
-			List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
-			for (ProductModelDO productModelDO : productModelDOS) {
-				ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
-				ProductModelBOS.add(productModelBO);
+			String specJson = "";
+			String category = "";
+			if(query.isApp()){
+				modelExample = new ProductModelDOExample();
+				modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
+				// 查询商品型号
+				List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
+				List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
+				for (ProductModelDO productModelDO : productModelDOS) {
+					ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
+					ProductModelBOS.add(productModelBO);
+				}
+				specJson = JSON.toJSONString(ProductModelBOS);
+				category = productCategoryService.getFullName(productDO.getCategoryId());
 			}
-			String specJson = JSON.toJSONString(ProductModelBOS);
-
 			ProductQueryBO productBO = ProductConverter.convertQueryBO(productDO);
 			productBO.setSpec(specJson);
-
-			String category = productCategoryService.getFullName(productDO.getCategoryId());
+			
 			productBO.setCategory(category);
 
 			productBOS.add(productBO);
@@ -302,8 +315,9 @@ public class ProductServiceImpl implements ProductService {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@Transactional
-	public void eidtProduct(Long productId, EditProductDataParam param) {
+	public void eidtProduct(EditProductDataParam param) {
 
+		Long productId = param.getProductId();
 		int inventory = 0;
 		int salesVolume = 0;
 		double originalPrice = 0;
@@ -440,6 +454,7 @@ public class ProductServiceImpl implements ProductService {
 			pcDO.setImagePath(imageUrls[i]);
 			pcDO.setGmtCreate(new Date());
 			pcDO.setGmtModified(new Date());
+			pcDO.setSortid(0);
 			pcDO.setStatus(true);
 			pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
 			productImageDOMapper.insert(pcDO);
@@ -471,6 +486,38 @@ public class ProductServiceImpl implements ProductService {
 		document.addField("inventory_i", inventory);
 		document.addField("salesVolume_i", salesVolume);
 		SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+	}
+
+	@Override
+	public void editTotalInventory(Long productId, int num, String flag) {
+		ProductNumsView view = new ProductNumsView();
+		view.setProductId(productId);
+		view.setFlag(flag);
+		view.setNum(num);
+		view.setGmtModified(new Date());
+		productDOMapperExtend.editTotalInventory(view);		
+	}
+
+	@Override
+	public void editTotalSaleVolume(Long productId, int num, String flag) {
+		ProductNumsView view = new ProductNumsView();
+		view.setProductId(productId);
+		view.setFlag(flag);
+		view.setNum(num);
+		view.setGmtModified(new Date());
+		productDOMapperExtend.editTotalSaleVolume(view);	
+		
+	}
+
+	@Override
+	public void editTotalFavorite(Long productId, int num, String flag) {
+		ProductNumsView view = new ProductNumsView();
+		view.setProductId(productId);
+		view.setFlag(flag);
+		view.setNum(num);
+		view.setGmtModified(new Date());
+		productDOMapperExtend.editTotalFavorite(view);	
+		
 	}
 
 }

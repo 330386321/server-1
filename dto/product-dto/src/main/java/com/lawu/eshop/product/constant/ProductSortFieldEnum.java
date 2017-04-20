@@ -12,7 +12,8 @@ package com.lawu.eshop.product.constant;
 public enum ProductSortFieldEnum {
 	
 	TOTAL_INVENTORY("total_inventory"),		//库存
-	TOTAL_SALES_VOLUME("total_sales_volume");	//销量
+	TOTAL_SALES_VOLUME("total_sales_volume"),//销量
+	CDATE("gmt_create");			//创建时间
 	
 	public String val;
 	ProductSortFieldEnum(String val){

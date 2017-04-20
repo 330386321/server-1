@@ -22,6 +22,7 @@ import com.lawu.eshop.product.srv.mapper.FavoriteProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.FavoriteProductService;
+import com.lawu.eshop.product.srv.service.ProductService;
 
 /**
  * 收藏商品接口实现类
@@ -40,6 +41,9 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 	
 	@Autowired
 	private ProductModelDOMapper productModelDOMapper;
+	
+	@Autowired
+	private ProductService productService;
 
 	@Override
 	@Transactional
@@ -55,6 +59,9 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 		favoriteProductDO.setProductId(productId);
 		favoriteProductDO.setGmtCreate(new Date());
 		Integer id=favoriteProductDOMapper.insert(favoriteProductDO);
+		
+		productService.editTotalFavorite(productId, 1, "A");
+		
 		return id;
 	}
 
@@ -64,6 +71,9 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 		FavoriteProductDOExample example = new FavoriteProductDOExample();
         example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
         Integer i = favoriteProductDOMapper.deleteByExample(example);
+        
+        productService.editTotalFavorite(productId, 1, "M");
+        
 		return i;
 	}
 

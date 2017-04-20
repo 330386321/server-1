@@ -18,6 +18,9 @@ import io.swagger.annotations.ApiParam;
  */
 public class ProductQuery extends AbstractPageParam{
 	
+	@ApiParam(value = "是否是app调用", required = false)
+	private boolean isApp;
+	
 	@ApiParam(value = "商品名称", required = false)
 	private String name;
 	
@@ -53,6 +56,12 @@ public class ProductQuery extends AbstractPageParam{
 	}
 	public void setProductStatus(ProductStatusEnum productStatus) {
 		this.productStatus = productStatus;
+	}
+	public boolean isApp() {
+		return isApp;
+	}
+	public void setApp(boolean isApp) {
+		this.isApp = isApp;
 	}
 	
 }

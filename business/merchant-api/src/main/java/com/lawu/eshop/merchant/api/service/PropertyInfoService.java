@@ -1,11 +1,17 @@
 package com.lawu.eshop.merchant.api.service;
 
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -106,7 +112,6 @@ public interface PropertyInfoService {
      * @param userNum
      * @return
      */
-    @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "propertyInfo/getPropertyInfoMoney/{userNum}", method = RequestMethod.GET)
-	Result getPropertyInfoMoney(@PathVariable("userNum") String userNum);
+	Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum);
 }

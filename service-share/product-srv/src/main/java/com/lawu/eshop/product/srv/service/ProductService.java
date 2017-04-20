@@ -53,6 +53,29 @@ public interface ProductService {
      * @param productId 商品ID
      * @param product
      */
-    void eidtProduct(Long productId, EditProductDataParam product);
+    void eidtProduct(EditProductDataParam product);
 
+    /**
+     * 操作库存
+     * @param productId
+     * @param num	加减数量数量
+     * @param flag	M-减、A-加
+     */
+    void editTotalInventory(Long productId,int num,String flag);
+    
+    /**
+     * 操作销量
+     * @param productId
+     * @param num	加减数量数量
+     * @param flag	M-减、A-加
+     */
+    void editTotalSaleVolume(Long productId,int num,String flag);
+    
+    /**
+     * 操作收藏
+     * @param productId
+     * @param num	加减数量数量
+     * @param flag	M-减、A-加
+     */
+    void editTotalFavorite(Long productId,int num,String flag);
 }

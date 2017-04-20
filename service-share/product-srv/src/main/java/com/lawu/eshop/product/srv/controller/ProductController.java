@@ -132,7 +132,7 @@ public class ProductController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
-	public Result saveProduct(@RequestParam Long productId, @RequestBody @Valid EditProductDataParam product,
+	public Result saveProduct(@RequestBody @Valid EditProductDataParam product,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
@@ -143,8 +143,33 @@ public class ProductController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		productService.eidtProduct(productId, product);
+		productService.eidtProduct(product);
+		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	/**
+     * 操作库存
+     * @param productId
+     * @param num	加减数量数量
+     * @param flag	M-减、A-加
+     */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "editTotalInventory", method = RequestMethod.POST)
+	public Result editTotalInventory(@RequestParam Long productId,@RequestParam int num,@RequestParam String flag) {
+		productService.editTotalInventory(productId,num,flag);
 		return successCreated(ResultCode.SUCCESS);
 	}
 
+	/**
+     * 操作销量
+     * @param productId
+     * @param num	加减数量数量
+     * @param flag	M-减、A-加
+     */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "editTotalSaleVolume", method = RequestMethod.POST)
+	public Result editTotalSaleVolume(@RequestParam Long productId,@RequestParam int num,@RequestParam String flag) {
+		productService.editTotalSaleVolume(productId,num,flag);
+		return successCreated(ResultCode.SUCCESS);
+	}
 }

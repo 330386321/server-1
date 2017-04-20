@@ -64,8 +64,11 @@ public class ProductConverter {
         productBO.setId(productDO.getId());
         productBO.setName(productDO.getName());
         productBO.setFeatureImage(productDO.getFeatureImage());
-        productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd HH:mm:ss"));
+        productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd"));
         productBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+        productBO.setTotalInventory(productDO.getTotalInventory() == null ? "0" : productDO.getTotalInventory().toString());
+        productBO.setTotalSalesVolume(productDO.getTotalSalesVolume() == null ? "0" : productDO.getTotalSalesVolume().toString());
+        productBO.setTotalFavorite(productDO.getTotalFavorite() == null ? "0" : productDO.getTotalFavorite().toString());
         return productBO;
     }
 
@@ -170,6 +173,8 @@ public class ProductConverter {
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
+        productDO.setImageContent(param.getImageContents());
+        productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
         	productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());

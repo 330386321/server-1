@@ -51,7 +51,7 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "product/saveProduct")
-	Result saveProduct(@RequestParam("productId") Long productId,@RequestBody EditProductDataParam product);
+	Result saveProduct(@RequestBody EditProductDataParam product);
 
     /**
      * 根据商品ID查询商品详情信息

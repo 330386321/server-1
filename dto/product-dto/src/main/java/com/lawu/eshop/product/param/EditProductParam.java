@@ -16,6 +16,10 @@ import io.swagger.annotations.ApiParam;
  *
  */
 public class EditProductParam {
+	
+	@ApiParam(value = "商品ID(新增时传0)", required = true)
+	@NotNull(message="productId不能为空(新增时传0)")
+	private Long productId;
 
 	@ApiParam(value = "商品类型ID", required = true)
 	@NotNull(message="categoryId不能为空")
@@ -44,6 +48,10 @@ public class EditProductParam {
 	
 	@ApiParam(value = "新增为空，修改时回显的详情图片url(新增时传空,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...})")
 	private String backProductDetailImageUrls;
+	
+	@ApiParam(value = "是否支持退换货(true|false)", required = true)
+	@NotNull(message="isAllowRefund不能为空")
+	private Boolean isAllowRefund;
 	
 //	public String getBackFeatureImageUrls() {
 //		return backFeatureImageUrls;
@@ -107,6 +115,22 @@ public class EditProductParam {
 
 	public void setImageContents(String imageContents) {
 		this.imageContents = imageContents;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public Boolean getIsAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setIsAllowRefund(Boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
 
 }

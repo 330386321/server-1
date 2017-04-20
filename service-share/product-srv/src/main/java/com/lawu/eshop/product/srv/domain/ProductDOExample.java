@@ -706,6 +706,66 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsAllowRefundIsNull() {
+            addCriterion("is_allow_refund is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundIsNotNull() {
+            addCriterion("is_allow_refund is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundEqualTo(Boolean value) {
+            addCriterion("is_allow_refund =", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotEqualTo(Boolean value) {
+            addCriterion("is_allow_refund <>", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundGreaterThan(Boolean value) {
+            addCriterion("is_allow_refund >", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_allow_refund >=", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundLessThan(Boolean value) {
+            addCriterion("is_allow_refund <", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_allow_refund <=", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundIn(List<Boolean> values) {
+            addCriterion("is_allow_refund in", values, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotIn(List<Boolean> values) {
+            addCriterion("is_allow_refund not in", values, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_allow_refund between", value1, value2, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_allow_refund not between", value1, value2, "isAllowRefund");
+            return (Criteria) this;
+        }
+
         public Criteria andTotalInventoryIsNull() {
             addCriterion("total_inventory is null");
             return (Criteria) this;
@@ -823,6 +883,66 @@ public class ProductDOExample {
 
         public Criteria andTotalSalesVolumeNotBetween(Integer value1, Integer value2) {
             addCriterion("total_sales_volume not between", value1, value2, "totalSalesVolume");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteIsNull() {
+            addCriterion("total_favorite is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteIsNotNull() {
+            addCriterion("total_favorite is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteEqualTo(Integer value) {
+            addCriterion("total_favorite =", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteNotEqualTo(Integer value) {
+            addCriterion("total_favorite <>", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteGreaterThan(Integer value) {
+            addCriterion("total_favorite >", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteGreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_favorite >=", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteLessThan(Integer value) {
+            addCriterion("total_favorite <", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteLessThanOrEqualTo(Integer value) {
+            addCriterion("total_favorite <=", value, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteIn(List<Integer> values) {
+            addCriterion("total_favorite in", values, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteNotIn(List<Integer> values) {
+            addCriterion("total_favorite not in", values, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteBetween(Integer value1, Integer value2) {
+            addCriterion("total_favorite between", value1, value2, "totalFavorite");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalFavoriteNotBetween(Integer value1, Integer value2) {
+            addCriterion("total_favorite not between", value1, value2, "totalFavorite");
             return (Criteria) this;
         }
 
