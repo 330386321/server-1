@@ -21,8 +21,10 @@ import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
+import com.lawu.eshop.property.srv.converter.WithdrawCashBOConverter;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
@@ -224,6 +226,22 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		bo.setBankInfo(bankAccountDO.getNote());
 
 		return bo;
+	}
+
+	/**
+	 * 查询提现详情
+	 * 
+	 * @param ids 提现id列表
+	 * @return
+	 */
+	@Override
+	public List<WithdrawCashBO> list(List<Long> ids) {
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		example.createCriteria().andIdIn(ids);
+		
+		List<WithdrawCashDO> withdrawCashDOList = withdrawCashDOMapper.selectByExample(example);
+		
+		return WithdrawCashBOConverter.convert(withdrawCashDOList);
 	}
 
 }

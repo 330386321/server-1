@@ -1,8 +1,11 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
 
@@ -45,6 +48,11 @@ public interface CashManageFrontService {
 	 */
 	WithdrawCashDetailBO cashDetail(Long id);
 	
-	
-
+	/**
+	 * 查询提现详情
+	 * 
+	 * @param ids 提现id列表
+	 * @return
+	 */
+	List<WithdrawCashBO> list(List<Long> ids);
 }

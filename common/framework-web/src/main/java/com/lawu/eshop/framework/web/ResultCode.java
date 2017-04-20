@@ -125,7 +125,7 @@ public class ResultCode {
         ResultCode.messageMap.put(NOT_FOUND_DATA, "数据不存在");
         ResultCode.messageMap.put(RESOURCE_NOT_FOUND, "ID对应数据不存在");
         ResultCode.messageMap.put(ID_EMPTY, "ID不能为空");
-        ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "必填参数不能为空");
+        ResultCode.messageMap.put(REQUIRED_PARM_EMPTY, "非法参数");
         ResultCode.messageMap.put(SAVE_FAIL, "保存失败");
         ResultCode.messageMap.put(UPDATE_FAIL, "更新失败");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");

@@ -45,8 +45,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
 		Criteria criteria = transactionDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
-		criteria.andDirectionEqualTo(param.getConsumptionType().getValue());
-		
+		if (param.getConsumptionType() != null) {
+			criteria.andDirectionEqualTo(param.getConsumptionType().getValue());
+		}
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
 		
 		Page<TransactionDetailBO> page = new Page<TransactionDetailBO>();
@@ -79,7 +80,10 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
 		Criteria criteria = transactionDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
-		criteria.andTransactionTypeEqualTo(param.getTransactionType().getValue());	
+		
+		if (param.getTransactionType() != null) {
+			criteria.andTransactionTypeEqualTo(param.getTransactionType().getValue());	
+		}
 		
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
 		
@@ -95,8 +99,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDOExample.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		
-		List<TransactionDetailBO> transactionDetailBOS = TransactionDetailConverter.convertBOS(transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds));
-		page.setRecords(transactionDetailBOS);
+		List<TransactionDetailDO> list = transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds);
+		
+		page.setRecords(TransactionDetailConverter.convertBOS(list));
 		
 		return page;
 	}

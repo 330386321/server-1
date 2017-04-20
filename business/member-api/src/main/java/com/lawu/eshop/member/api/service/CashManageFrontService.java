@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
+import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
 
@@ -49,4 +52,14 @@ public interface CashManageFrontService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "cashFront/cashDetail")
 	Result<WithdrawCashDetailDTO> cashDetail(@RequestParam("id") Long id);
+	
+	/**
+	 * 查询交易明细 如果交易类型为提现，需要知道提现的状态 查询提现明细状态
+	 * 
+	 * @param ids
+	 *            提现id列表
+	 * @return
+	 */
+	@RequestMapping(value = "cashFront/findCashDetailStatus", method = RequestMethod.GET)
+	Result<List<WithdrawCashStatusDTO>> findCashDetailStatus(@RequestParam("ids") List<Long> ids);
 }

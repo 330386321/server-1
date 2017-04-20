@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -37,9 +38,9 @@ public class TransactionDetailDTO implements Serializable {
     private Date transactionDate;
 	
 	/**
-	 * 消费类型
+	 * 资金流向
 	 */
-	@ApiModelProperty(value = "消费类型", required = true)
+	@ApiModelProperty(value = "资金流向(1-支出|2-收入)", required = true)
 	private ConsumptionTypeEnum direction;
 	
 	/**
@@ -47,6 +48,19 @@ public class TransactionDetailDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "备注", required = true)
 	private String remark;
+	
+    /**
+     * 业务类型操作对应的业务表ID
+     */
+	@ApiModelProperty(value = "业务ID", required = false)
+    private String bizId;
+	
+    /**
+     * API层加入
+     * 提现状态
+     */
+	@ApiModelProperty(value = "提现状态(APPLY-申请中|ACCEPT-受理中|SUCCESS-成功|FAILURE-失败)", required = false)
+    private CashStatusEnum status;
 	
 	public String getTitle() {
 		return title;
@@ -87,4 +101,21 @@ public class TransactionDetailDTO implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+
+	public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
+
+	public CashStatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(CashStatusEnum status) {
+		this.status = status;
+	}
+	
 }

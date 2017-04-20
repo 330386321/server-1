@@ -1,6 +1,12 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +21,10 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.CashManageFrontService;
 import com.lawu.eshop.merchant.api.service.TransactionDetailService;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
+import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 
 import io.swagger.annotations.Api;
@@ -35,6 +43,9 @@ public class TransactionDetailController extends BaseController {
 
     @Autowired
     private TransactionDetailService transactionDetailService;
+    
+    @Autowired
+    private CashManageFrontService cashManageFrontService;
     
     /**
      * 根据用户编号分页获取交易明细列表。
@@ -55,6 +66,40 @@ public class TransactionDetailController extends BaseController {
     	Result<Page<TransactionDetailDTO>> result = transactionDetailService.findPageByUserNumForMerchant(userNum, param);
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
+    	}
+    	
+    	// 如果交易类型为提现需要获取提现状态
+    	List<TransactionDetailDTO> transactionDetailDTOList = result.getModel().getRecords();
+    	
+    	// 把所有需要查询的id放入set
+    	List<Long> ids = new ArrayList<Long>();
+    	for (TransactionDetailDTO item : transactionDetailDTOList) {
+    		if (!StringUtils.isEmpty(item.getBizId())) {
+    			ids.add(Long.valueOf(item.getBizId()));
+    		}
+    	}
+    	
+    	Result<List<WithdrawCashStatusDTO>> resultWithdrawCashStatusDTOList = cashManageFrontService.findCashDetailStatus(ids);
+    	
+    	if (!isSuccess(resultWithdrawCashStatusDTOList)) {
+    		return successGet(resultWithdrawCashStatusDTOList.getRet());
+    	}
+    	
+    	// 把数据缓存到Map
+    	Map<String, WithdrawCashStatusDTO> withdrawCashStatusDTOMap = new HashMap<String, WithdrawCashStatusDTO>();
+    	for (WithdrawCashStatusDTO item : resultWithdrawCashStatusDTOList.getModel()) {
+    		withdrawCashStatusDTOMap.put(item.getId().toString(), item);
+    	}
+    	
+    	// 组合数据
+    	WithdrawCashStatusDTO withdrawCashStatusDTO = null;
+    	for (TransactionDetailDTO item : transactionDetailDTOList) {
+    		if (!StringUtils.isEmpty(item.getBizId())) {
+    			withdrawCashStatusDTO = withdrawCashStatusDTOMap.get(item.getBizId());
+    			if (withdrawCashStatusDTO != null) {
+    				item.setStatus(withdrawCashStatusDTO.getStatus());
+    			}
+    		}
     	}
     	
     	return successGet(result);

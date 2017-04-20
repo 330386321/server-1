@@ -20,10 +20,13 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
+import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashDataParam;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashDetailBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashQueryBO;
+import com.lawu.eshop.property.srv.converter.WithdrawCashBOConverter;
 import com.lawu.eshop.property.srv.service.CashManageFrontService;
 import com.lawu.eshop.utils.BeanUtil;
 
@@ -32,19 +35,21 @@ import com.lawu.eshop.utils.BeanUtil;
  * <p>
  * Description: 前端用户提现管理
  * </p>
+ * 
  * @author Yangqh
  * @date 2017年4月5日 下午2:44:35
  *
  */
 @RestController
 @RequestMapping(value = "cashFront/")
-public class CashManageFrontController extends BaseController{
-	
+public class CashManageFrontController extends BaseController {
+
 	@Autowired
 	private CashManageFrontService cashManageService;
 
 	/**
 	 * 用户、商家提现操作
+	 * 
 	 * @param cash
 	 * @return
 	 */
@@ -60,12 +65,13 @@ public class CashManageFrontController extends BaseController{
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		
+
 		return successCreated(cashManageService.save(cash));
 	}
-	
+
 	/**
 	 * 用户、商家提现明细
+	 * 
 	 * @param cparam
 	 * @return
 	 */
@@ -74,7 +80,7 @@ public class CashManageFrontController extends BaseController{
 		Page<WithdrawCashQueryBO> page = cashManageService.findCashList(cparam);
 		List<WithdrawCashQueryBO> cbos = page.getRecords();
 		List<WithdrawCashQueryDTO> dtos = new ArrayList<WithdrawCashQueryDTO>();
-		for(WithdrawCashQueryBO bo : cbos){
+		for (WithdrawCashQueryBO bo : cbos) {
 			WithdrawCashQueryDTO dto = new WithdrawCashQueryDTO();
 			dto.setId(bo.getId());
 			dto.setCashMoney(bo.getCashMoney());
@@ -92,22 +98,46 @@ public class CashManageFrontController extends BaseController{
 
 	/**
 	 * 用户、商家提现详情
+	 * 
 	 * @param id
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "cashDetail", method = RequestMethod.GET)
 	public Result<WithdrawCashDetailDTO> cashDetail(@RequestParam Long id) throws Exception {
-		if(id == null){
+		if (id == null) {
 			return successGet(ResultCode.ID_EMPTY);
 		}
 		WithdrawCashDetailBO cashDetailBO = cashManageService.cashDetail(id);
-		if(cashDetailBO == null){
+		if (cashDetailBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		WithdrawCashDetailDTO dto = new WithdrawCashDetailDTO();
 		BeanUtil.copyProperties(cashDetailBO, dto);
-		
+
 		return successGet(dto);
+	}
+
+	/**
+	 * 查询交易明细 如果交易类型为提现，需要知道提现的状态 查询提现明细状态
+	 * 
+	 * @param ids
+	 *            提现id列表
+	 * @return
+	 */
+	@RequestMapping(value = "findCashDetailStatus", method = RequestMethod.GET)
+	public Result<List<WithdrawCashStatusDTO>> findCashDetailStatus(@RequestParam List<Long> ids) {
+
+		if (ids == null || ids.isEmpty()) {
+			return successGet(ResultCode.ID_EMPTY);
+		}
+
+		List<WithdrawCashBO> withdrawCashBOList = cashManageService.list(ids);
+
+		if (withdrawCashBOList == null || withdrawCashBOList.isEmpty()) {
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+
+		return successGet(WithdrawCashBOConverter.convertWithdrawCashStatusDTOList(withdrawCashBOList));
 	}
 }
