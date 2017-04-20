@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="/Users/slq/.m2/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -41,16 +41,10 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.lawu.eshop.operator.srv.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
-        <table tableName="admin" domainObjectName="AdminDO">
+        <table tableName="user" domainObjectName="UserDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="role" domainObjectName="RoleDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="permission" domainObjectName="PermissionDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="user_role" domainObjectName="UserRoleDO">
+        <table tableName="role_permission" domainObjectName="RolePermissionDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

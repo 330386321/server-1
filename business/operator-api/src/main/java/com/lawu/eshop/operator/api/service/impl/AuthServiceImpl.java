@@ -1,14 +1,17 @@
 package com.lawu.eshop.operator.api.service.impl;
 
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.operator.api.service.UserService;
+import com.lawu.eshop.operator.dto.UserDTO;
+import com.lawu.eshop.operator.dto.UserRoleDTO;
 import om.lawu.eshop.shiro.AuthService;
 import om.lawu.eshop.shiro.model.ShiroRole;
 import om.lawu.eshop.shiro.model.ShiroUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Leach
@@ -17,38 +20,48 @@ import java.util.Set;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public ShiroUser find(String account) {
-        return test(account);
+
+        Result<UserDTO> result = userService.find(account);
+
+        ShiroUser shiroUser = new ShiroUser();
+        shiroUser.setAccount(result.getModel().getAccount());
+        shiroUser.setPassword(result.getModel().getPassword());
+        shiroUser.setRolesKey(result.getModel().getRolesKey());
+        List<ShiroRole> roles = new ArrayList<>();
+        for (UserRoleDTO userRoleDTO : result.getModel().getRoles()) {
+            ShiroRole shiroRole = new ShiroRole();
+            shiroRole.setRoleKey(userRoleDTO.getRoleKey());
+            shiroRole.setPermissionsKey(userRoleDTO.getPermissionsKey());
+            roles.add(shiroRole);
+        }
+        shiroUser.setRoles(roles);
+        shiroUser.setRolesKey(result.getModel().getRolesKey());
+        return shiroUser;
     }
 
     @Override
     public ShiroUser find(String account, String password) {
-        return test(account);
-    }
+        Result<UserDTO> result = userService.find(account, password);
 
-    /**
-     * 测试方法，TODO remove
-     * @param account
-     * @return
-     */
-    private ShiroUser test(String account) {
         ShiroUser shiroUser = new ShiroUser();
-        shiroUser.setAccount(account);
-
+        shiroUser.setAccount(result.getModel().getAccount());
+        shiroUser.setPassword(result.getModel().getPassword());
+        shiroUser.setRolesKey(result.getModel().getRolesKey());
         List<ShiroRole> roles = new ArrayList<>();
-        Set<String> rolesName = new HashSet<>();
-
-        ShiroRole shiroRole = new ShiroRole();
-        shiroRole.setRoleKey("admin");
-        List<String> permissionsName = new ArrayList<>();
-        permissionsName.add("user:edit");
-        shiroRole.setPermissionsKey(permissionsName);
-        roles.add(shiroRole);
-
+        for (UserRoleDTO userRoleDTO : result.getModel().getRoles()) {
+            ShiroRole shiroRole = new ShiroRole();
+            shiroRole.setRoleKey(userRoleDTO.getRoleKey());
+            shiroRole.setPermissionsKey(userRoleDTO.getPermissionsKey());
+            roles.add(shiroRole);
+        }
         shiroUser.setRoles(roles);
-        shiroUser.setRolesKey(rolesName);
-
+        shiroUser.setRolesKey(result.getModel().getRolesKey());
         return shiroUser;
     }
+
 }
