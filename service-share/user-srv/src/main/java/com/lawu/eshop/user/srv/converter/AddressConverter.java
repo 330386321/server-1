@@ -9,107 +9,109 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-*
-* 地址信息转换器
-*
-* @author zhangrc
-* @date 2017/3/22
-*/
+ *
+ * 地址信息转换器
+ *
+ * @author zhangrc
+ * @date 2017/3/22
+ */
 public class AddressConverter {
-	
+
 	/**
-     * BO转换
-     *
-     * @param addressDO
-     * @return
-     */
-    public static AddressBO convertBO(AddressDO addressDO) {
-    	
-        if (addressDO == null) {
-            return null;
-        }
+	 * BO转换
+	 *
+	 * @param addressDO
+	 * @return
+	 */
+	public static AddressBO convertBO(AddressDO addressDO) {
 
-        AddressBO addressBO = new AddressBO();
-        addressBO.setId(addressDO.getId());
-        addressBO.setAddr(addressDO.getAddr());;
-        addressBO.setIsDefault(addressDO.getIsDefault());
-        addressBO.setMobile(addressDO.getMobile());
-        addressBO.setName(addressDO.getName());
-        addressBO.setPostcode(addressDO.getPostcode());
-        addressBO.setRegionPath(addressDO.getRegionPath());
+		if (addressDO == null) {
+			return null;
+		}
 
-        return addressBO;
-    }
+		AddressBO addressBO = new AddressBO();
+		addressBO.setId(addressDO.getId());
+		addressBO.setAddr(addressDO.getAddr());
+		;
+		addressBO.setIsDefault(addressDO.getIsDefault());
+		addressBO.setMobile(addressDO.getMobile());
+		addressBO.setName(addressDO.getName());
+		addressBO.setPostcode(addressDO.getPostcode());
+		addressBO.setRegionPath(addressDO.getRegionPath());
 
-	
+		return addressBO;
+	}
+
 	public static List<AddressBO> convertListBOS(List<AddressDO> addressDOS) {
 		if (addressDOS == null) {
-	       return null;
-	    }
-		List<AddressBO> addressBOS=new ArrayList<AddressBO>();
+			return null;
+		}
+		List<AddressBO> addressBOS = new ArrayList<AddressBO>();
 		for (AddressDO addressDO : addressDOS) {
 			addressBOS.add(convertBO(addressDO));
 		}
 		return addressBOS;
 	}
-	
-	
+
 	/**
-     * BO转换
-     *
-     * @param addressBO
-     * @return
-     */
-    public static AddressDTO convertDTO(AddressBO addressBO) {
-    	
-        if (addressBO == null) {
-            return null;
-        }
+	 * BO转换
+	 *
+	 * @param addressBO
+	 * @return
+	 */
+	public static AddressDTO convertDTO(AddressBO addressBO) {
 
-        AddressDTO addressDTO = new AddressDTO();
-        addressDTO.setId(addressBO.getId());
-        addressDTO.setAddr(addressBO.getAddr());;
-        addressDTO.setIsDefault(addressBO.getIsDefault());
-        addressDTO.setMobile(addressBO.getMobile());
-        addressDTO.setName(addressBO.getName());
-        addressDTO.setPostcode(addressBO.getPostcode());
-        addressDTO.setRegionPath(addressBO.getRegionPath());
+		if (addressBO == null) {
+			return null;
+		}
 
-        return addressDTO;
-    }
+		AddressDTO addressDTO = new AddressDTO();
+		addressDTO.setId(addressBO.getId());
+		addressDTO.setAddr(addressBO.getAddr());
+		;
+		addressDTO.setIsDefault(addressBO.getIsDefault());
+		addressDTO.setMobile(addressBO.getMobile());
+		addressDTO.setName(addressBO.getName());
+		addressDTO.setPostcode(addressBO.getPostcode());
+		addressDTO.setRegionPath(addressBO.getRegionPath());
 
+		return addressDTO;
+	}
 
 	public static List<AddressDTO> convertListDOTS(List<AddressBO> addressBOS) {
-		if (addressBOS == null) {
-		       return null;
-		    }
-			List<AddressDTO> addressDTOS=new ArrayList<AddressDTO>();
-			for (AddressBO addressBO : addressBOS) {
-				addressDTOS.add(convertDTO(addressBO));
-			}
-		return addressDTOS;
+		List<AddressDTO> rtn = new ArrayList<AddressDTO>();
+		
+		if (addressBOS == null || addressBOS.isEmpty()) {
+			return rtn;
+		}
+		
+		for (AddressBO addressBO : addressBOS) {
+			rtn.add(convertDTO(addressBO));
+		}
+		
+		return rtn;
 	}
-	
-	
-	/**
-     * DO转换
-     *
-     * @param addressParam
-     * @return
-     */
-    public static AddressDO convertDO(AddressParam addressParam) {
-    	
-        if (addressParam == null) {
-            return null;
-        }
-        AddressDO addressDO = new AddressDO();
-        addressDO.setAddr(addressParam.getAddr());;
-        addressDO.setMobile(addressParam.getMobile());
-        addressDO.setName(addressParam.getName());
-        addressDO.setPostcode(addressParam.getPostcode());
-        addressDO.setRegionPath(addressParam.getRegionPath());
 
-        return addressDO;
-    }
+	/**
+	 * DO转换
+	 *
+	 * @param addressParam
+	 * @return
+	 */
+	public static AddressDO convertDO(AddressParam addressParam) {
+
+		if (addressParam == null) {
+			return null;
+		}
+		AddressDO addressDO = new AddressDO();
+		addressDO.setAddr(addressParam.getAddr());
+		;
+		addressDO.setMobile(addressParam.getMobile());
+		addressDO.setName(addressParam.getName());
+		addressDO.setPostcode(addressParam.getPostcode());
+		addressDO.setRegionPath(addressParam.getRegionPath());
+
+		return addressDO;
+	}
 
 }

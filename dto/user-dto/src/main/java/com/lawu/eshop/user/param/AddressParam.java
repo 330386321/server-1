@@ -1,84 +1,85 @@
 package com.lawu.eshop.user.param;
 
-import io.swagger.annotations.ApiParam;
-
 import java.io.Serializable;
+
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * api 收货地址操作实体
+ * 
  * @author zhangrc
  * @date 2017/03/23
  *
  */
-public class AddressParam implements Serializable{
+@ApiModel
+public class AddressParam implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ApiParam (name="name",required = true, value = "收货人")
+	@ApiModelProperty(name = "name", required = true, value = "收货人")
+	@NotBlank(message = "收货人不能为空")
 	private String name;
 
-	@ApiParam (name="mobile",required = true, value = "电话")
+	@ApiModelProperty(name = "mobile", required = true, value = "电话")
+	@NotBlank(message = "电话不能为空")
+	@Pattern(regexp = "^\\d(\\d|\\/)*\\d$", message = "电话格式不正确")
 	private String mobile;
 
-	@ApiParam (name="regionPath",required = true, value = "地址 格式: 省id/市id/区id")
+	@ApiModelProperty(name = "regionPath", required = true, value = "地址 格式: 省id/市id/区id")
+	@NotBlank(message = "地址不能为空")
 	private String regionPath;
 
-	@ApiParam (name="addr",required = true, value = "详细地址")
+	@ApiModelProperty(name = "addr", required = true, value = "详细地址")
+	@NotBlank(message = "详细地址不能为空")
 	private String addr;
 
-	@ApiParam (name="postcode",required = true, value = "邮编")
+	@ApiModelProperty(name = "postcode", required = true, value = "邮编")
+	@NotBlank(message = "邮编不能为空")
 	private String postcode;
-
 
 	public String getName() {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public String getMobile() {
 		return mobile;
 	}
 
-
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-
 
 	public String getRegionPath() {
 		return regionPath;
 	}
 
-
 	public void setRegionPath(String regionPath) {
 		this.regionPath = regionPath;
 	}
-
 
 	public String getAddr() {
 		return addr;
 	}
 
-
 	public void setAddr(String addr) {
 		this.addr = addr;
 	}
-
 
 	public String getPostcode() {
 		return postcode;
 	}
 
-
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
-
-
 
 }
