@@ -1,4 +1,4 @@
-package com.lawu.eshop.user.query;
+package com.lawu.eshop.user.param;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import io.swagger.annotations.ApiParam;

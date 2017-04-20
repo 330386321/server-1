@@ -10,7 +10,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
   </resultMap>
  
-  <select resultMap="BaseResultMap" parameterType="java.lang.Long" id="selectMyFavoriteAdByRowbounds" >
+  <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView" id="selectMyFavoriteAdByRowbounds" >
      select 
     	fa.id as id,
     	fa.id as ad_id,
@@ -20,7 +20,14 @@
 		a.merchant_id as merchant_id
     from favorite_ad fa  
     	left join ad a on fa.ad_id= a.id
-    where
-    	fa.member_id=#{memberId,jdbcType=BIGINT}
+     <where>
+    	fa.member_id=#{memberId,jdbcType=VARCHAR}
+	    <if test="type == 1" >
+	      and a.type !=3
+	    </if>
+	     <if test="type == 2" >
+	      and a.type =3
+	    </if>
+    </where>
   </select>
 </mapper>

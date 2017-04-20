@@ -59,6 +59,14 @@ public interface AdPlatformService {
 	Result issueAd(@PathVariable("id") Long id);
 	
 	/**
+	 * 下架广告
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/unShelve/{id}")
+	Result unShelve(@PathVariable("id") Long id);
+	
+	/**
 	 * 设置广告位
 	 * @param id
 	 * @return

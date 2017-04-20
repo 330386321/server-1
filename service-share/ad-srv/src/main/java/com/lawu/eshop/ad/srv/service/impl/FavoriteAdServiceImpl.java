@@ -88,7 +88,10 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		example.createCriteria().andMemberIdEqualTo(memberId);
 		Long count=favoriteAdDOMapper.countByExample(example);
         RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-        List<FavoriteAdDOView> views = favoriteAdDOMapperExtend.selectMyFavoriteAdByRowbounds(memberId, rowBounds);
+        FavoriteAdDOView view=new FavoriteAdDOView();
+        view.setMemberId(memberId);
+        view.setType(param.getTypeEnum().val);
+        List<FavoriteAdDOView> views = favoriteAdDOMapperExtend.selectMyFavoriteAdByRowbounds(view, rowBounds);
         Page<FavoriteAdDOViewBO> page=new Page<FavoriteAdDOViewBO>();
         page.setCurrentPage(param.getCurrentPage());
         page.setTotalCount(count.intValue());

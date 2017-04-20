@@ -38,10 +38,12 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		}else{ //商品
 			adPlatformDO.setType(new Byte("2"));
 			adPlatformDO.setProductId(adPlatformParam.getProductId());  
+			adPlatformDO.setCategoryId(adPlatformParam.getCategoryId());
 		}
 		adPlatformDO.setStatus(new Byte("1"));
 		adPlatformDO.setGmtCreate(new Date());
 		adPlatformDO.setGmtModified(new Date());
+		adPlatformDO.setContent(adPlatformParam.getContent());
 		Integer id=adPlatformDOMapper.insert(adPlatformDO);
 		return id;
 	}
@@ -61,7 +63,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 	public List<AdPlatformBO> selectByPosition(PositionEnum positionEnum) {
 		AdPlatformDOExample example = new AdPlatformDOExample();
 		Criteria criteria=example.createCriteria();
-		criteria.andStatusEqualTo(new Byte("3")).andPositionEqualTo(positionEnum.val);
+		criteria.andStatusEqualTo(new Byte("2")).andPositionEqualTo(positionEnum.val);
 		List<AdPlatformDO> DOS=adPlatformDOMapper.selectByExample(example);
 		return  DOS.isEmpty() ? null :AdPlatformConverter.convertBOS(DOS);
 	}
@@ -84,7 +86,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 	public Integer issueAd(Long id) {
 		AdPlatformDO adPlatformDO=new AdPlatformDO();
 		adPlatformDO.setId(id);
-		adPlatformDO.setStatus(new Byte("3"));
+		adPlatformDO.setStatus(new Byte("2"));
 		Integer i=adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
 		return i;
 	}
@@ -121,6 +123,15 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 	public AdPlatformBO select(Long id) {
 		 AdPlatformDO  adPlatformDO =adPlatformDOMapper.selectByPrimaryKey(id);
 		return AdPlatformConverter.convertBO(adPlatformDO);
+	}
+
+	@Override
+	public void unShelve(Long id) {
+		AdPlatformDO adPlatformDO=new AdPlatformDO();
+		adPlatformDO.setId(id);
+		adPlatformDO.setStatus(new Byte("3"));
+		Integer i=adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
+		
 	}
 
 }

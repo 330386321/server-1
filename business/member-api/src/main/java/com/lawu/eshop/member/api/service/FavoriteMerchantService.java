@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
-import com.lawu.eshop.user.query.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteMerchantParam;
 
 /**
  * api 商家收藏接口

@@ -130,12 +130,9 @@ public class AdServiceImpl implements AdService {
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
 		//将广告添加到solr中
-		if(adDO.getType()!=2){
-			FavoriteAdDOExample adExample=new FavoriteAdDOExample();
-			adExample.createCriteria().andAdIdEqualTo(adDO.getId());
-			Long attenCount=favoriteAdDOMapper.countByExample(adExample);
+		if(adDO.getType()==1){
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			document.addField("count_i", attenCount.intValue());
+			document.addField("count_i", 0);
 		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		}
 		return i;

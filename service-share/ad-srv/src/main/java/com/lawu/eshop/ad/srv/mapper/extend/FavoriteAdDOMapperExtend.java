@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
 
 /**
@@ -20,6 +21,6 @@ public interface FavoriteAdDOMapperExtend {
 	 * @param rowBounds
 	 * @return
 	 */
-	List<FavoriteAdDOView> selectMyFavoriteAdByRowbounds(Long  memberId, RowBounds rowBounds);
+	List<FavoriteAdDOView> selectMyFavoriteAdByRowbounds(FavoriteAdDOView  param, RowBounds rowBounds);
     
 }

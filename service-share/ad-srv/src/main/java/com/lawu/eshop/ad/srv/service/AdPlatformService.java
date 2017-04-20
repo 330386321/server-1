@@ -75,5 +75,11 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	AdPlatformBO select(Long id);
+	
+	/**
+	 * 广告下架
+	 * @param id
+	 */
+	void unShelve(Long id);
 
 }

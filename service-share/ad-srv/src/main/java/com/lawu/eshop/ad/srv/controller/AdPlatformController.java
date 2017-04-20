@@ -115,6 +115,17 @@ public class AdPlatformController extends BaseController{
     }
 	
 	/**
+	 * 广告下架
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
+    public Result unShelve(@PathVariable Long id) {
+		adPlatformService.unShelve(id);
+    	return successCreated(ResultCode.SUCCESS);
+    }
+	
+	/**
 	 * 设置广告位
 	 * @param id
 	 * @return

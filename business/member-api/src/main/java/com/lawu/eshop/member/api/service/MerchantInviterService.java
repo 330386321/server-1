@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.query.MerchantInviterParam;
+import com.lawu.eshop.user.param.MerchantInviterParam;
 
 /**
  * 推荐的商家

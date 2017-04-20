@@ -3,9 +3,9 @@ package com.lawu.eshop.user.srv.service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
-import com.lawu.eshop.user.query.MemberQuery;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 

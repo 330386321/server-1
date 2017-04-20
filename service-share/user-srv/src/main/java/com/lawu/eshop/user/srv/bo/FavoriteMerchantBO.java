@@ -1,30 +1,41 @@
 package com.lawu.eshop.user.srv.bo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 我收藏的商家实体
+ * 
  * @author zhangrc
- *@date 2017/03/27
+ * @date 2017/03/27
  */
 public class FavoriteMerchantBO {
-	
-	private Long id;
-	
-	private String name;
-	
-	private String principalName;
-	
-	private String regionPath;
-	
-	private Date gmtCreate;
 
-	public Long getId() {
-		return id;
+	private Long merchantId;
+
+	private String name;
+
+	private String industryName;
+
+	private BigDecimal feedbackRate;
+
+	private String path;
+	
+	private Integer fansCount;
+	
+	private int distance;
+	
+
+	public int getDistance() {
+		return distance;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setDistance(int distance) {
+		this.distance = distance;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
 	}
 
 	public String getName() {
@@ -35,33 +46,41 @@ public class FavoriteMerchantBO {
 		this.name = name;
 	}
 
-	public String getPrincipalName() {
-		return principalName;
+	public String getIndustryName() {
+		return industryName;
 	}
 
-	public void setPrincipalName(String principalName) {
-		this.principalName = principalName;
+	public void setIndustryName(String industryName) {
+		this.industryName = industryName;
 	}
 
-	public String getRegionPath() {
-		return regionPath;
+	public BigDecimal getFeedbackRate() {
+		return feedbackRate;
 	}
 
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
+	public void setFeedbackRate(BigDecimal feedbackRate) {
+		this.feedbackRate = feedbackRate;
 	}
 
-	public Date getGmtCreate() {
-		return gmtCreate;
+	public String getPath() {
+		return path;
 	}
 
-	public void setGmtCreate(Date gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
-	
-	
-	
+	public Integer getFansCount() {
+		return fansCount;
+	}
+
+	public void setFansCount(Integer fansCount) {
+		this.fansCount = fansCount;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
 	
 	
 

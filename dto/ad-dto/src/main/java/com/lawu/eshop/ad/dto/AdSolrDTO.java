@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.dto;
 
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class AdSolrDTO {
@@ -18,6 +20,17 @@ public class AdSolrDTO {
 	
 	@ApiModelProperty(value = "关注人数")
     private int count;
+	
+	@ApiModelProperty(value = "广告类型(AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 )")
+    private AdTypeEnum typeEnum;
+
+	public AdTypeEnum getTypeEnum() {
+		return typeEnum;
+	}
+
+	public void setTypeEnum(AdTypeEnum typeEnum) {
+		this.typeEnum = typeEnum;
+	}
 
 	public Long getId() {
 		return id;

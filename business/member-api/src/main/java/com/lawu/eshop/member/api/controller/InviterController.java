@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +15,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.member.api.service.MemberService;
@@ -25,8 +25,8 @@ import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
 import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.query.MemberQuery;
-import com.lawu.eshop.user.query.MerchantInviterParam;
+import com.lawu.eshop.user.param.MemberQuery;
+import com.lawu.eshop.user.param.MerchantInviterParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

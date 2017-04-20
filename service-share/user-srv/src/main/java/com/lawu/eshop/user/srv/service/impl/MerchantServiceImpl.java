@@ -1,28 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.constants.FileDirConstant;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
-import com.lawu.eshop.user.constants.UserStatusEnum;
-import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.query.MerchantInviterParam;
-import com.lawu.eshop.user.srv.bo.MerchantBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
-import com.lawu.eshop.user.srv.converter.MerchantConverter;
-import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
-import com.lawu.eshop.user.srv.mapper.*;
-import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
-import com.lawu.eshop.user.srv.rong.models.TokenResult;
-import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
-import com.lawu.eshop.user.srv.service.MerchantService;
-import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
-import com.lawu.eshop.utils.MD5;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +10,39 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.constants.UserInviterTypeEnum;
+import com.lawu.eshop.user.constants.UserStatusEnum;
+import com.lawu.eshop.user.param.MerchantInviterParam;
+import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.srv.bo.MerchantBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.converter.MerchantConverter;
+import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.rong.models.TokenResult;
+import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
+import com.lawu.eshop.user.srv.service.MerchantService;
+import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
+import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * 商户服务实现

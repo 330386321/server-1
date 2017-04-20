@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
@@ -11,7 +12,7 @@ import com.lawu.eshop.ad.constants.PutWayEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-@JsonInclude(Include.NON_EMPTY) 
+
 public class AdDTO {
 	
 	@ApiModelProperty(value = "主键")
@@ -36,9 +37,11 @@ public class AdDTO {
     private PutWayEnum putWayEnum;
 
 	@ApiModelProperty(value = "投放开始时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date beginTime;
 
 	@ApiModelProperty(value = "投放所需时间")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 	
 	@ApiModelProperty(value = "区域")
@@ -53,7 +56,7 @@ public class AdDTO {
 	@ApiModelProperty(value = "总积分")
     private BigDecimal totalPoint;
 
-	@ApiModelProperty(value = "积分")
+	@ApiModelProperty(value = "广告数量")
     private Integer adCount;
 
 	@ApiModelProperty(value = "状态")

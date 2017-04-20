@@ -164,6 +164,7 @@ public class AdConverter {
         document.addField("longitude_s", adDO.getMerchantLongitude());
         document.addField("latitude_s", adDO.getMerchantLatitude());
         document.addField("status_s", 2);
+        document.addField("type_i", adDO.getType());
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){
         		String[] location=adDO.getAreas().split("/");
@@ -195,7 +196,13 @@ public class AdConverter {
         	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
         	adSolrDTO.setTitle(solrDocument.get("tilte_s").toString());
         	adSolrDTO.setContent(solrDocument.get("content_s").toString());
-        	adSolrDTO.setCount((int)solrDocument.get("content_i"));
+        	adSolrDTO.setCount((int)solrDocument.get("count_i"));
+        	int type=(int)solrDocument.get("type_i");
+        	if(type==1){
+        		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);	
+        	}else{
+        		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_VIDEO);	
+        	}
         	adSolrDTOS.add(adSolrDTO);
         }
         return adSolrDTOS;

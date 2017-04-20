@@ -29,6 +29,7 @@ public class AdPlatformConverter {
 		adPlatformBO.setId(adPlatformDO.getId());
 		adPlatformBO.setTitle(adPlatformDO.getTitle());
 		adPlatformBO.setType(adPlatformDO.getType());
+		adPlatformBO.setContent(adPlatformDO.getContent());
 		adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
 		if(adPlatformDO.getType()==1){
 			adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
@@ -53,6 +54,7 @@ public class AdPlatformConverter {
 		adPlatformDTO.setId(adPlatformBO.getId());
 		adPlatformDTO.setTitle(adPlatformBO.getTitle());
 		adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
+		adPlatformDTO.setContent(adPlatformBO.getContent());
 		if(adPlatformBO.getType()==1){
 			adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
 		}else{
@@ -77,6 +79,7 @@ public class AdPlatformConverter {
 			adPlatformBO.setTitle(adPlatformDO.getTitle());
 			adPlatformBO.setType(adPlatformDO.getType());
 			adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
+			adPlatformBO.setContent(adPlatformDO.getContent());
 			if(adPlatformDO.getType()==1){
 				adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
 			}else{
@@ -103,6 +106,7 @@ public class AdPlatformConverter {
 			adPlatformDTO.setId(adPlatformBO.getId());
 			adPlatformDTO.setTitle(adPlatformBO.getTitle());
 			adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
+			adPlatformDTO.setContent(adPlatformBO.getContent());
 			if(adPlatformBO.getType()==1){
 				adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
 			}else{

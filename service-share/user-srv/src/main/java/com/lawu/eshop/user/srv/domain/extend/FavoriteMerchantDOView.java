@@ -1,36 +1,33 @@
-package com.lawu.eshop.user.dto;
+package com.lawu.eshop.user.srv.domain.extend;
 
 import java.math.BigDecimal;
 
-import io.swagger.annotations.ApiModelProperty;
+public class FavoriteMerchantDOView {
 
-public class FavoriteMerchantDTO {
-	
-	@ApiModelProperty(value = "商家id")
+	private Long memberId;
+
 	private Long merchantId;
 
-	@ApiModelProperty(value = "门店名称")
+	private byte type;
+
 	private String name;
 
-	@ApiModelProperty(value = "主营业名称")
+	private BigDecimal longitude;
+
+	private BigDecimal latitude;
+
 	private String industryName;
 
-	@ApiModelProperty(value = "好评率")
 	private BigDecimal feedbackRate;
 
-	@ApiModelProperty(value = "门店图路径")
 	private String path;
 
-	@ApiModelProperty(value = "距离")
-	private int distance;
-	
-
-	public int getDistance() {
-		return distance;
+	public Long getMemberId() {
+		return memberId;
 	}
 
-	public void setDistance(int distance) {
-		this.distance = distance;
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
 	}
 
 	public Long getMerchantId() {
@@ -41,12 +38,36 @@ public class FavoriteMerchantDTO {
 		this.merchantId = merchantId;
 	}
 
+	public byte getType() {
+		return type;
+	}
+
+	public void setType(byte type) {
+		this.type = type;
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public BigDecimal getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(BigDecimal longitude) {
+		this.longitude = longitude;
+	}
+
+	public BigDecimal getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(BigDecimal latitude) {
+		this.latitude = latitude;
 	}
 
 	public String getIndustryName() {
@@ -72,6 +93,5 @@ public class FavoriteMerchantDTO {
 	public void setPath(String path) {
 		this.path = path;
 	}
-
 
 }

@@ -18,6 +18,18 @@ public class AdPlatformDTO {
 
 	@ApiModelProperty(value = "链接地址")
 	private String linkUrl;
+	
+	@ApiModelProperty(value = "广告内容")
+	private String content;
+	
+	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
 
 	public Long getId() {
 		return id;

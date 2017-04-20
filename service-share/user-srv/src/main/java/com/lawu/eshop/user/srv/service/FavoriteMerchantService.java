@@ -1,7 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.query.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteMerchantParam;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 
 /**

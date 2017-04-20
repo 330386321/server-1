@@ -1,5 +1,8 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
-import com.lawu.eshop.user.query.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteMerchantParam;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
 import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
@@ -51,7 +53,16 @@ public class FavoriteMerchantController extends BaseController{
    @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
    public Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam  Long memberId ,@RequestBody FavoriteMerchantParam pageQuery) {
        Page<FavoriteMerchantBO> pageBO =favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
-       Page<FavoriteMerchantDTO> page=FavoriteMerchantConverter.convertPageDOTS(pageBO);
+       List<FavoriteMerchantBO> list=pageBO.getRecords();
+       List<FavoriteMerchantDTO> listDTO=new ArrayList<>();
+       for (FavoriteMerchantBO favoriteMerchantBO : list) {
+    	   FavoriteMerchantDTO dto= FavoriteMerchantConverter.convertDTO(favoriteMerchantBO);
+    	   listDTO.add(dto);
+	   }
+       Page<FavoriteMerchantDTO> page=new Page<FavoriteMerchantDTO>();
+       page.setCurrentPage(pageBO.getCurrentPage());
+       page.setTotalCount(pageBO.getTotalCount());
+       page.setRecords(listDTO);
        return successGet(page);
    }
    

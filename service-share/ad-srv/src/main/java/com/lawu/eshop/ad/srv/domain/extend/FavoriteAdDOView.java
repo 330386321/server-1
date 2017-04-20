@@ -37,6 +37,32 @@ public class FavoriteAdDOView {
 	 * 广告内容
 	 */
 	private String content;
+	
+	
+	/**
+	 * 广告类型
+	 */
+	private byte type;
+	
+	
+	private Long memberId;
+	
+
+	public Long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+
+	public byte getType() {
+		return type;
+	}
+
+	public void setType(byte type) {
+		this.type = type;
+	}
 
 	public Long getId() {
 		return id;

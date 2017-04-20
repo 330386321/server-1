@@ -1,28 +1,35 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.user.query.FavoriteMerchantParam;
-import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
-import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
-import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
+import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
+import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
+import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.extend.FavoriteMerchantDOView;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.FavoriteMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
+import com.lawu.eshop.utils.DistanceUtil;
 
 @Service
 public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
@@ -32,6 +39,12 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Resource
     private MerchantStoreDOMapper merchantStoreDOMapper;
+    
+    @Resource
+    private FavoriteMerchantDOMapperExtend favoriteMerchantDOMapperExtend;
+    
+    @Resource
+    private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
     @Transactional
@@ -88,28 +101,31 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Override
     public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId, FavoriteMerchantParam pageQuery) {
-        FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
-        example.createCriteria().andMemberIdEqualTo(memberId);
-        int totalCount = favoriteMerchantDOMapper.countByExample(example);
+    	FavoriteMerchantDOView view=new FavoriteMerchantDOView();
+    	view.setMemberId(memberId);
+    	view.setType(pageQuery.getManageTypeEnum().val);
         RowBounds rowBounds = new RowBounds(pageQuery.getCurrentPage(), pageQuery.getPageSize());
-        List<FavoriteMerchantDO> FMDOS = favoriteMerchantDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        List<MerchantStoreDO> MDOS = new ArrayList<MerchantStoreDO>();
-        for (FavoriteMerchantDO favoriteMerchantDO : FMDOS) {
-            MerchantStoreDOExample msExample = new MerchantStoreDOExample();
-            msExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDO.getMerchantId())
-                    .andStatusEqualTo(new Byte("1"));
-            List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(msExample);
-            if (!list.isEmpty()) {
-                MerchantStoreDO merchantStoreDO = list.get(0);
-                MDOS.add(merchantStoreDO);
-            }
-
-        }
-        List<FavoriteMerchantBO> fmBOS = FavoriteMerchantConverter.convertListBOS(MDOS, FMDOS);
+        List<FavoriteMerchantDOView> list=favoriteMerchantDOMapperExtend.selectFavoriteMerchantByRowbounds(view, rowBounds);
+        List<FavoriteMerchantBO> listBO=new ArrayList<>();
+        for (FavoriteMerchantDOView favoriteMerchantDOView : list) {
+        	FansMerchantDOExample  example=new FansMerchantDOExample();
+        	example.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
+        	int count=fansMerchantDOMapper.countByExample(example);
+        	FavoriteMerchantBO favoriteMerchantBO =new FavoriteMerchantBO();
+        	favoriteMerchantBO.setFansCount(count);
+        	favoriteMerchantBO=FavoriteMerchantConverter.convertListBO(favoriteMerchantDOView);
+        	if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
+				 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
+						 favoriteMerchantDOView.getLongitude().doubleValue(), favoriteMerchantDOView.getLatitude().doubleValue());
+				 favoriteMerchantBO.setDistance(distance); 
+        	}
+        	
+        	listBO.add(favoriteMerchantBO);
+		}
         Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();
-        page.setTotalCount(totalCount);
+        page.setTotalCount(list.size());
         page.setCurrentPage(pageQuery.getCurrentPage());
-        page.setRecords(fmBOS);
+        page.setRecords(listBO);
         return page;
     }
 

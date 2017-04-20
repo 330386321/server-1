@@ -8,6 +8,9 @@ public class AdPlatformParam {
 
 	@ApiParam(name = "productId", value = "商品id")
 	private Long productId;
+	
+	@ApiParam(name = "categoryId", value = "商品类型id")
+	private Long categoryId;
 
 	@ApiParam(name = "title", required = true, value = "广告标题")
 	private String title;
@@ -17,6 +20,9 @@ public class AdPlatformParam {
 
 	@ApiParam(name = "typeEnum", required = true, value = "广告类型")
 	private TypeEnum typeEnum;
+	
+	@ApiParam(name = "content", value = "广告内容")
+	private String content;
 
 	public Long getProductId() {
 		return productId;
@@ -50,4 +56,21 @@ public class AdPlatformParam {
 		this.typeEnum = typeEnum;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	
 }

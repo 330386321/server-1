@@ -68,6 +68,14 @@ public class AdPlatformController extends BaseController {
         return rs;
     }
     
+    @ApiOperation(value = "下架广告", notes = "下架广告[]（张荣成）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
+    public Result unShelve(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+        Result rs = adPlatformService.unShelve(id);
+        return rs;
+    }
+    
     
     @ApiOperation(value = "设置广告位", notes = "设置广告位[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

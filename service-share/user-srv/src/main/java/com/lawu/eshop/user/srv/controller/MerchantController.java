@@ -1,5 +1,13 @@
 package com.lawu.eshop.user.srv.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -8,8 +16,8 @@ import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.dto.RongYunTokenDTO;
+import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.query.MerchantInviterParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
@@ -19,8 +27,6 @@ import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan

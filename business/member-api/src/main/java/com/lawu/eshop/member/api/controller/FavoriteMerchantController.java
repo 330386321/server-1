@@ -1,8 +1,9 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -18,9 +19,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FavoriteMerchantService;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
-import com.lawu.eshop.user.query.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteMerchantParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
