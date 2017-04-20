@@ -32,9 +32,9 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "新增用户", notes = "新增用户 [1004，1005]（章勇）", httpMethod = "POST")
     @RequiresPermissions("user:add")
-    @RequestMapping(value = "register", method = RequestMethod.POST)
+    @RequestMapping(value = "addUser", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    public Result register(@RequestParam(value = "account") @ApiParam(value = "账号", required = true) String account,
+    public Result addUser(@RequestParam(value = "account") @ApiParam(value = "账号", required = true) String account,
                            @RequestParam(value = "name") @ApiParam(value = "姓名") String name,
                            @RequestParam(value = "password") @ApiParam(value = "密码", required = true) String password) {
 
