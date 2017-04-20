@@ -2,12 +2,14 @@ package com.lawu.eshop.order.param.foreign;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 商家填写物流信息
- * api传递给order-srv参数
+ * api接收参数
  * 
  * @author Sunny
  * @date 2017/4/12
@@ -21,25 +23,14 @@ public class ShoppingRefundDetailRerurnAddressForeignParam implements Serializab
 	 * 是否需要退货
 	 */
 	@ApiModelProperty(value = "是否需要退货", required = true)
+	@NotEmpty(message = "是否需要退货不能为空")
 	private Boolean isNeedReturn;
 	
 	/**
-	 * 收货人姓名
+	 * 地址id
 	 */
-	@ApiModelProperty(value = "收货人姓名", required = false)
-	private String consigneeName;
-
-	/**
-	 * 收货人地址
-	 */
-	@ApiModelProperty(value = "收货人地址", required = false)
-	private String consigneeAddress;
-
-	/**
-	 * 收货人手机号码
-	 */
-	@ApiModelProperty(value = "收货人手机号码", required = false)
-	private String consigneeMobile;
+	@ApiModelProperty(value = "地址id", required = false)
+	private Long addressId;
 
 	public Boolean getIsNeedReturn() {
 		return isNeedReturn;
@@ -49,28 +40,12 @@ public class ShoppingRefundDetailRerurnAddressForeignParam implements Serializab
 		this.isNeedReturn = isNeedReturn;
 	}
 
-	public String getConsigneeName() {
-		return consigneeName;
+	public Long getAddressId() {
+		return addressId;
 	}
 
-	public void setConsigneeName(String consigneeName) {
-		this.consigneeName = consigneeName;
-	}
-
-	public String getConsigneeAddress() {
-		return consigneeAddress;
-	}
-
-	public void setConsigneeAddress(String consigneeAddress) {
-		this.consigneeAddress = consigneeAddress;
-	}
-
-	public String getConsigneeMobile() {
-		return consigneeMobile;
-	}
-
-	public void setConsigneeMobile(String consigneeMobile) {
-		this.consigneeMobile = consigneeMobile;
+	public void setAddressId(Long addressId) {
+		this.addressId = addressId;
 	}
 	
 }

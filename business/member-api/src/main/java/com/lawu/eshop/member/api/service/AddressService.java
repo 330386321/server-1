@@ -101,6 +101,6 @@ public interface AddressService {
 	 * @author Sunny
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "saveWithUserNum/{userNum}", method = RequestMethod.POST)
+	@RequestMapping(value = "address/saveWithUserNum/{userNum}", method = RequestMethod.POST)
 	Result saveWithUserNum(@PathVariable("userNum") String userNum, @RequestBody @Validated AddressParam addressDO);
 }

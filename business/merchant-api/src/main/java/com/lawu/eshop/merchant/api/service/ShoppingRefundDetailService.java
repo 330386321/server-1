@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 
 /**
  * @author Sunny
@@ -64,7 +64,7 @@ public interface ShoppingRefundDetailService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingRefundDetail/fillReturnAddress/{id}", method = RequestMethod.PUT)
-	Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressForeignParam param);
+	Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressParam param);
 	
 	/**
 	 * 商家是否同意退款

@@ -16,9 +16,9 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
@@ -127,10 +127,14 @@ public class ShoppingRefundDetailController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
-	public Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressForeignParam param) {
+	public Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressParam param) {
 		
-		shoppingRefundDetailService.fillReturnAddress(id, param);
+		int resultCode = shoppingRefundDetailService.fillReturnAddress(id, param);
 
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
+		}
+		
 		return successCreated();
 	}
 

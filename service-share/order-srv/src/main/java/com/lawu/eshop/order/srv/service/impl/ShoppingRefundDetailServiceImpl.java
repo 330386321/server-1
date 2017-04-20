@@ -17,8 +17,8 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
@@ -177,7 +177,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 */
 	@Transactional
 	@Override
-	public int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressForeignParam param) {
+	public int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressParam param) {
 		
 		if (id == null || id <= 0) {
 			return ResultCode.ID_EMPTY;

@@ -1,8 +1,8 @@
 package com.lawu.eshop.order.srv.service;
 
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 
 /**
@@ -51,7 +51,7 @@ public interface ShoppingRefundDetailService {
 	 *            退货地址信息
 	 * @return
 	 */
-	int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressForeignParam param);
+	int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressParam param);
 
 	/**
 	 * 买家填写退货的物流信息

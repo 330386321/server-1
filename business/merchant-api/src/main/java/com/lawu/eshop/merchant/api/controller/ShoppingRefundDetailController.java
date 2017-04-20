@@ -1,7 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,12 +16,16 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.merchant.api.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
+import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailRerurnAddressForeignParam;
+import com.lawu.eshop.user.dto.AddressDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +43,9 @@ public class ShoppingRefundDetailController extends BaseController {
 
 	@Autowired
 	private ShoppingRefundDetailService shoppingRefundDetailservice;
+	
+	@Autowired
+	private AddressService addressService;
 	
 	
 	/**
@@ -139,11 +147,36 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
-    public Result<ShoppingOrderExpressDTO> fillReturnAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "退货地址参数") ShoppingRefundDetailRerurnAddressForeignParam param) {
+    public Result<ShoppingOrderExpressDTO> fillReturnAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "退货地址参数") ShoppingRefundDetailRerurnAddressForeignParam foreignParam, BindingResult bindingResult) {
     	if (id == null || id <= 0) {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
 		
+		if (bindingResult.hasErrors()) {
+			StringBuilder sb = new StringBuilder();
+			for (ObjectError error : bindingResult.getAllErrors()) {
+				if (sb.length() > 0) {
+					sb.append("||");
+				}
+				sb.append(error.getDefaultMessage());
+			}
+
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
+		}
+    	
+		ShoppingRefundDetailRerurnAddressParam param = new ShoppingRefundDetailRerurnAddressParam();
+    	if (foreignParam.getAddressId() != null && foreignParam.getAddressId() > 0) {
+    		Result<AddressDTO> resultAddressDTO = addressService.get(id);
+    		if (!isSuccess(resultAddressDTO)) {
+    			return successCreated(resultAddressDTO.getRet());
+    		}
+    		param.setConsigneeName(resultAddressDTO.getModel().getName());
+    		param.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
+    		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionPath() + resultAddressDTO.getModel().getAddr());
+    	}
+    	
+    	param.setIsNeedReturn(foreignParam.getIsNeedReturn());
+    	
     	Result result = shoppingRefundDetailservice.fillReturnAddress(id, param);
     	
     	if (!isSuccess(result)) {
