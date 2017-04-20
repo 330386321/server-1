@@ -27,7 +27,9 @@ public class AuthServiceImpl implements AuthService {
     public ShiroUser find(String account) {
 
         Result<UserDTO> result = userService.find(account);
-
+        if(result.getModel() == null){
+            return null;
+        }
         ShiroUser shiroUser = new ShiroUser();
         shiroUser.setAccount(result.getModel().getAccount());
         shiroUser.setPassword(result.getModel().getPassword());
@@ -47,7 +49,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ShiroUser find(String account, String password) {
         Result<UserDTO> result = userService.find(account, password);
-
+        if(result.getModel() == null){
+            return null;
+        }
         ShiroUser shiroUser = new ShiroUser();
         shiroUser.setAccount(result.getModel().getAccount());
         shiroUser.setPassword(result.getModel().getPassword());

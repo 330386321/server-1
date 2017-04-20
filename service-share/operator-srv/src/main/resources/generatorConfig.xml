@@ -44,8 +44,5 @@
         <table tableName="user" domainObjectName="UserDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="role_permission" domainObjectName="RolePermissionDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
     </context>
 </generatorConfiguration>

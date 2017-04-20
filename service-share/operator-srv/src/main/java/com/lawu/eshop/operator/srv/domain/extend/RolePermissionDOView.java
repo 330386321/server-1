@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.srv.domain.extend;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author zhangyong
@@ -14,6 +15,8 @@ public class RolePermissionDOView implements Serializable{
     private String permissionName;
 
     private String permissionKey;
+
+    private Map<String,String> permissionInfo;
 
     public Integer getId() {
         return id;

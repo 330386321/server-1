@@ -51,6 +51,11 @@ public class ResultCode {
     public static final int USER_POINT_NOT_ENOUGH = 2007;
     public static final int MERCHANT_STORE_AUDIT_EXIST = 2008;
 
+    //运营
+    public static final int USER_NOT_LOGIN = 2100;
+    public static final int USER_ROLE_EXIST = 2101;
+
+
     // 商品模块代码 3xxx
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
@@ -158,6 +163,10 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
         ResultCode.messageMap.put(USER_POINT_NOT_ENOUGH, "用户积分不足");
         ResultCode.messageMap.put(MERCHANT_STORE_AUDIT_EXIST, "已经存在未审核记录");
+
+        //运营
+        ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");
+        ResultCode.messageMap.put(USER_ROLE_EXIST, "用户已经存在该权限");
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
