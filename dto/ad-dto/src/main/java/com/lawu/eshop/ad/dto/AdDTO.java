@@ -3,12 +3,15 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
+@JsonInclude(Include.NON_EMPTY) 
 public class AdDTO {
 	
 	@ApiModelProperty(value = "主键")

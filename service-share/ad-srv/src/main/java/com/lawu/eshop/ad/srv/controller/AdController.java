@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
@@ -182,8 +183,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByPlatForm", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam) {
-		Page<AdBO> pageBO=  adService.selectListByPlatForm(adMerchantParam);
+    public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdFindParam adPlatParam) {
+		Page<AdBO> pageBO=  adService.selectListByPlatForm(adPlatParam);
 		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());

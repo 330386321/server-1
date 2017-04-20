@@ -205,7 +205,7 @@ public class AdController extends BaseController {
      @Authorization
      @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
+     @RequestMapping(value = "selectLexicon", method = RequestMethod.GET)
      public Result<List<AdLexiconDTO>> selectList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long adId) {
          Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adId);
          return adLexiconDTOS;

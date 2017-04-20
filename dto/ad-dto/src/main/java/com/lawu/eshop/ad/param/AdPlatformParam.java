@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.param;
 
-import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 
 import io.swagger.annotations.ApiParam;
@@ -16,10 +15,7 @@ public class AdPlatformParam {
 	@ApiParam(name = "linkUrl", required = true, value = "链接地址")
 	private String linkUrl;
 
-	@ApiParam(name = "positionEnum", required = true, value = "")
-	private PositionEnum positionEnum;
-
-	@ApiParam(name = "typeEnum", required = true, value = "")
+	@ApiParam(name = "typeEnum", required = true, value = "广告类型")
 	private TypeEnum typeEnum;
 
 	public Long getProductId() {
@@ -44,16 +40,6 @@ public class AdPlatformParam {
 
 	public void setLinkUrl(String linkUrl) {
 		this.linkUrl = linkUrl;
-	}
-
-	
-
-	public PositionEnum getPositionEnum() {
-		return positionEnum;
-	}
-
-	public void setPositionEnum(PositionEnum positionEnum) {
-		this.positionEnum = positionEnum;
 	}
 
 	public TypeEnum getTypeEnum() {

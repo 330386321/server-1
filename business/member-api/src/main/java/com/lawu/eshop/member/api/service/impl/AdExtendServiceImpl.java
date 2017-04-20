@@ -237,10 +237,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     		}else{
     			 Result<MerchantStoreDTO> rs= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
     			 MerchantStoreDTO dto= rs.getModel();
-    			 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
-    					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
-    			 if(adDTO.getRadius()>distance)
-    				 newList.add(adDTO);
+    			 if(adMemberParam.getLongitude()!=null && adMemberParam.getLatitude()!=null){
+    				 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
+        					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
+        			 if(adDTO.getRadius()>distance)
+        				 newList.add(adDTO);
+    			 }
+    			
     		}
 			
 		}

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
@@ -240,22 +241,24 @@ public class AdServiceImpl implements AdService {
 	 * @return
 	 */
 	@Override
-	public Page<AdBO> selectListByPlatForm(AdMerchantParam adMerchantParam) {
+	public Page<AdBO> selectListByPlatForm(AdFindParam adPlatParam) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
 		cr.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
-		if(adMerchantParam.getPutWayEnum()!=null){
-			cr.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
-		}else if(adMerchantParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
-		}else if(adMerchantParam.getStatusEnum()!=null){
-			cr.andStatusEqualTo(adMerchantParam.getStatusEnum().val);
+		if(adPlatParam.getPutWayEnum()!=null){
+			cr.andPutWayEqualTo(adPlatParam.getPutWayEnum().val);
+		}else if(adPlatParam.getTypeEnum()!=null){
+			cr.andTypeEqualTo(adPlatParam.getTypeEnum().val);
+		}else if(adPlatParam.getStatusEnum()!=null){
+			cr.andStatusEqualTo(adPlatParam.getStatusEnum().val);
+		}else if(adPlatParam.getBeginTime()!=null && adPlatParam.getEndTime()!=null){
+			cr.andGmtCreateBetween(adPlatParam.getBeginTime(), adPlatParam.getEndTime());
 		}
-		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
+		 RowBounds rowBounds = new RowBounds(adPlatParam.getOffset(), adPlatParam.getPageSize());
 		 Long count=adDOMapper.countByExample(example);
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 Page<AdBO> page=new Page<AdBO>();
-		 page.setCurrentPage(adMerchantParam.getCurrentPage());
+		 page.setCurrentPage(adPlatParam.getCurrentPage());
 		 page.setTotalCount(count.intValue());
 		 page.setRecords(AdConverter.convertBOS(DOS));
 		return page;

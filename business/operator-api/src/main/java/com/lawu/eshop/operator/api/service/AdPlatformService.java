@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.framework.web.Result;
 
@@ -39,12 +40,49 @@ public interface AdPlatformService {
 	@RequestMapping(method = RequestMethod.DELETE, value = "adPlatform/removeAdPlatform/{id}")
 	Result removeAdPlatform(@PathVariable("id") Long id);
 	
+
 	/**
-	 * 根据不同的位置查询不同的广告
-	 * @param positionEnum
+	 * 查询
+	 * @param param
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectByPosition")
-	Result<List<AdPlatformDTO>> selectByPosition(@RequestBody PositionEnum positionEnum);
+	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectList")
+	Result<List<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param);
+	
+	
+	/**
+	 * 发布广告
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/issueAd/{id}")
+	Result issueAd(@PathVariable("id") Long id);
+	
+	/**
+	 * 设置广告位
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/setPosition/{id}")
+	Result setPosition(@PathVariable("id") Long id,@RequestBody PositionEnum positionEnum);
+	
+	/**
+	 * 修改
+	 * @param id
+	 * @param adPlatformParam
+	 * @param url
+	 * @return
+	 */
+	@RequestMapping(value = "adPlatform/update/{id}", method = RequestMethod.POST)
+    Result update(@PathVariable("id") Long id, @RequestBody AdPlatformParam adPlatformParam,@RequestParam("url") String url); 
+	
+	
+	/**
+	 * 单个查询
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "adPlatform/select/{id}")
+	Result<AdPlatformDTO> select(@PathVariable("id") Long id);
 
 }

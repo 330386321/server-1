@@ -36,6 +36,12 @@
     <bean id="rocketMQMessageProducerServiceImpl" class="com.lawu.eshop.mq.message.impl.RocketMQMessageProducerServiceImpl" >
         <property name="defaultMQProducer" ref="defaultMQProducer" />
     </bean>
+    
+    <!--  <bean id="jacksonMapper" class="com.lawu.eshop.framework.web.MyJsonMapper"></bean> 
+		
+	 <bean id="jacksonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+		<constructor-arg ref="jacksonMapper" />
+	 </bean>  -->
 
     <!-- 消息消费者 -->
     <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >

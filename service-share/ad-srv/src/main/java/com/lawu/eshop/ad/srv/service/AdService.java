@@ -1,6 +1,8 @@
 package com.lawu.eshop.ad.srv.service;
 
 import java.math.BigDecimal;
+
+import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
@@ -58,7 +60,7 @@ public interface AdService {
 	 * @param adMerchantParam
 	 * @return
 	 */
-	Page<AdBO> selectListByPlatForm(AdMerchantParam adMerchantParam);
+	Page<AdBO> selectListByPlatForm(AdFindParam adPlatParam);
 	
 	/**
 	 * 会员对E赚的观看

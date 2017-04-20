@@ -42,10 +42,11 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @Authorization
-    @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectByPosition", method = RequestMethod.POST)
-    public Result<List<AdPlatformDTO>> selectByPosition(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "位置") PositionEnum positionEnum) {
+    @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
+    public Result<List<AdPlatformDTO>> selectByPosition(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "POSITON_RECOMMEND 人气推荐 POSITON_SHOP_TOP 要购物顶部广告 POSITON_SHOP_CHOOSE"
+			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告") PositionEnum positionEnum) {
         Result<List<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectByPosition(positionEnum);
         return adPlatformDTOS;
     }
