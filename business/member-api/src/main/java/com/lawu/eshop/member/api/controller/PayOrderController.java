@@ -49,7 +49,7 @@ public class PayOrderController extends BaseController {
 
     @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    // @Authorization
+    @Authorization
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
     public Result<PayOrderIdDTO> savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
