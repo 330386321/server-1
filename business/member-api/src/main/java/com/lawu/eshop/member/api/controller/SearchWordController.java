@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.SearchWordDTO;
 import com.lawu.eshop.mall.param.SearchWordParam;
 import com.lawu.eshop.member.api.service.SearchWordService;
@@ -29,6 +30,7 @@ public class SearchWordController extends BaseController {
     @Autowired
     private SearchWordService searchWordService;
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "搜索词条列表", notes = "门店、商品搜索词条列表。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listSearchWord", method = RequestMethod.GET)

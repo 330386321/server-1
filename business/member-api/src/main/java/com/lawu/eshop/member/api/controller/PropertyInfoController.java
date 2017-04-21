@@ -76,6 +76,7 @@ public class PropertyInfoController extends BaseController {
     	return successGet(result);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "获取资产余额积分", notes = "根据用户编号获取资产余额积分。[]（杨清华）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

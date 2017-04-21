@@ -122,6 +122,7 @@ public class TransactionDetailController extends BaseController {
      * @param param 查询参数
      * @return
      */
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "获取用户的所有交易类型。", notes = "获取用户的所有交易类型。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

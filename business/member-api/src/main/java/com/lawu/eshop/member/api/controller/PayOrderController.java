@@ -47,6 +47,7 @@ public class PayOrderController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

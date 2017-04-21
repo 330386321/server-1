@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,7 @@ public class FansMerchantController extends BaseController {
     @Autowired
     private FansMerchantService fansMerchantService;
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "成为商家粉丝", notes = "成为商家粉丝。 (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

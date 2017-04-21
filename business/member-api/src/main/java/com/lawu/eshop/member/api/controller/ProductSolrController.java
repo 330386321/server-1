@@ -69,6 +69,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductByName(productSolrParam);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductSearchWord", method = RequestMethod.GET)
@@ -76,6 +77,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listProductSearchWord(name);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物首页", notes = "要购物首页。(梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProduct", method = RequestMethod.GET)

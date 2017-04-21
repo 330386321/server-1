@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ public class MerchantFavoredController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "会员根据商家ID查询优惠买单信息", notes = "会员根据商家ID查询优惠买单信息。[1004]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findFavoredByMerchantId/{merchantId}", method = RequestMethod.GET)

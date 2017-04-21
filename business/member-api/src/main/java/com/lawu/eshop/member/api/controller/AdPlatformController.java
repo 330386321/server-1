@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ public class AdPlatformController extends BaseController {
      * @param positionEnum  
      * @return
      */
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "广告信息查询 (banner)", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
@@ -53,7 +55,8 @@ public class AdPlatformController extends BaseController {
         Result<List<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectByPosition(positionEnum);
         return adPlatformDTOS;
     }
-    
+
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物今日推荐", notes = "要购物今日推荐[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectRecommend", method = RequestMethod.GET)

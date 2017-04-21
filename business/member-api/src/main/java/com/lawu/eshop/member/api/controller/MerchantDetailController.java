@@ -88,6 +88,7 @@ public class MerchantDetailController extends BaseController {
         return merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情", notes = "要购物门店详情基本信息。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "shoppingStore/{id}", method = RequestMethod.GET)

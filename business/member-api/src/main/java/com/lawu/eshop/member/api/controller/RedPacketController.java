@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,8 +35,8 @@ public class RedPacketController extends BaseController{
 	
 	@Autowired
 	private RedPacketService redPacketService;
-	
-	
+
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "领取红包", notes = "领取红包[5004]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
