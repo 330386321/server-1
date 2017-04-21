@@ -79,6 +79,11 @@ public class TransactionDetailController extends BaseController {
     		}
     	}
     	
+    	//如果list中不存在提现的记录，不需要查询，直接返回数据
+    	if (ids.isEmpty()) {
+    		successGet(result);
+    	}
+    	
     	Result<List<WithdrawCashStatusDTO>> resultWithdrawCashStatusDTOList = cashManageFrontService.findCashDetailStatus(ids);
     	
     	if (!isSuccess(resultWithdrawCashStatusDTOList)) {
