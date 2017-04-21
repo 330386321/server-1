@@ -50,9 +50,6 @@ public class InviterController extends BaseController {
     
     @Autowired
     private InviterService inviterService;
-    
-    @Autowired
-    private MemberProfileService memberProfileService; 
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "查询邀请人", notes = "根据账号查询邀请人信息。[1002](梅述全)", httpMethod = "GET")
@@ -62,37 +59,6 @@ public class InviterController extends BaseController {
         return inviterService.getInviterByAccount(account);
     }
     
-    
-    /**
-     * 我的商家推荐总数量
-     * @param id
-     * @return
-    */
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "我的商家推荐总数量", notes = "我的商家推荐总数量,[]（张荣成）", httpMethod = "GET")
-    @Authorization
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getMerchantCount", method = RequestMethod.GET)
-    public Result<InviteeMechantCountDTO> getMerchantCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-	   Long id=UserUtil.getCurrentUserId(getRequest());
-	   Result<InviteeMechantCountDTO>  count=memberProfileService.getMerchantCount(id);
-	   return count;
-    }
-    
-    /**
-	 * 我的E友总数量
-	 * @return
-	 */
-    @Audit(date = "2017-04-01", reviewer = "孙林青")
-	@ApiOperation(value = "我的E友总数量", notes = "我的E友总数量,[]（张荣成）", httpMethod = "GET")
-    @Authorization
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getMemberCount", method = RequestMethod.GET)
-    public Result<InviteeMemberCountDTO> getMemberCount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-	   Long id=UserUtil.getCurrentUserId(getRequest());
-	   Result<InviteeMemberCountDTO>  count=memberProfileService.getMemberCount(id);
-	   return count;
-    }
 	
 	/**
 	 * 我推荐的商家

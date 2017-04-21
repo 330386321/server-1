@@ -1,5 +1,7 @@
 package com.lawu.eshop.user.dto;
 
+import java.math.BigDecimal;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -19,6 +21,15 @@ public class MerchantSNSDTO {
 
     @ApiModelProperty(value = "负责人")
     private String principalName;
+    
+    @ApiModelProperty(value = "邀请的商家总数")
+	private Integer inviteeMechantCount;
+    
+    @ApiModelProperty(value = "E友总数")
+	private Integer inviteeMemberCount;
+    
+    @ApiModelProperty(name = "loveAccount", value= "爱心账户", required = true)
+	private BigDecimal loveAccount;
 
     public Long getId() {
         return id;
@@ -50,6 +61,30 @@ public class MerchantSNSDTO {
 
 	public void setPrincipalName(String principalName) {
 		this.principalName = principalName;
+	}
+
+	public Integer getInviteeMechantCount() {
+		return inviteeMechantCount;
+	}
+
+	public void setInviteeMechantCount(Integer inviteeMechantCount) {
+		this.inviteeMechantCount = inviteeMechantCount;
+	}
+
+	public Integer getInviteeMemberCount() {
+		return inviteeMemberCount;
+	}
+
+	public void setInviteeMemberCount(Integer inviteeMemberCount) {
+		this.inviteeMemberCount = inviteeMemberCount;
+	}
+
+	public BigDecimal getLoveAccount() {
+		return loveAccount;
+	}
+
+	public void setLoveAccount(BigDecimal loveAccount) {
+		this.loveAccount = loveAccount;
 	}
 
 	

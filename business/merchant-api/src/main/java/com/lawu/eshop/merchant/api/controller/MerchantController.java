@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,9 +22,13 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.service.InviterService;
+import com.lawu.eshop.merchant.api.service.MemberProfileService;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
 import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -53,6 +59,11 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private InviterService inviterService;
+    
+    @Autowired
+    private MemberProfileService memberProfileService;
+   
+    
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
@@ -185,8 +196,28 @@ public class MerchantController extends BaseController {
     @RequestMapping(value = "selectMerchantInfo",method = RequestMethod.GET)
     public Result<MerchantSNSDTO> selectMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         Long id = UserUtil.getCurrentUserId(getRequest());
-        Result result = merchantService.selectMerchantInfo(id);
-        return result;
+       String userNum =UserUtil.getCurrentUserNum(getRequest());
+        Result<MerchantSNSDTO> result = merchantService.selectMerchantInfo(id);
+        MerchantSNSDTO dto=result.getModel();
+        InviteeMechantCountDTO inviteeMechantCountDTO=memberProfileService.getMerchantCount(id).getModel();
+        InviteeMemberCountDTO inviteeMemberCountDTO= memberProfileService.getMemberCount(id).getModel();
+        PropertyLoveAccountDTO propertyLoveAccountDTO=propertyInfoService.selectLoveAccount(userNum).getModel();
+        if(inviteeMechantCountDTO!=null){
+        	dto.setInviteeMechantCount(inviteeMechantCountDTO.getInviteeMechantCount());
+        }else{
+        	dto.setInviteeMechantCount(0);
+        }
+        if(inviteeMemberCountDTO!=null){
+        	dto.setInviteeMemberCount(inviteeMemberCountDTO.getInviteeMemberCount());
+        }else{
+        	dto.setInviteeMemberCount(0);
+        }
+        if(propertyLoveAccountDTO!=null){
+        	dto.setLoveAccount(propertyLoveAccountDTO.getLoveAccount());
+        }else{
+        	dto.setLoveAccount(new BigDecimal(0));
+        }
+        return successGet(dto);
     }
 
 
