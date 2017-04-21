@@ -183,4 +183,17 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
     }
 
+	@Override
+	public BigDecimal selectLoveAccount(String userNum) {
+		 PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
+	        propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
+	        List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
+
+	        if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
+	            return new BigDecimal(0);
+	        }
+	        BigDecimal loveAccount = propertyInfoDOS.get(0).getLoveAccount();
+		return loveAccount;
+	}
+
 }

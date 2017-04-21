@@ -88,5 +88,12 @@ public interface PropertyInfoService {
      * @param userNum
      */
     void savePropertyInfo(String userNum);
+    
+    /**
+     * 爱心账户
+     * @param userNum
+     * @return
+     */
+    BigDecimal selectLoveAccount(String userNum);
 
 }

@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
@@ -195,6 +196,20 @@ public class PropertyInfoController extends BaseController {
 			@RequestParam String flag, @RequestParam BigDecimal number) {
 		int retCode = propertyInfoService.updatePropertyNumbers(userNum, column, flag, number);
 		return successCreated(retCode);
+	}
+	
+	/**
+	 * 查询爱心账户
+	 * @param userNum
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "selectLoveAccount/{userNum}", method = RequestMethod.GET)
+	public Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum) throws Exception {
+		BigDecimal selectLoveAccount = propertyInfoService.selectLoveAccount(userNum);
+		PropertyLoveAccountDTO dto = new PropertyLoveAccountDTO();
+		dto.setLoveAccount(selectLoveAccount);
+		return successCreated(dto);
 	}
 
 }
