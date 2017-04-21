@@ -13,9 +13,9 @@ import com.lawu.eshop.operator.param.PerssionParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
-import org.apache.shiro.SecurityUtils;
+import om.lawu.eshop.shiro.util.UserUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,12 +37,11 @@ public class PermissonController extends BaseController{
     @RequestMapping(value = "getPerssion",method = RequestMethod.GET)
     @ApiResponse(code = HttpCode.SC_OK,message = "success")
     public Result<PerssionDTO> getPerssion(){
-        Subject subject = SecurityUtils.getSubject();
-        // 取身份信息
-        if(subject.getPrincipals() == null){
+
+        String account = UserUtil.getCurrentUserAccount();
+        if(StringUtils.isEmpty(account)){
             return successGet(ResultCode.USER_NOT_LOGIN);
         }
-        String account = subject.getPrincipals().toString();
         Result<PerssionDTO> perssions = permissonService.findPessionByAccount(account);
         return perssions;
     }
