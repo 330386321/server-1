@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,7 @@ public class MemberInfoController extends BaseController {
     @Autowired
     private MemberService memberService;
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "我的页面", notes = "返回我的页面所需要的资料[](蒋鑫俊)", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

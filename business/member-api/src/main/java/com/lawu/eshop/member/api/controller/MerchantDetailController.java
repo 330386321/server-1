@@ -98,6 +98,7 @@ public class MerchantDetailController extends BaseController {
         return merchantStoreService.getShoppingStoreDetailById(id, memberId);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情店铺首页", notes = "要购物门店详情店铺首页。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listHotProduct", method = RequestMethod.GET)
@@ -105,6 +106,7 @@ public class MerchantDetailController extends BaseController {
         return shoppingProductService.listHotProduct(listShoppingProductParam);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情全部商品", notes = "要购物门店详情全部商品。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listAllProduct", method = RequestMethod.GET)
@@ -112,6 +114,7 @@ public class MerchantDetailController extends BaseController {
         return shoppingProductService.listAllProduct(listShoppingProductParam);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "要购物门店详情最新上架", notes = "要购物门店详情最新上架。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNewProduct", method = RequestMethod.GET)
