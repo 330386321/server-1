@@ -56,10 +56,10 @@ public class FavoriteMerchantController extends BaseController{
 	}
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
-	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[]（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "我收藏的商家", notes = "我收藏商家列表查询,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.POST)
+    @RequestMapping(value = "getMyFavoriteMerchant", method = RequestMethod.GET)
     public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 																  @ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());

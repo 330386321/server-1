@@ -64,10 +64,10 @@ public class FavoriteProductController extends BaseController{
 	 * @return
 	 */
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
-	@ApiOperation(value = "我收藏的商品", notes = "我收藏的商品，[]（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "我收藏的商品", notes = "我收藏的商品，[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectMyFavoriteProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "selectMyFavoriteProduct", method = RequestMethod.GET)
     public Result<Page<FavoriteProductDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") FavoriteProductQuery pageQuery) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());

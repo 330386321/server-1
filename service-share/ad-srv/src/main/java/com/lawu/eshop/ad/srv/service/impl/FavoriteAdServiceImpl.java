@@ -39,7 +39,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	 * 广告收藏
 	 */
 	@Override
-	public Integer save(Long adId,Long memberId) {
+	public Integer save(Long memberId,Long adId) {
 		FavoriteAdDOExample example=new FavoriteAdDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
 		Long count=favoriteAdDOMapper.countByExample(example);
