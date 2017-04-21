@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +63,14 @@ public interface MerchantStoreService {
      */
     @RequestMapping(value = "audit/getMerchantAuditInfo/{merchantId}", method = RequestMethod.GET)
      Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@PathVariable(value = "merchantId") Long merchantId);
+
+    /**
+     * 申请实体店铺
+     * @param merchantId
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/applyPhysicalStore/{merchantId}", method = RequestMethod.PUT)
+    public Result applyPhysicalStore(@PathVariable(value = "merchantId") Long merchantId, @ModelAttribute ApplyStoreParam param);
 
 }

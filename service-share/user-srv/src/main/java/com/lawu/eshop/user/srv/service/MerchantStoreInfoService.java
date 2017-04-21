@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
 
@@ -93,4 +94,5 @@ public interface MerchantStoreInfoService {
      */
     void updateMerchantStoreStatus(Long merchantId, Byte status);
 
+    Integer applyPhysicalStore(Long merchantId,Long storeId, ApplyStoreParam param);
 }

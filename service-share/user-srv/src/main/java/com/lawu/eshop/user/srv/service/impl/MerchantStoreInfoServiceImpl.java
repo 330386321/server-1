@@ -5,6 +5,8 @@ import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
+import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
@@ -240,6 +242,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDO.setContent(JSONObject.fromObject(merchantStoreParam).toString());
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);// 待审核
         merchantStoreAuditDO.setGmtCreate(new Date());
+        merchantStoreAuditDO.setType(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
         merchantStoreAuditDO.setGmtModified(new Date());
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
 
@@ -499,7 +502,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     @Override
     public MerchantStoreAuditBO findStoreAuditInfo(Long merchantId) {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
         List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
         if (merchantStoreAuditDOS.isEmpty()) {
             return null;
@@ -524,6 +527,30 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
         merchantStoreDO.setStatus(status);
         merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO, example);
+    }
+
+    @Override
+    @Transactional
+    public Integer applyPhysicalStore(Long merchantId, Long storeId, ApplyStoreParam param) {
+
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId).
+                andStatusEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val).
+                andTypeEqualTo(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val);
+        List<MerchantStoreAuditDO> auditDOS = merchantStoreAuditDOMapper.selectByExample(example);
+        if (!auditDOS.isEmpty()) {
+            return -1;
+        }
+        MerchantStoreAuditDO audit = new MerchantStoreAuditDO();
+        audit.setMerchantId(merchantId);
+        audit.setMerchantStoreId(storeId);
+        audit.setType(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val);
+        audit.setStatus(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+        audit.setContent(JSONObject.fromObject(param).toString());
+        audit.setGmtCreate(new Date());
+        audit.setGmtModified(new Date());
+        Integer row = merchantStoreAuditDOMapper.insert(audit);
+        return row;
     }
 
 }

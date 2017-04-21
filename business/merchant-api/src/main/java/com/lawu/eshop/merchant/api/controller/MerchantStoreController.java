@@ -12,6 +12,7 @@ import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -245,6 +246,54 @@ public class MerchantStoreController extends BaseController {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         Result<MerchantAuditInfoDTO> result = merchantStoreService.getMerchantAuditInfo(merchantId);
         return result;
+    }
+
+    @ApiOperation(value = "申请实体店铺", notes = "申请实体店铺 [2008,1100]（章勇）", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "applyPhysicalStore", method = RequestMethod.POST)
+    public Result applyPhysicalStore(@ModelAttribute ApplyStoreParam param){
+        HttpServletRequest request = getRequest();
+        Long merchantId = UserUtil.getCurrentUserId(request);
+        StringBuffer storeUrls = new StringBuffer();        //门店照
+        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
+        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
+
+        Collection<Part> parts = null;
+        try {
+            parts = request.getParts();
+
+        } catch (IOException e) {
+            logger.error(e.getStackTrace().toString());
+            return successCreated(e.getMessage());
+        } catch (ServletException ex) {
+            logger.info("Servlet异常");
+        }
+        for (Part part : parts) {
+            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+            String flag = map.get("resultFlag");
+            String fileName = part.getName();
+            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                //有图片上传成功返回,拼接图片url
+                String imgUrl = map.get("imgUrl");
+                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                    storeUrls.append(imgUrl + ",");
+                }
+                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    environmentUrls.append(imgUrl + ",");
+                }
+                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    storeLogoUrls.append(imgUrl + ",");
+                }
+            } else {
+                return successCreated(Integer.valueOf(flag));
+            }
+        }
+        ApplyStoreParam applyStoreParam = new ApplyStoreParam();
+        applyStoreParam.setEnvironmentUrl(environmentUrls.toString());
+        applyStoreParam.setLogoUrl(storeLogoUrls.toString());
+        applyStoreParam.setStoreUrl(storeUrls.toString());
+        return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
     }
 
 }

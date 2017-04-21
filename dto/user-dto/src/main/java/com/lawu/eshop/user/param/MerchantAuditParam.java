@@ -2,6 +2,7 @@ package com.lawu.eshop.user.param;
 
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -27,6 +28,9 @@ public class MerchantAuditParam {
      */
     @ApiParam(name = "remark", value = "审核备注")
     private String remark;
+
+    @ApiParam(name = "typeEnum", value = "审核类型：申请实体店：AUDIT_TYPE_STORE，修改资料：AUDIT_TYPE_EDIT_INFO",required = true)
+    private MerchantAuditTypeEnum typeEnum;
 
     /**
      * 门店id
@@ -75,5 +79,13 @@ public class MerchantAuditParam {
 
     public void setAuditorId(Integer auditorId) {
         this.auditorId = auditorId;
+    }
+
+    public MerchantAuditTypeEnum getTypeEnum() {
+        return typeEnum;
+    }
+
+    public void setTypeEnum(MerchantAuditTypeEnum typeEnum) {
+        this.typeEnum = typeEnum;
     }
 }

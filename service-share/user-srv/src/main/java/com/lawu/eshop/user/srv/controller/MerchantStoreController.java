@@ -10,6 +10,7 @@ import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
@@ -270,4 +271,28 @@ public class MerchantStoreController extends BaseController {
         merchantStoreDTO.setStoreUrl(merchantStoreInfoBO.getStoreUrl());
         return merchantStoreDTO;
     }
+
+    /**
+     * 申请实体店铺
+     *
+     * @return
+     */
+    @RequestMapping(value = "applyPhysicalStore/{merchantId}", method = RequestMethod.PUT)
+    public Result applyPhysicalStore(@PathVariable(value = "merchantId") Long merchantId, @RequestBody ApplyStoreParam param) {
+        if (merchantId == null) {
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+        if (merchantStoreBO == null) {
+            return successCreated(ResultCode.NOT_FOUND_DATA);
+        }
+        //添加审核记录
+        Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
+        if (row < 0) {
+            return successCreated(ResultCode.MERCHANT_STORE_AUDIT_EXIST);
+        }
+        return successCreated(ResultCode.SUCCESS);
+    }
+
+
 }
