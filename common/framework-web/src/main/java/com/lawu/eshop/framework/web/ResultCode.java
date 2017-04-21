@@ -117,7 +117,9 @@ public class ResultCode {
     public static final int DEPOSIT_IN_SYSTEM_DAYS = 6016;
     public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
     public static final int MONEY_IS_ZERO = 6018;
+    
 
+    
    
     // 商城模块代码 7xxx
 
