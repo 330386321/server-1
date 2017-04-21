@@ -28,6 +28,9 @@ public class PayOrderInfoDTO {
     @ApiModelProperty(value = "EVALUATION_SUCCESS：已评，UN_EVALUATION：未评")
     private EvaluationEnum evaluationEnum;
 
+    @ApiModelProperty(value = "商家ID")
+    private Long merchantId;
+
     @ApiModelProperty(value = "买单时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
@@ -100,5 +103,13 @@ public class PayOrderInfoDTO {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
     }
 }

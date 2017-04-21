@@ -1,23 +1,31 @@
-package com.lawu.eshop.operator.srv.bo;
+package com.lawu.eshop.operator.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 
 /**
  * @author zhangyong
- * @date 2017/4/19.
+ * @date 2017/4/21.
  */
-public class PermissionBO {
+public class PermissionListDTO {
 
+    @ApiModelProperty(value = "权限ID")
     private Integer id;
 
+    @ApiModelProperty(value = "权限名称")
     private String permissionName;
 
+    @ApiModelProperty(value = "权限键值")
     private String permissionKey;
 
+    @ApiModelProperty(value = "权限URL")
     private String permissionUrl;
 
-    private Integer parentId;
 
+    @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date gmtCreate;
 
     public Integer getId() {
@@ -42,14 +50,6 @@ public class PermissionBO {
 
     public void setPermissionKey(String permissionKey) {
         this.permissionKey = permissionKey;
-    }
-
-    public Integer getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
     }
 
     public String getPermissionUrl() {

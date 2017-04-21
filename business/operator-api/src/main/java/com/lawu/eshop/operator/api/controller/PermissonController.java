@@ -1,11 +1,14 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.operator.api.service.PermissonService;
+import com.lawu.eshop.operator.dto.PermissionListDTO;
 import com.lawu.eshop.operator.dto.PerssionDTO;
+import com.lawu.eshop.operator.param.PermissionParam;
 import com.lawu.eshop.operator.param.PerssionParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,5 +59,15 @@ public class PermissonController extends BaseController{
         return result;
     }
 
-
+    @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
+    @RequiresPermissions("perssion:find")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "findPerminnionList", method = RequestMethod.GET)
+    public Result<Page<PermissionListDTO>> findPerminnionList(@ModelAttribute PermissionParam param){
+        if(param == null){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        Result<Page<PermissionListDTO>> pageResult = permissonService.findPerminnionList(param);
+        return pageResult;
+    }
 }

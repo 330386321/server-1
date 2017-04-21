@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.srv.converter;
 
 import com.lawu.eshop.operator.srv.bo.RoleBO;
+import com.lawu.eshop.operator.srv.domain.RoleDO;
 import com.lawu.eshop.operator.srv.domain.extend.UserRoleDOView;
 
 /**
@@ -10,7 +11,7 @@ import com.lawu.eshop.operator.srv.domain.extend.UserRoleDOView;
 public class RoleConverter {
 
     public static RoleBO coverBO(UserRoleDOView userRoleDOView) {
-        if(userRoleDOView == null){
+        if (userRoleDOView == null) {
             return null;
         }
         RoleBO roleBO = new RoleBO();
@@ -20,4 +21,14 @@ public class RoleConverter {
         return roleBO;
     }
 
+    public static RoleBO cover(RoleDO roleDO) {
+        if (roleDO == null) {
+            return null;
+        }
+        RoleBO roleBO = new RoleBO();
+        roleBO.setId(roleDO.getId());
+        roleBO.setRoleName(roleDO.getRoleName());
+        roleBO.setRoleKey(roleDO.getRoleKey());
+        return roleBO;
+    }
 }

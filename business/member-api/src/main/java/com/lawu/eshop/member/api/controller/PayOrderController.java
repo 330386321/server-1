@@ -102,6 +102,7 @@ public class PayOrderController extends BaseController {
             payOrderInfoDTO.setFavoredAmount(payOrderDTO.getFavoredAmount());
             payOrderInfoDTO.setGmtCreate(payOrderDTO.getGmtCreate());
             payOrderInfoDTO.setId(payOrderDTO.getId());
+            payOrderInfoDTO.setMerchantId(payOrderDTO.getMerchantId());
             payOrderInfoDTO.setTotalAmount(payOrderDTO.getTotalAmount());
             //查询相关商家Id
             MerchantStoreDTO storeInfo = merchantStoreService.findStoreNameAndImgByMerchantId(payOrderDTO.getMerchantId());
