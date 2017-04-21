@@ -117,26 +117,36 @@
 	</sql>
 
 	<sql id="ShoppingOrderItem_Column_List">
-		soi.id, soi.shopping_order_id, soi.product_id, soi.product_name, soi.product_model_id, soi.product_model_name,
-		soi.product_feature_image, soi.regular_price, soi.sales_price, soi.quantity, soi.is_evaluation, soi.order_status,
+		soi.id, soi.shopping_order_id, soi.product_id, soi.product_name, soi.product_model_id,
+		soi.product_model_name,
+		soi.product_feature_image, soi.regular_price, soi.sales_price, soi.quantity, soi.is_evaluation,
+		soi.order_status,
 		soi.refund_status, soi.gmt_create, soi.gmt_modified
 	</sql>
 
 	<sql id="ShoppingRefundDetail_Column_List">
-		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, srd.amount, srd.consignee_name, srd.consignee_address,
-		srd.consignee_mobile, srd.express_company_id, srd.express_company_code, srd.express_company_name,
-		srd.waybill_num, srd.status, srd.is_agree, srd.gmt_refund, srd.gmt_confirmed, srd.gmt_fill, srd.gmt_submit, srd.gmt_intervention,
+		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, srd.amount, srd.consignee_name,
+		srd.consignee_address,
+		srd.consignee_mobile, srd.express_company_id, srd.express_company_code,
+		srd.express_company_name,
+		srd.waybill_num, srd.status, srd.is_agree, srd.gmt_refund, srd.gmt_confirmed, srd.gmt_fill,
+		srd.gmt_submit, srd.gmt_intervention,
 		srd.gmt_create as srd_gmt_create, srd.gmt_modified as srd_gmt_modified
 	</sql>
 
 	<sql id="ShoppingOrder_Column_List">
-		so.id as so_id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name, so.consignee_name,
-		so.consignee_address, so.consignee_mobile, so.remark, so.message, so.freight_price, so.commodity_total_price,
-		so.order_total_price, so.order_status as so_order_status, so.status, so.send_time, so.is_no_reason_return,
+		so.id as so_id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name,
+		so.consignee_name,
+		so.consignee_address, so.consignee_mobile, so.remark, so.message, so.freight_price,
+		so.commodity_total_price,
+		so.order_total_price, so.order_status as so_order_status, so.status, so.send_time,
+		so.is_no_reason_return,
 		so.is_automatic_receipt,
-		so.shopping_cart_ids_str, so.order_num, so.payment_method, so.third_number, so.waybill_num as so_waybill_num, so.express_company_id as
+		so.shopping_cart_ids_str, so.order_num, so.payment_method,
+		so.third_number, so.waybill_num as so_waybill_num, so.express_company_id as
 		so_express_company_id,
-		so.express_company_code as so_express_company_code, so.express_company_name as so_express_company_name, so.gmt_payment, so.gmt_transport,
+		so.express_company_code as so_express_company_code, so.express_company_name as so_express_company_name,
+		so.gmt_payment, so.gmt_transport,
 		so.gmt_transaction,
 		so.gmt_create as so_gmt_create, so.gmt_modified as so_gmt_modified
 	</sql>
@@ -167,19 +177,19 @@
 		<if test="orderByClause != null">
 			order by ${orderByClause}
 		</if>
+	</select>
 
-		<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample"
-			resultType="java.lang.Long">
-			select count(*) from shopping_order_item
-			<if test="isIncludeShoppingOrder">
-				left join shopping_order so on soi.shopping_order_id = so.id
-			</if>
-			<if test="isIncludeShoppingRefundDetail">
-				left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
-			</if>
-			<if test="_parameter != null">
-				<include refid="Example_Where_Clause" />
-			</if>
-		</select>
+	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample"
+		resultType="java.lang.Long">
+		select count(*) from shopping_order_item
+		<if test="isIncludeShoppingOrder">
+			left join shopping_order so on soi.shopping_order_id = so.id
+		</if>
+		<if test="isIncludeShoppingRefundDetail">
+			left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+		</if>
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
 	</select>
 </mapper>
