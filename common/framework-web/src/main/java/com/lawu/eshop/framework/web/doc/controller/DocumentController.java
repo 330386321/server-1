@@ -47,6 +47,10 @@ public class DocumentController extends BaseController{
     @RequestMapping(value = "document.html")
     public String api(Boolean isAudit, ModelMap map) {
     	
+    	if (isAudit == null) {
+    		isAudit = true;
+    	}
+    	
     	List<ApiDocumentVO> voList = new ArrayList<ApiDocumentVO>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
@@ -59,7 +63,7 @@ public class DocumentController extends BaseController{
     	ApiOperation apiOperation = null;
     	
     	try {
-	    	WebApplicationContext wc = getWebApplicationContext(getRequest().getSession().getServletContext());  
+	    	WebApplicationContext wc = getWebApplicationContext(getRequest().getSession().getServletContext());
 	        RequestMappingHandlerMapping rmhp = wc.getBean(RequestMappingHandlerMapping.class);  
 	        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = rmhp.getHandlerMethods();  
 	        for (Iterator<RequestMappingInfo> iterator = handlerMethodMap.keySet().iterator(); iterator.hasNext();) {    
@@ -69,7 +73,7 @@ public class DocumentController extends BaseController{
 	            apiOperation = method.getMethodAnnotation(ApiOperation.class);
 	            audit = method.getMethodAnnotation(Audit.class);
 	            
-	            if ((method.getMethodAnnotation(Audit.class) != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
+	            if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
 	            	
 	            	api = method.getBeanType().getAnnotation(Api.class);
 	            	
