@@ -47,7 +47,7 @@ public class PayOrderController extends BaseController {
     @Autowired
     private MerchantFavoredService merchantFavoredService;
 
-    @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000]", httpMethod = "POST")
+    @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     // @Authorization
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
@@ -82,7 +82,7 @@ public class PayOrderController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "买单记录列表", notes = "买单记录列表  [1004,1002,1000]", httpMethod = "POST")
+    @ApiOperation(value = "买单记录列表", notes = "买单记录列表  [1004,1002,1000] （章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getpayOrderList", method = RequestMethod.POST)
@@ -120,7 +120,7 @@ public class PayOrderController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "删除买单记录", notes = "删除买单记录  [1004,1000]", httpMethod = "DELETE")
+    @ApiOperation(value = "删除买单记录", notes = "删除买单记录  [1004,1000] （章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
     @RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.DELETE)
