@@ -1,12 +1,9 @@
 package com.lawu.eshop.product.srv.service;
 
-
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.ProductParam;
+import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
@@ -29,7 +26,7 @@ public interface ProductService {
      * 批量处理
      *
      * @param ids
-     * @param productStatus
+     * @param status
      * @return
      */
     int updateProductStatus(String ids, ProductStatusEnum productStatus);
@@ -56,6 +53,14 @@ public interface ProductService {
      * @param productId 商品ID
      * @param product
      */
+    void eidtProduct_bak(EditProductDataParam_bak product);
+    
+    /**
+     * 编辑商品
+     *
+     * @param productId 商品ID
+     * @param product
+     */
     void eidtProduct(EditProductDataParam product);
 
     /**
@@ -65,7 +70,7 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalInventory(Long productId,int num,String flag);
-
+    
     /**
      * 操作销量
      * @param productId
@@ -73,7 +78,7 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalSaleVolume(Long productId,int num,String flag);
-
+    
     /**
      * 操作收藏
      * @param productId
@@ -81,19 +86,4 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalFavorite(Long productId,int num,String flag);
-    /**
-     * 根据商品ID查询商品信息
-     *
-     * @param id
-     * @return
-     */
-    ProductInfoBO getProductById(Long id);
-    
-    /**
-     * 查询所有的商品
-     * @param param
-     * @return
-     */
-    List<ProductQueryBO> selectProductByPlat(ProductParam param);
-
 }

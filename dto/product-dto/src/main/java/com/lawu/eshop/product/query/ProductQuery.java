@@ -57,10 +57,10 @@ public class ProductQuery extends AbstractPageParam{
 	public void setProductStatus(ProductStatusEnum productStatus) {
 		this.productStatus = productStatus;
 	}
-	public boolean isApp() {
+	public boolean getIsApp() {
 		return isApp;
 	}
-	public void setApp(boolean isApp) {
+	public void setIsApp(boolean isApp) {
 		this.isApp = isApp;
 	}
 	

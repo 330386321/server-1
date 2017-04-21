@@ -1,17 +1,26 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.QueryPropertyDTO;
+import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
+import com.lawu.eshop.property.param.TestQueryParam;
+import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.service.PropertyService;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
@@ -53,5 +62,26 @@ public class PropertyController extends BaseController {
     	List<String> values = propertyService.getValues(name);
         return values;
     }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    
+    
+    @RequestMapping(value = "query", method = RequestMethod.POST)
+	public Result<Page<QueryPropertyDTO>> query(@RequestBody TestQueryParam param) throws Exception {
+		
+		Page<QueryPropertyBO> page = propertyService.query(param);
+		List<QueryPropertyBO> cbos = page.getRecords();
+		List<QueryPropertyDTO> dtos = new ArrayList<QueryPropertyDTO>();
+		for (QueryPropertyBO bo : cbos) {
+			QueryPropertyDTO dto = new QueryPropertyDTO();
+			BeanUtil.copyProperties(bo, dto);
+			dtos.add(dto);
+		}
+		Page<QueryPropertyDTO> pageResult = new Page<QueryPropertyDTO>();
+		pageResult.setTotalCount(page.getTotalCount());
+		pageResult.setCurrentPage(page.getCurrentPage());
+		pageResult.setRecords(dtos);
+		return successCreated(pageResult);
+	}
 
 }

@@ -1,21 +1,23 @@
 package com.lawu.eshop.product.srv.converter;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.EditProductDataParam;
+import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 会员信息转换器
@@ -46,6 +48,10 @@ public class ProductConverter {
             productDTO.setGmtCreate(productBO.getGmtCreate());
             productDTO.setSpec(productBO.getSpec());
             productDTO.setStatus(productBO.getStatus());
+            productDTO.setTotalInventory(productBO.getTotalInventory());
+            productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
+            productDTO.setTotalFavorite(productBO.getTotalFavorite());
+            productDTO.setMinPrice(productBO.getMinPrice());
             productDTOS.add(productDTO);
         }
         return productDTOS;
@@ -67,6 +73,7 @@ public class ProductConverter {
         productBO.setTotalInventory(productDO.getTotalInventory() == null ? "0" : productDO.getTotalInventory().toString());
         productBO.setTotalSalesVolume(productDO.getTotalSalesVolume() == null ? "0" : productDO.getTotalSalesVolume().toString());
         productBO.setTotalFavorite(productDO.getTotalFavorite() == null ? "0" : productDO.getTotalFavorite().toString());
+        productBO.setMinPrice(productDO.getMinPrice() == null ? "0" : productDO.getMinPrice().toString());
         return productBO;
     }
 
@@ -157,6 +164,7 @@ public class ProductConverter {
         productEditInfoDTO.setContent(productBO.getContent());
         productEditInfoDTO.setImagesUrl(productBO.getImagesUrl());
         productEditInfoDTO.setSpec(productBO.getSpec());
+        productEditInfoDTO.setImageContent(productBO.getImageContent());
         return productEditInfoDTO;
     }
 
@@ -166,6 +174,24 @@ public class ProductConverter {
      * @param param
      * @return
      */
+    public static ProductDO convertDO(EditProductDataParam_bak param, Long id) {
+        ProductDO productDO = new ProductDO();
+        productDO.setName(param.getName());
+        productDO.setCategoryId(param.getCategoryId());
+        productDO.setMerchantId(param.getMerchantId());
+        productDO.setContent(param.getContent());
+        productDO.setFeatureImage(param.getFeatureImage());
+        productDO.setImageContent(param.getImageContents());
+        productDO.setImageContent(param.getImageContents());
+        productDO.setIsAllowRefund(param.getIsAllowRefund());
+        if (id == 0L) {
+        	productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            productDO.setGmtCreate(new Date());
+        }
+        productDO.setGmtModified(new Date());
+        return productDO;
+    }
+    
     public static ProductDO convertDO(EditProductDataParam param, Long id) {
         ProductDO productDO = new ProductDO();
         productDO.setName(param.getName());
@@ -191,6 +217,17 @@ public class ProductConverter {
      * @param param
      * @return
      */
+    public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam_bak param) {
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField("id", productId);
+        document.addField("featureImage_s", param.getFeatureImage());
+        document.setField("name_s", param.getName());
+        document.addField("categoryId_i", param.getCategoryId());
+        document.addField("content_s", param.getContent());
+        document.addField("averageDailySales_d", 0);
+        return document;
+    }
+    
     public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam param) {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", productId);

@@ -117,7 +117,8 @@ public class ResultCode {
     public static final int DEPOSIT_IN_SYSTEM_DAYS = 6016;
     public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
     public static final int MONEY_IS_ZERO = 6018;
-    
+    public static final int PAY_ORDER_NULL = 6019;
+    public static final int PAY_ORDER_IS_SUCCESS = 6020;
 
     
    
@@ -229,6 +230,8 @@ public class ResultCode {
         ResultCode.messageMap.put(DEPOSIT_IN_SYSTEM_DAYS, "不满足申请退保证金要求(保证金核实后90天)");
         ResultCode.messageMap.put(DEPOSIT_EXIST_ING_ORDER, "不满足申请退保证金要求(存在未完结订单)");
         ResultCode.messageMap.put(MONEY_IS_ZERO, "查询出金额为0");
+        ResultCode.messageMap.put(PAY_ORDER_NULL, "买单记录为空");
+        ResultCode.messageMap.put(PAY_ORDER_IS_SUCCESS, "重复买单");
 
 
         // 商城模块 7xxx

@@ -11,9 +11,9 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.dto.PayOrderIdDTO;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
-import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 
 /**
  * @author zhangyong

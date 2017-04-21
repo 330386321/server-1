@@ -12,14 +12,14 @@ public abstract class AbstractPageParam {
     /**
      * 当前页码
      */
-    @ApiModelProperty(value = "当前页码（从0开始）", required = true)
-    private Integer currentPage = 0;
+    @ApiModelProperty(value = "当前页码（从1开始）", required = true)
+    private Integer currentPage = 1;
 
     /**
      * 每页数量
      */
     @ApiModelProperty(value = "每页数量", required = true)
-    private Integer pageSize = 20;
+    private Integer pageSize = 10;
 
 
     public int getOffset() {

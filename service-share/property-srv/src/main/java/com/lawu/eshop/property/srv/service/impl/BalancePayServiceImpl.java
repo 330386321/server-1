@@ -92,7 +92,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 	@Transactional
 	public int balancePay(BalancePayDataParam param) {
 		
-		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getAccount());
+		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}

@@ -1,6 +1,9 @@
 package com.lawu.eshop.order.dto;
 
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+
 public class ThirdPayCallBackQueryPayOrderDTO {
+	private PayOrderStatusEnum payOrderStatusEnum;
 	private double actualMoney;
 	private String businessUserNum;
 	public double getActualMoney() {
@@ -14,6 +17,12 @@ public class ThirdPayCallBackQueryPayOrderDTO {
 	}
 	public void setBusinessUserNum(String businessUserNum) {
 		this.businessUserNum = businessUserNum;
+	}
+	public PayOrderStatusEnum getPayOrderStatusEnum() {
+		return payOrderStatusEnum;
+	}
+	public void setPayOrderStatusEnum(PayOrderStatusEnum payOrderStatusEnum) {
+		this.payOrderStatusEnum = payOrderStatusEnum;
 	}
 	
 }

@@ -18,9 +18,10 @@ import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.member.api.service.WxPayService;
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.ThirdPayParam;
 import com.lawu.eshop.utils.StringUtil;
@@ -75,6 +76,11 @@ public class WxPayController extends BaseController {
 		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+			if(payOrderCallback == null){
+				return successCreated(ResultCode.PAY_ORDER_NULL);
+			}else if(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val.equals(payOrderCallback.getPayOrderStatusEnum().val)){
+				return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
+			}
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			money = payOrderCallback.getActualMoney();
 

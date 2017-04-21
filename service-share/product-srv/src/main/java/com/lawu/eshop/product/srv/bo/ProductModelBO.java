@@ -16,8 +16,6 @@ public class ProductModelBO {
     private BigDecimal price;
     private Integer inventory;
     private Integer inventoryTrans;
-    private String isDelete;
-    
     private Integer salesVolume;
     
 	public Long getId() {
@@ -55,12 +53,6 @@ public class ProductModelBO {
 	}
 	public void setInventoryTrans(Integer inventoryTrans) {
 		this.inventoryTrans = inventoryTrans;
-	}
-	public String getIsDelete() {
-		return isDelete;
-	}
-	public void setIsDelete(String isDelete) {
-		this.isDelete = isDelete;
 	}
 	public Integer getSalesVolume() {
 		return salesVolume;

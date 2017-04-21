@@ -11,6 +11,7 @@ public class ProductEditInfoBO {
     private Long id;
     private Long merchantId;
     private Long category;
+    private String categoryName;
     private String name;
     private String content;
     private String featureImage;
@@ -18,6 +19,7 @@ public class ProductEditInfoBO {
     private String spec;
     private String imageContent;
     private String imageDetailUrl;
+    private boolean isAllowRefund;
 	public Long getId() {
 		return id;
 	}
@@ -77,6 +79,18 @@ public class ProductEditInfoBO {
 	}
 	public void setImageDetailUrl(String imageDetailUrl) {
 		this.imageDetailUrl = imageDetailUrl;
+	}
+	public boolean isAllowRefund() {
+		return isAllowRefund;
+	}
+	public void setAllowRefund(boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	
 }

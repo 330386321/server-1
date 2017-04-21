@@ -22,6 +22,9 @@ public class ProductEditInfoDTO {
 	@ApiModelProperty(value = "商品分类ID")
     private Long category;
 	
+	@ApiModelProperty(value = "商品分类全称")
+	private String categoryName;
+	
 	@ApiModelProperty(value = "商品名称")
     private String name;
 	
@@ -34,14 +37,17 @@ public class ProductEditInfoDTO {
 	@ApiModelProperty(value = "商品描述图片,格式：url1,url2,url3....")
     private String imagesUrl;
 	
-	@ApiModelProperty(value = "商品型号,格式：[{id,name,originalPrice,price,inventory,inventoryTrans,isDelete,salesVolume},{},...],修改时inventoryTrans透传不做修改,isDelete(0-否1-是)")
+	@ApiModelProperty(value = "商品型号,格式：[{id,name,originalPrice,price,inventory,inventoryTrans,salesVolume},{},...],修改时inventoryTrans透传不做修改")
     private String spec;
 	
 	@ApiModelProperty(value = "商品详情,格式：[\"xxxxxx\",\"zzzzzzz\",...]")
     private String imageContent;
 	
-	@ApiModelProperty(value = "商品详情图片,json格式：{\"productDetailImage-1\":[\"xxxx-1-1,xxxx-1-2\",\"zzzz-2-1,zzzz-2-2\"],\"productDetailImage-2\":[],...}")
+	@ApiModelProperty(value = "商品详情图片,格式：[\"xxxxxx\",\"zzzzzzz\",...]")
     private String imageDetailUrl;
+	
+	@ApiModelProperty(value = "是否支持退换货")
+    private boolean isAllowRefund;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -102,5 +108,17 @@ public class ProductEditInfoDTO {
 	}
 	public void setImageDetailUrl(String imageDetailUrl) {
 		this.imageDetailUrl = imageDetailUrl;
+	}
+	public boolean isAllowRefund() {
+		return isAllowRefund;
+	}
+	public void setAllowRefund(boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
+	}
+	public String getCategoryName() {
+		return categoryName;
+	}
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 }

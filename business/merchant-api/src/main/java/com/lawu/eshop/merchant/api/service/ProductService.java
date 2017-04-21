@@ -50,6 +50,14 @@ public interface ProductService {
      * @param product
      * @return
      */
+    @RequestMapping(method = RequestMethod.POST, value = "product/saveProduct_bak")
+	Result saveProduct_bak(@RequestBody EditProductDataParam product);
+    
+    /**
+     * 
+     * @param product
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, value = "product/saveProduct")
 	Result saveProduct(@RequestBody EditProductDataParam product);
 

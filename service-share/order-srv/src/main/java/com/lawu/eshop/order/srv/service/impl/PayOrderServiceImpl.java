@@ -98,6 +98,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 		ThirdPayCallBackQueryPayOrderBO bo = new ThirdPayCallBackQueryPayOrderBO();
 		bo.setActualMoney(payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		bo.setBusinessUserNum(payDO.getMerchantNum());
+		bo.setPayOrderStatusEnum(PayOrderStatusEnum.getEnum(payDO.getStatus()));
 		return bo;
 	}
 }

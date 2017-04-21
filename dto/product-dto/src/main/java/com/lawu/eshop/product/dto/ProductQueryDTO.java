@@ -42,6 +42,9 @@ public class ProductQueryDTO {
 	@ApiModelProperty(value = "商品型号(PC)", required = true)
     private String spec;
 	
+	@ApiModelProperty(value = "最低价格", required = true)
+	private String minPrice;
+	
 	public Long getId() {
 		return id;
 	}
@@ -101,6 +104,12 @@ public class ProductQueryDTO {
 	}
 	public void setTotalFavorite(String totalFavorite) {
 		this.totalFavorite = totalFavorite;
+	}
+	public String getMinPrice() {
+		return minPrice;
+	}
+	public void setMinPrice(String minPrice) {
+		this.minPrice = minPrice;
 	}
 	
 }

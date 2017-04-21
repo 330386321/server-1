@@ -2,6 +2,10 @@ package com.lawu.eshop.property.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.TestQueryParam;
+import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
+
 /**
  * 
  * <p>
@@ -16,4 +20,6 @@ public interface PropertyService {
 	String getValue(String key);
 	
 	List<String> getValues(String key);
+
+	Page<QueryPropertyBO> query(TestQueryParam param)  throws Exception;
 }

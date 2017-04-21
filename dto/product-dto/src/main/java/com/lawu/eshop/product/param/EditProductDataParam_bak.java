@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * @date 2017年3月27日 下午8:21:09
  *
  */
-public class EditProductDataParam extends EditProductParam{
+public class EditProductDataParam_bak extends EditProductParam{
 
 	@NotNull(message="merchantId不能为空")
 	private Long merchantId;
@@ -31,9 +31,6 @@ public class EditProductDataParam extends EditProductParam{
 	//@ApiParam(value = "滚动图片，多张提交key为productIamge-N(修改时上传增量，例如：第1张：productIamge-1、第2张：productIamge-2...)")
 	@NotBlank(message="productImages不能为空")
 	private String productImages;
-	
-	//商品描述图片
-	private String detailImages;
 	
 	public Long getMerchantId() {
 		return merchantId;
@@ -66,13 +63,6 @@ public class EditProductDataParam extends EditProductParam{
 	public void setProductImages(String productImages) {
 		this.productImages = productImages;
 	}
-
-	public String getDetailImages() {
-		return detailImages;
-	}
-
-	public void setDetailImages(String detailImages) {
-		this.detailImages = detailImages;
-	}
+	
 
 }

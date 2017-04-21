@@ -20,6 +20,7 @@ public class ProductQueryBO {
     private String totalFavorite;
     private String featureImage;
     private String spec;
+    private String minPrice;
 	public Long getId() {
 		return id;
 	}
@@ -79,6 +80,12 @@ public class ProductQueryBO {
 	}
 	public void setTotalFavorite(String totalFavorite) {
 		this.totalFavorite = totalFavorite;
+	}
+	public String getMinPrice() {
+		return minPrice;
+	}
+	public void setMinPrice(String minPrice) {
+		this.minPrice = minPrice;
 	}
     
 }
