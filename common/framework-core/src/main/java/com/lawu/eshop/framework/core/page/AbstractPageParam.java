@@ -12,7 +12,7 @@ public abstract class AbstractPageParam {
     /**
      * 当前页码
      */
-    @ApiModelProperty(value = "当前页码", required = true)
+    @ApiModelProperty(value = "当前页码（从0开始）", required = true)
     private Integer currentPage = 0;
 
     /**
