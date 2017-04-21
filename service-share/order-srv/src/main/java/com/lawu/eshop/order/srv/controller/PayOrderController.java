@@ -1,17 +1,5 @@
 package com.lawu.eshop.order.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -26,6 +14,11 @@ import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.BeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -49,12 +42,13 @@ public class PayOrderController extends BaseController {
         if (memberId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        String orderNum = payOrderService.savePayOrderInfo(memberId, param);
-        if (StringUtils.isEmpty(orderNum)) {
+        PayOrderBO orderBO = payOrderService.savePayOrderInfo(memberId, param);
+        if (orderBO == null) {
             return successCreated(ResultCode.SAVE_FAIL);
         }
         PayOrderIdDTO orderIdDTO = new PayOrderIdDTO();
-        orderIdDTO.setOrderNum(orderNum);
+        orderIdDTO.setOrderNum(orderBO.getOrderNum());
+        orderIdDTO.setOrderId(orderBO.getId());
         return successCreated(orderIdDTO);
     }
 

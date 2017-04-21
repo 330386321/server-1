@@ -100,6 +100,8 @@ public class PayOrderBO {
      */
     private Date gmtCreate;
 
+    private String orderNum;
+
     public Long getId() {
         return id;
     }
@@ -186,5 +188,13 @@ public class PayOrderBO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
     }
 }
