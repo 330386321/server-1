@@ -82,6 +82,7 @@ public class ProductController extends BaseController {
 		return successCreated(page);
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商品批量处理", notes = "商品批量处理，[1002]。(杨清华)", httpMethod = "PUT")
 	@Authorization
@@ -93,6 +94,7 @@ public class ProductController extends BaseController {
 		return productService.updateProductStatus(ids, productStatus);
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "selectEditProductById", method = RequestMethod.GET)
@@ -103,6 +105,7 @@ public class ProductController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
 	@Authorization

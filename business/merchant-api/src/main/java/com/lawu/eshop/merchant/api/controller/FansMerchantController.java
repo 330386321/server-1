@@ -101,6 +101,7 @@ public class FansMerchantController extends BaseController {
         return fansMerchantService.listFans(merchantId, listFansParam);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "粉丝数量", notes = "查询商家粉丝数量。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

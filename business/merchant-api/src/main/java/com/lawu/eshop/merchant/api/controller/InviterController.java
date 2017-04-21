@@ -58,18 +58,19 @@ public class InviterController extends BaseController {
     public Result<InviterDTO> getInviterByAccount(@PathVariable @ApiParam(required = true, value = "邀请人账号") String account) {
         return inviterService.getInviterByAccount(account);
     }
-    
-	
+
+
 	/**
 	 * 我推荐的商家
 	 * @param token
 	 * @param pageQuery
 	 * @return
 	 */
-    @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "POST")
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
+    @ApiOperation(value = "我推荐的商家", notes = "我推荐的商家查询,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectInviteeMerchant", method = RequestMethod.POST)
+    @RequestMapping(value = "selectInviteeMerchant", method = RequestMethod.GET)
     public Result<Page<MerchantInviterDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {
     	Long userId=UserUtil.getCurrentUserId(getRequest());
@@ -84,10 +85,11 @@ public class InviterController extends BaseController {
      * @param query
      * @return
      */
-    @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "POST")
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
+    @ApiOperation(value = "我的E友", notes = "我的E有查询,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectInviterMember", method = RequestMethod.POST)
+    @RequestMapping(value = "selectInviterMember", method = RequestMethod.GET)
     public Result<Page<EfriendDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
         Byte inviterType=2;

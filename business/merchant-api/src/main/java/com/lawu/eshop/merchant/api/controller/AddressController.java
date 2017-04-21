@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -43,6 +44,7 @@ public class AddressController extends BaseController {
 	@Autowired
 	private AddressService addressService;
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@Authorization
 	@ApiOperation(value = "收货地址信息查询", notes = "查询当前用户收货地址列表信息[]（蒋鑫俊）", httpMethod = "GET")
@@ -58,6 +60,7 @@ public class AddressController extends BaseController {
 		return successGet(result);
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -67,6 +70,7 @@ public class AddressController extends BaseController {
 		return addressDTO;
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "删除收货地址", notes = "删除收货地址[1002]（蒋鑫俊）", httpMethod = "DELETE")
@@ -77,6 +81,7 @@ public class AddressController extends BaseController {
 		return rs;
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "添加收货地址", notes = "添加收货地址[]（蒋鑫俊）", httpMethod = "POST")
@@ -105,6 +110,7 @@ public class AddressController extends BaseController {
 		return successCreated();
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "修改收货地址", notes = "修改收货地址[]（蒋鑫俊）", httpMethod = "POST")
@@ -116,6 +122,7 @@ public class AddressController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
 	@ApiOperation(value = "收货默认地址修改", notes = "修改收货默认地址[]（蒋鑫俊）", httpMethod = "PUT")

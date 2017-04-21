@@ -248,6 +248,7 @@ public class MerchantStoreController extends BaseController {
         return result;
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "申请实体店铺", notes = "申请实体店铺 [2008,1100]（章勇）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -296,6 +297,7 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
     }
 
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "加入7天退货保障", notes = "加入7天退货保障 [2009]（梅述全）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

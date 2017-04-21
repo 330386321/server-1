@@ -188,8 +188,9 @@ public class MerchantController extends BaseController {
         Result result = merchantService.setGtAndRongYunInfo(id,cid);
         return result;
     }
-    
-    
+
+
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
     @ApiOperation(value = "商家个人中心", notes = "=基本信息查询[] (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
