@@ -12,10 +12,10 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.RongYunTokenDTO;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -102,7 +102,22 @@ public class MerchantController extends BaseController {
         }
         return successGet(MerchantConverter.convertDTO(merchantBO));
     }
+    
+    /**
+     * 查询商户信息
+     *
+     * @param account 商户账号
+     */
+    @RequestMapping(value = "selectMerchantInfo", method = RequestMethod.GET)
+    public Result<MerchantSNSDTO> selectMerchantInfo(@RequestParam Long merchantId) {
+        MerchantBO merchantBO = merchantService.selectMerchantInfo(merchantId);
+        if (merchantBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(MerchantConverter.convertSNSDTO(merchantBO));
+    }
 
+    
     /**
      * 推荐商家
      *

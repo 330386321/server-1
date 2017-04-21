@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
-import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
@@ -31,6 +30,8 @@ import com.lawu.eshop.user.srv.domain.MemberDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
 import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
@@ -312,4 +313,18 @@ public class MerchantServiceImpl implements MerchantService {
         }
         return MerchantConverter.convertBO(merchantDOS.get(0));
     }
+
+	@Override
+	public MerchantBO selectMerchantInfo(Long merchantId) {
+		  MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
+		  MerchantStoreDOExample example=new MerchantStoreDOExample();
+		  example.createCriteria().andMerchantIdEqualTo(merchantId);
+		  List<MerchantStoreDO> list=merchantStoreDOMapper.selectByExample(example);
+		  MerchantBO merchantBO =MerchantConverter.convertBO(merchantDO);
+		  if(!list.isEmpty()){
+			  MerchantStoreDO merchantStoreDO=list.get(0);
+			  merchantBO.setPrincipalName(merchantStoreDO.getPrincipalName());
+		  }
+	     return merchantBO;
+	}
 }

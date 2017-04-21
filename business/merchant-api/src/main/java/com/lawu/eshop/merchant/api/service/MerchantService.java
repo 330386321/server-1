@@ -1,14 +1,21 @@
 package com.lawu.eshop.merchant.api.service;
 
 
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -92,5 +99,13 @@ public interface MerchantService {
      */
     @RequestMapping(value = "merchant/setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
     Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid);
+    
+    /**
+     * 商家基本信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/selectMerchantInfo")
+    Result<MerchantSNSDTO> selectMerchantInfo(@RequestParam("merchantId") Long merchantId);
 
 }

@@ -1,5 +1,15 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -14,15 +24,14 @@ import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -166,6 +175,17 @@ public class MerchantController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Result result = merchantService.setGtAndRongYunInfo(id,cid);
+        return result;
+    }
+    
+    
+    @ApiOperation(value = "商家个人中心", notes = "=基本信息查询[] (张荣成)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "selectMerchantInfo",method = RequestMethod.GET)
+    public Result<MerchantSNSDTO> selectMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+        Long id = UserUtil.getCurrentUserId(getRequest());
+        Result result = merchantService.selectMerchantInfo(id);
         return result;
     }
 

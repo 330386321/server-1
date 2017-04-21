@@ -36,6 +36,8 @@ public class MerchantBO {
     private String gtCid;
 
     private String ryToken;
+    
+    private String principalName;
 
     public Long getId() {
         return id;
@@ -148,4 +150,14 @@ public class MerchantBO {
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
     }
+
+	public String getPrincipalName() {
+		return principalName;
+	}
+
+	public void setPrincipalName(String principalName) {
+		this.principalName = principalName;
+	}
+    
+    
 }

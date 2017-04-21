@@ -76,4 +76,11 @@ public interface MerchantService {
     Integer setGtAndRongYunInfo(Long id, String cid);
 
     MerchantBO findMemberByNum(String userNum);
+
+    /**
+     * 商家个人中心信息
+     * @param merchantId
+     * @return
+     */
+	MerchantBO selectMerchantInfo(Long merchantId);
 }
