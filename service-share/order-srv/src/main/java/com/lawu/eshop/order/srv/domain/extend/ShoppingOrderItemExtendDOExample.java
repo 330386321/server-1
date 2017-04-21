@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample.Criteria;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample.Criteria;
 
 public class ShoppingOrderItemExtendDOExample {
     /**
@@ -1228,6 +1228,11 @@ public class ShoppingOrderItemExtendDOExample {
         
         public Criteria andSRDIdEqualTo(Long value) {
             addCriterion("srd.id =", value, "id");
+            return (Criteria) this;
+        }
+        
+        public Criteria andSOMemberIdEqualTo(Long value) {
+            addCriterion("so.member_id =", value, "memberId");
             return (Criteria) this;
         }
     }

@@ -9,12 +9,14 @@ import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.utils.RandomUtil;
 
@@ -147,5 +149,20 @@ public class ShoppingOrderConverter {
 		BeanUtils.copyProperties(shoppingOrderIsNoOnGoingOrderBO, shoppingOrderIsNoOnGoingOrderDTO);
 
 		return shoppingOrderIsNoOnGoingOrderDTO;
+	}
+
+	/**
+	 * 组装订单对应订单状态的数量
+	 * 
+	 * @param shoppingOrderNumberOfOrderStatusBO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderNumberOfOrderStatusDTO convert(ShoppingOrderNumberOfOrderStatusBO shoppingOrderNumberOfOrderStatusBO) {
+		ShoppingOrderNumberOfOrderStatusDTO rtn = new ShoppingOrderNumberOfOrderStatusDTO();
+
+		BeanUtils.copyProperties(shoppingOrderNumberOfOrderStatusBO, rtn);
+
+		return rtn;
 	}
 }

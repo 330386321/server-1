@@ -22,6 +22,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
@@ -38,6 +39,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
@@ -421,5 +423,20 @@ public class ShoppingOrderController extends BaseController {
 		ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = shoppingOrderService.isNoOnGoingOrder(merchantId);
 		
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderIsNoOnGoingOrderBO));
+	}
+	
+	/**
+	 * 查询各种订单状态的数量
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
+	public Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId) {
+		
+		ShoppingOrderNumberOfOrderStatusBO shoppingOrderNumberOfOrderStatusBO = shoppingOrderService.numberOfOrderStartus(memberId);
+		
+		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusBO));
 	}
 }

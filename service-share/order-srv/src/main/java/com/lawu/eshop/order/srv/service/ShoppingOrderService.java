@@ -14,6 +14,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 
 /**
  * 购物订单服务接口
@@ -213,5 +214,14 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	void executeAutoReceipt();
+	
+	/**
+	 * 查询各种订单状态的数量
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	ShoppingOrderNumberOfOrderStatusBO numberOfOrderStartus(Long memberId);
 	
 }

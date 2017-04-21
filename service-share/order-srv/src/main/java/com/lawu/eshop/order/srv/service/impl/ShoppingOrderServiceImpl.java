@@ -35,23 +35,27 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
+import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
+import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.utils.DateUtil;
@@ -70,6 +74,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	
 	@Autowired
 	private ShoppingOrderItemDOMapper shoppingOrderItemDOMapper;
+	
+	@Autowired
+	private ShoppingOrderItemExtendDOMapper shoppingOrderItemExtendDOMapper;
 	
 	@Autowired
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
@@ -967,6 +974,61 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderDO item : shoppingOrderDOList) {
 			tradingSuccess(item.getId(), true);
 		}
+	}
+	
+	/**
+	 * 查询各种订单状态的数量
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@Override
+	public ShoppingOrderNumberOfOrderStatusBO numberOfOrderStartus(Long memberId) {
+		ShoppingOrderNumberOfOrderStatusBO rtn = new ShoppingOrderNumberOfOrderStatusBO();
+		
+		//查询待收货订单的数量
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		ShoppingOrderDOExample.Criteria shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMemberIdEqualTo(memberId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+		long pendingPaymentCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+
+		// 查询待发货数量
+		shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMemberIdEqualTo(memberId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+		long beShippedCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+		
+		// 查询待收货数量
+		shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMemberIdEqualTo(memberId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		long toBeReceivedCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+		
+		//查询待评价数量
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
+		long evaluationCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
+		
+		//查询退货中数量
+		shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		long refundingCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
+		
+		rtn.setPendingPaymentCount(pendingPaymentCount);
+		rtn.setBeShippedCount(beShippedCount);
+		rtn.setToBeReceivedCount(toBeReceivedCount);
+		rtn.setEvaluationCount(evaluationCount);
+		rtn.setRefundingCount(refundingCount);
+		
+		return rtn;
 	}
 	
 	/**************************************************************

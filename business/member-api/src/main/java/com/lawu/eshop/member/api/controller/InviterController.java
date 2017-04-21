@@ -20,7 +20,6 @@ import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantInviterService;
-import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
 import com.lawu.eshop.user.dto.InviteeMemberCountDTO;

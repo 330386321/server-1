@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 
@@ -102,4 +103,13 @@ public interface PropertyInfoService {
      */
 	@RequestMapping(value = "propertyInfo/getPropertyInfoMoney/{userNum}", method = RequestMethod.GET)
 	Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum);
+	
+	/**
+	 * 查询爱心账户
+	 * 
+	 * @param userNum
+	 * @return
+	 */
+	@RequestMapping(value = "propertyInfo/selectLoveAccount/{userNum}", method = RequestMethod.GET)
+	Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum);
 }
