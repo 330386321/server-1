@@ -33,7 +33,7 @@ public class ProductSolrController extends BaseController {
     public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSolrParam productSolrParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("categoryId_i:" + productSolrParam.getCategoryId());
+        query.setFilterQueries("categoryId_is:" + productSolrParam.getCategoryId());
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(productSolrParam.getOffset());
         query.setRows(productSolrParam.getPageSize());
@@ -59,7 +59,7 @@ public class ProductSolrController extends BaseController {
     public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSolrParam productSolrParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("categoryId_i:" + productSolrParam.getCategoryId());
+        query.setFilterQueries("categoryId_is:" + productSolrParam.getCategoryId());
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(productSolrParam.getOffset());
         query.setRows(productSolrParam.getPageSize());

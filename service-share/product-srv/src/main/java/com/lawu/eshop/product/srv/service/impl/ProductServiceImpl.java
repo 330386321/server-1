@@ -1,20 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -32,23 +17,23 @@ import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
-import com.lawu.eshop.product.srv.domain.ProductImageDO;
-import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
+import com.lawu.eshop.product.srv.mapper.*;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -65,26 +50,29 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductImageDOMapper productImageDOMapper;
 
-	@Autowired
-	private ProductCategoryService productCategoryService;
-	
-	@Autowired
-	private ProductDOMapperExtend productDOMapperExtend;
+    @Autowired
+    private ProductCategoryService productCategoryService;
 
-	@Autowired
-	@Qualifier("delProductCommentTransactionMainServiceImpl")
-	private TransactionMainService<Reply> delProductCommentTransactionMainServiceImpl;
+    @Autowired
+    private ProductCategoryeDOMapper productCategoryeDOMapper;
 
-	@Override
-	public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
-		ProductDOExample example = new ProductDOExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andMerchantIdEqualTo(query.getMerchantId())
-				.andStatusEqualTo(query.getProductStatus().val);
-		if(query.getName() != null  && !"".equals(query.getName())){
-			criteria.andNameLike("%" + query.getName() + "%");
-		}
-		example.setOrderByClause(query.getProductSortFieldEnum().val + " " + query.getOrderType());
+    @Autowired
+    private ProductDOMapperExtend productDOMapperExtend;
+
+    @Autowired
+    @Qualifier("delProductCommentTransactionMainServiceImpl")
+    private TransactionMainService<Reply> delProductCommentTransactionMainServiceImpl;
+
+    @Override
+    public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
+        ProductDOExample example = new ProductDOExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andMerchantIdEqualTo(query.getMerchantId())
+                .andStatusEqualTo(query.getProductStatus().val);
+        if (query.getName() != null && !"".equals(query.getName())) {
+            criteria.andNameLike("%" + query.getName() + "%");
+        }
+        example.setOrderByClause(query.getProductSortFieldEnum().val + " " + query.getOrderType());
 
         // 查询总数
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
@@ -98,25 +86,25 @@ public class ProductServiceImpl implements ProductService {
         ProductModelDOExample modelExample = null;
         for (ProductDO productDO : productDOS) {
 
-			String specJson = "";
-			String category = "";
-			if(query.isApp()){
-				modelExample = new ProductModelDOExample();
-				modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
-				// 查询商品型号
-				List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
-				List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
-				for (ProductModelDO productModelDO : productModelDOS) {
-					ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
-					ProductModelBOS.add(productModelBO);
-				}
-				specJson = JSON.toJSONString(ProductModelBOS);
-				category = productCategoryService.getFullName(productDO.getCategoryId());
-			}
-			ProductQueryBO productBO = ProductConverter.convertQueryBO(productDO);
-			productBO.setSpec(specJson);
+            String specJson = "";
+            String category = "";
+            if (query.isApp()) {
+                modelExample = new ProductModelDOExample();
+                modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
+                // 查询商品型号
+                List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
+                List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
+                for (ProductModelDO productModelDO : productModelDOS) {
+                    ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
+                    ProductModelBOS.add(productModelBO);
+                }
+                specJson = JSON.toJSONString(ProductModelBOS);
+                category = productCategoryService.getFullName(productDO.getCategoryId());
+            }
+            ProductQueryBO productBO = ProductConverter.convertQueryBO(productDO);
+            productBO.setSpec(specJson);
 
-			productBO.setCategory(category);
+            productBO.setCategory(category);
 
             productBOS.add(productBO);
         }
@@ -179,6 +167,13 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("price_d", price);
                     document.addField("inventory_i", inventory);
                     document.addField("salesVolume_i", salesVolume);
+                    ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+                    if (productCategoryeDO != null) {
+                        String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                        for (String categoryId : categoryIdArr) {
+                            document.addField("categoryId_is", categoryId);
+                        }
+                    }
                     SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
                 }
             }
@@ -313,17 +308,17 @@ public class ProductServiceImpl implements ProductService {
         return productEditInfoBO;
     }
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
-	@Transactional
-	public void eidtProduct(EditProductDataParam param) {
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Override
+    @Transactional
+    public void eidtProduct(EditProductDataParam param) {
 
-		Long productId = param.getProductId();
-		int inventory = 0;
-		int salesVolume = 0;
-		double originalPrice = 0;
-		double price = 0;
-		int traverseCnt = 0;
+        Long productId = param.getProductId();
+        int inventory = 0;
+        int salesVolume = 0;
+        double originalPrice = 0;
+        double price = 0;
+        int traverseCnt = 0;
 
         boolean isEdit = true;
         if (productId == 0L || productId == null || productId < 0) {
@@ -445,21 +440,21 @@ public class ProductServiceImpl implements ProductService {
             productImageDOMapper.updateByExampleSelective(imageDO, imageExample);
         }
 
-		// 保存商品滚动图片信息
-		ProductImageDO pcDO = null;
-		String imageUrl = param.getProductImages();
-		String[] imageUrls = imageUrl.split(",");
-		for (int i = 0; i < imageUrls.length; i++) {
-			pcDO = new ProductImageDO();
-			pcDO.setProductId(Long.valueOf(productId));
-			pcDO.setImagePath(imageUrls[i]);
-			pcDO.setGmtCreate(new Date());
-			pcDO.setGmtModified(new Date());
-			pcDO.setSortid(0);
-			pcDO.setStatus(true);
-			pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
-			productImageDOMapper.insert(pcDO);
-		}
+        // 保存商品滚动图片信息
+        ProductImageDO pcDO = null;
+        String imageUrl = param.getProductImages();
+        String[] imageUrls = imageUrl.split(",");
+        for (int i = 0; i < imageUrls.length; i++) {
+            pcDO = new ProductImageDO();
+            pcDO.setProductId(Long.valueOf(productId));
+            pcDO.setImagePath(imageUrls[i]);
+            pcDO.setGmtCreate(new Date());
+            pcDO.setGmtModified(new Date());
+            pcDO.setSortid(0);
+            pcDO.setStatus(true);
+            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
+            productImageDOMapper.insert(pcDO);
+        }
 
         // 保存商品详情图片
         Map<String, List<String>> detailImageMap = param.getDetailImageMap();
@@ -486,40 +481,47 @@ public class ProductServiceImpl implements ProductService {
         document.addField("price_d", price);
         document.addField("inventory_i", inventory);
         document.addField("salesVolume_i", salesVolume);
+        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
+        if (productCategoryeDO != null) {
+            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+            for (String categoryId : categoryIdArr) {
+                document.addField("categoryId_is", categoryId);
+            }
+        }
         SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
     }
 
-	@Override
-	public void editTotalInventory(Long productId, int num, String flag) {
-		ProductNumsView view = new ProductNumsView();
-		view.setProductId(productId);
-		view.setFlag(flag);
-		view.setNum(num);
-		view.setGmtModified(new Date());
-		productDOMapperExtend.editTotalInventory(view);
-	}
+    @Override
+    public void editTotalInventory(Long productId, int num, String flag) {
+        ProductNumsView view = new ProductNumsView();
+        view.setProductId(productId);
+        view.setFlag(flag);
+        view.setNum(num);
+        view.setGmtModified(new Date());
+        productDOMapperExtend.editTotalInventory(view);
+    }
 
-	@Override
-	public void editTotalSaleVolume(Long productId, int num, String flag) {
-		ProductNumsView view = new ProductNumsView();
-		view.setProductId(productId);
-		view.setFlag(flag);
-		view.setNum(num);
-		view.setGmtModified(new Date());
-		productDOMapperExtend.editTotalSaleVolume(view);
+    @Override
+    public void editTotalSaleVolume(Long productId, int num, String flag) {
+        ProductNumsView view = new ProductNumsView();
+        view.setProductId(productId);
+        view.setFlag(flag);
+        view.setNum(num);
+        view.setGmtModified(new Date());
+        productDOMapperExtend.editTotalSaleVolume(view);
 
-	}
+    }
 
-	@Override
-	public void editTotalFavorite(Long productId, int num, String flag) {
-		ProductNumsView view = new ProductNumsView();
-		view.setProductId(productId);
-		view.setFlag(flag);
-		view.setNum(num);
-		view.setGmtModified(new Date());
-		productDOMapperExtend.editTotalFavorite(view);
+    @Override
+    public void editTotalFavorite(Long productId, int num, String flag) {
+        ProductNumsView view = new ProductNumsView();
+        view.setProductId(productId);
+        view.setFlag(flag);
+        view.setNum(num);
+        view.setGmtModified(new Date());
+        productDOMapperExtend.editTotalFavorite(view);
 
-	}
+    }
 
     @Override
     public ProductInfoBO getProductById(Long id) {
@@ -530,25 +532,25 @@ public class ProductServiceImpl implements ProductService {
         return ProductConverter.convertInfoBO(productDO);
     }
 
-	@Override
-	public List<ProductQueryBO> selectProductByPlat(ProductParam param) {
-		ProductDOExample exmple=new ProductDOExample();
-		Criteria cr=exmple.createCriteria();
-		cr.andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
-		if(param.getName()!=null){
-			cr.andNameLike("%" + param.getName() + "%");
-		}
-		List<ProductDO> productList= productDOMapper.selectByExample(exmple);
-		List<ProductQueryBO> bos=new ArrayList<>();
-		if(!productList.isEmpty()){
-			for (ProductDO productDO : productList) {
-				ProductQueryBO bo=new ProductQueryBO();
-				bo.setId(productDO.getId());
-				bo.setName(productDO.getName());
-				bos.add(bo);
-			}
-		}
-		return bos;
-	}
+    @Override
+    public List<ProductQueryBO> selectProductByPlat(ProductParam param) {
+        ProductDOExample exmple = new ProductDOExample();
+        Criteria cr = exmple.createCriteria();
+        cr.andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        if (param.getName() != null) {
+            cr.andNameLike("%" + param.getName() + "%");
+        }
+        List<ProductDO> productList = productDOMapper.selectByExample(exmple);
+        List<ProductQueryBO> bos = new ArrayList<>();
+        if (!productList.isEmpty()) {
+            for (ProductDO productDO : productList) {
+                ProductQueryBO bo = new ProductQueryBO();
+                bo.setId(productDO.getId());
+                bo.setName(productDO.getName());
+                bos.add(bo);
+            }
+        }
+        return bos;
+    }
 
 }

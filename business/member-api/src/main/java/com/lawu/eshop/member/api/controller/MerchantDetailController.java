@@ -108,14 +108,14 @@ public class MerchantDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listAllProduct", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listAllProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
-        return shoppingProductService.listHotProduct(listShoppingProductParam);
+        return shoppingProductService.listAllProduct(listShoppingProductParam);
     }
 
     @ApiOperation(value = "要购物门店详情最新上架", notes = "要购物门店详情最新上架。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNewProduct", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listNewProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
-        return shoppingProductService.listHotProduct(listShoppingProductParam);
+        return shoppingProductService.listNewProduct(listShoppingProductParam);
     }
 
 }
