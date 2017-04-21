@@ -100,21 +100,21 @@ public class MerchantDetailController extends BaseController {
     @ApiOperation(value = "要购物门店详情店铺首页", notes = "要购物门店详情店铺首页。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listHotProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listHotProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+    public Result<Page<ProductSearchDTO>> listHotProduct(@ModelAttribute @ApiParam ListShoppingProductParam listShoppingProductParam) {
         return shoppingProductService.listHotProduct(listShoppingProductParam);
     }
 
     @ApiOperation(value = "要购物门店详情全部商品", notes = "要购物门店详情全部商品。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listAllProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listAllProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+    public Result<Page<ProductSearchDTO>> listAllProduct(@ModelAttribute @ApiParam ListShoppingProductParam listShoppingProductParam) {
         return shoppingProductService.listAllProduct(listShoppingProductParam);
     }
 
     @ApiOperation(value = "要购物门店详情最新上架", notes = "要购物门店详情最新上架。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listNewProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listNewProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+    public Result<Page<ProductSearchDTO>> listNewProduct(@ModelAttribute @ApiParam ListShoppingProductParam listShoppingProductParam) {
         return shoppingProductService.listNewProduct(listShoppingProductParam);
     }
 
