@@ -12,20 +12,14 @@ import com.lawu.eshop.member.api.service.AdPlatformService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ProductSolrService;
 import com.lawu.eshop.member.api.service.RecommendProductCategoryService;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductSearchDTO;
-import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
-import com.lawu.eshop.product.dto.ShoppingProductDTO;
+import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.ProductSolrParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +67,13 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listProductByName(productSolrParam);
+    }
+
+    @ApiOperation(value = "搜索词关联词频查询", notes = "根据搜索词推荐关联词和频率查询。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listProductSearchWord", method = RequestMethod.GET)
+    public Result<List<ProductSearchWordDTO>> listProductSearchWord(@RequestParam @ApiParam(name = "name", required = true, value = "商品名称") String name) {
+        return productSolrService.listProductSearchWord(name);
     }
 
     @ApiOperation(value = "要购物首页", notes = "要购物首页。(梅述全)", httpMethod = "GET")

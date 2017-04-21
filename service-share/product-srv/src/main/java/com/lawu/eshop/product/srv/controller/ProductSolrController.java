@@ -5,15 +5,18 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
+import com.lawu.eshop.product.dto.ProductSearchWordDTO;
 import com.lawu.eshop.product.param.ProductSolrParam;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.solr.SolrUtil;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocumentList;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author meishuquan
@@ -99,6 +102,44 @@ public class ProductSolrController extends BaseController {
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(productSolrParam.getCurrentPage());
         return successGet(page);
+    }
+
+    /**
+     * 搜索词关联词频查询
+     *
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "listProductSearchWord", method = RequestMethod.GET)
+    public Result<List<ProductSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
+        SolrQuery query = new SolrQuery();
+        query.set("q", "*:*");
+        query.set("qt", "/terms");
+        query.set("terms", "true");
+        query.set("terms.fl", "name_s");
+        query.set("terms.regex", name + "+.*");
+        query.set("terms.regex.flag", "case_insensitive");
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+
+        List<ProductSearchWordDTO> productSearchWordDTOS = new ArrayList<>();
+        if (termsResponse != null) {
+            Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
+            for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
+                List<TermsResponse.Term> termList = termsEntry.getValue();
+                for (TermsResponse.Term term : termList) {
+                    ProductSearchWordDTO productSearchWordDTO = new ProductSearchWordDTO();
+                    productSearchWordDTO.setName(term.getTerm());
+                    productSearchWordDTO.setCount((int) term.getFrequency());
+                    productSearchWordDTOS.add(productSearchWordDTO);
+                }
+            }
+        } else {
+            ProductSearchWordDTO productSearchWordDTO = new ProductSearchWordDTO();
+            productSearchWordDTO.setName(name);
+            productSearchWordDTO.setCount(0);
+            productSearchWordDTOS.add(productSearchWordDTO);
+        }
+        return successGet(productSearchWordDTOS);
     }
 
 }
