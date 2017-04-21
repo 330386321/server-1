@@ -13,7 +13,6 @@ import javax.servlet.ServletContext;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -37,8 +36,16 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 public class DocumentController extends BaseController{
 
+	/**
+	 * 显示接口列表
+	 * 
+	 * @param isAudit 是否通过审核
+	 * @param map
+	 * @return
+	 * @author Sunny
+	 */
     @RequestMapping(value = "document.html")
-    public String api(ModelMap map) {
+    public String api(Boolean isAudit, ModelMap map) {
     	
     	List<ApiDocumentVO> voList = new ArrayList<ApiDocumentVO>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,12 +66,12 @@ public class DocumentController extends BaseController{
 	            info = iterator.next();
 	            
 	            method = handlerMethodMap.get(info);
+	            apiOperation = method.getMethodAnnotation(ApiOperation.class);
+	            audit = method.getMethodAnnotation(Audit.class);
 	            
-	            if (method.getMethodAnnotation(Audit.class) != null) {
+	            if ((method.getMethodAnnotation(Audit.class) != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
 	            	
 	            	api = method.getBeanType().getAnnotation(Api.class);
-	            	audit = method.getMethodAnnotation(Audit.class);
-	            	apiOperation = method.getMethodAnnotation(ApiOperation.class);
 	            	
 	            	// 组装VO对象
 	            	ApiDocumentVO vo = new ApiDocumentVO();
@@ -74,28 +81,36 @@ public class DocumentController extends BaseController{
 	            		//如果Api注解为空,或者tags为空，设置ApiName为空串
 	            		vo.setApiName("");
 	            	}
-	            	vo.setDate(df.parse(audit.date()));
-	            	vo.setReviewer(audit.reviewer());
+	            	
+	            	if (audit != null) {
+		            	vo.setDate(df.parse(audit.date()));
+		            	vo.setReviewer(audit.reviewer());
+	            	}
 	            	vo.setPath(info.getPatternsCondition().toString());
-	            	vo.setName(apiOperation.value());
-	            	vo.setNotes(apiOperation.notes());
-	            	vo.setHttpMethod(apiOperation.httpMethod());
+	            	if (apiOperation != null) {
+		            	vo.setName(apiOperation.value());
+		            	vo.setNotes(apiOperation.notes());
+		            	vo.setHttpMethod(apiOperation.httpMethod());
+	            	}
 	            	voList.add(vo);
 	            	
 	            }
+	            
 	        }
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
     	
     	// 按照日期和接口排序
-    	
     	Collections.sort(voList, new Comparator <ApiDocumentVO>() {
 			@Override
 			public int compare(ApiDocumentVO o1, ApiDocumentVO o2){
 				
 				// 先按照时间排序
-				int compare = o2.getDate().compareTo(o1.getDate());
+				int compare = 0;
+				if (o2.getDate() != null && o1.getDate() != null) {
+					compare = o2.getDate().compareTo(o1.getDate());
+				}
 				
 				// 如果时间相等的话再按照接口排序
 				if (compare == 0) {

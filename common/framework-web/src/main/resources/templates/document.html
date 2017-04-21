@@ -19,7 +19,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="vo : ${voList}">
-				<td th:text="${#dates.format(vo.date, 'yyyy-MM-dd')}"></td>
+				<td th:text="${vo.date ne null} ? ${#dates.format(vo.date, 'yyyy-MM-dd')} : ''"></td>
 				<td th:text="${vo.name}"></td>
 				<td th:text="${vo.apiName}"></td>
 				<td th:text="${vo.path}"></td>
