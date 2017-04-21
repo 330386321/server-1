@@ -204,10 +204,8 @@ public class MemberConverter {
             return null;
         }
         EfriendDTO memberDTO = new EfriendDTO();
-        memberDTO.setName(memberBO.getName());
         memberDTO.setNickname(memberBO.getNickname());
         memberDTO.setHeadimg(memberBO.getHeadimg());
-        memberDTO.setRegionPath(memberBO.getRegionPath());
         memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setLevel(memberBO.getLevel());
         memberDTO.setGmtCreate(memberBO.getGmtCreate());

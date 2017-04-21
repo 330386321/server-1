@@ -38,7 +38,6 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		}else{ //商品
 			adPlatformDO.setType(new Byte("2"));
 			adPlatformDO.setProductId(adPlatformParam.getProductId());  
-			adPlatformDO.setCategoryId(adPlatformParam.getCategoryId());
 		}
 		adPlatformDO.setStatus(new Byte("1"));
 		adPlatformDO.setGmtCreate(new Date());

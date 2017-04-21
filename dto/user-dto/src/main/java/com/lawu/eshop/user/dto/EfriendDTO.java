@@ -8,17 +8,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class EfriendDTO {
 
-    @ApiModelProperty(value = "姓名")
-    private String name;
-
     @ApiModelProperty(value = "昵称")
     private String nickname;
     
     @ApiModelProperty(value = "电话")
     private String mobile;
-
-    @ApiModelProperty(value = "生日")
-    private String regionPath;
 
     @ApiModelProperty(value = "头像")
     private String headimg;
@@ -35,28 +29,12 @@ public class EfriendDTO {
 
     private UserSexEnum userSex;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getRegionPath() {
-        return regionPath;
-    }
-
-    public void setRegionPath(String regionPath) {
-        this.regionPath = regionPath;
     }
 
 

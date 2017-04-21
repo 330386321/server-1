@@ -158,8 +158,8 @@ public class MemberController extends BaseController {
 	 * @date 2017/03/23
 	 */
 	@RequestMapping(value = "findMemberListByUser", method = RequestMethod.POST)
-	public Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam Long userId, @RequestBody MemberQuery memberQuery) {
-		Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(userId, memberQuery);
+	public Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam Long userId, @RequestBody MemberQuery memberQuery,@RequestParam byte inviterType) {
+		Page<MemberBO> pageMemberBOS = memberService.findMemberListByUser(userId, memberQuery, inviterType);
 		Page<EfriendDTO> page = MemberConverter.convertPageDOTS(pageMemberBOS);
 		return successGet(page);
 	}

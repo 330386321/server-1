@@ -63,8 +63,8 @@ public class AdPlatformController extends BaseController {
         List<AdRecommendDTO> rdList=new ArrayList<>();
         if(!list.isEmpty()){
         	for (AdPlatformDTO adPlatformDTO : list) {
-        		AdRecommendDTO dto=new AdRecommendDTO();
         		if(adPlatformDTO.getProductId()!=null){
+        			AdRecommendDTO  dto=new AdRecommendDTO();
         			 Result<ProductInfoDTO>  prs=productService.selectProductById(adPlatformDTO.getProductId());
         			 String price= prs.getModel().getPriceMin();
         			 dto.setPrice(price);
@@ -74,8 +74,9 @@ public class AdPlatformController extends BaseController {
         			 dto.setMediaUrl(adPlatformDTO.getMediaUrl());
         			 dto.setProductId(adPlatformDTO.getProductId());
         			 dto.setTitle(adPlatformDTO.getTitle());
+        			 rdList.add(dto);
         		}
-        		rdList.add(dto);
+        		
         		
 			}
         }

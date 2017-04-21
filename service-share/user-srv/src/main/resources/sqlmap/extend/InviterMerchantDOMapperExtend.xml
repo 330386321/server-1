@@ -11,6 +11,7 @@
     <result column="principal_mobile" property="principalMobile" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
   </resultMap>
 
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" id="selectInviterMerchantByRowbounds" >
@@ -22,13 +23,16 @@
     	ms.principal_name as regionPath,
     	ms.principal_mobile as principalMobile,
     	ms.status as status,
-    	ms.gmt_create as gmtCreate
-    from merchant me left join merchant_store ms on me.id=ms.merchant_id
+    	ms.gmt_create as gmtCreate,
+        msi.path
+   			 from merchant me 
+      left join merchant_store ms on me.id=ms.merchant_id 
+      LEFT JOIN merchant_store_image msi on ms.merchant_id=msi.merchant_id and msi.status=1 and msi.type=3
     <where>
     	me.inviter_id=#{inviterId,jdbcType=VARCHAR}
-	    <if test="mobileAndName != null and mobileAndName!=''" >
-	      and me.mobile=concat(concat('%',#{mobileAndName,jdbcType=VARCHAR}),'%')
-	      or ms.name=concat(concat('%',#{mobileAndName,jdbcType=VARCHAR}),'%')
+    	 and me.inviter_type=#{inviterType,jdbcType=TINYINT}
+	    <if test="name != null and name!=''" >
+	      and ms.name=concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
 	    </if>
     </where>
   </select>

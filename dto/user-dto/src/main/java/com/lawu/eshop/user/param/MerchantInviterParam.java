@@ -5,17 +5,18 @@ import io.swagger.annotations.ApiParam;
 
 public class MerchantInviterParam extends AbstractPageParam{
 	
-	@ApiParam (name="mobileOrName", value = "商家名称或者电话")
-	private String mobileOrName;
+	@ApiParam (name="name", value = "商家名称")
+	private String name;
 
-	public String getMobileOrName() {
-		return mobileOrName;
+	public String getName() {
+		return name;
 	}
 
-	public void setMobileOrName(String mobileOrName) {
-		this.mobileOrName = mobileOrName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
+	
 	
 	
 

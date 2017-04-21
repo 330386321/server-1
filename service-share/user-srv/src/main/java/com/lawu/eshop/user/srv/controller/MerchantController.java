@@ -12,6 +12,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
@@ -111,8 +112,8 @@ public class MerchantController extends BaseController {
      * @date 2017/03/23
      */
     @RequestMapping(value = "getMerchantByInviter", method = RequestMethod.POST)
-    public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestParam Long userId, @RequestBody MerchantInviterParam pageQuery) {
-        Page<MerchantInviterBO> pageBO = merchantService.getMerchantByInviter(userId, pageQuery);
+    public Result<Page<MerchantInviterDTO>> getMerchantByInviter(@RequestParam Long userId, @RequestBody MerchantInviterParam pageQuery,byte inviterType) {
+        Page<MerchantInviterBO> pageBO = merchantService.getMerchantByInviter(userId, pageQuery,inviterType);
         Page<MerchantInviterDTO> pageDTOS = MerchantInviterConverter.convertPageMIDOTS(pageBO);
         return successGet(pageDTOS);
     }

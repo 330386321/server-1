@@ -20,6 +20,7 @@ import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberProfileService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantInviterService;
+import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.dto.EfriendDTO;
 import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
 import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
@@ -99,7 +100,8 @@ public class InviterController extends BaseController {
     public Result<Page<MerchantInviterDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") MerchantInviterParam pageQuery) {
     	Long userId=UserUtil.getCurrentUserId(getRequest());
-    	Result<Page<MerchantInviterDTO>>  pageDTOS=merchantInviterService.getMerchantByInviter(userId,pageQuery);
+    	Byte memberType=1;
+    	Result<Page<MerchantInviterDTO>>  pageDTOS=merchantInviterService.getMerchantByInviter(userId,pageQuery,memberType);
     	return pageDTOS;
     }
     
@@ -116,7 +118,8 @@ public class InviterController extends BaseController {
     @RequestMapping(value = "selectInviterMember", method = RequestMethod.POST)
     public Result<Page<EfriendDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "查询信息") MemberQuery query) {
         Long userId = UserUtil.getCurrentUserId(getRequest());
-        Result<Page<EfriendDTO>> page = memberService.findMemberListByUser(userId, query);
+        Byte inviterType=1;
+        Result<Page<EfriendDTO>> page = memberService.findMemberListByUser(userId, query,inviterType);
         return page;
     }
 

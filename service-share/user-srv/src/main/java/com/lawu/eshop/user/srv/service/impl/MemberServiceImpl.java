@@ -137,11 +137,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery) {
+    public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery,byte inviterType) {
         MemberDOExample example = new MemberDOExample();
         Byte status = 1;
         Criteria c1 = example.createCriteria();
-        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status);
+        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType);
         int totalCount = memberDOMapper.countByExample(example); //总记录数
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
             Criteria c2 = example.createCriteria();

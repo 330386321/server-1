@@ -20,6 +20,8 @@ public class MerchantInviterBO {
 	
 	private Date gmtCreate;
 	
+	private String path;
+	
 	private MerchantStatusEnum statusEnum;
 
 	public String getAccount() {
@@ -84,6 +86,14 @@ public class MerchantInviterBO {
 
 	public void setStatusEnum(MerchantStatusEnum statusEnum) {
 		this.statusEnum = statusEnum;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	

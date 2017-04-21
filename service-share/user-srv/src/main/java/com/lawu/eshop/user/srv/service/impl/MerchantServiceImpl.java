@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
@@ -263,10 +264,12 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam) {
+    public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam ,byte  inviterType) {
         InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
-        inviterMerchantDO.setMobileAndName(pageParam.getMobileOrName());
+        inviterMerchantDO.setInviterType(inviterType);
+        if(pageParam.getName()!=null)
+        	inviterMerchantDO.setName(pageParam.getName());
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
         List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
@@ -274,6 +277,7 @@ public class MerchantServiceImpl implements MerchantService {
         pageMerchantInviter.setTotalCount(inviterMerchantDOS.size());
         List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);
         pageMerchantInviter.setRecords(memberBOS);
+        pageMerchantInviter.setCurrentPage(pageParam.getCurrentPage());
         return pageMerchantInviter;
     }
 

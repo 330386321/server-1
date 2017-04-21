@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
@@ -61,7 +62,7 @@ public interface MerchantService {
      * @author zhangrc
      * @date 2017/03/27
      */
-    Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageQuery);
+    Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageQuery,byte  inviterType);
 
     /**
      * 查询会员信息

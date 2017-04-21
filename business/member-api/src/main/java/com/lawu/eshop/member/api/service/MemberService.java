@@ -84,7 +84,7 @@ public interface MemberService {
      * @date 2017/03/23
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/findMemberListByUser")
-    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query);
+    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query,@RequestParam("inviterType") Byte inviterType);
 
     /**
      * 会员注册
