@@ -62,7 +62,9 @@ public class MerchantProductCommentListDTO {
     @ApiModelProperty(value = "回复内容")
     private String replyContent;
     @ApiModelProperty(value = "商品图片")
-    private String featureImag;
+    private String featureImage;
+    @ApiModelProperty(value = "会员等级")
+     private Integer level;
 
     public String getHeadImg() {
         return headImg;
@@ -160,11 +162,19 @@ public class MerchantProductCommentListDTO {
         this.replyContent = replyContent;
     }
 
-    public String getFeatureImag() {
-        return featureImag;
+    public String getFeatureImage() {
+        return featureImage;
     }
 
-    public void setFeatureImag(String featureImag) {
-        this.featureImag = featureImag;
+    public void setFeatureImage(String featureImage) {
+        this.featureImage = featureImage;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

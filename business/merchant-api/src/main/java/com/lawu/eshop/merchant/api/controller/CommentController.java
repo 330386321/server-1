@@ -193,12 +193,13 @@ public class CommentController extends BaseController {
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
             commentProductDTO.setHeadImg(user.getModel().getHeadimg());
             commentProductDTO.setNickName(user.getModel().getNickname());
+            commentProductDTO.setLevel(user.getModel().getLevel());
             //查询商品信息
             Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
             commentProductDTO.setName(product.getModel().getName());
             commentProductDTO.setPrice(product.getModel().getPrice());
             commentProductDTO.setSpec(product.getModel().getModelName());
-            commentProductDTO.setFeatureImag(product.getModel().getFeatureImage());
+            commentProductDTO.setFeatureImage(product.getModel().getFeatureImage());
             commentProductDTOS.add(commentProductDTO);
         }
         pages.setCurrentPage(result.getModel().getCurrentPage());
