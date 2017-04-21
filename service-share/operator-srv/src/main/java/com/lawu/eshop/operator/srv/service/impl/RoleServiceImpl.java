@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.operator.param.RoleInfoParam;
 import com.lawu.eshop.operator.param.RoleParam;
 import com.lawu.eshop.operator.srv.bo.RoleBO;
 import com.lawu.eshop.operator.srv.converter.RoleConverter;
@@ -11,8 +12,10 @@ import com.lawu.eshop.operator.srv.service.RoleService;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,4 +51,36 @@ public class RoleServiceImpl implements RoleService {
         page.setRecords(list);
         return page;
     }
+
+    @Override
+    @Transactional
+    public Integer addRole(RoleInfoParam param) {
+        RoleDO roleDO = new RoleDO();
+        roleDO.setRoleKey(param.getRoleKey());
+        roleDO.setRoleName(param.getRoleName());
+        roleDO.setGmtCreate(new Date());
+        roleDO.setGmtModified(new Date());
+        roleDOMapper.insert(roleDO);
+        return roleDO.getId();
+    }
+
+    @Override
+    @Transactional
+    public Integer updateRole(Integer id, RoleInfoParam param) {
+        RoleDO roleDO = new RoleDO();
+        roleDO.setRoleName(param.getRoleName());
+        roleDO.setRoleKey(param.getRoleKey());
+        roleDO.setId(id);
+        roleDO.setGmtModified(new Date());
+        Integer row = roleDOMapper.updateByPrimaryKeySelective(roleDO);
+        return row;
+    }
+
+    @Override
+    @Transactional
+    public void delRole(Integer id) {
+        roleDOMapper.deleteByPrimaryKey(id);
+    }
+
+
 }

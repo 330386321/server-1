@@ -55,6 +55,8 @@ public class ResultCode {
     //运营
     public static final int USER_NOT_LOGIN = 2100;
     public static final int USER_ROLE_EXIST = 2101;
+    public static final int ROLE_HAS_USER_RELATE = 2102;
+    public static final int ROLE_HAS_PERMISSION = 2103;
 
 
     // 商品模块代码 3xxx
@@ -167,6 +169,8 @@ public class ResultCode {
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");
         ResultCode.messageMap.put(USER_ROLE_EXIST, "用户已经存在该权限");
+        ResultCode.messageMap.put(ROLE_HAS_USER_RELATE, "角色下面存在关联用户");
+        ResultCode.messageMap.put(ROLE_HAS_PERMISSION, "角色下面存在该权限");
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
