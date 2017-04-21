@@ -1,6 +1,7 @@
 package com.lawu.eshop.product.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.ListShoppingProductParam;
 import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
@@ -27,6 +28,7 @@ public class ShoppingProductServiceImpl implements ShoppingProductService {
     @Override
     public Page<ProductSearchBO> listHotProduct(ListShoppingProductParam listShoppingProductParam) {
         ProductDOExample productDOExample = new ProductDOExample();
+        productDOExample.createCriteria().andMerchantIdEqualTo(listShoppingProductParam.getMerchantId()).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
         productDOExample.setOrderByClause("total_sales_volume desc");
 
         RowBounds rowBounds = new RowBounds(listShoppingProductParam.getOffset(), listShoppingProductParam.getPageSize());
@@ -42,6 +44,7 @@ public class ShoppingProductServiceImpl implements ShoppingProductService {
     @Override
     public Page<ProductSearchBO> listAllProduct(ListShoppingProductParam listShoppingProductParam) {
         ProductDOExample productDOExample = new ProductDOExample();
+        productDOExample.createCriteria().andMerchantIdEqualTo(listShoppingProductParam.getMerchantId()).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
 
         RowBounds rowBounds = new RowBounds(listShoppingProductParam.getOffset(), listShoppingProductParam.getPageSize());
         Page<ProductSearchBO> page = new Page<>();
@@ -56,6 +59,7 @@ public class ShoppingProductServiceImpl implements ShoppingProductService {
     @Override
     public Page<ProductSearchBO> listNewProduct(ListShoppingProductParam listShoppingProductParam) {
         ProductDOExample productDOExample = new ProductDOExample();
+        productDOExample.createCriteria().andMerchantIdEqualTo(listShoppingProductParam.getMerchantId()).andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
         productDOExample.setOrderByClause("gmt_create desc");
 
         RowBounds rowBounds = new RowBounds(listShoppingProductParam.getOffset(), listShoppingProductParam.getPageSize());
