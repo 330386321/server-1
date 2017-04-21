@@ -4,7 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.product.dto.ProductSolrDTO;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.ProductSolrParam;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.solr.SolrUtil;
@@ -30,7 +30,7 @@ public class ProductSolrController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.POST)
-    public Result<Page<ProductSolrDTO>> listProductByCategoryId(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSolrParam productSolrParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setFilterQueries("categoryId_i:" + productSolrParam.getCategoryId());
@@ -42,7 +42,7 @@ public class ProductSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
-        Page<ProductSolrDTO> page = new Page<>();
+        Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(productSolrParam.getCurrentPage());
@@ -56,7 +56,7 @@ public class ProductSolrController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.POST)
-    public Result<Page<ProductSolrDTO>> listRecommendProduct(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSolrParam productSolrParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setFilterQueries("categoryId_i:" + productSolrParam.getCategoryId());
@@ -68,7 +68,7 @@ public class ProductSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
-        Page<ProductSolrDTO> page = new Page<>();
+        Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(productSolrParam.getCurrentPage());
@@ -82,7 +82,7 @@ public class ProductSolrController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listProductByName", method = RequestMethod.POST)
-    public Result<Page<ProductSolrDTO>> listProductByName(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSolrParam productSolrParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setFilterQueries("name_s:*" + productSolrParam.getName() + "*");
@@ -94,7 +94,7 @@ public class ProductSolrController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
 
-        Page<ProductSolrDTO> page = new Page<>();
+        Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(productSolrParam.getCurrentPage());

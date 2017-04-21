@@ -1,33 +1,32 @@
-package com.lawu.eshop.product.dto;
-
-import io.swagger.annotations.ApiModelProperty;
+package com.lawu.eshop.product.srv.bo;
 
 /**
  * @author meishuquan
- * @date 2017/4/12.
+ * @date 2017/4/21.
  */
-public class ProductSolrDTO {
+public class ProductSearchBO {
 
-    @ApiModelProperty(value = "商品ID")
     private Long productId;
 
-    @ApiModelProperty(value = "特征图片")
     private String featureImage;
 
-    @ApiModelProperty(value = "名称")
     private String name;
 
-    @ApiModelProperty(value = "详细描述")
     private String content;
 
-    @ApiModelProperty(value = "原价")
     private Double originalPrice;
 
-    @ApiModelProperty(value = "现价")
     private Double price;
 
-    @ApiModelProperty(value = "销量")
     private Integer salesVolume;
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
     public String getFeatureImage() {
         return featureImage;
@@ -67,14 +66,6 @@ public class ProductSolrDTO {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
 
     public Integer getSalesVolume() {

@@ -1,14 +1,12 @@
 package com.lawu.eshop.product.srv.converter;
 
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.ProductEditInfoDTO;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.dto.ProductSolrDTO;
+import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
 import org.apache.solr.common.SolrDocument;
@@ -179,7 +177,7 @@ public class ProductConverter {
         productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
-        	productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());
@@ -227,22 +225,74 @@ public class ProductConverter {
      * @param solrDocumentList
      * @return
      */
-    public static List<ProductSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
+    public static List<ProductSearchDTO> convertDTO(SolrDocumentList solrDocumentList) {
         if (solrDocumentList.isEmpty()) {
             return null;
         }
 
-        List<ProductSolrDTO> productSolrDTOS = new ArrayList<>();
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
         for (SolrDocument solrDocument : solrDocumentList) {
-            ProductSolrDTO productSolrDTO = new ProductSolrDTO();
-            productSolrDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
-            productSolrDTO.setName(solrDocument.get("name_s").toString());
-            productSolrDTO.setContent(solrDocument.get("content_s").toString());
-            productSolrDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
-            productSolrDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
-            productSolrDTOS.add(productSolrDTO);
+            ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+            productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
+            productSearchDTO.setName(solrDocument.get("name_s").toString());
+            productSearchDTO.setContent(solrDocument.get("content_s").toString());
+            productSearchDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
+            productSearchDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
+            productSearchDTOS.add(productSearchDTO);
         }
-        return productSolrDTOS;
+        return productSearchDTOS;
+    }
+
+    /**
+     * BO转换
+     *
+     * @param productDOS
+     * @return
+     */
+    public static List<ProductSearchBO> convertBO(List<ProductDO> productDOS) {
+        if (productDOS == null || productDOS.isEmpty()) {
+            return null;
+        }
+
+        List<ProductSearchBO> productSearchBOS = new ArrayList<>(productDOS.size());
+        for (ProductDO productDO : productDOS) {
+            ProductSearchBO productSearchBO = new ProductSearchBO();
+            productSearchBO.setProductId(productDO.getId());
+            productSearchBO.setName(productDO.getName());
+            productSearchBO.setContent(productDO.getContent());
+            productSearchBO.setFeatureImage(productDO.getFeatureImage());
+            productSearchBO.setOriginalPrice(productDO.getMaxPrice().doubleValue());
+            productSearchBO.setPrice(productDO.getMinPrice().doubleValue());
+            productSearchBO.setSalesVolume(productDO.getTotalSalesVolume());
+            productSearchBOS.add(productSearchBO);
+        }
+        return productSearchBOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param productSearchBOS
+     * @return
+     */
+    public static List<ProductSearchDTO> convertDTO(List<ProductSearchBO> productSearchBOS) {
+        if (productSearchBOS == null || productSearchBOS.isEmpty()) {
+            return null;
+        }
+
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>(productSearchBOS.size());
+        for (ProductSearchBO productSearchBO : productSearchBOS) {
+            ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+            productSearchDTO.setProductId(productSearchBO.getProductId());
+            productSearchDTO.setName(productSearchBO.getName());
+            productSearchDTO.setContent(productSearchBO.getContent());
+            productSearchDTO.setFeatureImage(productSearchBO.getFeatureImage());
+            productSearchDTO.setOriginalPrice(productSearchBO.getOriginalPrice());
+            productSearchDTO.setPrice(productSearchBO.getPrice());
+            productSearchDTO.setSalesVolume(productSearchBO.getSalesVolume());
+            productSearchDTOS.add(productSearchDTO);
+        }
+        return productSearchDTOS;
     }
 
 }

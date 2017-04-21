@@ -183,6 +183,25 @@ public class MerchantStoreConverter {
     }
 
     /**
+     * DTO转换
+     *
+     * @param shoppingStoreDetailBO
+     * @return
+     */
+    public static ShoppingStoreDetailDTO convertDTO(ShoppingStoreDetailBO shoppingStoreDetailBO) {
+        if (shoppingStoreDetailBO == null) {
+            return null;
+        }
+
+        ShoppingStoreDetailDTO shoppingStoreDetailDTO = new ShoppingStoreDetailDTO();
+        shoppingStoreDetailDTO.setMerchantId(shoppingStoreDetailBO.getMerchantId());
+        shoppingStoreDetailDTO.setName(shoppingStoreDetailBO.getName());
+        shoppingStoreDetailDTO.setFansCount(shoppingStoreDetailBO.getFansCount());
+        shoppingStoreDetailDTO.setFans(shoppingStoreDetailBO.getFans());
+        return shoppingStoreDetailDTO;
+    }
+
+    /**
      * BO转换
      *
      * @param merchantStoreDO

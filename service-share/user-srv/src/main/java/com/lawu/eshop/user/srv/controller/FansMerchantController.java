@@ -109,4 +109,17 @@ public class FansMerchantController extends BaseController {
         return count;
     }
 
+    /**
+     * 成为商家粉丝
+     *
+     * @param merchantId
+     * @param memberId
+     * @return
+     */
+    @RequestMapping(value = "saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
+    public Result saveFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
+        fansMerchantService.saveFansMerchant(merchantId, memberId);
+        return successCreated();
+    }
+
 }

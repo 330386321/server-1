@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -12,8 +13,12 @@ import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import com.lawu.eshop.member.api.service.MerchantStoreImageService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.ShoppingProductService;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
+import com.lawu.eshop.product.param.ListShoppingProductParam;
 import com.lawu.eshop.user.dto.MerchantStoreImageDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.utils.DateUtil;
 import io.swagger.annotations.Api;
@@ -42,6 +47,9 @@ public class MerchantDetailController extends BaseController {
 
     @Autowired
     private MerchantFavoredService merchantFavoredService;
+
+    @Autowired
+    private ShoppingProductService shoppingProductService;
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "会员查看商家门店详情", notes = "会员查看商家门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
@@ -79,4 +87,35 @@ public class MerchantDetailController extends BaseController {
     public Result<List<MerchantStoreImageDTO>> listMerchantStoreImage(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) {
         return merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT);
     }
+
+    @ApiOperation(value = "要购物门店详情", notes = "要购物门店详情基本信息。[1002]（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "shoppingStore/{id}", method = RequestMethod.GET)
+    public Result<ShoppingStoreDetailDTO> shoppingStoreDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                              @PathVariable @ApiParam(required = true, value = "门店ID") Long id) {
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.getShoppingStoreDetailById(id, memberId);
+    }
+
+    @ApiOperation(value = "要购物门店详情店铺首页", notes = "要购物门店详情店铺首页。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listHotProduct", method = RequestMethod.GET)
+    public Result<Page<ProductSearchDTO>> listHotProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+        return shoppingProductService.listHotProduct(listShoppingProductParam);
+    }
+
+    @ApiOperation(value = "要购物门店详情全部商品", notes = "要购物门店详情全部商品。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listAllProduct", method = RequestMethod.GET)
+    public Result<Page<ProductSearchDTO>> listAllProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+        return shoppingProductService.listHotProduct(listShoppingProductParam);
+    }
+
+    @ApiOperation(value = "要购物门店详情最新上架", notes = "要购物门店详情最新上架。（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listNewProduct", method = RequestMethod.GET)
+    public Result<Page<ProductSearchDTO>> listNewProduct(@PathVariable @ApiParam ListShoppingProductParam listShoppingProductParam) {
+        return shoppingProductService.listHotProduct(listShoppingProductParam);
+    }
+
 }

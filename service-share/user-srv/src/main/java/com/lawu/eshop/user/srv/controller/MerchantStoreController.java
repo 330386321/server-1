@@ -6,10 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.CashUserInfoDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.*;
@@ -308,5 +305,21 @@ public class MerchantStoreController extends BaseController {
         }
         merchantStoreService.updateNoReasonReturn(merchantStoreBO.getId());
         return successCreated();
+    }
+
+    /**
+     * 要购物门店详情
+     *
+     * @param id
+     * @param memberId
+     * @return
+     */
+    @RequestMapping(value = "shoppingStoreDetail/{id}", method = RequestMethod.GET)
+    public Result<ShoppingStoreDetailDTO> shoppingStoreDetail(@PathVariable Long id, @RequestParam Long memberId) {
+        ShoppingStoreDetailBO shoppingStoreDetailBO = merchantStoreInfoService.getShoppingStoreDetailById(id, memberId);
+        if (shoppingStoreDetailBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(MerchantStoreConverter.convertDTO(shoppingStoreDetailBO));
     }
 }

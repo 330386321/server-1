@@ -50,6 +50,9 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     @Autowired
     private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
 
+    @Autowired
+    private FansMerchantDOMapper fansMerchantDOMapper;
+
     @Override
     public MerchantStoreInfoBO selectMerchantStore(Long merchantStoreId) {
 
@@ -551,6 +554,36 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         audit.setGmtModified(new Date());
         Integer row = merchantStoreAuditDOMapper.insert(audit);
         return row;
+    }
+
+    @Override
+    public ShoppingStoreDetailBO getShoppingStoreDetailById(Long id, Long memberId) {
+        //查询门店信息
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        if (merchantStoreDO == null) {
+            return null;
+        }
+
+        ShoppingStoreDetailBO shoppingStoreDetailBO = new ShoppingStoreDetailBO();
+        shoppingStoreDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
+        shoppingStoreDetailBO.setName(merchantStoreDO.getName());
+
+        //查询粉丝数量
+        FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
+        fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        int fansCount = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
+        shoppingStoreDetailBO.setFansCount(fansCount);
+
+        //查询是否关注
+        fansMerchantDOExample = new FansMerchantDOExample();
+        fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
+        if (fansMerchantDOS.isEmpty()) {
+            shoppingStoreDetailBO.setFans(false);
+        } else {
+            shoppingStoreDetailBO.setFans(true);
+        }
+        return shoppingStoreDetailBO;
     }
 
 }

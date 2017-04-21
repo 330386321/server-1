@@ -94,5 +94,14 @@ public interface MerchantStoreInfoService {
      */
     void updateMerchantStoreStatus(Long merchantId, Byte status);
 
-    Integer applyPhysicalStore(Long merchantId,Long storeId, ApplyStoreParam param);
+    Integer applyPhysicalStore(Long merchantId, Long storeId, ApplyStoreParam param);
+
+    /**
+     * 要购物门店详情
+     *
+     * @param id
+     * @param memberId
+     * @return
+     */
+    ShoppingStoreDetailBO getShoppingStoreDetailById(Long id, Long memberId);
 }

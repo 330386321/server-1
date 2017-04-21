@@ -13,7 +13,7 @@ import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ProductSolrService;
 import com.lawu.eshop.member.api.service.RecommendProductCategoryService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductSolrDTO;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
 import com.lawu.eshop.product.dto.ShoppingProductDTO;
 import com.lawu.eshop.product.param.ProductSolrParam;
@@ -55,7 +55,7 @@ public class ProductSolrController extends BaseController {
     @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.GET)
-    public Result<Page<ProductSolrDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listProductByCategoryId(productSolrParam);
     }
 
@@ -63,7 +63,7 @@ public class ProductSolrController extends BaseController {
     @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSolrDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listRecommendProduct(productSolrParam);
     }
 
@@ -71,7 +71,7 @@ public class ProductSolrController extends BaseController {
     @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)
-    public Result<Page<ProductSolrDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
         return productSolrService.listProductByName(productSolrParam);
     }
 
@@ -80,7 +80,7 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProduct", method = RequestMethod.GET)
     public Result<ShoppingProductDTO> listProduct() {
         ShoppingProductDTO shoppingProductDTO = new ShoppingProductDTO();
-        List<ProductSolrDTO> productSolrDTOS = new ArrayList<>();
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
 
         //商品分类
         Result<List<RecommendProductCategoryDTO>> recProCatResult = recommendProductCategoryService.listAllRecommendProductCategory();
@@ -94,53 +94,53 @@ public class ProductSolrController extends BaseController {
         Result<List<AdPlatformDTO>> topResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_TOP);
         if (isSuccess(topResult)) {
             for (AdPlatformDTO adPlatformDTO : topResult.getModel()) {
-                ProductSolrDTO productSolrDTO = new ProductSolrDTO();
-                productSolrDTO.setProductId(adPlatformDTO.getProductId());
-                productSolrDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                productSolrDTOS.add(productSolrDTO);
+                ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                productSearchDTOS.add(productSearchDTO);
             }
         }
-        shoppingProductDTO.setTopProduct(productSolrDTOS);
+        shoppingProductDTO.setTopProduct(productSearchDTOS);
 
         //今日推荐
-        productSolrDTOS = new ArrayList<>();
+        productSearchDTOS = new ArrayList<>();
         Result<List<AdPlatformDTO>> chooseResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_CHOOSE);
         if (isSuccess(chooseResult)) {
             for (AdPlatformDTO adPlatformDTO : chooseResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
                 if (isSuccess(productInfoDTOResult)) {
-                    ProductSolrDTO productSolrDTO = new ProductSolrDTO();
-                    productSolrDTO.setProductId(adPlatformDTO.getProductId());
-                    productSolrDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSolrDTO.setName(adPlatformDTO.getTitle());
-                    productSolrDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
-                    productSolrDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
-                    productSolrDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
-                    productSolrDTOS.add(productSolrDTO);
+                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformDTO.getTitle());
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTOS.add(productSearchDTO);
                 }
             }
         }
-        shoppingProductDTO.setRecommendProduct(productSolrDTOS);
+        shoppingProductDTO.setRecommendProduct(productSearchDTOS);
 
         //精品推荐
-        productSolrDTOS = new ArrayList<>();
+        productSearchDTOS = new ArrayList<>();
         Result<List<AdPlatformDTO>> goodsResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_GOODS);
         if (isSuccess(goodsResult)) {
             for (AdPlatformDTO adPlatformDTO : goodsResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
                 if (isSuccess(productInfoDTOResult)) {
-                    ProductSolrDTO productSolrDTO = new ProductSolrDTO();
-                    productSolrDTO.setProductId(adPlatformDTO.getProductId());
-                    productSolrDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSolrDTO.setName(adPlatformDTO.getTitle());
-                    productSolrDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
-                    productSolrDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
-                    productSolrDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
-                    productSolrDTOS.add(productSolrDTO);
+                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformDTO.getTitle());
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTOS.add(productSearchDTO);
                 }
             }
         }
-        shoppingProductDTO.setGoodsProduct(productSolrDTOS);
+        shoppingProductDTO.setGoodsProduct(productSearchDTOS);
         return successGet(shoppingProductDTO);
     }
 

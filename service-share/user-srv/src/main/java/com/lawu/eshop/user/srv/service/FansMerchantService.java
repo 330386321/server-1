@@ -38,19 +38,29 @@ public interface FansMerchantService {
      * @return
      */
     FansMerchantBO getFansMerchant(Long memberId, Long merchantId);
-    
+
     /**
      * 查询当前商家的所有粉丝
+     *
      * @param memberId
      * @return
      */
     List<Long> findMerchant(Long memberId);
-    
+
     /**
      * 根据商家查询粉丝数量
+     *
      * @param merchantId
      * @return
      */
     Integer findFensCount(Long merchantId);
+
+    /**
+     * 成为商家粉丝
+     *
+     * @param merchantId
+     * @param memberId
+     */
+    void saveFansMerchant(Long merchantId, Long memberId);
 
 }

@@ -14,35 +14,35 @@ public class ShoppingProductDTO {
     private List<RecommendProductCategoryDTO> recommendProductCategoryDTOS;
 
     @ApiModelProperty(value = "顶部推荐")
-    private List<ProductSolrDTO> topProduct;
+    private List<ProductSearchDTO> topProduct;
 
     @ApiModelProperty(value = "今日推荐")
-    private List<ProductSolrDTO> recommendProduct;
+    private List<ProductSearchDTO> recommendProduct;
 
     @ApiModelProperty(value = "精品推荐")
-    private List<ProductSolrDTO> goodsProduct;
+    private List<ProductSearchDTO> goodsProduct;
 
-    public List<ProductSolrDTO> getRecommendProduct() {
+    public List<ProductSearchDTO> getRecommendProduct() {
         return recommendProduct;
     }
 
-    public void setRecommendProduct(List<ProductSolrDTO> recommendProduct) {
+    public void setRecommendProduct(List<ProductSearchDTO> recommendProduct) {
         this.recommendProduct = recommendProduct;
     }
 
-    public List<ProductSolrDTO> getGoodsProduct() {
+    public List<ProductSearchDTO> getGoodsProduct() {
         return goodsProduct;
     }
 
-    public void setGoodsProduct(List<ProductSolrDTO> goodsProduct) {
+    public void setGoodsProduct(List<ProductSearchDTO> goodsProduct) {
         this.goodsProduct = goodsProduct;
     }
 
-    public List<ProductSolrDTO> getTopProduct() {
+    public List<ProductSearchDTO> getTopProduct() {
         return topProduct;
     }
 
-    public void setTopProduct(List<ProductSolrDTO> topProduct) {
+    public void setTopProduct(List<ProductSearchDTO> topProduct) {
         this.topProduct = topProduct;
     }
 
