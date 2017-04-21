@@ -4,7 +4,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.order.srv.bo.CommentMerchantNotification;
+import com.lawu.eshop.mq.dto.mall.CommentMerchantNotification;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import org.springframework.beans.factory.annotation.Autowired;

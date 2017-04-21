@@ -3,10 +3,12 @@ package com.lawu.eshop.mall.srv.service.impl.transaction;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
-import com.lawu.eshop.mall.srv.bo.CommentProductNotification;
 import com.lawu.eshop.mall.srv.constants.TransactionConstant;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.mall.CommentProductNotification;
 import org.springframework.stereotype.Service;
+
+//import com.lawu.eshop.mall.srv.bo.CommentProductNotification;
 
 /**
  * @author zhangyong

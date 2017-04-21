@@ -1,14 +1,13 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.order.srv.bo.CommentProductNotification;
+import com.lawu.eshop.mq.dto.mall.CommentProductNotification;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong
