@@ -3,6 +3,9 @@ package com.lawu.eshop.merchant.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,6 +18,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
@@ -78,7 +82,20 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "添加收货地址", notes = "添加收货地址[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
-	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
+	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") @Validated AddressParam address, BindingResult bindingResult) {
+		
+		if (bindingResult.hasErrors()) {
+			StringBuilder sb = new StringBuilder();
+			for (ObjectError error : bindingResult.getAllErrors()) {
+				if (sb.length() > 0) {
+					sb.append("||");
+				}
+				sb.append(error.getDefaultMessage());
+			}
+
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
+		}
+		
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result result = addressService.saveWithUserNum(userNum, address);
 		if (!isSuccess(result)) {

@@ -3,9 +3,6 @@ package com.lawu.eshop.user.srv.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -96,19 +93,7 @@ public class AddressController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveWithUserNum/{userNum}", method = RequestMethod.POST)
-	public Result saveWithUserNum(@PathVariable("userNum") String userNum, @RequestBody @Validated AddressParam addressDO, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			StringBuilder sb = new StringBuilder();
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				if (sb.length() > 0) {
-					sb.append("||");
-				}
-				sb.append(error.getDefaultMessage());
-			}
-
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
-		}
-
+	public Result saveWithUserNum(@PathVariable("userNum") String userNum, @RequestBody AddressParam addressDO) {
 		int result = addressService.saveWithUserNum(userNum, addressDO);
 
 		if (result != ResultCode.SUCCESS) {

@@ -18,7 +18,7 @@
                      <!--管理验证信息的bean-->
                      <property name="manager" ref="tokenManager" />
                      <!--debug模式-->
-                     <property name="debug" value="true" />
+                     <property name="debug" value="false" />
                      <property name="testNum" value="M000001"/>
                      <property name="testId" value="1"/>
                      <property name="testAccount" value="test" />

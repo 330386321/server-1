@@ -134,11 +134,12 @@ public class AddressServiceImpl implements AddressService {
 		
 		AddressDO addressDO = AddressConverter.convertDO(param);
 		
+		addressDO.setUserNum(userNum);
 		addressDO.setStatus(StatusEnum.VALID.getValue());
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
 		
-		int result = addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		int result = addressDOMapper.insertSelective(addressDO);
 		
 		if (result <= 0) {
 			return ResultCode.SAVE_FAIL;
