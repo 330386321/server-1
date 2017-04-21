@@ -1,5 +1,13 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -11,13 +19,8 @@ import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
 import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.DataTransUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class AdPlatformServiceImpl implements AdPlatformService {
@@ -68,15 +71,27 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 	}
 
 	@Override
-	public List<AdPlatformBO> selectList(AdPlatformFindParam param) {
+	public Page<AdPlatformBO> selectList(AdPlatformFindParam param) {
 		AdPlatformDOExample example = new AdPlatformDOExample();
 		Criteria criteria=example.createCriteria();
 		criteria.andStatusNotEqualTo(new Byte("0"));
 		if(param.getPositionEnum()!=null){
 			criteria.andPositionEqualTo(param.getPositionEnum().val);
 		}
-		List<AdPlatformDO> DOS=adPlatformDOMapper.selectByExample(example);
-		return  DOS.isEmpty() ? null :AdPlatformConverter.convertBOS(DOS);
+		if(param.getTypeEnum()!=null){
+			criteria.andTypeEqualTo(param.getTypeEnum().val);
+		}
+		if(param.getTitle()!=null){
+			criteria.andTitleLike("%" + param.getTitle() + "%");
+		}
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		List<AdPlatformDO> DOS=adPlatformDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		List<AdPlatformBO> bos=AdPlatformConverter.convertBOS(DOS);
+		Page<AdPlatformBO> pageAd = new Page<AdPlatformBO>();
+		pageAd.setCurrentPage(param.getCurrentPage());
+		pageAd.setTotalCount(DOS.size());
+		pageAd.setRecords(bos);
+		return  pageAd;
 	}
 
 

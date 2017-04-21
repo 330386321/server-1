@@ -16,6 +16,7 @@ import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -45,8 +46,8 @@ public class AdPlatformController extends BaseController {
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
-    public Result<List<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam(required = true, value = "查询信息") AdPlatformFindParam param) {
-        Result<List<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectList(param);
+    public Result<Page<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam(required = true, value = "查询信息") AdPlatformFindParam param) {
+        Result<Page<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectList(param);
         return adPlatformDTOS;
     }
 

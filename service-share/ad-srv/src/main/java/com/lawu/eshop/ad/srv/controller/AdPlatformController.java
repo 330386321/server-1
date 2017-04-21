@@ -1,5 +1,17 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -8,14 +20,10 @@ import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 运营平台接口提供
@@ -70,14 +78,18 @@ public class AdPlatformController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectList", method = RequestMethod.POST)
-    public Result<List<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param) {
-		List<AdPlatformBO> BOS = adPlatformService.selectList(param);
+    public Result<Page<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param) {
+		Page<AdPlatformBO> page = adPlatformService.selectList(param);
 		List<AdPlatformDTO> list;
-		list=AdPlatformConverter.convertDTOS(BOS);
+		list=AdPlatformConverter.convertDTOS(page.getRecords());
 		if(list==null){
 			list=new ArrayList<AdPlatformDTO>();
 		}
-		return  successAccepted(list);
+		Page<AdPlatformDTO> newPage=new Page<>();
+		newPage.setCurrentPage(page.getCurrentPage());
+		newPage.setTotalCount(page.getTotalCount());
+		newPage.setRecords(list);
+		return  successAccepted(newPage);
     }
 
 	/**

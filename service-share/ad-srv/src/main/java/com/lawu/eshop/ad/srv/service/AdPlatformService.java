@@ -1,12 +1,13 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
-
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
 
 /**
  * 平台广告管理
@@ -45,7 +46,7 @@ public interface AdPlatformService {
 	 * @param param
 	 * @return
 	 */
-	List<AdPlatformBO> selectList(AdPlatformFindParam param);
+	Page<AdPlatformBO> selectList(AdPlatformFindParam param);
 
 	/**
 	 * 发布广告

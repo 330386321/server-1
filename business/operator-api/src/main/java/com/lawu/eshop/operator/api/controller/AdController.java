@@ -39,7 +39,6 @@ public class AdController extends BaseController {
  
 
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -50,7 +49,6 @@ public class AdController extends BaseController {
     
 
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
     public Result updateStatus(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
@@ -61,7 +59,6 @@ public class AdController extends BaseController {
     
     
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
@@ -70,7 +67,6 @@ public class AdController extends BaseController {
     }
     
     @ApiOperation(value = "广告审核", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
-    @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
     public Result auditVideo(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {

@@ -1,5 +1,20 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -9,6 +24,7 @@ import com.lawu.eshop.product.constant.ProductImgTypeEnum;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
+import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
@@ -16,7 +32,6 @@ import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
@@ -34,15 +49,6 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -523,5 +529,26 @@ public class ProductServiceImpl implements ProductService {
         }
         return ProductConverter.convertInfoBO(productDO);
     }
+
+	@Override
+	public List<ProductQueryBO> selectProductByPlat(ProductParam param) {
+		ProductDOExample exmple=new ProductDOExample();
+		Criteria cr=exmple.createCriteria();
+		cr.andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+		if(param.getName()!=null){
+			cr.andNameLike("%" + param.getName() + "%");
+		}
+		List<ProductDO> productList= productDOMapper.selectByExample(exmple);
+		List<ProductQueryBO> bos=new ArrayList<>();
+		if(!productList.isEmpty()){
+			for (ProductDO productDO : productList) {
+				ProductQueryBO bo=new ProductQueryBO();
+				bo.setId(productDO.getId());
+				bo.setName(productDO.getName());
+				bos.add(bo);
+			}
+		}
+		return bos;
+	}
 
 }

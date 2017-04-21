@@ -1,7 +1,5 @@
 package com.lawu.eshop.operator.api.service;
 
-import java.util.List;
-
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +11,7 @@ import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
 /**
@@ -47,7 +46,7 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectList")
-	Result<List<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param);
+	Result<Page<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param);
 	
 	
 	/**
