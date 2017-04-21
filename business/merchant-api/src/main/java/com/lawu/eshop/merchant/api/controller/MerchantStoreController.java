@@ -296,4 +296,13 @@ public class MerchantStoreController extends BaseController {
         return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
     }
 
+    @ApiOperation(value = "加入7天退货保障", notes = "加入7天退货保障 [2009]（梅述全）", httpMethod = "PUT")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "updateNoReasonReturn", method = RequestMethod.PUT)
+    Result updateNoReasonReturn(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.updateNoReasonReturn(merchantId);
+    }
+
 }

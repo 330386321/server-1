@@ -385,6 +385,126 @@ public class RecommendProductCategoryDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsvisibleIsNull() {
+            addCriterion("isvisible is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleIsNotNull() {
+            addCriterion("isvisible is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleEqualTo(Boolean value) {
+            addCriterion("isvisible =", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleNotEqualTo(Boolean value) {
+            addCriterion("isvisible <>", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleGreaterThan(Boolean value) {
+            addCriterion("isvisible >", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("isvisible >=", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleLessThan(Boolean value) {
+            addCriterion("isvisible <", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleLessThanOrEqualTo(Boolean value) {
+            addCriterion("isvisible <=", value, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleIn(List<Boolean> values) {
+            addCriterion("isvisible in", values, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleNotIn(List<Boolean> values) {
+            addCriterion("isvisible not in", values, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleBetween(Boolean value1, Boolean value2) {
+            addCriterion("isvisible between", value1, value2, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsvisibleNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("isvisible not between", value1, value2, "isvisible");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalIsNull() {
+            addCriterion("ordinal is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalIsNotNull() {
+            addCriterion("ordinal is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalEqualTo(Byte value) {
+            addCriterion("ordinal =", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalNotEqualTo(Byte value) {
+            addCriterion("ordinal <>", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalGreaterThan(Byte value) {
+            addCriterion("ordinal >", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalGreaterThanOrEqualTo(Byte value) {
+            addCriterion("ordinal >=", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalLessThan(Byte value) {
+            addCriterion("ordinal <", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalLessThanOrEqualTo(Byte value) {
+            addCriterion("ordinal <=", value, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalIn(List<Byte> values) {
+            addCriterion("ordinal in", values, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalNotIn(List<Byte> values) {
+            addCriterion("ordinal not in", values, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalBetween(Byte value1, Byte value2) {
+            addCriterion("ordinal between", value1, value2, "ordinal");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrdinalNotBetween(Byte value1, Byte value2) {
+            addCriterion("ordinal not between", value1, value2, "ordinal");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtCreateIsNull() {
             addCriterion("gmt_create is null");
             return (Criteria) this;

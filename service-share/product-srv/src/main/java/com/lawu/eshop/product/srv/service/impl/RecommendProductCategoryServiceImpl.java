@@ -48,7 +48,7 @@ public class RecommendProductCategoryServiceImpl implements RecommendProductCate
     @Override
     public Page<RecommendProductCategoryBO> listRecommendProductCategory(ListRecommendProductCategoryParam listRecommendProductCategoryParam) {
         RecommendProductCategoryDOExample recommendProductCategoryDOExample = new RecommendProductCategoryDOExample();
-        recommendProductCategoryDOExample.setOrderByClause("id desc");
+        recommendProductCategoryDOExample.setOrderByClause("ordinal is null, ordinal");
 
         RowBounds rowBounds = new RowBounds(listRecommendProductCategoryParam.getOffset(), listRecommendProductCategoryParam.getPageSize());
         Page<RecommendProductCategoryBO> page = new Page<>();
@@ -63,7 +63,7 @@ public class RecommendProductCategoryServiceImpl implements RecommendProductCate
     @Override
     public List<RecommendProductCategoryBO> listAllRecommendProductCategory() {
         RecommendProductCategoryDOExample recommendProductCategoryDOExample = new RecommendProductCategoryDOExample();
-        recommendProductCategoryDOExample.setOrderByClause("id desc");
+        recommendProductCategoryDOExample.setOrderByClause("ordinal is null, ordinal");
         List<RecommendProductCategoryDO> recommendProductCategoryDOList = recommendProductCategoryDOMapper.selectByExample(recommendProductCategoryDOExample);
         return RecommendProductCategoryConverter.convertBO(recommendProductCategoryDOList);
     }

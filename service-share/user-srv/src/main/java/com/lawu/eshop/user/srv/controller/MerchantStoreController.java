@@ -294,5 +294,19 @@ public class MerchantStoreController extends BaseController {
         return successCreated(ResultCode.SUCCESS);
     }
 
-
+    /**
+     * 加入7天退货保障
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "updateNoReasonReturn/{merchantId}")
+    public Result updateNoReasonReturn(@PathVariable("merchantId") Long merchantId) {
+        MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantId);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
+        }
+        merchantStoreService.updateNoReasonReturn(merchantStoreBO.getId());
+        return successCreated();
+    }
 }

@@ -50,6 +50,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_IDCARD = 2006;
     public static final int USER_POINT_NOT_ENOUGH = 2007;
     public static final int MERCHANT_STORE_AUDIT_EXIST = 2008;
+    public static final int MERCHANT_STORE_NO_EXIST = 2009;
 
     //运营
     public static final int USER_NOT_LOGIN = 2100;
@@ -61,7 +62,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
     public static final int GOODS_DO_NOT_EXIST = 3002;
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
-    
+
     // 订单模块代码 4xxx
     public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -91,7 +92,7 @@ public class ResultCode {
     public static final int AD_PRAISE_PUTED = 5005;
     public static final int AD_CLICK_EXIST = 5006;
     public static final int AD_PRAISE_POINT_GET = 5007;
-    
+
 
     // 资产模块代码 6xxx
     public static final int BANK_ACCOUNT_ERROR = 6000;
@@ -106,7 +107,7 @@ public class ResultCode {
     public static final int PROPERTY_CASH_USER_INFO_NULL = 6009;
     public static final int PROPERTY_INFO_POINT_LESS = 6010;
     public static final int BIZ_TYPE_NULL = 6011;
-    
+
     public static final int CASH_BACKAGE_FAILURE_REASON_NULL = 6012;
     public static final int FREEZE_NULL = 6013;
     public static final int FREEZE_ROWS_OUT = 6014;
@@ -115,10 +116,7 @@ public class ResultCode {
     public static final int DEPOSIT_EXIST_ING_ORDER = 6017;
     public static final int MONEY_IS_ZERO = 6018;
 
-    
 
-
-   
     // 商城模块代码 7xxx
 
 
@@ -164,6 +162,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_IDCARD, "手持身份证照");
         ResultCode.messageMap.put(USER_POINT_NOT_ENOUGH, "用户积分不足");
         ResultCode.messageMap.put(MERCHANT_STORE_AUDIT_EXIST, "已经存在未审核记录");
+        ResultCode.messageMap.put(MERCHANT_STORE_NO_EXIST, "未查询到门店");
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");
@@ -174,7 +173,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品详情图片");
         ResultCode.messageMap.put(GOODS_DO_NOT_EXIST, "商品型号对应的商品信息不存在");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
-        
+
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
@@ -193,7 +192,7 @@ public class ResultCode {
         ResultCode.messageMap.put(ORDER_NOT_REFUND_FAILED, "订单退款状态不是退款失败");
         ResultCode.messageMap.put(ORDER_NOT_COMPLETE_STATUS, "订单不是完成状态");
         ResultCode.messageMap.put(PAY_ORDER_FAVORED_AMOUNT_UNEQUAL, "买单优惠金额不正确");
-        
+
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
@@ -215,7 +214,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_EXIST, "提交的银行卡ID不存在");
         ResultCode.messageMap.put(PROPERTY_CASH_BANK_NOT_MATCH, "提交的银行卡与用户不匹配");
         ResultCode.messageMap.put(PROPERTY_CASH_USER_INFO_NULL, "提交查询用户冗余信息为空");
-        
+
         ResultCode.messageMap.put(CASH_BACKAGE_FAILURE_REASON_NULL, "操作失败时原因不能为空");
         ResultCode.messageMap.put(BIZ_TYPE_NULL, "业务类型不能为空");
         ResultCode.messageMap.put(FREEZE_NULL, "冻结资金记录为空");
