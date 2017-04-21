@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ProductSolrDTO {
 
+    @ApiModelProperty(value = "商品ID")
+    private Long productId;
+
     @ApiModelProperty(value = "特征图片")
     private String featureImage;
 
@@ -22,6 +25,9 @@ public class ProductSolrDTO {
 
     @ApiModelProperty(value = "现价")
     private Double price;
+
+    @ApiModelProperty(value = "销量")
+    private Integer salesVolume;
 
     public String getFeatureImage() {
         return featureImage;
@@ -61,5 +67,21 @@ public class ProductSolrDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Integer getSalesVolume() {
+        return salesVolume;
+    }
+
+    public void setSalesVolume(Integer salesVolume) {
+        this.salesVolume = salesVolume;
     }
 }

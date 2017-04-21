@@ -47,11 +47,13 @@ public class FansMerchantConverter {
         for (FansMerchantDOView fansMerchantDOView : fansMerchantDOViewList) {
             FansMerchantBO fansMerchantBO = new FansMerchantBO();
             fansMerchantBO.setRegionPath(fansMerchantDOView.getRegionPath());
+            fansMerchantBO.setRegionName(fansMerchantDOView.getRegionName());
             fansMerchantBO.setAccount(fansMerchantDOView.getAccount());
             fansMerchantBO.setMemberId(fansMerchantDOView.getMemberId());
             fansMerchantBO.setNum(fansMerchantDOView.getNum());
             fansMerchantBO.setGmtCreate(fansMerchantDOView.getGmtCreate());
             fansMerchantBO.setHeadimg(fansMerchantDOView.getHeadimg());
+            fansMerchantBO.setLevel(fansMerchantDOView.getLevel());
             fansMerchantBO.setNickname(fansMerchantDOView.getNickname());
             fansMerchantBOS.add(fansMerchantBO);
         }
@@ -75,9 +77,11 @@ public class FansMerchantConverter {
             fansMerchantDTO.setMemberId(fansMerchantBO.getMemberId());
             fansMerchantDTO.setAccount(StringUtil.hideUserAccount(fansMerchantBO.getAccount()));
             fansMerchantDTO.setRegionPath(fansMerchantBO.getRegionPath());
+            fansMerchantDTO.setRegionName(fansMerchantBO.getRegionName());
             fansMerchantDTO.setNum(fansMerchantBO.getNum());
             fansMerchantDTO.setNickname(StringUtils.isEmpty(fansMerchantBO.getNickname()) ? "E店用户" : fansMerchantBO.getNickname());
             fansMerchantDTO.setHeadimg(fansMerchantBO.getHeadimg());
+            fansMerchantDTO.setLevel(fansMerchantBO.getLevel());
             fansMerchantDTO.setGmtCreate(fansMerchantBO.getGmtCreate());
             fansMerchantDTOS.add(fansMerchantDTO);
         }

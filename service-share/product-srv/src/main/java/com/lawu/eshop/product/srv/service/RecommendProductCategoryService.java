@@ -4,6 +4,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.param.ListRecommendProductCategoryParam;
 import com.lawu.eshop.product.srv.bo.RecommendProductCategoryBO;
 
+import java.util.List;
+
 /**
  * @author meishuquan
  * @date 2017/4/10.
@@ -40,4 +42,11 @@ public interface RecommendProductCategoryService {
      * @return
      */
     Page<RecommendProductCategoryBO> listRecommendProductCategory(ListRecommendProductCategoryParam listRecommendProductCategoryParam);
+
+    /**
+     * 商品类别列表
+     *
+     * @return
+     */
+    List<RecommendProductCategoryBO> listAllRecommendProductCategory();
 }

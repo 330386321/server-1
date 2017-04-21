@@ -59,4 +59,12 @@ public class RecommendProductCategoryServiceImpl implements RecommendProductCate
         page.setRecords(RecommendProductCategoryConverter.convertBO(recommendProductCategoryDOList));
         return page;
     }
+
+    @Override
+    public List<RecommendProductCategoryBO> listAllRecommendProductCategory() {
+        RecommendProductCategoryDOExample recommendProductCategoryDOExample = new RecommendProductCategoryDOExample();
+        recommendProductCategoryDOExample.setOrderByClause("id desc");
+        List<RecommendProductCategoryDO> recommendProductCategoryDOList = recommendProductCategoryDOMapper.selectByExample(recommendProductCategoryDOExample);
+        return RecommendProductCategoryConverter.convertBO(recommendProductCategoryDOList);
+    }
 }

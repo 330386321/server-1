@@ -26,7 +26,7 @@ public interface ProductService {
      * 批量处理
      *
      * @param ids
-     * @param status
+     * @param productStatus
      * @return
      */
     int updateProductStatus(String ids, ProductStatusEnum productStatus);
@@ -62,7 +62,7 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalInventory(Long productId,int num,String flag);
-    
+
     /**
      * 操作销量
      * @param productId
@@ -70,7 +70,7 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalSaleVolume(Long productId,int num,String flag);
-    
+
     /**
      * 操作收藏
      * @param productId
@@ -78,4 +78,12 @@ public interface ProductService {
      * @param flag	M-减、A-加
      */
     void editTotalFavorite(Long productId,int num,String flag);
+    /**
+     * 根据商品ID查询商品信息
+     *
+     * @param id
+     * @return
+     */
+    ProductInfoBO getProductById(Long id);
+
 }

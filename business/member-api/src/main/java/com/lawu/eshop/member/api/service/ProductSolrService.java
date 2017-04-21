@@ -42,4 +42,5 @@ public interface ProductSolrService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "productSolr/listProductByName")
     Result<Page<ProductSolrDTO>> listProductByName(@ModelAttribute ProductSolrParam productSolrParam);
+
 }

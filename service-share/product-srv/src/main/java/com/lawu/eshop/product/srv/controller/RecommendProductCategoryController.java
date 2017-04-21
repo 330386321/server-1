@@ -12,6 +12,8 @@ import com.lawu.eshop.product.srv.service.RecommendProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author meishuquan
  * @date 2017/4/10.
@@ -67,4 +69,19 @@ public class RecommendProductCategoryController extends BaseController {
         page.setTotalCount(recommendProductCategoryBOPage.getTotalCount());
         return successGet(page);
     }
+
+    /**
+     * 商品类别列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "listAllRecommendProductCategory", method = RequestMethod.GET)
+    public Result<List<RecommendProductCategoryDTO>> listAllRecommendProductCategory() {
+        List<RecommendProductCategoryBO> recommendProductCategoryBOS = recommendProductCategoryService.listAllRecommendProductCategory();
+        if (recommendProductCategoryBOS == null || recommendProductCategoryBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(RecommendProductCategoryConverter.convertDTO(recommendProductCategoryBOS));
+    }
+
 }

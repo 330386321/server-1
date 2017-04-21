@@ -1,12 +1,5 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -18,12 +11,19 @@ import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
 import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
+import com.lawu.eshop.utils.DataTransUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class AdPlatformServiceImpl implements AdPlatformService {
-	
-	@Autowired
-	private AdPlatformDOMapper adPlatformDOMapper;
+
+    @Autowired
+    private AdPlatformDOMapper adPlatformDOMapper;
 
 	@Override
 	@Transactional
@@ -48,16 +48,16 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		return id;
 	}
 
-	@Override
-	@Transactional
-	public Integer removeAdPlatform(Long id) {
-		AdPlatformDOExample example = new AdPlatformDOExample();
-		example.createCriteria().andIdEqualTo(id);
-		AdPlatformDO adPlatformDO=new AdPlatformDO();
-		adPlatformDO.setStatus(new Byte("0"));
-		Integer i=adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
-		return i;
-	}
+    @Override
+    @Transactional
+    public Integer removeAdPlatform(Long id) {
+        AdPlatformDOExample example = new AdPlatformDOExample();
+        example.createCriteria().andIdEqualTo(id);
+        AdPlatformDO adPlatformDO = new AdPlatformDO();
+        adPlatformDO.setStatus(new Byte("0"));
+        Integer i = adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
+        return i;
+    }
 
 	@Override
 	public List<AdPlatformBO> selectByPosition(PositionEnum positionEnum) {
@@ -67,7 +67,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		List<AdPlatformDO> DOS=adPlatformDOMapper.selectByExample(example);
 		return  DOS.isEmpty() ? null :AdPlatformConverter.convertBOS(DOS);
 	}
-	
+
 	@Override
 	public List<AdPlatformBO> selectList(AdPlatformFindParam param) {
 		AdPlatformDOExample example = new AdPlatformDOExample();
@@ -79,8 +79,8 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		List<AdPlatformDO> DOS=adPlatformDOMapper.selectByExample(example);
 		return  DOS.isEmpty() ? null :AdPlatformConverter.convertBOS(DOS);
 	}
-	
-	
+
+
 	@Override
 	@Transactional
 	public Integer issueAd(Long id) {
@@ -113,7 +113,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 			adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
 		}else{ //商品
 			adPlatformDO.setType(new Byte("2"));
-			adPlatformDO.setProductId(adPlatformParam.getProductId());  
+			adPlatformDO.setProductId(adPlatformParam.getProductId());
 		}
 		Integer i=adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
 		return i;
@@ -131,7 +131,15 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		adPlatformDO.setId(id);
 		adPlatformDO.setStatus(new Byte("3"));
 		Integer i=adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-		
+
 	}
+
+    @Override
+    public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum) {
+        AdPlatformDOExample example = new AdPlatformDOExample();
+        example.createCriteria().andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(DataTransUtil.intToByte(1));
+        List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
+        return adPlatformDOS.isEmpty() ? null : AdPlatformConverter.convertBOS(adPlatformDOS);
+    }
 
 }

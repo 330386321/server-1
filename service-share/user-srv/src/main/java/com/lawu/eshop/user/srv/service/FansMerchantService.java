@@ -41,7 +41,7 @@ public interface FansMerchantService {
     
     /**
      * 查询当前商家的所有粉丝
-     * @param merchantId
+     * @param memberId
      * @return
      */
     List<Long> findMerchant(Long memberId);

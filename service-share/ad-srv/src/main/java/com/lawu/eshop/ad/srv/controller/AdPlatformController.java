@@ -1,18 +1,7 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
@@ -22,52 +11,59 @@ import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 运营平台接口提供
+ *
  * @author zhangrc
  * @date 2017/4/5
- *
  */
 @RestController
 @RequestMapping(value = "adPlatform/")
-public class AdPlatformController extends BaseController{
-	
-	@Resource
-	private AdPlatformService adPlatformService;
-	
-	/**
-	 * 添加广告
-	 * @param adPlatformParam
-	 * @return
-	 */
-	@RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
+public class AdPlatformController extends BaseController {
+
+    @Resource
+    private AdPlatformService adPlatformService;
+
+    /**
+     * 添加广告
+     *
+     * @param adPlatformParam
+     * @return
+     */
+    @RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
     public Result saveAdPlatform(@RequestBody AdPlatformParam adPlatformParam, @RequestParam String url) {
-		Integer id= adPlatformService.saveAdPlatform(adPlatformParam,url);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+        Integer id = adPlatformService.saveAdPlatform(adPlatformParam, url);
+        if (id > 0) {
+            return successCreated(ResultCode.SUCCESS);
+        } else {
+            return successCreated(ResultCode.FAIL);
+        }
     }
-	
-	/**
-	 * 根据位置查询广告
-	 * @param positionEnum
-	 * @return
-	 */
-	@RequestMapping(value = "selectByPosition", method = RequestMethod.POST)
+
+    /**
+     * 根据位置查询广告
+     *
+     * @param positionEnum
+     * @return
+     */
+    @RequestMapping(value = "selectByPosition", method = RequestMethod.POST)
     public Result<List<AdPlatformDTO>> selectByPosition(@RequestBody PositionEnum positionEnum) {
-		List<AdPlatformBO> BOS = adPlatformService.selectByPosition(positionEnum);
-		List<AdPlatformDTO> list;
-		list=AdPlatformConverter.convertDTOS(BOS);
-		if(list==null){
-			list=new ArrayList<AdPlatformDTO>();
-		}
-		return  successAccepted(list);
+        List<AdPlatformBO> BOS = adPlatformService.selectByPosition(positionEnum);
+        List<AdPlatformDTO> list;
+        list = AdPlatformConverter.convertDTOS(BOS);
+        if (list == null) {
+            list = new ArrayList<AdPlatformDTO>();
+        }
+        return successAccepted(list);
     }
 	
-	
+
 	/**
 	 * 根据位置查询广告
 	 * @param positionEnum
@@ -83,7 +79,7 @@ public class AdPlatformController extends BaseController{
 		}
 		return  successAccepted(list);
     }
-	
+
 	/**
 	 * 删除广告
 	 * @param id
@@ -98,7 +94,7 @@ public class AdPlatformController extends BaseController{
     		return successCreated(ResultCode.FAIL);
     	}
     }
-	
+
 	/**
 	 * 发布广告
 	 * @param id
@@ -113,7 +109,7 @@ public class AdPlatformController extends BaseController{
     		return successCreated(ResultCode.FAIL);
     	}
     }
-	
+
 	/**
 	 * 广告下架
 	 * @param id
@@ -124,7 +120,7 @@ public class AdPlatformController extends BaseController{
 		adPlatformService.unShelve(id);
     	return successCreated(ResultCode.SUCCESS);
     }
-	
+
 	/**
 	 * 设置广告位
 	 * @param id
@@ -139,7 +135,7 @@ public class AdPlatformController extends BaseController{
     		return successCreated(ResultCode.FAIL);
     	}
     }
-	
+
 	/**
 	 * 修改
 	 * @param id
@@ -156,7 +152,7 @@ public class AdPlatformController extends BaseController{
     		return successCreated(ResultCode.FAIL);
     	}
     }
-	
+
 	/**
 	 * 单个查询
 	 * @param id
@@ -168,5 +164,20 @@ public class AdPlatformController extends BaseController{
 		return successGet(AdPlatformConverter.convertDTO(adPlatformBO));
     }
 
+    /**
+     * 根据类型位置查询广告
+     *
+     * @param typeEnum
+     * @param positionEnum
+     * @return
+     */
+    @RequestMapping(value = "getAdPlatformByTypePosition", method = RequestMethod.GET)
+    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum , @RequestParam PositionEnum positionEnum) {
+        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum);
+        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
+    }
 
 }

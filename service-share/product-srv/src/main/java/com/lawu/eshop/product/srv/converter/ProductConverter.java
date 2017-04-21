@@ -97,6 +97,9 @@ public class ProductConverter {
         productInfoBO.setFeatureImage(productDO.getFeatureImage());
         productInfoBO.setContent(productDO.getContent());
         productInfoBO.setMerchantId(productDO.getMerchantId());
+        productInfoBO.setTotalSales(productDO.getTotalSalesVolume());
+        productInfoBO.setPriceMax(String.valueOf(productDO.getMaxPrice()));
+        productInfoBO.setPriceMin(String.valueOf(productDO.getMinPrice()));
         return productInfoBO;
     }
 

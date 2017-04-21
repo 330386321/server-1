@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -22,13 +23,20 @@ public class FansMerchantDTO {
     @ApiModelProperty(value = "区域路径")
     private String regionPath;
 
+    @ApiModelProperty(value = "区域名称")
+    private String regionName;
+
     @ApiModelProperty(value = "昵称")
     private String nickname;
 
     @ApiModelProperty(value = "头像")
     private String headimg;
 
+    @ApiModelProperty(value = "等级")
+    private Integer level;
+
     @ApiModelProperty(value = "成为粉丝时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
 
     public Long getMemberId() {
@@ -85,5 +93,21 @@ public class FansMerchantDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

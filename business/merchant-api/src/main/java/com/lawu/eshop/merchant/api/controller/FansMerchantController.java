@@ -100,4 +100,14 @@ public class FansMerchantController extends BaseController {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         return fansMerchantService.listFans(merchantId, listFansParam);
     }
+
+    @ApiOperation(value = "粉丝数量", notes = "查询商家粉丝数量。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "countFans", method = RequestMethod.GET)
+    public Result<Integer> countFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return fansMerchantService.countFans(merchantId);
+    }
+
 }

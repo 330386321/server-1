@@ -32,4 +32,13 @@ public interface ProductService {
     @RequestMapping(value = "productModel/selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
     Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception;
 
+    /**
+     * 根据商品ID查询商品信息
+     *
+     * @param productId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/getProduct/{productId}")
+    Result<ProductInfoDTO> getProductById(@PathVariable("productId") Long productId);
+
 }

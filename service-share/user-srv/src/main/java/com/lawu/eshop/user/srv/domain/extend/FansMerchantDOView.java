@@ -19,9 +19,13 @@ public class FansMerchantDOView implements Serializable {
 
     private String regionPath;
 
+    private String regionName;
+
     private String nickname;
 
     private String headimg;
+
+    private Integer level;
 
     private Date gmtCreate;
 
@@ -83,5 +87,21 @@ public class FansMerchantDOView implements Serializable {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 }

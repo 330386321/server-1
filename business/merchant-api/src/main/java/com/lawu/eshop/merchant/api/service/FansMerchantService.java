@@ -35,4 +35,13 @@ public interface FansMerchantService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "fansMerchant/listFans/{merchantId}")
     Result<Page<FansMerchantDTO>> listFans(@PathVariable("merchantId") Long merchantId, @ModelAttribute ListFansParam listFansParam);
+
+    /**
+     * 查询商家粉丝数量
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "fansMerchant/countFans/{merchantId}")
+    Result<Integer> countFans(@PathVariable("merchantId") Long merchantId);
 }

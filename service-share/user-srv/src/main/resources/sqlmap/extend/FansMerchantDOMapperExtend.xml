@@ -6,8 +6,10 @@
         <result column="num" property="num" jdbcType="VARCHAR"/>
         <result column="account" property="account" jdbcType="VARCHAR"/>
         <result column="region_path" property="regionPath" jdbcType="VARCHAR"/>
+        <result column="region_name" property="regionName" jdbcType="VARCHAR"/>
         <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
         <result column="headimg" property="headimg" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
         <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
     </resultMap>
 
@@ -17,7 +19,7 @@
     </select>
 
     <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.param.ListFansRealParam" id="listFans">
-        select mem.account,mem.region_path,mem.nickname,mem.headimg,fm.gmt_create
+        select mem.account,mem.region_path,mem.region_name,mem.nickname,mem.headimg,mem.level,fm.gmt_create
         from fans_merchant fm inner join member mem on fm.member_id = mem.id
         where fm.merchant_id = #{merchantId,,jdbcType=BIGINT}
         <if test="regionPath != null">
