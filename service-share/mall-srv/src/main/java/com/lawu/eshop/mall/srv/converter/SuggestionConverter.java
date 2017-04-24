@@ -89,6 +89,8 @@ public class SuggestionConverter {
 		SuggestionDO suggestionDO = new SuggestionDO();
 		BeanUtils.copyProperties(param, suggestionDO, new String[]{"userType","clientType"});
 		
+		suggestionDO.setUserNum(userNum);
+		
 		// 用户类型，1是商家，2是会员
 		if (userNum.startsWith("B")) {
 			suggestionDO.setUserType((byte)1);
