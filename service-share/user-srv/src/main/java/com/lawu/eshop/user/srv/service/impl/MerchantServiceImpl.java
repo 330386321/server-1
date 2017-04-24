@@ -1,15 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
@@ -23,21 +13,9 @@ import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
-import com.lawu.eshop.user.srv.domain.InviteRelationDO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
-import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
@@ -45,6 +23,15 @@ import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 商户服务实现
@@ -250,10 +237,10 @@ public class MerchantServiceImpl implements MerchantService {
         //获取融云token
         TokenResult tokenResult = rongMerchantService.getRongToken(userNum, "E店商家", FileDirConstant.DEFAULT_PIC);
         if (StringUtils.isNotEmpty(tokenResult.getToken())) {
-            MemberDO memberDO2 = new MemberDO();
-            memberDO2.setRyToken(tokenResult.getToken());
-            memberDO2.setId(merchantId);
-            memberDOMapper.updateByPrimaryKeySelective(memberDO2);
+            MerchantDO merchantDO1 = new MerchantDO();
+            merchantDO1.setRyToken(tokenResult.getToken());
+            merchantDO1.setId(merchantId);
+            merchantDOMapper.updateByPrimaryKeySelective(merchantDO1);
         }
         transactionMainService.sendNotice(merchantId);
     }
