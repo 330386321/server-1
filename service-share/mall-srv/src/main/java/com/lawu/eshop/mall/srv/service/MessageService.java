@@ -6,6 +6,7 @@ import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -58,5 +59,5 @@ public interface MessageService {
 
     Integer saveMessageOperator(String userNum ,OperatorMessageInfoParam messageInfoParam);
 
-    Long saveMessageToAll(OperatorMessageInfoParam messageInfoParam);
+    void saveMessageToAll(OperatorMessageParam messageInfoParam);
 }

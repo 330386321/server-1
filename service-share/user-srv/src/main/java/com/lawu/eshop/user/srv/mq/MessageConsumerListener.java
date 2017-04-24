@@ -1,19 +1,23 @@
 package com.lawu.eshop.user.srv.mq;
 
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.HandleDepostMessage;
-import com.lawu.eshop.user.param.MessagePushInfo;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.utils.GtPush;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * @author Leach
@@ -29,6 +33,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
     @Autowired
     private MerchantService merchantService;
+
     @Override
     public void consumeMessage(String topic, String tags, Object message) {
 
@@ -66,6 +71,35 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
                 //删除solr门店信息
                 SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(),SolrUtil.SOLR_MERCHANT_CORE);
             }
+        }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSHALL.equals(tags)){
+            //发送推送消息
+            MessagePushInfo info = (MessagePushInfo) message;
+            GtPush push = new GtPush();
+           if(UserTypeEnum.MEMBER.val==info.getUserType()){
+               //推送所有
+               push.pushToAllUser(info.getTitle(),info.getContent());
+           }else{
+               push.pushToAllCompany(info.getTitle(),info.getContent());
+           }
+        }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH_AREA.equals(tags)){
+            //发送推送消息
+            MessagePushInfo info = (MessagePushInfo) message;
+            GtPush push = new GtPush();
+            List<MessagePushBO> messagePushBOS = null;
+            if(UserTypeEnum.MEMBER.val==info.getUserType()){
+                //推送用户
+                messagePushBOS = memberService.findMessagePushList(info.getArea());
+                for(MessagePushBO messagePushBO : messagePushBOS){
+                    push.sendMessageToCidCustoms(info.getContent(),messagePushBO.getGtCid(),info.getTitle());
+                }
+            }else{
+                messagePushBOS = merchantService.findMessagePushList(info.getArea());
+                for(MessagePushBO messagePushBO : messagePushBOS){
+                    push.sendMessageToCid(info.getContent(),messagePushBO.getGtCid(),info.getTitle());
+                }
+            }
+
+
         }
     }
 }

@@ -253,7 +253,8 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     @Override
     public MerchantStoreAuditBO getMerchantAuditInfo(Long merchantId) {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusNotEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        example.setOrderByClause("id desc");
        List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
        if(merchantStoreAuditDOS.isEmpty()){
            return  null;
@@ -261,6 +262,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
+        merchantStoreAuditBO.setGmtCreate(merchantStoreAuditDOS.get(0).getGmtCreate());
         return merchantStoreAuditBO;
     }
 

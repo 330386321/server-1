@@ -7,7 +7,9 @@ import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,8 @@ public class MerchantAuditController extends BaseController {
 
     @Autowired
     private MerchantAuditService merchantAuditService;
+    @Autowired
+    private MerchantStoreInfoService merchantStoreInfoService;
 
     /**
      * 门店审核
@@ -36,19 +40,24 @@ public class MerchantAuditController extends BaseController {
     }
 
     /**
-     * 查询门店审核成功和失败审核信息
+     * 查询门店审失败或待审核信息
      * @param merchantId
      * @return
      */
     @RequestMapping(value = "getMerchantAuditInfo/{merchantId}", method = RequestMethod.GET)
     public Result<MerchantAuditInfoDTO> getMerchantAuditInfo(@PathVariable(value = "merchantId") Long merchantId){
-        MerchantStoreAuditBO storeAuditBO = merchantAuditService.getMerchantAuditInfo(merchantId);
-        if(storeAuditBO == null){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+
+        //查询门店信息
+        MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+        if(merchantStoreBO == null){
+            return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
         }
+        MerchantStoreAuditBO storeAuditBO = merchantAuditService.getMerchantAuditInfo(merchantId);
         MerchantAuditInfoDTO auditInfoDTO = new MerchantAuditInfoDTO();
         auditInfoDTO.setRemark(storeAuditBO.getRemark());
+        auditInfoDTO.setGmtCreate(storeAuditBO.getGmtCreate());
         auditInfoDTO.setMerchantAuditStatusEnum(MerchantAuditStatusEnum.getEnum(storeAuditBO.getStatus()));
+        auditInfoDTO.setStoreStatus(merchantStoreBO.getStatusEnum());
         return successGet(auditInfoDTO);
     }
 }

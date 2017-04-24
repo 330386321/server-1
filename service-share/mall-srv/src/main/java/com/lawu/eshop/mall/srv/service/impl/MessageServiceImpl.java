@@ -18,6 +18,7 @@ import com.lawu.eshop.mall.srv.mapper.MessageTemplateDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.MessageDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -159,14 +160,34 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setTitle(messageInfoParam.getTitle());
         pushInfo.setContent(messageInfoParam.getContent());
         pushInfo.setMessageId(messageDO.getId());
-        pushInfo.setUserNum(messageDO.getUserNum());
+        pushInfo.setUserNum(userNum);
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH,pushInfo);
         return row;
     }
 
     @Override
-    public Long saveMessageToAll(OperatorMessageInfoParam messageInfoParam) {
-        //TODO 批量查询新增站内消息
-        return null;
+    @Transactional
+    public void saveMessageToAll(OperatorMessageParam param) {
+        // 批量查询新增站内消息
+        for(PushParam pushParam : param.getParams()){
+            MessageDO messageDO = new MessageDO();
+            messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
+            messageDO.setUserNum(pushParam.getUserNum());
+            messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+            messageDO.setContent(param.getContent());
+            messageDO.setGmtCreate(new Date());
+            messageDO.setGmtModified(new Date());
+            messageDOMapper.insert(messageDO);
+        }
+        MessagePushInfo pushInfo = new MessagePushInfo();
+        pushInfo.setTitle(param.getTitle());
+        pushInfo.setContent(param.getContent());
+        pushInfo.setUserType(param.getUserTypeEnum().val);
+        //推送全部
+        if("all".equals(param.getArea())){
+            messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSHALL,pushInfo);
+        }else{
+            messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH_AREA,pushInfo);
+        }
     }
 }

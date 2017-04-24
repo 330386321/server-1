@@ -1,12 +1,14 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.InviterTypeEnum;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+
+import java.util.List;
 
 /**
  * 商户服务接口
@@ -83,4 +85,6 @@ public interface MerchantService {
      * @return
      */
 	MerchantBO selectMerchantInfo(Long merchantId);
+
+    List<MessagePushBO> findMessagePushList(String area);
 }

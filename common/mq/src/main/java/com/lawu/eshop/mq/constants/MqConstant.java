@@ -68,6 +68,15 @@ public class MqConstant {
      */
     public static final String TAG_GTPUSH = "gtpush";
 
+    /**
+     * 增加站内消息发推送所有用户
+     */
+    public static final String TAG_GTPUSHALL = "pushall";
+    /**
+     * 增加站内消息发推送所有区域内用户
+     */
+    public static final String TAG_GTPUSH_AREA = "push_area";
+
 
     /******************************************/
     /*******order-srv模块tag **********/

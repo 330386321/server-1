@@ -11,12 +11,15 @@ import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
+import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
@@ -30,6 +33,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +73,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private RongMerchantService rongMerchantService;
+
+    @Autowired
+    private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
 
     @Override
     @Transactional
@@ -252,12 +259,12 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam ,byte  inviterType) {
+    public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam, byte inviterType) {
         InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
         inviterMerchantDO.setInviterType(inviterType);
-        if(pageParam.getName()!=null)
-        	inviterMerchantDO.setName(pageParam.getName());
+        if (pageParam.getName() != null)
+            inviterMerchantDO.setName(pageParam.getName());
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
         List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
@@ -301,17 +308,34 @@ public class MerchantServiceImpl implements MerchantService {
         return MerchantConverter.convertBO(merchantDOS.get(0));
     }
 
-	@Override
-	public MerchantBO selectMerchantInfo(Long merchantId) {
-		  MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
-		  MerchantStoreDOExample example=new MerchantStoreDOExample();
-		  example.createCriteria().andMerchantIdEqualTo(merchantId);
-		  List<MerchantStoreDO> list=merchantStoreDOMapper.selectByExample(example);
-		  MerchantBO merchantBO =MerchantConverter.convertBO(merchantDO);
-		  if(!list.isEmpty()){
-			  MerchantStoreDO merchantStoreDO=list.get(0);
-			  merchantBO.setPrincipalName(merchantStoreDO.getPrincipalName());
-		  }
-	     return merchantBO;
-	}
+    @Override
+    public MerchantBO selectMerchantInfo(Long merchantId) {
+        MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
+        MerchantStoreDOExample example = new MerchantStoreDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+        MerchantBO merchantBO = MerchantConverter.convertBO(merchantDO);
+        if (!list.isEmpty()) {
+            MerchantStoreDO merchantStoreDO = list.get(0);
+            merchantBO.setPrincipalName(merchantStoreDO.getPrincipalName());
+        }
+        return merchantBO;
+    }
+
+    @Override
+    public List<MessagePushBO> findMessagePushList(String area) {
+
+        List<MerchantPushView> list = merchantStoreDOMapperExtend.selectPushInfo(area);
+        if (list.isEmpty()) {
+            return null;
+        }
+        List<MessagePushBO> messagePushBOS = new ArrayList<>();
+        for (MerchantPushView pushView : list) {
+            MessagePushBO messagePushBO = new MessagePushBO();
+            messagePushBO.setUserNum(pushView.getNum());
+            messagePushBO.setGtCid(pushView.getGtCid());
+            messagePushBOS.add(messagePushBO);
+        }
+        return messagePushBOS;
+    }
 }

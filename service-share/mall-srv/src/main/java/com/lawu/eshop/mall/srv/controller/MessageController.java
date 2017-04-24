@@ -12,6 +12,7 @@ import com.lawu.eshop.mall.dto.MessageTemplateDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -157,11 +158,9 @@ public class MessageController extends BaseController {
      * @return
      */
     @RequestMapping(value = "saveMessageToAll", method = RequestMethod.POST)
-    public Result saveMessageToAll(@RequestBody OperatorMessageInfoParam messageInfoParam){
-        Long id = messageService.saveMessageToAll(messageInfoParam);
-        if(id == 0 || id<0){
-            return successCreated(ResultCode.SAVE_FAIL);
-        }
+    public Result saveMessageToAll(@RequestBody OperatorMessageParam param){
+         messageService.saveMessageToAll(param);
+
         return successCreated(ResultCode.SUCCESS);
     }
 

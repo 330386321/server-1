@@ -5,13 +5,18 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
- * @date 2017/4/19.
+ * @date 2017/4/24.
  */
-public class OperatorMessageInfoParam {
+public class OperatorMessageListParam {
     @ApiModelProperty(value = "推送标题",required = true)
     private String title;
     @ApiModelProperty(value = "推送内容",required = true)
     private String content;
+
+    @ApiModelProperty(value = "推送用户类型",required = true)
+    private UserTypeEnum userTypeEnum;
+    @ApiModelProperty(value = "区域")
+    private String area;
 
     public String getTitle() {
         return title;
@@ -29,5 +34,19 @@ public class OperatorMessageInfoParam {
         this.content = content;
     }
 
+    public UserTypeEnum getUserTypeEnum() {
+        return userTypeEnum;
+    }
 
+    public void setUserTypeEnum(UserTypeEnum userTypeEnum) {
+        this.userTypeEnum = userTypeEnum;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
 }

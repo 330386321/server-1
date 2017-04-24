@@ -1,11 +1,13 @@
-package com.lawu.eshop.mall.param;
+package com.lawu.eshop.mq.dto.user;
+
+import java.io.Serializable;
 
 /**
  * @author zhangyong
  * @date 2017/4/14.
  */
-public class MessagePushInfo {
-
+public class MessagePushInfo implements Serializable{
+    private static final long serialVersionUID = 1L;
     private Long messageId;
 
     private String title;
@@ -14,6 +16,9 @@ public class MessagePushInfo {
 
     private String content;
 
+    private Byte userType;
+
+    private String area;
     public Long getMessageId() {
         return messageId;
     }
@@ -44,5 +49,21 @@ public class MessagePushInfo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Byte getUserType() {
+        return userType;
+    }
+
+    public void setUserType(Byte userType) {
+        this.userType = userType;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
     }
 }
