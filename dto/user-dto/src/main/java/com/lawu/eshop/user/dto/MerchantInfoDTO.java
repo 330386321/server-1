@@ -3,6 +3,8 @@ package com.lawu.eshop.user.dto;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * 商家扩展信息表
  * Created by zhangyong on 2017/3/23.
@@ -57,6 +59,9 @@ public class MerchantInfoDTO {
 
     @ApiModelProperty(name = "ryToken ",value = "融云token")
     private String ryToken;
+
+    @ApiModelProperty(name = "loveAccount", value= "爱心账户", required = true)
+    private BigDecimal loveAccount;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -144,5 +149,13 @@ public class MerchantInfoDTO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public BigDecimal getLoveAccount() {
+        return loveAccount;
+    }
+
+    public void setLoveAccount(BigDecimal loveAccount) {
+        this.loveAccount = loveAccount;
     }
 }
