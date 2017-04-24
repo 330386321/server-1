@@ -174,6 +174,16 @@ public class MerchantStoreDTO {
     @ApiModelProperty(name = "auditSuccess", value = "门店审核状态 false未审核，true 已审核/审核")
     private boolean auditSuccess = false;
 
+    @ApiModelProperty(value = "商家ID")
+    private Long merchantId;
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
 
     public Long getMerchantStoreId() {
         return merchantStoreId;

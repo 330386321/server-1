@@ -16,6 +16,8 @@ public class AdPlatformBO {
 
 	private String content;
 
+	private Long merchantStoreId;
+
 	public String getContent() {
 		return content;
 	}
@@ -72,4 +74,11 @@ public class AdPlatformBO {
 		this.type = type;
 	}
 
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
 }

@@ -41,4 +41,10 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         merchantStoreDOMapper.updateByPrimaryKey(merchantStoreDO);
     }
 
+    @Override
+    public MerchantStoreBO getMerchantStoreById(Long id) {
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        return MerchantStoreConverter.convertStoreBO(merchantStoreDO);
+    }
+
 }

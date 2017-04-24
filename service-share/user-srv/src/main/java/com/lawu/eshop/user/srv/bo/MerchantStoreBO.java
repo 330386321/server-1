@@ -10,6 +10,8 @@ public class MerchantStoreBO {
 	
 	private Long id;
 
+	private Long merchantId;
+
     /**
      *
      * 店铺名称
@@ -63,6 +65,8 @@ public class MerchantStoreBO {
      * @mbg.generated 2017-03-24 10:29:55
      */
     private String industryPath;
+
+    private String industryName;
 
     /**
      *
@@ -164,5 +168,19 @@ public class MerchantStoreBO {
 		this.id = id;
 	}
 
-    
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
 }

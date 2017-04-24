@@ -322,4 +322,19 @@ public class MerchantStoreController extends BaseController {
         }
         return successGet(MerchantStoreConverter.convertDTO(shoppingStoreDetailBO));
     }
+
+    /**
+     * 根据门店ID查询门店信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getMerchantStore/{id}", method = RequestMethod.GET)
+    public Result<MerchantStoreDTO> getMerchantStore(@PathVariable Long id) {
+        MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(MerchantStoreConverter.convertStoreDTO(merchantStoreBO));
+    }
 }

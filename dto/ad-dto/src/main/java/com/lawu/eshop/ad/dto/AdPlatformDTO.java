@@ -21,7 +21,9 @@ public class AdPlatformDTO {
 	
 	@ApiModelProperty(value = "广告内容")
 	private String content;
-	
+
+	@ApiModelProperty(value = "门店ID")
+	private Long merchantStoreId;
 	
 	public String getContent() {
 		return content;
@@ -71,4 +73,11 @@ public class AdPlatformDTO {
 		this.linkUrl = linkUrl;
 	}
 
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
 }

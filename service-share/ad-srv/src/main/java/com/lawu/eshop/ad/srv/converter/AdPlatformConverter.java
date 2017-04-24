@@ -1,11 +1,11 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 平台广告实体转化
@@ -80,6 +80,7 @@ public class AdPlatformConverter {
 			adPlatformBO.setType(adPlatformDO.getType());
 			adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
 			adPlatformBO.setContent(adPlatformDO.getContent());
+			adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
 			if(adPlatformDO.getType()==1){
 				adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
 			}else{
@@ -107,6 +108,7 @@ public class AdPlatformConverter {
 			adPlatformDTO.setTitle(adPlatformBO.getTitle());
 			adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
 			adPlatformDTO.setContent(adPlatformBO.getContent());
+			adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
 			if(adPlatformBO.getType()==1){
 				adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
 			}else{

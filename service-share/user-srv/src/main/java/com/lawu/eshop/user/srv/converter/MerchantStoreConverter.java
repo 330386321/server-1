@@ -315,6 +315,9 @@ public class MerchantStoreConverter {
         bo.setLatitude(merchantStoreDO.getLatitude());
         bo.setName(merchantStoreDO.getName());
         bo.setId(merchantStoreDO.getId());
+        bo.setMerchantId(merchantStoreDO.getMerchantId());
+        bo.setIndustryPath(merchantStoreDO.getIndustryPath());
+        bo.setIndustryName(merchantStoreDO.getIndustryName());
         return bo;
     }
 
@@ -327,6 +330,9 @@ public class MerchantStoreConverter {
         dto.setLatitude(merchantStoreBO.getLatitude());
         dto.setName(merchantStoreBO.getName());
         dto.setMerchantStoreId(merchantStoreBO.getId());
+        dto.setMerchantId(merchantStoreBO.getMerchantId());
+        dto.setIndustryPath(merchantStoreBO.getIndustryPath());
+        dto.setIndustryName(merchantStoreBO.getIndustryName());
         return dto;
     }
 

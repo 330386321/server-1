@@ -24,4 +24,12 @@ public interface MerchantStoreService {
      */
     void updateNoReasonReturn(Long id);
 
+    /**
+     * 根据门店ID查询门店信息
+     *
+     * @param id
+     * @return
+     */
+    MerchantStoreBO getMerchantStoreById(Long id);
+
 }
