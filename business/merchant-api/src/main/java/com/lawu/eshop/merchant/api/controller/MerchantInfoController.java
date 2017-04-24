@@ -8,6 +8,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.MerchantInfoService;
+import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
@@ -29,6 +31,8 @@ public class MerchantInfoController extends BaseController {
 
     @Autowired
     private MerchantInfoService merchantProfileService;
+    @Autowired
+    private PropertyInfoService propertyInfoService;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "设置网站链接", notes = "设置网站链接，成功返回merchantInfo。[2100] （章勇）", httpMethod = "PUT")
@@ -50,7 +54,10 @@ public class MerchantInfoController extends BaseController {
     @RequestMapping(value = "getCurrentMerchantInfo", method = RequestMethod.GET)
     public Result<MerchantInfoDTO> getCurrentMerchantInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long id = UserUtil.getCurrentUserId(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<MerchantInfoDTO> result = merchantProfileService.getCurrentMerchantInfo(id);
+        PropertyLoveAccountDTO propertyLoveAccountDTO=propertyInfoService.selectLoveAccount(userNum).getModel();
+        result.getModel().setLoveAccount(propertyLoveAccountDTO.getLoveAccount());
         return result;
     }
 

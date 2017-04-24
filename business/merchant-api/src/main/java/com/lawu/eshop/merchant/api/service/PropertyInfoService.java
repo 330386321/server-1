@@ -123,5 +123,5 @@ public interface PropertyInfoService {
      * @return
      */
     @RequestMapping(value = "propertyInfo/selectLoveAccount/{userNum}", method = RequestMethod.GET)
-    public Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum);
+    Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum);
 }
