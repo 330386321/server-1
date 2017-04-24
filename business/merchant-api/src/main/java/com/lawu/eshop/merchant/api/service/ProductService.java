@@ -34,7 +34,7 @@ public interface ProductService {
 	 * @param status
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "product/updateProductStatus")
+	@RequestMapping(method = RequestMethod.PUT, value = "product/updateProductStatus")
     Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("productStatus") ProductStatusEnum productStatus);
     
     /**

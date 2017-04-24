@@ -3,6 +3,7 @@ package com.lawu.eshop.merchant.api.controller;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ import com.lawu.eshop.product.param.EditProductParam;
 import com.lawu.eshop.product.param.EditProductParam_bak;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -80,6 +82,8 @@ public class ProductController extends BaseController {
 		queryData.setProductSortFieldEnum(query.getProductSortFieldEnum());
 		queryData.setOrderType(query.getOrderType());
 		queryData.setIsApp(query.getIsApp());
+		queryData.setCurrentPage(query.getCurrentPage());
+		queryData.setPageSize(query.getPageSize());
 		Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);
 		return successCreated(page);
 	}
@@ -243,7 +247,7 @@ public class ProductController extends BaseController {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
 	public Result saveProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -280,8 +284,9 @@ public class ProductController extends BaseController {
 				String imgUrl = map.get("imgUrl");
 				if ("".equals(imgUrl)) {
 					continue;
-//					logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})", productId);
-//					return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+					// logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})",
+					// productId);
+					// return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
 				}
 
 				String fileName = part.getName();
@@ -304,8 +309,7 @@ public class ProductController extends BaseController {
 		String featureImage = featureImageStr.toString();
 		String productImage = productImageStr.toString();
 		String productDetailImage = productDetailImageStr.toString();
-		if (productId == null || productId == 0L || productId < 0) {
-
+		if (productId == 0L) {
 			if ("".equals(productImage)) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
 			}
@@ -317,17 +321,29 @@ public class ProductController extends BaseController {
 				featureImage = productImage.split(",")[0];
 			}
 		} else {
-			if (("".equals(product.getBackProductImageUrls()) || product.getBackProductImageUrls() == null)
+			String backImageUrls = product.getBackProductImageUrls();
+			backImageUrls = URLDecoder.decode(backImageUrls);
+			if ((backImageUrls == null || "[]".equals(backImageUrls) || "".equals(backImageUrls))
 					&& "".equals(productImage)) {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
 			}
-
-			if (!"".equals(product.getBackProductImageUrls())) {
-				productImage = product.getBackProductImageUrls() + "," + productImage;
+			if (!"".equals(backImageUrls) && !"[]".equals(backImageUrls)) {
+				String image = StringUtil.getJsonListToString(backImageUrls);
+				productImage = image + "," + productImage;
 			}
-			
+			if ("".equals(featureImage)) {
+				featureImage = productImage.split(",")[0];
+			}
+
+			String backDetailImageUrls = product.getBackProductDetailImageUrls();
+			backDetailImageUrls = URLDecoder.decode(backDetailImageUrls);
+			if (!"".equals(backDetailImageUrls) && !"[]".equals(backDetailImageUrls)) {
+				productDetailImage = getUpdateLaterImageDetailUrl(productDetailImage, backDetailImageUrls);
+			}
 		}
+
 		productImage = productImage.substring(0, productImage.lastIndexOf(","));
+		productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
 		dataProduct.setProductId(productId);
@@ -347,4 +363,55 @@ public class ProductController extends BaseController {
 		return productService.saveProduct(dataProduct);
 
 	}
+
+	/**
+	 * 存在增量和修改的
+	 * 
+	 * @param productDetailImage
+	 *            新上传图片（存在回显修改的）
+	 * @param backProductDetailImageUrls
+	 *            修改回显的url
+	 * @return
+	 */
+	private String getUpdateLaterImageDetailUrl(String productDetailImage, String backProductDetailImageUrls) {
+		if ("".equals(backProductDetailImageUrls) || "[]".equals(backProductDetailImageUrls)) {// 回显的全部删除完
+			return productDetailImage;
+		}
+		List<String> backDetailImagesList = StringUtil.getJsonListToStringList(backProductDetailImageUrls);
+		if (!backDetailImagesList.contains("")) {
+			productDetailImage = backProductDetailImageUrls + "," + productDetailImage;
+		} else {
+			List<Integer> indexs = new ArrayList<Integer>();// 回显图片修改过的下标
+			for (int i = 0; i < backDetailImagesList.size(); i++) {
+				if ("".equals(backDetailImagesList.get(i))) {
+					indexs.add(i);
+				}
+			}
+			List<String> detailImagesList1 = Arrays.asList(productDetailImage.split(","));
+			List<String> detailImagesList = new ArrayList<String>();
+			detailImagesList.addAll(detailImagesList1);
+			for (int i = 0; i < indexs.size(); i++) {
+				backDetailImagesList.set(indexs.get(i), detailImagesList.get(0));
+				detailImagesList.remove(0);
+			}
+			backDetailImagesList.addAll(detailImagesList);
+			StringBuffer nimages = new StringBuffer();
+			for (String image : backDetailImagesList) {
+				nimages.append(image).append(",");
+			}
+			String images = nimages.toString();
+			productDetailImage = images.substring(0, images.lastIndexOf(","));
+		}
+		return productDetailImage;
+	}
+
+//	public static void main(String[] args) {
+//		 String productDetailImage = "1,233,4";
+//		 String backProductDetailImageUrls = "[\"\",\"r\",\"\",\"w\"]";
+//		 String s = new
+//		 ProductController().getUpdateLaterImageDetailUrl(productDetailImage,backProductDetailImageUrls);
+//		 System.out.println(s);
+//
+//
+//	}
 }

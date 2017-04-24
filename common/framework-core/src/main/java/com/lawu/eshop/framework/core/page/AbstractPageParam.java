@@ -23,7 +23,7 @@ public abstract class AbstractPageParam {
 
 
     public int getOffset() {
-        return this.pageSize * this.currentPage;
+        return this.pageSize * (this.currentPage - 1);
     }
 
     public Integer getCurrentPage() {

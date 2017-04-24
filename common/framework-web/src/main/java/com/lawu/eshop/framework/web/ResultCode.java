@@ -177,7 +177,7 @@ public class ResultCode {
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品详情图片");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
         ResultCode.messageMap.put(GOODS_DO_NOT_EXIST, "商品型号对应的商品信息不存在");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
 

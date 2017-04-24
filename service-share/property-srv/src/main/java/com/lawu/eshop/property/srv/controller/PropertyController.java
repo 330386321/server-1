@@ -15,10 +15,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.QueryPropertyDTO;
-import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.param.TestQueryParam;
 import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
-import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.utils.BeanUtil;
 
@@ -84,4 +82,21 @@ public class PropertyController extends BaseController {
 		return successCreated(pageResult);
 	}
 
+    @RequestMapping(value = "save", method = RequestMethod.POST)
+   	public int save(@RequestBody TestQueryParam param) {
+    	return propertyService.save(param);
+    }
+    
+    @RequestMapping(value = "delete/{propertyIds}", method = RequestMethod.DELETE)
+   	public int delete(@PathVariable String propertyIds) {
+    	return propertyService.delete(propertyIds);
+    }
+    
+    @RequestMapping(value = "get/{propertyId}", method = RequestMethod.GET)
+   	public QueryPropertyDTO get(@PathVariable Long propertyId) throws Exception {
+    	QueryPropertyBO bo = propertyService.get(propertyId);
+    	QueryPropertyDTO dto = new QueryPropertyDTO();
+    	BeanUtil.copyProperties(bo, dto);
+    	return dto;
+    }
 }

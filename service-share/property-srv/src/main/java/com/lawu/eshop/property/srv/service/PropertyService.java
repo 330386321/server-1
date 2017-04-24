@@ -22,4 +22,10 @@ public interface PropertyService {
 	List<String> getValues(String key);
 
 	Page<QueryPropertyBO> query(TestQueryParam param)  throws Exception;
+
+	int save(TestQueryParam param);
+
+	int delete(String propertyIds);
+
+	QueryPropertyBO get(Long propertyId) throws Exception;
 }

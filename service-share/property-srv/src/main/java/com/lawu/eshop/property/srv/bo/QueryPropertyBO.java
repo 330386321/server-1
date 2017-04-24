@@ -1,9 +1,22 @@
 package com.lawu.eshop.property.srv.bo;
 
 public class QueryPropertyBO {
+	
+	private Long id;
+	
 	private String name;
 	 
 	private String value;
+	
+	private String remark;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -20,4 +33,13 @@ public class QueryPropertyBO {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }
