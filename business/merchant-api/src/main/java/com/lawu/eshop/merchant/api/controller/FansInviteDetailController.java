@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
  * @author meishuquan
  * @date 2017/4/24.
  */
-@Api(tags = "transactionDetailFansInvite")
+@Api(tags = "fansInviteDetail")
 @RestController
-@RequestMapping(value = "transactionDetailFansInvite/")
+@RequestMapping(value = "fansInviteDetail/")
 public class FansInviteDetailController extends BaseController {
 
     @Autowired

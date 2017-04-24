@@ -14,6 +14,7 @@ import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
@@ -62,17 +63,22 @@ public class FansMerchantController extends BaseController {
     @Authorization
     @RequestMapping(value = "inviteFans", method = RequestMethod.POST)
     public Result inviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                             @RequestParam @ApiParam(required = true, value = "会员编号,以逗号分隔") String nums) {
+                             @RequestParam @ApiParam(required = true, value = "会员编号,以逗号分隔") String nums,
+                             @RequestParam @ApiParam(required = true, value = "邀请区域,以逗号分隔") String regionName) {
         if (StringUtils.isEmpty(nums)) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         String[] numArray = nums.split(",");
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 
-        //邀请粉丝扣除积分
+        //邀请粉丝扣除积分、插入粉丝邀请记录
         PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
         propertyInfoDataParam.setUserNum(userNum);
         propertyInfoDataParam.setPoint(String.valueOf(numArray.length));
+        propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
+        propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
+        propertyInfoDataParam.setRegionName(regionName);
+        propertyInfoDataParam.setInviteFansCount(numArray.length);
         Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
         if (!isSuccess(result)) {
             return result;

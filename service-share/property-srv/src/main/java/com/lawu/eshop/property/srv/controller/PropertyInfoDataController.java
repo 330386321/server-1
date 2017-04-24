@@ -1,9 +1,10 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -12,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 
@@ -44,12 +42,11 @@ public class PropertyInfoDataController extends BaseController {
 	 * 
 	 * 商家邀请粉丝、商家发布广告、商家发红包
 	 * 
-	 * @param userNum
-	 * @param consumePoint
+	 * @param param
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "doHanlderMinusPoint/{userNum}", method = RequestMethod.POST)
+	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestBody @Valid PropertyInfoDataParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();

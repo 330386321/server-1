@@ -21,18 +21,18 @@
     <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.param.ListFansRealParam" id="listFans">
         select mem.account,mem.region_path,mem.region_name,mem.nickname,mem.headimg,mem.level,fm.gmt_create
         from fans_merchant fm inner join member mem on fm.member_id = mem.id
-        where fm.merchant_id = #{merchantId,,jdbcType=BIGINT}
+        where fm.merchant_id = #{merchantId,jdbcType=BIGINT}
         <if test="regionPath != null">
             and mem.region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
         </if>
         order by fm.id desc
-        limit #{offset,,jdbcType=INTEGER},#{pageSize,,jdbcType=INTEGER}
+        limit #{offset,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
     </select>
 
     <select resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.param.ListFansRealParam" id="countFans">
         select count(1)
         from fans_merchant fm inner join member mem on fm.member_id = mem.id
-        where fm.merchant_id = #{merchantId,,jdbcType=BIGINT}
+        where fm.merchant_id = #{merchantId,jdbcType=BIGINT}
         <if test="regionPath != null">
             and mem.region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
         </if>
