@@ -1010,6 +1010,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		//查询待评价数量
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
 		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
@@ -1017,6 +1018,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		//查询退货中数量
 		shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());

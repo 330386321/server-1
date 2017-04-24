@@ -110,7 +110,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public List<AddressBO> selectByUserNum(String userNum) {
 		AddressDOExample example = new AddressDOExample();
-		example.createCriteria().andUserNumEqualTo(userNum);
+		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(StatusEnum.VALID.getValue());
 
 		List<AddressDO> list = addressDOMapper.selectByExample(example);
 

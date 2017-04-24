@@ -181,7 +181,7 @@
 
 	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample"
 		resultType="java.lang.Long">
-		select count(*) from shopping_order_item
+		select count(*) from shopping_order_item soi
 		<if test="isIncludeShoppingOrder">
 			left join shopping_order so on soi.shopping_order_id = so.id
 		</if>
