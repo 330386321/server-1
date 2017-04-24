@@ -1,31 +1,24 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.operator.api.result.TableJson;
+import com.lawu.eshop.operator.api.service.TestService;
+import com.lawu.eshop.property.dto.QueryPropertyDTO;
+import com.lawu.eshop.property.param.TestQueryParam;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.operator.api.result.TableJson;
-import com.lawu.eshop.operator.api.service.TestService;
-import com.lawu.eshop.property.dto.QueryPropertyDTO;
-import com.lawu.eshop.property.param.TestQueryParam;
-
-import io.swagger.annotations.ApiParam;
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "ftest/")
@@ -35,6 +28,15 @@ public class FTestController extends BaseController {
 			
     @Autowired
     private TestService testService;
+
+    @PageBody
+	@RequestMapping(value = "page", method = RequestMethod.GET)
+	public Result page() throws Exception {
+		Result<Page<QueryPropertyDTO>> dtos = new Result<>();
+		Page<QueryPropertyDTO> page = new Page<>();
+		dtos.setModel(page);
+		return successGet(dtos);
+	}
 
 	@RequestMapping(value = "jsondata", method = RequestMethod.POST)
 	public @ResponseBody TableJson<QueryPropertyDTO> jsondata(@RequestBody TestQueryParam param)

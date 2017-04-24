@@ -18,6 +18,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.lawu.eshop</groupId>
+			<artifactId>framework-core</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 		<!-- servlet3.0 可以直接用注解方式使用servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
