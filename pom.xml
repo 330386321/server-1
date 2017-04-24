@@ -31,6 +31,8 @@
 
         <springfox.swagger>2.6.1</springfox.swagger>
         <rocketmq.version>3.2.6</rocketmq.version>
+
+        <elastic.job.version>2.1.0</elastic.job.version>
     </properties>
 
 
@@ -58,6 +60,19 @@
                 <groupId>com.alibaba.rocketmq</groupId>
                 <artifactId>rocketmq-client</artifactId>
                 <version>${rocketmq.version}</version>
+            </dependency>
+            <!-- 引入elastic-job-lite核心模块 -->
+            <dependency>
+                <groupId>com.dangdang</groupId>
+                <artifactId>elastic-job-lite-core</artifactId>
+                <version>${elastic.job.version}</version>
+            </dependency>
+
+            <!-- 使用springframework自定义命名空间时引入 -->
+            <dependency>
+                <groupId>com.dangdang</groupId>
+                <artifactId>elastic-job-lite-spring</artifactId>
+                <version>${elastic.job.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
