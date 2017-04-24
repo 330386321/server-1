@@ -37,7 +37,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2017年4月15日 上午10:57:34
  *
  */
-@Api(tags="businessDeposit")
+@Api(tags = "businessDeposit")
 @RestController
 @RequestMapping(value = "businessDeposit/")
 public class BusinessDepositController extends BaseController {
@@ -69,8 +69,9 @@ public class BusinessDepositController extends BaseController {
 	@ApiOperation(value = "查看我的保证金", notes = "查看我的保证金,[]（杨清华）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "selectDeposit/{businessId}", method = RequestMethod.GET)
-	public Result<BusinessDepositDetailDTO> selectDeposit(@PathVariable("businessId") String businessId) {
-		return businessDepositService.selectDeposit(businessId);
+	public Result<BusinessDepositDetailDTO> selectDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@PathVariable("merchantId") String merchantId) {
+		return businessDepositService.selectDeposit(merchantId);
 	}
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -79,13 +80,14 @@ public class BusinessDepositController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
 	public Result refundDeposit(@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
-		
-		//需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
-		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
-		if(!dto.getModel().getIsNoOnGoingOrder()){
+
+		// 需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
+		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService
+				.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
+		if (!dto.getModel().getIsNoOnGoingOrder()) {
 			return successCreated(ResultCode.DEPOSIT_EXIST_ING_ORDER);
 		}
-		
+
 		return businessDepositService.refundDeposit(param);
 	}
 }

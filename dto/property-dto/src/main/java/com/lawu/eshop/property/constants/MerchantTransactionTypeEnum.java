@@ -8,88 +8,30 @@ package com.lawu.eshop.property.constants;
  */
 public enum MerchantTransactionTypeEnum {
 	
-	/**
-	 * 买单100
-	 */
-	PAY((byte)0x64),
+	PAY((byte)0x64,"买单"),					//100
+	ORDER((byte)0x65,"订单"),					//101
+	LOWER_INCOME((byte)0x66,"下级点击广告提成"),	//102
+	RECHARGE((byte)0x67,"余额充值"),			//103
+	PUT_ON((byte)0x68,"投放"),				//104
+	INTEGRAL_RECHARGE((byte)0x69,"积分充值"),	//105
+	REFUNDS((byte)0x6A,"退款"),				//106
+	WITHDRAW((byte)0x6B,"提现"),				//107
+	WITHDRAW_BACK((byte)0x6C,"提现退回"),		//108
+	INVITE_FANS((byte)0x6D,"邀请粉丝"),		//109
+	ADD_AD((byte)0x6E,"发广告"),				//110
+	ADD_RED_PACKET((byte)0x6F,"发红包"),		//111
+	AD_RETURN_POINT((byte)0x70,"退还积分"),	//112
+	DEPOSIT((byte)0x71,"缴纳保证金"),			//113
+	DEPOSIT_REFUND((byte)0x72,"退缴纳保证金");	//114
 	
-	/**
-	 * 订单101
-	 */
-	ORDER((byte)0x65),
-	
-	/**
-	 * 下级收益102
-	 */
-	LOWER_INCOME((byte)0x66),
-	
-	/**
-	 * 余额充值103
-	 */
-	RECHARGE((byte)0x67),
-	
-	/**
-	 * 投放104
-	 */
-	PUT_ON((byte)0x68),
-	
-	/**
-	 * 积分充值105
-	 */
-	INTEGRAL_RECHARGE((byte)0x69),
-	
-	/**
-	 * 退款106
-	 */
-	REFUNDS((byte)0x6A),
-	
-	/**
-	 * 提现107
-	 */
-	WITHDRAW((byte)0x6B),
-	
-	/**
-	 * 提现108
-	 */
-	WITHDRAW_BACK((byte)0x6C),
-	
-	/**
-	 * 邀请粉丝109
-	 */
-	INVITE_FANS((byte)0x6D),
-	
-	/**
-	 * 发广告110
-	 */
-	ADD_AD((byte)0x6E),
-	
-	/**
-	 * 发红包111
-	 */
-	ADD_RED_PACKET((byte)0x6F),
-	
-	/**
-	 * 退还积分112
-	 */
-	AD_RETURN_POINT((byte)0x70),
-	
-	/**
-	 * 缴纳保证金113
-	 */
-	DEPOSIT((byte)0x71),
-	
-	/**
-	 * 退缴纳保证金114
-	 */
-	DEPOSIT_REFUND((byte)0x72);
-	
-	
-	
-	MerchantTransactionTypeEnum(Byte value){
-		this.value = value;
-	}
 	
 	private Byte value;
+	private String name;
+
+	MerchantTransactionTypeEnum(Byte value, String name) {
+		this.value = value;
+		this.name = name;
+	}
 
 	public Byte getValue() {
 		return value;
@@ -97,6 +39,14 @@ public enum MerchantTransactionTypeEnum {
 
 	public void setValue(Byte value) {
 		this.value = value;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

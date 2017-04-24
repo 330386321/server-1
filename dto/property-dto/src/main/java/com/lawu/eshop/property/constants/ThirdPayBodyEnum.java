@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.constants;
 
-import io.swagger.annotations.ApiParam;
-
 /**
  * 
  * <p>

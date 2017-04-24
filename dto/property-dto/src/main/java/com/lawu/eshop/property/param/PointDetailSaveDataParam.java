@@ -48,6 +48,16 @@ public class PointDetailSaveDataParam implements Serializable {
 	private String remark;
 	
 	private Byte direction;
+	
+	private String bizId;
+
+	public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
 
 	public String getTitle() {
 		return title;

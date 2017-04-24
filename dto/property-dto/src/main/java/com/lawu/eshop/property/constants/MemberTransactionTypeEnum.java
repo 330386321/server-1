@@ -8,59 +8,16 @@ package com.lawu.eshop.property.constants;
  */
 public enum MemberTransactionTypeEnum {
 
-	/**
-	 * 余额充值
-	 */
 	RECHARGE((byte) 0x01, "余额充值"),
-
-	/**
-	 * 广告
-	 */
-	ADVERTISING((byte) 0x02, "广告"),
-
-	/**
-	 * 扫红包
-	 */
+	ADVERTISING((byte) 0x02, "点广告"),
 	RED_SWEEP((byte) 0x03, "扫红包"),
-
-	/**
-	 * 退款
-	 */
 	REFUNDS((byte) 0x04, "退款"),
-
-	/**
-	 * 下级收益
-	 */
-	LOWER_INCOME((byte) 0x05, "下级收益"),
-
-	/**
-	 * 买单
-	 */
+	LOWER_INCOME((byte) 0x05, " 下级点击广告提成"),
 	PAY((byte) 0x06, "买单"),
-
-	/**
-	 * 付商品订单
-	 */
 	PAY_ORDERS((byte) 0x07, "付商品订单"),
-
-	/**
-	 * 积分充值
-	 */
 	INTEGRAL_RECHARGE((byte) 0x08, "积分充值"),
-
-	/**
-	 * 提现
-	 */
 	WITHDRAW((byte) 0x09, "提现"),
-
-	/**
-	 * 提现退回10
-	 */
 	WITHDRAW_BACK((byte) 0x0A, "提现退回"),
-
-	/**
-	 * 退商品订单11
-	 */
 	REFUND_ORDERS((byte) 0x0B, "退商品订单");
 
 	private Byte value;
