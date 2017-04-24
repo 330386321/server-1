@@ -1,13 +1,12 @@
 package com.lawu.eshop.property.param;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * 
@@ -38,6 +37,12 @@ public class PropertyInfoDataParam {
 	
 	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
+
+	private Long merchantId;
+
+	private String regionName;
+
+	private Integer inviteFansCount;
 
 	public String getUserNum() {
 		return userNum;
@@ -79,4 +84,27 @@ public class PropertyInfoDataParam {
 		this.transactionTitleEnum = transactionTitleEnum;
 	}
 
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	public Integer getInviteFansCount() {
+		return inviteFansCount;
+	}
+
+	public void setInviteFansCount(Integer inviteFansCount) {
+		this.inviteFansCount = inviteFansCount;
+	}
 }
