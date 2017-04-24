@@ -271,9 +271,10 @@ public class ProductController extends BaseController {
 		StringBuffer productImageStr = new StringBuffer();
 		StringBuffer productDetailImageStr = new StringBuffer();
 		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
-		Collection<Part> parts;
+		Collection<Part> parts = null;
 		try {
 			parts = request.getParts();
+			
 			for (Part part : parts) {
 				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part);
 				String resultFlag = map.get("resultFlag");
@@ -284,8 +285,7 @@ public class ProductController extends BaseController {
 				String imgUrl = map.get("imgUrl");
 				if ("".equals(imgUrl)) {
 					continue;
-					// logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})",
-					// productId);
+					// logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})",productId);
 					// return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
 				}
 
@@ -301,11 +301,13 @@ public class ProductController extends BaseController {
 
 				}
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("上传商品图片异常，失败(productId={})", productId);
 			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
-		}
-
+		} catch (ServletException ex) {
+            logger.info("Servlet异常，没有提交图片文件");
+        }
+		
 		String featureImage = featureImageStr.toString();
 		String productImage = productImageStr.toString();
 		String productDetailImage = productDetailImageStr.toString();
@@ -379,7 +381,12 @@ public class ProductController extends BaseController {
 		}
 		List<String> backDetailImagesList = StringUtil.getJsonListToStringList(backProductDetailImageUrls);
 		if (!backDetailImagesList.contains("")) {
-			productDetailImage = backProductDetailImageUrls + "," + productDetailImage;
+			if(!"".equals(productDetailImage)){
+				String []productDetailImages = productDetailImage.split(",");
+				for(int i = 0 ; i < productDetailImages.length ; i++){
+					backDetailImagesList.add(productDetailImages[i]);
+				}
+			}
 		} else {
 			List<Integer> indexs = new ArrayList<Integer>();// 回显图片修改过的下标
 			for (int i = 0; i < backDetailImagesList.size(); i++) {
@@ -395,23 +402,14 @@ public class ProductController extends BaseController {
 				detailImagesList.remove(0);
 			}
 			backDetailImagesList.addAll(detailImagesList);
-			StringBuffer nimages = new StringBuffer();
-			for (String image : backDetailImagesList) {
-				nimages.append(image).append(",");
-			}
-			String images = nimages.toString();
-			productDetailImage = images.substring(0, images.lastIndexOf(","));
 		}
-		return productDetailImage;
+		
+		StringBuffer nimages = new StringBuffer();
+		for (String image : backDetailImagesList) {
+			nimages.append(image).append(",");
+		}
+		String images = nimages.toString();
+		return images;
 	}
 
-//	public static void main(String[] args) {
-//		 String productDetailImage = "1,233,4";
-//		 String backProductDetailImageUrls = "[\"\",\"r\",\"\",\"w\"]";
-//		 String s = new
-//		 ProductController().getUpdateLaterImageDetailUrl(productDetailImage,backProductDetailImageUrls);
-//		 System.out.println(s);
-//
-//
-//	}
 }

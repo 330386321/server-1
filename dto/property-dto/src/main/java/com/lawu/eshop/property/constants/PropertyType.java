@@ -38,4 +38,19 @@ public class PropertyType {
 	// 商家退款保证金至少存入系统天数后，才运行商家申请退
 	public final static String DEPOSIT_REFUND_DIFF_DAYS = "product_order_money_freeze_days";
 	public final static String DEPOSIT_REFUND_DIFF_DAYS_DEFAULT = "90";
+	
+	// 广告提成比例
+	public final static String ad_commission_0 = "ad_commission_0";
+	public final static String ad_commission_1 = "ad_commission_1";
+	public final static String ad_commission_2 = "ad_commission_2";
+	public final static String ad_commission_3 = "ad_commission_3";
+	public final static String ad_commission_0_default = "0.5";
+	public final static String ad_commission_1_default = "0.16";
+	public final static String ad_commission_2_default = "0.03";
+	public final static String ad_commission_3_default = "0.01";
+	// 爱心账户比例
+	public final static String love_account_scale = "love_account_scale";
+	public final static String love_account_scale_default = "0.003";
+	
+	
 }

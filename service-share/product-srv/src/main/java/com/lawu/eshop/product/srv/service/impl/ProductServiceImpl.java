@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -339,6 +341,10 @@ public class ProductServiceImpl implements ProductService {
 		}
 		String specJson = JSON.toJSONString(ProductModelBOS);
 		productEditInfoBO.setSpec(specJson);
+		
+		String featureImage = productEditInfoBO.getFeatureImage();
+		featureImage = featureImage.replaceAll("\\\\", "/");
+		productEditInfoBO.setFeatureImage(featureImage);
 
 		// 查询滚动图片
 		ProductImageDOExample imageExample = new ProductImageDOExample();
@@ -347,7 +353,9 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
 		List<String> images = new ArrayList<String>();
 		for (ProductImageDO image : imageDOS) {
-			images.add(image.getImagePath());
+			String imageUrl = image.getImagePath();
+			imageUrl = imageUrl.replaceAll("\\\\", "/");
+			images.add(imageUrl);
 		}
 		String iamgesJson = JSON.toJSONString(images);
 		productEditInfoBO.setImagesUrl(iamgesJson);
@@ -359,7 +367,9 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductImageDO> imageDetailDOS = productImageDOMapper.selectByExample(imageExample);
 		List<String> imageDetails = new ArrayList<String>();
 		for (ProductImageDO image : imageDetailDOS) {
-			imageDetails.add(image.getImagePath());
+			String imageUrl = image.getImagePath();
+			imageUrl = imageUrl.replaceAll("\\\\", "/");
+			imageDetails.add(imageUrl);
 		}
 		String imageDetailsJson = JSON.toJSONString(imageDetails);
 		productEditInfoBO.setImageDetailUrl(imageDetailsJson);
@@ -568,12 +578,18 @@ public class ProductServiceImpl implements ProductService {
 		if (productId == 0L || productId == null || productId < 0) {
 			// 保存商品信息
 			ProductDO productDO = ProductConverter.convertDO(param, 0L);
+			String featureImage = productDO.getFeatureImage();
+			featureImage = featureImage.replaceAll("/", File.separator);
+			productDO.setFeatureImage(featureImage);
 			productDOMapper.insertSelective(productDO);
 			productId = productDO.getId();
 			isEdit = false;
 		} else {
 			// 修改商品基本信息
 			ProductDO productDO = ProductConverter.convertDO(param, productId);
+			String featureImage = productDO.getFeatureImage();
+			featureImage = featureImage.replace("/", File.separator);
+			productDO.setFeatureImage(featureImage);
 			ProductDOExample example = new ProductDOExample();
 			example.createCriteria().andIdEqualTo(productId);
 			productDOMapper.updateByExampleSelective(productDO, example);
@@ -695,9 +711,11 @@ public class ProductServiceImpl implements ProductService {
 		String imageUrl = param.getProductImages();
 		String[] imageUrls = imageUrl.split(",");
 		for (int i = 0; i < imageUrls.length; i++) {
+			String imgUrl = imageUrls[i];
+			imgUrl = imgUrl.replace("/", File.separator);
 			pcDO = new ProductImageDO();
 			pcDO.setProductId(Long.valueOf(productId));
-			pcDO.setImagePath(imageUrls[i]);
+			pcDO.setImagePath(imgUrl);
 			pcDO.setGmtCreate(new Date());
 			pcDO.setGmtModified(new Date());
 			pcDO.setSortid(0);
@@ -710,9 +728,11 @@ public class ProductServiceImpl implements ProductService {
 		String detaiImageUrl = param.getDetailImages();
 		String[] detaiImageUrls = detaiImageUrl.split(",");
 		for (int i = 0; i < detaiImageUrls.length; i++) {
+			String imgUrl = detaiImageUrls[i];
+			imgUrl = imgUrl.replace("/", File.separator);
 			pcDO = new ProductImageDO();
 			pcDO.setProductId(Long.valueOf(productId));
-			pcDO.setImagePath(imageUrls[i]);
+			pcDO.setImagePath(imgUrl);
 			pcDO.setGmtCreate(new Date());
 			pcDO.setGmtModified(new Date());
 			pcDO.setStatus(true);
@@ -762,4 +782,5 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	
 }

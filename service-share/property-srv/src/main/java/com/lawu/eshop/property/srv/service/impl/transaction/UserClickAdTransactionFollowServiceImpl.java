@@ -11,7 +11,7 @@ import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
+import com.lawu.eshop.property.srv.service.AdService;
 
 /**
  * @author zhangrc
@@ -23,7 +23,7 @@ public class UserClickAdTransactionFollowServiceImpl extends AbstractTransaction
 
     
     @Autowired
-    private PropertyInfoDataService propertyInfoDataService;
+    private AdService adService;
 
     @Override
     public Reply execute(AdPointNotification notification) {
@@ -32,7 +32,7 @@ public class UserClickAdTransactionFollowServiceImpl extends AbstractTransaction
 	    param.setUserNum(notification.getUserNum());
 	    param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
 	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
-	    propertyInfoDataService.doHanlderAddPoint(param);
+	    adService.clickAd(param);
         return new Reply();
     }
 }

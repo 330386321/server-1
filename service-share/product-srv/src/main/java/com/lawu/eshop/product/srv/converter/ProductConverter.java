@@ -123,6 +123,7 @@ public class ProductConverter {
         productEditInfoBO.setContent(productDO.getContent());
         productEditInfoBO.setMerchantId(productDO.getMerchantId());
         productEditInfoBO.setImageContent(productDO.getImageContent());
+        productEditInfoBO.setAllowRefund(productDO.getIsAllowRefund());
         return productEditInfoBO;
     }
 
