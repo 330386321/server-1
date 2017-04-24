@@ -11,11 +11,9 @@ public class FavoriteProductView {
 	 
 	private String featureImage;
 	 
-	private BigDecimal originalPrice;
-	 
 	private BigDecimal price;
 	 
-	private Integer salesVolume;
+	private String content;
 	
 
 	public Long getMemberId() {
@@ -52,14 +50,6 @@ public class FavoriteProductView {
 		this.featureImage = featureImage;
 	}
 
-	public BigDecimal getOriginalPrice() {
-		return originalPrice;
-	}
-
-	public void setOriginalPrice(BigDecimal originalPrice) {
-		this.originalPrice = originalPrice;
-	}
-
 	public BigDecimal getPrice() {
 		return price;
 	}
@@ -68,12 +58,13 @@ public class FavoriteProductView {
 		this.price = price;
 	}
 
-	public Integer getSalesVolume() {
-		return salesVolume;
+	public String getContent() {
+		return content;
 	}
 
-	public void setSalesVolume(Integer salesVolume) {
-		this.salesVolume = salesVolume;
+	public void setContent(String content) {
+		this.content = content;
 	}
+
 
 }

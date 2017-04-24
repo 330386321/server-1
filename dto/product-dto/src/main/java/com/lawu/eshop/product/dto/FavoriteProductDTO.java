@@ -14,15 +14,12 @@ public class FavoriteProductDTO {
 	 @ApiModelProperty(value = "商品图片")
 	 private String featureImage;
 	 
-	 @ApiModelProperty(value = "原价")
-	 private BigDecimal originalPrice;
-	 
 	 @ApiModelProperty(value = "现价")
 	 private BigDecimal price;
 	 
-	 @ApiModelProperty(value = "销量")
-	 private Integer salesVolume;
-
+	 @ApiModelProperty(value = "描述")
+	 private String content;
+	 
 	public String getName() {
 		return name;
 	}
@@ -39,13 +36,7 @@ public class FavoriteProductDTO {
 		this.featureImage = featureImage;
 	}
 
-	public BigDecimal getOriginalPrice() {
-		return originalPrice;
-	}
-
-	public void setOriginalPrice(BigDecimal originalPrice) {
-		this.originalPrice = originalPrice;
-	}
+	
 
 	public BigDecimal getPrice() {
 		return price;
@@ -55,12 +46,13 @@ public class FavoriteProductDTO {
 		this.price = price;
 	}
 
-	public Integer getSalesVolume() {
-		return salesVolume;
+
+	public String getContent() {
+		return content;
 	}
 
-	public void setSalesVolume(Integer salesVolume) {
-		this.salesVolume = salesVolume;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Long getId() {

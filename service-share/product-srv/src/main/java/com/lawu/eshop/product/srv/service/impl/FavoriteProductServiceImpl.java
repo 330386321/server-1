@@ -86,20 +86,9 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 		favoriteProductView.setMemberId(memberId);
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
         List<FavoriteProductView> DOS = favoriteProductDOExtendMapper.selectMyFavoriteProductByRowbounds(favoriteProductView, rowBounds);
-        List<ProductModelDO> listPM=new ArrayList<ProductModelDO>();
-        for (FavoriteProductView fpeDO : DOS) {
-        	ProductModelDOExample pmExample=new ProductModelDOExample();
-        	pmExample.setOrderByClause("price asc");
-        	pmExample.createCriteria().andProductIdEqualTo(fpeDO.getProductId());
-        	List<ProductModelDO> productModelDOS=productModelDOMapper.selectByExample(pmExample);
-        	if(productModelDOS.size()>0){
-        		 ProductModelDO productModelDO= productModelDOS.get(0);
-        		 listPM.add(productModelDO);
-        	}
-		}
         Page<FavoriteProductBO> page = new Page<FavoriteProductBO>();
         page.setTotalCount(count);
-        List<FavoriteProductBO> memberBOS = FavoriteProductConverter.convertBOS(DOS,listPM);
+        List<FavoriteProductBO> memberBOS = FavoriteProductConverter.convertBOS(DOS);
         page.setRecords(memberBOS);
         page.setCurrentPage(query.getCurrentPage());
 		return page;

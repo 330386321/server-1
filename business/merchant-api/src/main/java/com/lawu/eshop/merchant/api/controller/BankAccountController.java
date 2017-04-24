@@ -69,9 +69,9 @@ public class BankAccountController extends BaseController{
 	 */
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@Authorization
-    @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000|1022|1002]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "添加银行卡", notes = "添加银行卡[6000|1022|1002|6021]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveBankAccount", method = RequestMethod.GET)
+    @RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						 @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
                              @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {

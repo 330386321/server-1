@@ -81,4 +81,15 @@ public class BankAccountServiceImpl implements BankAccountService {
 		return i;
 	}
 
+	@Override
+	public Boolean selectByAccount(String account) {
+		BankAccountDOExample example = new BankAccountDOExample();
+		example.createCriteria().andAccountNumberEqualTo(account).andStatusEqualTo(new Byte("1"));
+		List<BankAccountDO>  list=bankAccountDOMapper.selectByExample(example);
+		if(list.isEmpty())
+			return true;
+		else
+			return false;
+	}
+
 }

@@ -30,24 +30,20 @@ public class FavoriteProductConverter {
 	 * @param listPM
 	 * @return
 	 */
-	public static List<FavoriteProductBO> convertBOS(List<FavoriteProductView> favoriteProductViews,List<ProductModelDO> listPM) {
+	public static List<FavoriteProductBO> convertBOS(List<FavoriteProductView> favoriteProductViews) {
         if (favoriteProductViews == null) {
             return null;
         }
         List<FavoriteProductBO> BOS=new ArrayList<FavoriteProductBO>();
         for (FavoriteProductView favoriteProductExtendDO: favoriteProductViews) {
-        	for (ProductModelDO productModelDO : listPM) {
-        		if(favoriteProductExtendDO.getProductId().equals(productModelDO.getProductId())){
-        			FavoriteProductBO favoriteProductBO=new FavoriteProductBO();
-        			favoriteProductBO.setId(favoriteProductExtendDO.getProductId());
-        	        favoriteProductBO.setName(favoriteProductExtendDO.getName());
-        	        favoriteProductBO.setFeatureImage(favoriteProductExtendDO.getFeatureImage());
-        	        favoriteProductBO.setOriginalPrice(productModelDO.getOriginalPrice());
-        	        favoriteProductBO.setPrice(productModelDO.getPrice());
-        	        favoriteProductBO.setSalesVolume(productModelDO.getSalesVolume());
-        	        BOS.add(favoriteProductBO);
-        		}
-			}
+			FavoriteProductBO favoriteProductBO=new FavoriteProductBO();
+			favoriteProductBO.setId(favoriteProductExtendDO.getProductId());
+	        favoriteProductBO.setName(favoriteProductExtendDO.getName());
+	        favoriteProductBO.setFeatureImage(favoriteProductExtendDO.getFeatureImage());
+	        favoriteProductBO.setPrice(favoriteProductExtendDO.getPrice());
+	        favoriteProductBO.setContent(favoriteProductExtendDO.getContent());
+	        BOS.add(favoriteProductBO);
+        	
         	
 		}
         
@@ -67,9 +63,8 @@ public class FavoriteProductConverter {
         bankAccountDTO.setId(favoriteProductBO.getId());
         bankAccountDTO.setName(favoriteProductBO.getName());
         bankAccountDTO.setFeatureImage(favoriteProductBO.getFeatureImage());
-        bankAccountDTO.setOriginalPrice(favoriteProductBO.getOriginalPrice());
         bankAccountDTO.setPrice(favoriteProductBO.getPrice());
-        bankAccountDTO.setSalesVolume(favoriteProductBO.getSalesVolume());
+        bankAccountDTO.setContent(favoriteProductBO.getContent());
         return bankAccountDTO;
     }
 	

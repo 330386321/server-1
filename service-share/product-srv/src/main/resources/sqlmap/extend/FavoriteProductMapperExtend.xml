@@ -3,10 +3,11 @@
 <mapper namespace="com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOMapperExtend" >
   <resultMap id="BaseResultMap" type="com.lawu.eshop.product.srv.domain.extend.FavoriteProductView" >
   	<result column="member_id" property="memberId" jdbcType="BIGINT" />
-  	
     <result column="product_id" property="productId" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="feature_image" property="featureImage" jdbcType="VARCHAR" />
+     <result column="min_price" property="price" jdbcType="DECIMAL" />
+     <result column="content" property="content" jdbcType="LONGVARCHAR" />
   </resultMap>
 
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.product.srv.domain.extend.FavoriteProductView" id="selectMyFavoriteProductByRowbounds" >
@@ -14,6 +15,8 @@
     	fp.member_id as memberId,
     	fp.product_id as productId,
     	pd.name as name,
+    	pd.content as content,
+    	pd.min_price as min_price,
     	pd.feature_image as feature_image
     from favorite_product fp  
     	left join product pd on fp.product_id=pd.id

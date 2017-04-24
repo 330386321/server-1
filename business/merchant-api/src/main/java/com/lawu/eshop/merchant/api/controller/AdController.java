@@ -142,7 +142,7 @@ public class AdController extends BaseController {
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Result rs= adService.remove(id);
     	return rs;

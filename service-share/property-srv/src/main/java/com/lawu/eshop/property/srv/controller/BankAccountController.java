@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +39,10 @@ public class BankAccountController extends BaseController{
 	 */
 	@RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
+		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber());
+		if(!flag){
+			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
+		}
 		Integer id= bankAccountService.saveBankAccount(userNum,bankAccountParam);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
@@ -65,7 +70,7 @@ public class BankAccountController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
-    public Result remove(@RequestParam Long id) {
+    public Result remove(@PathVariable Long id) {
 		Integer i = bankAccountService.remove(id);
 		if(id>0){
     		return successDelete();

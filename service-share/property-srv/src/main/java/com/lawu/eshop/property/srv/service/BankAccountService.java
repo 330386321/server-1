@@ -33,6 +33,13 @@ public interface BankAccountService {
 	 */
 	Integer remove(Long id);
 	
+	/**
+	 * 根据卡号查询
+	 * @param account
+	 * @return
+	 */
+	Boolean selectByAccount(String account);
+	
 	
 
 }

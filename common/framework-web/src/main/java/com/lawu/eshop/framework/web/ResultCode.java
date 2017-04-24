@@ -120,6 +120,7 @@ public class ResultCode {
     public static final int MONEY_IS_ZERO = 6018;
     public static final int PAY_ORDER_NULL = 6019;
     public static final int PAY_ORDER_IS_SUCCESS = 6020;
+    public static final int BANK_ACCOUNT_IS_EXIST = 6021;
 
 
     // 商城模块代码 7xxx
@@ -233,6 +234,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MONEY_IS_ZERO, "查询出金额为0");
         ResultCode.messageMap.put(PAY_ORDER_NULL, "买单记录为空");
         ResultCode.messageMap.put(PAY_ORDER_IS_SUCCESS, "重复买单");
+        ResultCode.messageMap.put(BANK_ACCOUNT_IS_EXIST, "已经绑定该银行卡");
 
 
         // 商城模块 7xxx

@@ -131,14 +131,11 @@ public class MemberServiceImpl implements MemberService {
         Byte status = 1;
         Criteria c1 = example.createCriteria();
         c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType);
-        int totalCount = memberDOMapper.countByExample(example); //总记录数
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
+            c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
             Criteria c2 = example.createCriteria();
-            c2.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
-            Criteria c3 = example.createCriteria();
-            c3.andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
+            c2.andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
             example.or(c2);
-            example.or(c3);
         }
         RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());
         List<MemberDO> memberDOS = memberDOMapper.selectByExampleWithRowbounds(example, rowBounds);
@@ -150,7 +147,7 @@ public class MemberServiceImpl implements MemberService {
                 mpList.add(memberProfileDO);
         }
         Page<MemberBO> pageMember = new Page<MemberBO>();
-        pageMember.setTotalCount(totalCount);
+        pageMember.setTotalCount(memberDOS.size());
         List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS, mpList);
         pageMember.setRecords(memberBOS);
         pageMember.setCurrentPage(memberQuery.getCurrentPage());

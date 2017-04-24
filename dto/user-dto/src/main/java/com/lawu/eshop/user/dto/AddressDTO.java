@@ -28,7 +28,7 @@ public class AddressDTO {
 	@ApiModelProperty(value = "详细地址", required = true)
 	private String addr;
 
-	@ApiModelProperty(value = "邮编", required = true)
+	@ApiModelProperty(value = "邮编")
 	private String postcode;
 
 
