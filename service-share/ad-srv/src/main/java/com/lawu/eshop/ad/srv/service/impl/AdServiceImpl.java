@@ -331,7 +331,7 @@ public class AdServiceImpl implements AdService {
 	}
 	
 	@Override
-	public Integer clickAd(Long id, Long memberId) {
+	public Integer clickAd(Long id, Long memberId,String num) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		Integer hits= adDO.getHits();
 		if(hits==null)
@@ -344,7 +344,9 @@ public class AdServiceImpl implements AdService {
 			adDOMapper.updateByPrimaryKey(adDO);
 			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
 			memberAdRecordD.setAdId(adDO.getId());
+			memberAdRecordD.setPoint(adDO.getPoint());
 			memberAdRecordD.setMemberId(memberId);
+			memberAdRecordD.setMemberNum(num);
 			memberAdRecordD.setGmtCreate(new Date());
 			memberAdRecordD.setClickDate(new Date());
 			i=memberAdRecordDOMapper.insert(memberAdRecordD);

@@ -147,12 +147,12 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
-    public Result clickAd(@PathVariable Long id, @RequestParam Long memberId) {
+    public Result clickAd(@PathVariable Long id, @RequestParam Long memberId ,@RequestParam String num) {
 		boolean flag=memberAdRecordService.isClickToDay(memberId, id);
 		if(flag){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
-			Integer i=adService.clickAd(id, memberId);
+			Integer i=adService.clickAd(id, memberId,num);
 			if(i>0){
 	     		return successCreated(ResultCode.SUCCESS);
 	     	}else{

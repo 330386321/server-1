@@ -98,7 +98,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	Integer clickAd(Long id,Long memberId);
+	Integer clickAd(Long id,Long memberId,String num);
 	
 	/**
 	 * 通过定时器改变广告的状态

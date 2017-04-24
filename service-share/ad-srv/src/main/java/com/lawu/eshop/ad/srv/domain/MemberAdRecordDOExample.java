@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.domain;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -342,6 +343,76 @@ public class MemberAdRecordDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMemberNumIsNull() {
+            addCriterion("member_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIsNotNull() {
+            addCriterion("member_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumEqualTo(String value) {
+            addCriterion("member_num =", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotEqualTo(String value) {
+            addCriterion("member_num <>", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThan(String value) {
+            addCriterion("member_num >", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumGreaterThanOrEqualTo(String value) {
+            addCriterion("member_num >=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThan(String value) {
+            addCriterion("member_num <", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLessThanOrEqualTo(String value) {
+            addCriterion("member_num <=", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumLike(String value) {
+            addCriterion("member_num like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotLike(String value) {
+            addCriterion("member_num not like", value, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumIn(List<String> values) {
+            addCriterion("member_num in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotIn(List<String> values) {
+            addCriterion("member_num not in", values, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumBetween(String value1, String value2) {
+            addCriterion("member_num between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMemberNumNotBetween(String value1, String value2) {
+            addCriterion("member_num not between", value1, value2, "memberNum");
+            return (Criteria) this;
+        }
+
         public Criteria andAdIdIsNull() {
             addCriterion("ad_id is null");
             return (Criteria) this;
@@ -399,6 +470,66 @@ public class MemberAdRecordDOExample {
 
         public Criteria andAdIdNotBetween(Long value1, Long value2) {
             addCriterion("ad_id not between", value1, value2, "adId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIsNull() {
+            addCriterion("point is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIsNotNull() {
+            addCriterion("point is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointEqualTo(BigDecimal value) {
+            addCriterion("point =", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotEqualTo(BigDecimal value) {
+            addCriterion("point <>", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointGreaterThan(BigDecimal value) {
+            addCriterion("point >", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("point >=", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointLessThan(BigDecimal value) {
+            addCriterion("point <", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("point <=", value, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIn(List<BigDecimal> values) {
+            addCriterion("point in", values, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotIn(List<BigDecimal> values) {
+            addCriterion("point not in", values, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("point between", value1, value2, "point");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("point not between", value1, value2, "point");
             return (Criteria) this;
         }
 
@@ -519,6 +650,66 @@ public class MemberAdRecordDOExample {
 
         public Criteria andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusEqualTo(Byte value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotEqualTo(Byte value) {
+            addCriterion("status <>", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThan(Byte value) {
+            addCriterion("status >", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("status >=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThan(Byte value) {
+            addCriterion("status <", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("status <=", value, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusIn(List<Byte> values) {
+            addCriterion("status in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotIn(List<Byte> values) {
+            addCriterion("status not in", values, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusBetween(Byte value1, Byte value2) {
+            addCriterion("status between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

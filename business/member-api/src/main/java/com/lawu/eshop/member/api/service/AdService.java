@@ -75,7 +75,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/clickAd/{id}", method = RequestMethod.GET)
-    public Result clickAd(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
+    public Result clickAd(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
 	
 	/**

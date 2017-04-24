@@ -31,6 +31,12 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "店铺id")
 	private Long  merchantStoreId;
 	
+	@ApiModelProperty(name = "logoUrl", value = "logo图片路径")
+    private String logoUrl;
+	
+	@ApiModelProperty(value = "倒计时")
+	private Long needBeginTime;
+	
 
 	public Integer getCount() {
 		return count;
@@ -94,6 +100,22 @@ public class AdPraiseDTO {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
+	public Long getNeedBeginTime() {
+		return needBeginTime;
+	}
+
+	public void setNeedBeginTime(Long needBeginTime) {
+		this.needBeginTime = needBeginTime;
 	}
 
 	

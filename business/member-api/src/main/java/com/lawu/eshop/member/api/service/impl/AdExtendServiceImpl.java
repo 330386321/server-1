@@ -107,6 +107,14 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      		adDTO.setName(merchantStoreDTO.getModel().getName());
+     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     		Date date=new Date();
+     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
+     		if(time>0){
+     			adDTO.setNeedBeginTime(time);
+     		}else{
+     			adDTO.setNeedBeginTime(0l);
+     		}
 		}
     	Page<AdDTO> newPage=new Page<AdDTO>();
     	newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
@@ -146,6 +154,14 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      		adDTO.setName(merchantStoreDTO.getModel().getName());
+     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     		Date date=new Date();
+     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
+     		if(time>0){
+     			adDTO.setNeedBeginTime(time);
+     		}else{
+     			adDTO.setNeedBeginTime(0l);
+     		}
  		}
    
 		return successGet(newList);
@@ -171,6 +187,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			praise.setTotalPoint(adDTO.getTotalPoint());
 			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
 			praise.setCount(adDTO.getNumber());
+			praise.setLogoUrl(adDTO.getLogoUrl());
+			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
 			adPraiseDTOS.add(praise);
  		}
      	Page<AdPraiseDTO> newPage=new Page<AdPraiseDTO>();
@@ -196,6 +214,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setTotalPoint(ad.getTotalPoint());
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
 		praise.setCount(ad.getNumber());
+		praise.setLogoUrl(ad.getLogoUrl());
+		praise.setNeedBeginTime(ad.getNeedBeginTime());
         return successGet(praise);
 	}
 	
@@ -300,9 +320,18 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      		adDTO.setName(merchantStoreDTO.getModel().getName());
+     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     		Date date=new Date();
+     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
+     		if(time>0){
+     			adDTO.setNeedBeginTime(time);
+     		}else{
+     			adDTO.setNeedBeginTime(0l);
+     		}
+     		
 		}
     	Page<AdDTO> newPage=new Page<AdDTO>();
-    	newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
+    	newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
     	newPage.setTotalCount(newList.size());
     	newPage.setRecords(screenList);
 		return successGet(newPage);

@@ -76,6 +76,12 @@ public class AdDTO {
     
 	@ApiModelProperty(value = "已抢人数")
     private Integer number;
+	
+	@ApiModelProperty(name = "logoUrl", value = "logo图片路径")
+    private String logoUrl;
+	
+	@ApiModelProperty(value = "倒计时")
+	private Long needBeginTime;
 
 
 	public Long getId() {
@@ -279,6 +285,29 @@ public class AdDTO {
 	public void setRadius(Integer radius) {
 		this.radius = radius;
 	}
+
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
+
+	public Long getNeedBeginTime() {
+		return needBeginTime;
+	}
+
+
+	public void setNeedBeginTime(Long needBeginTime) {
+		this.needBeginTime = needBeginTime;
+	}
+
+
+	
 
 	
 	
