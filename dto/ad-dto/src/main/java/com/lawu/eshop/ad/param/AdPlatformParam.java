@@ -9,8 +9,8 @@ public class AdPlatformParam {
 	@ApiParam(name = "productId", value = "商品id")
 	private Long productId;
 	
-	@ApiParam(name = "categoryId", value = "商品类型id")
-	private Long categoryId;
+	@ApiParam(name = "merchantStoreId", value = "门店id")
+	private Long merchantStoreId;
 
 	@ApiParam(name = "title", required = true, value = "广告标题")
 	private String title;
@@ -64,13 +64,15 @@ public class AdPlatformParam {
 		this.content = content;
 	}
 
-	public Long getCategoryId() {
-		return categoryId;
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
 	}
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
+
+
 
 	
 }

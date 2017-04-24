@@ -34,13 +34,14 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		AdPlatformDO adPlatformDO=new AdPlatformDO();
 		adPlatformDO.setTitle(adPlatformParam.getTitle());
 		adPlatformDO.setMediaUrl(url);
+		adPlatformDO.setType(adPlatformParam.getTypeEnum().val);
 		//纯链接
 		if(adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_LINK)){
-			adPlatformDO.setType(new Byte("1"));
 			adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
-		}else{ //商品
-			adPlatformDO.setType(new Byte("2"));
+		}else if(adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_PRODUCT)){ //商品
 			adPlatformDO.setProductId(adPlatformParam.getProductId());  
+		}else{
+			adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
 		}
 		adPlatformDO.setStatus(new Byte("1"));
 		adPlatformDO.setGmtCreate(new Date());

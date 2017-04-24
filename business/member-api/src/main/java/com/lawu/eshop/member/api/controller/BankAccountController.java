@@ -70,7 +70,7 @@ public class BankAccountController extends BaseController{
 			 Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
 			 return rs;
 		}else{
-			 return successCreated(ResultCode.SAVE_FAIL);
+			 return successCreated(ResultCode.PAY_PWD_ERROR);
 		}
     }
 

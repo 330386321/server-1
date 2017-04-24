@@ -16,6 +16,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BankAccountService;
@@ -80,7 +81,7 @@ public class BankAccountController extends BaseController{
 			 Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
 			 return rs;
 		}else{
-			 return flag;
+			 return successCreated(ResultCode.PAY_PWD_ERROR);
 		}
         
     }

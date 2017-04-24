@@ -894,6 +894,66 @@ public class AdPlatformDOExample {
             addCriterion("content not between", value1, value2, "content");
             return (Criteria) this;
         }
+
+        public Criteria andMerchantStoreIdIsNull() {
+            addCriterion("merchant_store_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIsNotNull() {
+            addCriterion("merchant_store_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdEqualTo(Long value) {
+            addCriterion("merchant_store_id =", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotEqualTo(Long value) {
+            addCriterion("merchant_store_id <>", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThan(Long value) {
+            addCriterion("merchant_store_id >", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id >=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThan(Long value) {
+            addCriterion("merchant_store_id <", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id <=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIn(List<Long> values) {
+            addCriterion("merchant_store_id in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotIn(List<Long> values) {
+            addCriterion("merchant_store_id not in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id not between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
     }
 
     /**
