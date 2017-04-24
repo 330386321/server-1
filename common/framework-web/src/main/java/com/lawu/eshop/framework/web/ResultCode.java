@@ -120,8 +120,7 @@ public class ResultCode {
     public static final int PAY_ORDER_NULL = 6019;
     public static final int PAY_ORDER_IS_SUCCESS = 6020;
 
-    
-   
+
     // 商城模块代码 7xxx
 
 
