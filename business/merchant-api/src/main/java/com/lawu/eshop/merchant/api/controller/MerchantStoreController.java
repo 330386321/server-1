@@ -238,7 +238,7 @@ public class MerchantStoreController extends BaseController {
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "查询门店审核成功和失败审核信息", notes = "查询门店审核成功和失败审核信息 [1012]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "查询门店审核信息", notes = "查询门店审审核信息 [1012,2009]（章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getMerchantAuditInfo", method = RequestMethod.GET)

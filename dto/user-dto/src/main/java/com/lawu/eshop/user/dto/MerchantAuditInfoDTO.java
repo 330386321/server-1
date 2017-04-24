@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class MerchantAuditInfoDTO {
 
-    @ApiModelProperty(value = "审核状态：MERCHANT_AUDIT_STATUS_CHECKED:审核通过,MERCHANT_AUDIT_STATUS_CHECK_FAILED:审核不通过")
+    @ApiModelProperty(value = "审核状态：MERCHANT_AUDIT_STATUS_CHECKED:审核通过,MERCHANT_AUDIT_STATUS_CHECK_FAILED:审核不通过，MERCHANT_AUDIT_STATUS_UNCHECK:未审核")
     private MerchantAuditStatusEnum merchantAuditStatusEnum;
 
     @ApiModelProperty(value = "审核备注")
