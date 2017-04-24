@@ -1,15 +1,14 @@
 package com.lawu.eshop.framework.web.doc.controller;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.ServletContext;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -37,15 +36,46 @@ import io.swagger.annotations.ApiOperation;
 public class DocumentController extends BaseController{
 
 	/**
-	 * 显示接口列表
+	 * 显示审核通过接口列表
 	 * 
-	 * @param isAudit 是否通过审核
 	 * @param map
 	 * @return
 	 * @author Sunny
 	 */
     @RequestMapping(value = "document.html")
-    public String api(Boolean isAudit, ModelMap map) {
+    public String api(ModelMap map) {
+    	
+    	List<ApiDocumentVO> voList = getVoList(true);
+    	
+    	map.addAttribute("voList", voList);
+    	return "document";
+    }
+    
+	/**
+	 * 显示未审核通过的接口列表
+	 * 
+	 * @param map
+	 * @return
+	 * @author Sunny
+	 */
+    @RequestMapping(value = "documentUnAudit.html")
+    public String apiUnAudit(ModelMap map) {
+    	
+    	List<ApiDocumentVO> voList = getVoList(false);
+    	
+    	map.addAttribute("voList", voList);
+    	return "document";
+    }
+
+    /**
+     * 返回接口VoList
+     * 
+     * @param isAudit 是否审核
+     * @return
+     * @author Sunny
+     */
+    @SuppressWarnings("unused")
+	private List<ApiDocumentVO> getVoList(Boolean isAudit) {
     	
     	if (isAudit == null) {
     		isAudit = true;
@@ -54,53 +84,116 @@ public class DocumentController extends BaseController{
     	List<ApiDocumentVO> voList = new ArrayList<ApiDocumentVO>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
-    	RequestMappingInfo info = null;
-    	HandlerMethod method = null;
-    	
-    	// 注解
-    	Api api = null;
-    	Audit audit = null;
-    	ApiOperation apiOperation = null;
-    	
     	try {
-	    	WebApplicationContext wc = getWebApplicationContext(getRequest().getSession().getServletContext());
-	        RequestMappingHandlerMapping rmhp = wc.getBean(RequestMappingHandlerMapping.class);  
-	        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = rmhp.getHandlerMethods();  
-	        for (Iterator<RequestMappingInfo> iterator = handlerMethodMap.keySet().iterator(); iterator.hasNext();) {    
-	            info = iterator.next();
-	            
-	            method = handlerMethodMap.get(info);
-	            apiOperation = method.getMethodAnnotation(ApiOperation.class);
-	            audit = method.getMethodAnnotation(Audit.class);
-	            
-	            if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
-	            	
-	            	api = method.getBeanType().getAnnotation(Api.class);
-	            	
-	            	// 组装VO对象
-	            	ApiDocumentVO vo = new ApiDocumentVO();
-	            	if (api != null && api.tags() != null) {
-	            		vo.setApiName(Arrays.toString(api.tags()));
-	            	} else {
-	            		//如果Api注解为空,或者tags为空，设置ApiName为空串
-	            		vo.setApiName("");
-	            	}
-	            	
-	            	if (audit != null) {
-		            	vo.setDate(df.parse(audit.date()));
-		            	vo.setReviewer(audit.reviewer());
-	            	}
-	            	vo.setPath(info.getPatternsCondition().toString());
-	            	if (apiOperation != null) {
-		            	vo.setName(apiOperation.value());
-		            	vo.setNotes(apiOperation.notes());
-		            	vo.setHttpMethod(apiOperation.httpMethod());
-	            	}
-	            	voList.add(vo);
-	            	
-	            }
-	            
-	        }
+    		if (false) {
+    	    	// 注解
+    	    	Api api = null;
+    	    	Audit audit = null;
+    	    	ApiOperation apiOperation = null;
+    			
+    	    	RequestMappingInfo info = null;
+    	    	HandlerMethod method = null;
+    			
+    			// 通过RequestMappingHandlerMapping获取接口的路径
+		    	WebApplicationContext wc = getWebApplicationContext();
+		        RequestMappingHandlerMapping rmhp = wc.getBean(RequestMappingHandlerMapping.class);  
+		        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = rmhp.getHandlerMethods();  
+		        
+		        for (Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethodMap.entrySet()) {
+		        	
+		        	method = entry.getValue();
+		            apiOperation = method.getMethodAnnotation(ApiOperation.class);
+		            audit = method.getMethodAnnotation(Audit.class);
+		            
+		            if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
+		            	info = entry.getKey();
+		            	api = method.getBeanType().getAnnotation(Api.class);
+		            	
+		            	// 组装VO对象
+		            	ApiDocumentVO vo = new ApiDocumentVO();
+		            	if (api != null && api.tags() != null) {
+		            		vo.setApiName(Arrays.toString(api.tags()));
+		            	} else {
+		            		//如果Api注解为空,或者tags为空，设置ApiName为空串
+		            		vo.setApiName("");
+		            	}
+		            	
+		            	if (audit != null) {
+			            	vo.setDate(df.parse(audit.date()));
+			            	vo.setReviewer(audit.reviewer());
+		            	}
+		            	vo.setPath(info.getPatternsCondition().toString());
+		            	if (apiOperation != null) {
+			            	vo.setName(apiOperation.value());
+			            	vo.setNotes(apiOperation.notes());
+			            	vo.setHttpMethod(apiOperation.httpMethod());
+		            	}
+		            	voList.add(vo);
+		            }
+		        }
+    		} else {
+    			Map<String, Object> apiMap = getWebApplicationContext().getBeansWithAnnotation(Api.class);
+    				
+    	    	// 注解
+    	    	Api api = null;
+    	    	Audit audit = null;
+    	    	ApiOperation apiOperation = null;
+    	    	RequestMapping beanRequestMapping = null;
+    	    	RequestMapping requestMapping = null;
+    	    	StringBuilder sb = new StringBuilder();
+				
+				Class<? extends Object> clazz = null;  
+		        for(Map.Entry<String, Object> entry : apiMap.entrySet()) {  
+		            clazz = entry.getValue().getClass();//获取到实例对象的class信息  
+		            
+		            api = clazz.getAnnotation(Api.class);
+		            beanRequestMapping = clazz.getAnnotation(RequestMapping.class);
+		            
+		            Method[]  methods = clazz.getMethods();
+		            for (Method method : methods) {
+		            	
+		            	audit = method.getAnnotation(Audit.class);
+		            	apiOperation = method.getAnnotation(ApiOperation.class);
+		            	requestMapping = method.getAnnotation(RequestMapping.class);
+		            	
+		            	if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
+			            	if (apiOperation != null) {
+			            		// 组装VO对象
+				            	ApiDocumentVO vo = new ApiDocumentVO();
+				            	if (api != null && api.tags() != null) {
+				            		vo.setApiName(Arrays.toString(api.tags()));
+				            	} else {
+				            		//如果Api注解为空,或者tags为空，设置ApiName为空串
+				            		vo.setApiName("");
+				            	}
+				            	
+				            	if (audit != null) {
+					            	vo.setDate(df.parse(audit.date()));
+					            	vo.setReviewer(audit.reviewer());
+				            	}
+				            	
+				            	// 拼装Url
+				            	sb.delete(0, sb.length());
+				            	for (String beanRequestUrl : beanRequestMapping.value()) {
+					            	for (String requestUrl : requestMapping.value()) {
+					            		if (sb.length() > 0) {
+					            			sb.append(",");
+					            		}
+					            		sb.append(beanRequestUrl + requestUrl);
+					            	}
+				            	}
+				            	vo.setPath(sb.toString());
+				            	if (apiOperation != null) {
+					            	vo.setName(apiOperation.value());
+					            	vo.setNotes(apiOperation.notes());
+					            	vo.setHttpMethod(apiOperation.httpMethod());
+				            	}
+				            	voList.add(vo);
+			            	}
+		            	}
+		            }
+		        }
+    		}
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
@@ -125,12 +218,11 @@ public class DocumentController extends BaseController{
 			}
 		});
     	
-    	map.addAttribute("voList", voList);
-    	return "document";
+    	return voList;
     }
-
-    public WebApplicationContext getWebApplicationContext(ServletContext sc) {  
-        return WebApplicationContextUtils.getRequiredWebApplicationContext(sc);  
+    
+    public WebApplicationContext getWebApplicationContext() {  
+        return WebApplicationContextUtils.getRequiredWebApplicationContext(getRequest().getSession().getServletContext());  
     }  
 
 }
