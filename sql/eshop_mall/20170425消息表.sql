@@ -1,0 +1,1 @@
+alter table message add column `title` varchar(50) DEFAULT NULL COMMENT '标题' after type;
