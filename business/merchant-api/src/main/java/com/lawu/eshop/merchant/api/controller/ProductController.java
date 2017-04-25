@@ -111,7 +111,6 @@ public class ProductController extends BaseController {
 
 	}
 
-	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
@@ -246,6 +245,7 @@ public class ProductController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-04-25", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
