@@ -123,7 +123,6 @@ public class ResultCode {
     public static final int BANK_ACCOUNT_IS_EXIST = 6021;
 
 
-
     // 商城模块代码 7xxx
 
 
