@@ -7,7 +7,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.operator.api.service.PermissonService;
 import com.lawu.eshop.operator.dto.PermissionListDTO;
-import com.lawu.eshop.operator.dto.PerssionDTO;
+import com.lawu.eshop.operator.dto.PermissionDTO;
 import com.lawu.eshop.operator.param.PermissionParam;
 import com.lawu.eshop.operator.param.PerssionParam;
 import io.swagger.annotations.Api;
@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -38,13 +40,14 @@ public class PermissonController extends BaseController{
     @RequestMapping(value = "getPermssion",method = RequestMethod.GET)
     @RequiresAuthentication
     @ApiResponse(code = HttpCode.SC_OK,message = "success")
-    public Result<PerssionDTO> getPermssion(){
+    public Result<List<PermissionDTO>> getPermssion(){
 
         String account = UserUtil.getCurrentUserAccount();
         if(StringUtils.isEmpty(account)){
             return successGet(ResultCode.USER_NOT_LOGIN);
         }
-        Result<PerssionDTO> perssions = permissonService.findPessionByAccount(account);
+        Result<List<PermissionDTO>> perssions = permissonService.findPermissionByAccount(account);
+
         return perssions;
     }
 

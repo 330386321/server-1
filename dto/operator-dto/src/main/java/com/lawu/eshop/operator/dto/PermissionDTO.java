@@ -1,19 +1,27 @@
-package com.lawu.eshop.operator.srv.bo;
+package com.lawu.eshop.operator.dto;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author zhangyong
  * @date 2017/4/20.
  */
-public class PerssionInfoListBO {
+public class PermissionDTO {
 
-   private Integer id;
 
-   private String permissionName;
+    @ApiModelProperty(value = "权限ID")
+    private Integer id;
 
-   private String permissionKey;
+    @ApiModelProperty(value = "权限名称")
+    private String permissionName;
 
-   private String permissionUrl;
+    @ApiModelProperty(value = "权限键值")
+    private String permissionKey;
 
+    @ApiModelProperty(value = "权限URL")
+    private String permissionUrl;
+
+    @ApiModelProperty(value = "父节点ID")
     private Integer parentId;
 
     public Integer getId() {

@@ -91,22 +91,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PerssionInfoListBO findRolePermissionList(Integer userId) {
+    public List<PerssionInfoListBO> findRolePermissionList(Integer userId) {
+
         List<UserRoleDOView> userRoleDOViews = userRoleDOMapperExtend.findUserRoleByUserId(userId);
         if (userRoleDOViews.isEmpty()) {
             return null;
         }
         List<Map<String, String>> list = new ArrayList<>();
+        List<Integer> roleids = new ArrayList<>();
         for (UserRoleDOView userRoleDOView : userRoleDOViews) {
-            List<Map<String, String>> rolePermissionDOViews = rolePermissionDOMapperExtend.findRolePermissionList(userRoleDOView.getId());
-            if (!rolePermissionDOViews.isEmpty()) {
-                list.addAll(rolePermissionDOViews);
-            }
+            roleids.add(userRoleDOView.getId());
         }
-        Set<Map<String, String>> set = new HashSet<>(list);
-        PerssionInfoListBO perssionInfoListBO = new PerssionInfoListBO();
-        perssionInfoListBO.setPerssionInfo(set);
-        return perssionInfoListBO;
+        List<RolePermissionDOView> rolePermissionDOViews = rolePermissionDOMapperExtend.findRolePermissionList(roleids);
+        if(rolePermissionDOViews.isEmpty()){
+            return null;
+        }
+        List<PerssionInfoListBO> listBOS = new ArrayList<>();
+        for (RolePermissionDOView rolePermissionDOView :rolePermissionDOViews){
+            PerssionInfoListBO perssionInfoListBO = new PerssionInfoListBO();
+            perssionInfoListBO.setId(rolePermissionDOView.getId());
+            perssionInfoListBO.setParentId(rolePermissionDOView.getParentId());
+            perssionInfoListBO.setPermissionKey(rolePermissionDOView.getPermissionKey());
+            perssionInfoListBO.setPermissionName(rolePermissionDOView.getPermissionName());
+            perssionInfoListBO.setPermissionUrl(rolePermissionDOView.getPermissionUrl());
+            listBOS.add(perssionInfoListBO);
+        }
+        /*perssionInfoListBO.setPerssionInfo(set);*/
+        return listBOS;
     }
 
     @Override

@@ -24,7 +24,7 @@ public interface UserService {
 
     UserBO find(String account);
 
-    PerssionInfoListBO findRolePermissionList(Integer id);
+    List<PerssionInfoListBO> findRolePermissionList(Integer id);
 
     Integer addUser(String account, String name, String password);
 

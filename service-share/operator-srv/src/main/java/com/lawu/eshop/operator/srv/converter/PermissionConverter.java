@@ -1,9 +1,14 @@
 package com.lawu.eshop.operator.srv.converter;
 
 import com.lawu.eshop.operator.dto.PermissionListDTO;
+import com.lawu.eshop.operator.dto.PermissionDTO;
 import com.lawu.eshop.operator.srv.bo.PermissionBO;
+import com.lawu.eshop.operator.srv.bo.PerssionInfoListBO;
 import com.lawu.eshop.operator.srv.domain.PermissionDO;
 import com.lawu.eshop.operator.srv.domain.extend.RolePermissionDOView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -46,5 +51,23 @@ public class PermissionConverter {
         permissionListDTO.setPermissionKey(permissionBO.getPermissionKey());
         permissionListDTO.setPermissionUrl(permissionBO.getPermissionUrl());
         return permissionListDTO;
+    }
+
+    public static List<PermissionDTO> coverDTOS(List<PerssionInfoListBO> perssionInfoListBOS) {
+        if (perssionInfoListBOS == null) {
+            return null;
+        }
+        List<PermissionDTO> list = new ArrayList<>();
+
+        for (PerssionInfoListBO perssionInfoListBO : perssionInfoListBOS) {
+            PermissionDTO permissionDTO = new PermissionDTO();
+            permissionDTO.setPermissionUrl(perssionInfoListBO.getPermissionUrl());
+            permissionDTO.setId(perssionInfoListBO.getId());
+            permissionDTO.setPermissionName(perssionInfoListBO.getPermissionName());
+            permissionDTO.setPermissionKey(perssionInfoListBO.getPermissionKey());
+            permissionDTO.setParentId(perssionInfoListBO.getParentId());
+            list.add(permissionDTO);
+        }
+        return list;
     }
 }

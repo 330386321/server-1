@@ -5,7 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.operator.dto.PermissionListDTO;
-import com.lawu.eshop.operator.dto.PerssionDTO;
+import com.lawu.eshop.operator.dto.PermissionDTO;
 import com.lawu.eshop.operator.param.PermissionParam;
 import com.lawu.eshop.operator.param.PerssionParam;
 import com.lawu.eshop.operator.srv.bo.PermissionBO;
@@ -25,7 +25,7 @@ import java.util.List;
  * @date 2017/4/20.
  */
 @RestController
-@RequestMapping(value = "perssion")
+@RequestMapping(value = "permission")
 public class PermissonController extends BaseController {
 
     @Autowired
@@ -38,16 +38,18 @@ public class PermissonController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "findPessionByAccount/{account}", method = RequestMethod.GET)
-    public Result<PerssionDTO> findPessionByAccount(@PathVariable("account") String account) {
+    @RequestMapping(value = "findPermissionByAccount/{account}", method = RequestMethod.GET)
+    public Result<List<PermissionDTO>> findPermissionByAccount(@PathVariable("account") String account) {
         UserBO userBO = userService.find(account);
         if (userBO == null) {
             return successGet(ResultCode.USER_WRONG_ID);
         }
-        PerssionInfoListBO perssionInfoListBO = perssionInfoListBO = userService.findRolePermissionList(userBO.getId());
-        PerssionDTO perssionDTO = new PerssionDTO();
-        perssionDTO.setPermissionInfo(perssionInfoListBO.getPerssionInfo());
-        return successGet(perssionDTO);
+        List<PerssionInfoListBO>  perssionInfoListBOS = userService.findRolePermissionList(userBO.getId());
+        if(perssionInfoListBOS == null){
+            return successGet(ResultCode.ROLE_HAS_NOPERMISSION);
+        }
+        List<PermissionDTO> perssionDTOS = PermissionConverter.coverDTOS(perssionInfoListBOS);
+        return successGet(perssionDTOS);
     }
 
     @RequestMapping(value = "addPerssion", method = RequestMethod.POST)

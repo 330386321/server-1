@@ -58,6 +58,7 @@ public class ResultCode {
     public static final int ROLE_HAS_USER_RELATE = 2102;
     public static final int ROLE_HAS_PERMISSION = 2103;
     public static final int PUSH_HAS_NOUSER = 2104;
+    public static final int ROLE_HAS_NOPERMISSION = 2105;
 
 
     // 商品模块代码 3xxx
@@ -186,6 +187,7 @@ public class ResultCode {
         ResultCode.messageMap.put(USER_ROLE_EXIST, "用户已经存在该权限");
         ResultCode.messageMap.put(ROLE_HAS_USER_RELATE, "角色下面存在关联用户");
         ResultCode.messageMap.put(ROLE_HAS_PERMISSION, "角色下面存在该权限");
+        ResultCode.messageMap.put(ROLE_HAS_NOPERMISSION, "没有相关联权限");
         ResultCode.messageMap.put(PUSH_HAS_NOUSER, "没有可推送用户");
 
         // 商品模块 3xxx
