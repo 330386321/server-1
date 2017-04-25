@@ -35,10 +35,10 @@ public interface ProductService {
     /**
      * 根据商品ID查询商品信息
      *
-     * @param productId
+     * @param id
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "product/getProduct/{productId}")
-    Result<ProductInfoDTO> getProductById(@PathVariable("productId") Long productId);
+    @RequestMapping(method = RequestMethod.GET, value = "product/getProduct/{id}")
+    Result<ProductInfoDTO> getProductById(@PathVariable("id") Long id);
 
 }

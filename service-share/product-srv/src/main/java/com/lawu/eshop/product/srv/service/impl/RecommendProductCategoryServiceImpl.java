@@ -1,6 +1,7 @@
 package com.lawu.eshop.product.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.product.param.EditRecommendProductCategoryParam;
 import com.lawu.eshop.product.param.ListRecommendProductCategoryParam;
 import com.lawu.eshop.product.srv.bo.RecommendProductCategoryBO;
 import com.lawu.eshop.product.srv.converter.RecommendProductCategoryConverter;
@@ -26,10 +27,12 @@ public class RecommendProductCategoryServiceImpl implements RecommendProductCate
     private RecommendProductCategoryDOMapper recommendProductCategoryDOMapper;
 
     @Override
-    public void saveRecommendProductCategory(Integer categoryId, String categoryName) {
+    public void saveRecommendProductCategory(EditRecommendProductCategoryParam param) {
         RecommendProductCategoryDO recommendProductCategoryDO = new RecommendProductCategoryDO();
-        recommendProductCategoryDO.setCategoryId(categoryId);
-        recommendProductCategoryDO.setCategoryName(categoryName);
+        recommendProductCategoryDO.setCategoryId(param.getCategoryId());
+        recommendProductCategoryDO.setCategoryName(param.getCategoryName());
+        recommendProductCategoryDO.setIsvisible(param.getIsvisible());
+        recommendProductCategoryDO.setOrdinal(param.getOrdinal());
         recommendProductCategoryDO.setGmtCreate(new Date());
         recommendProductCategoryDOMapper.insertSelective(recommendProductCategoryDO);
     }
@@ -37,6 +40,17 @@ public class RecommendProductCategoryServiceImpl implements RecommendProductCate
     @Override
     public void deleteRecommendProductCategoryById(Long id) {
         recommendProductCategoryDOMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void updateRecommendProductCategoryById(Long id, EditRecommendProductCategoryParam param) {
+        RecommendProductCategoryDO recommendProductCategoryDO = new RecommendProductCategoryDO();
+        recommendProductCategoryDO.setId(id);
+        recommendProductCategoryDO.setCategoryId(param.getCategoryId());
+        recommendProductCategoryDO.setCategoryName(param.getCategoryName());
+        recommendProductCategoryDO.setIsvisible(param.getIsvisible());
+        recommendProductCategoryDO.setOrdinal(param.getOrdinal());
+        recommendProductCategoryDOMapper.updateByPrimaryKeySelective(recommendProductCategoryDO);
     }
 
     @Override

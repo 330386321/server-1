@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
+import com.lawu.eshop.product.param.EditRecommendProductCategoryParam;
 import com.lawu.eshop.product.param.ListRecommendProductCategoryParam;
 import com.lawu.eshop.product.srv.bo.RecommendProductCategoryBO;
 import com.lawu.eshop.product.srv.converter.RecommendProductCategoryConverter;
@@ -28,13 +29,12 @@ public class RecommendProductCategoryController extends BaseController {
     /**
      * 保存商品类别
      *
-     * @param categoryId
-     * @param categoryName
+     * @param param
      * @return
      */
     @RequestMapping(value = "saveRecommendProductCategory", method = RequestMethod.POST)
-    public Result saveRecommendProductCategory(@RequestParam Integer categoryId, @RequestParam String categoryName) {
-        recommendProductCategoryService.saveRecommendProductCategory(categoryId, categoryName);
+    public Result saveRecommendProductCategory(@RequestBody EditRecommendProductCategoryParam param) {
+        recommendProductCategoryService.saveRecommendProductCategory(param);
         return successCreated();
     }
 
@@ -52,6 +52,35 @@ public class RecommendProductCategoryController extends BaseController {
         }
         recommendProductCategoryService.deleteRecommendProductCategoryById(id);
         return successDelete();
+    }
+
+    /**
+     * 根据ID修改商品类别
+     *
+     * @param id
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "updateRecommendProductCategory/{id}", method = RequestMethod.PUT)
+    public Result updateRecommendProductCategory(@PathVariable Long id, @RequestBody EditRecommendProductCategoryParam param) {
+        RecommendProductCategoryBO recommendProductCategoryBO = recommendProductCategoryService.getRecommendProductCategoryById(id);
+        if (recommendProductCategoryBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        recommendProductCategoryService.updateRecommendProductCategoryById(id, param);
+        return successCreated();
+    }
+
+    /**
+     * 根据ID查询商品类别
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getRecommendProductCategory/{id}", method = RequestMethod.GET)
+    public Result<RecommendProductCategoryDTO> getRecommendProductCategory(@PathVariable Long id) {
+        RecommendProductCategoryBO recommendProductCategoryBO = recommendProductCategoryService.getRecommendProductCategoryById(id);
+        return successGet(RecommendProductCategoryConverter.convertDTO(recommendProductCategoryBO));
     }
 
     /**

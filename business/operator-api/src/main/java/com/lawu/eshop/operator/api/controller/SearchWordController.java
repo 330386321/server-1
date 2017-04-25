@@ -1,11 +1,10 @@
 package com.lawu.eshop.operator.api.controller;
 
-import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.constants.SearchWordTypeEnum;
 import com.lawu.eshop.mall.dto.SearchWordDTO;
 import com.lawu.eshop.mall.param.SearchWordParam;
@@ -14,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,29 +31,27 @@ public class SearchWordController extends BaseController {
 
     @ApiOperation(value = "新增搜索词条", notes = "新增搜索词条。（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @Authorization
+    @RequiresPermissions("searchWord:add")
     @RequestMapping(value = "saveSearchWord", method = RequestMethod.POST)
-    public Result saveSearchWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                 @RequestParam @ApiParam(name = "word", required = true, value = "词条") String word,
+    public Result saveSearchWord(@RequestParam @ApiParam(name = "word", required = true, value = "词条") String word,
                                  SearchWordTypeEnum searchWordTypeEnum) {
         return searchWordService.saveSearchWord(word, searchWordTypeEnum);
     }
 
     @ApiOperation(value = "删除词条", notes = "根据ID删除词条。[1002]（梅述全）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @Authorization
+    @RequiresPermissions("searchWord:del")
     @RequestMapping(value = "deleteSearchWord/{id}", method = RequestMethod.DELETE)
-    public Result deleteSearchWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                   @PathVariable @ApiParam(name = "id", required = true, value = "ID") Long id) {
+    public Result deleteSearchWord(@PathVariable @ApiParam(name = "id", required = true, value = "ID") Long id) {
         return searchWordService.deleteSearchWordById(id);
     }
 
     @ApiOperation(value = "词条列表", notes = "词条列表。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
+    @RequiresPermissions("searchWord:list")
+    @PageBody
     @RequestMapping(value = "listSearchWord", method = RequestMethod.GET)
-    public Result<Page<SearchWordDTO>> listSearchWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                      @ModelAttribute @ApiParam SearchWordParam searchWordParam) {
+    public Result<Page<SearchWordDTO>> listSearchWord(@RequestBody @ApiParam SearchWordParam searchWordParam) {
         return searchWordService.listSearchWord(searchWordParam);
     }
 }
