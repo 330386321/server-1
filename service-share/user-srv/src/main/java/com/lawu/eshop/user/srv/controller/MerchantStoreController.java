@@ -9,6 +9,7 @@ import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
@@ -338,7 +339,7 @@ public class MerchantStoreController extends BaseController {
         }
         return successGet(MerchantStoreConverter.convertStoreDTO(merchantStoreBO));
     }
-    
+
     @RequestMapping(value = "selectAllMerchantStore/{id}", method = RequestMethod.POST)
     public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(MerchantStoreParam param){
     	 List<MerchantStoreBO> boList = merchantStoreService.selectAllMerchantStore(param);
@@ -353,4 +354,36 @@ public class MerchantStoreController extends BaseController {
          }
          return successGet(list);
     }
+
+    /**
+     * 查询所有审核通过的门店
+     *
+     * @return
+     */
+    @RequestMapping(value = "listMerchantStore", method = RequestMethod.GET)
+    public Result<List<MerchantStoreDTO>> listMerchantStore() {
+        List<MerchantStoreBO> merchantStoreBOS = merchantStoreService.listMerchantStore();
+        if (merchantStoreBOS == null || merchantStoreBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(MerchantStoreConverter.convertStoreDTO(merchantStoreBOS));
+    }
+
+    /**
+     * 更新门店统计数据，同时更新solr
+     *
+     * @param id
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "updateStoreStatistics/{id}", method = RequestMethod.PUT)
+    public Result updateStoreStatistics(@PathVariable Long id, @RequestBody StoreStatisticsParam param) {
+        MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);
+        if (merchantStoreBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        merchantStoreService.updateStoreStatisticsById(id, param);
+        return successCreated();
+    }
+
 }

@@ -1,20 +1,5 @@
 package com.lawu.eshop.product.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -34,6 +19,15 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Yangqh
@@ -118,16 +112,16 @@ public class ProductController extends BaseController {
             return successCreated(ResultCode.ID_EMPTY, null);
         }
 
-		// 商品基本信息
-		ProductEditInfoBO productBO = productService.selectEditProductById(productId);
-		if (productBO == null) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND, null);
-		}
-		ProductEditInfoDTO productDTO = new ProductEditInfoDTO();
-		BeanUtil.copyProperties(productBO, productDTO);
-		productDTO.setAllowRefund(productBO.isAllowRefund());
-		return successCreated(productDTO);
-	}
+        // 商品基本信息
+        ProductEditInfoBO productBO = productService.selectEditProductById(productId);
+        if (productBO == null) {
+            return successCreated(ResultCode.RESOURCE_NOT_FOUND, null);
+        }
+        ProductEditInfoDTO productDTO = new ProductEditInfoDTO();
+        BeanUtil.copyProperties(productBO, productDTO);
+        productDTO.setAllowRefund(productBO.isAllowRefund());
+        return successCreated(productDTO);
+    }
 
     /**
      * 添加、编辑商品
@@ -217,7 +211,7 @@ public class ProductController extends BaseController {
         }
         return successGet(ProductConverter.convertInfoDTO(productBO));
     }
-    
+
     /**
 	 * 查询已审核的所有商品
 	 * @param param
@@ -237,9 +231,39 @@ public class ProductController extends BaseController {
 				dtoList.add(dto);
 			}
 		}
-		
+
 		return successGet(dtoList);
 	}
 
-}
+    /**
+     * 查询所有上架中商品
+     *
+     * @return
+     */
+    @RequestMapping(value = "listProduct", method = RequestMethod.GET)
+    public Result<List<ProductInfoDTO>> listProduct() {
+        List<ProductInfoBO> productInfoBOS = productService.listProduct();
+        if (productInfoBOS == null || productInfoBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(ProductConverter.convertInfoDTO(productInfoBOS));
+    }
 
+    /**
+     * 更新商品平均日销量，同时更新solr
+     *
+     * @param id
+     * @param averageDailySales
+     * @return
+     */
+    @RequestMapping(value = "updateAverageDailySales/{id}", method = RequestMethod.PUT)
+    public Result updateAverageDailySales(@PathVariable Long id, @RequestParam BigDecimal averageDailySales) {
+        ProductInfoBO productBO = productService.getProductById(id);
+        if (productBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        productService.updateAverageDailySalesById(id, averageDailySales);
+        return successCreated();
+    }
+
+}

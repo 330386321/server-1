@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.srv.service;
 
-import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
@@ -11,6 +10,9 @@ import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Yangqh on 2017/3/23.
@@ -98,12 +100,27 @@ public interface ProductService {
      * @return
      */
     ProductInfoBO getProductById(Long id);
-    
-    
+
+
     /**
      * 运营平台查询所有已审核的商品
      * @param param
      * @return
      */
     List<ProductQueryBO> selectProductPlat(ProductParam param);
+
+    /**
+     * 查询所有上架中商品
+     *
+     * @return
+     */
+    List<ProductInfoBO> listProduct();
+
+    /**
+     * 更新商品平均日销量
+     *
+     * @param id
+     * @param averageDailySales
+     */
+    void updateAverageDailySalesById(Long id, BigDecimal averageDailySales);
 }

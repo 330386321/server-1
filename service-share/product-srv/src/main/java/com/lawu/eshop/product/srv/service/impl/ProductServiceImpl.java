@@ -1,23 +1,6 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -34,23 +17,25 @@ import com.lawu.eshop.product.srv.bo.ProductModelBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
-import com.lawu.eshop.product.srv.domain.ProductImageDO;
-import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
+import com.lawu.eshop.product.srv.mapper.*;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -69,6 +54,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductCategoryService productCategoryService;
+
+    @Autowired
+    private ProductCategoryeDOMapper productCategoryeDOMapper;
 
 	@Autowired
 	private ProductDOMapperExtend productDOMapperExtend;
@@ -180,6 +168,13 @@ public class ProductServiceImpl implements ProductService {
 					document.addField("price_d", price);
 					document.addField("inventory_i", inventory);
 					document.addField("salesVolume_i", salesVolume);
+                    ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+                    if (productCategoryeDO != null) {
+                        String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                        for (String categoryId : categoryIdArr) {
+                            document.addField("categoryId_is", categoryId);
+                        }
+                    }
 					SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
 				}
 			}
@@ -256,8 +251,8 @@ public class ProductServiceImpl implements ProductService {
 
 		return productInfoBO;
 	}
-	
-	
+
+
 	//备份方法，支持商品描述多张
 //	@Override
 //	public ProductEditInfoBO selectEditProductById(Long productId) {
@@ -342,7 +337,7 @@ public class ProductServiceImpl implements ProductService {
 		}
 		String specJson = JSON.toJSONString(ProductModelBOS);
 		productEditInfoBO.setSpec(specJson);
-		
+
 		String featureImage = productEditInfoBO.getFeatureImage();
 		featureImage = featureImage.replaceAll("\\\\", "/");
 		productEditInfoBO.setFeatureImage(featureImage);
@@ -560,10 +555,17 @@ public class ProductServiceImpl implements ProductService {
 		document.addField("price_d", price);
 		document.addField("inventory_i", inventory);
 		document.addField("salesVolume_i", salesVolume);
+        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
+        if (productCategoryeDO != null) {
+            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+            for (String categoryId : categoryIdArr) {
+                document.addField("categoryId_is", categoryId);
+            }
+        }
 		SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
 	}
-	
-	
+
+
 	@Override
 	@Transactional
 	public void eidtProduct(EditProductDataParam param) {
@@ -742,14 +744,21 @@ public class ProductServiceImpl implements ProductService {
 			productImageDOMapper.insert(pcDO);
 		}
 
-		SolrInputDocument document = ProductConverter.convertSolrInputDocument(productId, param);
-		document.addField("originalPrice_d", originalPrice);
-		document.addField("price_d", price);
-		document.addField("inventory_i", inventory);
-		document.addField("salesVolume_i", salesVolume);
-		SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
-	}
-	
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productId, param);
+        document.addField("originalPrice_d", originalPrice);
+        document.addField("price_d", price);
+        document.addField("inventory_i", inventory);
+        document.addField("salesVolume_i", salesVolume);
+        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
+        if (productCategoryeDO != null) {
+            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+            for (String categoryId : categoryIdArr) {
+                document.addField("categoryId_is", categoryId);
+            }
+        }
+        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+    }
+
 
 	@Override
 	public void editTotalInventory(Long productId, int num, String flag) {
@@ -806,5 +815,43 @@ public class ProductServiceImpl implements ProductService {
 		return ProductConverter.convertInfoBO(productDO);
 	}
 
-	
+    @Override
+    public List<ProductInfoBO> listProduct() {
+        ProductDOExample example = new ProductDOExample();
+        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        List<ProductDO> productDOS = productDOMapper.selectByExample(example);
+        return ProductConverter.convertInfoBO(productDOS);
+    }
+
+    @Override
+    public void updateAverageDailySalesById(Long id, BigDecimal averageDailySales) {
+        ProductDO productDO = new ProductDO();
+        productDO.setId(id);
+        productDO.setAverageDailySales(averageDailySales);
+        productDOMapper.updateByPrimaryKeySelective(productDO);
+
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, SolrUtil.SOLR_PRODUCT_CORE);
+        if (solrDocument != null) {
+            SolrInputDocument document = new SolrInputDocument();
+            document.addField("id", solrDocument.get("id"));
+            document.addField("featureImage_s", solrDocument.get("featureImage_s"));
+            document.setField("name_s", solrDocument.get("name_s"));
+            document.addField("categoryId_i", solrDocument.get("categoryId_i"));
+            document.addField("content_s", solrDocument.get("content_s"));
+            document.addField("averageDailySales_d", averageDailySales);
+            document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
+            document.addField("price_d", solrDocument.get("price_d"));
+            document.addField("inventory_i", solrDocument.get("inventory_i"));
+            document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
+            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(Integer.valueOf(solrDocument.get("categoryId_i").toString()));
+            if (productCategoryeDO != null) {
+                String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                for (String categoryId : categoryIdArr) {
+                    document.addField("categoryId_is", categoryId);
+                }
+            }
+            SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+        }
+    }
+
 }

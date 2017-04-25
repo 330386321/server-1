@@ -175,6 +175,38 @@ public class DateUtil {
         return dateFormat.format(date);
     }
 
+    /**
+     * 两个时间相隔天数
+     *
+     * @param beginDate 开始日期
+     * @param endDate   结束日期
+     * @return
+     */
+    public static int daysOfTwo(Date beginDate, Date endDate) {
+        if (null == beginDate || null == endDate) {
+            return -1;
+        }
+
+        long intervalMilli = endDate.getTime() - beginDate.getTime();
+        return (int) (intervalMilli / (24 * 60 * 60 * 1000));
+    }
+
+    /**
+     * 两个时间相隔天数
+     *
+     * @param beginDate 开始日期
+     * @return
+     */
+    public static int daysOfTwo(Date beginDate) {
+        if (null == beginDate) {
+            return -1;
+        }
+
+        Date endDate = new Date();
+        long intervalMilli = endDate.getTime() - beginDate.getTime();
+        return (int) (intervalMilli / (24 * 60 * 60 * 1000));
+    }
+
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
@@ -452,27 +484,6 @@ public class DateUtil {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, -month);
         return c.getTime();
-    }
-
-    /**
-     * 两个时间相隔天数
-     *
-     * @param fDate 起始天数
-     * @param oDate 最后天数
-     * @return
-     */
-    public static int daysOfTwo(Date fDate, Date oDate) {
-
-        if (null == fDate || null == oDate) {
-
-            return -1;
-
-        }
-
-        long intervalMilli = oDate.getTime() - fDate.getTime();
-
-        return (int) (intervalMilli / (24 * 60 * 60 * 1000));
-
     }
 
     /**

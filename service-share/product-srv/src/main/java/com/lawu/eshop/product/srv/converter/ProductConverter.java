@@ -107,6 +107,7 @@ public class ProductConverter {
         productInfoBO.setTotalSales(productDO.getTotalSalesVolume());
         productInfoBO.setPriceMax(String.valueOf(productDO.getMaxPrice()));
         productInfoBO.setPriceMin(String.valueOf(productDO.getMinPrice()));
+        productInfoBO.setGmtCreate(productDO.getGmtCreate());
         return productInfoBO;
     }
 
@@ -148,7 +149,42 @@ public class ProductConverter {
         productInfoDTO.setTotalSales(productBO.getTotalSales());
         productInfoDTO.setPriceMax(productBO.getPriceMax());
         productInfoDTO.setPriceMin(productBO.getPriceMin());
+        productInfoDTO.setGmtCreate(productBO.getGmtCreate());
         return productInfoDTO;
+    }
+
+    /**
+     * BO转换
+     *
+     * @param productDOList
+     * @return
+     */
+    public static List<ProductInfoBO> convertInfoBO(List<ProductDO> productDOList) {
+        List<ProductInfoBO> productInfoBOS = new ArrayList<>();
+        if (productDOList == null || productDOList.isEmpty()) {
+            return productInfoBOS;
+        }
+        for (ProductDO productDO : productDOList) {
+            productInfoBOS.add(convertInfoBO(productDO));
+        }
+        return productInfoBOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param productInfoBOList
+     * @return
+     */
+    public static List<ProductInfoDTO> convertInfoDTO(List<ProductInfoBO> productInfoBOList) {
+        List<ProductInfoDTO> productInfoDTOS = new ArrayList<>();
+        if (productInfoBOList == null || productInfoBOList.isEmpty()) {
+            return productInfoDTOS;
+        }
+        for (ProductInfoBO productInfoBO : productInfoBOList) {
+            productInfoDTOS.add(convertInfoDTO(productInfoBO));
+        }
+        return productInfoDTOS;
     }
 
     /**
@@ -273,11 +309,13 @@ public class ProductConverter {
 
         for (SolrDocument solrDocument : solrDocumentList) {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+            productSearchDTO.setProductId(Long.valueOf(solrDocument.get("id").toString()));
             productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
             productSearchDTO.setName(solrDocument.get("name_s").toString());
             productSearchDTO.setContent(solrDocument.get("content_s").toString());
             productSearchDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
             productSearchDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
+            productSearchDTO.setSalesVolume(Integer.valueOf(solrDocument.get("salesVolume_i").toString()));
             productSearchDTOS.add(productSearchDTO);
         }
         return productSearchDTOS;

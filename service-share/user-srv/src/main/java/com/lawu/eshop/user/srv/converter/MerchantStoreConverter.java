@@ -336,6 +336,28 @@ public class MerchantStoreConverter {
         return dto;
     }
 
+    public static List<MerchantStoreBO> convertStoreBO(List<MerchantStoreDO> merchantStoreDOList) {
+        List<MerchantStoreBO> merchantStoreBOS = new ArrayList<>();
+        if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()) {
+            return merchantStoreBOS;
+        }
+        for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
+            merchantStoreBOS.add(convertStoreBO(merchantStoreDO));
+        }
+        return merchantStoreBOS;
+    }
+
+    public static List<MerchantStoreDTO> convertStoreDTO(List<MerchantStoreBO> merchantStoreBOList) {
+        List<MerchantStoreDTO> merchantStoreDTOS = new ArrayList<>();
+        if (merchantStoreBOList == null || merchantStoreBOList.isEmpty()) {
+            return merchantStoreDTOS;
+        }
+        for (MerchantStoreBO merchantStoreBO : merchantStoreBOList) {
+            merchantStoreDTOS.add(convertStoreDTO(merchantStoreBO));
+        }
+        return merchantStoreDTOS;
+    }
+
     /**
      * SolrInputDocument
      *
