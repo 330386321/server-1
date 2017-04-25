@@ -60,11 +60,11 @@ public class IndustryTypeConverter {
      * @return
      */
     public static List<IndustryTypeBO> convertBO(List<IndustryTypeDO> industryTypeDOList) {
-        if (industryTypeDOList.isEmpty()) {
-            return null;
+        List<IndustryTypeBO> industryTypeBOS = new ArrayList<IndustryTypeBO>();
+        if (industryTypeDOList == null || industryTypeDOList.isEmpty()) {
+            return industryTypeBOS;
         }
 
-        List<IndustryTypeBO> industryTypeBOS = new ArrayList<IndustryTypeBO>(industryTypeDOList.size());
         for (IndustryTypeDO industryTypeDO : industryTypeDOList) {
             IndustryTypeBO industryTypeBO = new IndustryTypeBO();
             industryTypeBO.setId(industryTypeDO.getId());
@@ -84,11 +84,11 @@ public class IndustryTypeConverter {
      * @return
      */
     public static List<IndustryTypeDTO> convertDTO(List<IndustryTypeBO> industryTypeBOS) {
-        if (industryTypeBOS.isEmpty()) {
-            return null;
+        List<IndustryTypeDTO> industryTypeDTOS = new ArrayList<IndustryTypeDTO>();
+        if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
+            return industryTypeDTOS;
         }
 
-        List<IndustryTypeDTO> industryTypeDTOS = new ArrayList<IndustryTypeDTO>(industryTypeBOS.size());
         for (IndustryTypeBO industryTypeBO : industryTypeBOS) {
             IndustryTypeDTO industryTypeDTO = new IndustryTypeDTO();
             industryTypeDTO.setId(industryTypeBO.getId());

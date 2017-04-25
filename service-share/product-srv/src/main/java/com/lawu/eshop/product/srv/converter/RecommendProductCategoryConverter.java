@@ -58,11 +58,11 @@ public class RecommendProductCategoryConverter {
      * @return
      */
     public static List<RecommendProductCategoryBO> convertBO(List<RecommendProductCategoryDO> recommendProductCategoryDOS) {
-        if (recommendProductCategoryDOS.isEmpty()) {
-            return null;
+        List<RecommendProductCategoryBO> recommendProductCategoryBOS = new ArrayList<>();
+        if (recommendProductCategoryDOS == null || recommendProductCategoryDOS.isEmpty()) {
+            return recommendProductCategoryBOS;
         }
 
-        List<RecommendProductCategoryBO> recommendProductCategoryBOS = new ArrayList<>(recommendProductCategoryDOS.size());
         for (RecommendProductCategoryDO recommendProductCategoryDO : recommendProductCategoryDOS) {
             RecommendProductCategoryBO recommendProductCategoryBO = new RecommendProductCategoryBO();
             recommendProductCategoryBO.setId(recommendProductCategoryDO.getId());
@@ -81,11 +81,11 @@ public class RecommendProductCategoryConverter {
      * @return
      */
     public static List<RecommendProductCategoryDTO> convertDTO(List<RecommendProductCategoryBO> recommendProductCategoryBOS) {
-        if (recommendProductCategoryBOS.isEmpty()) {
-            return null;
+        List<RecommendProductCategoryDTO> recommendProductCategoryDTOS = new ArrayList<>();
+        if (recommendProductCategoryBOS == null || recommendProductCategoryBOS.isEmpty()) {
+            return recommendProductCategoryDTOS;
         }
 
-        List<RecommendProductCategoryDTO> recommendProductCategoryDTOS = new ArrayList<>(recommendProductCategoryBOS.size());
         for (RecommendProductCategoryBO recommendProductCategoryBO : recommendProductCategoryBOS) {
             RecommendProductCategoryDTO recommendProductCategoryDTO = new RecommendProductCategoryDTO();
             recommendProductCategoryDTO.setId(recommendProductCategoryBO.getId());

@@ -58,11 +58,11 @@ public class FansInviteDetailConverter {
      * @return
      */
     public static List<FansInviteDetailBO> convertBO(List<FansInviteDetailDO> fansInviteDetailDOList) {
+        List<FansInviteDetailBO> fansInviteDetailBOS = new ArrayList<>();
         if (fansInviteDetailDOList == null || fansInviteDetailDOList.isEmpty()) {
-            return null;
+            return fansInviteDetailBOS;
         }
 
-        List<FansInviteDetailBO> fansInviteDetailBOS = new ArrayList<>();
         for (FansInviteDetailDO fansInviteDetailDO : fansInviteDetailDOList) {
             fansInviteDetailBOS.add(convertBO(fansInviteDetailDO));
         }
@@ -76,11 +76,11 @@ public class FansInviteDetailConverter {
      * @return
      */
     public static List<FansInviteDetailDTO> convertDTO(List<FansInviteDetailBO> fansInviteDetailBOList) {
+        List<FansInviteDetailDTO> fansInviteDetailDTOS = new ArrayList<>();
         if (fansInviteDetailBOList == null || fansInviteDetailBOList.isEmpty()) {
-            return null;
+            return fansInviteDetailDTOS;
         }
 
-        List<FansInviteDetailDTO> fansInviteDetailDTOS = new ArrayList<>();
         for (FansInviteDetailBO fansInviteDetailBO : fansInviteDetailBOList) {
             fansInviteDetailDTOS.add(convertDTO(fansInviteDetailBO));
         }

@@ -39,11 +39,11 @@ public class FansMerchantConverter {
      * @return
      */
     public static List<FansMerchantBO> convertBO(List<FansMerchantDOView> fansMerchantDOViewList) {
-        if (fansMerchantDOViewList.isEmpty()) {
-            return null;
+        List<FansMerchantBO> fansMerchantBOS = new ArrayList<FansMerchantBO>();
+        if (fansMerchantDOViewList == null || fansMerchantDOViewList.isEmpty()) {
+            return fansMerchantBOS;
         }
 
-        List<FansMerchantBO> fansMerchantBOS = new ArrayList<FansMerchantBO>(fansMerchantDOViewList.size());
         for (FansMerchantDOView fansMerchantDOView : fansMerchantDOViewList) {
             FansMerchantBO fansMerchantBO = new FansMerchantBO();
             fansMerchantBO.setRegionPath(fansMerchantDOView.getRegionPath());
@@ -67,11 +67,11 @@ public class FansMerchantConverter {
      * @return
      */
     public static List<FansMerchantDTO> convertDTO(List<FansMerchantBO> fansMerchantBOList) {
-        if (fansMerchantBOList.isEmpty()) {
-            return null;
+        List<FansMerchantDTO> fansMerchantDTOS = new ArrayList<FansMerchantDTO>();
+        if (fansMerchantBOList == null || fansMerchantBOList.isEmpty()) {
+            return fansMerchantDTOS;
         }
 
-        List<FansMerchantDTO> fansMerchantDTOS = new ArrayList<FansMerchantDTO>(fansMerchantBOList.size());
         for (FansMerchantBO fansMerchantBO : fansMerchantBOList) {
             FansMerchantDTO fansMerchantDTO = new FansMerchantDTO();
             fansMerchantDTO.setMemberId(fansMerchantBO.getMemberId());

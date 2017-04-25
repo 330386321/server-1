@@ -59,11 +59,11 @@ public class SearchWordConverter {
      * @return
      */
     public static List<SearchWordBO> convertBO(List<SearchWordDO> searchWordDOList) {
+        List<SearchWordBO> searchWordBOS = new ArrayList<>();
         if (searchWordDOList == null || searchWordDOList.isEmpty()) {
-            return null;
+            return searchWordBOS;
         }
 
-        List<SearchWordBO> searchWordBOS = new ArrayList<>(searchWordDOList.size());
         for (SearchWordDO searchWordDO : searchWordDOList) {
             SearchWordBO searchWordBO = new SearchWordBO();
             searchWordBO.setId(searchWordDO.getId());
@@ -82,11 +82,11 @@ public class SearchWordConverter {
      * @return
      */
     public static List<SearchWordDTO> convertDTO(List<SearchWordBO> searchWordBOList) {
+        List<SearchWordDTO> searchWordDTOS = new ArrayList<>();
         if (searchWordBOList == null || searchWordBOList.isEmpty()) {
-            return null;
+            return searchWordDTOS;
         }
 
-        List<SearchWordDTO> searchWordDTOS = new ArrayList<>(searchWordBOList.size());
         for (SearchWordBO searchWordBO : searchWordBOList) {
             SearchWordDTO searchWordDTO = new SearchWordDTO();
             searchWordDTO.setId(searchWordBO.getId());

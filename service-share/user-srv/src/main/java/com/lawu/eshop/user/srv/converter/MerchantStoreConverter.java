@@ -349,7 +349,7 @@ public class MerchantStoreConverter {
         document.addField("id", merchantStoreId);
         document.addField("merchantId_l", merchantId);
         document.addField("name_s", merchantStoreParam.getName());
-        document.addField("regionPath_s",merchantStoreParam.getRegionPath());
+        document.addField("regionPath_s", merchantStoreParam.getRegionPath());
         document.addField("latLon_p", merchantStoreParam.getLatitude() + "," + merchantStoreParam.getLongitude());
         document.addField("industryPath_s", merchantStoreParam.getIndustryPath());
         document.addField("industryName_s", merchantStoreParam.getIndustryName());
@@ -363,11 +363,11 @@ public class MerchantStoreConverter {
      * @return
      */
     public static List<StoreSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
-        if (solrDocumentList.isEmpty()) {
-            return null;
+        List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return storeSolrDTOS;
         }
 
-        List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
         for (SolrDocument solrDocument : solrDocumentList) {
             StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
             storeSolrDTO.setMerchantId(Long.valueOf(solrDocument.get("merchantId_l").toString()));
@@ -396,7 +396,7 @@ public class MerchantStoreConverter {
         document.addField("id", solrDocument.get("id"));
         document.addField("merchantId_l", solrDocument.get("merchantId_l"));
         document.addField("name_s", solrDocument.get("name_s"));
-        document.addField("regionPath_s",solrDocument.get("regionPath_s"));
+        document.addField("regionPath_s", solrDocument.get("regionPath_s"));
         document.addField("latLon_p", solrDocument.get("latLon_p"));
         document.addField("industryPath_s", solrDocument.get("industryPath_s"));
         document.addField("industryName_s", solrDocument.get("industryName_s"));

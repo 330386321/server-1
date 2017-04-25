@@ -41,11 +41,11 @@ public class PropertyConverter {
      * @return
      */
     public static List<PropertyBO> convertBO(List<PropertyDO> propertyDOS) {
-        if (propertyDOS.isEmpty()) {
-            return null;
+        List<PropertyBO> propertyBOS = new ArrayList<PropertyBO>();
+        if (propertyDOS == null || propertyDOS.isEmpty()) {
+            return propertyBOS;
         }
 
-        List<PropertyBO> propertyBOS = new ArrayList<PropertyBO>(propertyDOS.size());
         for (PropertyDO propertyDO : propertyDOS) {
             PropertyBO propertyBO = new PropertyBO();
             propertyBO.setId(propertyDO.getId());
@@ -87,11 +87,11 @@ public class PropertyConverter {
      * @return
      */
     public static List<PropertyDTO> convertDTO(List<PropertyBO> propertyBOS) {
-        if (propertyBOS.isEmpty()) {
-            return null;
+        List<PropertyDTO> propertyDTOS = new ArrayList<PropertyDTO>();
+        if (propertyBOS == null || propertyBOS.isEmpty()) {
+            return propertyDTOS;
         }
 
-        List<PropertyDTO> propertyDTOS = new ArrayList<PropertyDTO>(propertyBOS.size());
         for (PropertyBO propertyBO : propertyBOS) {
             PropertyDTO propertyDTO = new PropertyDTO();
             propertyDTO.setId(propertyBO.getId());

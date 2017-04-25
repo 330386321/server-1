@@ -25,7 +25,7 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
     public List<IndustryTypeBO> listIndustryType() {
         IndustryTypeDOExample industryTypeDOExample = new IndustryTypeDOExample();
         List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
-        return industryTypeDOS.isEmpty() ? null : IndustryTypeConverter.convertBO(industryTypeDOS);
+        return IndustryTypeConverter.convertBO(industryTypeDOS);
     }
 
 }

@@ -1,15 +1,10 @@
 package com.lawu.eshop.product.srv.converter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.*;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
@@ -18,6 +13,13 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 会员信息转换器
@@ -186,13 +188,13 @@ public class ProductConverter {
         productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
-        	productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());
         return productDO;
     }
-    
+
     public static ProductDO convertDO(EditProductDataParam param, Long id) {
         ProductDO productDO = new ProductDO();
         productDO.setName(param.getName());
@@ -228,7 +230,7 @@ public class ProductConverter {
         document.addField("averageDailySales_d", 0);
         return document;
     }
-    
+
     public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam param) {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", productId);
@@ -264,11 +266,11 @@ public class ProductConverter {
      * @return
      */
     public static List<ProductSearchDTO> convertDTO(SolrDocumentList solrDocumentList) {
-        if (solrDocumentList.isEmpty()) {
-            return null;
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return productSearchDTOS;
         }
 
-        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
         for (SolrDocument solrDocument : solrDocumentList) {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
             productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
@@ -288,11 +290,11 @@ public class ProductConverter {
      * @return
      */
     public static List<ProductSearchBO> convertBO(List<ProductDO> productDOS) {
+        List<ProductSearchBO> productSearchBOS = new ArrayList<>();
         if (productDOS == null || productDOS.isEmpty()) {
-            return null;
+            return productSearchBOS;
         }
 
-        List<ProductSearchBO> productSearchBOS = new ArrayList<>(productDOS.size());
         for (ProductDO productDO : productDOS) {
             ProductSearchBO productSearchBO = new ProductSearchBO();
             productSearchBO.setProductId(productDO.getId());
@@ -314,11 +316,11 @@ public class ProductConverter {
      * @return
      */
     public static List<ProductSearchDTO> convertDTO(List<ProductSearchBO> productSearchBOS) {
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
         if (productSearchBOS == null || productSearchBOS.isEmpty()) {
-            return null;
+            return productSearchDTOS;
         }
 
-        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>(productSearchBOS.size());
         for (ProductSearchBO productSearchBO : productSearchBOS) {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
             productSearchDTO.setProductId(productSearchBO.getProductId());
