@@ -12,6 +12,17 @@ public class BankAccountBO {
 	
 	private String bankName;
 	
+	private String iconUrl;
+	
+	
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -1,16 +1,19 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -46,5 +49,22 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
         return MerchantStoreConverter.convertStoreBO(merchantStoreDO);
     }
+
+	@Override
+	public List<MerchantStoreBO> selectAllMerchantStore(MerchantStoreParam param) {
+		 MerchantStoreDOExample example = new MerchantStoreDOExample();
+	        example.createCriteria().andStatusEqualTo(new Byte("1"));
+	        List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
+	        List<MerchantStoreBO> boList=new ArrayList<>();
+	        if (!list.isEmpty()) {
+	        	for (MerchantStoreDO merchantStoreDO : list) {
+	        		MerchantStoreBO bo=new MerchantStoreBO();
+	        		bo.setId(merchantStoreDO.getId());
+	        		bo.setName(merchantStoreDO.getName());
+	        		boList.add(bo);
+				}
+	        }
+		return boList;
+	}
 
 }

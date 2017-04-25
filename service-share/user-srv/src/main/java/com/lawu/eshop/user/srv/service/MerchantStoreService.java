@@ -1,5 +1,8 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
+import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 
 /**
@@ -31,5 +34,12 @@ public interface MerchantStoreService {
      * @return
      */
     MerchantStoreBO getMerchantStoreById(Long id);
+    
+    /**
+     * 查询所有的门店
+     * @param param
+     * @return
+     */
+    List<MerchantStoreBO> selectAllMerchantStore(MerchantStoreParam param);
 
 }

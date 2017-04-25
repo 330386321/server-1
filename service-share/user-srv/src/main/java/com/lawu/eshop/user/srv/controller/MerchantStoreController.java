@@ -18,6 +18,7 @@ import com.lawu.eshop.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -336,5 +337,20 @@ public class MerchantStoreController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         return successGet(MerchantStoreConverter.convertStoreDTO(merchantStoreBO));
+    }
+    
+    @RequestMapping(value = "selectAllMerchantStore/{id}", method = RequestMethod.POST)
+    public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(MerchantStoreParam param){
+    	 List<MerchantStoreBO> boList = merchantStoreService.selectAllMerchantStore(param);
+    	 List<MerchantStorePlatDTO> list=new ArrayList<>();
+         if (!boList.isEmpty()) {
+            for (MerchantStoreBO merchantStoreBO : boList) {
+            	MerchantStorePlatDTO dto=new MerchantStorePlatDTO();
+            	dto.setMerchantStoreId(merchantStoreBO.getId());
+            	dto.setName(merchantStoreBO.getName());
+            	list.add(dto);
+			}
+         }
+         return successGet(list);
     }
 }

@@ -20,8 +20,16 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.operator.api.service.AdPlatformService;
+import com.lawu.eshop.operator.api.service.MerchantStoreService;
+import com.lawu.eshop.operator.api.service.ProductService;
+import com.lawu.eshop.product.dto.ProductPlatDTO;
+import com.lawu.eshop.product.param.ProductParam;
+import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.MerchantStorePlatParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +49,12 @@ public class AdPlatformController extends BaseController {
 
     @Autowired
     private AdPlatformService adPlatformService;
+    
+    @Autowired
+    private ProductService productService;
+    
+    @Autowired
+    private MerchantStoreService merchantStoreService;
 
     
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
@@ -115,12 +129,32 @@ public class AdPlatformController extends BaseController {
         return rs;
     }
 
+    
     @ApiOperation(value = "单个广告查询", notes = "单个广告查询[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "select/{id}", method = RequestMethod.GET)
     public Result<AdPlatformDTO> setPositon(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adPlatformService.select(id);
         return rs;
+    }
+    
+    
+
+    @PageBody
+    @ApiOperation(value = "查询所有商家的商品", notes = "查询所有商家的商品  [](张荣成)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "selectProductByPlat", method = RequestMethod.GET)
+    public Result<List<ProductPlatDTO>> selectProductByPlat(@ModelAttribute @ApiParam ProductParam param) {
+    	return productService.selectProductByPlat(param);
+    }
+    
+    
+    @PageBody
+    @ApiOperation(value = "查询所有店铺", notes = "查询所有店铺  [](张荣成)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.GET)
+    public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@ModelAttribute @ApiParam MerchantStorePlatParam param) {
+    	return merchantStoreService.selectAllMerchantStore(param);
     }
 
 }

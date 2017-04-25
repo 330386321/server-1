@@ -100,7 +100,7 @@ public class BankAccountController extends BaseController{
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                          @PathVariable @ApiParam(required = true, value = "id") Long id) {
         Result rs = bankAccountService.delete(id);
-        return rs;
+        return successDelete();
     }
 
 }

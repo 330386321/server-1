@@ -20,13 +20,14 @@ public class BankAccountConverter {
 	 * @param bankAccountDO
 	 * @return
 	 */
-	public static BankAccountBO convertBO(BankAccountDO bankAccountDO,String bankName) {
+	public static BankAccountBO convertBO(BankAccountDO bankAccountDO,String bankName,String url) {
         if (bankAccountDO == null) {
             return null;
         }
         BankAccountBO bankAccountBO=new BankAccountBO();
         bankAccountBO.setId(bankAccountDO.getId());
         bankAccountBO.setBankName(bankName);
+        bankAccountBO.setIconUrl(url);
         bankAccountBO.setAccountName(bankAccountDO.getAccountName());
         String accountNumber=bankAccountDO.getAccountNumber();
         String newAccountNumber =accountNumber.substring(accountNumber.length()-4, accountNumber.length());
@@ -47,12 +48,14 @@ public class BankAccountConverter {
         List<BankAccountBO> BOS=new ArrayList<BankAccountBO>();
         for (BankAccountDO bankAccountDO: bankAccountDOS) {
         	String bankName=null;
+        	String url=null;
         	for (BankDO bankBO : bankDOS) {
 				if(bankAccountDO.getBankId().equals(bankBO.getId())){
 					bankName=bankBO.getName();
+					url=bankBO.getIconUrl();
 				}
 			}
-        	BOS.add(convertBO(bankAccountDO,bankName));
+        	BOS.add(convertBO(bankAccountDO,bankName,url));
 		}
         
         return BOS;
@@ -73,6 +76,7 @@ public class BankAccountConverter {
         bankAccountDTO.setAccountNumber(bankAccountBO.getAccountNumber());
         bankAccountDTO.setBankName(bankAccountBO.getBankName());
         bankAccountDTO.setSubBranchName(bankAccountBO.getSubBranchName());
+        bankAccountDTO.setIconUrl(bankAccountBO.getIconUrl());
         return bankAccountDTO;
     }
 	
