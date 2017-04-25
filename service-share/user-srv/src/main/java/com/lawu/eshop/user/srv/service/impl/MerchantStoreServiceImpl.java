@@ -2,14 +2,8 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.param.StoreStatisticsParam;
-import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
@@ -22,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +45,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         MerchantStoreDO merchantStoreDO = new MerchantStoreDO();
         merchantStoreDO.setId(id);
         merchantStoreDO.setIsNoReasonReturn(true);
-        merchantStoreDOMapper.updateByPrimaryKey(merchantStoreDO);
+        merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
     }
 
     @Override
