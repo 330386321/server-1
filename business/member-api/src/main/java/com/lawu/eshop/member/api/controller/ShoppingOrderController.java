@@ -222,6 +222,7 @@ public class ShoppingOrderController extends BaseController {
 	 *            查询参数
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

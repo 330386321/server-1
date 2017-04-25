@@ -3,6 +3,7 @@ package com.lawu.eshop.order.dto.foreign;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -44,6 +45,7 @@ public class ShoppingOrderQueryToMerchantDTO implements Serializable {
     /**
      * 创建时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
 
