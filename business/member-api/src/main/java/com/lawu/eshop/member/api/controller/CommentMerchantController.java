@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,7 @@ public class CommentMerchantController extends BaseController {
         catch (ServletException ex){
             logger.info("Servlet异常");
         }
+        if(parts != null &&StringUtils.isNotEmpty(parts.toString())){
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
@@ -84,6 +86,7 @@ public class CommentMerchantController extends BaseController {
                     return successCreated(Integer.valueOf(flag));
                 }
             }
+        }
 
         return commentMerchantService.saveCommentMerchantInfo(memberId, param, commentPic.toString());
     }

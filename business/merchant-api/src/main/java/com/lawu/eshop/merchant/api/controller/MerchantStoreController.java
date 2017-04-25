@@ -79,36 +79,37 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        for (Part part : parts) {
-            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
-            String flag = map.get("resultFlag");
-            String fileName = part.getName();
-            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                //有图片上传成功返回,拼接图片url
-                String imgUrl = map.get("imgUrl");
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
-                    storeUrls.append(imgUrl + ",");
+        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                String flag = map.get("resultFlag");
+                String fileName = part.getName();
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                    //有图片上传成功返回,拼接图片url
+                    String imgUrl = map.get("imgUrl");
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                        storeUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                        environmentUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                        storeLogoUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                        idCardUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                        licenseUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                        otherUrls.append(imgUrl + ",");
+                    }
+                } else {
+                    return successCreated(Integer.valueOf(flag));
                 }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
-                    environmentUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
-                    storeLogoUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
-                    idCardUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
-                    licenseUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
-                    otherUrls.append(imgUrl + ",");
-                }
-            } else {
-                return successCreated(Integer.valueOf(flag));
             }
         }
-
         //判断回显照片
         if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
             merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
@@ -172,33 +173,35 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        for (Part part : parts) {
-            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
-            String flag = map.get("resultFlag");
-            String fileName = part.getName();
-            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                //有图片上传成功返回,拼接图片url
-                String imgUrl = map.get("imgUrl");
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
-                    storeUrls.append(imgUrl + ",");
+        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                String flag = map.get("resultFlag");
+                String fileName = part.getName();
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                    //有图片上传成功返回,拼接图片url
+                    String imgUrl = map.get("imgUrl");
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                        storeUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                        environmentUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                        storeLogoUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                        idCardUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                        licenseUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                        otherUrls.append(imgUrl + ",");
+                    }
+                } else {
+                    return successCreated(Integer.valueOf(flag));
                 }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
-                    environmentUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
-                    storeLogoUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
-                    idCardUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
-                    licenseUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
-                    otherUrls.append(imgUrl + ",");
-                }
-            } else {
-                return successCreated(Integer.valueOf(flag));
             }
         }
         //判断回显照片
@@ -270,24 +273,26 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        for (Part part : parts) {
-            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
-            String flag = map.get("resultFlag");
-            String fileName = part.getName();
-            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                //有图片上传成功返回,拼接图片url
-                String imgUrl = map.get("imgUrl");
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
-                    storeUrls.append(imgUrl + ",");
+        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                String flag = map.get("resultFlag");
+                String fileName = part.getName();
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                    //有图片上传成功返回,拼接图片url
+                    String imgUrl = map.get("imgUrl");
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                        storeUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                        environmentUrls.append(imgUrl + ",");
+                    }
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                        storeLogoUrls.append(imgUrl + ",");
+                    }
+                } else {
+                    return successCreated(Integer.valueOf(flag));
                 }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
-                    environmentUrls.append(imgUrl + ",");
-                }
-                if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
-                    storeLogoUrls.append(imgUrl + ",");
-                }
-            } else {
-                return successCreated(Integer.valueOf(flag));
             }
         }
         ApplyStoreParam applyStoreParam = new ApplyStoreParam();

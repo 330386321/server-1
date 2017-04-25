@@ -27,6 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,16 +92,18 @@ public class CommentProductController extends BaseController {
         catch (ServletException ex){
             logger.info("Servlet异常");
         }
-        for (Part part : parts) {
-            Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
-            String flag = map.get("resultFlag");
-            String fileName = part.getSubmittedFileName();
-            if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                //有图片上传成功返回,拼接图片url
-                String imgUrl = map.get("imgUrl");
-                headImg.append(imgUrl + ",");
-            } else {
-                return successCreated(Integer.valueOf(flag));
+        if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
+            for (Part part : parts) {
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                String flag = map.get("resultFlag");
+                String fileName = part.getSubmittedFileName();
+                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+                    //有图片上传成功返回,拼接图片url
+                    String imgUrl = map.get("imgUrl");
+                    headImg.append(imgUrl + ",");
+                } else {
+                    return successCreated(Integer.valueOf(flag));
+                }
             }
         }
         return commentProductService.saveCommentProductInfo(memberId, param, headImg.toString());
