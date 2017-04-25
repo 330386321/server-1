@@ -183,7 +183,7 @@ public class MerchantStoreController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "findIsNoReasonReturnById", method = RequestMethod.GET)
-    public Result findIsNoReasonReturnById(@RequestParam Long merchantId) {
+    public Result<Boolean> findIsNoReasonReturnById(@RequestParam Long merchantId) {
 
         if (merchantId == null || merchantId == 0L) {
             return successCreated(ResultCode.ID_EMPTY);

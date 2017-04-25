@@ -76,7 +76,17 @@ public interface MerchantStoreService {
     Result updateNoReasonReturn(@PathVariable("merchantId") Long merchantId);
 
     /**
+     * 查询是否加入7天退货保障
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/findIsNoReasonReturnById", method = RequestMethod.GET)
+    Result<Boolean> findIsNoReasonReturnById(@PathVariable("merchantId") Long merchantId);
+
+    /**
      * 申请实体店铺
+     *
      * @param merchantId
      * @param param
      * @return

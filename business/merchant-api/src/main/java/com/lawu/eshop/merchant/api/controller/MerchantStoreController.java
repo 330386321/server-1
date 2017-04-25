@@ -79,7 +79,7 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+        if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
@@ -126,12 +126,12 @@ public class MerchantStoreController extends BaseController {
         } else {
             merchantStoreParam.setLogoUrl(storeLogoUrls.toString());
         }
-        if (StringUtils.isNotEmpty( merchantStoreParam.getIdcardUrl())) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getIdcardUrl())) {
             merchantStoreParam.setIdcardUrl(idCardUrls + merchantStoreParam.getIdcardUrl());
         } else {
             merchantStoreParam.setIdcardUrl(idCardUrls.toString());
         }
-        if (StringUtils.isNotEmpty( merchantStoreParam.getLicenseUrl() )) {
+        if (StringUtils.isNotEmpty(merchantStoreParam.getLicenseUrl())) {
             merchantStoreParam.setLicenseUrl(licenseUrls + merchantStoreParam.getLicenseUrl());
         } else {
             merchantStoreParam.setLicenseUrl(licenseUrls.toString());
@@ -173,7 +173,7 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+        if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
@@ -256,7 +256,7 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "applyPhysicalStore", method = RequestMethod.POST)
-    public Result applyPhysicalStore(@ModelAttribute ApplyStoreParam param){
+    public Result applyPhysicalStore(@ModelAttribute ApplyStoreParam param) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer storeUrls = new StringBuffer();        //门店照
@@ -273,7 +273,7 @@ public class MerchantStoreController extends BaseController {
         } catch (ServletException ex) {
             logger.info("Servlet异常");
         }
-        if(parts != null &&StringUtils.isNotEmpty(parts.toString())) {
+        if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
                 String flag = map.get("resultFlag");
@@ -299,7 +299,7 @@ public class MerchantStoreController extends BaseController {
         applyStoreParam.setEnvironmentUrl(environmentUrls.toString());
         applyStoreParam.setLogoUrl(storeLogoUrls.toString());
         applyStoreParam.setStoreUrl(storeUrls.toString());
-        return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
+        return merchantStoreService.applyPhysicalStore(merchantId, applyStoreParam);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -310,6 +310,15 @@ public class MerchantStoreController extends BaseController {
     Result updateNoReasonReturn(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         return merchantStoreService.updateNoReasonReturn(merchantId);
+    }
+
+    @ApiOperation(value = "查询是否加入7天退货保障", notes = "查询是否加入7天退货保障(false--未加入，true--已加入) [1002]（梅述全）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "findIsNoReasonReturn", method = RequestMethod.GET)
+    Result<Boolean> findIsNoReasonReturn(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return merchantStoreService.findIsNoReasonReturnById(merchantId);
     }
 
 }
