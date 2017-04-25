@@ -52,10 +52,10 @@ public class MessageController extends BaseController {
      * @return
      */
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 [1000]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "站内信息列表", notes = "根据用户编号获取站内未删除的信息列表 [1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "getMessageList", method = RequestMethod.POST)
+    @RequestMapping(value = "getMessageList", method = RequestMethod.GET)
     public Result<Page<MessageDTO>> getMessageList(@ModelAttribute @ApiParam MessageParam pageParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<Page<MessageDTO>> messageDTOPage = messageService.getMessageList(userNum, pageParam);
