@@ -27,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @author zhangyong
  * @date 2017/4/20.
  */
-@Api(tags = "premssion")
+@Api(tags = "permisson")
 @RestController
-@RequestMapping(value = "premssion")
+@RequestMapping(value = "permisson")
 public class PermissonController extends BaseController{
     @Autowired
     private PermissonService permissonService;
