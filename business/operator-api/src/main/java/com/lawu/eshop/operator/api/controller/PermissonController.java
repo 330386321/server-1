@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,17 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
  * @author zhangyong
  * @date 2017/4/20.
  */
-@Api(tags = "pression")
+@Api(tags = "premssion")
 @RestController
-@RequestMapping(value = "pression")
+@RequestMapping(value = "premssion")
 public class PermissonController extends BaseController{
     @Autowired
     private PermissonService permissonService;
 
     @ApiOperation(value = "查询权限信息", notes = "查询权限信息 （章勇）", httpMethod = "GET")
-    @RequestMapping(value = "getPerssion",method = RequestMethod.GET)
+    @RequestMapping(value = "getPermssion",method = RequestMethod.GET)
+    @RequiresAuthentication
     @ApiResponse(code = HttpCode.SC_OK,message = "success")
-    public Result<PerssionDTO> getPerssion(){
+    public Result<PerssionDTO> getPermssion(){
 
         String account = UserUtil.getCurrentUserAccount();
         if(StringUtils.isEmpty(account)){
@@ -47,7 +49,7 @@ public class PermissonController extends BaseController{
     }
 
     @ApiOperation(value = "新增权限", notes = "新增权限 [1004，1005]（章勇）", httpMethod = "POST")
-    @RequiresPermissions("perssion:add")
+    @RequiresPermissions("permssion:add")
     @RequestMapping(value = "addPerssion", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result addPerssion(@ModelAttribute PerssionParam perssionParam) {
@@ -59,7 +61,7 @@ public class PermissonController extends BaseController{
     }
 
     @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
-    @RequiresPermissions("perssion:find")
+    @RequiresPermissions("permssion:find")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findPerminnionList", method = RequestMethod.GET)
     public Result<Page<PermissionListDTO>> findPerminnionList(@ModelAttribute PermissionParam param){

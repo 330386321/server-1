@@ -23,8 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommonController extends BaseController {
 
 
-    @ApiOperation(value = "登录", notes = "根据账号密码登录。[2000]（孙林青）", httpMethod = "POST")
-    @RequestMapping(value = "login", method = RequestMethod.POST)
+    @ApiOperation(value = "登录", notes = "根据账号密码登录。[2000]（孙林青）", httpMethod = "GET")
+    @RequestMapping(value = "login", method = RequestMethod.GET)
     public Result login(String account, String password) {
         try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(account, password));
