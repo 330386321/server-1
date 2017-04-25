@@ -31,7 +31,7 @@ public class Page<T> {
     }
 
     public void setCurrentPage(Integer currentPage) {
-        this.currentPage = currentPage + 1;
+        this.currentPage = currentPage;
     }
 
     public Integer getTotalCount() {
