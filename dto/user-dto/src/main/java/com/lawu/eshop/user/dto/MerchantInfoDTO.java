@@ -63,6 +63,9 @@ public class MerchantInfoDTO {
     @ApiModelProperty(name = "loveAccount", value= "爱心账户", required = true)
     private BigDecimal loveAccount;
 
+    @ApiModelProperty(name = "isNOReasonReturn", value= "是否支持无理由退货true：是，false：否")
+    private Boolean isNOReasonReturn;
+
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
     }
@@ -157,5 +160,13 @@ public class MerchantInfoDTO {
 
     public void setLoveAccount(BigDecimal loveAccount) {
         this.loveAccount = loveAccount;
+    }
+
+    public Boolean getNOReasonReturn() {
+        return isNOReasonReturn;
+    }
+
+    public void setNOReasonReturn(Boolean NOReasonReturn) {
+        isNOReasonReturn = NOReasonReturn;
     }
 }

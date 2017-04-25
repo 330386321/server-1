@@ -1,7 +1,7 @@
 package com.lawu.eshop.mall.dto;
 
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 站内信息统计信息
@@ -11,19 +11,19 @@ public class MessageStatisticsDTO {
     /**
      * 未读消息总数
      */
-    @ApiParam(name = "noReadCount",value = "未读消息总数")
+    @ApiModelProperty(name = "noReadCount",value = "未读消息总数")
     private Integer noReadCount;
 
     /**
      * 消息内容
      */
-    @ApiParam(name = "content",value = "消息内容")
+    @ApiModelProperty(name = "content",value = "消息内容")
     private String content;
 
     /**
      * 消息类型
      */
-    @ApiParam(name = "type",value = "消息类型")
+    @ApiModelProperty(name = "type",value = "消息类型")
     private MessageTypeEnum type;
 
     public Integer getNoReadCount() {

@@ -1,5 +1,7 @@
 package com.lawu.eshop.mall.srv.bo;
 
+import java.util.Date;
+
 /**
  * 消息列表BO
  * Created by zhangyong on 2017/3/29.
@@ -26,6 +28,8 @@ public class MessageBO {
     private Byte status;
 
     private String title;
+
+    private Date gmtCreate;
 
     public Long getId() {
         return id;
@@ -65,5 +69,13 @@ public class MessageBO {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

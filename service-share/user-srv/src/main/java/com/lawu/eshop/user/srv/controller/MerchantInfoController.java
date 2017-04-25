@@ -77,10 +77,13 @@ public class MerchantInfoController extends BaseController{
             //门店ID
             merchantInfoDTO.setMerchantStoreId(merchantStoreBO.getMerchantStoreId());
             merchantInfoDTO.setPrincipalName(merchantStoreBO.getPrincipalName());
+            merchantInfoDTO.setNOReasonReturn(merchantStoreBO.getIsNoReasonReturn());
             //门店类型
             MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreProfileService.findMerchantStoreInfo(merchantId);
-            merchantInfoDTO.setStoreTypeEnum(MerchantStoreTypeEnum.getEnum(merchantStoreProfileBO.getManageType()));
-            merchantInfoDTO.setCertifTypeEnum(CertifTypeEnum.getEnum(merchantStoreProfileBO.getCertifType()));
+            if(merchantStoreProfileBO !=null){
+                merchantInfoDTO.setStoreTypeEnum(MerchantStoreTypeEnum.getEnum(merchantStoreProfileBO.getManageType()));
+                merchantInfoDTO.setCertifTypeEnum(CertifTypeEnum.getEnum(merchantStoreProfileBO.getCertifType()));
+            }
             //商家扩展信息
             MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
             merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());

@@ -38,6 +38,7 @@ public class MessageConverter {
         messageBO.setId(messageDO.getId());
         messageBO.setStatus(messageDO.getStatus());
         messageBO.setTitle(messageDO.getTitle());
+        messageBO.setGmtCreate(messageDO.getGmtCreate());
         return messageBO;
     }
 
@@ -53,6 +54,7 @@ public class MessageConverter {
             messageDTO.setMessageTypeEnum(MessageTypeEnum.getEnum(messageBO.getType()));
             messageDTO.setContent(messageBO.getContent());
             messageDTO.setTitle(messageBO.getTitle());
+            messageDTO.setGmtCreate(messageBO.getGmtCreate());
             messageDTOS.add(messageDTO);
         }
         return messageDTOS;

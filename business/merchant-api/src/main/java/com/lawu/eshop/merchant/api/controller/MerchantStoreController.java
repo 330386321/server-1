@@ -256,7 +256,7 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "applyPhysicalStore", method = RequestMethod.POST)
-    public Result applyPhysicalStore(@ModelAttribute ApplyStoreParam param) {
+    public Result applyPhysicalStore(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuffer storeUrls = new StringBuffer();        //门店照
@@ -299,7 +299,7 @@ public class MerchantStoreController extends BaseController {
         applyStoreParam.setEnvironmentUrl(environmentUrls.toString());
         applyStoreParam.setLogoUrl(storeLogoUrls.toString());
         applyStoreParam.setStoreUrl(storeUrls.toString());
-        return merchantStoreService.applyPhysicalStore(merchantId, applyStoreParam);
+        return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
