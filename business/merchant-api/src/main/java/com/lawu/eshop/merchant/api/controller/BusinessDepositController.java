@@ -68,7 +68,7 @@ public class BusinessDepositController extends BaseController {
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@ApiOperation(value = "查看我的保证金", notes = "查看我的保证金,[]（杨清华）", httpMethod = "GET")
 	@Authorization
-	@RequestMapping(value = "selectDeposit/{businessId}", method = RequestMethod.GET)
+	@RequestMapping(value = "selectDeposit/{merchantId}", method = RequestMethod.GET)
 	public Result<BusinessDepositDetailDTO> selectDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@PathVariable("merchantId") String merchantId) {
 		return businessDepositService.selectDeposit(merchantId);
