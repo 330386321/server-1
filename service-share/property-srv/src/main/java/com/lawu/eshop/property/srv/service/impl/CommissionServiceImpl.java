@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.ad.param.AdCommissionJobParam;
+import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
@@ -30,16 +29,14 @@ import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
-import com.lawu.eshop.property.srv.service.AdService;
+import com.lawu.eshop.property.srv.service.CommissionService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
-import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.StringUtil;
 
 @Service
-public class AdServiceImpl implements AdService {
+public class CommissionServiceImpl implements CommissionService {
 
 	@Autowired
 	private PropertyService propertyService;
@@ -51,8 +48,6 @@ public class AdServiceImpl implements AdService {
 	private LoveDetailDOMapper loveDetailDOMapper;
 	@Autowired
 	private PointDetailService pointDetailService;
-	@Autowired
-	private PropertyInfoService propertyInfoService;
 	@Autowired
 	private TransactionDetailDOMapper transactionDetailDOMapper;
 	@Autowired
@@ -126,22 +121,48 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	@Transactional
-	public int calculation(AdCommissionJobParam param) {
+	public int calculation(CommissionJobParam param) {
 		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
 
 		String num = StringUtil.getRandomNum("");
-		if (!param.isLast()) {
+		if (param.isLast()) {
+			// 先判断该上级是否已算过提成
+			PointDetailDOExample example = new PointDetailDOExample();
+			com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria = example.createCriteria();
+			criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
+					.andPointTypeEqualTo(param.getTypeVal());
+			List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
+			if (dos != null && dos.size() > 0) {
+				return ResultCode.SUCCESS;
+			}
+
+			// 新增积分明细
+			PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
+			pointDetailSaveDataParam.setPointNum(num);
+			pointDetailSaveDataParam.setUserNum(param.getUserNum());
+			pointDetailSaveDataParam.setTitle(param.getTypeName());
+			pointDetailSaveDataParam.setPointType(param.getTypeVal());
+			pointDetailSaveDataParam.setPoint(param.getActureMoneyIn());
+			pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+			pointDetailSaveDataParam.setBizId(param.getBizId().toString());
+			pointDetailService.save(pointDetailSaveDataParam);
+
+			// 更新用户资产
+			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+			infoDoView.setUserNum(param.getUserNum());
+			infoDoView.setPoint(param.getActureMoneyIn());
+			infoDoView.setGmtModified(new Date());
+			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView);
+
+			// 最后一级不计爱心账户
+
+		} else {
 
 			// 先查询该上级是否已经算过提成
 			TransactionDetailDOExample example = new TransactionDetailDOExample();
 			Criteria criteria = example.createCriteria();
-			criteria.andBizIdEqualTo(param.getMemberAdRecordId().toString()).andUserNumEqualTo(param.getUserNum());
-			Criteria criteria1 = example.createCriteria();
-			criteria1.andTransactionTypeEqualTo(MemberTransactionTypeEnum.LOWER_INCOME.getValue());
-			Criteria criteria2 = example.createCriteria();
-			criteria2.andTransactionTypeEqualTo(MerchantTransactionTypeEnum.LOWER_INCOME.getValue());
-			example.or(criteria1);
-			example.or(criteria2);
+			criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
+					.andTransactionTypeEqualTo(param.getTypeVal());
 			List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
 			if (dos != null && dos.size() > 0) {
 				return ResultCode.SUCCESS;
@@ -151,19 +172,13 @@ public class AdServiceImpl implements AdService {
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 			tdsParam.setTransactionNum(num);
 			tdsParam.setUserNum(param.getUserNum());
-			if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				tdsParam.setTitle(MemberTransactionTypeEnum.LOWER_INCOME.getName());
-				tdsParam.setTransactionType(MemberTransactionTypeEnum.LOWER_INCOME.getValue());
-
-			} else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-				tdsParam.setTitle(MerchantTransactionTypeEnum.LOWER_INCOME.getName());
-				tdsParam.setTransactionType(MerchantTransactionTypeEnum.LOWER_INCOME.getValue());
-			}
+			tdsParam.setTitle(param.getTypeName());
+			tdsParam.setTransactionType(param.getTypeVal());
 			tdsParam.setTransactionAccount("");
 			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 			tdsParam.setAmount(param.getActureMoneyIn());
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-			tdsParam.setBizId(param.getMemberAdRecordId());
+			tdsParam.setBizId(param.getBizId());
 			transactionDetailService.save(tdsParam);
 
 			// 加用户（会员或商家）财产余额
@@ -175,12 +190,12 @@ public class AdServiceImpl implements AdService {
 
 			// 计爱心账户
 			LoveDetailDO loveDetailDO = new LoveDetailDO();
-			loveDetailDO.setTitle(LoveTypeEnum.AD_COMMISSION.getName());
+			loveDetailDO.setTitle(param.getLoveTypeName());
 			loveDetailDO.setLoveNum(num);
 			loveDetailDO.setUserNum(param.getUserNum());
-			loveDetailDO.setLoveType(LoveTypeEnum.AD_COMMISSION.getValue());
+			loveDetailDO.setLoveType(param.getLoveTypeVal());
 			loveDetailDO.setAmount(param.getActureLoveIn());
-			loveDetailDO.setRemark("下级点击广告所得提成，计入爱心账户");
+			loveDetailDO.setRemark("");
 			loveDetailDO.setGmtCreate(new Date());
 			loveDetailDOMapper.insertSelective(loveDetailDO);
 
@@ -190,46 +205,6 @@ public class AdServiceImpl implements AdService {
 			infoDoView1.setLoveAccount(param.getActureLoveIn());
 			infoDoView1.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddLove(infoDoView1);
-
-		} else {
-
-			// 先判断该上级是否已算过提成
-			PointDetailDOExample example = new PointDetailDOExample();
-			com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria = example.createCriteria();
-			criteria.andBizIdEqualTo(param.getMemberAdRecordId().toString()).andUserNumEqualTo(param.getUserNum());
-			com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria1 = example.createCriteria();
-			criteria1.andPointTypeEqualTo(MemberTransactionTypeEnum.LOWER_INCOME.getValue());
-			com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria2 = example.createCriteria();
-			criteria2.andPointTypeEqualTo(MerchantTransactionTypeEnum.LOWER_INCOME.getValue());
-			example.or(criteria1);
-			example.or(criteria2);
-			List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
-			if (dos != null && dos.size() > 0) {
-				return ResultCode.SUCCESS;
-			}
-
-			// 新增积分明细
-			PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-			pointDetailSaveDataParam.setPointNum(num);
-			pointDetailSaveDataParam.setUserNum(param.getUserNum());
-			if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				pointDetailSaveDataParam.setTitle(MemberTransactionTypeEnum.LOWER_INCOME.getName());
-				pointDetailSaveDataParam.setPointType(MemberTransactionTypeEnum.LOWER_INCOME.getValue());
-
-			} else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-				pointDetailSaveDataParam.setTitle(MerchantTransactionTypeEnum.LOWER_INCOME.getName());
-				pointDetailSaveDataParam.setPointType(MerchantTransactionTypeEnum.LOWER_INCOME.getValue());
-
-			}
-			pointDetailSaveDataParam.setPoint(param.getActureMoneyIn());
-			pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-			pointDetailSaveDataParam.setBizId(param.getMemberAdRecordId().toString());
-			pointDetailService.save(pointDetailSaveDataParam);
-
-			// 更新用户资产
-			propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "A", param.getActureMoneyIn());
-
-			// 最后一级不计爱心账户
 
 		}
 

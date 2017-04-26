@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.dto.CommissionInvitersUserDTO;
 import com.lawu.eshop.user.srv.bo.InviterBO;
 import com.lawu.eshop.user.srv.converter.InviterConverter;
 import com.lawu.eshop.user.srv.domain.InviteRelationDO;
@@ -70,17 +72,34 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	@Override
-	public List<String> selectHigherLevelInviters(String invitedUserNum, int level) {
+	public List<CommissionInvitersUserDTO> selectHigherLevelInviters(String invitedUserNum, int level,
+			boolean isLevel) {
 		InviteRelationDOExample example = new InviteRelationDOExample();
 		example.createCriteria().andInviteUserNumEqualTo(invitedUserNum).andDepthBetween(0, level);
 		example.setOrderByClause(" depth asc ");
 		List<InviteRelationDO> dos = inviteRelationDOMapper.selectByExample(example);
-		if(dos == null || dos.isEmpty()){
+		if (dos == null || dos.isEmpty()) {
 			return null;
 		}
-		List<String> list = new ArrayList<String>();
-		for(InviteRelationDO irdo : dos){
-			list.add(irdo.getUserNum());
+		List<CommissionInvitersUserDTO> list = new ArrayList<CommissionInvitersUserDTO>();
+		for (InviteRelationDO irdo : dos) {
+			CommissionInvitersUserDTO user = new CommissionInvitersUserDTO();
+			user.setLevel(1);
+			if(isLevel){
+				if (irdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+					MemberDOExample memberExample = new MemberDOExample();
+					memberExample.createCriteria().andNumEqualTo(irdo.getUserNum());
+					List<MemberDO> members = memberDOMapper.selectByExample(memberExample);
+					if(members != null && !members.isEmpty() && members.size() > 0){
+						user.setLevel(members.get(0).getLevel());
+					}
+				} else if (irdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+					// 商家目前不按等级计算提成
+				}
+			}
+			user.setUserNum(irdo.getUserNum());
+
+			list.add(user);
 		}
 		return list;
 	}

@@ -12,7 +12,9 @@ package com.lawu.eshop.property.constants;
 public enum LoveTypeEnum {
 
 	AD_CLICK((byte) 0x01, "点广告"),
-	AD_COMMISSION((byte) 0x02, "广告提成");
+	AD_COMMISSION((byte) 0x02, "广告提成"),
+	SALES_COMMISSION((byte) 0x03, "销售提成"),
+	VOLUME_COMMISSION((byte) 0x04, "营业额提成");
 
 	private Byte value;
 

@@ -31,7 +31,7 @@ public class ShoppingOrderCommissionDTO implements Serializable {
     private String merchantNum;
     
 	/**
-	 * 实际支付给商家的金额
+	 * 实际支付给商家的金额(需要减去退款的商品！)
 	 */
 	private BigDecimal actualAmount;
 

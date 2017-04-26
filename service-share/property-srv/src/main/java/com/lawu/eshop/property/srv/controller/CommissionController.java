@@ -6,36 +6,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.param.AdCommissionJobParam;
+import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.property.srv.service.AdService;
+import com.lawu.eshop.property.srv.service.CommissionService;
 
 /**
  * 
  * <p>
- * Description: 
+ * Description: 计算提成
  * </p>
  * @author Yangqh
- * @date 2017年4月24日 下午7:48:55
+ * @date 2017年4月26日 下午8:22:53
  *
  */
 @RestController
-@RequestMapping(value = "adCommission/")
-public class AdCommissionController extends BaseController {
+@RequestMapping(value = "commission/")
+public class CommissionController extends BaseController {
 
 	@Autowired
-	private AdService adService;
+	private CommissionService commissionService;
 
 	/**
-	 * 用户、商家提现详情
-	 * 
-	 * @param id
+	 * 计算提成
+	 * @param param
 	 * @return
-	 * @throws Exception
 	 */
 	@RequestMapping(value = "calculation", method = RequestMethod.POST)
-	public int calculation(@RequestBody AdCommissionJobParam param) {
-		int retCode = adService.calculation(param);
+	public int calculation(@RequestBody CommissionJobParam param) {
+		int retCode = commissionService.calculation(param);
 		return retCode;
 	}
 

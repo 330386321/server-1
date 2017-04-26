@@ -5,5 +5,15 @@ import java.util.Map;
 
 public interface CommonPropertyService {
 
-	Map<String,BigDecimal> getCommissionPropertys();
+	/**
+	 * 广告提成比例
+	 * @return
+	 */
+	Map<String,BigDecimal> getAdCommissionPropertys();
+
+	/**
+	 * 销售和营业额提成比例
+	 * @return
+	 */
+	Map<String, BigDecimal> getSaleCommissionPropertys();
 }

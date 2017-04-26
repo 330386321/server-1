@@ -1,6 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
-import com.lawu.eshop.ad.param.AdCommissionJobParam;
+import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 /**
@@ -13,7 +13,7 @@ import com.lawu.eshop.property.param.PropertyInfoDataParam;
  * @date 2017年4月24日 下午4:34:16
  *
  */
-public interface AdService {
+public interface CommissionService {
 
 	/**
 	 * 会员点击广告
@@ -36,6 +36,6 @@ public interface AdService {
 	 * @param param
 	 * @return
 	 */
-	int calculation(AdCommissionJobParam param);
+	int calculation(CommissionJobParam param);
 
 }
