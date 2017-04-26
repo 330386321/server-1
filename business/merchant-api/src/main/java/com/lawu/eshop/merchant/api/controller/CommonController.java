@@ -9,6 +9,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.framework.web.dto.TokenDTO;
 import com.lawu.eshop.mall.dto.ConfigDTO;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.user.dto.LoginUserDTO;
 import io.swagger.annotations.Api;
@@ -16,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,10 +28,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/")
 public class CommonController extends BaseController {
 
-    @Value(value="${image.url}")
-    private String imageUrl;
-    @Value(value="${video.url}")
-    private String videoUrl;
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
 
     @Autowired
     private MerchantService memberService;
@@ -77,8 +75,8 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "getConfig", method = RequestMethod.GET)
     public Result<ConfigDTO> getConfig() {
         ConfigDTO configDTO = new ConfigDTO();
-        configDTO.setImageUrl(imageUrl);
-        configDTO.setVideoUrl(videoUrl);
+        configDTO.setImageUrl(merchantApiConfig.getImageUrl());
+        configDTO.setVideoUrl(merchantApiConfig.getVideoUrl());
         return successCreated(configDTO);
     }
 

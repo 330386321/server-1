@@ -1,5 +1,6 @@
 package com.lawu.eshop.agent.api.controller;
 
+import com.lawu.eshop.agent.api.AgentApiConfig;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -9,7 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,10 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/")
 public class CommonController extends BaseController {
 
-    @Value(value="${image.url}")
-    private String imageUrl;
-    @Value(value="${video.url}")
-    private String videoUrl;
+    @Autowired
+    private AgentApiConfig agentApiConfig;
 
 
     @ApiOperation(value = "登录", notes = "根据账号密码登录。[2000]（孙林青）", httpMethod = "POST")
@@ -52,8 +51,8 @@ public class CommonController extends BaseController {
     @RequestMapping(value = "getConfig", method = RequestMethod.GET)
     public Result<ConfigDTO> getConfig() {
         ConfigDTO configDTO = new ConfigDTO();
-        configDTO.setImageUrl(imageUrl);
-        configDTO.setVideoUrl(videoUrl);
+        configDTO.setImageUrl(agentApiConfig.getImageUrl());
+        configDTO.setVideoUrl(agentApiConfig.getVideoUrl());
         return successCreated(configDTO);
     }
 }
