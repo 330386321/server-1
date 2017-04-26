@@ -46,7 +46,9 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         
-        
+         <table tableName="ad_platform" domainObjectName="AdPlatformDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table> 
         <!-- 
           <table tableName="ad_platform" domainObjectName="AdPlatformDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>

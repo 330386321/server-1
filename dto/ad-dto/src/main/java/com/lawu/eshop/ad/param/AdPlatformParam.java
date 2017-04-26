@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.param;
 
+import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 
@@ -28,6 +29,9 @@ public class AdPlatformParam {
 	@ApiParam(name = "positionEnum", value = "广告位置 POSITON_RECOMMEND 人气推荐 POSITON_SHOP_TOP 要购物顶部广告 POSITON_SHOP_CHOOSE"
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告")
 	private PositionEnum positionEnum;
+	
+	@ApiParam(name = "goodsTypeEnum", value = "SHOPPING_BUY E店必够 SHOPPING_GOODS  特色好货  SHOPPING_BENEFIT 实惠单品")
+	private GoodsTypeEnum goodsTypeEnum;
 
 	public Long getProductId() {
 		return productId;
@@ -85,7 +89,15 @@ public class AdPlatformParam {
 		this.positionEnum = positionEnum;
 	}
 
+	public GoodsTypeEnum getGoodsTypeEnum() {
+		return goodsTypeEnum;
+	}
 
+	public void setGoodsTypeEnum(GoodsTypeEnum goodsTypeEnum) {
+		this.goodsTypeEnum = goodsTypeEnum;
+	}
+
+	
 
 	
 }
