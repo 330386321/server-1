@@ -24,8 +24,16 @@
 			status = #{item.status,jdbcType=TINYINT},
 			audit_faild_reason = #{item.auditFailReason,jdbcType=VARCHAR},
 			audit_user_id = #{item.auditUserId,jdbcType=BIGINT},
-			audit_user_name = #{item.auditUserName,jdbcType=VARCHAR},
-			gmt_modified = #{item.gmtModified,jdbcType=TIMESTAMP}
+			audit_user_name =
+			#{item.auditUserName,jdbcType=VARCHAR},
+			gmt_modified =
+			#{item.gmtModified,jdbcType=TIMESTAMP},
+			<if test="item.gmtAccept != null">
+				gmt_accept = #{item.gmtAccept,jdbcType=TIMESTAMP}
+			</if>
+			<if test="item.gmtFinish != null">
+				gmt_finish = #{item.gmtFinish,jdbcType=TIMESTAMP}
+			</if>
 			where id =
 			#{item.id,jdbcType=BIGINT}
 		</foreach>

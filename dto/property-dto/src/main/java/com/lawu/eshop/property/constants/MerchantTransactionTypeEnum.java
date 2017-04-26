@@ -9,7 +9,7 @@ package com.lawu.eshop.property.constants;
 public enum MerchantTransactionTypeEnum {
 	
 	PAY((byte)0x64,"买单"),					//100
-	ORDER((byte)0x65,"订单"),					//101
+	ORDER((byte)0x65,"订单付款"),					//101
 	LOWER_INCOME((byte)0x66,"下级点击广告提成"),	//102
 	RECHARGE((byte)0x67,"余额充值"),			//103
 	PUT_ON((byte)0x68,"投放"),				//104

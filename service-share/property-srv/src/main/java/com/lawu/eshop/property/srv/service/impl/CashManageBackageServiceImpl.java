@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
@@ -215,6 +216,11 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			view.setAuditUserId(param.getAuditUserId() == null ? 0 : param.getAuditUserId());
 			view.setAuditUserName(param.getAuditUserName() == null ? "" : param.getAuditUserName());
 			view.setGmtModified(new Date());
+			if(CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)){
+				view.setGmtAccept(new Date());
+			}else{
+				view.setGmtFinish(new Date());
+			}
 			paramList.add(view);
 		}
 		withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);

@@ -1,5 +1,8 @@
 package com.lawu.eshop.product.dto;
 
+import java.util.List;
+import java.util.Map;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -34,17 +37,17 @@ public class ProductEditInfoDTO {
 	@ApiModelProperty(value = "商品特征图片")
     private String featureImage;
 	
-	@ApiModelProperty(value = "商品描述图片,格式：url1,url2,url3....")
-    private String imagesUrl;
+	@ApiModelProperty(value = "商品描述图片")
+    private List<String> imagesUrl;
 	
-	@ApiModelProperty(value = "商品型号,格式：[{id,name,originalPrice,price,inventory,inventoryTrans,salesVolume},{},...],修改时inventoryTrans透传不做修改")
-    private String spec;
+	@ApiModelProperty(value = "商品型号,修改时inventoryTrans、salesVolume透传不做修改")
+    private List<ProductModelDTO> spec;
 	
-	@ApiModelProperty(value = "商品详情,格式：[\"xxxxxx\",\"zzzzzzz\",...]")
-    private String imageContent;
+	@ApiModelProperty(value = "商品详情")
+    private List<String> imageContent;
 	
-	@ApiModelProperty(value = "商品详情图片,格式：[\"xxxxxx\",\"zzzzzzz\",...]")
-    private String imageDetailUrl;
+	@ApiModelProperty(value = "商品详情图片")
+    private List<String> imageDetailUrl;
 	
 	@ApiModelProperty(value = "是否支持退换货")
     private boolean isAllowRefund;
@@ -85,29 +88,17 @@ public class ProductEditInfoDTO {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
-	public String getImagesUrl() {
+	public List<String> getImagesUrl() {
 		return imagesUrl;
 	}
-	public void setImagesUrl(String imagesUrl) {
+	public void setImagesUrl(List<String> imagesUrl) {
 		this.imagesUrl = imagesUrl;
 	}
-	public String getSpec() {
+	public List<ProductModelDTO> getSpec() {
 		return spec;
 	}
-	public void setSpec(String spec) {
+	public void setSpec(List<ProductModelDTO> spec) {
 		this.spec = spec;
-	}
-	public String getImageContent() {
-		return imageContent;
-	}
-	public void setImageContent(String imageContent) {
-		this.imageContent = imageContent;
-	}
-	public String getImageDetailUrl() {
-		return imageDetailUrl;
-	}
-	public void setImageDetailUrl(String imageDetailUrl) {
-		this.imageDetailUrl = imageDetailUrl;
 	}
 	public boolean isAllowRefund() {
 		return isAllowRefund;
@@ -121,4 +112,18 @@ public class ProductEditInfoDTO {
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
 	}
+	public List<String> getImageContent() {
+		return imageContent;
+	}
+	public void setImageContent(List<String> imageContent) {
+		this.imageContent = imageContent;
+	}
+	public List<String> getImageDetailUrl() {
+		return imageDetailUrl;
+	}
+	public void setImageDetailUrl(List<String> imageDetailUrl) {
+		this.imageDetailUrl = imageDetailUrl;
+	}
+	
+	
 }

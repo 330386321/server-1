@@ -29,8 +29,8 @@ public class PropertyInfoDataParam {
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
 	private String point;
 	
-	@NotNull(message="transactionTitleEnum不能为空")
-	private TransactionTitleEnum transactionTitleEnum;
+//	@NotNull(message="transactionTitleEnum不能为空")
+//	private TransactionTitleEnum transactionTitleEnum;
 	
 	//业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
@@ -76,13 +76,13 @@ public class PropertyInfoDataParam {
 		this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
 	}
 
-	public TransactionTitleEnum getTransactionTitleEnum() {
-		return transactionTitleEnum;
-	}
-
-	public void setTransactionTitleEnum(TransactionTitleEnum transactionTitleEnum) {
-		this.transactionTitleEnum = transactionTitleEnum;
-	}
+//	public TransactionTitleEnum getTransactionTitleEnum() {
+//		return transactionTitleEnum;
+//	}
+//
+//	public void setTransactionTitleEnum(TransactionTitleEnum transactionTitleEnum) {
+//		this.transactionTitleEnum = transactionTitleEnum;
+//	}
 
 	public Long getMerchantId() {
 		return merchantId;

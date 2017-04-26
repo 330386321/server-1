@@ -28,6 +28,8 @@
     <result column="audit_faild_reason" property="auditFaildReason" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_accept" property="gmtAccept" jdbcType="TIMESTAMP" />
+    <result column="gmt_finish" property="gmtFinish" jdbcType="TIMESTAMP" />
     <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -104,7 +106,7 @@
     id, user_num, account, name, province_id, city_id, area_id, region_full_name, cash_money, 
     current_scale, money, user_type, channel, status, business_bank_account_id, cash_number, 
     third_number, audit_user_id, audit_user_name, audit_faild_reason, remark, gmt_create, 
-    gmt_modified
+    gmt_accept, gmt_finish, gmt_modified
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.WithdrawCashDOExample" >
     <!--
@@ -167,7 +169,8 @@
       status, business_bank_account_id, cash_number, 
       third_number, audit_user_id, audit_user_name, 
       audit_faild_reason, remark, gmt_create, 
-      gmt_modified)
+      gmt_accept, gmt_finish, gmt_modified
+      )
     values (#{userNum,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{provinceId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{areaId,jdbcType=INTEGER}, 
       #{regionFullName,jdbcType=VARCHAR}, #{cashMoney,jdbcType=DECIMAL}, #{currentScale,jdbcType=VARCHAR}, 
@@ -175,7 +178,8 @@
       #{status,jdbcType=TINYINT}, #{businessBankAccountId,jdbcType=BIGINT}, #{cashNumber,jdbcType=VARCHAR}, 
       #{thirdNumber,jdbcType=VARCHAR}, #{auditUserId,jdbcType=BIGINT}, #{auditUserName,jdbcType=VARCHAR}, 
       #{auditFaildReason,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+      #{gmtAccept,jdbcType=TIMESTAMP}, #{gmtFinish,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.property.srv.domain.WithdrawCashDO" >
     <!--
@@ -250,6 +254,12 @@
       <if test="gmtCreate != null" >
         gmt_create,
       </if>
+      <if test="gmtAccept != null" >
+        gmt_accept,
+      </if>
+      <if test="gmtFinish != null" >
+        gmt_finish,
+      </if>
       <if test="gmtModified != null" >
         gmt_modified,
       </if>
@@ -317,6 +327,12 @@
       </if>
       <if test="gmtCreate != null" >
         #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtAccept != null" >
+        #{gmtAccept,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtFinish != null" >
+        #{gmtFinish,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null" >
         #{gmtModified,jdbcType=TIMESTAMP},
@@ -406,6 +422,12 @@
       <if test="record.gmtCreate != null" >
         gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.gmtAccept != null" >
+        gmt_accept = #{record.gmtAccept,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtFinish != null" >
+        gmt_finish = #{record.gmtFinish,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.gmtModified != null" >
         gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       </if>
@@ -442,6 +464,8 @@
       audit_faild_reason = #{record.auditFaildReason,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_accept = #{record.gmtAccept,jdbcType=TIMESTAMP},
+      gmt_finish = #{record.gmtFinish,jdbcType=TIMESTAMP},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -517,6 +541,12 @@
       <if test="gmtCreate != null" >
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
+      <if test="gmtAccept != null" >
+        gmt_accept = #{gmtAccept,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtFinish != null" >
+        gmt_finish = #{gmtFinish,jdbcType=TIMESTAMP},
+      </if>
       <if test="gmtModified != null" >
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       </if>
@@ -550,6 +580,8 @@
       audit_faild_reason = #{auditFaildReason,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_accept = #{gmtAccept,jdbcType=TIMESTAMP},
+      gmt_finish = #{gmtFinish,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>

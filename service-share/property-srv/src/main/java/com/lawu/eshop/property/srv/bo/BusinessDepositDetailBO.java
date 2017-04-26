@@ -4,19 +4,19 @@ import java.math.BigDecimal;
 
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class BusinessDepositDetailBO {
 
-	@ApiModelProperty(value = "主键")
 	private Long id;
 
-	@ApiModelProperty(value = "金额")
 	private BigDecimal amount;
 
-	@ApiModelProperty(value = "状态")
 	private BusinessDepositStatusEnum businessDepositStatusEnum;
 
+	private String bankName;
+	
+	private String accountName;
+	
+	private String cardNo;
 	public Long getId() {
 		return id;
 	}
@@ -39,6 +39,30 @@ public class BusinessDepositDetailBO {
 
 	public void setBusinessDepositStatusEnum(BusinessDepositStatusEnum businessDepositStatusEnum) {
 		this.businessDepositStatusEnum = businessDepositStatusEnum;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 
 }

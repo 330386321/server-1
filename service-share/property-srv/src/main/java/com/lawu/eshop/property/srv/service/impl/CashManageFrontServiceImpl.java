@@ -221,7 +221,10 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		}
 		bo.setCashNumber(cdo.getCashNumber());
 		bo.setCdate(DateUtil.getDateFormat(cdo.getGmtCreate(), "yyyy-MM-dd"));
-
+		bo.setAcceptDate(DateUtil.getDateFormat(cdo.getGmtAccept(), "yyyy-MM-dd HH:mm"));
+		bo.setFinishDate(DateUtil.getDateFormat(cdo.getGmtFinish(), "yyyy-MM-dd HH:mm"));
+		bo.setFaildReason(cdo.getAuditFaildReason());
+		
 		BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 		bo.setBankInfo(bankAccountDO.getNote());
 

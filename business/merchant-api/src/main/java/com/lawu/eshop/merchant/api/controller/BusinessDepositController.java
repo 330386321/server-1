@@ -3,7 +3,6 @@ package com.lawu.eshop.merchant.api.controller;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,9 +68,8 @@ public class BusinessDepositController extends BaseController {
 	@ApiOperation(value = "查看我的保证金", notes = "查看我的保证金,[]（杨清华）", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "selectDeposit/{merchantId}", method = RequestMethod.GET)
-	public Result<BusinessDepositDetailDTO> selectDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable("merchantId") String merchantId) {
-		return businessDepositService.selectDeposit(merchantId);
+	public Result<BusinessDepositDetailDTO> selectDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+		return businessDepositService.selectDeposit(UserUtil.getCurrentUserId(getRequest()).toString());
 	}
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -79,7 +77,8 @@ public class BusinessDepositController extends BaseController {
 	@ApiOperation(value = "申请退保证金操作", notes = "申请退保证金,[]（杨清华）", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
-	public Result refundDeposit(@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
+	public Result refundDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
 
 		// 需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
 		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService

@@ -4,6 +4,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
 import com.lawu.eshop.property.param.OrderRefundDataParam;
 import com.lawu.eshop.property.param.OrderReleaseFreezeParam;
+import com.lawu.eshop.property.param.OrderSysJobParam;
 
 /**
  * 
@@ -60,12 +61,18 @@ public interface OrderService {
 
 	/**
 	 * 定时任务调用 确认收货后7天，订单冻结金额自动加入商家余额账户 :新增商家订单付款交易记录，释放冻结资金，加商家财产余额
-	 * <发消息通知订单修改状态>
 	 * 
 	 * @param param
 	 * @param result
 	 * @return
 	 */
 	int comfirmReleaseFreeze(OrderReleaseFreezeParam param);
+
+	/**
+	 * 待发货后14天，用户未确认收货，系统自动确认收货，订单金额直接转入商家余额：新增商家订单付款交易记录，加商家财产余额
+	 * @param param
+	 * @return
+	 */
+	int comfirmSysJob(OrderSysJobParam param);
 
 }

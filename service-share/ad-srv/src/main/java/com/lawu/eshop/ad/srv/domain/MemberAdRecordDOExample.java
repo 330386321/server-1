@@ -653,6 +653,66 @@ public class MemberAdRecordDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGmtCommissionIsNull() {
+            addCriterion("gmt_commission is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionIsNotNull() {
+            addCriterion("gmt_commission is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionEqualTo(Date value) {
+            addCriterion("gmt_commission =", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotEqualTo(Date value) {
+            addCriterion("gmt_commission <>", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionGreaterThan(Date value) {
+            addCriterion("gmt_commission >", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_commission >=", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionLessThan(Date value) {
+            addCriterion("gmt_commission <", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_commission <=", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionIn(List<Date> values) {
+            addCriterion("gmt_commission in", values, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotIn(List<Date> values) {
+            addCriterion("gmt_commission not in", values, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionBetween(Date value1, Date value2) {
+            addCriterion("gmt_commission between", value1, value2, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_commission not between", value1, value2, "gmtCommission");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

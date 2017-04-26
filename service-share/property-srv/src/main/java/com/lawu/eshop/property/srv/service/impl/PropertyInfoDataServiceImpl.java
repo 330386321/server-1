@@ -48,12 +48,13 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
         String pointNum = StringUtil.getRandomNum("");
         // 插入积分明细
         PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-        pointDetailSaveDataParam.setTitle(param.getTransactionTitleEnum().val);
         pointDetailSaveDataParam.setPointNum(pointNum);
         pointDetailSaveDataParam.setUserNum(param.getUserNum());
         if (param.getMemberTransactionTypeEnum() != null) {
+            pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
             pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
         } else if (param.getMerchantTransactionTypeEnum() != null) {
+            pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
             pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
         } else {
             return ResultCode.BIZ_TYPE_NULL;
@@ -87,12 +88,13 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
         // 插入积分明细
         PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-        pointDetailSaveDataParam.setTitle(param.getTransactionTitleEnum().val);
         pointDetailSaveDataParam.setPointNum(StringUtil.getRandomNum(""));
         pointDetailSaveDataParam.setUserNum(param.getUserNum());
         if (param.getMemberTransactionTypeEnum() != null) {
+            pointDetailSaveDataParam.setTitle(param.getMemberTransactionTypeEnum().getName());
             pointDetailSaveDataParam.setPointType(param.getMemberTransactionTypeEnum().getValue());
         } else if (param.getMerchantTransactionTypeEnum() != null) {
+            pointDetailSaveDataParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
             pointDetailSaveDataParam.setPointType(param.getMerchantTransactionTypeEnum().getValue());
         } else {
             return ResultCode.BIZ_TYPE_NULL;

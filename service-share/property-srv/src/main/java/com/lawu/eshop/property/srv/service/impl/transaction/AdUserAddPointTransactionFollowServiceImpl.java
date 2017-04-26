@@ -9,7 +9,6 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowSer
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
@@ -30,7 +29,7 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
 	    PropertyInfoDataParam param=new PropertyInfoDataParam();
 	    param.setPoint(notification.getPoint().toString());
 	    param.setUserNum(notification.getUserNum());
-	    param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
+	    //param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
 	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
 	    propertyInfoDataService.doHanlderAddPoint(param);
         return new Reply();

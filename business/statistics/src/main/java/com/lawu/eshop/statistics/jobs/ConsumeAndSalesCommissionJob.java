@@ -17,6 +17,7 @@ import com.lawu.eshop.statistics.service.ConsumeAndSalesCommissionService;
  * ① 确认收货后7天定时任务将商家冻结资金加入余额时算提成； ② 商家发货后14天系统用户未确认收货时系统自动将订单金额加入商家余额时算提成
  * </p>
  * 
+ * 
  * @author Yangqh
  * @date 2017年4月24日 下午3:31:10
  *

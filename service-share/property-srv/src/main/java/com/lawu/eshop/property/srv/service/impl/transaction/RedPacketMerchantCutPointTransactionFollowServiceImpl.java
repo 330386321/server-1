@@ -9,7 +9,6 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowSer
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.AdPointNotification;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
@@ -30,7 +29,7 @@ public class RedPacketMerchantCutPointTransactionFollowServiceImpl extends Abstr
 		    PropertyInfoDataParam param=new PropertyInfoDataParam();
 		    param.setPoint(notification.getPoint().toString());
 		    param.setUserNum(notification.getUserNum());
-		    param.setTransactionTitleEnum(TransactionTitleEnum.ADD_RED_PACKET);
+		    //param.setTransactionTitleEnum(TransactionTitleEnum.ADD_RED_PACKET);
 		    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_RED_PACKET);
 		    propertyInfoDataService.doHanlderMinusPoint(param);
 	        return new Reply();

@@ -262,10 +262,6 @@ public class ProductController extends BaseController {
 
 		String imageContents = product.getImageContents();
 		imageContents = URLDecoder.decode(imageContents);
-		List<Object> imageContentsList = JSONArray.parseArray(imageContents, Object.class);
-		if (imageContentsList == null || imageContentsList.isEmpty() || imageContentsList.size() < 1) {
-			return successCreated(ResultCode.FAIL, "商品详情图片描述不能为空");
-		}
 
 		StringBuffer featureImageStr = new StringBuffer();
 		StringBuffer productImageStr = new StringBuffer();

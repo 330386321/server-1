@@ -14,7 +14,7 @@ public enum MemberTransactionTypeEnum {
 	REFUNDS((byte) 0x04, "退款"),
 	LOWER_INCOME((byte) 0x05, " 下级点击广告提成"),
 	PAY((byte) 0x06, "买单"),
-	PAY_ORDERS((byte) 0x07, "付商品订单"),
+	PAY_ORDERS((byte) 0x07, "订单付款"),
 	INTEGRAL_RECHARGE((byte) 0x08, "积分充值"),
 	WITHDRAW((byte) 0x09, "提现"),
 	WITHDRAW_BACK((byte) 0x0A, "提现退回"),

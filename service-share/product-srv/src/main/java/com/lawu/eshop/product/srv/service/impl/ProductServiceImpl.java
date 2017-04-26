@@ -345,8 +345,8 @@ public class ProductServiceImpl implements ProductService {
 			ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
 			ProductModelBOS.add(productModelBO);
 		}
-		String specJson = JSON.toJSONString(ProductModelBOS);
-		productEditInfoBO.setSpec(specJson);
+//		String specJson = JSON.toJSONString(ProductModelBOS);
+		productEditInfoBO.setSpec(ProductModelBOS);
 		
 		String featureImage = productEditInfoBO.getFeatureImage();
 		featureImage = featureImage.replaceAll("\\\\", "/");
@@ -363,8 +363,8 @@ public class ProductServiceImpl implements ProductService {
 			imageUrl = imageUrl.replaceAll("\\\\", "/");
 			images.add(imageUrl);
 		}
-		String iamgesJson = JSON.toJSONString(images);
-		productEditInfoBO.setImagesUrl(iamgesJson);
+		//String iamgesJson = JSON.toJSONString(images);
+		productEditInfoBO.setImagesUrl(images);
 
 		// 查询详情图片
 		imageExample.clear();
@@ -377,8 +377,8 @@ public class ProductServiceImpl implements ProductService {
 			imageUrl = imageUrl.replaceAll("\\\\", "/");
 			imageDetails.add(imageUrl);
 		}
-		String imageDetailsJson = JSON.toJSONString(imageDetails);
-		productEditInfoBO.setImageDetailUrl(imageDetailsJson);
+//		String imageDetailsJson = JSON.toJSONString(imageDetails);
+		productEditInfoBO.setImageDetailUrl(imageDetails);
 
 		String category = productCategoryService.getFullName(productDO.getCategoryId());
 		productEditInfoBO.setCategoryName(category);
@@ -632,32 +632,48 @@ public class ProductServiceImpl implements ProductService {
 			}
 		} else {
 			for (ProductModelBO dataBO : speclist) {
-				ProductModelDOExample modelExample = new ProductModelDOExample();
-				modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
-				ProductModelDO modelDO = new ProductModelDO();
+				if(dataBO.getId() == null || dataBO.getId() == 0L){
+					ProductModelDO pmDO = new ProductModelDO();
+					pmDO.setMerchantId(param.getMerchantId());
+					pmDO.setProductId(productId);
+					pmDO.setName(dataBO.getName());
+					pmDO.setOriginalPrice(dataBO.getOriginalPrice());
+					pmDO.setPrice(dataBO.getPrice());
+					pmDO.setInventory(dataBO.getInventory());
+					pmDO.setStatus(true);
+					pmDO.setGmtCreate(new Date());
+					pmDO.setGmtModified(new Date());
+					productModelDOMapper.insertSelective(pmDO);
+					
+				}else{
+					ProductModelDOExample modelExample = new ProductModelDOExample();
+					modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
+					ProductModelDO modelDO = new ProductModelDO();
 
-				modelDO.setOriginalPrice(dataBO.getOriginalPrice());
-				modelDO.setPrice(dataBO.getPrice());
-				modelDO.setInventory(dataBO.getInventory());
-				modelDO.setName(dataBO.getName());
-				modelDO.setGmtModified(new Date());
-				productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
+					modelDO.setOriginalPrice(dataBO.getOriginalPrice());
+					modelDO.setPrice(dataBO.getPrice());
+					modelDO.setInventory(dataBO.getInventory());
+					modelDO.setName(dataBO.getName());
+					modelDO.setGmtModified(new Date());
+					productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
 
-				Integer inventoryTrans = dataBO.getInventoryTrans();
-				if (dataBO.getInventory() != inventoryTrans) {
-					ProductModelInventoryDO pmiDO = new ProductModelInventoryDO();
-					pmiDO.setProductModelId(dataBO.getId());
-					if (dataBO.getInventory() > inventoryTrans) {
-						pmiDO.setQuantity(dataBO.getInventory() - inventoryTrans);
-						pmiDO.setType(ProductModelInventoryTypeEnum.PLUS.getValue());
-					} else {
-						pmiDO.setQuantity(inventoryTrans - dataBO.getInventory());
-						pmiDO.setType(ProductModelInventoryTypeEnum.MINUS.getValue());
+					Integer inventoryTrans = dataBO.getInventoryTrans();
+					if (dataBO.getInventory() != inventoryTrans) {
+						ProductModelInventoryDO pmiDO = new ProductModelInventoryDO();
+						pmiDO.setProductModelId(dataBO.getId());
+						if (dataBO.getInventory() > inventoryTrans) {
+							pmiDO.setQuantity(dataBO.getInventory() - inventoryTrans);
+							pmiDO.setType(ProductModelInventoryTypeEnum.PLUS.getValue());
+						} else {
+							pmiDO.setQuantity(inventoryTrans - dataBO.getInventory());
+							pmiDO.setType(ProductModelInventoryTypeEnum.MINUS.getValue());
+						}
+						pmiDO.setGmtCreate(new Date());
+						pmiDO.setGmtModified(new Date());
+						productModelInventoryDOMapper.insertSelective(pmiDO);
 					}
-					pmiDO.setGmtCreate(new Date());
-					pmiDO.setGmtModified(new Date());
-					productModelInventoryDOMapper.insertSelective(pmiDO);
 				}
+				
 
 				if (traverseCnt == 0) {
 					price = dataBO.getPrice().doubleValue();

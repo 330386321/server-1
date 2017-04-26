@@ -21,6 +21,7 @@ import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
 import com.lawu.eshop.property.param.OrderRefundDataParam;
 import com.lawu.eshop.property.param.OrderReleaseFreezeParam;
+import com.lawu.eshop.property.param.OrderSysJobParam;
 import com.lawu.eshop.property.srv.service.OrderService;
 
 /**
@@ -112,8 +113,6 @@ public class OrderController extends BaseController {
 	/**
 	 * 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
 	 * 
-	 * <7天外用户可以申请售后>
-	 * 
 	 * @param param
 	 * @param result
 	 * @return
@@ -142,7 +141,6 @@ public class OrderController extends BaseController {
 
 	/**
 	 * 定时任务调用 确认收货后7天，订单冻结金额自动加入商家余额账户 :新增商家订单付款交易记录，释放冻结资金，加商家财产余额
-	 * <发消息通知订单修改状态>
 	 * 
 	 * @param param
 	 * @param result
@@ -161,6 +159,28 @@ public class OrderController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		int retCode = orderService.comfirmReleaseFreeze(param);
+		return successCreated(retCode);
+	}
+	
+	/**
+	 * 待发货后14天，用户未确认收货，系统自动确认收货，订单金额直接转入商家余额
+	 * @param param
+	 * @param result
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "comfirmSysJob", method = RequestMethod.POST)
+	public Result comfirmSysJob(@RequestBody @Valid OrderSysJobParam param, BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		int retCode = orderService.comfirmSysJob(param);
 		return successCreated(retCode);
 	}
 }

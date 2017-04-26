@@ -269,7 +269,8 @@ public class ProductController extends BaseController {
      * @param averageDailySales
      * @return
      */
-    @RequestMapping(value = "updateAverageDailySales/{id}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateAverageDailySales/{id}", method = RequestMethod.PUT)
     public Result updateAverageDailySales(@PathVariable Long id, @RequestParam BigDecimal averageDailySales) {
         ProductInfoBO productBO = productService.getProductById(id);
         if (productBO == null) {
@@ -278,5 +279,4 @@ public class ProductController extends BaseController {
         productService.updateAverageDailySalesById(id, averageDailySales);
         return successCreated();
     }
-
 }

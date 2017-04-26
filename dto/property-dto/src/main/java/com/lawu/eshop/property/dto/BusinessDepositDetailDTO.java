@@ -17,6 +17,15 @@ public class BusinessDepositDetailDTO {
 	@ApiModelProperty(value = "状态")
 	private BusinessDepositStatusEnum businessDepositStatusEnum;
 
+	@ApiModelProperty(value = "银行名称")
+	private String bankName;
+	
+	@ApiModelProperty(value = "账户名称")
+	private String accountName;
+	
+	@ApiModelProperty(value = "卡号后四位")
+	private String cardNo;
+	
 	public Long getId() {
 		return id;
 	}
@@ -39,6 +48,30 @@ public class BusinessDepositDetailDTO {
 
 	public void setBusinessDepositStatusEnum(BusinessDepositStatusEnum businessDepositStatusEnum) {
 		this.businessDepositStatusEnum = businessDepositStatusEnum;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getCardNo() {
+		return cardNo;
+	}
+
+	public void setCardNo(String cardNo) {
+		this.cardNo = cardNo;
 	}
 
 }

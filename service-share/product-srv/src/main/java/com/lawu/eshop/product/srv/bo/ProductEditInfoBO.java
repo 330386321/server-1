@@ -1,5 +1,8 @@
 package com.lawu.eshop.product.srv.bo;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 产品类别BO
  *
@@ -15,10 +18,10 @@ public class ProductEditInfoBO {
     private String name;
     private String content;
     private String featureImage;
-    private String imagesUrl;
-    private String spec;
-    private String imageContent;
-    private String imageDetailUrl;
+    private List<String> imagesUrl;
+    private List<ProductModelBO> spec;
+    private List<String> imageContent;
+    private List<String> imageDetailUrl;
     private boolean isAllowRefund;
 	public Long getId() {
 		return id;
@@ -44,42 +47,21 @@ public class ProductEditInfoBO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getSpec() {
-		return spec;
-	}
-	public void setSpec(String spec) {
-		this.spec = spec;
-	}
+	
 	public String getFeatureImage() {
 		return featureImage;
 	}
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
-	public String getImagesUrl() {
-		return imagesUrl;
-	}
-	public void setImagesUrl(String imagesUrl) {
-		this.imagesUrl = imagesUrl;
-	}
+	
 	public Long getCategory() {
 		return category;
 	}
 	public void setCategory(Long category) {
 		this.category = category;
 	}
-	public String getImageContent() {
-		return imageContent;
-	}
-	public void setImageContent(String imageContent) {
-		this.imageContent = imageContent;
-	}
-	public String getImageDetailUrl() {
-		return imageDetailUrl;
-	}
-	public void setImageDetailUrl(String imageDetailUrl) {
-		this.imageDetailUrl = imageDetailUrl;
-	}
+	
 	public boolean isAllowRefund() {
 		return isAllowRefund;
 	}
@@ -91,6 +73,30 @@ public class ProductEditInfoBO {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public List<String> getImagesUrl() {
+		return imagesUrl;
+	}
+	public void setImagesUrl(List<String> imagesUrl) {
+		this.imagesUrl = imagesUrl;
+	}
+	public List<ProductModelBO> getSpec() {
+		return spec;
+	}
+	public void setSpec(List<ProductModelBO> spec) {
+		this.spec = spec;
+	}
+	public List<String> getImageContent() {
+		return imageContent;
+	}
+	public void setImageContent(List<String> imageContent) {
+		this.imageContent = imageContent;
+	}
+	public List<String> getImageDetailUrl() {
+		return imageDetailUrl;
+	}
+	public void setImageDetailUrl(List<String> imageDetailUrl) {
+		this.imageDetailUrl = imageDetailUrl;
 	}
 	
 }

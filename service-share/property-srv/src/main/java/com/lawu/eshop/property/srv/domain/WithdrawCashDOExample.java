@@ -1616,6 +1616,126 @@ public class WithdrawCashDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGmtAcceptIsNull() {
+            addCriterion("gmt_accept is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptIsNotNull() {
+            addCriterion("gmt_accept is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptEqualTo(Date value) {
+            addCriterion("gmt_accept =", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptNotEqualTo(Date value) {
+            addCriterion("gmt_accept <>", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptGreaterThan(Date value) {
+            addCriterion("gmt_accept >", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_accept >=", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptLessThan(Date value) {
+            addCriterion("gmt_accept <", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_accept <=", value, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptIn(List<Date> values) {
+            addCriterion("gmt_accept in", values, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptNotIn(List<Date> values) {
+            addCriterion("gmt_accept not in", values, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptBetween(Date value1, Date value2) {
+            addCriterion("gmt_accept between", value1, value2, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtAcceptNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_accept not between", value1, value2, "gmtAccept");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishIsNull() {
+            addCriterion("gmt_finish is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishIsNotNull() {
+            addCriterion("gmt_finish is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishEqualTo(Date value) {
+            addCriterion("gmt_finish =", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishNotEqualTo(Date value) {
+            addCriterion("gmt_finish <>", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishGreaterThan(Date value) {
+            addCriterion("gmt_finish >", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_finish >=", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishLessThan(Date value) {
+            addCriterion("gmt_finish <", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_finish <=", value, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishIn(List<Date> values) {
+            addCriterion("gmt_finish in", values, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishNotIn(List<Date> values) {
+            addCriterion("gmt_finish not in", values, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishBetween(Date value1, Date value2) {
+            addCriterion("gmt_finish between", value1, value2, "gmtFinish");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtFinishNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_finish not between", value1, value2, "gmtFinish");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

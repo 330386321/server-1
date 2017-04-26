@@ -15,6 +15,8 @@ public class WithdrawCashOperDOView implements Serializable {
 	private Long auditUserId;
 	private String auditUserName;
 	private Date gmtModified;
+	private Date gmtAccept;
+	private Date gmtFinish;
 	
 	public Integer getId() {
 		return id;
@@ -51,6 +53,18 @@ public class WithdrawCashOperDOView implements Serializable {
 	}
 	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
+	}
+	public Date getGmtAccept() {
+		return gmtAccept;
+	}
+	public void setGmtAccept(Date gmtAccept) {
+		this.gmtAccept = gmtAccept;
+	}
+	public Date getGmtFinish() {
+		return gmtFinish;
+	}
+	public void setGmtFinish(Date gmtFinish) {
+		this.gmtFinish = gmtFinish;
 	}
 	
 }

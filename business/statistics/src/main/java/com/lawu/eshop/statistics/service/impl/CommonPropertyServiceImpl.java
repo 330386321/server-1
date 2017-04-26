@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.statistics.service.CommonPropertyService;
-import com.lawu.eshop.statistics.service.PropertySrvPropertyService;
+import com.lawu.eshop.statistics.service.PropertySrvService;
 
 /**
  * 
@@ -25,7 +25,7 @@ import com.lawu.eshop.statistics.service.PropertySrvPropertyService;
 public class CommonPropertyServiceImpl implements CommonPropertyService {
 
 	@Autowired
-	private PropertySrvPropertyService propertyService;
+	private PropertySrvService propertyService;
 
 	@SuppressWarnings("rawtypes")
 	@Override

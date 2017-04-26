@@ -120,11 +120,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
 		businessDepositDOMapper.updateByExample(depositDO, example);
 
-		//  回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
+		// 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
 		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
 		message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_GIVE_MONEY_CHECK);
-		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
+		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
 
 		result.setRet(ResultCode.SUCCESS);
 		return result;
@@ -223,35 +223,35 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
 		businessDepositDOMapper.updateByExampleSelective(bddo, example);
-		
+
 		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
 		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 核实操作成功后，发送MQ消息修改门店状态为：待审核
 			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
 
 		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 退款成功操作后，发送MQ消息修改门店状态为：注销
 			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT,message);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
 		}
 		return ResultCode.SUCCESS;
 	}
 
 	@Override
 	public int refundDeposit(BusinessRefundDepositParam param) {
-		
+
 		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(param.getId()));
 		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
 		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
 		if ("".equals(sysDays)) {
 			sysDays = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
 		}
-		if(diffDays <= Integer.valueOf(sysDays).intValue()){
+		if (diffDays <= Integer.valueOf(sysDays).intValue()) {
 			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
 		}
-		
+
 		BusinessDepositDO bddo = new BusinessDepositDO();
 		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.val);
 		bddo.setBusinessBankAccountId(Long.valueOf(param.getBusinessBankAccountId()));
@@ -267,13 +267,27 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andBusinessIdEqualTo(Long.valueOf(businessId));
 		List<BusinessDepositDO> list = businessDepositDOMapper.selectByExample(example);
-		if(list == null || list.isEmpty()){
+		if (list == null || list.isEmpty()) {
 			return null;
 		}
 		BusinessDepositDetailBO bo = new BusinessDepositDetailBO();
 		bo.setId(list.get(0).getId());
 		bo.setAmount(list.get(0).getAmount());
 		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
+
+		BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
+		bo.setBankName(bankAccountDO.getNote() == null ? ""
+				: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+		String accountName = bankAccountDO.getAccountName();
+		if (accountName.length() == 2) {
+			accountName = "*" + accountName.substring(1);
+		} else {
+			accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+		}
+		bo.setAccountName(accountName);
+		bo.setCardNo(bankAccountDO.getNote() == null ? ""
+				: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
+						bankAccountDO.getNote().indexOf(")")));
 		return bo;
 	}
 

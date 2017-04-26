@@ -7,12 +7,14 @@ import javax.annotation.Resource;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 import com.lawu.eshop.ad.srv.bo.MemberAdRecodeCommissionBO;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.utils.BeanUtil;
 
 /**
@@ -36,6 +38,7 @@ public class ClickAdCommissionController extends BaseController{
 	 * 查询未计算提成的用户点击广告记录
 	 * @return
 	 * @throws Exception 
+	 * @author yangqh
 	 */
 	@RequestMapping(value = "getNoneCommissionAds", method = RequestMethod.GET)
     public List<MemberAdRecodeCommissionDTO> getNoneCommissionAds() throws Exception {
@@ -49,6 +52,18 @@ public class ClickAdCommissionController extends BaseController{
 		return dtos;
     }
 	
-	
+	/**
+	 * 修改用户点击广告记录表状态为已计算提成
+	 * @param id
+	 * @return
+	 * @author yangqh
+	 */
+	@RequestMapping(value = "updateMemberAdRecardStatus", method = RequestMethod.POST)
+    public int updateMemberAdRecardStatus(@RequestParam Long id) {
+		if(id == null){
+			return ResultCode.ID_EMPTY;
+		}
+		return memberAdRecordService.updateMemberAdRecardStatus(id);
+    }
 
 }

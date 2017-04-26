@@ -8,19 +8,25 @@ public class WithdrawCashDetailDTO {
 	@ApiModelProperty(value = "主键", required = true)
 	private Long id;
 	@ApiModelProperty(value = "出账金额", required = true)
-	private BigDecimal cashMoney;//出账金额
+	private BigDecimal cashMoney;
 	@ApiModelProperty(value = "商品", required = true)
-	private String title;//商品
+	private String title;
 	@ApiModelProperty(value = "提现金额", required = true)
-	private BigDecimal money;//提现金额
+	private BigDecimal money;
 	@ApiModelProperty(value = "状态", required = true)
 	private String cashStatus;
-	@ApiModelProperty(value = "提现时间", required = true)
+	@ApiModelProperty(value = "提现申请时间", required = true)
 	private String cdate;
+	@ApiModelProperty(value = "受理时间")
+	private String acceptDate;
+	@ApiModelProperty(value = "成功/失败时间")
+	private String finishDate;
 	@ApiModelProperty(value = "银行信息", required = true)
 	private String bankInfo;
 	@ApiModelProperty(value = "提现单号", required = true)
 	private String cashNumber;
+	@ApiModelProperty(value = "失败原因")
+	private String faildReason;
 	public Long getId() {
 		return id;
 	}
@@ -68,6 +74,24 @@ public class WithdrawCashDetailDTO {
 	}
 	public void setCashNumber(String cashNumber) {
 		this.cashNumber = cashNumber;
+	}
+	public String getAcceptDate() {
+		return acceptDate;
+	}
+	public void setAcceptDate(String acceptDate) {
+		this.acceptDate = acceptDate;
+	}
+	public String getFinishDate() {
+		return finishDate;
+	}
+	public void setFinishDate(String finishDate) {
+		this.finishDate = finishDate;
+	}
+	public String getFaildReason() {
+		return faildReason;
+	}
+	public void setFaildReason(String faildReason) {
+		this.faildReason = faildReason;
 	}
 	
 	

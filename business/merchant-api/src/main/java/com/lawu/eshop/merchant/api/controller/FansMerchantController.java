@@ -14,6 +14,7 @@ import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
@@ -75,7 +76,8 @@ public class FansMerchantController extends BaseController {
         PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
         propertyInfoDataParam.setUserNum(userNum);
         propertyInfoDataParam.setPoint(String.valueOf(numArray.length));
-        propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
+        //propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
+        propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
         propertyInfoDataParam.setRegionName(regionName);
         propertyInfoDataParam.setInviteFansCount(numArray.length);
