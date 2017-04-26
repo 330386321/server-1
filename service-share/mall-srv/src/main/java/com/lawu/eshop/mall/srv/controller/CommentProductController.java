@@ -192,7 +192,9 @@ public class CommentProductController extends BaseController {
     @RequestMapping(value = "getProductCommentIdsByMerchantId",method = RequestMethod.POST)
     public Result<Page<CommentProductIdDTO>> getProductCommentIdsByMerchantId(@RequestBody CommentMerchantListParam pageParam){
         Page<CommentProductBO> commentProductBOPage = commentProductService.getProductCommentIdsByMerchantId(pageParam);
-
+        if(commentProductBOPage == null){
+            return successGet(new Page<>());
+        }
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
         List<CommentProductIdDTO> commentProductDTOS = CommentProductConverter.converterProIdDTOS(commentProductBOS);

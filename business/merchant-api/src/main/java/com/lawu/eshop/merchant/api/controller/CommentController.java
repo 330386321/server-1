@@ -101,7 +101,7 @@ public class CommentController extends BaseController {
         Page<ProductCommentListDTO> pages = new Page<>();
         Result<Page<CommentDTO>> comments = commentService.getProductCommentListByMerchantId(param);
         if (comments.getModel() == null || comments.getModel().getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(new Page<>());
         }
         for (CommentDTO commentDTO : comments.getModel().getRecords()) {
             //设置评论信息
@@ -151,7 +151,7 @@ public class CommentController extends BaseController {
         Page<CommentProductInfoDTO> pages = new Page<>();
         Result<Page<CommentProductIdDTO>> productIds = commentService.getProductCommentIdsByMerchantId(param);
         if (productIds.getModel() == null || productIds.getModel().getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(new Page<>());
         }
         for (CommentProductIdDTO commentProductIdDTO : productIds.getModel().getRecords()) {
             //查询商品信息
@@ -178,7 +178,7 @@ public class CommentController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentService.getCommentProducts(listParam);
         if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(new Page<>());
         }
         for (CommentDTO commentDTO : result.getModel().getRecords()) {
             //设置评论信息
@@ -225,7 +225,7 @@ public class CommentController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentService.getCommentMerchantAllList(listParam);
         if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(new Page<>());
         }
         for (CommentDTO commentDTO : result.getModel().getRecords()) {
             CommentMerchantInfoDTO commentMerchantDTO = new CommentMerchantInfoDTO();
