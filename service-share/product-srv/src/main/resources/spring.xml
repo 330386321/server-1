@@ -9,7 +9,7 @@
     <!-- 消息生产者 -->
     <bean id="defaultMQProducer" class="com.alibaba.rocketmq.client.producer.DefaultMQProducer" scope="singleton" init-method="start" destroy-method="shutdown">
         <!-- Name Server地址列表，多个用分号隔开 -->
-        <property name="namesrvAddr" value="192.168.1.22:9876"/>
+        <property name="namesrvAddr" value="${mq.namesrv.addrs}"/>
         <!-- 客户端实例名 -->
         <property name="instanceName" value="producer"/>
 
@@ -38,7 +38,7 @@
     <!-- 消息消费者 -->
     <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >
         <!-- Name Server地址列表，多个用分号隔开 -->
-        <property name="namesrvAddr" value="192.168.1.22:9876"/>
+        <property name="namesrvAddr" value="${mq.namesrv.addrs}"/>
         <!-- 客户端实例名 -->
         <property name="instanceName" value="consumer"/>
 

@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.utils.express.kdniao;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.lawu.eshop.order.srv.OrderSrvConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -13,17 +14,9 @@ import java.util.Map;
 
 @Component
 public class KdniaoTrackQueryAPI {
-    //电商ID
-    @Value("${express.kauidiniao.EBusinessID}")
-    private String EBusinessID;
 
-    //电商加密私钥，快递鸟提供，注意保管，不要泄漏
-    @Value("${express.kauidiniao.AppKey}")
-    private String AppKey;
-
-    //请求url
-    @Value("${express.kauidiniao.ReqURL}")
-    private String ReqURL;
+    @Autowired
+    private OrderSrvConfig orderSrvConfig;
 
     //DEMO
     /*
@@ -67,13 +60,13 @@ public class KdniaoTrackQueryAPI {
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("RequestData", urlEncoder(requestData, "UTF-8"));
-        params.put("EBusinessID", EBusinessID);
+        params.put("EBusinessID", orderSrvConfig.getKdnEbusinessID());
         params.put("RequestType", "1002");
-        String dataSign = encrypt(requestData, AppKey, "UTF-8");
+        String dataSign = encrypt(requestData, orderSrvConfig.getKdnAppKey(), "UTF-8");
         params.put("DataSign", urlEncoder(dataSign, "UTF-8"));
         params.put("DataType", "2");
 
-        String result = sendPost(ReqURL, params);
+        String result = sendPost(orderSrvConfig.getKdnReqURL(), params);
 
         //根据公司业务处理返回的信息......
 

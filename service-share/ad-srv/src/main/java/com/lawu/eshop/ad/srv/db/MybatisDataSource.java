@@ -1,13 +1,13 @@
 package com.lawu.eshop.ad.srv.db;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.lawu.eshop.ad.srv.Configuration;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,9 +20,8 @@ import javax.sql.DataSource;
  * @author Leach
  * @date 2017/3/13
  */
-@org.springframework.context.annotation.Configuration
+@Configuration
 @MapperScan("com.lawu.eshop.ad.srv.mapper")
-@EnableConfigurationProperties(Configuration.class)
 @EnableTransactionManagement
 public class MybatisDataSource {
 
@@ -32,17 +31,17 @@ public class MybatisDataSource {
     private final static String CONFIG_LOCATION = "classpath:mapperConfig.xml";
 
     @Autowired
-    private Configuration configuration;
+    private AdSrvConfig adSrvConfig;
     private DruidDataSource datasource = null;
 
     @Bean(destroyMethod = "close")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
-        datasource.setUrl(configuration.getUrl());
-        datasource.setDbType(configuration.getType());
-        datasource.setDriverClassName(configuration.getDriver());
-        datasource.setUsername(configuration.getUsername());
-        datasource.setPassword(configuration.getPassword());
+        datasource.setUrl(adSrvConfig.getUrl());
+        datasource.setDbType(adSrvConfig.getType());
+        datasource.setDriverClassName(adSrvConfig.getDriver());
+        datasource.setUsername(adSrvConfig.getUsername());
+        datasource.setPassword(adSrvConfig.getPassword());
         return datasource;
     }
 
