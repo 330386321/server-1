@@ -1,26 +1,29 @@
-package com.lawu.eshop.ad.srv.db;
+package com.lawu.eshop.ad.srv;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author Leach
  * @date 2017/3/13
  */
-@ConfigurationProperties(prefix = DataSourceProperties.PREFIX, ignoreUnknownFields = false)
-public class DataSourceProperties {
+@ConfigurationProperties
+public class Configuration {
 
-    public DataSourceProperties() {
-        super();
-    }
+    @Value(value = "${db.type}")
+    private String type;
 
-    //对应配置文件里的配置键
-    public final static String PREFIX = "jdbc";
+    @Value(value = "${db.driver}")
+    private String driver;
 
-    private String type = "mysql";
-    private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://192.168.1.22:3306/eshop_ad?useUnicode=true&characterEncoding=utf8";
-    private String username = "root";
-    private String password = "1qazXSW@";
+    @Value(value = "${db.url}")
+    private String url;
+
+    @Value(value = "${db.username}")
+    private String username;
+
+    @Value(value = "${db.password}")
+    private String password;
 
     public String getType() {
         return type;
