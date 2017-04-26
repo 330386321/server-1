@@ -366,7 +366,7 @@ public class MerchantStoreController extends BaseController {
 	}
 
 	@RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.POST)
-	public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(MerchantStoreParam param) {
+	public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@RequestBody MerchantStoreParam param) {
 		List<MerchantStoreBO> boList = merchantStoreService.selectAllMerchantStore(param);
 		List<MerchantStorePlatDTO> list = new ArrayList<>();
 		if (!boList.isEmpty()) {

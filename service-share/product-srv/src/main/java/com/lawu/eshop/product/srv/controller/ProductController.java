@@ -223,7 +223,7 @@ public class ProductController extends BaseController {
 	 * @date 2017/4/25
 	 */
 	@RequestMapping(value = "selectProductByPlat", method = RequestMethod.POST)
-	public Result<List<ProductPlatDTO>> selectProductByPlat(ProductParam param) {
+	public Result<List<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
 		List<ProductQueryBO> boList = productService.selectProductPlat(param);
 		List<ProductPlatDTO> dtoList=new ArrayList<>();
 		if(!boList.isEmpty()){

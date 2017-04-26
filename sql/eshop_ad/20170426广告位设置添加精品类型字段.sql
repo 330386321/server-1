@@ -1,3 +1,3 @@
-alter table ad_platform add column  `goods_type` tinyint(2)  COMMENT '¾«Æ·ÀàĞÍ 1 Eµê±Ø¹» 2 ÌØÉ«ºÃ»õ 3 Êµ»İµ¥Æ·' after position;
+alter table ad_platform add column  `goods_type` tinyint(2)  COMMENT 'ç²¾å“ç±»å‹ 1 Eåº—å¿…å¤Ÿ 2 ç‰¹è‰²å¥½è´§ 3 å®æƒ å•å“' after position;
 
 
