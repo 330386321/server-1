@@ -71,6 +71,8 @@
 		<result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
 		<result column="commodity_total_price" jdbcType="DECIMAL" property="commodityTotalPrice" />
 		<result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
+		<result column="actual_amount" jdbcType="DECIMAL" property="actualAmount" />
+    	<result column="commission_status" jdbcType="TINYINT" property="commissionStatus" />
 		<result column="order_status" jdbcType="TINYINT" property="orderStatus" />
 		<result column="status" jdbcType="TINYINT" property="status" />
 		<result column="send_time" jdbcType="INTEGER" property="sendTime" />
@@ -84,6 +86,7 @@
 		<result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
 		<result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
 		<result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
+		<result column="gmt_commission" jdbcType="TIMESTAMP" property="gmtCommission" />
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
@@ -155,11 +158,11 @@
 		so.consignee_address,
 		so.consignee_mobile, so.remark,
 		so.message, so.freight_price, so.commodity_total_price,
-		so.order_total_price,
+		so.order_total_price, so.actual_amount, so.commission_status,
 		so.order_status, so.status, so.send_time,
 		so.is_no_reason_return, so.is_automatic_receipt, so.shopping_cart_ids_str,
 		so.order_num, so.payment_method, so.third_number, so.waybill_num, so.express_company_id, so.express_company_code,
-		so.express_company_name,
+		so.express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
 		so.gmt_transaction, so.gmt_create, so.gmt_modified
 	</sql>
@@ -271,4 +274,118 @@
 			order by ${orderByClause}
 		</if>
 	</select>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
+	    update shopping_order so
+	    <set>
+	      <if test="memberId != null">
+	        so.member_id = #{memberId,jdbcType=BIGINT},
+	      </if>
+	      <if test="memberNum != null">
+	        so.member_num = #{memberNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchantId != null">
+	        so.merchant_id = #{merchantId,jdbcType=BIGINT},
+	      </if>
+	      <if test="merchantNum != null">
+	        so.merchant_num = #{merchantNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="merchantName != null">
+	        so.merchant_name = #{merchantName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="consigneeName != null">
+	        so.consignee_name = #{consigneeName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="consigneeAddress != null">
+	        so.consignee_address = #{consigneeAddress,jdbcType=VARCHAR},
+	      </if>
+	      <if test="consigneeMobile != null">
+	        so.consignee_mobile = #{consigneeMobile,jdbcType=VARCHAR},
+	      </if>
+	      <if test="remark != null">
+	        so.remark = #{remark,jdbcType=VARCHAR},
+	      </if>
+	      <if test="message != null">
+	        so.message = #{message,jdbcType=VARCHAR},
+	      </if>
+	      <if test="freightPrice != null">
+	        so.freight_price = #{freightPrice,jdbcType=DECIMAL},
+	      </if>
+	      <if test="commodityTotalPrice != null">
+	        so.commodity_total_price = #{commodityTotalPrice,jdbcType=DECIMAL},
+	      </if>
+	      <if test="orderTotalPrice != null">
+	        so.order_total_price = #{orderTotalPrice,jdbcType=DECIMAL},
+	      </if>
+	      <if test="actualAmount != null">
+	        so.actual_amount = #{actualAmount,jdbcType=DECIMAL},
+	      </if>
+	      <if test="commissionStatus != null">
+	        so.commission_status = #{commissionStatus,jdbcType=TINYINT},
+	      </if>
+	      <if test="orderStatus != null">
+	        so.order_status = #{orderStatus,jdbcType=TINYINT},
+	      </if>
+	      <if test="status != null">
+	        so.status = #{status,jdbcType=TINYINT},
+	      </if>
+	      <if test="sendTime != null">
+	        so.send_time = #{sendTime,jdbcType=INTEGER},
+	      </if>
+	      <if test="isNoReasonReturn != null">
+	        so.is_no_reason_return = #{isNoReasonReturn,jdbcType=BIT},
+	      </if>
+	      <if test="isAutomaticReceipt != null">
+	        so.is_automatic_receipt = #{isAutomaticReceipt,jdbcType=BIT},
+	      </if>
+	      <if test="shoppingCartIdsStr != null">
+	        so.shopping_cart_ids_str = #{shoppingCartIdsStr,jdbcType=VARCHAR},
+	      </if>
+	      <if test="orderNum != null">
+	        so.order_num = #{orderNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="paymentMethod != null">
+	        so.payment_method = #{paymentMethod,jdbcType=TINYINT},
+	      </if>
+	      <if test="thirdNumber != null">
+	        so.third_number = #{thirdNumber,jdbcType=VARCHAR},
+	      </if>
+	      <if test="waybillNum != null">
+	        so.waybill_num = #{waybillNum,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressCompanyId != null">
+	        so.express_company_id = #{expressCompanyId,jdbcType=INTEGER},
+	      </if>
+	      <if test="expressCompanyCode != null">
+	        so.express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},
+	      </if>
+	      <if test="expressCompanyName != null">
+	        so.express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="gmtCommission != null">
+	        so.gmt_commission = #{gmtCommission,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="gmtPayment != null">
+	        so.gmt_payment = #{gmtPayment,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="gmtTransport != null">
+	        so.gmt_transport = #{gmtTransport,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="gmtTransaction != null">
+	        so.gmt_transaction = #{gmtTransaction,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="gmtCreate != null">
+	        so.gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="gmtModified != null">
+	        so.gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+	      </if>
+	      
+	      <!-- Extend -->
+    	  <if test="actualAmountSubtraction != null">
+	        so.actual_amount = so.actual_amount - #{actualAmountSubtraction,jdbcType=DECIMAL},
+	      </if>
+	    </set>
+	    where id = #{id,jdbcType=BIGINT}
+	  </update>
 </mapper>

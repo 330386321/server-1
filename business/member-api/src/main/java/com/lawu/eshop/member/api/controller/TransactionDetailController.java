@@ -28,6 +28,7 @@ import com.lawu.eshop.member.api.service.CashManageFrontService;
 import com.lawu.eshop.member.api.service.TransactionDetailService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
+import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionTypeDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
@@ -65,16 +66,16 @@ public class TransactionDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "page", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询资料") @Valid TransactionDetailQueryForMemberParam param, BindingResult bindingResult) {
+    public Result<Page<TransactionDetailToMemberDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询资料") @Valid TransactionDetailQueryForMemberParam param, BindingResult bindingResult) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
-    	Result<Page<TransactionDetailDTO>> result = transactionDetailService.findPageByUserNumForMember(userNum, param);
+    	Result<Page<TransactionDetailToMemberDTO>> result = transactionDetailService.findPageByUserNumForMember(userNum, param);
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
     	}
     	
     	// 如果交易类型为提现需要获取提现状态
-    	List<TransactionDetailDTO> transactionDetailDTOList = result.getModel().getRecords();
+    	List<TransactionDetailToMemberDTO> transactionDetailDTOList = result.getModel().getRecords();
     	
     	// 把所有需要查询的id放入set
     	List<Long> ids = new ArrayList<Long>();
@@ -86,7 +87,7 @@ public class TransactionDetailController extends BaseController {
     	
     	//如果list中不存在提现的记录，不需要查询，直接返回数据
     	if (ids.isEmpty()) {
-    		successGet(result);
+    		return successGet(result);
     	}
     	
     	Result<List<WithdrawCashStatusDTO>> resultWithdrawCashStatusDTOList = cashManageFrontService.findCashDetailStatus(ids);

@@ -44,4 +44,14 @@ public enum MemberTransactionTypeEnum {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public static MemberTransactionTypeEnum getEnum(Byte val) {
+		MemberTransactionTypeEnum[] values = MemberTransactionTypeEnum.values();
+		for (MemberTransactionTypeEnum object : values) {
+			if (object.getValue().equals(val)) {
+				return object;
+			}
+		}
+		return null;
+	}
 }

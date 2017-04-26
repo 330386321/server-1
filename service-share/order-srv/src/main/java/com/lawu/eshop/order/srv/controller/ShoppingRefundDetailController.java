@@ -195,8 +195,12 @@ public class ShoppingRefundDetailController extends BaseController {
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	public Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
 
-		shoppingRefundDetailService.agreeToRefund(id, param.getIsAgree());
+		int resultCode = shoppingRefundDetailService.agreeToRefund(id, param.getIsAgree());
 
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
+		}
+		
 		return successCreated();
 	}
 

@@ -1,5 +1,6 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +54,7 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询订单", notes = "根据查询参数分页查询。[1004]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@Authorization
+	@RequiresAuthentication
 	@RequestMapping(value = "selectPage", method = RequestMethod.GET)
 	public Result<Page<ShoppingOrderQueryToOperatorDTO>> selectPageByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") ShoppingOrderQueryForeignToOperatorParam param) {
 		// 校验参数

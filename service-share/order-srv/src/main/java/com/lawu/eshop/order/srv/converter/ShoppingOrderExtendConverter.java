@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -35,11 +36,12 @@ public class ShoppingOrderExtendConverter {
 		}
 
 		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = new ShoppingOrderExtendBO();
-		BeanUtils.copyProperties(shoppingOrderExtendDO, shoppingOrderExtendDetailBO, new String[]{"items", "orderStatus"});
+		BeanUtils.copyProperties(shoppingOrderExtendDO, shoppingOrderExtendDetailBO, new String[]{"items", "orderStatus", "commissionStatus"});
 		
 		// 转换为枚举类型
 		shoppingOrderExtendDetailBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderExtendDO.getOrderStatus()));
 		shoppingOrderExtendDetailBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendDO.getPaymentMethod()));
+		shoppingOrderExtendDetailBO.setCommissionStatus(CommissionStatusEnum.getEnum(shoppingOrderExtendDO.getCommissionStatus()));
 		
 		if (shoppingOrderExtendDO.getItems() != null) {
 			shoppingOrderExtendDetailBO.setItems(ShoppingOrderItemConverter.convert(shoppingOrderExtendDO.getItems()));

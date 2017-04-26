@@ -264,7 +264,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			shoppingOrderSettlementItemParam.setQuantity(shoppingCartDTO.getQuantity());
     			shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
     			shoppingOrderSettlementItemParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
-    			commodityTotalPrice = commodityTotalPrice.add(shoppingCartProductModelDTO.getPrice());
+    			commodityTotalPrice = commodityTotalPrice.add(shoppingCartProductModelDTO.getPrice().multiply(new BigDecimal(shoppingCartDTO.getQuantity())));
     			items.add(shoppingOrderSettlementItemParam);
     		}
     		shoppingOrderSettlementParam.setItems(items);

@@ -76,4 +76,12 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
 	List<ShoppingOrderDO> selectByExample(ShoppingOrderExtendDOExample example);
+	
+	/**
+	 * 
+	 * @param record
+	 * @return
+	 * @author Sunny
+	 */
+    int updateByPrimaryKeySelective(ShoppingOrderExtendDO record);
 }

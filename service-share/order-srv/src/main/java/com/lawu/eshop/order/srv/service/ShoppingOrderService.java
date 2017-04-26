@@ -224,4 +224,20 @@ public interface ShoppingOrderService {
 	 */
 	ShoppingOrderNumberOfOrderStatusBO numberOfOrderStartus(Long memberId);
 	
+	/**
+	 * 查询未计算提成订单
+	 * 
+	 * @return
+	 * @author Sunny
+	 */
+	List<ShoppingOrderBO> commissionShoppingOrder();
+	
+	/**
+	 * 根据订单id更新购物订单的提成状态和提成时间
+	 * 
+	 * @return
+	 * @author Sunny
+	 */
+	int commissionShoppingOrder(Long id);
+	
 }

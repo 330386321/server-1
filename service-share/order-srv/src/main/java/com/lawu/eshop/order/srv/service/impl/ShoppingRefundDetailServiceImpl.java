@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -27,11 +28,13 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
+import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
@@ -51,6 +54,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 	@Autowired
 	private ShoppingOrderDOMapper shoppingOrderDOMapper;
+	
+	@Autowired
+	private ShoppingOrderExtendDOMapper shoppingOrderExtendDOMapper;
 
 	@Autowired
 	private PropertyService propertyService;
@@ -82,6 +88,10 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Autowired
 	@Qualifier("shoppingRefundToBeRefundRemindTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingRefundToBeRefundRemindTransactionMainServiceImpl;
+
+	@Autowired
+	@Qualifier("shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl;
 	
 	/**
 	 * 根据购物退货详情id 获取购物退货详情
@@ -298,8 +308,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		shoppingOrderItemExtendDOExampleCriteria.andSRDIdEqualTo(id);
-		
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 		
@@ -316,29 +326,28 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		// 订单状态必须为退款中
-		if (!shoppingOrderItemExtendDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
+		if (!shoppingOrderItemExtendDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 			return ResultCode.NOT_REFUNDING;
 		}
 
 		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED)) {
+		if (!shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED.getValue())) {
 			return ResultCode.ORDER_NOT_TO_BE_REFUNDED;
 		}
 		
 		// 更新订单项状态为待退款
-		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
 		if (isAgree) {
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue());
+			shoppingOrderItemExtendDO.setRefundStatus(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue());
 			// 设置购物订单项的订单状态为交易关闭
-			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+			shoppingOrderItemExtendDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 		} else {
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.REFUND_FAILED.getValue());
+			shoppingOrderItemExtendDO.setRefundStatus(RefundStatusEnum.REFUND_FAILED.getValue());
 		}
 
 		// 重置发送提醒的次数
-		shoppingOrderItemDO.setSendTime(0);
-		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		shoppingOrderItemExtendDO.setSendTime(0);
+		shoppingOrderItemExtendDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemExtendDO);
 		
 		// 更新退款详情
 		shoppingRefundDetailDO.setGmtRefund(new Date());
@@ -348,23 +357,27 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		if (isAgree) {
 			// 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
 			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
-			shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdNotEqualTo(shoppingOrderItemDO.getShoppingOrderId()).andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-			
+			shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderItemExtendDO.getShoppingOrderId()).andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 			long count = shoppingOrderItemDOMapper.countByExample(shoppingOrderItemDOExample);
 			
+			ShoppingOrderExtendDO shoppingOrderExtendDO = new ShoppingOrderExtendDO();
+			shoppingOrderExtendDO.setId(shoppingOrderItemExtendDO.getShoppingOrderId());
+			shoppingOrderExtendDO.setGmtModified(new Date());
+			
+			// 如果购物订单下的所有订单项都是关闭状态关闭购物订单
 			if (count <= 0) {
-				ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-				shoppingOrderDO.setId(shoppingOrderItemDO.getShoppingOrderId());
-				shoppingOrderDO.setGmtModified(new Date());
-				shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
-				shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+				shoppingOrderExtendDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 			}
 			
+			// 更新实际支付给商家的金额
+			shoppingOrderExtendDO.setActualAmountSubtraction(shoppingOrderItemExtendDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemExtendDO.getQuantity())));
+			shoppingOrderExtendDOMapper.updateByPrimaryKeySelective(shoppingOrderExtendDO);
+			
 			// 发送MQ消息给property模块，退款给用户
-			shoppingOrderAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemDO.getId());
+			shoppingOrderAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 			
 			// 发送MQ消息给mall模块，删除商品订单评价
-			
+			shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 		}
 		
 		return ResultCode.SUCCESS;

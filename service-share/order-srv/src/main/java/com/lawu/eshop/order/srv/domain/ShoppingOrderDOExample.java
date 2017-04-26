@@ -1116,6 +1116,126 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andActualAmountIsNull() {
+            addCriterion("actual_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountIsNotNull() {
+            addCriterion("actual_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountEqualTo(BigDecimal value) {
+            addCriterion("actual_amount =", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountNotEqualTo(BigDecimal value) {
+            addCriterion("actual_amount <>", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountGreaterThan(BigDecimal value) {
+            addCriterion("actual_amount >", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_amount >=", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountLessThan(BigDecimal value) {
+            addCriterion("actual_amount <", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_amount <=", value, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountIn(List<BigDecimal> values) {
+            addCriterion("actual_amount in", values, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountNotIn(List<BigDecimal> values) {
+            addCriterion("actual_amount not in", values, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_amount between", value1, value2, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_amount not between", value1, value2, "actualAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusIsNull() {
+            addCriterion("commission_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusIsNotNull() {
+            addCriterion("commission_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusEqualTo(Byte value) {
+            addCriterion("commission_status =", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusNotEqualTo(Byte value) {
+            addCriterion("commission_status <>", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusGreaterThan(Byte value) {
+            addCriterion("commission_status >", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("commission_status >=", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusLessThan(Byte value) {
+            addCriterion("commission_status <", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("commission_status <=", value, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusIn(List<Byte> values) {
+            addCriterion("commission_status in", values, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusNotIn(List<Byte> values) {
+            addCriterion("commission_status not in", values, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusBetween(Byte value1, Byte value2) {
+            addCriterion("commission_status between", value1, value2, "commissionStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCommissionStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("commission_status not between", value1, value2, "commissionStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderStatusIsNull() {
             addCriterion("order_status is null");
             return (Criteria) this;
@@ -1953,6 +2073,66 @@ public class ShoppingOrderDOExample {
 
         public Criteria andExpressCompanyNameNotBetween(String value1, String value2) {
             addCriterion("express_company_name not between", value1, value2, "expressCompanyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionIsNull() {
+            addCriterion("gmt_commission is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionIsNotNull() {
+            addCriterion("gmt_commission is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionEqualTo(Date value) {
+            addCriterion("gmt_commission =", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotEqualTo(Date value) {
+            addCriterion("gmt_commission <>", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionGreaterThan(Date value) {
+            addCriterion("gmt_commission >", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_commission >=", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionLessThan(Date value) {
+            addCriterion("gmt_commission <", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_commission <=", value, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionIn(List<Date> values) {
+            addCriterion("gmt_commission in", values, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotIn(List<Date> values) {
+            addCriterion("gmt_commission not in", values, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionBetween(Date value1, Date value2) {
+            addCriterion("gmt_commission between", value1, value2, "gmtCommission");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtCommissionNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_commission not between", value1, value2, "gmtCommission");
             return (Criteria) this;
         }
 

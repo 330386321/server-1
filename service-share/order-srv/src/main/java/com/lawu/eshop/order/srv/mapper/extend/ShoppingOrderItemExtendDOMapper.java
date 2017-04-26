@@ -31,5 +31,4 @@ public interface ShoppingOrderItemExtendDOMapper {
      * @author Sunny
      */
     long countByExample(ShoppingOrderItemExtendDOExample example);
-
 }

@@ -18,7 +18,7 @@ public class ShoppingOrderNumberOfOrderStatusDTO implements Serializable {
 	/**
 	 * 待收货订单的数量
 	 */
-	@ApiModelProperty(value = "待收货订单的数量", required = true)
+	@ApiModelProperty(value = "待支付数量", required = true)
 	private Long pendingPaymentCount;
 	
 	/**

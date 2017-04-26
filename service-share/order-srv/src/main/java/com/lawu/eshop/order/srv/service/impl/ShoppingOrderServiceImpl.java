@@ -19,6 +19,7 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
+import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
@@ -1033,6 +1034,53 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return rtn;
 	}
 	
+	/**
+	 * 查询未计算提成订单
+	 * 
+	 * @return
+	 * @author Sunny
+	 */
+	@Override
+	public List<ShoppingOrderBO> commissionShoppingOrder() {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
+		
+		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
+		
+		// 查找超过退款时间的购物订单记录
+		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		criteria.andGmtTransactionAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
+		
+		// 查找自动确认收货的购物订单记录
+		shoppingOrderExtendDOExample.or().andIsAutomaticReceiptEqualTo(true);
+		
+		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		
+		return ShoppingOrderConverter.convert(shoppingOrderDOList);
+	}
+	
+	/**
+	 * 根据订单id更新购物订单的提成状态和提成时间
+	 * 
+	 * @return
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public int commissionShoppingOrder(Long id) {
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
+		shoppingOrderDO.setId(id);
+		
+		// 更新提成状态和提成时间
+		shoppingOrderDO.setGmtCommission(new Date());
+		shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.CALCULATED.getValue());
+		
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		
+		return ResultCode.SUCCESS;
+	}
+	
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/
@@ -1063,5 +1111,5 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 发送MQ消息，通知mall模块发送推送和站内信
 		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
 	}
-	
+
 }

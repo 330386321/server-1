@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -81,7 +82,17 @@ public class ShoppingOrderBO implements Serializable {
      * 订单总价
      */
     private BigDecimal orderTotalPrice;
+    
+	/**
+	 * 实际支付给商家的金额
+	 */
+	private BigDecimal actualAmount;
 
+	/**
+	 * 是否计算过提成(0-没有计算过提成|1-计算过提成)
+	 */
+	private CommissionStatusEnum commissionStatus;
+    
     /**
      * 订单的总状态
      */
@@ -146,7 +157,12 @@ public class ShoppingOrderBO implements Serializable {
      * 快递公司名称
      */
     private String expressCompanyName;
-
+    
+	/**
+	 * 计算提成的时间
+	 */
+	private Date gmtCommission;
+    
     /**
      * 付款时间
      */
@@ -284,6 +300,22 @@ public class ShoppingOrderBO implements Serializable {
 		this.orderTotalPrice = orderTotalPrice;
 	}
 
+	public BigDecimal getActualAmount() {
+		return actualAmount;
+	}
+
+	public void setActualAmount(BigDecimal actualAmount) {
+		this.actualAmount = actualAmount;
+	}
+
+	public CommissionStatusEnum getCommissionStatus() {
+		return commissionStatus;
+	}
+
+	public void setCommissionStatus(CommissionStatusEnum commissionStatus) {
+		this.commissionStatus = commissionStatus;
+	}
+
 	public ShoppingOrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
@@ -386,6 +418,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setExpressCompanyName(String expressCompanyName) {
 		this.expressCompanyName = expressCompanyName;
+	}
+
+	public Date getGmtCommission() {
+		return gmtCommission;
+	}
+
+	public void setGmtCommission(Date gmtCommission) {
+		this.gmtCommission = gmtCommission;
 	}
 
 	public Date getGmtPayment() {

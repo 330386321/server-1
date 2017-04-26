@@ -7,8 +7,10 @@ import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
+import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 
@@ -85,6 +87,43 @@ public class TransactionDetailConverter {
 		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
 		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
 		rtn.setRecords(convertDTOS(transactionDetailBOPage.getRecords()));
+		return rtn;
+	}
+	
+	public static TransactionDetailToMemberDTO convertTransactionDetailToMemberDTO(TransactionDetailBO transactionDetailBO) {
+		TransactionDetailToMemberDTO rtn = null;
+
+		if (transactionDetailBO == null) {
+			return rtn;
+		}
+
+		rtn = new TransactionDetailToMemberDTO();
+		BeanUtils.copyProperties(transactionDetailBO, rtn, "transactionType");
+		rtn.setTransactionType(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()));
+		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
+
+		return rtn;
+	}
+
+	public static List<TransactionDetailToMemberDTO> convertTransactionDetailToMemberDTOS(List<TransactionDetailBO> transactionDetailBOS) {
+		List<TransactionDetailToMemberDTO> rtn = new ArrayList<TransactionDetailToMemberDTO>();
+
+		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
+			return rtn;
+		}
+
+		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
+			rtn.add(convertTransactionDetailToMemberDTO(transactionDetailBO));
+		}
+
+		return rtn;
+	}
+	
+	public static Page<TransactionDetailToMemberDTO> convertTransactionDetailToMemberDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+		Page<TransactionDetailToMemberDTO> rtn = new Page<TransactionDetailToMemberDTO>();
+		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+		rtn.setRecords(convertTransactionDetailToMemberDTOS(transactionDetailBOPage.getRecords()));
 		return rtn;
 	}
 

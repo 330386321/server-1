@@ -1,12 +1,16 @@
 package com.lawu.eshop.order.srv.converter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
@@ -46,7 +50,11 @@ public class ShoppingOrderConverter {
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
 		// 记录状态设置为正常
 		shoppingOrderDO.setStatus((byte) 0x01);
-		// 设置为待评价
+		
+		// 设置提成状态，和支付给商家的实际金额
+		shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
+		shoppingOrderDO.setActualAmount(param.getOrderTotalPrice());
+		
 		shoppingOrderDO.setOrderNum(RandomUtil.getTableNumRandomString(""));
 		shoppingOrderDO.setGmtCreate(new Date());
 		shoppingOrderDO.setGmtModified(new Date());
@@ -89,10 +97,11 @@ public class ShoppingOrderConverter {
 		}
 
 		ShoppingOrderBO shoppingOrderBO = new ShoppingOrderBO();
-		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO, "orderStatus", "paymentMethod");
+		BeanUtils.copyProperties(shoppingOrderDO, shoppingOrderBO, "orderStatus", "paymentMethod", "commissionStatus");
 
 		shoppingOrderBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderDO.getOrderStatus()));
 		shoppingOrderBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderDO.getPaymentMethod()));
+		shoppingOrderBO.setCommissionStatus(CommissionStatusEnum.getEnum(shoppingOrderDO.getCommissionStatus()));
 
 		return shoppingOrderBO;
 	}
@@ -162,6 +171,67 @@ public class ShoppingOrderConverter {
 		ShoppingOrderNumberOfOrderStatusDTO rtn = new ShoppingOrderNumberOfOrderStatusDTO();
 
 		BeanUtils.copyProperties(shoppingOrderNumberOfOrderStatusBO, rtn);
+
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderDOList
+	 * @return
+	 * @author Sunny
+	 */
+	public static List<ShoppingOrderBO> convert(List<ShoppingOrderDO> shoppingOrderDOList) {
+		List<ShoppingOrderBO> rtn = null;
+		
+		if (shoppingOrderDOList == null || shoppingOrderDOList.isEmpty()) {
+			return rtn;
+		}
+		
+		rtn = new ArrayList<ShoppingOrderBO>();
+		
+		for (ShoppingOrderDO item : shoppingOrderDOList) {
+			rtn.add(convertShoppingOrderBO(item));
+		}
+
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderBO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderCommissionDTO convert(ShoppingOrderBO shoppingOrderBO) {
+		ShoppingOrderCommissionDTO rtn = null;
+		
+		if (shoppingOrderBO == null) {
+			return rtn;
+		}
+		
+		rtn = new ShoppingOrderCommissionDTO();
+		
+		BeanUtils.copyProperties(shoppingOrderBO, rtn);
+		
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderBOList
+	 * @return
+	 * @author Sunny
+	 */
+	public static List<ShoppingOrderCommissionDTO> convertShoppingOrderCommissionDTOList(List<ShoppingOrderBO> shoppingOrderBOList) {
+		List<ShoppingOrderCommissionDTO> rtn = null;
+		
+		if (shoppingOrderBOList == null || shoppingOrderBOList.isEmpty()) {
+			return rtn;
+		}
+		
+		rtn = new ArrayList<ShoppingOrderCommissionDTO>();
+		
+		for (ShoppingOrderBO item : shoppingOrderBOList) {
+			rtn.add(convert(item));
+		}
 
 		return rtn;
 	}

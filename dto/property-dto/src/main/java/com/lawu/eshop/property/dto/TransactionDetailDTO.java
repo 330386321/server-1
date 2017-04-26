@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
@@ -34,6 +35,7 @@ public class TransactionDetailDTO implements Serializable {
     /**
      * 交易时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "交易时间", required = true)
     private Date transactionDate;
 	

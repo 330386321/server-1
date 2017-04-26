@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -438,5 +439,20 @@ public class ShoppingOrderController extends BaseController {
 		ShoppingOrderNumberOfOrderStatusBO shoppingOrderNumberOfOrderStatusBO = shoppingOrderService.numberOfOrderStartus(memberId);
 		
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusBO));
+	}
+	
+	/**
+	 * 查询已完成但是未计算提成的购物订单
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "commissionShoppingOrder", method = RequestMethod.GET)
+	public Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder() {
+		
+		List<ShoppingOrderBO> shoppingOrderBOList = shoppingOrderService.commissionShoppingOrder();
+		
+		return successGet(ShoppingOrderConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
 	}
 }
