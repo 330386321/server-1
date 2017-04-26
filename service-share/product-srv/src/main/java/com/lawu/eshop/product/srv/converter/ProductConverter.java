@@ -12,6 +12,7 @@ import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.StringUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -19,7 +20,6 @@ import org.apache.solr.common.SolrInputDocument;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 会员信息转换器
@@ -149,6 +149,9 @@ public class ProductConverter {
         productInfoDTO.setContent(productBO.getContent());
         productInfoDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
         productInfoDTO.setSpec(productBO.getSpec());
+        productInfoDTO.setMaxPrice(productBO.getMaxPrice());
+        productInfoDTO.setMinPrice(productBO.getMinPrice());
+        productInfoDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
         productInfoDTO.setGmtCreate(productBO.getGmtCreate());
         return productInfoDTO;
     }
