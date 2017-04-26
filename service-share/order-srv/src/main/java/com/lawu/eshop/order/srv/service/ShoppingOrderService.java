@@ -235,9 +235,10 @@ public interface ShoppingOrderService {
 	/**
 	 * 根据订单id更新购物订单的提成状态和提成时间
 	 * 
+	 * @param ids 购物订单id集合
 	 * @return
 	 * @author Sunny
 	 */
-	int commissionShoppingOrder(Long id);
+	int updateCommissionStatus(List<Long> ids);
 	
 }

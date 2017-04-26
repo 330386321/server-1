@@ -455,4 +455,24 @@ public class ShoppingOrderController extends BaseController {
 		
 		return successGet(ShoppingOrderConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
 	}
+	
+	/**
+	 * 查询已完成但是未计算提成的购物订单
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateCommissionStatus", method = RequestMethod.PUT)
+	public Result updateCommissionStatus(@RequestParam("ids") List<Long> ids) {
+		
+		int resultCode = shoppingOrderService.updateCommissionStatus(ids);
+		
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
+		}
+		
+		return successCreated();
+	}
 }

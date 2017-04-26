@@ -1063,20 +1063,22 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	/**
 	 * 根据订单id更新购物订单的提成状态和提成时间
 	 * 
+	 * @param ids 购物订单id集合
 	 * @return
 	 * @author Sunny
 	 */
 	@Transactional
 	@Override
-	public int commissionShoppingOrder(Long id) {
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-		shoppingOrderDO.setId(id);
+	public int updateCommissionStatus(List<Long> ids) {
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExample.createCriteria().andIdIn(ids);
 		
+		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		// 更新提成状态和提成时间
 		shoppingOrderDO.setGmtCommission(new Date());
 		shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.CALCULATED.getValue());
 		
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByExampleSelective(shoppingOrderDO, shoppingOrderDOExample);
 		
 		return ResultCode.SUCCESS;
 	}
