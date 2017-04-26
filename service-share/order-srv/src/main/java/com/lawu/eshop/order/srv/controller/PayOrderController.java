@@ -59,7 +59,7 @@ public class PayOrderController extends BaseController {
         }
         Page<PayOrderBO> boPage = payOrderService.getpayOrderList(memberId, param);
         if (boPage == null || boPage.getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(new Page<>());
         }
         List<PayOrderDTO> payOrderDTOS = new ArrayList<>();
         Page<PayOrderDTO> payOrderDTOPage = new Page<>();

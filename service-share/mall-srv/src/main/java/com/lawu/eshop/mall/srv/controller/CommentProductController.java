@@ -4,11 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.dto.CommentDTO;
-import com.lawu.eshop.mall.dto.CommentGradeDTO;
-import com.lawu.eshop.mall.dto.CommentOperatorDTO;
-import com.lawu.eshop.mall.dto.CommentProductIdDTO;
-import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
+import com.lawu.eshop.mall.dto.*;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
@@ -20,7 +16,6 @@ import com.lawu.eshop.mall.srv.service.CommentProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,9 +60,7 @@ public class CommentProductController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProducts(listParam);
-        if(commentProductBOPage.getRecords().isEmpty()){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
         List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
@@ -89,9 +82,7 @@ public class CommentProductController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProductsWithImgs(listParam);
-        if(commentProductBOPage.getRecords().isEmpty()){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
         List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
@@ -160,9 +151,7 @@ public class CommentProductController extends BaseController {
     public Result<Page<CommentOperatorDTO>> getCommentProductListOperator(@RequestBody CommentListParam listParam){
 
         Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProductListOperator(listParam);
-        if(commentProductBOPage.getRecords().isEmpty()){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
         List<CommentOperatorDTO> commentOperatorDTOS = CommentProductConverter.converterOperatorDTOS(commentProductBOS);
         Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
@@ -184,9 +173,7 @@ public class CommentProductController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentProductBO> commentProductBOPage = commentProductService.getProductCommentListByMerchantId(pageParam);
-        if(commentProductBOPage.getRecords().isEmpty()){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
         List<CommentDTO> commentProductDTOS = CommentProductConverter.converterDTOS(commentProductBOS);
@@ -205,9 +192,7 @@ public class CommentProductController extends BaseController {
     @RequestMapping(value = "getProductCommentIdsByMerchantId",method = RequestMethod.POST)
     public Result<Page<CommentProductIdDTO>> getProductCommentIdsByMerchantId(@RequestBody CommentMerchantListParam pageParam){
         Page<CommentProductBO> commentProductBOPage = commentProductService.getProductCommentIdsByMerchantId(pageParam);
-        if(commentProductBOPage.getRecords().isEmpty()){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
 
         List<CommentProductIdDTO> commentProductDTOS = CommentProductConverter.converterProIdDTOS(commentProductBOS);

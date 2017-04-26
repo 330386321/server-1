@@ -44,7 +44,7 @@ public class MessageConverter {
 
     public static List<MessageDTO> coverDTOS(List<MessageBO> messageBOS) {
         if (messageBOS.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<MessageDTO> messageDTOS = new ArrayList<>();
         for (MessageBO messageBO : messageBOS) {

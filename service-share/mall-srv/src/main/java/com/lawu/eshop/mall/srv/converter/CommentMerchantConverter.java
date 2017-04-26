@@ -39,7 +39,7 @@ public class CommentMerchantConverter {
 
     public static List<CommentDTO> converterDTOS(List<CommentMerchantBO> commentMerchantBOS) {
         if (commentMerchantBOS.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (CommentMerchantBO commentMerchantBO : commentMerchantBOS) {
@@ -74,7 +74,7 @@ public class CommentMerchantConverter {
 
     public static List<CommentOperatorDTO> converterOperatorDTOS(List<CommentMerchantBO> commentMerchantBOS) {
         if (commentMerchantBOS.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<CommentOperatorDTO> commentOperatorDTOS = new ArrayList<>();
         for (CommentMerchantBO commentMerchantBO : commentMerchantBOS) {

@@ -40,7 +40,7 @@ public class CommentProductConverter {
 
     public static List<CommentDTO> converterDTOS(List<CommentProductBO> commentProductBOS) {
         if(commentProductBOS.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (CommentProductBO commentProductBO : commentProductBOS){
@@ -78,7 +78,7 @@ public class CommentProductConverter {
 
     public static List<CommentOperatorDTO> converterOperatorDTOS(List<CommentProductBO> commentProductBOS) {
         if(commentProductBOS.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         List<CommentOperatorDTO> commentOperatorDTOS = new ArrayList<>();
         for (CommentProductBO commentProductBO : commentProductBOS){
@@ -94,7 +94,7 @@ public class CommentProductConverter {
 
     public static List<CommentProductIdDTO> converterProIdDTOS(List<CommentProductBO> commentProductBOS) {
         if(commentProductBOS.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         List<CommentProductIdDTO> commentProductIdDTOS = new ArrayList<>();
         for (CommentProductBO commentProductBO : commentProductBOS){

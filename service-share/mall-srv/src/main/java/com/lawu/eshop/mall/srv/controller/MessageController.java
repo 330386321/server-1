@@ -126,7 +126,7 @@ public class MessageController extends BaseController {
 
         MessageTemplateBO templateBO = messageService.getTemplateByType(type);
         if(templateBO == null){
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet();
         }
         MessageTemplateDTO messageTemplateDTO = new MessageTemplateDTO();
         messageTemplateDTO.setTitle(templateBO.getTitle());

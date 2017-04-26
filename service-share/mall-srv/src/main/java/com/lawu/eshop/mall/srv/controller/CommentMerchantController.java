@@ -63,9 +63,7 @@ public class CommentMerchantController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantAllList(listParam);
-        if (commentMerchantBOPage.getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
 
         List<CommentDTO> commentDTOS = CommentMerchantConverter.converterDTOS(commentMerchantBOS);
@@ -82,9 +80,7 @@ public class CommentMerchantController extends BaseController {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListWithImgs(listParam);
-        if (commentMerchantBOPage.getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
 
         List<CommentDTO> commentDTOS = CommentMerchantConverter.converterDTOS(commentMerchantBOS);
@@ -114,7 +110,7 @@ public class CommentMerchantController extends BaseController {
 
         CommentGradeBO commentGradeBO = commentMerchantService.getCommentAvgGrade(merchantId);
         if (commentGradeBO == null) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet();
         }
         CommentGradeDTO commentGradeDTO = new CommentGradeDTO();
         commentGradeDTO.setGoodGrad(commentGradeBO.getGoodGrad());
@@ -126,9 +122,7 @@ public class CommentMerchantController extends BaseController {
     public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@RequestBody CommentListParam listParam) {
 
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListOperator(listParam);
-        if (commentMerchantBOPage.getRecords().isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
-        }
+
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
         List<CommentOperatorDTO> commentOperatorDTOS = CommentMerchantConverter.converterOperatorDTOS(commentMerchantBOS);
         Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
