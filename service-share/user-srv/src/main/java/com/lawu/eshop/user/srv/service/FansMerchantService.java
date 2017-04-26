@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 
 import java.util.List;
@@ -16,10 +17,10 @@ public interface FansMerchantService {
      * 查询会员邀请粉丝
      *
      * @param merchantId
-     * @param regionPath
+     * @param param
      * @return
      */
-    List<FansMerchantBO> listInviteFans(Long merchantId, String regionPath);
+    List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param);
 
     /**
      * 查询粉丝列表

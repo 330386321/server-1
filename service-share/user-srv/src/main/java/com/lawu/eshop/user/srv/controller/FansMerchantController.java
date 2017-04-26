@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
@@ -29,14 +30,14 @@ public class FansMerchantController extends BaseController {
      * 查询可邀请的会员
      *
      * @param merchantId
-     * @param regionPath
+     * @param param
      * @return
      */
-    @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestParam String regionPath) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, regionPath);
+    @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.POST)
+    public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansParam param) {
+        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, param);
         if (fansMerchantBOList == null || fansMerchantBOList.isEmpty()) {
-            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
         return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
     }

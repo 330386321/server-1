@@ -5,15 +5,12 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author meishuquan
- * @date 2017/4/6.
+ * @date 2017/4/26.
  */
-public class InviteFansParam {
+public class ListInviteFansParam {
 
-    @ApiModelProperty(value = "会员编号,以逗号分隔", required = true)
-    private String nums;
-
-    @ApiModelProperty(value = "邀请区域,以逗号分隔", required = true)
-    private String regionName;
+    @ApiModelProperty(value = "区域路径", required = true)
+    private String regionPath;
 
     @ApiModelProperty(value = "性别，SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--全部", required = true)
     private UserSexEnum userSexEnum;
@@ -27,23 +24,12 @@ public class InviteFansParam {
     @ApiModelProperty(value = "最大年龄")
     private Integer endAge;
 
-    @ApiModelProperty(value = "支付密码", required = true)
-    private String payPwd;
-
-    public String getNums() {
-        return nums;
+    public String getRegionPath() {
+        return regionPath;
     }
 
-    public void setNums(String nums) {
-        this.nums = nums;
-    }
-
-    public String getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 
     public UserSexEnum getUserSexEnum() {
@@ -76,13 +62,5 @@ public class InviteFansParam {
 
     public void setEndAge(Integer endAge) {
         this.endAge = endAge;
-    }
-
-    public String getPayPwd() {
-        return payPwd;
-    }
-
-    public void setPayPwd(String payPwd) {
-        this.payPwd = payPwd;
     }
 }

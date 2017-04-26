@@ -18,7 +18,9 @@ import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
+import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -48,29 +50,36 @@ public class FansMerchantController extends BaseController {
     private MessageService messageService;
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1002] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listInviteFans", method = RequestMethod.GET)
     public Result<List<FansMerchantDTO>> listInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                                        @RequestParam @ApiParam(required = true, value = "区域路径") String regionPath) {
+                                                        @ModelAttribute @ApiParam ListInviteFansParam param) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
-        return fansMerchantService.listInviteFans(merchantId, regionPath);
+        return fansMerchantService.listInviteFans(merchantId, param);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "邀请粉丝", notes = "邀请会员成为粉丝。[1004|6002|6024] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "邀请粉丝", notes = "邀请会员成为粉丝。[1002|1004|1022|1023|6002|6024] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "inviteFans", method = RequestMethod.POST)
     public Result inviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                             @RequestParam @ApiParam(required = true, value = "会员编号,以逗号分隔") String nums,
-                             @RequestParam @ApiParam(required = true, value = "邀请区域,以逗号分隔") String regionName) {
-        if (StringUtils.isEmpty(nums)) {
+                             @ModelAttribute InviteFansParam param) {
+        if (StringUtils.isEmpty(param.getNums())) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        String[] numArray = nums.split(",");
+        String[] numArray = param.getNums().split(",");
         String userNum = UserUtil.getCurrentUserNum(getRequest());
+
+        Result<Boolean> pwdResult = propertyInfoService.varifyPayPwd(userNum, param.getPayPwd());
+        if (!isSuccess(pwdResult)) {
+            return pwdResult;
+        }
+        if (!pwdResult.getModel()) {
+            return successCreated(ResultCode.PAY_PWD_ERROR);
+        }
 
         //邀请粉丝扣除积分、插入粉丝邀请记录
         PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
@@ -79,8 +88,10 @@ public class FansMerchantController extends BaseController {
         //propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
-        propertyInfoDataParam.setRegionName(regionName);
+        propertyInfoDataParam.setRegionName(param.getRegionName());
         propertyInfoDataParam.setInviteFansCount(numArray.length);
+        propertyInfoDataParam.setSex(param.getUserSexEnum().val);
+        propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
         Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
         if (!isSuccess(result)) {
             return result;

@@ -67,7 +67,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO.setGmtCreate(new Date());
         commentMerchantDO.setGmtModified(new Date());
-       commentMerchantDOMapper.insert(commentMerchantDO);
+        commentMerchantDOMapper.insert(commentMerchantDO);
         Long id = commentMerchantDO.getId();
         if (!StringUtils.isEmpty(commentPic)) {
             String imgs[] = commentPic.split(",");
@@ -194,15 +194,25 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         if (commentMerchantDOS.isEmpty()) {
             return null;
         }
+
+        //平均得分
         Double avgGrade = commentMerchantDOMapperExtend.selectAvgGrade(merchantId);
         avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
+
+        //好评率
         Integer goodCount = commentMerchantDOMapperExtend.selectGoodGradeCount(merchantId);
         CommentMerchantDOExample example = new CommentMerchantDOExample();
         example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
                 andMerchantIdEqualTo(merchantId);
         Integer totalCount = commentMerchantDOMapper.countByExample(example);
         double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+
+        //人均消费
+        Double averageConsumeAmount = commentMerchantDOMapperExtend.getAvgSpend(merchantId);
+        averageConsumeAmount = new BigDecimal(averageConsumeAmount).setScale(2, RoundingMode.UP).doubleValue();
+
         CommentGradeBO commentGradeBO = new CommentGradeBO();
+        commentGradeBO.setAverageConsumeAmount(averageConsumeAmount);
         commentGradeBO.setAvgGrade(avgGrade);
         commentGradeBO.setGoodGrad(goodGrade);
         return commentGradeBO;

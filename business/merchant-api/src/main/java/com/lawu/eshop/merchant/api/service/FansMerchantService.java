@@ -4,8 +4,12 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
@@ -20,11 +24,11 @@ public interface FansMerchantService {
      * 查询可邀请为粉丝的会员
      *
      * @param merchantId
-     * @param regionPath
+     * @param param
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "fansMerchant/listInviteFans/{merchantId}")
-    Result<List<FansMerchantDTO>> listInviteFans(@PathVariable("merchantId") Long merchantId, @RequestParam("regionPath") String regionPath);
+    @RequestMapping(method = RequestMethod.POST, value = "fansMerchant/listInviteFans/{merchantId}")
+    Result<List<FansMerchantDTO>> listInviteFans(@PathVariable("merchantId") Long merchantId, @ModelAttribute ListInviteFansParam param);
 
     /**
      * 粉丝列表

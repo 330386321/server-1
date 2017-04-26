@@ -11,6 +11,10 @@ public class FansInviteDetailBO {
 
     private String regionName;
 
+    private Byte sex;
+
+    private String age;
+
     private Integer inviteFansCount;
 
     private BigDecimal consumePoint;
@@ -47,5 +51,21 @@ public class FansInviteDetailBO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public Byte getSex() {
+        return sex;
+    }
+
+    public void setSex(Byte sex) {
+        this.sex = sex;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 }

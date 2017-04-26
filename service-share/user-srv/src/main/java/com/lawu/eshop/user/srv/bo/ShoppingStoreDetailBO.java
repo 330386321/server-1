@@ -14,6 +14,10 @@ public class ShoppingStoreDetailBO {
 
     private Boolean isFans;
 
+    private Boolean isFavorite;
+
+    private String logoPic;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -44,5 +48,21 @@ public class ShoppingStoreDetailBO {
 
     public void setFans(Boolean fans) {
         isFans = fans;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getLogoPic() {
+        return logoPic;
+    }
+
+    public void setLogoPic(String logoPic) {
+        this.logoPic = logoPic;
     }
 }

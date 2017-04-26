@@ -1,9 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.param.InviteFansParam;
-import com.lawu.eshop.user.param.ListFansParam;
-import com.lawu.eshop.user.param.ListFansRealParam;
+import com.lawu.eshop.user.param.*;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
@@ -33,11 +31,15 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
-    public List<FansMerchantBO> listInviteFans(Long merchantId, String regionPath) {
-        InviteFansParam inviteFansParam = new InviteFansParam();
-        inviteFansParam.setMerchantId(merchantId);
-        inviteFansParam.setRegionPath(regionPath);
-        List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(inviteFansParam);
+    public List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param) {
+        ListInviteFansRealParam listInviteFansRealParam = new ListInviteFansRealParam();
+        listInviteFansRealParam.setMerchantId(merchantId);
+        listInviteFansRealParam.setRegionPath(param.getRegionPath());
+        listInviteFansRealParam.setSex(param.getUserSexEnum().val);
+        listInviteFansRealParam.setAgeLimit(param.getIsAgeLimit());
+        listInviteFansRealParam.setStartAge(param.getStartAge());
+        listInviteFansRealParam.setEndAge(param.getEndAge());
+        List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(listInviteFansRealParam);
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
     }
 

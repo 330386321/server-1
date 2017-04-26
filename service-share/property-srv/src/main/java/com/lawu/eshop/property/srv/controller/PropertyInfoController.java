@@ -1,15 +1,5 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.math.BigDecimal;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -26,6 +16,11 @@ import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -123,7 +118,7 @@ public class PropertyInfoController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "varifyPayPwd", method = RequestMethod.GET)
-	public Result varifyPayPwd(@RequestParam String userNum, @RequestParam String payPwd) {
+	public Result<Boolean> varifyPayPwd(@RequestParam String userNum, @RequestParam String payPwd) {
 		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
 		if (propertyInfoBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);

@@ -568,6 +568,13 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         shoppingStoreDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
         shoppingStoreDetailBO.setName(merchantStoreDO.getName());
 
+        //查询门店logo
+        MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+        merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+        List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        String logoPic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+        shoppingStoreDetailBO.setLogoPic(logoPic);
+
         //查询粉丝数量
         FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
         fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
@@ -582,6 +589,16 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             shoppingStoreDetailBO.setFans(false);
         } else {
             shoppingStoreDetailBO.setFans(true);
+        }
+
+        //查询是否收藏
+        FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
+        favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+        List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
+        if (favoriteMerchantDOS.isEmpty()) {
+            shoppingStoreDetailBO.setFavorite(false);
+        } else {
+            shoppingStoreDetailBO.setFavorite(true);
         }
         return shoppingStoreDetailBO;
     }

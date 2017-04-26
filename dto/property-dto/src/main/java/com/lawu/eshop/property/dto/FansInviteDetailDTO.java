@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.property.constants.SexEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -14,6 +15,12 @@ public class FansInviteDetailDTO {
 
     @ApiModelProperty(value = "邀请区域")
     private String regionName;
+
+    @ApiModelProperty(value = "性别，SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--全部")
+    private SexEnum sexEnum;
+
+    @ApiModelProperty(value = "年龄区间，不限年龄为空")
+    private String age;
 
     @ApiModelProperty(value = "邀请粉丝数量")
     private Integer inviteFansCount;
@@ -55,5 +62,21 @@ public class FansInviteDetailDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public SexEnum getSexEnum() {
+        return sexEnum;
+    }
+
+    public void setSexEnum(SexEnum sexEnum) {
+        this.sexEnum = sexEnum;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 }

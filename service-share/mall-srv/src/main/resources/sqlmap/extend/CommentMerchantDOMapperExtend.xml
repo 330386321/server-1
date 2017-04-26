@@ -74,4 +74,12 @@
         AND  grade  &gt;= 4
     </select>
 
+    <select id="getAvgSpend" resultType="java.lang.Double" parameterType="java.lang.Long">
+        SELECT
+        AVG(avg_spend)
+        FROM
+        comment_merchant
+        WHERE merchant_id =#{merchantId} and status=1 and avg_spend >0
+    </select>
+
 </mapper>

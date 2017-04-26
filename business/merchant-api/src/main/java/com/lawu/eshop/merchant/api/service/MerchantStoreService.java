@@ -82,7 +82,7 @@ public interface MerchantStoreService {
      * @return
      */
     @RequestMapping(value = "merchantStore/findIsNoReasonReturnById", method = RequestMethod.GET)
-    Result<Boolean> findIsNoReasonReturnById(@PathVariable("merchantId") Long merchantId);
+    Result<Boolean> findIsNoReasonReturnById(@RequestParam("merchantId") Long merchantId);
 
     /**
      * 申请实体店铺

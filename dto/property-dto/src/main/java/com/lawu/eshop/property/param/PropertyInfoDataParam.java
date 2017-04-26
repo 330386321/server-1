@@ -9,14 +9,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
- * 
  * <p>
  * Description: 业务操作需要处理财产积分
  * </p>
- * 
+ *
  * @author Yangqh
  * @date 2017年4月11日 下午5:35:25
- *
  */
 public class PropertyInfoDataParam {
 
@@ -38,43 +36,52 @@ public class PropertyInfoDataParam {
 	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 
-	private Long merchantId;
+    //商家ID(邀请粉丝添加邀请记录参数)
+    private Long merchantId;
 
-	private String regionName;
+    //区域名称(邀请粉丝添加邀请记录参数)
+    private String regionName;
 
-	private Integer inviteFansCount;
+    //邀请粉丝数量(邀请粉丝添加邀请记录参数)
+    private Integer inviteFansCount;
 
-	public String getUserNum() {
-		return userNum;
-	}
+    //性别(邀请粉丝添加邀请记录参数)
+    private Byte sex;
 
-	public void setUserNum(String userNum) {
-		this.userNum = userNum;
-	}
+    //年龄区间(邀请粉丝添加邀请记录参数)
+    private String age;
 
-	public String getPoint() {
-		return point;
-	}
+    public String getUserNum() {
+        return userNum;
+    }
 
-	public void setPoint(String point) {
-		this.point = point;
-	}
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
+    }
 
-	public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
-		return memberTransactionTypeEnum;
-	}
+    public String getPoint() {
+        return point;
+    }
 
-	public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
-		this.memberTransactionTypeEnum = memberTransactionTypeEnum;
-	}
+    public void setPoint(String point) {
+        this.point = point;
+    }
 
-	public MerchantTransactionTypeEnum getMerchantTransactionTypeEnum() {
-		return merchantTransactionTypeEnum;
-	}
+    public MemberTransactionTypeEnum getMemberTransactionTypeEnum() {
+        return memberTransactionTypeEnum;
+    }
 
-	public void setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum merchantTransactionTypeEnum) {
-		this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
-	}
+    public void setMemberTransactionTypeEnum(MemberTransactionTypeEnum memberTransactionTypeEnum) {
+        this.memberTransactionTypeEnum = memberTransactionTypeEnum;
+    }
+
+    public MerchantTransactionTypeEnum getMerchantTransactionTypeEnum() {
+        return merchantTransactionTypeEnum;
+    }
+
+    public void setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum merchantTransactionTypeEnum) {
+        this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
+    }
 
 //	public TransactionTitleEnum getTransactionTitleEnum() {
 //		return transactionTitleEnum;
@@ -84,27 +91,43 @@ public class PropertyInfoDataParam {
 //		this.transactionTitleEnum = transactionTitleEnum;
 //	}
 
-	public Long getMerchantId() {
-		return merchantId;
-	}
+    public Long getMerchantId() {
+        return merchantId;
+    }
 
-	public void setMerchantId(Long merchantId) {
-		this.merchantId = merchantId;
-	}
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
 
-	public String getRegionName() {
-		return regionName;
-	}
+    public String getRegionName() {
+        return regionName;
+    }
 
-	public void setRegionName(String regionName) {
-		this.regionName = regionName;
-	}
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
 
-	public Integer getInviteFansCount() {
-		return inviteFansCount;
-	}
+    public Integer getInviteFansCount() {
+        return inviteFansCount;
+    }
 
-	public void setInviteFansCount(Integer inviteFansCount) {
-		this.inviteFansCount = inviteFansCount;
-	}
+    public void setInviteFansCount(Integer inviteFansCount) {
+        this.inviteFansCount = inviteFansCount;
+    }
+
+    public Byte getSex() {
+        return sex;
+    }
+
+    public void setSex(Byte sex) {
+        this.sex = sex;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
 }

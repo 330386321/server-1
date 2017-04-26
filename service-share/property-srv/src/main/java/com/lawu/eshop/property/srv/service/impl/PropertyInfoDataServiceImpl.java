@@ -69,6 +69,8 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
             fansInviteDetailDO.setMerchantId(param.getMerchantId());
             fansInviteDetailDO.setPointNum(pointNum);
             fansInviteDetailDO.setRegionName(param.getRegionName());
+            fansInviteDetailDO.setSex(param.getSex());
+            fansInviteDetailDO.setAge(param.getAge());
             fansInviteDetailDO.setInviteFansCount(param.getInviteFansCount());
             fansInviteDetailDO.setConsumePoint(new BigDecimal(param.getPoint()));
             fansInviteDetailDO.setGmtCreate(new Date());

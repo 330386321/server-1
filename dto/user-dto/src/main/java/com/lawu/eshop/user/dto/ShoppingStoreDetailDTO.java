@@ -20,6 +20,12 @@ public class ShoppingStoreDetailDTO {
     @ApiModelProperty(value = "是否关注：true--已关注，false--未关注")
     private Boolean isFans;
 
+    @ApiModelProperty(value = "是否收藏：true--已收藏，false--未收藏")
+    private Boolean isFavorite;
+
+    @ApiModelProperty(value = "门店logo")
+    private String logoPic;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -50,5 +56,21 @@ public class ShoppingStoreDetailDTO {
 
     public void setFans(Boolean fans) {
         isFans = fans;
+    }
+
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getLogoPic() {
+        return logoPic;
+    }
+
+    public void setLogoPic(String logoPic) {
+        this.logoPic = logoPic;
     }
 }

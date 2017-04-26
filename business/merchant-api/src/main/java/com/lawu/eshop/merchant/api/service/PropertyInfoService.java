@@ -55,10 +55,6 @@ public interface PropertyInfoService {
 	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/setPayPwd/{userNo}")
     Result setPayPwd(@PathVariable("userNo") String userNo, @RequestParam("newPwd") String newPwd);
 
-    @SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.PUT, value = "propertyInfo/updatePayPwd/{userNo}")
-    Result updatePayPwd(@PathVariable("userNo") String userNo, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd, @RequestParam("type") Integer type);
-
     /**
      * 查询是否设置支付密码
      *
@@ -106,7 +102,7 @@ public interface PropertyInfoService {
      */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
-    Result varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
+    Result<Boolean> varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
     
     /**
      * 获取商家积分余额

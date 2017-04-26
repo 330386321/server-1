@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.converter;
 
+import com.lawu.eshop.property.constants.SexEnum;
 import com.lawu.eshop.property.dto.FansInviteDetailDTO;
 import com.lawu.eshop.property.srv.bo.FansInviteDetailBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
@@ -26,6 +27,8 @@ public class FansInviteDetailConverter {
 
         FansInviteDetailBO fansInviteDetailBO = new FansInviteDetailBO();
         fansInviteDetailBO.setRegionName(fansInviteDetailDO.getRegionName());
+        fansInviteDetailBO.setSex(fansInviteDetailDO.getSex());
+        fansInviteDetailBO.setAge(fansInviteDetailDO.getAge());
         fansInviteDetailBO.setInviteFansCount(fansInviteDetailDO.getInviteFansCount());
         fansInviteDetailBO.setConsumePoint(fansInviteDetailDO.getConsumePoint());
         fansInviteDetailBO.setGmtCreate(fansInviteDetailDO.getGmtCreate());
@@ -45,6 +48,8 @@ public class FansInviteDetailConverter {
 
         FansInviteDetailDTO fansInviteDetailDTO = new FansInviteDetailDTO();
         fansInviteDetailDTO.setRegionName(fansInviteDetailBO.getRegionName());
+        fansInviteDetailDTO.setSexEnum(SexEnum.getEnum(fansInviteDetailBO.getSex()));
+        fansInviteDetailDTO.setAge(fansInviteDetailBO.getAge());
         fansInviteDetailDTO.setInviteFansCount(fansInviteDetailBO.getInviteFansCount());
         fansInviteDetailDTO.setConsumePoint(fansInviteDetailBO.getConsumePoint());
         fansInviteDetailDTO.setGmtCreate(fansInviteDetailBO.getGmtCreate());

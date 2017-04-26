@@ -196,8 +196,10 @@ public class MerchantStoreConverter {
         ShoppingStoreDetailDTO shoppingStoreDetailDTO = new ShoppingStoreDetailDTO();
         shoppingStoreDetailDTO.setMerchantId(shoppingStoreDetailBO.getMerchantId());
         shoppingStoreDetailDTO.setName(shoppingStoreDetailBO.getName());
+        shoppingStoreDetailDTO.setLogoPic(shoppingStoreDetailBO.getLogoPic());
         shoppingStoreDetailDTO.setFansCount(shoppingStoreDetailBO.getFansCount());
         shoppingStoreDetailDTO.setFans(shoppingStoreDetailBO.getFans());
+        shoppingStoreDetailDTO.setFavorite(shoppingStoreDetailBO.getFavorite());
         return shoppingStoreDetailDTO;
     }
 

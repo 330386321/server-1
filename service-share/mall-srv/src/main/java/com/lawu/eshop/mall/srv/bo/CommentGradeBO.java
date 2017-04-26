@@ -6,9 +6,19 @@ package com.lawu.eshop.mall.srv.bo;
  */
 public class CommentGradeBO {
 
+    private Double averageConsumeAmount;
+
     private Double avgGrade;
 
     private Double goodGrad;
+
+    public Double getAverageConsumeAmount() {
+        return averageConsumeAmount;
+    }
+
+    public void setAverageConsumeAmount(Double averageConsumeAmount) {
+        this.averageConsumeAmount = averageConsumeAmount;
+    }
 
     public Double getAvgGrade() {
         return avgGrade;
