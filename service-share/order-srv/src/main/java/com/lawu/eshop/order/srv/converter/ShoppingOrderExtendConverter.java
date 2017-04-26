@@ -7,12 +7,18 @@ import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.dto.foreign.TraceDTO;
+import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
+import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 
 /**
@@ -39,6 +45,7 @@ public class ShoppingOrderExtendConverter {
 		BeanUtils.copyProperties(shoppingOrderExtendDO, shoppingOrderExtendDetailBO, new String[]{"items", "orderStatus", "commissionStatus"});
 		
 		// 转换为枚举类型
+		shoppingOrderExtendDetailBO.setStatus(StatusEnum.getEnum(shoppingOrderExtendDO.getStatus()));
 		shoppingOrderExtendDetailBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderExtendDO.getOrderStatus()));
 		shoppingOrderExtendDetailBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendDO.getPaymentMethod()));
 		shoppingOrderExtendDetailBO.setCommissionStatus(CommissionStatusEnum.getEnum(shoppingOrderExtendDO.getCommissionStatus()));
@@ -69,19 +76,37 @@ public class ShoppingOrderExtendConverter {
 	 * @param shoppingOrderExtendBO
 	 * @return
 	 */
-	public static ShoppingOrderExtendDetailDTO convert(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+	public static ShoppingOrderExtendDetailDTO convert(ShoppingOrderExtendBO shoppingOrderExtendBO, ExpressInquiriesDetailBO expressInquiriesDetailBO) {
+		ShoppingOrderExtendDetailDTO rtn = null;
+		
 		if (shoppingOrderExtendBO == null) {
 			return null;
 		}
 
-		ShoppingOrderExtendDetailDTO shoppingOrderExtendDetailDTO = new ShoppingOrderExtendDetailDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, shoppingOrderExtendDetailDTO, new String[]{"items"});
+		rtn = new ShoppingOrderExtendDetailDTO();
+		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn, new String[]{"items"});
 		
-		if (shoppingOrderExtendBO.getItems() != null) {
-			shoppingOrderExtendDetailDTO.setItems(ShoppingOrderItemConverter.convertShoppingOrderItemDTOList(shoppingOrderExtendBO.getItems()));
+		// 如果物流信息存在
+		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
+			TraceBO traceBO = expressInquiriesDetailBO.getTraces().get(0);
+			TraceDTO traceDTO = new TraceDTO();
+			BeanUtils.copyProperties(traceBO, traceDTO);
+			rtn.setTrace(traceDTO);
 		}
 		
-		return shoppingOrderExtendDetailDTO;
+		int quantity = 0;
+		if (shoppingOrderExtendBO.getItems() != null) {
+			if (shoppingOrderExtendBO.getItems() != null) {
+				rtn.setItems(new ArrayList<ShoppingOrderItemDTO>());
+				for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+					quantity += item.getQuantity();
+					rtn.getItems().add(ShoppingOrderItemConverter.convert(item));
+				}
+			}
+		}
+		rtn.setAmountOfGoods(quantity);
+		
+		return rtn;
 	}
 	
 	/**
@@ -91,18 +116,27 @@ public class ShoppingOrderExtendConverter {
 	 * @return
 	 */
 	public static ShoppingOrderExtendQueryDTO convertShoppingOrderExtendQueryDTO(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderExtendQueryDTO rtn = null;
 		if (shoppingOrderExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderExtendQueryDTO shoppingOrderExtendDetailDTO = new ShoppingOrderExtendQueryDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, shoppingOrderExtendDetailDTO, new String[]{"items"});
+		rtn = new ShoppingOrderExtendQueryDTO();
+		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn, new String[]{"items"});
 		
+		int quantity = 0;
 		if (shoppingOrderExtendBO.getItems() != null) {
-			shoppingOrderExtendDetailDTO.setItems(ShoppingOrderItemConverter.convertShoppingOrderItemDTOList(shoppingOrderExtendBO.getItems()));
+			rtn.setItems(new ArrayList<ShoppingOrderItemDTO>());
+			for (ShoppingOrderItemBO item : shoppingOrderExtendBO.getItems()) {
+				quantity += item.getQuantity();
+				rtn.getItems().add(ShoppingOrderItemConverter.convert(item));
+			}
 		}
 		
-		return shoppingOrderExtendDetailDTO;
+		// 添加商品总数量
+		rtn.setAmountOfGoods(quantity);
+		
+		return rtn;
 	}
 	
 	/**

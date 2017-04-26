@@ -3,6 +3,8 @@ package com.lawu.eshop.member.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
-import com.lawu.eshop.order.dto.foreign.MemberShoppingCartDTO;
+import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
@@ -61,10 +63,19 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") ShoppingCartParam param) {
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartParam param, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
     	
-    	return successCreated(shoppingcartExtendService.save(memberId, param));
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	Result result = shoppingcartExtendService.save(memberId, param);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    	
+    	return successCreated();
     }
 
     /**
@@ -79,10 +90,15 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    Result<List<MemberShoppingCartDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	return successGet(shoppingcartExtendService.findListByMemberId(memberId));
+     	Result<List<MemberShoppingCartGroupDTO>> result = shoppingcartExtendService.findListByMemberId(memberId);
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+     	
+    	return successGet(result);
     }
     
     /**
@@ -95,20 +111,23 @@ public class ShoppingCartController extends BaseController {
      */
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1002|1003|4000]（蒋鑫俊）", httpMethod = "PUT")
+    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1002|1004|1024]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable("id") @ApiParam(name = "id", required = true, value = "购物车ID") Long id, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") ShoppingCartParam param) {
+	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", required = true, value = "购物车ID") Long id, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartUpdateParam param, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
     	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	
-    	ShoppingCartUpdateParam shoppingCartUpdateParam = new ShoppingCartUpdateParam();
-    	shoppingCartUpdateParam.setProductModelId(param.getProductModelId());
-    	shoppingCartUpdateParam.setQuantity(param.getQuantity());
-    	
-    	return successCreated(shoppingCartService.update(id, memberId, shoppingCartUpdateParam));
+    	Result result = shoppingCartService.update(id, memberId, param);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    			
+    	return successCreated();
     }
     
     /**
@@ -120,7 +139,7 @@ public class ShoppingCartController extends BaseController {
      */
     @SuppressWarnings({ "rawtypes", "deprecation" })
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1002|1003|4000]（蒋鑫俊）", httpMethod = "DELETE")
+    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1002|1003|1024]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
@@ -148,11 +167,14 @@ public class ShoppingCartController extends BaseController {
     @Authorization
 	@RequestMapping(value = "settlement", method = RequestMethod.GET)
 	public Result<ShoppingCartSettlementDTO> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "购物车id") List<Long> idList) {
-    	if (idList == null || idList.isEmpty()) {
-    		return successGet(ResultCode.ID_EMPTY);
+    	String memberNum = UserUtil.getCurrentUserNum(getRequest());
+    	
+    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.settlement(idList, memberNum);
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
     	}
     	
-    	return successCreated(shoppingcartExtendService.settlement(idList));
+    	return successGet(result);
     }
     
     /**
@@ -167,10 +189,20 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "createOrder", method = RequestMethod.POST)
-	public Result<List<Long>> createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") List<ShoppingOrderSettlementForeignParam> params) {
+	public Result<List<Long>> createOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "param", required = true, value = "订单参数") @Validated List<ShoppingOrderSettlementForeignParam> params, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	return successCreated(shoppingcartExtendService.createOrder(memberId, params));
+    	Result<List<Long>> result = shoppingcartExtendService.createOrder(memberId, params);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    	
+    	return successCreated(result);
     }
     
 }

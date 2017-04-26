@@ -64,10 +64,6 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectPageByMerchantId", method = RequestMethod.GET)
 	public Result<Page<ShoppingOrderQueryToMerchantDTO>> selectPageByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") ShoppingOrderQueryForeignToMerchantParam param) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
-		// 校验参数
-		if (param == null) {
-			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-		}
 
 		Result<Page<ShoppingOrderQueryToMerchantDTO>> result = shoppingOrderService.selectPageByMerchantId(merchantId, param);
 		if (!isSuccess(result)) {

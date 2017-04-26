@@ -5,7 +5,6 @@ import java.util.List;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
-import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 
 /**
  * 购物车服务接口
@@ -26,33 +25,34 @@ public interface ShoppingCartService {
 	
 	/**
 	 * 加入购物车
-	 * @param param
 	 * 
-	 * @return 返回生成的id
+	 * @param memberId 会员id
+	 * @param param 保存参数
+	 * @return
+	 * @author Sunny
 	 */
-	Long save(Long memberId, ShoppingCartSaveParam param);
+	int save(Long memberId, ShoppingCartSaveParam param);
 	
 	/**
 	 * 根据id更新购物车
 	 * 
-	 * @param param
+	 * @param id 购物车id
+	 * @param memberId 会员id
+	 * @param param 更新参数
+	 * @return
+	 * @author Sunny
 	 */
-	Integer update(Long id, ShoppingCartUpdateParam param);
+	int update(Long id, Long memberId, ShoppingCartUpdateParam param);
 	
 	/**
 	 * 根据id删除购物车的商品
 	 * 
-	 * @param id
-	 */
-	Integer remove(Long id);
-	
-	/**
-	 * 根据id查询购物车的商品信息
-	 * 
-	 * @param id
+	 * @param id 购物车id
+	 * @param memberId 会员id
 	 * @return
+	 * @author Sunny
 	 */
-	public ShoppingCartDO get(Long id);
+	int remove(Long id, Long memberId);
 	
 	/**
 	 * 根据购物车id列表查询购物车列表
@@ -61,13 +61,5 @@ public interface ShoppingCartService {
 	 * @return
 	 */
 	List<ShoppingCartBO> findListByIds(List<Long> ids);
-	
-	/**
-	 * 根据购物订单id列表查询购物车列表
-	 * 
-	 * @param shoppingOrderId 购物订单id
-	 * @return
-	 */
-	Integer deleteByShoppingOrderId(Long shoppingOrderId);
 	
 }

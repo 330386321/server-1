@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -46,11 +45,7 @@ public class ProductModelController extends BaseController {
 		ShoppingCartProductModelBO shoppingCartProductModelBO = productModelService.getShoppingCartProductModel(id);
 
 		if (shoppingCartProductModelBO == null) {
-			successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		if (StringUtils.isEmpty(shoppingCartProductModelBO.getProductName())) {
-			successGet(ResultCode.GOODS_DO_NOT_EXIST);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
 		return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBO));
@@ -66,11 +61,10 @@ public class ProductModelController extends BaseController {
 	@RequestMapping(value = "shoppingCart/list", method = RequestMethod.GET)
 	public Result<List<ShoppingCartProductModelDTO>> getShoppingCartProductModel(@RequestParam("ids") List<Long> ids) {
 
-		List<ShoppingCartProductModelBO> shoppingCartProductModelBOS = productModelService
-				.getShoppingCartProductModel(ids);
+		List<ShoppingCartProductModelBO> shoppingCartProductModelBOS = productModelService.getShoppingCartProductModel(ids);
 
 		if (shoppingCartProductModelBOS == null || shoppingCartProductModelBOS.isEmpty()) {
-			successGet(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
 		return successGet(ShoppingCartProductModelConverter.convert(shoppingCartProductModelBOS));

@@ -17,11 +17,13 @@ import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartDTO;
+import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementItemDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
@@ -30,6 +32,7 @@ import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
+import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
@@ -60,6 +63,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	
     @Autowired
     private AddressService addressService;
+    
+    @Autowired
+    private PropertyInfoService propertyInfoService;
     
     /**
      *  加入购物车。
@@ -97,7 +103,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @param memberId 会员id
 	 * @return
 	 */
-    public Result<List<MemberShoppingCartDTO>> findListByMemberId(Long memberId){
+    public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId){
     	// 通过memberId查询用户购物车资料
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
     	if (!isSuccess(resultShoppingCartDTOS)) {
@@ -124,8 +130,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		}
     	}
     	
-    	List<MemberShoppingCartDTO> MemberShoppingCartDTOS = new ArrayList<MemberShoppingCartDTO>();
-    	
+    	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<Long, List<MemberShoppingCartDTO>>();
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
@@ -153,10 +158,21 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			memberShoppingCartDTO.setIsInvalid(false);
     		}
     		
-    		MemberShoppingCartDTOS.add(memberShoppingCartDTO);
+    		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
+    			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
+    		}
+    		
+    		map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
     	}
     	
-    	return successGet(MemberShoppingCartDTOS);
+    	List<MemberShoppingCartGroupDTO> memberShoppingCartGroupDTOList = new ArrayList<MemberShoppingCartGroupDTO>();
+    	for (Map.Entry<Long, List<MemberShoppingCartDTO>> item : map.entrySet()) {
+    		MemberShoppingCartGroupDTO memberShoppingCartGroupDTO = new MemberShoppingCartGroupDTO();
+    		memberShoppingCartGroupDTO.setItem(item.getValue());
+    		memberShoppingCartGroupDTOList.add(memberShoppingCartGroupDTO);
+    	}
+    	
+    	return successGet(memberShoppingCartGroupDTOList);
     }
     
 	/**
@@ -288,10 +304,11 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * 根据购物车id列表生成结算数据
 	 * 
 	 * @param idList 购物车id列表
+	 * @param memberNum 用户编号
 	 * @return 返回结算数据
 	 */
 	@Override
-	public Result<ShoppingCartSettlementDTO> settlement(List<Long> idList) {
+	public Result<ShoppingCartSettlementDTO> settlement(List<Long> idList, String memberNum) {
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(idList);
     	
     	if (!isSuccess(resultShoppingCartDTOS)) {
@@ -308,6 +325,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(ids));
     	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
     		return successGet(resultShoppingCartProductModelDTOS.getRet());
+    	}
+    	
+    	
+    	// 查找用户余额
+    	Result<PropertyBalanceDTO> resultPropertyBalanceDTO = propertyInfoService.getPropertyBalance(memberNum);
+    	if (!isSuccess(resultPropertyBalanceDTO)) {
+    		return successGet(resultPropertyBalanceDTO.getRet());
     	}
     	
     	// 组装数据
@@ -374,6 +398,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	shoppingCartSettlementDTO.setTotal(total);
     	shoppingCartSettlementDTO.setItems(items);
+    	// 放入用户余额
+    	shoppingCartSettlementDTO.setBalance(resultPropertyBalanceDTO.getModel().getBalance());
     	
     	return successCreated(shoppingCartSettlementDTO);
 	}

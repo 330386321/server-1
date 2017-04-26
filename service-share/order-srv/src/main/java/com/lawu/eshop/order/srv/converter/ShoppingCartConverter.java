@@ -68,16 +68,16 @@ public class ShoppingCartConverter {
 	}
 	
 	public static List<ShoppingCartDTO> convertDTOS(List<ShoppingCartBO> bos) {
+		List<ShoppingCartDTO> rtn = new ArrayList<ShoppingCartDTO>();
 		if (bos == null || bos.isEmpty()) {
-			return null;
+			return rtn;
 		}
 
-		List<ShoppingCartDTO> dtos = new ArrayList<ShoppingCartDTO>();
 		for (ShoppingCartBO bo : bos) {
-			dtos.add(convert(bo));
+			rtn.add(convert(bo));
 		}
 
-		return dtos;
+		return rtn;
 	}
 	
 	/**

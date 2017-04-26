@@ -3,6 +3,8 @@ package com.lawu.eshop.order.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import io.swagger.annotations.ApiModelProperty;
+
 public class ShoppingCartDTO implements Serializable {
 	
     private static final long serialVersionUID = 1L;
@@ -10,36 +12,43 @@ public class ShoppingCartDTO implements Serializable {
     /**
      * 主键
      */
+    @ApiModelProperty(value = "主键", required = true)
     private Long id;
     
 	/**
 	 * 商家ID
 	 */
+    @ApiModelProperty(value = "商家ID", required = true)
 	private Long merchantId;
     
     /**
      * 商家名称
      */
+    @ApiModelProperty(value = "商家名称", required = true)
     private String merchantName;
 
     /**
      * 商品ID
      */
+    @ApiModelProperty(value = "商品ID", required = true)
     private Long productId;
 
     /**
     * 商品型号ID
     */
+    @ApiModelProperty(value = "商品型号ID", required = true)
     private Long productModelId;
     
     /**
      * 数量
      */
+    @ApiModelProperty(value = "数量", required = true)
     private Integer quantity;
 
     /**
      * 现价
      */
+    @ApiModelProperty(value = "现价", required = true)
     private BigDecimal salesPrice;
 
 	public Long getId() {

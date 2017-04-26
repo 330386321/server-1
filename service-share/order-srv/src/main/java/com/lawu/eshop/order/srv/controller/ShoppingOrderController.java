@@ -1,7 +1,10 @@
 package com.lawu.eshop.order.srv.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,12 +44,15 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
+import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
+import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 购物订单
@@ -67,6 +73,9 @@ public class ShoppingOrderController extends BaseController {
 	@Autowired
 	@Qualifier("kDNiaoExpressStrategy")
 	private ExpressStrategy expressStrategy;
+	
+	@Autowired
+	private PropertyService propertyService;
 
 	/*********************************************************
 	 * 					Member Api
@@ -382,8 +391,39 @@ public class ShoppingOrderController extends BaseController {
 		if (shoppingOrderExtendDetailBO == null || shoppingOrderExtendDetailBO.getId() == null || shoppingOrderExtendDetailBO.getId() <= 0 || shoppingOrderExtendDetailBO.getItems() == null || shoppingOrderExtendDetailBO.getItems().isEmpty()) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-
-		return successGet(ShoppingOrderExtendConverter.convert(shoppingOrderExtendDetailBO));
+		
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
+		if (StringUtils.isNotEmpty(shoppingOrderExtendDetailBO.getExpressCompanyCode()) && StringUtils.isNotEmpty(shoppingOrderExtendDetailBO.getWaybillNum())) {
+			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExtendDetailBO.getExpressCompanyCode(), shoppingOrderExtendDetailBO.getWaybillNum());
+		}
+		
+		ShoppingOrderExtendDetailDTO shoppingOrderExtendDetailDTO = ShoppingOrderExtendConverter.convert(shoppingOrderExtendDetailBO, expressInquiriesDetailBO);
+		
+		// 倒计时在服务端放入
+		Long countdown = null;
+		switch (shoppingOrderExtendDetailDTO.getOrderStatus()) {
+			case PENDING_PAYMENT:
+				// 1.自动取消订单
+				String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+				
+				Date automaticCancelOrderTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
+				
+				countdown = DateUtil.interval(new Date(), automaticCancelOrderTo, Calendar.MILLISECOND);
+				break;
+			case TO_BE_RECEIVED:
+				// 2.自动确认收货
+				String automaticReceipt = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+				
+				Date automaticReceiptTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtTransport(), Integer.valueOf(automaticReceipt), Calendar.DAY_OF_YEAR);
+				
+				countdown = DateUtil.interval(new Date(), automaticReceiptTo, Calendar.MILLISECOND);
+				break;
+			default:
+				break;
+		}
+		shoppingOrderExtendDetailDTO.setCountdown(countdown);
+		
+		return successGet(shoppingOrderExtendDetailDTO);
 	}
 	
 	/** 第三方支付时获取订单原始总金额，用于调用第三方支付平台

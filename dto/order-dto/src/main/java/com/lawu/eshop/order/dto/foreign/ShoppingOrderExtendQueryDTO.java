@@ -13,7 +13,7 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 主键
+	 * 购物订单id
 	 */
 	@ApiModelProperty(value = "购物订单id", required = true)
 	private Long id;
@@ -53,6 +53,12 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "是否支持无理由退货(false 不支持|true 支持)", required = true)
 	private Boolean isNoReasonReturn;
+	
+	/**
+	 * 商品数量
+	 */
+	@ApiModelProperty(value = "商品数量", required = true)
+	private Integer amountOfGoods;
 	
 	/**
 	 * 订单项
@@ -114,6 +120,14 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 
 	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
 		this.isNoReasonReturn = isNoReasonReturn;
+	}
+	
+	public Integer getAmountOfGoods() {
+		return amountOfGoods;
+	}
+
+	public void setAmountOfGoods(Integer amountOfGoods) {
+		this.amountOfGoods = amountOfGoods;
 	}
 
 	public List<ShoppingOrderItemDTO> getItems() {

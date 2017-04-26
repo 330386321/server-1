@@ -513,22 +513,58 @@ public class DateUtil {
     }
 
     /**
-     * 获取now之后overTime的时间
+     * 获取overTime之后的时间
      *
-     * @param now      现在时间
+     * @param from     开始时间
      * @param overTime 超过的时间
      * @param field    单位
      * @return
      */
-    public static Date add(Date now, int overTime, int field) {
+    public static Date add(Date from, int overTime, int field) {
         // 所有参数不能为空
-        if (now == null) {
+        if (from == null) {
             return null;
         }
         Calendar calendar = Calendar.getInstance();  //得到日历
-        calendar.setTime(now);//把当前时间赋给日历  
+        calendar.setTime(from);//把当前时间赋给日历  
         calendar.add(field, overTime);  //添加超过时间
 
         return calendar.getTime();
+    }
+    
+    /**
+     * 
+     * @param from 开始时间
+     * @param to
+     * @param field
+     * @return
+     * @author Sunny
+     */
+    public static Long interval(Date from, Date to, int field) {
+    	Long rtn = null;
+        // 所有参数不能为空
+        if (from == null || to == null) {
+            return rtn;
+        }
+        
+        long interval = to.getTime() - from.getTime();
+        
+        switch (field) {
+			case Calendar.MILLISECOND:
+				rtn = interval;
+				break;
+			case Calendar.SECOND:
+				rtn = interval/1000;
+				break;
+			case Calendar.MINUTE:
+				rtn = interval/1000/60;
+				break;
+			case Calendar.HOUR:
+				rtn = interval/1000/60/60;
+				break;
+			default:
+				break;
+		}
+        return rtn;
     }
 }

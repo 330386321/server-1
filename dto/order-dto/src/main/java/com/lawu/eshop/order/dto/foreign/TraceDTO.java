@@ -32,7 +32,7 @@ public class TraceDTO implements Serializable {
 	/**
 	 * 备注
 	 */
-	@ApiModelProperty(value = "描述")
+	@ApiModelProperty(value = "备注")
 	private String remark;
 
 	public String getAcceptTime() {

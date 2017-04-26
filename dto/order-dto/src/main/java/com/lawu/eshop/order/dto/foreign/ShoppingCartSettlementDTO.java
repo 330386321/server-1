@@ -17,6 +17,12 @@ public class ShoppingCartSettlementDTO implements Serializable {
     private BigDecimal total;
     
     /**
+     * 用户余额
+     */
+    @ApiModelProperty(value = "用户余额", required = true)
+    private BigDecimal balance;
+    
+    /**
      * 订单数据 - 分单显示
      */
     @ApiModelProperty(value = "订单数据", required = true)
@@ -28,6 +34,14 @@ public class ShoppingCartSettlementDTO implements Serializable {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
 	}
 
 	public List<ShoppingCartSettlementItemDTO> getItems() {

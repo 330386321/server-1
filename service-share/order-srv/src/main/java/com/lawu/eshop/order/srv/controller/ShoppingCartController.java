@@ -2,7 +2,6 @@ package com.lawu.eshop.order.srv.controller;
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +16,8 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
-import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -37,22 +36,16 @@ public class ShoppingCartController extends BaseController {
 	 * 
 	 * @param param
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
 	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
-		// 参数验证
-		if (param == null || StringUtils.isEmpty(param.getMerchantName()) || param.getMerchantId() == null 
-				|| param.getProductId() == null || param.getProductModelId() == null
-				|| param.getQuantity() == null || param.getSalesPrice() == null || param.getQuantity() == null) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+		int resultCode = shoppingCartService.save(memberId, param);
+		
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
 		
-		Long id = shoppingCartService.save(memberId, param);
-		
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.SAVE_FAIL);
-		}
-		
-		return successCreated(ResultCode.SUCCESS);
+		return successCreated();
 	}
 	
 	/**
@@ -63,11 +56,10 @@ public class ShoppingCartController extends BaseController {
 	 */
 	@RequestMapping(value = "list/{memberId}",  method = RequestMethod.GET)
 	Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId){
-		if (memberId == null) {
-			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-		}
 		
-		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartService.findListByMemberId(memberId)));
+		List<ShoppingCartBO> shoppingCartBOList = shoppingCartService.findListByMemberId(memberId);
+		
+		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));
 	}
 	
 	/**
@@ -77,25 +69,17 @@ public class ShoppingCartController extends BaseController {
 	 * @param param
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
 	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam param) {
-		if (id == null) {
-			return successCreated(ResultCode.ID_EMPTY);
+		
+		int resultCode = shoppingCartService.update(id, memberId, param);
+		
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
 		
-		// 判断id对应的数据是否存在
-		ShoppingCartDO shoppingCartDO = shoppingCartService.get(id);
-		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		if (!shoppingCartDO.getMemberId().equals(memberId)) {
-			return successCreated(ResultCode.PRODUCT_NOT_FOUND_IN_CART);
-		}
-		
-		shoppingCartService.update(id, param);
-		
-		return successCreated(ResultCode.SUCCESS);
+		return successCreated();
 	}
 	
 	/**
@@ -103,24 +87,22 @@ public class ShoppingCartController extends BaseController {
 	 * 
 	 * @param id
 	 */
+	/**
+	 * @param id
+	 * @param memberId
+	 * @return
+	 * @author Sunny
+	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)
 	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId) {
-		if (id == null) {
-			return successCreated(ResultCode.ID_EMPTY);
+		int resultCode = shoppingCartService.remove(id, memberId);
+		
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
 		
-		ShoppingCartDO shoppingCartDO = shoppingCartService.get(id);
-		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		if (!shoppingCartDO.getMemberId().equals(memberId)) {
-			return successCreated(ResultCode.PRODUCT_NOT_FOUND_IN_CART);
-		}
-		
-		shoppingCartService.remove(id);
-		
-		return successCreated(ResultCode.SUCCESS);
+		return successCreated();
 	}
 	
 	
@@ -132,10 +114,9 @@ public class ShoppingCartController extends BaseController {
 	 */
 	@RequestMapping(value = "list/findListByIds",  method = RequestMethod.GET)
 	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
-		if (ids == null || ids.isEmpty()) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
 		
-		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartService.findListByIds(ids)));
+		List<ShoppingCartBO> ShoppingCartBOList = shoppingCartService.findListByIds(ids);
+		
+		return successGet(ShoppingCartConverter.convertDTOS(ShoppingCartBOList));
 	}
 }

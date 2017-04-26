@@ -3,34 +3,15 @@ package com.lawu.eshop.order.dto.foreign;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderExtendDetailDTO implements Serializable {
+public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO implements Serializable {
     
 	private static final long serialVersionUID = 1L;
 	
-	/**
-     * 主键 
-     */
-	@ApiModelProperty(value = "购物订单id", required = true)
-    private Long id;
-
-    /**
-     * 商家ID
-     */
-	@ApiModelProperty(value = "商家id", required = true)
-    private Long merchantId;
-
-    /**
-     * 商家名称
-     */
-	@ApiModelProperty(value = "商家名称", required = true)
-    private String merchantName;
-
     /**
      * 收货人姓名
      */
@@ -50,35 +31,11 @@ public class ShoppingOrderExtendDetailDTO implements Serializable {
     private String consigneeMobile;
     
     /**
-     * 运费
-     */
-	@ApiModelProperty(value = "运费", required = true)
-    private BigDecimal freightPrice;
-
-    /**
      * 商品总价
      */
 	@ApiModelProperty(value = "商品总价", required = true)
     private BigDecimal commodityTotalPrice;
-
-    /**
-     * 订单总价
-     */
-	@ApiModelProperty(value = "商品总价", required = true)
-    private BigDecimal orderTotalPrice;
-
-    /**
-     * 订单的总状态
-     */
-	@ApiModelProperty(value = "订单状态|PENDING 待处理|PENDING_PAYMENT 待付款|BE_SHIPPED 待发货|TO_BE_RECEIVED 待收货|TRADING_SUCCESS 交易成功|CANCEL_TRANSACTION 交易关闭|REFUNDING 退款中", required = true)
-    private ShoppingOrderStatusEnum orderStatus;
-
-    /**
-    * 是否支持无理由退货,0否 1是
-    */
-	@ApiModelProperty(value = "是否支持无理由退货(false 不支持|true 支持)", required = true)
-   private Boolean isNoReasonReturn;
-    
+	
     /**
      * 订单编号
      */
@@ -110,35 +67,41 @@ public class ShoppingOrderExtendDetailDTO implements Serializable {
     private Date gmtCreate;
     
     /**
-     * 订单项
+     * 快递公司名称
      */
-	@ApiModelProperty(value = "订单项", required = true)
-    private List<ShoppingOrderItemDTO> items;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getMerchantId() {
-		return merchantId;
-	}
-
-	public void setMerchantId(Long merchantId) {
-		this.merchantId = merchantId;
-	}
-
-	public String getMerchantName() {
-		return merchantName;
-	}
-
-	public void setMerchantName(String merchantName) {
-		this.merchantName = merchantName;
-	}
-
+	@ApiModelProperty(value = "快递公司名称", required = false)
+    private String expressCompanyName;
+	
+    /**
+     * 运单编号
+     */
+	@ApiModelProperty(value = "运单编号", required = false)
+    private String waybillNum;
+	
+	/**
+	 * 支付方式
+	 */
+	@ApiModelProperty(value = "支付方式(BALANCE-余额|ALIPAY-支付宝|WX-微信)", required = false)
+	private TransactionPayTypeEnum paymentMethod;
+	
+	/**
+	 * 商家编号
+	 */
+	@ApiModelProperty(value = "商家编号", required = true)
+	private String merchantNum;
+	
+	/**
+	 * 倒计时
+	 */
+	@ApiModelProperty(value = "倒计时", required = false)
+	private Long countdown;
+	
+	/**
+	 * 最新更新的物流记录
+	 */
+	@ApiModelProperty(value = "最新的物流记录", required = false)
+	private TraceDTO trace;
+	
 	public String getConsigneeName() {
 		return consigneeName;
 	}
@@ -163,44 +126,12 @@ public class ShoppingOrderExtendDetailDTO implements Serializable {
 		this.consigneeMobile = consigneeMobile;
 	}
 
-	public BigDecimal getFreightPrice() {
-		return freightPrice;
-	}
-
-	public void setFreightPrice(BigDecimal freightPrice) {
-		this.freightPrice = freightPrice;
-	}
-
 	public BigDecimal getCommodityTotalPrice() {
 		return commodityTotalPrice;
 	}
 
 	public void setCommodityTotalPrice(BigDecimal commodityTotalPrice) {
 		this.commodityTotalPrice = commodityTotalPrice;
-	}
-
-	public BigDecimal getOrderTotalPrice() {
-		return orderTotalPrice;
-	}
-
-	public void setOrderTotalPrice(BigDecimal orderTotalPrice) {
-		this.orderTotalPrice = orderTotalPrice;
-	}
-
-	public ShoppingOrderStatusEnum getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(ShoppingOrderStatusEnum orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-
-	public Boolean getIsNoReasonReturn() {
-		return isNoReasonReturn;
-	}
-
-	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
-		this.isNoReasonReturn = isNoReasonReturn;
 	}
 
 	public String getOrderNum() {
@@ -243,12 +174,52 @@ public class ShoppingOrderExtendDetailDTO implements Serializable {
 		this.gmtCreate = gmtCreate;
 	}
 
-	public List<ShoppingOrderItemDTO> getItems() {
-		return items;
+	public String getExpressCompanyName() {
+		return expressCompanyName;
 	}
 
-	public void setItems(List<ShoppingOrderItemDTO> items) {
-		this.items = items;
+	public void setExpressCompanyName(String expressCompanyName) {
+		this.expressCompanyName = expressCompanyName;
 	}
-	
+
+	public String getWaybillNum() {
+		return waybillNum;
+	}
+
+	public void setWaybillNum(String waybillNum) {
+		this.waybillNum = waybillNum;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+
+	public String getMerchantNum() {
+		return merchantNum;
+	}
+
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
+	}
+
+	public Long getCountdown() {
+		return countdown;
+	}
+
+	public void setCountdown(Long countdown) {
+		this.countdown = countdown;
+	}
+
+	public TraceDTO getTrace() {
+		return trace;
+	}
+
+	public void setTrace(TraceDTO trace) {
+		this.trace = trace;
+	}
+
 }

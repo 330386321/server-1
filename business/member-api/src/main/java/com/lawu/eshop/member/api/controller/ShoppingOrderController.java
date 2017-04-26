@@ -59,7 +59,13 @@ public class ShoppingOrderController extends BaseController {
     public Result<Page<ShoppingOrderExtendQueryDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "购物订单查询参数") ShoppingOrderQueryForeignToMemberParam param) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	return successCreated(shoppingOrderService.selectPageByMemberId(memberId, param));
+    	Result<Page<ShoppingOrderExtendQueryDTO>> result = shoppingOrderService.selectPageByMemberId(memberId, param);
+    	
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    	
+    	return successCreated(result);
     }
     
     /**

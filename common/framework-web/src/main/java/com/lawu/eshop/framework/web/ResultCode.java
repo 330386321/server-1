@@ -39,6 +39,7 @@ public class ResultCode {
     public static final int UPLOAD_SIZE_BIGER = 1021;
     public static final int PAY_PWD_NULL = 1022;
     public static final int PAY_PWD_ERROR = 1023;
+    public static final int ILLEGAL_OPERATION = 1024;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -64,11 +65,9 @@ public class ResultCode {
     // 商品模块代码 3xxx
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
-    public static final int GOODS_DO_NOT_EXIST = 3002;
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
 
     // 订单模块代码 4xxx
-    public static final int PRODUCT_NOT_FOUND_IN_CART = 4000;
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
     public static final int ORDER_NOT_CANCELED = 4002;
     public static final int ORDER_NOT_DELETE = 4003;
@@ -169,6 +168,7 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
         ResultCode.messageMap.put(PAY_PWD_NULL, "支付密码尚未设置");
         ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
+        ResultCode.messageMap.put(ILLEGAL_OPERATION, "非法操作");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
@@ -193,11 +193,9 @@ public class ResultCode {
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
-        ResultCode.messageMap.put(GOODS_DO_NOT_EXIST, "商品型号对应的商品信息不存在");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
 
         // 订单模块 4xxx
-        ResultCode.messageMap.put(PRODUCT_NOT_FOUND_IN_CART, "商品不在购物车内");
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
         ResultCode.messageMap.put(ORDER_NOT_CANCELED, "订单不能被取消");
         ResultCode.messageMap.put(ORDER_NOT_DELETE, "订单不能被删除");
