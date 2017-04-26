@@ -54,6 +54,7 @@ public class ProductCategoryController extends BaseController {
 		return successCreated(dto);
 	}
 
+	@Audit(date = "2017-04-26", reviewer = "孙林青")
 	@ApiOperation(value = "根据父ID查询商品分类", notes = "根据父ID查询商品分类，(杨清华)", httpMethod = "GET")
 	@RequestMapping(value = "find/{parentId}", method = RequestMethod.GET)
 	public Result<List<ProductCategoryDTO>> find(

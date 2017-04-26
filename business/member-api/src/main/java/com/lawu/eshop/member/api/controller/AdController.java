@@ -262,8 +262,9 @@ public class AdController extends BaseController {
      	 Result<Page<AdSolrDTO>>  page=adService.queryAdByTitle(findParam);
      	 return page;
      }
-    
-    
+
+
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "领取红包", notes = "领取红包[5004]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

@@ -60,6 +60,7 @@ public class StoreSolrController extends BaseController {
         return storeSolrService.listStoreSearchWord(name);
     }
 
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "要买单人气推荐", notes = "要买单人气推荐。[1100]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendStore", method = RequestMethod.GET)
