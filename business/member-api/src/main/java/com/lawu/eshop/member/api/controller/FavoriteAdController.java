@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FavoriteAdService;
+import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +42,9 @@ public class FavoriteAdController extends BaseController{
 	
 	@Autowired
 	private FavoriteAdService favoriteAdService;
+	
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 	
 	/**
 	 * 广告的收藏
@@ -72,6 +79,16 @@ public class FavoriteAdController extends BaseController{
                                                                  @ModelAttribute @ApiParam( value = "查询信息") FavoriteAdParam param) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<FavoriteAdDOViewDTO>>  pageDTOS=favoriteAdService.selectMyFavoriteAd(memberId, param);
+    	if(isSuccess(pageDTOS)){
+    		List<FavoriteAdDOViewDTO> list=pageDTOS.getModel().getRecords();
+    		for (FavoriteAdDOViewDTO favoriteAdDOViewDTO : list) {
+    			Result<MerchantStoreDTO> rs=merchantStoreService.selectMerchantStoreByMId(favoriteAdDOViewDTO.getMerchantId());
+				if(isSuccess(rs)){
+					favoriteAdDOViewDTO.setLogoUrl(rs.getModel().getLogoUrl());
+					favoriteAdDOViewDTO.setName(rs.getModel().getName());
+				}
+			}
+    	}
     	return pageDTOS;
     }
 

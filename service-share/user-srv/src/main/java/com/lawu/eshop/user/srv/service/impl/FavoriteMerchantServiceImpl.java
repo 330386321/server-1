@@ -101,6 +101,8 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Override
     public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId, FavoriteMerchantParam pageQuery) {
+    	FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
+    	exmple.createCriteria().andMemberIdEqualTo(memberId);
     	FavoriteMerchantDOView view=new FavoriteMerchantDOView();
     	view.setMemberId(memberId);
     	view.setType(pageQuery.getManageTypeEnum().val);
@@ -120,10 +122,15 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 				 favoriteMerchantBO.setDistance(distance); 
         	}
         	
+        	FansMerchantDOExample fmExample=new FansMerchantDOExample();
+        	fmExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
+        	Integer fansCount=0;
+        	fansCount=fansMerchantDOMapper.countByExample(fmExample);
+        	favoriteMerchantBO.setFansCount(fansCount);
         	listBO.add(favoriteMerchantBO);
 		}
         Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();
-        page.setTotalCount(list.size());
+        page.setTotalCount(favoriteMerchantDOMapper.countByExample(exmple));
         page.setCurrentPage(pageQuery.getCurrentPage());
         page.setRecords(listBO);
         return page;

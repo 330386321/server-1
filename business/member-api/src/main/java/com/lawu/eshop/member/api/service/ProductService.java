@@ -40,5 +40,13 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/getProduct/{id}")
     Result<ProductInfoDTO> getProductById(@PathVariable("id") Long id);
+    
+    /**
+     * 查询商家上架的商品数量
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/selectProductCount")
+    Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId);
 
 }

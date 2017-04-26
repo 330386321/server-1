@@ -31,7 +31,7 @@ public class AdPage<T> {
     	}
     	if(totalCount > 0){
     	    if(startNum <= pageCount){
-    	       if(startNum == 0){
+    	       if(startNum == 1){
 			    	if(totalCount <= endNum){
 			    	   //截止到总的数据条数(当前数据不足一页，按一页显示)，这样才不会出现数组越界异常
 			    	    result = list.subList(0, totalCount);

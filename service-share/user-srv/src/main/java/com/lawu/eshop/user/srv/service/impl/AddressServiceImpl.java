@@ -37,7 +37,7 @@ public class AddressServiceImpl implements AddressService {
 		addressDO.setUserId(userId);
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
-		addressDO.setIsDefault(false);
+		addressDO.setIsDefault(true);
 		addressDO.setStatus(new Byte("1"));
 		Integer id = addressDOMapper.insert(addressDO);
 		return id;
@@ -138,6 +138,7 @@ public class AddressServiceImpl implements AddressService {
 		addressDO.setStatus(StatusEnum.VALID.getValue());
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
+		addressDO.setIsDefault(true);
 		
 		int result = addressDOMapper.insertSelective(addressDO);
 		

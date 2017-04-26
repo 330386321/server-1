@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
@@ -25,6 +26,7 @@ public class FavoriteAdConverter {
         favoriteProductBO.setMediaUrl(favoriteAdDOView.getMediaUrl());
         favoriteProductBO.setMerchantId(favoriteAdDOView.getMerchantId());
         favoriteProductBO.setTitle(favoriteAdDOView.getTitle());
+        favoriteProductBO.setStatusEnum(AdStatusEnum.getEnum(favoriteAdDOView.getStatus()));
         return favoriteProductBO;
     }
 	
@@ -62,6 +64,7 @@ public class FavoriteAdConverter {
 		favoriteAdDOViewDTO.setMediaUrl(favoriteAdDOViewBO.getMediaUrl());
 		favoriteAdDOViewDTO.setMerchantId(favoriteAdDOViewBO.getMerchantId());
 		favoriteAdDOViewDTO.setTitle(favoriteAdDOViewBO.getTitle());
+		favoriteAdDOViewDTO.setStatusEnum(favoriteAdDOViewBO.getStatusEnum());
         return favoriteAdDOViewDTO;
     }
 	

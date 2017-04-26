@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -52,5 +52,5 @@ public interface AdExtendService {
     Result<AdPraiseDTO> selectAbPraiseById(Long id);
 	
 	
-    Result clickPraise(Long id);
+    Result<PraisePointDTO> clickPraise(Long id);
 }

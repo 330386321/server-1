@@ -38,7 +38,7 @@ public class AddressParam implements Serializable {
 	@NotBlank(message = "详细地址不能为空")
 	private String addr;
 
-	@ApiModelProperty(name = "postcode", required = true, value = "邮编")
+	@ApiModelProperty(name = "postcode", value = "邮编")
 	@NotBlank(message = "邮编不能为空")
 	private String postcode;
 

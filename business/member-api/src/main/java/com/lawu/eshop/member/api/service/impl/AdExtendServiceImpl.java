@@ -273,7 +273,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 
 	@Override
-	public Result clickPraise(Long id) {
+	public Result<PraisePointDTO> clickPraise(Long id) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
 		
@@ -332,7 +332,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
     	Page<AdDTO> newPage=new Page<AdDTO>();
     	newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
-    	newPage.setTotalCount(newList.size());
+    	newPage.setTotalCount(screenList.size());
     	newPage.setRecords(screenList);
 		return successGet(newPage);
 	}

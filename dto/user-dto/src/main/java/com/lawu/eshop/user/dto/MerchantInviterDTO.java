@@ -32,6 +32,9 @@ public class MerchantInviterDTO {
 	
 	@ApiModelProperty(value = "是否审核(0：待审核，1：审核通过，2：审核不通过，3：未提交保证金，4：已提交保证金待财务核实，5：财务审核不通过)", required = true)
 	private MerchantStatusEnum statusEnum;
+	
+	@ApiModelProperty(value = "邀请人数", required = true)
+	private Integer inviterCount;
 
 	public String getAccount() {
 		return account;
@@ -103,6 +106,14 @@ public class MerchantInviterDTO {
 
 	public void setPath(String path) {
 		this.path = path;
+	}
+
+	public Integer getInviterCount() {
+		return inviterCount;
+	}
+
+	public void setInviterCount(Integer inviterCount) {
+		this.inviterCount = inviterCount;
 	}
 
 	

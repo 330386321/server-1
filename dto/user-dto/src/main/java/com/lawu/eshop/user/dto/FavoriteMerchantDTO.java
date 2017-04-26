@@ -24,6 +24,12 @@ public class FavoriteMerchantDTO {
 	@ApiModelProperty(value = "距离")
 	private int distance;
 	
+	@ApiModelProperty(value = "粉丝总数量")
+	private Integer fansCount;
+	
+	@ApiModelProperty(value = "在售商品总数量")
+	private Integer saleCount;
+	
 
 	public int getDistance() {
 		return distance;
@@ -73,5 +79,22 @@ public class FavoriteMerchantDTO {
 		this.path = path;
 	}
 
+	public Integer getFansCount() {
+		return fansCount;
+	}
+
+	public void setFansCount(Integer fansCount) {
+		this.fansCount = fansCount;
+	}
+
+	public Integer getSaleCount() {
+		return saleCount;
+	}
+
+	public void setSaleCount(Integer saleCount) {
+		this.saleCount = saleCount;
+	}
+	
+	
 
 }

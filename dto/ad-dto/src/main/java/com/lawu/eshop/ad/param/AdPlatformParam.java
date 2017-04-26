@@ -77,6 +77,14 @@ public class AdPlatformParam {
 		this.merchantStoreId = merchantStoreId;
 	}
 
+	public PositionEnum getPositionEnum() {
+		return positionEnum;
+	}
+
+	public void setPositionEnum(PositionEnum positionEnum) {
+		this.positionEnum = positionEnum;
+	}
+
 
 
 	

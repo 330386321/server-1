@@ -30,6 +30,7 @@ public class MerchantInviterConverter {
 			FIO.setGmtCreate(inviterMerchantDO.getGmtCreate());
 			FIO.setStatusEnum(MerchantStatusEnum.getEnum(inviterMerchantDO.getStatus()));
 			FIO.setPath(inviterMerchantDO.getPath());
+			FIO.setInviterCount(inviterMerchantDO.getInviterCount());
 			FIBOS.add(FIO);
 			
 		}
@@ -56,6 +57,7 @@ public class MerchantInviterConverter {
         DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
         DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
         DTO.setPath(merchantInviterBO.getPath());
+        DTO.setInviterCount(merchantInviterBO.getInviterCount());
         return DTO;
     }
 	

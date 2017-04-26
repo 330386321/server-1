@@ -220,7 +220,7 @@ public class ProductController extends BaseController {
 	 * @date 2017/4/25
 	 */
 	@RequestMapping(value = "selectProductByPlat", method = RequestMethod.POST)
-	public Result<List<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
+	public Result<List<ProductPlatDTO>> selectProductByPlat(ProductParam param) {
 		List<ProductQueryBO> boList = productService.selectProductPlat(param);
 		List<ProductPlatDTO> dtoList=new ArrayList<>();
 		if(!boList.isEmpty()){
@@ -234,6 +234,19 @@ public class ProductController extends BaseController {
 
 		return successGet(dtoList);
 	}
+	
+	
+	 /**
+     * 查询商家上架商品的总数量
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "selectProductCount", method = RequestMethod.GET)
+    public Result<Integer> selectProductCount(@RequestParam Long merchantId) {
+        int count = productService.selectProductCount(merchantId);
+        return successGet(count);
+    }
 
     /**
      * 查询所有上架中商品

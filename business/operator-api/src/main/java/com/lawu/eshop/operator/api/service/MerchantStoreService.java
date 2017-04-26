@@ -14,7 +14,7 @@ import com.lawu.eshop.user.param.MerchantStorePlatParam;
 @FeignClient(value = "user-srv")
 public interface MerchantStoreService {
 	
-	 @RequestMapping(value = "merchantStore/selectAllMerchantStore",method = RequestMethod.GET)
+	 @RequestMapping(value = "merchantStore/selectAllMerchantStore",method = RequestMethod.POST)
 	 Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@ModelAttribute MerchantStorePlatParam param);
 
 }

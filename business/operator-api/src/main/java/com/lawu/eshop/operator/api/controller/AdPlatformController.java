@@ -28,7 +28,6 @@ import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductPlatDTO;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
-import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
 
 import io.swagger.annotations.Api;
@@ -71,7 +70,7 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "removeAdPlatform/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adPlatformService.removeAdPlatform(id);
-        return rs;
+        return successDelete();
     }
     
     
@@ -140,16 +139,17 @@ public class AdPlatformController extends BaseController {
     
     
 
-    @PageBody
+
     @ApiOperation(value = "查询所有商家的商品", notes = "查询所有商家的商品  [](张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectProductByPlat", method = RequestMethod.GET)
     public Result<List<ProductPlatDTO>> selectProductByPlat(@ModelAttribute @ApiParam ProductParam param) {
-    	return productService.selectProductByPlat(param);
+    	Result<List<ProductPlatDTO>> rs=productService.selectProductByPlat(param);
+    	return rs;
     }
     
     
-    @PageBody
+
     @ApiOperation(value = "查询所有店铺", notes = "查询所有店铺  [](张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.GET)

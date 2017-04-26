@@ -80,7 +80,8 @@ public class AdPlatformConverter {
 			adPlatformBO.setType(adPlatformDO.getType());
 			adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
 			adPlatformBO.setContent(adPlatformDO.getContent());
-			adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
+			if(adPlatformDO.getMerchantStoreId()!=null)
+				adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
 			if(adPlatformDO.getType()==1){
 				adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
 			}else{

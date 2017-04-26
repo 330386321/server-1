@@ -47,6 +47,16 @@ public class FavoriteAdDOView {
 	
 	private Long memberId;
 	
+	private byte status;
+	
+
+	public byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(byte status) {
+		this.status = status;
+	}
 
 	public Long getMemberId() {
 		return memberId;

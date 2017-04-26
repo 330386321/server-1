@@ -268,6 +268,11 @@ public class MerchantServiceImpl implements MerchantService {
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         //推荐的商家
         List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
+        for (InviterMerchantDOView inviterMerchantDOView : inviterMerchantDOS) {
+        	 MerchantProfileDO  merchantProfileDO =merchantProfileDOMapper.selectByPrimaryKey(inviterMerchantDOView.getId());
+        	 inviterMerchantDOView.setInviterCount(merchantProfileDO.getInviteMerchantCount2()+merchantProfileDO.getInviteMerchantCount3());
+		}
+       
         Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();
         pageMerchantInviter.setTotalCount(inviterMerchantDOS.size());
         List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);

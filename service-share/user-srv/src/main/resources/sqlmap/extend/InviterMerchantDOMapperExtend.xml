@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend" >
   <resultMap id="BaseResultMap" type="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" >
+    <id column="id" property="id" jdbcType="BIGINT" />
     <result column="account" property="account" jdbcType="VARCHAR" />
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="inviter_id" property="inviterId" jdbcType="BIGINT" />
@@ -15,7 +16,8 @@
   </resultMap>
 
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" id="selectInviterMerchantByRowbounds" >
-    select 
+    select
+    	me.id as id, 
     	me.account as account,
     	me.mobile as mobile,
     	ms.name as name,

@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.dto;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class FavoriteAdDOViewDTO {
@@ -21,6 +23,24 @@ public class FavoriteAdDOViewDTO {
 	
 	@ApiModelProperty(value = "广告内容")
 	private String content;
+	
+	@ApiModelProperty(value = "店铺logo")
+	private String logoUrl;
+	
+	@ApiModelProperty(value = "店铺名称")
+	private String name;
+	
+	@ApiModelProperty(value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中 AD_STATUS_PUTED 投放结束 AD_STATUS_OUT 下架")
+	private AdStatusEnum  statusEnum;
+	
+	
+	public AdStatusEnum getStatusEnum() {
+		return statusEnum;
+	}
+
+	public void setStatusEnum(AdStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
+	}
 
 	public Long getId() {
 		return id;
@@ -68,6 +88,22 @@ public class FavoriteAdDOViewDTO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	

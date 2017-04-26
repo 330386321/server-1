@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FavoriteMerchantService;
+import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
 
@@ -42,6 +44,9 @@ public class FavoriteMerchantController extends BaseController{
 	
 	@Resource
 	private FavoriteMerchantService favoriteMerchantService;
+	
+	@Resource
+	private ProductService productService;
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
@@ -63,8 +68,25 @@ public class FavoriteMerchantController extends BaseController{
     public Result<Page<FavoriteMerchantDTO>> findMemberListByUser(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 																  @ModelAttribute @ApiParam(value = "查询信息") FavoriteMerchantParam pageQuery) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-    	Result<Page<FavoriteMerchantDTO>> page = favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
-    	return page;
+    	Result<Page<FavoriteMerchantDTO>> pageRs = favoriteMerchantService.getMyFavoriteMerchant(memberId,pageQuery);
+    	 List<FavoriteMerchantDTO> list =pageRs.getModel().getRecords();
+    	 Page<FavoriteMerchantDTO> newPage=new Page<>();
+    	 newPage.setCurrentPage(pageQuery.getCurrentPage());
+    	 newPage.setTotalCount(pageRs.getModel().getTotalCount());
+    	 List<FavoriteMerchantDTO> newList=new ArrayList<>();
+    	 if(!list.isEmpty()){
+    		 for (FavoriteMerchantDTO favoriteMerchantDTO : list) {
+    			 Result<Integer> rsCount= productService.selectProductCount(favoriteMerchantDTO.getMerchantId());
+    			 if(rsCount.getModel()==null){
+    				 favoriteMerchantDTO.setSaleCount(0);
+    			 }else{
+    				 favoriteMerchantDTO.setSaleCount(rsCount.getModel());
+    			 }
+    			 newList.add(favoriteMerchantDTO);
+			}
+    	 }
+    	 newPage.setRecords(newList);
+    	return successGet(newPage);
     }
 	
 	@Audit(date = "2017-03-29", reviewer = "孙林青")

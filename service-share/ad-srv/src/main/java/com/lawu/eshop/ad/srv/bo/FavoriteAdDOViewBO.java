@@ -1,5 +1,7 @@
 package com.lawu.eshop.ad.srv.bo;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+
 public class FavoriteAdDOViewBO {
 
 	/**
@@ -31,6 +33,17 @@ public class FavoriteAdDOViewBO {
 	 * 广告内容
 	 */
 	private String content;
+	
+	private AdStatusEnum  statusEnum;
+	
+	
+	public AdStatusEnum getStatusEnum() {
+		return statusEnum;
+	}
+
+	public void setStatusEnum(AdStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
+	}
 
 	public Long getId() {
 		return id;

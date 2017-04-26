@@ -13,6 +13,8 @@ import java.util.Date;
 public class InviterMerchantDOView implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private Long id;
 
 	/**
 	 * 商家账号
@@ -68,6 +70,26 @@ public class InviterMerchantDOView implements Serializable {
 	 * 图片
 	 */
 	private String path;
+	
+	private Integer inviterCount;
+	
+	
+
+	public Integer getInviterCount() {
+		return inviterCount;
+	}
+
+	public void setInviterCount(Integer inviterCount) {
+		this.inviterCount = inviterCount;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getAccount() {
 		return account;

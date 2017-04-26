@@ -23,6 +23,18 @@ public class MerchantInviterBO {
 	private String path;
 	
 	private MerchantStatusEnum statusEnum;
+	
+	private Integer inviterCount;
+	
+	
+
+	public Integer getInviterCount() {
+		return inviterCount;
+	}
+
+	public void setInviterCount(Integer inviterCount) {
+		this.inviterCount = inviterCount;
+	}
 
 	public String getAccount() {
 		return account;

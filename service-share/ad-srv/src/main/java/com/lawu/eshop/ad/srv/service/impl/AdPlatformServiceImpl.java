@@ -35,6 +35,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 		adPlatformDO.setTitle(adPlatformParam.getTitle());
 		adPlatformDO.setMediaUrl(url);
 		adPlatformDO.setType(adPlatformParam.getTypeEnum().val);
+		adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
 		//纯链接
 		if(adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_LINK)){
 			adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
