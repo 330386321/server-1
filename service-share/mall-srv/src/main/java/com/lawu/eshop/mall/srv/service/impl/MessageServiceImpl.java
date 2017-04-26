@@ -66,7 +66,7 @@ public class MessageServiceImpl implements MessageService {
     public Page<MessageBO> getMessageList(String userNum, MessageParam pageParam) {
 
        MessageDOExample example = new MessageDOExample();
-       example.createCriteria().andUserNumEqualTo(userNum);
+       example.createCriteria().andUserNumEqualTo(userNum).andStatusNotEqualTo(MessageStatusEnum.MESSAGE_STATUS_DELETE.val);
        example.setOrderByClause("id desc");
         //查询总数
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
