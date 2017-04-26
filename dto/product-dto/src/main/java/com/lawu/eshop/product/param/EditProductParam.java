@@ -44,7 +44,6 @@ public class EditProductParam {
 	private String backProductImageUrls;
 	
 	@ApiParam(value = "详情图片描述(以json字符串的格式传输，格式：[xxx,zzz,...]，其顺序要和其详情图片index一致)")
-	@NotBlank(message="imageContents不能为空")
 	private String imageContents;
 	
 	@ApiParam(value = "新增为空，修改时回显的详情图片url(新增时传空,格式：[url1,url2,...])")

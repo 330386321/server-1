@@ -1,6 +1,10 @@
 package com.lawu.eshop.mall.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
@@ -61,4 +65,20 @@ public interface CommentProductService {
     void delCommentByProductModelId(Long productModelId);
 
     void delCommentByOrderItemId(Long orderItemId);
+
+    /**
+     * 用户端商品详情，查询商品最近1条商品评价
+     * @param productId
+     * @return
+     * @author yangqh
+     */
+	List<MemberProductCommentDTO> geNewlyProductComment(Long productId);
+
+	/**
+     * 用户端商品详情，查询商品评价数量
+     * @param productId
+     * @return
+     * @author yangqh
+     */
+	Integer getProductCommentCount(Long productId);
 }

@@ -339,9 +339,11 @@ public class ProductController extends BaseController {
 				productDetailImage = getUpdateLaterImageDetailUrl(productDetailImage, backDetailImageUrls);
 			}
 		}
-
+		
 		productImage = productImage.substring(0, productImage.lastIndexOf(","));
-		productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
+		if(!"".equals(productDetailImage)){
+			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
+		}		
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
 		dataProduct.setProductId(productId);
@@ -350,7 +352,7 @@ public class ProductController extends BaseController {
 		dataProduct.setCategoryId(product.getCategoryId());
 		dataProduct.setContent(product.getContent());
 		dataProduct.setSpec(URLDecoder.decode(product.getSpec()));
-		dataProduct.setImageContents(imageContents);
+		dataProduct.setImageContents((imageContents == null || "".equals(imageContents)) ? "[]" : imageContents);
 		dataProduct.setFeatureImage(featureImage);
 		dataProduct.setProductImages(productImage);
 		dataProduct.setDetailImageMap(detailImageMap);

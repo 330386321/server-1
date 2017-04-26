@@ -1,5 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +13,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
+import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentMerchantParam;
 
@@ -56,4 +59,21 @@ public interface CommentMerchantService {
      */
     @RequestMapping(value = "commentMerchant/getCommentAvgGrade/{merchantId}",method = RequestMethod.GET)
     public Result<CommentGradeDTO> getCommentAvgGrade(@PathVariable("merchantId") Long merchantId);
+
+    /**
+     * 用户端商品详情，查询商品最近1条商品评价
+     * @param productId
+     * @return
+     * @author yangqh
+     */
+    @RequestMapping(value = "commentProduct/geNewlyProductComment",method = RequestMethod.GET)
+	public Result<List<MemberProductCommentDTO>> geNewlyProductComment(@RequestParam("productId") Long productId);
+
+    /**
+     * 用户端商品详情,查询用户评价数
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "commentProduct/getProductCommentCount",method = RequestMethod.GET)
+	public Result<Integer> getProductCommentCount(@RequestParam("productId") Long productId);
 }

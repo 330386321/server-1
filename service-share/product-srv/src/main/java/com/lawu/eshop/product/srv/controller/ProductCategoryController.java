@@ -8,6 +8,7 @@ import com.lawu.eshop.product.srv.bo.ProductCategoryBO;
 import com.lawu.eshop.product.srv.converter.ProductCategoryConverter;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,6 +61,17 @@ public class ProductCategoryController extends BaseController {
         if (productCategoryBOS == null || productCategoryBOS.isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
+        return successGet(ProductCategoryConverter.convertDTOS(productCategoryBOS));
+    }
+    
+    /**
+     * 根据parent_id查询
+     *
+     * @return
+     */
+    @RequestMapping(value = "find/{parentId}", method = RequestMethod.GET)
+    public Result<List<ProductCategoryDTO>> find(@PathVariable Long parentId) {
+        List<ProductCategoryBO> productCategoryBOS = productCategoryService.find(parentId);
         return successGet(ProductCategoryConverter.convertDTOS(productCategoryBOS));
     }
 }

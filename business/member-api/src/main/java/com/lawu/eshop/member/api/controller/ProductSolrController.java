@@ -116,9 +116,9 @@ public class ProductSolrController extends BaseController {
                     productSearchDTO.setProductId(adPlatformDTO.getProductId());
                     productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
                     productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
                     productSearchDTOS.add(productSearchDTO);
                 }
             }
@@ -136,9 +136,9 @@ public class ProductSolrController extends BaseController {
                     productSearchDTO.setProductId(adPlatformDTO.getProductId());
                     productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
                     productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
                     productSearchDTOS.add(productSearchDTO);
                 }
             }

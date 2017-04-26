@@ -104,9 +104,9 @@ public class ProductConverter {
         productInfoBO.setFeatureImage(productDO.getFeatureImage());
         productInfoBO.setContent(productDO.getContent());
         productInfoBO.setMerchantId(productDO.getMerchantId());
-        productInfoBO.setTotalSales(productDO.getTotalSalesVolume());
-        productInfoBO.setPriceMax(String.valueOf(productDO.getMaxPrice()));
-        productInfoBO.setPriceMin(String.valueOf(productDO.getMinPrice()));
+        productInfoBO.setTotalSalesVolume(productDO.getTotalSalesVolume());
+        productInfoBO.setMaxPrice(String.valueOf(productDO.getMaxPrice()));
+        productInfoBO.setMinPrice(String.valueOf(productDO.getMinPrice()));
         productInfoBO.setGmtCreate(productDO.getGmtCreate());
         return productInfoBO;
     }
@@ -126,7 +126,7 @@ public class ProductConverter {
         productEditInfoBO.setContent(productDO.getContent());
         productEditInfoBO.setMerchantId(productDO.getMerchantId());
         
-        String imageContent = productDO.getImageContent() == null ? "[]" : productDO.getImageContent();
+        String imageContent = (productDO.getImageContent() == null || "".equals(productDO.getImageContent())) ? "[]" : productDO.getImageContent();
         List<String> imageContents = StringUtil.getJsonListToStringList(imageContent);
         productEditInfoBO.setImageContent(imageContents);
         
@@ -148,11 +148,7 @@ public class ProductConverter {
         productInfoDTO.setFeatureImage(productBO.getFeatureImage());
         productInfoDTO.setContent(productBO.getContent());
         productInfoDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
-        productInfoDTO.setImageDetailUrl(productBO.getImageDetailUrl());
         productInfoDTO.setSpec(productBO.getSpec());
-        productInfoDTO.setTotalSales(productBO.getTotalSales());
-        productInfoDTO.setPriceMax(productBO.getPriceMax());
-        productInfoDTO.setPriceMin(productBO.getPriceMin());
         productInfoDTO.setGmtCreate(productBO.getGmtCreate());
         return productInfoDTO;
     }

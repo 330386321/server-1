@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
@@ -34,6 +35,7 @@ public interface MerchantStoreService {
      *
      * @param merchantId
      * @return
+     * @author yangqh
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/findIsNoReasonReturnById")
@@ -102,4 +104,13 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getMerchantStore/{id}")
     Result<MerchantStoreDTO> getMerchantStoreById(@PathVariable("id") Long id);
+
+    /**
+     * 用户端商品详情页面查询，店铺信息
+     * @param merchantId
+     * @return
+     * @author yangqh
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getMemberProductDetailStore")
+    Result<MemberProductStoreDTO> getMemberProductDetailStore(@RequestParam("merchantId") Long merchantId);
 }

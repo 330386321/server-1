@@ -69,7 +69,7 @@ public class AdPlatformController extends BaseController {
         		if(adPlatformDTO.getProductId()!=null){
         			AdRecommendDTO  dto=new AdRecommendDTO();
         			 Result<ProductInfoDTO>  prs=productService.selectProductById(adPlatformDTO.getProductId());
-        			 String price= prs.getModel().getPriceMin();
+        			 String price= prs.getModel().getMinPrice();
         			 dto.setPrice(price);
         			 dto.setContent(adPlatformDTO.getContent());
         			 dto.setId(adPlatformDTO.getId());

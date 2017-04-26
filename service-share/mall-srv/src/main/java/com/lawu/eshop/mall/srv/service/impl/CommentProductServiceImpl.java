@@ -7,6 +7,7 @@ import com.lawu.eshop.mall.constants.CommentAnonymousEnum;
 import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
+import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
@@ -40,300 +41,356 @@ import java.util.List;
 @Service
 public class CommentProductServiceImpl implements CommentProductService {
 
-    @Autowired
-    private CommentProductDOMapper commentProductDOMapper;
-    @Autowired
-    private CommentImageDOMapper commentImageDOMapper;
-    @Autowired
-    private CommentProductDOMapperExtend commentProductDOMapperExtend;
+	@Autowired
+	private CommentProductDOMapper commentProductDOMapper;
+	@Autowired
+	private CommentImageDOMapper commentImageDOMapper;
+	@Autowired
+	private CommentProductDOMapperExtend commentProductDOMapperExtend;
 
-    @Autowired
-    @Qualifier("orderCommentProductTransactionMainServiceImpl")
-    private TransactionMainService transactionMainService;
+	@Autowired
+	@Qualifier("orderCommentProductTransactionMainServiceImpl")
+	private TransactionMainService transactionMainService;
 
-    @Override
-    @Transactional
-    public Integer saveCommentProductInfo(Long memberId, CommentProductParam param, String headImg) {
-        CommentProductDO commentProductDO = new CommentProductDO();
-        commentProductDO.setMemberId(memberId);
-        commentProductDO.setContent(param.getContent());
-        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
-        commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
-        commentProductDO.setOrderItemId(param.getShoppingOrderItemId());
-        commentProductDO.setMerchantId(param.getMerchantId());
-        commentProductDO.setProductModelId(param.getProductModelId());
-        commentProductDO.setGrade(param.getGradeEnum().val);
-        commentProductDO.setProductId(param.getProductId());
-        commentProductDO.setGmtCreate(new Date());
-        commentProductDO.setGmtModified(new Date());
-         commentProductDOMapper.insert(commentProductDO);//新增评价信息
-        Long id =commentProductDO.getId();
-        if (!StringUtils.isEmpty(headImg)) {
-            String imgs[] = headImg.split(",");
-            if (id != null && id > 0) {
-                //新增评价图片
-                for (int i = 0; i < imgs.length; i++) {
-                    if (!StringUtils.isEmpty(imgs[i])) {
-                        CommentImageDO commentImageDO = new CommentImageDO();
-                        commentImageDO.setCommentId(id);
-                        commentImageDO.setImgUrl(imgs[i]);
-                        commentImageDO.setStatus(true);//有效
-                        commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);//评论商品
-                        commentImageDO.setGmtCreate(new Date());
-                        commentImageDO.setGmtModified(new Date());
-                        commentImageDOMapper.insert(commentImageDO);
-                    }
-                }
-            }
-        }
-        // 更新评价状态 发消息
-        transactionMainService.sendNotice(param.getShoppingOrderItemId());
-        return id.intValue();
-    }
+	@Override
+	@Transactional
+	public Integer saveCommentProductInfo(Long memberId, CommentProductParam param, String headImg) {
+		CommentProductDO commentProductDO = new CommentProductDO();
+		commentProductDO.setMemberId(memberId);
+		commentProductDO.setContent(param.getContent());
+		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
+		commentProductDO.setIsAnonymous(param.getAnonymousEnum().val);// 匿名
+		commentProductDO.setOrderItemId(param.getShoppingOrderItemId());
+		commentProductDO.setMerchantId(param.getMerchantId());
+		commentProductDO.setProductModelId(param.getProductModelId());
+		commentProductDO.setGrade(param.getGradeEnum().val);
+		commentProductDO.setProductId(param.getProductId());
+		commentProductDO.setGmtCreate(new Date());
+		commentProductDO.setGmtModified(new Date());
+		commentProductDOMapper.insert(commentProductDO);// 新增评价信息
+		Long id = commentProductDO.getId();
+		if (!StringUtils.isEmpty(headImg)) {
+			String imgs[] = headImg.split(",");
+			if (id != null && id > 0) {
+				// 新增评价图片
+				for (int i = 0; i < imgs.length; i++) {
+					if (!StringUtils.isEmpty(imgs[i])) {
+						CommentImageDO commentImageDO = new CommentImageDO();
+						commentImageDO.setCommentId(id);
+						commentImageDO.setImgUrl(imgs[i]);
+						commentImageDO.setStatus(true);// 有效
+						commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);// 评论商品
+						commentImageDO.setGmtCreate(new Date());
+						commentImageDO.setGmtModified(new Date());
+						commentImageDOMapper.insert(commentImageDO);
+					}
+				}
+			}
+		}
+		// 更新评价状态 发消息
+		transactionMainService.sendNotice(param.getShoppingOrderItemId());
+		return id.intValue();
+	}
 
-    @Override
-    public Page<CommentProductBO> getCommentProducts(CommentProductListParam listParam) {
-        CommentProductDOExample example = new CommentProductDOExample();
-        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
-                andProductIdEqualTo(listParam.getProductId());
-        example.setOrderByClause("id desc");
-        RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
-        Page<CommentProductBO> page = new Page<>();
-        page.setTotalCount(commentProductDOMapper.countByExample(example));
-        page.setCurrentPage(listParam.getCurrentPage());
+	@Override
+	public Page<CommentProductBO> getCommentProducts(CommentProductListParam listParam) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
+				.andProductIdEqualTo(listParam.getProductId());
+		example.setOrderByClause("id desc");
+		RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
+		Page<CommentProductBO> page = new Page<>();
+		page.setTotalCount(commentProductDOMapper.countByExample(example));
+		page.setCurrentPage(listParam.getCurrentPage());
 
-        //查询评价列表
-        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        List<CommentProductBO> commentProductBOS = new ArrayList<>();
-        for (CommentProductDO commentProductDO : commentProductDOS) {
-            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
-            CommentImageDOExample imageDOExample = new CommentImageDOExample();
-            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
-            List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-            List<String> images = new ArrayList<String>();
-            if (!commentImageDOS.isEmpty()) {
-                for (int i = 0; i < commentImageDOS.size(); i++) {
-                    images.add(commentImageDOS.get(i).getImgUrl());
-                }
-                commentProductBO.setUrlImgs(images);
-            }
+		// 查询评价列表
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,
+				rowBounds);
+		List<CommentProductBO> commentProductBOS = new ArrayList<>();
+		for (CommentProductDO commentProductDO : commentProductDOS) {
+			CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+			CommentImageDOExample imageDOExample = new CommentImageDOExample();
+			imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
+					.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+			List<String> images = new ArrayList<String>();
+			if (!commentImageDOS.isEmpty()) {
+				for (int i = 0; i < commentImageDOS.size(); i++) {
+					images.add(commentImageDOS.get(i).getImgUrl());
+				}
+				commentProductBO.setUrlImgs(images);
+			}
 
-            commentProductBOS.add(commentProductBO);
-        }
-        page.setRecords(commentProductBOS);
-        return page;
-    }
+			commentProductBOS.add(commentProductBO);
+		}
+		page.setRecords(commentProductBOS);
+		return page;
+	}
 
-    @Override
-    public Page<CommentProductBO> getCommentProductsWithImgs(CommentProductListParam listParam) {
+	@Override
+	public Page<CommentProductBO> getCommentProductsWithImgs(CommentProductListParam listParam) {
 
-        int totalCount = commentProductDOMapperExtend.selectCountByProductId(listParam.getProductId());
+		int totalCount = commentProductDOMapperExtend.selectCountByProductId(listParam.getProductId());
 
-        Page<CommentProductBO> commentProductBOPage = new Page<CommentProductBO>();
-        commentProductBOPage.setTotalCount(totalCount);
-        commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
+		Page<CommentProductBO> commentProductBOPage = new Page<CommentProductBO>();
+		commentProductBOPage.setTotalCount(totalCount);
+		commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
 
-        CommentProductPageParam productPageParam = new CommentProductPageParam();
-        productPageParam.setCurrentPage(listParam.getOffset());
-        productPageParam.setPageSize(listParam.getPageSize());
-        productPageParam.setProductId(listParam.getProductId());
-        //查询评论列表信息
-        List<CommentProductDOView> commentProductDOViews = commentProductDOMapperExtend.selectCommentsWithImg(productPageParam);
+		CommentProductPageParam productPageParam = new CommentProductPageParam();
+		productPageParam.setCurrentPage(listParam.getOffset());
+		productPageParam.setPageSize(listParam.getPageSize());
+		productPageParam.setProductId(listParam.getProductId());
+		// 查询评论列表信息
+		List<CommentProductDOView> commentProductDOViews = commentProductDOMapperExtend
+				.selectCommentsWithImg(productPageParam);
 
-        Page<CommentProductBO> pages = new Page<CommentProductBO>();
-        List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
-        if (!commentProductDOViews.isEmpty()) {
-            for (CommentProductDOView commentProductDOView : commentProductDOViews) {
-                CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
-                //查询对应的评价图片
-                CommentImageDOExample imageDOExample = new CommentImageDOExample();
-                imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDOView.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
-                List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-                List<String> images = new ArrayList<String>();
-                if (!commentImageDOS.isEmpty()) {
-                    for (int i = 0; i < commentImageDOS.size(); i++) {
-                        images.add(commentImageDOS.get(i).getImgUrl());
-                    }
-                    commentProductBO.setUrlImgs(images);
-                }
-                commentProductBOS.add(commentProductBO);
-            }
-        }
-        pages.setCurrentPage(listParam.getCurrentPage());
-        pages.setTotalCount(totalCount);
-        pages.setRecords(commentProductBOS);
-        return pages;
-    }
+		Page<CommentProductBO> pages = new Page<CommentProductBO>();
+		List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
+		if (!commentProductDOViews.isEmpty()) {
+			for (CommentProductDOView commentProductDOView : commentProductDOViews) {
+				CommentProductBO commentProductBO = CommentProductConverter.converterBOFromView(commentProductDOView);
+				// 查询对应的评价图片
+				CommentImageDOExample imageDOExample = new CommentImageDOExample();
+				imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDOView.getId())
+						.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+				List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+				List<String> images = new ArrayList<String>();
+				if (!commentImageDOS.isEmpty()) {
+					for (int i = 0; i < commentImageDOS.size(); i++) {
+						images.add(commentImageDOS.get(i).getImgUrl());
+					}
+					commentProductBO.setUrlImgs(images);
+				}
+				commentProductBOS.add(commentProductBO);
+			}
+		}
+		pages.setCurrentPage(listParam.getCurrentPage());
+		pages.setTotalCount(totalCount);
+		pages.setRecords(commentProductBOS);
+		return pages;
+	}
 
-    @Override
-    public CommentProductBO findProductComment(Long commentId) {
+	@Override
+	public CommentProductBO findProductComment(Long commentId) {
 
-        CommentProductDO commentProductDO = commentProductDOMapper.selectByPrimaryKey(commentId);
-        CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
-        return commentProductBO;
-    }
+		CommentProductDO commentProductDO = commentProductDOMapper.selectByPrimaryKey(commentId);
+		CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+		return commentProductBO;
+	}
 
-    @Override
-    @Transactional
-    public Integer replyProductComment(Long commentId, String replyContent) {
-        CommentProductDO commentProductDO = new CommentProductDO();
-        commentProductDO.setId(commentId);
-        commentProductDO.setReplyContent(replyContent);
-        commentProductDO.setGmtReply(new Date());
-        int rows = commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
-        return rows;
-    }
+	@Override
+	@Transactional
+	public Integer replyProductComment(Long commentId, String replyContent) {
+		CommentProductDO commentProductDO = new CommentProductDO();
+		commentProductDO.setId(commentId);
+		commentProductDO.setReplyContent(replyContent);
+		commentProductDO.setGmtReply(new Date());
+		int rows = commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+		return rows;
+	}
 
-    @Override
-    @Transactional
-    public void delCommentProductInfo(Long commentId) {
-        CommentProductDO commentProductDO = new CommentProductDO();
-        commentProductDO.setId(commentId);
-        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
-        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
-    }
+	@Override
+	@Transactional
+	public void delCommentProductInfo(Long commentId) {
+		CommentProductDO commentProductDO = new CommentProductDO();
+		commentProductDO.setId(commentId);
+		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+		commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+	}
 
-    @Override
-    public CommentGradeBO getCommentAvgGrade(Long productId) {
-        CommentProductDOExample commentProductDOExample = new CommentProductDOExample();
-        commentProductDOExample.createCriteria().andProductIdEqualTo(productId);
-        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExample(commentProductDOExample);
-        if (commentProductDOS.isEmpty()) {
-            return null;
-        }
-        Double avgGrade = commentProductDOMapperExtend.selectAvgGrade(productId);
-        avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
-        Integer goodCount = commentProductDOMapperExtend.selectGoodGradeCount(productId);
-        CommentProductDOExample example = new CommentProductDOExample();
-        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
-                andProductIdEqualTo(productId);
-        Integer totalCount = commentProductDOMapper.countByExample(example);
-        double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
-        CommentGradeBO commentGradeBO = new CommentGradeBO();
-        commentGradeBO.setAvgGrade(avgGrade);
-        commentGradeBO.setGoodGrad(goodGrade);
-        return commentGradeBO;
-    }
+	@Override
+	public CommentGradeBO getCommentAvgGrade(Long productId) {
+		CommentProductDOExample commentProductDOExample = new CommentProductDOExample();
+		commentProductDOExample.createCriteria().andProductIdEqualTo(productId);
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExample(commentProductDOExample);
+		if (commentProductDOS.isEmpty()) {
+			return null;
+		}
+		Double avgGrade = commentProductDOMapperExtend.selectAvgGrade(productId);
+		avgGrade = new BigDecimal(avgGrade).setScale(2, RoundingMode.UP).doubleValue();
+		Integer goodCount = commentProductDOMapperExtend.selectGoodGradeCount(productId);
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
+				.andProductIdEqualTo(productId);
+		Integer totalCount = commentProductDOMapper.countByExample(example);
+		double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+		CommentGradeBO commentGradeBO = new CommentGradeBO();
+		commentGradeBO.setAvgGrade(avgGrade);
+		commentGradeBO.setGoodGrad(goodGrade);
+		return commentGradeBO;
+	}
 
-    @Override
-    public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
-        CommentProductDOExample example = new CommentProductDOExample();
-        example.setOrderByClause("id desc");
-        RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
-        Page<CommentProductBO> page = new Page<>();
-        page.setTotalCount(commentProductDOMapper.countByExample(example));
-        page.setCurrentPage(listParam.getCurrentPage());
+	@Override
+	public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.setOrderByClause("id desc");
+		RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
+		Page<CommentProductBO> page = new Page<>();
+		page.setTotalCount(commentProductDOMapper.countByExample(example));
+		page.setCurrentPage(listParam.getCurrentPage());
 
-        //查询评价列表
-        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        if (commentProductDOS.isEmpty()) {
-            return null;
-        }
-        List<CommentProductBO> commentProductBOS = new ArrayList<>();
-        for (CommentProductDO commentProductDO : commentProductDOS) {
-            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
-            commentProductBOS.add(commentProductBO);
-        }
-        page.setRecords(commentProductBOS);
-        return page;
-    }
+		// 查询评价列表
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,
+				rowBounds);
+		if (commentProductDOS.isEmpty()) {
+			return null;
+		}
+		List<CommentProductBO> commentProductBOS = new ArrayList<>();
+		for (CommentProductDO commentProductDO : commentProductDOS) {
+			CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+			commentProductBOS.add(commentProductBO);
+		}
+		page.setRecords(commentProductBOS);
+		return page;
+	}
 
-    @Override
-    @Transactional
-    public void saveCommentProductInfoOrderJob(ShoppingOrderAutoCommentNotification notification) {
-        CommentProductDOExample example = new CommentProductDOExample();
-        example.createCriteria().andOrderItemIdEqualTo(notification.getShoppingOrderItem());
-        List<CommentProductDO> oldComment = commentProductDOMapper.selectByExample(example);
-        if(!oldComment.isEmpty()){
-            return;
-        }
-        CommentProductDO productDO = new CommentProductDO();
-        productDO.setMemberId(notification.getMemberId());
-        productDO.setMerchantId(notification.getMerchantId());
-        productDO.setProductId(notification.getProductId());
-        productDO.setOrderItemId(notification.getShoppingOrderItem());
-        productDO.setIsAnonymous(CommentAnonymousEnum.COMMENT_ANONYMOUS.val);//匿名
-        productDO.setContent("好评");
-        productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
-        productDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
-        productDO.setGmtModified(new Date());
-        productDO.setGmtCreate(new Date());
-        productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
-        commentProductDOMapper.insert(productDO);
-    }
+	@Override
+	@Transactional
+	public void saveCommentProductInfoOrderJob(ShoppingOrderAutoCommentNotification notification) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andOrderItemIdEqualTo(notification.getShoppingOrderItem());
+		List<CommentProductDO> oldComment = commentProductDOMapper.selectByExample(example);
+		if (!oldComment.isEmpty()) {
+			return;
+		}
+		CommentProductDO productDO = new CommentProductDO();
+		productDO.setMemberId(notification.getMemberId());
+		productDO.setMerchantId(notification.getMerchantId());
+		productDO.setProductId(notification.getProductId());
+		productDO.setOrderItemId(notification.getShoppingOrderItem());
+		productDO.setIsAnonymous(CommentAnonymousEnum.COMMENT_ANONYMOUS.val);// 匿名
+		productDO.setContent("好评");
+		productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
+		productDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
+		productDO.setGmtModified(new Date());
+		productDO.setGmtCreate(new Date());
+		productDO.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
+		commentProductDOMapper.insert(productDO);
+	}
 
-    @Override
-    public Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam) {
-        CommentProductDOExample example = new CommentProductDOExample();
-        example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
-                andMerchantIdEqualTo(pageParam.getMerchantId());
-        example.setOrderByClause("id desc");
-        RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
-        Page<CommentProductBO> page = new Page<>();
-        page.setTotalCount(commentProductDOMapper.countByExample(example));
-        page.setCurrentPage(pageParam.getCurrentPage());
+	@Override
+	public Page<CommentProductBO> getProductCommentListByMerchantId(CommentMerchantListParam pageParam) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
+				.andMerchantIdEqualTo(pageParam.getMerchantId());
+		example.setOrderByClause("id desc");
+		RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
+		Page<CommentProductBO> page = new Page<>();
+		page.setTotalCount(commentProductDOMapper.countByExample(example));
+		page.setCurrentPage(pageParam.getCurrentPage());
 
-        //查询评价列表
-        List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        List<CommentProductBO> commentProductBOS = new ArrayList<>();
-        for (CommentProductDO commentProductDO : commentProductDOS) {
-            CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
-            CommentImageDOExample imageDOExample = new CommentImageDOExample();
-            imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
-            List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-            List<String> images = new ArrayList<String>();
-            if (!commentImageDOS.isEmpty()) {
-                for (int i = 0; i < commentImageDOS.size(); i++) {
-                    images.add(commentImageDOS.get(i).getImgUrl());
-                }
-                commentProductBO.setUrlImgs(images);
-            }
+		// 查询评价列表
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,
+				rowBounds);
+		List<CommentProductBO> commentProductBOS = new ArrayList<>();
+		for (CommentProductDO commentProductDO : commentProductDOS) {
+			CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+			CommentImageDOExample imageDOExample = new CommentImageDOExample();
+			imageDOExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
+					.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+			List<String> images = new ArrayList<String>();
+			if (!commentImageDOS.isEmpty()) {
+				for (int i = 0; i < commentImageDOS.size(); i++) {
+					images.add(commentImageDOS.get(i).getImgUrl());
+				}
+				commentProductBO.setUrlImgs(images);
+			}
 
-            commentProductBOS.add(commentProductBO);
-        }
-        page.setRecords(commentProductBOS);
-        return page;
-    }
+			commentProductBOS.add(commentProductBO);
+		}
+		page.setRecords(commentProductBOS);
+		return page;
+	}
 
-    @Override
-    public Page<CommentProductBO> getProductCommentIdsByMerchantId(CommentMerchantListParam pageParam) {
+	@Override
+	public Page<CommentProductBO> getProductCommentIdsByMerchantId(CommentMerchantListParam pageParam) {
 
-        int totalCount = commentProductDOMapperExtend.getCommentIdsCountByMerchantId(pageParam.getMerchantId());
-        if(totalCount == 0 || totalCount <0){
-            return null;
-        }
-        List<CommentProductDOView> productDOViews = commentProductDOMapperExtend.getProductCommentIdsByMerchantId(pageParam);
-        List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
-        for(CommentProductDOView commentProductDOView : productDOViews){
-            CommentProductBO commentProductBO = new CommentProductBO();
-            commentProductBO.setProductId(commentProductDOView.getProductId());
-            commentProductBO.setProductModelId(commentProductDOView.getProductModelId());
-            commentProductBOS.add(commentProductBO);
-        }
-       Page<CommentProductBO> page = new Page<>();
-        page.setRecords(commentProductBOS);
-        page.setCurrentPage(pageParam.getCurrentPage());
-        page.setTotalCount(totalCount);
-        return page;
-    }
+		int totalCount = commentProductDOMapperExtend.getCommentIdsCountByMerchantId(pageParam.getMerchantId());
+		if (totalCount == 0 || totalCount < 0) {
+			return null;
+		}
+		List<CommentProductDOView> productDOViews = commentProductDOMapperExtend
+				.getProductCommentIdsByMerchantId(pageParam);
+		List<CommentProductBO> commentProductBOS = new ArrayList<CommentProductBO>();
+		for (CommentProductDOView commentProductDOView : productDOViews) {
+			CommentProductBO commentProductBO = new CommentProductBO();
+			commentProductBO.setProductId(commentProductDOView.getProductId());
+			commentProductBO.setProductModelId(commentProductDOView.getProductModelId());
+			commentProductBOS.add(commentProductBO);
+		}
+		Page<CommentProductBO> page = new Page<>();
+		page.setRecords(commentProductBOS);
+		page.setCurrentPage(pageParam.getCurrentPage());
+		page.setTotalCount(totalCount);
+		return page;
+	}
 
-    @Override
-    @Transactional
-    public void delCommentByProductModelId(Long productModelId) {
-        CommentProductDO commentProductDO = new CommentProductDO();
-        commentProductDO.setProductModelId(productModelId);
-        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
-        commentProductDO.setGmtModified(new Date());
-        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
-    }
+	@Override
+	@Transactional
+	public void delCommentByProductModelId(Long productModelId) {
+		CommentProductDO commentProductDO = new CommentProductDO();
+		commentProductDO.setProductModelId(productModelId);
+		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+		commentProductDO.setGmtModified(new Date());
+		commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+	}
 
-    @Override
-    @Transactional
-    public void delCommentByOrderItemId(Long orderItemId) {
-        CommentProductDO commentProductDO = new CommentProductDO();
-        commentProductDO.setOrderItemId(orderItemId);
-        commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
-        commentProductDO.setGmtModified(new Date());
-        commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
-    }
+	@Override
+	@Transactional
+	public void delCommentByOrderItemId(Long orderItemId) {
+		CommentProductDO commentProductDO = new CommentProductDO();
+		commentProductDO.setOrderItemId(orderItemId);
+		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
+		commentProductDO.setGmtModified(new Date());
+		commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+	}
+
+	@Override
+	public List<MemberProductCommentDTO> geNewlyProductComment(Long productId) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
+				.andProductIdEqualTo(productId);
+		example.setOrderByClause("id desc");
+		RowBounds rowBounds = new RowBounds(0, 1);
+		Page<CommentProductBO> page = new Page<>();
+		page.setTotalCount(commentProductDOMapper.countByExample(example));
+		page.setCurrentPage(1);
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,
+				rowBounds);
+		List<MemberProductCommentDTO> dtos = new ArrayList<MemberProductCommentDTO>();
+		for (CommentProductDO comment : commentProductDOS) {
+			MemberProductCommentDTO dto = new MemberProductCommentDTO();
+			dto.setContent(comment.getContent());
+			dto.setGmtCreate(comment.getGmtCreate());
+			dto.setGrade(comment.getGrade());
+
+			CommentImageDOExample imageDOExample = new CommentImageDOExample();
+			imageDOExample.createCriteria().andCommentIdEqualTo(comment.getId())
+					.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
+			List<String> images = new ArrayList<String>();
+			if (!commentImageDOS.isEmpty()) {
+				for (int i = 0; i < commentImageDOS.size(); i++) {
+					images.add(commentImageDOS.get(i).getImgUrl());
+				}
+			}
+			dto.setImgUrls(images);
+			dto.setIsAnonymous(comment.getIsAnonymous());
+			dto.setMemberId(comment.getMemberId());
+			dto.setProductModelId(comment.getProductModelId());
+			dto.setReplyContent(comment.getReplyContent());
+			dtos.add(dto);
+		}
+		return dtos;
+	}
+
+	@Override
+	public Integer getProductCommentCount(Long productId) {
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
+				.andProductIdEqualTo(productId);
+		int count = commentProductDOMapper.countByExample(example);
+		return count;
+	}
 }

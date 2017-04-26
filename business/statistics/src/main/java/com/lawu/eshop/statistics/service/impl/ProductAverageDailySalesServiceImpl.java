@@ -29,7 +29,7 @@ public class ProductAverageDailySalesServiceImpl implements ProductAverageDailyS
 
         for (ProductInfoDTO productInfoDTO : result.getModel()) {
             int days = DateUtil.daysOfTwo(productInfoDTO.getGmtCreate());
-            int salesVolume = productInfoDTO.getTotalSales();
+            int salesVolume = productInfoDTO.getTotalSalesVolume();
             double averageDailySales = 0;
             if (days > 0) {
                 averageDailySales = (double) salesVolume / days;

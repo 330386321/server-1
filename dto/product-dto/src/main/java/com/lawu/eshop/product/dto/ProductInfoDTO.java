@@ -1,9 +1,11 @@
 package com.lawu.eshop.product.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 用户端商品详情封装DTO
@@ -13,135 +15,170 @@ import java.util.Date;
  */
 public class ProductInfoDTO {
 
-    @ApiModelProperty(value = "商品ID")
-    private Long id;
-    @ApiModelProperty(value = "商家ID")
-    private Long merchantId;
-    @ApiModelProperty(value = "商品名称")
-    private String name;
-    @ApiModelProperty(value = "商品描述")
-    private String content;
-    @ApiModelProperty(value = "销量")
-    private Integer totalSales;
-    @ApiModelProperty(value = "封面图片")
-    private String featureImage;
-    @ApiModelProperty(value = "滚动图片")
-    private String imagesHeadUrl;
-    @ApiModelProperty(value = "详情图片")
-    private String imageDetailUrl;
-    @ApiModelProperty(value = "型号信息")
-    private String spec;
-    @ApiModelProperty(value = "型号最大价格")
-    private String priceMax;
-    @ApiModelProperty(value = "型号最小价格")
-    private String priceMin;
-    @ApiModelProperty(value = "是否支持七天无理由退货")
-    private boolean isSupportEleven;
-    @ApiModelProperty(value = "添加时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date gmtCreate;
+	// 定时任务计算商品日销量使用
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date gmtCreate;
 
-    public boolean isSupportEleven() {
-        return isSupportEleven;
-    }
+	@ApiModelProperty(value = "商品ID")
+	private Long id;
 
-    public void setSupportEleven(boolean isSupportEleven) {
-        this.isSupportEleven = isSupportEleven;
-    }
+	@ApiModelProperty(value = "商家ID")
+	private Long merchantId;
 
-    public Integer getTotalSales() {
-        return totalSales;
-    }
+	@ApiModelProperty(value = "商品名称")
+	private String name;
 
-    public void setTotalSales(Integer totalSales) {
-        this.totalSales = totalSales;
-    }
+	@ApiModelProperty(value = "封面图片")
+	private String featureImage;
 
-    public String getPriceMax() {
-        return priceMax;
-    }
+	@ApiModelProperty(value = "滚动图片")
+	private List<String> imagesHeadUrl;
 
-    public Long getMerchantId() {
-        return merchantId;
-    }
+	@ApiModelProperty(value = "型号最大价格")
+	private String maxPrice;
 
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
-    }
+	@ApiModelProperty(value = "型号最小价格")
+	private String minPrice;
 
-    public void setPriceMax(String priceMax) {
-        this.priceMax = priceMax;
-    }
+	@ApiModelProperty(value = "销量")
+	private Integer totalSalesVolume;
 
-    public String getPriceMin() {
-        return priceMin;
-    }
+	@ApiModelProperty(value = "型号信息")
+	private List<MemberProductModelDTO> spec;
 
-    public void setPriceMin(String priceMin) {
-        this.priceMin = priceMin;
-    }
+	@ApiModelProperty(value = "商品描述")
+	private String content;
+	
+	@ApiModelProperty(value = "商品描述")
+	private List<MemberProductImageDetailDTO> imageDetail;
 
-    public Long getId() {
-        return id;
-    }
+	@ApiModelProperty(value = "门店信息")
+	private MemberProductStoreDTO store;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@ApiModelProperty(value = "评价信息")
+	private List<MemberProductCommentInfoDTO> comments;
+	
+	@ApiModelProperty(value = "评价数量")
+	private Integer commentCount;
 
-    public String getName() {
-        return name;
-    }
+	public Long getMerchantId() {
+		return merchantId;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getFeatureImage() {
-        return featureImage;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setFeatureImage(String featureImage) {
-        this.featureImage = featureImage;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getImagesHeadUrl() {
-        return imagesHeadUrl;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setImagesHeadUrl(String imagesHeadUrl) {
-        this.imagesHeadUrl = imagesHeadUrl;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public String getSpec() {
-        return spec;
-    }
+	public String getFeatureImage() {
+		return featureImage;
+	}
 
-    public void setSpec(String spec) {
-        this.spec = spec;
-    }
+	public void setFeatureImage(String featureImage) {
+		this.featureImage = featureImage;
+	}
 
-    public String getImageDetailUrl() {
-        return imageDetailUrl;
-    }
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
 
-    public void setImageDetailUrl(String imageDetailUrl) {
-        this.imageDetailUrl = imageDetailUrl;
-    }
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
 
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
+	public List<String> getImagesHeadUrl() {
+		return imagesHeadUrl;
+	}
 
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
+	public void setImagesHeadUrl(List<String> imagesHeadUrl) {
+		this.imagesHeadUrl = imagesHeadUrl;
+	}
+
+	public String getMaxPrice() {
+		return maxPrice;
+	}
+
+	public void setMaxPrice(String maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+
+	public String getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(String minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	public Integer getTotalSalesVolume() {
+		return totalSalesVolume;
+	}
+
+	public void setTotalSalesVolume(Integer totalSalesVolume) {
+		this.totalSalesVolume = totalSalesVolume;
+	}
+
+	public List<MemberProductModelDTO> getSpec() {
+		return spec;
+	}
+
+	public void setSpec(List<MemberProductModelDTO> spec) {
+		this.spec = spec;
+	}
+
+	public List<MemberProductImageDetailDTO> getImageDetail() {
+		return imageDetail;
+	}
+
+	public void setImageDetail(List<MemberProductImageDetailDTO> imageDetail) {
+		this.imageDetail = imageDetail;
+	}
+
+	public MemberProductStoreDTO getStore() {
+		return store;
+	}
+
+	public void setStore(MemberProductStoreDTO store) {
+		this.store = store;
+	}
+
+	public List<MemberProductCommentInfoDTO> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<MemberProductCommentInfoDTO> comments) {
+		this.comments = comments;
+	}
+
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount = commentCount;
+	}
+	
 }

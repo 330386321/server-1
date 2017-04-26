@@ -1,6 +1,12 @@
 package com.lawu.eshop.product.srv.bo;
 
 import java.util.Date;
+import java.util.List;
+
+import com.lawu.eshop.product.dto.MemberProductImageDetailDTO;
+import com.lawu.eshop.product.dto.MemberProductModelDTO;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 产品类别BO
@@ -14,15 +20,15 @@ public class ProductInfoBO {
     private Long merchantId;
     private String name;
     private String content;
-    private Integer totalSales;//销量
     private String featureImage;
-    private String imagesHeadUrl;
-    private String imageDetailUrl;
-    private String spec;
-    private String priceMax;
-    private String priceMin;
+    private List<String> imagesHeadUrl;
+    private List<MemberProductModelDTO> spec;
+    private List<MemberProductImageDetailDTO> imageDetail;
     private Date gmtCreate;
-
+    private String maxPrice;
+	private String minPrice;
+	private Integer totalSalesVolume;
+    
     public Long getId() {
         return id;
     }
@@ -55,14 +61,6 @@ public class ProductInfoBO {
         this.content = content;
     }
 
-    public String getSpec() {
-        return spec;
-    }
-
-    public void setSpec(String spec) {
-        this.spec = spec;
-    }
-
     public String getFeatureImage() {
         return featureImage;
     }
@@ -71,45 +69,7 @@ public class ProductInfoBO {
         this.featureImage = featureImage;
     }
 
-    public String getImagesHeadUrl() {
-        return imagesHeadUrl;
-    }
-
-    public void setImagesHeadUrl(String imagesHeadUrl) {
-        this.imagesHeadUrl = imagesHeadUrl;
-    }
-
-    public Integer getTotalSales() {
-        return totalSales;
-    }
-
-    public void setTotalSales(Integer totalSales) {
-        this.totalSales = totalSales;
-    }
-
-    public String getPriceMax() {
-        return priceMax;
-    }
-
-    public void setPriceMax(String priceMax) {
-        this.priceMax = priceMax;
-    }
-
-    public String getPriceMin() {
-        return priceMin;
-    }
-
-    public void setPriceMin(String priceMin) {
-        this.priceMin = priceMin;
-    }
-
-    public String getImageDetailUrl() {
-        return imageDetailUrl;
-    }
-
-    public void setImageDetailUrl(String imageDetailUrl) {
-        this.imageDetailUrl = imageDetailUrl;
-    }
+    
 
     public Date getGmtCreate() {
         return gmtCreate;
@@ -118,4 +78,53 @@ public class ProductInfoBO {
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
+
+	public List<String> getImagesHeadUrl() {
+		return imagesHeadUrl;
+	}
+
+	public void setImagesHeadUrl(List<String> imagesHeadUrl) {
+		this.imagesHeadUrl = imagesHeadUrl;
+	}
+
+	public List<MemberProductModelDTO> getSpec() {
+		return spec;
+	}
+
+	public void setSpec(List<MemberProductModelDTO> spec) {
+		this.spec = spec;
+	}
+
+	public List<MemberProductImageDetailDTO> getImageDetail() {
+		return imageDetail;
+	}
+
+	public void setImageDetail(List<MemberProductImageDetailDTO> imageDetail) {
+		this.imageDetail = imageDetail;
+	}
+
+	public String getMaxPrice() {
+		return maxPrice;
+	}
+
+	public void setMaxPrice(String maxPrice) {
+		this.maxPrice = maxPrice;
+	}
+
+	public String getMinPrice() {
+		return minPrice;
+	}
+
+	public void setMinPrice(String minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	public Integer getTotalSalesVolume() {
+		return totalSalesVolume;
+	}
+
+	public void setTotalSalesVolume(Integer totalSalesVolume) {
+		this.totalSalesVolume = totalSalesVolume;
+	}
+    
 }

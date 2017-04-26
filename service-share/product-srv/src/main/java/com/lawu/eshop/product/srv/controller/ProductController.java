@@ -82,9 +82,10 @@ public class ProductController extends BaseController {
      *
      * @param productId
      * @return
+     * @throws Exception 
      */
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
-    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) {
+    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) throws Exception {
         if (productId == null) {
             return successCreated(ResultCode.ID_EMPTY);
         }
@@ -94,8 +95,10 @@ public class ProductController extends BaseController {
         if (productBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        ProductInfoDTO productDTO = ProductConverter.convertInfoDTO(productBO);
-
+        ProductInfoDTO productDTO = new ProductInfoDTO();
+        BeanUtil.copyProperties(productBO, productDTO);
+        productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
+        productDTO.setImageDetail(productBO.getImageDetail());
         return successCreated(productDTO);
     }
 
@@ -279,4 +282,5 @@ public class ProductController extends BaseController {
         productService.updateAverageDailySalesById(id, averageDailySales);
         return successCreated();
     }
+    
 }

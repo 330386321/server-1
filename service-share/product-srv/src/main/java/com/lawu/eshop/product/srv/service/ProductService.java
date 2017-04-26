@@ -41,7 +41,7 @@ public interface ProductService {
      * @param id
      * @return
      */
-    ProductInfoBO selectProductById(Long id);
+    ProductInfoBO selectProductById(Long id) throws Exception;
 
     /**
      * 商家端编辑商品时，根据ID查询商品

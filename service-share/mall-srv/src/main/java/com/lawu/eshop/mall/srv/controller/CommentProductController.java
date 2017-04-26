@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.dto.CommentDTO;
 import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.dto.CommentProductIdDTO;
+import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
@@ -19,6 +20,7 @@ import com.lawu.eshop.mall.srv.service.CommentProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -244,4 +246,32 @@ public class CommentProductController extends BaseController {
         return successDelete();
     }
 
+    /**
+     * 用户端商品详情，查询商品最近1条商品评价
+     * @param productId
+     * @return
+     * @author yangqh
+     */
+    @RequestMapping(value = "geNewlyProductComment",method = RequestMethod.GET)
+    public Result<List<MemberProductCommentDTO>> geNewlyProductComment(@RequestParam Long productId){
+    	if(productId == null){
+    		return successCreated(ResultCode.ID_EMPTY);
+    	}
+    	List<MemberProductCommentDTO> dtos = commentProductService.geNewlyProductComment(productId);
+    	return successCreated(dtos);
+    }
+    
+    /**
+     * 用户端商品详情，查询商品评价数量
+     * @param productId
+     * @return
+     */
+    @RequestMapping(value = "getProductCommentCount",method = RequestMethod.GET)
+    public Result<Integer> getProductCommentCount(@RequestParam Long productId){
+    	if(productId == null){
+    		return successCreated(ResultCode.ID_EMPTY);
+    	}
+    	Integer count = commentProductService.getProductCommentCount(productId);
+    	return successCreated(count);
+    }
 }

@@ -25,7 +25,16 @@ public interface FansMerchantService {
      * @param memberId
      * @return
      */
-    @RequestMapping(value = "fansMerchant/saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "fansMerchant/saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
     Result saveFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId);
 
+    /**
+     * 查询商家粉丝数量
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "fansMerchant/countFans/{merchantId}")
+    Result<Integer> countFans(@PathVariable("merchantId") Long merchantId);
 }

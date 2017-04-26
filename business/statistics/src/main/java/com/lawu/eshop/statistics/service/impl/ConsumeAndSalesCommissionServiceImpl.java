@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.statistics.service.CommonPropertyService;
 import com.lawu.eshop.statistics.service.ConsumeAndSalesCommissionService;
 
@@ -24,7 +25,7 @@ public class ConsumeAndSalesCommissionServiceImpl implements ConsumeAndSalesComm
 		//查询订单相关用户商家的上级邀请关系
 		//计算提成
 		
-		List orders = new ArrayList<>();
+		List<ShoppingOrderCommissionDTO> orders = new ArrayList<>();
 		if (orders != null && orders.size() > 0) {
 
 			Map<String, BigDecimal> property = commonPropertyService.getCommissionPropertys();

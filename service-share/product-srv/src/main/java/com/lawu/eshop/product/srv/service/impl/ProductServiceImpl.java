@@ -24,6 +24,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductImgTypeEnum;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
+import com.lawu.eshop.product.dto.MemberProductImageDetailDTO;
+import com.lawu.eshop.product.dto.MemberProductModelDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ProductParam;
@@ -53,6 +55,8 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -193,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public ProductInfoBO selectProductById(Long id) {
+	public ProductInfoBO selectProductById(Long id) throws Exception {
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
 		if (productDO == null) {
 			return null;
@@ -208,42 +212,18 @@ public class ProductServiceImpl implements ProductService {
 		if (productModelDOS == null || productModelDOS.isEmpty()) {
 			return null;
 		}
-
-		List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
-		Integer totalSales = 0;
-		boolean rangePrice = true;
-		if (productModelDOS.size() == 1) {
-			rangePrice = false;
+		List<MemberProductModelDTO> spec = new ArrayList<MemberProductModelDTO>();
+		for(ProductModelDO mdo : productModelDOS){
+			MemberProductModelDTO dto = new MemberProductModelDTO();
+			BeanUtil.copyProperties(mdo, dto);
+			spec.add(dto);
 		}
-		double max = productModelDOS.get(0).getPrice().doubleValue();
-		double min = max;
-		for (ProductModelDO productModelDO : productModelDOS) {
-			ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
-			ProductModelBOS.add(productModelBO);
-
-			Integer salesVolume = productModelDO.getSalesVolume();
-			totalSales = totalSales + salesVolume;
-
-			double price = 0;
-			if (rangePrice) {
-				price = productModelDO.getPrice().doubleValue();
-				if (max < price) {
-					max = price;
-				}
-				if (min > price) {
-					min = price;
-				}
-			}
-		}
-		String specJson = JSON.toJSONString(ProductModelBOS);
-		productInfoBO.setSpec(specJson);
-		productInfoBO.setTotalSales(totalSales);
-		productInfoBO.setPriceMax(String.valueOf(max));
-		productInfoBO.setPriceMin(String.valueOf(min));
+		productInfoBO.setSpec(spec);
 
 		// 查询商品图片
 		ProductImageDOExample imageExample = new ProductImageDOExample();
 		imageExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
+		imageExample.setOrderByClause(" sortid asc ");
 		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
 		List<String> imagesHead = new ArrayList<String>();
 		List<String> imagesDetail = new ArrayList<String>();
@@ -254,10 +234,18 @@ public class ProductServiceImpl implements ProductService {
 				imagesDetail.add(image.getImagePath());
 			}
 		}
-		String imagesHeadJson = JSON.toJSONString(imagesHead);
-		String imagesDetailJson = JSON.toJSONString(imagesDetail);
-		productInfoBO.setImagesHeadUrl(imagesHeadJson);
-		productInfoBO.setImageDetailUrl(imagesDetailJson);
+		productInfoBO.setImagesHeadUrl(imagesHead);
+		//商品描述图片
+		String imageContent = productDO.getImageContent() == null ? "[]" : productDO.getImageContent();
+		List<String> imageContents = StringUtil.getJsonListToStringList(imageContent);
+		List<MemberProductImageDetailDTO> imageDetail = new ArrayList<MemberProductImageDetailDTO>();
+		for(int i = 0 ; i < imageContents.size() ; i++){
+			MemberProductImageDetailDTO d = new MemberProductImageDetailDTO();
+			d.setDetail(imageContents.get(i));
+			d.setImageUrl(imagesDetail.get(i));
+			imageDetail.add(d);
+		}
+		productInfoBO.setImageDetail(imageDetail);
 
 		return productInfoBO;
 	}

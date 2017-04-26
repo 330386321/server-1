@@ -38,4 +38,7 @@ public interface ProductCategoryService {
 	 * @return
 	 */
 	List<ProductCategoryBO> listRecommendProductCategory();
+
+	
+	List<ProductCategoryBO> find(Long parentId);
 }
