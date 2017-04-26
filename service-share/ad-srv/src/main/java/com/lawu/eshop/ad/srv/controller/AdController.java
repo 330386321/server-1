@@ -208,8 +208,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByMember", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam) {
-		Page<AdBO> pageBO=  adService.selectListByMember(adMemberParam);
+    public Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam,@RequestParam Long memberId) {
+		Page<AdBO> pageBO=  adService.selectListByMember(adMemberParam,memberId);
 		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());

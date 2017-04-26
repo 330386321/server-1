@@ -32,7 +32,6 @@ public class AddressConverter {
 		AddressBO addressBO = new AddressBO();
 		addressBO.setId(addressDO.getId());
 		addressBO.setAddr(addressDO.getAddr());
-		;
 		addressBO.setIsDefault(addressDO.getIsDefault());
 		addressBO.setMobile(addressDO.getMobile());
 		addressBO.setName(addressDO.getName());

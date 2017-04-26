@@ -4,6 +4,7 @@ import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.MerchantProfileBO;
 import com.lawu.eshop.user.srv.bo.MerchantSizeLinkBO;
 import com.lawu.eshop.user.srv.converter.MerchantInfoConverter;
+import com.lawu.eshop.user.srv.converter.MerchantProfileConverter;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantProfileService;
@@ -43,4 +44,10 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
         BeanUtils.copyProperties(merchantProfileDO,merchantSizeLinkBO);
         return merchantSizeLinkBO;
     }
+
+	@Override
+	public MerchantProfileBO getMerchantProfile(Long merchantId) {
+		MerchantProfileDO merchantProfileDO = merchantProfileDOMapper.selectByPrimaryKey(merchantId);
+		return MerchantProfileConverter.convertBO(merchantProfileDO);
+	}
 }

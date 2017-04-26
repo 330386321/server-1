@@ -10,6 +10,42 @@ public class MerchantProfileBO {
     private Integer inviteMemberCount;
 
     private Integer inviteMerchantCount;
+    
+    /**
+    *
+    * 官网链接
+    * merchant_profile.website_url
+    *
+    * @mbg.generated
+    */
+   private String websiteUrl;
+
+   /**
+    *
+    * 淘宝链接
+    * merchant_profile.taobao_url
+    *
+    * @mbg.generated
+    */
+   private String taobaoUrl;
+
+   /**
+    *
+    * 天猫链接
+    * merchant_profile.tmall_url
+    *
+    * @mbg.generated
+    */
+   private String tmallUrl;
+
+   /**
+    *
+    * 京东链接
+    * merchant_profile.jd_url
+    *
+    * @mbg.generated
+    */
+   private String jdUrl;
 
 
     public Long getId() {
@@ -35,4 +71,38 @@ public class MerchantProfileBO {
     public void setInviteMerchantCount(Integer inviteMerchantCount) {
         this.inviteMerchantCount = inviteMerchantCount;
     }
+
+	public String getWebsiteUrl() {
+		return websiteUrl;
+	}
+
+	public void setWebsiteUrl(String websiteUrl) {
+		this.websiteUrl = websiteUrl;
+	}
+
+	public String getTaobaoUrl() {
+		return taobaoUrl;
+	}
+
+	public void setTaobaoUrl(String taobaoUrl) {
+		this.taobaoUrl = taobaoUrl;
+	}
+
+	public String getTmallUrl() {
+		return tmallUrl;
+	}
+
+	public void setTmallUrl(String tmallUrl) {
+		this.tmallUrl = tmallUrl;
+	}
+
+	public String getJdUrl() {
+		return jdUrl;
+	}
+
+	public void setJdUrl(String jdUrl) {
+		this.jdUrl = jdUrl;
+	}
+    
+    
 }

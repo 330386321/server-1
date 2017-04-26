@@ -32,8 +32,6 @@ import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
-import com.lawu.eshop.ad.srv.domain.RedPacketDO;
-import com.lawu.eshop.ad.srv.domain.RedPacketDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
@@ -310,7 +308,7 @@ public class AdServiceImpl implements AdService {
 	 * @return
 	 */
 	@Override
-	public Page<AdBO> selectListByMember(AdMemberParam adMemberParam) {
+	public Page<AdBO> selectListByMember(AdMemberParam adMemberParam,Long memberId) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
 		Criteria cr2= example.createCriteria();
@@ -335,7 +333,15 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
+			FavoriteAdDOExample fAexample=new FavoriteAdDOExample();
+			fAexample.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
+			Long count=favoriteAdDOMapper.countByExample(fAexample);
 			AdBO BO=AdConverter.convertBO(adDO);
+			if(count.intValue()>0){
+				BO.setIsFavorite(true);
+			}else{
+				BO.setIsFavorite(false);
+			}
 			BOS.add(BO);
 		}
 		Page<AdBO> page=new Page<AdBO>();
@@ -368,7 +374,7 @@ public class AdServiceImpl implements AdService {
 		if(count.intValue()>0){
 			adBO.setIsFavorite(true);
 		}else{
-			adBO.setIsFavorite(true);
+			adBO.setIsFavorite(false);
 		}
 		return adBO;
 	}

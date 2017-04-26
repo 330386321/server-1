@@ -13,7 +13,7 @@ public class AdEgainParam extends AbstractPageParam{
 	@ApiParam (name="latitude", value = "纬度")
 	private Double latitude;
 	
-	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞")
+	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞 AD_TYPE_PACKET 红包")
 	private AdTypeEnum typeEnum;
 
 	public AdTypeEnum getTypeEnum() {

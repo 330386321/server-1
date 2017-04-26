@@ -67,7 +67,7 @@ public interface AdService {
 	 * @param adMerchantParam
 	 * @return
 	 */
-	Page<AdBO> selectListByMember(AdMemberParam adMemberParam);
+	Page<AdBO> selectListByMember(AdMemberParam adMemberParam,Long memberId);
 	
 	/**
 	 * 查看广告详情

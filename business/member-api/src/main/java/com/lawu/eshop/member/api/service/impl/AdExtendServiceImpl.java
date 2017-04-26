@@ -98,7 +98,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
    	    param.setTypeEnum(adEgainParam.getTypeEnum());
    	    param.setLatitude(adEgainParam.getLatitude());
    	    param.setLongitude(adEgainParam.getLongitude());
-		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param);
+		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param,memberId);
     	List<AdDTO> list =pageDTOS.getModel().getRecords();
     	List<AdDTO> newList=screem(param,list,memberId);
     	AdPage<AdDTO> adpage=new AdPage<>();
@@ -132,7 +132,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	 param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
     	 param.setLatitude(adPointParam.getLatitude());
     	 param.setLongitude(adPointParam.getLongitude());
-		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param);
+		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
      	List<AdDTO> newList= new ArrayList<AdDTO>();
      	newList=screem(param,list,memberId);

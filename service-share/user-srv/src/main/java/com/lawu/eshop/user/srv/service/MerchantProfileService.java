@@ -23,4 +23,14 @@ public interface MerchantProfileService {
     MerchantProfileBO findMerchantProfileInfo(Long merchantProfileId);
 
     MerchantSizeLinkBO getMerchantSizeLink(Long merchantId);
+    
+    /**
+     * 查询商家对应的网站链接
+     * @param merchantId
+     * @return
+     */
+    MerchantProfileBO  getMerchantProfile(Long merchantId);
+    
+    
+    
 }

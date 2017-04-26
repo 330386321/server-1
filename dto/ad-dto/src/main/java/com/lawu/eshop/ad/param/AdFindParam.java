@@ -14,7 +14,7 @@ public class AdFindParam extends AbstractPageParam{
 	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞")
 	private AdTypeEnum typeEnum;
 
-	@ApiParam (name="putWayEnum", value = "PUT_WAY_AREAS 区域 PUT_WAY_FENS 粉丝 PUT_WAY_RADAR 雷达")
+	@ApiParam (name="putWayEnum", value = "PUT_WAY_AREAS 区域 PUT_WAY_FENS 粉丝 PUT_WAY_RADAR 雷达 AD_TYPE_PACKET 红包")
     private PutWayEnum putWayEnum;
     
 	@ApiParam (name="statusEnum", value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中 AD_STATUS_PUTED 投放结束"

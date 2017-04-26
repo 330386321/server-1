@@ -11,6 +11,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
 import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
+import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.srv.service.MemberProfileService;
 
 /**
@@ -51,5 +52,8 @@ public class MemberProfileController extends BaseController{
 	   dto.setInviteeMechantCount(count);
 	   return successGet(dto);
    }
+   
+   
+  
 
 }

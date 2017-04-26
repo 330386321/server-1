@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiParam;
 
 public class AdMemberParam extends AbstractPageParam{
 	
-	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞")
+	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞 AD_TYPE_PACKET 红包")
 	private AdTypeEnum typeEnum;
 
 	@ApiParam (name="longitude", value = "经度")

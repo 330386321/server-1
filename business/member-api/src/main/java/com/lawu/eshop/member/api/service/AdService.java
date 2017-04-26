@@ -33,7 +33,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectListByMember")
-    Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam);
+    Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam,@RequestParam("memberId") Long memberId);
 	
 	
 	 /**

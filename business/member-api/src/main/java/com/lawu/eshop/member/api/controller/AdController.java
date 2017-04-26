@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.dto.UserTopDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
@@ -37,10 +37,11 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
-import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 
@@ -73,8 +74,10 @@ public class AdController extends BaseController {
     
     @Autowired
     private FansMerchantService fansMerchantService;
+    
     @Autowired
-    private InviterService inviterService;
+    private MerchantProfileService merchantProfileService;
+
 
 
     @Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -116,14 +119,37 @@ public class AdController extends BaseController {
     @ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
-    public Result<AdDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<AdEgainDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
-        Result<AdDTO> adDTO = adService.selectAbById(id,memberId);
-        Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getModel().getMerchantId());
-        adDTO.getModel().setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-        adDTO.getModel().setName(merchantStoreDTO.getModel().getName());
-        return adDTO;
+        Result<AdDTO> adRs = adService.selectAbById(id,memberId);
+        AdEgainDTO adEgainDTO=new AdEgainDTO();
+        if(isSuccess(adRs)){
+        	AdDTO  adDTO=adRs.getModel();
+        	adEgainDTO.setId(adDTO.getId());
+        	adEgainDTO.setAttenCount(adDTO.getAttenCount());
+        	adEgainDTO.setContent(adDTO.getContent());
+        	adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
+        	adEgainDTO.setTitle(adDTO.getTitle());
+        	adEgainDTO.setMediaUrl(adDTO.getMediaUrl());
+        	adEgainDTO.setMerchantId(adDTO.getMerchantId());
+        	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
+        	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+        	if(isSuccess(merchantStoreDTO)){
+        		adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+            	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
+            	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+        	}
+        	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+        	if(isSuccess(mpRs)){
+        		adEgainDTO.setJdUrl(mpRs.getModel().getJdUrl());
+        		adEgainDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
+        		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
+        		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
+        	}
+        }
+       
+        return successAccepted(adEgainDTO);
     }
 
 
