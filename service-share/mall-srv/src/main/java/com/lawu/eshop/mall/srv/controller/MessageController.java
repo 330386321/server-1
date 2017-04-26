@@ -51,7 +51,7 @@ public class MessageController extends BaseController {
             messageStatisticsDTO.setType(MessageTypeEnum.getEnum(messageStatisticsBO.getType()));
             return successGet(messageStatisticsDTO);
         }
-        return successGet();
+        return successGet(messageStatisticsDTO);
     }
 
     /**
