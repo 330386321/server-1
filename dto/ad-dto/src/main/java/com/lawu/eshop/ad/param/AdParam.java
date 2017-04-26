@@ -10,22 +10,22 @@ import io.swagger.annotations.ApiParam;
 
 public class AdParam {
 
-	@ApiParam (name="title",required = true, value = "广告标题")
+	@ApiParam (name="title", value = "广告标题")
     private String title;
 
 	@ApiParam (name="content", value = "广告描述")
     private String content;
 
-	@ApiParam (name="typeEnum",required = true, value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频")
+	@ApiParam (name="typeEnum",required = true, value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞 AD_TYPE_PACKET红包")
     private AdTypeEnum typeEnum;
 
-	@ApiParam (name="putWayEnum",required = true, value = "PUT_WAY_AREAS 区域 PUT_WAY_FENS 粉丝 PUT_WAY_RADAR 雷达")
+	@ApiParam (name="putWayEnum",required = true, value = "PUT_WAY_AREAS 区域 PUT_WAY_FENS 粉丝 PUT_WAY_RADAR 雷达 PUT_WAY_COMMON 普通红包PUT_WAY_LUCK手气红包" )
     private PutWayEnum putWayEnum;
 
-	@ApiParam (name="beginTime",required = true, value = "投放的开始时间")
+	@ApiParam (name="beginTime", value = "投放的开始时间")
     private Date beginTime;
 
-	@ApiParam (name="endTime",required = true, value = "投放的结束时间")
+	@ApiParam (name="endTime", value = "投放的结束时间")
     private Date endTime;
 
 	@ApiParam (name="areas", value = "区域 区域最后一位 XX/XX/XX")

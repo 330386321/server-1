@@ -138,8 +138,12 @@ public class AddressServiceImpl implements AddressService {
 		addressDO.setStatus(StatusEnum.VALID.getValue());
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
-		addressDO.setIsDefault(true);
 		
+		AddressDOExample example=new AddressDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum);
+		long count=addressDOMapper.countByExample(example);
+		if(count==0)
+		   addressDO.setIsDefault(true);
 		int result = addressDOMapper.insertSelective(addressDO);
 		
 		if (result <= 0) {

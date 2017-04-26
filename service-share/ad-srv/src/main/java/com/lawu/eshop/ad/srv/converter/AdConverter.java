@@ -98,9 +98,9 @@ public class AdConverter {
 		adDTO.setTypeEnum(adBO.getTypeEnum());
 		adDTO.setPutWayEnum(adBO.getPutWayEnum());
 		adDTO.setStatusEnum(adBO.getStatusEnum());
-		adDTO.setAttenCount(adBO.getAttenCount());
 		adDTO.setTotalPoint(adBO.getTotalPoint());
 		adDTO.setNumber(adBO.getNumber());
+		adDTO.setIsFavorite(adBO.getIsFavorite());
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}

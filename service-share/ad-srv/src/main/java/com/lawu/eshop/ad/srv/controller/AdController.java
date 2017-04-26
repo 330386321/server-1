@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -65,6 +67,12 @@ public class AdController extends BaseController{
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
+		if(adSaveParam.getAdParam().getTypeEnum().val==4){
+			Integer count=adService.selectRPIsSend(adSaveParam.getMerchantId());
+			if(count>0){
+				return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
+			}
+		}
 		Integer id= adService.saveAd(adSaveParam);
 		if(id>0){
     		return successCreated(ResultCode.SUCCESS);
@@ -95,8 +103,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(@PathVariable Long id) {
-		 AdBO BO= adService.selectAbById(id);
+    public Result updateStatus(@PathVariable Long id ) {
+		 AdBO BO= adService.get(id);
 		 Calendar calendar = Calendar.getInstance();  //得到日历  
 		 calendar.setTime(new Date());//把当前时间赋给日历  
 		 calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前  
@@ -136,8 +144,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectAbById/{id}", method = RequestMethod.GET)
-    public Result<AdDTO> selectAbById(@PathVariable Long id) {
-		AdBO bo=adService.selectAbById(id);
+    public Result<AdDTO> selectAbById(@PathVariable Long id,@RequestParam Long memberId) {
+		AdBO bo=adService.selectAbById(id,memberId);
  		return successAccepted(AdConverter.convertDTO(bo));
     }
 	
@@ -310,6 +318,22 @@ public class AdController extends BaseController{
         }
         page.setCurrentPage(adSolrParam.getCurrentPage());
         return successGet(page);
+    }
+    
+    
+    /**
+     * 领取红包
+     * @param merchantId
+     * @param memberId
+     * @param memberNum
+     * @return
+     */
+	@RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
+    public Result<PraisePointDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId,@RequestParam String memberNum) {
+    	BigDecimal point=adService.getRedPacket(merchantId,memberId,memberNum);
+    	PraisePointDTO dto=new PraisePointDTO();
+    	dto.setPoint(point);
+    	return successGet(dto);
     }
 
 }

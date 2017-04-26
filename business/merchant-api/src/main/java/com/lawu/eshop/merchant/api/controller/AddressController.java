@@ -23,6 +23,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.param.AddressMerchantParam;
 import com.lawu.eshop.user.param.AddressParam;
 
 import io.swagger.annotations.Api;
@@ -87,8 +88,12 @@ public class AddressController extends BaseController {
 	@ApiOperation(value = "添加收货地址", notes = "添加收货地址[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
-	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") @Validated AddressParam address, BindingResult bindingResult) {
-		
+	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") @Validated AddressMerchantParam addressParam, BindingResult bindingResult) {
+		AddressParam address=new AddressParam();
+		address.setAddr(addressParam.getAddr());
+		address.setMobile(address.getMobile());
+		address.setName(address.getName());
+		address.setRegionPath(address.getRegionPath());
 		if (bindingResult.hasErrors()) {
 			StringBuilder sb = new StringBuilder();
 			for (ObjectError error : bindingResult.getAllErrors()) {

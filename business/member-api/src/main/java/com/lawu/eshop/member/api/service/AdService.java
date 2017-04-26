@@ -15,6 +15,7 @@ import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
@@ -40,7 +41,7 @@ public interface AdService {
 	  * @return
 	  */
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
-	Result<AdDTO> selectAbById(@PathVariable("id") Long id);
+	Result<AdDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 	
 	/**
 	 * E赞查询
@@ -104,4 +105,12 @@ public interface AdService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "ad/selectChoiceness")
 	Result<Page<AdDTO>> selectChoiceness(AdMemberParam param);
+    
+    /**
+	 * 领取红包
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.GET)
+    public Result<PraisePointDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
 }

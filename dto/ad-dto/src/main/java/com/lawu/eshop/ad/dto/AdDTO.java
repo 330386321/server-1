@@ -82,6 +82,9 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "倒计时")
 	private Long needBeginTime;
+	
+	@ApiModelProperty(value = "是否收藏")
+	private Boolean isFavorite;
 
 
 	public Long getId() {
@@ -304,6 +307,16 @@ public class AdDTO {
 
 	public void setNeedBeginTime(Long needBeginTime) {
 		this.needBeginTime = needBeginTime;
+	}
+
+
+	public Boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+
+	public void setIsFavorite(Boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 

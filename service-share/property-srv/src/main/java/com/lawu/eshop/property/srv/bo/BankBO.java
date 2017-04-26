@@ -5,6 +5,8 @@ public class BankBO {
 	 private Integer id;
 	 
 	 private String name;
+	 
+	 private String iconUrl;
 
 	public Integer getId() {
 		return id;
@@ -20,6 +22,14 @@ public class BankBO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
 	}
 	 
 	 

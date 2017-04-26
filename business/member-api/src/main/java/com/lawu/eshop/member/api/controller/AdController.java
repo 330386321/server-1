@@ -18,6 +18,7 @@ import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.dto.UserTopDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
@@ -117,7 +118,8 @@ public class AdController extends BaseController {
     @RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
     public Result<AdDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result<AdDTO> adDTO = adService.selectAbById(id);
+    	Long memberId=UserUtil.getCurrentUserId(getRequest());
+        Result<AdDTO> adDTO = adService.selectAbById(id,memberId);
         Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getModel().getMerchantId());
         adDTO.getModel().setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
         adDTO.getModel().setName(merchantStoreDTO.getModel().getName());
@@ -234,5 +236,17 @@ public class AdController extends BaseController {
      	 Result<Page<AdSolrDTO>>  page=adService.queryAdByTitle(findParam);
      	 return page;
      }
+    
+    
+    @Authorization
+    @ApiOperation(value = "领取红包", notes = "领取红包[5004]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
+    public Result<PraisePointDTO> getRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<PraisePointDTO> rs=adService.getRedPacket(merchantId,memberId,userNum);
+    	return rs;
+    }
 
-}
+} 

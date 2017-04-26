@@ -26,6 +26,7 @@ public class BankConverter {
         BankBO bankBO=new BankBO();
         bankBO.setId(bankDO.getId());
         bankBO.setName(bankDO.getName());
+        bankBO.setIconUrl(bankDO.getIconUrl());
         return bankBO;
     }
 	
@@ -58,6 +59,7 @@ public class BankConverter {
         BankDTO bankDTO=new BankDTO();
         bankDTO.setId(bankBO.getId());
         bankDTO.setName(bankBO.getName());
+        bankDTO.setIconUrl(bankBO.getIconUrl());
         return bankDTO;
     }
 	

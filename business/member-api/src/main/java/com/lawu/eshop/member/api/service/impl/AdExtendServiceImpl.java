@@ -200,7 +200,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	
 	@Override
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
-		Result<AdDTO> adDTO = adService.selectAbById(id);
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
+		Result<AdDTO> adDTO = adService.selectAbById(id,memberId);
         Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getModel().getMerchantId());
         AdDTO ad=adDTO.getModel();
         ad.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
@@ -216,6 +217,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setCount(ad.getNumber());
 		praise.setLogoUrl(ad.getLogoUrl());
 		praise.setNeedBeginTime(ad.getNeedBeginTime());
+		praise.setIsFavorite(ad.getIsFavorite());
         return successGet(praise);
 	}
 	

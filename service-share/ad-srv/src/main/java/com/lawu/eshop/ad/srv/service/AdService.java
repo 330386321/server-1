@@ -70,11 +70,11 @@ public interface AdService {
 	Page<AdBO> selectListByMember(AdMemberParam adMemberParam);
 	
 	/**
-	 * 查看E赚详情
+	 * 查看广告详情
 	 * @param id
 	 * @return
 	 */
-	AdBO selectAbById(Long id);
+	AdBO selectAbById(Long id,Long memberId);
 	
 	
 	/**
@@ -113,6 +113,33 @@ public interface AdService {
 	 */
 	Page<AdBO> selectChoiceness(AdMemberParam adMemberParam);
 	
+	/**
+	 * 判断用户是否发送过红包
+	 * @param merchantId
+	 * @return
+	 */
+	Integer selectRPIsSend(Long merchantId);
+	
+	/**
+	 * 领取红包
+	 * @param memberId
+	 * @return
+	 */
+	BigDecimal getRedPacket(Long merchantId ,Long  memberId,String memberNum);
+	
+	/**
+	 * 广告信息获取
+	 * @param id
+	 * @return
+	 */
+	AdBO get(Long id);
+	
+	/**
+	 * 根据用户查询是否已经抢到红包
+	 * @param memberId
+	 * @return
+	 */
+	Boolean selectRedPacketByMember(Long merchantId,Long memberId);
 	
 
 }

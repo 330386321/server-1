@@ -69,7 +69,7 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[5000]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[5000|5003]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
@@ -82,12 +82,12 @@ public class AdController extends BaseController {
     	}
     	String mediaUrl="";
     	HttpServletRequest request = getRequest();
-    	if(adParam.getPutWayEnum().val==1){ //平面投放
+    	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE);
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl").toString();
             }
-    	}else{//视频投放
+    	}else if(adParam.getTypeEnum().val==2){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO);
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl").toString();

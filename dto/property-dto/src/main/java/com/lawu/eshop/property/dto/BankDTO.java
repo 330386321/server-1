@@ -9,6 +9,9 @@ public class BankDTO {
 	 
 	@ApiModelProperty(value = "名称", required = true)
 	private String name;
+	
+	@ApiModelProperty(value = "银行卡图标", required = true)
+	private String iconUrl;
 
 	public Integer getId() {
 		return id;
@@ -25,5 +28,15 @@ public class BankDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getIconUrl() {
+		return iconUrl;
+	}
+
+	public void setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+	}
+	
+	
 
 }

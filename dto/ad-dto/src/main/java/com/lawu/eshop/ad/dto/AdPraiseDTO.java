@@ -37,6 +37,9 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "倒计时")
 	private Long needBeginTime;
 	
+	@ApiModelProperty(value = "是否收藏")
+	private Boolean isFavorite;
+	
 
 	public Integer getCount() {
 		return count;
@@ -116,6 +119,14 @@ public class AdPraiseDTO {
 
 	public void setNeedBeginTime(Long needBeginTime) {
 		this.needBeginTime = needBeginTime;
+	}
+
+	public Boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(Boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 	
