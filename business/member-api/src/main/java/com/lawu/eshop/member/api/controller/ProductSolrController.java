@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -125,11 +126,11 @@ public class ProductSolrController extends BaseController {
         }
         shoppingProductDTO.setRecommendProduct(productSearchDTOS);
 
-        //精品推荐
+        //E店必购
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> goodsResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_GOODS);
-        if (isSuccess(goodsResult)) {
-            for (AdPlatformDTO adPlatformDTO : goodsResult.getModel()) {
+        Result<List<AdPlatformDTO>> buyResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_BUY);
+        if (isSuccess(buyResult)) {
+            for (AdPlatformDTO adPlatformDTO : buyResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
                 if (isSuccess(productInfoDTOResult)) {
                     ProductSearchDTO productSearchDTO = new ProductSearchDTO();
@@ -143,7 +144,47 @@ public class ProductSolrController extends BaseController {
                 }
             }
         }
-        shoppingProductDTO.setGoodsProduct(productSearchDTOS);
+        shoppingProductDTO.setBuyProduct(productSearchDTOS);
+
+        //特色好货
+        productSearchDTOS = new ArrayList<>();
+        Result<List<AdPlatformDTO>> featureResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_GOODS);
+        if (isSuccess(featureResult)) {
+            for (AdPlatformDTO adPlatformDTO : featureResult.getModel()) {
+                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
+                if (isSuccess(productInfoDTOResult)) {
+                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformDTO.getTitle());
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTOS.add(productSearchDTO);
+                }
+            }
+        }
+        shoppingProductDTO.setFeatureProduct(productSearchDTOS);
+
+        //实惠单品
+        productSearchDTOS = new ArrayList<>();
+        Result<List<AdPlatformDTO>> benefitResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_BENEFIT);
+        if (isSuccess(benefitResult)) {
+            for (AdPlatformDTO adPlatformDTO : benefitResult.getModel()) {
+                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
+                if (isSuccess(productInfoDTOResult)) {
+                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformDTO.getTitle());
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSales());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMax()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getPriceMin()));
+                    productSearchDTOS.add(productSearchDTO);
+                }
+            }
+        }
+        shoppingProductDTO.setBenefitProduct(productSearchDTOS);
         return successGet(shoppingProductDTO);
     }
 

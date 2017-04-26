@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -20,14 +21,15 @@ import java.util.List;
  */
 @FeignClient(value = "ad-srv")
 public interface AdPlatformService {
-	
-	/**
-	 * 根据不同的位置查询不同的广告
-	 * @param positionEnum
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectByPosition")
-	Result<List<AdPlatformDTO>> selectByPosition(@RequestBody PositionEnum positionEnum);
+
+    /**
+     * 根据不同的位置查询不同的广告
+     *
+     * @param positionEnum
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectByPosition")
+    Result<List<AdPlatformDTO>> selectByPosition(@RequestBody PositionEnum positionEnum);
 
     /**
      * 根据类型位置查询广告
@@ -38,5 +40,14 @@ public interface AdPlatformService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePosition")
     Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum);
+
+    /**
+     * 根据精品类型查询精品
+     *
+     * @param goodsTypeEnum
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformWithGoods")
+    Result<List<AdPlatformDTO>> getAdPlatformWithGoods(@RequestParam("goodsTypeEnum") GoodsTypeEnum goodsTypeEnum);
 
 }
