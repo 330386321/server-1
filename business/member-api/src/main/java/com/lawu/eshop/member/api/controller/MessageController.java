@@ -73,7 +73,7 @@ public class MessageController extends BaseController {
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "站内信息操作", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
+    @ApiOperation(value = "站内信息操作（删除）", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
     @RequestMapping(value = "del/{messageId}", method = RequestMethod.DELETE)

@@ -111,7 +111,10 @@ public class MessageController extends BaseController {
     @RequestMapping(value = "saveMessage/{userNum}", method = RequestMethod.POST)
     public Result saveMessage(@PathVariable("userNum") String userNum, @RequestBody MessageInfoParam messageInfoParam) {
         Integer id = messageService.saveMessage(userNum, messageInfoParam);
-        if(id == 0 || id<0){
+        if(id == null){
+            return successCreated(ResultCode.SAVE_FAIL);
+        }
+        if( id == 0 || id<0){
             return successCreated(ResultCode.SAVE_FAIL);
         }
         return successCreated(ResultCode.SUCCESS);

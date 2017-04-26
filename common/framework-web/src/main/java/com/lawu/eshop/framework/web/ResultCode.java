@@ -136,7 +136,7 @@ public class ResultCode {
  
 
     // 商城模块代码 7xxx
-
+    public static final int MESSAGE_HAS_NO_TEMPLATE = 7001;
 
     // 初始化状态码与文字说明
     static {
@@ -251,6 +251,7 @@ public class ResultCode {
 
 
         // 商城模块 7xxx
+        ResultCode.messageMap.put(MESSAGE_HAS_NO_TEMPLATE, "未配置对应的消息模板");
 
 
     }
