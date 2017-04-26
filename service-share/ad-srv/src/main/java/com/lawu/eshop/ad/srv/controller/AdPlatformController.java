@@ -1,17 +1,6 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -24,6 +13,11 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 运营平台接口提供
@@ -70,110 +64,116 @@ public class AdPlatformController extends BaseController {
         }
         return successAccepted(list);
     }
-	
 
-	/**
-	 * 根据位置查询广告
-	 * @param positionEnum
-	 * @return
-	 */
-	@RequestMapping(value = "selectList", method = RequestMethod.POST)
+    /**
+     * 根据位置查询广告
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "selectList", method = RequestMethod.POST)
     public Result<Page<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param) {
-		Page<AdPlatformBO> page = adPlatformService.selectList(param);
-		List<AdPlatformDTO> list;
-		list=AdPlatformConverter.convertDTOS(page.getRecords());
-		if(list==null){
-			list=new ArrayList<AdPlatformDTO>();
-		}
-		Page<AdPlatformDTO> newPage=new Page<>();
-		newPage.setCurrentPage(page.getCurrentPage());
-		newPage.setTotalCount(page.getTotalCount());
-		newPage.setRecords(list);
-		return  successAccepted(newPage);
+        Page<AdPlatformBO> page = adPlatformService.selectList(param);
+        List<AdPlatformDTO> list;
+        list = AdPlatformConverter.convertDTOS(page.getRecords());
+        if (list == null) {
+            list = new ArrayList<AdPlatformDTO>();
+        }
+        Page<AdPlatformDTO> newPage = new Page<>();
+        newPage.setCurrentPage(page.getCurrentPage());
+        newPage.setTotalCount(page.getTotalCount());
+        newPage.setRecords(list);
+        return successAccepted(newPage);
     }
 
-	/**
-	 * 删除广告
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "removeAdPlatform/{id}", method = RequestMethod.DELETE)
+    /**
+     * 删除广告
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "removeAdPlatform/{id}", method = RequestMethod.DELETE)
     public Result removeAdPlatform(@PathVariable Long id) {
-		Integer i = adPlatformService.removeAdPlatform(id);
-		if(id>0){
-    		return successDelete();
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+        Integer i = adPlatformService.removeAdPlatform(id);
+        if (id > 0) {
+            return successDelete();
+        } else {
+            return successCreated(ResultCode.FAIL);
+        }
     }
 
-	/**
-	 * 发布广告
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "issueAd/{id}", method = RequestMethod.PUT)
+    /**
+     * 发布广告
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "issueAd/{id}", method = RequestMethod.PUT)
     public Result issueAd(@PathVariable Long id) {
-		Integer i = adPlatformService.issueAd(id);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+        Integer i = adPlatformService.issueAd(id);
+        if (id > 0) {
+            return successCreated(ResultCode.SUCCESS);
+        } else {
+            return successCreated(ResultCode.FAIL);
+        }
     }
 
-	/**
-	 * 广告下架
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
+    /**
+     * 广告下架
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
     public Result unShelve(@PathVariable Long id) {
-		adPlatformService.unShelve(id);
-    	return successCreated(ResultCode.SUCCESS);
+        adPlatformService.unShelve(id);
+        return successCreated(ResultCode.SUCCESS);
     }
 
-	/**
-	 * 设置广告位
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "setPosition/{id}", method = RequestMethod.POST)
-    public Result setPosition(@PathVariable Long id,@RequestBody PositionEnum positionEnum) {
-		Integer i = adPlatformService.setPosition(id, positionEnum);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+    /**
+     * 设置广告位
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "setPosition/{id}", method = RequestMethod.POST)
+    public Result setPosition(@PathVariable Long id, @RequestBody PositionEnum positionEnum) {
+        Integer i = adPlatformService.setPosition(id, positionEnum);
+        if (id > 0) {
+            return successCreated(ResultCode.SUCCESS);
+        } else {
+            return successCreated(ResultCode.FAIL);
+        }
     }
 
-	/**
-	 * 修改
-	 * @param id
-	 * @param adPlatformParam
-	 * @param url
-	 * @return
-	 */
-	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public Result update(@PathVariable Long id, @RequestBody AdPlatformParam adPlatformParam,@RequestParam String url) {
-		Integer i = adPlatformService.update(id, adPlatformParam, url);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+    /**
+     * 修改
+     *
+     * @param id
+     * @param adPlatformParam
+     * @param url
+     * @return
+     */
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
+    public Result update(@PathVariable Long id, @RequestBody AdPlatformParam adPlatformParam, @RequestParam String url) {
+        Integer i = adPlatformService.update(id, adPlatformParam, url);
+        if (id > 0) {
+            return successCreated(ResultCode.SUCCESS);
+        } else {
+            return successCreated(ResultCode.FAIL);
+        }
     }
 
-	/**
-	 * 单个查询
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "select/{id}", method = RequestMethod.GET)
+    /**
+     * 单个查询
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "select/{id}", method = RequestMethod.GET)
     public Result<AdPlatformDTO> select(@PathVariable Long id) {
-		AdPlatformBO  adPlatformBO = adPlatformService.select(id);
-		return successGet(AdPlatformConverter.convertDTO(adPlatformBO));
+        AdPlatformBO adPlatformBO = adPlatformService.select(id);
+        return successGet(AdPlatformConverter.convertDTO(adPlatformBO));
     }
 
     /**
@@ -184,8 +184,23 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "getAdPlatformByTypePosition", method = RequestMethod.GET)
-    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum , @RequestParam PositionEnum positionEnum) {
+    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum) {
         List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum);
+        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
+    }
+
+    /**
+     * 根据精品类型查询精品
+     *
+     * @param goodsTypeEnum
+     * @return
+     */
+    @RequestMapping(value = "getAdPlatformWithGoods", method = RequestMethod.GET)
+    public Result<List<AdPlatformDTO>> getAdPlatformWithGoods(@RequestParam GoodsTypeEnum goodsTypeEnum) {
+        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformWithGoods(goodsTypeEnum);
         if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }

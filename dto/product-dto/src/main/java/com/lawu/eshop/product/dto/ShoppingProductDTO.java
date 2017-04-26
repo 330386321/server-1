@@ -19,8 +19,14 @@ public class ShoppingProductDTO {
     @ApiModelProperty(value = "今日推荐")
     private List<ProductSearchDTO> recommendProduct;
 
-    @ApiModelProperty(value = "精品推荐")
-    private List<ProductSearchDTO> goodsProduct;
+    @ApiModelProperty(value = "E店必购")
+    private List<ProductSearchDTO> buyProduct;
+
+    @ApiModelProperty(value = "特色好货")
+    private List<ProductSearchDTO> featureProduct;
+
+    @ApiModelProperty(value = "实惠单品")
+    private List<ProductSearchDTO> benefitProduct;
 
     public List<ProductSearchDTO> getRecommendProduct() {
         return recommendProduct;
@@ -30,12 +36,28 @@ public class ShoppingProductDTO {
         this.recommendProduct = recommendProduct;
     }
 
-    public List<ProductSearchDTO> getGoodsProduct() {
-        return goodsProduct;
+    public List<ProductSearchDTO> getBuyProduct() {
+        return buyProduct;
     }
 
-    public void setGoodsProduct(List<ProductSearchDTO> goodsProduct) {
-        this.goodsProduct = goodsProduct;
+    public void setBuyProduct(List<ProductSearchDTO> buyProduct) {
+        this.buyProduct = buyProduct;
+    }
+
+    public List<ProductSearchDTO> getFeatureProduct() {
+        return featureProduct;
+    }
+
+    public void setFeatureProduct(List<ProductSearchDTO> featureProduct) {
+        this.featureProduct = featureProduct;
+    }
+
+    public List<ProductSearchDTO> getBenefitProduct() {
+        return benefitProduct;
+    }
+
+    public void setBenefitProduct(List<ProductSearchDTO> benefitProduct) {
+        this.benefitProduct = benefitProduct;
     }
 
     public List<ProductSearchDTO> getTopProduct() {
