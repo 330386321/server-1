@@ -121,7 +121,18 @@ public class ResultCode {
     public static final int PAY_ORDER_NULL = 6019;
     public static final int PAY_ORDER_IS_SUCCESS = 6020;
     public static final int BANK_ACCOUNT_IS_EXIST = 6021;
+    
 
+    
+    public static final int ALIPAY_INIT_VALIDATOR_SUBJECT_NULL = 6009;
+    public static final int ALIPAY_INIT_VALIDATOR_MONEY_NULL = 6010;
+    public static final int ALIPAY_INIT_VALIDATOR_OUT_TRADE_NO_NULL = 6011;
+    public static final int ALIPAY_INIT_VALIDATOR_USER_TYPE_NULL = 6012;
+    public static final int ALIPAY_INIT_VALIDATOR_BODY_NULL = 6013;
+    public static final int ALIPAY_INIT_VALIDATOR_USER_NUM_NULL = 6014;
+    public static final int ALIPAY_INIT_VALIDATOR_BIZ_FLAG_NULL = 6015;
+
+ 
 
     // 商城模块代码 7xxx
 
