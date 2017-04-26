@@ -133,7 +133,8 @@ public class CommentController extends BaseController {
     }
 
 
-    @ApiOperation(value = "商品评价刷选商品信息列表", notes = "商品评价刷选商品信息列表 [1002，1004,1000]（章勇）", httpMethod = "GET")
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
+    @ApiOperation(value = "商品评价筛选商品信息列表", notes = "商品评价筛选商品信息列表 [1002，1004,1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductsByMerchantId", method = RequestMethod.GET)
@@ -168,6 +169,7 @@ public class CommentController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
@@ -209,6 +211,7 @@ public class CommentController extends BaseController {
         return successGet(pages);
     }
 
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "评价商家列表", notes = "评价商家列表 [1005，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

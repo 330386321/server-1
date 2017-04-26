@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.FansInviteDetailService;
 import com.lawu.eshop.property.dto.FansInviteDetailDTO;
 import com.lawu.eshop.property.param.ListFansInviteDetailParam;
@@ -29,6 +30,7 @@ public class FansInviteDetailController extends BaseController {
     @Autowired
     private FansInviteDetailService fansInviteDetailService;
 
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "查询商家邀请粉丝记录", notes = "商家邀请粉丝记录列表。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
@@ -39,6 +41,7 @@ public class FansInviteDetailController extends BaseController {
         return fansInviteDetailService.listFansInviteDetail(merchantId, listFansInviteDetailParam);
     }
 
+    @Audit(date = "2017-04-26", reviewer = "孙林青")
     @ApiOperation(value = "查询邀请粉丝详情", notes = "根据积分编号查询邀请粉丝详情。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
