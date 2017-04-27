@@ -10,13 +10,15 @@ package com.lawu.eshop.property.constants;
  *
  */
 public enum TransactionPayTypeEnum {
-	BALANCE((byte) 0x01), // 余额
-	ALIPAY((byte) 0x02), // 支付宝
-	WX((byte) 0x03);// 微信
+	BALANCE((byte) 0x01,"余额"), // 余额
+	ALIPAY((byte) 0x02,"支付宝"), // 支付宝
+	WX((byte) 0x03,"微信");// 微信
 	public Byte val;
+	public String name;
 
-	TransactionPayTypeEnum(Byte val) {
+	TransactionPayTypeEnum(Byte val,String name) {
 		this.val = val;
+		this.name = name;
 	}
 
 	public static TransactionPayTypeEnum getEnum(Byte val) {

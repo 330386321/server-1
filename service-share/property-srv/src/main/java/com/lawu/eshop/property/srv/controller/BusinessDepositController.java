@@ -129,6 +129,7 @@ public class BusinessDepositController extends BaseController {
 		for (BusinessDepositQueryBO bo : list) {
 			BusinessDepositQueryDTO dto = new BusinessDepositQueryDTO();
 			BeanUtil.copyProperties(bo, dto);
+			
 			newList.add(dto);
 		}
 		Page<BusinessDepositQueryDTO> pageResult = new Page<BusinessDepositQueryDTO>();

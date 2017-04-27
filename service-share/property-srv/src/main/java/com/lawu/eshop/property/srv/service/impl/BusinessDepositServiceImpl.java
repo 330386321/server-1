@@ -134,8 +134,15 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	public Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param) {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		Criteria criteria1 = example.createCriteria();
-		criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate())
-				.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
+		if (param.getBeginDate() != null && param.getEndDate() != null) {
+			criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
+		}
+		if (param.getBusinessDepositStatusEnum() != null) {
+			criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
+		} else {
+			criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.val);
+		}
+
 		if (param.getTransactionPayTypeEnum() != null) {
 			criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().val);
 		}
@@ -176,26 +183,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			ddqbo.setDepositNumber(bddo.getDepositNumber() == null ? "" : bddo.getDepositNumber());
 			ddqbo.setBusinessName(bddo.getBusinessName() == null ? "" : bddo.getBusinessName());
 			ddqbo.setAmount(bddo.getAmount() == null ? new BigDecimal("0") : bddo.getAmount());
-			if (TransactionPayTypeEnum.ALIPAY.val.equals(bddo.getPaymentMethod())) {
-				ddqbo.setPayMethod("支付宝");
-			} else if (TransactionPayTypeEnum.WX.val.equals(bddo.getPaymentMethod())) {
-				ddqbo.setPayMethod("微信");
-			}
-
-			if (BusinessDepositStatusEnum.VERIFY.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("待核实");
-			} else if (BusinessDepositStatusEnum.VERIFYD.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("已核实");
-			} else if (BusinessDepositStatusEnum.APPLY_REFUND.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("申请退款");
-			} else if (BusinessDepositStatusEnum.ACCPET_REFUND.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("退款已受理");
-			} else if (BusinessDepositStatusEnum.REFUND_SUCCESS.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("退款成功");
-			} else if (BusinessDepositStatusEnum.REFUND_FAILURE.val.equals(bddo.getStatus())) {
-				ddqbo.setStatus("退款失败");
-			}
-
+			ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).name);
+			ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).name);
+			ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
 			ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
 			ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());

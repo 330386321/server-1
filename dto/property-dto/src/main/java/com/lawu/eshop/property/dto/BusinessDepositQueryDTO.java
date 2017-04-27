@@ -2,6 +2,8 @@ package com.lawu.eshop.property.dto;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class BusinessDepositQueryDTO {
@@ -30,6 +32,9 @@ public class BusinessDepositQueryDTO {
 	@ApiModelProperty(value = "支付方式")
 	private String payMethod;
 
+	@ApiModelProperty(value = "状态枚举")
+	private BusinessDepositStatusEnum businessDepositStatusEnum;
+	
 	@ApiModelProperty(value = "状态")
 	private String status;
 	
@@ -119,12 +124,12 @@ public class BusinessDepositQueryDTO {
 		this.payMethod = payMethod;
 	}
 
-	public String getStatus() {
-		return status;
+	public BusinessDepositStatusEnum getBusinessDepositStatusEnum() {
+		return businessDepositStatusEnum;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setBusinessDepositStatusEnum(BusinessDepositStatusEnum businessDepositStatusEnum) {
+		this.businessDepositStatusEnum = businessDepositStatusEnum;
 	}
 
 	public String getBusinessBankAccount() {
@@ -173,6 +178,14 @@ public class BusinessDepositQueryDTO {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

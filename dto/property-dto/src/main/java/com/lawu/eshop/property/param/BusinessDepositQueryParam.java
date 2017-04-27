@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
@@ -19,6 +20,7 @@ import io.swagger.annotations.ApiParam;
  * @date 2017年4月15日 下午1:23:17
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BusinessDepositQueryParam  extends AbstractPageParam{
 
 	@ApiParam(name = "content", value = "搜索文本")

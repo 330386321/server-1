@@ -2,6 +2,8 @@ package com.lawu.eshop.property.srv.bo;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
+
 public class BusinessDepositQueryBO {
 
 	private Long id;
@@ -20,6 +22,8 @@ public class BusinessDepositQueryBO {
 
 	private String payMethod;
 
+	private BusinessDepositStatusEnum businessDepositStatusEnum;
+	
 	private String status;
 	
 	
@@ -156,6 +160,14 @@ public class BusinessDepositQueryBO {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public BusinessDepositStatusEnum getBusinessDepositStatusEnum() {
+		return businessDepositStatusEnum;
+	}
+
+	public void setBusinessDepositStatusEnum(BusinessDepositStatusEnum businessDepositStatusEnum) {
+		this.businessDepositStatusEnum = businessDepositStatusEnum;
 	}
 
 }

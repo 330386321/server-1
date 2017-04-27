@@ -2,6 +2,7 @@ package com.lawu.eshop.operator.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.BusinessDepositManageService;
 import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
 import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
@@ -44,9 +46,10 @@ public class BusinessDepositManageController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@PageBody
 	@ApiOperation(value = "保证金明细查询", notes = "保证金明细查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
-	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@ModelAttribute @ApiParam BusinessDepositQueryParam param)
+	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryParam param)
 			throws Exception {
 		BusinessDepositQueryDataParam dparam = new BusinessDepositQueryDataParam();
 		dparam.setContent(param.getContent());

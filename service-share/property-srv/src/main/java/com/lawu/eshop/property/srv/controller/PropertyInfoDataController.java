@@ -40,7 +40,7 @@ public class PropertyInfoDataController extends BaseController {
 	/**
 	 * 减积分的业务：
 	 * 
-	 * 商家邀请粉丝、商家发布广告、商家发红包
+	 * 商家邀请粉丝、商家发布广告、商家发红包、大额抢占扣除积分
 	 * 
 	 * @param param
 	 * @return

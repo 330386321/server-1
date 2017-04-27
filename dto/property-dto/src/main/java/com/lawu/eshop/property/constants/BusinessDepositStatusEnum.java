@@ -12,17 +12,20 @@ package com.lawu.eshop.property.constants;
  */
 public enum BusinessDepositStatusEnum {
 
-	PAYING((byte) 0x00),
-	VERIFY((byte) 0x01),
-	VERIFYD((byte) 0x02),
-	APPLY_REFUND((byte) 0x03),
-	ACCPET_REFUND((byte) 0x04),
-	REFUND_SUCCESS((byte) 0x05),
-	REFUND_FAILURE((byte) 0x06);
+	PAYING((byte) 0x00,"待支付"),
+	VERIFY((byte) 0x01,"待核实"),
+	VERIFYD((byte) 0x02,"已核实"),
+	APPLY_REFUND((byte) 0x03,"申请退款"),
+	ACCPET_REFUND((byte) 0x04,"退款已受理"),
+	REFUND_SUCCESS((byte) 0x05,"退款成功"),
+	REFUND_FAILURE((byte) 0x06,"退款失败");
+	
 	public Byte val;
+	public String name;
 
-	BusinessDepositStatusEnum(Byte val) {
+	BusinessDepositStatusEnum(Byte val,String name) {
 		this.val = val;
+		this.name = name;
 	}
 
 	public static BusinessDepositStatusEnum getEnum(Byte val) {
