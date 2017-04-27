@@ -28,5 +28,10 @@ public class KeyConstant {
      * 商家token-账号
      */
     public static final String REDIS_TOKEN_MERCHANT_PREFIX = "AUTHORIZATION_TOKEN_MERCHANT_";
+    
+    /**
+     * 广告ID
+     */
+    public static final String REDIS_KEY_AD = "AD_KEY_MEMBER_ID_";
 
 }

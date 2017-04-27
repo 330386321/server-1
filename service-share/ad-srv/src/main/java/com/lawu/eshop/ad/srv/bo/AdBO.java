@@ -46,6 +46,17 @@ public class AdBO {
 	private Integer number;
 
 	private Boolean isFavorite;
+	
+	private Boolean isPraise;
+	
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
+	}
 
 	public Long getId() {
 		return id;

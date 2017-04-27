@@ -47,6 +47,7 @@ public class AdConverter {
 		adBO.setPutWayEnum(PutWayEnum.getEnum(adDO.getPutWay()));
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
 		adBO.setTotalPoint(adDO.getTotalPoint());
+		adBO.setViewCount(adDO.getViewcount());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){
@@ -101,6 +102,8 @@ public class AdConverter {
 		adDTO.setTotalPoint(adBO.getTotalPoint());
 		adDTO.setNumber(adBO.getNumber());
 		adDTO.setIsFavorite(adBO.getIsFavorite());
+		adDTO.setViewCount(adBO.getViewCount());
+		adDTO.setIsPraise(adBO.getIsPraise());
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}
@@ -164,6 +167,7 @@ public class AdConverter {
         document.addField("longitude_s", adDO.getMerchantLongitude());
         document.addField("latitude_s", adDO.getMerchantLatitude());
         document.addField("status_s", 2);
+        document.addField("count_i", 0);
         document.addField("type_i", adDO.getType());
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){

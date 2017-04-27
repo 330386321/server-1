@@ -10,6 +10,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
@@ -30,6 +32,7 @@ import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
 import com.lawu.eshop.ad.srv.domain.AdRegionDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
@@ -65,6 +68,9 @@ public class AdServiceImpl implements AdService {
 	
 	@Autowired
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
+	
+	@Autowired
+    private StringRedisTemplate stringRedisTemplate;
 	
 	@Autowired
 	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
@@ -134,7 +140,6 @@ public class AdServiceImpl implements AdService {
 		//将广告添加到solr中
 		if(adDO.getType()==1){
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			document.addField("count_i", 0);
 		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		}
 		return i;
@@ -363,19 +368,30 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 		Long count=favoriteAdDOMapper.countByExample(example);
 		AdBO adBO=AdConverter.convertBO(adDO);
-		Long number=0l;
-		if(adDO.getType()==3){
+		Long praiseCount=0l;
+		boolean isPraise=false;
+		if(adDO.getType()==3){ //获取E赞的抢赞人数
 			PointPoolDOExample ppexample=new PointPoolDOExample();
 			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
 					                   .andStatusEqualTo(new Byte("1"));
-			number=pointPoolDOMapper.countByExample(ppexample);
+			praiseCount=pointPoolDOMapper.countByExample(ppexample);
+			
+			PointPoolDOExample ppexample2=new PointPoolDOExample();
+			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
+					                   .andStatusEqualTo(new Byte("1")).andMemberIdEqualTo(memberId);
+			Long number=pointPoolDOMapper.countByExample(ppexample2);
+			if(number>0){
+				isPraise=true;
+			}
 		}
-		adBO.setNumber(number.intValue());
+		adBO.setIsPraise(isPraise);
+		adBO.setNumber(praiseCount.intValue());
 		if(count.intValue()>0){
 			adBO.setIsFavorite(true);
 		}else{
 			adBO.setIsFavorite(false);
 		}
+		
 		return adBO;
 	}
 	
@@ -418,11 +434,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setStatus(new Byte("1"));
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
-		FavoriteAdDOExample adExample=new FavoriteAdDOExample();
-		adExample.createCriteria().andAdIdEqualTo(adDO.getId());
-		Long attenCount=favoriteAdDOMapper.countByExample(adExample);
 		SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-		document.addField("count_i", attenCount.intValue());
 	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		return i;
 	}
@@ -610,6 +622,46 @@ public class AdServiceImpl implements AdService {
 			return false;
 		else
 			return true;
+	}
+
+	@Override
+	public ClickAdPointBO getClickAdPoint(Long memberId,Long adId) {
+		MemberAdRecordDOExample example=new MemberAdRecordDOExample();
+		example.createCriteria().andClickDateEqualTo(new Date()).andMemberIdEqualTo(memberId);
+		List<MemberAdRecordDO> list= memberAdRecordDOMapper.selectByExample(example);
+		BigDecimal totlePoint=new BigDecimal(0);
+		if(!list.isEmpty()){
+			for (MemberAdRecordDO memberAdRecordDO : list) {
+				totlePoint=totlePoint.add(memberAdRecordDO.getPoint());
+			}
+		}
+		AdDO adDO=adDOMapper.selectByPrimaryKey(adId);
+		ClickAdPointBO clickAdPointBO=new ClickAdPointBO();
+		clickAdPointBO.setAdTotlePoint(adDO.getTotalPoint());
+		clickAdPointBO.setAddPoint(totlePoint);
+		return clickAdPointBO;
+	}
+
+	@Override
+	public List<Long> getAllAd() {
+		AdDOExample example =new AdDOExample();
+		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
+		List<AdDO> list=adDOMapper.selectByExample(example);
+		
+		List<Long> ids=new ArrayList<>();
+		for (AdDO adDO : list) {
+			ids.add(adDO.getId());
+		}
+		return ids;
+		
+	}
+
+	@Override
+	public void updateViewCount(Long id,Integer count) {
+		AdDO adDO=new  AdDO();
+		adDO.setId(id);
+		adDO.setViewcount(count);
+		adDOMapper.updateByPrimaryKeySelective(adDO);
 	}
 
 }

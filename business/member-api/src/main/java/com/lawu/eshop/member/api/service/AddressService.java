@@ -76,7 +76,7 @@ public interface AddressService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "address/updateDefault/{id}")
-	Result updateDefault(@PathVariable("id") Long id, @RequestParam("userId") Long userId);
+	Result updateDefault(@PathVariable("id") Long id, @RequestParam("userNum") String userNum);
 
 	/**
 	 * 根据用户编号 查询用户所有地址

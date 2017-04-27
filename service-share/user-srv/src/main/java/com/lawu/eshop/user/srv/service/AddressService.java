@@ -57,7 +57,7 @@ public interface AddressService {
 	 * @param id
 	 * @param isDefault
 	 */
-	Integer updateDefault(Long id, Long userId);
+	Integer updateDefault(Long id, String userNum);
 
 	/**
 	 * 根据用户编号 查询用户所有地址

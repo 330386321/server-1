@@ -84,10 +84,10 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	@Transactional
-	public Integer updateDefault(Long id, Long userId) {
+	public Integer updateDefault(Long id, String userNum) {
 		AddressDO addressDO = new AddressDO();
 		AddressDOExample example = new AddressDOExample();
-		example.createCriteria().andUserIdEqualTo(userId);
+		example.createCriteria().andUserNumEqualTo(userNum);
 		addressDO.setIsDefault(false);
 		addressDO.setGmtModified(new Date());
 		addressDOMapper.updateByExampleSelective(addressDO, example);

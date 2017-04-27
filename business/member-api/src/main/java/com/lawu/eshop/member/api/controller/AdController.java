@@ -17,6 +17,7 @@ import com.lawu.eshop.ad.dto.AdEgainDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.UserTopDTO;
@@ -36,6 +37,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
+import com.lawu.eshop.member.api.service.AdViewService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
@@ -77,6 +79,9 @@ public class AdController extends BaseController {
     
     @Autowired
     private MerchantProfileService merchantProfileService;
+    
+    @Autowired
+    private AdViewService adViewService;
 
 
 
@@ -127,7 +132,7 @@ public class AdController extends BaseController {
         if(isSuccess(adRs)){
         	AdDTO  adDTO=adRs.getModel();
         	adEgainDTO.setId(adDTO.getId());
-        	adEgainDTO.setAttenCount(adDTO.getAttenCount());
+        	adEgainDTO.setViewCount(adDTO.getViewCount());
         	adEgainDTO.setContent(adDTO.getContent());
         	adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
         	adEgainDTO.setTitle(adDTO.getTitle());
@@ -147,6 +152,21 @@ public class AdController extends BaseController {
         		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
         		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
         	}
+        	
+        	 if(adDTO.getViewCount()==0){
+        		 adViewService.setAdView(id.toString(), memberId.toString());
+        	 }else{
+        		 Result<List<String>> rs= adViewService.getAdviews(id.toString());
+        		 if(isSuccess(rs)){
+        			 for (String str : rs.getModel()) {
+            			 if(!memberId.toString().equals(str)){
+            				 adViewService.setAdView(id.toString(), memberId.toString());
+            			 }
+    				}
+        		 }
+        		
+        	 }
+        	 
         }
        
         return successAccepted(adEgainDTO);
@@ -274,6 +294,17 @@ public class AdController extends BaseController {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<PraisePointDTO> rs=adService.getRedPacket(merchantId,memberId,userNum);
     	return rs;
+    }
+    
+    @Authorization
+    @ApiOperation(value = "今日获得积分", notes = "今日获得积分[]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getClickAdPoint/{id}", method = RequestMethod.GET)
+    public Result<ClickAdPointDTO> getClickAdPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                  @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+   	   Long memberId=UserUtil.getCurrentUserId(getRequest());
+   	   Result<ClickAdPointDTO> rs = adService.getClickAdPoint(memberId,id);
+       return rs;
     }
 
 } 

@@ -1,11 +1,15 @@
-package com.lawu.eshop.ad.srv.bo;
+package com.lawu.eshop.ad.dto;
 
 import java.math.BigDecimal;
 
-public class ClickAdPointBO {
+import io.swagger.annotations.ApiModelProperty;
+
+public class ClickAdPointDTO {
 	
+	@ApiModelProperty(value = "今日累计积分")
 	private BigDecimal addPoint;
 	
+	@ApiModelProperty(value = "广告总积分")
 	private BigDecimal adTotlePoint;
 
 	public BigDecimal getAddPoint() {

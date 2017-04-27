@@ -189,6 +189,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			praise.setCount(adDTO.getNumber());
 			praise.setLogoUrl(adDTO.getLogoUrl());
 			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
+			praise.setMediaUrl(adDTO.getMediaUrl());
 			adPraiseDTOS.add(praise);
  		}
      	Page<AdPraiseDTO> newPage=new Page<AdPraiseDTO>();
@@ -218,6 +219,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setLogoUrl(ad.getLogoUrl());
 		praise.setNeedBeginTime(ad.getNeedBeginTime());
 		praise.setIsFavorite(ad.getIsFavorite());
+		praise.setIsPraise(ad.getIsPraise());
         return successGet(praise);
 	}
 	

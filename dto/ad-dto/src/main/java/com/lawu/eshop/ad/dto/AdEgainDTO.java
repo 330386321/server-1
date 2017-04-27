@@ -25,8 +25,8 @@ public class AdEgainDTO {
 	@ApiModelProperty(value = "状态")
     private AdStatusEnum statusEnum;
     
-	@ApiModelProperty(value = "关注数量")
-    private Integer attenCount;
+	@ApiModelProperty(value = "浏览数量")
+    private Integer viewCount;
     
 	@ApiModelProperty(value = "店铺名称")
     private String name;
@@ -100,12 +100,12 @@ public class AdEgainDTO {
 		this.statusEnum = statusEnum;
 	}
 
-	public Integer getAttenCount() {
-		return attenCount;
+	public Integer getViewCount() {
+		return viewCount;
 	}
 
-	public void setAttenCount(Integer attenCount) {
-		this.attenCount = attenCount;
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
 	}
 
 	public String getName() {

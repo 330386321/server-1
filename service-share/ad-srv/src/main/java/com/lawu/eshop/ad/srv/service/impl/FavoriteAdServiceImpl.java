@@ -51,14 +51,6 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 		favoriteAd.setMemberId(memberId);
 		favoriteAd.setGmtCreate(new Date());
 		int row=favoriteAdDOMapper.insert(favoriteAd);
-		
-		FavoriteAdDOExample example2=new FavoriteAdDOExample();
-		example2.createCriteria().andAdIdEqualTo(adId);
-		Long attend=favoriteAdDOMapper.countByExample(example2);
-		SolrInputDocument document = new SolrInputDocument();
-		document.addField("id", adId);
-		document.addField("count_i", attend);
-	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		return row;
 	}
 
@@ -69,14 +61,7 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 	public void remove(Long adId,Long memberId) {
 		FavoriteAdDOExample example = new FavoriteAdDOExample();
         example.createCriteria().andMemberIdEqualTo(memberId).andAdIdEqualTo(adId);
-        Integer i = favoriteAdDOMapper.deleteByExample(example);
-        
-        FavoriteAdDOExample example2=new FavoriteAdDOExample();
-		example2.createCriteria().andAdIdEqualTo(adId);
-		Long attend=favoriteAdDOMapper.countByExample(example2);
-		SolrInputDocument document = new SolrInputDocument();
-		document.addField("count_i", attend-1);
-	    SolrUtil.delSolrDocsById(adId, SolrUtil.SOLR_AD_CORE);
+        favoriteAdDOMapper.deleteByExample(example);
 	}
 
 	/**

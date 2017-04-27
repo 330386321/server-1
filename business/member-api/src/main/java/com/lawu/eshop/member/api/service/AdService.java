@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
@@ -113,4 +113,13 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.GET)
     public Result<PraisePointDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
+	
+	/**
+	 * 点击广告获取的积分
+	 * @param memberId
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/getClickAdPoint/{id}", method = RequestMethod.GET)
+    public Result<ClickAdPointDTO> getClickAdPoint(@RequestParam("memberId") Long memberId,@PathVariable("id") Long id);
 }

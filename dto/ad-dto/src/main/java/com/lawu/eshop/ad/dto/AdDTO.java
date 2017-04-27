@@ -66,7 +66,7 @@ public class AdDTO {
     private Date gmtCreate;
     
 	@ApiModelProperty(value = "关注数量")
-    private Integer attenCount;
+    private Integer viewCount;
     
 	@ApiModelProperty(value = "店铺名称")
     private String name;
@@ -85,6 +85,9 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "是否收藏")
 	private Boolean isFavorite;
+	
+	@ApiModelProperty(value = "是否抢赞")
+	private Boolean isPraise;
 
 
 	public Long getId() {
@@ -228,14 +231,13 @@ public class AdDTO {
 		this.gmtCreate = gmtCreate;
 	}
 
-
-	public Integer getAttenCount() {
-		return attenCount;
+	public Integer getViewCount() {
+		return viewCount;
 	}
 
 
-	public void setAttenCount(Integer attenCount) {
-		this.attenCount = attenCount;
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
 	}
 
 
@@ -317,6 +319,16 @@ public class AdDTO {
 
 	public void setIsFavorite(Boolean isFavorite) {
 		this.isFavorite = isFavorite;
+	}
+
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
 	}
 
 

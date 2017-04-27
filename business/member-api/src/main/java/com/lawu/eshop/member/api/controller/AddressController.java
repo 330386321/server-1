@@ -129,8 +129,8 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.PUT)
 	public Result updateDefault(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
-		Long userId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = addressService.updateDefault(id, userId);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		Result rs = addressService.updateDefault(id, userNum);
 		return rs;
 	}
 

@@ -67,6 +67,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private RongUserService rongUserService;
+   
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -131,6 +132,7 @@ public class MemberServiceImpl implements MemberService {
         Byte status = 1;
         Criteria c1 = example.createCriteria();
         c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType);
+        int count=memberDOMapper.countByExample(example);
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
             c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
             Criteria c2 = example.createCriteria();
@@ -147,7 +149,7 @@ public class MemberServiceImpl implements MemberService {
                 mpList.add(memberProfileDO);
         }
         Page<MemberBO> pageMember = new Page<MemberBO>();
-        pageMember.setTotalCount(memberDOS.size());
+        pageMember.setTotalCount(count);
         List<MemberBO> memberBOS = MemberConverter.convertListBOS(memberDOS, mpList);
         pageMember.setRecords(memberBOS);
         pageMember.setCurrentPage(memberQuery.getCurrentPage());

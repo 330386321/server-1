@@ -1326,6 +1326,66 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andViewcountIsNull() {
+            addCriterion("viewCount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountIsNotNull() {
+            addCriterion("viewCount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountEqualTo(Integer value) {
+            addCriterion("viewCount =", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotEqualTo(Integer value) {
+            addCriterion("viewCount <>", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountGreaterThan(Integer value) {
+            addCriterion("viewCount >", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("viewCount >=", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountLessThan(Integer value) {
+            addCriterion("viewCount <", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountLessThanOrEqualTo(Integer value) {
+            addCriterion("viewCount <=", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountIn(List<Integer> values) {
+            addCriterion("viewCount in", values, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotIn(List<Integer> values) {
+            addCriterion("viewCount not in", values, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountBetween(Integer value1, Integer value2) {
+            addCriterion("viewCount between", value1, value2, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotBetween(Integer value1, Integer value2) {
+            addCriterion("viewCount not between", value1, value2, "viewcount");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

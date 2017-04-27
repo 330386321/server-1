@@ -42,33 +42,23 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         
-      	<table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
+      	
+         <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         
+        <!-- 
+        <table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
          <table tableName="ad_platform" domainObjectName="AdPlatformDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table> 
-        <!-- 
-          <table tableName="ad_platform" domainObjectName="AdPlatformDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> 
-        <table tableName="ad_platform" domainObjectName="AdPlatformDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         
-       <table tableName="ad_platform" domainObjectName="AdPlatformDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        
 		<table tableName="member_ad_record" domainObjectName="MemberAdRecord">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-       
-         <table tableName="ad_platform" domainObjectName="AdPlatformDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
          <table tableName="ad" domainObjectName="AdDO">

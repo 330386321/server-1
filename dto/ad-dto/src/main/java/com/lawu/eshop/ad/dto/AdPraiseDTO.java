@@ -40,6 +40,11 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "是否收藏")
 	private Boolean isFavorite;
 	
+	@ApiModelProperty(value = "广告附件路径")
+	private String mediaUrl;
+	
+	@ApiModelProperty(value = "是否抢赞")
+	private Boolean isPraise;
 
 	public Integer getCount() {
 		return count;
@@ -129,5 +134,22 @@ public class AdPraiseDTO {
 		this.isFavorite = isFavorite;
 	}
 
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
+	public Boolean getIsPraise() {
+		return isPraise;
+	}
+
+	public void setIsPraise(Boolean isPraise) {
+		this.isPraise = isPraise;
+	}
+
+	
 	
 }

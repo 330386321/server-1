@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.constants.RedPacketStatusEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.dto.RedPacketDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -29,6 +28,7 @@ import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -334,6 +334,43 @@ public class AdController extends BaseController{
     	PraisePointDTO dto=new PraisePointDTO();
     	dto.setPoint(point);
     	return successGet(dto);
+    }
+	
+	/**
+	 * 点击广告获取到的积分
+	 * @param memberId
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getClickAdPoint/{id}", method = RequestMethod.PUT)
+    public Result<ClickAdPointDTO> getClickAdPoint(@RequestParam  Long  memberId,@PathVariable Long id) {
+		ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
+    	ClickAdPointDTO dto=new ClickAdPointDTO();
+    	dto.setAddPoint(clickAdPointBO.getAddPoint());
+    	dto.setAdTotlePoint(clickAdPointBO.getAdTotlePoint());
+    	return successGet(dto);
+    }
+	
+	/**
+	 * 获取所有的广告ids
+	 * @return
+	 */
+	@RequestMapping(value = "getAllAd", method = RequestMethod.GET)
+    public Result<List<Long>> getAllAd() {
+    	List<Long> ids=adService.getAllAd();
+    	return successGet(ids);
+    }
+	
+	/**
+	 * 修改广告浏览次数
+	 * @param id
+	 * @param count
+	 * @return
+	 */
+	@RequestMapping(value = "updateViewCount/{id}", method = RequestMethod.GET)
+    public Result<List<Long>> updateViewCount(@PathVariable  Long  id,@RequestParam Integer count) {
+    	adService.updateViewCount(id, count);
+    	return successCreated();
     }
 
 }

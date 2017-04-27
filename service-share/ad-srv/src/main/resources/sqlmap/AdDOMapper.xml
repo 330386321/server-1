@@ -24,6 +24,7 @@
     <result column="total_point" jdbcType="DECIMAL" property="totalPoint" />
     <result column="ad_count" jdbcType="INTEGER" property="adCount" />
     <result column="hits" jdbcType="INTEGER" property="hits" />
+    <result column="viewCount" jdbcType="INTEGER" property="viewcount" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
@@ -101,7 +102,7 @@
     -->
     id, merchant_id, merchant_num, merchant_longitude, merchant_latitude, title, media_url, 
     content, type, put_way, begin_time, end_time, areas, radius, point, total_point, 
-    ad_count, hits, status, gmt_modified, gmt_create
+    ad_count, hits, viewCount, status, gmt_modified, gmt_create
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.ad.srv.domain.AdDOExample" resultMap="BaseResultMap">
     <!--
@@ -162,15 +163,17 @@
       content, type, put_way, 
       begin_time, end_time, areas, 
       radius, point, total_point, 
-      ad_count, hits, status, 
-      gmt_modified, gmt_create)
+      ad_count, hits, viewCount, 
+      status, gmt_modified, gmt_create
+      )
     values (#{merchantId,jdbcType=BIGINT}, #{merchantNum,jdbcType=VARCHAR}, #{merchantLongitude,jdbcType=DECIMAL}, 
       #{merchantLatitude,jdbcType=DECIMAL}, #{title,jdbcType=VARCHAR}, #{mediaUrl,jdbcType=VARCHAR}, 
       #{content,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{putWay,jdbcType=TINYINT}, 
       #{beginTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{areas,jdbcType=VARCHAR}, 
       #{radius,jdbcType=INTEGER}, #{point,jdbcType=DECIMAL}, #{totalPoint,jdbcType=DECIMAL}, 
-      #{adCount,jdbcType=INTEGER}, #{hits,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
-      #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP})
+      #{adCount,jdbcType=INTEGER}, #{hits,jdbcType=INTEGER}, #{viewcount,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT}, #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.ad.srv.domain.AdDO">
     <!--
@@ -233,6 +236,9 @@
       <if test="hits != null">
         hits,
       </if>
+      <if test="viewcount != null">
+        viewCount,
+      </if>
       <if test="status != null">
         status,
       </if>
@@ -294,6 +300,9 @@
       </if>
       <if test="hits != null">
         #{hits,jdbcType=INTEGER},
+      </if>
+      <if test="viewcount != null">
+        #{viewcount,jdbcType=INTEGER},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -377,6 +386,9 @@
       <if test="record.hits != null">
         hits = #{record.hits,jdbcType=INTEGER},
       </if>
+      <if test="record.viewcount != null">
+        viewCount = #{record.viewcount,jdbcType=INTEGER},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
       </if>
@@ -415,6 +427,7 @@
       total_point = #{record.totalPoint,jdbcType=DECIMAL},
       ad_count = #{record.adCount,jdbcType=INTEGER},
       hits = #{record.hits,jdbcType=INTEGER},
+      viewCount = #{record.viewcount,jdbcType=INTEGER},
       status = #{record.status,jdbcType=TINYINT},
       gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP}
@@ -480,6 +493,9 @@
       <if test="hits != null">
         hits = #{hits,jdbcType=INTEGER},
       </if>
+      <if test="viewcount != null">
+        viewCount = #{viewcount,jdbcType=INTEGER},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
       </if>
@@ -515,6 +531,7 @@
       total_point = #{totalPoint,jdbcType=DECIMAL},
       ad_count = #{adCount,jdbcType=INTEGER},
       hits = #{hits,jdbcType=INTEGER},
+      viewCount = #{viewcount,jdbcType=INTEGER},
       status = #{status,jdbcType=TINYINT},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
