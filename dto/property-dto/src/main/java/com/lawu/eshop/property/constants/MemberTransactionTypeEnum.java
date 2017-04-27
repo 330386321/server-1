@@ -20,7 +20,8 @@ public enum MemberTransactionTypeEnum {
 	WITHDRAW_BACK((byte) 0x0A, "提现退回"),
 	REFUND_ORDERS((byte) 0x0B, "退商品订单"),
 	SALES_COMMISSION((byte) 0x0C, "销售提成"),
-	VOLUME_COMMISSION((byte) 0x0D, "营业额提成");
+	VOLUME_COMMISSION((byte) 0x0D, "营业额提成"),
+	PRAISE_AD((byte) 0x0E, "大额抢占");
 
 	private Byte value;
 

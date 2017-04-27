@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.QueryPropertyDTO;
+import com.lawu.eshop.property.param.TestQuery1Param;
 import com.lawu.eshop.property.param.TestQueryParam;
 
 @FeignClient(value = "property-srv")
 public interface TestService {
 
 	@RequestMapping(method = RequestMethod.POST, value = "property/query")
-	Result<Page<QueryPropertyDTO>> query(@RequestBody TestQueryParam param);
+	Result<Page<QueryPropertyDTO>> query(@RequestBody TestQuery1Param param);
 
 	@RequestMapping(method = RequestMethod.POST, value = "property/save")
 	int save(@RequestBody TestQueryParam param);

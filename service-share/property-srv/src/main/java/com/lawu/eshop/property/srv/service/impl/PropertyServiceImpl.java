@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.param.TestQuery1Param;
 import com.lawu.eshop.property.param.TestQueryParam;
 import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
 import com.lawu.eshop.property.srv.domain.PropertyDO;
@@ -55,7 +56,7 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 	@Override
-	public Page<QueryPropertyBO> query(TestQueryParam param) throws Exception {
+	public Page<QueryPropertyBO> query(TestQuery1Param param) throws Exception {
 		PropertyDOExample example = new PropertyDOExample();
 		Criteria criteria = example.createCriteria();
 		if (param.getName() != null && !"".equals(param.getName())) {

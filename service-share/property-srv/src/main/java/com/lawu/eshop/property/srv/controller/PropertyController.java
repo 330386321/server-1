@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.QueryPropertyDTO;
+import com.lawu.eshop.property.param.TestQuery1Param;
 import com.lawu.eshop.property.param.TestQueryParam;
 import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
 import com.lawu.eshop.property.srv.service.PropertyService;
@@ -65,7 +66,7 @@ public class PropertyController extends BaseController {
     
     
     @RequestMapping(value = "query", method = RequestMethod.POST)
-	public Result<Page<QueryPropertyDTO>> query(@RequestBody TestQueryParam param) throws Exception {
+	public Result<Page<QueryPropertyDTO>> query(@RequestBody TestQuery1Param param) throws Exception {
 		
 		Page<QueryPropertyBO> page = propertyService.query(param);
 		List<QueryPropertyBO> cbos = page.getRecords();

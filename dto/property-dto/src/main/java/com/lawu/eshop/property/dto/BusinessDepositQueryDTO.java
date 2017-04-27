@@ -18,7 +18,7 @@ public class BusinessDepositQueryDTO {
 	@ApiModelProperty(value = "账户")
 	private String BusinessAccount;
 
-	@ApiModelProperty(value = "提现单号")
+	@ApiModelProperty(value = "第三方订单号")
 	private String thirdNumber;
 
 	@ApiModelProperty(value = "负责人姓名")
