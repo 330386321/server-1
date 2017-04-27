@@ -56,7 +56,11 @@ public class UserConverter {
                 userListDTO.setName(userListBO.getName());
             }
             userListDTO.setGmtCreate(userListBO.getGmtCreate());
-            userListDTO.setStatusEnum(userListBO.getStatusEnum());
+            if(StatusEnum.STATUS_DISABLE.val == userListBO.getStatusEnum().val){
+                userListDTO.setStatus("已禁用");
+            }else{
+                userListDTO.setStatus("已启用");
+            }
             userListDTOS.add(userListDTO);
         }
         return userListDTOS;

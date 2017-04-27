@@ -147,7 +147,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequestMapping(value = "findUserList", method = RequestMethod.POST)
-    Result<Page<UserListDTO>> findUserList(@ModelAttribute UserPageParam pageParam) {
+    Result<Page<UserListDTO>> findUserList(@RequestBody UserPageParam pageParam) {
         Page<UserListDTO> userListDTOPage = new Page<UserListDTO>();
         Page<UserListBO> boPage = userService.findUserList(pageParam);
         if (boPage.getRecords().isEmpty()) {
@@ -183,10 +183,10 @@ public class UserController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "delUser/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "delUser/{id}", method = RequestMethod.PUT)
     public Result delUser(@PathVariable(value = "id") Integer id){
         userService.delUser(id);
-        return successDelete();
+        return successCreated();
     }
 
     /**

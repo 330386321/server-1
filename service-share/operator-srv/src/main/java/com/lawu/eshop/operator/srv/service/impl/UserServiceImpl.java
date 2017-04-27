@@ -19,6 +19,7 @@ import com.lawu.eshop.operator.srv.mapper.extend.RolePermissionDOMapperExtend;
 import com.lawu.eshop.operator.srv.mapper.extend.UserRoleDOMapperExtend;
 import com.lawu.eshop.operator.srv.service.UserService;
 import com.lawu.eshop.operator.srv.strategy.PasswordStrategy;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -150,7 +151,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserListBO> findUserList(UserPageParam pageParam) {
         UserDOExample example = new UserDOExample();
-        example.createCriteria().andStatusNotEqualTo(StatusEnum.STATUS_INVALID.val);
+        if(StringUtils.isNotEmpty(pageParam.getAccount())){
+            example.createCriteria().andStatusNotEqualTo(StatusEnum.STATUS_INVALID.val).andAccountEqualTo(pageParam.getAccount());
+        }else{
+            example.createCriteria().andStatusNotEqualTo(StatusEnum.STATUS_INVALID.val);
+        }
         example.setOrderByClause("id desc");
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         int count = userDOMapper.countByExample(example);

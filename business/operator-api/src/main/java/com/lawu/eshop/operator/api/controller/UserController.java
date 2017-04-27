@@ -15,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,7 @@ public class UserController extends BaseController {
     private UserService userService;
 
     @ApiOperation(value = "新增用户", notes = "新增用户 [1004，1005]（章勇）", httpMethod = "POST")
-    @RequiresPermissions("user:add")
+ /*   @RequiresPermissions("user:add")*/
     @RequestMapping(value = "addUser", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result addUser(@RequestParam(value = "account") @ApiParam(value = "账号", required = true) String account,
@@ -47,8 +46,8 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息 [1003，1019]（章勇）", httpMethod = "PUT")
-    @RequiresPermissions("user:edit")
-    @RequestMapping(value = "user/editUser", method = RequestMethod.PUT)
+    /*@RequiresPermissions("user:edit")*/
+    @RequestMapping(value = "editUser", method = RequestMethod.PUT)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result editUser(@ModelAttribute UserParam userParam) {
         if (userParam == null || userParam.getId() <= 0) {
@@ -59,7 +58,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
-    @RequiresPermissions("user:find")
+  /*  @RequiresPermissions("user:find")*/
     @RequestMapping(value = "findUserList", method = RequestMethod.GET)
     @PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -72,10 +71,10 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "分配角色", notes = "分配角色 [1004，2101，1005，1000]（章勇）", httpMethod = "POST")
-    @RequiresPermissions("user:assign_role")
+    /*@RequiresPermissions("user:assign_role")*/
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId) {
+    public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId) {
         if (userId == null || roleId == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -84,22 +83,22 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "删除用户", notes = "删除用户 （章勇）", httpMethod = "DELETE")
-    @RequiresPermissions("user:del")
+    @ApiOperation(value = "删除用户", notes = "删除用户 （章勇）", httpMethod = "PUT")
+ /*   @RequiresPermissions("user:del")*/
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "delUser/{id}", method = RequestMethod.DELETE)
-    Result delUser(@PathVariable(value = "id") Integer id) {
+    @RequestMapping(value = "delUser/{id}", method = RequestMethod.PUT)
+    public Result delUser(@PathVariable(value = "id") Integer id) {
         if (id == null || id <= 0) {
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        return successDelete(userService.delUser(id));
+        return userService.delUser(id);
     }
 
     @ApiOperation(value = "禁用用户", notes = "禁用用户 [1004,1019,1000]（章勇）", httpMethod = "PUT")
-    @RequiresPermissions("user:disable")
+  /*  @RequiresPermissions("user:disable")*/
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "userDisabled/{id}", method = RequestMethod.PUT)
-    Result userDisabled(@PathVariable(value = "id") Integer id) {
+    public Result userDisabled(@PathVariable(value = "id") Integer id) {
         if (id == null || id <= 0) {
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
         }

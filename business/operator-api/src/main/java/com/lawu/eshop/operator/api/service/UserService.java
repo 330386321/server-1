@@ -52,7 +52,7 @@ public interface UserService {
     @RequestMapping(value = "user/assignRoles", method = RequestMethod.POST)
     Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId);
 
-    @RequestMapping(value = "user/delUser/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "user/delUser/{id}", method = RequestMethod.PUT)
     Result delUser(@PathVariable(value = "id") Integer id);
 
     @RequestMapping(value = "user/userDisabled/{id}", method = RequestMethod.PUT)
