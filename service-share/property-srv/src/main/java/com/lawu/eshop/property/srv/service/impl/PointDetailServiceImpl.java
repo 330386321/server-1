@@ -92,6 +92,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 		pointDetailDO.setPointType(param.getPointType());
 		pointDetailDO.setPoint(param.getPoint());
 		pointDetailDO.setDirection(param.getDirection());
+		pointDetailDO.setBizId(param.getBizId());
 		pointDetailDO.setRemark(param.getRemark());
 		pointDetailDO.setGmtCreate(new Date());
 		pointDetailDOMapper.insertSelective(pointDetailDO);

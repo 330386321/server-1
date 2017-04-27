@@ -154,7 +154,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//减财产余额、加财产积分
 		//新增余额充值积分交易明细
 		//新增积分交易明细
-		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getAccount());
+		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
@@ -206,6 +206,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		pdsParam.setUserNum(param.getUserNum());
 		pdsParam.setPointType(transactionType);
 		pdsParam.setPoint(new BigDecimal(point));
+		pdsParam.setBizId(param.getBizIds());
 		pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		pdsParam.setRemark("");
 		pointDetailService.save(pdsParam);
