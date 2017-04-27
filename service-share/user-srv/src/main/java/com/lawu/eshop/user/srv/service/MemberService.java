@@ -1,14 +1,13 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.srv.bo.MessagePushBO;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -105,4 +104,6 @@ public interface MemberService {
     MemberBO findMemberByNum(String userNum);
 
     List<MessagePushBO> findMessagePushList(String area);
+
+    MessagePushBO findMessagePushByMobile(String moblie);
 }

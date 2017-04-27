@@ -154,6 +154,7 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setContent(messageInfoParam.getContent());
         messageDO.setGmtCreate(new Date());
         messageDO.setGmtModified(new Date());
+        messageDO.setTitle(messageInfoParam.getTitle());
        int row =  messageDOMapper.insert(messageDO);
         //发送推送
         MessagePushInfo pushInfo = new MessagePushInfo();
@@ -174,6 +175,7 @@ public class MessageServiceImpl implements MessageService {
             messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
             messageDO.setUserNum(pushParam.getUserNum());
             messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+            messageDO.setTitle(param.getTitle());
             messageDO.setContent(param.getContent());
             messageDO.setGmtCreate(new Date());
             messageDO.setGmtModified(new Date());

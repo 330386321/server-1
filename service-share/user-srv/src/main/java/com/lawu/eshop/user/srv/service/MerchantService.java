@@ -87,4 +87,6 @@ public interface MerchantService {
 	MerchantBO selectMerchantInfo(Long merchantId);
 
     List<MessagePushBO> findMessagePushList(String area);
+
+    MessagePushBO findMessagePushByMobile(String moblie);
 }

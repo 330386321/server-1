@@ -41,39 +41,58 @@ public class MessageController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
+
     @ApiOperation(value = "指定用户发送系统通知", notes = "指定用户发送系统通知 [1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMessage/{userNum}", method = RequestMethod.POST)
-    public Result saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute OperatorMessageInfoParam messageInfoParam) {
+    @RequestMapping(value = "saveMessage", method = RequestMethod.POST)
+    public Result saveMessage(@ModelAttribute OperatorMessageInfoParam messageInfoParam) {
         //增加系统站内消息
+        String moblie = messageInfoParam.getMoblie();
+        String userNum = "";
+        MessagePushDTO messagePushDTO = null;
+        if (UserTypeEnum.MEMBER.val == messageInfoParam.getUserType().val) {
+            //查询用户信息
+            messagePushDTO = memberService.findMessagePushByMobile(moblie);
+            if (messagePushDTO == null) {
+                return successGet(ResultCode.MEMBER_NO_EXIST);
+            }
+            userNum = messagePushDTO.getUserNum();
+        } else {
+            messagePushDTO = merchantService.findMessagePushByMobile(moblie);
+            if (messagePushDTO == null) {
+                return successGet(ResultCode.MEMBER_NO_EXIST);
+            }
+            userNum = messagePushDTO.getUserNum();
+        }
+
         Result result = messageService.saveMessageOperator(userNum, messageInfoParam);
         return result;
     }
 
     @ApiOperation(value = "给所有用户发送系统通知", notes = "给所有用户发送系统通知 [1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "saveMessage", method = RequestMethod.POST)
+    @RequestMapping(value = "saveMessageToAll", method = RequestMethod.POST)
     public Result saveMessageToAll(@ModelAttribute OperatorMessageListParam messageInfoParam) {
 
-        if(messageInfoParam == null){
+        if (messageInfoParam == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         //查询所有用户信息
         Result<List<MessagePushDTO>> result = null;
         String area = messageInfoParam.getArea();
-        if(StringUtils.isEmpty(area)){
+        if (StringUtils.isEmpty(area)) {
             area = "all";
         }
-        if(UserTypeEnum.MEMBER.val  == messageInfoParam.getUserTypeEnum().val){
-             result = memberService.findMessagePushList(area);
-        }else{
+        if (UserTypeEnum.MEMBER.val == messageInfoParam.getUserTypeEnum().val) {
+            result = memberService.findMessagePushList(area);
+        } else {
             result = merchantService.findMessagePushList(area);
         }
-        if(result == null || result.getModel().isEmpty()){
+        if (result == null || result.getModel().isEmpty()) {
             return successCreated(ResultCode.PUSH_HAS_NOUSER);
         }
         List<PushParam> list = new ArrayList<>();
-        for (MessagePushDTO messagePushDTO : result.getModel()){
+        for (MessagePushDTO messagePushDTO : result.getModel()) {
             PushParam pushParam = new PushParam();
             pushParam.setUserNum(messagePushDTO.getUserNum());
             pushParam.setGtCid(messagePushDTO.getGtCid());
@@ -94,8 +113,16 @@ public class MessageController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
     @RequestMapping(value = "getOperatorMessageList", method = RequestMethod.GET)
-    public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param){
+    public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param) {
         Result<Page<OperatorMessageDTO>> result = messageService.getOperatorMessageList(param);
+        return result;
+    }
+
+    @ApiOperation(value = "消息删除", notes = "消息删除 [1000]（章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
+    public Result delMessage(@PathVariable(value = "ids") String ids) {
+        Result result = messageService.delMessageByIds(ids);
         return result;
     }
 }

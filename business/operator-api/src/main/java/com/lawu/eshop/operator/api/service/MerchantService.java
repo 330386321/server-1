@@ -18,4 +18,7 @@ public interface MerchantService {
 
     @RequestMapping(value = "merchant/findMessagePushList",method = RequestMethod.GET)
     Result<List<MessagePushDTO>> findMessagePushList(@RequestParam(value = "area") String area);
+
+    @RequestMapping(value = "merchant/findMessagePushByMobile", method = RequestMethod.GET)
+    MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie);
 }

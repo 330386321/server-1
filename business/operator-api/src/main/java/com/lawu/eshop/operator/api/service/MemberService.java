@@ -22,4 +22,7 @@ public interface MemberService {
      */
     @RequestMapping(value = "member/findMessagePushList", method = RequestMethod.GET)
     Result<List<MessagePushDTO>> findMessagePushList(@RequestParam(value = "area",required = false) String area);
+
+    @RequestMapping(value = "member/findMessagePushByMobile", method = RequestMethod.GET)
+    MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie);
 }

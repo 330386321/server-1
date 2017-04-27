@@ -422,4 +422,17 @@ public class MemberServiceImpl implements MemberService {
         return messagePushBOS;
     }
 
+    @Override
+    public MessagePushBO findMessagePushByMobile(String moblie) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andMobileEqualTo(moblie).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+        if(!memberDOS.isEmpty()){
+            MessagePushBO messagePushBO = new MessagePushBO();
+            messagePushBO.setUserNum(memberDOS.get(0).getNum());
+            return messagePushBO;
+        }
+        return null;
+    }
+
 }

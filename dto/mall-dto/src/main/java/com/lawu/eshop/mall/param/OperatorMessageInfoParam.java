@@ -12,6 +12,10 @@ public class OperatorMessageInfoParam {
     private String title;
     @ApiModelProperty(value = "推送内容",required = true)
     private String content;
+    @ApiModelProperty(value = "手机号",required = true)
+    private String moblie;
+    @ApiModelProperty(value = "用户类型")
+    private UserTypeEnum userType;
 
     public String getTitle() {
         return title;
@@ -29,5 +33,19 @@ public class OperatorMessageInfoParam {
         this.content = content;
     }
 
+    public String getMoblie() {
+        return moblie;
+    }
 
+    public void setMoblie(String moblie) {
+        this.moblie = moblie;
+    }
+
+    public UserTypeEnum getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserTypeEnum userType) {
+        this.userType = userType;
+    }
 }

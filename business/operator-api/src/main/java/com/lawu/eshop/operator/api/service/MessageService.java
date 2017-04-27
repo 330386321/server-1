@@ -24,4 +24,7 @@ public interface MessageService {
 
     @RequestMapping(value = "message/getOperatorMessageList",method = RequestMethod.POST)
     Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param);
+
+    @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
+    Result delMessageByIds(@RequestParam("ids") String ids);
 }

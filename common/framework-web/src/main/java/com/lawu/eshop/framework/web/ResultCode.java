@@ -52,6 +52,7 @@ public class ResultCode {
     public static final int USER_POINT_NOT_ENOUGH = 2007;
     public static final int MERCHANT_STORE_AUDIT_EXIST = 2008;
     public static final int MERCHANT_STORE_NO_EXIST = 2009;
+    public static final int MEMBER_NO_EXIST = 2010;
 
     //运营
     public static final int USER_NOT_LOGIN = 2100;
@@ -181,6 +182,7 @@ public class ResultCode {
         ResultCode.messageMap.put(USER_POINT_NOT_ENOUGH, "用户积分不足");
         ResultCode.messageMap.put(MERCHANT_STORE_AUDIT_EXIST, "已经存在未审核记录");
         ResultCode.messageMap.put(MERCHANT_STORE_NO_EXIST, "未查询到门店");
+        ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");

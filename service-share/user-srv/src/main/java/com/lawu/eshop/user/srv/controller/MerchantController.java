@@ -172,5 +172,20 @@ public class MerchantController extends BaseController {
     }
 
 
+    /**
+     * 根据手机号查询userNum
+     * @param moblie
+     * @return
+     */
+    @RequestMapping(value = "findMessagePushByMobile", method = RequestMethod.GET)
+    MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie){
+        MessagePushBO messagePushBO = merchantService.findMessagePushByMobile(moblie);
+        if(messagePushBO == null){
+            return null;
+        }
+        MessagePushDTO messagePushDTO = new MessagePushDTO();
+        messagePushDTO.setUserNum(messagePushBO.getUserNum());
+        return messagePushDTO;
+    }
 
 }

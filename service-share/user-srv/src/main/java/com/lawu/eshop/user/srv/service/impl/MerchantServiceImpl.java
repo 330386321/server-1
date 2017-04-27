@@ -343,4 +343,18 @@ public class MerchantServiceImpl implements MerchantService {
         }
         return messagePushBOS;
     }
+
+    @Override
+    public MessagePushBO findMessagePushByMobile(String moblie) {
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andMobileEqualTo(moblie).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+        if(!merchantDOS.isEmpty()){
+            MessagePushBO messagePushBO = new MessagePushBO();
+            messagePushBO.setUserNum(merchantDOS.get(0).getNum());
+            return messagePushBO;
+        }
+        return null;
+    }
+
 }

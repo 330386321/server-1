@@ -189,4 +189,15 @@ public class MessageController extends BaseController {
         return successGet(page);
     }
 
+    @RequestMapping(value = "delMessageByIds", method = RequestMethod.DELETE)
+    public Result delMessageByIds(@RequestParam("ids") String ids) {
+        String[] idString = ids.split(",");
+        Long[] lids = new Long[idString.length];
+        for (int i = 0; i < idString.length; i++) {
+            lids[i] = Long.valueOf(idString[i]);
+            messageService.updateMessageStatus(lids[i], MessageStatusEnum.MESSAGE_STATUS_DELETE);
+        }
+        return successCreated();
+    }
+
 }
