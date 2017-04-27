@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper">
 	
-	<resultMap id="ShoppingOrderItemAssociationResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO">
+	<resultMap id="ShoppingOrderItemResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO">
 		<id column="item_id" jdbcType="BIGINT" property="id" />
 		<result column="shopping_order_id" jdbcType="BIGINT" property="shoppingOrderId" />
 		<result column="product_id" jdbcType="BIGINT" property="productId" />
@@ -59,7 +59,7 @@
 	  <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>
 	
-	<resultMap id="ShoppingOrderAssociationResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
+	<resultMap id="ShoppingOrderExtendResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
 		<result column="member_num" jdbcType="VARCHAR" property="memberNum" />
@@ -97,7 +97,7 @@
 		<result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 		<!-- 级联查询 -->
-		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemAssociationResultMap"/>  
+		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemResultMap"/>  
 	</resultMap>
 	
 	<resultMap id="ShoppingOrderItemRefundResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO">
@@ -156,7 +156,7 @@
 		</where>
 	</sql>
 	
-	<sql id="ShoppingOrder_Association_Base_Column_List">
+	<sql id="ShoppingOrder_Column_List">
 		so.id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
@@ -171,7 +171,7 @@
 		so.gmt_transaction, so.gmt_create, so.gmt_modified
 	</sql>
 
-	<sql id="ShoppingOrderItem_Association_Base_Column_List">
+	<sql id="ShoppingOrderItem_Column_List">
 		soi.id as item_id, soi.shopping_order_id, soi.product_id,
 		soi.product_name,
 		soi.product_model_id,
@@ -181,29 +181,20 @@
 		soi.gmt_create as item_gmt_create, soi.gmt_modified as item_gmt_modified
 	</sql>
 	
-	<select id="selectShoppingOrderIdByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
-		select
-		<if test="distinct">distinct</if> so.id
-		from shopping_order so
-		left join shopping_order_item soi on so.id = soi.shopping_order_id
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
-		<if test="orderByClause != null">
-			order by ${orderByClause}
-		</if>
-	</select>
-		
-	<select id="selectShoppingOrderAssociationByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderAssociationResultMap">
+	<select id="selectByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderExtendResultMap">
 		select
 		<if test="distinct">
 			distinct
 		</if>
-		<include refid="ShoppingOrder_Association_Base_Column_List" />
+		<include refid="ShoppingOrder_Column_List" />
+		<if test="isIncludeViewShoppingOrderItem">
 		,
-		<include refid="ShoppingOrderItem_Association_Base_Column_List" />
+		<include refid="ShoppingOrderItem_Column_List" />
+		</if>
 		from shopping_order so
-		left join shopping_order_item soi on so.id = soi.shopping_order_id
+		<if test="isIncludeShoppingOrderItem">
+			left join shopping_order_item soi on so.id = soi.shopping_order_id
+		</if>
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -215,17 +206,19 @@
 	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.lang.Long">
 		select count(<if test="distinct">distinct</if> so.id)
 		from shopping_order so
-		left join shopping_order_item soi on so.id = soi.shopping_order_id
+		<if test="isIncludeShoppingOrderItem">
+			left join shopping_order_item soi on so.id = soi.shopping_order_id
+		</if>
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</select>
 	
-	<select id="getShoppingOrderAssociationByPrimaryKey" parameterType="java.lang.Long" resultMap="ShoppingOrderAssociationResultMap">
+	<select id="getShoppingOrderAssociationByPrimaryKey" parameterType="java.lang.Long" resultMap="ShoppingOrderExtendResultMap">
 	  select 
-	  <include refid="ShoppingOrder_Association_Base_Column_List" />
+	  <include refid="ShoppingOrder_Column_List" />
 	  ,
-	  <include refid="ShoppingOrderItem_Association_Base_Column_List" />
+	  <include refid="ShoppingOrderItem_Column_List" />
 	  from shopping_order so
 	  left join shopping_order_item soi on so.id = soi.shopping_order_id
 	  where so.id = #{id,jdbcType=BIGINT}
@@ -233,7 +226,7 @@
 	
 	<select id="selectShoppingOrderItemRefundResultMapByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderItemRefundResultMap">
 	  select
-	  <include refid="ShoppingOrderItem_Association_Base_Column_List" />
+	  <include refid="ShoppingOrderItem_Column_List" />
 	  ,so.merchant_id, so.merchant_name, srd.type, srd.amount, srd.id as shopping_refund_detail_id
 	  from shopping_order_item soi
 	  left join shopping_order so on so.id = soi.shopping_order_id
@@ -246,31 +239,20 @@
 	  </if>
 	</select>
 	
-	<select id="selectShoppingOrderAssociationByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderAssociationResultMap">
+	<select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderExtendResultMap">
 		select
 		<if test="distinct">
 			distinct
 		</if>
-		<include refid="ShoppingOrder_Association_Base_Column_List" />
+		<include refid="ShoppingOrder_Column_List" />
+		<if test="isIncludeViewShoppingOrderItem">
 		,
-		<include refid="ShoppingOrderItem_Association_Base_Column_List" />
+		<include refid="ShoppingOrderItem_Column_List" />
+		</if>
 		from shopping_order so
-		left join shopping_order_item soi on so.id = soi.shopping_order_id
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
+		<if test="isIncludeShoppingOrderItem">
+			left join shopping_order_item soi on so.id = soi.shopping_order_id
 		</if>
-		<if test="orderByClause != null">
-			order by ${orderByClause}
-		</if>
-	</select>
-	
-	<select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ShoppingOrderBaseResultMap">
-		select
-		<if test="distinct">
-			distinct
-		</if>
-		<include refid="ShoppingOrder_Association_Base_Column_List" />
-		from shopping_order so
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>

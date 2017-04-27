@@ -520,9 +520,9 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "commissionShoppingOrder", method = RequestMethod.GET)
 	public Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder() {
 		
-		List<ShoppingOrderBO> shoppingOrderBOList = shoppingOrderService.commissionShoppingOrder();
+		List<ShoppingOrderExtendBO> shoppingOrderBOList = shoppingOrderService.commissionShoppingOrder();
 		
-		return successGet(ShoppingOrderConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
+		return successGet(ShoppingOrderExtendConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
 	}
 	
 	/**

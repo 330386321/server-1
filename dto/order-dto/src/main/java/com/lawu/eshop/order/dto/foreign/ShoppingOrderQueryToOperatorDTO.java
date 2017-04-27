@@ -3,7 +3,10 @@ package com.lawu.eshop.order.dto.foreign;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.order.constants.ShoppingOrderSortEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.SortOrderEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -44,9 +47,10 @@ public class ShoppingOrderQueryToOperatorDTO implements Serializable {
     /**
      * 创建时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
-
+	
 	public Long getId() {
 		return id;
 	}

@@ -183,7 +183,7 @@
 		</if>
 	</select>
 
-	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample" resultType="java.lang.Long">
+	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample" resultType="java.lang.Long">
 		select count(*) from shopping_order_item soi
 		<if test="isIncludeShoppingOrder">
 			left join shopping_order so on soi.shopping_order_id = so.id
@@ -195,19 +195,6 @@
 			<include refid="Example_Where_Clause" />
 		</if>
 	</select>
-	
-	  <select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample" resultType="java.lang.Long">
-	    select count(*) from shopping_order_item soi
-		<if test="isIncludeShoppingOrder">
-		left join shopping_order so on soi.shopping_order_id = so.id
-		</if>
-		<if test="isIncludeShoppingRefundDetail">
-		left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
-		</if>
-	    <if test="_parameter != null">
-	      <include refid="Example_Where_Clause" />
-	    </if>
-	  </select>
 	
 	<select id="selectByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample" resultMap="ShoppingOrderItemExtendResultMap">
 	  select

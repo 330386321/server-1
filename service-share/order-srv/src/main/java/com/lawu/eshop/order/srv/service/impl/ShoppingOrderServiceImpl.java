@@ -154,6 +154,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public Page<ShoppingOrderExtendBO> selectPageByMemberId(Long memberId, ShoppingOrderQueryForeignToMemberParam param) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		
 		// 组装Criteria
 		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
@@ -211,15 +213,22 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
-		List<Long> shoppingOrderIdList = shoppingOrderDOExtendMapper.selectShoppingOrderIdByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		List<Long> shoppingOrderIdList = new ArrayList<Long>();
+		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
+			shoppingOrderIdList.add(item.getId());
+		}
 		
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
 		
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
@@ -229,6 +238,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		
 		// 组装Criteria
 		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
@@ -281,9 +292,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
-		List<Long> shoppingOrderIdList = shoppingOrderDOExtendMapper.selectShoppingOrderIdByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		List<Long> shoppingOrderIdList = new ArrayList<Long>();
+		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
+			shoppingOrderIdList.add(item.getId());
+		}
 		
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
 		// 分页参数
@@ -292,7 +310,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
 			
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
@@ -714,12 +732,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			orderNumCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 			
 			Criteria paroductCriteria = shoppingOrderExtendDOExample.or();
-			paroductCriteria.andSOIProductNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.andConsigneeNameLike("%"+ param.getKeyword() + "%");
 			paroductCriteria.getAllCriteria().addAll(baseCriteria.getAllCriteria());
 		}
-		
-		// 过滤重复记录
-		shoppingOrderExtendDOExample.setDistinct(true);
 		
 		// 查询总记录数
 		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
@@ -733,19 +748,37 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return shoppingOrderItemBOPage;
 		}
 		
+		if (param.getSortName() != null && param.getSortOrder() != null) {
+			shoppingOrderExtendDOExample.setOrderByClause(param.getSortName().getDatabaseField() + " " + param.getSortOrder().name());
+		} else {
+			// 默认创建时间排序
+			shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		}
+		
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
-		List<Long> shoppingOrderIdList = shoppingOrderDOExtendMapper.selectShoppingOrderIdByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		
+		List<Long> shoppingOrderIdList = new ArrayList<Long>();
+		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
+			shoppingOrderIdList.add(item.getId());
+		}
 		
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		if (param.getSortName() != null && param.getSortOrder() != null) {
+			shoppingOrderExtendDOExample.setOrderByClause(param.getSortName().getDatabaseField() + " " + param.getSortOrder().name());
+		} else {
+			// 默认创建时间排序
+			shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
+		}
 		
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
 		
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 		
@@ -849,7 +882,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 如果交易时间超过automaticEvaluation的记录
 		shoppingOrderExtendDOExampleCriteria.andGmtTransactionDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticEvaluation), new Date());
 		
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
 		for (ShoppingOrderExtendDO shoppingOrderExtendDO : shoppingOrderExtendDOList) {
 			for (ShoppingOrderItemDO item : shoppingOrderExtendDO.getItems()) {
@@ -899,7 +932,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 			shoppingOrderExtendDOExample.createCriteria().andSOIIdEqualTo(shoppingOrderItemId);
 			
-			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList =  shoppingOrderDOExtendMapper.selectShoppingOrderAssociationByExample(shoppingOrderExtendDOExample);
+			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList =  shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 			
 			if (shoppingOrderExtendDOList == null || shoppingOrderExtendDOList.isEmpty()) {
 				return rtn;
@@ -926,6 +959,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public void executeAutoCancelOrder() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 		
 		String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
@@ -934,9 +968,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		criteria.andGmtCreateDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticCancelOrderTime), new Date());
 		
 		// 查找所有超时未付款的订单
-		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		for (ShoppingOrderDO item : shoppingOrderDOList) {
+		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			cancelOrder(item.getId());
 		}
 	}
@@ -949,6 +983,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public void executeAutoRemindShipments() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 		
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
@@ -958,9 +993,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
 		
 		// 查找所有超时未发货的订单，提醒卖家发货
-		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		for (ShoppingOrderDO item : shoppingOrderDOList) {
+		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			// 发送站内信和推送
 			shoppingOrderRemindShipmentsTransactionMainServiceImpl.sendNotice(item.getId());
 		}
@@ -984,9 +1019,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
 		
 		// 查找所有超时未收货的订单，自动收货
-		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		for (ShoppingOrderDO item : shoppingOrderDOList) {
+		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			tradingSuccess(item.getId(), true);
 		}
 	}
@@ -1055,7 +1090,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Override
-	public List<ShoppingOrderBO> commissionShoppingOrder() {
+	public List<ShoppingOrderExtendBO> commissionShoppingOrder() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 		
@@ -1069,9 +1104,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查找自动确认收货的购物订单记录
 		shoppingOrderExtendDOExample.or().andIsAutomaticReceiptEqualTo(true);
 		
-		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		return ShoppingOrderConverter.convert(shoppingOrderDOList);
+		return ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderDOList);
 	}
 	
 	/**

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
-import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
@@ -24,16 +23,7 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @param rowBounds 分页参数
 	 * @return
 	 */
-	List<ShoppingOrderExtendDO> selectShoppingOrderAssociationByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
-	
-	/**
-	 * 分页查询订单表以及级联订单项表
-	 * 
-	 * @param example 查询参数
-	 * @param rowBounds 分页参数
-	 * @return 返回购物订单id列表
-	 */
-	List<Long> selectShoppingOrderIdByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
+	List<ShoppingOrderExtendDO> selectByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
 	
 	/**
 	 * 根据参数查询总记录数
@@ -62,20 +52,12 @@ public interface ShoppingOrderExtendDOMapper {
 	List<ShoppingOrderItemRefundDO> selectShoppingOrderItemRefundResultMapByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
 	
 	/**
-	 * 查询订单表以及级联订单项表
-	 * 
-	 * @param example 查询参数
-	 * @return
-	 */
-	List<ShoppingOrderExtendDO> selectShoppingOrderAssociationByExample(ShoppingOrderExtendDOExample example);
-	
-	/**
 	 * 查询订单表
 	 * 
 	 * @param example 查询参数
 	 * @return
 	 */
-	List<ShoppingOrderDO> selectByExample(ShoppingOrderExtendDOExample example);
+	List<ShoppingOrderExtendDO> selectByExample(ShoppingOrderExtendDOExample example);
 	
 	/**
 	 * 

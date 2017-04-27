@@ -9,6 +9,7 @@ import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
@@ -226,16 +227,56 @@ public class ShoppingOrderExtendConverter {
 	 * @return
 	 */
 	public static List<ShoppingOrderQueryToOperatorDTO> convertShoppingOrderQueryToOperatorDTOList(List<ShoppingOrderExtendBO> shoppingOrderExtendBOList) {
+		List<ShoppingOrderQueryToOperatorDTO> rtn = new ArrayList<ShoppingOrderQueryToOperatorDTO>();
 		if (shoppingOrderExtendBOList == null || shoppingOrderExtendBOList.isEmpty()) {
-			return null;
+			return rtn;
 		}
 		
-		List<ShoppingOrderQueryToOperatorDTO> shoppingOrderQueryToOperatorDTOList = new ArrayList<ShoppingOrderQueryToOperatorDTO>();
 		for (ShoppingOrderExtendBO shoppingOrderExtendBO : shoppingOrderExtendBOList) {
-			shoppingOrderQueryToOperatorDTOList.add(convertShoppingOrderQueryToOperatorDTO(shoppingOrderExtendBO));
+			rtn.add(convertShoppingOrderQueryToOperatorDTO(shoppingOrderExtendBO));
 		}
 		
-		return shoppingOrderQueryToOperatorDTOList;
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderExtendBO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderCommissionDTO convert(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderCommissionDTO rtn = null;
+		
+		if (shoppingOrderExtendBO == null) {
+			return rtn;
+		}
+		
+		rtn = new ShoppingOrderCommissionDTO();
+		
+		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn);
+		
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderExtendBOList
+	 * @return
+	 * @author Sunny
+	 */
+	public static List<ShoppingOrderCommissionDTO> convertShoppingOrderCommissionDTOList(List<ShoppingOrderExtendBO> shoppingOrderExtendBOList) {
+		List<ShoppingOrderCommissionDTO> rtn = null;
+		
+		if (shoppingOrderExtendBOList == null || shoppingOrderExtendBOList.isEmpty()) {
+			return rtn;
+		}
+		
+		rtn = new ArrayList<ShoppingOrderCommissionDTO>();
+		
+		for (ShoppingOrderExtendBO item : shoppingOrderExtendBOList) {
+			rtn.add(convert(item));
+		}
+
+		return rtn;
 	}
 	
 }

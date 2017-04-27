@@ -3,8 +3,9 @@ package com.lawu.eshop.order.param.foreign;
 import java.io.Serializable;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
+import com.lawu.eshop.order.constants.ShoppingOrderSortEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.order.constants.ShoppingOrderStatusToMerchantEnum;
+import com.lawu.eshop.order.constants.SortOrderEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,7 +30,19 @@ public class ShoppingOrderQueryForeignToOperatorParam extends AbstractPageParam 
 	 */
 	@ApiModelProperty(name = "keyword", required = false, value = "搜索订单的关键字(订单号|收货人名称)")
 	private String keyword;
-
+	
+	/**
+	 * 排序字段
+	 */
+	@ApiModelProperty(value = "排序字段(orderNum-订单编号|orderStatus-订单状态|consigneeName-收货人姓名|gmtCreate-创建时间)", required = false)
+	private ShoppingOrderSortEnum sortName;
+	
+	/**
+	 * 排序类型
+	 */
+	@ApiModelProperty(value = "排序类型(desc-反序|asc-正序)", required = false)
+	private SortOrderEnum sortOrder;
+	
 	public ShoppingOrderStatusEnum getOrderStatus() {
 		return orderStatus;
 	}
@@ -44,6 +57,22 @@ public class ShoppingOrderQueryForeignToOperatorParam extends AbstractPageParam 
 
 	public void setKeyword(String keyword) {
 		this.keyword = keyword;
+	}
+
+	public ShoppingOrderSortEnum getSortName() {
+		return sortName;
+	}
+
+	public void setSortName(ShoppingOrderSortEnum sortName) {
+		this.sortName = sortName;
+	}
+
+	public SortOrderEnum getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(SortOrderEnum sortOrder) {
+		this.sortOrder = sortOrder;
 	}
 
 }
