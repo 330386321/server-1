@@ -44,10 +44,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 	public ShoppingCartProductModelBO getShoppingCartProductModel(Long id) {
 		ProductModelDO productModelDO =  productModelDOMapper.selectByPrimaryKey(id);
 		
-		ProductDO productDO = null;
-		if (productModelDO != null && productModelDO.getProductId() != null) {
-			productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-		}
+		ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
 		
 		return ShoppingCartProductModelConverter.convert(productModelDO, productDO);
 	}

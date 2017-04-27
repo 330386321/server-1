@@ -78,7 +78,7 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	 * 是否支持无理由退货,0否 1是
 	 */
 	private Boolean isNoReasonReturn;
-
+	
 	/**
 	 * 订单项
 	 */

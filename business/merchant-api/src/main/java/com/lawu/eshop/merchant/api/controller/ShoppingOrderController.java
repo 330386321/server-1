@@ -2,6 +2,8 @@ package com.lawu.eshop.merchant.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,10 +25,13 @@ import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 import com.lawu.eshop.merchant.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderLogisticsInformationForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -116,24 +121,28 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") ShoppingOrderLogisticsInformationForeignParam param) {
+	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") @Validated ShoppingOrderLogisticsInformationForeignParam param, BindingResult bindingResult) {
 
 		// 校验参数
-		if (param == null || StringUtils.isEmpty(param.getExpressCompanyId()) || StringUtils.isEmpty(param.getWaybillNum())) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+		String message = validate(bindingResult);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
-
-		Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
-		if (!isSuccess(resultExpressCompanyDTO)) {
-			return successCreated(resultExpressCompanyDTO.getRet());
-		}
-
+		
 		ShoppingOrderLogisticsInformationParam ShoppingOrderLogisticsInformationParam = new ShoppingOrderLogisticsInformationParam();
-		ShoppingOrderLogisticsInformationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
-		ShoppingOrderLogisticsInformationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
-		ShoppingOrderLogisticsInformationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());
-		ShoppingOrderLogisticsInformationParam.setWaybillNum(param.getWaybillNum());
-
+		
+		if (param.getIsNeedsLogistics()) {
+			Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
+			if (!isSuccess(resultExpressCompanyDTO)) {
+				return successCreated(resultExpressCompanyDTO.getRet());
+			}
+	
+			ShoppingOrderLogisticsInformationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
+			ShoppingOrderLogisticsInformationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
+			ShoppingOrderLogisticsInformationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());
+			ShoppingOrderLogisticsInformationParam.setWaybillNum(param.getWaybillNum());
+		}
+		
 		Result result = shoppingOrderService.fillLogisticsInformation(id, ShoppingOrderLogisticsInformationParam);
 		if (!isSuccess(result)) {
 			return successCreated(result.getRet());
@@ -141,4 +150,51 @@ public class ShoppingOrderController extends BaseController {
 
 		return successCreated(result);
 	}
+	
+    /**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * 
+	 * @param memberId
+	 *            会员id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "selectRefundPageByMerchantId", method = RequestMethod.GET)
+    public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	
+    	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> result = shoppingOrderService.selectRefundPageByMerchantId(merchantId, param);
+    	
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+    	return successGet(result);
+    }
+	
+    /**
+	 * 查询订单各种状态的数量
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询订单各种状态的数量", notes = "查询订单各种状态的数量。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "numberOfOrderStartusByMerchant", method = RequestMethod.GET)
+    public Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	
+    	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> result = shoppingOrderService.numberOfOrderStartusByMerchant(merchantId);
+    	
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+    	return successGet(result);
+    }
 }

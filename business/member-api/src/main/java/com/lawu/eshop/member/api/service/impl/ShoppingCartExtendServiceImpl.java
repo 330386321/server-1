@@ -271,6 +271,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			ShoppingOrderSettlementItemParam shoppingOrderSettlementItemParam = new ShoppingOrderSettlementItemParam();
     			ShoppingCartProductModelDTO shoppingCartProductModelDTO = shoppingCartProductModelDTOMap.get(shoppingCartDTO.getProductModelId());
     			// 加入购物车id,用于在保存订单之后删除购物车记录
+    			shoppingOrderSettlementItemParam.setIsAllowRefund(shoppingCartProductModelDTO.getIsAllowRefund());
     			shoppingOrderSettlementItemParam.setShoppingCartId(shoppingCartDTO.getId());
     			shoppingOrderSettlementItemParam.setProductId(shoppingCartProductModelDTO.getProductId());
     			shoppingOrderSettlementItemParam.setProductName(shoppingCartProductModelDTO.getProductName());

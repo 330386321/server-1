@@ -2,6 +2,8 @@ package com.lawu.eshop.order.param.foreign;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -18,14 +20,21 @@ public class ShoppingOrderLogisticsInformationForeignParam implements Serializab
 	/**
 	 * 物流编号
 	 */
-	@ApiModelProperty(required = true, value = "物流编号")
+	@ApiModelProperty(required = false, value = "物流编号")
 	private String waybillNum;
 
 	/**
 	 * 快递公司id
 	 */
-	@ApiModelProperty(required = true, value = "快递公司id")
+	@ApiModelProperty(required = false, value = "快递公司id")
 	private Integer expressCompanyId;
+	
+	/**
+	 * 是否需要物流
+	 */
+	@NotNull(message = "是否需要物流不能为空")
+	@ApiModelProperty(required = true, value = "是否需要物流")
+	private Boolean isNeedsLogistics;
 
 
 	public String getWaybillNum() {
@@ -42,6 +51,14 @@ public class ShoppingOrderLogisticsInformationForeignParam implements Serializab
 
 	public void setExpressCompanyId(Integer expressCompanyId) {
 		this.expressCompanyId = expressCompanyId;
+	}
+
+	public Boolean getIsNeedsLogistics() {
+		return isNeedsLogistics;
+	}
+
+	public void setIsNeedsLogistics(Boolean isNeedsLogistics) {
+		this.isNeedsLogistics = isNeedsLogistics;
 	}
 
 }

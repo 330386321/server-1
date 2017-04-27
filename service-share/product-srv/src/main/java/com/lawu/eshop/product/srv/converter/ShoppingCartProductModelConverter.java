@@ -40,6 +40,7 @@ public class ShoppingCartProductModelConverter {
 			shoppingCartProductModelBO.setProductName(productDO.getName());
 			shoppingCartProductModelBO.setFeatureImage(productDO.getFeatureImage());
 			shoppingCartProductModelBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+			shoppingCartProductModelBO.setIsAllowRefund(productDO.getIsAllowRefund());
 		}
 
 		return shoppingCartProductModelBO;

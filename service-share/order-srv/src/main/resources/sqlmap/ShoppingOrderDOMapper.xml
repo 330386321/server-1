@@ -31,6 +31,7 @@
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
     <result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
     <result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
+    <result column="is_needs_logistics" jdbcType="BIT" property="isNeedsLogistics" />
     <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
     <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
     <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
@@ -117,8 +118,9 @@
     consignee_address, consignee_mobile, remark, message, freight_price, commodity_total_price, 
     order_total_price, actual_amount, commission_status, order_status, status, send_time, 
     is_no_reason_return, is_automatic_receipt, shopping_cart_ids_str, order_num, payment_method, 
-    third_number, waybill_num, express_company_id, express_company_code, express_company_name, 
-    gmt_commission, gmt_payment, gmt_transport, gmt_transaction, gmt_create, gmt_modified
+    third_number, is_needs_logistics, waybill_num, express_company_id, express_company_code, 
+    express_company_name, gmt_commission, gmt_payment, gmt_transport, gmt_transaction, 
+    gmt_create, gmt_modified
   </sql>
   <select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample" resultMap="BaseResultMap">
     <!--
@@ -182,10 +184,11 @@
       order_status, status, send_time, 
       is_no_reason_return, is_automatic_receipt, shopping_cart_ids_str, 
       order_num, payment_method, third_number, 
-      waybill_num, express_company_id, express_company_code, 
-      express_company_name, gmt_commission, gmt_payment, 
-      gmt_transport, gmt_transaction, gmt_create, 
-      gmt_modified)
+      is_needs_logistics, waybill_num, express_company_id, 
+      express_company_code, express_company_name, 
+      gmt_commission, gmt_payment, gmt_transport, 
+      gmt_transaction, gmt_create, gmt_modified
+      )
     values (#{memberId,jdbcType=BIGINT}, #{memberNum,jdbcType=VARCHAR}, #{merchantId,jdbcType=BIGINT}, 
       #{merchantNum,jdbcType=VARCHAR}, #{merchantName,jdbcType=VARCHAR}, #{consigneeName,jdbcType=VARCHAR}, 
       #{consigneeAddress,jdbcType=VARCHAR}, #{consigneeMobile,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
@@ -194,10 +197,11 @@
       #{orderStatus,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, #{sendTime,jdbcType=INTEGER}, 
       #{isNoReasonReturn,jdbcType=BIT}, #{isAutomaticReceipt,jdbcType=BIT}, #{shoppingCartIdsStr,jdbcType=VARCHAR}, 
       #{orderNum,jdbcType=VARCHAR}, #{paymentMethod,jdbcType=TINYINT}, #{thirdNumber,jdbcType=VARCHAR}, 
-      #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, #{expressCompanyCode,jdbcType=VARCHAR}, 
-      #{expressCompanyName,jdbcType=VARCHAR}, #{gmtCommission,jdbcType=TIMESTAMP}, #{gmtPayment,jdbcType=TIMESTAMP}, 
-      #{gmtTransport,jdbcType=TIMESTAMP}, #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP})
+      #{isNeedsLogistics,jdbcType=BIT}, #{waybillNum,jdbcType=VARCHAR}, #{expressCompanyId,jdbcType=INTEGER}, 
+      #{expressCompanyCode,jdbcType=VARCHAR}, #{expressCompanyName,jdbcType=VARCHAR}, 
+      #{gmtCommission,jdbcType=TIMESTAMP}, #{gmtPayment,jdbcType=TIMESTAMP}, #{gmtTransport,jdbcType=TIMESTAMP}, 
+      #{gmtTransaction,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
     <!--
@@ -280,6 +284,9 @@
       </if>
       <if test="thirdNumber != null">
         third_number,
+      </if>
+      <if test="isNeedsLogistics != null">
+        is_needs_logistics,
       </if>
       <if test="waybillNum != null">
         waybill_num,
@@ -384,6 +391,9 @@
       </if>
       <if test="thirdNumber != null">
         #{thirdNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="isNeedsLogistics != null">
+        #{isNeedsLogistics,jdbcType=BIT},
       </if>
       <if test="waybillNum != null">
         #{waybillNum,jdbcType=VARCHAR},
@@ -509,6 +519,9 @@
       <if test="record.thirdNumber != null">
         third_number = #{record.thirdNumber,jdbcType=VARCHAR},
       </if>
+      <if test="record.isNeedsLogistics != null">
+        is_needs_logistics = #{record.isNeedsLogistics,jdbcType=BIT},
+      </if>
       <if test="record.waybillNum != null">
         waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
       </if>
@@ -575,6 +588,7 @@
       order_num = #{record.orderNum,jdbcType=VARCHAR},
       payment_method = #{record.paymentMethod,jdbcType=TINYINT},
       third_number = #{record.thirdNumber,jdbcType=VARCHAR},
+      is_needs_logistics = #{record.isNeedsLogistics,jdbcType=BIT},
       waybill_num = #{record.waybillNum,jdbcType=VARCHAR},
       express_company_id = #{record.expressCompanyId,jdbcType=INTEGER},
       express_company_code = #{record.expressCompanyCode,jdbcType=VARCHAR},
@@ -668,6 +682,9 @@
       <if test="thirdNumber != null">
         third_number = #{thirdNumber,jdbcType=VARCHAR},
       </if>
+      <if test="isNeedsLogistics != null">
+        is_needs_logistics = #{isNeedsLogistics,jdbcType=BIT},
+      </if>
       <if test="waybillNum != null">
         waybill_num = #{waybillNum,jdbcType=VARCHAR},
       </if>
@@ -731,6 +748,7 @@
       order_num = #{orderNum,jdbcType=VARCHAR},
       payment_method = #{paymentMethod,jdbcType=TINYINT},
       third_number = #{thirdNumber,jdbcType=VARCHAR},
+      is_needs_logistics = #{isNeedsLogistics,jdbcType=BIT},
       waybill_num = #{waybillNum,jdbcType=VARCHAR},
       express_company_id = #{expressCompanyId,jdbcType=INTEGER},
       express_company_code = #{expressCompanyCode,jdbcType=VARCHAR},

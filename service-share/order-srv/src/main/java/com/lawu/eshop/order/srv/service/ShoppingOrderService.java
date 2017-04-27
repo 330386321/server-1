@@ -15,6 +15,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 
 /**
  * 购物订单服务接口
@@ -136,7 +137,7 @@ public interface ShoppingOrderService {
 	 *            物流信息参数
 	 * @return
 	 */
-	Integer fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param);
+	int fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param);
 
 	/**
 	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
@@ -217,6 +218,7 @@ public interface ShoppingOrderService {
 	
 	/**
 	 * 查询各种订单状态的数量
+	 * To Member
 	 * 
 	 * @param memberId 会员id
 	 * @return
@@ -241,4 +243,13 @@ public interface ShoppingOrderService {
 	 */
 	int updateCommissionStatus(List<Long> ids);
 	
+	/**
+	 * 查询各种订单状态的数量
+	 * To Merchant
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	ShoppingOrderNumberOfOrderStatusForMerchantBO numberOfOrderStartusByMerchant(Long merchantId);
 }

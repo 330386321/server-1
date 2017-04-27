@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 
 /**
@@ -23,6 +24,7 @@ public interface ShoppingOrderItemService {
 	
 	/**
 	 * 查询处于退款中的订单项
+	 * To Member
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -31,6 +33,18 @@ public interface ShoppingOrderItemService {
 	 * @return 订单列表
 	 */
 	Page<ShoppingOrderItemRefundBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param);
+	
+	/**
+	 * 查询处于退款中的订单项
+	 * To Merchant
+	 * 
+	 * @param merchantId
+	 *            会员id
+	 * @param param
+	 *            查询参数
+	 * @return 订单列表
+	 */
+	Page<ShoppingOrderItemExtendBO> selectRefundPageByMerchantId(Long merchantId, ShoppingRefundQueryForeignParam param);
 	
 	/**
 	 * 评论成功更新订单项为已评论

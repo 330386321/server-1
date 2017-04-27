@@ -14,6 +14,7 @@
 		<result column="sales_price" jdbcType="DECIMAL" property="salesPrice" />
 		<result column="quantity" jdbcType="INTEGER" property="quantity" />
 		<result column="is_evaluation" jdbcType="BIT" property="isEvaluation" />
+		<result column="is_allow_refund" jdbcType="BIT" property="isAllowRefund" />
 		<result column="order_status" jdbcType="TINYINT" property="orderStatus" />
 		<result column="refund_status" jdbcType="TINYINT" property="refundStatus" />
 		<result column="send_time" jdbcType="INTEGER" property="sendTime" />
@@ -66,6 +67,8 @@
 		<result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
 		<result column="commodity_total_price" jdbcType="DECIMAL" property="commodityTotalPrice" />
 		<result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
+	    <result column="actual_amount" jdbcType="DECIMAL" property="actualAmount" />
+        <result column="commission_status" jdbcType="TINYINT" property="commissionStatus" />
 		<result column="so_order_status" jdbcType="TINYINT" property="orderStatus" />
 		<result column="status" jdbcType="TINYINT" property="status" />
 		<result column="send_time" jdbcType="INTEGER" property="sendTime" />
@@ -75,10 +78,12 @@
 		<result column="order_num" jdbcType="VARCHAR" property="orderNum" />
 		<result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
 		<result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
+		<result column="is_needs_logistics" jdbcType="BIT" property="isNeedsLogistics" />
 		<result column="so_waybill_num" jdbcType="VARCHAR" property="waybillNum" />
 		<result column="so_express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
 		<result column="so_express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
 		<result column="so_express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
+		<result column="gmt_commission" jdbcType="TIMESTAMP" property="gmtCommission" />
 		<result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 		<result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 		<result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
@@ -119,7 +124,7 @@
 	<sql id="ShoppingOrderItem_Column_List">
 		soi.id, soi.shopping_order_id, soi.product_id, soi.product_name, soi.product_model_id,
 		soi.product_model_name,
-		soi.product_feature_image, soi.regular_price, soi.sales_price, soi.quantity, soi.is_evaluation,
+		soi.product_feature_image, soi.regular_price, soi.sales_price, soi.quantity, soi.is_evaluation, soi.is_allow_refund,
 		soi.order_status,
 		soi.refund_status, soi.gmt_create, soi.gmt_modified
 	</sql>
@@ -143,7 +148,7 @@
 		so.is_no_reason_return,
 		so.is_automatic_receipt,
 		so.shopping_cart_ids_str, so.order_num, so.payment_method,
-		so.third_number, so.waybill_num as so_waybill_num, so.express_company_id as
+		so.third_number, so.is_needs_logistics, so.waybill_num as so_waybill_num, so.express_company_id as
 		so_express_company_id,
 		so.express_company_code as so_express_company_code, so.express_company_name as so_express_company_name,
 		so.gmt_payment, so.gmt_transport,
@@ -151,8 +156,7 @@
 		so.gmt_create as so_gmt_create, so.gmt_modified as so_gmt_modified
 	</sql>
 
-	<select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample"
-		resultMap="ShoppingOrderItemExtendResultMap">
+	<select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample" resultMap="ShoppingOrderItemExtendResultMap">
 		select
 		<if test="distinct">distinct</if>
 		<include refid="ShoppingOrderItem_Column_List" />
@@ -179,8 +183,7 @@
 		</if>
 	</select>
 
-	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample"
-		resultType="java.lang.Long">
+	<select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample" resultType="java.lang.Long">
 		select count(*) from shopping_order_item soi
 		<if test="isIncludeShoppingOrder">
 			left join shopping_order so on soi.shopping_order_id = so.id
@@ -191,5 +194,45 @@
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
+	</select>
+	
+	  <select id="countByExample" parameterType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample" resultType="java.lang.Long">
+	    select count(*) from shopping_order_item soi
+		<if test="isIncludeShoppingOrder">
+		left join shopping_order so on soi.shopping_order_id = so.id
+		</if>
+		<if test="isIncludeShoppingRefundDetail">
+		left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+		</if>
+	    <if test="_parameter != null">
+	      <include refid="Example_Where_Clause" />
+	    </if>
+	  </select>
+	
+	<select id="selectByExampleWithRowbounds" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample" resultMap="ShoppingOrderItemExtendResultMap">
+	  select
+	  <if test="distinct">distinct</if>
+	  <include refid="ShoppingOrderItem_Column_List" />
+	  <if test="isIncludeShoppingOrder">
+		,
+		<include refid="ShoppingOrder_Column_List" />
+	  </if>
+	  <if test="isIncludeShoppingRefundDetail">
+		,
+		<include refid="ShoppingRefundDetail_Column_List" />
+	  </if>
+	  from shopping_order_item soi
+	  <if test="isIncludeShoppingOrder">
+		left join shopping_order so on soi.shopping_order_id = so.id
+	  </if>
+	  <if test="isIncludeShoppingRefundDetail">
+		left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+	  </if>
+	  <if test="_parameter != null">
+	    <include refid="Example_Where_Clause" />
+	  </if>
+	  <if test="orderByClause != null">
+	    order by ${orderByClause}
+	  </if>
 	</select>
 </mapper>

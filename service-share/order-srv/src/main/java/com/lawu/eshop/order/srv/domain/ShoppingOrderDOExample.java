@@ -1806,6 +1806,66 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsNeedsLogisticsIsNull() {
+            addCriterion("is_needs_logistics is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsIsNotNull() {
+            addCriterion("is_needs_logistics is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsEqualTo(Boolean value) {
+            addCriterion("is_needs_logistics =", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsNotEqualTo(Boolean value) {
+            addCriterion("is_needs_logistics <>", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsGreaterThan(Boolean value) {
+            addCriterion("is_needs_logistics >", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_needs_logistics >=", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsLessThan(Boolean value) {
+            addCriterion("is_needs_logistics <", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_needs_logistics <=", value, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsIn(List<Boolean> values) {
+            addCriterion("is_needs_logistics in", values, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsNotIn(List<Boolean> values) {
+            addCriterion("is_needs_logistics not in", values, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_needs_logistics between", value1, value2, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsNeedsLogisticsNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_needs_logistics not between", value1, value2, "isNeedsLogistics");
+            return (Criteria) this;
+        }
+
         public Criteria andWaybillNumIsNull() {
             addCriterion("waybill_num is null");
             return (Criteria) this;

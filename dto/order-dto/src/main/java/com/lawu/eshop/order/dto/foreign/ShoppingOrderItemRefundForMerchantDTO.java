@@ -9,7 +9,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
+    /**
+     * 收货人姓名
+     */
+	@ApiModelProperty(value = "收货人姓名", required = true)
+    private String consigneeName;
+	
 	/**
 	 * 商品名称
 	 */
@@ -34,12 +40,14 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
 	private RefundStatusEnum refundStatus;
 
-	/**
-	 * 购物退款详情id
-	 */
-	@ApiModelProperty(value = "购物退款详情id", required = true)
-	private Long shoppingRefundDetailId;
-	
+	public String getConsigneeName() {
+		return consigneeName;
+	}
+
+	public void setConsigneeName(String consigneeName) {
+		this.consigneeName = consigneeName;
+	}
+
 	public String getProductName() {
 		return productName;
 	}
@@ -72,12 +80,4 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 		this.refundStatus = refundStatus;
 	}
 
-	public Long getShoppingRefundDetailId() {
-		return shoppingRefundDetailId;
-	}
-
-	public void setShoppingRefundDetailId(Long shoppingRefundDetailId) {
-		this.shoppingRefundDetailId = shoppingRefundDetailId;
-	}
-	
 }

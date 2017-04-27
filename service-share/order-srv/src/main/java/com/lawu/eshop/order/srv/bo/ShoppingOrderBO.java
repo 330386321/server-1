@@ -10,79 +10,79 @@ import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 public class ShoppingOrderBO implements Serializable {
-    
+
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
-     * 主键
-     */
-    private Long id;
+	 * 主键
+	 */
+	private Long id;
 
-    /**
-     * 用户ID
-     */
-    private Long memberId;
-    
-    /**
-    * 会员编号
-    */
-    private String memberNum;
-    
-    /**
-     * 商家ID
-     */
-    private Long merchantId;
-    
-    /**
-    * 商家编号
-    */
-    private String merchantNum;
+	/**
+	 * 用户ID
+	 */
+	private Long memberId;
 
-    /**
-     * 商家名称
-     */
-    private String merchantName;
+	/**
+	 * 会员编号
+	 */
+	private String memberNum;
 
-    /**
-     * 收货人姓名
-     */
-    private String consigneeName;
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
 
-    /**
-     * 收货人地址
-     */
-    private String consigneeAddress;
+	/**
+	 * 商家编号
+	 */
+	private String merchantNum;
 
-    /**
-     * 收货人手机号码
-     */
-    private String consigneeMobile;
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
 
-    /**
-     * 订单备注(退货理由)
-     */
-    private String remark;
+	/**
+	 * 收货人姓名
+	 */
+	private String consigneeName;
 
-    /**
-     * 买家留言
-     */
-    private String message;
+	/**
+	 * 收货人地址
+	 */
+	private String consigneeAddress;
 
-    /**
-     * 运费
-     */
-    private BigDecimal freightPrice;
+	/**
+	 * 收货人手机号码
+	 */
+	private String consigneeMobile;
 
-    /**
-     * 商品总价
-     */
-    private BigDecimal commodityTotalPrice;
+	/**
+	 * 订单备注(退货理由)
+	 */
+	private String remark;
 
-    /**
-     * 订单总价
-     */
-    private BigDecimal orderTotalPrice;
-    
+	/**
+	 * 买家留言
+	 */
+	private String message;
+
+	/**
+	 * 运费
+	 */
+	private BigDecimal freightPrice;
+
+	/**
+	 * 商品总价
+	 */
+	private BigDecimal commodityTotalPrice;
+
+	/**
+	 * 订单总价
+	 */
+	private BigDecimal orderTotalPrice;
+
 	/**
 	 * 实际支付给商家的金额
 	 */
@@ -92,41 +92,41 @@ public class ShoppingOrderBO implements Serializable {
 	 * 是否计算过提成(0-没有计算过提成|1-计算过提成)
 	 */
 	private CommissionStatusEnum commissionStatus;
-    
-    /**
-     * 订单的总状态
-     */
-    private ShoppingOrderStatusEnum orderStatus;
 
-    /**
-     * 状态(0删除1正常)
-     */
-    private StatusEnum status;
-    
-    /**
-    * 发送提醒的次数
-    */
-    private Integer sendTime;
+	/**
+	 * 订单的总状态
+	 */
+	private ShoppingOrderStatusEnum orderStatus;
 
-    /**
-     * 是否支持无理由退货,0否 1是
-     */
-    private Boolean isNoReasonReturn;
-    
-    /**
-     * 是否自动收货(0-否|1-是)
-     */
-    private Boolean isAutomaticReceipt;
-    
-    /**
-    * 对应的购物车相应的id(多个id用,分隔)
-    */
-   private String shoppingCartIdsStr;
-    
-    /**
-     * 订单编号
-     */
-    private String orderNum;
+	/**
+	 * 状态(0删除1正常)
+	 */
+	private StatusEnum status;
+
+	/**
+	 * 发送提醒的次数
+	 */
+	private Integer sendTime;
+
+	/**
+	 * 是否支持无理由退货,0否 1是
+	 */
+	private Boolean isNoReasonReturn;
+
+	/**
+	 * 是否自动收货(0-否|1-是)
+	 */
+	private Boolean isAutomaticReceipt;
+
+	/**
+	 * 对应的购物车相应的id(多个id用,分隔)
+	 */
+	private String shoppingCartIdsStr;
+
+	/**
+	 * 订单编号
+	 */
+	private String orderNum;
 
 	/**
 	 * 支付方式(1-余额 2-微信 3-支付宝)
@@ -137,56 +137,61 @@ public class ShoppingOrderBO implements Serializable {
 	 * 第三方支付交易号
 	 */
 	private String thirdNumber;
-    
-    /**
-     * 运单编号
-     */
-    private String waybillNum;
 
-    /**
-     * 快递公司id
-     */
-    private Integer expressCompanyId;
+	/**
+	 * 是否需要物流(0-不需要|1-需要)
+	 */
+	private Boolean isNeedsLogistics;
 
-    /**
-     * 快递公司编码
-     */
-    private String expressCompanyCode;
+	/**
+	 * 运单编号
+	 */
+	private String waybillNum;
 
-    /**
-     * 快递公司名称
-     */
-    private String expressCompanyName;
-    
+	/**
+	 * 快递公司id
+	 */
+	private Integer expressCompanyId;
+
+	/**
+	 * 快递公司编码
+	 */
+	private String expressCompanyCode;
+
+	/**
+	 * 快递公司名称
+	 */
+	private String expressCompanyName;
+
 	/**
 	 * 计算提成的时间
 	 */
 	private Date gmtCommission;
-    
-    /**
-     * 付款时间
-     */
-    private Date gmtPayment;
 
-    /**
-     * 发货时间
-     */
-    private Date gmtTransport;
+	/**
+	 * 付款时间
+	 */
+	private Date gmtPayment;
 
-    /**
-     * 交易时间
-     */
-    private Date gmtTransaction;
+	/**
+	 * 发货时间
+	 */
+	private Date gmtTransport;
 
-    /**
-     * 创建时间
-     */
-    private Date gmtCreate;
+	/**
+	 * 交易时间
+	 */
+	private Date gmtTransaction;
 
-    /**
-     * 修改时间
-     */
-    private Date gmtModified;
+	/**
+	 * 创建时间
+	 */
+	private Date gmtCreate;
+
+	/**
+	 * 修改时间
+	 */
+	private Date gmtModified;
 
 	public Long getId() {
 		return id;
@@ -219,7 +224,7 @@ public class ShoppingOrderBO implements Serializable {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
-	
+
 	public String getMerchantNum() {
 		return merchantNum;
 	}
@@ -388,6 +393,14 @@ public class ShoppingOrderBO implements Serializable {
 		this.thirdNumber = thirdNumber;
 	}
 
+	public Boolean getIsNeedsLogistics() {
+		return isNeedsLogistics;
+	}
+
+	public void setIsNeedsLogistics(Boolean isNeedsLogistics) {
+		this.isNeedsLogistics = isNeedsLogistics;
+	}
+
 	public String getWaybillNum() {
 		return waybillNum;
 	}
@@ -467,5 +480,5 @@ public class ShoppingOrderBO implements Serializable {
 	public void setGmtModified(Date gmtModified) {
 		this.gmtModified = gmtModified;
 	}
-    
+
 }

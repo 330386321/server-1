@@ -32,6 +32,11 @@ public class ShoppingOrderLogisticsInformationParam implements Serializable {
 	 * 快递公司名称
 	 */
 	private String expressCompanyName;
+	
+	/**
+	 * 是否需要物流
+	 */
+	private Boolean isNeedsLogistics;
 
 	public String getWaybillNum() {
 		return waybillNum;
@@ -63,6 +68,14 @@ public class ShoppingOrderLogisticsInformationParam implements Serializable {
 
 	public void setExpressCompanyName(String expressCompanyName) {
 		this.expressCompanyName = expressCompanyName;
+	}
+
+	public Boolean getIsNeedsLogistics() {
+		return isNeedsLogistics;
+	}
+
+	public void setIsNeedsLogistics(Boolean isNeedsLogistics) {
+		this.isNeedsLogistics = isNeedsLogistics;
 	}
 
 }

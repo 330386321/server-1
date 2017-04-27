@@ -42,6 +42,11 @@ public class ShoppingCartProductModelBO implements Serializable {
 	 */
 	private ProductStatusEnum status;
 
+	/**
+	 * 是否支持退换货(0-否1-是)
+	 */
+	private Boolean isAllowRefund;
+
 	public Long getId() {
 		return id;
 	}
@@ -112,6 +117,14 @@ public class ShoppingCartProductModelBO implements Serializable {
 
 	public void setStatus(ProductStatusEnum status) {
 		this.status = status;
+	}
+
+	public Boolean getIsAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setIsAllowRefund(Boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
 
 }

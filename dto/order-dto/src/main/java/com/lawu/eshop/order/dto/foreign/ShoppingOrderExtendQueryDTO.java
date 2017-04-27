@@ -55,6 +55,12 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	private Boolean isNoReasonReturn;
 	
 	/**
+	 * 是否需要物流
+	 */
+	@ApiModelProperty(value = "是否需要物流(false-不需要|true-需要)", required = false)
+	private Boolean isNeedsLogistics;
+	
+	/**
 	 * 商品数量
 	 */
 	@ApiModelProperty(value = "商品数量", required = true)
@@ -122,6 +128,14 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 		this.isNoReasonReturn = isNoReasonReturn;
 	}
 	
+	public Boolean getIsNeedsLogistics() {
+		return isNeedsLogistics;
+	}
+
+	public void setIsNeedsLogistics(Boolean isNeedsLogistics) {
+		this.isNeedsLogistics = isNeedsLogistics;
+	}
+
 	public Integer getAmountOfGoods() {
 		return amountOfGoods;
 	}

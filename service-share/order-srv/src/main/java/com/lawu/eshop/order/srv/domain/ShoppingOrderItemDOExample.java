@@ -886,6 +886,66 @@ public class ShoppingOrderItemDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsAllowRefundIsNull() {
+            addCriterion("is_allow_refund is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundIsNotNull() {
+            addCriterion("is_allow_refund is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundEqualTo(Boolean value) {
+            addCriterion("is_allow_refund =", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotEqualTo(Boolean value) {
+            addCriterion("is_allow_refund <>", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundGreaterThan(Boolean value) {
+            addCriterion("is_allow_refund >", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_allow_refund >=", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundLessThan(Boolean value) {
+            addCriterion("is_allow_refund <", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_allow_refund <=", value, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundIn(List<Boolean> values) {
+            addCriterion("is_allow_refund in", values, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotIn(List<Boolean> values) {
+            addCriterion("is_allow_refund not in", values, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_allow_refund between", value1, value2, "isAllowRefund");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsAllowRefundNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_allow_refund not between", value1, value2, "isAllowRefund");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderStatusIsNull() {
             addCriterion("order_status is null");
             return (Criteria) this;

@@ -10,9 +10,12 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 
 /**
  * @author Sunny
@@ -66,4 +69,29 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "shoppingOrder/isNoOnGoingOrder/{merchantId}", method = RequestMethod.GET)
 	Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId);
+	
+	/**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * To Merchant
+	 * 
+	 * @param merchantId
+	 *            商家id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
+	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingRefundQueryForeignParam param);
+	
+	/**
+	 * 查询各种订单状态的数量
+	 * To Merchant
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "shoppingOrder/numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
+	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("memberId") Long merchantId);
 }

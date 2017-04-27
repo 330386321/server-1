@@ -37,6 +37,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
@@ -632,27 +633,40 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public Integer fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param) {
+	public int fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param) {
+		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 只有订单状态为待发货才能填写物流信息
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())){
+			return ResultCode.NOT_SHIPPING_STATUS;
+		}
 		
 		// 更新购物订单的状态
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更改订单状态为待商家确认
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
 		
-		// 更新购物订单的物流信息
-		shoppingOrderDO.setExpressCompanyId(param.getExpressCompanyId());
-		shoppingOrderDO.setExpressCompanyCode(param.getExpressCompanyCode());
-		shoppingOrderDO.setExpressCompanyName(param.getExpressCompanyName());
-		shoppingOrderDO.setWaybillNum(param.getWaybillNum());
+		if (param.getIsNeedsLogistics()) {
+			// 更新购物订单的物流信息
+			shoppingOrderDO.setExpressCompanyId(param.getExpressCompanyId());
+			shoppingOrderDO.setExpressCompanyCode(param.getExpressCompanyCode());
+			shoppingOrderDO.setExpressCompanyName(param.getExpressCompanyName());
+			shoppingOrderDO.setWaybillNum(param.getWaybillNum());
+		}
+		shoppingOrderDO.setIsNeedsLogistics(param.getIsNeedsLogistics());
 		
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 		
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
 		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
+		shoppingOrderItemDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 		shoppingOrderItemDO.setGmtModified(new Date());
@@ -660,7 +674,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 		
-		return result;
+		return ResultCode.SUCCESS;
 	}
 
 	
@@ -1081,6 +1095,47 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderDOMapper.updateByExampleSelective(shoppingOrderDO, shoppingOrderDOExample);
 		
 		return ResultCode.SUCCESS;
+	}
+	
+	@Override
+	public ShoppingOrderNumberOfOrderStatusForMerchantBO numberOfOrderStartusByMerchant(Long merchantId) {
+		ShoppingOrderNumberOfOrderStatusForMerchantBO rtn = new ShoppingOrderNumberOfOrderStatusForMerchantBO();
+		
+		//查询待收货订单的数量
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		ShoppingOrderDOExample.Criteria shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMerchantIdEqualTo(merchantId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+		long pendingPaymentCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+
+		// 查询待发货数量
+		shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMerchantIdEqualTo(merchantId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
+		long beShippedCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+		
+		// 查询待收货数量
+		shoppingOrderDOExample = new ShoppingOrderDOExample();
+		shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		shoppingOrderDOExampleCriteria.andMerchantIdEqualTo(merchantId);
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		long toBeReceivedCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
+		
+		//查询退货中数量
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(merchantId);
+		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		long refundingCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
+		
+		rtn.setPendingPaymentCount(pendingPaymentCount);
+		rtn.setBeShippedCount(beShippedCount);
+		rtn.setToBeReceivedCount(toBeReceivedCount);
+		rtn.setRefundingCount(refundingCount);
+		
+		return rtn;
 	}
 	
 	/**************************************************************

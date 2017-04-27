@@ -26,7 +26,9 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
@@ -42,11 +44,14 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
@@ -203,6 +208,7 @@ public class ShoppingOrderController extends BaseController {
 	/**
 	 * 根据查询参数分页查询退款记录
 	 * 购物订单 购物订单项 退款详情关联查询
+	 * To Member 
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -306,24 +312,31 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
 	public Result fillLogisticsInformation(@PathVariable("id") Long id, ShoppingOrderLogisticsInformationParam param) {
 
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+		int resultCode = shoppingOrderService.fillLogisticsInformation(id, param);
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated();
 		}
 		
-		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-		
-		if (shoppingOrderBO == null || shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		// 只有订单状态为待发货才能填写物流信息
-		if (!shoppingOrderBO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())){
-			return successCreated(ResultCode.NOT_SHIPPING_STATUS);
-		}
-		
-		shoppingOrderService.fillLogisticsInformation(id, param);
-
 		return successCreated();
+	}
+	
+	/**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * To Merchant
+	 * 
+	 * @param merchantId
+	 *            商家id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
+	public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingRefundQueryForeignParam param) {
+		
+		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMerchantId(merchantId, param);
+		
+		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForMerchantDTOPage(page));
 	}
 	
 	/*********************************************************
@@ -366,6 +379,22 @@ public class ShoppingOrderController extends BaseController {
 		}
 
 		return successCreated();
+	}
+	
+	/**
+	 * 查询各种订单状态的数量
+	 * To Merchant
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
+	public Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("memberId") Long merchantId) {
+		
+		ShoppingOrderNumberOfOrderStatusForMerchantBO shoppingOrderNumberOfOrderStatusForMerchantBO = shoppingOrderService.numberOfOrderStartusByMerchant(merchantId);
+		
+		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusForMerchantBO));
 	}
 	
 	/*********************************************************

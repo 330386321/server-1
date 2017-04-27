@@ -60,12 +60,17 @@ public class ShoppingOrderItemBO implements Serializable {
 	 * 数量
 	 */
 	private Integer quantity;
-	
-    /**
-    * 是否评价(0-未评价|1-已评价)
-    */
-    private Boolean isEvaluation;
-	
+
+	/**
+	 * 是否评价(0-未评价|1-已评价)
+	 */
+	private Boolean isEvaluation;
+
+	/**
+	 * 是否支持退换货(0-否1-是)
+	 */
+	private Boolean isAllowRefund;
+
 	/**
 	 * 订单项状态
 	 */
@@ -75,11 +80,11 @@ public class ShoppingOrderItemBO implements Serializable {
 	 * 退款状态
 	 */
 	private RefundStatusEnum refundStatus;
-	
-    /**
-    * 发送提醒的次数
-    */
-    private Integer sendTime;
+
+	/**
+	 * 发送提醒的次数
+	 */
+	private Integer sendTime;
 
 	/**
 	 * 创建时间
@@ -177,6 +182,14 @@ public class ShoppingOrderItemBO implements Serializable {
 
 	public void setIsEvaluation(Boolean isEvaluation) {
 		this.isEvaluation = isEvaluation;
+	}
+
+	public Boolean getIsAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setIsAllowRefund(Boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
 
 	public ShoppingOrderStatusEnum getOrderStatus() {

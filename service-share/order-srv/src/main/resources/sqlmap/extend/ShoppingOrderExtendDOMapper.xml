@@ -36,6 +36,8 @@
 	  <result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
 	  <result column="commodity_total_price" jdbcType="DECIMAL" property="commodityTotalPrice" />
 	  <result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
+	  <result column="actual_amount" jdbcType="DECIMAL" property="actualAmount" />
+      <result column="commission_status" jdbcType="TINYINT" property="commissionStatus" />
 	  <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
 	  <result column="status" jdbcType="TINYINT" property="status" />
 	  <result column="send_time" jdbcType="INTEGER" property="sendTime" />
@@ -49,6 +51,7 @@
 	  <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
 	  <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
 	  <result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
+	  <result column="gmt_commission" jdbcType="TIMESTAMP" property="gmtCommission" />
 	  <result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
 	  <result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
 	  <result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
@@ -82,6 +85,7 @@
 		<result column="order_num" jdbcType="VARCHAR" property="orderNum" />
 		<result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
 		<result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
+	    <result column="is_needs_logistics" jdbcType="BIT" property="isNeedsLogistics" />
 		<result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
 		<result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
 		<result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
@@ -161,7 +165,7 @@
 		so.order_total_price, so.actual_amount, so.commission_status,
 		so.order_status, so.status, so.send_time,
 		so.is_no_reason_return, so.is_automatic_receipt, so.shopping_cart_ids_str,
-		so.order_num, so.payment_method, so.third_number, so.waybill_num, so.express_company_id, so.express_company_code,
+		so.order_num, so.payment_method, so.third_number, so.is_needs_logistics, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,
 		so.gmt_transaction, so.gmt_create, so.gmt_modified

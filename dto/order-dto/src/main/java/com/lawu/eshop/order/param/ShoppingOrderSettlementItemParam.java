@@ -58,6 +58,11 @@ public class ShoppingOrderSettlementItemParam implements Serializable {
 	 */
 	private Integer quantity;
 	
+	/**
+	 * 是否支持退换货(0-否1-是)
+	 */
+	private Boolean isAllowRefund;
+	
 	public Long getShoppingCartId() {
 		return shoppingCartId;
 	}
@@ -128,6 +133,14 @@ public class ShoppingOrderSettlementItemParam implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public Boolean getIsAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setIsAllowRefund(Boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
 
 }
