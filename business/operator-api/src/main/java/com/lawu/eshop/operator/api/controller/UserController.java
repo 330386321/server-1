@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.param.UserPageParam;
@@ -60,6 +61,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
     @RequiresPermissions("user:find")
     @RequestMapping(value = "findUserList", method = RequestMethod.GET)
+    @PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     public Result<Page<UserListDTO>> findUserList(@ModelAttribute UserPageParam pageParam) {
         if (pageParam == null) {
