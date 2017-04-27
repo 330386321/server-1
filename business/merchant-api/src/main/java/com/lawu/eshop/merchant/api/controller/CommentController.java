@@ -72,7 +72,7 @@ public class CommentController extends BaseController {
      * @return
      */
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "商家回复商品评价", notes = "商家回复商品评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "商家回复商家评价", notes = "商家回复商家评价 [1002，1005,1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "replyMerchantComment/{commentId}", method = RequestMethod.PUT)
@@ -101,7 +101,10 @@ public class CommentController extends BaseController {
         Page<ProductCommentListDTO> pages = new Page<>();
         Result<Page<CommentDTO>> comments = commentService.getProductCommentListByMerchantId(param);
         if (comments.getModel() == null || comments.getModel().getRecords().isEmpty()) {
-            return successGet(new Page<>());
+            pages.setCurrentPage(param.getCurrentPage());
+            pages.setTotalCount(comments.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
         for (CommentDTO commentDTO : comments.getModel().getRecords()) {
             //设置评论信息
@@ -152,7 +155,10 @@ public class CommentController extends BaseController {
         Page<CommentProductInfoDTO> pages = new Page<>();
         Result<Page<CommentProductIdDTO>> productIds = commentService.getProductCommentIdsByMerchantId(param);
         if (productIds.getModel() == null || productIds.getModel().getRecords().isEmpty()) {
-            return successGet(new Page<>());
+            pages.setCurrentPage(param.getCurrentPage());
+            pages.setTotalCount(productIds.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
         for (CommentProductIdDTO commentProductIdDTO : productIds.getModel().getRecords()) {
             //查询商品信息
@@ -180,7 +186,10 @@ public class CommentController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentService.getCommentProducts(listParam);
         if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
-            return successGet(new Page<>());
+            pages.setCurrentPage(listParam.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
         for (CommentDTO commentDTO : result.getModel().getRecords()) {
             //设置评论信息
@@ -228,7 +237,10 @@ public class CommentController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentService.getCommentMerchantAllList(listParam);
         if (result.getModel() == null || result.getModel().getRecords().isEmpty()) {
-            return successGet(new Page<>());
+            pages.setCurrentPage(param.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
         for (CommentDTO commentDTO : result.getModel().getRecords()) {
             CommentMerchantInfoDTO commentMerchantDTO = new CommentMerchantInfoDTO();

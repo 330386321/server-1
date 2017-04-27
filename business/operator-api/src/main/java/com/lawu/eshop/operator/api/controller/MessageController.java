@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.dto.OperatorMessageDTO;
 import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.operator.api.service.MemberService;
@@ -91,6 +92,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "查询消息列表", notes = "查询消息列表 [1000]", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @PageBody
     @RequestMapping(value = "getOperatorMessageList", method = RequestMethod.GET)
     public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param){
         Result<Page<OperatorMessageDTO>> result = messageService.getOperatorMessageList(param);

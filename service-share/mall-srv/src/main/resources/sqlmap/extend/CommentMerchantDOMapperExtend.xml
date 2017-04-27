@@ -59,7 +59,7 @@
         AND ci.img_url IS NOT NULL
         ORDER  BY
         cm.id DESC
-        LIMIT #{currentPage},#{pageSize}
+        LIMIT #{offset},#{pageSize}
     </select>
 
     <!-- 查商家好评总数-->

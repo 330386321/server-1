@@ -35,7 +35,7 @@
         AND m.status &lt;&gt; 2
         ORDER  BY
         m.id DESC
-        LIMIT #{currentPage},#{pageSize}
+        LIMIT #{offset},#{pageSize}
     </select>
 
     <!-- 根据用户编号查询站内信息总数-->

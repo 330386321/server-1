@@ -120,7 +120,10 @@ public class CommentProductController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentProductService.getCommentProducts(listParam);
         if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
-            return  successGet(new Page<>());
+            pages.setCurrentPage(listParam.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 //设置评论信息
@@ -161,7 +164,10 @@ public class CommentProductController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentProductService.getCommentProductsWithImgs(listParam);
         if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
-            return  successGet(new Page<>());
+            pages.setCurrentPage(listParam.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 //设置评论信息

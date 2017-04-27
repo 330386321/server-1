@@ -101,7 +101,10 @@ public class CommentMerchantController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentMerchantService.getCommentMerchantAllList(listParam);
         if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
-            return  successGet(new Page<>());
+            pages.setCurrentPage(listParam.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 CommentMerchantDTO commentMerchantDTO = new CommentMerchantDTO();
@@ -136,7 +139,10 @@ public class CommentMerchantController extends BaseController {
         //获取评论列表
         Result<Page<CommentDTO>> result = commentMerchantService.getCommentMerchantListWithImgs(listParam);
         if(result.getModel() == null || result.getModel() .getRecords().isEmpty()){
-            return  successGet(new Page<>());
+            pages.setCurrentPage(listParam.getCurrentPage());
+            pages.setTotalCount(result.getModel().getTotalCount());
+            pages.setRecords(new ArrayList<>());
+            return successGet(pages);
         }
             for (CommentDTO commentDTO : result.getModel().getRecords()) {
                 CommentMerchantDTO commentMerchantDTO = new CommentMerchantDTO();
