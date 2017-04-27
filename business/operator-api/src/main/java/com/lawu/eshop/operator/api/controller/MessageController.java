@@ -1,13 +1,12 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
-import com.lawu.eshop.mall.param.OperatorMessageListParam;
-import com.lawu.eshop.mall.param.OperatorMessageParam;
-import com.lawu.eshop.mall.param.PushParam;
+import com.lawu.eshop.mall.dto.OperatorMessageDTO;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.operator.api.service.MerchantService;
 import com.lawu.eshop.operator.api.service.MessageService;
@@ -88,5 +87,13 @@ public class MessageController extends BaseController {
         //增加系统站内消息
         Result r = messageService.saveMessageToAll(param);
         return r;
+    }
+
+    @ApiOperation(value = "查询消息列表", notes = "查询消息列表 [1000]", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getOperatorMessageList", method = RequestMethod.GET)
+    public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param){
+        Result<Page<OperatorMessageDTO>> result = messageService.getOperatorMessageList(param);
+        return result;
     }
 }

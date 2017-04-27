@@ -31,6 +31,8 @@ public class MessageBO {
 
     private Date gmtCreate;
 
+    private String userNum;
+
     public Long getId() {
         return id;
     }
@@ -77,5 +79,13 @@ public class MessageBO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

@@ -1,12 +1,14 @@
 package com.lawu.eshop.mall.param;
 
-import com.lawu.eshop.framework.core.page.PageParam;
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 传值给mapper
  * Created by Administrator on 2017/3/30.
  */
-public class MessageQueryParam extends PageParam {
+public class MessageQueryParam extends AbstractPageParam {
+    @ApiModelProperty(value = "用户编号")
     private String userNum;
 
     public String getUserNum() {

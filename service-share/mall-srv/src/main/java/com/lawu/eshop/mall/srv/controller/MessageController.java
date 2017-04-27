@@ -9,10 +9,8 @@ import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.dto.MessageDTO;
 import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.dto.MessageTemplateDTO;
-import com.lawu.eshop.mall.param.MessageInfoParam;
-import com.lawu.eshop.mall.param.MessageParam;
-import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
-import com.lawu.eshop.mall.param.OperatorMessageParam;
+import com.lawu.eshop.mall.dto.OperatorMessageDTO;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -65,6 +63,9 @@ public class MessageController extends BaseController {
     public Result<Page<MessageDTO>> getMessageList(@PathVariable("userNum") String userNum, @RequestBody MessageParam pageParam) {
 
         Page<MessageBO> messageDTOPage = messageService.getMessageList(userNum, pageParam);
+        if(messageDTOPage == null){
+            return successGet(new Page<>());
+        }
         List<MessageBO> messageBOS = messageDTOPage.getRecords();
         //BO转DTO
         List<MessageDTO> messageDTOS = MessageConverter.coverDTOS(messageBOS);
@@ -121,7 +122,7 @@ public class MessageController extends BaseController {
     }
 
     /**
-     * 查询模板信心
+     * 查询模板信息
      * @param type
      * @return
      */
@@ -165,6 +166,27 @@ public class MessageController extends BaseController {
          messageService.saveMessageToAll(param);
 
         return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 运营平台查询消息列表
+     * @param param
+     * @return
+     * @autor zy
+     */
+    @RequestMapping(value = "getOperatorMessageList",method = RequestMethod.POST)
+    public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@RequestBody MessageQueryParam param){
+
+        Page<MessageBO> messageBOPage = messageService.getOperatorMessageList(param);
+        if(messageBOPage == null){
+            return successGet(new Page<>());
+        }
+        List<OperatorMessageDTO> messageDTOS = MessageConverter.coverOperatorDTOS(messageBOPage.getRecords());
+        Page<OperatorMessageDTO> page = new Page<>();
+        page.setCurrentPage(messageBOPage.getCurrentPage());
+        page.setTotalCount(messageBOPage.getTotalCount());
+        page.setRecords(messageDTOS);
+        return successGet(page);
     }
 
 }

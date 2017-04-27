@@ -18,6 +18,7 @@ import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,5 +189,34 @@ public class MessageServiceImpl implements MessageService {
         }else{
             messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV,MqConstant.TAG_GTPUSH_AREA,pushInfo);
         }
+    }
+
+    @Override
+    public Page<MessageBO> getOperatorMessageList(MessageQueryParam param) {
+        MessageDOExample example = new MessageDOExample();
+        if(StringUtils.isNotEmpty(param.getUserNum())){
+            example.createCriteria().andUserNumEqualTo(param.getUserNum()).andStatusNotEqualTo(MessageStatusEnum.MESSAGE_STATUS_DELETE.val);
+        }else{
+            example.createCriteria().andStatusNotEqualTo(MessageStatusEnum.MESSAGE_STATUS_DELETE.val);
+        }
+        example.setOrderByClause("id desc");
+
+        RowBounds rowBounds = new RowBounds(param.getOffset(),param.getPageSize());
+        int total = messageDOMapper.countByExample(example);
+
+        List<MessageDO> messageDOS = messageDOMapper.selectByExampleWithRowbounds(example,rowBounds);
+        if(messageDOS.isEmpty()){
+            return null;
+        }
+        Page<MessageBO> page = new Page<>();
+        List<MessageBO> messageBOS = new ArrayList<>();
+        for (MessageDO messageDO :messageDOS){
+            MessageBO messageBO = MessageConverter.coverBO(messageDO);
+            messageBOS.add(messageBO);
+        }
+        page.setCurrentPage(param.getCurrentPage());
+        page.setTotalCount(total);
+        page.setRecords(messageBOS);
+        return page;
     }
 }
