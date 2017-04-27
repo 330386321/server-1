@@ -39,6 +39,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listInviteFansRealParam.setAgeLimit(param.getIsAgeLimit());
         listInviteFansRealParam.setStartAge(param.getStartAge());
         listInviteFansRealParam.setEndAge(param.getEndAge());
+        listInviteFansRealParam.setInviteCount(param.getInviteCount());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(listInviteFansRealParam);
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
     }

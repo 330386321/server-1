@@ -18,6 +18,8 @@ public class ListInviteFansRealParam {
 
     private Integer endAge;
 
+    private Integer inviteCount;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -64,5 +66,13 @@ public class ListInviteFansRealParam {
 
     public void setEndAge(Integer endAge) {
         this.endAge = endAge;
+    }
+
+    public Integer getInviteCount() {
+        return inviteCount;
+    }
+
+    public void setInviteCount(Integer inviteCount) {
+        this.inviteCount = inviteCount;
     }
 }

@@ -24,6 +24,9 @@ public class ListInviteFansParam {
     @ApiModelProperty(value = "最大年龄")
     private Integer endAge;
 
+    @ApiModelProperty(value = "邀请人数")
+    private Integer inviteCount;
+
     public String getRegionPath() {
         return regionPath;
     }
@@ -62,5 +65,13 @@ public class ListInviteFansParam {
 
     public void setEndAge(Integer endAge) {
         this.endAge = endAge;
+    }
+
+    public Integer getInviteCount() {
+        return inviteCount;
+    }
+
+    public void setInviteCount(Integer inviteCount) {
+        this.inviteCount = inviteCount;
     }
 }
