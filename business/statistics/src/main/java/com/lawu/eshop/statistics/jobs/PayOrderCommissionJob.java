@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.lawu.eshop.statistics.service.ConsumeAndSalesCommissionService;
+import com.lawu.eshop.statistics.service.ProductOrderCommissionService;
 
 /**
  * 
@@ -22,12 +22,12 @@ import com.lawu.eshop.statistics.service.ConsumeAndSalesCommissionService;
  * @date 2017年4月24日 下午3:31:10
  *
  */
-public class ConsumeAndSalesCommissionJob implements SimpleJob {
+public class PayOrderCommissionJob implements SimpleJob {
 
-	private static Logger logger = LoggerFactory.getLogger(ConsumeAndSalesCommissionJob.class);
+	private static Logger logger = LoggerFactory.getLogger(PayOrderCommissionJob.class);
 
 	@Autowired
-	private ConsumeAndSalesCommissionService consumeAndSalesCommissionService;
+	private ProductOrderCommissionService consumeAndSalesCommissionService;
 
 	@Override
 	public void execute(ShardingContext shardingContext) {

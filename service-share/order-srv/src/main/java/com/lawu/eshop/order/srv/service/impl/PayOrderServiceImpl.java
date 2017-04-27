@@ -1,7 +1,10 @@
 package com.lawu.eshop.order.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -28,8 +31,8 @@ import java.util.List;
  */
 @Service
 public class PayOrderServiceImpl implements PayOrderService {
-    @Autowired
-    private PayOrderDOMapper payOrderDOMapper;
+	@Autowired
+	private PayOrderDOMapper payOrderDOMapper;
 
     @Override
     @Transactional
@@ -56,42 +59,44 @@ public class PayOrderServiceImpl implements PayOrderService {
         return payOrderBO;
     }
 
-    @Override
-    public Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param) {
-        PayOrderDOExample example = new PayOrderDOExample();
-        if (param.getEvaluationEnum() == null) {
-            example.createCriteria().andMemberIdEqualTo(memberId).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-        } else {
-            example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-        }
-        example.setOrderByClause("id desc");
-        //分页
-        RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-        Page<PayOrderBO> page = new Page<>();
-        page.setTotalCount(payOrderDOMapper.countByExample(example));
-        page.setCurrentPage(param.getCurrentPage());
+	@Override
+	public Page<PayOrderBO> getpayOrderList(Long memberId, PayOrderListParam param) {
+		PayOrderDOExample example = new PayOrderDOExample();
+		if (param.getEvaluationEnum() == null) {
+			example.createCriteria().andMemberIdEqualTo(memberId)
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+		} else {
+			example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val)
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+		}
+		example.setOrderByClause("id desc");
+		// 分页
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		Page<PayOrderBO> page = new Page<>();
+		page.setTotalCount(payOrderDOMapper.countByExample(example));
+		page.setCurrentPage(param.getCurrentPage());
 
-        List<PayOrderDO> payOrderDOS = payOrderDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-        if (payOrderDOS == null) {
-            return null;
-        }
-        List<PayOrderBO> payOrderBOS = new ArrayList<>();
-        for (PayOrderDO payOrderDO : payOrderDOS) {
-            PayOrderBO payOrderBO = PayOrderConverter.coverBO(payOrderDO);
-            payOrderBOS.add(payOrderBO);
-        }
-        page.setRecords(payOrderBOS);
-        return page;
-    }
+		List<PayOrderDO> payOrderDOS = payOrderDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		if (payOrderDOS == null) {
+			return null;
+		}
+		List<PayOrderBO> payOrderBOS = new ArrayList<>();
+		for (PayOrderDO payOrderDO : payOrderDOS) {
+			PayOrderBO payOrderBO = PayOrderConverter.coverBO(payOrderDO);
+			payOrderBOS.add(payOrderBO);
+		}
+		page.setRecords(payOrderBOS);
+		return page;
+	}
 
-    @Override
-    @Transactional
-    public void delPayOrderInfo(Long id) {
-        PayOrderDO payOrderDO = new PayOrderDO();
-        payOrderDO.setId(id);
-        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_DEL.val);
-        payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
-    }
+	@Override
+	@Transactional
+	public void delPayOrderInfo(Long id) {
+		PayOrderDO payOrderDO = new PayOrderDO();
+		payOrderDO.setId(id);
+		payOrderDO.setStatus(PayOrderStatusEnum.STATUS_DEL.val);
+		payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
+	}
 
 	@Override
 	public ThirdPayCallBackQueryPayOrderBO selectThirdPayCallBackPayOrder(String orderId) {
@@ -101,5 +106,43 @@ public class PayOrderServiceImpl implements PayOrderService {
 		bo.setBusinessUserNum(payDO.getMerchantNum());
 		bo.setPayOrderStatusEnum(PayOrderStatusEnum.getEnum(payDO.getStatus()));
 		return bo;
+	}
+
+	/**
+	 * 查询未计算提成的买单
+	 * 
+	 * @return
+	 * @throws Exception
+	 * @author yangqh
+	 */
+	@Override
+	public List<ShoppingOrderCommissionDTO> selectNotCommissionOrder() {
+		PayOrderDOExample example = new PayOrderDOExample();
+		example.createCriteria().andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val)
+				.andCommissionStatusEqualTo(CommissionStatusEnum.NOT_COUNTED.getValue());
+		List<PayOrderDO> dos = payOrderDOMapper.selectByExample(example);
+		List<ShoppingOrderCommissionDTO> dtos = new ArrayList<ShoppingOrderCommissionDTO>();
+		for(PayOrderDO orderDO : dos){
+			ShoppingOrderCommissionDTO dto = new ShoppingOrderCommissionDTO();
+			dto.setId(orderDO.getId());
+			dto.setMemberNum(orderDO.getMemberNum());
+			dto.setMerchantNum(orderDO.getMerchantNum());
+			dto.setActualAmount(orderDO.getActualAmount());
+			dtos.add(dto);
+		}
+		return dtos;
+	}
+
+	@Override
+	public int updateCommissionStatus(List<Long> ids) {
+		PayOrderDOExample example = new PayOrderDOExample();
+		example.createCriteria().andIdIn(ids);
+		
+		PayOrderDO payOrder = new PayOrderDO();
+		payOrder.setGmtCommission(new Date());
+		payOrder.setCommissionStatus(CommissionStatusEnum.CALCULATED.getValue());
+		payOrderDOMapper.updateByExampleSelective(payOrder, example);
+		
+		return ResultCode.SUCCESS;
 	}
 }

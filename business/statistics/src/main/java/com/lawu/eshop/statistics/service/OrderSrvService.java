@@ -42,4 +42,20 @@ public interface OrderSrvService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.PUT, value = "shoppingOrder/updateCommissionStatus")
 	Result updateCommissionStatus(@RequestParam("ids") List<Long> ids);
+
+	/**
+	 * 查询已支付且未计算提成的买单
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectNotCommissionOrder")
+	Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder();
+	
+	/**
+	 * 修改买单是否提成状态
+	 * @param ids
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.PUT, value = "payOrder/updatePayOrderCommissionStatus")
+	Result updatePayOrderCommissionStatus(@RequestParam("ids") List<Long> ids);
 }

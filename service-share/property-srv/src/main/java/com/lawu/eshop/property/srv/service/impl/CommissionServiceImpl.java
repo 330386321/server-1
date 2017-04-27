@@ -33,6 +33,7 @@ import com.lawu.eshop.property.srv.service.CommissionService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.StringUtil;
 
 @Service
@@ -59,10 +60,10 @@ public class CommissionServiceImpl implements CommissionService {
 		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
 
 		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
-		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
 		if ("".equals(ad_commission_0)) {
 			ad_commission_0 = PropertyType.ad_commission_0_default;
 		}
+		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
@@ -136,23 +137,47 @@ public class CommissionServiceImpl implements CommissionService {
 				return ResultCode.SUCCESS;
 			}
 
-			// 新增积分明细
-			PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
-			pointDetailSaveDataParam.setPointNum(num);
-			pointDetailSaveDataParam.setUserNum(param.getUserNum());
-			pointDetailSaveDataParam.setTitle(param.getTypeName());
-			pointDetailSaveDataParam.setPointType(param.getTypeVal());
-			pointDetailSaveDataParam.setPoint(param.getActureMoneyIn());
-			pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-			pointDetailSaveDataParam.setBizId(param.getBizId().toString());
-			pointDetailService.save(pointDetailSaveDataParam);
+			// 最后一级若为用户进余额，为商家进广告积分
+			if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				// 新增点广告的余额交易明细
+				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+				tdsParam.setTransactionNum(num);
+				tdsParam.setUserNum(param.getUserNum());
+				tdsParam.setTitle(param.getTypeName());
+				tdsParam.setTransactionType(param.getTypeVal());
+				tdsParam.setTransactionAccount("");
+				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+				tdsParam.setAmount(param.getActureMoneyIn());
+				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+				tdsParam.setBizId(param.getBizId());
+				transactionDetailService.save(tdsParam);
 
-			// 更新用户资产
-			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-			infoDoView.setUserNum(param.getUserNum());
-			infoDoView.setPoint(param.getActureMoneyIn());
-			infoDoView.setGmtModified(new Date());
-			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView);
+				// 加用户（会员或商家）财产余额
+				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+				infoDoView.setUserNum(param.getUserNum());
+				infoDoView.setBalance(param.getActureMoneyIn());
+				infoDoView.setGmtModified(new Date());
+				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
+
+			} else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				// 新增积分明细
+				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
+				pointDetailSaveDataParam.setPointNum(num);
+				pointDetailSaveDataParam.setUserNum(param.getUserNum());
+				pointDetailSaveDataParam.setTitle(param.getTypeName());
+				pointDetailSaveDataParam.setPointType(param.getTypeVal());
+				pointDetailSaveDataParam.setPoint(param.getActureMoneyIn());
+				pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+				pointDetailSaveDataParam.setBizId(param.getBizId().toString());
+				pointDetailService.save(pointDetailSaveDataParam);
+
+				// 更新用户资产
+				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
+				infoDoView.setUserNum(param.getUserNum());
+				infoDoView.setPoint(param.getActureMoneyIn());
+				infoDoView.setGmtModified(new Date());
+				propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView);
+			}
 
 			// 最后一级不计爱心账户
 

@@ -21,6 +21,6 @@ public interface CommissionCommonService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "user/common/selectHigherLevelInviters/{invitedUserNum}")
 	List<CommissionInvitersUserDTO> selectHigherLevelInviters(@PathVariable("invitedUserNum") String invitedUserNum,
-			@RequestParam int level, @RequestBody boolean isLevel);
+			@RequestParam("level") int level, @RequestBody boolean isLevel);
 
 }

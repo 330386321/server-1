@@ -1,6 +1,9 @@
 package com.lawu.eshop.order.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -36,4 +39,21 @@ public interface PayOrderService {
      * @author Yangqh
      */
     ThirdPayCallBackQueryPayOrderBO selectThirdPayCallBackPayOrder(String orderId);
+
+
+	/**
+	 * 查询未计算提成的买单
+	 * @return
+	 * @throws Exception
+	 * @author yangqh
+	 */
+	List<ShoppingOrderCommissionDTO> selectNotCommissionOrder();
+
+	/**
+	 * 修改为已计算提成
+	 * @param ids
+	 * @return
+	 * @author yangqh
+	 */
+	int updateCommissionStatus(List<Long> ids);
 }

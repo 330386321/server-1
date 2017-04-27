@@ -1,6 +1,6 @@
 package com.lawu.eshop.statistics.service;
 
-public interface ConsumeAndSalesCommissionService {
+public interface ProductOrderCommissionService {
 
 	void executeAutoConsumeAndSalesCommission();
 

@@ -19,7 +19,7 @@ public interface PropertySrvService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "property/getValue")
-	Result getValue(@RequestParam String name);
+	Result getValue(@RequestParam("name") String name);
 	
 	/**
 	 * 计算上级提成
