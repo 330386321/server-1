@@ -1,7 +1,6 @@
 package com.lawu.eshop.operator.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.operator.constants.StatusEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -21,8 +20,8 @@ public class UserListDTO {
     @ApiModelProperty(value = "姓名")
     private String name;
 
-    @ApiModelProperty(value = "STATUS_VALID:正常，STATUS_DISABLE:禁用")
-    private StatusEnum statusEnum;
+    @ApiModelProperty(value = "状态")
+    private String status;
 
     @ApiModelProperty(value = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
@@ -60,11 +59,11 @@ public class UserListDTO {
         this.gmtCreate = gmtCreate;
     }
 
-    public StatusEnum getStatusEnum() {
-        return statusEnum;
+    public String getStatus() {
+        return status;
     }
 
-    public void setStatusEnum(StatusEnum statusEnum) {
-        this.statusEnum = statusEnum;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
