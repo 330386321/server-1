@@ -33,9 +33,10 @@ public class PayOrderServiceImpl implements PayOrderService {
 
     @Override
     @Transactional
-    public PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param) {
+    public PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param,String numNum) {
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setMemberId(memberId);
+        payOrderDO.setMemberNum(numNum);
         payOrderDO.setMerchantId(param.getMerchantId());
         payOrderDO.setFavoredAmount(BigDecimal.valueOf(param.getFavoredAmount()));
         payOrderDO.setActualAmount(BigDecimal.valueOf(param.getTotalAmount()-param.getFavoredAmount()+param.getNotFavoredAmount()));

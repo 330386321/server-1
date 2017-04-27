@@ -38,11 +38,11 @@ public class PayOrderController extends BaseController {
      * @return
      */
     @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param) {
+    public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param,@RequestParam("param") String numNum) {
         if (memberId == null || param == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        PayOrderBO orderBO = payOrderService.savePayOrderInfo(memberId, param);
+        PayOrderBO orderBO = payOrderService.savePayOrderInfo(memberId, param,numNum);
         if (orderBO == null) {
             return successCreated(ResultCode.SAVE_FAIL);
         }

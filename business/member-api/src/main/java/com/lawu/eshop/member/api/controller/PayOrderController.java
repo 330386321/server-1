@@ -54,6 +54,7 @@ public class PayOrderController extends BaseController {
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
     public Result<PayOrderIdDTO> savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
         //查询优惠信息记录
         double realFavoredAmount = 0;//实际优惠金额
         double canFavoredAmount = param.getTotalAmount()-param.getNotFavoredAmount();//参与优惠金额
@@ -78,7 +79,7 @@ public class PayOrderController extends BaseController {
                 }
             }
         }
-        Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param);
+        Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param,userNum);
         return result;
     }
 
