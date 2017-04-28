@@ -174,6 +174,13 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("price_d", price);
                     document.addField("inventory_i", inventory);
                     document.addField("salesVolume_i", salesVolume);
+                    ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+                    if (productCategoryeDO != null) {
+                        String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                        for (String categoryId : categoryIdArr) {
+                            document.addField("categoryId_is", categoryId);
+                        }
+                    }
                     SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
                 }
             }
@@ -538,6 +545,13 @@ public class ProductServiceImpl implements ProductService {
         document.addField("price_d", price);
         document.addField("inventory_i", inventory);
         document.addField("salesVolume_i", salesVolume);
+        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
+        if (productCategoryeDO != null) {
+            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+            for (String categoryId : categoryIdArr) {
+                document.addField("categoryId_is", categoryId);
+            }
+        }
         SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
     }
 
@@ -741,6 +755,13 @@ public class ProductServiceImpl implements ProductService {
         document.addField("price_d", price);
         document.addField("inventory_i", inventory);
         document.addField("salesVolume_i", salesVolume);
+        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
+        if (productCategoryeDO != null) {
+            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+            for (String categoryId : categoryIdArr) {
+                document.addField("categoryId_is", categoryId);
+            }
+        }
         SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
     }
 
