@@ -241,7 +241,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     				String memberPath=memberDTO.getModel().getRegionPath();
     				if(memberPath!=null){
     					String[] memberPaths=memberPath.split("/");
-    					String[] path=adDTO.getAreas().split("/");
+    					String[] path=adDTO.getAreas().split(",");
     					for (String s : path) {
         					for (String mp : memberPaths) {
         						if(s.equals(mp)){

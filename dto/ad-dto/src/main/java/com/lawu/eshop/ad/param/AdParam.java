@@ -28,7 +28,7 @@ public class AdParam {
 	@ApiParam (name="endTime", value = "投放的结束时间")
     private Date endTime;
 
-	@ApiParam (name="areas", value = "区域 区域最后一位 XX/XX/XX")
+	@ApiParam (name="areas", value = "区域 区域最后一位 XX,XX,XX")
     private String areas;
 
 	@ApiParam (name="radius", value = "雷达半径")

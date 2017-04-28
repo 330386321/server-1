@@ -200,8 +200,8 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "findMemberCount", method = RequestMethod.GET)
-    public Integer findMemberCount(@RequestParam("areas") String regionPath) {
-        Integer count = memberService.findMemberCount(regionPath);
+    public Integer findMemberCount(@RequestParam("areas") String areas) {
+        Integer count = memberService.findMemberCount(areas);
         return count;
     }
 

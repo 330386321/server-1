@@ -4,13 +4,14 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author zhangyong
  * @date 2017/4/10.
  */
-public class SuggestionListParam extends AbstractPageParam {
+public class SuggestionListParam extends AbstractPageParam implements Serializable{
 
     @ApiModelProperty(value = "开始时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd")

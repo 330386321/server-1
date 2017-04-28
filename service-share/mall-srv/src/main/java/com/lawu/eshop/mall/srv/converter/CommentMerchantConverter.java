@@ -82,6 +82,7 @@ public class CommentMerchantConverter {
             commentOperatorDTO.setGmtCreate(commentMerchantBO.getGmtCreate());
             commentOperatorDTO.setContent(commentMerchantBO.getContent());
             commentOperatorDTO.setId(commentMerchantBO.getId());
+            commentOperatorDTO.setCommentToId(commentMerchantBO.getMerchantId());
             commentOperatorDTOS.add(commentOperatorDTO);
         }
         return commentOperatorDTOS;

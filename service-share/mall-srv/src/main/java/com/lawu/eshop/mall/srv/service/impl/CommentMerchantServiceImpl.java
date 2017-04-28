@@ -222,6 +222,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     public Page<CommentMerchantBO> getCommentMerchantListOperator(CommentListParam listParam) {
         CommentMerchantDOExample example = new CommentMerchantDOExample();
         example.setOrderByClause("id desc");
+        example.createCriteria().andStatusEqualTo(new Byte("1"));
         RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
         Page<CommentMerchantBO> page = new Page<>();
         page.setTotalCount(commentMerchantDOMapper.countByExample(example));

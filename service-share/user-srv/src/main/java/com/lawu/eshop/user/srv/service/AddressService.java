@@ -78,4 +78,12 @@ public interface AddressService {
 	 */
 	int saveWithUserNum(String userNum, AddressParam param);
 	
+	/**
+	 * 验证收货地址
+	 * @param id
+	 * @param userNum
+	 * @return
+	 */
+	boolean isCheckAddress(Long id,String userNum);
+	
 }

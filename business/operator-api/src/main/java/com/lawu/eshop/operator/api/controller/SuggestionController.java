@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.dto.SuggestionDTO;
 import com.lawu.eshop.mall.param.SuggestionListParam;
 import com.lawu.eshop.operator.api.service.SuggestionService;
@@ -29,9 +30,10 @@ public class SuggestionController extends BaseController {
     @Autowired
     private SuggestionService suggestionService;
 
-    @ApiOperation(value = "意见记录列表", notes = "可以根据时间段查询已经反馈记录 [1004,1002]", httpMethod = "POST")
+    @PageBody
+    @ApiOperation(value = "意见记录列表", notes = "可以根据时间段查询已经反馈记录 [1004,1002]", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "suggestion/getSuggestionList", method = RequestMethod.POST)
+    @RequestMapping(value = "suggestion/getSuggestionList", method = RequestMethod.GET)
     public Result<Page<SuggestionDTO>> getSuggestionList(@ModelAttribute SuggestionListParam pageParam) {
         if (pageParam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);

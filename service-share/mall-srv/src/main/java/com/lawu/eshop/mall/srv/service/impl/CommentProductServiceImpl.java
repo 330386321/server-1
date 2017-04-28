@@ -224,6 +224,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 	public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
 		CommentProductDOExample example = new CommentProductDOExample();
 		example.setOrderByClause("id desc");
+		example.createCriteria().andStatusEqualTo(new Byte("1"));
 		RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
 		Page<CommentProductBO> page = new Page<>();
 		page.setTotalCount(commentProductDOMapper.countByExample(example));

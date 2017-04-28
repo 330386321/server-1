@@ -4,6 +4,7 @@ import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
@@ -72,14 +73,14 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
-    public Result<Page<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param) {
+    public Result<Page<AdPlatformOperatorDTO>> selectList(@RequestBody AdPlatformFindParam param) {
         Page<AdPlatformBO> page = adPlatformService.selectList(param);
-        List<AdPlatformDTO> list;
-        list = AdPlatformConverter.convertDTOS(page.getRecords());
+        List<AdPlatformOperatorDTO> list;
+        list = AdPlatformConverter.convertOperatorDTOS(page.getRecords());
         if (list == null) {
-            list = new ArrayList<AdPlatformDTO>();
+            list = new ArrayList<AdPlatformOperatorDTO>();
         }
-        Page<AdPlatformDTO> newPage = new Page<>();
+        Page<AdPlatformOperatorDTO> newPage = new Page<>();
         newPage.setCurrentPage(page.getCurrentPage());
         newPage.setTotalCount(page.getTotalCount());
         newPage.setRecords(list);

@@ -16,10 +16,16 @@ public class CommentOperatorDTO {
 
     @ApiModelProperty(value = "评价内容")
     private String content;
+    
+    @ApiModelProperty(value = "评论对象id")
+    private Long commentToId;
 
     @ApiModelProperty(value = "评价时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
+    
+    @ApiModelProperty(value = "名称")
+    private String name;
 
     public Long getId() {
         return id;
@@ -44,4 +50,22 @@ public class CommentOperatorDTO {
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
     }
+
+	public Long getCommentToId() {
+		return commentToId;
+	}
+
+	public void setCommentToId(Long commentToId) {
+		this.commentToId = commentToId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+    
+    
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -22,11 +23,15 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.operator.api.service.AdPlatformService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
+import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.operator.api.service.ProductService;
+import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductPlatDTO;
 import com.lawu.eshop.product.param.ProductParam;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
 
@@ -53,15 +58,38 @@ public class AdPlatformController extends BaseController {
     private ProductService productService;
     
     @Autowired
+    private ProductAuditService productAuditService;
+    
+    
+    @Autowired
     private MerchantStoreService merchantStoreService;
 
     @PageBody
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
-    public Result<Page<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam( value = "查询信息") AdPlatformFindParam queryParams) {
-        Result<Page<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
-        return adPlatformDTOS;
+    public Result<Page<AdPlatformOperatorDTO>> selectByPosition(@ModelAttribute @ApiParam( value = "查询信息") AdPlatformFindParam queryParams) {
+        Result<Page<AdPlatformOperatorDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
+        if(isSuccess(adPlatformDTOS)){
+   		 Page<AdPlatformOperatorDTO> page=adPlatformDTOS.getModel();
+   		 List<AdPlatformOperatorDTO> list= page.getRecords();
+   		 for (AdPlatformOperatorDTO adPlatformDTO : list) {
+   			 if(adPlatformDTO.getProductId()!=null){
+   				 Result<ProductEditInfoDTO>  productRs=productAuditService.selectEditProductById(adPlatformDTO.getProductId());
+   	   			 if(isSuccess(productRs)){
+   	   				adPlatformDTO.setProductName(productRs.getModel().getName());
+   	   			 }
+   			 }
+   			if(adPlatformDTO.getMerchantStoreId()!=null){
+   				Result<MerchantStoreDTO>  merchantRs=merchantStoreService.selectMerchantStore(adPlatformDTO.getMerchantStoreId());
+   				if(isSuccess(merchantRs)){
+   				  adPlatformDTO.setMerchantName(merchantRs.getModel().getName());
+   				}
+   			}
+   			 
+		  }
+   	   }
+       return adPlatformDTOS;
     }
 
     

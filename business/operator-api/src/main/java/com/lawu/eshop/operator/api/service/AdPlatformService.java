@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -46,7 +47,7 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/selectList")
-	Result<Page<AdPlatformDTO>> selectList(@RequestBody AdPlatformFindParam param);
+	Result<Page<AdPlatformOperatorDTO>> selectList(@RequestBody AdPlatformFindParam param);
 	
 	
 	/**

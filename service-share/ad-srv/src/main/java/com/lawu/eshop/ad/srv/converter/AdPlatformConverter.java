@@ -1,11 +1,12 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import com.lawu.eshop.ad.dto.AdPlatformDTO;
-import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
-import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
+import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
+import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
 
 /**
  * 平台广告实体转化
@@ -111,6 +112,36 @@ public class AdPlatformConverter {
 
         for (AdPlatformBO adPlatformBO : bOS) {
             AdPlatformDTO adPlatformDTO = new AdPlatformDTO();
+            adPlatformDTO.setId(adPlatformBO.getId());
+            adPlatformDTO.setTitle(adPlatformBO.getTitle());
+            adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
+            adPlatformDTO.setContent(adPlatformBO.getContent());
+            adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
+            if (adPlatformBO.getType() == 1) {
+                adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
+            } else {
+                adPlatformDTO.setProductId(adPlatformBO.getProductId());
+            }
+            DTOS.add(adPlatformDTO);
+        }
+        return DTOS;
+    }
+    
+    
+    /**
+     * BOS 转DTOS
+     *
+     * @param bOS
+     * @return
+     */
+    public static List<AdPlatformOperatorDTO> convertOperatorDTOS(List<AdPlatformBO> bOS) {
+        List<AdPlatformOperatorDTO> DTOS = new ArrayList<AdPlatformOperatorDTO>();
+        if (bOS == null || bOS.isEmpty()) {
+            return DTOS;
+        }
+
+        for (AdPlatformBO adPlatformBO : bOS) {
+        	AdPlatformOperatorDTO adPlatformDTO = new AdPlatformOperatorDTO();
             adPlatformDTO.setId(adPlatformBO.getId());
             adPlatformDTO.setTitle(adPlatformBO.getTitle());
             adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());

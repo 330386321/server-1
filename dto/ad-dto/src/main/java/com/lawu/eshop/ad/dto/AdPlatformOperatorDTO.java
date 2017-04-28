@@ -2,7 +2,7 @@ package com.lawu.eshop.ad.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class AdPlatformDTO {
+public class AdPlatformOperatorDTO {
 
 	@ApiModelProperty(value = "主键")
 	private Long id;
@@ -25,7 +25,11 @@ public class AdPlatformDTO {
 	@ApiModelProperty(value = "门店ID")
 	private Long merchantStoreId;
 	
+	@ApiModelProperty(value = "门店名称")
+	private String merchantName;
 	
+	@ApiModelProperty(value = "商品名称")
+	private String productName;
 	
 	public String getContent() {
 		return content;
@@ -82,8 +86,20 @@ public class AdPlatformDTO {
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
 	}
+	
+	public String getMerchantName() {
+		return merchantName;
+	}
 
-	
-	
-	
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
 }

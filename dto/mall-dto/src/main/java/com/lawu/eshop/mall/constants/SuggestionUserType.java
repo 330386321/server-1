@@ -8,12 +8,14 @@ public enum SuggestionUserType {
     /**
      * 商家
      */
-    MEMBER((byte) 1),
+    MEMBER((byte) 0x01),
     /**
      * 会员
      */
     MERCHANT((byte) 2);
     public Byte value;
+    
+    private String label;
 
     SuggestionUserType(Byte value) {
         this.value = value;
@@ -28,5 +30,12 @@ public enum SuggestionUserType {
         }
         return null;
     }
+
+	public String getLabel() {
+		return label;
+	}
+
+	
+    
 
 }

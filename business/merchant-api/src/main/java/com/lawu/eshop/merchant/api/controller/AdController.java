@@ -95,7 +95,11 @@ public class AdController extends BaseController {
     	}
     	Integer count=0;
     	if(adParam.getPutWayEnum().val==1){
-    		count=memberCountService.findMemberCount(adParam.getAreas());
+    		String areas=adParam.getAreas();
+    		if(areas==null){
+    			areas="ALL_PLACE";
+    		}
+    		count=memberCountService.findMemberCount(areas);
     	}else if(adParam.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
@@ -115,10 +119,10 @@ public class AdController extends BaseController {
 
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
+    @RequestMapping(value = "selectListByMerchant", method = RequestMethod.GET)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMerchantParam adMerchantParam) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());

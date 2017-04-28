@@ -158,6 +158,9 @@ public class AddressController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.GET)
 	public Result updateDefault(@PathVariable Long id, @RequestParam String userNum) {
+		boolean flag=addressService.isCheckAddress(id,userNum);
+		if(!flag)
+			return successCreated(ResultCode.NOT_FOUND_DATA);
 		Integer i = addressService.updateDefault(id, userNum);
 		if (i > 0) {
 			return successCreated(ResultCode.SUCCESS);

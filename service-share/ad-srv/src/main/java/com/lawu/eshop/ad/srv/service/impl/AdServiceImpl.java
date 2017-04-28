@@ -124,7 +124,7 @@ public class AdServiceImpl implements AdService {
 			saveRPPool(adDO);
 		}
 		if(adParam.getAreas()!=null){ //不是全国投放
-			String[] path=adParam.getAreas().split("/");
+			String[] path=adParam.getAreas().split(",");
 			for (String s : path) {
 				AdRegionDO adRegionDO=new AdRegionDO();
 				adRegionDO.setAdId(adDO.getId());
@@ -217,14 +217,46 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public Page<AdBO> selectListByMerchant(AdMerchantParam adMerchantParam, Long merchantId) {
 		AdDOExample example=new AdDOExample();
-		Criteria cr= example.createCriteria();
-		cr.andMerchantIdEqualTo(merchantId).andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
-		if(adMerchantParam.getPutWayEnum()!=null){
-			cr.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
-		}else if(adMerchantParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
-		}else if(adMerchantParam.getStatusEnum()!=null){
-			cr.andStatusEqualTo(adMerchantParam.getStatusEnum().val);
+		if(adMerchantParam.getStatusEnum()==null && adMerchantParam.getTypeEnum()==null && adMerchantParam.getPutWayEnum()==null ){
+			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
+					.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
+					.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
+					.andMerchantIdEqualTo(merchantId);
+		}else{
+			Criteria c1=example.createCriteria();
+			
+			if(adMerchantParam.getStatusEnum()!=null){
+				if(adMerchantParam.getStatusEnum().val==3){
+					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val)
+					.andMerchantIdEqualTo(merchantId);
+					
+				}else{
+					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val)
+					.andMerchantIdEqualTo(merchantId);
+					Criteria  c2=example.createCriteria();
+					 c2.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val)
+					.andMerchantIdEqualTo(merchantId);
+					 example.or(c2);
+				}
+				
+			}
+			if(adMerchantParam.getTypeEnum()!=null){
+				c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
+				.andMerchantIdEqualTo(merchantId);
+				
+			}
+			if(adMerchantParam.getPutWayEnum()!=null){
+				c1.andTypeEqualTo(adMerchantParam.getPutWayEnum().val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
+				.andMerchantIdEqualTo(merchantId);
+			}
+			
+			
 		}
 		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());

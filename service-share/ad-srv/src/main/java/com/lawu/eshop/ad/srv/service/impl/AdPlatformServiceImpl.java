@@ -41,7 +41,6 @@ public class AdPlatformServiceImpl implements AdPlatformService {
             adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
         } else if (adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_PRODUCT)) { //商品
             adPlatformDO.setProductId(adPlatformParam.getProductId());
-            adPlatformDO.setGoodsType(adPlatformParam.getGoodsTypeEnum().val);
         } else {
             adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         }

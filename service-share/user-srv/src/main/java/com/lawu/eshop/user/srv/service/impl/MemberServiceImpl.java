@@ -354,11 +354,11 @@ public class MemberServiceImpl implements MemberService {
         Criteria c1 = example.createCriteria();
         c1.andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         int count = 0;
-        if (regionPath == null) { //所有用户
+        if (regionPath.equals("ALL_PLACE")) { //所有用户
             count = memberDOMapper.countByExample(example);
             return count;
         } else {
-            String[] path = regionPath.split("/");
+            String[] path = regionPath.split(",");
             List<MemberDO> list = memberDOMapper.selectByExample(example);
             for (MemberDO memberDO : list) {
                 if (memberDO.getRegionPath() != null) {

@@ -105,8 +105,8 @@ public class FansMerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "findFensCount", method = RequestMethod.GET)
-    public Integer findFensCount(@RequestParam Long memberId) {
-        Integer count = fansMerchantService.findFensCount(memberId);
+    public Integer findFensCount(@RequestParam Long merchantId) {
+        Integer count = fansMerchantService.findFensCount(merchantId);
         return count;
     }
 

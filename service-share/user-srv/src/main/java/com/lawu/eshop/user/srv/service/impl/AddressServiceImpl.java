@@ -85,9 +85,11 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	@Transactional
 	public Integer updateDefault(Long id, String userNum) {
+		
 		AddressDO addressDO = new AddressDO();
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
+		addressDOMapper.countByExample(example);
 		addressDO.setIsDefault(false);
 		addressDO.setGmtModified(new Date());
 		addressDOMapper.updateByExampleSelective(addressDO, example);
@@ -153,6 +155,17 @@ public class AddressServiceImpl implements AddressService {
 		}
 
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public boolean isCheckAddress(Long id, String userNum) {
+		AddressDOExample example = new AddressDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum).andUserNumEqualTo(userNum);
+		Long count=addressDOMapper.countByExample(example);
+		if(count.intValue()>0){
+			return true;
+		}
+		return false;
 	}
 
 }
