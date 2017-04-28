@@ -1,14 +1,17 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.alibaba.druid.util.StringUtils;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
+import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.converter.MerchantStoreAuditConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
@@ -17,6 +20,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import net.sf.json.JSONObject;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,7 +70,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                 newStoreDO.setGmtModified(new Date());
                 if (MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val == auditParam.getAuditStatusEnum().val) {
                     //审核通过
-                    if(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val==auditParam.getTypeEnum().val) {
+                    if (MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val == auditParam.getTypeEnum().val) {
                         //修改门店资料信息
                         if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
                             // 新增记录 修改门店信息状态
@@ -188,7 +192,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             document.addField("averageScore_d", merchantStoreDO.getAverageScore());
                             SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
                         }
-                    }else{
+                    } else {
                         //申请实体店铺
                         //先删除对应商家LOGO图片---逻辑删除
                         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
@@ -255,10 +259,10 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId);
         example.setOrderByClause("id desc");
-       List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
-       if(merchantStoreAuditDOS.isEmpty()){
-           return  null;
-       }
+        List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
+        if (merchantStoreAuditDOS.isEmpty()) {
+            return null;
+        }
         MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
@@ -271,12 +275,40 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(status).andTypeEqualTo(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
         List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
-        if(merchantStoreAuditDOS.isEmpty()){
-            return  null;
+        if (merchantStoreAuditDOS.isEmpty()) {
+            return null;
         }
         MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
         return merchantStoreAuditBO;
+    }
+
+    @Override
+    public Page<MerchantStoreAuditBO> listAllStoreAudit(ListStoreAuditParam auditParam) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        MerchantStoreAuditDOExample.Criteria criteria = example.createCriteria();
+        if (auditParam.getStatusEnum() != null) {
+            criteria.andStatusEqualTo(auditParam.getStatusEnum().val);
+        }
+        if (auditParam.getTypeEnum() != null) {
+            criteria.andTypeEqualTo(auditParam.getTypeEnum().val);
+        }
+
+        RowBounds rowBounds = new RowBounds(auditParam.getOffset(), auditParam.getPageSize());
+
+        Page<MerchantStoreAuditBO> page = new Page<>();
+        page.setCurrentPage(auditParam.getCurrentPage());
+        page.setTotalCount(merchantStoreAuditDOMapper.countByExample(example));
+
+        List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
+        page.setRecords(MerchantStoreAuditConverter.convertBO(merchantStoreAuditDOS));
+        return page;
+    }
+
+    @Override
+    public MerchantStoreAuditBO getMerchantStoreAuditById(Long id) {
+        MerchantStoreAuditDO merchantStoreAuditDO = merchantStoreAuditDOMapper.selectByPrimaryKey(id);
+        return MerchantStoreAuditConverter.convertBO(merchantStoreAuditDO);
     }
 }

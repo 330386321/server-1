@@ -5,12 +5,9 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
-import com.lawu.eshop.product.query.ProductQuery;
+import com.lawu.eshop.product.param.ListProductParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author meishuquan
@@ -22,11 +19,11 @@ public interface ProductAuditService {
     /**
      * 查询所有门店商品
      *
-     * @param productQuery
+     * @param listProductParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "product/selectProduct")
-    Result<Page<ProductQueryDTO>> listProduct(@ModelAttribute ProductQuery productQuery);
+    @RequestMapping(method = RequestMethod.POST, value = "product/listAllProduct")
+    Result<Page<ProductQueryDTO>> listProduct(@RequestBody ListProductParam listProductParam);
 
     /**
      * 更新商品状态

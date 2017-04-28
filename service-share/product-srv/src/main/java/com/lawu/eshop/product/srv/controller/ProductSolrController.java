@@ -79,6 +79,31 @@ public class ProductSolrController extends BaseController {
     }
 
     /**
+     * 要购物首页猜你喜欢
+     *
+     * @param productSolrParam
+     * @return
+     */
+    @RequestMapping(value = "listYouLikeProduct", method = RequestMethod.POST)
+    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@RequestBody ProductSolrParam productSolrParam) {
+        SolrQuery query = new SolrQuery();
+        query.setQuery("*:*");
+        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setStart(productSolrParam.getOffset());
+        query.setRows(productSolrParam.getPageSize());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        if (solrDocumentList == null || solrDocumentList.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+
+        Page<ProductSearchDTO> page = new Page<>();
+        page.setRecords(ProductConverter.convertDTO(solrDocumentList));
+        page.setTotalCount((int) solrDocumentList.getNumFound());
+        page.setCurrentPage(productSolrParam.getCurrentPage());
+        return successGet(page);
+    }
+
+    /**
      * 会员APP商品搜索
      *
      * @param productSolrParam

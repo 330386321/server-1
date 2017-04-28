@@ -43,6 +43,8 @@ public class MerchantStoreAuditBO {
      */
     private Byte status;
 
+    private Byte type;
+
     /**
      *
      * 审核人员ID
@@ -192,5 +194,13 @@ public class MerchantStoreAuditBO {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Byte getType() {
+        return type;
+    }
+
+    public void setType(Byte type) {
+        this.type = type;
     }
 }

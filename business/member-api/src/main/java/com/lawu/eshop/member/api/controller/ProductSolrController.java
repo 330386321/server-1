@@ -188,4 +188,18 @@ public class ProductSolrController extends BaseController {
         return successGet(shoppingProductDTO);
     }
 
+    @ApiOperation(value = "要购物首页猜你喜欢", notes = "要购物首页猜你喜欢。[1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listYouLikeProduct", method = RequestMethod.GET)
+    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
+        return productSolrService.listYouLikeProduct(productSolrParam);
+    }
+
+    @ApiOperation(value = "查询商品推荐类别", notes = "查询商品类别。[1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)
+    public Result<List<RecommendProductCategoryDTO>> listRecommendProductCategory() {
+        return recommendProductCategoryService.listAllRecommendProductCategory();
+    }
+
 }

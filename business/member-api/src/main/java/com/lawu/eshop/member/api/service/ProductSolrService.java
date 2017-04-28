@@ -39,6 +39,15 @@ public interface ProductSolrService {
     Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute ProductSolrParam productSolrParam);
 
     /**
+     * 要购物首页猜你喜欢
+     *
+     * @param productSolrParam
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "productSolr/listYouLikeProduct")
+    Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute ProductSolrParam productSolrParam);
+
+    /**
      * 会员APP商品搜索
      *
      * @param productSolrParam

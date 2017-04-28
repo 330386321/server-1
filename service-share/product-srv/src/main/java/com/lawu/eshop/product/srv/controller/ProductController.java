@@ -11,6 +11,7 @@ import com.lawu.eshop.product.dto.ProductPlatDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
+import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
@@ -82,7 +83,7 @@ public class ProductController extends BaseController {
      *
      * @param productId
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) throws Exception {
@@ -216,33 +217,34 @@ public class ProductController extends BaseController {
     }
 
     /**
-	 * 查询已审核的所有商品
-	 * @param param
-	 * @return
-	 * @author zhangrc
-	 * @date 2017/4/25
-	 */
-	@RequestMapping(value = "selectProductByPlat", method = RequestMethod.POST)
-	public Result<List<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
-		List<ProductQueryBO> boList = productService.selectProductPlat(param);
-		List<ProductPlatDTO> dtoList=new ArrayList<>();
-		if(!boList.isEmpty()){
-			for (ProductQueryBO productQueryBO : boList) {
-				ProductPlatDTO dto=new ProductPlatDTO();
-				dto.setId(productQueryBO.getId());
-				dto.setName(productQueryBO.getName());
-				dtoList.add(dto);
-			}
-		}
+     * 查询已审核的所有商品
+     *
+     * @param param
+     * @return
+     * @author zhangrc
+     * @date 2017/4/25
+     */
+    @RequestMapping(value = "selectProductByPlat", method = RequestMethod.POST)
+    public Result<List<ProductPlatDTO>> selectProductByPlat(@RequestBody ProductParam param) {
+        List<ProductQueryBO> boList = productService.selectProductPlat(param);
+        List<ProductPlatDTO> dtoList = new ArrayList<>();
+        if (!boList.isEmpty()) {
+            for (ProductQueryBO productQueryBO : boList) {
+                ProductPlatDTO dto = new ProductPlatDTO();
+                dto.setId(productQueryBO.getId());
+                dto.setName(productQueryBO.getName());
+                dtoList.add(dto);
+            }
+        }
 
-		return successGet(dtoList);
-	}
-	
-	
-	 /**
+        return successGet(dtoList);
+    }
+
+
+    /**
      * 查询商家上架商品的总数量
      *
-     * @param id
+     * @param merchantId
      * @return
      */
     @RequestMapping(value = "selectProductCount", method = RequestMethod.GET)
@@ -273,7 +275,7 @@ public class ProductController extends BaseController {
      * @return
      */
     @SuppressWarnings("rawtypes")
-	@RequestMapping(value = "updateAverageDailySales/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "updateAverageDailySales/{id}", method = RequestMethod.PUT)
     public Result updateAverageDailySales(@PathVariable Long id, @RequestParam BigDecimal averageDailySales) {
         ProductInfoBO productBO = productService.getProductById(id);
         if (productBO == null) {
@@ -282,5 +284,21 @@ public class ProductController extends BaseController {
         productService.updateAverageDailySalesById(id, averageDailySales);
         return successCreated();
     }
-    
+
+    /**
+     * 查询所有上架的商品
+     *
+     * @param listProductParam
+     * @return
+     */
+    @RequestMapping(value = "listAllProduct", method = RequestMethod.POST)
+    public Result<Page<ProductQueryDTO>> listAllProduct(@RequestBody ListProductParam listProductParam) {
+        Page<ProductQueryBO> productQueryBOPage = productService.listAllProduct(listProductParam);
+        Page<ProductQueryDTO> page = new Page<>();
+        page.setCurrentPage(productQueryBOPage.getCurrentPage());
+        page.setTotalCount(productQueryBOPage.getTotalCount());
+        page.setRecords(ProductConverter.convertDTOS(productQueryBOPage.getRecords()));
+        return successCreated(page);
+    }
+
 }

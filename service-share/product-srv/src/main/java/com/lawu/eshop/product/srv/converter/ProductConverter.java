@@ -36,11 +36,11 @@ public class ProductConverter {
      * @return
      */
     public static List<ProductQueryDTO> convertDTOS(List<ProductQueryBO> productBOS) {
-        if (productBOS == null) {
-            return null;
+        List<ProductQueryDTO> productDTOS = new ArrayList<ProductQueryDTO>();
+        if (productBOS == null || productBOS.isEmpty()) {
+            return productDTOS;
         }
 
-        List<ProductQueryDTO> productDTOS = new ArrayList<ProductQueryDTO>();
         for (ProductQueryBO productBO : productBOS) {
             ProductQueryDTO productDTO = new ProductQueryDTO();
             productDTO.setId(productBO.getId());

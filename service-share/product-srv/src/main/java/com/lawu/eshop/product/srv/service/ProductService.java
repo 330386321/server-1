@@ -1,17 +1,18 @@
 package com.lawu.eshop.product.srv.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
+import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Yangqh on 2017/3/23.
@@ -99,17 +100,19 @@ public interface ProductService {
      * @return
      */
     ProductInfoBO getProductById(Long id);
-    
-    
+
+
     /**
      * 运营平台查询所有已审核的商品
+     *
      * @param param
      * @return
      */
     List<ProductQueryBO> selectProductPlat(ProductParam param);
-    
+
     /**
      * 查询当前商家总有多少商品
+     *
      * @param merchantId
      * @return
      */
@@ -129,6 +132,13 @@ public interface ProductService {
      * @param averageDailySales
      */
     void updateAverageDailySalesById(Long id, BigDecimal averageDailySales);
-    
-    
+
+    /**
+     * 查询所有上架的商品
+     *
+     * @param listProductParam
+     * @return
+     */
+    Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam);
+
 }
