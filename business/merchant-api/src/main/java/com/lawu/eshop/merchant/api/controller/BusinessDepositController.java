@@ -1,6 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,13 +13,16 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BusinessDepositService;
 import com.lawu.eshop.merchant.api.service.OrderService;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositParam;
+import com.lawu.eshop.utils.BeanUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -86,7 +88,12 @@ public class BusinessDepositController extends BaseController {
 		if (!dto.getModel().getIsNoOnGoingOrder()) {
 			return successCreated(ResultCode.DEPOSIT_EXIST_ING_ORDER);
 		}
+		
+		BusinessRefundDepositDataParam dparam = new BusinessRefundDepositDataParam();
+		dparam.setId(param.getId());
+		dparam.setBusinessBankAccountId(param.getBusinessBankAccountId());
+		dparam.setUserName(UserUtil.getCurrentUserNum(getRequest()));
 
-		return businessDepositService.refundDeposit(param);
+		return businessDepositService.refundDeposit(dparam);
 	}
 }

@@ -133,28 +133,6 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	@Override
 	public Page<BusinessDepositQueryBO> selectDepositList(BusinessDepositQueryDataParam param) {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		Criteria criteria1 = example.createCriteria();
-		if (param.getBeginDate() != null && param.getEndDate() != null) {
-			criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
-		}
-		if (param.getBusinessDepositStatusEnum() != null) {
-			criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
-		} else {
-			criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.val);
-		}
-
-		if (param.getTransactionPayTypeEnum() != null) {
-			criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().val);
-		}
-		if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
-			if (param.getRegionPath().split("/").length == 1) {
-				criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[0]));
-			} else if (param.getRegionPath().split("/").length == 2) {
-				criteria1.andCityIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[1]));
-			} else if (param.getRegionPath().split("/").length == 3) {
-				criteria1.andAreaIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
-			}
-		}
 
 		if (param.getContent() != null && !"".equals(param.getContent().trim())) {
 			Criteria criteria2 = example.createCriteria();
@@ -165,6 +143,30 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 
 			example.or(criteria2);
 			example.or(criteria3);
+
+		} else {
+			Criteria criteria1 = example.createCriteria();
+			if (param.getBeginDate() != null && param.getEndDate() != null) {
+				criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
+			}
+			if (param.getBusinessDepositStatusEnum() != null) {
+				criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
+			} else {
+				criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.val);
+			}
+
+			if (param.getTransactionPayTypeEnum() != null) {
+				criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().val);
+			}
+			if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
+				if (param.getRegionPath().split("/").length == 1) {
+					criteria1.andProvinceIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[0]));
+				} else if (param.getRegionPath().split("/").length == 2) {
+					criteria1.andCityIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[1]));
+				} else if (param.getRegionPath().split("/").length == 3) {
+					criteria1.andAreaIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
+				}
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
@@ -188,6 +190,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
 			ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
+			ddqbo.setUserNum(bddo.getUserNum());
 			ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
 			ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
 					: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
@@ -230,9 +233,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	}
 
 	@Override
-	public int refundDeposit(BusinessRefundDepositParam param) {
+	public int refundDeposit(BusinessRefundDepositDataParam dparam) {
 
-		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(param.getId()));
+		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getId()));
 		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
 		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
 		if ("".equals(sysDays)) {
@@ -242,12 +245,21 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
 		}
 
+		// 校验提交的银行卡是否正确
+		BankAccountDO bankAccountDo = bankAccountDOMapper
+				.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
+		if (bankAccountDo == null) {
+			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
+		} else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserName())) {
+			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
+		}
+
 		BusinessDepositDO bddo = new BusinessDepositDO();
 		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.val);
-		bddo.setBusinessBankAccountId(Long.valueOf(param.getBusinessBankAccountId()));
+		bddo.setBusinessBankAccountId(Long.valueOf(dparam.getBusinessBankAccountId()));
 		bddo.setGmtRefund(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getId()));
+		example.createCriteria().andIdEqualTo(Long.valueOf(dparam.getId()));
 		businessDepositDOMapper.updateByExampleSelective(bddo, example);
 		return ResultCode.SUCCESS;
 	}

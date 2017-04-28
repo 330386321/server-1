@@ -25,6 +25,9 @@ public class BusinessDepositQueryDTO {
 
 	@ApiModelProperty(value = "负责人姓名")
 	private String BusinessName;
+	
+	@ApiModelProperty(value = "商家编号")
+	private String userNum;
 
 	@ApiModelProperty(value = "金额")
 	private BigDecimal amount;
@@ -186,6 +189,14 @@ public class BusinessDepositQueryDTO {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
 	}
 
 }

@@ -6,7 +6,7 @@ import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
-import com.lawu.eshop.property.param.BusinessRefundDepositParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
 import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
@@ -48,7 +48,7 @@ public interface BusinessDepositService {
 	 * @param param
 	 * @return
 	 */
-	int refundDeposit(BusinessRefundDepositParam param);
+	int refundDeposit(BusinessRefundDepositDataParam dparam);
 
 	/**
 	 * 商家我的保证金

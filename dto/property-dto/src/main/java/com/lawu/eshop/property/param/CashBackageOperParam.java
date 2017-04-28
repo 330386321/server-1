@@ -10,23 +10,23 @@ import io.swagger.annotations.ApiParam;
 
 public class CashBackageOperParam {
 
-	@ApiParam(name = "ids",required = true, value = "提现ID(多条记录用英文逗号分隔)")
-	@NotBlank(message="ids不能为空")
-	private String ids;
+	@ApiParam(name = "id",required = true, value = "提现ID(多条记录用英文逗号分隔)")
+	@NotBlank(message="id不能为空")
+	private String id;
 	
 	@ApiParam(name = "cashOperEnum", required = true, value = "操作类型(ACCEPT-受理；SUCCESS-成功；FAILURE-失败)")
 	@NotNull(message="cashOperEnum不能为空")
 	private CashOperEnum cashOperEnum;
 
-	@ApiParam(name = "auditFailReason", value = "失败原因")
-	private String auditFailReason;
+	@ApiParam(name = "failReason", value = "失败原因")
+	private String failReason;
 	
-	public String getIds() {
-		return ids;
+	public String getId() {
+		return id;
 	}
 
-	public void setIds(String ids) {
-		this.ids = ids;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public CashOperEnum getCashOperEnum() {
@@ -37,12 +37,14 @@ public class CashBackageOperParam {
 		this.cashOperEnum = cashOperEnum;
 	}
 
-	public String getAuditFailReason() {
-		return auditFailReason;
+	public String getFailReason() {
+		return failReason;
 	}
 
-	public void setAuditFailReason(String auditFailReason) {
-		this.auditFailReason = auditFailReason;
+	public void setFailReason(String failReason) {
+		this.failReason = failReason;
 	}
+
+	
 
 }

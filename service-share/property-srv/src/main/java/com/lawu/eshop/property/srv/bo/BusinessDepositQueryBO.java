@@ -17,6 +17,8 @@ public class BusinessDepositQueryBO {
 	private String thirdNumber;
 
 	private String BusinessName;
+	
+	private String userNum;
 
 	private BigDecimal amount;
 
@@ -168,6 +170,14 @@ public class BusinessDepositQueryBO {
 
 	public void setBusinessDepositStatusEnum(BusinessDepositStatusEnum businessDepositStatusEnum) {
 		this.businessDepositStatusEnum = businessDepositStatusEnum;
+	}
+
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
 	}
 
 }

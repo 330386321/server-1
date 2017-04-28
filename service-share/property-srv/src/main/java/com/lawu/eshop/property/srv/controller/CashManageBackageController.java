@@ -55,17 +55,7 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "findCashInfo", method = RequestMethod.POST)
-	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody @Valid CashBackageQueryDataParam param,
-			BindingResult result) throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryDataParam param) throws Exception {
 		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfo(param);
 		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
 		List<WithdrawCashBackageQueryDTO> dtos = new ArrayList<WithdrawCashBackageQueryDTO>();
@@ -163,7 +153,7 @@ public class CashManageBackageController extends BaseController {
 		}
 
 		if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)
-				&& (param.getAuditFailReason() == null || "".equals(param.getAuditFailReason()))) {
+				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {
 			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
 		}
 

@@ -26,7 +26,7 @@ import com.lawu.eshop.property.dto.BusinessDepositQueryDTO;
 import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
-import com.lawu.eshop.property.param.BusinessRefundDepositParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.srv.bo.BusinessDepositDetailBO;
 import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
@@ -192,7 +192,7 @@ public class BusinessDepositController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
-	public Result refundDeposit(@RequestBody BusinessRefundDepositParam param, BindingResult result) {
+	public Result refundDeposit(@RequestBody BusinessRefundDepositDataParam dparam, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
 			StringBuffer es = new StringBuffer();
@@ -202,7 +202,7 @@ public class BusinessDepositController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		int retCode = businessDepositService.refundDeposit(param);
+		int retCode = businessDepositService.refundDeposit(dparam);
 		return successCreated(retCode);
 
 	}

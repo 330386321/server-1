@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
+import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositParam;
 
 /**
@@ -47,6 +48,6 @@ public interface BusinessDepositService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "businessDeposit/refundDeposit",method = RequestMethod.POST)
-	Result refundDeposit(@RequestBody BusinessRefundDepositParam param);
+	Result refundDeposit(@RequestBody BusinessRefundDepositDataParam dparam);
 
 }

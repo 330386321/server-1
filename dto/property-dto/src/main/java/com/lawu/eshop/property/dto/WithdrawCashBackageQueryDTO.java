@@ -2,6 +2,8 @@ package com.lawu.eshop.property.dto;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.constants.CashStatusEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class WithdrawCashBackageQueryDTO {
@@ -26,6 +28,9 @@ public class WithdrawCashBackageQueryDTO {
 
 	@ApiModelProperty(value = "状态")
 	private String status;
+
+	@ApiModelProperty(value = "状态")
+	private CashStatusEnum cashStatsuEnum;
 
 	@ApiModelProperty(value = "银行账户")
 	private String businessBankAccount;
@@ -180,6 +185,14 @@ public class WithdrawCashBackageQueryDTO {
 
 	public void setGmtModified(String gmtModified) {
 		this.gmtModified = gmtModified;
+	}
+
+	public CashStatusEnum getCashStatsuEnum() {
+		return cashStatsuEnum;
+	}
+
+	public void setCashStatsuEnum(CashStatusEnum cashStatsuEnum) {
+		this.cashStatsuEnum = cashStatsuEnum;
 	}
 
 }

@@ -60,20 +60,6 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	public Page<WithdrawCashBackageQueryBO> findCashInfo(CashBackageQueryDataParam param) {
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
 
-		Criteria criteria1 = example.createCriteria();
-		criteria1.andUserTypeEqualTo(param.getUserTypeEnum().val)
-				.andGmtCreateBetween(param.getBeginDate(), param.getEndDate())
-				.andStatusEqualTo(param.getCashStatsuEnum().val);
-		if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
-			if (param.getRegionPath().split("/").length == 1) {
-				criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[0]));
-			} else if (param.getRegionPath().split("/").length == 2) {
-				criteria1.andCityIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[1]));
-			} else if (param.getRegionPath().split("/").length == 3) {
-				criteria1.andAreaIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
-			}
-		}
-
 		if (param.getContent() != null && !"".equals(param.getContent().trim())) {
 			Criteria criteria2 = example.createCriteria();
 			criteria2.andAccountEqualTo(param.getContent());
@@ -87,6 +73,26 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			example.or(criteria2);
 			example.or(criteria3);
 			example.or(criteria4);
+
+		} else {
+			Criteria criteria1 = example.createCriteria();
+			criteria1.andUserTypeEqualTo(param.getUserTypeEnum().val);
+			if (param.getBeginDate() != null && param.getEndDate() != null) {
+				criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
+			}
+			if (!CashStatusEnum.ALL.val.equals(param.getCashStatsuEnum().val)) {
+				criteria1.andStatusEqualTo(param.getCashStatsuEnum().val);
+			}
+
+			if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
+				if (param.getRegionPath().split("/").length == 1) {
+					criteria1.andProvinceIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[0]));
+				} else if (param.getRegionPath().split("/").length == 2) {
+					criteria1.andCityIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[1]));
+				} else if (param.getRegionPath().split("/").length == 3) {
+					criteria1.andAreaIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
+				}
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
@@ -102,17 +108,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());
-			;
-			if (CashStatusEnum.APPLY.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("申请中");
-			} else if (CashStatusEnum.ACCEPT.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("受理中");
-			} else if (CashStatusEnum.SUCCESS.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("成功");
-			} else if (CashStatusEnum.FAILURE.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("失败");
-			}
-
+			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).name);
+			bqbo.setCashStatsuEnum(CashStatusEnum.getEnum(cdo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
 			bqbo.setBankNo(bankAccountDO.getAccountNumber());
@@ -206,24 +203,25 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
 		// 批量修改提现表状态
 		List<WithdrawCashOperDOView> paramList = new ArrayList<WithdrawCashOperDOView>();
-		String ids = param.getIds();
+		String ids = param.getId();
 		String idsArray[] = ids.split(",");
 		for (int i = 0; i < idsArray.length; i++) {
+			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
 			view.setId(Integer.valueOf(idsArray[i]));
 			view.setStatus(param.getCashOperEnum().val);
-			view.setAuditFailReason(param.getAuditFailReason() == null ? "" : param.getAuditFailReason());
+			view.setAuditFailReason(param.getFailReason() == null ? "" : param.getFailReason());
 			view.setAuditUserId(param.getAuditUserId() == null ? 0 : param.getAuditUserId());
 			view.setAuditUserName(param.getAuditUserName() == null ? "" : param.getAuditUserName());
 			view.setGmtModified(new Date());
-			if(CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)){
+			if (CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)) {
 				view.setGmtAccept(new Date());
-			}else{
+			} else {
 				view.setGmtFinish(new Date());
 			}
 			paramList.add(view);
+			withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
 		}
-		withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
 		if (!CashStatusEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
 			return ResultCode.SUCCESS;
 		}
@@ -258,10 +256,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setGmtCreate(new Date());
 			transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		}
-		
-		//TODO 发送站内消息---待模板
-		
-		
+
+		// TODO 发送站内消息---待模板
 
 		return ResultCode.SUCCESS;
 	}

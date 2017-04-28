@@ -2,6 +2,10 @@ package com.lawu.eshop.property.srv.bo;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.property.constants.CashStatusEnum;
+
+import io.swagger.annotations.ApiModelProperty;
+
 public class WithdrawCashBackageQueryBO {
 
 	private Long id;
@@ -17,6 +21,8 @@ public class WithdrawCashBackageQueryBO {
 	private BigDecimal money;
 
 	private String status;
+	
+	private CashStatusEnum cashStatsuEnum;
 
 	private String businessBankAccount;
 	
@@ -162,6 +168,14 @@ public class WithdrawCashBackageQueryBO {
 
 	public void setGmtModified(String gmtModified) {
 		this.gmtModified = gmtModified;
+	}
+
+	public CashStatusEnum getCashStatsuEnum() {
+		return cashStatsuEnum;
+	}
+
+	public void setCashStatsuEnum(CashStatusEnum cashStatsuEnum) {
+		this.cashStatsuEnum = cashStatsuEnum;
 	}
 
 }

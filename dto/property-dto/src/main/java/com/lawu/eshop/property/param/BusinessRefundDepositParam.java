@@ -22,7 +22,7 @@ public class BusinessRefundDepositParam {
 	@NotBlank(message="businessBankAccountId不能为空")
 	@ApiParam(name = "businessBankAccountId", required = true, value = "商家银行卡ID")
 	private String businessBankAccountId;
-
+	
 	public String getId() {
 		return id;
 	}
