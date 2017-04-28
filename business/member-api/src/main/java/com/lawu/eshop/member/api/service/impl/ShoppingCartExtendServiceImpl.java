@@ -104,10 +104,17 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @return
 	 */
     public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId){
+    	List<MemberShoppingCartGroupDTO> rtn = new ArrayList<MemberShoppingCartGroupDTO>();
+    	
     	// 通过memberId查询用户购物车资料
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
     	if (!isSuccess(resultShoppingCartDTOS)) {
     		return successGet(resultShoppingCartDTOS.getRet());
+    	}
+    	
+    	// 如果购物车列表为空直接返回
+    	if (resultShoppingCartDTOS.getModel() == null || resultShoppingCartDTOS.getModel().isEmpty()) {
+    		return successGet(rtn);
     	}
     	
     	// 把要查询的id放入set,统一一次性查询
@@ -165,14 +172,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
     	}
     	
-    	List<MemberShoppingCartGroupDTO> memberShoppingCartGroupDTOList = new ArrayList<MemberShoppingCartGroupDTO>();
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> item : map.entrySet()) {
     		MemberShoppingCartGroupDTO memberShoppingCartGroupDTO = new MemberShoppingCartGroupDTO();
     		memberShoppingCartGroupDTO.setItem(item.getValue());
-    		memberShoppingCartGroupDTOList.add(memberShoppingCartGroupDTO);
+    		rtn.add(memberShoppingCartGroupDTO);
     	}
     	
-    	return successGet(memberShoppingCartGroupDTOList);
+    	return successGet(rtn);
     }
     
 	/**
