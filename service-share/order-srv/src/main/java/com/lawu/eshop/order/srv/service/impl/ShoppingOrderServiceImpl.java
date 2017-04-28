@@ -902,6 +902,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
 		shoppingOrderExtendDOExampleCriteria.andMerchantIdEqualTo(merchantId);
 		
