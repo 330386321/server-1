@@ -941,6 +941,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		if (isAll) {
 			ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+			shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+			shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 			shoppingOrderExtendDOExample.createCriteria().andSOIIdEqualTo(shoppingOrderItemId);
 			
 			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList =  shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);

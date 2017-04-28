@@ -17,7 +17,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForei
 public interface ShoppingRefundDetailService {
 	
 	/**
-	 * 同意退款给买家
+	 * 退款给买家
 	 * 
 	 * @param id
 	 *            退款详情id
@@ -28,4 +28,15 @@ public interface ShoppingRefundDetailService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingRefundDetail/agreeToRefund/{id}", method = RequestMethod.PUT)
 	Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
+	
+	/**
+	 * 撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "shoppingRefundDetail/revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	Result revokeRefundRequest(@PathVariable("id") Long id);
 }

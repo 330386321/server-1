@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
-import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
@@ -75,5 +75,5 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@RequestMapping(value = "shoppingOrder/selectRefundPage", method = RequestMethod.POST)
-	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param);
+	Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param);
 }

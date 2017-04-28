@@ -10,6 +10,12 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 购物订单退款详情id
+	 */
+	@ApiModelProperty(value = "购物订单退款详情id", required = true)
+	private Long shoppingRefundDetailId;
+	
     /**
      * 收货人姓名
      */
@@ -39,6 +45,14 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
 	private RefundStatusEnum refundStatus;
+	
+	public Long getShoppingRefundDetailId() {
+		return shoppingRefundDetailId;
+	}
+
+	public void setShoppingRefundDetailId(Long shoppingRefundDetailId) {
+		this.shoppingRefundDetailId = shoppingRefundDetailId;
+	}
 
 	public String getConsigneeName() {
 		return consigneeName;

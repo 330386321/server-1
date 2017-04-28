@@ -180,9 +180,10 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	@Override
 	public Page<ShoppingOrderItemExtendBO> selectRefundPage(ShoppingRefundQueryForeignParam param) {
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
@@ -194,6 +195,9 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		if (count == null || count <= 0) {
 			return rtn;
 		}
+		
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		
 		// 按照退款详情的创建时间排序
 		shoppingOrderItemExtendDOExample.setOrderByClause("srd.gmt_create desc");

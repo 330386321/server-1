@@ -9,6 +9,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 
@@ -78,7 +79,12 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		rtn = new ShoppingOrderItemRefundForMerchantDTO();
 		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
-		
+		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
+			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
+		}
+		if (shoppingOrderItemExtendBO.getShoppingRefundDetail() != null) {
+			rtn.setShoppingRefundDetailId(shoppingOrderItemExtendBO.getShoppingRefundDetail().getId());
+		}
 		return rtn;
 	}
 	
@@ -116,4 +122,63 @@ public class ShoppingOrderItemExtendConverter {
 		return rtn;
 	}
 	
+	/**
+	 * ShoppingOrderItemRefundForOperatorDTO转换
+	 * 
+	 * @param shoppingOrderItemExtendBO
+	 * @return
+	 */
+	public static ShoppingOrderItemRefundForOperatorDTO convertShoppingOrderItemRefundForOperatorDTO(ShoppingOrderItemExtendBO shoppingOrderItemExtendBO) {
+		ShoppingOrderItemRefundForOperatorDTO rtn = null;
+		if (shoppingOrderItemExtendBO == null) {
+			return rtn;
+		}
+		rtn = new ShoppingOrderItemRefundForOperatorDTO();
+		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
+		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
+			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
+			rtn.setConsigneeAddress(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeAddress());
+			rtn.setConsigneeMobile(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeMobile());
+			rtn.setOrderNum(shoppingOrderItemExtendBO.getShoppingOrder().getOrderNum());
+		}
+		if (shoppingOrderItemExtendBO.getShoppingRefundDetail() != null) {
+			rtn.setShoppingRefundDetailId(shoppingOrderItemExtendBO.getShoppingRefundDetail().getId());
+			rtn.setGmtIntervention(shoppingOrderItemExtendBO.getShoppingRefundDetail().getGmtIntervention());
+		}
+		return rtn;
+	}
+	
+	/**
+	 * ShoppingOrderItemRefundForOperatorDTO List转换
+	 * 
+	 * @param shoppingOrderItemExtendBOList
+	 * @return
+	 */
+	public static List<ShoppingOrderItemRefundForOperatorDTO> convertShoppingOrderItemRefundForOperatorDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
+		List<ShoppingOrderItemRefundForOperatorDTO> rtn = new ArrayList<ShoppingOrderItemRefundForOperatorDTO>();
+		
+		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
+			return rtn;
+		}
+		
+		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
+			rtn.add(convertShoppingOrderItemRefundForOperatorDTO(shoppingOrderItemExtendBO));
+		}
+		
+		return rtn;
+	}
+	
+	/**
+	 * ShoppingOrderItemRefundForOperatorDTO Page转换
+	 * 
+	 * @param shoppingOrderItemExtendBOPage
+	 * @return
+	 */
+	public static Page<ShoppingOrderItemRefundForOperatorDTO> convertShoppingOrderItemRefundForOperatorDTOPage(Page<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOPage) {
+		Page<ShoppingOrderItemRefundForOperatorDTO> rtn = new Page<ShoppingOrderItemRefundForOperatorDTO>();
+		rtn.setCurrentPage(shoppingOrderItemExtendBOPage.getCurrentPage());
+		rtn.setTotalCount(shoppingOrderItemExtendBOPage.getTotalCount());
+		rtn.setRecords(convertShoppingOrderItemRefundForOperatorDTOList(shoppingOrderItemExtendBOPage.getRecords()));
+		return rtn;
+	}
 }

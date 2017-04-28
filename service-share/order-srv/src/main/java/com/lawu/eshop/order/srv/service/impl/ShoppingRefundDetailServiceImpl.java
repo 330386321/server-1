@@ -331,7 +331,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED.getValue())) {
+		if (!shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED.getValue())
+				&& !shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue())) {
 			return ResultCode.ORDER_NOT_TO_BE_REFUNDED;
 		}
 		
@@ -443,7 +444,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 		
 		// 订单项状态必须为退款中
-		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 			return ResultCode.NOT_REFUNDING;
 		}
 		

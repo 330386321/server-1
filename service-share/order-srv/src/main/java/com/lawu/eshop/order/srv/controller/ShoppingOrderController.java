@@ -26,6 +26,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForOperatorDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
@@ -403,11 +404,11 @@ public class ShoppingOrderController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "selectRefundPage", method = RequestMethod.POST)
-	public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param) {
+	public Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param) {
 		
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPage(param);
 		
-		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForMerchantDTOPage(page));
+		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForOperatorDTOPage(page));
 	}
 	
 	/*********************************************************

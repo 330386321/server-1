@@ -281,10 +281,10 @@ public class ShoppingRefundDetailController extends BaseController {
 	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
 	public Result revokeRefundRequest(@PathVariable("id") Long id) {
 
-		int result = shoppingRefundDetailService.revokeRefundRequest(id);
+		int resultCode = shoppingRefundDetailService.revokeRefundRequest(id);
 		
-		if (result != ResultCode.SUCCESS) {
-			successCreated(result);
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
 
 		return successCreated();
