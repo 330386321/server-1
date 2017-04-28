@@ -1,20 +1,34 @@
 package com.lawu.eshop.user.srv.converter;
 
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.utils.DataTransUtil;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.common.SolrInputDocument;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.BeanUtils;
+
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrDTO;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.utils.DataTransUtil;
 
 /**
  * 商家门店信息转换
@@ -242,7 +256,8 @@ public class MerchantStoreConverter {
         MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO = new MerchantStoreNoReasonReturnBO();
         merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
         merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
-
+        merchantStoreNoReasonReturnBO.setMerchantNum(merchantDO.getNum());
+        
         return merchantStoreNoReasonReturnBO;
     }
 
@@ -278,15 +293,15 @@ public class MerchantStoreConverter {
      * @return
      */
     public static MerchantStoreNoReasonReturnDTO convert(MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO) {
+    	MerchantStoreNoReasonReturnDTO rtn = null;
         if (merchantStoreNoReasonReturnBO == null) {
-            return null;
+            return rtn;
         }
 
-        MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO = new MerchantStoreNoReasonReturnDTO();
-        merchantStoreNoReasonReturnDTO.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
-        merchantStoreNoReasonReturnDTO.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
+        rtn = new MerchantStoreNoReasonReturnDTO();
+        BeanUtils.copyProperties(merchantStoreNoReasonReturnBO, rtn);
 
-        return merchantStoreNoReasonReturnDTO;
+        return rtn;
     }
 
     /**

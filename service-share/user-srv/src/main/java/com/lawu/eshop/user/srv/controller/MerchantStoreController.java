@@ -227,15 +227,13 @@ public class MerchantStoreController extends BaseController {
 			return successGet(ResultCode.ID_EMPTY);
 		}
 
-		List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService
-				.selectNoReasonReturnByMerchantIds(merchantIdList);
+		List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService.selectNoReasonReturnByMerchantIds(merchantIdList);
 
 		if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
-		return successGet(
-				MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
+		return successGet(MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
 	}
 
 	/**

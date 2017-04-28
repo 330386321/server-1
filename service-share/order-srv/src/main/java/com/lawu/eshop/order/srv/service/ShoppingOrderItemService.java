@@ -55,4 +55,14 @@ public interface ShoppingOrderItemService {
 	 */
 	Integer commentsSuccessful(Long id);
 	
+	/**
+	 * 查询处于退款中的订单项
+	 * To Operator
+	 * 
+	 * @param param
+	 *            查询参数
+	 * @return 订单列表
+	 */
+	Page<ShoppingOrderItemExtendBO> selectRefundPage(ShoppingRefundQueryForeignParam param);
+	
 }

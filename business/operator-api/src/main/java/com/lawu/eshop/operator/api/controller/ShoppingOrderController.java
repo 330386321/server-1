@@ -5,22 +5,30 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.operator.api.service.ShoppingOrderExtendService;
 import com.lawu.eshop.operator.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -148,5 +156,29 @@ public class ShoppingOrderController extends BaseController {
     	}
     	
     	return successCreated();
+    }
+    
+    /**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * To Operator
+	 * 
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "selectRefundPageByMemberId", method = RequestMethod.GET)
+    public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPage( @ModelAttribute @ApiParam(name = "param", value="查询参数") ShoppingRefundQueryForeignParam param) {
+    	
+    	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> result = shoppingOrderService.selectRefundPage(param);
+    	
+    	if (!isSuccess(result)) {
+    		return successGet(result.getRet());
+    	}
+    	return successGet(result);
     }
 }

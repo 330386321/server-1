@@ -1,7 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -130,6 +129,7 @@ public class ShoppingOrderController extends BaseController {
 		}
 		
 		ShoppingOrderLogisticsInformationParam ShoppingOrderLogisticsInformationParam = new ShoppingOrderLogisticsInformationParam();
+		ShoppingOrderLogisticsInformationParam.setIsNeedsLogistics(param.getIsNeedsLogistics());
 		
 		if (param.getIsNeedsLogistics()) {
 			Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 
 /**
  * @author Sunny
@@ -62,4 +64,16 @@ public interface ShoppingOrderService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
 	public Result cancelOrder(@PathVariable("id") Long id);
+	
+	/**
+	 * 根据查询参数分页查询退款记录
+	 * 购物订单 购物订单项 退款详情关联查询
+	 * To Operator
+	 * 
+	 * @param param
+	 *            查询参数
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/selectRefundPage", method = RequestMethod.POST)
+	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param);
 }

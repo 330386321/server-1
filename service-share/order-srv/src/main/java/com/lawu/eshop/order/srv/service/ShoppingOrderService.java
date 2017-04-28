@@ -88,7 +88,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	Integer cancelOrder(Long id);
+	int cancelOrder(Long id);
 
 	/**
 	 * 删除购物订单

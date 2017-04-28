@@ -20,7 +20,7 @@ public class MerchantStoreNoReasonReturnBO implements Serializable {
     /**
     * 商家编号
     */
-    private String merchantIdNum;
+    private String merchantNum;
 
 	/**
 	 * 商家是否无理由退货
@@ -34,13 +34,13 @@ public class MerchantStoreNoReasonReturnBO implements Serializable {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
-
-	public String getMerchantIdNum() {
-		return merchantIdNum;
+	
+	public String getMerchantNum() {
+		return merchantNum;
 	}
 
-	public void setMerchantIdNum(String merchantIdNum) {
-		this.merchantIdNum = merchantIdNum;
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
 	}
 
 	public Boolean getIsNoReasonReturn() {

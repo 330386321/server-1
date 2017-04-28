@@ -362,16 +362,26 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public Integer cancelOrder(Long id) {
+	public int cancelOrder(Long id) {
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
+		
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 被取消的订单必须要是待支付的状态
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue())) {
+			return ResultCode.ORDER_NOT_CANCELED;
+		}
+		
 		// 更新购物订单的状态
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更新订单状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 		// 更新成交时间
 		shoppingOrderDO.setGmtTransaction(new Date());
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
@@ -387,7 +397,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 事务补偿(释放库存)
 		shoppingOrderCancelOrderTransactionMainServiceImpl.sendNotice(id);
 		
-		return result;
+		return ResultCode.SUCCESS;
 	}
 	
 	/**

@@ -58,7 +58,7 @@ public interface ShoppingOrderService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	Result fillLogisticsInformation(@PathVariable("id") Long id, ShoppingOrderLogisticsInformationParam param);
+	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingOrderLogisticsInformationParam param);
 	
 	/**
 	 * 查询商家是否有正在进行中的订单
