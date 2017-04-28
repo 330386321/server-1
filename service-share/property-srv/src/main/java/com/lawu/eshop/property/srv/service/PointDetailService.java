@@ -23,15 +23,6 @@ public interface PointDetailService {
 	Page<PointDetailBO> findPageByUserNum(String userNo, PointDetailQueryParam transactionDetailQueryParam);
 	
 	/**
-	 * 根据用户编号和交易类型查询交易的总条数
-	 * 
-	 * @param userNo
-	 * @param transactionType
-	 * @return
-	 */
-	Integer findCountByUserNum(String userNo);
-
-	/**
 	 * 保存积分明细记录
 	 * @param param
 	 * @return

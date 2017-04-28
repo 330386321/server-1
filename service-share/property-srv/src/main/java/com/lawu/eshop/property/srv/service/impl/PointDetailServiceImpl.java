@@ -47,10 +47,12 @@ public class PointDetailServiceImpl implements PointDetailService {
 		Criteria criteria = pointDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
 
+		Long count = pointDetailDOMapper.countByExample(pointDetailDOExample);
+		
 		Page<PointDetailBO> page = new Page<PointDetailBO>();
 		page.setCurrentPage(pointDetailQueryParam.getCurrentPage());
-		page.setTotalCount(findCountByUserNum(userNum));
-
+		page.setTotalCount(count.intValue());
+		
 		// 如果返回的总记录为0，直接返回page
 		if (page.getTotalCount() == null || page.getTotalCount() <= 0) {
 			return page;
@@ -64,22 +66,6 @@ public class PointDetailServiceImpl implements PointDetailService {
 		page.setRecords(PointDetailConverter.convertBOS(list));
 
 		return page;
-	}
-
-	/**
-	 * 根据用户编号和交易类型查询交易的总条数
-	 * 
-	 * @param userNo
-	 * @param transactionType
-	 * @return
-	 */
-	@Override
-	public Integer findCountByUserNum(String userNum) {
-		PointDetailDOExample pointDetailDOExample = new PointDetailDOExample();
-		Criteria criteria = pointDetailDOExample.createCriteria();
-		criteria.andUserNumEqualTo(userNum);
-
-		return pointDetailDOMapper.countByExample(pointDetailDOExample);
 	}
 
 	@Override
