@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdExtendService;
@@ -42,6 +44,11 @@ import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.PropertyInfoDataService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -82,6 +89,12 @@ public class AdController extends BaseController {
     
     @Autowired
     private AdViewService adViewService;
+    
+    @Autowired
+    private PropertyInfoDataService propertyInfoDataService;
+    
+    @Autowired
+    private PropertyInfoService propertyInfoService;
 
 
 
@@ -237,16 +250,16 @@ public class AdController extends BaseController {
          return rs;
      }
 
-    @Audit(date = "2017-04-13", reviewer = "孙林青")
+     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "点击广告", notes = "点击广告[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
      @RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
-     public Result clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+     public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	 Long memberId=UserUtil.getCurrentUserId(getRequest());
     	 String num = UserUtil.getCurrentUserNum(getRequest());
-    	 Result rs = adService.clickAd(id,memberId,num);
+    	 Result<ClickAdPointDTO> rs = adService.clickAd(id,memberId,num);
          return rs;
      }
 
@@ -305,6 +318,28 @@ public class AdController extends BaseController {
    	   Long memberId=UserUtil.getCurrentUserId(getRequest());
    	   Result<ClickAdPointDTO> rs = adService.getClickAdPoint(memberId,id);
        return rs;
+    }
+    
+    
+    @Authorization
+    @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.GET)
+    public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);
+	    BigDecimal point=result.getModel().getPoint();
+	    if(point.compareTo(new BigDecimal(30))==-1){
+		   return successCreated(ResultCode.PROPERTY_INFO_POINT_LESS);
+	    }else{
+		  PropertyInfoDataParam param=new PropertyInfoDataParam();
+	      param.setUserNum(userNum);
+	      param.setPoint("30");
+	      param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
+	      Result  rs=propertyInfoDataService.doHanlderMinusPoint(param);
+	      return rs;
+	  }
+    	
     }
 
 } 

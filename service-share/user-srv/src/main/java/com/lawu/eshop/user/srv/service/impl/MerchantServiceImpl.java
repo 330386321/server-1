@@ -260,7 +260,10 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam, byte inviterType) {
-        InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
+    	MerchantDOExample example=new MerchantDOExample();
+    	example.createCriteria().andInviterIdEqualTo(userId).andInviterTypeEqualTo(inviterType);
+    	int count=merchantDOMapper.countByExample(example);
+    	InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
         inviterMerchantDO.setInviterType(inviterType);
         if (pageParam.getName() != null)
@@ -274,7 +277,7 @@ public class MerchantServiceImpl implements MerchantService {
 		}
        
         Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();
-        pageMerchantInviter.setTotalCount(inviterMerchantDOS.size());
+        pageMerchantInviter.setTotalCount(count);
         List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);
         pageMerchantInviter.setRecords(memberBOS);
         pageMerchantInviter.setCurrentPage(pageParam.getCurrentPage());

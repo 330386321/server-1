@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.bo;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -48,6 +49,8 @@ public class AdBO {
 	private Boolean isFavorite;
 	
 	private Boolean isPraise;
+	
+	private AdPraiseStatusEnum adPraiseStatusEnum;
 	
 
 	public Boolean getIsPraise() {
@@ -209,5 +212,15 @@ public class AdBO {
 	public void setIsFavorite(Boolean isFavorite) {
 		this.isFavorite = isFavorite;
 	}
+
+	public AdPraiseStatusEnum getAdPraiseStatusEnum() {
+		return adPraiseStatusEnum;
+	}
+
+	public void setAdPraiseStatusEnum(AdPraiseStatusEnum adPraiseStatusEnum) {
+		this.adPraiseStatusEnum = adPraiseStatusEnum;
+	}
+	
+	
 
 }

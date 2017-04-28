@@ -1,4 +1,4 @@
-package com.lawu.eshop.property.srv.controller;
+ package com.lawu.eshop.property.srv.controller;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;

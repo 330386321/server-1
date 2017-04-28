@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.operator.api.service.CommentProductService;
@@ -27,6 +28,7 @@ public class CommentManageController extends BaseController{
     @Autowired
     private CommentProductService commentProductService;
 
+    @PageBody
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductListOperator", method = RequestMethod.GET)
@@ -34,6 +36,7 @@ public class CommentManageController extends BaseController{
         return commentProductService.getCommentProductListOperator(listParam);
     }
 
+    @PageBody
     @ApiOperation(value = "评价商家列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.GET)

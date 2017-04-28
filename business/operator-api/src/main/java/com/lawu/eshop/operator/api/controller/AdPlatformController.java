@@ -55,12 +55,12 @@ public class AdPlatformController extends BaseController {
     @Autowired
     private MerchantStoreService merchantStoreService;
 
-    
-    @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "GET")
+    @PageBody
+    @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
-    public Result<Page<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam(required = true, value = "查询信息") AdPlatformFindParam param) {
-        Result<Page<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectList(param);
+    @RequestMapping(value = "selectList", method = RequestMethod.POST)
+    public Result<Page<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam( value = "查询信息") AdPlatformFindParam queryParams) {
+        Result<Page<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
         return adPlatformDTOS;
     }
 

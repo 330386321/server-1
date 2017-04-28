@@ -6,6 +6,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -59,7 +60,8 @@ public class AdDTO {
 	@ApiModelProperty(value = "广告数量")
     private Integer adCount;
 
-	@ApiModelProperty(value = "状态")
+	@ApiModelProperty(value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中  AD_STATUS_PUTED 投放结束"
+			+ "AD_STATUS_OUT 下架 AD_STATUS_AUDIT 审核中")
     private AdStatusEnum statusEnum;
 
 	@ApiModelProperty(value = "创建时间")
@@ -88,6 +90,9 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "是否抢赞")
 	private Boolean isPraise;
+	
+	@ApiModelProperty(value = "AD_STATUS_SHOOT 开枪中  AD_STATUS_TOBEGIN 即将开始 AD_STATUS_END 已结束")
+	private AdPraiseStatusEnum adPraiseStatusEnum;
 
 
 	public Long getId() {

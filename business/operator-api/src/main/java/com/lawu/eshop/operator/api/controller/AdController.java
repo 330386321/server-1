@@ -40,7 +40,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
+    @RequestMapping(value = "selectList", method = RequestMethod.POST)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdFindParam adPlatParam) {
     	Result<Page<AdDTO>>  pageDTOS=adService.selectListByPlatForm(adPlatParam);

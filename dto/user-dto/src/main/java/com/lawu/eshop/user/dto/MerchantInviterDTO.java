@@ -30,7 +30,7 @@ public class MerchantInviterDTO {
 	@ApiModelProperty(value = "图片", required = true)
 	private String path;
 	
-	@ApiModelProperty(value = "是否审核(0：待审核，1：审核通过，2：审核不通过，3：未提交保证金，4：已提交保证金待财务核实，5：财务审核不通过)", required = true)
+    @ApiModelProperty(name = "statusEnum", value = "门店状态:MERCHANT_STATUS_UNCHECK:未审核,MERCHANT_STATUS_CHECKED:审核通过,MERCHANT_STATUS_CHECK_FAILED:审核不通过,MERCHANT_STATUS_NOT_MONEY:未提交保证金,MERCHANT_STATUS_GIVE_MONEY_CHECK:已提交保证金待财务核实,MERCHANT_STATUS_GIVE_MONEY_CHECK_FAILED:财务审核不通过")
 	private MerchantStatusEnum statusEnum;
 	
 	@ApiModelProperty(value = "邀请人数", required = true)

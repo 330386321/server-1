@@ -1,12 +1,14 @@
 package com.lawu.eshop.ad.param;
 
+import java.io.Serializable;
+
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
 import io.swagger.annotations.ApiParam;
 
-public class AdPlatformFindParam extends AbstractPageParam{
+public class AdPlatformFindParam extends AbstractPageParam implements Serializable{
 
 	@ApiParam(name = "positionEnum", value = "POSITON_RECOMMEND 人气推荐 POSITON_SHOP_TOP 要购物顶部广告 POSITON_SHOP_CHOOSE"
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告")
