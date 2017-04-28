@@ -194,4 +194,12 @@ public class UserServiceImpl implements UserService {
        int row =  userDOMapper.updateByPrimaryKeySelective(userDO);
         return row;
     }
+
+    @Override
+    public UserListBO finUserById(Integer id) {
+
+        UserDO userDO = userDOMapper.selectByPrimaryKey(id);
+        UserListBO userListBO = UserConverter.cover(userDO);
+        return userListBO;
+    }
 }

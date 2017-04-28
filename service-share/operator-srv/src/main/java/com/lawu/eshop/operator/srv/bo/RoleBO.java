@@ -1,5 +1,7 @@
 package com.lawu.eshop.operator.srv.bo;
 
+import java.util.Date;
+
 /**
  * @author zhangyong
  * @date 2017/4/19.
@@ -12,6 +14,8 @@ public class RoleBO {
     private String roleKey;
 
     private Integer id;
+
+    private Date gmtCreate;
 
     public String getRoleName() {
         return roleName;
@@ -35,5 +39,13 @@ public class RoleBO {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

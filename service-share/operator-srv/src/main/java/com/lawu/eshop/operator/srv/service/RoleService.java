@@ -5,6 +5,8 @@ import com.lawu.eshop.operator.param.RoleInfoParam;
 import com.lawu.eshop.operator.param.RoleParam;
 import com.lawu.eshop.operator.srv.bo.RoleBO;
 
+import java.util.List;
+
 /**
  * @author zhangyong
  * @date 2017/4/21.
@@ -17,4 +19,9 @@ public interface RoleService {
     Integer updateRole(Integer id, RoleInfoParam param);
 
     void delRole(Integer id);
+
+    List<RoleBO> findroleListAll();
+
+
+    RoleBO findRoleById(Integer id);
 }

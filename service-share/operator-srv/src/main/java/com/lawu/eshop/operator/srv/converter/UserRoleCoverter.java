@@ -15,7 +15,7 @@ public class UserRoleCoverter {
         }
         UserRoleBO userRoleBO = new UserRoleBO();
         userRoleBO.setId(userRoleDO.getId());
-        userRoleBO.setRoleId(userRoleDO.getId());
+        userRoleBO.setRoleId(userRoleDO.getRoleId());
         userRoleBO.setUserId(userRoleDO.getUserId());
         return userRoleBO;
     }

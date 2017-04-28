@@ -82,5 +82,28 @@ public class RoleServiceImpl implements RoleService {
         roleDOMapper.deleteByPrimaryKey(id);
     }
 
+    @Override
+    public List<RoleBO> findroleListAll() {
+        RoleDOExample example = new RoleDOExample();
+        example.setOrderByClause("id desc");
+        List<RoleDO> roleDOList = roleDOMapper.selectByExample(example);
+        if (roleDOList.isEmpty()) {
+            return null;
+        }
+        List<RoleBO> list = new ArrayList<>();
+        for (RoleDO roleDO : roleDOList) {
+            RoleBO roleBO = RoleConverter.cover(roleDO);
+            list.add(roleBO);
+        }
+        return list;
+    }
+
+    @Override
+    public RoleBO findRoleById(Integer id) {
+        RoleDO roleDO = roleDOMapper.selectByPrimaryKey(id);
+        RoleBO roleBO = RoleConverter.cover(roleDO);
+        return roleBO;
+    }
+
 
 }

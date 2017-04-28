@@ -50,11 +50,19 @@ public interface UserService {
      * @return
      */
     @RequestMapping(value = "user/assignRoles", method = RequestMethod.POST)
-    Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId);
+    Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") String roleId);
 
     @RequestMapping(value = "user/delUser/{id}", method = RequestMethod.PUT)
     Result delUser(@PathVariable(value = "id") Integer id);
 
     @RequestMapping(value = "user/userDisabled/{id}", method = RequestMethod.PUT)
     Result userDisabled(@PathVariable(value = "id") Integer id);
+
+    /**
+     * 查询用户信息详情
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user/findUserById/{id}", method = RequestMethod.GET)
+    Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id);
 }

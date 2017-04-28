@@ -42,13 +42,21 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     @Transactional
-    public Integer assignRoles(Integer userId, Integer roleId) {
-        UserRoleDO userRoleDO = new UserRoleDO();
-        userRoleDO.setUserId(userId);
-        userRoleDO.setRoleId(roleId);
-        userRoleDO.setGmtCreate(new Date());
-        int row = userRoleDOMapper.insert(userRoleDO);
-        return row;
+    public void assignRoles(Integer userId, String roleId) {
+        UserRoleDOExample example = new UserRoleDOExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+
+        userRoleDOMapper.deleteByExample(example);
+        String[] idString = roleId.split(",");
+        Integer[] id = new Integer[idString.length];
+        for (int i = 0; i < idString.length; i++) {
+            id[i] = Integer.valueOf(idString[i]);
+            UserRoleDO userRoleDO = new UserRoleDO();
+            userRoleDO.setUserId(userId);
+            userRoleDO.setRoleId(id[i]);
+            userRoleDO.setGmtCreate(new Date());
+            int row = userRoleDOMapper.insert(userRoleDO);
+        }
     }
 
     @Override
@@ -69,19 +77,36 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     @Transactional
-    public Integer addRolePermission(Integer roleId, Integer permissionId) {
+    public void addRolePermission(Integer roleId, String permissionIds) {
         RolePermissionDOExample example = new RolePermissionDOExample();
-        example.createCriteria().andRoleIdEqualTo(roleId).andPermissionIdEqualTo(permissionId);
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        rolePermissionDOMapper.deleteByExample(example);
 
-        List<RolePermissionDO> list = rolePermissionDOMapper.selectByExample(example);
-        if (!list.isEmpty()) {
-            return -1;
+        String[] idString = permissionIds.split(",");
+        Integer[] id = new Integer[idString.length];
+        for (int i = 0; i < idString.length; i++) {
+            id[i] = Integer.valueOf(idString[i]);
+            RolePermissionDO rolePermissionDO = new RolePermissionDO();
+            rolePermissionDO.setRoleId(roleId);
+            rolePermissionDO.setPermissionId(id[i]);
+            rolePermissionDO.setGmtCreate(new Date());
+            rolePermissionDOMapper.insert(rolePermissionDO);
         }
-        RolePermissionDO rolePermissionDO = new RolePermissionDO();
-        rolePermissionDO.setRoleId(roleId);
-        rolePermissionDO.setPermissionId(permissionId);
-        rolePermissionDO.setGmtCreate(new Date());
-        rolePermissionDOMapper.insert(rolePermissionDO);
-        return rolePermissionDO.getId();
+    }
+
+    @Override
+    public List<UserRoleBO> findRoleByUserId(Integer userId) {
+        UserRoleDOExample example = new UserRoleDOExample();
+        example.createCriteria().andUserIdEqualTo(userId);
+        List<UserRoleDO> list = userRoleDOMapper.selectByExample(example);
+        if (list.isEmpty()) {
+            return null;
+        }
+        List<UserRoleBO> userRoleBOS = new ArrayList<>();
+        for (UserRoleDO userRoleDO : list) {
+            UserRoleBO userRoleBO = UserRoleCoverter.cover(userRoleDO);
+            userRoleBOS.add(userRoleBO);
+        }
+        return userRoleBOS;
     }
 }

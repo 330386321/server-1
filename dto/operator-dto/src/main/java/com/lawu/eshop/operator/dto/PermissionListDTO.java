@@ -23,9 +23,10 @@ public class PermissionListDTO {
     @ApiModelProperty(value = "权限URL")
     private String permissionUrl;
 
+    private Integer parentId;
 
     @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gmtCreate;
 
     public Integer getId() {
@@ -66,5 +67,13 @@ public class PermissionListDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public Integer getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Integer parentId) {
+        this.parentId = parentId;
     }
 }

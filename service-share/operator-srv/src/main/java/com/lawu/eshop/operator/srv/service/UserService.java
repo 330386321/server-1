@@ -35,4 +35,6 @@ public interface UserService {
     void delUser(Integer id);
 
     Integer userDisabled(Integer id);
+
+    UserListBO finUserById(Integer id);
 }

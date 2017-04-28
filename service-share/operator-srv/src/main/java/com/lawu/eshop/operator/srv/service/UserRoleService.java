@@ -11,9 +11,11 @@ import java.util.List;
 public interface UserRoleService {
     UserRoleBO findUserRoleInfo(Integer userId, Integer roleId);
 
-    Integer assignRoles(Integer userId, Integer roleId);
+    void assignRoles(Integer userId, String roleId);
 
     List<UserRoleBO> findUserRoleByRoleId(Integer id);
 
-    Integer addRolePermission(Integer roleId, Integer permissionId);
+    void addRolePermission(Integer roleId, String permissionIds);
+
+    List<UserRoleBO> findRoleByUserId(Integer userId);
 }

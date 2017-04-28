@@ -37,6 +37,7 @@ public class UserConverter {
         userListBO.setAccount(userDO.getAccount());
         userListBO.setName(userDO.getName());
         userListBO.setGmtCreate(userDO.getGmtCreate());
+        userListBO.setPassword(userDO.getPassword());
         userListBO.setStatusEnum(StatusEnum.getEnum(userDO.getStatus()));
         return userListBO;
     }
@@ -56,6 +57,7 @@ public class UserConverter {
                 userListDTO.setName(userListBO.getName());
             }
             userListDTO.setGmtCreate(userListBO.getGmtCreate());
+            userListDTO.setPassword(userListBO.getPassword());
             if(StatusEnum.STATUS_DISABLE.val == userListBO.getStatusEnum().val){
                 userListDTO.setStatus("已禁用");
             }else{
@@ -64,5 +66,27 @@ public class UserConverter {
             userListDTOS.add(userListDTO);
         }
         return userListDTOS;
+    }
+
+    public static UserListDTO coverDTO(UserListBO userListBO) {
+        if(userListBO == null){
+            return null;
+        }
+        UserListDTO userListDTO = new UserListDTO();
+        userListDTO.setAccount(userListBO.getAccount());
+        userListDTO.setId(userListBO.getId());
+        if(StringUtils.isEmpty(userListBO.getName())){
+            userListDTO.setName("");
+        }else{
+            userListDTO.setName(userListBO.getName());
+        }
+        userListDTO.setGmtCreate(userListBO.getGmtCreate());
+        userListDTO.setPassword(userListBO.getPassword());
+        if(StatusEnum.STATUS_DISABLE.val == userListBO.getStatusEnum().val){
+            userListDTO.setStatus("已禁用");
+        }else{
+            userListDTO.setStatus("已启用");
+        }
+        return userListDTO;
     }
 }

@@ -30,6 +30,7 @@ public class RoleConverter {
         roleBO.setId(roleDO.getId());
         roleBO.setRoleName(roleDO.getRoleName());
         roleBO.setRoleKey(roleDO.getRoleKey());
+        roleBO.setGmtCreate(roleDO.getGmtCreate());
         return roleBO;
     }
 
@@ -41,6 +42,7 @@ public class RoleConverter {
         roleDTO.setId(roleBO.getId());
         roleDTO.setRoleName(roleBO.getRoleName());
         roleDTO.setRoleKey(roleBO.getRoleKey());
+        roleDTO.setGmtCreate(roleBO.getGmtCreate());
         return roleDTO;
     }
 }

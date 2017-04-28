@@ -1,6 +1,9 @@
 package com.lawu.eshop.operator.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 /**
  * @author zhangyong
@@ -16,6 +19,9 @@ public class RoleDTO {
 
     @ApiModelProperty(value = "角色键值")
     private String roleKey;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date gmtCreate;
 
     public Integer getId() {
         return id;
@@ -39,5 +45,13 @@ public class RoleDTO {
 
     public void setRoleKey(String roleKey) {
         this.roleKey = roleKey;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

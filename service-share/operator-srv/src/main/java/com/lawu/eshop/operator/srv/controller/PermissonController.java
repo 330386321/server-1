@@ -4,8 +4,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.operator.dto.PermissionListDTO;
 import com.lawu.eshop.operator.dto.PermissionDTO;
+import com.lawu.eshop.operator.dto.PermissionListDTO;
 import com.lawu.eshop.operator.param.PermissionParam;
 import com.lawu.eshop.operator.param.PerssionParam;
 import com.lawu.eshop.operator.srv.bo.PermissionBO;
@@ -44,8 +44,8 @@ public class PermissonController extends BaseController {
         if (userBO == null) {
             return successGet(ResultCode.USER_WRONG_ID);
         }
-        List<PerssionInfoListBO>  perssionInfoListBOS = userService.findRolePermissionList(userBO.getId());
-        if(perssionInfoListBOS == null){
+        List<PerssionInfoListBO> perssionInfoListBOS = userService.findRolePermissionList(userBO.getId());
+        if (perssionInfoListBOS == null) {
             return successGet(ResultCode.ROLE_HAS_NOPERMISSION);
         }
         List<PermissionDTO> perssionDTOS = PermissionConverter.coverDTOS(perssionInfoListBOS);
@@ -63,11 +63,12 @@ public class PermissonController extends BaseController {
 
     /**
      * 查询权限列表记录
+     *
      * @param param
      * @return
      */
-    @RequestMapping(value = "findPerminnionList", method = RequestMethod.POST)
-    public Result<Page<PermissionListDTO>> findPerminnionList(@RequestBody PermissionParam param) {
+    @RequestMapping(value = "findPermissionList", method = RequestMethod.POST)
+    public Result<Page<PermissionListDTO>> findPermissionList(@RequestBody PermissionParam param) {
 
         Page<PermissionListDTO> pages = new Page<>();
         Page<PermissionBO> boPage = perssionService.findPerminnionList(param);
@@ -86,5 +87,62 @@ public class PermissonController extends BaseController {
         return successGet(pages);
     }
 
+    /**
+     * 查询所有的权限记录
+     *
+     * @return
+     */
+    @RequestMapping(value = "findAllPermissionList", method = RequestMethod.GET)
+    public List<PermissionListDTO> findAllPermissionList() {
+
+        List<PermissionBO> permissionBOS = perssionService.findAllPermissionList();
+        if (permissionBOS == null) {
+            return new ArrayList<>();
+        }
+        List<PermissionListDTO> listDTOList = new ArrayList<>();
+        for (PermissionBO permissionBO : permissionBOS) {
+            PermissionListDTO permissionListDTO = PermissionConverter.coverDTO(permissionBO);
+            listDTOList.add(permissionListDTO);
+        }
+        return listDTOList;
+    }
+
+    @RequestMapping(value = "findPermissionListByRoleId/{roleId}", method = RequestMethod.GET)
+    public List<PermissionListDTO> findPermissionListByRoleId(@PathVariable(value = "roleId") Integer roleId) {
+
+        List<PermissionBO> permissionBOS = perssionService.findPermissionListByRoleId(roleId);
+        if (permissionBOS == null) {
+            return new ArrayList<>();
+        }
+        List<PermissionListDTO> listDTOList = new ArrayList<>();
+        for (PermissionBO permissionBO : permissionBOS) {
+            PermissionListDTO permissionListDTO = new PermissionListDTO();
+            permissionListDTO.setId(permissionBO.getId());
+            listDTOList.add(permissionListDTO);
+        }
+        return listDTOList;
+    }
+
+    @RequestMapping(value = "delPermission", method = RequestMethod.POST)
+    public Result delPermission(@RequestParam(value = "permissionIds") String permissionIds) {
+        perssionService.delPermission(permissionIds);
+        return successCreated(ResultCode.SUCCESS);
+    }
+
+    @RequestMapping(value = "findPermissionInfoById/{id}", method = RequestMethod.GET)
+    public PermissionListDTO findPermissionInfoById(@PathVariable(value = "id") Integer id) {
+        PermissionBO permissionBO = perssionService.findPermissionInfoById(id);
+        if (permissionBO == null) {
+            return null;
+        }
+        PermissionListDTO permissionListDTO = PermissionConverter.coverDTO(permissionBO);
+        return permissionListDTO;
+    }
+
+    @RequestMapping(value = "editPermission/{id}", method = RequestMethod.PUT)
+    public Result editPermission(@PathVariable(value = "id") Integer id,@RequestBody PerssionParam perssionParam) {
+         perssionService.editPermission(id,perssionParam);
+        return successCreated(ResultCode.SUCCESS);
+    }
 
 }

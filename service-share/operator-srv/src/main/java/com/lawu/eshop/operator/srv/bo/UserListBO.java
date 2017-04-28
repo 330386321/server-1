@@ -20,6 +20,8 @@ public class UserListBO {
 
     private StatusEnum statusEnum;
 
+    private String password;
+
     public Integer getId() {
         return id;
     }
@@ -58,5 +60,13 @@ public class UserListBO {
 
     public void setStatusEnum(StatusEnum statusEnum) {
         this.statusEnum = statusEnum;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

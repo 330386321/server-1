@@ -58,10 +58,10 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
-  /*  @RequiresPermissions("user:find")*/
-    @RequestMapping(value = "findUserList", method = RequestMethod.GET)
-    @PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+  /*  @RequiresPermissions("user:find")*/
+    @PageBody
+    @RequestMapping(value = "findUserList", method = RequestMethod.GET)
     public Result<Page<UserListDTO>> findUserList(@ModelAttribute UserPageParam pageParam) {
         if (pageParam == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
@@ -74,7 +74,7 @@ public class UserController extends BaseController {
     /*@RequiresPermissions("user:assign_role")*/
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId) {
+    public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") String roleId) {
         if (userId == null || roleId == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -104,6 +104,16 @@ public class UserController extends BaseController {
         }
         Result result = userService.userDisabled(id);
         return result;
+    }
+
+    @ApiOperation(value = "查询用户详情", notes = "查询用户详情（章勇）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "findUserById/{id}", method = RequestMethod.GET)
+    public Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id){
+
+        Result<UserListDTO> userListDTOResult = userService.findUserById(id);
+
+        return userListDTOResult;
     }
 
 }

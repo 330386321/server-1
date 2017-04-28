@@ -12,7 +12,6 @@ import com.lawu.eshop.operator.param.UserParam;
 import com.lawu.eshop.operator.srv.bo.RoleBO;
 import com.lawu.eshop.operator.srv.bo.UserBO;
 import com.lawu.eshop.operator.srv.bo.UserListBO;
-import com.lawu.eshop.operator.srv.bo.UserRoleBO;
 import com.lawu.eshop.operator.srv.converter.UserConverter;
 import com.lawu.eshop.operator.srv.service.UserRoleService;
 import com.lawu.eshop.operator.srv.service.UserService;
@@ -163,18 +162,11 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
-    public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") Integer roleId) {
+    public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") String roleId) {
         if (roleId == null || userId == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        UserRoleBO userRoleBO = userRoleService.findUserRoleInfo(userId, roleId);
-        if (userRoleBO != null) {
-            return successCreated(ResultCode.USER_ROLE_EXIST);
-        }
-        Integer row = userRoleService.assignRoles(userId, roleId);
-        if (row == null || row <= 0) {
-            return successCreated(ResultCode.SAVE_FAIL);
-        }
+        userRoleService.assignRoles(userId, roleId);
         return successCreated(ResultCode.SUCCESS);
     }
 
@@ -201,6 +193,21 @@ public class UserController extends BaseController {
             return successCreated(ResultCode.UPDATE_FAIL);
         }
         return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 根据ID查询用户信息
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "findUserById/{id}", method = RequestMethod.GET)
+    public Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id){
+        UserListBO userListBO = userService.finUserById(id);
+        if(userListBO == null){
+            return successGet();
+        }
+        UserListDTO userListDTO = UserConverter.coverDTO(userListBO);
+        return successGet(userListDTO);
     }
 
 }

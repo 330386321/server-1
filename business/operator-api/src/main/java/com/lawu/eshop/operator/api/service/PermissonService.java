@@ -7,10 +7,7 @@ import com.lawu.eshop.operator.dto.PermissionListDTO;
 import com.lawu.eshop.operator.param.PermissionParam;
 import com.lawu.eshop.operator.param.PerssionParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +38,21 @@ public interface PermissonService {
      * @param param
      * @return
      */
-    @RequestMapping(value = "permission/findPerminnionList", method = RequestMethod.POST)
-    Result<Page<PermissionListDTO>> findPerminnionList(@ModelAttribute PermissionParam param);
+    @RequestMapping(value = "permission/findPermissionList", method = RequestMethod.POST)
+    Result<Page<PermissionListDTO>> findPermissionList(@ModelAttribute PermissionParam param);
+
+    @RequestMapping(value = "permission/findAllPermissionList", method = RequestMethod.GET)
+    List<PermissionListDTO> findAllPermissionList();
+
+    @RequestMapping(value = "permission/findPermissionListByRoleId/{roleId}", method = RequestMethod.GET)
+    List<PermissionListDTO> findPermissionListByRoleId(@PathVariable(value = "roleId") Integer roleId);
+
+    @RequestMapping(value = "permission/delPermission",method = RequestMethod.POST)
+    Result delPermission(@RequestParam(value = "permissionIds") String permissionIds);
+
+    @RequestMapping(value = "permission/findPermissionInfoById/{id}",method = RequestMethod.GET)
+    PermissionListDTO findPermissionInfoById(@PathVariable(value = "id")Integer id);
+
+    @RequestMapping(value = "permission/editPermission/{id}", method = RequestMethod.PUT)
+    Result editPermission(@PathVariable(value = "id") Integer id,@ModelAttribute PerssionParam perssionParam);
 }

@@ -16,4 +16,5 @@ public class UserPageParam extends AbstractPageParam{
     public void setAccount(String account) {
         this.account = account;
     }
+
 }

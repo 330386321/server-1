@@ -93,18 +93,18 @@ public class RoleController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "delRole/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "delRole/{id}", method = RequestMethod.PUT)
     public Result delRole(@PathVariable(value = "id") Integer id) {
         if (id == null || id <= 0) {
-            return successDelete(ResultCode.FAIL);
+            return successCreated(ResultCode.FAIL);
         }
         //查询角色下的用户
         List<UserRoleBO> userRoleBOS = userRoleService.findUserRoleByRoleId(id);
         if (userRoleBOS == null) {
             roleService.delRole(id);
-            return successDelete();
+            return successCreated();
         }else{
-            return  successDelete(ResultCode.ROLE_HAS_USER_RELATE);
+            return  successCreated(ResultCode.ROLE_HAS_USER_RELATE);
         }
 
     }
@@ -117,15 +117,51 @@ public class RoleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "addRolePermission", method = RequestMethod.POST)
-    public Result addRolePermission(@RequestParam(value = "roleId") Integer roleId, @RequestParam(value = "permissionId") Integer permissionId) {
-        if (roleId == null || permissionId == null) {
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-        }
-        Integer id = userRoleService.addRolePermission(roleId, permissionId);
-        if (id < 0) {
-            return successCreated(ResultCode.ROLE_HAS_PERMISSION);
-        }
+    public Result addRolePermission(@RequestParam(value = "roleId") Integer roleId, @RequestParam(value = "permissionIds") String permissionIds) {
+        userRoleService.addRolePermission(roleId, permissionIds);
         return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 查询所有角色
+     * @return
+     */
+    @RequestMapping(value = "findroleListAll",method = RequestMethod.GET)
+    public Result<List<RoleDTO>> findroleListAll(){
+
+        List<RoleBO> list = roleService.findroleListAll();
+        if (list==null) {
+            return successGet(new ArrayList<>());
+        }
+        List<RoleDTO> roleDTOS = new ArrayList<>();
+        for (RoleBO roleBO : list) {
+            RoleDTO roleDTO = RoleConverter.coverDTO(roleBO);
+            roleDTOS.add(roleDTO);
+        }
+        return successGet(roleDTOS);
+    }
+
+    @RequestMapping(value = "findRoleByUserId/{userId}",method = RequestMethod.GET)
+    public List<RoleDTO> findRoleByUserId(@PathVariable(value = "userId") Integer userId){
+
+        List<UserRoleBO> userRoleBOS = userRoleService.findRoleByUserId(userId);
+        if(userRoleBOS == null){
+          return   new ArrayList<>();
+        }
+        List<RoleDTO> list = new ArrayList<>();
+        for(UserRoleBO userRoleBO : userRoleBOS){
+            RoleDTO roleDTO =new RoleDTO();
+            roleDTO.setId(userRoleBO.getRoleId());
+            list.add(roleDTO);
+        }
+        return list;
+    }
+
+    @RequestMapping(value = "findRoleById/{id}",method = RequestMethod.GET)
+    public RoleDTO findRoleById(@PathVariable(value = "id") Integer id){
+        RoleBO roleBO = roleService.findRoleById(id);
+        RoleDTO roleDTO = RoleConverter.coverDTO(roleBO);
+        return roleDTO;
     }
 
 }

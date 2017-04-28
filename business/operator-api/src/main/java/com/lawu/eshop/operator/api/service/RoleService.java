@@ -8,6 +8,8 @@ import com.lawu.eshop.operator.param.RoleParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author zhangyong
  * @date 2017/4/21.
@@ -30,7 +32,7 @@ public interface RoleService {
      * @param id
      * @return
      */
-    @RequestMapping(value = "role/delRole/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "role/delRole/{id}", method = RequestMethod.PUT)
      Result delRole(@PathVariable(value = "id") Integer id);
 
     /**
@@ -40,5 +42,14 @@ public interface RoleService {
      * @return
      */
     @RequestMapping(value = "role/addRolePermission", method = RequestMethod.POST)
-    Result addRolePermission(@RequestParam(value = "roleId") Integer roleId, @RequestParam(value = "permissionId") Integer permissionId);
+    Result addRolePermission(@RequestParam(value = "roleId") Integer roleId, @RequestParam(value = "permissionIds") String permissionIds);
+
+    @RequestMapping(value = "role/findroleListAll",method = RequestMethod.GET)
+    Result<List<RoleDTO>> findroleListAll();
+
+    @RequestMapping(value = "role/findRoleByUserId/{userId}",method = RequestMethod.GET)
+    List<RoleDTO> findRoleByUserId(@PathVariable(value = "userId") Integer userId);
+
+    @RequestMapping(value = "role/findRoleById/{id}",method = RequestMethod.GET)
+    RoleDTO findRoleById(@PathVariable(value = "id") Integer id);
 }
