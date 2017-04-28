@@ -119,7 +119,8 @@ public class ShoppingOrderConverter {
 			return null;
 		}
 
-		BeanUtils.copyProperties(param, shoppingOrderDO);
+		BeanUtils.copyProperties(param, shoppingOrderDO, "orderStatus");
+		shoppingOrderDO.setOrderStatus(param.getOrderStatus().getValue());
 
 		return shoppingOrderDO;
 	}

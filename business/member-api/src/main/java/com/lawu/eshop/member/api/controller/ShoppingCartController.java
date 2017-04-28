@@ -90,7 +90,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    private Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
      	Result<List<MemberShoppingCartGroupDTO>> result = shoppingcartExtendService.findListByMemberId(memberId);

@@ -131,21 +131,23 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	@Transactional
 	public int saveWithUserNum(String userNum, AddressParam param) {
-		
+
 		AddressDO addressDO = AddressConverter.convertDO(param);
-		
+
 		addressDO.setUserNum(userNum);
 		addressDO.setStatus(StatusEnum.VALID.getValue());
+		addressDO.setMobile(param.getMobile());
 		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
-		
-		AddressDOExample example=new AddressDOExample();
+
+		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
-		long count=addressDOMapper.countByExample(example);
-		if(count==0)
-		   addressDO.setIsDefault(true);
+		long count = addressDOMapper.countByExample(example);
+		if (count == 0) {
+			addressDO.setIsDefault(true);
+		}
 		int result = addressDOMapper.insertSelective(addressDO);
-		
+
 		if (result <= 0) {
 			return ResultCode.SAVE_FAIL;
 		}

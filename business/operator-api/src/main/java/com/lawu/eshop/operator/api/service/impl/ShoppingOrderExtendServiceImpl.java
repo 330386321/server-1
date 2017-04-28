@@ -26,10 +26,6 @@ public class ShoppingOrderExtendServiceImpl extends BaseController implements Sh
 	@Transactional
 	@Override
 	public Result updateInformation(Long id, ShoppingOrderUpdateInfomationForeignParam param) {
-		if (param == null) {
-			
-		}
-		
 		Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
 		
 		if (!isSuccess(resultExpressCompanyDTO)) {
@@ -39,7 +35,7 @@ public class ShoppingOrderExtendServiceImpl extends BaseController implements Sh
 		ShoppingOrderUpdateInfomationParam shoppingOrderUpdateInfomationParam = new ShoppingOrderUpdateInfomationParam();
 		shoppingOrderUpdateInfomationParam.setConsigneeAddress(param.getConsigneeAddress());
 		shoppingOrderUpdateInfomationParam.setConsigneeName(param.getConsigneeName());
-		shoppingOrderUpdateInfomationParam.setConsigneeMobile(param.getConsigneeName());
+		shoppingOrderUpdateInfomationParam.setConsigneeMobile(param.getConsigneeMobile());
 		shoppingOrderUpdateInfomationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
 		shoppingOrderUpdateInfomationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
 		shoppingOrderUpdateInfomationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());

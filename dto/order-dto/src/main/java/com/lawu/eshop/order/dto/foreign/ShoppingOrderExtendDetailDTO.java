@@ -66,6 +66,12 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
     
+	/**
+	 * 快递公司id
+	 */
+	@ApiModelProperty(value = "快递公司id", required = false)
+	private String expressCompanyId;
+	
     /**
      * 快递公司名称
      */
@@ -172,6 +178,14 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public String getExpressCompanyId() {
+		return expressCompanyId;
+	}
+
+	public void setExpressCompanyId(String expressCompanyId) {
+		this.expressCompanyId = expressCompanyId;
 	}
 
 	public String getExpressCompanyName() {

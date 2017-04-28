@@ -2,7 +2,6 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -21,6 +20,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressMerchantParam;
@@ -89,11 +89,7 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
 	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") @Validated AddressMerchantParam addressParam, BindingResult bindingResult) {
-		AddressParam address=new AddressParam();
-		address.setAddr(addressParam.getAddr());
-		address.setMobile(address.getMobile());
-		address.setName(address.getName());
-		address.setRegionPath(address.getRegionPath());
+		
 		if (bindingResult.hasErrors()) {
 			StringBuilder sb = new StringBuilder();
 			for (ObjectError error : bindingResult.getAllErrors()) {
@@ -105,6 +101,12 @@ public class AddressController extends BaseController {
 
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
 		}
+		
+		AddressParam address=new AddressParam();
+		address.setAddr(addressParam.getAddr());
+		address.setMobile(addressParam.getMobile());
+		address.setName(addressParam.getName());
+		address.setRegionPath(addressParam.getRegionPath());
 		
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result result = addressService.saveWithUserNum(userNum, address);
@@ -134,8 +136,8 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.PUT)
 	public Result updateDefault(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
-		Long userId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = addressService.updateDefault(id, userId);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		Result rs = addressService.updateDefault(id, userNum);
 		return rs;
 	}
 

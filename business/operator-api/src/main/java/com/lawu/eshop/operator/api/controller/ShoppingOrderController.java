@@ -1,6 +1,8 @@
 package com.lawu.eshop.operator.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +39,7 @@ public class ShoppingOrderController extends BaseController {
 
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
-
+	
 	@Autowired
 	private ShoppingOrderExtendService shoppingOrderExtendService;
 
@@ -91,7 +93,7 @@ public class ShoppingOrderController extends BaseController {
 		if (!isSuccess(resultShoppingOrderExtendDetailDTO)) {
 			return successGet(resultShoppingOrderExtendDetailDTO.getRet());
 		}
-
+		
 		return successGet(resultShoppingOrderExtendDetailDTO);
 	}
 
@@ -109,9 +111,15 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	//@RequiresPermissions("shoppingOrder:updateInformation/{id}")
 	@RequestMapping(value = "updateInformation/{id}", method = RequestMethod.POST)
-	public Result updateInformation(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "更新参数") ShoppingOrderUpdateInfomationForeignParam param) {
+	public Result updateInformation(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "更新参数") @Validated ShoppingOrderUpdateInfomationForeignParam param, BindingResult bindingResult) {
+		
+		String message = validate(bindingResult);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+		
 		Result result = shoppingOrderExtendService.updateInformation(id, param);
-
+		
 		if (!isSuccess(result)) {
 			return successCreated(result.getRet());
 		}
@@ -129,7 +137,7 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-  //@RequiresPermissions("shoppingOrder:cancelOrder/{id}")
+    //@RequiresPermissions("shoppingOrder:cancelOrder/{id}")
     @RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
     public Result cancelOrder(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
