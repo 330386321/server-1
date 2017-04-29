@@ -1,5 +1,6 @@
 package com.lawu.eshop.operator.api.service;
 
+import com.lawu.eshop.ad.param.ListAdParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,5 +50,22 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/auditVideo/{id}")
     public Result auditVideo(@PathVariable("id") Long id);
+
+	/**
+	 * 查询广告列表
+	 *
+	 * @param listAdParam
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "ad/listAllAd")
+	Result<Page<AdDTO>> listAd(@RequestBody ListAdParam listAdParam );
+
+	/**
+	 * 根据ID查询广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET,value = "ad/getAd/{id}")
+	Result<AdDTO> getAdById(@PathVariable("id") Long id);
 
 }

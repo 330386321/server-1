@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.ad.param.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -694,6 +690,34 @@ public class AdServiceImpl implements AdService {
 		adDO.setId(id);
 		adDO.setViewcount(count);
 		adDOMapper.updateByPrimaryKeySelective(adDO);
+	}
+
+	@Override
+	public Page<AdBO> listAllAd(ListAdParam listAdParam) {
+		AdDOExample example = new AdDOExample();
+		Criteria criteria = example.createCriteria();
+		if(StringUtils.isNotEmpty(listAdParam.getTitle())){
+			criteria.andTitleLike("%" + listAdParam.getTitle() + "%");
+		}
+		if(listAdParam.getTypeEnum()!=null){
+			criteria.andTypeEqualTo(listAdParam.getTypeEnum().val);
+		}
+		if(listAdParam.getPutWayEnum()!=null){
+			criteria.andPutWayEqualTo(listAdParam.getPutWayEnum().val);
+		}
+		if(listAdParam.getStatusEnum()!=null){
+			criteria.andStatusEqualTo(listAdParam.getStatusEnum().val);
+		}
+
+		RowBounds rowBounds = new RowBounds(listAdParam.getOffset(),listAdParam.getPageSize());
+
+		Page<AdBO> page = new Page<>();
+		page.setCurrentPage(listAdParam.getCurrentPage());
+		page.setTotalCount((int)adDOMapper.countByExample(example));
+
+		List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(example,rowBounds);
+		page.setRecords(AdConverter.convertBOS(adDOS));
+		return page;
 	}
 
 }

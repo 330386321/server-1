@@ -1,17 +1,14 @@
 package com.lawu.eshop.ad.dto;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 
 public class AdDTO {
@@ -65,6 +62,7 @@ public class AdDTO {
     private AdStatusEnum statusEnum;
 
 	@ApiModelProperty(value = "创建时间")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
     
 	@ApiModelProperty(value = "关注数量")

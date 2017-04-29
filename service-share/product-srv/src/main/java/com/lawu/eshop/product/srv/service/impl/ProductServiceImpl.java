@@ -872,7 +872,9 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        if (listProductParam.getStatusEnum() != null) {
+            criteria.andStatusEqualTo(listProductParam.getStatusEnum().val);
+        }
         if (StringUtils.isNotEmpty(listProductParam.getName())) {
             criteria.andNameLike("%" + listProductParam.getName() + "%");
         }

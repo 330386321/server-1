@@ -62,11 +62,13 @@ public class MerchantAuditController extends BaseController {
      * @param auditParam
      * @return
      */
-    @ApiOperation(value = "门店审核信息", notes = "根据门店审核记录ID更新对应信息  [1000]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "门店审核信息", notes = "根据门店审核记录ID更新对应信息  [1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "updateMerchantAudit/{storeAuditId}", method = RequestMethod.PUT)
-    public Result updateMerchantAudit(@PathVariable("storeAuditId") @ApiParam(required = true, value = "门店审核ID") Long storeAuditId,
+    @RequestMapping(value = "updateMerchantAudit", method = RequestMethod.POST)
+    public Result updateMerchantAudit(@RequestParam @ApiParam(required = true, value = "门店审核ID") Long storeAuditId,
                                       @ModelAttribute @ApiParam MerchantAuditParam auditParam) {
+        Integer auditorId = 0;
+        auditParam.setAuditorId(auditorId);
         return merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
     }
 }

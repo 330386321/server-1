@@ -1,27 +1,24 @@
 package com.lawu.eshop.operator.api.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.operator.api.service.AdService;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 描述：广告管理
@@ -45,6 +42,30 @@ public class AdController extends BaseController {
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdFindParam adPlatParam) {
     	Result<Page<AdDTO>>  pageDTOS=adService.selectListByPlatForm(adPlatParam);
     	return pageDTOS;
+    }
+
+    @ApiOperation(value = "广告列表", notes = "查询广告列表。（梅述全）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @PageBody
+    @RequestMapping(value = "listAd", method = RequestMethod.POST)
+    public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam( value = "查询条件 ") ListAdParam listAdParam ) {
+        if(listAdParam.getTypeEnum().val == AdTypeEnum.AD_TYPE_PACKET.val){
+            listAdParam.setTypeEnum(null);
+        }
+        if(listAdParam.getPutWayEnum().val == PutWayEnum.PUT_WAY_COMMON.val){
+            listAdParam.setPutWayEnum(null);
+        }
+        if(listAdParam.getStatusEnum().val == AdStatusEnum.AD_STATUS_PUTED.val){
+            listAdParam.setStatusEnum(null);
+        }
+        return adService.listAd(listAdParam);
+    }
+
+    @ApiOperation(value = "广告详情", notes = "查询广告详情。[1002]（梅述全）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getAd/{id}", method = RequestMethod.GET)
+    public Result<AdDTO> getAd(@PathVariable @ApiParam( value = "ID") Long id ) {
+        return adService.getAdById(id);
     }
     
 

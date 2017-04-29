@@ -3,11 +3,7 @@ package com.lawu.eshop.ad.srv.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.framework.core.page.Page;
@@ -160,6 +156,14 @@ public interface AdService {
 	 * @param id
 	 */
 	void updateViewCount(Long id,Integer count);
+
+	/**
+	 * 运营后天查询广告列表
+	 *
+	 * @param listAdParam
+	 * @return
+	 */
+	Page<AdBO> listAllAd(ListAdParam listAdParam);
 	
 
 }

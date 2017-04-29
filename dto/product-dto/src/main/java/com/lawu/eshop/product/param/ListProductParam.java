@@ -1,6 +1,7 @@
 package com.lawu.eshop.product.param;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import io.swagger.annotations.ApiParam;
 
 /**
@@ -11,6 +12,9 @@ public class ListProductParam extends AbstractPageParam {
 
     @ApiParam(value = "商品名称")
     private String name;
+
+    @ApiParam(value = "商品状态")
+    private ProductStatusEnum statusEnum;
 
     @ApiParam(value = "排序字段")
     private String sortName;
@@ -40,5 +44,13 @@ public class ListProductParam extends AbstractPageParam {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public ProductStatusEnum getStatusEnum() {
+        return statusEnum;
+    }
+
+    public void setStatusEnum(ProductStatusEnum statusEnum) {
+        this.statusEnum = statusEnum;
     }
 }

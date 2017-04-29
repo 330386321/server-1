@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.lawu.eshop.ad.param.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
@@ -21,12 +22,6 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -376,5 +371,35 @@ public class AdController extends BaseController{
     	adService.updateViewCount(id, count);
     	return successCreated();
     }
+
+	/**
+	 * 运营后台查询广告列表
+	 *
+	 * @param listAdParam
+	 * @return
+	 */
+	@RequestMapping(value = "listAllAd", method = RequestMethod.POST)
+	public Result<Page<AdDTO>> listAllAd(@RequestBody ListAdParam listAdParam) {
+		Page<AdBO> adBOPage = adService.listAllAd(listAdParam);
+		Page<AdDTO> page = new Page<>();
+		page.setCurrentPage(adBOPage.getCurrentPage());
+		page.setRecords(AdConverter.convertDTOS(adBOPage.getRecords()));
+		page.setTotalCount(adBOPage.getTotalCount());
+		return successGet(page);
+	}
+
+	/**
+	 * 根据ID查询广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getAd/{id}", method = RequestMethod.GET)
+	public Result<AdDTO> getAdById(@PathVariable Long id) {
+		AdBO adBO = adService.get(id);
+		if(adBO == null){
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		return successGet(AdConverter.convertDTO(adBO));
+	}
 
 }
