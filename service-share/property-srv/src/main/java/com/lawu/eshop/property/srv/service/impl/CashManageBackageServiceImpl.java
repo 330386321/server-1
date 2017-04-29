@@ -149,7 +149,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
 
 		Criteria criteria1 = example.createCriteria();
-		criteria1.andUserTypeEqualTo(param.getUserTypeEnum().val).andAccountEqualTo(param.getAccount());
+		criteria1.andUserNumEqualTo(param.getUserNum());
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		Page<WithdrawCashBackageQueryBO> page = new Page<WithdrawCashBackageQueryBO>();
@@ -164,17 +164,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());
-			;
-			if (CashStatusEnum.APPLY.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("申请中");
-			} else if (CashStatusEnum.ACCEPT.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("受理中");
-			} else if (CashStatusEnum.SUCCESS.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("成功");
-			} else if (CashStatusEnum.FAILURE.val.equals(cdo.getStatus())) {
-				bqbo.setStatus("失败");
-			}
-
+			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).name);
+			bqbo.setCashStatsuEnum(CashStatusEnum.getEnum(cdo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
 			bqbo.setBankNo(bankAccountDO.getAccountNumber());

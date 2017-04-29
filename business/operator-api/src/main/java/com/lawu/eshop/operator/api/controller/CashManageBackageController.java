@@ -83,10 +83,11 @@ public class CashManageBackageController extends BaseController {
 		return cashManageBackageService.getTotalNum(param);
 	}
 
+	@PageBody
 	@ApiOperation(value = "商家、用户提现详情", notes = "商家、用户提现详情查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
 	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(
-			@ModelAttribute @ApiParam CashBackageQueryDetailParam param) {
+			@RequestBody @ApiParam CashBackageQueryDetailParam param) {
 
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfoDetail(param);
 		return dtos;
