@@ -60,6 +60,9 @@ public class ProductInfoDTO {
 	
 	@ApiModelProperty(value = "评价数量")
 	private Integer commentCount;
+	
+	@ApiModelProperty(value = "是否收藏")
+	private boolean favoriteFlag;
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -179,6 +182,14 @@ public class ProductInfoDTO {
 
 	public void setCommentCount(Integer commentCount) {
 		this.commentCount = commentCount;
+	}
+
+	public boolean isFavoriteFlag() {
+		return favoriteFlag;
+	}
+
+	public void setFavoriteFlag(boolean favoriteFlag) {
+		this.favoriteFlag = favoriteFlag;
 	}
 	
 }

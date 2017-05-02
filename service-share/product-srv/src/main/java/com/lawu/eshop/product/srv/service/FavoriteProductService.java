@@ -34,6 +34,8 @@ public interface FavoriteProductService {
 	 * @return
 	 */
 	Page<FavoriteProductBO> selectMyFavoriteProduct(Long memberId ,FavoriteProductQuery query);
+
+	Integer getUserFavorite(Long productId, Long memberId);
 	
 
 }

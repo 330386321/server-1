@@ -196,7 +196,10 @@ public class ProductServiceImpl implements ProductService {
         }
 
         ProductInfoBO productInfoBO = ProductConverter.convertInfoBO(productDO);
-
+        String featureImage = productInfoBO.getFeatureImage();
+        featureImage = featureImage.replaceAll("\\\\", "/");
+        productInfoBO.setFeatureImage(featureImage);
+        
         // 查询商品型号
         ProductModelDOExample modelExample = new ProductModelDOExample();
         modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
@@ -221,9 +224,9 @@ public class ProductServiceImpl implements ProductService {
         List<String> imagesDetail = new ArrayList<String>();
         for (ProductImageDO image : imageDOS) {
             if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_HEAD.val.byteValue()) {
-                imagesHead.add(image.getImagePath());
+                imagesHead.add(image.getImagePath().replaceAll("\\\\", "/"));
             } else if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val.byteValue()) {
-                imagesDetail.add(image.getImagePath());
+                imagesDetail.add(image.getImagePath().replaceAll("\\\\", "/"));
             }
         }
         productInfoBO.setImagesHeadUrl(imagesHead);

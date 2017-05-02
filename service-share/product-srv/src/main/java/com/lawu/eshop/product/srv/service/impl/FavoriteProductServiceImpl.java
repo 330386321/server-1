@@ -26,72 +26,82 @@ import com.lawu.eshop.product.srv.service.ProductService;
 
 /**
  * 收藏商品接口实现类
+ * 
  * @author zhangrc
  * @date 2017/03/30
  *
  */
 @Service
 public class FavoriteProductServiceImpl implements FavoriteProductService {
-	
+
 	@Autowired
 	private FavoriteProductDOMapper favoriteProductDOMapper;
-	
+
 	@Autowired
 	private FavoriteProductDOMapperExtend favoriteProductDOExtendMapper;
-	
+
 	@Autowired
 	private ProductModelDOMapper productModelDOMapper;
-	
+
 	@Autowired
 	private ProductService productService;
 
 	@Override
 	@Transactional
 	public Integer save(Long memberId, Long productId) {
-		FavoriteProductDOExample example=new FavoriteProductDOExample();
+		FavoriteProductDOExample example = new FavoriteProductDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
-		int count=favoriteProductDOMapper.countByExample(example);
-		if(count==1){
+		int count = favoriteProductDOMapper.countByExample(example);
+		if (count == 1) {
 			return 0;
 		}
-		FavoriteProductDO favoriteProductDO=new FavoriteProductDO();
+		FavoriteProductDO favoriteProductDO = new FavoriteProductDO();
 		favoriteProductDO.setMemberId(memberId);
 		favoriteProductDO.setProductId(productId);
 		favoriteProductDO.setGmtCreate(new Date());
-		Integer id=favoriteProductDOMapper.insert(favoriteProductDO);
-		
+		Integer id = favoriteProductDOMapper.insert(favoriteProductDO);
+
 		productService.editTotalFavorite(productId, 1, "A");
-		
+
 		return id;
 	}
 
 	@Override
 	@Transactional
-	public Integer remove(Long productId,Long memberId) {
+	public Integer remove(Long productId, Long memberId) {
 		FavoriteProductDOExample example = new FavoriteProductDOExample();
-        example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
-        Integer i = favoriteProductDOMapper.deleteByExample(example);
-        
-        productService.editTotalFavorite(productId, 1, "M");
-        
+		example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
+		Integer i = favoriteProductDOMapper.deleteByExample(example);
+
+		productService.editTotalFavorite(productId, 1, "M");
+
 		return i;
 	}
 
 	@Override
 	public Page<FavoriteProductBO> selectMyFavoriteProduct(Long memberId, FavoriteProductQuery query) {
-		FavoriteProductDOExample example=new FavoriteProductDOExample();
+		FavoriteProductDOExample example = new FavoriteProductDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		int count=favoriteProductDOMapper.countByExample(example);
-		FavoriteProductView favoriteProductView=new FavoriteProductView();
+		int count = favoriteProductDOMapper.countByExample(example);
+		FavoriteProductView favoriteProductView = new FavoriteProductView();
 		favoriteProductView.setMemberId(memberId);
-        RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
-        List<FavoriteProductView> DOS = favoriteProductDOExtendMapper.selectMyFavoriteProductByRowbounds(favoriteProductView, rowBounds);
-        Page<FavoriteProductBO> page = new Page<FavoriteProductBO>();
-        page.setTotalCount(count);
-        List<FavoriteProductBO> memberBOS = FavoriteProductConverter.convertBOS(DOS);
-        page.setRecords(memberBOS);
-        page.setCurrentPage(query.getCurrentPage());
+		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
+		List<FavoriteProductView> DOS = favoriteProductDOExtendMapper
+				.selectMyFavoriteProductByRowbounds(favoriteProductView, rowBounds);
+		Page<FavoriteProductBO> page = new Page<FavoriteProductBO>();
+		page.setTotalCount(count);
+		List<FavoriteProductBO> memberBOS = FavoriteProductConverter.convertBOS(DOS);
+		page.setRecords(memberBOS);
+		page.setCurrentPage(query.getCurrentPage());
 		return page;
+	}
+
+	@Override
+	public Integer getUserFavorite(Long productId, Long memberId) {
+		FavoriteProductDOExample example = new FavoriteProductDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId).andProductIdEqualTo(productId);
+		int count = favoriteProductDOMapper.countByExample(example);
+		return count;
 	}
 
 }

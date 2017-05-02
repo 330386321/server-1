@@ -30,4 +30,7 @@ public interface FavoriteProductService {
 	@RequestMapping(method = RequestMethod.GET, value = "favoriteProduct/selectMyFavoriteProduct")
 	Result<Page<FavoriteProductDTO>> selectMyFavoriteProduct(@RequestParam("memberId") Long id, @RequestBody FavoriteProductQuery query);
 
+	@RequestMapping(method = RequestMethod.GET, value = "favoriteProduct/getUserFavorite/{productId}")
+	boolean getUserFavorite(@PathVariable("productId") Long productId,@RequestParam("memberId") Long memberId);
+
 }

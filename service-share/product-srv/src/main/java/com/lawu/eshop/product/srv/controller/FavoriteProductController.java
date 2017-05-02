@@ -79,4 +79,21 @@ public class FavoriteProductController extends BaseController{
     	
     }
 
+	/**
+	 * 查询用户是否收藏了该商品
+	 * @param productId
+	 * @param memberId
+	 * @return
+	 * @date 2017年5月2日 上午11:16:21
+	 * @author yangqh
+	 */
+	@RequestMapping(value = "getUserFavorite/{productId}", method = RequestMethod.GET)
+    public boolean getUserFavorite(@PathVariable Long productId,@RequestParam Long memberId) {
+    	Integer i = favoriteProductService.getUserFavorite(productId,memberId);
+    	if(i > 0){
+    		return true;
+    	}
+    	return false;
+    	
+    }
 }
