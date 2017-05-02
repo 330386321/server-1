@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.lawu.eshop.ad.param.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
@@ -18,7 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -457,10 +464,13 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	@Transactional
-	public Integer auditVideo(Long id) {
-		AdDO adDO=new AdDO();
-		adDO.setId(id);
-		adDO.setStatus(new Byte("1"));
+	public Integer auditVideo(Long id,AuditEnum auditEnum) {
+		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
+		if(auditEnum.val==1){
+			adDO.setStatus(new Byte("1"));
+		}else{
+			adDO.setStatus(new Byte("6"));
+		}
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);

@@ -3,7 +3,13 @@ package com.lawu.eshop.ad.srv.service;
 import java.math.BigDecimal;
 import java.util.List;
 
-import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.framework.core.page.Page;
@@ -51,7 +57,7 @@ public interface AdService {
 	 * @param id
 	 * @return
 	 */
-	Integer auditVideo(Long id);
+	Integer auditVideo(Long id,AuditEnum auditEnum);
 	
 	/**
 	 * 运营平台对E赚的查询

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -49,7 +50,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/auditVideo/{id}")
-    public Result auditVideo(@PathVariable("id") Long id);
+    public Result auditVideo(@PathVariable("id") Long id,@RequestBody AuditEnum auditEnum);
 
 	/**
 	 * 查询广告列表

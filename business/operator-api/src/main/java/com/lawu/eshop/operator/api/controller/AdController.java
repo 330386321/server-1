@@ -2,6 +2,7 @@ package com.lawu.eshop.operator.api.controller;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
@@ -87,11 +88,19 @@ public class AdController extends BaseController {
     	return rs;
     }
     
-    @ApiOperation(value = "广告审核", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
+    @ApiOperation(value = "广告审核通过", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
-    public Result auditVideo(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result rs= adService.auditVideo(id);
+    @RequestMapping(value = "auditVideoPass/{id}", method = RequestMethod.PUT)
+    public Result auditVideoPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	Result rs= adService.auditVideo(id,AuditEnum.AD_AUDIT_PASS);
+    	return rs;
+    }
+    
+    @ApiOperation(value = "广告审核不通过", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.PUT)
+    public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	Result rs= adService.auditVideo(id,AuditEnum.AD_AUDIT_PASS);
     	return rs;
     }
 

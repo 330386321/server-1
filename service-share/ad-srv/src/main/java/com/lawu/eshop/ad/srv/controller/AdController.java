@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
@@ -175,8 +176,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
-    public Result auditVideo(@PathVariable Long id) {
-    	Integer i= adService.auditVideo(id);
+    public Result auditVideo(@PathVariable Long id,@RequestBody AuditEnum auditEnum) {
+    	Integer i= adService.auditVideo(id,auditEnum);
  		if(i>0){
      		return successCreated(ResultCode.SUCCESS);
      	}else{
