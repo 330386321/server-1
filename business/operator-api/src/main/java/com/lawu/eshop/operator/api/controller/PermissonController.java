@@ -14,7 +14,6 @@ import com.lawu.eshop.operator.param.PerssionParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
-import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,7 @@ import java.util.List;
  */
 @Api(tags = "permission")
 @RestController
-@RequestMapping(value = "permission")
+@RequestMapping(value = "permission/")
 public class PermissonController extends BaseController {
     @Autowired
     private PermissonService permissonService;
@@ -36,9 +35,9 @@ public class PermissonController extends BaseController {
     @RequestMapping(value = "getPermssion", method = RequestMethod.GET)
     // @RequiresAuthentication
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    public Result<List<PermissionDTO>> getPermssion() {
+    public Result<List<PermissionDTO>> getPermssion(@RequestParam("account") String account) {
 
-        String account = UserUtil.getCurrentUserAccount();
+       // String account = UserUtil.getCurrentUserAccount();
         if (StringUtils.isEmpty(account)) {
             return successGet(ResultCode.USER_NOT_LOGIN);
         }

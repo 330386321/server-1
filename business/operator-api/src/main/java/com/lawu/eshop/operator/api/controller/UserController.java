@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "user")
 @RestController
-@RequestMapping(value = "user")
+@RequestMapping(value = "user/")
 public class UserController extends BaseController {
 
     @Autowired

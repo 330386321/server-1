@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Api(tags = "role")
 @RestController
-@RequestMapping(value = "role")
+@RequestMapping(value = "role/")
 public class RoleController extends BaseController {
 
     @Autowired
