@@ -2,12 +2,12 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
@@ -77,6 +77,12 @@ public class MerchantServiceImpl implements MerchantService {
     @Autowired
     private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
 
+    @Autowired
+    private UserSrvConfig userSrvConfig;
+
+    @Autowired
+    private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+
     @Override
     @Transactional
     public void updateLoginPwd(Long id, String newPwd) {
@@ -127,6 +133,7 @@ public class MerchantServiceImpl implements MerchantService {
         merchantDO.setPwd(MD5.MD5Encode(registerRealParam.getPwd()));
         merchantDO.setMobile(registerRealParam.getAccount());
         merchantDO.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        merchantDO.setHeadimg(userSrvConfig.getMerchant_headimg());
         merchantDO.setInviterId(inviterId);
         merchantDO.setInviterType(inviterType);
         merchantDO.setLevel(UserCommonConstant.LEVEL_1);
@@ -242,7 +249,7 @@ public class MerchantServiceImpl implements MerchantService {
             }
         }
         //获取融云token
-        TokenResult tokenResult = rongMerchantService.getRongToken(userNum, "E店商家", FileDirConstant.DEFAULT_PIC);
+        TokenResult tokenResult = rongMerchantService.getRongToken(userNum, "E店商家", userSrvConfig.getMerchant_headimg());
         if (StringUtils.isNotEmpty(tokenResult.getToken())) {
             MerchantDO merchantDO1 = new MerchantDO();
             merchantDO1.setRyToken(tokenResult.getToken());
@@ -358,6 +365,21 @@ public class MerchantServiceImpl implements MerchantService {
             return messagePushBO;
         }
         return null;
+    }
+
+    @Override
+    public void updateHeadImg(String headimg, Long merchantId) {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setHeadimg(headimg);
+        merchantDO.setId(merchantId);
+        merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
+        MerchantStoreProfileDOExample example = new MerchantStoreProfileDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        MerchantDO old = merchantDOMapper.selectByPrimaryKey(merchantId);
+        List<MerchantStoreProfileDO> olds = merchantStoreProfileDOMapper.selectByExample(example);
+        if(!olds.isEmpty()){
+            rongMerchantService.refreshUserInfo(old.getNum(), olds.get(0).getCompanyName(), headimg);
+        }
     }
 
 }

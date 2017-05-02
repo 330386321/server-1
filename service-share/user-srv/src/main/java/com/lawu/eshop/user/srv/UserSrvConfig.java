@@ -25,6 +25,12 @@ public class UserSrvConfig {
     @Value(value = "${db.password}")
     private String password;
 
+    @Value(value="${image.user_default_headimg}")
+    private String user_headimg;
+
+    @Value(value="${image.merchant_default_headimg}")
+    private String merchant_headimg;
+
     public String getType() {
         return type;
     }
@@ -43,6 +49,14 @@ public class UserSrvConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getUser_headimg() {
+        return user_headimg;
+    }
+
+    public String getMerchant_headimg() {
+        return merchant_headimg;
     }
 
 }

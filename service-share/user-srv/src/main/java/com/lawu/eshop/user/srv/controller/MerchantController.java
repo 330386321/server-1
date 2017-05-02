@@ -188,4 +188,19 @@ public class MerchantController extends BaseController {
         return messagePushDTO;
     }
 
+    /**
+     * 修改头像
+     *
+     * @param memberId
+     * @param headimg
+     * @return
+     */
+    @RequestMapping(value = "saveHeadImage/{merchantId}", method = RequestMethod.POST)
+    public Result<UserHeadImgDTO> saveHeadImage(@PathVariable("merchantId") Long merchantId, @RequestParam String headimg) {
+        merchantService.updateHeadImg(headimg, merchantId);
+        UserHeadImgDTO userHeadImgDTO = new UserHeadImgDTO();
+        userHeadImgDTO.setHeadImg(headimg);
+        return successCreated(userHeadImgDTO);
+    }
+
 }

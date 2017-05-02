@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -16,6 +17,7 @@ import org.springframework.context.annotation.ImportResource;
 @EnableDiscoveryClient
 @SpringBootApplication
 @ImportResource(locations={"classpath:spring.xml"})
+@ConfigurationProperties(locations = "classpath:bootstrap.properties")
 @ComponentScan({"com.lawu.eshop"})
 public class UserSrvApplication {
 

@@ -1,43 +1,32 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.math.BigDecimal;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
-import com.lawu.eshop.merchant.api.service.InviterService;
-import com.lawu.eshop.merchant.api.service.MemberProfileService;
-import com.lawu.eshop.merchant.api.service.MerchantService;
-import com.lawu.eshop.merchant.api.service.PropertyInfoService;
-import com.lawu.eshop.merchant.api.service.VerifyCodeService;
+import com.lawu.eshop.merchant.api.service.*;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
-import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
-import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
-import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import util.UploadFileUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * @author meishuquan
@@ -219,6 +208,22 @@ public class MerchantController extends BaseController {
         	dto.setLoveAccount(new BigDecimal(0));
         }
         return successGet(dto);
+    }
+
+    @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "saveHeadImage", method = RequestMethod.POST)
+    public Result<UserHeadImgDTO> saveHeadImage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        HttpServletRequest request = getRequest();
+        Long merchantId = UserUtil.getCurrentUserId(request);
+        String headImg = "";
+        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD);
+        if(!"".equals(retMap.get("imgUrl"))){
+            headImg = retMap.get("imgUrl").toString();
+            return    merchantService.saveHeadImage(merchantId, headImg);
+        }
+        return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
     }
 
 

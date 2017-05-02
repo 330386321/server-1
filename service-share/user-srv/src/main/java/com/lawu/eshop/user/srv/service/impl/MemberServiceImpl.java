@@ -10,6 +10,7 @@ import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
@@ -67,6 +68,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private RongUserService rongUserService;
+
+    @Autowired
+    private UserSrvConfig userSrvConfig;
    
 
     @Override
@@ -183,6 +187,7 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setMobile(registerRealParam.getAccount());
         memberDO.setSex(UserSexEnum.SEX_SECRET.val);
         memberDO.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        memberDO.setHeadimg(userSrvConfig.getUser_headimg());
         memberDO.setInviterId(inviterId);
         memberDO.setInviterType(inviterType);
         memberDO.setLevel(UserCommonConstant.LEVEL_1);
@@ -306,7 +311,7 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         //获取ryToken
-        TokenResult tokenResult = rongUserService.getRongToken(userNum, "E店会员", FileDirConstant.DEFAULT_PIC);
+        TokenResult tokenResult = rongUserService.getRongToken(userNum, "E店会员", userSrvConfig.getUser_headimg());
         if (StringUtils.isNotEmpty(tokenResult.getToken())) {
             MemberDO memberDO2 = new MemberDO();
             memberDO2.setRyToken(tokenResult.getToken());

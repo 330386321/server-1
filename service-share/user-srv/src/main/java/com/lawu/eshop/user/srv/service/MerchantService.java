@@ -89,4 +89,6 @@ public interface MerchantService {
     List<MessagePushBO> findMessagePushList(String area);
 
     MessagePushBO findMessagePushByMobile(String moblie);
+
+    void updateHeadImg(String headimg, Long merchantId);
 }
