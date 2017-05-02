@@ -47,6 +47,8 @@ public class ShoppingOrderConverter {
 
 		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		BeanUtils.copyProperties(param, shoppingOrderDO, new String[] { "status", "isEvaluation", "gmtCreate", "gmtModified" });
+		// 设置自动收货为false
+		shoppingOrderDO.setIsAutomaticReceipt(false);
 		// 设置为待处理状态
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
 		// 记录状态设置为正常
