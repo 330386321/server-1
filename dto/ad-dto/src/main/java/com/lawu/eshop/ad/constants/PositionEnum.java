@@ -6,7 +6,10 @@ public enum PositionEnum {
 	    POSITON_SHOP_TOP((byte) 0x02),     //要购物顶部广告
 	    POSITON_SHOP_CHOOSE((byte) 0x03),    //要购物今日推荐
 		POSITON_SHOP_GOODS((byte) 0x04),    //要购物精品
-		POSITON_AD_TOP((byte) 0x05);    //看广告顶部广告
+		POSITON_AD_TOP((byte) 0x05),   //看广告顶部广告    
+	    SHOPPING_BUY((byte) 0x06), // E店必够
+	    SHOPPING_GOODS((byte) 0x07), // 特色好货
+	   SHOPPING_BENEFIT((byte) 0x08); // 实惠单品
 	    public Byte val;
 
 	    PositionEnum(Byte val) {

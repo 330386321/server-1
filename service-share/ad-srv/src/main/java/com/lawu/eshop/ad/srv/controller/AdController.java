@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import com.lawu.eshop.ad.param.*;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.common.SolrDocumentList;
@@ -20,9 +19,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -84,12 +91,12 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam,@RequestParam Long memberId) {
+    public Result<Page<AdMerchantDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam,@RequestParam Long memberId) {
 		Page<AdBO> pageBO=  adService.selectListByMerchant(adMerchantParam, memberId);
-		Page<AdDTO> pageDTO=new Page<AdDTO>();
+		Page<AdMerchantDTO> pageDTO=new Page<AdMerchantDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());
-		pageDTO.setRecords(AdConverter.convertDTOS(pageBO.getRecords()));
+		pageDTO.setRecords(AdConverter.convertMerchantAdDTOS(pageBO.getRecords()));
 		return  successAccepted(pageDTO);
     }
 	
@@ -105,7 +112,7 @@ public class AdController extends BaseController{
 		 calendar.setTime(new Date());//把当前时间赋给日历  
 		 calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前  
 	     Date before14days = calendar.getTime();   //得到14天前的时间  
-	     if(before14days.getTime() < BO.getBeginTime().getTime()){  
+	     if(BO.getBeginTime()!=null && before14days.getTime() < BO.getBeginTime().getTime()){  
 	        return successCreated(ResultCode.AD_PUT_NOT_TIME);  
 	     }else{  
 	    	 Integer i= adService.updateStatus(id);

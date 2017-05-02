@@ -2,6 +2,8 @@ package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,7 +108,14 @@ public class AdServiceImpl implements AdService {
 		adDO.setMediaUrl(adSaveParam.getMediaUrl());
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
-		adDO.setBeginTime(adParam.getBeginTime());
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			if(adParam.getBeginTime()!=null){
+				adDO.setBeginTime(sdf.parse(adParam.getBeginTime()));
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		adDO.setEndTime(adParam.getEndTime());
 		adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
 		adDO.setPoint(adParam.getPoint());
@@ -232,6 +241,12 @@ public class AdServiceImpl implements AdService {
 				if(adMerchantParam.getStatusEnum().val==3){
 					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val)
 					.andMerchantIdEqualTo(merchantId);
+					if(adMerchantParam.getTypeEnum()!=null){
+						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
+					}
+					if(adMerchantParam.getPutWayEnum()!=null){
+						c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
+					}
 					
 				}else{
 					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val)
@@ -239,26 +254,31 @@ public class AdServiceImpl implements AdService {
 					Criteria  c2=example.createCriteria();
 					 c2.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val)
 					.andMerchantIdEqualTo(merchantId);
+					 if(adMerchantParam.getTypeEnum()!=null){
+						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
+						c2.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
+					 }
+					 if(adMerchantParam.getPutWayEnum()!=null){
+						c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
+						c2.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
+					 }
 					 example.or(c2);
+					 
+				}
+				
+			}else{
+				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
+				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
+				.andMerchantIdEqualTo(merchantId);
+				if(adMerchantParam.getTypeEnum()!=null){
+					c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
+				}
+				if(adMerchantParam.getPutWayEnum()!=null){
+					c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 				}
 				
 			}
-			if(adMerchantParam.getTypeEnum()!=null){
-				c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
-				.andMerchantIdEqualTo(merchantId);
-				
-			}
-			if(adMerchantParam.getPutWayEnum()!=null){
-				c1.andTypeEqualTo(adMerchantParam.getPutWayEnum().val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
-				.andMerchantIdEqualTo(merchantId);
-			}
-			
 			
 		}
 		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
@@ -285,11 +305,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(new Byte("4"));
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad= adDOMapper.selectByPrimaryKey(id);
-		if(ad.getType()==3){ //E赞 下架 退还积分
-			matransactionMainAddService.sendNotice(ad.getId());
-		}else{
-			matransactionMainAddService.sendNotice(id);
-		}
+		matransactionMainAddService.sendNotice(ad.getId());
 		//删除solr中的数据
 		SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
 		return i;

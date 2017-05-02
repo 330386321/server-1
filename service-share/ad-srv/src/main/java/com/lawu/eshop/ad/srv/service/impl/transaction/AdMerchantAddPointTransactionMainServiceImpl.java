@@ -10,6 +10,7 @@ import com.lawu.eshop.ad.srv.constants.TransactionConstant;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
+import com.lawu.eshop.ad.srv.domain.PointPoolDOExample.Criteria;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.compensating.transaction.Reply;
@@ -37,10 +38,15 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
     	 AdDO ad=adDOMapper.selectByPrimaryKey(adId);
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(ad.getMerchantNum());
-    	 if(ad.getType()==3){
+    	 if(ad.getType()==3 || ad.getType()==4){
     		PointPoolDOExample ppexample=new PointPoolDOExample();
- 			ppexample.createCriteria().andAdIdEqualTo(ad.getId()).andTypeEqualTo(new Byte("1"))
- 					                   .andStatusEqualTo(new Byte("0"));
+    		 Criteria cr=ppexample.createCriteria();
+ 			 cr.andAdIdEqualTo(ad.getId()).andStatusEqualTo(new Byte("0"));
+ 			 if(ad.getType()==3){
+ 				 cr.andTypeEqualTo(new Byte("1"));
+ 			 }else{
+ 				 cr.andTypeEqualTo(new Byte("2"));
+ 			 }
  			List<PointPoolDO> list=pointPoolDOMapper.selectByExample(ppexample);
  			BigDecimal sum=new BigDecimal(0);
  			for (PointPoolDO pointPoolDO : list) {

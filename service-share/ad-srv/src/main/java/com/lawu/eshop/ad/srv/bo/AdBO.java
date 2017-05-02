@@ -52,6 +52,24 @@ public class AdBO {
 	
 	private AdPraiseStatusEnum adPraiseStatusEnum;
 	
+	 /**
+    *
+    * 经度
+    * ad.merchant_longitude
+    *
+    * @mbg.generated
+    */
+   private BigDecimal merchantLongitude;
+
+   /**
+    *
+    * 纬度
+    * ad.merchant_latitude
+    *
+    * @mbg.generated
+    */
+   private BigDecimal merchantLatitude;
+	
 
 	public Boolean getIsPraise() {
 		return isPraise;
@@ -219,6 +237,22 @@ public class AdBO {
 
 	public void setAdPraiseStatusEnum(AdPraiseStatusEnum adPraiseStatusEnum) {
 		this.adPraiseStatusEnum = adPraiseStatusEnum;
+	}
+
+	public BigDecimal getMerchantLongitude() {
+		return merchantLongitude;
+	}
+
+	public void setMerchantLongitude(BigDecimal merchantLongitude) {
+		this.merchantLongitude = merchantLongitude;
+	}
+
+	public BigDecimal getMerchantLatitude() {
+		return merchantLatitude;
+	}
+
+	public void setMerchantLatitude(BigDecimal merchantLatitude) {
+		this.merchantLatitude = merchantLatitude;
 	}
 	
 	

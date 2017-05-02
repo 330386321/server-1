@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.param;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 
@@ -23,7 +24,7 @@ public class AdParam {
     private PutWayEnum putWayEnum;
 
 	@ApiParam (name="beginTime", value = "投放的开始时间")
-    private Date beginTime;
+    private String beginTime;
 
 	@ApiParam (name="endTime", value = "投放的结束时间")
     private Date endTime;
@@ -84,12 +85,14 @@ public class AdParam {
 	}
 
 
-	public Date getBeginTime() {
+	
+
+	public String getBeginTime() {
 		return beginTime;
 	}
 
 
-	public void setBeginTime(Date beginTime) {
+	public void setBeginTime(String beginTime) {
 		this.beginTime = beginTime;
 	}
 

@@ -172,9 +172,9 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "select/{id}", method = RequestMethod.GET)
-    public Result<AdPlatformDTO> select(@PathVariable Long id) {
+    public Result<AdPlatformOperatorDTO> select(@PathVariable Long id) {
         AdPlatformBO adPlatformBO = adPlatformService.select(id);
-        return successGet(AdPlatformConverter.convertDTO(adPlatformBO));
+        return successGet(AdPlatformConverter.convertOperatorDTO(adPlatformBO));
     }
 
     /**

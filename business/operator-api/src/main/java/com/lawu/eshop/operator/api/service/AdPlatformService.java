@@ -91,6 +91,6 @@ public interface AdPlatformService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "adPlatform/select/{id}")
-	Result<AdPlatformDTO> select(@PathVariable("id") Long id);
+	Result<AdPlatformOperatorDTO> select(@PathVariable("id") Long id);
 
 }

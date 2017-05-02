@@ -4,9 +4,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -42,8 +39,11 @@ public class AdMerchantDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
 	
-	@ApiModelProperty(value = "创建时间")
+	@ApiModelProperty(value = "推广人数")
 	private Integer memberCount;
+	
+	@ApiModelProperty(value = "推广单号")
+	private String expandOrder;
 
 	public Long getId() {
 		return id;
@@ -108,8 +108,23 @@ public class AdMerchantDTO {
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
-    
-	
+
+	public Integer getMemberCount() {
+		return memberCount;
+	}
+
+	public void setMemberCount(Integer memberCount) {
+		this.memberCount = memberCount;
+	}
+
+	public String getExpandOrder() {
+		return expandOrder;
+	}
+
+	public void setExpandOrder(String expandOrder) {
+		this.expandOrder = expandOrder;
+	}
+
 	
 
 	

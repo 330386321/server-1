@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -31,5 +32,6 @@ public interface MemberCountService {
 	 */
 	@RequestMapping(value = "fansMerchant/findFensCount", method = RequestMethod.GET)
     Integer findFensCount( @RequestParam("merchantId") Long merchantId);
+
 
 }

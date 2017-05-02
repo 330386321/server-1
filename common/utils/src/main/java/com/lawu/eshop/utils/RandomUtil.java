@@ -91,5 +91,14 @@ public class RandomUtil {
         return String.valueOf(System.currentTimeMillis())
                 + RandomUtil.getRandomString(1, 6) + prefix;
     }
+    
+    /**
+     * 广告投放单号
+     * @return
+     */
+    public static final String expandOrder() {
+        return String.valueOf(System.currentTimeMillis())
+                + RandomUtil.getRandomString(1, 6);
+    }
 
 }

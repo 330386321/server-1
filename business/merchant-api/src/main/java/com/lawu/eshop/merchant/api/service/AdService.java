@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -33,7 +34,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/selectListByMerchant")
-    Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam,@RequestParam("memberId") Long memberId);
+    Result<Page<AdMerchantDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam,@RequestParam("memberId") Long memberId);
 	
 	/**
 	 * 操作广告下架

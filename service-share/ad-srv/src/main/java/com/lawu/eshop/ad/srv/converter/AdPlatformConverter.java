@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
@@ -26,19 +28,20 @@ public class AdPlatformConverter {
         if (adPlatformDO == null) {
             return null;
         }
-        AdPlatformBO BO = new AdPlatformBO();
         AdPlatformBO adPlatformBO = new AdPlatformBO();
         adPlatformBO.setId(adPlatformDO.getId());
         adPlatformBO.setTitle(adPlatformDO.getTitle());
         adPlatformBO.setType(adPlatformDO.getType());
         adPlatformBO.setContent(adPlatformDO.getContent());
         adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
+        adPlatformBO.setTypeEnum(TypeEnum.getEnum(adPlatformDO.getType()));
+        adPlatformBO.setPositionEnum(PositionEnum.getEnum(adPlatformDO.getPosition()));
         if (adPlatformDO.getType() == 1) {
             adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
         } else {
             adPlatformBO.setProductId(adPlatformDO.getProductId());
         }
-        return BO;
+        return adPlatformBO;
 
     }
 
@@ -52,7 +55,6 @@ public class AdPlatformConverter {
         if (adPlatformBO == null) {
             return null;
         }
-        AdPlatformDTO DTO = new AdPlatformDTO();
         AdPlatformDTO adPlatformDTO = new AdPlatformDTO();
         adPlatformDTO.setId(adPlatformBO.getId());
         adPlatformDTO.setTitle(adPlatformBO.getTitle());
@@ -63,7 +65,7 @@ public class AdPlatformConverter {
         } else {
             adPlatformDTO.setProductId(adPlatformBO.getProductId());
         }
-        return DTO;
+        return adPlatformDTO;
     }
 
     /**
@@ -147,6 +149,8 @@ public class AdPlatformConverter {
             adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
             adPlatformDTO.setContent(adPlatformBO.getContent());
             adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
+            adPlatformDTO.setTypeEnum(adPlatformBO.getTypeEnum());
+            adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
             if (adPlatformBO.getType() == 1) {
                 adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
             } else {
@@ -155,5 +159,27 @@ public class AdPlatformConverter {
             DTOS.add(adPlatformDTO);
         }
         return DTOS;
+    }
+    
+    
+    public static AdPlatformOperatorDTO convertOperatorDTO(AdPlatformBO adPlatformBO) {
+    	AdPlatformOperatorDTO adPlatformDTO = new AdPlatformOperatorDTO();
+        if (adPlatformBO == null ) {
+            return adPlatformDTO;
+        }
+        adPlatformDTO.setId(adPlatformBO.getId());
+        adPlatformDTO.setTitle(adPlatformBO.getTitle());
+        adPlatformDTO.setMediaUrl(adPlatformBO.getMediaUrl());
+        adPlatformDTO.setContent(adPlatformBO.getContent());
+        adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
+        adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
+        adPlatformDTO.setTypeEnum(adPlatformBO.getTypeEnum());
+        if (adPlatformBO.getType() == 1) {
+            adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
+        } else {
+            adPlatformDTO.setProductId(adPlatformBO.getProductId());
+        }
+        
+        return adPlatformDTO;
     }
 }

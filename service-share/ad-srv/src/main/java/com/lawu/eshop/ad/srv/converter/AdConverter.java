@@ -11,10 +11,12 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * E赚实体转化
@@ -48,6 +50,9 @@ public class AdConverter {
 		adBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
 		adBO.setTotalPoint(adDO.getTotalPoint());
 		adBO.setViewCount(adDO.getViewcount());
+		adBO.setMerchantLatitude(adDO.getMerchantLatitude());
+		adBO.setMerchantLongitude(adDO.getMerchantLongitude());
+		adBO.setAreas(adDO.getAreas());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){
@@ -104,6 +109,7 @@ public class AdConverter {
 		adDTO.setIsFavorite(adBO.getIsFavorite());
 		adDTO.setViewCount(adBO.getViewCount());
 		adDTO.setIsPraise(adBO.getIsPraise());
+		adDTO.setAreas(adBO.getAreas());
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}
@@ -129,6 +135,28 @@ public class AdConverter {
 		for (AdBO adBO : adBOS) {
 			AdDTO DTO=convertDTO(adBO);
 			DTOS.add(DTO);
+		}
+		return DTOS;
+	}
+	
+	public static List<AdMerchantDTO> convertMerchantAdDTOS(List<AdBO> adBOS){
+		List<AdMerchantDTO> DTOS=new ArrayList<AdMerchantDTO>();
+		if(adBOS==null){
+			return DTOS;
+		}
+		for (AdBO adBO : adBOS) {
+			AdMerchantDTO dto=new AdMerchantDTO();
+			dto.setId(adBO.getId());
+			dto.setTitle(adBO.getTitle());
+			dto.setMerchantId(adBO.getMerchantId());
+			dto.setGmtCreate(adBO.getGmtCreate());
+			dto.setPutWayEnum(adBO.getPutWayEnum());
+			dto.setStatusEnum(adBO.getStatusEnum());
+			dto.setTotalPoint(adBO.getTotalPoint());
+			dto.setTypeEnum(adBO.getTypeEnum());
+			dto.setExpandOrder(RandomUtil.expandOrder());
+			dto.setMemberCount(adBO.getAdCount());
+			DTOS.add(dto);
 		}
 		return DTOS;
 	}

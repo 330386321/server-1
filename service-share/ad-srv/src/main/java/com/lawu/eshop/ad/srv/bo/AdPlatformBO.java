@@ -1,5 +1,8 @@
 package com.lawu.eshop.ad.srv.bo;
 
+import com.lawu.eshop.ad.constants.PositionEnum;
+import com.lawu.eshop.ad.constants.TypeEnum;
+
 public class AdPlatformBO {
 
 	private Long id;
@@ -17,6 +20,26 @@ public class AdPlatformBO {
 	private String content;
 
 	private Long merchantStoreId;
+	
+	private PositionEnum positionEnum;
+	
+	private TypeEnum typeEnum;
+	
+	public TypeEnum getTypeEnum() {
+		return typeEnum;
+	}
+
+	public void setTypeEnum(TypeEnum typeEnum) {
+		this.typeEnum = typeEnum;
+	}
+
+	public PositionEnum getPositionEnum() {
+		return positionEnum;
+	}
+
+	public void setPositionEnum(PositionEnum positionEnum) {
+		this.positionEnum = positionEnum;
+	}
 
 	public String getContent() {
 		return content;
