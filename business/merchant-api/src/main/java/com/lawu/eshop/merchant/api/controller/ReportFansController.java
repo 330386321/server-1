@@ -13,15 +13,10 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.merchant.api.service.BusinessDepositService;
-import com.lawu.eshop.merchant.api.service.OrderService;
-import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
-import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
-import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
-import com.lawu.eshop.property.param.BusinessDepositSaveParam;
-import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
-import com.lawu.eshop.property.param.BusinessRefundDepositParam;
+import com.lawu.eshop.merchant.api.service.ReportFansService;
+import com.lawu.eshop.user.dto.ReportFansRiseRateDTO;
+import com.lawu.eshop.user.param.ReportFansDataParam;
+import com.lawu.eshop.user.param.ReportFansParam;
 import com.lawu.eshop.utils.BeanUtil;
 
 import io.swagger.annotations.Api;
@@ -31,69 +26,35 @@ import io.swagger.annotations.ApiParam;
 /**
  * 
  * <p>
- * Description: 商家保证金
+ * Description: 报表----粉丝数据
  * </p>
  * 
  * @author Yangqh
- * @date 2017年4月15日 上午10:57:34
+ * @date 2017年5月2日 下午2:13:10
  *
  */
-@Api(tags = "businessDeposit")
+@Api(tags = "reportFans")
 @RestController
-@RequestMapping(value = "businessDeposit/")
+@RequestMapping(value = "reportFans/")
 public class ReportFansController extends BaseController {
 
 	@Autowired
-	private BusinessDepositService businessDepositService;
-	@Autowired
-	private OrderService orderService;
+	private ReportFansService reportFansService;
 
-	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "商家缴纳保证金初始化记录", notes = "商家缴纳保证金初始化记录，支付前需要调该接口初始化一条保证金记录，[]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "粉丝数据，粉丝增长量", notes = "粉丝数据，粉丝增长量(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam BusinessDepositSaveParam param) {
-		BusinessDepositSaveDataParam bparam = new BusinessDepositSaveDataParam();
-		bparam.setBusinessId(UserUtil.getCurrentUserId(getRequest()));
-		bparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		bparam.setBusinessAccount(UserUtil.getCurrentAccount(getRequest()));
-		bparam.setBusinessName(param.getBusinessName());
-		bparam.setProvinceId(param.getProvinceId());
-		bparam.setCityId(param.getCityId());
-		bparam.setAreaId(param.getAreaId());
-		return businessDepositService.save(bparam);
-	}
-
-	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@ApiOperation(value = "查看我的保证金", notes = "查看我的保证金,[]（杨清华）", httpMethod = "GET")
-	@Authorization
-	@RequestMapping(value = "selectDeposit/{merchantId}", method = RequestMethod.GET)
-	public Result<BusinessDepositDetailDTO> selectDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-		return businessDepositService.selectDeposit(UserUtil.getCurrentUserId(getRequest()).toString());
-	}
-
-	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "申请退保证金操作", notes = "申请退保证金,[]（杨清华）", httpMethod = "POST")
-	@Authorization
-	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
-	public Result refundDeposit(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam BusinessRefundDepositParam param) {
-
-		// 需要判断是否满足退保证金条件：无未完结订单、三个月(已财务核实时间为准)
-		Result<ShoppingOrderIsNoOnGoingOrderDTO> dto = orderService
-				.isNoOnGoingOrder(UserUtil.getCurrentUserId(getRequest()));
-		if (!dto.getModel().getIsNoOnGoingOrder()) {
-			return successCreated(ResultCode.DEPOSIT_EXIST_ING_ORDER);
+	@RequestMapping(value = "fansRiseRate", method = RequestMethod.GET)
+	public Result<ReportFansRiseRateDTO> fansRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam ReportFansParam param) throws Exception {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		if (merchantId == 0L) {
+			return successCreated(ResultCode.MEMBER_NO_EXIST);
 		}
-		
-		BusinessRefundDepositDataParam dparam = new BusinessRefundDepositDataParam();
-		dparam.setId(param.getId());
-		dparam.setBusinessBankAccountId(param.getBusinessBankAccountId());
-		dparam.setUserName(UserUtil.getCurrentUserNum(getRequest()));
-
-		return businessDepositService.refundDeposit(dparam);
+		ReportFansDataParam dparam = new ReportFansDataParam();
+		BeanUtil.copyProperties(param, dparam);
+		dparam.setMerchantId(merchantId);
+		return reportFansService.fansRiseRate(dparam);
 	}
+
 }
