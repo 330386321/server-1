@@ -424,7 +424,7 @@ public class ShoppingOrderExtendDOExample {
         }
 
         public Criteria andMerchantIdEqualTo(Long value) {
-            addCriterion("so.member_id =", value, "merchantId");
+            addCriterion("so.merchant_id =", value, "merchantId");
             return (Criteria) this;
         }
 

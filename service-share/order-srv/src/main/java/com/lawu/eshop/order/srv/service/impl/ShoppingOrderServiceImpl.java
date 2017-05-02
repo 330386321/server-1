@@ -238,8 +238,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public Page<ShoppingOrderExtendBO> selectPageByMerchantId(Long merchantId, ShoppingOrderQueryForeignToMerchantParam param) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
-		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		
 		// 组装Criteria
 		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
