@@ -64,7 +64,8 @@ public class ShoppingCartController extends BaseController {
     @Authorization
     @RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartParam param, BindingResult bindingResult) {
-    	String message = validate(bindingResult);
+    	
+		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
@@ -90,7 +91,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    private Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
      	Result<List<MemberShoppingCartGroupDTO>> result = shoppingcartExtendService.findListByMemberId(memberId);

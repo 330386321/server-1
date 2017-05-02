@@ -61,6 +61,7 @@ public class AddressController extends BaseController {
 		return successGet(result);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-21", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "查询单个收货地址", notes = "单个查询收货地址[]（蒋鑫俊）", httpMethod = "GET")
@@ -68,7 +69,12 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
 		Result<AddressDTO> addressDTO = addressService.get(id);
-		return addressDTO;
+		
+		if (!isSuccess(addressDTO)) {
+			return successGet(addressDTO.getRet());
+		}
+		
+		return successGet(addressDTO);
 	}
 
 	@Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -79,7 +85,12 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
 		Result rs = addressService.delete(id);
-		return rs;
+		
+		if (!isSuccess(rs)) {
+			return successCreated(rs.getRet());
+		}
+		
+		return successDelete();
 	}
 
 	@Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -125,7 +136,10 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
 	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
 		Result rs = addressService.update(address, id);
-		return rs;
+		if (!isSuccess(rs)) {
+			return successCreated(rs.getRet());
+		}
+		return successCreated();
 
 	}
 
@@ -138,7 +152,10 @@ public class AddressController extends BaseController {
 	public Result updateDefault(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result rs = addressService.updateDefault(id, userNum);
-		return rs;
+		if (!isSuccess(rs)) {
+			return successCreated(rs.getRet());
+		}
+		return successCreated();
 	}
 
 }
