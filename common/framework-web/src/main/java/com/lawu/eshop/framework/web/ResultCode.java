@@ -127,7 +127,6 @@ public class ResultCode {
 
 
 
-
     // 商城模块代码 7xxx
     public static final int MESSAGE_HAS_NO_TEMPLATE = 7001;
 
