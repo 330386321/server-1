@@ -26,7 +26,7 @@ public class MemberProductStoreDTO {
 	@ApiModelProperty(value = "型号现价")
 	private String fansNum;
 	
-	@ApiModelProperty(value = "logo")
+	@ApiModelProperty(value = "商家logo")
 	private String logo;
 	
 	@ApiModelProperty(value = "是否支持七天无理由退货")

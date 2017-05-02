@@ -1,6 +1,6 @@
 package com.lawu.eshop.user.param;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
 
@@ -20,7 +20,7 @@ public class ReportFansDataParam extends  ReportFansParam{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@NotBlank(message = "merchantId不能为空")
+	@NotNull(message = "merchantId不能为空")
 	private Long merchantId;
 
 	public Long getMerchantId() {

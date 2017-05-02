@@ -105,6 +105,7 @@ public class ProductConverter {
         productInfoBO.setContent(productDO.getContent());
         productInfoBO.setMerchantId(productDO.getMerchantId());
         productInfoBO.setTotalSalesVolume(productDO.getTotalSalesVolume());
+        productInfoBO.setTotalInventory(productDO.getTotalInventory());
         productInfoBO.setMaxPrice(String.valueOf(productDO.getMaxPrice()));
         productInfoBO.setMinPrice(String.valueOf(productDO.getMinPrice()));
         productInfoBO.setGmtCreate(productDO.getGmtCreate());
@@ -121,7 +122,7 @@ public class ProductConverter {
         ProductEditInfoBO productEditInfoBO = new ProductEditInfoBO();
         productEditInfoBO.setId(productDO.getId());
         productEditInfoBO.setName(productDO.getName());
-        productEditInfoBO.setCategory(productDO.getId());
+        productEditInfoBO.setCategory(Long.valueOf(productDO.getCategoryId()));
         productEditInfoBO.setFeatureImage(productDO.getFeatureImage());
         productEditInfoBO.setContent(productDO.getContent());
         productEditInfoBO.setMerchantId(productDO.getMerchantId());

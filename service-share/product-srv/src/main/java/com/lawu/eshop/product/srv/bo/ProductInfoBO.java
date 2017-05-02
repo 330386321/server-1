@@ -28,6 +28,7 @@ public class ProductInfoBO {
     private String maxPrice;
 	private String minPrice;
 	private Integer totalSalesVolume;
+	private Integer totalInventory;
     
     public Long getId() {
         return id;
@@ -125,6 +126,14 @@ public class ProductInfoBO {
 
 	public void setTotalSalesVolume(Integer totalSalesVolume) {
 		this.totalSalesVolume = totalSalesVolume;
+	}
+
+	public Integer getTotalInventory() {
+		return totalInventory;
+	}
+
+	public void setTotalInventory(Integer totalInventory) {
+		this.totalInventory = totalInventory;
 	}
     
 }

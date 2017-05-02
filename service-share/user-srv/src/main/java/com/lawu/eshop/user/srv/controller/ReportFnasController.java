@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.ReportFansRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.user.param.ReportFansDataParam;
-import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.service.ReportFansService;
 
 /**
@@ -37,8 +37,8 @@ public class ReportFnasController extends BaseController {
 	@Autowired
 	private ReportFansService reportFansService;
 	
-	@RequestMapping(value = "fansRiseRate", method = RequestMethod.GET)
-	public Result<ReportFansRiseRateDTO> fansRiseRate(@RequestBody @Valid ReportFansDataParam dparam,
+	@RequestMapping(value = "fansRiseRate", method = RequestMethod.POST)
+	public Result<ReportRiseRateDTO> fansRiseRate(@RequestBody @Valid ReportFansDataParam dparam,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
@@ -49,8 +49,32 @@ public class ReportFnasController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		ReportFansRiseRateDTO dto = reportFansService.fansRiseRate(dparam);
+		ReportRiseRateDTO dto = reportFansService.fansRiseRate(dparam);
 		return successCreated(dto);
+	}
+	
+	/**
+	 * 增长来源
+	 * @param dparam
+	 * @param result
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月2日 下午7:16:27
+	 */
+	@RequestMapping(value = "fansRiseSource", method = RequestMethod.POST)
+	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestBody @Valid ReportFansDataParam dparam,
+			BindingResult result) {
+		if (result.hasErrors()) {
+			List<FieldError> errors = result.getFieldErrors();
+			StringBuffer es = new StringBuffer();
+			for (FieldError e : errors) {
+				String msg = e.getDefaultMessage();
+				es.append(msg);
+			}
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
+		}
+		List<ReportRiseRerouceDTO> dtos = reportFansService.fansRiseSource(dparam);
+		return successCreated(dtos);
 	}
 
 }

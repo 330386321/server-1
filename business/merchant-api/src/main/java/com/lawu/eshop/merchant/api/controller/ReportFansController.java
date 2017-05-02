@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -14,7 +16,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ReportFansService;
-import com.lawu.eshop.user.dto.ReportFansRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.user.param.ReportFansDataParam;
 import com.lawu.eshop.user.param.ReportFansParam;
 import com.lawu.eshop.utils.BeanUtil;
@@ -41,11 +44,10 @@ public class ReportFansController extends BaseController {
 	@Autowired
 	private ReportFansService reportFansService;
 
-	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "粉丝数据，粉丝增长量", notes = "粉丝数据，粉丝增长量(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansRiseRate", method = RequestMethod.GET)
-	public Result<ReportFansRiseRateDTO> fansRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public Result<ReportRiseRateDTO> fansRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam ReportFansParam param) throws Exception {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		if (merchantId == 0L) {
@@ -54,7 +56,23 @@ public class ReportFansController extends BaseController {
 		ReportFansDataParam dparam = new ReportFansDataParam();
 		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
+		dparam.setFlag(param.getFlag());
 		return reportFansService.fansRiseRate(dparam);
 	}
 
+	@ApiOperation(value = "粉丝数据，增长来源", notes = "粉丝数据，增长来源(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "fansRiseSource", method = RequestMethod.GET)
+	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam ReportFansParam param) throws Exception {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		if (merchantId == 0L) {
+			return successCreated(ResultCode.MEMBER_NO_EXIST);
+		}
+		ReportFansDataParam dparam = new ReportFansDataParam();
+		BeanUtil.copyProperties(param, dparam);
+		dparam.setMerchantId(merchantId);
+		dparam.setFlag(param.getFlag());
+		return reportFansService.fansRiseSource(dparam);
+	}
 }

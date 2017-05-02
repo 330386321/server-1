@@ -1,6 +1,9 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.dto.ReportFansRiseRateDTO;
+import java.util.List;
+
+import com.lawu.eshop.user.dto.ReportRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.user.param.ReportFansDataParam;
 
 /**
@@ -21,7 +24,16 @@ public interface ReportFansService {
 	 * @author yangqh
 	 * @date 2017年5月2日 下午2:48:18
 	 */
-	ReportFansRiseRateDTO fansRiseRate(ReportFansDataParam dparam);
+	ReportRiseRateDTO fansRiseRate(ReportFansDataParam dparam);
+
+	/**
+	 * 增长来源
+	 * @param dparam
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月2日 下午7:16:44
+	 */
+	List<ReportRiseRerouceDTO> fansRiseSource(ReportFansDataParam dparam);
 
     
 }

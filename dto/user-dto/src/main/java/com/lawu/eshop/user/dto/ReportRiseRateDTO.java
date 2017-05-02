@@ -13,12 +13,12 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017年5月2日 下午2:43:39
  *
  */
-public class ReportFansRiseRateDTO {
+public class ReportRiseRateDTO {
 
-    @ApiModelProperty(value = "报表x轴")
+    @ApiModelProperty(value = "报表x轴(与y轴对应)")
     private List<String> x;
 
-    @ApiModelProperty(value = "报表y轴")
+    @ApiModelProperty(value = "报表y轴(英文逗号分隔)")
     private List<String> y;
 
 	public List<String> getX() {

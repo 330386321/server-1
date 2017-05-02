@@ -1,12 +1,15 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.ReportFansRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRateDTO;
+import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.user.param.ReportFansDataParam;
 
 /**
@@ -28,7 +31,17 @@ public interface ReportFansService {
 	 * @author yangqh
 	 * @date 2017年5月2日 下午2:34:33
 	 */
-	@RequestMapping(method = RequestMethod.PUT, value = "reportFans/fansRiseRate")
-	Result<ReportFansRiseRateDTO> fansRiseRate(@RequestBody ReportFansDataParam dparam);
+	@RequestMapping(method = RequestMethod.POST, value = "reportFans/fansRiseRate")
+	Result<ReportRiseRateDTO> fansRiseRate(@RequestBody ReportFansDataParam dparam);
+
+	/**
+	 * 粉丝数据，增长来源
+	 * @param dparam
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月2日 下午7:15:22
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "reportFans/fansRiseSource")
+	Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestBody ReportFansDataParam dparam);
     
 }

@@ -42,6 +42,9 @@ public class ProductInfoDTO {
 
 	@ApiModelProperty(value = "销量")
 	private Integer totalSalesVolume;
+	
+	@ApiModelProperty(value = "总库存")
+	private Integer totalInventory;
 
 	@ApiModelProperty(value = "型号信息")
 	private List<MemberProductModelDTO> spec;
@@ -190,6 +193,14 @@ public class ProductInfoDTO {
 
 	public void setFavoriteFlag(boolean favoriteFlag) {
 		this.favoriteFlag = favoriteFlag;
+	}
+
+	public Integer getTotalInventory() {
+		return totalInventory;
+	}
+
+	public void setTotalInventory(Integer totalInventory) {
+		this.totalInventory = totalInventory;
 	}
 	
 }
