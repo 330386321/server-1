@@ -11,6 +11,9 @@ public class ProductSearchDTO {
     @ApiModelProperty(value = "商品ID")
     private Long productId;
 
+    @ApiModelProperty(value = "商品类别ID")
+    private Integer categoryId;
+
     @ApiModelProperty(value = "特征图片")
     private String featureImage;
 
@@ -83,5 +86,13 @@ public class ProductSearchDTO {
 
     public void setSalesVolume(Integer salesVolume) {
         this.salesVolume = salesVolume;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }

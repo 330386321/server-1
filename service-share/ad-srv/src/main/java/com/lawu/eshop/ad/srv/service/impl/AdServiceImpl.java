@@ -1,13 +1,21 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
+import com.lawu.eshop.ad.srv.domain.*;
+import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
+import com.lawu.eshop.ad.srv.mapper.*;
+import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.utils.AdArithmeticUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
@@ -17,39 +25,14 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.ListAdParam;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.ad.srv.domain.AdDOExample;
-import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.domain.AdRegionDO;
-import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
-import com.lawu.eshop.ad.srv.domain.PointPoolDO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
-import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
-import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
-import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
-import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
-import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
-import com.lawu.eshop.ad.srv.service.AdService;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.AdArithmeticUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * E赚接口实现类
@@ -91,8 +74,7 @@ public class AdServiceImpl implements AdService {
 
 	/**
 	 * 商家发布E赚
-	 * @param adParam
-	 * @param merchantId
+	 * @param adSaveParam
 	 * @return
 	 */
 	@Override
@@ -247,7 +229,7 @@ public class AdServiceImpl implements AdService {
 					if(adMerchantParam.getPutWayEnum()!=null){
 						c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 					}
-					
+
 				}else{
 					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val)
 					.andMerchantIdEqualTo(merchantId);
@@ -263,9 +245,9 @@ public class AdServiceImpl implements AdService {
 						c2.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 					 }
 					 example.or(c2);
-					 
+
 				}
-				
+
 			}else{
 				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
 				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
@@ -277,7 +259,7 @@ public class AdServiceImpl implements AdService {
 				if(adMerchantParam.getPutWayEnum()!=null){
 					c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 				}
-				
+
 			}
 			
 		}
@@ -294,7 +276,7 @@ public class AdServiceImpl implements AdService {
 
 	/**
 	 * 运营平台(商家)对E赚的管理(下架)
-	 * @param statusEnum
+	 * @param id
 	 * @return
 	 */
 	@Override
@@ -314,7 +296,7 @@ public class AdServiceImpl implements AdService {
 	
 	/**
 	 * 运营平台(商家)对E赚的管理(删除)
-	 * @param statusEnum
+	 * @param id
 	 * @return
 	 */
 	@Override
@@ -331,7 +313,7 @@ public class AdServiceImpl implements AdService {
 
 	/**
 	 * 运营平台对广告的查询
-	 * @param adMerchantParam
+	 * @param adPlatParam
 	 * @return
 	 */
 	@Override
@@ -360,7 +342,8 @@ public class AdServiceImpl implements AdService {
 
 	/**
 	 * 会员对广告的观看
-	 * @param adMerchantParam
+	 * @param adMemberParam
+	 * @param memberId
 	 * @return
 	 */
 	@Override
@@ -722,16 +705,20 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> listAllAd(ListAdParam listAdParam) {
 		AdDOExample example = new AdDOExample();
 		Criteria criteria = example.createCriteria();
+		criteria.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
+		if(StringUtils.isNotEmpty(listAdParam.getSortName()) && StringUtils.isNotEmpty(listAdParam.getSortOrder())){
+			example.setOrderByClause("gmt_create " + listAdParam.getSortOrder());
+		}
 		if(StringUtils.isNotEmpty(listAdParam.getTitle())){
 			criteria.andTitleLike("%" + listAdParam.getTitle() + "%");
 		}
-		if(listAdParam.getTypeEnum()!=null){
+		if(listAdParam.getTypeEnum() != null){
 			criteria.andTypeEqualTo(listAdParam.getTypeEnum().val);
 		}
-		if(listAdParam.getPutWayEnum()!=null){
+		if(listAdParam.getPutWayEnum() != null){
 			criteria.andPutWayEqualTo(listAdParam.getPutWayEnum().val);
 		}
-		if(listAdParam.getStatusEnum()!=null){
+		if(listAdParam.getStatusEnum() != null){
 			criteria.andStatusEqualTo(listAdParam.getStatusEnum().val);
 		}
 

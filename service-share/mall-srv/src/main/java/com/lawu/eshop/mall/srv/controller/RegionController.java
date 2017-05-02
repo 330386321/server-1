@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
 import com.lawu.eshop.mall.srv.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +40,16 @@ public class RegionController extends BaseController {
             list.add(regionDTO);
         }
         return successGet(list);
+    }
+
+    /**
+     * 根据区域ID查询区域完整名称
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getRegionFullName/{id}", method = RequestMethod.GET)
+    public Result<String> getRegionFullName(@PathVariable Integer id) {
+        return successGet(regionService.getRegionFullName(id));
     }
 }

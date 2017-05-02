@@ -1,6 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
@@ -20,6 +19,7 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -288,6 +288,9 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     public Page<MerchantStoreAuditBO> listAllStoreAudit(ListStoreAuditParam auditParam) {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
         MerchantStoreAuditDOExample.Criteria criteria = example.createCriteria();
+        if (StringUtils.isNotEmpty(auditParam.getSortName()) && StringUtils.isNotEmpty(auditParam.getSortOrder())) {
+            example.setOrderByClause("gmt_modified " + auditParam.getSortOrder());
+        }
         if (auditParam.getStatusEnum() != null) {
             criteria.andStatusEqualTo(auditParam.getStatusEnum().val);
         }

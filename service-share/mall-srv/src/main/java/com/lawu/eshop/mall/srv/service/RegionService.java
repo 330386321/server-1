@@ -12,4 +12,12 @@ public interface RegionService {
 
 
     List<RegionBO> getRegionList();
+
+    /**
+     * 根据区域ID查询区域完整名称
+     *
+     * @param id
+     * @return
+     */
+    String getRegionFullName(Integer id);
 }

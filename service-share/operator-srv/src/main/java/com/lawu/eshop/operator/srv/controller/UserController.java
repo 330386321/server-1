@@ -204,7 +204,7 @@ public class UserController extends BaseController {
     public Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id){
         UserListBO userListBO = userService.finUserById(id);
         if(userListBO == null){
-            return successGet();
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         UserListDTO userListDTO = UserConverter.coverDTO(userListBO);
         return successGet(userListDTO);

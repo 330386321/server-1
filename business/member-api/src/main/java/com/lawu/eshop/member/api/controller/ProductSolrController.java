@@ -47,7 +47,7 @@ public class ProductSolrController extends BaseController {
     private ProductService productService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类(categoryId 必传)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
@@ -55,7 +55,7 @@ public class ProductSolrController extends BaseController {
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行,categoryId 必传)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
@@ -63,7 +63,7 @@ public class ProductSolrController extends BaseController {
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索(name 必传)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {

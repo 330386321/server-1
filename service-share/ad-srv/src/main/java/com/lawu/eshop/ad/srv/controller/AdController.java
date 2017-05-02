@@ -135,7 +135,7 @@ public class AdController extends BaseController{
     public Result remove(@PathVariable Long id) {
     	Integer i= adService.remove(id);
  		if(i>0){
-     		return successDelete();
+     		return successCreated();
      	}else{
      		return successCreated(ResultCode.FAIL);
      	}

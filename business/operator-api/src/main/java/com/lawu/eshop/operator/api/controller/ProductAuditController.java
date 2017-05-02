@@ -34,7 +34,7 @@ public class ProductAuditController extends BaseController {
     //@RequiresPermissions("product:list")
     @PageBody
     @RequestMapping(value = "listProduct", method = RequestMethod.POST)
-    public Result<Page<ProductQueryDTO>> listProduct(@RequestBody ListProductParam listProductParam) {
+    public Result<Page<ProductQueryDTO>> listProduct(@RequestBody @ApiParam ListProductParam listProductParam) {
         return productAuditService.listProduct(listProductParam);
     }
 

@@ -106,8 +106,11 @@ public class MerchantStoreAuditDTO {
     @ApiModelProperty(value = "审核类型")
     private MerchantAuditTypeEnum typeEnum;
 
-    @ApiModelProperty(value = "审核人")
+    @ApiModelProperty(value = "审核人ID")
     private Integer auditorId;
+
+    @ApiModelProperty(value = "审核人")
+    private String  auditorName;
 
     @ApiModelProperty(value = "备注")
     private String remark;
@@ -390,5 +393,13 @@ public class MerchantStoreAuditDTO {
 
     public void setOtherUrl(List<String> otherUrl) {
         this.otherUrl = otherUrl;
+    }
+
+    public String getAuditorName() {
+        return auditorName;
+    }
+
+    public void setAuditorName(String auditorName) {
+        this.auditorName = auditorName;
     }
 }

@@ -2,7 +2,9 @@ package com.lawu.eshop.mall.srv.service.impl;
 
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
+import com.lawu.eshop.mall.srv.domain.RegionDO;
 import com.lawu.eshop.mall.srv.domain.extend.RegionDOView;
+import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.RegionDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class RegionServiceImpl implements RegionService {
     @Autowired
     private RegionDOMMapperExtend regionDOMMapperExtend;
 
+    @Autowired
+    private RegionDOMapper regionDOMapper;
+
     @Override
     public List<RegionBO> getRegionList() {
         List<RegionDOView> viewList = regionDOMMapperExtend.getRegionList();
@@ -32,5 +37,27 @@ public class RegionServiceImpl implements RegionService {
             regionBOS.add(regionBO);
         }
         return regionBOS;
+    }
+
+    @Override
+    public String getRegionFullName(Integer id) {
+        String regionFullName = "";
+        RegionDO regionDO = regionDOMapper.selectByPrimaryKey(id);
+        if (regionDO == null) {
+            return regionFullName;
+        }
+        int cnt = 0;
+        regionFullName = regionDO.getName();
+        do {
+            if (regionDO.getParentId() > 0) {
+                regionDO = regionDOMapper.selectByPrimaryKey(regionDO.getParentId());
+                if (regionDO == null) {
+                    return regionFullName;
+                }
+                regionFullName = regionDO.getName() + regionFullName;
+            }
+            cnt++;
+        } while (cnt < 2);
+        return regionFullName;
     }
 }

@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ProductSolrParam extends AbstractPageParam {
 
-    @ApiModelProperty(value = "商品类型ID")
+    @ApiModelProperty(value = "商品类别ID")
     private Integer categoryId;
 
     @ApiModelProperty(value = "商品名称")

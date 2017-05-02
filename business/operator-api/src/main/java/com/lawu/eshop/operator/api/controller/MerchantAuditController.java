@@ -6,6 +6,8 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.MerchantAuditService;
+import com.lawu.eshop.operator.api.service.UserService;
+import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
@@ -15,6 +17,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -28,6 +32,9 @@ public class MerchantAuditController extends BaseController {
     @Autowired
     private MerchantAuditService merchantAuditService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * 门店审核列表
      *
@@ -39,7 +46,19 @@ public class MerchantAuditController extends BaseController {
     @PageBody
     @RequestMapping(value = "listStoreAudit", method = RequestMethod.POST)
     public Result<Page<MerchantStoreAuditDTO>> listStoreAudit(@RequestBody @ApiParam ListStoreAuditParam auditParam) {
-        return merchantAuditService.listStoreAudit(auditParam);
+        Result<Page<MerchantStoreAuditDTO>> result = merchantAuditService.listStoreAudit(auditParam);
+        List<MerchantStoreAuditDTO> list = result.getModel().getRecords();
+        if (list != null && !list.isEmpty()) {
+            for (MerchantStoreAuditDTO merchantStoreAuditDTO : list) {
+                if (merchantStoreAuditDTO.getAuditorId() != null && merchantStoreAuditDTO.getAuditorId() > 0) {
+                    Result<UserListDTO> userListDTOResult = userService.findUserById(merchantStoreAuditDTO.getAuditorId());
+                    if (isSuccess(userListDTOResult)) {
+                        merchantStoreAuditDTO.setAuditorName(userListDTOResult.getModel().getName());
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**
