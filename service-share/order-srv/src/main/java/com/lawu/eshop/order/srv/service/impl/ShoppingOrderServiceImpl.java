@@ -327,7 +327,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.createCriteria().andIdEqualTo(id);
 		
-		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.getShoppingOrderAssociationByPrimaryKey(id);
+		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
 		
 		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0
 				|| shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty()) {
@@ -414,10 +414,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return ResultCode.ID_EMPTY;
 		}
 		
-		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.getShoppingOrderAssociationByPrimaryKey(id);
+		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
 		
 		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0) {
 			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+		
+		// 当前订单是否已经删除，实现删除操作的幂等性，返回成功状态码
+		if (shoppingOrderExtendDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			return ResultCode.SUCCESS;
 		}
 		
 		// 检查订单项的订单状态是否是否是完成状态
@@ -431,7 +436,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		
 		// 订单的当前状态必须已结束状态的订单
-		if (!isDone){
+		if (!isDone) {
 			return ResultCode.ORDER_NOT_COMPLETE_STATUS;
 		}
 		
@@ -452,9 +457,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更改数据状态为删除
 		shoppingOrderDO.setStatus(StatusEnum.INVALID.getValue());
-		Integer result = shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
-		return result;
+		return ResultCode.SUCCESS;
 	}
 
 	/**

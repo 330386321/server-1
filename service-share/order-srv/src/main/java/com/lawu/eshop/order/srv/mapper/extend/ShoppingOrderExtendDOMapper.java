@@ -40,7 +40,7 @@ public interface ShoppingOrderExtendDOMapper {
      * @param id 订单id
      * @return
      */
-    ShoppingOrderExtendDO getShoppingOrderAssociationByPrimaryKey(Long id);
+    ShoppingOrderExtendDO selectByPrimaryKey(Long id);
     
 	/**
 	 * 分页查询订单退款列表

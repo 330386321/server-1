@@ -214,7 +214,7 @@
 		</if>
 	</select>
 	
-	<select id="getShoppingOrderAssociationByPrimaryKey" parameterType="java.lang.Long" resultMap="ShoppingOrderExtendResultMap">
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ShoppingOrderExtendResultMap">
 	  select 
 	  <include refid="ShoppingOrder_Column_List" />
 	  ,
