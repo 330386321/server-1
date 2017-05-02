@@ -1,7 +1,9 @@
 package com.lawu.eshop.order.dto.foreign;
 
 import java.io.Serializable;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -45,6 +47,19 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
 	private RefundStatusEnum refundStatus;
+	
+	/**
+	 * 退款时间
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
+	@ApiModelProperty(value = "退款时间", required = true)
+	private Date gmtCreate;
+	
+	/**
+	 * 购物订单项id
+	 */
+	@ApiModelProperty(value = "购物订单项id", required = true)
+	private Long id;
 	
 	public Long getShoppingRefundDetailId() {
 		return shoppingRefundDetailId;
@@ -92,6 +107,22 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 
 	public void setRefundStatus(RefundStatusEnum refundStatus) {
 		this.refundStatus = refundStatus;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

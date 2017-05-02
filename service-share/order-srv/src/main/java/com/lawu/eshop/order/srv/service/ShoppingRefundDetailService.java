@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 
 /**
@@ -29,7 +30,7 @@ public interface ShoppingRefundDetailService {
 	 *            购物订单项id
 	 * @return
 	 */
-	ShoppingRefundDetailBO getByShoppingOrderitemId(Long shoppingOrderItemId);
+	ShoppingOrderItemExtendBO getByShoppingOrderitemId(Long shoppingOrderItemId);
 
 	/**
 	 * 商家是否同意买家的退货申请

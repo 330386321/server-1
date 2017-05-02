@@ -6,7 +6,6 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
 
 /**
  * 关联查询订单和订单项表
@@ -42,15 +41,6 @@ public interface ShoppingOrderExtendDOMapper {
      */
     ShoppingOrderExtendDO selectByPrimaryKey(Long id);
     
-	/**
-	 * 分页查询订单退款列表
-	 * 
-	 * @param example 查询参数
-	 * @param rowBounds 分页参数
-	 * @return
-	 */
-	List<ShoppingOrderItemRefundDO> selectShoppingOrderItemRefundResultMapByExampleWithRowbounds(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
-	
 	/**
 	 * 查询订单表
 	 * 

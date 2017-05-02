@@ -2,6 +2,7 @@ package com.lawu.eshop.order.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
@@ -31,7 +32,7 @@ public interface ShoppingCartService {
 	 * @return
 	 * @author Sunny
 	 */
-	int save(Long memberId, ShoppingCartSaveParam param);
+	Result<Long> save(Long memberId, ShoppingCartSaveParam param);
 	
 	/**
 	 * 根据id更新购物车

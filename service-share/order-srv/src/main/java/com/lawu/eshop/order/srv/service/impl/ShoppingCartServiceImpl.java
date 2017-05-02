@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
@@ -24,7 +26,7 @@ import com.lawu.eshop.order.srv.service.ShoppingCartService;
  * @date 2017/3/24
  */
 @Service
-public class ShoppingCartServiceImpl implements ShoppingCartService {
+public class ShoppingCartServiceImpl extends BaseController implements ShoppingCartService {
 
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
@@ -51,7 +53,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	 */
 	@Transactional
 	@Override
-	public int save(Long memberId, ShoppingCartSaveParam param) {
+	public Result<Long> save(Long memberId, ShoppingCartSaveParam param) {
 		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
 		suggestionDO.setMemberId(memberId);
 		suggestionDO.setGmtCreate(new Date());
@@ -61,10 +63,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 		int result = shoppingCartDOMapper.insertSelective(suggestionDO);
 
 		if (result <= 0) {
-			return ResultCode.SAVE_FAIL;
+			return successCreated(ResultCode.SAVE_FAIL);
 		}
 
-		return ResultCode.SUCCESS;
+		return successCreated(suggestionDO.getId());
 	}
 
 	/**

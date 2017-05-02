@@ -20,14 +20,15 @@ import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
+import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
-import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
@@ -119,24 +120,21 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * @return
 	 */
 	@Override
-	public ShoppingRefundDetailBO getByShoppingOrderitemId(Long shoppingOrderItemId) {
+	public ShoppingOrderItemExtendBO getByShoppingOrderitemId(Long shoppingOrderItemId) {
 		if (shoppingOrderItemId == null || shoppingOrderItemId <= 0) {
 			return null;
 		}
-
-		ShoppingRefundDetailDOExample shoppingRefundDetailDOExample = new ShoppingRefundDetailDOExample();
-		ShoppingRefundDetailDOExample.Criteria criteria = shoppingRefundDetailDOExample.createCriteria();
-		criteria.andShoppingOrderItemIdEqualTo(shoppingOrderItemId);
+		
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
+		ShoppingOrderItemExtendDOExample.Criteria criteria = shoppingOrderItemExtendDOExample.createCriteria();
+		criteria.andIdEqualTo(shoppingOrderItemId);
 		// 找到有效记录
-		criteria.andStatusEqualTo(StatusEnum.VALID.getValue());
+		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+		
+		List<ShoppingOrderItemExtendDO> list = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
-		List<ShoppingRefundDetailDO> shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByExample(shoppingRefundDetailDOExample);
-
-		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.isEmpty()) {
-			return null;
-		}
-
-		return ShoppingRefundDetailConverter.convert(shoppingRefundDetailDO.get(0));
+		return ShoppingOrderItemExtendConverter.convert(list.get(0));
 	}
 
 	/**

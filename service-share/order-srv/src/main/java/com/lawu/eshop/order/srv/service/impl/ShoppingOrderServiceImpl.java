@@ -302,9 +302,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
 		
-		// 分页参数
-		rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-		
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		
@@ -1173,7 +1170,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
 		long toBeReceivedCount = shoppingOrderDOMapper.countByExample(shoppingOrderDOExample);
 		
-		//查询退货中数量
+		// 查询退货中数量
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();

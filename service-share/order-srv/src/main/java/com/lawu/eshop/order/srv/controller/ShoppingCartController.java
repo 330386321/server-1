@@ -36,16 +36,17 @@ public class ShoppingCartController extends BaseController {
 	 * 
 	 * @param param
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
-	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
-		int resultCode = shoppingCartService.save(memberId, param);
+	public Result<Long> save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
 		
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+		Result<Long> result = shoppingCartService.save(memberId, param);
+		
+		if (!isSuccess(result)) {
+			return successCreated(result.getRet());
 		}
 		
-		return successCreated();
+		return successCreated(result);
 	}
 	
 	/**
@@ -55,7 +56,7 @@ public class ShoppingCartController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "list/{memberId}",  method = RequestMethod.GET)
-	Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId){
+	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId){
 		
 		List<ShoppingCartBO> shoppingCartBOList = shoppingCartService.findListByMemberId(memberId);
 		
@@ -113,7 +114,7 @@ public class ShoppingCartController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "list/findListByIds",  method = RequestMethod.GET)
-	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
+	public Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
 		
 		List<ShoppingCartBO> ShoppingCartBOList = shoppingCartService.findListByIds(ids);
 		

@@ -206,4 +206,31 @@ public class ShoppingCartController extends BaseController {
     	return successCreated(result);
     }
     
+	/**
+	 * 立即购买
+	 * @param param 购物参数
+	 * @return 返回订单的结算数据
+	 */
+    @SuppressWarnings({"unchecked" })
+	@ApiOperation(value = "立即购买", notes = "立即购买。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+	@RequestMapping(value = "buyNow", method = RequestMethod.POST)
+	public Result<ShoppingCartSettlementDTO> buyNow(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "加入购物车参数") @Validated ShoppingCartParam param, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	String memberNum = UserUtil.getCurrentUserNum(getRequest());
+    	
+    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.buyNow(memberId, memberNum, param);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    	
+    	return successCreated(result);
+    }
+    
 }

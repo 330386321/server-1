@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -75,39 +77,51 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	/**
 	 * 退款时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "退款时间", required = true)
 	private Date gmtRefund;
 
 	/**
 	 * 商家确认时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "商家确认时间", required = true)
 	private Date gmtConfirmed;
 
 	/**
 	 * 商家填写退货地址时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "商家填写退货地址时间", required = true)
 	private Date gmtFill;
 
 	/**
 	 * 买家提交退货物流时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "买家提交退货物流时间", required = true)
 	private Date gmtSubmit;
 	
     /**
     * 平台介入时间
     */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "平台介入时间", required = true)
     private Date gmtIntervention;
 	
 	/**
 	 * 退款申请时间
 	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "退款申请时间", required = true)
 	private Date gmtCreate;
-
+	
+	/**
+	 * 退款状态
+	 */
+	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
+	private RefundStatusEnum refundStatus;
+	
 	public Long getId() {
 		return id;
 	}
@@ -234,6 +248,14 @@ public class ShoppingRefundDetailDTO implements Serializable {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public RefundStatusEnum getRefundStatus() {
+		return refundStatus;
+	}
+
+	public void setRefundStatus(RefundStatusEnum refundStatus) {
+		this.refundStatus = refundStatus;
 	}
 
 }

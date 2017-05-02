@@ -4,7 +4,6 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 
 /**
  * 购物订单项服务接口
@@ -32,7 +31,7 @@ public interface ShoppingOrderItemService {
 	 *            查询参数
 	 * @return 订单列表
 	 */
-	Page<ShoppingOrderItemRefundBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param);
+	Page<ShoppingOrderItemExtendBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param);
 	
 	/**
 	 * 查询处于退款中的订单项

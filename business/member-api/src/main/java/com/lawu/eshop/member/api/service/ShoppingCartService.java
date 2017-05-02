@@ -28,9 +28,8 @@ public interface ShoppingCartService {
 	 * @param parm
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingCart/{memberId}", method = RequestMethod.POST)
-	Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam parm);
+	Result<Long> save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam parm);
 	
 	/**
 	 * 根据memberId查询用户的购物车列表

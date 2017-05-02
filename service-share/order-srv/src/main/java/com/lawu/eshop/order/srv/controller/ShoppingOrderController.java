@@ -45,14 +45,12 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
-import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -212,14 +210,9 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param) {
 		
-		Page<ShoppingOrderItemRefundBO> shoppingOrderItemRefundBOPage = shoppingOrderItemService.selectRefundPageByMemberId(memberId, param);
+		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMemberId(memberId, param);
 		
-		Page<ShoppingOrderItemRefundDTO> shoppingOrderItemRefundDTOPage = new Page<ShoppingOrderItemRefundDTO>();
-		shoppingOrderItemRefundDTOPage.setCurrentPage(shoppingOrderItemRefundBOPage.getCurrentPage());
-		shoppingOrderItemRefundDTOPage.setTotalCount(shoppingOrderItemRefundBOPage.getTotalCount());
-		shoppingOrderItemRefundDTOPage.setRecords(ShoppingOrderItemRefundConverter.convertShoppingOrderItemRefundDTOList(shoppingOrderItemRefundBOPage.getRecords()));
-		
-		return successCreated(shoppingOrderItemRefundDTOPage);
+		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundDTOPage(page));
 	}
 	
 	/**

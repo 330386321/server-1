@@ -21,6 +21,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeig
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
@@ -60,13 +61,13 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.getByShoppingOrderitemId(shoppingOrderItemId);
+		ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingRefundDetailService.getByShoppingOrderitemId(shoppingOrderItemId);
 
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
+		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getId() == null || shoppingOrderItemExtendBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
-		return successCreated(ShoppingRefundDetailConverter.convert(shoppingRefundDetailBO));
+		return successCreated(ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO));
 	}
 
 	/**

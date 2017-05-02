@@ -70,8 +70,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     /**
      *  加入购物车。
      */
-    @SuppressWarnings("rawtypes")
-	public Result save(Long memberId, ShoppingCartParam param) {
+    @SuppressWarnings({ "unchecked" })
+	public Result<Long> save(Long memberId, ShoppingCartParam param) {
     	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
     	
     	if (!isSuccess(resultShoppingCartProductModelDTO)) {
@@ -94,7 +94,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	shoppingCartSaveParam.setQuantity(param.getQuantity());
     	shoppingCartSaveParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     	
-    	return successCreated(shoppingCartService.save(memberId, shoppingCartSaveParam));
+    	Result<Long> result = shoppingCartService.save(memberId, shoppingCartSaveParam);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    			
+    	return successCreated(result);
     }
     
 	/**
@@ -409,6 +414,32 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	shoppingCartSettlementDTO.setBalance(resultPropertyBalanceDTO.getModel().getBalance());
     	
     	return successCreated(shoppingCartSettlementDTO);
+	}
+
+	/**
+	 * 立即购买
+	 * @param param 购物参数
+	 * @return 返回订单的结算数据
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param) {
+		
+		// 1.保存购物车记录
+		Result<Long> resultSave = save(memberId, param);
+		if (!isSuccess(resultSave)) {
+			return successGet(resultSave.getRet());
+		}
+		
+		// 2.生成结算数据
+		List<Long> idList = new ArrayList<Long>();
+		idList.add(resultSave.getModel());
+		Result<ShoppingCartSettlementDTO> settlementResult = settlement(idList, memberNum);
+		if (!isSuccess(settlementResult)) {
+			return successGet(settlementResult.getRet());
+		}
+		
+		return successCreated(settlementResult);
 	}
 
 }

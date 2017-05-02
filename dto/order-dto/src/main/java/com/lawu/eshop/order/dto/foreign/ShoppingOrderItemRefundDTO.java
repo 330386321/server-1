@@ -72,6 +72,12 @@ public class ShoppingOrderItemRefundDTO implements Serializable {
 	@ApiModelProperty(value = "购物退款详情id", required = true)
 	private Long shoppingRefundDetailId;
 	
+	/**
+	 * 购物订单项id
+	 */
+	@ApiModelProperty(value = "购物订单项id", required = true)
+	private Long id;
+	
 	public Long getMerchantId() {
 		return merchantId;
 	}
@@ -150,6 +156,14 @@ public class ShoppingOrderItemRefundDTO implements Serializable {
 
 	public void setShoppingRefundDetailId(Long shoppingRefundDetailId) {
 		this.shoppingRefundDetailId = shoppingRefundDetailId;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 }

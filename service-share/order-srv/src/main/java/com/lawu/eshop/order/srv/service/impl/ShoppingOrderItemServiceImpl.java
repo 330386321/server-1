@@ -13,18 +13,12 @@ import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderItemRefundBO;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
-import com.lawu.eshop.order.srv.converter.ShoppingOrderItemRefundConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
-import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemRefundDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
-import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 
@@ -36,9 +30,6 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	
 	@Autowired
 	private ShoppingOrderItemExtendDOMapper shoppingOrderItemExtendDOMapper;
-	
-	@Autowired
-	private ShoppingOrderExtendDOMapper shoppingOrderDOExtendMapper;
 	
 	/**
 	 * 根据购物订单id获取购物订单项
@@ -68,39 +59,37 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	 * @return 订单列表
 	 */
 	@Override
-	public Page<ShoppingOrderItemRefundBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param) {
+	public Page<ShoppingOrderItemExtendBO> selectRefundPageByMemberId(Long memberId, ShoppingRefundQueryForeignParam param) {
 		
-		// 查找所有处于退款中的订单项
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
-		// 查询退款申请中有效的记录
-		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
-		if (memberId != null && memberId > 0) {
-			criteria.andMemberIdEqualTo(memberId);
-		}
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
+		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		// 用户可以多次申请退款，查询当中有效的一条记录
+		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		
 		// 查询总记录数
-		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
+		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 		
-		Page<ShoppingOrderItemRefundBO> shoppingOrderItemRefundBOPage = new Page<ShoppingOrderItemRefundBO>();
-		shoppingOrderItemRefundBOPage.setCurrentPage(param.getCurrentPage());
-		shoppingOrderItemRefundBOPage.setTotalCount(count.intValue());
+		Page<ShoppingOrderItemExtendBO> rtn = new Page<ShoppingOrderItemExtendBO>();
+		rtn.setCurrentPage(param.getCurrentPage());
+		rtn.setTotalCount(count.intValue());
 		
 		if (count == null || count <= 0) {
-			return shoppingOrderItemRefundBOPage;
+			return rtn;
 		}
 		
 		// 按照退款详情的创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("srd.gmt_create desc");
+		shoppingOrderItemExtendDOExample.setOrderByClause("srd.gmt_create desc");
 		
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		
-		List<ShoppingOrderItemRefundDO> shoppingOrderItemRefundDOList = shoppingOrderDOExtendMapper.selectShoppingOrderItemRefundResultMapByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExampleWithRowbounds(shoppingOrderItemExtendDOExample, rowBounds);
+		rtn.setRecords(ShoppingOrderItemExtendConverter.convert(shoppingOrderItemExtendDOList));
 		
-		shoppingOrderItemRefundBOPage.setRecords(ShoppingOrderItemRefundConverter.convertShoppingOrderItemRefundBOList(shoppingOrderItemRefundDOList));
-		
-		return shoppingOrderItemRefundBOPage;
+		return rtn;
 	}
 
 	/**
@@ -142,10 +131,12 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andSOMerchantIdEqualTo(merchantId);
-		
+		// 用户可以多次申请退款，查询当中有效的一条记录
+		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);

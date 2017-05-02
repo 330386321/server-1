@@ -179,9 +179,9 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
 	@ApiOperation(value = "确认收货", notes = "根据购物订单id确认收货。[1002|1003|4005]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@Authorization
+    @Authorization
     @RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
-    public Result tradingSuccess(/*@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,*/ @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    public Result tradingSuccess(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
     	
     	Result result = shoppingOrderService.tradingSuccess(id);
     	

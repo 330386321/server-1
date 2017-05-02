@@ -22,8 +22,7 @@ public interface ShoppingCartExtendService {
 	 * @param param
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	Result save(Long memberId, ShoppingCartParam param);
+	Result<Long> save(Long memberId, ShoppingCartParam param);
 	
 	/**
 	 * 根据memberId查询用户的购物车列表。
@@ -49,5 +48,12 @@ public interface ShoppingCartExtendService {
 	 * @return 返回订单的id列表
 	 */
 	Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params);
+	
+	/**
+	 * 立即购买
+	 * @param param 购物参数
+	 * @return 返回订单的结算数据
+	 */
+	Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param);
 	
 }

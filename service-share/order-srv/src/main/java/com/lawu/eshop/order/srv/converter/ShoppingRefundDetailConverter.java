@@ -6,6 +6,7 @@ import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 
@@ -39,16 +40,18 @@ public class ShoppingRefundDetailConverter {
 	/**
 	 * ShoppingRefundDetailDTO转换
 	 * 
-	 * @param shoppingRefundDetailBO
+	 * @param shoppingOrderItemExtendBO
 	 * @return
 	 */
-	public static ShoppingRefundDetailDTO convert(ShoppingRefundDetailBO shoppingRefundDetailBO) {
-		if (shoppingRefundDetailBO == null) {
+	public static ShoppingRefundDetailDTO convert(ShoppingOrderItemExtendBO shoppingOrderItemExtendBO) {
+		ShoppingRefundDetailDTO shoppingRefundDetailDTO = null;
+		if (shoppingOrderItemExtendBO == null) {
 			return null;
 		}
 
-		ShoppingRefundDetailDTO shoppingRefundDetailDTO = new ShoppingRefundDetailDTO();
-		BeanUtils.copyProperties(shoppingRefundDetailBO, shoppingRefundDetailDTO);
+		shoppingRefundDetailDTO = new ShoppingRefundDetailDTO();
+		BeanUtils.copyProperties(shoppingOrderItemExtendBO.getShoppingRefundDetail(), shoppingRefundDetailDTO);
+		shoppingRefundDetailDTO.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
 		
 		return shoppingRefundDetailDTO;
 	}
