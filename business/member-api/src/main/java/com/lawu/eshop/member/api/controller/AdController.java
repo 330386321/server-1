@@ -308,7 +308,8 @@ public class AdController extends BaseController {
     	Result<PraisePointDTO> rs=adService.getRedPacket(merchantId,memberId,userNum);
     	return rs;
     }
-    
+
+    @Audit(date = "2017-05-02", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "今日获得积分", notes = "今日获得积分[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -319,8 +320,9 @@ public class AdController extends BaseController {
    	   Result<ClickAdPointDTO> rs = adService.getClickAdPoint(memberId,id);
        return rs;
     }
-    
-    
+
+
+    @Audit(date = "2017-05-02", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")

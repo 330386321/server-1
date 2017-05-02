@@ -210,6 +210,7 @@ public class MerchantController extends BaseController {
         return successGet(dto);
     }
 
+    @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "修改头像", notes = "修改头像。 (章勇)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization

@@ -188,6 +188,7 @@ public class ProductSolrController extends BaseController {
         return successGet(shoppingProductDTO);
     }
 
+    @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "要购物首页猜你喜欢", notes = "要购物首页猜你喜欢。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listYouLikeProduct", method = RequestMethod.GET)
@@ -195,6 +196,7 @@ public class ProductSolrController extends BaseController {
         return productSolrService.listYouLikeProduct(productSolrParam);
     }
 
+    @Audit(date = "2017-05-02", reviewer = "孙林青")
     @ApiOperation(value = "查询商品推荐类别", notes = "查询商品类别。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProductCategory", method = RequestMethod.GET)

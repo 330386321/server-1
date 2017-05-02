@@ -161,6 +161,7 @@ public class ShoppingOrderController extends BaseController {
 	 *            查询参数
 	 * @return
 	 */
+	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -182,6 +183,7 @@ public class ShoppingOrderController extends BaseController {
 	 * 
 	 * @return
 	 */
+	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询订单各种状态的数量", notes = "查询订单各种状态的数量。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
