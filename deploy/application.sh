@@ -9,7 +9,7 @@ DEPLOY_BASE_DIR="/usr/local/eshop/deploy/"
 # 配置服务器地址
 DEPLOY_CONFIG_SERVER="http://192.168.1.26:8080"
 # 部署环境
-DEPLOY_ENV=dev
+DEPLOY_ENV=test
 
 # --参数--
 # 操作类型
