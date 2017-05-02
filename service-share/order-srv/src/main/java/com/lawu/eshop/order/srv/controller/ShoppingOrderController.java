@@ -166,7 +166,7 @@ public class ShoppingOrderController extends BaseController {
 	public Result deleteOrder(@PathVariable("id") Long id) {
 		int resultCode = shoppingOrderService.deleteOrder(id);
 		
-		if (resultCode == ResultCode.SUCCESS) {
+		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
 		
