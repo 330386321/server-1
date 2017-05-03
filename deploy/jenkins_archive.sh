@@ -62,6 +62,7 @@ cpJar "service-share" "order-srv"
 cpJar "service-share" "product-srv"
 cpJar "service-share" "property-srv"
 cpJar "service-share" "user-srv"
+cpJar "service-share" "operator-srv"
 
 # service-sys
 cpJar "service-sys" "cache-srv"
