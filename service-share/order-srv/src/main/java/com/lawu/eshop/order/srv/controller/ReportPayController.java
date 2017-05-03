@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.order.srv.service.ReportPayService;
 import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 import com.lawu.eshop.user.param.ReportDataParam;
 
@@ -30,6 +32,9 @@ import com.lawu.eshop.user.param.ReportDataParam;
 @RequestMapping(value = "reportPay/")
 public class ReportPayController extends BaseController {
 
+	@Autowired
+	private ReportPayService reportPayService;
+	
 	@RequestMapping(value = "payVolumeRiseRate", method = RequestMethod.POST)
 	public Result<ReportRiseRateDTO> payVolumeRiseRate(@RequestBody @Valid ReportDataParam dparam,
 			BindingResult result) {
@@ -42,7 +47,7 @@ public class ReportPayController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		ReportRiseRateDTO dto = null;//reportFansService.fansRiseRate(dparam);
+		ReportRiseRateDTO dto = reportPayService.payVolumeRiseRate(dparam);
 		return successCreated(dto);
 	}
 }

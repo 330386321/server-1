@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper">
+	<resultMap id="ReportBaseResultMap"
+		type="com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView">
+		<result column="keyTxt" property="keyTxt" jdbcType="VARCHAR" />
+		<result column="num" property="num" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="payVolumeRiseRate" resultMap="ReportBaseResultMap"
+		parameterType="java.lang.String">
+		<if test="flag == 1">
+			SELECT
+			DATE_FORMAT(gmt_create, "%m") AS keyTxt,
+			sum(actual_amount) AS num
+			FROM
+			pay_order
+			WHERE
+			DATE_FORMAT(gmt_create,
+			"%Y") = #{formatDate} and merchant_id = #{merchantId}
+			GROUP BY
+			DATE_FORMAT(gmt_create, "%m")
+		</if>
+		<if test="flag == 2">
+			SELECT
+			DATE_FORMAT(gmt_create, "%d") AS keyTxt,
+			sum(actual_amount) AS num
+			FROM
+			pay_order
+			WHERE
+			DATE_FORMAT(gmt_create,
+			"%Y%m") = #{formatDate} and merchant_id = #{merchantId} GROUP BY
+			DATE_FORMAT(gmt_create, "%d")
+		</if>
+	</select>
+
+</mapper>

@@ -23,6 +23,9 @@ public class ReportRiseRateDTO {
 
     @ApiModelProperty(value = "报表y轴(英文逗号分隔)")
     private List<String> y;
+    
+    @ApiModelProperty(value = "总额")
+    private String total;
 
 	public List<String> getX() {
 		return x;
@@ -48,5 +51,12 @@ public class ReportRiseRateDTO {
 		this.x1 = x1;
 	}
 
+	public String getTotal() {
+		return total;
+	}
+
+	public void setTotal(String total) {
+		this.total = total;
+	}
    
 }
