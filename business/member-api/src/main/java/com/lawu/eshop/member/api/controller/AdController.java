@@ -315,6 +315,7 @@ public class AdController extends BaseController {
     	    	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	    	rs=adService.getRedPacket(merchantId,memberId,userNum);
     	    	fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
+    	    	
     		}else{
     			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
     		}
