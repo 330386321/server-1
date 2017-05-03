@@ -1,7 +1,7 @@
 package com.lawu.eshop.order.srv.service;
 
-import com.lawu.eshop.user.dto.ReportRiseRateDTO;
-import com.lawu.eshop.user.param.ReportDataParam;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 
 /**
  * 

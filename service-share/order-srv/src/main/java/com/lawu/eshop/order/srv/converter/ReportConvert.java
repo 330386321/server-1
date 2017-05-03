@@ -3,8 +3,8 @@ package com.lawu.eshop.order.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
-import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 
 public class ReportConvert {
 

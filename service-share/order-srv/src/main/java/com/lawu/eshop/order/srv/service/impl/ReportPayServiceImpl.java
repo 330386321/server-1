@@ -7,13 +7,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.srv.converter.ReportConvert;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.mapper.extend.PayOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ReportPayService;
-import com.lawu.eshop.user.constants.ReportFansRiseRateEnum;
-import com.lawu.eshop.user.dto.ReportRiseRateDTO;
-import com.lawu.eshop.user.param.ReportDataParam;
 import com.lawu.eshop.utils.DateUtil;
 
 /**
