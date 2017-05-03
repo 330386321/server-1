@@ -419,6 +419,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         JSONObject json = JSONObject.fromObject(merchantStoreParam);
         merchantStoreAuditDO.setContent(json.toString());
         merchantStoreAuditDO.setGmtModified(new Date());
+        merchantStoreAuditDO.setType(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
         merchantStoreAuditDO.setGmtCreate(new Date());
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
