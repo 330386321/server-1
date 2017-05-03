@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
@@ -19,8 +20,9 @@ import com.lawu.eshop.utils.DateUtil;
 /**
  * 
  * <p>
- * Description: 
+ * Description:
  * </p>
+ * 
  * @author Yangqh
  * @date 2017年5月3日 下午2:23:26
  *
@@ -30,23 +32,28 @@ public class ReportPayServiceImpl implements ReportPayService {
 
 	@Autowired
 	private PayOrderExtendDOMapper payOrderExtendDOMapper;
-	
+
 	@Override
 	public ReportRiseRateDTO payVolumeRiseRate(ReportDataParam dparam) {
 		List<ReportRiseRateView> list = new ArrayList<ReportRiseRateView>();
 		int x = 0;
+		String total = "0";// 总金额
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue(),dparam.getMerchantId());
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
 			x = DateUtil.getNowMonthDay();
+			total = payOrderExtendDOMapper.payVolumeTotal(DateUtil.getDateFormat(new Date(), "yyyyMM"),
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
 			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyy"),
-					dparam.getFlag().getValue(),dparam.getMerchantId());
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
 			x = 12;
+			total = payOrderExtendDOMapper.payVolumeTotal("", dparam.getFlag().getValue(), dparam.getMerchantId(),
+					PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
 		}
 		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(list, x);
-		
+		dto.setTotal(total == null ? "0" : total);
 		return dto;
 	}
-	
+
 }

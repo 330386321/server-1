@@ -32,15 +32,48 @@ public class ReportFansServiceImpl implements ReportFansService {
 		int x = 0;
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = fansMerchantDOMapperExtend.fansRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue());
+					dparam.getFlag().getValue(), dparam.getMerchantId());
 			x = DateUtil.getNowMonthDay();
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
 			list = fansMerchantDOMapperExtend.fansRiseRate(DateUtil.getDateFormat(new Date(), "yyyy"),
-					dparam.getFlag().getValue());
+					dparam.getFlag().getValue(), dparam.getMerchantId());
 			x = 12;
 		}
 		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(list, x);
 		return dto;
+	}
+	
+	@Override
+	public List<ReportRiseRerouceDTO> fansRiseSource(ReportDataParam dparam) {
+		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
+		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
+			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMMdd"),
+					dparam.getFlag().getValue(), dparam.getMerchantId());
+		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
+			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMM"),
+					dparam.getFlag().getValue(), dparam.getMerchantId());
+		}
+		int total = 0;
+		for (FansMerchantDOReportView view : list) {
+			int t = Integer.valueOf(view.getNum()).intValue();
+			total = total + t;
+		}
+		Double todayDouble = Double.valueOf(total);
+		List<ReportRiseRerouceDTO> dtos = new ArrayList<ReportRiseRerouceDTO>();
+		for (FansMerchantDOReportView view : list) {
+			ReportRiseRerouceDTO dto = new ReportRiseRerouceDTO();
+			int num = Integer.valueOf(view.getNum()).intValue();
+			Double numDouble = Double.valueOf(num);
+			float p = (float) ((float) (numDouble / todayDouble) * 100);
+			DecimalFormat df = new DecimalFormat("0.00");
+			String ps = df.format(p) + "%";
+
+			dto.setName(ps + FansMerchantChannelEnum
+					.getEnum(StringUtil.intToByte(Integer.valueOf(view.getKeyTxt()).intValue())).getName());
+			dto.setValue(view.getNum());
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 
 	// public static void main(String[] args) {
@@ -112,36 +145,4 @@ public class ReportFansServiceImpl implements ReportFansService {
 	// }
 	// }
 
-	@Override
-	public List<ReportRiseRerouceDTO> fansRiseSource(ReportDataParam dparam) {
-		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
-		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
-			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMMdd"),
-					dparam.getFlag().getValue());
-		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
-			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue());
-		}
-		int total = 0;
-		for (FansMerchantDOReportView view : list) {
-			int t = Integer.valueOf(view.getNum()).intValue();
-			total = total + t;
-		}
-		Double todayDouble = Double.valueOf(total);
-		List<ReportRiseRerouceDTO> dtos = new ArrayList<ReportRiseRerouceDTO>();
-		for (FansMerchantDOReportView view : list) {
-			ReportRiseRerouceDTO dto = new ReportRiseRerouceDTO();
-			int num = Integer.valueOf(view.getNum()).intValue();
-			Double numDouble = Double.valueOf(num);
-			float p = (float) ((float)(numDouble / todayDouble) * 100);
-			DecimalFormat df = new DecimalFormat("0.00");
-			String ps = df.format(p) + "%";
-
-			dto.setName(ps + FansMerchantChannelEnum.getEnum(StringUtil.intToByte(Integer.valueOf(view.getKeyTxt()).intValue())).getName());
-			dto.setValue(view.getNum());
-			dtos.add(dto);
-		}
-		return dtos;
-	}
-	
 }
