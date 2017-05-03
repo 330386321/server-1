@@ -1,22 +1,26 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.HttpCode;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.operator.api.service.LogService;
+import com.lawu.eshop.operator.api.service.ShoppingRefundDetailService;
+import com.lawu.eshop.operator.constants.LogTitleEnum;
+import com.lawu.eshop.operator.constants.ModuleEnum;
+import com.lawu.eshop.operator.constants.OperationTypeEnum;
+import com.lawu.eshop.operator.param.LogParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import om.lawu.eshop.shiro.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.operator.api.service.ShoppingRefundDetailService;
-import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
 
 /**
  * @author Sunny 
@@ -29,6 +33,9 @@ public class ShoppingRefundDetailController extends BaseController {
 
 	@Autowired
 	private ShoppingRefundDetailService shoppingRefundDetailservice;
+
+	@Autowired
+	private LogService logService;
 	
 	/**
 	 * 退款给买家
@@ -55,7 +62,15 @@ public class ShoppingRefundDetailController extends BaseController {
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
     	}
-		
+
+		//保存操作日志
+		LogParam logParam = new LogParam();
+		logParam.setAccount(UserUtil.getCurrentUserAccount());
+		logParam.setTypeEnum(OperationTypeEnum.UPDATE);
+		logParam.setModuleEnum(ModuleEnum.ORDER);
+		logParam.setBusinessId(String.valueOf(id));
+		logParam.setChangeTitle(LogTitleEnum.ORDER_REFUNDING_AGREE.getName());
+		logService.saveLog(logParam);
     	return successCreated(result);
     }
 	
@@ -78,7 +93,15 @@ public class ShoppingRefundDetailController extends BaseController {
 		if (!isSuccess(result)) {
 			return successCreated(result.getRet());
 		}
-		
+
+		//保存操作日志
+		LogParam logParam = new LogParam();
+		logParam.setAccount(UserUtil.getCurrentUserAccount());
+		logParam.setTypeEnum(OperationTypeEnum.UPDATE);
+		logParam.setModuleEnum(ModuleEnum.ORDER);
+		logParam.setBusinessId(String.valueOf(id));
+		logParam.setChangeTitle(LogTitleEnum.ORDER_REFUNDING_CANCEL.getName());
+		logService.saveLog(logParam);
 		return successDelete();
 	}
 }

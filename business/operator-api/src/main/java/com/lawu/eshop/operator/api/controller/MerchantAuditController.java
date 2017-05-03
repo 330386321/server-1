@@ -1,13 +1,20 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.operator.api.service.LogService;
 import com.lawu.eshop.operator.api.service.MerchantAuditService;
 import com.lawu.eshop.operator.api.service.UserService;
+import com.lawu.eshop.operator.constants.LogTitleEnum;
+import com.lawu.eshop.operator.constants.ModuleEnum;
+import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.dto.UserListDTO;
+import com.lawu.eshop.operator.param.LogParam;
+import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
@@ -15,6 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import om.lawu.eshop.shiro.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +42,9 @@ public class MerchantAuditController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LogService logService;
 
     /**
      * 门店审核列表
@@ -88,6 +99,25 @@ public class MerchantAuditController extends BaseController {
                                       @ModelAttribute @ApiParam MerchantAuditParam auditParam) {
         Integer auditorId = 0;
         auditParam.setAuditorId(auditorId);
-        return merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
+        Result result = merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
+
+        //保存操作日志
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", auditParam.getAuditStatusEnum().val);
+        jsonObject.put("type", auditParam.getTypeEnum().val);
+        jsonObject.put("remark", auditParam.getRemark());
+        LogParam logParam = new LogParam();
+        logParam.setAccount(UserUtil.getCurrentUserAccount());
+        logParam.setTypeEnum(OperationTypeEnum.UPDATE);
+        logParam.setModuleEnum(ModuleEnum.STORE);
+        logParam.setBusinessId(String.valueOf(storeAuditId));
+        if (auditParam.getAuditStatusEnum().val == MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val) {
+            logParam.setChangeTitle(LogTitleEnum.STORE_AUDIT_SUCCESS.getName());
+        } else {
+            logParam.setChangeTitle(LogTitleEnum.STORE_AUDIT_FAIL.getName());
+        }
+        logParam.setChangeContent(jsonObject.toString());
+        logService.saveLog(logParam);
+        return result;
     }
 }

@@ -34,9 +34,10 @@ public class FansMerchantController extends BaseController {
     @Authorization
     @RequestMapping(value = "saveFansMerchant", method = RequestMethod.PUT)
     public Result saveFansMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-                                   @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId) {
+                                   @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId,
+                                   @RequestParam @ApiParam(required = true, value = "粉丝来源") FansMerchantChannelEnum channelEnum ) {
         long memberId = UserUtil.getCurrentUserId(getRequest());
-        return fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.INVITE);
+        return fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
     }
 
 }

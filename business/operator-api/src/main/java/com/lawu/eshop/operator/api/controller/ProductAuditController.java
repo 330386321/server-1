@@ -1,11 +1,17 @@
 package com.lawu.eshop.operator.api.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.operator.api.service.LogService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
+import com.lawu.eshop.operator.constants.LogTitleEnum;
+import com.lawu.eshop.operator.constants.ModuleEnum;
+import com.lawu.eshop.operator.constants.OperationTypeEnum;
+import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
@@ -14,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import om.lawu.eshop.shiro.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +35,9 @@ public class ProductAuditController extends BaseController {
 
     @Autowired
     private ProductAuditService productAuditService;
+
+    @Autowired
+    private LogService logService;
 
     @ApiOperation(value = "商品审核", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -51,7 +61,20 @@ public class ProductAuditController extends BaseController {
     //@RequiresPermissions("product:down")
     @RequestMapping(value = "downProduct", method = RequestMethod.PUT)
     public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        return productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
+        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
+
+        //保存操作日志
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DOWN.val);
+        LogParam logParam = new LogParam();
+        logParam.setAccount(UserUtil.getCurrentUserAccount());
+        logParam.setTypeEnum(OperationTypeEnum.UPDATE);
+        logParam.setModuleEnum(ModuleEnum.PRODUCT);
+        logParam.setBusinessId(ids);
+        logParam.setChangeTitle(LogTitleEnum.PRODUCT_DOWN.getName());
+        logParam.setChangeContent(jsonObject.toString());
+        logService.saveLog(logParam);
+        return result;
     }
 
     @ApiOperation(value = "商品批量删除", notes = "商品批量删除，[1002]。(梅述全)", httpMethod = "PUT")
@@ -59,7 +82,20 @@ public class ProductAuditController extends BaseController {
     //@RequiresPermissions("product:del")
     @RequestMapping(value = "deleteProduct", method = RequestMethod.PUT)
     public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
-        return productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);
+        Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);
+
+        //保存操作日志
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DEL.val);
+        LogParam logParam = new LogParam();
+        logParam.setAccount(UserUtil.getCurrentUserAccount());
+        logParam.setTypeEnum(OperationTypeEnum.DELETE);
+        logParam.setModuleEnum(ModuleEnum.PRODUCT);
+        logParam.setBusinessId(ids);
+        logParam.setChangeTitle(LogTitleEnum.PRODUCT_DELETE.getName());
+        logParam.setChangeContent(jsonObject.toString());
+        logService.saveLog(logParam);
+        return result;
     }
 
 }
