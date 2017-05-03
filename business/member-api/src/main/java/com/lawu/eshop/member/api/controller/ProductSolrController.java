@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -128,7 +127,7 @@ public class ProductSolrController extends BaseController {
 
         //E店必购
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> buyResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_BUY);
+        Result<List<AdPlatformDTO>> buyResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BUY);
         if (isSuccess(buyResult)) {
             for (AdPlatformDTO adPlatformDTO : buyResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
@@ -148,7 +147,7 @@ public class ProductSolrController extends BaseController {
 
         //特色好货
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> featureResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_GOODS);
+        Result<List<AdPlatformDTO>> featureResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_GOODS);
         if (isSuccess(featureResult)) {
             for (AdPlatformDTO adPlatformDTO : featureResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
@@ -168,7 +167,7 @@ public class ProductSolrController extends BaseController {
 
         //实惠单品
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> benefitResult = adPlatformService.getAdPlatformWithGoods(GoodsTypeEnum.SHOPPING_BENEFIT);
+        Result<List<AdPlatformDTO>> benefitResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BENEFIT);
         if (isSuccess(benefitResult)) {
             for (AdPlatformDTO adPlatformDTO : benefitResult.getModel()) {
                 Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());

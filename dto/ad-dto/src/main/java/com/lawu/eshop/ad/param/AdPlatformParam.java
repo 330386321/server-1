@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.param;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 

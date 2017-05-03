@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -187,21 +186,6 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "getAdPlatformByTypePosition", method = RequestMethod.GET)
     public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum) {
         List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum);
-        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
-    }
-
-    /**
-     * 根据精品类型查询精品
-     *
-     * @param goodsTypeEnum
-     * @return
-     */
-    @RequestMapping(value = "getAdPlatformWithGoods", method = RequestMethod.GET)
-    public Result<List<AdPlatformDTO>> getAdPlatformWithGoods(@RequestParam GoodsTypeEnum goodsTypeEnum) {
-        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformWithGoods(goodsTypeEnum);
         if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }

@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.srv.service;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -101,13 +100,5 @@ public interface AdPlatformService {
      * @return
      */
     List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum);
-
-    /**
-     * 根据精品类型查询精品
-     *
-     * @param goodsTypeEnum
-     * @return
-     */
-    List<AdPlatformBO> getAdPlatformWithGoods(GoodsTypeEnum goodsTypeEnum);
 
 }

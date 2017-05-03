@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -40,14 +39,5 @@ public interface AdPlatformService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePosition")
     Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum);
-
-    /**
-     * 根据精品类型查询精品
-     *
-     * @param goodsTypeEnum
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformWithGoods")
-    Result<List<AdPlatformDTO>> getAdPlatformWithGoods(@RequestParam("goodsTypeEnum") GoodsTypeEnum goodsTypeEnum);
 
 }

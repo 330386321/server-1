@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import com.lawu.eshop.ad.constants.GoodsTypeEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -154,14 +153,6 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum) {
         AdPlatformDOExample example = new AdPlatformDOExample();
         example.createCriteria().andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(DataTransUtil.intToByte(1));
-        List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
-        return AdPlatformConverter.convertBOS(adPlatformDOS);
-    }
-
-    @Override
-    public List<AdPlatformBO> getAdPlatformWithGoods(GoodsTypeEnum goodsTypeEnum) {
-        AdPlatformDOExample example = new AdPlatformDOExample();
-        example.createCriteria().andTypeEqualTo(TypeEnum.TYPE_PRODUCT.val).andPositionEqualTo(PositionEnum.POSITON_SHOP_GOODS.val).andGoodsTypeEqualTo(goodsTypeEnum.val).andStatusEqualTo(DataTransUtil.intToByte(1));
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
         return AdPlatformConverter.convertBOS(adPlatformDOS);
     }
