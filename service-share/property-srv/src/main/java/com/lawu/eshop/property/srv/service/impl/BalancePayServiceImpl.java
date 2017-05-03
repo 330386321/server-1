@@ -54,7 +54,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 	@Override
 	@Transactional
 	public int balancePayProductOrder(BalancePayDataParam param) {
-		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getAccount());
+		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getTotalAmount());
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
