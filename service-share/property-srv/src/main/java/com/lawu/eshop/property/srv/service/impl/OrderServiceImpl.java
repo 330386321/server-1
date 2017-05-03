@@ -93,10 +93,7 @@ public class OrderServiceImpl implements OrderService {
 		/*
 		 * 更新订单状态 发送MQ消息更新订单状态
 		 */
-		String[] bizIds = param.getBizIds().split(",");
-		for (int i = 0; i < bizIds.length; i++) {
-			shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
-		}
+		shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
 		return ResultCode.SUCCESS;
 	}

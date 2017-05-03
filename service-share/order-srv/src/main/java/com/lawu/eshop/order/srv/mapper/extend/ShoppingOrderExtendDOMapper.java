@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 
@@ -56,4 +57,20 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @author Sunny
 	 */
     int updateByPrimaryKeySelective(ShoppingOrderExtendDO record);
+    
+	/**
+	 * 查询交易数据
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+    List<ReportRiseRateView> selectByTransactionData(ShoppingOrderExtendDOExample example);
+    
+	/**
+	 * 查询交易数据
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+    List<ReportRiseRateView> selectByTransactionTotalAmount(ShoppingOrderExtendDOExample example);
 }

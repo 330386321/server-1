@@ -25,6 +25,8 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
@@ -39,6 +41,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
+import com.lawu.eshop.order.srv.converter.ReportConvert;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemConverter;
@@ -48,6 +51,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
+import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
@@ -720,7 +724,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for(int i = 0 ; i < orderIdsArray.length ; i++){
 			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			BigDecimal price = orderDO.getCommodityTotalPrice();
-			total.add(price);
+			total = total.add(price);
 		}
 		return total.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
@@ -1191,6 +1195,42 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		rtn.setRefundingCount(refundingCount);
 		
 		return rtn;
+	}
+	
+	/**
+	 * 统计商家的交易数据
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	@Override
+	public ReportRiseRateDTO selectByTransactionData(ReportDataParam dparam) {
+		List<ReportRiseRateView> list = new ArrayList<ReportRiseRateView>();
+		int x = 0;
+		BigDecimal total = new BigDecimal(0);// 总金额
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
+		
+//		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
+//			
+//			shoppingOrderDOExtendMapper.selectByTransactionData(example);
+//			
+//			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
+//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+//			x = DateUtil.getNowMonthDay();
+//			total = payOrderExtendDOMapper.payVolumeTotal(DateUtil.getDateFormat(new Date(), "yyyyMM"),
+//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+//		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
+//			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyy"),
+//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+//			x = 12;
+//			total = payOrderExtendDOMapper.payVolumeTotal("", dparam.getFlag().getValue(), dparam.getMerchantId(),
+//					PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+//		}
+		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(list, x);
+		dto.setTotal(total == null ? "0" : total.toString());
+		return dto;
 	}
 	
 	/**************************************************************

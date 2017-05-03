@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
@@ -252,4 +254,13 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	ShoppingOrderNumberOfOrderStatusForMerchantBO numberOfOrderStartusByMerchant(Long merchantId);
+	
+	/**
+	 * 统计商家的交易数据
+	 * 
+	 * @param merchantId 商家id
+	 * @return
+	 * @author Sunny
+	 */
+	ReportRiseRateDTO selectByTransactionData(ReportDataParam dparam);
 }

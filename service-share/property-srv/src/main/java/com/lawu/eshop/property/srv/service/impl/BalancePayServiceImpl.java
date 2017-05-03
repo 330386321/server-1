@@ -80,10 +80,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView);
 		
 		//发异步消息更新购物订单状态
-		String []bizIds = param.getBizIds().split(",");
-		for(int i = 0 ; i < bizIds.length ; i++){
-			shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
-		}
+		shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 		
 		return ResultCode.SUCCESS;
 	}

@@ -101,6 +101,11 @@
 		<collection property="items" column="item_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO" resultMap="ShoppingOrderItemResultMap"/>  
 	</resultMap>
 	
+	<resultMap id="ReportResultMap" type="com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView">
+		<result column="keyTxt" property="keyTxt" jdbcType="VARCHAR" />
+		<result column="num" property="num" jdbcType="VARCHAR" />
+	</resultMap>
+	
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -338,5 +343,26 @@
 	  </update>
 	  
 	  <!-- Report -->
+	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ReportResultMap">
+	  	SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
+	  	FROM shopping_order so
+	  	<if test="isIncludeShoppingOrderItem">
+			left join shopping_order_item soi on so.id = soi.shopping_order_id
+		</if>
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		GROUP BY keyTxt
+	  </select>
 	  
+	  <select id="selectByTransactionTotalAmount" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.math.BigDecimal">
+	  	SELECT sum(so.actual_amount) AS num
+	  	FROM shopping_order so
+	  	<if test="isIncludeShoppingOrderItem">
+			left join shopping_order_item soi on so.id = soi.shopping_order_id
+		</if>
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	  </select>
 </mapper>

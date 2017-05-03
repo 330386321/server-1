@@ -54,19 +54,35 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	@Transactional
 	@Override
 	public Result<Long> save(Long memberId, ShoppingCartSaveParam param) {
-		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
-		suggestionDO.setMemberId(memberId);
-		suggestionDO.setGmtCreate(new Date());
-		suggestionDO.setGmtModified(new Date());
-
-		// 空值交给Mybatis去处理
-		int result = shoppingCartDOMapper.insertSelective(suggestionDO);
-
-		if (result <= 0) {
-			return successCreated(ResultCode.SAVE_FAIL);
+		
+		// 查看用户购物车是否有重复记录
+		ShoppingCartDOExample example = new ShoppingCartDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId).andProductModelIdEqualTo(param.getProductModelId());
+		List<ShoppingCartDO> list = shoppingCartDOMapper.selectByExample(example);
+		
+		ShoppingCartDO shoppingCartDO = null;
+		if (list != null && !list.isEmpty()) {
+			shoppingCartDO = list.get(0);
+			shoppingCartDO.setGmtModified(new Date());
+			shoppingCartDO.setQuantity(shoppingCartDO.getQuantity() + param.getQuantity());
+			shoppingCartDOMapper.updateByPrimaryKeySelective(shoppingCartDO);
+			
+			return successCreated(shoppingCartDO.getId());
+		} else {
+			shoppingCartDO = ShoppingCartConverter.convert(param);
+			shoppingCartDO.setMemberId(memberId);
+			shoppingCartDO.setGmtCreate(new Date());
+			shoppingCartDO.setGmtModified(new Date());
+	
+			// 空值交给Mybatis去处理
+			int result = shoppingCartDOMapper.insertSelective(shoppingCartDO);
+	
+			if (result <= 0) {
+				return successCreated(ResultCode.SAVE_FAIL);
+			}
 		}
-
-		return successCreated(suggestionDO.getId());
+		
+		return successCreated(shoppingCartDO.getId());
 	}
 
 	/**
