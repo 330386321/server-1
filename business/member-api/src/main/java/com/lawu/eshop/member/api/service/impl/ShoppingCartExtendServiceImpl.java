@@ -208,6 +208,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(ids);
     	
+    	if (!isSuccess(resultShoppingCartDTOS)) {
+    		return successCreated(resultShoppingCartDTOS.getRet());
+    	}
+    	
     	// 购物车分单,同一个商家的商品分在同一个订单当中
     	Map<Long, List<ShoppingCartDTO>> shoppingCartDTOMap = new HashMap<Long, List<ShoppingCartDTO>>();
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {

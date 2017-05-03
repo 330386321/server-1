@@ -61,6 +61,6 @@ public interface ShoppingCartService {
 	 * @param ids 购物车id列表
 	 * @return
 	 */
-	List<ShoppingCartBO> findListByIds(List<Long> ids);
+	Result<List<ShoppingCartBO>> findListByIds(List<Long> ids);
 	
 }

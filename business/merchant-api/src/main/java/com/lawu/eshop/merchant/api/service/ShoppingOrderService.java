@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
@@ -94,4 +95,14 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "shoppingOrder/numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
 	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("merchantId") Long merchantId);
+	
+	/**
+	 * 根据id查询订单物流信息
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/getExpressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
 }

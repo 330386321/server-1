@@ -135,19 +135,21 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 * @return
 	 */
 	@Override
-	public List<ShoppingCartBO> findListByIds(List<Long> ids) {
+	public Result<List<ShoppingCartBO>> findListByIds(List<Long> ids) {
+		
 		if (ids == null || ids.isEmpty()) {
-			return null;
+			return successGet(ResultCode.ID_EMPTY);
 		}
 
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andIdIn(ids);
 
-		return ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
-	}
-
-	public ShoppingCartDO get(Long id) {
-		return shoppingCartDOMapper.selectByPrimaryKey(id);
+		List<ShoppingCartDO> list = shoppingCartDOMapper.selectByExample(example);
+		if (list == null || list.isEmpty()) {
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		
+		return successGet(ShoppingCartConverter.convertBOS(list));
 	}
 
 }

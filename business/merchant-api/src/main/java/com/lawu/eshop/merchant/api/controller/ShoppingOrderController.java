@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -23,6 +22,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.merchant.api.service.ExpressCompanyService;
 import com.lawu.eshop.merchant.api.service.ShoppingOrderService;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundForMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
@@ -120,7 +120,7 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") @Validated ShoppingOrderLogisticsInformationForeignParam param, BindingResult bindingResult) {
+	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") @Validated ShoppingOrderLogisticsInformationForeignParam param, BindingResult bindingResult) {
 
 		// 校验参数
 		String message = validate(bindingResult);
@@ -198,5 +198,28 @@ public class ShoppingOrderController extends BaseController {
     		return successGet(result.getRet());
     	}
     	return successGet(result);
+    }
+	
+    /**
+     * 查询物流动态
+     * 
+     * @param token
+     * @param id
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
+    public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    	
+    	Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingOrderService.getExpressInfo(id);
+    	
+    	if (!isSuccess(resultShoppingOrderExpressDTO)) {
+    		return successGet(resultShoppingOrderExpressDTO.getRet());
+    	}
+    	
+    	return successGet(resultShoppingOrderExpressDTO);
     }
 }
