@@ -77,7 +77,8 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
-		Result rs = addressService.delete(id);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		Result rs = addressService.delete(id,userNum);
 		return rs;
 	}
 

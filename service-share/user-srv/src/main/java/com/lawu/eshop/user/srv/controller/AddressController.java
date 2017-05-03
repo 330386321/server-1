@@ -137,9 +137,9 @@ public class AddressController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
-	public Result remove(@PathVariable Long id) {
-		AddressBO addressBO = addressService.get(id);
-		if(addressBO==null){
+	public Result remove(@PathVariable Long id,@RequestParam String userNum) {
+		boolean flag=addressService.isCheckAddress(id, userNum);
+		if(flag){
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
 		Integer i = addressService.remove(id);
