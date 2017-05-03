@@ -150,8 +150,8 @@ public class AdController extends BaseController {
     	Result rs= adService.remove(id);
     	return successDelete();
     }
-    
-    
+
+	@Audit(date = "2017-05-03", reviewer = "孙林青")
     @ApiOperation(value = "广告再次投放", notes = "广告再次投放,[]（张荣成）", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

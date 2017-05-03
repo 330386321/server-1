@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -40,6 +41,7 @@ public class ReportTradeDataController extends BaseController {
 	@Autowired
 	private ReportTradeDataService reportTradeDataService;
 
+	@Audit(date = "2017-05-03", reviewer = "孙林青")
 	@ApiOperation(value = "实体店铺买单交易数据", notes = "实体店铺买单交易数据(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "payVolumeRiseRate", method = RequestMethod.GET)

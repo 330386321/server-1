@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import java.util.List;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -44,6 +45,7 @@ public class ReportFansController extends BaseController {
 	@Autowired
 	private ReportFansService reportFansService;
 
+	@Audit(date = "2017-05-03", reviewer = "孙林青")
 	@ApiOperation(value = "粉丝数据，粉丝增长量", notes = "粉丝数据，粉丝增长量(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansRiseRate", method = RequestMethod.GET)
@@ -60,6 +62,7 @@ public class ReportFansController extends BaseController {
 		return reportFansService.fansRiseRate(dparam);
 	}
 
+	@Audit(date = "2017-05-03", reviewer = "孙林青")
 	@ApiOperation(value = "粉丝数据，增长来源", notes = "粉丝数据，增长来源(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansRiseSource", method = RequestMethod.GET)
