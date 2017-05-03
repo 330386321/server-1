@@ -17,6 +17,12 @@ public class ShoppingCartSettlementItemDTO implements Serializable {
     private BigDecimal subtotal;
     
     /**
+     * 商品数量
+     */
+    @ApiModelProperty(value = "商品数量", required = true)
+    private Integer productNumber;
+    
+    /**
      * 订单项数据
      */
     @ApiModelProperty(value = "订单项数据", required = true)
@@ -28,6 +34,14 @@ public class ShoppingCartSettlementItemDTO implements Serializable {
 
 	public void setSubtotal(BigDecimal subtotal) {
 		this.subtotal = subtotal;
+	}
+
+	public Integer getProductNumber() {
+		return productNumber;
+	}
+
+	public void setProductNumber(Integer productNumber) {
+		this.productNumber = productNumber;
 	}
 
 	public List<MemberShoppingCartDTO> getItems() {

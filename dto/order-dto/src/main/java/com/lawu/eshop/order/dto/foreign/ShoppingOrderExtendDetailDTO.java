@@ -53,21 +53,21 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
     /**
      * 发货时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "发货时间", required = true)
     private Date gmtTransport;
 
     /**
      * 交易时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "交易时间", required = true)
     private Date gmtTransaction;
 
     /**
      * 创建时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
     

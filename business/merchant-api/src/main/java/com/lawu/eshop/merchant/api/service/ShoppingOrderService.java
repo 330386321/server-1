@@ -93,5 +93,5 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "shoppingOrder/numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
-	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("memberId") Long merchantId);
+	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("merchantId") Long merchantId);
 }

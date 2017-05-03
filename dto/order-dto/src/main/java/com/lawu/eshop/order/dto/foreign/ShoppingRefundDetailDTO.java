@@ -77,42 +77,42 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	/**
 	 * 退款时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "退款时间", required = true)
 	private Date gmtRefund;
 
 	/**
 	 * 商家确认时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "商家确认时间", required = true)
 	private Date gmtConfirmed;
 
 	/**
 	 * 商家填写退货地址时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "商家填写退货地址时间", required = true)
 	private Date gmtFill;
 
 	/**
 	 * 买家提交退货物流时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "买家提交退货物流时间", required = true)
 	private Date gmtSubmit;
 	
     /**
     * 平台介入时间
     */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "平台介入时间", required = true)
     private Date gmtIntervention;
 	
 	/**
 	 * 退款申请时间
 	 */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "退款申请时间", required = true)
 	private Date gmtCreate;
 	
