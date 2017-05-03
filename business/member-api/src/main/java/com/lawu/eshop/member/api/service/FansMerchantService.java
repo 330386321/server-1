@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,12 @@ public interface FansMerchantService {
      *
      * @param merchantId
      * @param memberId
+     * @param channelEnum
      * @return
      */
     @SuppressWarnings("rawtypes")
-	@RequestMapping(value = "fansMerchant/saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
-    Result saveFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId);
+    @RequestMapping(value = "fansMerchant/saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
+    Result saveFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId, @RequestParam("channelEnum") FansMerchantChannelEnum channelEnum);
 
     /**
      * 查询商家粉丝数量

@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,7 +36,7 @@ public class FansMerchantController extends BaseController {
     public Result saveFansMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId) {
         long memberId = UserUtil.getCurrentUserId(getRequest());
-        return fansMerchantService.saveFansMerchant(merchantId, memberId);
+        return fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.INVITE);
     }
 
 }

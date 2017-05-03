@@ -3,10 +3,7 @@ package com.lawu.eshop.user.srv.service.impl;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
-import com.lawu.eshop.user.constants.UserSexEnum;
-import com.lawu.eshop.user.constants.UserStatusEnum;
+import com.lawu.eshop.user.constants.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -206,6 +203,7 @@ public class MemberServiceImpl implements MemberService {
             FansMerchantDO fansMerchantDO = new FansMerchantDO();
             fansMerchantDO.setMerchantId(inviterId);
             fansMerchantDO.setMemberId(memberId);
+            fansMerchantDO.setChannel(FansMerchantChannelEnum.REGISTER.getValue());
             fansMerchantDO.setGmtCreate(new Date());
             fansMerchantDOMapper.insertSelective(fansMerchantDO);
         }

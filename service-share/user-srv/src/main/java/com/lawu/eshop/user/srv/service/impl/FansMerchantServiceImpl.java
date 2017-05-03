@@ -1,7 +1,11 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.param.*;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
+import com.lawu.eshop.user.param.ListFansParam;
+import com.lawu.eshop.user.param.ListFansRealParam;
+import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.ListInviteFansRealParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
@@ -87,10 +91,11 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     }
 
     @Override
-    public void saveFansMerchant(Long merchantId, Long memberId) {
+    public void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum) {
         FansMerchantDO fansMerchantDO = new FansMerchantDO();
         fansMerchantDO.setMemberId(memberId);
         fansMerchantDO.setMerchantId(merchantId);
+        fansMerchantDO.setChannel(channelEnum.getValue());
         fansMerchantDO.setGmtCreate(new Date());
         fansMerchantDOMapper.insertSelective(fansMerchantDO);
     }

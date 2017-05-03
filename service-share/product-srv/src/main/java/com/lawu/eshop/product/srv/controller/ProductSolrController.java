@@ -6,7 +6,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.dto.ProductSearchWordDTO;
-import com.lawu.eshop.product.param.ProductSolrParam;
+import com.lawu.eshop.product.param.ProductSearchParam;
+import com.lawu.eshop.product.param.ProductSearchRealParam;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.solr.SolrUtil;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -29,17 +30,17 @@ public class ProductSolrController extends BaseController {
     /**
      * 根据商品类别查询商品信息
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.POST)
-    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("categoryId_is:" + productSolrParam.getCategoryId());
+        query.setFilterQueries("categoryId_is:" + param.getCategoryId());
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
-        query.setStart(productSolrParam.getOffset());
-        query.setRows(productSolrParam.getPageSize());
+        query.setStart(param.getOffset());
+        query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
@@ -48,24 +49,24 @@ public class ProductSolrController extends BaseController {
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
-        page.setCurrentPage(productSolrParam.getCurrentPage());
+        page.setCurrentPage(param.getCurrentPage());
         return successGet(page);
     }
 
     /**
      * 商品详情为你推荐(同类别按销量排行)
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.POST)
-    public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("categoryId_is:" + productSolrParam.getCategoryId());
+        query.setFilterQueries("categoryId_is:" + param.getCategoryId());
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
-        query.setStart(productSolrParam.getOffset());
-        query.setRows(productSolrParam.getPageSize());
+        query.setStart(param.getOffset());
+        query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
@@ -74,23 +75,23 @@ public class ProductSolrController extends BaseController {
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
-        page.setCurrentPage(productSolrParam.getCurrentPage());
+        page.setCurrentPage(param.getCurrentPage());
         return successGet(page);
     }
 
     /**
      * 要购物首页猜你喜欢
      *
-     * @param productSolrParam
+     * @param productSearchParam
      * @return
      */
     @RequestMapping(value = "listYouLikeProduct", method = RequestMethod.POST)
-    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@RequestBody ProductSearchParam productSearchParam) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
-        query.setStart(productSolrParam.getOffset());
-        query.setRows(productSolrParam.getPageSize());
+        query.setStart(productSearchParam.getOffset());
+        query.setRows(productSearchParam.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
@@ -99,24 +100,24 @@ public class ProductSolrController extends BaseController {
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
-        page.setCurrentPage(productSolrParam.getCurrentPage());
+        page.setCurrentPage(productSearchParam.getCurrentPage());
         return successGet(page);
     }
 
     /**
      * 会员APP商品搜索
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(value = "listProductByName", method = RequestMethod.POST)
-    public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSolrParam productSolrParam) {
+    public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("name_s:*" + productSolrParam.getName() + "*");
+        query.setFilterQueries("name_s:*" + param.getName() + "*");
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
-        query.setStart(productSolrParam.getOffset());
-        query.setRows(productSolrParam.getPageSize());
+        query.setStart(param.getOffset());
+        query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
@@ -125,7 +126,7 @@ public class ProductSolrController extends BaseController {
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
-        page.setCurrentPage(productSolrParam.getCurrentPage());
+        page.setCurrentPage(param.getCurrentPage());
         return successGet(page);
     }
 

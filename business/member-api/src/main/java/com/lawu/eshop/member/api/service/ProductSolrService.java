@@ -4,7 +4,8 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.dto.ProductSearchWordDTO;
-import com.lawu.eshop.product.param.ProductSolrParam;
+import com.lawu.eshop.product.param.ProductSearchParam;
+import com.lawu.eshop.product.param.ProductSearchRealParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,38 +24,38 @@ public interface ProductSolrService {
     /**
      * 根据商品类别查询商品信息
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "productSolr/listProductByCategoryId")
-    Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute ProductSolrParam productSolrParam);
+    Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute ProductSearchRealParam param);
 
     /**
      * 商品详情为你推荐(同类别按销量排行)
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "productSolr/listRecommendProduct")
-    Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute ProductSolrParam productSolrParam);
+    Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute ProductSearchRealParam param);
 
     /**
      * 要购物首页猜你喜欢
      *
-     * @param productSolrParam
+     * @param productSearchParam
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "productSolr/listYouLikeProduct")
-    Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute ProductSolrParam productSolrParam);
+    Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute ProductSearchParam productSearchParam);
 
     /**
      * 会员APP商品搜索
      *
-     * @param productSolrParam
+     * @param param
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "productSolr/listProductByName")
-    Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute ProductSolrParam productSolrParam);
+    Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute ProductSearchRealParam param);
 
     /**
      * 搜索词关联词频查询

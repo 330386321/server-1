@@ -13,7 +13,8 @@ import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ProductSolrService;
 import com.lawu.eshop.member.api.service.RecommendProductCategoryService;
 import com.lawu.eshop.product.dto.*;
-import com.lawu.eshop.product.param.ProductSolrParam;
+import com.lawu.eshop.product.param.ProductSearchParam;
+import com.lawu.eshop.product.param.ProductSearchRealParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -46,27 +47,42 @@ public class ProductSolrController extends BaseController {
     private ProductService productService;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类(categoryId 必传)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "根据商品类别查询商品信息", notes = "会员APP首页商品分类。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
-        return productSolrService.listProductByCategoryId(productSolrParam);
+    public Result<Page<ProductSearchDTO>> listProductByCategoryId(@ModelAttribute @ApiParam ProductSearchParam productSearchParam,
+                                                                  @RequestParam @ApiParam(required = true, value = "商品类别ID") Integer categoryId) {
+        ProductSearchRealParam param = new ProductSearchRealParam();
+        param.setCurrentPage(productSearchParam.getCurrentPage());
+        param.setPageSize(productSearchParam.getPageSize());
+        param.setCategoryId(categoryId);
+        return productSolrService.listProductByCategoryId(param);
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行,categoryId 必传)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "商品详情为你推荐", notes = "商品详情为你推荐(同类别按销量排行)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
-        return productSolrService.listRecommendProduct(productSolrParam);
+    public Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSearchParam productSearchParam,
+                                                               @RequestParam @ApiParam(required = true, value = "商品类别ID") Integer categoryId) {
+        ProductSearchRealParam param = new ProductSearchRealParam();
+        param.setCurrentPage(productSearchParam.getCurrentPage());
+        param.setPageSize(productSearchParam.getPageSize());
+        param.setCategoryId(categoryId);
+        return productSolrService.listRecommendProduct(param);
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
-    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索(name 必传)。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "会员APP商品搜索", notes = "会员APP商品搜索。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listProductByName", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
-        return productSolrService.listProductByName(productSolrParam);
+    public Result<Page<ProductSearchDTO>> listProductByName(@ModelAttribute @ApiParam ProductSearchParam productSearchParam,
+                                                            @RequestParam @ApiParam(required = true, value = "商品名称") String name) {
+        ProductSearchRealParam param = new ProductSearchRealParam();
+        param.setCurrentPage(productSearchParam.getCurrentPage());
+        param.setPageSize(productSearchParam.getPageSize());
+        param.setName(name);
+        return productSolrService.listProductByName(param);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
@@ -191,8 +207,8 @@ public class ProductSolrController extends BaseController {
     @ApiOperation(value = "要购物首页猜你喜欢", notes = "要购物首页猜你喜欢。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listYouLikeProduct", method = RequestMethod.GET)
-    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute @ApiParam ProductSolrParam productSolrParam) {
-        return productSolrService.listYouLikeProduct(productSolrParam);
+    public Result<Page<ProductSearchDTO>> listYouLikeProduct(@ModelAttribute @ApiParam ProductSearchParam productSearchParam) {
+        return productSolrService.listYouLikeProduct(productSearchParam);
     }
 
     @Audit(date = "2017-05-02", reviewer = "孙林青")

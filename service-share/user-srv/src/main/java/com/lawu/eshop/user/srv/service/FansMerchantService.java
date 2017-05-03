@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
@@ -61,7 +62,8 @@ public interface FansMerchantService {
      *
      * @param merchantId
      * @param memberId
+     * @param channelEnum
      */
-    void saveFansMerchant(Long merchantId, Long memberId);
+    void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum);
 
 }

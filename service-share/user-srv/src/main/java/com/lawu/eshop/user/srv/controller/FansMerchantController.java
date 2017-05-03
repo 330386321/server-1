@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
@@ -101,7 +102,7 @@ public class FansMerchantController extends BaseController {
     /**
      * 当前用户属于的商家
      *
-     * @param memberId
+     * @param merchantId
      * @return
      */
     @RequestMapping(value = "findFensCount", method = RequestMethod.GET)
@@ -115,11 +116,12 @@ public class FansMerchantController extends BaseController {
      *
      * @param merchantId
      * @param memberId
+     * @param channelEnum
      * @return
      */
     @RequestMapping(value = "saveFansMerchant/{merchantId}", method = RequestMethod.PUT)
-    public Result saveFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId) {
-        fansMerchantService.saveFansMerchant(merchantId, memberId);
+    public Result saveFansMerchant(@PathVariable Long merchantId, @RequestParam Long memberId, @RequestParam FansMerchantChannelEnum channelEnum) {
+        fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
         return successCreated();
     }
 
