@@ -113,6 +113,7 @@ public class AddressServiceImpl implements AddressService {
 	public List<AddressBO> selectByUserNum(String userNum) {
 		AddressDOExample example = new AddressDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(StatusEnum.VALID.getValue());
+		example.setOrderByClause("is_default desc");
 
 		List<AddressDO> list = addressDOMapper.selectByExample(example);
 

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.constants.PositionEnum;
-import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
@@ -23,7 +22,6 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
-import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.operator.api.service.AdPlatformService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
@@ -142,9 +140,9 @@ public class AdPlatformController extends BaseController {
         return rs;
     }
     
-    @ApiOperation(value = "修改广告", notes = "修改广告[1011|1015|1010]（张荣成）", httpMethod = "PUT")
+    @ApiOperation(value = "修改广告", notes = "修改广告[1011|1015|1010]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
     public Result update(@PathVariable @ApiParam(required = true, value = "广告id") Long id,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
     	 HttpServletRequest request = getRequest();
     	 String mediaUrl = "";
@@ -182,7 +180,8 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.GET)
     public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@ModelAttribute @ApiParam MerchantStorePlatParam param) {
-    	return merchantStoreService.selectAllMerchantStore(param);
+    	Result<List<MerchantStorePlatDTO>> rs=merchantStoreService.selectAllMerchantStore(param);
+    	return rs;
     }
 
 }

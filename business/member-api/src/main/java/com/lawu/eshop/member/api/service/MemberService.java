@@ -150,4 +150,12 @@ public interface MemberService {
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "member/findMember/{memberId}")
     Result<MemberDTO> findMemberInfoById(@PathVariable("memberId") Long memberId);
+	
+	/**
+	 * 查询用户是否注册
+	 * @param moblie
+	 * @return
+	 */
+	@RequestMapping(value = "member/isRegister", method = RequestMethod.GET)
+    Result<Boolean> isRegister(@RequestParam("moblie") String moblie);
 }

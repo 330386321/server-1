@@ -49,6 +49,7 @@ import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -299,14 +300,27 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-26", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "领取红包", notes = "领取红包[5004]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "领取红包", notes = "领取红包[1002|5004]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
-    public Result<PraisePointDTO> getRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
-    	Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	Result<PraisePointDTO> rs=adService.getRedPacket(merchantId,memberId,userNum);
+    public Result<PraisePointDTO> getRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    		@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId
+    		,@RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
+    	Result<Boolean> isRegisterRs= memberService.isRegister(mobile);
+    	Result<PraisePointDTO> rs=new Result<>();
+    	if(isSuccess(isRegisterRs)){
+    		Boolean flag=isRegisterRs.getModel();
+    		if(flag){ //直接领取红包 并成为粉丝
+    			Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	    	rs=adService.getRedPacket(merchantId,memberId,userNum);
+    	    	fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
+    		}else{
+    			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+    		}
+    	}
     	return rs;
+    	
     }
 
     @Audit(date = "2017-05-02", reviewer = "孙林青")

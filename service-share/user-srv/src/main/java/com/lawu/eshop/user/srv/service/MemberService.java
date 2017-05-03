@@ -106,4 +106,11 @@ public interface MemberService {
     List<MessagePushBO> findMessagePushList(String area);
 
     MessagePushBO findMessagePushByMobile(String moblie);
+    
+    /**
+     * 根据手机号判断用户是否注册
+     * @param mobile
+     * @return
+     */
+    Boolean isRegister(String mobile);
 }
