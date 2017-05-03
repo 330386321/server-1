@@ -42,7 +42,7 @@ public class ReportTradeDataController extends BaseController {
 	private ReportTradeDataService reportTradeDataService;
 
 	@Audit(date = "2017-05-03", reviewer = "孙林青")
-	@ApiOperation(value = "实体店铺买单交易数据", notes = "实体店铺买单交易数据(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@ApiOperation(value = "买单交易数据", notes = "买单交易数据(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "payVolumeRiseRate", method = RequestMethod.GET)
 	public Result<ReportRiseRateDTO> payVolumeRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
@@ -58,5 +58,19 @@ public class ReportTradeDataController extends BaseController {
 		return reportTradeDataService.payVolumeRiseRate(dparam);
 	}
 
-	
+	@ApiOperation(value = "商品订单交易数据", notes = "商品订单交易数据(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "productOrderVolumeRiseRate", method = RequestMethod.GET)
+	public Result<ReportRiseRateDTO> productOrderVolumeRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam ReportParam param) throws Exception {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		if (merchantId == 0L) {
+			return successCreated(ResultCode.MEMBER_NO_EXIST);
+		}
+		ReportDataParam dparam = new ReportDataParam();
+		BeanUtil.copyProperties(param, dparam);
+		dparam.setMerchantId(merchantId);
+		dparam.setFlag(param.getFlag());
+		return reportTradeDataService.productOrderVolumeRiseRate(dparam);
+	}
 }

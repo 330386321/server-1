@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 /**
  * 
  * <p>
- * Description: 粉丝增长来源
+ * Description: 粉丝增长来源、消费转化
  * </p>
  * @author Yangqh
  * @date 2017年5月2日 下午7:30:57

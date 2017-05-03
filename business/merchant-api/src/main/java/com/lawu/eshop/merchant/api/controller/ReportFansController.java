@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ReportFansService;
+import com.lawu.eshop.merchant.api.service.ReportTradeDataService;
 import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.user.param.ReportDataParam;
@@ -44,6 +45,8 @@ public class ReportFansController extends BaseController {
 
 	@Autowired
 	private ReportFansService reportFansService;
+	@Autowired
+	private ReportTradeDataService reportTradeDataService;
 
 	@Audit(date = "2017-05-03", reviewer = "孙林青")
 	@ApiOperation(value = "粉丝数据，粉丝增长量", notes = "粉丝数据，粉丝增长量(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
@@ -77,5 +80,21 @@ public class ReportFansController extends BaseController {
 		dparam.setMerchantId(merchantId);
 		dparam.setFlag(param.getFlag());
 		return reportFansService.fansRiseSource(dparam);
+	}
+	
+	@ApiOperation(value = "粉丝数据，消费转化", notes = "粉丝数据，消费转化(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.GET)
+	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@ModelAttribute @ApiParam ReportParam param) throws Exception {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		if (merchantId == 0L) {
+			return successCreated(ResultCode.MEMBER_NO_EXIST);
+		}
+		ReportDataParam dparam = new ReportDataParam();
+		BeanUtil.copyProperties(param, dparam);
+		dparam.setMerchantId(merchantId);
+		dparam.setFlag(param.getFlag());
+		return reportTradeDataService.fansSaleTransform(dparam);
 	}
 }
