@@ -1,9 +1,7 @@
 package com.lawu.eshop.user.srv.converter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -13,16 +11,18 @@ import org.springframework.beans.BeanUtils;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
 import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
@@ -248,12 +248,12 @@ public class MerchantStoreConverter {
      * @param merchantStoreDO
      * @return
      */
-    public static MerchantStoreNoReasonReturnBO convert(MerchantStoreDO merchantStoreDO, MerchantDO merchantDO) {
+    public static ShoppingOrderFindMerchantInfoBO convert(MerchantStoreDO merchantStoreDO, MerchantDO merchantDO) {
         if (merchantStoreDO == null) {
             return null;
         }
 
-        MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO = new MerchantStoreNoReasonReturnBO();
+        ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO = new ShoppingOrderFindMerchantInfoBO();
         merchantStoreNoReasonReturnBO.setIsNoReasonReturn(merchantStoreDO.getIsNoReasonReturn());
         merchantStoreNoReasonReturnBO.setMerchantId(merchantStoreDO.getMerchantId());
         merchantStoreNoReasonReturnBO.setMerchantNum(merchantDO.getNum());
@@ -262,61 +262,36 @@ public class MerchantStoreConverter {
     }
 
     /**
-     * MerchantStoreNoReasonReturnBO List转换
-     *
-     * @param merchantStoreDOList
-     * @return
-     */
-    public static List<MerchantStoreNoReasonReturnBO> convertMerchantStoreNoReasonReturnBOList(List<MerchantStoreDO> merchantStoreDOList, List<MerchantDO> merchantDOList) {
-        if (merchantStoreDOList == null || merchantStoreDOList.isEmpty()
-                || merchantDOList == null || merchantDOList.isEmpty()) {
-            return null;
-        }
-
-        Map<Long, MerchantDO> merchantDOMap = new HashMap<Long, MerchantDO>();
-        for (MerchantDO merchantDO : merchantDOList) {
-            merchantDOMap.put(merchantDO.getId(), merchantDO);
-        }
-
-        List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = new ArrayList<MerchantStoreNoReasonReturnBO>();
-        for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
-            merchantStoreNoReasonReturnBOList.add(convert(merchantStoreDO, merchantDOMap.get(merchantStoreDO.getMerchantId())));
-        }
-
-        return merchantStoreNoReasonReturnBOList;
-    }
-
-    /**
      * MerchantStoreNoReasonReturnDTO转换
      *
      * @param merchantStoreNoReasonReturnBO
      * @return
      */
-    public static MerchantStoreNoReasonReturnDTO convert(MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO) {
-    	MerchantStoreNoReasonReturnDTO rtn = null;
+    public static ShoppingOrderFindMerchantInfoDTO convert(ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO) {
+    	ShoppingOrderFindMerchantInfoDTO rtn = null;
         if (merchantStoreNoReasonReturnBO == null) {
             return rtn;
         }
 
-        rtn = new MerchantStoreNoReasonReturnDTO();
+        rtn = new ShoppingOrderFindMerchantInfoDTO();
         BeanUtils.copyProperties(merchantStoreNoReasonReturnBO, rtn);
 
         return rtn;
     }
 
     /**
-     * MerchantStoreNoReasonReturnDTO List转换
+     * ShoppingOrderFindMerchantInfoDTO List转换
      *
      * @param merchantStoreNoReasonReturnBOList
      * @return
      */
-    public static List<MerchantStoreNoReasonReturnDTO> convertMerchantStoreNoReasonReturnDTOList(List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList) {
-        if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
+    public static List<ShoppingOrderFindMerchantInfoDTO> convertShoppingOrderFindMerchantInfoDTOList(List<ShoppingOrderFindMerchantInfoBO> merchantStoreNoReasonReturnBOList) {
+    	if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
             return null;
         }
 
-        List<MerchantStoreNoReasonReturnDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<MerchantStoreNoReasonReturnDTO>();
-        for (MerchantStoreNoReasonReturnBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
+        List<ShoppingOrderFindMerchantInfoDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<ShoppingOrderFindMerchantInfoDTO>();
+        for (ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
             merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
         }
 
@@ -444,5 +419,19 @@ public class MerchantStoreConverter {
         document.addField("averageScore_d", solrDocument.get("averageScore_d"));
         return document;
     }
-
+    
+    /**
+     * ShoppingOrderFindUserInfoDTO转换
+     *
+     * @param merchantStoreNoReasonReturnBOList
+     * @return
+     */
+    public static ShoppingOrderFindUserInfoDTO convert(List<ShoppingOrderFindMerchantInfoBO> merchantStoreNoReasonReturnBOList, MemberBO memberBO) {
+    	ShoppingOrderFindUserInfoDTO rtn = new ShoppingOrderFindUserInfoDTO();
+    	
+    	rtn.setShoppingOrderFindMerchantInfoDTOList(convertShoppingOrderFindMerchantInfoDTOList(merchantStoreNoReasonReturnBOList));
+        rtn.setMemberNum(memberBO.getNum());
+        
+        return rtn;
+    }
 }

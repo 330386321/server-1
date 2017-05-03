@@ -19,21 +19,24 @@ import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
 import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
 import com.lawu.eshop.user.dto.StoreDetailDTO;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreNoReasonReturnBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
 import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
+import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
@@ -54,6 +57,9 @@ public class MerchantStoreController extends BaseController {
 
 	@Autowired
 	private MerchantAuditService merchantAuditService;
+
+	@Autowired
+	private MemberService memberService;
 
 	/**
 	 * 门店信息查询
@@ -102,8 +108,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveMerchantStoreInfo/{merchantId}", method = RequestMethod.POST)
-	public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId,
-			@RequestBody MerchantStoreParam merchantStoreParam) {
+	public Result saveMerchantStoreInfo(@PathVariable("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
 
 		// 判断门店是否存在
 		MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
@@ -112,8 +117,7 @@ public class MerchantStoreController extends BaseController {
 		}
 		// 判断该营业执照是否存在相同记录
 		if (!StringUtils.isEmpty(merchantStoreParam.getRegNumber())) {
-			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService
-					.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
+			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
 			if (merchantStoreProfileBO != null) {
 				return successCreated(ResultCode.RECORD_EXIST);
 			}
@@ -121,8 +125,7 @@ public class MerchantStoreController extends BaseController {
 
 		// 判断该身份证号是否存在相同记录
 		if (!StringUtils.isEmpty(merchantStoreParam.getOperatorCardId())) {
-			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService
-					.selectStoreInfoByExample(merchantStoreParam.getOperatorCardId(), 2);
+			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getOperatorCardId(), 2);
 			if (merchantStoreProfileBO != null) {
 				return successCreated(ResultCode.RECORD_EXIST);
 			}
@@ -143,8 +146,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "updateMerchantStoreInfo/{merchantStoreId}", method = RequestMethod.PUT)
-	public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId,
-			@RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
+	public Result updateMerchantStoreInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
 		MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStore(merchantStoreId);
 		if (merchantStoreInfoBO == null) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -182,11 +184,9 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "saveMerchantStoreAuditInfo/{merchantStoreId}", method = RequestMethod.POST)
-	public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId,
-			@RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
+	public Result saveMerchantStoreAuditInfo(@PathVariable("merchantStoreId") Long merchantStoreId, @RequestParam("merchantId") Long merchantId, @RequestBody MerchantStoreParam merchantStoreParam) {
 		// 查询是否存在未审核记录
-		MerchantStoreAuditBO auditBO = merchantAuditService.getMerchantAuditInfoByUncheck(merchantId,
-				MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+		MerchantStoreAuditBO auditBO = merchantAuditService.getMerchantAuditInfoByUncheck(merchantId, MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
 		if (auditBO != null) {
 			return successCreated(ResultCode.MERCHANT_STORE_AUDIT_EXIST);
 		}
@@ -216,24 +216,18 @@ public class MerchantStoreController extends BaseController {
 	}
 
 	/**
-	 * 根据商家ID列表批量查询该商家是否支持七天无理由退货
+	 * 商家是否支持七天退货、商家的用户编号、当前用户是否是商家的粉丝
 	 *
-	 * @param merchantIdList
+	 * @param param
 	 */
-	@RequestMapping(value = "selectNoReasonReturnByMerchantIds", method = RequestMethod.GET)
-	public Result<List<MerchantStoreNoReasonReturnDTO>> selectNoReasonReturnByMerchantIds(
-			@RequestParam List<Long> merchantIdList) {
-		if (merchantIdList == null || merchantIdList.isEmpty()) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
+	@RequestMapping(value = "shoppingOrderFindUserInfo", method = RequestMethod.PUT)
+	public Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfo(@RequestBody ShoppingOrderFindUserInfoParam param) {
 
-		List<MerchantStoreNoReasonReturnBO> merchantStoreNoReasonReturnBOList = merchantStoreInfoService.selectNoReasonReturnByMerchantIds(merchantIdList);
-
-		if (merchantStoreNoReasonReturnBOList == null || merchantStoreNoReasonReturnBOList.isEmpty()) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		return successGet(MerchantStoreConverter.convertMerchantStoreNoReasonReturnDTOList(merchantStoreNoReasonReturnBOList));
+		List<ShoppingOrderFindMerchantInfoBO> shoppingOrderFindUserInfoBOList = merchantStoreInfoService.shoppingOrderFindUserInfo(param);
+		
+		MemberBO memberBO = memberService.getMemberById(param.getMemberId());
+		
+		return successGet(MerchantStoreConverter.convert(shoppingOrderFindUserInfoBOList, memberBO));
 	}
 
 	/**
@@ -298,8 +292,7 @@ public class MerchantStoreController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "applyPhysicalStore/{merchantId}", method = RequestMethod.PUT)
-	public Result applyPhysicalStore(@PathVariable(value = "merchantId") Long merchantId,
-			@RequestBody ApplyStoreParam param) {
+	public Result applyPhysicalStore(@PathVariable(value = "merchantId") Long merchantId, @RequestBody ApplyStoreParam param) {
 		if (merchantId == null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
@@ -308,8 +301,7 @@ public class MerchantStoreController extends BaseController {
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
 		// 添加审核记录
-		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(),
-				param);
+		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
 		if (row < 0) {
 			return successCreated(ResultCode.MERCHANT_STORE_AUDIT_EXIST);
 		}
@@ -379,18 +371,19 @@ public class MerchantStoreController extends BaseController {
 	}
 
 	/**
-     * 用户端商品详情页面查询，店铺信息
-     * @param merchantId
-     * @return
-     * @author yangqh
-     */
+	 * 用户端商品详情页面查询，店铺信息
+	 * 
+	 * @param merchantId
+	 * @return
+	 * @author yangqh
+	 */
 	@RequestMapping(value = "getMemberProductDetailStore", method = RequestMethod.GET)
 	public Result<MemberProductStoreDTO> getMemberProductDetailStore(@RequestParam Long merchantId) {
 		if (merchantId == null) {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 		MerchantStoreInfoBO storeBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
-		if(storeBO == null){
+		if (storeBO == null) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		MemberProductStoreDTO dto = new MemberProductStoreDTO();

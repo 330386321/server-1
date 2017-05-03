@@ -13,8 +13,16 @@ import java.util.List;
 @FeignClient(value = "user-srv")
 public interface FansMerchantService {
 
+	/**
+	 * 查询用户是否是商家的粉丝
+	 * 
+	 * @param merchantId
+	 * @param memberId
+	 * @return
+	 * @author Sunny
+	 */
     @RequestMapping(value = "fansMerchant/isFansMerchant/{merchantId}", method = RequestMethod.GET)
-    public Result<Boolean> isFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId);
+    Result<Boolean> isFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId);
 
     @RequestMapping(value = "fansMerchant/findMerchant", method = RequestMethod.GET)
     public List<Long> findMerchant(@RequestParam("memberId") Long memberId);

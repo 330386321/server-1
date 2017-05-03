@@ -1416,6 +1416,66 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsFansIsNull() {
+            addCriterion("is_fans is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansIsNotNull() {
+            addCriterion("is_fans is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansEqualTo(Boolean value) {
+            addCriterion("is_fans =", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansNotEqualTo(Boolean value) {
+            addCriterion("is_fans <>", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansGreaterThan(Boolean value) {
+            addCriterion("is_fans >", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_fans >=", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansLessThan(Boolean value) {
+            addCriterion("is_fans <", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_fans <=", value, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansIn(List<Boolean> values) {
+            addCriterion("is_fans in", values, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansNotIn(List<Boolean> values) {
+            addCriterion("is_fans not in", values, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_fans between", value1, value2, "isFans");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsFansNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_fans not between", value1, value2, "isFans");
+            return (Criteria) this;
+        }
+
         public Criteria andIsNoReasonReturnIsNull() {
             addCriterion("is_no_reason_return is null");
             return (Criteria) this;

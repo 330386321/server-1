@@ -169,6 +169,12 @@ public class MqConstant {
      */
     public static final String TAG_TO_BE_REFUND_REMIND = "to_be_refund_remind";
     
+    /**
+     * 创建购物订单时发布的MQ消息
+     * 发送到user模块，用户 成为商家粉丝
+     */
+    public static final String TAG_CREATE_ORDER_FANS = "create_order_fans";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";

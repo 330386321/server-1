@@ -90,4 +90,9 @@ public class TransactionConstant {
      */
     public static final  byte TO_BE_RETURN_REFUND = 0x0e;
     
+    /**
+     * 创建购物订单-成为商家粉丝
+     */
+    public static final byte CREATE_ORDER_FANS = 0x0f;
+    
 }

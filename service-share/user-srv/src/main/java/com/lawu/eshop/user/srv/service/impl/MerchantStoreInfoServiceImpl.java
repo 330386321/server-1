@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
@@ -8,20 +19,40 @@ import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.*;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.domain.FansMerchantDO;
+import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
+import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import net.sf.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import net.sf.json.JSONObject;
 
 /**
  * 商家门店service Created by Administrator on 2017/3/24.
@@ -388,24 +419,45 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     }
 
     /**
-     * 根据商家id列表批量查询
-     * 商家是否支持七天退货以及商家的用户编号
+     * 商家是否支持七天退货、商家的用户编号、当前用户是否是商家的粉丝
      *
-     * @param merchantIds
+     * @param param
      * @return
      */
     @Override
-    public List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds) {
+    public List<ShoppingOrderFindMerchantInfoBO> shoppingOrderFindUserInfo(ShoppingOrderFindUserInfoParam param) {
         MerchantStoreDOExample merchantStoreDOExample = new MerchantStoreDOExample();
-        merchantStoreDOExample.createCriteria().andMerchantIdIn(merchantIds);
-        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+        merchantStoreDOExample.createCriteria().andMerchantIdIn(param.getMerchantIdList());
+        List<MerchantStoreDO> merchantStoreDOList = merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
 
 
         MerchantDOExample merchantDOExample = new MerchantDOExample();
-        merchantDOExample.createCriteria().andIdIn(merchantIds);
+        merchantDOExample.createCriteria().andIdIn(param.getMerchantIdList());
         List<MerchantDO> merchantDOList = merchantDOMapper.selectByExample(merchantDOExample);
-
-        return MerchantStoreConverter.convertMerchantStoreNoReasonReturnBOList(merchantStoreDOS, merchantDOList);
+        
+        Map<Long, MerchantDO> merchantDOMap = new HashMap<Long, MerchantDO>();
+        for (MerchantDO merchantDO : merchantDOList) {
+            merchantDOMap.put(merchantDO.getId(), merchantDO);
+        }
+        
+        List<ShoppingOrderFindMerchantInfoBO> rtn = new ArrayList<ShoppingOrderFindMerchantInfoBO>();
+        FansMerchantDOExample fansMerchantDOExample = null;
+        ShoppingOrderFindMerchantInfoBO shoppingOrderFindUserInfoBO = null;
+        for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
+            fansMerchantDOExample = new FansMerchantDOExample();
+            fansMerchantDOExample.createCriteria().andMemberIdEqualTo(param.getMemberId()).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+            int count = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
+            boolean isFans = false;
+            if (count > 0) {
+            	isFans = true;
+            }
+            shoppingOrderFindUserInfoBO = MerchantStoreConverter.convert(merchantStoreDO, merchantDOMap.get(merchantStoreDO.getMerchantId()));
+            shoppingOrderFindUserInfoBO.setIsFans(isFans);
+            rtn.add(shoppingOrderFindUserInfoBO);
+            
+        }
+        
+        return rtn;
     }
 
     @Override

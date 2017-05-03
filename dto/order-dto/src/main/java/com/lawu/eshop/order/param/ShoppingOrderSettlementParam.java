@@ -80,6 +80,11 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	private Boolean isNoReasonReturn;
 	
 	/**
+	 * 用户是否是商家粉丝
+	 */
+	private Boolean isFans;
+	
+	/**
 	 * 订单项
 	 */
 	private List<ShoppingOrderSettlementItemParam> items;
@@ -186,6 +191,14 @@ public class ShoppingOrderSettlementParam implements Serializable {
 
 	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
 		this.isNoReasonReturn = isNoReasonReturn;
+	}
+
+	public Boolean getIsFans() {
+		return isFans;
+	}
+
+	public void setIsFans(Boolean isFans) {
+		this.isFans = isFans;
 	}
 
 	public List<ShoppingOrderSettlementItemParam> getItems() {

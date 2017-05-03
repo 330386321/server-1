@@ -107,7 +107,12 @@ public class ShoppingOrderBO implements Serializable {
 	 * 发送提醒的次数
 	 */
 	private Integer sendTime;
-
+	
+    /**
+    * 购买前用户是否是商家的粉丝
+    */
+    private Boolean isFans;
+	
 	/**
 	 * 是否支持无理由退货,0否 1是
 	 */
@@ -343,6 +348,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setSendTime(Integer sendTime) {
 		this.sendTime = sendTime;
+	}
+
+	public Boolean getIsFans() {
+		return isFans;
+	}
+
+	public void setIsFans(Boolean isFans) {
+		this.isFans = isFans;
 	}
 
 	public Boolean getIsNoReasonReturn() {

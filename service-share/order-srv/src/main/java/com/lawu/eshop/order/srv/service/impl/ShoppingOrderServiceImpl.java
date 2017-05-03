@@ -105,6 +105,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
     @Autowired
     @Qualifier("shoppingOrderRemindShipmentsTransactionMainServiceImpl")
     private TransactionMainService<Reply> shoppingOrderRemindShipmentsTransactionMainServiceImpl;
+    
+    @Autowired
+    @Qualifier("shoppingOrderCreateOrderFansTransactionMainServiceImpl")
+    private TransactionMainService<Reply> shoppingOrderCreateOrderFansTransactionMainServiceImpl;
 	
 	/**
 	 * 
@@ -145,6 +149,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				rtn.add(id);
 				// 事务补偿(减掉库存)
 				shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
+				
+				// 事务补偿(用户成为商家粉丝)
+				shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
 			}
 		}
 		

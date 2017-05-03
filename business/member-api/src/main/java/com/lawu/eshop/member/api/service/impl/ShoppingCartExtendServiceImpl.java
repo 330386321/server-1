@@ -35,7 +35,9 @@ import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
-import com.lawu.eshop.user.dto.MerchantStoreNoReasonReturnDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
 
 /**
  * 购物车扩展服务实现类
@@ -240,15 +242,18 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	// 查询商家是否支持七天退货
     	List<Long> merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
-    	Result<List<MerchantStoreNoReasonReturnDTO>> resultMerchantStoreNoReasonReturnDTOList = merchantStoreService.selectNoReasonReturnByMerchantIds(merchantIdList);
-    	if (!isSuccess(resultMerchantStoreNoReasonReturnDTOList)) {
-    		return successCreated(resultMerchantStoreNoReasonReturnDTOList.getRet());
+    	ShoppingOrderFindUserInfoParam shoppingOrderFindUserInfoParam = new ShoppingOrderFindUserInfoParam();
+    	shoppingOrderFindUserInfoParam.setMerchantIdList(merchantIdList);
+    	shoppingOrderFindUserInfoParam.setMemberId(memberId);
+    	Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfoDTOResult = merchantStoreService.shoppingOrderFindUserInfo(shoppingOrderFindUserInfoParam);
+    	if (!isSuccess(shoppingOrderFindUserInfoDTOResult)) {
+    		return successCreated(shoppingOrderFindUserInfoDTOResult.getRet());
     	}
     	
     	// 把商家信息放入Map
-    	Map<Long, MerchantStoreNoReasonReturnDTO> merchantStoreNoReasonReturnDTOMap =  new HashMap<Long, MerchantStoreNoReasonReturnDTO>();
-    	for (MerchantStoreNoReasonReturnDTO merchantStoreNoReasonReturnDTO : resultMerchantStoreNoReasonReturnDTOList.getModel()) {
-    		merchantStoreNoReasonReturnDTOMap.put(merchantStoreNoReasonReturnDTO.getMerchantId(), merchantStoreNoReasonReturnDTO);
+    	Map<Long, ShoppingOrderFindMerchantInfoDTO> shoppingOrderFindMerchantInfoDTOMap =  new HashMap<Long, ShoppingOrderFindMerchantInfoDTO>();
+    	for (ShoppingOrderFindMerchantInfoDTO shoppingOrderFindMerchantInfoDTO : shoppingOrderFindUserInfoDTOResult.getModel().getShoppingOrderFindMerchantInfoDTOList()) {
+    		shoppingOrderFindMerchantInfoDTOMap.put(shoppingOrderFindMerchantInfoDTO.getMerchantId(), shoppingOrderFindMerchantInfoDTO);
     	}
     	
     	Result<MemberInfoForShoppingOrderDTO> resultMemberInfoForShoppingOrderDTO = memberService.getMemberInfoForShoppingOrder(memberId);
@@ -261,9 +266,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	shoppingCartDTOMap.forEach( (key,value) -> {
     		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
     		shoppingOrderSettlementParam.setMemberId(memberId);
-    		shoppingOrderSettlementParam.setMemberNum(resultMemberInfoForShoppingOrderDTO.getModel().getNum());
+    		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
     		shoppingOrderSettlementParam.setMerchantId(key);
-    		shoppingOrderSettlementParam.setMerchantNum(merchantStoreNoReasonReturnDTOMap.get(key).getMerchantNum());
+    		shoppingOrderSettlementParam.setMerchantNum(shoppingOrderFindMerchantInfoDTOMap.get(key).getMerchantNum());
     		shoppingOrderSettlementParam.setMerchantName(value.get(0).getMerchantName());
     		shoppingOrderSettlementParam.setMessage(shoppingOrderSettlementForeignParamMap.get(key).getMessage());
     		shoppingOrderSettlementParam.setFreightPrice(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice());
@@ -274,7 +279,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
     		
     		// 是否支持七天退货
-    		shoppingOrderSettlementParam.setIsNoReasonReturn(merchantStoreNoReasonReturnDTOMap.get(key).getIsNoReasonReturn());
+    		shoppingOrderSettlementParam.setIsNoReasonReturn(shoppingOrderFindMerchantInfoDTOMap.get(key).getIsNoReasonReturn());
+    		
+    		// 用户是否是商家粉丝
+    		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTOMap.get(key).getIsFans());
     		
     		BigDecimal commodityTotalPrice = new BigDecimal(0);
     		List<ShoppingOrderSettlementItemParam> items = new ArrayList<ShoppingOrderSettlementItemParam>();

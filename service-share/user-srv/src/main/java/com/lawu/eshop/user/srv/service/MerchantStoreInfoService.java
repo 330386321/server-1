@@ -1,10 +1,17 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.*;
-
-import java.util.List;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
 
 /**
  * 门店信息接口
@@ -48,13 +55,12 @@ public interface MerchantStoreInfoService {
     MerchantStoreInfoBO selectMerchantStoreByMId(Long merchantId);
 
     /**
-     * 根据商家id列表批量查询
-     * 商家是否支持七天退货以及商家的用户编号
+     * 商家是否支持七天退货、商家的用户编号、当前用户是否是商家的粉丝
      *
-     * @param merchantIds
+     * @param param
      * @return
      */
-    List<MerchantStoreNoReasonReturnBO> selectNoReasonReturnByMerchantIds(List<Long> merchantIds);
+    List<ShoppingOrderFindMerchantInfoBO> shoppingOrderFindUserInfo(ShoppingOrderFindUserInfoParam param);
 
     void saveMerchantStoreAuditInfo(Long merchantId, MerchantStoreParam merchantStoreParam, Long merchantStoreId);
 
