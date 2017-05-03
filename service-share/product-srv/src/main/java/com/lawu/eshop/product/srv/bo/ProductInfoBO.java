@@ -6,8 +6,6 @@ import java.util.List;
 import com.lawu.eshop.product.dto.MemberProductImageDetailDTO;
 import com.lawu.eshop.product.dto.MemberProductModelDTO;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * 产品类别BO
  *
@@ -18,6 +16,7 @@ public class ProductInfoBO {
 
     private Long id;
     private Long merchantId;
+    private Integer categoryId;
     private String name;
     private String content;
     private String featureImage;
@@ -134,6 +133,14 @@ public class ProductInfoBO {
 
 	public void setTotalInventory(Integer totalInventory) {
 		this.totalInventory = totalInventory;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
     
 }

@@ -109,6 +109,7 @@ public class ProductConverter {
         productInfoBO.setMaxPrice(String.valueOf(productDO.getMaxPrice()));
         productInfoBO.setMinPrice(String.valueOf(productDO.getMinPrice()));
         productInfoBO.setGmtCreate(productDO.getGmtCreate());
+        productInfoBO.setCategoryId(productDO.getCategoryId());
         return productInfoBO;
     }
 

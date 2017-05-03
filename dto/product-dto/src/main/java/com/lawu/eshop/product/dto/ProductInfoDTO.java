@@ -24,6 +24,9 @@ public class ProductInfoDTO {
 
 	@ApiModelProperty(value = "商家ID")
 	private Long merchantId;
+	
+	@ApiModelProperty(value = "分类ID")
+	private Integer categoryId;
 
 	@ApiModelProperty(value = "商品名称")
 	private String name;
@@ -201,6 +204,14 @@ public class ProductInfoDTO {
 
 	public void setTotalInventory(Integer totalInventory) {
 		this.totalInventory = totalInventory;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
 	
 }
