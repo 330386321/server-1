@@ -48,12 +48,12 @@ public interface ShoppingCartService {
 	/**
 	 * 根据id删除购物车的商品
 	 * 
-	 * @param id 购物车id
 	 * @param memberId 会员id
+	 * @param ids 购物车id列表
 	 * @return
 	 * @author Sunny
 	 */
-	int remove(Long id, Long memberId);
+	int remove(Long memberId, List<Long> ids);
 	
 	/**
 	 * 根据购物车id列表查询购物车列表

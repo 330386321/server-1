@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -45,24 +46,28 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
     /**
      * 付款时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "付款时间", required = true)
     private Date gmtPayment;
 
     /**
      * 发货时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "发货时间", required = true)
     private Date gmtTransport;
 
     /**
      * 交易时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "交易时间", required = true)
     private Date gmtTransaction;
 
     /**
      * 创建时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
     
@@ -101,6 +106,12 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 	 */
 	@ApiModelProperty(value = "倒计时", required = false)
 	private Long countdown;
+	
+	/**
+	 * 实际支付给商家的金额
+	 */
+	@ApiModelProperty(value = "实际收入", required = true)
+	private BigDecimal actualAmount;
 	
 	/**
 	 * 最新更新的物流记录
@@ -226,6 +237,14 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 
 	public void setCountdown(Long countdown) {
 		this.countdown = countdown;
+	}
+
+	public BigDecimal getActualAmount() {
+		return actualAmount;
+	}
+
+	public void setActualAmount(BigDecimal actualAmount) {
+		this.actualAmount = actualAmount;
 	}
 
 	public TraceDTO getTrace() {

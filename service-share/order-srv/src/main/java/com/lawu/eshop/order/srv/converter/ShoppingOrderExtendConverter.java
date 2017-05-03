@@ -177,6 +177,7 @@ public class ShoppingOrderExtendConverter {
 			shoppingOrderQueryToMerchantDTO.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
 		}
 		
+		
 		return shoppingOrderQueryToMerchantDTO;
 	}
 	

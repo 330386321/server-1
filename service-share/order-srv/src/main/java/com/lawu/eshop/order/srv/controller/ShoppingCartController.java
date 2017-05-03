@@ -84,20 +84,17 @@ public class ShoppingCartController extends BaseController {
 	}
 	
 	/**
-	 * 根据id删除购物车的商品
+	 * 根据id列表删除购物车的商品
 	 * 
-	 * @param id
-	 */
-	/**
-	 * @param id
 	 * @param memberId
+	 * @param ids
 	 * @return
 	 * @author Sunny
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.PUT)
-	public Result delete(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId) {
-		int resultCode = shoppingCartService.remove(id, memberId);
+	@RequestMapping(value = "delete", method = RequestMethod.PUT)
+	public Result delete(@RequestParam("memberId") Long memberId, @RequestBody List<Long> ids) {
+		int resultCode = shoppingCartService.remove(memberId, ids);
 		
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);

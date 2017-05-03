@@ -118,18 +118,11 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 */
 	@Transactional
 	@Override
-	public int remove(Long id, Long memberId) {
-		ShoppingCartDO shoppingCartDO = shoppingCartDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
-		}
-
-		if (!shoppingCartDO.getMemberId().equals(memberId)) {
-			return ResultCode.ILLEGAL_OPERATION;
-		}
-
-		shoppingCartDOMapper.deleteByPrimaryKey(id);
+	public int remove(Long memberId, List<Long> ids) {
+		ShoppingCartDOExample example = new ShoppingCartDOExample();
+		example.createCriteria().andIdIn(ids);
+		
+		shoppingCartDOMapper.deleteByExample(example);
 
 		return ResultCode.SUCCESS;
 	}

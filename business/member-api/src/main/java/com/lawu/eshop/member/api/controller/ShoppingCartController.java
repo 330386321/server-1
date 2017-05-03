@@ -2,6 +2,8 @@ package com.lawu.eshop.member.api.controller;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -138,21 +139,26 @@ public class ShoppingCartController extends BaseController {
      * @param token
      * @return
      */
-    @SuppressWarnings({ "rawtypes", "deprecation" })
+    @SuppressWarnings({ "rawtypes"})
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "删除购物车的商品", notes = "根据id删除购物车的商品。[1002|1003|1024]（蒋鑫俊）", httpMethod = "DELETE")
+    @ApiOperation(value = "删除购物车的商品", notes = "根据id列表删除购物车的商品。[1002|1003|1024]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-	public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable(name = "id") @ApiParam(name = "id", required = true, value = "购物车ID") Long id) {
+	@RequestMapping(value = "delete", method = RequestMethod.DELETE)
+	public Result delete(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "ids", required = true, value = "购物车ID列表") @Validated @NotNull List<Long> ids, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	Result result = successCreated(shoppingCartService.delete(id, memberId));
+    	Result result = successCreated(shoppingCartService.delete(memberId, ids));
     	if (!isSuccess(result)) {
     		successCreated(result);
     	}
     	
-    	return successDelete(result);
+    	return successDelete();
     }
     
     /**
@@ -163,14 +169,19 @@ public class ShoppingCartController extends BaseController {
      */
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
-	@ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表结算购物车的商品生成结算数据。[1003]（蒋鑫俊）", httpMethod = "GET")
+	@ApiOperation(value = "购物车的商品结算", notes = "根据购物车id列表结算购物车的商品生成结算数据。[1003]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-	@RequestMapping(value = "settlement", method = RequestMethod.GET)
-	public Result<ShoppingCartSettlementDTO> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "购物车id") List<Long> idList) {
+	@RequestMapping(value = "settlement", method = RequestMethod.POST)
+	public Result<ShoppingCartSettlementDTO> settlement(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestBody @ApiParam(name = "ids", required = true, value = "购物车ID列表") @Validated @NotNull List<Long> ids, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
     	String memberNum = UserUtil.getCurrentUserNum(getRequest());
     	
-    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.settlement(idList, memberNum);
+    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.settlement(ids, memberNum);
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
     	}
