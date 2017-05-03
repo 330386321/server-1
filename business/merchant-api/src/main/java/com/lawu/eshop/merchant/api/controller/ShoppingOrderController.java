@@ -207,6 +207,7 @@ public class ShoppingOrderController extends BaseController {
      * @param id
      * @return
      */
+	@Audit(date = "2017-05-03", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
