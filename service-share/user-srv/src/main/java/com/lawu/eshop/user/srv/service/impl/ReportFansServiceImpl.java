@@ -12,7 +12,7 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
-import com.lawu.eshop.user.param.ReportFansDataParam;
+import com.lawu.eshop.user.param.ReportDataParam;
 import com.lawu.eshop.user.srv.converter.ReportConvert;
 import com.lawu.eshop.user.srv.domain.extend.FansMerchantDOReportView;
 import com.lawu.eshop.user.srv.mapper.extend.FansMerchantDOMapperExtend;
@@ -27,7 +27,7 @@ public class ReportFansServiceImpl implements ReportFansService {
 	private FansMerchantDOMapperExtend fansMerchantDOMapperExtend;
 
 	@Override
-	public ReportRiseRateDTO fansRiseRate(ReportFansDataParam dparam) {
+	public ReportRiseRateDTO fansRiseRate(ReportDataParam dparam) {
 		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
 		int x = 0;
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
@@ -113,7 +113,7 @@ public class ReportFansServiceImpl implements ReportFansService {
 	// }
 
 	@Override
-	public List<ReportRiseRerouceDTO> fansRiseSource(ReportFansDataParam dparam) {
+	public List<ReportRiseRerouceDTO> fansRiseSource(ReportDataParam dparam) {
 		List<FansMerchantDOReportView> list = new ArrayList<FansMerchantDOReportView>();
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = fansMerchantDOMapperExtend.fansRiseSource(DateUtil.getDateFormat(new Date(), "yyyyMMdd"),

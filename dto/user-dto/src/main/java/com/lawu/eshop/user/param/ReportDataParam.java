@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModel;
  *
  */
 @ApiModel
-public class ReportFansDataParam extends  ReportFansParam{
+public class ReportDataParam extends  ReportParam{
 
 	/**
 	 * 

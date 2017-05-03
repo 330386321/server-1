@@ -17,7 +17,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
-import com.lawu.eshop.user.param.ReportFansDataParam;
+import com.lawu.eshop.user.param.ReportDataParam;
 import com.lawu.eshop.user.srv.service.ReportFansService;
 
 /**
@@ -38,7 +38,7 @@ public class ReportFnasController extends BaseController {
 	private ReportFansService reportFansService;
 	
 	@RequestMapping(value = "fansRiseRate", method = RequestMethod.POST)
-	public Result<ReportRiseRateDTO> fansRiseRate(@RequestBody @Valid ReportFansDataParam dparam,
+	public Result<ReportRiseRateDTO> fansRiseRate(@RequestBody @Valid ReportDataParam dparam,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
@@ -62,7 +62,7 @@ public class ReportFnasController extends BaseController {
 	 * @date 2017年5月2日 下午7:16:27
 	 */
 	@RequestMapping(value = "fansRiseSource", method = RequestMethod.POST)
-	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestBody @Valid ReportFansDataParam dparam,
+	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestBody @Valid ReportDataParam dparam,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();

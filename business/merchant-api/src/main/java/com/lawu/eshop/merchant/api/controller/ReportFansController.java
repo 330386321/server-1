@@ -18,8 +18,8 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.merchant.api.service.ReportFansService;
 import com.lawu.eshop.user.dto.ReportRiseRateDTO;
 import com.lawu.eshop.user.dto.ReportRiseRerouceDTO;
-import com.lawu.eshop.user.param.ReportFansDataParam;
-import com.lawu.eshop.user.param.ReportFansParam;
+import com.lawu.eshop.user.param.ReportDataParam;
+import com.lawu.eshop.user.param.ReportParam;
 import com.lawu.eshop.utils.BeanUtil;
 
 import io.swagger.annotations.Api;
@@ -48,12 +48,12 @@ public class ReportFansController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "fansRiseRate", method = RequestMethod.GET)
 	public Result<ReportRiseRateDTO> fansRiseRate(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ReportFansParam param) throws Exception {
+			@ModelAttribute @ApiParam ReportParam param) throws Exception {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		if (merchantId == 0L) {
 			return successCreated(ResultCode.MEMBER_NO_EXIST);
 		}
-		ReportFansDataParam dparam = new ReportFansDataParam();
+		ReportDataParam dparam = new ReportDataParam();
 		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
 		dparam.setFlag(param.getFlag());
@@ -64,12 +64,12 @@ public class ReportFansController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "fansRiseSource", method = RequestMethod.GET)
 	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ReportFansParam param) throws Exception {
+			@ModelAttribute @ApiParam ReportParam param) throws Exception {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		if (merchantId == 0L) {
 			return successCreated(ResultCode.MEMBER_NO_EXIST);
 		}
-		ReportFansDataParam dparam = new ReportFansDataParam();
+		ReportDataParam dparam = new ReportDataParam();
 		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
 		dparam.setFlag(param.getFlag());

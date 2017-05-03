@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @ApiModel
-public class ReportFansParam implements Serializable {
+public class ReportParam implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

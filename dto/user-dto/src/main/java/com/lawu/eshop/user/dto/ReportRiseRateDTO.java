@@ -17,6 +17,9 @@ public class ReportRiseRateDTO {
 
     @ApiModelProperty(value = "报表x轴(与y轴对应)")
     private List<String> x;
+    
+    @ApiModelProperty(value = "报表x轴辅助信息(与y轴对应)")
+    private List<String> x1;
 
     @ApiModelProperty(value = "报表y轴(英文逗号分隔)")
     private List<String> y;
@@ -35,6 +38,14 @@ public class ReportRiseRateDTO {
 
 	public void setY(List<String> y) {
 		this.y = y;
+	}
+
+	public List<String> getX1() {
+		return x1;
+	}
+
+	public void setX1(List<String> x1) {
+		this.x1 = x1;
 	}
 
    
