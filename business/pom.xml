@@ -17,6 +17,7 @@
         <module>merchant-api</module>
         <module>operator-api</module>
         <module>agent-api</module>
+        <module>external-api</module>
         <module>statistics</module>
     </modules>
 
