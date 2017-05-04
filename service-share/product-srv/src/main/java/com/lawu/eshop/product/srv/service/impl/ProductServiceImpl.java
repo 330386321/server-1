@@ -577,6 +577,10 @@ public class ProductServiceImpl implements ProductService {
             String featureImage = productDO.getFeatureImage();
             featureImage = featureImage.replaceAll("/", File.separator);
             productDO.setFeatureImage(featureImage);
+            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+            if(productCategoryeDO != null && productCategoryeDO.getIsVirtual()){
+                productDO.setIsAllowRefund(false);
+            }
             productDOMapper.insertSelective(productDO);
             productId = productDO.getId();
             isEdit = false;
@@ -586,6 +590,10 @@ public class ProductServiceImpl implements ProductService {
             String featureImage = productDO.getFeatureImage();
             featureImage = featureImage.replace("/", File.separator);
             productDO.setFeatureImage(featureImage);
+            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+            if(productCategoryeDO != null && productCategoryeDO.getIsVirtual()){
+                productDO.setIsAllowRefund(false);
+            }
             ProductDOExample example = new ProductDOExample();
             example.createCriteria().andIdEqualTo(productId);
             productDOMapper.updateByExampleSelective(productDO, example);
