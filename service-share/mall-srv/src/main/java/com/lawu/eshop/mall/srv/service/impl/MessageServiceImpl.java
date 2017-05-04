@@ -118,7 +118,7 @@ public class MessageServiceImpl implements MessageService {
         /**
          * {0}用户昵称、{1}订单编号、{2}运单编号、{3}余额、{4}充值金额、{5}当前积分、{6}消费金额
          * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
-         * {13}广告名称、{14}门店名称、{15}消费积分
+         * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号
          */
 
         //消息替换占位符
@@ -138,6 +138,7 @@ public class MessageServiceImpl implements MessageService {
         content = content.replace("{13}", messageInfoParam.getMessageParam().getAdName());
         content = content.replace("{14}", messageInfoParam.getMessageParam().getStoreName());
         content = content.replace("{15}", messageInfoParam.getMessageParam().getExpendPoint().toString());
+        content = content.replace("{16}", messageInfoParam.getMessageParam().getRechargeNum());
 
 
         messageDO.setContent(content);
@@ -151,9 +152,9 @@ public class MessageServiceImpl implements MessageService {
         //发送推送
         MessagePushInfo pushInfo = new MessagePushInfo();
         pushInfo.setTitle(dos.get(0).getTitle());
-        pushInfo.setContent(messageDO.getContent());
+        pushInfo.setContent(content);
         pushInfo.setMessageId(messageDO.getId());
-        pushInfo.setUserNum(messageDO.getUserNum());
+        pushInfo.setUserNum(userNum);
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return id;
     }

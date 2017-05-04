@@ -59,6 +59,9 @@ public class MessageTempParam {
     @ApiModelProperty(value = "消费积分")
     private BigDecimal expendPoint;
 
+    @ApiModelProperty(value = "充值编号")
+    private String rechargeNum;
+
     public String getUserName() {
         return userName;
     }
@@ -185,5 +188,13 @@ public class MessageTempParam {
 
     public void setExpendPoint(BigDecimal expendPoint) {
         this.expendPoint = expendPoint;
+    }
+
+    public String getRechargeNum() {
+        return rechargeNum;
+    }
+
+    public void setRechargeNum(String rechargeNum) {
+        this.rechargeNum = rechargeNum;
     }
 }
