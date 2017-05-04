@@ -48,11 +48,11 @@ function cpJar() {
 
 # business
 cpJar "business" "agent-api"
-#cpJar "business" "external-api"
+cpJar "business" "external-api"
 cpJar "business" "member-api"
 cpJar "business" "merchant-api"
 cpJar "business" "operator-api"
-#cpJar "business" "statistics"
+cpJar "business" "statistics"
 
 # service-share
 cpJar "service-share" "ad-srv"
@@ -62,7 +62,6 @@ cpJar "service-share" "order-srv"
 cpJar "service-share" "product-srv"
 cpJar "service-share" "property-srv"
 cpJar "service-share" "user-srv"
-cpJar "service-share" "operator-srv"
 
 # service-sys
 cpJar "service-sys" "cache-srv"
