@@ -1,29 +1,14 @@
-package com.lawu.eshop.property.srv;
+package com.lawu.eshop.external.api;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Leach
- * @date 2017/3/13
+ * @author meishuquan
+ * @date 2017/5/4
  */
 @Component
-public class PropertySrvConfig {
-
-    @Value(value = "${db.type}")
-    private String type;
-
-    @Value(value = "${db.driver}")
-    private String driver;
-
-    @Value(value = "${db.url}")
-    private String url;
-
-    @Value(value = "${db.username}")
-    private String username;
-
-    @Value(value = "${db.password}")
-    private String password;
+public class ExternalApiConfig {
 
     //支付宝支付参数
     @Value(value = "${alipay_partner}")
@@ -133,26 +118,6 @@ public class PropertySrvConfig {
     @Value(value = "${wxpay_ip}")
     private String wxpay_ip;
 
-    public String getType() {
-        return type;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public String getAlipay_partner() {
         return alipay_partner;
     }
@@ -199,14 +164,6 @@ public class PropertySrvConfig {
 
     public String getAlipay_service() {
         return alipay_service;
-    }
-
-    public String getAlipay_https_verify_url() {
-        return alipay_https_verify_url;
-    }
-
-    public String getAlipay_refund_url() {
-        return alipay_refund_url;
     }
 
     public String getAlipay_notify_url() {
@@ -287,6 +244,14 @@ public class PropertySrvConfig {
 
     public String getWxpay_notify_url_pc() {
         return wxpay_notify_url_pc;
+    }
+
+    public String getAlipay_https_verify_url() {
+        return alipay_https_verify_url;
+    }
+
+    public String getAlipay_refund_url() {
+        return alipay_refund_url;
     }
 
     public String getWxpay_ip() {

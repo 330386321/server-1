@@ -1,19 +1,18 @@
 package com.lawu.eshop.pay.sdk.alipay.util;
 
+import com.lawu.eshop.pay.sdk.alipay.sign.RSA;
+import com.lawu.eshop.property.param.AliPayConfigParam;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Node;
-import org.dom4j.io.SAXReader;
-
-import com.lawu.eshop.pay.sdk.alipay.config.AlipayConfig;
-import com.lawu.eshop.pay.sdk.alipay.sign.RSA;
 
 /* *
  *类名：AlipaySubmit
@@ -40,12 +39,12 @@ public class AlipaySubmit {
 	 *            要签名的数组
 	 * @return 签名结果字符串
 	 */
-	public static String buildRequestMysign(Map<String, String> sPara) {
+	public static String buildRequestMysign(Map<String, String> sPara,String sign_type,String private_key,String input_charset) {
 		String prestr = AlipayCore.createLinkString(sPara); // 把数组所有元素，按照“参数=参数值”的模式用“&”字符拼接成字符串
 		// System.out.println("待签名字符串：" + prestr);
 		String mysign = "";
-		if ("RSA".equals(AlipayConfig.sign_type)) {
-			mysign = RSA.sign(prestr, AlipayConfig.private_key, AlipayConfig.input_charset);
+		if ("RSA".equals(sign_type)) {
+			mysign = RSA.sign(prestr, private_key, input_charset);
 		}
 		// System.out.println("sign：" + mysign);
 		return mysign;
@@ -58,15 +57,15 @@ public class AlipaySubmit {
 	 *            请求前的参数数组
 	 * @return 要请求的参数数组
 	 */
-	private static Map<String, String> buildRequestPara(Map<String, String> sParaTemp) {
+	private static Map<String, String> buildRequestPara(Map<String, String> sParaTemp,String sign_type,String private_key,String input_charset) {
 		// 除去数组中的空值和签名参数
 		Map<String, String> sPara = AlipayCore.paraFilter(sParaTemp);
 		// 生成签名结果
-		String mysign = buildRequestMysign(sPara);
+		String mysign = buildRequestMysign(sPara,sign_type,private_key,input_charset);
 
 		// 签名结果与签名方式加入请求提交参数组中
 		sPara.put("sign", mysign);
-		sPara.put("sign_type", AlipayConfig.sign_type);
+		sPara.put("sign_type", sign_type);
 		return sPara;
 	}
 
@@ -81,15 +80,15 @@ public class AlipaySubmit {
 	 *            确认按钮显示文字
 	 * @return 提交表单HTML文本
 	 */
-	public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName) {
+	public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName,AliPayConfigParam aliPayConfigParam) {
 		// 待请求参数数组
-		Map<String, String> sPara = buildRequestPara(sParaTemp);
+		Map<String, String> sPara = buildRequestPara(sParaTemp,aliPayConfigParam.getAlipay_sign_type(), aliPayConfigParam.getAlipay_private_key(), aliPayConfigParam.getAlipay_input_charset());
 		List<String> keys = new ArrayList<String>(sPara.keySet());
 
 		StringBuffer sbHtml = new StringBuffer();
 
 		sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW
-				+ "_input_charset=" + AlipayConfig.input_charset + "\" method=\"" + strMethod + "\">");
+				+ "_input_charset=" + aliPayConfigParam.getAlipay_input_charset() + "\" method=\"" + strMethod + "\">");
 
 		for (int i = 0; i < keys.size(); i++) {
 			String name = (String) keys.get(i);
@@ -113,11 +112,11 @@ public class AlipaySubmit {
 	 * @throws DocumentException
 	 * @throws MalformedURLException
 	 */
-	public static String query_timestamp() throws MalformedURLException, DocumentException, IOException {
+	public static String query_timestamp(String partner, String input_charset) throws MalformedURLException, DocumentException, IOException {
 
 		// 构造访问query_timestamp接口的URL串
-		String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + AlipayConfig.partner
-				+ "&_input_charset" + AlipayConfig.input_charset;
+		String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + partner
+				+ "&_input_charset" + input_charset;
 		StringBuffer result = new StringBuffer();
 
 		SAXReader reader = new SAXReader();

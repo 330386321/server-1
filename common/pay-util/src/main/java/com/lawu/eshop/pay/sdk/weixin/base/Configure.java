@@ -1,7 +1,5 @@
 package com.lawu.eshop.pay.sdk.weixin.base;
 
-import java.io.File;
-
 /**
  * 请求配置
  * @author 杨清华
@@ -9,7 +7,7 @@ import java.io.File;
  */
 public class Configure {
 
-	public static String key = "MNUYvbWEQ4fxw6ntEAw3l5JodnkyEZOg";			//商户平台：API安全-API秘钥-设置秘钥
+	/*public static String key = "MNUYvbWEQ4fxw6ntEAw3l5JodnkyEZOg";			//商户平台：API安全-API秘钥-设置秘钥
 	public static String mchID = "1427140002";								//商户平台：微信支付分配的商户号ID
 	public static String appID = "wx51a325231ace3eb7";						//公众号-基本配置
 	
@@ -102,6 +100,6 @@ public class Configure {
 	}
 	public static void setCertPasswordMember(String certPasswordMember) {
 		Configure.certPasswordMember = certPasswordMember;
-	}
+	}*/
 
 }

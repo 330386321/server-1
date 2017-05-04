@@ -1,10 +1,10 @@
 package com.lawu.eshop.pay.handle;
 
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
 import com.lawu.eshop.pay.sdk.weixin.sdk.WXPay;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
 import com.lawu.eshop.property.param.ThirdPayRefundParam;
+import com.lawu.eshop.property.param.WxPayConfigParam;
 
 /**
  * 
@@ -23,13 +23,13 @@ public class WxpayBusinessHandle {
 	 * @param jsonResult 返回参数
 	 * @throws Exception 
 	 */
-	public static void refund(ThirdPayRefundParam rparam, JsonResult jsonResult) throws Exception {
+	public static void refund(ThirdPayRefundParam rparam, JsonResult jsonResult,WxPayConfigParam wxPayConfigParam) throws Exception {
 		double refundMoney = Double.valueOf(rparam.getRefundMoney()).doubleValue();
 		double totalMoney = Double.valueOf(rparam.getTotalMoney()).doubleValue();
 		int refundMoneyInt = (int) (refundMoney * 100);
 		int totalMoneyInt = (int) (totalMoney * 100);
-		RefundReqData refundReqData = new RefundReqData(Configure.appID_member,Configure.mchID_member,rparam.getTradeNo(),rparam.getRefundId(), totalMoneyInt, refundMoneyInt, Configure.mchID_member);
-		WXPay.requestRefundService(refundReqData,jsonResult);
+		RefundReqData refundReqData = new RefundReqData(wxPayConfigParam.getWxpay_app_id_member(),wxPayConfigParam.getWxpay_mch_id_member(),rparam.getTradeNo(),rparam.getRefundId(), totalMoneyInt, refundMoneyInt, wxPayConfigParam.getWxpay_mch_id_member(),wxPayConfigParam.getWxpay_key_app());
+		WXPay.requestRefundService(refundReqData,jsonResult,wxPayConfigParam);
 	}
 	
 }

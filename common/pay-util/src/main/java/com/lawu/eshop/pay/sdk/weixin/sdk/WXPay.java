@@ -1,9 +1,9 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk;
 
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
 import com.lawu.eshop.pay.sdk.weixin.sdk.service.RefundService;
+import com.lawu.eshop.property.param.WxPayConfigParam;
 
 /**
  * 
@@ -26,12 +26,12 @@ public class WXPay {
      * @param certPassword HTTP证书的密码，默认等于MCHID
      */
     public static void initSDKConfiguration(String key,String appID,String mchID,String sdbMchID,String certLocalPath,String certPassword){
-        Configure.setKey(key);
-        Configure.setAppID(appID);
-        Configure.setMchID(mchID);
-        //Configure.setSubMchID(sdbMchID);
-        Configure.setCertLocalPathMember(certLocalPath);
-        Configure.setCertPasswordMember(certPassword);
+        //Configure.setKey(key);
+        //Configure.setAppID(appID);
+        //Configure.setMchID(mchID);
+        ////Configure.setSubMchID(sdbMchID);
+        //Configure.setCertLocalPathMember(certLocalPath);
+        //Configure.setCertPasswordMember(certPassword);
     }
 
    
@@ -43,8 +43,8 @@ public class WXPay {
      * @return API返回的XML数据
      * @throws Exception
      */
-    public static String requestRefundService(RefundReqData refundReqData, JsonResult jsonResult) throws Exception{
-        return new RefundService().request(refundReqData,jsonResult);
+    public static String requestRefundService(RefundReqData refundReqData, JsonResult jsonResult, WxPayConfigParam wxPayConfigParam) throws Exception{
+        return new RefundService(wxPayConfigParam.getWxpay_refund_api(),wxPayConfigParam.getWxpay_https_request_class_name()).request(refundReqData,jsonResult, wxPayConfigParam);
     }
 
     

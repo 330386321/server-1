@@ -1,13 +1,18 @@
 package com.lawu.eshop.property.srv.pay;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.validation.Valid;
-
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.sdk.alipay.util.AlipaySubmit;
+import com.lawu.eshop.pay.sdk.alipay.util.SignUtils;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.AliPayConfigParam;
+import com.lawu.eshop.property.param.PcAlipayDataParam;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.srv.PropertySrvConfig;
+import com.lawu.eshop.utils.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,17 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.alipay.config.AlipayConfig;
-import com.lawu.eshop.pay.sdk.alipay.util.AlipaySubmit;
-import com.lawu.eshop.pay.sdk.alipay.util.SignUtils;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.PcAlipayDataParam;
-import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.utils.DateUtil;
+import javax.validation.Valid;
+import java.util.*;
 
 /**
  * 
@@ -42,8 +38,11 @@ import com.lawu.eshop.utils.DateUtil;
 public class AlipayController extends BaseController {
 
 	//private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
-	
+
 	public static final String split = "|";
+
+	@Autowired
+	private PropertySrvConfig propertySrvConfig;
 
 	/**
 	 * 客户端调用支付宝获取请求参数
@@ -68,9 +67,9 @@ public class AlipayController extends BaseController {
 		SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
 		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
-			appId = AlipayConfig.app_id_member;
+			appId = propertySrvConfig.getAlipay_app_id_member();
 		} else if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMCHANT.val)) {
-			appId = AlipayConfig.app_id_business;
+			appId = propertySrvConfig.getAlipay_app_id_business();
 		}
 		paramMap.put("app_id", appId);
 		paramMap.put("method", "alipay.trade.app.pay");
@@ -78,7 +77,7 @@ public class AlipayController extends BaseController {
 		paramMap.put("sign_type", "RSA");
 		paramMap.put("timestamp", DateUtil.getDateTime());
 		paramMap.put("version", "1.0");
-		paramMap.put("notify_url", AlipayConfig.notify_url);
+		paramMap.put("notify_url", propertySrvConfig.getAlipay_notify_url());
 
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds() + split + param.getSideUserNum();
@@ -88,7 +87,7 @@ public class AlipayController extends BaseController {
 				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
 
 		String paramStr = SignUtils.buildMapToString(paramMap);
-		String sign = SignUtils.getSign(paramMap, AlipayConfig.private_key,
+		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipay_private_key(),
 				false);
 
 		return successCreated(paramStr + "&" + sign);
@@ -116,12 +115,12 @@ public class AlipayController extends BaseController {
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("service", "create_direct_pay_by_user");
-		paramMap.put("partner", AlipayConfig.partner);
-		paramMap.put("seller_id", AlipayConfig.seller_id);
-		paramMap.put("_input_charset", AlipayConfig.input_charset);
+		paramMap.put("partner", propertySrvConfig.getAlipay_partner());
+		paramMap.put("seller_id", propertySrvConfig.getAlipay_seller_id());
+		paramMap.put("_input_charset", propertySrvConfig.getAlipay_input_charset());
 		paramMap.put("payment_type", "1");
-		paramMap.put("notify_url", AlipayConfig.notify_url_pc);
-		paramMap.put("return_url", AlipayConfig.notify_url_pc);
+		paramMap.put("notify_url", propertySrvConfig.getAlipay_notify_url_pc());
+		paramMap.put("return_url", propertySrvConfig.getAlipay_return_url_pc());
 		paramMap.put("anti_phishing_key", "");
 		paramMap.put("exter_invoke_ip", "");
 
@@ -138,7 +137,12 @@ public class AlipayController extends BaseController {
 					param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P");
 		}
 		paramMap.put("total_fee", param.getTotalAmount());
-		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认");
+
+		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
+		aliPayConfigParam.setAlipay_sign_type(propertySrvConfig.getAlipay_sign_type());
+		aliPayConfigParam.setAlipay_private_key(propertySrvConfig.getAlipay_private_key());
+		aliPayConfigParam.setAlipay_input_charset(propertySrvConfig.getAlipay_input_charset());
+		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认",aliPayConfigParam);
 		return successCreated(sHtmlText);
 	}
 

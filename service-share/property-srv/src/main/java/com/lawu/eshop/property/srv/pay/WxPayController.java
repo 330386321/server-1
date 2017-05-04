@@ -1,16 +1,19 @@
 package com.lawu.eshop.property.srv.pay;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.validation.Valid;
-
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.sdk.weixin.base.HttpUtil;
+import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
+import com.lawu.eshop.pay.sdk.weixin.base.RandomStringGenerator;
+import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.ThirdPayDataParam;
+import com.lawu.eshop.property.srv.PropertySrvConfig;
 import org.jdom.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,17 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
-import com.lawu.eshop.pay.sdk.weixin.base.HttpUtil;
-import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
-import com.lawu.eshop.pay.sdk.weixin.base.RandomStringGenerator;
-import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
-import com.lawu.eshop.property.constants.UserTypeEnum;
-import com.lawu.eshop.property.param.ThirdPayDataParam;
-import com.lawu.eshop.utils.DateUtil;
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * 
@@ -48,6 +46,9 @@ public class WxPayController extends BaseController {
 
 	public static final String split = "|";
 	public static final String splitStr = "\\|";
+
+	@Autowired
+	private PropertySrvConfig propertySrvConfig;
 
 	/**
 	 * app和PC获取预支付订单返回的信息 1、app端通过后台服务获取prepay_id、pc获取预支付订单二维码 2、组装app调用支付接口参数
@@ -72,22 +73,22 @@ public class WxPayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 
-		String key = Configure.key_app;
+		String key = propertySrvConfig.getWxpay_key();
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
 		packageParams.put("trade_type", "APP");
-		packageParams.put("notify_url", Configure.notify_url);
+		packageParams.put("notify_url", propertySrvConfig.getWxpay_notify_url());
 		if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
-			packageParams.put("appid", Configure.appID_member);
-			packageParams.put("mch_id", Configure.mchID_member);
+			packageParams.put("appid", propertySrvConfig.getWxpay_app_id_member());
+			packageParams.put("mch_id", propertySrvConfig.getWxpay_mch_id_member());
 		} else if (UserTypeEnum.MEMCHANT.val == param.getUserTypeEnum().val) {
-			packageParams.put("appid", Configure.appID_business);
-			packageParams.put("mch_id", Configure.mchID_business);
+			packageParams.put("appid", propertySrvConfig.getWxpay_app_id_business());
+			packageParams.put("mch_id", propertySrvConfig.getWxpay_mch_id_business());
 		} else if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
-			packageParams.put("appid", Configure.appID);
-			packageParams.put("mch_id", Configure.mchID);
+			packageParams.put("appid", propertySrvConfig.getWxpay_app_id());
+			packageParams.put("mch_id", propertySrvConfig.getWxpay_mch_id());
 			packageParams.put("trade_type", "NATIVE");
-			packageParams.put("notify_url", Configure.notify_url_pc);
-			key = Configure.key;
+			packageParams.put("notify_url", propertySrvConfig.getWxpay_notify_url_pc());
+			key =propertySrvConfig.getWxpay_key();
 		}
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
@@ -95,7 +96,7 @@ public class WxPayController extends BaseController {
 		Float fTotalAmount = Float.valueOf(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
 		packageParams.put("total_fee", iTotalAmount + "");
-		packageParams.put("spbill_create_ip", Configure.ip);
+		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpay_ip());
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split
 				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum());
 
@@ -104,7 +105,7 @@ public class WxPayController extends BaseController {
 
 		String requestXML = PayCommonUtil.getRequestXml(packageParams);
 
-		String resXml = HttpUtil.postData(Configure.NATIVE_PAY_API, requestXML);
+		String resXml = HttpUtil.postData(propertySrvConfig.getWxpay_native_pay_api(), requestXML);
 		Map map = XMLUtil.doXMLParse(resXml);
 
 		String return_code = map.get("return_code") == null ? "" : map.get("return_code").toString();
@@ -132,11 +133,11 @@ public class WxPayController extends BaseController {
 					String prepay_id = map.get("prepay_id") == null ? "" : map.get("prepay_id").toString();
 					packageParams.clear();
 					if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
-						packageParams.put("appid", Configure.appID_member);
-						packageParams.put("partnerid", Configure.mchID_member);
+						packageParams.put("appid", propertySrvConfig.getWxpay_app_id_member());
+						packageParams.put("partnerid", propertySrvConfig.getWxpay_mch_id_member());
 					} else if (UserTypeEnum.MEMCHANT.val == param.getUserTypeEnum().val) {
-						packageParams.put("appid", Configure.appID_business);
-						packageParams.put("partnerid", Configure.mchID_business);
+						packageParams.put("appid", propertySrvConfig.getWxpay_app_id_business());
+						packageParams.put("partnerid", propertySrvConfig.getWxpay_mch_id_business());
 					}
 					packageParams.put("prepayid", prepay_id);
 					packageParams.put("package", "Sign=WXPay");

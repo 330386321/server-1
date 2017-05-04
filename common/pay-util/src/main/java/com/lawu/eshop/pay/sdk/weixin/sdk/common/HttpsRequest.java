@@ -1,18 +1,11 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk.common;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLContext;
-
+import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundResData;
+import com.lawu.eshop.pay.sdk.weixin.sdk.service.IServiceRequest;
+import com.lawu.eshop.property.param.WxPayConfigParam;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -27,12 +20,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
 
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
-import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundResData;
-import com.lawu.eshop.pay.sdk.weixin.sdk.service.IServiceRequest;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.security.*;
+import java.security.cert.CertificateException;
 
 /**
  * 
@@ -71,16 +65,16 @@ public class HttpsRequest implements IServiceRequest {
 
 	public HttpsRequest() throws UnrecoverableKeyException, KeyManagementException, NoSuchAlgorithmException,
 			KeyStoreException, IOException {
-		init();
+		//init();
 	}
 
-	private void init() throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException,
+	private void init(WxPayConfigParam wxPayConfigParam) throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException,
 			KeyManagementException {
 
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
-		FileInputStream instream = new FileInputStream(new File(Configure.getCert_base_path()));// 加载本地的证书进行https加密传输
+		FileInputStream instream = new FileInputStream(new File(wxPayConfigParam.getWxpay_cert_base_path()));// 加载本地的证书进行https加密传输
 		try {
-			keyStore.load(instream, Configure.getCertPasswordMember().toCharArray());// 设置证书密码
+			keyStore.load(instream, wxPayConfigParam.getWxpay_cert_password_member().toCharArray());// 设置证书密码
 		} catch (CertificateException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
@@ -91,7 +85,7 @@ public class HttpsRequest implements IServiceRequest {
 
 		// Trust own CA and all self-signed certs
 		SSLContext sslcontext = SSLContexts.custom()
-				.loadKeyMaterial(keyStore, Configure.getCertPasswordMember().toCharArray()).build();
+				.loadKeyMaterial(keyStore, wxPayConfigParam.getWxpay_cert_password_member().toCharArray()).build();
 		// Allow TLSv1 protocol only
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" }, null,
 				SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
@@ -120,11 +114,11 @@ public class HttpsRequest implements IServiceRequest {
 	 * @throws KeyManagementException
 	 */
 
-	public String sendPost(String url, Object xmlObj, JsonResult jsonResult) throws IOException, KeyStoreException,
+	public String sendPost(String url, Object xmlObj, JsonResult jsonResult, WxPayConfigParam wxPayConfigParam) throws IOException, KeyStoreException,
 			UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException {
 
 		if (!hasInit) {
-			init();
+			init(wxPayConfigParam);
 		}
 
 		String result = null;

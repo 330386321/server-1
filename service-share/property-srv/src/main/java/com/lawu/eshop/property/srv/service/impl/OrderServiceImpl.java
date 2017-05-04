@@ -1,37 +1,14 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.pay.handle.AlipayBusinessHandle;
 import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
-import com.lawu.eshop.property.constants.FreezeStatusEnum;
-import com.lawu.eshop.property.constants.FreezeTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.OrderRefundStatusEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.PropertyType;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.OrderComfirmDataParam;
-import com.lawu.eshop.property.param.OrderRefundDataParam;
-import com.lawu.eshop.property.param.OrderReleaseFreezeParam;
-import com.lawu.eshop.property.param.OrderSysJobParam;
-import com.lawu.eshop.property.param.ThirdPayRefundParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.property.param.*;
+import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.FreezeDOExample;
 import com.lawu.eshop.property.srv.domain.extend.FreezeDOView;
@@ -43,6 +20,15 @@ import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -57,6 +43,9 @@ public class OrderServiceImpl implements OrderService {
 	private PropertyService propertyService;
 	@Autowired
 	private FreezeDOMapperExtend freezeDOMapperExtend;
+
+	@Autowired
+	private PropertySrvConfig propertySrvConfig;
 
 	@Autowired
 	@Qualifier("payOrderTransactionMainServiceImpl")
@@ -179,7 +168,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public int doRefundScopeInside(OrderRefundDataParam param) throws Exception {
+	public int doRefundScopeInside(OrderRefundDataParam param,String certPath) throws Exception {
 
 		// 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
 		// （校验：区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额）
@@ -255,10 +244,32 @@ public class OrderServiceImpl implements OrderService {
 			rparam.setTotalMoney(rparam.getTotalMoney());
 			rparam.setTradeNo(param.getTradeNo());
 			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
-				AlipayBusinessHandle.refund(rparam, jsonResult);
+				AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
+				aliPayConfigParam.setAlipay_refund_url(propertySrvConfig.getAlipay_refund_url());
+				aliPayConfigParam.setAlipay_app_id_member(propertySrvConfig.getAlipay_app_id_member());
+				aliPayConfigParam.setAlipay_private_key(propertySrvConfig.getAlipay_private_key());
+				aliPayConfigParam.setAlipay_edian_member_public_key(propertySrvConfig.getAlipay_edian_member_public_key());
+				aliPayConfigParam.setAlipay_public_key(propertySrvConfig.getAlipay_public_key());
+				aliPayConfigParam.setAlipay_partner(propertySrvConfig.getAlipay_partner());
+				aliPayConfigParam.setAlipay_https_verify_url(propertySrvConfig.getAlipay_https_verify_url());
+				aliPayConfigParam.setAlipay_sign_type(propertySrvConfig.getAlipay_sign_type());
+				aliPayConfigParam.setAlipay_input_charset(propertySrvConfig.getAlipay_input_charset());
+				AlipayBusinessHandle.refund(rparam, jsonResult,aliPayConfigParam);
 
 			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
-				WxpayBusinessHandle.refund(rparam, jsonResult);
+				WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
+				wxPayConfigParam.setWxpay_app_id_member(propertySrvConfig.getWxpay_app_id_member());
+				wxPayConfigParam.setWxpay_mch_id_member(wxPayConfigParam.getWxpay_mch_id_member());
+				wxPayConfigParam.setWxpay_key(wxPayConfigParam.getWxpay_key());
+				wxPayConfigParam.setWxpay_app_id(wxPayConfigParam.getWxpay_app_id());
+				wxPayConfigParam.setWxpay_mch_id(wxPayConfigParam.getWxpay_mch_id());
+				wxPayConfigParam.setWxpay_cert_local_path_member(wxPayConfigParam.getWxpay_cert_local_path_member());
+				wxPayConfigParam.setWxpay_cert_password_member(wxPayConfigParam.getWxpay_cert_password_member());
+				wxPayConfigParam.setWxpay_cert_base_path(certPath);
+				wxPayConfigParam.setWxpay_refund_api(wxPayConfigParam.getWxpay_refund_api());
+				wxPayConfigParam.setWxpay_https_request_class_name(wxPayConfigParam.getWxpay_https_request_class_name());
+				wxPayConfigParam.setWxpay_key_app(wxPayConfigParam.getWxpay_key_app());
+				WxpayBusinessHandle.refund(rparam, jsonResult,wxPayConfigParam);
 			}
 		}
 

@@ -1,16 +1,13 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk.common;
 
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
 
 /**
  * 
@@ -29,7 +26,7 @@ public class Signature {
      * @return 签名
      * @throws IllegalAccessException
      */
-	public static String getSign(Object o) throws IllegalAccessException {
+	public static String getSign(Object o, String key) throws IllegalAccessException {
         ArrayList<String> list = new ArrayList<String>();
         Class cls = o.getClass();
         Field[] fields = cls.getDeclaredFields();
@@ -47,14 +44,14 @@ public class Signature {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
-        result += "key=" + Configure.getKey();
+        result += "key=" + key;
         Util.log("Sign Before MD5:" + result);
         result = MD5.MD5Encode(result,"UTF-8").toUpperCase();
         Util.log("Sign Result:" + result);
         return result;
     }
 
-    public static String getSign(Map<String,Object> map){
+    public static String getSign(Map<String,Object> map, String key_app){
         ArrayList<String> list = new ArrayList<String>();
         for(Map.Entry<String,Object> entry:map.entrySet()){
             if(entry.getValue()!=""){
@@ -69,7 +66,7 @@ public class Signature {
             sb.append(arrayToSort[i]);
         }
         String result = sb.toString();
-        result += "key=" + Configure.key_app;
+        result += "key=" + key_app;
         Util.log("Sign Before MD5:" + result);
         result = MD5.MD5Encode(result,"UTF-8").toUpperCase();
         Util.log("Sign Result:" + result);
@@ -84,12 +81,12 @@ public class Signature {
      * @throws IOException
      * @throws SAXException
      */
-    public static String getSignFromResponseString(String responseString) throws IOException, SAXException, ParserConfigurationException {
+    public static String getSignFromResponseString(String responseString, String key_app) throws IOException, SAXException, ParserConfigurationException {
         Map<String,Object> map = XMLParser.getMapFromXML(responseString);
         //清掉返回数据对象里面的Sign数据（不能把这个数据也加进去进行签名），然后用签名算法进行签名
         map.put("sign","");
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
-        return Signature.getSign(map);
+        return Signature.getSign(map, key_app);
     }
 
     /**
@@ -100,7 +97,7 @@ public class Signature {
      * @throws IOException
      * @throws SAXException
      */
-    public static boolean checkIsSignValidFromResponseString(String responseString) throws ParserConfigurationException, IOException, SAXException {
+    public static boolean checkIsSignValidFromResponseString(String responseString, String key_app) throws ParserConfigurationException, IOException, SAXException {
 
         Map<String,Object> map = XMLParser.getMapFromXML(responseString);
         Util.log(map.toString());
@@ -114,7 +111,7 @@ public class Signature {
         //清掉返回数据对象里面的Sign数据（不能把这个数据也加进去进行签名），然后用签名算法进行签名
         map.put("sign","");
         //将API返回的数据根据用签名算法进行计算新的签名，用来跟API返回的签名进行比较
-        String signForAPIResponse = Signature.getSign(map);
+        String signForAPIResponse = Signature.getSign(map, key_app);
 
         if(!signForAPIResponse.equals(signFromAPIResponse)){
             //签名验不过，表示这个API返回的数据有可能已经被篡改了

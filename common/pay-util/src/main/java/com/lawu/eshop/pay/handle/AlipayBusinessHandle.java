@@ -4,8 +4,8 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
-import com.lawu.eshop.pay.sdk.alipay.config.AlipayConfig;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
+import com.lawu.eshop.property.param.AliPayConfigParam;
 import com.lawu.eshop.property.param.ThirdPayRefundParam;
 
 /**
@@ -25,8 +25,8 @@ public class AlipayBusinessHandle {
 	 * @param jsonResult 返回参数
 	 * @throws Exception 
 	 */
-	public static void refund(ThirdPayRefundParam rparam, JsonResult jsonResult) throws Exception {
-		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do",AlipayConfig.app_id_member,AlipayConfig.private_key,"JSON","utf-8",AlipayConfig.alipay_edian_member_public_key,"RSA");
+	public static void refund(ThirdPayRefundParam rparam, JsonResult jsonResult, AliPayConfigParam aliPayConfigParam) throws Exception {
+		AlipayClient alipayClient = new DefaultAlipayClient(aliPayConfigParam.getAlipay_refund_url(),aliPayConfigParam.getAlipay_app_id_member(),aliPayConfigParam.getAlipay_private_key(),"JSON","utf-8",aliPayConfigParam.getAlipay_edian_member_public_key(),"RSA");
 		AlipayTradeRefundRequest req = new AlipayTradeRefundRequest();
 		req.setBizContent("{" +
 		"    \"trade_no\":\""+rparam.getTradeNo()+"\"," +

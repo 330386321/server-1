@@ -1,13 +1,19 @@
 package com.lawu.eshop.external.api.controller;
 
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.alipay.api.internal.util.AlipaySignature;
+import com.lawu.eshop.external.api.ExternalApiConfig;
+import com.lawu.eshop.external.api.service.DepositService;
+import com.lawu.eshop.external.api.service.OrderService;
+import com.lawu.eshop.external.api.service.RechargeService;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.param.AliPayConfigParam;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alipay.api.internal.util.AlipaySignature;
-import com.lawu.eshop.external.api.service.DepositService;
-import com.lawu.eshop.external.api.service.OrderService;
-import com.lawu.eshop.external.api.service.RechargeService;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.alipay.config.AlipayConfig;
-import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.utils.StringUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * 
@@ -54,6 +53,9 @@ public class AlipayNotifyController extends BaseController {
 	@Autowired
 	private DepositService depositService;
 
+	@Autowired
+	private ExternalApiConfig externalApiConfig;
+
 	/**
 	 * 支付宝异步回调接口
 	 * 
@@ -67,11 +69,11 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String member_public_key = AlipayConfig.alipay_edian_member_public_key;
-		String merchant_public_key = AlipayConfig.alipay_edian_business_public_key;
-		String input_charset = AlipayConfig.input_charset;
-		String app_id_member = AlipayConfig.app_id_member;
-		String app_id_business = AlipayConfig.app_id_business;
+		String member_public_key = externalApiConfig.getAlipay_edian_member_public_key();
+		String merchant_public_key = externalApiConfig.getAlipay_edian_business_public_key();
+		String input_charset = externalApiConfig.getAlipay_input_charset();
+		String app_id_member = externalApiConfig.getAlipay_app_id_member();
+		String app_id_business = externalApiConfig.getAlipay_app_id_business();
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -183,8 +185,8 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String alipay_pc_public_key = AlipayConfig.alipay_public_key;
-		String app_id_business = AlipayConfig.app_id_business;
+		String alipay_pc_public_key = externalApiConfig.getAlipay_public_key();
+		String app_id_business = externalApiConfig.getAlipay_app_id_business();
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -208,11 +210,18 @@ public class AlipayNotifyController extends BaseController {
 		String app_id = new String(request.getParameter("app_id").getBytes("ISO-8859-1"), "UTF-8");
 		String buyer_email = new String(request.getParameter("buyer_email").getBytes("ISO-8859-1"), "UTF-8");
 
+		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
+		aliPayConfigParam.setAlipay_public_key(alipay_pc_public_key);
+		aliPayConfigParam.setAlipay_partner(externalApiConfig.getAlipay_partner());
+		aliPayConfigParam.setAlipay_https_verify_url(externalApiConfig.getAlipay_https_verify_url());
+		aliPayConfigParam.setAlipay_sign_type(externalApiConfig.getAlipay_sign_type());
+		aliPayConfigParam.setAlipay_input_charset(externalApiConfig.getAlipay_input_charset());
+
 		boolean b = false;
 		if (!app_id_business.equals(app_id)) {
 			result = successCreated(ResultCode.FAIL, "app_id不匹配");
 		} else {
-			b = AlipayNotify.verify(params, alipay_pc_public_key);
+			b = AlipayNotify.verify(params, aliPayConfigParam);
 		}
 
 		if (!b) {

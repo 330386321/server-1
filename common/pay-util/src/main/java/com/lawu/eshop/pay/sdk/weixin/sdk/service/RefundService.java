@@ -1,8 +1,8 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk.service;
 
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
+import com.lawu.eshop.property.param.WxPayConfigParam;
 
 /**
  * 
@@ -15,8 +15,8 @@ import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
  */
 public class RefundService extends BaseService{
 
-    public RefundService() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        super(Configure.REFUND_API);
+    public RefundService(String refund_api, String httpsRequestClassName) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+        super(refund_api, httpsRequestClassName);
     }
 
     /**
@@ -26,12 +26,12 @@ public class RefundService extends BaseService{
      * @return API返回的XML数据
      * @throws Exception
      */
-    public String request(RefundReqData refundReqData, JsonResult jsonResult) throws Exception {
+    public String request(RefundReqData refundReqData, JsonResult jsonResult, WxPayConfigParam wxPayConfigParam) throws Exception {
 
         //--------------------------------------------------------------------
         //发送HTTPS的Post请求到API地址
         //--------------------------------------------------------------------
-        String responseString = sendPost(refundReqData,jsonResult);
+        String responseString = sendPost(refundReqData,jsonResult, wxPayConfigParam);
 
         return responseString;
     }

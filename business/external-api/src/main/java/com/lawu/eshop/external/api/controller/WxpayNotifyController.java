@@ -1,18 +1,18 @@
 package com.lawu.eshop.external.api.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.lawu.eshop.external.api.ExternalApiConfig;
+import com.lawu.eshop.external.api.service.DepositService;
+import com.lawu.eshop.external.api.service.OrderService;
+import com.lawu.eshop.external.api.service.RechargeService;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
+import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.external.api.service.DepositService;
-import com.lawu.eshop.external.api.service.OrderService;
-import com.lawu.eshop.external.api.service.RechargeService;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
-import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
-import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.utils.StringUtil;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * 
@@ -58,6 +52,8 @@ public class WxpayNotifyController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private DepositService depositService;
+	@Autowired
+	private ExternalApiConfig externalApiConfig;
 
 	
 	/**
@@ -74,7 +70,7 @@ public class WxpayNotifyController extends BaseController {
 		Result result = successCreated();
 
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, Configure.key_app)) {
+		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpay_key_app())) {
 			String return_code = packageParams.get("return_code") == null ? ""
 					: packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {
@@ -164,7 +160,7 @@ public class WxpayNotifyController extends BaseController {
 		Result result = successCreated();
 
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, Configure.key)) {
+		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpay_key())) {
 			String return_code = packageParams.get("return_code") == null ? ""
 					: packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {

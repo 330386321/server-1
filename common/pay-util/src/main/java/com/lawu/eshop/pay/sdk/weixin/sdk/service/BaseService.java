@@ -1,13 +1,13 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk.service;
 
+import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
+import com.lawu.eshop.property.param.WxPayConfigParam;
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
-
-import com.lawu.eshop.pay.sdk.weixin.base.Configure;
-import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 
 /**
  * 
@@ -27,14 +27,14 @@ public class BaseService{
     //发请求的HTTPS请求器
     private IServiceRequest serviceRequest;
 
-	public BaseService(String api) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+	public BaseService(String api, String httpsRequestClassName) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         apiURL = api;
-        Class c = Class.forName(Configure.HttpsRequestClassName);
+        Class c = Class.forName(httpsRequestClassName);
         serviceRequest = (IServiceRequest) c.newInstance();
     }
 
-    protected String sendPost(Object xmlObj, JsonResult jsonResult) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
-        return serviceRequest.sendPost(apiURL,xmlObj,jsonResult);
+    protected String sendPost(Object xmlObj, JsonResult jsonResult, WxPayConfigParam wxPayConfigParam) throws UnrecoverableKeyException, IOException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+        return serviceRequest.sendPost(apiURL,xmlObj,jsonResult, wxPayConfigParam);
     }
 
     /**

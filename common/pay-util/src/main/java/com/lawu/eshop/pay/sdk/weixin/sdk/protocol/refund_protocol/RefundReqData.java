@@ -41,7 +41,7 @@ public class RefundReqData {
      * @param opUserID 操作员帐号, 默认为商户号
      * @param refundFeeType 货币类型，符合ISO 4217标准的三位字母代码，默认为CNY（人民币）
      */
-    public RefundReqData(String appId,String mchId,String transactionID,String outRefundNo,int totalFee,int refundFee,String opUserID){
+    public RefundReqData(String appId,String mchId,String transactionID,String outRefundNo,int totalFee,int refundFee,String opUserID,String key_app){
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
         setAppid(appId);
@@ -67,7 +67,7 @@ public class RefundReqData {
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
 
         //根据API给的签名规则进行签名
-        String sign = Signature.getSign(toMap());
+        String sign = Signature.getSign(toMap(),key_app);
         setSign(sign);//把签名数据设置到Sign这个属性中
 
     }

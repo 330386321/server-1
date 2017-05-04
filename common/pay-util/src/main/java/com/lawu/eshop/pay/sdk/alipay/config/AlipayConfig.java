@@ -12,7 +12,7 @@ package com.lawu.eshop.pay.sdk.alipay.config;
  */
 public class AlipayConfig {
 
-	// 合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
+	/*// 合作身份者ID，签约账号，以2088开头由16位纯数字组成的字符串，查看地址：https://b.alipay.com/order/pidAndKey.htm
 	public static String partner = "2088521405698435";
 
 	// 收款支付宝账号，以2088开头由16位纯数字组成的字符串，一般情况下收款账号就是签约账号
@@ -59,7 +59,7 @@ public class AlipayConfig {
 	public static String anti_phishing_key = "";
 
 	// 客户端的IP地址 非局域网的外网IP地址，如：221.0.0.1
-	public static String exter_invoke_ip = "";
+	public static String exter_invoke_ip = "";*/
 
 	// ↑↑↑↑↑↑↑↑↑↑请在这里配置防钓鱼信息，如果没开通防钓鱼功能，为空即可 ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 
