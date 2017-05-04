@@ -1,0 +1,1 @@
+alter table `ad_platform` drop column goods_type ;
