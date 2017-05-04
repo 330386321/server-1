@@ -645,66 +645,6 @@ public class AdPlatformDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andGoodsTypeIsNull() {
-            addCriterion("goods_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeIsNotNull() {
-            addCriterion("goods_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeEqualTo(Byte value) {
-            addCriterion("goods_type =", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeNotEqualTo(Byte value) {
-            addCriterion("goods_type <>", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeGreaterThan(Byte value) {
-            addCriterion("goods_type >", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("goods_type >=", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeLessThan(Byte value) {
-            addCriterion("goods_type <", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("goods_type <=", value, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeIn(List<Byte> values) {
-            addCriterion("goods_type in", values, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeNotIn(List<Byte> values) {
-            addCriterion("goods_type not in", values, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeBetween(Byte value1, Byte value2) {
-            addCriterion("goods_type between", value1, value2, "goodsType");
-            return (Criteria) this;
-        }
-
-        public Criteria andGoodsTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("goods_type not between", value1, value2, "goodsType");
-            return (Criteria) this;
-        }
-
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
