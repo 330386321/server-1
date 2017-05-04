@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private UserSrvConfig userSrvConfig;
-   
+
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -133,7 +133,7 @@ public class MemberServiceImpl implements MemberService {
         Byte status = 1;
         Criteria c1 = example.createCriteria();
         c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType);
-        int count=memberDOMapper.countByExample(example);
+        int count = memberDOMapper.countByExample(example);
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
             c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
             Criteria c2 = example.createCriteria();
@@ -405,9 +405,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MessagePushBO> findMessagePushList(String area) {
         MemberDOExample example = new MemberDOExample();
-        if("all".equals(area)){
+        if ("all".equals(area)) {
             example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andGtCidIsNotNull();
-        }else{
+        } else {
             example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andGtCidIsNotNull().andRegionNameLike(area);
         }
         example.setOrderByClause("id desc");
@@ -430,7 +430,7 @@ public class MemberServiceImpl implements MemberService {
         MemberDOExample example = new MemberDOExample();
         example.createCriteria().andMobileEqualTo(moblie).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
-        if(!memberDOS.isEmpty()){
+        if (!memberDOS.isEmpty()) {
             MessagePushBO messagePushBO = new MessagePushBO();
             messagePushBO.setUserNum(memberDOS.get(0).getNum());
             return messagePushBO;
@@ -438,17 +438,28 @@ public class MemberServiceImpl implements MemberService {
         return null;
     }
 
-	@Override
-	public Boolean isRegister(String mobile) {
-		MemberDOExample example = new MemberDOExample();
+    @Override
+    public Boolean isRegister(String mobile) {
+        MemberDOExample example = new MemberDOExample();
         example.createCriteria().andMobileEqualTo(mobile).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
-        if(!memberDOS.isEmpty()){
-        	return true;
-        }else{
-        	return false;
+        if (!memberDOS.isEmpty()) {
+            return true;
+        } else {
+            return false;
         }
-		
-	}
+
+    }
+
+    @Override
+    public MemberBO getMemberByNum(String num) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andNumEqualTo(num);
+        List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+        if (memberDOS.isEmpty()) {
+            return null;
+        }
+        return MemberConverter.convertBO(memberDOS.get(0));
+    }
 
 }

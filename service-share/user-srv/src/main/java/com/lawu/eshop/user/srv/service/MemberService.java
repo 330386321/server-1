@@ -41,11 +41,11 @@ public interface MemberService {
     /**
      * 修改登录密码
      *
-     * @param id          主键
-     * @param newPwd      新密码
+     * @param id     主键
+     * @param newPwd 新密码
      * @return
      */
-    void updateLoginPwd(Long id,  String newPwd);
+    void updateLoginPwd(Long id, String newPwd);
 
     /**
      * 根据账号查询会员信息
@@ -56,12 +56,12 @@ public interface MemberService {
     MemberBO getMemberByAccount(String account);
 
     /**
+     * @return
      * @author zhangrc
      * @date 2017/03/23
      * 查询我的E友
-     * @return
      */
-    Page<MemberBO> findMemberListByUser(Long inviterId,MemberQuery memberQuery,byte inviterType);
+    Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType);
 
     /**
      * 会员注册
@@ -75,10 +75,11 @@ public interface MemberService {
      *
      * @param id 会员ID
      */
-    MemberBO getMemberById(Long id );
+    MemberBO getMemberById(Long id);
 
     /**
      * 修改头像
+     *
      * @param headimg
      * @param mermberId
      */
@@ -86,14 +87,16 @@ public interface MemberService {
 
     /**
      * 用户、商家提现时根据商家ID获取账号、名称、省市区信息冗余到提现表中
+     *
      * @param id
      * @return
      * @author Yangqh
      */
     CashUserInfoBO findCashUserInfo(@PathVariable("id") Long id);
-    
+
     /**
      * 根据区域查询用户数量
+     *
      * @param regionPath
      * @return
      */
@@ -106,11 +109,20 @@ public interface MemberService {
     List<MessagePushBO> findMessagePushList(String area);
 
     MessagePushBO findMessagePushByMobile(String moblie);
-    
+
     /**
      * 根据手机号判断用户是否注册
+     *
      * @param mobile
      * @return
      */
     Boolean isRegister(String mobile);
+
+    /**
+     * 根据会员编号查询会员信息
+     *
+     * @param num
+     * @return
+     */
+    MemberBO getMemberByNum(String num);
 }

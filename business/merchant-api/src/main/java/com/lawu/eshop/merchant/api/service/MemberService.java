@@ -27,7 +27,7 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/findMemberInfo/{memberId}")
     Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId);
-    
+
     /**
      * 查询我的E友
      *
@@ -36,5 +36,14 @@ public interface MemberService {
      * @date 2017/03/23
      */
     @RequestMapping(method = RequestMethod.POST, value = "member/findMemberListByUser")
-    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query,@RequestParam("inviterType") byte inviterType);
+    Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query, @RequestParam("inviterType") byte inviterType);
+
+    /**
+     * 根据会员编号查询会员信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "member/getMemberByNum")
+    Result<UserDTO> getMemberByNum(@RequestParam("num") String num);
 }

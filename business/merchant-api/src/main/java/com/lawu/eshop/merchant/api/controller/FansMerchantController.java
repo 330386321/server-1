@@ -11,13 +11,15 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.merchant.api.service.FansMerchantService;
+import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
+import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
@@ -48,6 +50,9 @@ public class FansMerchantController extends BaseController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
@@ -100,10 +105,21 @@ public class FansMerchantController extends BaseController {
         //发送站内消息
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
-        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECOMMEND_STORE);
-        // TODO 发送消息实体内容
-        messageInfoParam.setMessageParam("");
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
+        MessageTempParam messageTempParam = new MessageTempParam();
         for (String num : numArray) {
+            Result<UserDTO> userDTOResult = memberService.getMemberByNum(num);
+            if (isSuccess(userDTOResult)) {
+                String userName = userDTOResult.getModel().getNickname();
+                if (StringUtils.isEmpty(userName)) {
+                    messageTempParam.setUserName("E店会员");
+                } else {
+                    messageTempParam.setUserName(userName);
+                }
+            } else {
+                messageTempParam.setUserName("E店会员");
+            }
+            messageInfoParam.setMessageParam(messageTempParam);
             messageService.saveMessage(num, messageInfoParam);
         }
         return successCreated();
