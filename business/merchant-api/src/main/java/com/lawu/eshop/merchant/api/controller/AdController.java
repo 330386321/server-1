@@ -68,7 +68,7 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[5000|5003]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
@@ -93,13 +93,13 @@ public class AdController extends BaseController {
             }
     	}
     	Integer count=0;
-    	if(adParam.getPutWayEnum().val==1){
+    	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
     		if(areas==null){
     			areas="ALL_PLACE";
     		}
     		count=memberCountService.findMemberCount(areas);
-    	}else if(adParam.getPutWayEnum().val==2){
+    	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStore(merchantId);

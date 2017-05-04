@@ -453,6 +453,11 @@ public class AdServiceImpl implements AdService {
 		}else if(hits==adDO.getAdCount()){
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 			adDOMapper.updateByPrimaryKey(adDO);
+			//删除solr中的数据
+			SolrInputDocument document = new SolrInputDocument();
+			document.addField("id", adDO.getId());
+			document.addField("status_s", 1);
+		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 		}  
 		return i;
 	}
@@ -557,23 +562,6 @@ public class AdServiceImpl implements AdService {
 				    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
 				}
 			}
-		 
-		 AdDOExample example2=new AdDOExample();
-		 example2.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
-		 List<AdDO> listPutIng=adDOMapper.selectByExample(example);
-		 if(!listPutIng.isEmpty())
-				for (AdDO adDO : listPutIng) {
-					Date date=new Date();
-					if((date.getTime()-adDO.getBeginTime().getTime())>adDO.getEndTime().getTime()){
-						adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
-						adDOMapper.updateByPrimaryKey(adDO);
-						//删除solr中的数据
-						SolrInputDocument document = new SolrInputDocument();
-						document.addField("id", adDO.getId());
-						document.addField("status_s", 1);
-					    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
-					}
-				}
 		
 	}
 

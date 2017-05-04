@@ -132,9 +132,9 @@ public class UploadFileUtil {
                     }
                     // 1M=1024k=1048576字节
                     long fileSize = part.getSize();
-                    if (fileSize > 0.5 * 1048576) {
+                    if (fileSize > 5 * 1048576) {
                         valsMap.put("resultFlag", "1015");
-                        valsMap.put("msg", "图片文件大于500K");
+                        valsMap.put("msg", "图片文件大于5M");
                         return valsMap;
                     }
                     File file = new File(bashdir, dir);
