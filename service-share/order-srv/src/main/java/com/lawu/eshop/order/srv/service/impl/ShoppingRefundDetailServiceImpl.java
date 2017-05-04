@@ -135,7 +135,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> list = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
-		return ShoppingOrderItemExtendConverter.convert(list.get(0));
+		return ShoppingOrderItemExtendConverter.convert((list != null && list.size() > 0) ? list.get(0) : null);
 	}
 
 	/**
