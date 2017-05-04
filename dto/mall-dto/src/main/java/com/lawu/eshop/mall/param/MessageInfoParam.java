@@ -21,7 +21,7 @@ public class MessageInfoParam {
     @ApiParam(name = "typeEnum", value = "消息类型 MESSAGE_TYPE_REFUND:退款，MESSAGE_TYPE_APPRAISE：评价，MESSAGE_TYPEUS_NOTICE：通知",required = true)
     private MessageTypeEnum typeEnum;
 
-    private String messageParam;
+    private MessageTempParam messageParam;
 
     public Long getRelateId() {
         return relateId;
@@ -39,11 +39,12 @@ public class MessageInfoParam {
         this.typeEnum = typeEnum;
     }
 
-    public String getMessageParam() {
+    public MessageTempParam getMessageParam() {
         return messageParam;
     }
 
-    public void setMessageParam(String messageParam) {
+    public void setMessageParam(MessageTempParam messageParam) {
         this.messageParam = messageParam;
     }
+
 }
