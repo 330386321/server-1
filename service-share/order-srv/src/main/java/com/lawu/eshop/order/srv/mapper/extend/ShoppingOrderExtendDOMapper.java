@@ -1,9 +1,12 @@
 package com.lawu.eshop.order.srv.mapper.extend;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
 
+import com.lawu.eshop.order.param.ShoppingOrderReportDataParam;
+import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
@@ -64,7 +67,7 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @param example 查询参数
 	 * @return
 	 */
-    List<ReportRiseRateView> selectByTransactionData(ShoppingOrderExtendDOExample example);
+    List<ReportRiseRateView> selectByTransactionData(ShoppingOrderReportDataParam param);
     
 	/**
 	 * 查询交易数据
@@ -72,5 +75,13 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @param example 查询参数
 	 * @return
 	 */
-    List<ReportRiseRateView> selectByTransactionTotalAmount(ShoppingOrderExtendDOExample example);
+    BigDecimal selectByTransactionTotalAmount(ShoppingOrderReportDataParam param);
+    
+	/**
+	 * 查询交易数据
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+    List<ReportFansSaleTransFormDO> selectByFansSaleTransForm(ShoppingOrderReportDataParam param);
 }

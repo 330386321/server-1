@@ -5,6 +5,7 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
@@ -258,9 +259,18 @@ public interface ShoppingOrderService {
 	/**
 	 * 统计商家的交易数据
 	 * 
-	 * @param merchantId 商家id
+	 * @param param
 	 * @return
 	 * @author Sunny
 	 */
-	ReportRiseRateDTO selectByTransactionData(ReportDataParam dparam);
+	ReportRiseRateDTO selectByTransactionData(ReportDataParam param);
+	
+	/**
+	 * 粉丝数据-消费转化
+	 * 
+	 * @param param
+	 * @return
+	 * @author Sunny
+	 */
+	List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
 }

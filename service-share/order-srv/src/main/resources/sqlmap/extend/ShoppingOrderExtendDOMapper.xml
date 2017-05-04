@@ -106,6 +106,11 @@
 		<result column="num" property="num" jdbcType="VARCHAR" />
 	</resultMap>
 	
+	<resultMap id="ReportFansSaleTransFormResultMap" type="com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO">
+		<result column="is_fans" property="isFans" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="BIGINT" />
+	</resultMap>
+	
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -343,26 +348,38 @@
 	  </update>
 	  
 	  <!-- Report -->
-	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultMap="ReportResultMap">
-	  	SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
-	  	FROM shopping_order so
-	  	<if test="isIncludeShoppingOrderItem">
-			left join shopping_order_item soi on so.id = soi.shopping_order_id
+	  <select id="selectByTransactionData" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportResultMap">
+	  	<if test="flag == 1">
+		  	SELECT DATE_FORMAT(so.gmt_create, "%d") AS keyTxt, sum(so.actual_amount) AS num
+			FROM shopping_order so
+			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INTEGER} DAY) > NOW() or so.is_automatic_receipt = 1)
+			GROUP BY keyTxt
 		</if>
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
+		<if test="flag == 2">
+			SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
+			FROM shopping_order so
+			WHERE DATE_FORMAT(so.gmt_create, "%Y") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INTEGER} DAY) > NOW() or so.is_automatic_receipt = 1)
+			GROUP BY keyTxt
 		</if>
-		GROUP BY keyTxt
 	  </select>
 	  
-	  <select id="selectByTransactionTotalAmount" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample" resultType="java.math.BigDecimal">
-	  	SELECT sum(so.actual_amount) AS num
-	  	FROM shopping_order so
-	  	<if test="isIncludeShoppingOrderItem">
-			left join shopping_order_item soi on so.id = soi.shopping_order_id
-		</if>
-		<if test="_parameter != null">
-			<include refid="Example_Where_Clause" />
-		</if>
+	  <select id="selectByTransactionTotalAmount" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultType="java.math.BigDecimal">
+	  	<if test="flag == 1">
+		  	SELECT sum(so.actual_amount) AS num
+			FROM shopping_order so
+			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INT} DAY) > NOW() or so.is_automatic_receipt = 1)
+	  	</if>
+	  	<if test="flag == 2">
+	  		SELECT sum(so.actual_amount) AS num
+			FROM shopping_order so
+			WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INTEGER} DAY) > NOW() or so.is_automatic_receipt = 1)
+	  	</if>
+	  </select>
+	  
+  	  <select id="selectByFansSaleTransForm" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportFansSaleTransFormResultMap">
+	  	  SELECT so.is_fans, COUNT(so.id) as count
+		  FROM shopping_order so
+		  WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INTEGER} DAY) > NOW() or so.is_automatic_receipt = 1)
+		  GROUP BY so.is_fans
 	  </select>
 </mapper>

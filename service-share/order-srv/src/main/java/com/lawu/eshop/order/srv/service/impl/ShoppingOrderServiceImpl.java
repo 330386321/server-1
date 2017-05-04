@@ -21,13 +21,16 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
+import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingOrderReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
@@ -51,6 +54,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
+import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
@@ -643,7 +647,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
 		shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
 		// 根据订单状态是否需要退货
-		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED)) {
+		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
 			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.REFUND.getValue());
 		} else{
 			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
@@ -1205,32 +1209,54 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Override
-	public ReportRiseRateDTO selectByTransactionData(ReportDataParam dparam) {
-		List<ReportRiseRateView> list = new ArrayList<ReportRiseRateView>();
+	public ReportRiseRateDTO selectByTransactionData(ReportDataParam param) {
+		List<ReportRiseRateView> rtn = new ArrayList<ReportRiseRateView>();
 		int x = 0;
 		BigDecimal total = new BigDecimal(0);// 总金额
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
+		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
 		
-//		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
-//			
-//			shoppingOrderDOExtendMapper.selectByTransactionData(example);
-//			
-//			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-//			x = DateUtil.getNowMonthDay();
-//			total = payOrderExtendDOMapper.payVolumeTotal(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-//		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
-//			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyy"),
-//					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-//			x = 12;
-//			total = payOrderExtendDOMapper.payVolumeTotal("", dparam.getFlag().getValue(), dparam.getMerchantId(),
-//					PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
-//		}
-		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(list, x);
+		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
+		
+		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+			shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+			shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
+			x = DateUtil.getNowMonthDay();
+		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+			x = 12;
+		}
+		
+		rtn = shoppingOrderDOExtendMapper.selectByTransactionData(shoppingOrderReportDataParam);
+		total = shoppingOrderDOExtendMapper.selectByTransactionTotalAmount(shoppingOrderReportDataParam);
+		
+		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(rtn, x);
 		dto.setTotal(total == null ? "0" : total.toString());
 		return dto;
+	}
+	
+	/**
+	 * 粉丝数据-消费转化
+	 * 
+	 * @param param
+	 * @return
+	 * @author Sunny
+	 */
+	@Override
+	public List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param) {
+		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
+		
+		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
+		
+		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
+			shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+			shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
+		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+		}
+		
+		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = shoppingOrderDOExtendMapper.selectByFansSaleTransForm(shoppingOrderReportDataParam);
+		
+		return ReportConvert.convert(reportFansSaleTransFormDOList);
 	}
 	
 	/**************************************************************
@@ -1263,5 +1289,4 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 发送MQ消息，通知mall模块发送推送和站内信
 		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
 	}
-
 }

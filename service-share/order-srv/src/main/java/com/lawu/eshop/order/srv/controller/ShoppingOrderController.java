@@ -19,6 +19,8 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ReportRiseRateDTO;
+import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
@@ -31,6 +33,7 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
+import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
@@ -550,5 +553,36 @@ public class ShoppingOrderController extends BaseController {
 		}
 		
 		return successCreated();
+	}
+	
+	/**
+	 * 查询已完成但是未计算提成的购物订单
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "selectByTransactionData", method = RequestMethod.PUT)
+	public Result selectByTransactionData(@RequestBody ReportDataParam param) {
+		
+		ReportRiseRateDTO reportRiseRateDTO = shoppingOrderService.selectByTransactionData(param);
+		
+		return successCreated(reportRiseRateDTO);
+	}
+	
+	/**
+	 * 查询已完成但是未计算提成的购物订单
+	 * 
+	 * @param memberId 会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.PUT)
+	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam param) {
+		
+		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(param);
+		
+		return successCreated(reportRiseRerouceDTOList);
 	}
 }

@@ -41,7 +41,7 @@ public interface ReportTradeDataService {
 	 * @author yangqh
 	 * @date 2017年5月3日 下午6:21:42
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "reportPay/payVolumeRiseRate")
+	@RequestMapping(method = RequestMethod.PUT, value = "shoppingOrder/fansSaleTransform")
 	Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam dparam);
 
 	/**
@@ -51,7 +51,7 @@ public interface ReportTradeDataService {
 	 * @author yangqh
 	 * @date 2017年5月3日 下午6:23:26
 	 */
-	@RequestMapping(method = RequestMethod.POST, value = "reportPay/payVolumeRiseRate")
-	Result<ReportRiseRateDTO> productOrderVolumeRiseRate(@RequestBody ReportDataParam dparam);
+	@RequestMapping(method = RequestMethod.PUT, value = "shoppingOrder/selectByTransactionData")
+	Result<ReportRiseRateDTO> selectByTransactionData(@RequestBody ReportDataParam dparam);
     
 }

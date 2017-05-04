@@ -71,6 +71,6 @@ public class ReportTradeDataController extends BaseController {
 		BeanUtil.copyProperties(param, dparam);
 		dparam.setMerchantId(merchantId);
 		dparam.setFlag(param.getFlag());
-		return reportTradeDataService.productOrderVolumeRiseRate(dparam);
+		return reportTradeDataService.selectByTransactionData(dparam);
 	}
 }
