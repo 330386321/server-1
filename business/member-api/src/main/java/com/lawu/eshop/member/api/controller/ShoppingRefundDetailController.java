@@ -1,6 +1,10 @@
 package com.lawu.eshop.member.api.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -83,7 +87,16 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id") Long id, @ModelAttribute @ApiParam(name = "param", value = "退货物流参数") ShoppingRefundDetailLogisticsInformationForeignParam param) {
+	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(name = "param", value = "退货物流参数") @Validated ShoppingRefundDetailLogisticsInformationForeignParam param, BindingResult bindingResult) {
+		
+    	if (id == null || id <= 0) {
+    		return successCreated(ResultCode.ID_EMPTY);
+    	}
+		
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		
 		Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
 		

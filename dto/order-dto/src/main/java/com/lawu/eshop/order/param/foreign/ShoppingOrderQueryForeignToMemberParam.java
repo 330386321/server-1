@@ -3,7 +3,6 @@ package com.lawu.eshop.order.param.foreign;
 import java.io.Serializable;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
-import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
 
 import io.swagger.annotations.ApiModelProperty;

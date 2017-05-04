@@ -23,6 +23,7 @@ import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
@@ -35,12 +36,12 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
@@ -229,7 +230,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
-	public Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundForeignParam param) {
+	public Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param) {
 
 		// 修改购物订单以及订单项状态，保存退款详情记录
 		int result = shoppingOrderService.requestRefund(shoppingOrderitemId, param);
@@ -239,6 +240,25 @@ public class ShoppingOrderController extends BaseController {
 		}
 		
 		return successCreated();
+	}
+	
+	/**
+	 * 订单支付
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.PUT)
+	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id) {
+		
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
+		
+		if (shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
+			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		
+		return successCreated(ShoppingOrderConverter.convert(shoppingOrderBO));
 	}
 	
 	/**

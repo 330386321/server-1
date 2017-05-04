@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -112,6 +113,12 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 	 */
 	@ApiModelProperty(value = "实际收入", required = true)
 	private BigDecimal actualAmount;
+	
+	/**
+	 * 物流状态
+	 */
+	@ApiModelProperty(value = "物流状态(ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
+	private ExpressInquiriesDetailStateEnum state;
 	
 	/**
 	 * 最新更新的物流记录
@@ -245,6 +252,14 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 
 	public void setActualAmount(BigDecimal actualAmount) {
 		this.actualAmount = actualAmount;
+	}
+
+	public ExpressInquiriesDetailStateEnum getState() {
+		return state;
+	}
+
+	public void setState(ExpressInquiriesDetailStateEnum state) {
+		this.state = state;
 	}
 
 	public TraceDTO getTrace() {

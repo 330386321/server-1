@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
+import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
-import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 
 /**
@@ -118,7 +119,7 @@ public interface ShoppingOrderService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "shoppingOrder/requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
-	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundForeignParam param);
+	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param);
 	
 	/**
 	 * 根据查询参数分页查询退款记录
@@ -151,4 +152,14 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "shoppingOrder/numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
 	Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId);
+	
+	/**
+	 * 订单支付
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingOrder/orderPayment/{id}", method = RequestMethod.PUT)
+	Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id);
 }

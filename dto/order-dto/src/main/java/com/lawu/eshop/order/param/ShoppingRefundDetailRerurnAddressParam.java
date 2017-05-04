@@ -17,11 +17,6 @@ public class ShoppingRefundDetailRerurnAddressParam implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 是否需要退货
-	 */
-	private Boolean isNeedReturn;
-	
-	/**
 	 * 收货人姓名
 	 */
 	private String consigneeName;
@@ -35,14 +30,6 @@ public class ShoppingRefundDetailRerurnAddressParam implements Serializable {
 	 * 收货人手机号码
 	 */
 	private String consigneeMobile;
-
-	public Boolean getIsNeedReturn() {
-		return isNeedReturn;
-	}
-
-	public void setIsNeedReturn(Boolean isNeedReturn) {
-		this.isNeedReturn = isNeedReturn;
-	}
 
 	public String getConsigneeName() {
 		return consigneeName;

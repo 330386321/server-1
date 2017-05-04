@@ -367,7 +367,7 @@
 	  	<if test="flag == 1">
 		  	SELECT sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INT} DAY) > NOW() or so.is_automatic_receipt = 1)
+			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.order_status = #{orderStatus,jdbcType=TINYINT} and (DATE_ADD(so.gmt_transaction,INTERVAL #{refundRequestTime,jdbcType=INTEGER} DAY) > NOW() or so.is_automatic_receipt = 1)
 	  	</if>
 	  	<if test="flag == 2">
 	  		SELECT sum(so.actual_amount) AS num

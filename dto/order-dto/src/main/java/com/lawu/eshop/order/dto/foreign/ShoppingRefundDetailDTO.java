@@ -19,23 +19,29 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "退款详情id", required = true)
 	private Long id;
-
+	
+	/**
+	 * 购物订单id
+	 */
+	@ApiModelProperty(value = "购物订单id", required = true)
+	private Long shoppingOrderId;
+	
 	/**
 	 * 退款类型
 	 */
-	@ApiModelProperty(value = "退款类型", required = true)
+	@ApiModelProperty(value = "退款类型(REFUND 退款|RETURN_REFUND 退货退款)", required = true)
 	private ShoppingRefundTypeEnum type;
 
 	/**
 	 * 退货原因
 	 */
-	@ApiModelProperty(value = "退款类型", required = true)
+	@ApiModelProperty(value = "退款原因", required = true)
 	private String reason;
 
 	/**
 	 * 退款金额
 	 */
-	@ApiModelProperty(value = "退款类型", required = true)
+	@ApiModelProperty(value = "退款金额", required = true)
 	private BigDecimal amount;
 
 	/**
@@ -117,6 +123,30 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	private Date gmtCreate;
 	
 	/**
+	 * 倒计时
+	 */
+	@ApiModelProperty(value = "倒计时", required = false)
+	private Long countdown;
+	
+	/**
+	 * 退款描述
+	 */
+	@ApiModelProperty(value = "退款描述", required = false)
+	private String description;
+
+	/**
+	 * 凭证图片
+	 */
+	@ApiModelProperty(value = "凭证图片", required = false)
+	private String voucherPicture;
+	
+    /**
+    * 拒绝退款理由
+    */
+	@ApiModelProperty(value = "拒绝退款理由", required = false)
+    private String refusalReasons;
+	
+	/**
 	 * 退款状态
 	 */
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
@@ -128,6 +158,14 @@ public class ShoppingRefundDetailDTO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getShoppingOrderId() {
+		return shoppingOrderId;
+	}
+
+	public void setShoppingOrderId(Long shoppingOrderId) {
+		this.shoppingOrderId = shoppingOrderId;
 	}
 
 	public ShoppingRefundTypeEnum getType() {
@@ -248,6 +286,38 @@ public class ShoppingRefundDetailDTO implements Serializable {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public Long getCountdown() {
+		return countdown;
+	}
+
+	public void setCountdown(Long countdown) {
+		this.countdown = countdown;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getVoucherPicture() {
+		return voucherPicture;
+	}
+
+	public void setVoucherPicture(String voucherPicture) {
+		this.voucherPicture = voucherPicture;
+	}
+
+	public String getRefusalReasons() {
+		return refusalReasons;
+	}
+
+	public void setRefusalReasons(String refusalReasons) {
+		this.refusalReasons = refusalReasons;
 	}
 
 	public RefundStatusEnum getRefundStatus() {

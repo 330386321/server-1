@@ -8,12 +8,12 @@ import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
+import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
@@ -129,7 +129,7 @@ public interface ShoppingOrderService {
 	 *            退款参数
 	 * @return
 	 */
-	int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundForeignParam param);
+	int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundParam param);
 
 	/**
 	 * 商家填写物流信息
@@ -273,4 +273,5 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
+	
 }

@@ -1,8 +1,10 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -117,11 +119,16 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
-    public Result<ShoppingOrderExpressDTO> agreeToApply(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "申请审核参数") ShoppingRefundDetailAgreeToApplyForeignParam param) {
+    public Result<ShoppingOrderExpressDTO> agreeToApply(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(value = "申请审核参数") @Validated ShoppingRefundDetailAgreeToApplyForeignParam param, BindingResult bindingResult) {
     	if (id == null || id <= 0) {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
-		
+    	
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
     	Result result = shoppingRefundDetailservice.agreeToApply(id, param);
     	
     	if (!isSuccess(result)) {
@@ -152,17 +159,10 @@ public class ShoppingRefundDetailController extends BaseController {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
 		
-		if (bindingResult.hasErrors()) {
-			StringBuilder sb = new StringBuilder();
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				if (sb.length() > 0) {
-					sb.append("||");
-				}
-				sb.append(error.getDefaultMessage());
-			}
-
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
-		}
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
     	
 		ShoppingRefundDetailRerurnAddressParam param = new ShoppingRefundDetailRerurnAddressParam();
     	if (foreignParam.getAddressId() != null && foreignParam.getAddressId() > 0) {
@@ -174,8 +174,6 @@ public class ShoppingRefundDetailController extends BaseController {
     		param.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
     		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionPath() + resultAddressDTO.getModel().getAddr());
     	}
-    	
-    	param.setIsNeedReturn(foreignParam.getIsNeedReturn());
     	
     	Result result = shoppingRefundDetailservice.fillReturnAddress(id, param);
     	
@@ -201,11 +199,16 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
-    public Result agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "同意退款参数") ShoppingRefundDetailAgreeToRefundForeignParam param) {
+    public Result agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(value = "同意退款参数") @Validated ShoppingRefundDetailAgreeToRefundForeignParam param, BindingResult bindingResult) {
     	if (id == null || id <= 0) {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
 		
+		String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
     	Result result = shoppingRefundDetailservice.agreeToRefund(id, param);
     	
     	if (!isSuccess(result)) {

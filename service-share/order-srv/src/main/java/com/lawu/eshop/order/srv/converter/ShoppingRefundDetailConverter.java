@@ -44,16 +44,17 @@ public class ShoppingRefundDetailConverter {
 	 * @return
 	 */
 	public static ShoppingRefundDetailDTO convert(ShoppingOrderItemExtendBO shoppingOrderItemExtendBO) {
-		ShoppingRefundDetailDTO shoppingRefundDetailDTO = null;
+		ShoppingRefundDetailDTO rtn = null;
 		if (shoppingOrderItemExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
-		shoppingRefundDetailDTO = new ShoppingRefundDetailDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO.getShoppingRefundDetail(), shoppingRefundDetailDTO);
-		shoppingRefundDetailDTO.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		rtn = new ShoppingRefundDetailDTO();
+		BeanUtils.copyProperties(shoppingOrderItemExtendBO.getShoppingRefundDetail(), rtn);
+		rtn.setShoppingOrderId(shoppingOrderItemExtendBO.getShoppingOrderId());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
 		
-		return shoppingRefundDetailDTO;
+		return rtn;
 	}
 	
     /**

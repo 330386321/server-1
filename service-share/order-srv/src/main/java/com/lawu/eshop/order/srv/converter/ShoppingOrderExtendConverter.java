@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -89,6 +90,7 @@ public class ShoppingOrderExtendConverter {
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
+			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState()));
 			TraceBO traceBO = expressInquiriesDetailBO.getTraces().get(0);
 			TraceDTO traceDTO = new TraceDTO();
 			BeanUtils.copyProperties(traceBO, traceDTO);

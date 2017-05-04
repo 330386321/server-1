@@ -31,11 +31,11 @@ public class AddressMerchantParam implements Serializable {
 	private String mobile;
 
 	@ApiModelProperty(name = "regionPath", required = true, value = "地址 格式: 省id/市id/区id")
-	@NotBlank(message = "地址不能为空")
+	@NotBlank(message = "地址id不能为空")
 	private String regionPath;
 	
 	@ApiModelProperty(name = "regionName", required = true, value = "地址名称")
-	@NotBlank(message = "地址不能为空")
+	@NotBlank(message = "地址名称不能为空")
 	private String regionName;
 
 	@ApiModelProperty(name = "addr", required = true, value = "详细地址")

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -101,16 +100,9 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "addAddress", method = RequestMethod.POST)
 	public Result addAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") @Validated AddressMerchantParam addressParam, BindingResult bindingResult) {
 		
-		if (bindingResult.hasErrors()) {
-			StringBuilder sb = new StringBuilder();
-			for (ObjectError error : bindingResult.getAllErrors()) {
-				if (sb.length() > 0) {
-					sb.append("||");
-				}
-				sb.append(error.getDefaultMessage());
-			}
-
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, sb.toString());
+		String message = validate(bindingResult);
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
 		
 		AddressParam address=new AddressParam();

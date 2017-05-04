@@ -31,13 +31,13 @@ import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.param.ReportDataParam;
 import com.lawu.eshop.order.param.ShoppingOrderLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingOrderReportDataParam;
+import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
 import com.lawu.eshop.order.param.ShoppingOrderUpdateInfomationParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMerchantParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
-import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
@@ -54,6 +54,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
@@ -590,13 +591,21 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundForeignParam param) {
+	public int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundParam param) {
 		
 		if (shoppingOrderitemId == null || shoppingOrderitemId <= 0) {
 			return ResultCode.ID_EMPTY;
 		}
 		
 		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderitemId);
+		
+		// 如果订单项存在有效的退款记录，不允许再退款
+		ShoppingRefundDetailDOExample shoppingRefundDetailDOExample = new ShoppingRefundDetailDOExample();
+		shoppingRefundDetailDOExample.createCriteria().andShoppingOrderItemIdEqualTo(shoppingOrderitemId).andStatusEqualTo(StatusEnum.VALID.getValue());
+		long count = shoppingRefundDetailDOMapper.countByExample(shoppingRefundDetailDOExample);
+		if (count > 0) {
+			return ResultCode.ORDER_NOT_REFUND;
+		}
 		
 		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
 			return ResultCode.RESOURCE_NOT_FOUND;
@@ -623,8 +632,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return ResultCode.EXCEEDS_RETURN_TIME;
 		}
 		
-		// 如果订单是自动收货，不允许退款
-		if (shoppingOrderDO.getIsAutomaticReceipt()) {
+		// 如果订单是自动收货或者不允许退款，则不允许退款操作
+		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && shoppingOrderDO.getIsAutomaticReceipt()) {
+			return ResultCode.ORDER_NOT_REFUND;
+		}
+		
+		if (!shoppingOrderItemDO.getIsAllowRefund()) {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
@@ -632,11 +645,38 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDO.setGmtModified(new Date());
 		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		
+		// 根据订单状态是否需要退货
+		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
+		ShoppingRefundTypeEnum shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
+		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
+			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
+		} else{
+			shoppingRefundTypeEnum =  ShoppingRefundTypeEnum.RETURN_REFUND;
+		}
+		
+		// 后台判断的类型是否跟用户选择的一致
+		boolean isMatches = false;
+		if (shoppingRefundTypeEnum.equals(param.getType())) {
+			isMatches = true;
+		}
+		
 		/*
-		 *  如果卖家支持七天无理由退货并且已经收到货，跳过商家确认这个阶段
+		 *  如果卖家支持七天无理由退货，跳过商家确认这个阶段
 		 */
-		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())) {
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+		if (shoppingOrderDO.getIsNoReasonReturn() && isMatches) {
+			// 订单是否需要物流
+			if (!shoppingOrderDO.getIsNeedsLogistics()) {
+				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+			} else {
+				
+				
+				// 判断订单的当前状态,如果订单还没有发货，退款状态直接是待退款，不需要填写物流
+				if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) || shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())) {
+					shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+				} else if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
+					shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+				}
+			}
 		} else {
 			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
 		}
@@ -644,18 +684,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 保存退货详情记录
-		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
 		shoppingRefundDetailDO.setShoppingOrderItemId(shoppingOrderItemDO.getId());
-		// 根据订单状态是否需要退货
-		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
-			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.REFUND.getValue());
-		} else{
-			shoppingRefundDetailDO.setType(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
-		}
+		
 		// 计算退款金额
 		BigDecimal amount = shoppingOrderItemDO.getSalesPrice().multiply(new BigDecimal(shoppingOrderItemDO.getQuantity()));
+		shoppingRefundDetailDO.setStatus(StatusEnum.VALID.getValue());
+		shoppingRefundDetailDO.setType(param.getType().getValue());
 		shoppingRefundDetailDO.setAmount(amount);
 		shoppingRefundDetailDO.setReason(param.getReason());
+		shoppingRefundDetailDO.setDescription(param.getDescription());
+		shoppingRefundDetailDO.setVoucherPicture(param.getVoucherPicture());
 		shoppingRefundDetailDO.setGmtCreate(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		
@@ -1216,13 +1254,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
 		
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
+		shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
+		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
 		
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
 			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
-			shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-			shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
 			x = DateUtil.getNowMonthDay();
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
+			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
 			x = 12;
 		}
 		
@@ -1246,12 +1288,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
 		
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
+		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
+		shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
 		
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());
 			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyyMM"));
-			shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-			shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(param.getFlag().getValue())) {
+			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.MONTH.getValue());
+			shoppingOrderReportDataParam.setGmtCreate(DateUtil.getDateFormat(new Date(), "yyyy"));
 		}
 		
 		List<ReportFansSaleTransFormDO> reportFansSaleTransFormDOList = shoppingOrderDOExtendMapper.selectByFansSaleTransForm(shoppingOrderReportDataParam);
@@ -1289,4 +1335,5 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 发送MQ消息，通知mall模块发送推送和站内信
 		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
 	}
+
 }

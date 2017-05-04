@@ -2,7 +2,7 @@ package com.lawu.eshop.order.param.foreign;
 
 import java.io.Serializable;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,25 +20,11 @@ public class ShoppingRefundDetailRerurnAddressForeignParam implements Serializab
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 是否需要退货
-	 */
-	@ApiModelProperty(value = "是否需要退货", required = true)
-	@NotEmpty(message = "是否需要退货不能为空")
-	private Boolean isNeedReturn;
-	
-	/**
 	 * 地址id
 	 */
+	@NotNull(message = "地址id不能为空")
 	@ApiModelProperty(value = "地址id", required = false)
 	private Long addressId;
-
-	public Boolean getIsNeedReturn() {
-		return isNeedReturn;
-	}
-
-	public void setIsNeedReturn(Boolean isNeedReturn) {
-		this.isNeedReturn = isNeedReturn;
-	}
 
 	public Long getAddressId() {
 		return addressId;

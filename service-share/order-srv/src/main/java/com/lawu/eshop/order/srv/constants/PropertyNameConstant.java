@@ -107,4 +107,16 @@ public class PropertyNameConstant {
 	 */
 	public final static String TO_BE_REFUNDED_REFUND_TIME = "to_be_returned_refund_time";
 	
+	/**
+	 * 买家申请平台介入，退款类型-退款
+	 * 倒计时
+	 */
+	public final static String PLATFORM_INTERVENTION_REFUND_TIME = "platform_intervention_refund_time";
+	
+	/**
+	 * 买家申请平台介入，退款类型-退货退款
+	 * 倒计时
+	 */
+	public final static String PLATFORM_INTERVENTION_RETURN_REFUND_TIME = "platform_intervention_return_refund_time";
+	
 }

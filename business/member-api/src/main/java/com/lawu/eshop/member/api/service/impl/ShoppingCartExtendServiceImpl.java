@@ -278,7 +278,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setFreightPrice(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice());
     		
     		// 设置收货人信息,对应每个订单
-    		shoppingOrderSettlementParam.setConsigneeAddress(resultAddressDTO.getModel().getRegionPath() + " " + resultAddressDTO.getModel().getAddr());
+    		shoppingOrderSettlementParam.setConsigneeAddress(resultAddressDTO.getModel().getRegionName() + " " + resultAddressDTO.getModel().getAddr());
     		shoppingOrderSettlementParam.setConsigneeName(resultAddressDTO.getModel().getName());
     		shoppingOrderSettlementParam.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
     		

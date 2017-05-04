@@ -1,5 +1,8 @@
 package com.lawu.eshop.order.srv.controller;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +16,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
+import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
@@ -23,10 +27,13 @@ import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
+import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 购物退货详情
@@ -47,7 +54,10 @@ public class ShoppingRefundDetailController extends BaseController {
 	@Autowired
 	@Qualifier("kDNiaoExpressStrategy")
 	private ExpressStrategy expressStrategy;
-
+	
+	@Autowired
+	private PropertyService propertyService;
+	
 	/**
 	 * 根据订单项id查询退款信息
 	 * 
@@ -66,8 +76,78 @@ public class ShoppingRefundDetailController extends BaseController {
 		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getId() == null || shoppingOrderItemExtendBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
-
-		return successCreated(ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO));
+		
+		ShoppingRefundDetailDTO shoppingRefundDetailDTO = ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO);
+		
+		// 倒计时在服务端放入
+		Long countdown = null;
+		String time = null;
+		Date date = null;
+		switch (shoppingOrderItemExtendBO.getRefundStatus()) {
+			case TO_BE_CONFIRMED:
+				// 1.等待商家确认超时，自动退款给用户
+				
+				if (ShoppingRefundTypeEnum.REFUND.equals(shoppingOrderItemExtendBO.getShoppingRefundDetail().getType())) {
+					// 1)退款类型为退款
+					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
+					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+					countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				} else {
+					// 2)退款类型为退货退款
+					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_RETURN_REFUND_REFUND_TIME);
+					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+					countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				}
+				break;
+			case FILL_RETURN_ADDRESS:
+				// 2.等待商家填写退货地址超时，自动退款
+				
+				// 自动退款时间
+				time = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REFUND_TIME);
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			case TO_BE_RETURNED:
+				// 3.等待买家退货，自动取消退款申请
+				
+				// 自动取消退款申请时间
+				time = propertyService.getByName(PropertyNameConstant.TO_BE_RETURNED_REVOKE_TIME);
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			case TO_BE_REFUNDED:
+				// 4.等待商家退款，自动退款
+				
+				// 自动退款时间
+				time = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			case REFUND_FAILED:
+				// 5.退款失败，等待卖家处理超时，自动取消退款申请
+				
+				// 自动取消退款申请时间
+				time = propertyService.getByName(PropertyNameConstant.REFUND_FAILED_REVOKE_TIME);
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			case PLATFORM_INTERVENTION:
+				// 6.平台介入，倒计时
+				
+				if (ShoppingRefundTypeEnum.REFUND.equals(shoppingOrderItemExtendBO.getShoppingRefundDetail().getType())) {
+					time = propertyService.getByName(PropertyNameConstant.PLATFORM_INTERVENTION_REFUND_TIME);
+				} else {
+					time = propertyService.getByName(PropertyNameConstant.PLATFORM_INTERVENTION_RETURN_REFUND_TIME);
+				}
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			default:
+				break;
+		}
+		shoppingRefundDetailDTO.setCountdown(countdown);
+		
+		return successCreated(shoppingRefundDetailDTO);
 	}
 
 	/**
@@ -82,38 +162,12 @@ public class ShoppingRefundDetailController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
 	public Result agreeToApply(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToApplyForeignParam param) {
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+		int resultCode = shoppingRefundDetailService.agreeToApply(id, param);
+
+		if (resultCode != ResultCode.SUCCESS) {
+			return successCreated(resultCode);
 		}
-
-		if (param.getIsAgree() == null) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-		}
-
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
-
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
-
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		// 订单状态必须为退款中
-		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
-			return successCreated(ResultCode.NOT_REFUNDING);
-		}
-
-		// 退款状态必须为待商家确认
-		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.TO_BE_CONFIRMED)) {
-			return successCreated(ResultCode.NOT_AGREE_TO_APPLY);
-		}
-
-		shoppingRefundDetailService.agreeToApply(shoppingRefundDetailBO, param);
-
+		 
 		return successCreated();
 	}
 
@@ -151,10 +205,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
 	public Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailLogisticsInformationParam param) {
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
-
+		
 		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
 
 		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
@@ -196,7 +247,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	public Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
 
-		int resultCode = shoppingRefundDetailService.agreeToRefund(id, param.getIsAgree());
+		int resultCode = shoppingRefundDetailService.agreeToRefund(id, param);
 
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);

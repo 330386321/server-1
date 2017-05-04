@@ -20,6 +20,7 @@ import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
@@ -204,32 +205,26 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		// 订单状态必须为退款中
-		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 			return ResultCode.NOT_REFUNDING;
 		}
 
 		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS)) {
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue())) {
 			return ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS;
 		}
 		
-		// 商家判断是否需要寄回货物
-		if (param.getIsNeedReturn()) {
-			// 更新订单项退款状态为待退货
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_RETURNED.getValue());
-	
-			// 更新退款详情的退货地址信息
-			shoppingRefundDetailDO.setGmtFill(new Date());
-			shoppingRefundDetailDO.setConsigneeName(param.getConsigneeName());
-			shoppingRefundDetailDO.setConsigneeMobile(param.getConsigneeMobile());
-			shoppingRefundDetailDO.setConsigneeAddress(param.getConsigneeAddress());
-			shoppingRefundDetailDO.setGmtModified(new Date());
-	
-			shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-		} else {
-			// 更新订单项退款状态为待退货
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
-		}
+		// 更新订单项退款状态为待退货
+		shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_RETURNED.getValue());
+
+		// 更新退款详情的退货地址信息
+		shoppingRefundDetailDO.setGmtFill(new Date());
+		shoppingRefundDetailDO.setConsigneeName(param.getConsigneeName());
+		shoppingRefundDetailDO.setConsigneeMobile(param.getConsigneeMobile());
+		shoppingRefundDetailDO.setConsigneeAddress(param.getConsigneeAddress());
+		shoppingRefundDetailDO.setGmtModified(new Date());
+
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
 		
 		// 重置发送提醒的次数
 		shoppingOrderItemDO.setSendTime(0);
@@ -250,14 +245,34 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 */
 	@Transactional
 	@Override
-	public Integer agreeToApply(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailAgreeToApplyForeignParam param) {
-		// 更新订单项状态为待退款
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingRefundDetailBO.getShoppingOrderItemId());
+	public int agreeToApply(Long id, ShoppingRefundDetailAgreeToApplyForeignParam param) {
+		
+		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
 
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+
+		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+
+		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
+			return ResultCode.RESOURCE_NOT_FOUND;
+		}
+
+		// 订单状态必须为退款中
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
+			return ResultCode.NOT_REFUNDING;
+		}
+
+		// 退款状态必须为待商家确认
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_CONFIRMED.getValue())) {
+			return ResultCode.NOT_AGREE_TO_APPLY;
+		}
+		
+		// 更新退款状态
 		if (param.getIsAgree()) {
 			// 判断是否需要退货
-			if (shoppingRefundDetailBO.getType().equals(ShoppingRefundTypeEnum.REFUND)) {
+			if (shoppingRefundDetailDO.getType().equals(ShoppingRefundTypeEnum.REFUND.getValue())) {
 				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
 			} else {
 				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
@@ -269,22 +284,19 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 重置发送提醒的次数
 		shoppingOrderItemDO.setSendTime(0);
 		shoppingOrderItemDO.setGmtModified(new Date());
-
-		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 
 		// 更新退款详情
-		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		shoppingRefundDetailDO.setId(shoppingRefundDetailBO.getId());
-
 		shoppingRefundDetailDO.setGmtConfirmed(new Date());
 		if (!param.getIsAgree()) {
 			shoppingRefundDetailDO.setGmtRefund(new Date());
 		}
+		shoppingRefundDetailDO.setRefusalReasons(param.getRefusalReasons());
 		shoppingRefundDetailDO.setIsAgree(param.getIsAgree());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
 
-		return result;
+		return ResultCode.SUCCESS;
 	}
 
 	/**
@@ -292,17 +304,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * 
 	 * @param id
 	 *            退款详情
-	 * @param isAgree
-	 *            是否同意退款
+	 * @param param
 	 * @return
 	 */
 	@Transactional
 	@Override
-	public int agreeToRefund(Long id, boolean isAgree) {
-		
-		if (id == null || id <= 0) {
-			return ResultCode.ID_EMPTY;
-		}
+	public int agreeToRefund(Long id, ShoppingRefundDetailAgreeToRefundForeignParam param) {
 		
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
@@ -334,8 +341,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			return ResultCode.ORDER_NOT_TO_BE_REFUNDED;
 		}
 		
-		// 更新订单项状态为待退款
-		if (isAgree) {
+		if (param.getIsAgree()) {
 			shoppingOrderItemExtendDO.setRefundStatus(RefundStatusEnum.REFUND_SUCCESSFULLY.getValue());
 			// 设置购物订单项的订单状态为交易关闭
 			shoppingOrderItemExtendDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
@@ -353,7 +359,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
 		
-		if (isAgree) {
+		if (param.getIsAgree()) {
 			// 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
 			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
 			shoppingOrderItemDOExample.createCriteria().andShoppingOrderIdEqualTo(shoppingOrderItemExtendDO.getShoppingOrderId()).andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
@@ -632,7 +638,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 超过提醒时间
 		criteria.andGmtModifiedAddDayLessThanOrEqualTo(Integer.valueOf(remindTime), new Date());
 		
-		// 自动撤销撤销时间
+		// 自动退款时间
 		String refundTime = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REFUND_TIME);
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
@@ -646,9 +652,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			
-			// 买家操作超过处理时间，平台自动撤销退款申请
+			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				revokeRefundRequest(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
+				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
 			}
 		}
 	}
@@ -729,9 +735,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			
-			// 买家操作超过处理时间，平台自动撤销退款申请
+			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				revokeRefundRequest(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
+				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
 			}
 		}
 	}
@@ -816,5 +822,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		// 发送站内信和推送
 		shoppingRefundToBeRefundRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+	}
+	
+	@Transactional
+	public int agreeToRefund(Long id, boolean isAgree) {
+		ShoppingRefundDetailAgreeToRefundForeignParam param = new ShoppingRefundDetailAgreeToRefundForeignParam();
+		param.setIsAgree(isAgree);
+		return agreeToRefund(id, param);
 	}
 }

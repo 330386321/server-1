@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
 import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
+import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 
@@ -34,14 +35,13 @@ public interface ShoppingRefundDetailService {
 
 	/**
 	 * 商家是否同意买家的退货申请
-	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
 	 * @param param
-	 *            参数 是否同意申请
+	 *            参数
 	 * @return
 	 */
-	Integer agreeToApply(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailAgreeToApplyForeignParam param);
+	int agreeToApply(Long id, ShoppingRefundDetailAgreeToApplyForeignParam param);
 
 	/**
 	 * 商家填写退货地址信息
@@ -70,11 +70,10 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情Id
-	 * @param isAgree
-	 *            是否同意退款
+	 * @param param
 	 * @return
 	 */
-	int agreeToRefund(Long id, boolean isAgree);
+	int agreeToRefund(Long id, ShoppingRefundDetailAgreeToRefundForeignParam param);
 
 	/**
 	 * 如果商家拒绝买家的退款申请或者拒绝退款 买家可以申请平台介入

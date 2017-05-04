@@ -446,6 +446,216 @@ public class ShoppingRefundDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andDescriptionIsNull() {
+            addCriterion("description is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIsNotNull() {
+            addCriterion("description is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionEqualTo(String value) {
+            addCriterion("description =", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotEqualTo(String value) {
+            addCriterion("description <>", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThan(String value) {
+            addCriterion("description >", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionGreaterThanOrEqualTo(String value) {
+            addCriterion("description >=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThan(String value) {
+            addCriterion("description <", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLessThanOrEqualTo(String value) {
+            addCriterion("description <=", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionLike(String value) {
+            addCriterion("description like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotLike(String value) {
+            addCriterion("description not like", value, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionIn(List<String> values) {
+            addCriterion("description in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotIn(List<String> values) {
+            addCriterion("description not in", values, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionBetween(String value1, String value2) {
+            addCriterion("description between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andDescriptionNotBetween(String value1, String value2) {
+            addCriterion("description not between", value1, value2, "description");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureIsNull() {
+            addCriterion("voucher_picture is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureIsNotNull() {
+            addCriterion("voucher_picture is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureEqualTo(String value) {
+            addCriterion("voucher_picture =", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureNotEqualTo(String value) {
+            addCriterion("voucher_picture <>", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureGreaterThan(String value) {
+            addCriterion("voucher_picture >", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureGreaterThanOrEqualTo(String value) {
+            addCriterion("voucher_picture >=", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureLessThan(String value) {
+            addCriterion("voucher_picture <", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureLessThanOrEqualTo(String value) {
+            addCriterion("voucher_picture <=", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureLike(String value) {
+            addCriterion("voucher_picture like", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureNotLike(String value) {
+            addCriterion("voucher_picture not like", value, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureIn(List<String> values) {
+            addCriterion("voucher_picture in", values, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureNotIn(List<String> values) {
+            addCriterion("voucher_picture not in", values, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureBetween(String value1, String value2) {
+            addCriterion("voucher_picture between", value1, value2, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andVoucherPictureNotBetween(String value1, String value2) {
+            addCriterion("voucher_picture not between", value1, value2, "voucherPicture");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsIsNull() {
+            addCriterion("refusal_reasons is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsIsNotNull() {
+            addCriterion("refusal_reasons is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsEqualTo(String value) {
+            addCriterion("refusal_reasons =", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsNotEqualTo(String value) {
+            addCriterion("refusal_reasons <>", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsGreaterThan(String value) {
+            addCriterion("refusal_reasons >", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsGreaterThanOrEqualTo(String value) {
+            addCriterion("refusal_reasons >=", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsLessThan(String value) {
+            addCriterion("refusal_reasons <", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsLessThanOrEqualTo(String value) {
+            addCriterion("refusal_reasons <=", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsLike(String value) {
+            addCriterion("refusal_reasons like", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsNotLike(String value) {
+            addCriterion("refusal_reasons not like", value, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsIn(List<String> values) {
+            addCriterion("refusal_reasons in", values, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsNotIn(List<String> values) {
+            addCriterion("refusal_reasons not in", values, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsBetween(String value1, String value2) {
+            addCriterion("refusal_reasons between", value1, value2, "refusalReasons");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefusalReasonsNotBetween(String value1, String value2) {
+            addCriterion("refusal_reasons not between", value1, value2, "refusalReasons");
+            return (Criteria) this;
+        }
+
         public Criteria andAmountIsNull() {
             addCriterion("amount is null");
             return (Criteria) this;

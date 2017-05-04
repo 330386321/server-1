@@ -11,6 +11,7 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO;
@@ -212,6 +213,24 @@ public class ShoppingOrderConverter {
 		ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO rtn = new ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO();
 
 		BeanUtils.copyProperties(shoppingOrderNumberOfOrderStatusForMerchantBO, rtn);
+
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param ShoppingOrderPaymentDTO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderPaymentDTO convert(ShoppingOrderBO shoppingOrderBO) {
+		ShoppingOrderPaymentDTO rtn = null;
+		
+		if (shoppingOrderBO == null) {
+			return rtn;
+		}
+
+		BeanUtils.copyProperties(shoppingOrderBO, rtn);
 
 		return rtn;
 	}

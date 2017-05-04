@@ -31,6 +31,21 @@ public class ShoppingRefundDetailBO implements Serializable {
 	private String reason;
 
 	/**
+	 * 退款描述
+	 */
+	private String description;
+
+	/**
+	 * 凭证图片
+	 */
+	private String voucherPicture;
+	
+    /**
+    * 拒绝退款理由
+    */
+    private String refusalReasons;
+
+	/**
 	 * 退款金额
 	 */
 	private BigDecimal amount;
@@ -69,12 +84,12 @@ public class ShoppingRefundDetailBO implements Serializable {
 	 * 物流编号
 	 */
 	private String waybillNum;
-	
-    /**
-    * 商家是否同意退货申请
-    */
+
+	/**
+	 * 商家是否同意退货申请
+	 */
 	private Boolean isAgree;
-	
+
 	/**
 	 * 退款时间
 	 */
@@ -94,12 +109,12 @@ public class ShoppingRefundDetailBO implements Serializable {
 	 * 买家提交退货物流时间
 	 */
 	private Date gmtSubmit;
-	
-    /**
-    * 平台介入时间
-    */
-    private Date gmtIntervention;
-	
+
+	/**
+	 * 平台介入时间
+	 */
+	private Date gmtIntervention;
+
 	/**
 	 * 创建时间
 	 */
@@ -140,6 +155,30 @@ public class ShoppingRefundDetailBO implements Serializable {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getVoucherPicture() {
+		return voucherPicture;
+	}
+
+	public void setVoucherPicture(String voucherPicture) {
+		this.voucherPicture = voucherPicture;
+	}
+
+	public String getRefusalReasons() {
+		return refusalReasons;
+	}
+
+	public void setRefusalReasons(String refusalReasons) {
+		this.refusalReasons = refusalReasons;
 	}
 
 	public BigDecimal getAmount() {
