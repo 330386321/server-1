@@ -58,6 +58,7 @@ public class ReportTradeDataController extends BaseController {
 		return reportTradeDataService.payVolumeRiseRate(dparam);
 	}
 
+	@Audit(date = "2017-05-04", reviewer = "孙林青")
 	@ApiOperation(value = "商品订单交易数据", notes = "商品订单交易数据(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "productOrderVolumeRiseRate", method = RequestMethod.GET)

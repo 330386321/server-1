@@ -81,7 +81,8 @@ public class ReportFansController extends BaseController {
 		dparam.setFlag(param.getFlag());
 		return reportFansService.fansRiseSource(dparam);
 	}
-	
+
+	@Audit(date = "2017-05-04", reviewer = "孙林青")
 	@ApiOperation(value = "粉丝数据，消费转化", notes = "粉丝数据，消费转化(日增长、月增长)。[]，(杨清华)", httpMethod = "GET")
 	@Authorization
 	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.GET)
