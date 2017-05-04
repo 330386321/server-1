@@ -22,11 +22,11 @@ import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.pay.sdk.alipay.config.AlipayConfig;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.utils.PropertiesUtil;
 import com.lawu.eshop.utils.StringUtil;
 
 /**
@@ -67,11 +67,11 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String member_public_key = PropertiesUtil.getPropertyValue("alipay_member_public_key", "alipay.properties");
-		String merchant_public_key = PropertiesUtil.getPropertyValue("alipay_business_public_key", "alipay.properties");
-		String input_charset = PropertiesUtil.getPropertyValue("input_charset", "alipay.properties");
-		String app_id_member = PropertiesUtil.getPropertyValue("app_id_member", "alipay.properties");
-		String app_id_business = PropertiesUtil.getPropertyValue("app_id_business", "alipay.properties");
+		String member_public_key = AlipayConfig.alipay_edian_member_public_key;
+		String merchant_public_key = AlipayConfig.alipay_edian_business_public_key;
+		String input_charset = AlipayConfig.input_charset;
+		String app_id_member = AlipayConfig.app_id_member;
+		String app_id_business = AlipayConfig.app_id_business;
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -183,8 +183,8 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String alipay_pc_public_key = PropertiesUtil.getPropertyValue("alipay_pc_public_key", "alipay.properties");
-		String app_id_business = PropertiesUtil.getPropertyValue("app_id_business", "alipay.properties");
+		String alipay_pc_public_key = AlipayConfig.alipay_public_key;
+		String app_id_business = AlipayConfig.app_id_business;
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
