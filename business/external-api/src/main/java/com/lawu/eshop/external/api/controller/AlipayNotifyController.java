@@ -22,7 +22,7 @@ import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.srv.sdk.alipay.util.AlipayNotify;
+import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;

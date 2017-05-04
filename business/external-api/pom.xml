@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.lawu.eshop</groupId>
-			<artifactId>pay-srv</artifactId>
+			<artifactId>pay-util</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
