@@ -87,7 +87,7 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(name = "param", value = "退货物流参数") @Validated ShoppingRefundDetailLogisticsInformationForeignParam param, BindingResult bindingResult) {
+	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id", required = true) @Validated @NotNull Long id, @ModelAttribute @ApiParam(name = "param", value = "退货物流参数") @Validated ShoppingRefundDetailLogisticsInformationForeignParam param, BindingResult bindingResult) {
 		
     	if (id == null || id <= 0) {
     		return successCreated(ResultCode.ID_EMPTY);

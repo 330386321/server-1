@@ -166,19 +166,19 @@ public class ShoppingRefundDetailController extends BaseController {
     	
 		ShoppingRefundDetailRerurnAddressParam param = new ShoppingRefundDetailRerurnAddressParam();
     	if (foreignParam.getAddressId() != null && foreignParam.getAddressId() > 0) {
-    		Result<AddressDTO> resultAddressDTO = addressService.get(id);
+    		Result<AddressDTO> resultAddressDTO = addressService.get(foreignParam.getAddressId());
     		if (!isSuccess(resultAddressDTO)) {
     			return successCreated(resultAddressDTO.getRet());
     		}
     		param.setConsigneeName(resultAddressDTO.getModel().getName());
     		param.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
-    		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionPath() + resultAddressDTO.getModel().getAddr());
+    		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionName() + resultAddressDTO.getModel().getAddr());
     	}
     	
     	Result result = shoppingRefundDetailservice.fillReturnAddress(id, param);
     	
     	if (!isSuccess(result)) {
-    		return successGet(result.getRet());
+    		return successCreated(result.getRet());
     	}
 		
     	return successCreated(result);
