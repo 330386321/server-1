@@ -461,5 +461,7 @@ public class MemberServiceImpl implements MemberService {
         }
         return MemberConverter.convertBO(memberDOS.get(0));
     }
+    
+	
 
 }

@@ -110,9 +110,10 @@ public interface MemberService {
 
     MessagePushBO findMessagePushByMobile(String moblie);
 
+
+    
     /**
      * 根据手机号判断用户是否注册
-     *
      * @param mobile
      * @return
      */
