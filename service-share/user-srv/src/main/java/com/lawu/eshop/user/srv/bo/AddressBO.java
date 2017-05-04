@@ -19,6 +19,8 @@ public class AddressBO {
 
 
    private String regionPath;
+   
+   private String regionName;
 
 
    private String addr;
@@ -104,6 +106,16 @@ public class AddressBO {
 	
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
+	}
+
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 	   
    

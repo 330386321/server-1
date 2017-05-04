@@ -33,6 +33,10 @@ public class AddressMerchantParam implements Serializable {
 	@ApiModelProperty(name = "regionPath", required = true, value = "地址 格式: 省id/市id/区id")
 	@NotBlank(message = "地址不能为空")
 	private String regionPath;
+	
+	@ApiModelProperty(name = "regionName", required = true, value = "地址名称")
+	@NotBlank(message = "地址不能为空")
+	private String regionName;
 
 	@ApiModelProperty(name = "addr", required = true, value = "详细地址")
 	@NotBlank(message = "详细地址不能为空")
@@ -71,4 +75,13 @@ public class AddressMerchantParam implements Serializable {
 		this.addr = addr;
 	}
 
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	
 }

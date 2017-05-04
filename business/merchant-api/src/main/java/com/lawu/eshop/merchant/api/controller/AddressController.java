@@ -118,6 +118,7 @@ public class AddressController extends BaseController {
 		address.setMobile(addressParam.getMobile());
 		address.setName(addressParam.getName());
 		address.setRegionPath(addressParam.getRegionPath());
+		address.setRegionName(addressParam.getRegionName());
 		
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result result = addressService.saveWithUserNum(userNum, address);

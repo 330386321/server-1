@@ -24,6 +24,9 @@ public class AddressDTO {
 
 	@ApiModelProperty(value = "区域", required = true)
 	private String regionPath;
+	
+	@ApiModelProperty(value = "区域名称", required = true)
+	private String regionName;
 
 	@ApiModelProperty(value = "详细地址", required = true)
 	private String addr;
@@ -100,6 +103,17 @@ public class AddressDTO {
 	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
-		   
+
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+		  
+	
 
 }

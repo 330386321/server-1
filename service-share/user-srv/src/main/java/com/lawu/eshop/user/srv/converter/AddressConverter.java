@@ -37,7 +37,7 @@ public class AddressConverter {
 		addressBO.setName(addressDO.getName());
 		addressBO.setPostcode(addressDO.getPostcode());
 		addressBO.setRegionPath(addressDO.getRegionPath());
-
+		addressBO.setRegionName(addressDO.getRegionName());
 		return addressBO;
 	}
 
@@ -67,13 +67,12 @@ public class AddressConverter {
 		AddressDTO addressDTO = new AddressDTO();
 		addressDTO.setId(addressBO.getId());
 		addressDTO.setAddr(addressBO.getAddr());
-		;
 		addressDTO.setIsDefault(addressBO.getIsDefault());
 		addressDTO.setMobile(addressBO.getMobile());
 		addressDTO.setName(addressBO.getName());
 		addressDTO.setPostcode(addressBO.getPostcode());
 		addressDTO.setRegionPath(addressBO.getRegionPath());
-
+		addressDTO.setRegionName(addressBO.getRegionName());
 		return addressDTO;
 	}
 
@@ -104,11 +103,11 @@ public class AddressConverter {
 		}
 		AddressDO addressDO = new AddressDO();
 		addressDO.setAddr(addressParam.getAddr());
-		;
 		addressDO.setMobile(addressParam.getMobile());
 		addressDO.setName(addressParam.getName());
 		addressDO.setPostcode(addressParam.getPostcode());
 		addressDO.setRegionPath(addressParam.getRegionPath());
+		addressDO.setRegionName(addressParam.getRegionName());
 
 		return addressDO;
 	}
