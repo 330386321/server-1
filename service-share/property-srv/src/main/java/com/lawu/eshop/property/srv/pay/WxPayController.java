@@ -73,7 +73,7 @@ public class WxPayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 
-		String key = propertySrvConfig.getWxpayKey();
+		String key = propertySrvConfig.getWxpayKeyApp();
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
 		packageParams.put("trade_type", "APP");
 		packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrl());
@@ -88,7 +88,7 @@ public class WxPayController extends BaseController {
 			packageParams.put("mch_id", propertySrvConfig.getWxpayMchId());
 			packageParams.put("trade_type", "NATIVE");
 			packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrlPc());
-			key =propertySrvConfig.getWxpayKey();
+			key = propertySrvConfig.getWxpayKey();
 		}
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
