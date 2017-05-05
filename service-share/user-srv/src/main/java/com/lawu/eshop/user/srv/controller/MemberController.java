@@ -287,7 +287,6 @@ public class MemberController extends BaseController {
     
     /**
      * 判断用户是否注册
-     *
      * @param moblie
      * @return
      */
