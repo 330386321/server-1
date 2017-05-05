@@ -245,30 +245,30 @@ public class OrderServiceImpl implements OrderService {
 			rparam.setTradeNo(param.getTradeNo());
 			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
 				AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
-				aliPayConfigParam.setAlipay_refund_url(propertySrvConfig.getAlipay_refund_url());
-				aliPayConfigParam.setAlipay_app_id_member(propertySrvConfig.getAlipay_app_id_member());
-				aliPayConfigParam.setAlipay_private_key(propertySrvConfig.getAlipay_private_key());
-				aliPayConfigParam.setAlipay_edian_member_public_key(propertySrvConfig.getAlipay_edian_member_public_key());
-				aliPayConfigParam.setAlipay_public_key(propertySrvConfig.getAlipay_public_key());
-				aliPayConfigParam.setAlipay_partner(propertySrvConfig.getAlipay_partner());
-				aliPayConfigParam.setAlipay_https_verify_url(propertySrvConfig.getAlipay_https_verify_url());
-				aliPayConfigParam.setAlipay_sign_type(propertySrvConfig.getAlipay_sign_type());
-				aliPayConfigParam.setAlipay_input_charset(propertySrvConfig.getAlipay_input_charset());
+				aliPayConfigParam.setAlipayRefundUrl(propertySrvConfig.getAlipayRefundUrl());
+				aliPayConfigParam.setAlipayAppIdMember(propertySrvConfig.getAlipayAppIdMember());
+				aliPayConfigParam.setAlipayPrivateKey(propertySrvConfig.getAlipayPrivateKey());
+				aliPayConfigParam.setAlipayEdianMemberPublicKey(propertySrvConfig.getAlipayEdianMemberPublicKey());
+				aliPayConfigParam.setAlipayPublicKey(propertySrvConfig.getAlipayPublicKey());
+				aliPayConfigParam.setAlipayPartner(propertySrvConfig.getAlipayPartner());
+				aliPayConfigParam.setAlipayHttpsVerifyUrl(propertySrvConfig.getAlipayHttpsVerifyUrl());
+				aliPayConfigParam.setAlipaySignType(propertySrvConfig.getAlipaySignType());
+				aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
 				AlipayBusinessHandle.refund(rparam, jsonResult,aliPayConfigParam);
 
 			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
 				WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
-				wxPayConfigParam.setWxpay_app_id_member(propertySrvConfig.getWxpay_app_id_member());
-				wxPayConfigParam.setWxpay_mch_id_member(propertySrvConfig.getWxpay_mch_id_member());
-				wxPayConfigParam.setWxpay_key(propertySrvConfig.getWxpay_key());
-				wxPayConfigParam.setWxpay_app_id(propertySrvConfig.getWxpay_app_id());
-				wxPayConfigParam.setWxpay_mch_id(propertySrvConfig.getWxpay_mch_id());
-				wxPayConfigParam.setWxpay_cert_local_path_member(propertySrvConfig.getWxpay_cert_local_path_member());
-				wxPayConfigParam.setWxpay_cert_password_member(propertySrvConfig.getWxpay_cert_password_member());
-				wxPayConfigParam.setWxpay_cert_base_path(propertySrvConfig.getWxpay_cert_local_path_member());
-				wxPayConfigParam.setWxpay_refund_api(propertySrvConfig.getWxpay_refund_api());
-				wxPayConfigParam.setWxpay_https_request_class_name(propertySrvConfig.getWxpay_https_request_class_name());
-				wxPayConfigParam.setWxpay_key_app(propertySrvConfig.getWxpay_key_app());
+				wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdMember());
+				wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdMember());
+				wxPayConfigParam.setWxpayKey(propertySrvConfig.getWxpayKey());
+				wxPayConfigParam.setWxpayAppId(propertySrvConfig.getWxpayAppId());
+				wxPayConfigParam.setWxpayMchId(propertySrvConfig.getWxpayMchId());
+				wxPayConfigParam.setWxpayCertLocalPathMember(propertySrvConfig.getWxpayCertLocalPathMember());
+				wxPayConfigParam.setWxpayCertPasswordMember(propertySrvConfig.getWxpayCertPasswordMember());
+				wxPayConfigParam.setWxpayCertBasePath(propertySrvConfig.getWxpayCertLocalPathMember());
+				wxPayConfigParam.setWxpayRefundApi(propertySrvConfig.getWxpayRefundApi());
+				wxPayConfigParam.setWxpayHttpsRequestClassName(propertySrvConfig.getWxpayHttpsRequestClassName());
+				wxPayConfigParam.setWxpayKeyApp(propertySrvConfig.getWxpayKeyApp());
 				WxpayBusinessHandle.refund(rparam, jsonResult,wxPayConfigParam);
 			}
 		}

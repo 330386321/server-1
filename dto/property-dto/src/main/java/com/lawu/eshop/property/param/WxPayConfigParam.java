@@ -6,113 +6,113 @@ package com.lawu.eshop.property.param;
  */
 public class WxPayConfigParam {
 
-    private String wxpay_app_id_member;
+    private String wxpayAppIdMember;
 
-    private String wxpay_mch_id_member;
+    private String wxpayMchIdMember;
 
-    private String wxpay_key;
+    private String wxpayKey;
 
-    private String wxpay_app_id;
+    private String wxpayAppId;
 
-    private String wxpay_mch_id;
+    private String wxpayMchId;
 
-    private String wxpay_cert_local_path_member;
+    private String wxpayCertLocalPathMember;
 
-    private String wxpay_cert_password_member;
+    private String wxpayCertPasswordMember;
 
-    private String wxpay_cert_base_path;
+    private String wxpayCertBasePath;
 
-    private String wxpay_refund_api;
+    private String wxpayRefundApi;
 
-    private String wxpay_https_request_class_name;
+    private String wxpayHttpsRequestClassName;
 
-    private String wxpay_key_app;
+    private String wxpayKeyApp;
 
-    public String getWxpay_app_id_member() {
-        return wxpay_app_id_member;
+    public String getWxpayAppIdMember() {
+        return wxpayAppIdMember;
     }
 
-    public void setWxpay_app_id_member(String wxpay_app_id_member) {
-        this.wxpay_app_id_member = wxpay_app_id_member;
+    public void setWxpayAppIdMember(String wxpayAppIdMember) {
+        this.wxpayAppIdMember = wxpayAppIdMember;
     }
 
-    public String getWxpay_mch_id_member() {
-        return wxpay_mch_id_member;
+    public String getWxpayMchIdMember() {
+        return wxpayMchIdMember;
     }
 
-    public void setWxpay_mch_id_member(String wxpay_mch_id_member) {
-        this.wxpay_mch_id_member = wxpay_mch_id_member;
+    public void setWxpayMchIdMember(String wxpayMchIdMember) {
+        this.wxpayMchIdMember = wxpayMchIdMember;
     }
 
-    public String getWxpay_key() {
-        return wxpay_key;
+    public String getWxpayKey() {
+        return wxpayKey;
     }
 
-    public void setWxpay_key(String wxpay_key) {
-        this.wxpay_key = wxpay_key;
+    public void setWxpayKey(String wxpayKey) {
+        this.wxpayKey = wxpayKey;
     }
 
-    public String getWxpay_app_id() {
-        return wxpay_app_id;
+    public String getWxpayAppId() {
+        return wxpayAppId;
     }
 
-    public void setWxpay_app_id(String wxpay_app_id) {
-        this.wxpay_app_id = wxpay_app_id;
+    public void setWxpayAppId(String wxpayAppId) {
+        this.wxpayAppId = wxpayAppId;
     }
 
-    public String getWxpay_mch_id() {
-        return wxpay_mch_id;
+    public String getWxpayMchId() {
+        return wxpayMchId;
     }
 
-    public void setWxpay_mch_id(String wxpay_mch_id) {
-        this.wxpay_mch_id = wxpay_mch_id;
+    public void setWxpayMchId(String wxpayMchId) {
+        this.wxpayMchId = wxpayMchId;
     }
 
-    public String getWxpay_cert_local_path_member() {
-        return wxpay_cert_local_path_member;
+    public String getWxpayCertLocalPathMember() {
+        return wxpayCertLocalPathMember;
     }
 
-    public void setWxpay_cert_local_path_member(String wxpay_cert_local_path_member) {
-        this.wxpay_cert_local_path_member = wxpay_cert_local_path_member;
+    public void setWxpayCertLocalPathMember(String wxpayCertLocalPathMember) {
+        this.wxpayCertLocalPathMember = wxpayCertLocalPathMember;
     }
 
-    public String getWxpay_cert_password_member() {
-        return wxpay_cert_password_member;
+    public String getWxpayCertPasswordMember() {
+        return wxpayCertPasswordMember;
     }
 
-    public void setWxpay_cert_password_member(String wxpay_cert_password_member) {
-        this.wxpay_cert_password_member = wxpay_cert_password_member;
+    public void setWxpayCertPasswordMember(String wxpayCertPasswordMember) {
+        this.wxpayCertPasswordMember = wxpayCertPasswordMember;
     }
 
-    public String getWxpay_cert_base_path() {
-        return wxpay_cert_base_path;
+    public String getWxpayCertBasePath() {
+        return wxpayCertBasePath;
     }
 
-    public void setWxpay_cert_base_path(String wxpay_cert_base_path) {
-        this.wxpay_cert_base_path = wxpay_cert_base_path;
+    public void setWxpayCertBasePath(String wxpayCertBasePath) {
+        this.wxpayCertBasePath = wxpayCertBasePath;
     }
 
-    public String getWxpay_refund_api() {
-        return wxpay_refund_api;
+    public String getWxpayRefundApi() {
+        return wxpayRefundApi;
     }
 
-    public void setWxpay_refund_api(String wxpay_refund_api) {
-        this.wxpay_refund_api = wxpay_refund_api;
+    public void setWxpayRefundApi(String wxpayRefundApi) {
+        this.wxpayRefundApi = wxpayRefundApi;
     }
 
-    public String getWxpay_https_request_class_name() {
-        return wxpay_https_request_class_name;
+    public String getWxpayHttpsRequestClassName() {
+        return wxpayHttpsRequestClassName;
     }
 
-    public void setWxpay_https_request_class_name(String wxpay_https_request_class_name) {
-        this.wxpay_https_request_class_name = wxpay_https_request_class_name;
+    public void setWxpayHttpsRequestClassName(String wxpayHttpsRequestClassName) {
+        this.wxpayHttpsRequestClassName = wxpayHttpsRequestClassName;
     }
 
-    public String getWxpay_key_app() {
-        return wxpay_key_app;
+    public String getWxpayKeyApp() {
+        return wxpayKeyApp;
     }
 
-    public void setWxpay_key_app(String wxpay_key_app) {
-        this.wxpay_key_app = wxpay_key_app;
+    public void setWxpayKeyApp(String wxpayKeyApp) {
+        this.wxpayKeyApp = wxpayKeyApp;
     }
 }

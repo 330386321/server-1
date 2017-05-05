@@ -67,9 +67,9 @@ public class AlipayController extends BaseController {
 		SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
 		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
-			appId = propertySrvConfig.getAlipay_app_id_member();
+			appId = propertySrvConfig.getAlipayAppIdMember();
 		} else if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMCHANT.val)) {
-			appId = propertySrvConfig.getAlipay_app_id_business();
+			appId = propertySrvConfig.getAlipayAppIdBusiness();
 		}
 		paramMap.put("app_id", appId);
 		paramMap.put("method", "alipay.trade.app.pay");
@@ -77,7 +77,7 @@ public class AlipayController extends BaseController {
 		paramMap.put("sign_type", "RSA");
 		paramMap.put("timestamp", DateUtil.getDateTime());
 		paramMap.put("version", "1.0");
-		paramMap.put("notify_url", propertySrvConfig.getAlipay_notify_url());
+		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrl());
 
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds() + split + param.getSideUserNum();
@@ -87,7 +87,7 @@ public class AlipayController extends BaseController {
 				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
 
 		String paramStr = SignUtils.buildMapToString(paramMap);
-		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipay_private_key(),
+		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipayPrivateKey(),
 				false);
 
 		return successCreated(paramStr + "&" + sign);
@@ -115,12 +115,12 @@ public class AlipayController extends BaseController {
 		
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("service", "create_direct_pay_by_user");
-		paramMap.put("partner", propertySrvConfig.getAlipay_partner());
-		paramMap.put("seller_id", propertySrvConfig.getAlipay_seller_id());
-		paramMap.put("_input_charset", propertySrvConfig.getAlipay_input_charset());
+		paramMap.put("partner", propertySrvConfig.getAlipayPartner());
+		paramMap.put("seller_id", propertySrvConfig.getAlipaySellerId());
+		paramMap.put("_input_charset", propertySrvConfig.getAlipayInputCharset());
 		paramMap.put("payment_type", "1");
-		paramMap.put("notify_url", propertySrvConfig.getAlipay_notify_url_pc());
-		paramMap.put("return_url", propertySrvConfig.getAlipay_return_url_pc());
+		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrlPc());
+		paramMap.put("return_url", propertySrvConfig.getAlipayReturnUrlPc());
 		paramMap.put("anti_phishing_key", "");
 		paramMap.put("exter_invoke_ip", "");
 
@@ -139,9 +139,9 @@ public class AlipayController extends BaseController {
 		paramMap.put("total_fee", param.getTotalAmount());
 
 		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
-		aliPayConfigParam.setAlipay_sign_type(propertySrvConfig.getAlipay_sign_type());
-		aliPayConfigParam.setAlipay_private_key(propertySrvConfig.getAlipay_private_key());
-		aliPayConfigParam.setAlipay_input_charset(propertySrvConfig.getAlipay_input_charset());
+		aliPayConfigParam.setAlipaySignType(propertySrvConfig.getAlipaySignType());
+		aliPayConfigParam.setAlipayPrivateKey(propertySrvConfig.getAlipayPrivateKey());
+		aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
 		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认",aliPayConfigParam);
 		return successCreated(sHtmlText);
 	}

@@ -28,7 +28,7 @@ public class WxpayBusinessHandle {
 		double totalMoney = Double.valueOf(rparam.getTotalMoney()).doubleValue();
 		int refundMoneyInt = (int) (refundMoney * 100);
 		int totalMoneyInt = (int) (totalMoney * 100);
-		RefundReqData refundReqData = new RefundReqData(wxPayConfigParam.getWxpay_app_id_member(),wxPayConfigParam.getWxpay_mch_id_member(),rparam.getTradeNo(),rparam.getRefundId(), totalMoneyInt, refundMoneyInt, wxPayConfigParam.getWxpay_mch_id_member(),wxPayConfigParam.getWxpay_key_app());
+		RefundReqData refundReqData = new RefundReqData(wxPayConfigParam.getWxpayAppIdMember(),wxPayConfigParam.getWxpayMchIdMember(),rparam.getTradeNo(),rparam.getRefundId(), totalMoneyInt, refundMoneyInt, wxPayConfigParam.getWxpayMchIdMember(),wxPayConfigParam.getWxpayKeyApp());
 		WXPay.requestRefundService(refundReqData,jsonResult,wxPayConfigParam);
 	}
 	

@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.LogService;
 import com.lawu.eshop.operator.api.service.MerchantAuditService;
+import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
@@ -45,6 +46,9 @@ public class MerchantAuditController extends BaseController {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private MessageService messageService;
 
     /**
      * 门店审核列表
@@ -97,9 +101,13 @@ public class MerchantAuditController extends BaseController {
     @RequestMapping(value = "updateMerchantAudit", method = RequestMethod.POST)
     public Result updateMerchantAudit(@RequestParam @ApiParam(required = true, value = "门店审核ID") Long storeAuditId,
                                       @ModelAttribute @ApiParam MerchantAuditParam auditParam) {
+        // TODO 获取登录人ID
         Integer auditorId = 0;
         auditParam.setAuditorId(auditorId);
         Result result = merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
+
+        //发送站内消息
+
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();

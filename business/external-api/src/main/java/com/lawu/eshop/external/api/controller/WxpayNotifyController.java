@@ -70,7 +70,7 @@ public class WxpayNotifyController extends BaseController {
 		Result result = successCreated();
 
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpay_key_app())) {
+		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
 			String return_code = packageParams.get("return_code") == null ? ""
 					: packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {
@@ -160,7 +160,7 @@ public class WxpayNotifyController extends BaseController {
 		Result result = successCreated();
 
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
-		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpay_key())) {
+		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKey())) {
 			String return_code = packageParams.get("return_code") == null ? ""
 					: packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {

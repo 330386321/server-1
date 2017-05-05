@@ -47,11 +47,11 @@ public class AlipayNotify {
     	String responseTxt = "false";
 		if(params.get("notify_id") != null) {
 			String notify_id = params.get("notify_id");
-			responseTxt = verifyResponse(notify_id, aliPayConfigParam.getAlipay_partner(), aliPayConfigParam.getAlipay_https_verify_url());
+			responseTxt = verifyResponse(notify_id, aliPayConfigParam.getAlipayPartner(), aliPayConfigParam.getAlipayHttpsVerifyUrl());
 		}
 	    String sign = "";
 	    if(params.get("sign") != null) {sign = params.get("sign");}
-	    boolean isSign = getSignVeryfy(params, sign,aliPayConfigParam.getAlipay_public_key(),aliPayConfigParam.getAlipay_sign_type(),aliPayConfigParam.getAlipay_input_charset());
+	    boolean isSign = getSignVeryfy(params, sign,aliPayConfigParam.getAlipayPublicKey(),aliPayConfigParam.getAlipaySignType(),aliPayConfigParam.getAlipayInputCharset());
 
         //写日志记录（若要调试，请取消下面两行注释）
 //        String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);

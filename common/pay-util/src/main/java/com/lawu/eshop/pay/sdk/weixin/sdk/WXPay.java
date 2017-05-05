@@ -44,7 +44,7 @@ public class WXPay {
      * @throws Exception
      */
     public static String requestRefundService(RefundReqData refundReqData, JsonResult jsonResult, WxPayConfigParam wxPayConfigParam) throws Exception{
-        return new RefundService(wxPayConfigParam.getWxpay_refund_api(),wxPayConfigParam.getWxpay_https_request_class_name()).request(refundReqData,jsonResult, wxPayConfigParam);
+        return new RefundService(wxPayConfigParam.getWxpayRefundApi(),wxPayConfigParam.getWxpayHttpsRequestClassName()).request(refundReqData,jsonResult, wxPayConfigParam);
     }
 
     

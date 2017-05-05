@@ -72,9 +72,9 @@ public class HttpsRequest implements IServiceRequest {
 			KeyManagementException {
 
 		KeyStore keyStore = KeyStore.getInstance("PKCS12");
-		FileInputStream instream = new FileInputStream(new File(wxPayConfigParam.getWxpay_cert_base_path()));// 加载本地的证书进行https加密传输
+		FileInputStream instream = new FileInputStream(new File(wxPayConfigParam.getWxpayCertBasePath()));// 加载本地的证书进行https加密传输
 		try {
-			keyStore.load(instream, wxPayConfigParam.getWxpay_cert_password_member().toCharArray());// 设置证书密码
+			keyStore.load(instream, wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
 		} catch (CertificateException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
@@ -85,7 +85,7 @@ public class HttpsRequest implements IServiceRequest {
 
 		// Trust own CA and all self-signed certs
 		SSLContext sslcontext = SSLContexts.custom()
-				.loadKeyMaterial(keyStore, wxPayConfigParam.getWxpay_cert_password_member().toCharArray()).build();
+				.loadKeyMaterial(keyStore, wxPayConfigParam.getWxpayCertPasswordMember().toCharArray()).build();
 		// Allow TLSv1 protocol only
 		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" }, null,
 				SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);

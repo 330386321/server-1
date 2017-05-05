@@ -69,11 +69,11 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String member_public_key = externalApiConfig.getAlipay_edian_member_public_key();
-		String merchant_public_key = externalApiConfig.getAlipay_edian_business_public_key();
-		String input_charset = externalApiConfig.getAlipay_input_charset();
-		String app_id_member = externalApiConfig.getAlipay_app_id_member();
-		String app_id_business = externalApiConfig.getAlipay_app_id_business();
+		String member_public_key = externalApiConfig.getAlipayEdianMemberPublicKey();
+		String merchant_public_key = externalApiConfig.getAlipayEdianBusinessPublicKey();
+		String input_charset = externalApiConfig.getAlipayInputCharset();
+		String app_id_member = externalApiConfig.getAlipayAppIdMember();
+		String app_id_business = externalApiConfig.getAlipayAppIdBusiness();
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -185,8 +185,8 @@ public class AlipayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
-		String alipay_pc_public_key = externalApiConfig.getAlipay_public_key();
-		String app_id_business = externalApiConfig.getAlipay_app_id_business();
+		String alipay_pc_public_key = externalApiConfig.getAlipayPublicKey();
+		String app_id_business = externalApiConfig.getAlipayAppIdBusiness();
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -211,11 +211,11 @@ public class AlipayNotifyController extends BaseController {
 		String buyer_email = new String(request.getParameter("buyer_email").getBytes("ISO-8859-1"), "UTF-8");
 
 		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
-		aliPayConfigParam.setAlipay_public_key(alipay_pc_public_key);
-		aliPayConfigParam.setAlipay_partner(externalApiConfig.getAlipay_partner());
-		aliPayConfigParam.setAlipay_https_verify_url(externalApiConfig.getAlipay_https_verify_url());
-		aliPayConfigParam.setAlipay_sign_type(externalApiConfig.getAlipay_sign_type());
-		aliPayConfigParam.setAlipay_input_charset(externalApiConfig.getAlipay_input_charset());
+		aliPayConfigParam.setAlipayPublicKey(alipay_pc_public_key);
+		aliPayConfigParam.setAlipayPartner(externalApiConfig.getAlipayPartner());
+		aliPayConfigParam.setAlipayHttpsVerifyUrl(externalApiConfig.getAlipayHttpsVerifyUrl());
+		aliPayConfigParam.setAlipaySignType(externalApiConfig.getAlipaySignType());
+		aliPayConfigParam.setAlipayInputCharset(externalApiConfig.getAlipayInputCharset());
 
 		boolean b = false;
 		if (!app_id_business.equals(app_id)) {

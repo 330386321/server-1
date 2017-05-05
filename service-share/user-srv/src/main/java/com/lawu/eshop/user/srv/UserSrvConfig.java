@@ -37,12 +37,6 @@ public class UserSrvConfig {
     @Value(value = "${solr_merchant_core}")
     private String solrMerchantCore;
 
-    @Value(value = "${solr_product_core}")
-    private String solrProductCore;
-
-    @Value(value = "${solr_ad_core}")
-    private String solrAdCore;
-
     @Value(value = "${default_headimg}")
     private String defaultHeadimg;
 
@@ -80,14 +74,6 @@ public class UserSrvConfig {
 
     public String getSolrMerchantCore() {
         return solrMerchantCore;
-    }
-
-    public String getSolrProductCore() {
-        return solrProductCore;
-    }
-
-    public String getSolrAdCore() {
-        return solrAdCore;
     }
 
     public String getDefaultHeadimg() {

@@ -3,6 +3,7 @@ package com.lawu.eshop.operator.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.OperatorMessageDTO;
+import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageQueryParam;
 import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
 import com.lawu.eshop.mall.param.OperatorMessageParam;
@@ -27,4 +28,13 @@ public interface MessageService {
 
     @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
     Result delMessageByIds(@RequestParam("ids") String ids);
+
+    /**
+     * 插入站内消息
+     *
+     * @param userNum          用户编号
+     * @param messageInfoParam 消息参数
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "message/saveMessage/{userNum}")
+    Result saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute MessageInfoParam messageInfoParam);
 }

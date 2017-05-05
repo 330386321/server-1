@@ -6,93 +6,93 @@ package com.lawu.eshop.property.param;
  */
 public class AliPayConfigParam {
 
-    private String alipay_refund_url;
+    private String alipayRefundUrl;
 
-    private String alipay_app_id_member;
+    private String alipayAppIdMember;
 
-    private String alipay_private_key;
+    private String alipayPrivateKey;
 
-    private String alipay_edian_member_public_key;
+    private String alipayEdianMemberPublicKey;
 
-    private String alipay_public_key;
+    private String alipayPublicKey;
 
-    private String alipay_partner;
+    private String alipayPartner;
 
-    private String alipay_https_verify_url;
+    private String alipayHttpsVerifyUrl;
 
-    private String alipay_sign_type;
+    private String alipaySignType;
 
-    private String alipay_input_charset;
+    private String alipayInputCharset;
 
-    public String getAlipay_refund_url() {
-        return alipay_refund_url;
+    public String getAlipayRefundUrl() {
+        return alipayRefundUrl;
     }
 
-    public void setAlipay_refund_url(String alipay_refund_url) {
-        this.alipay_refund_url = alipay_refund_url;
+    public void setAlipayRefundUrl(String alipayRefundUrl) {
+        this.alipayRefundUrl = alipayRefundUrl;
     }
 
-    public String getAlipay_app_id_member() {
-        return alipay_app_id_member;
+    public String getAlipayAppIdMember() {
+        return alipayAppIdMember;
     }
 
-    public void setAlipay_app_id_member(String alipay_app_id_member) {
-        this.alipay_app_id_member = alipay_app_id_member;
+    public void setAlipayAppIdMember(String alipayAppIdMember) {
+        this.alipayAppIdMember = alipayAppIdMember;
     }
 
-    public String getAlipay_private_key() {
-        return alipay_private_key;
+    public String getAlipayPrivateKey() {
+        return alipayPrivateKey;
     }
 
-    public void setAlipay_private_key(String alipay_private_key) {
-        this.alipay_private_key = alipay_private_key;
+    public void setAlipayPrivateKey(String alipayPrivateKey) {
+        this.alipayPrivateKey = alipayPrivateKey;
     }
 
-    public String getAlipay_edian_member_public_key() {
-        return alipay_edian_member_public_key;
+    public String getAlipayEdianMemberPublicKey() {
+        return alipayEdianMemberPublicKey;
     }
 
-    public void setAlipay_edian_member_public_key(String alipay_edian_member_public_key) {
-        this.alipay_edian_member_public_key = alipay_edian_member_public_key;
+    public void setAlipayEdianMemberPublicKey(String alipayEdianMemberPublicKey) {
+        this.alipayEdianMemberPublicKey = alipayEdianMemberPublicKey;
     }
 
-    public String getAlipay_public_key() {
-        return alipay_public_key;
+    public String getAlipayPublicKey() {
+        return alipayPublicKey;
     }
 
-    public void setAlipay_public_key(String alipay_public_key) {
-        this.alipay_public_key = alipay_public_key;
+    public void setAlipayPublicKey(String alipayPublicKey) {
+        this.alipayPublicKey = alipayPublicKey;
     }
 
-    public String getAlipay_partner() {
-        return alipay_partner;
+    public String getAlipayPartner() {
+        return alipayPartner;
     }
 
-    public void setAlipay_partner(String alipay_partner) {
-        this.alipay_partner = alipay_partner;
+    public void setAlipayPartner(String alipayPartner) {
+        this.alipayPartner = alipayPartner;
     }
 
-    public String getAlipay_https_verify_url() {
-        return alipay_https_verify_url;
+    public String getAlipayHttpsVerifyUrl() {
+        return alipayHttpsVerifyUrl;
     }
 
-    public void setAlipay_https_verify_url(String alipay_https_verify_url) {
-        this.alipay_https_verify_url = alipay_https_verify_url;
+    public void setAlipayHttpsVerifyUrl(String alipayHttpsVerifyUrl) {
+        this.alipayHttpsVerifyUrl = alipayHttpsVerifyUrl;
     }
 
-    public String getAlipay_sign_type() {
-        return alipay_sign_type;
+    public String getAlipaySignType() {
+        return alipaySignType;
     }
 
-    public void setAlipay_sign_type(String alipay_sign_type) {
-        this.alipay_sign_type = alipay_sign_type;
+    public void setAlipaySignType(String alipaySignType) {
+        this.alipaySignType = alipaySignType;
     }
 
-    public String getAlipay_input_charset() {
-        return alipay_input_charset;
+    public String getAlipayInputCharset() {
+        return alipayInputCharset;
     }
 
-    public void setAlipay_input_charset(String alipay_input_charset) {
-        this.alipay_input_charset = alipay_input_charset;
+    public void setAlipayInputCharset(String alipayInputCharset) {
+        this.alipayInputCharset = alipayInputCharset;
     }
 }

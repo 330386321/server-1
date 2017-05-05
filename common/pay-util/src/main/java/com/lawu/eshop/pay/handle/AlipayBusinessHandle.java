@@ -26,7 +26,7 @@ public class AlipayBusinessHandle {
 	 * @throws Exception 
 	 */
 	public static void refund(ThirdPayRefundParam rparam, JsonResult jsonResult, AliPayConfigParam aliPayConfigParam) throws Exception {
-		AlipayClient alipayClient = new DefaultAlipayClient(aliPayConfigParam.getAlipay_refund_url(),aliPayConfigParam.getAlipay_app_id_member(),aliPayConfigParam.getAlipay_private_key(),"JSON","utf-8",aliPayConfigParam.getAlipay_edian_member_public_key(),"RSA");
+		AlipayClient alipayClient = new DefaultAlipayClient(aliPayConfigParam.getAlipayRefundUrl(),aliPayConfigParam.getAlipayAppIdMember(),aliPayConfigParam.getAlipayPrivateKey(),"JSON","utf-8",aliPayConfigParam.getAlipayEdianMemberPublicKey(),"RSA");
 		AlipayTradeRefundRequest req = new AlipayTradeRefundRequest();
 		req.setBizContent("{" +
 		"    \"trade_no\":\""+rparam.getTradeNo()+"\"," +

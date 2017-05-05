@@ -82,13 +82,13 @@ public class AlipaySubmit {
 	 */
 	public static String buildRequest(Map<String, String> sParaTemp, String strMethod, String strButtonName,AliPayConfigParam aliPayConfigParam) {
 		// 待请求参数数组
-		Map<String, String> sPara = buildRequestPara(sParaTemp,aliPayConfigParam.getAlipay_sign_type(), aliPayConfigParam.getAlipay_private_key(), aliPayConfigParam.getAlipay_input_charset());
+		Map<String, String> sPara = buildRequestPara(sParaTemp,aliPayConfigParam.getAlipaySignType(), aliPayConfigParam.getAlipayPrivateKey(), aliPayConfigParam.getAlipayInputCharset());
 		List<String> keys = new ArrayList<String>(sPara.keySet());
 
 		StringBuffer sbHtml = new StringBuffer();
 
 		sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW
-				+ "_input_charset=" + aliPayConfigParam.getAlipay_input_charset() + "\" method=\"" + strMethod + "\">");
+				+ "_input_charset=" + aliPayConfigParam.getAlipayInputCharset() + "\" method=\"" + strMethod + "\">");
 
 		for (int i = 0; i < keys.size(); i++) {
 			String name = (String) keys.get(i);
