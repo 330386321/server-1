@@ -24,7 +24,8 @@ then
 
     # 备份上一次的文件（加上当前日期）
     cd ${DEPLOY_READY_ROOT_DIR}
-    mv ${DEPLOY_READY_FOLDER} ${DEPLOY_READY_FOLDER}${CUR_DATE}
+    rm -fr ${DEPLOY_READY_FOLDER}
+    #mv ${DEPLOY_READY_FOLDER} ${DEPLOY_READY_FOLDER}${CUR_DATE}
 fi
 
 
