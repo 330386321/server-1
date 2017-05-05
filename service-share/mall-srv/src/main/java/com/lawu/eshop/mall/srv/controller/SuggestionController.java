@@ -69,5 +69,19 @@ public class SuggestionController extends BaseController {
         pages.setCurrentPage(suggestionBOPage.getCurrentPage());
         return successGet(pages);
     }
+    
+    /**
+     * 删除反馈意见
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "delSuggestion/{id}", method = RequestMethod.DELETE)
+    public Result delSuggestion(@RequestParam Long id) {
+    	 if(id == null){
+             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+         }
+    	 suggestionService.delSuggestion(id);
+         return successDelete();
+    }
 
 }

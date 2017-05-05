@@ -73,4 +73,10 @@ public class SuggestionServiceImpl implements SuggestionService {
         return page;
     }
 
+	@Override
+	@Transactional
+	public void delSuggestion(Long id) {
+		suggestionDOMapper.deleteByPrimaryKey(id.intValue());
+	}
+
 }

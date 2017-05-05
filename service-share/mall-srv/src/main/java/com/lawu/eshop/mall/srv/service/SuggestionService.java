@@ -27,4 +27,10 @@ public interface SuggestionService {
 	 * @return
 	 */
     Page<SuggestionBO> getSuggestionList(SuggestionListParam pageParam);
+    
+    /**
+     * 删除反馈意见
+     * @param id
+     */
+    void delSuggestion(Long id);
 }

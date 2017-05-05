@@ -72,6 +72,10 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	@Qualifier("adUserAddPointTransactionMainServiceImpl")
     private TransactionMainService adtransactionMainAddService;
+	
+	@Autowired
+	@Qualifier("userClickAdTransactionMainServiceImpl")
+    private TransactionMainService userClicktransactionMainAddService;
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
@@ -453,7 +457,7 @@ public class AdServiceImpl implements AdService {
 			memberAdRecordD.setGmtCreate(new Date());
 			memberAdRecordD.setClickDate(new Date());
 			i=memberAdRecordDOMapper.insert(memberAdRecordD);
-			adtransactionMainAddService.sendNotice(adDO.getId());
+			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		}else if(hits==adDO.getAdCount()){
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 			adDOMapper.updateByPrimaryKey(adDO);

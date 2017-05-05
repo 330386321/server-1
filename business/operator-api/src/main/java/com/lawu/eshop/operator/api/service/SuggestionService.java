@@ -6,6 +6,7 @@ import com.lawu.eshop.mall.dto.SuggestionDTO;
 import com.lawu.eshop.mall.param.SuggestionListParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,4 +25,12 @@ public interface SuggestionService {
      */
     @RequestMapping(value = "suggestion/getSuggestionList", method = RequestMethod.POST)
     public Result<Page<SuggestionDTO>> getSuggestionList(@RequestBody SuggestionListParam pageParam);
+    
+    /**
+     * 删除反馈意见
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "suggestion/delSuggestion/{id}",method = RequestMethod.DELETE)
+    public Result delSuggestion(@PathVariable("id") Long id);
 }
