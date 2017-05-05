@@ -19,6 +19,9 @@ public class ShoppingProductDTO {
     @ApiModelProperty(value = "今日推荐")
     private List<ProductSearchDTO> recommendProduct;
 
+    @ApiModelProperty(value = "热门商品")
+    private List<ProductSearchDTO> hotProduct;
+
     @ApiModelProperty(value = "E店必购")
     private List<ProductSearchDTO> buyProduct;
 
@@ -74,5 +77,13 @@ public class ShoppingProductDTO {
 
     public void setRecommendProductCategoryDTOS(List<RecommendProductCategoryDTO> recommendProductCategoryDTOS) {
         this.recommendProductCategoryDTOS = recommendProductCategoryDTOS;
+    }
+
+    public List<ProductSearchDTO> getHotProduct() {
+        return hotProduct;
+    }
+
+    public void setHotProduct(List<ProductSearchDTO> hotProduct) {
+        this.hotProduct = hotProduct;
     }
 }

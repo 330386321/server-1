@@ -141,6 +141,26 @@ public class ProductSolrController extends BaseController {
         }
         shoppingProductDTO.setRecommendProduct(productSearchDTOS);
 
+        //热门商品
+        productSearchDTOS = new ArrayList<>();
+        Result<List<AdPlatformDTO>> hotResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_HOT);
+        if (isSuccess(hotResult)) {
+            for (AdPlatformDTO adPlatformDTO : hotResult.getModel()) {
+                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
+                if (isSuccess(productInfoDTOResult)) {
+                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
+                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformDTO.getTitle());
+                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
+                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
+                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+                    productSearchDTOS.add(productSearchDTO);
+                }
+            }
+        }
+        shoppingProductDTO.setHotProduct(productSearchDTOS);
+
         //E店必购
         productSearchDTOS = new ArrayList<>();
         Result<List<AdPlatformDTO>> buyResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BUY);
