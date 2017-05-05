@@ -132,7 +132,7 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	 * 退款描述
 	 */
 	@ApiModelProperty(value = "退款描述", required = false)
-	private String description;
+	private String describe;
 
 	/**
 	 * 凭证图片
@@ -295,13 +295,13 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	public void setCountdown(Long countdown) {
 		this.countdown = countdown;
 	}
-
-	public String getDescription() {
-		return description;
+	
+	public String getDescribe() {
+		return describe;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescribe(String describe) {
+		this.describe = describe;
 	}
 
 	public String getVoucherPicture() {

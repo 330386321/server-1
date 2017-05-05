@@ -53,6 +53,7 @@ public class ShoppingRefundDetailConverter {
 		BeanUtils.copyProperties(shoppingOrderItemExtendBO.getShoppingRefundDetail(), rtn);
 		rtn.setShoppingOrderId(shoppingOrderItemExtendBO.getShoppingOrderId());
 		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		rtn.setDescribe(shoppingOrderItemExtendBO.getShoppingRefundDetail().getDescription());
 		
 		return rtn;
 	}

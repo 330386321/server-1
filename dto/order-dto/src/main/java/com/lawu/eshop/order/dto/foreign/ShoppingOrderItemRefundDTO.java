@@ -78,6 +78,12 @@ public class ShoppingOrderItemRefundDTO implements Serializable {
 	@ApiModelProperty(value = "购物订单项id", required = true)
 	private Long id;
 	
+	/**
+	 * 是否支持无理由退货
+	 */
+	@ApiModelProperty(value = "是否支持无理由退货", required = true)
+	private Boolean isNoReasonReturn;
+	
 	public Long getMerchantId() {
 		return merchantId;
 	}
@@ -164,6 +170,14 @@ public class ShoppingOrderItemRefundDTO implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Boolean getIsNoReasonReturn() {
+		return isNoReasonReturn;
+	}
+
+	public void setIsNoReasonReturn(Boolean isNoReasonReturn) {
+		this.isNoReasonReturn = isNoReasonReturn;
 	}
 	
 }

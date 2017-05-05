@@ -201,6 +201,7 @@ public class ShoppingOrderItemExtendConverter {
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());
 			rtn.setMerchantName(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantName());
+			rtn.setIsNoReasonReturn(shoppingOrderItemExtendBO.getShoppingOrder().getIsNoReasonReturn());
 		}
 		if (shoppingOrderItemExtendBO.getShoppingRefundDetail() != null) {
 			rtn.setShoppingRefundDetailId(shoppingOrderItemExtendBO.getShoppingRefundDetail().getId());
