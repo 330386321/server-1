@@ -1,15 +1,18 @@
 package com.lawu.eshop.property.srv.service.impl;
 
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +23,7 @@ import java.util.Date;
 
 /**
  * <p>
- * Description:与积分相关业务处理(加、减)
+ * Description:与积分/余额相关业务处理(加、减)
  * </p>
  *
  * @author Yangqh
@@ -31,12 +34,12 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	@Autowired
 	private PointDetailService pointDetailService;
-
 	@Autowired
 	private PropertyInfoService propertyInfoService;
-
 	@Autowired
 	private FansInviteDetailDOMapper fansInviteDetailDOMapper;
+	@Autowired
+	private TransactionDetailService transactionDetailService;
 
 	@Override
 	@Transactional
@@ -110,6 +113,64 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		BigDecimal point = new BigDecimal(param.getPoint());
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "P", "A", point);
 
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int doHanlderAddBalance(PropertyInfoDataParam param) {
+		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setUserNum(param.getUserNum());
+		tdsParam.setTransactionAccount("");
+		if (param.getMemberTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
+		} else if (param.getMerchantTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
+		}
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+		tdsParam.setAmount(new BigDecimal(param.getPoint()));
+		tdsParam.setBizId(0L);
+		tdsParam.setThirdTransactionNum("");
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		transactionDetailService.save(tdsParam);
+		
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", point);
+		
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int doHanlderMinusBalance(PropertyInfoDataParam param) {
+		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getPoint());
+		if (retCode != ResultCode.SUCCESS) {
+			return retCode;
+		}
+		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setUserNum(param.getUserNum());
+		tdsParam.setTransactionAccount("");
+		if (param.getMemberTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
+		} else if (param.getMerchantTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
+		}
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+		tdsParam.setAmount(new BigDecimal(param.getPoint()));
+		tdsParam.setBizId(0L);
+		tdsParam.setThirdTransactionNum("");
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		transactionDetailService.save(tdsParam);
+		
+		// 更新用户资产
+		BigDecimal point = new BigDecimal(param.getPoint());
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", point);
+		
 		return ResultCode.SUCCESS;
 	}
 }

@@ -27,4 +27,17 @@ public interface PropertyInfoDataService {
 	 */
 	int doHanlderAddPoint(PropertyInfoDataParam param);
 	
+	/**
+	 * 业务消费加余额
+	 * @param param
+	 * @return
+	 */
+	int doHanlderAddBalance(PropertyInfoDataParam param);
+	
+	/**
+	 * 业务消费减余额
+	 * @param param
+	 * @return
+	 */
+	int doHanlderMinusBalance(PropertyInfoDataParam param);
 }
