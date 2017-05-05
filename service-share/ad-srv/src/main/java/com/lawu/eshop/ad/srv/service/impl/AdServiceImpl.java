@@ -5,6 +5,7 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -72,6 +73,9 @@ public class AdServiceImpl implements AdService {
 	@Qualifier("adUserAddPointTransactionMainServiceImpl")
     private TransactionMainService adtransactionMainAddService;
 
+	@Autowired
+	private AdSrvConfig adSrvConfig;
+
 	/**
 	 * 商家发布E赚
 	 * @param adSaveParam
@@ -134,7 +138,7 @@ public class AdServiceImpl implements AdService {
 		//将广告添加到solr中
 		if(adDO.getType()==1){
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
 		return i;
 	}
@@ -289,7 +293,7 @@ public class AdServiceImpl implements AdService {
 		AdDO ad= adDOMapper.selectByPrimaryKey(id);
 		matransactionMainAddService.sendNotice(ad.getId());
 		//删除solr中的数据
-		SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
+		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		return i;
 	}
 	
@@ -307,7 +311,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setStatus(AdStatusEnum.AD_STATUS_DELETE.val);
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		//删除solr中的数据
-		SolrUtil.delSolrDocsById(adDO.getId(), SolrUtil.SOLR_AD_CORE);
+		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		return i;
 	}
 
@@ -457,7 +461,7 @@ public class AdServiceImpl implements AdService {
 			SolrInputDocument document = new SolrInputDocument();
 			document.addField("id", adDO.getId());
 			document.addField("status_s", 1);
-		    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}  
 		return i;
 	}
@@ -477,7 +481,7 @@ public class AdServiceImpl implements AdService {
 		}
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-	    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+	    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		return i;
 	}
 
@@ -559,7 +563,7 @@ public class AdServiceImpl implements AdService {
 					SolrInputDocument document = new SolrInputDocument();
 					document.addField("id", adDO.getId());
 					document.addField("status_s", 3);
-				    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_AD_CORE);
+				    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 				}
 			}
 		

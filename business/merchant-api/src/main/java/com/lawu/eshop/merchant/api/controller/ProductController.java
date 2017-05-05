@@ -1,29 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
@@ -36,6 +12,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.ProductService;
 import com.lawu.eshop.product.constant.ProductImagePrefix;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
@@ -47,11 +24,21 @@ import com.lawu.eshop.product.param.EditProductParam_bak;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.query.ProductQuery;
 import com.lawu.eshop.utils.StringUtil;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.*;
 
 /**
  * @author Yangqh
@@ -66,6 +53,9 @@ public class ProductController extends BaseController {
 
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private MerchantApiConfig merchantApiConfig;
 
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
@@ -140,7 +130,7 @@ public class ProductController extends BaseController {
 		try {
 			parts = request.getParts();
 			for (Part part : parts) {
-				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part);
+				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part, merchantApiConfig.getImageUploadUrl());
 				String resultFlag = map.get("resultFlag");
 				if (!"0".equals(resultFlag)) {
 					return successCreated(resultFlag);
@@ -272,7 +262,7 @@ public class ProductController extends BaseController {
 			parts = request.getParts();
 			
 			for (Part part : parts) {
-				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part);
+				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part, merchantApiConfig.getImageUploadUrl());
 				String resultFlag = map.get("resultFlag");
 				if (!"0".equals(resultFlag)) {
 					return successCreated(resultFlag);

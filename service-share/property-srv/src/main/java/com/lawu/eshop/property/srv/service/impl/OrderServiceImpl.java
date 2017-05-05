@@ -168,7 +168,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	@Transactional
-	public int doRefundScopeInside(OrderRefundDataParam param,String certPath) throws Exception {
+	public int doRefundScopeInside(OrderRefundDataParam param) throws Exception {
 
 		// 商家同意订单退款（确认收货后7天内）,区分余额支付和第三方支付
 		// （校验：区分是否是最后一次退款，校验冻结资金记录是否存在和数量，退款金额不能大于冻结金额）
@@ -259,16 +259,16 @@ public class OrderServiceImpl implements OrderService {
 			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
 				WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
 				wxPayConfigParam.setWxpay_app_id_member(propertySrvConfig.getWxpay_app_id_member());
-				wxPayConfigParam.setWxpay_mch_id_member(wxPayConfigParam.getWxpay_mch_id_member());
-				wxPayConfigParam.setWxpay_key(wxPayConfigParam.getWxpay_key());
-				wxPayConfigParam.setWxpay_app_id(wxPayConfigParam.getWxpay_app_id());
-				wxPayConfigParam.setWxpay_mch_id(wxPayConfigParam.getWxpay_mch_id());
-				wxPayConfigParam.setWxpay_cert_local_path_member(wxPayConfigParam.getWxpay_cert_local_path_member());
-				wxPayConfigParam.setWxpay_cert_password_member(wxPayConfigParam.getWxpay_cert_password_member());
-				wxPayConfigParam.setWxpay_cert_base_path(certPath);
-				wxPayConfigParam.setWxpay_refund_api(wxPayConfigParam.getWxpay_refund_api());
-				wxPayConfigParam.setWxpay_https_request_class_name(wxPayConfigParam.getWxpay_https_request_class_name());
-				wxPayConfigParam.setWxpay_key_app(wxPayConfigParam.getWxpay_key_app());
+				wxPayConfigParam.setWxpay_mch_id_member(propertySrvConfig.getWxpay_mch_id_member());
+				wxPayConfigParam.setWxpay_key(propertySrvConfig.getWxpay_key());
+				wxPayConfigParam.setWxpay_app_id(propertySrvConfig.getWxpay_app_id());
+				wxPayConfigParam.setWxpay_mch_id(propertySrvConfig.getWxpay_mch_id());
+				wxPayConfigParam.setWxpay_cert_local_path_member(propertySrvConfig.getWxpay_cert_local_path_member());
+				wxPayConfigParam.setWxpay_cert_password_member(propertySrvConfig.getWxpay_cert_password_member());
+				wxPayConfigParam.setWxpay_cert_base_path(propertySrvConfig.getWxpay_cert_local_path_member());
+				wxPayConfigParam.setWxpay_refund_api(propertySrvConfig.getWxpay_refund_api());
+				wxPayConfigParam.setWxpay_https_request_class_name(propertySrvConfig.getWxpay_https_request_class_name());
+				wxPayConfigParam.setWxpay_key_app(propertySrvConfig.getWxpay_key_app());
 				WxpayBusinessHandle.refund(rparam, jsonResult,wxPayConfigParam);
 			}
 		}

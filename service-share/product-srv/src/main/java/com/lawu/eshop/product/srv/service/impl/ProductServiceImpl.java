@@ -14,6 +14,7 @@ import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductModelBO;
@@ -66,6 +67,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDOMapperExtend productDOMapperExtend;
+
+    @Autowired
+    private ProductSrvConfig productSrvConfig;
 
     @Autowired
     @Qualifier("delProductCommentTransactionMainServiceImpl")
@@ -139,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
             if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DEL.val
                     || productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DOWN.val) {
                 for (String id : idArray) {
-                    SolrUtil.delSolrDocsById(Long.valueOf(id), SolrUtil.SOLR_PRODUCT_CORE);
+                    SolrUtil.delSolrDocsById(Long.valueOf(id), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
                 }
             } else if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
                 for (String id : idArray) {
@@ -181,7 +185,7 @@ public class ProductServiceImpl implements ProductService {
                             document.addField("categoryId_is", categoryId);
                         }
                     }
-                    SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+                    SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
                 }
             }
         }
@@ -555,7 +559,7 @@ public class ProductServiceImpl implements ProductService {
                 document.addField("categoryId_is", categoryId);
             }
         }
-        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
     }
 
 
@@ -773,7 +777,7 @@ public class ProductServiceImpl implements ProductService {
                 document.addField("categoryId_is", categoryId);
             }
         }
-        SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
     }
 
 
@@ -855,7 +859,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setAverageDailySales(averageDailySales);
         productDOMapper.updateByPrimaryKeySelective(productDO);
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if (solrDocument != null) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
@@ -875,7 +879,7 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("categoryId_is", categoryId);
                 }
             }
-            SolrUtil.addSolrDocs(document, SolrUtil.SOLR_PRODUCT_CORE);
+            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         }
     }
 

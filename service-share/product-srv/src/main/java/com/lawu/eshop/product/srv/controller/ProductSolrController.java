@@ -8,11 +8,13 @@ import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.dto.ProductSearchWordDTO;
 import com.lawu.eshop.product.param.ProductSearchParam;
 import com.lawu.eshop.product.param.ProductSearchRealParam;
+import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.solr.SolrUtil;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "productSolr/")
 public class ProductSolrController extends BaseController {
+
+    @Autowired
+    private ProductSrvConfig productSrvConfig;
 
     /**
      * 根据商品类别查询商品信息
@@ -41,7 +46,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -67,7 +72,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -92,7 +97,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(productSearchParam.getOffset());
         query.setRows(productSearchParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -118,7 +123,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_PRODUCT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -145,7 +150,7 @@ public class ProductSolrController extends BaseController {
         query.set("terms.fl", "name_s");
         query.set("terms.regex", name + "+.*");
         query.set("terms.regex.flag", "case_insensitive");
-        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
 
         List<ProductSearchWordDTO> productSearchWordDTOS = new ArrayList<>();
         if (termsResponse != null) {

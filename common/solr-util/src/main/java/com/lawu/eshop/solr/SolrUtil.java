@@ -22,7 +22,7 @@ public class SolrUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SolrUtil.class);
 
-    //solr服务器地址
+    /*//solr服务器地址
     private static final String SOLR_URL = "http://192.168.1.22:8983/solr/";
 
     //商家索引库
@@ -32,17 +32,18 @@ public class SolrUtil {
     public static final String SOLR_PRODUCT_CORE = "product";
 
     //广告索引库
-    public static final String SOLR_AD_CORE = "ad";
+    public static final String SOLR_AD_CORE = "ad";*/
 
 
     /**
      * 获取solr客户端
      *
+     * @param solrUrl
      * @param solrCore
      * @return
      */
-    private static HttpSolrClient getSolrClient(String solrCore) {
-        HttpSolrClient solrClient = new HttpSolrClient(SOLR_URL + solrCore);
+    private static HttpSolrClient getSolrClient(String solrUrl, String solrCore) {
+        HttpSolrClient solrClient = new HttpSolrClient(solrUrl + solrCore);
         return solrClient;
     }
 
@@ -65,11 +66,12 @@ public class SolrUtil {
      * 新增
      *
      * @param document
+     * @param solrUrl
      * @param solrCore
      * @return
      */
-    public static boolean addSolrDocs(SolrInputDocument document, String solrCore) {
-        HttpSolrClient client = getSolrClient(solrCore);
+    public static boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl, solrCore);
         try {
             UpdateResponse rspAdd = client.add(document);
             UpdateResponse rspCommit = client.commit();
@@ -87,11 +89,12 @@ public class SolrUtil {
      * 根据ID删除
      *
      * @param id
+     * @param solrUrl
      * @param solrCore
      * @return
      */
-    public static boolean delSolrDocsById(Long id, String solrCore) {
-        HttpSolrClient client = getSolrClient(solrCore);
+    public static boolean delSolrDocsById(Long id, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl,solrCore);
         try {
             UpdateResponse rspAdd = client.deleteById(String.valueOf(id));
             UpdateResponse rspCommit = client.commit();
@@ -109,12 +112,13 @@ public class SolrUtil {
      * 根据条件查询
      *
      * @param query
+     * @param solrUrl
      * @param solrCore
      * @return
      * @throws Exception
      */
-    public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrCore) {
-        HttpSolrClient client = getSolrClient(solrCore);
+    public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl, solrCore);
         try {
             QueryResponse rsp = client.query(query);
             SolrDocumentList docsList = rsp.getResults();
@@ -130,11 +134,12 @@ public class SolrUtil {
      * 根据主键查询
      *
      * @param id
+     * @param solrUrl
      * @param solrCore
      * @return
      */
-    public static SolrDocument getSolrDocsById(Long id, String solrCore) {
-        HttpSolrClient client = getSolrClient(solrCore);
+    public static SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl, solrCore);
         SolrDocument solrDocument = null;
         SolrQuery query = new SolrQuery();
         query.setQuery("id:" + id);
@@ -155,11 +160,12 @@ public class SolrUtil {
      * 词频统计
      *
      * @param query
+     * @param solrUrl
      * @param solrCore
      * @return
      */
-    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrCore) {
-        HttpSolrClient client = getSolrClient(solrCore);
+    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl, solrCore);
         try {
             QueryResponse rsp = client.query(query);
             TermsResponse termsResponse = rsp.getTermsResponse();

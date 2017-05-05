@@ -15,6 +15,7 @@ import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.mall.dto.CommentProductDTO;
 import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.CommentProductService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.ProductService;
@@ -60,9 +61,12 @@ public class CommentProductController extends BaseController {
 
     @Autowired
     private ProductService productService;
+
     @Autowired
     private ShoppingOrderService shoppingOrderService;
 
+    @Autowired
+    private MemberApiConfig memberApiConfig;
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "用户评价商品", notes = "用户评价商品 [1005，1000,4100]（章勇）", httpMethod = "POST")
@@ -94,7 +98,7 @@ public class CommentProductController extends BaseController {
         }
         if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, memberApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
                 String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {

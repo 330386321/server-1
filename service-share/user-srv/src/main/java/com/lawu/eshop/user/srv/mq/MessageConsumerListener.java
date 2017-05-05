@@ -7,6 +7,7 @@ import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.HandleDepostMessage;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
@@ -33,6 +34,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
     @Autowired
     private MerchantService merchantService;
+
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     @Override
     public void consumeMessage(String topic, String tags, Object message) {
@@ -69,7 +73,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
                     return;
                 }
                 //删除solr门店信息
-                SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(),SolrUtil.SOLR_MERCHANT_CORE);
+                SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(),userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             }
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSHALL.equals(tags)){
             //发送推送消息

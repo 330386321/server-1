@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
@@ -43,6 +44,9 @@ public class MerchantStoreController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(MerchantStoreController.class);
     @Autowired
     private MerchantStoreService merchantStoreService;
+
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
 
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
@@ -81,7 +85,7 @@ public class MerchantStoreController extends BaseController {
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, merchantApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
                 String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
@@ -175,7 +179,7 @@ public class MerchantStoreController extends BaseController {
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, merchantApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
                 String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
@@ -275,7 +279,7 @@ public class MerchantStoreController extends BaseController {
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part);
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, merchantApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
                 String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {

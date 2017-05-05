@@ -4,6 +4,7 @@ import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
@@ -24,6 +25,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private MerchantStoreDOMapper merchantStoreDOMapper;
+
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -89,7 +93,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         merchantStoreDO.setFeedbackRate(param.getFeedbackRate());
         merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, SolrUtil.SOLR_MERCHANT_CORE);
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         if (solrDocument != null) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
@@ -103,7 +107,7 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount());
             document.addField("averageScore_d", param.getAverageScore());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
-            SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
+            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         }
     }
 

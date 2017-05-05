@@ -1,19 +1,18 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.lawu.eshop.ad.dto.PointPoolDTO;
+import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.service.PointPoolService;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.dto.PointPoolDTO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDO;
-import com.lawu.eshop.ad.srv.service.PointPoolService;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -30,7 +29,7 @@ public class PointPoolController extends BaseController{
 	
 	/**
 	 * 根据广告id 查询e赞前三名会员
-	 * @param adId
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value = "selectMemberList", method = RequestMethod.GET)

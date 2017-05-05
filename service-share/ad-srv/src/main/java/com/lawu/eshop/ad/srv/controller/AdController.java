@@ -1,35 +1,9 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.dto.ClickAdPointDTO;
-import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.AdsolrFindParam;
-import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
@@ -41,6 +15,17 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚接口提供
@@ -60,12 +45,13 @@ public class AdController extends BaseController{
 	
 	@Resource
 	private PointPoolService pointPoolService;
+
+	@Autowired
+	private AdSrvConfig adSrvConfig;
 	
 	/**
 	 * 添加E赚
-	 * @param adParam
-	 * @param merchantId
-	 * @param mediaUrl
+	 * @param adSaveParam
 	 * @return
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
@@ -194,7 +180,7 @@ public class AdController extends BaseController{
 	
 	/**
 	 * 运营查询广告
-	 * @param adMerchantParam
+	 * @param adPlatParam
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByPlatForm", method = RequestMethod.POST)
@@ -210,7 +196,7 @@ public class AdController extends BaseController{
 	
 	/**
 	 * 会员查询广告
-	 * @param adMerchantParam
+	 * @param adMemberParam
 	 * @param memberId
 	 * @return
 	 */
@@ -227,8 +213,7 @@ public class AdController extends BaseController{
 	
 	/**
 	 * 会员查询广告
-	 * @param adMerchantParam
-	 * @param memberId
+	 * @param adMemberParam
 	 * @return
 	 */
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.POST)
@@ -244,8 +229,7 @@ public class AdController extends BaseController{
 	
 	/**
 	 * 会员E赞
-	 * @param adMerchantParam
-	 * @param memberId
+	 * @param adPraiseParam
 	 * @return
 	 */
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.POST)
@@ -261,8 +245,9 @@ public class AdController extends BaseController{
 	
 	/**
 	 * 会员E赞
-	 * @param adMerchantParam
+	 * @param id
 	 * @param memberId
+	 * @param num
 	 * @return
 	 */
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
@@ -315,7 +300,7 @@ public class AdController extends BaseController{
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());
         SolrDocumentList solrDocumentList =new SolrDocumentList();
-        solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_AD_CORE);
+        solrDocumentList = SolrUtil.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
         Page<AdSolrDTO> page = new Page<AdSolrDTO>();
         page.setRecords(AdConverter.convertDTO(solrDocumentList));
         if(solrDocumentList==null){

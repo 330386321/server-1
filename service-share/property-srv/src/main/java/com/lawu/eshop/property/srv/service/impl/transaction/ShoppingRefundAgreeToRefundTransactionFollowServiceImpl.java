@@ -1,11 +1,5 @@
 package com.lawu.eshop.property.srv.service.impl.transaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
@@ -14,6 +8,11 @@ import com.lawu.eshop.mq.dto.order.ShoppingRefundAgreeToRefundNotification;
 import com.lawu.eshop.property.constants.OrderRefundStatusEnum;
 import com.lawu.eshop.property.param.OrderRefundDataParam;
 import com.lawu.eshop.property.srv.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 
@@ -50,7 +49,7 @@ public class ShoppingRefundAgreeToRefundTransactionFollowServiceImpl extends Abs
 	    param.setOrderRefundStatusEnum(OrderRefundStatusEnum.getEnum(notification.getStatus().getValue()));
 	    
 	    try {
-	    	orderService.doRefundScopeInside(param,"");
+	    	orderService.doRefundScopeInside(param);
 	    } catch (Exception e) {
 	    	logger.error(e.getMessage());
 	    }

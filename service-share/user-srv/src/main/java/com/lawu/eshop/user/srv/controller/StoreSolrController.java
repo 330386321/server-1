@@ -9,11 +9,13 @@ import com.lawu.eshop.user.constants.StoreSolrEnum;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,6 +29,9 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "storeSolr/")
 public class StoreSolrController extends BaseController {
+
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     /**
      * 搜索门店
@@ -70,7 +75,7 @@ public class StoreSolrController extends BaseController {
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -97,7 +102,7 @@ public class StoreSolrController extends BaseController {
         query.set("terms.fl", "name_s");
         query.set("terms.regex", name + "+.*");
         query.set("terms.regex.flag", "case_insensitive");
-        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, SolrUtil.SOLR_MERCHANT_CORE);
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
 
         List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
         if (termsResponse != null) {

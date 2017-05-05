@@ -1,13 +1,5 @@
 package com.lawu.eshop.ad.srv.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.srv.bo.AdLexiconBO;
 import com.lawu.eshop.ad.srv.converter.AdLexiconConverter;
@@ -15,6 +7,13 @@ import com.lawu.eshop.ad.srv.service.AdLexiconService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 广告词库
@@ -31,7 +30,7 @@ public class AdLexiconController extends BaseController{
 	
 	/**
 	 * 添加词库
-	 * @param adPlatformParam
+	 * @param title
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)

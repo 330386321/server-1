@@ -1,17 +1,5 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -22,6 +10,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
+import com.lawu.eshop.operator.api.OperatorApiConfig;
 import com.lawu.eshop.operator.api.service.AdPlatformService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
@@ -32,12 +21,17 @@ import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
 import com.lawu.eshop.user.param.MerchantStorePlatParam;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 描述：广告管理
@@ -61,6 +55,9 @@ public class AdPlatformController extends BaseController {
     
     @Autowired
     private MerchantStoreService merchantStoreService;
+
+    @Autowired
+    private OperatorApiConfig operatorApiConfig;
 
     @PageBody
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
@@ -132,7 +129,7 @@ public class AdPlatformController extends BaseController {
     public Result saveAdPlatform(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
     	 HttpServletRequest request = getRequest();
     	 String mediaUrl = "";
-         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE);
+         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
          if(!"".equals(retMap.get("imgUrl"))){
         	 mediaUrl = retMap.get("imgUrl").toString();
          }
@@ -146,7 +143,7 @@ public class AdPlatformController extends BaseController {
     public Result update(@PathVariable @ApiParam(required = true, value = "广告id") Long id,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
     	 HttpServletRequest request = getRequest();
     	 String mediaUrl = "";
-         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE);
+         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
          if(!"".equals(retMap.get("imgUrl"))){
         	 mediaUrl = retMap.get("imgUrl").toString();
          }

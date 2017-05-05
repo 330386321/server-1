@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
@@ -51,6 +52,9 @@ public class MemberController extends BaseController {
 
     @Autowired
     private InviterService inviterService;
+
+    @Autowired
+    private MemberApiConfig memberApiConfig;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member [1000]（章勇）", httpMethod = "GET")
@@ -195,7 +199,7 @@ public class MemberController extends BaseController {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
         String headImg = "";
-        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD);
+        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD, memberApiConfig.getImageUploadUrl());
         if(!"".equals(retMap.get("imgUrl"))){
              headImg = retMap.get("imgUrl").toString();
                  return    memberService.saveHeadImage(memberId, headImg);

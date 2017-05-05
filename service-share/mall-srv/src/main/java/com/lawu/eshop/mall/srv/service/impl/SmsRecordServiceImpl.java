@@ -2,6 +2,7 @@ package com.lawu.eshop.mall.srv.service.impl;
 
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
 import com.lawu.eshop.mall.srv.domain.SmsRecordDO;
 import com.lawu.eshop.mall.srv.domain.SmsRecordDOExample;
@@ -34,6 +35,9 @@ public class SmsRecordServiceImpl implements SmsRecordService {
 
     @Autowired
     private VerifyCodeDOMapper verifyCodeDOMapper;
+
+    @Autowired
+    private MallSrvConfig mallSrvConfig;
 
     @Override
     public int verifySendSms(String mobile, String ip) throws ParseException {
@@ -76,7 +80,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         //插入短信记录
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setMobile(mobile);
-        smsRecordDO.setContent(SmsConstant.SMS_TEMPLATE.replace("{smsCode}", smsCode));
+        smsRecordDO.setContent(mallSrvConfig.getSmsTemplate().replace("{smsCode}", smsCode));
         smsRecordDO.setIp(ip);
         smsRecordDO.setType(purpose.val);
         smsRecordDO.setIsSuccess(SmsConstant.SMS_SEND_FAIL);

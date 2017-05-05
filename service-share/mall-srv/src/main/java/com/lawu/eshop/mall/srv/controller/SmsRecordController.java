@@ -5,6 +5,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.mall.param.SmsConfigParam;
+import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
 import com.lawu.eshop.utils.RandomUtil;
@@ -23,11 +25,11 @@ import java.util.Map;
 @RequestMapping(value = "smsRecord/")
 public class SmsRecordController extends BaseController {
 
-    //是否发送短信
-    private static final boolean isSend = false;
-
     @Autowired
     private SmsRecordService smsRecordService;
+
+    @Autowired
+    private MallSrvConfig mallSrvConfig;
 
     /**
      * 发送短信
@@ -48,10 +50,19 @@ public class SmsRecordController extends BaseController {
         if (errorCode != ResultCode.SUCCESS) {
             return successGet(errorCode);
         }
-        if (!isSend) {
+        if (!mallSrvConfig.getIsSend()) {
             return successCreated(verifyCodeDTO);
         }
-        Map<String, Object> returnMap = SmsUtil.sendSms(mobile, smsCode, ip);
+        SmsConfigParam smsConfigParam = new SmsConfigParam();
+        smsConfigParam.setSmsUrl(mallSrvConfig.getSmsUrl());
+        smsConfigParam.setSmsEncoding(mallSrvConfig.getSmsEncoding());
+        smsConfigParam.setSmsSpCode(mallSrvConfig.getSmsSpCode());
+        smsConfigParam.setSmsLoginName(mallSrvConfig.getSmsLoginName());
+        smsConfigParam.setSmsPassword(mallSrvConfig.getSmsPassword());
+        smsConfigParam.setSmsSerialNumber(mallSrvConfig.getSmsSerialNumber());
+        smsConfigParam.setSmsF(mallSrvConfig.getSmsF());
+        smsConfigParam.setSmsTemplate(mallSrvConfig.getSmsTemplate());
+        Map<String, Object> returnMap = SmsUtil.sendSms(mobile, smsCode, ip, smsConfigParam);
         smsRecordService.updateSmsRecordResult(smsRecordBO.getId(),(Boolean) returnMap.get("sendCode"),returnMap.get("sendResult").toString());
         if (!(Boolean) returnMap.get("sendCode")) {
             return successGet(ResultCode.FAIL);

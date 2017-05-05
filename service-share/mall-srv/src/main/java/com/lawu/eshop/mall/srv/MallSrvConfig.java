@@ -25,6 +25,33 @@ public class MallSrvConfig {
     @Value(value = "${db.password}")
     private String password;
 
+    @Value(value = "${sms_url}")
+    private String smsUrl;
+
+    @Value(value = "${sms_encoding}")
+    private String smsEncoding;
+
+    @Value(value = "${sms_sp_code}")
+    private String smsSpCode;
+
+    @Value(value = "${sms_login_name}")
+    private String smsLoginName;
+
+    @Value(value = "${sms_password}")
+    private String smsPassword;
+
+    @Value(value = "${sms_serial_number}")
+    private String smsSerialNumber;
+
+    @Value(value = "${sms_f}")
+    private String smsF;
+
+    @Value(value = "${sms_template}")
+    private String smsTemplate;
+
+    @Value(value = "${sms_is_send}")
+    private Boolean isSend;
+
     public String getType() {
         return type;
     }
@@ -43,5 +70,41 @@ public class MallSrvConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getSmsUrl() {
+        return smsUrl;
+    }
+
+    public String getSmsEncoding() {
+        return smsEncoding;
+    }
+
+    public String getSmsSpCode() {
+        return smsSpCode;
+    }
+
+    public String getSmsLoginName() {
+        return smsLoginName;
+    }
+
+    public String getSmsPassword() {
+        return smsPassword;
+    }
+
+    public String getSmsSerialNumber() {
+        return smsSerialNumber;
+    }
+
+    public String getSmsF() {
+        return smsF;
+    }
+
+    public String getSmsTemplate() {
+        return smsTemplate;
+    }
+
+    public Boolean getIsSend() {
+        return isSend;
     }
 }

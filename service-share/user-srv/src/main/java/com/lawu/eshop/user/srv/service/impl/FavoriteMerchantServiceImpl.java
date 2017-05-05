@@ -1,28 +1,13 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.FavoriteMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
@@ -30,6 +15,17 @@ import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.FavoriteMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
 import com.lawu.eshop.utils.DistanceUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
@@ -45,6 +41,9 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     
     @Resource
     private FansMerchantDOMapper fansMerchantDOMapper;
+
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     @Override
     @Transactional
@@ -65,11 +64,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
             //更新solr门店收藏人数
-            SolrDocument solrDocument = SolrUtil.getSolrDocsById(list.get(0).getId(), SolrUtil.SOLR_MERCHANT_CORE);
+            SolrDocument solrDocument = SolrUtil.getSolrDocsById(list.get(0).getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
                 document.addField("favoriteNumber_i", count);
-                SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
+                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             }
         }
         return row;
@@ -89,11 +88,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
             //更新solr门店收藏人数
-            SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), SolrUtil.SOLR_MERCHANT_CORE);
+            SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
                 document.addField("favoriteNumber_i", count);
-                SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
+                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             }
         }
         return i;

@@ -52,7 +52,8 @@ public class FavoriteAdController extends BaseController{
 	
 	/**
 	 * 取消收藏
-	 * @param id
+	 * @param adId
+	 * @param memberId
 	 * @return
 	 */
 	@RequestMapping(value = "remove/{adId}", method = RequestMethod.DELETE)
@@ -65,7 +66,7 @@ public class FavoriteAdController extends BaseController{
 	/**
 	 * 我收藏的商品列表
 	 * @param memberId
-	 * @param query
+	 * @param param
 	 * @return
 	 */
 	@RequestMapping(value = "selectMyFavoriteAd", method = RequestMethod.POST)

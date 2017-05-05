@@ -10,6 +10,7 @@ import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.*;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.dto.*;
@@ -52,7 +53,8 @@ public class MerchantController extends BaseController {
     @Autowired
     private MemberProfileService memberProfileService;
    
-    
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
@@ -219,7 +221,7 @@ public class MerchantController extends BaseController {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         String headImg = "";
-        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD);
+        Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD, merchantApiConfig.getImageUploadUrl());
         if(!"".equals(retMap.get("imgUrl"))){
             headImg = retMap.get("imgUrl").toString();
             return    merchantService.saveHeadImage(merchantId, headImg);

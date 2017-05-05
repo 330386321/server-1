@@ -25,6 +25,18 @@ public class AdSrvConfig {
     @Value(value = "${db.password}")
     private String password;
 
+    @Value(value = "${solr_url}")
+    private String solrUrl;
+
+    @Value(value = "${solr_merchant_core}")
+    private String solrMerchantCore;
+
+    @Value(value = "${solr_product_core}")
+    private String solrProductCore;
+
+    @Value(value = "${solr_ad_core}")
+    private String solrAdCore;
+
     public String getType() {
         return type;
     }
@@ -43,5 +55,21 @@ public class AdSrvConfig {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getSolrUrl() {
+        return solrUrl;
+    }
+
+    public String getSolrMerchantCore() {
+        return solrMerchantCore;
+    }
+
+    public String getSolrProductCore() {
+        return solrProductCore;
+    }
+
+    public String getSolrAdCore() {
+        return solrAdCore;
     }
 }

@@ -9,6 +9,7 @@ import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreAuditConverter;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
@@ -43,6 +44,8 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
     @Autowired
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
+    @Autowired
+    private UserSrvConfig userSrvConfig;
 
     @Override
     @Transactional
@@ -190,7 +193,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
                             document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount());
                             document.addField("averageScore_d", merchantStoreDO.getAverageScore());
-                            SolrUtil.addSolrDocs(document, SolrUtil.SOLR_MERCHANT_CORE);
+                            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
                         }
                     } else {
                         //申请实体店铺
