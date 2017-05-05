@@ -394,5 +394,17 @@ public class AdController extends BaseController{
 		}
 		return successGet(AdConverter.convertDTO(adBO));
 	}
+	
+	
+	/**
+	 * 商家端广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
+    public Result<AdMerchantDTO> selectById(@PathVariable Long id) {
+		AdBO bo=adService.selectById(id);
+ 		return successAccepted(AdConverter.convertMerchantAdDTO(bo));
+    }
 
 }

@@ -85,12 +85,13 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         if (param.getTitle() != null) {
             criteria.andTitleLike("%" + param.getTitle() + "%");
         }
+        Long count=adPlatformDOMapper.countByExample(example);
         RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
         List<AdPlatformDO> DOS = adPlatformDOMapper.selectByExampleWithRowbounds(example, rowBounds);
         List<AdPlatformBO> bos = AdPlatformConverter.convertBOS(DOS);
         Page<AdPlatformBO> pageAd = new Page<AdPlatformBO>();
         pageAd.setCurrentPage(param.getCurrentPage());
-        pageAd.setTotalCount(DOS.size());
+        pageAd.setTotalCount(count.intValue());
         pageAd.setRecords(bos);
         return pageAd;
     }

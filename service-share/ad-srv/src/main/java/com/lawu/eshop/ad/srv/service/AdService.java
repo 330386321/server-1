@@ -171,5 +171,13 @@ public interface AdService {
 	 */
 	Page<AdBO> listAllAd(ListAdParam listAdParam);
 	
+	/**
+	 * 商家端详情
+	 * @param id
+	 * @return
+	 */
+	AdBO selectById(Long id);
+	
+	
 
 }

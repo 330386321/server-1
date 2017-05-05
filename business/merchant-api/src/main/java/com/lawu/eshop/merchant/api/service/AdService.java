@@ -54,12 +54,19 @@ public interface AdService {
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/remove/{id}")
     public Result remove(@PathVariable("id") Long id);
 	
+	 /**
+	  * 单个查询广告
+	  * @return
+	  */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
+	Result<AdDTO> selectAbById(@PathVariable("id") Long id);
+	
 	/**
-	 * 广告详情
+	 * 商家端详情
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "ad/selectAbById/{id}", method = RequestMethod.GET)
-    public Result<AdDTO> selectAbById(@PathVariable("id") Long id);
+	@RequestMapping(method = RequestMethod.GET, value = "ad/selectById/{id}")
+	Result<AdMerchantDTO> selectById(@PathVariable("id") Long id);
 
 }

@@ -160,6 +160,25 @@ public class AdConverter {
 		}
 		return DTOS;
 	}
+	
+	public static AdMerchantDTO convertMerchantAdDTO(AdBO adBO){
+		AdMerchantDTO dto=new AdMerchantDTO();
+		if(adBO==null){
+			return dto;
+		}
+		
+		dto.setId(adBO.getId());
+		dto.setTitle(adBO.getTitle());
+		dto.setMerchantId(adBO.getMerchantId());
+		dto.setGmtCreate(adBO.getGmtCreate());
+		dto.setPutWayEnum(adBO.getPutWayEnum());
+		dto.setStatusEnum(adBO.getStatusEnum());
+		dto.setTotalPoint(adBO.getTotalPoint());
+		dto.setTypeEnum(adBO.getTypeEnum());
+		dto.setExpandOrder(RandomUtil.expandOrder());
+		dto.setMemberCount(adBO.getAdCount());
+		return dto;
+	}
 
 	public static List<AdPraiseDTO> convertPraiseDTOS(List<AdBO> records) {
 		

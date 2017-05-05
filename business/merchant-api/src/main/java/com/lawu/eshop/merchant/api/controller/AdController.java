@@ -199,5 +199,13 @@ public class AdController extends BaseController {
     	}
     }
 
+	    @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
+	    @Authorization
+	    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+	    @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
+	    public Result<AdMerchantDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+	    	Result<AdMerchantDTO> rs= adService.selectById(id);
+	    	return rs;
+	    }
 
 }

@@ -729,4 +729,10 @@ public class AdServiceImpl implements AdService {
 		return page;
 	}
 
+	@Override
+	public AdBO selectById(Long id) {
+		 AdDO adDO=adDOMapper.selectByPrimaryKey(id);
+		return AdConverter.convertBO(adDO);
+	}
+
 }
