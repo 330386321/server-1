@@ -23,5 +23,5 @@ public class FileDirConstant {
     /**
      * 默认图片
      */
-    public static final String DEFAULT_PIC = "http://www.rongcloud.cn/images/logo.png";
+    //public static final String DEFAULT_PIC = "http://www.rongcloud.cn/images/logo.png";
 }

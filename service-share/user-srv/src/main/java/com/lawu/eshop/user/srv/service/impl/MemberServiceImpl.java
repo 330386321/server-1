@@ -2,7 +2,6 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.user.constants.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -100,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
         int result = memberDOMapper.updateByPrimaryKeySelective(memberDO);
         if (StringUtils.isNotEmpty(memberDO.getNickname())) {
             MemberDO old = memberDOMapper.selectByPrimaryKey(id);
-            String headImg = FileDirConstant.DEFAULT_PIC;
+            String headImg = userSrvConfig.getDefaultHeadimg();
             if (StringUtils.isNotEmpty(old.getHeadimg())) {
                 headImg = old.getHeadimg();
             }

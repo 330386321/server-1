@@ -43,6 +43,9 @@ public class UserSrvConfig {
     @Value(value = "${solr_ad_core}")
     private String solrAdCore;
 
+    @Value(value = "${default_headimg}")
+    private String defaultHeadimg;
+
     public String getType() {
         return type;
     }
@@ -85,5 +88,9 @@ public class UserSrvConfig {
 
     public String getSolrAdCore() {
         return solrAdCore;
+    }
+
+    public String getDefaultHeadimg() {
+        return defaultHeadimg;
     }
 }
