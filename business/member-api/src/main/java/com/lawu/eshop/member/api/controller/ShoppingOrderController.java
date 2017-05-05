@@ -297,7 +297,8 @@ public class ShoppingOrderController extends BaseController {
 	 * @param id
 	 * @return
 	 */
-	@ApiOperation(value = "订单支付页面", notes = "订单支付页面。[]（蒋鑫俊）", httpMethod = "GET")
+	@Audit(date = "2017-05-05", reviewer = "孙林青")
+	@ApiOperation(value = "待支付订单支付", notes = "用于对已生成但未支付的订单进行支付。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "orderPayment", method = RequestMethod.GET)
