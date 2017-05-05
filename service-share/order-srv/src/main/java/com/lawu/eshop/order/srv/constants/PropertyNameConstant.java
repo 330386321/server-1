@@ -119,4 +119,9 @@ public class PropertyNameConstant {
 	 */
 	public final static String PLATFORM_INTERVENTION_RETURN_REFUND_TIME = "platform_intervention_return_refund_time";
 	
+	/**
+	 * 退款成功-到账提示时间
+	 */
+	public final static String REFUND_TO_THE_ACCOUNT_TIME = "refund_to_the_account_time";
+	
 }

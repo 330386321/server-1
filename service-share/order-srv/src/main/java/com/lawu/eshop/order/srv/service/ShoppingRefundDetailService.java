@@ -31,7 +31,7 @@ public interface ShoppingRefundDetailService {
 	 *            购物订单项id
 	 * @return
 	 */
-	ShoppingOrderItemExtendBO getByShoppingOrderitemId(Long shoppingOrderItemId);
+	ShoppingOrderItemExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId);
 
 	/**
 	 * 商家是否同意买家的退货申请

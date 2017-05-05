@@ -7,6 +7,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -145,6 +146,19 @@ public class ShoppingRefundDetailDTO implements Serializable {
     */
 	@ApiModelProperty(value = "拒绝退款理由", required = false)
     private String refusalReasons;
+	
+	/**
+	 * 退款到账时间
+	 */
+	@JsonFormat(pattern="yyyy-MM-dd")
+	@ApiModelProperty(value = "退款到账时间", required = false)
+	private Date gmtToAccount;
+	
+	/**
+	 * 支付方式
+	 */
+	@ApiModelProperty(value = "支付方式(BALANCE-余额|WX-微信|ALIPAY-支付宝)", required = true)
+	private TransactionPayTypeEnum paymentMethod;
 	
 	/**
 	 * 退款状态
@@ -318,6 +332,22 @@ public class ShoppingRefundDetailDTO implements Serializable {
 
 	public void setRefusalReasons(String refusalReasons) {
 		this.refusalReasons = refusalReasons;
+	}
+
+	public Date getGmtToAccount() {
+		return gmtToAccount;
+	}
+
+	public void setGmtToAccount(Date gmtToAccount) {
+		this.gmtToAccount = gmtToAccount;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 	public RefundStatusEnum getRefundStatus() {

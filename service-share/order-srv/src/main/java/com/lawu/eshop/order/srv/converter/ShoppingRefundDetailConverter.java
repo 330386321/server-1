@@ -45,6 +45,7 @@ public class ShoppingRefundDetailConverter {
 	 */
 	public static ShoppingRefundDetailDTO convert(ShoppingOrderItemExtendBO shoppingOrderItemExtendBO) {
 		ShoppingRefundDetailDTO rtn = null;
+		
 		if (shoppingOrderItemExtendBO == null) {
 			return rtn;
 		}
@@ -54,6 +55,7 @@ public class ShoppingRefundDetailConverter {
 		rtn.setShoppingOrderId(shoppingOrderItemExtendBO.getShoppingOrderId());
 		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
 		rtn.setDescribe(shoppingOrderItemExtendBO.getShoppingRefundDetail().getDescription());
+		rtn.setPaymentMethod(shoppingOrderItemExtendBO.getShoppingOrder().getPaymentMethod());
 		
 		return rtn;
 	}

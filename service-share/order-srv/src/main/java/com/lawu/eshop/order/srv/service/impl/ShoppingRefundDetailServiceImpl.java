@@ -121,12 +121,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * @return
 	 */
 	@Override
-	public ShoppingOrderItemExtendBO getByShoppingOrderitemId(Long shoppingOrderItemId) {
+	public ShoppingOrderItemExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId) {
 		if (shoppingOrderItemId == null || shoppingOrderItemId <= 0) {
 			return null;
 		}
 		
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria criteria = shoppingOrderItemExtendDOExample.createCriteria();
 		criteria.andIdEqualTo(shoppingOrderItemId);

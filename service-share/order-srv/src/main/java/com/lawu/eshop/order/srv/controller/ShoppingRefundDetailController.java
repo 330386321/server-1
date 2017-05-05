@@ -71,7 +71,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.ID_EMPTY);
 		}
 
-		ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingRefundDetailService.getByShoppingOrderitemId(shoppingOrderItemId);
+		ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingRefundDetailService.getByShoppingOrderItemId(shoppingOrderItemId);
 
 		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getId() == null || shoppingOrderItemExtendBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -141,6 +141,14 @@ public class ShoppingRefundDetailController extends BaseController {
 				}
 				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
+				break;
+			case REFUND_SUCCESSFULLY:
+				// 7.退款成功，退款到账提示时间
+				
+				time = propertyService.getByName(PropertyNameConstant.REFUND_TO_THE_ACCOUNT_TIME);
+				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				shoppingRefundDetailDTO.setGmtToAccount(date);
+				
 				break;
 			default:
 				break;
