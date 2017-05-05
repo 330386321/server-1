@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiResponse;
 public class ShoppingRefundDetailController extends BaseController {
 
 	@Autowired
-	private ShoppingRefundDetailService shoppingRefundDetailservice;
+	private ShoppingRefundDetailService shoppingRefundDetailService;
 	
 	@Autowired
 	private AddressService addressService;
@@ -68,7 +68,7 @@ public class ShoppingRefundDetailController extends BaseController {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
 		
-    	Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingRefundDetailservice.getExpressInfo(id);
+    	Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingRefundDetailService.getExpressInfo(id);
     	
     	if (!isSuccess(resultShoppingOrderExpressDTO)) {
     		return successCreated(resultShoppingOrderExpressDTO.getRet());
@@ -95,7 +95,7 @@ public class ShoppingRefundDetailController extends BaseController {
     		return successCreated(ResultCode.ID_EMPTY);
     	}
 		
-    	Result<ShoppingRefundDetailDTO> resultShoppingRefundDetailDTO = shoppingRefundDetailservice.getRefundDetail(shoppingOrderItemId);
+    	Result<ShoppingRefundDetailDTO> resultShoppingRefundDetailDTO = shoppingRefundDetailService.getRefundDetail(shoppingOrderItemId);
     	
     	if (!isSuccess(resultShoppingRefundDetailDTO)) {
     		return successGet(resultShoppingRefundDetailDTO.getRet());
@@ -129,7 +129,7 @@ public class ShoppingRefundDetailController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
     	
-    	Result result = shoppingRefundDetailservice.agreeToApply(id, param);
+    	Result result = shoppingRefundDetailService.agreeToApply(id, param);
     	
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
@@ -175,7 +175,7 @@ public class ShoppingRefundDetailController extends BaseController {
     		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionName() + resultAddressDTO.getModel().getAddr());
     	}
     	
-    	Result result = shoppingRefundDetailservice.fillReturnAddress(id, param);
+    	Result result = shoppingRefundDetailService.fillReturnAddress(id, param);
     	
     	if (!isSuccess(result)) {
     		return successCreated(result.getRet());
@@ -209,7 +209,7 @@ public class ShoppingRefundDetailController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
     	
-    	Result result = shoppingRefundDetailservice.agreeToRefund(id, param);
+    	Result result = shoppingRefundDetailService.agreeToRefund(id, param);
     	
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());

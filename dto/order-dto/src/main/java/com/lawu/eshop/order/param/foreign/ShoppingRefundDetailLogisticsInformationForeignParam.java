@@ -2,6 +2,8 @@ package com.lawu.eshop.order.param.foreign;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -27,7 +29,7 @@ public class ShoppingRefundDetailLogisticsInformationForeignParam implements Ser
 	/**
 	 * 快递公司id
 	 */
-	@NotBlank(message="快递公司id不能为空")
+	@NotNull(message="快递公司id不能为空")
 	@ApiModelProperty(required = true, value = "快递公司id")
 	private Integer expressCompanyId;
 
