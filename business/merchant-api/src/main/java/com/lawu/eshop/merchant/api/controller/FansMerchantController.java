@@ -93,7 +93,7 @@ public class FansMerchantController extends BaseController {
         //propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
-        propertyInfoDataParam.setRegionName(param.getRegionName());
+        propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
         propertyInfoDataParam.setInviteFansCount(numArray.length);
         propertyInfoDataParam.setSex(param.getUserSexEnum().val);
         propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");

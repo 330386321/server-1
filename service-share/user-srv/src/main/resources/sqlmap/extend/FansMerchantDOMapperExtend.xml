@@ -25,10 +25,10 @@
 		parameterType="com.lawu.eshop.user.param.ListInviteFansRealParam" id="listInviteFans">
 		select id as
 		memberId,num,account,region_path,region_name,nickname,headimg,level
-		from member where region_path = #{regionPath,jdbcType=VARCHAR}
-		and id
-		not in(select member_id from fans_merchant where merchant_id =
-		#{merchantId,jdbcType=BIGINT})
+		from member where id not in(select member_id from fans_merchant where merchant_id = #{merchantId,jdbcType=BIGINT})
+		<if test="regionPath != null and regionPath != ''">
+			and region_path like CONCAT(#{regionPath,jdbcType=VARCHAR},'%')
+		</if>
 		<if test="sex != 1">
 			and sex = #{sex,jdbcType=TINYINT}
 		</if>

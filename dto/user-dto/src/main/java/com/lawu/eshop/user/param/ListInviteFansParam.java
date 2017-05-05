@@ -9,7 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class ListInviteFansParam {
 
-    @ApiModelProperty(value = "区域路径", required = true)
+    @ApiModelProperty(value = "区域路径，全国为空", required = true)
     private String regionPath;
 
     @ApiModelProperty(value = "性别，SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--全部", required = true)
