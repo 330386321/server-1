@@ -17,6 +17,7 @@ import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.dto.UserDTO;
@@ -31,6 +32,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -102,7 +104,7 @@ public class FansMerchantController extends BaseController {
             return result;
         }
 
-        //发送站内消息
+        //给会员发送站内消息
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
@@ -122,6 +124,16 @@ public class FansMerchantController extends BaseController {
             messageInfoParam.setMessageParam(messageTempParam);
             messageService.saveMessage(num, messageInfoParam);
         }
+
+        //给商家发送站内消息
+        Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(UserUtil.getCurrentUserNum(getRequest()));
+        messageInfoParam = new MessageInfoParam();
+        messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
+        messageTempParam = new MessageTempParam();
+        messageTempParam.setExpendPoint(new BigDecimal(numArray.length));
+        messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint());
+        messageService.saveMessage(UserUtil.getCurrentUserNum(getRequest()), messageInfoParam);
         return successCreated();
     }
 

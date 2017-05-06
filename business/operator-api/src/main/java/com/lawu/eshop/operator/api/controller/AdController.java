@@ -14,13 +14,15 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.operator.api.service.AdService;
-import com.lawu.eshop.operator.api.service.LogService;
-import com.lawu.eshop.operator.api.service.RegionService;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.operator.api.service.*;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.param.LogParam;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -49,6 +51,12 @@ public class AdController extends BaseController {
 
     @Autowired
     private LogService logService;
+
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private MerchantService merchantService;
 
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -105,6 +113,18 @@ public class AdController extends BaseController {
     public Result updateStatus(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.updateStatus(id);
 
+        //发送站内消息
+        Result<AdDTO> adDTOResult = adService.getAdById(id);
+        Result<MerchantSNSDTO> merchantSNSDTOResult = merchantService.selectMerchantInfo(adDTOResult.getModel().getMerchantId());
+
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setAdName(adDTOResult.getModel().getTitle());
+        messageTempParam.setAdTypeName(adDTOResult.getModel().getTypeEnum().getName());
+        messageInfoParam.setRelateId(id);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_DOWN);
+        messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
+
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", AdStatusEnum.AD_STATUS_OUT.val);
@@ -146,6 +166,17 @@ public class AdController extends BaseController {
     public Result auditVideoPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_PASS);
 
+        //发送站内消息
+        Result<AdDTO> adDTOResult = adService.getAdById(id);
+        Result<MerchantSNSDTO> merchantSNSDTOResult = merchantService.selectMerchantInfo(adDTOResult.getModel().getMerchantId());
+
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setAdName(adDTOResult.getModel().getTitle());
+        messageInfoParam.setRelateId(id);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_SUCCESS);
+        messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
+
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("status", AdStatusEnum.AD_STATUS_ADD.val);
@@ -165,6 +196,17 @@ public class AdController extends BaseController {
     @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_UN_PASS);
+
+        //发送站内消息
+        Result<AdDTO> adDTOResult = adService.getAdById(id);
+        Result<MerchantSNSDTO> merchantSNSDTOResult = merchantService.selectMerchantInfo(adDTOResult.getModel().getMerchantId());
+
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setAdName(adDTOResult.getModel().getTitle());
+        messageInfoParam.setRelateId(id);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_FAIL);
+        messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();

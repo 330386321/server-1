@@ -5,7 +5,7 @@ package com.lawu.eshop.mall.constants;
  * Created by Administrator on 2017/3/30.
  */
 public enum MessageTypeEnum {
-    MESSAGE_TYPE_INVITE_FANS((byte) 0x01),//邀请粉丝
+    MESSAGE_TYPE_INVITE_FANS((byte) 0x01),//邀请粉丝--会员
     MESSAGE_TYPE_ORDER_PAY((byte) 0x02),//订单付款
 
     MESSAGE_TYPE_ACTIVE((byte) 0x03),//活动消息
@@ -45,7 +45,10 @@ public enum MessageTypeEnum {
 
     MESSAGE_TYPE_PLATFORM_NOTICE((byte) 0x29),//平台通知
 
-    MESSAGE_TYPE_REDPACKET((byte) 0x30);//现金红包
+    MESSAGE_TYPE_REDPACKET((byte) 0x30),//现金红包
+
+    MESSAGE_TYPE_AD_DOWN((byte) 0x31),//ad下架
+    MESSAGE_TYPE_INVITE_FANS_MERCHANT((byte) 0x32);//邀请粉丝--商家
 
     public Byte val;
 

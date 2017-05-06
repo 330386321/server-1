@@ -6,16 +6,17 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
-import com.lawu.eshop.operator.api.service.LogService;
-import com.lawu.eshop.operator.api.service.MerchantAuditService;
-import com.lawu.eshop.operator.api.service.MessageService;
-import com.lawu.eshop.operator.api.service.UserService;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.operator.api.service.*;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
@@ -49,6 +50,9 @@ public class MerchantAuditController extends BaseController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private MerchantService merchantService;
 
     /**
      * 门店审核列表
@@ -107,7 +111,20 @@ public class MerchantAuditController extends BaseController {
         Result result = merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
 
         //发送站内消息
+        Result<MerchantStoreAuditDTO> storeAuditDTOResult = merchantAuditService.getMerchantStoreAuditById(storeAuditId);
+        Result<MerchantSNSDTO> merchantSNSDTOResult = merchantService.selectMerchantInfo(storeAuditDTOResult.getModel().getMerchantId());
 
+        MessageInfoParam messageInfoParam = new MessageInfoParam();
+        MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setStoreName(storeAuditDTOResult.getModel().getName());
+        messageInfoParam.setRelateId(storeAuditDTOResult.getModel().getStoreId());
+        if (auditParam.getAuditStatusEnum().val == MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val) {
+            messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_STORE_SUCCESS);
+        } else if (auditParam.getAuditStatusEnum().val == MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECK_FAILED.val) {
+            messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_STORE_FAIL);
+            messageTempParam.setFailReason(auditParam.getRemark());
+        }
+        messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
