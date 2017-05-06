@@ -16,6 +16,16 @@
 			<artifactId>pay-util</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.lawu.eshop</groupId>
+			<artifactId>mall-dto</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.lawu.eshop</groupId>
+			<artifactId>user-dto</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

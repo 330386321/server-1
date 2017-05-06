@@ -1,19 +1,14 @@
 package com.lawu.eshop.external.api.controller;
 
-import com.alipay.api.internal.util.AlipaySignature;
-import com.lawu.eshop.external.api.ExternalApiConfig;
-import com.lawu.eshop.external.api.service.DepositService;
-import com.lawu.eshop.external.api.service.OrderService;
-import com.lawu.eshop.external.api.service.RechargeService;
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.param.AliPayConfigParam;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.utils.StringUtil;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +16,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import com.alipay.api.internal.util.AlipaySignature;
+import com.lawu.eshop.external.api.ExternalApiConfig;
+import com.lawu.eshop.external.api.service.DepositService;
+import com.lawu.eshop.external.api.service.MessageService;
+import com.lawu.eshop.external.api.service.OrderService;
+import com.lawu.eshop.external.api.service.RechargeService;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
+import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.param.AliPayConfigParam;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 
@@ -52,9 +60,10 @@ public class AlipayNotifyController extends BaseController {
 	private OrderService orderService;
 	@Autowired
 	private DepositService depositService;
-
 	@Autowired
 	private ExternalApiConfig externalApiConfig;
+	@Autowired
+	private MessageService messageService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -97,6 +106,8 @@ public class AlipayNotifyController extends BaseController {
 		String buyer_logon_id = new String(request.getParameter("buyer_logon_id").getBytes("ISO-8859-1"), "UTF-8");
 
 		boolean b = false;
+		int bizFlagInt = 0;
+		String extra[] = null;
 		if (app_id_member.equals(app_id)) {
 			params.remove("sign_type");
 			b = AlipaySignature.rsaCheckV2(params, member_public_key, input_charset);
@@ -122,7 +133,7 @@ public class AlipayNotifyController extends BaseController {
 
 				} else {
 
-					String extra[] = passback_params.split(splitStr);
+					extra = passback_params.split(splitStr);
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
 					String bizFlag = extra[0];
 					NotifyCallBackParam param = new NotifyCallBackParam();
@@ -137,22 +148,22 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_logon_id);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
-					int bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(bizFlagInt)
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(bizFlagInt)) {
+							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
-						
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
+
+					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = orderService.doHandleOrderPayNotify(param);
-						
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(bizFlagInt)) {
+
+					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = orderService.doHandlePayOrderNotify(param);
-						
+
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -166,6 +177,30 @@ public class AlipayNotifyController extends BaseController {
 			out.print("success");// 请不要修改或删除
 			out.flush();
 			out.close();
+
+			// ------------------------------发送站内消息
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setRelateId(0L);
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setRechargeBalance(new BigDecimal(total_amount));
+			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				// messageTempParam.setBalance(new BigDecimal(""));
+			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				// messageTempParam.setPoint(new BigDecimal(""));
+			}
+			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				messageTempParam.setUserName("E店会员");
+			} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				messageTempParam.setUserName("E店商家");
+			}
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(extra[1], messageInfoParam);
+			// ------------------------------发送站内消息
+
 		} else {
 			logger.error("APP支付宝回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), requestParams);
 		}
@@ -218,6 +253,8 @@ public class AlipayNotifyController extends BaseController {
 		aliPayConfigParam.setAlipayInputCharset(externalApiConfig.getAlipayInputCharset());
 
 		boolean b = false;
+		int bizFlagInt = 0;
+		String extra[] = null;
 		if (!app_id_business.equals(app_id)) {
 			result = successCreated(ResultCode.FAIL, "app_id不匹配");
 		} else {
@@ -238,7 +275,7 @@ public class AlipayNotifyController extends BaseController {
 
 				} else {
 
-					String extra[] = extra_common_param.split(splitStr);
+					extra = extra_common_param.split(splitStr);
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
 					String bizFlag = extra[0];
 					NotifyCallBackParam param = new NotifyCallBackParam();
@@ -251,12 +288,12 @@ public class AlipayNotifyController extends BaseController {
 					param.setTradeNo(trade_no);
 					param.setBuyerLogonId(buyer_email);
 
-					int bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)) {
+							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
 
 					} else {
@@ -272,6 +309,24 @@ public class AlipayNotifyController extends BaseController {
 			out.print("success");// 请不要修改或删除
 			out.flush();
 			out.close();
+
+			// ------------------------------发送站内消息
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setRelateId(0L);
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setRechargeBalance(new BigDecimal(total_fee));
+			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				// messageTempParam.setBalance(new BigDecimal(""));
+			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				// messageTempParam.setPoint(new BigDecimal(""));
+			}
+			messageTempParam.setUserName("E店商家");
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(extra[1], messageInfoParam);
+			// ------------------------------发送站内消息
+
 		} else {
 			logger.error("PC支付宝回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), requestParams);
 		}

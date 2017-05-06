@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -11,12 +13,18 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.merchant.api.service.BalancePayService;
+import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +49,8 @@ public class BalancePayController extends BaseController {
 	private RechargeService rechargeService;
 	@Autowired
 	private BalancePayService balancePayService;
+	@Autowired
+	private MessageService messageService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -49,14 +59,36 @@ public class BalancePayController extends BaseController {
 	@RequestMapping(value = "balancePayPoint", method = RequestMethod.POST)
 	public Result balancePayPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		BalancePayDataParam dparam = new BalancePayDataParam();
 		dparam.setBizIds(param.getBizIds());
-		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		dparam.setUserNum(userNum);
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
 		double money = rechargeService.getRechargeMoney(param.getBizIds());
 		dparam.setTotalAmount(String.valueOf(money));
 
-		return balancePayService.balancePayPoint(dparam);
+		Result result = balancePayService.balancePayPoint(dparam);
+		if(ResultCode.SUCCESS != result.getRet()){
+			return result;
+		}
+		
+		// ------------------------------发送站内消息
+		MessageInfoParam messageInfoParam = new MessageInfoParam();
+		messageInfoParam.setRelateId(0L);
+		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+		MessageTempParam messageTempParam = new MessageTempParam();
+		messageTempParam.setRechargeBalance(new BigDecimal(money));
+		// messageTempParam.setPoint(new BigDecimal(""));
+		if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+			messageTempParam.setUserName("E店会员");
+		} else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+			messageTempParam.setUserName("E店商家");
+		}
+		messageInfoParam.setMessageParam(messageTempParam);
+		messageService.saveMessage(userNum, messageInfoParam);
+		// ------------------------------发送站内消息
+		
+		return successCreated();
 	}
 }

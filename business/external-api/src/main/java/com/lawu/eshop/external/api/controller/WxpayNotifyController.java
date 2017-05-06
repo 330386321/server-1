@@ -2,16 +2,21 @@ package com.lawu.eshop.external.api.controller;
 
 import com.lawu.eshop.external.api.ExternalApiConfig;
 import com.lawu.eshop.external.api.service.DepositService;
+import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +31,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -54,8 +60,9 @@ public class WxpayNotifyController extends BaseController {
 	private DepositService depositService;
 	@Autowired
 	private ExternalApiConfig externalApiConfig;
+	@Autowired
+	private MessageService messageService;
 
-	
 	/**
 	 * APP微信异步回调接口
 	 * 
@@ -69,6 +76,9 @@ public class WxpayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
+		double dmoney = 0;
+		int bizFlagInt = 0;
+		String extra[] = null;
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
 		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
 			String return_code = packageParams.get("return_code") == null ? ""
@@ -85,8 +95,8 @@ public class WxpayNotifyController extends BaseController {
 					String out_trade_no = packageParams.get("out_trade_no") == null ? ""
 							: packageParams.get("out_trade_no").toString();
 
-					String extra[] = attach.split(splitStr);
-					double dmoney = new Double(total_fee).doubleValue();
+					extra = attach.split(splitStr);
+					dmoney = new Double(total_fee).doubleValue();
 					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
 					String bizFlag = extra[0];
@@ -102,7 +112,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setBuyerLogonId("回调没返回");
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					int bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(bizFlagInt)
@@ -111,13 +121,13 @@ public class WxpayNotifyController extends BaseController {
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
 						result = depositService.doHandleDepositNotify(param);
-						
+
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
 						result = orderService.doHandleOrderPayNotify(param);
-						
+
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(bizFlagInt)) {
 						result = orderService.doHandlePayOrderNotify(param);
-						
+
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -140,6 +150,30 @@ public class WxpayNotifyController extends BaseController {
 			out.print("success");// 请不要修改或删除
 			out.flush();
 			out.close();
+
+			// ------------------------------发送站内消息
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setRelateId(0L);
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setRechargeBalance(new BigDecimal(dmoney));
+			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				// messageTempParam.setBalance(new BigDecimal(""));
+			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				// messageTempParam.setPoint(new BigDecimal(""));
+			}
+			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				messageTempParam.setUserName("E店会员");
+			} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				messageTempParam.setUserName("E店商家");
+			}
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(extra[1], messageInfoParam);
+			// ------------------------------发送站内消息
+
 		} else {
 			logger.error("APP微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
 		}
@@ -159,6 +193,9 @@ public class WxpayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
+		double dmoney = 0;
+		int bizFlagInt = 0;
+		String extra[] = null;
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
 		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKey())) {
 			String return_code = packageParams.get("return_code") == null ? ""
@@ -175,8 +212,8 @@ public class WxpayNotifyController extends BaseController {
 					String out_trade_no = packageParams.get("out_trade_no") == null ? ""
 							: packageParams.get("out_trade_no").toString();
 
-					String extra[] = attach.split(splitStr);
-					double dmoney = new Double(total_fee).doubleValue();
+					extra = attach.split(splitStr);
+					dmoney = new Double(total_fee).doubleValue();
 					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金
 					String bizFlag = extra[0];
@@ -191,14 +228,14 @@ public class WxpayNotifyController extends BaseController {
 					param.setBuyerLogonId("回调没返回");
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					int bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)) {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						//TODO 保证金回调
-						
+						// TODO 保证金回调
+
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -221,6 +258,24 @@ public class WxpayNotifyController extends BaseController {
 			out.print("success");// 请不要修改或删除
 			out.flush();
 			out.close();
+
+			// ------------------------------发送站内消息
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setRelateId(0L);
+			MessageTempParam messageTempParam = new MessageTempParam();
+			messageTempParam.setRechargeBalance(new BigDecimal(dmoney));
+			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				// messageTempParam.setBalance(new BigDecimal(""));
+			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				// messageTempParam.setPoint(new BigDecimal(""));
+			}
+			messageTempParam.setUserName("E店商家");
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(extra[1], messageInfoParam);
+			// ------------------------------发送站内消息
+
 		} else {
 			logger.error("PC微信回调失败,错误码:{},错误信息：{},回调参数：{}", result.getRet(), result.getMsg(), packageParams);
 		}

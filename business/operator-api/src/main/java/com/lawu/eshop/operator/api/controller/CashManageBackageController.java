@@ -133,14 +133,15 @@ public class CashManageBackageController extends BaseController {
 		// 发送站内消息
 		MessageInfoParam messageInfoParam = new MessageInfoParam();
 		messageInfoParam.setRelateId(0L);
+		MessageTempParam messageTempParam = new MessageTempParam();
 		if (CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_APPLY);
 		} else if (CashOperEnum.SUCCESS.val.equals(param.getCashOperEnum().val)) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_SUCCESS);
 		} else if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_FAIL);
+			messageTempParam.setFailReason(param.getFailReason());
 		}
-		MessageTempParam messageTempParam = new MessageTempParam();
 		List<String> userNums = Arrays.asList(param.getUserNum().split(","));
 		for (String userNum : userNums) {
 			if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
