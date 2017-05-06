@@ -62,6 +62,15 @@ public class MessageTempParam {
     @ApiModelProperty(value = "充值编号")
     private String rechargeNum;
 
+    @ApiModelProperty(value = "广告类型名称")
+    private String adTypeName;
+
+    @ApiModelProperty(value = "失败原因")
+    private String failReason;
+
+    @ApiModelProperty(value = "代发货商品数量")
+    private Integer productCount;
+
     public String getUserName() {
         return userName;
     }
@@ -196,5 +205,29 @@ public class MessageTempParam {
 
     public void setRechargeNum(String rechargeNum) {
         this.rechargeNum = rechargeNum;
+    }
+
+    public String getAdTypeName() {
+        return adTypeName;
+    }
+
+    public void setAdTypeName(String adTypeName) {
+        this.adTypeName = adTypeName;
+    }
+
+    public String getFailReason() {
+        return failReason;
+    }
+
+    public void setFailReason(String failReason) {
+        this.failReason = failReason;
+    }
+
+    public Integer getProductCount() {
+        return productCount;
+    }
+
+    public void setProductCount(Integer productCount) {
+        this.productCount = productCount;
     }
 }

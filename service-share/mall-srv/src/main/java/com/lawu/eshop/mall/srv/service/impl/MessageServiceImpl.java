@@ -139,6 +139,9 @@ public class MessageServiceImpl implements MessageService {
         content = content.replace("{14}", messageInfoParam.getMessageParam().getStoreName());
         content = content.replace("{15}", messageInfoParam.getMessageParam().getExpendPoint().toString());
         content = content.replace("{16}", messageInfoParam.getMessageParam().getRechargeNum());
+        content = content.replace("{17}", messageInfoParam.getMessageParam().getAdTypeName());
+        content = content.replace("{18}", messageInfoParam.getMessageParam().getFailReason());
+        content = content.replace("{19}", messageInfoParam.getMessageParam().getProductCount().toString());
 
 
         messageDO.setContent(content);
