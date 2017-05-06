@@ -1,9 +1,11 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -13,12 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.operator.api.service.CashManageBackageService;
+import com.lawu.eshop.operator.api.service.MessageService;
+import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
@@ -27,6 +35,8 @@ import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQueryParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.dto.UserDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +59,8 @@ public class CashManageBackageController extends BaseController {
 
 	@Autowired
 	private CashManageBackageService cashManageBackageService;
+	@Autowired
+	private MessageService messageService;
 
 	/**
 	 * 运营平台财务提现管理
@@ -71,7 +83,7 @@ public class CashManageBackageController extends BaseController {
 		dparam.setUserTypeEnum(param.getUserTypeEnum());
 		dparam.setCurrentPage(param.getCurrentPage());
 		dparam.setPageSize(param.getPageSize());
-		
+
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfo(dparam);
 		return dtos;
 	}
@@ -92,7 +104,7 @@ public class CashManageBackageController extends BaseController {
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfoDetail(param);
 		return dtos;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家、用户提现数据操作", notes = "商家、用户提现数据操作,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
@@ -110,14 +122,35 @@ public class CashManageBackageController extends BaseController {
 		dparam.setId(param.getId());
 		dparam.setCashOperEnum(param.getCashOperEnum());
 		dparam.setFailReason(param.getFailReason());
-		//TODO 
-		dparam.setAuditUserId(1L);
+		// TODO
+		dparam.setAuditUserId(UserUtil.getCurrentUserId(getRequest()));
 		dparam.setAuditUserName("super");
 		Result result1 = cashManageBackageService.updateWithdrawCash(dparam);
-		if(ResultCode.SUCCESS != result1.getRet()){
+		if (ResultCode.SUCCESS != result1.getRet()) {
 			return result1;
 		}
-		
-		return result1;
+
+		// 发送站内消息
+		MessageInfoParam messageInfoParam = new MessageInfoParam();
+		messageInfoParam.setRelateId(0L);
+		if (CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)) {
+			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_APPLY);
+		} else if (CashOperEnum.SUCCESS.val.equals(param.getCashOperEnum().val)) {
+			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_SUCCESS);
+		} else if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
+			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_FAIL);
+		}
+		MessageTempParam messageTempParam = new MessageTempParam();
+		List<String> userNums = Arrays.asList(param.getUserNum().split(","));
+		for (String userNum : userNums) {
+			if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				messageTempParam.setUserName("E店会员");
+			} else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				messageTempParam.setUserName("E店商家");
+			}
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(userNum, messageInfoParam);
+		}
+		return successCreated();
 	}
 }

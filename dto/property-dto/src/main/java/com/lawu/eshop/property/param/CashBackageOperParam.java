@@ -14,6 +14,10 @@ public class CashBackageOperParam {
 	@NotBlank(message="id不能为空")
 	private String id;
 	
+	@ApiParam(name = "userNum",required = true, value = "提现用户编号(多条记录用英文逗号分隔)")
+	@NotBlank(message="userNum不能为空")
+	private String userNum;
+	
 	@ApiParam(name = "cashOperEnum", required = true, value = "操作类型(ACCEPT-受理；SUCCESS-成功；FAILURE-失败)")
 	@NotNull(message="cashOperEnum不能为空")
 	private CashOperEnum cashOperEnum;
@@ -45,6 +49,12 @@ public class CashBackageOperParam {
 		this.failReason = failReason;
 	}
 
-	
+	public String getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
+	}
 
 }
