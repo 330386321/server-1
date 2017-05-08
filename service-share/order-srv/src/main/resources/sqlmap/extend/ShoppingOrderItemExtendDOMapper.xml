@@ -31,6 +31,9 @@
 		<result column="shopping_order_item_id" jdbcType="BIGINT" property="shoppingOrderItemId" />
 		<result column="type" jdbcType="TINYINT" property="type" />
 		<result column="reason" jdbcType="VARCHAR" property="reason" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+    	<result column="voucher_picture" jdbcType="VARCHAR" property="voucherPicture" />
+    	<result column="refusal_reasons" jdbcType="VARCHAR" property="refusalReasons" />
 		<result column="amount" jdbcType="DECIMAL" property="amount" />
 		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
 		<result column="consignee_address" jdbcType="VARCHAR" property="consigneeAddress" />
@@ -128,8 +131,8 @@
 	</sql>
 
 	<sql id="ShoppingRefundDetail_Column_List">
-		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, srd.amount, srd.consignee_name,
-		srd.consignee_address,
+		srd.id as srd_id, srd.shopping_order_item_id, srd.type, srd.reason, description, voucher_picture, refusal_reasons,
+		srd.amount, srd.consignee_name, srd.consignee_address,
 		srd.consignee_mobile, srd.express_company_id, srd.express_company_code,
 		srd.express_company_name,
 		srd.waybill_num, srd.status, srd.is_agree, srd.gmt_refund, srd.gmt_confirmed, srd.gmt_fill,

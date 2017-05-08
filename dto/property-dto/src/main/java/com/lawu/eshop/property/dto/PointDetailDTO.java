@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -39,6 +40,7 @@ public class PointDetailDTO implements Serializable {
 	/**
      * 积分时间
      */
+	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "积分时间", required = true)
     private Date integralDate;
 	
