@@ -75,13 +75,13 @@ public class SuggestionController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "delSuggestion/{id}", method = RequestMethod.DELETE)
-    public Result delSuggestion(@RequestParam Long id) {
+    @RequestMapping(value = "delSuggestion/{id}", method = RequestMethod.PUT)
+    public Result delSuggestion(@PathVariable Long id) {
     	 if(id == null){
-             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
          }
     	 suggestionService.delSuggestion(id);
-         return successDelete();
+         return successCreated();
     }
 
 }

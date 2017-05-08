@@ -45,28 +45,28 @@ public class SuggestionController extends BaseController {
         return pageResult;
     }
     
-    @ApiOperation(value = "删除反馈意见", notes = "删除反馈意见 []（张荣成）", httpMethod = "DELETE")
+    @ApiOperation(value = "删除反馈意见", notes = "删除反馈意见 []（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "delSuggestion/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "delSuggestion/{id}", method = RequestMethod.PUT)
     public Result delCommentProductInfo(@PathVariable("id") @ApiParam(value = "反馈ID",required = true) Long id){
         if(id == null){
-            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        return  successDelete(suggestionService.delSuggestion(id));
+        return  suggestionService.delSuggestion(id);
     }
     
-    @ApiOperation(value = "批量删除反馈意见", notes = "批量删除反馈意见 []（张荣成）", httpMethod = "DELETE")
+    @ApiOperation(value = "批量删除反馈意见", notes = "批量删除反馈意见 []（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "batchelDelSuggestion/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "batchelDelSuggestion/", method = RequestMethod.PUT)
     public Result batchelDelSuggestion(@RequestParam @ApiParam(value = "反馈ID集合 以逗号隔开",required = true) String ids){
         if(ids == null){
-            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         String[] commentIds=ids.split(",");
         for (String id : commentIds) {
         	 suggestionService.delSuggestion(Long.parseLong(id));
 		}
        
-        return  successDelete();
+        return  successCreated();
     }
 }
