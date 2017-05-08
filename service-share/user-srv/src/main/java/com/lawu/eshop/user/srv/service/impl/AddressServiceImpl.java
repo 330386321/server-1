@@ -144,10 +144,12 @@ public class AddressServiceImpl implements AddressService {
 		addressDO.setGmtModified(new Date());
 
 		AddressDOExample example = new AddressDOExample();
-		example.createCriteria().andUserNumEqualTo(userNum);
-		long count = addressDOMapper.countByExample(example);
-		if (count == 0) {
+		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(new Byte("1"));
+		Long count = addressDOMapper.countByExample(example);
+		if (count == 0 || count==null) {
 			addressDO.setIsDefault(true);
+		}else{
+			addressDO.setIsDefault(false);
 		}
 		int result = addressDOMapper.insertSelective(addressDO);
 

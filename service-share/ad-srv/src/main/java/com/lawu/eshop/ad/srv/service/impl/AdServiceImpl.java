@@ -221,7 +221,6 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		if(adMerchantParam.getStatusEnum()==null && adMerchantParam.getTypeEnum()==null && adMerchantParam.getPutWayEnum()==null ){
 			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-					.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
 					.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
 					.andMerchantIdEqualTo(merchantId);
 		}else{
@@ -258,7 +257,6 @@ public class AdServiceImpl implements AdService {
 
 			}else{
 				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_AUDIT.val)
 				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
 				.andMerchantIdEqualTo(merchantId);
 				if(adMerchantParam.getTypeEnum()!=null){
