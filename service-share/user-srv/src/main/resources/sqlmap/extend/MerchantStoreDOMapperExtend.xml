@@ -23,7 +23,7 @@
         m.`status` = 1
         AND m.gt_cid IS NOT NULL
         <if test="area != 'all'">
-            AND s.region_name like CONCAT('%',#{area},'%' )
+            AND s.region_path like CONCAT(#{area},'%' )
         </if>
     </select>
 

@@ -407,7 +407,7 @@ public class MemberServiceImpl implements MemberService {
         if ("all".equals(area)) {
             example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andGtCidIsNotNull();
         } else {
-            example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andGtCidIsNotNull().andRegionNameLike(area);
+            example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andGtCidIsNotNull().andRegionPathLike(area + "%");
         }
         example.setOrderByClause("id desc");
         List<MemberDO> list = memberDOMapper.selectByExample(example);
