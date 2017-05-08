@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.dto.TransactionDetailDTO;
+import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 
 /**
@@ -28,6 +28,6 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	@RequestMapping(value = "transactionDetail/findPageByUserNumForMerchant/{userNum}", method = RequestMethod.POST)
-	public Result<Page<TransactionDetailDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMerchantParam param);
+	public Result<Page<TransactionDetailToMerchantDTO>> findPageByUserNumForMerchant(@PathVariable("userNum") String userNum, @RequestBody TransactionDetailQueryForMerchantParam param);
 
 }

@@ -23,7 +23,8 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.CashManageFrontService;
 import com.lawu.eshop.merchant.api.service.TransactionDetailService;
-import com.lawu.eshop.property.dto.TransactionDetailDTO;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.dto.WithdrawCashStatusDTO;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 
@@ -60,21 +61,21 @@ public class TransactionDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findPageByUserNum", method = RequestMethod.GET)
-    public Result<Page<TransactionDetailDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") TransactionDetailQueryForMerchantParam param) {
+    public Result<Page<TransactionDetailToMerchantDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") TransactionDetailQueryForMerchantParam param) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	
-    	Result<Page<TransactionDetailDTO>> result = transactionDetailService.findPageByUserNumForMerchant(userNum, param);
+    	Result<Page<TransactionDetailToMerchantDTO>> result = transactionDetailService.findPageByUserNumForMerchant(userNum, param);
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
     	}
     	
     	// 如果交易类型为提现需要获取提现状态
-    	List<TransactionDetailDTO> transactionDetailDTOList = result.getModel().getRecords();
+    	List<TransactionDetailToMerchantDTO> transactionDetailDTOList = result.getModel().getRecords();
     	
     	// 把所有需要查询的id放入set
     	List<Long> ids = new ArrayList<Long>();
-    	for (TransactionDetailDTO item : transactionDetailDTOList) {
-    		if (!StringUtils.isEmpty(item.getBizId())) {
+    	for (TransactionDetailToMerchantDTO item : transactionDetailDTOList) {
+    		if (MerchantTransactionTypeEnum.WITHDRAW.equals(item.getTransactionType()) && !StringUtils.isEmpty(item.getBizId())) {
     			ids.add(Long.valueOf(item.getBizId()));
     		}
     	}
@@ -98,7 +99,7 @@ public class TransactionDetailController extends BaseController {
     	
     	// 组合数据
     	WithdrawCashStatusDTO withdrawCashStatusDTO = null;
-    	for (TransactionDetailDTO item : transactionDetailDTOList) {
+    	for (TransactionDetailToMerchantDTO item : transactionDetailDTOList) {
     		if (!StringUtils.isEmpty(item.getBizId())) {
     			withdrawCashStatusDTO = withdrawCashStatusDTOMap.get(item.getBizId());
     			if (withdrawCashStatusDTO != null) {

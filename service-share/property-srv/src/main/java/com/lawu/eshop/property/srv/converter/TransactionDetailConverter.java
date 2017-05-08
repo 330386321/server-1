@@ -8,9 +8,11 @@ import org.springframework.beans.BeanUtils;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
+import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 
@@ -124,6 +126,43 @@ public class TransactionDetailConverter {
 		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
 		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
 		rtn.setRecords(convertTransactionDetailToMemberDTOS(transactionDetailBOPage.getRecords()));
+		return rtn;
+	}
+	
+	public static TransactionDetailToMerchantDTO convertTransactionDetailToMerchantDTO(TransactionDetailBO transactionDetailBO) {
+		TransactionDetailToMerchantDTO rtn = null;
+
+		if (transactionDetailBO == null) {
+			return rtn;
+		}
+
+		rtn = new TransactionDetailToMerchantDTO();
+		BeanUtils.copyProperties(transactionDetailBO, rtn, "transactionType");
+		rtn.setTransactionType(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()));
+		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
+
+		return rtn;
+	}
+
+	public static List<TransactionDetailToMerchantDTO> convertTransactionDetailToMerchantDTOS(List<TransactionDetailBO> transactionDetailBOS) {
+		List<TransactionDetailToMerchantDTO> rtn = new ArrayList<TransactionDetailToMerchantDTO>();
+
+		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
+			return rtn;
+		}
+
+		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
+			rtn.add(convertTransactionDetailToMerchantDTO(transactionDetailBO));
+		}
+
+		return rtn;
+	}
+	
+	public static Page<TransactionDetailToMerchantDTO> convertTransactionDetailToMerchantDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+		Page<TransactionDetailToMerchantDTO> rtn = new Page<TransactionDetailToMerchantDTO>();
+		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+		rtn.setRecords(convertTransactionDetailToMerchantDTOS(transactionDetailBOPage.getRecords()));
 		return rtn;
 	}
 

@@ -42,7 +42,7 @@ public class TransactionDetailDTO implements Serializable {
 	/**
 	 * 资金流向
 	 */
-	@ApiModelProperty(value = "资金流向(1-支出|2-收入)", required = true)
+	@ApiModelProperty(value = "资金流向(EXPENDITURE-支出|INCOME-收入)", required = true)
 	private ConsumptionTypeEnum direction;
 	
 	/**

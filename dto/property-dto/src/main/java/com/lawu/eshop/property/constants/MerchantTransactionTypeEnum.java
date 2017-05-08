@@ -51,4 +51,13 @@ public enum MerchantTransactionTypeEnum {
 		this.name = name;
 	}
 	
+	public static MerchantTransactionTypeEnum getEnum(Byte val) {
+		MerchantTransactionTypeEnum[] values = MerchantTransactionTypeEnum.values();
+		for (MerchantTransactionTypeEnum object : values) {
+			if (object.getValue().equals(val)) {
+				return object;
+			}
+		}
+		return null;
+	}
 }

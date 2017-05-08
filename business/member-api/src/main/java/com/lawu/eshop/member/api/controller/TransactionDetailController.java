@@ -79,8 +79,8 @@ public class TransactionDetailController extends BaseController {
     	
     	// 把所有需要查询的id放入set
     	List<Long> ids = new ArrayList<Long>();
-    	for (TransactionDetailDTO item : transactionDetailDTOList) {
-    		if (!StringUtils.isEmpty(item.getBizId())) {
+    	for (TransactionDetailToMemberDTO item : transactionDetailDTOList) {
+    		if (MemberTransactionTypeEnum.LOWER_INCOME.equals(item.getTransactionType()) && !StringUtils.isEmpty(item.getBizId())) {
     			ids.add(Long.valueOf(item.getBizId()));
     		}
     	}

@@ -65,7 +65,6 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
-		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
 		// 用户可以多次申请退款，查询当中有效的一条记录
 		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
@@ -133,7 +132,6 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
-		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andSOMerchantIdEqualTo(merchantId);
 		// 用户可以多次申请退款，查询当中有效的一条记录
 		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
@@ -173,7 +171,6 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
-		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		
 		// 查询总记录数
