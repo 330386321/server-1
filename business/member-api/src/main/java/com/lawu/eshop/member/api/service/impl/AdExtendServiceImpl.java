@@ -233,6 +233,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     public List<AdDTO> screem(AdMemberParam adMemberParam,List<AdDTO> list,Long memberId ){
     	List<AdDTO> newList =new ArrayList<AdDTO>();
     	for (AdDTO adDTO : list) {
+			 
+			 
+			 
     		if(adDTO.getPutWayEnum().val==1){ //区域
     			if(adDTO.getAreas()==null){
     				newList.add(adDTO);

@@ -55,6 +55,7 @@ public class AdConverter {
 		adBO.setMerchantLatitude(adDO.getMerchantLatitude());
 		adBO.setMerchantLongitude(adDO.getMerchantLongitude());
 		adBO.setAreas(adDO.getAreas());
+		adBO.setRadius(adDO.getRadius());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){
@@ -112,6 +113,7 @@ public class AdConverter {
 		adDTO.setViewCount(adBO.getViewCount());
 		adDTO.setIsPraise(adBO.getIsPraise());
 		adDTO.setAreas(adBO.getAreas());
+		adDTO.setRadius(adBO.getRadius());
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}
