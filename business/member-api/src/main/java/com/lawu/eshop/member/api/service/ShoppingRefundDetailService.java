@@ -58,7 +58,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "shoppingRefundDetail/revokeRefundRequest/{id}", method = RequestMethod.PUT)
 	Result revokeRefundRequest(@PathVariable("id") Long id);
 	
 }

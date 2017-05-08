@@ -20,5 +20,4 @@ bin
 
 #Custom
 test
-
-application.properties
+*.properties

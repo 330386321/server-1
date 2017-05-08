@@ -49,10 +49,10 @@ public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
 	private RefundStatusEnum refundStatus;
 	
 	/**
-	 * 退款时间
+	 * 申请时间
 	 */
 	@JsonFormat(pattern="yyyy-MM-dd")
-	@ApiModelProperty(value = "退款时间", required = true)
+	@ApiModelProperty(value = "申请时间", required = true)
 	private Date gmtCreate;
 	
 	/**
