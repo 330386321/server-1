@@ -17,12 +17,12 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
  * @date 2017/4/12
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_ADD_POINT)
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_CLICK_POINT)
 public class UserClickAdTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
 
     
 	 @Autowired
-	    private PropertyInfoDataService propertyInfoDataService;
+	 private PropertyInfoDataService propertyInfoDataService;
 
 	    @Override
 	    public Reply execute(AdPointNotification notification) {

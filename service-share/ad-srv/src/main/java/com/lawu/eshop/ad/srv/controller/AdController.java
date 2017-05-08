@@ -175,7 +175,7 @@ public class AdController extends BaseController{
 			if(i>0){
 	     		return successCreated(dto);
 	     	}else{
-	     		return successCreated(ResultCode.FAIL);
+	     		return successCreated(ResultCode.AD_CLICK_PUTED);
 	     	}
 		}
 		

@@ -253,7 +253,7 @@ public class AdController extends BaseController {
 
      @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
-     @ApiOperation(value = "点击广告", notes = "点击广告[]（张荣成）", httpMethod = "GET")
+     @ApiOperation(value = "点击广告", notes = "点击广告[5008]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
      @RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
      public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

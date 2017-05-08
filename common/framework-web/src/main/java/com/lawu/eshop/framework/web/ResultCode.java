@@ -96,6 +96,7 @@ public class ResultCode {
     public static final int AD_PRAISE_PUTED = 5005;
     public static final int AD_CLICK_EXIST = 5006;
     public static final int AD_PRAISE_POINT_GET = 5007;
+    public static final int AD_CLICK_PUTED = 5008;
 
 
     // 资产模块代码 6xxx
@@ -216,6 +217,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_PUTED, "抢赞已经结束");
         ResultCode.messageMap.put(AD_CLICK_EXIST, "今天已经点击过该广告");
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
+        ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "提现金额必须大于等于10元");
