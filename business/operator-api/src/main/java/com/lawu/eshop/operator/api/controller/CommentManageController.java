@@ -1,15 +1,5 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -23,11 +13,14 @@ import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -96,9 +89,9 @@ public class CommentManageController extends BaseController{
         return  successDelete(commentProductService.delCommentProductInfo(commentId));
     }
 
-    @ApiOperation(value = "批量屏蔽商家评价", notes = "屏蔽商家评价 [1004，1000]（章勇）", httpMethod = "DELETE")
+    @ApiOperation(value = "批量屏蔽商家评价", notes = "屏蔽商家评价 [1004，1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "batchelDelCommentMerchantInfo/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "batchelDelCommentMerchantInfo/", method = RequestMethod.PUT)
     public Result batchelDelCommentMerchantInfo(@RequestParam @ApiParam(value = "评论ID集合 以逗号隔开",required = true) String ids){
         if(ids == null){
             return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
@@ -108,7 +101,7 @@ public class CommentManageController extends BaseController{
         	 commentProductService.delCommentMerchantInfo(Long.parseLong(id));
 		}
        
-        return  successDelete();
+        return  successCreated();
     }
     
     @ApiOperation(value = "批量屏蔽商品评价", notes = "屏蔽商品评价 [1004，1000]（章勇）", httpMethod = "PUT")
