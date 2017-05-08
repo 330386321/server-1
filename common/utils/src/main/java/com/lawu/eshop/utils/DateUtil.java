@@ -176,6 +176,21 @@ public class DateUtil {
     }
 
     /**
+     * yyyy-MM-dd 字符串转换为Date
+     *
+     * @param date
+     * @return
+     */
+    public static Date stringToDate(String date) {
+        try {
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 两个时间相隔天数
      *
      * @param beginDate 开始日期

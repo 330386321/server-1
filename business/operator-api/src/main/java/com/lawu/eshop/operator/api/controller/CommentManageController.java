@@ -61,10 +61,10 @@ public class CommentManageController extends BaseController{
     }
 
     @PageBody
-    @ApiOperation(value = "评价商家列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "评价商家列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.GET)
-    public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@ModelAttribute @ApiParam CommentListParam listParam) {
+    @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.POST)
+    public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@RequestBody @ApiParam CommentListParam listParam) {
     	 Result<Page<CommentOperatorDTO>> rsPage= commentProductService.getCommentMerchantListOperator(listParam);
     	 if(isSuccess(rsPage)){
     		 Page<CommentOperatorDTO> page=rsPage.getModel();

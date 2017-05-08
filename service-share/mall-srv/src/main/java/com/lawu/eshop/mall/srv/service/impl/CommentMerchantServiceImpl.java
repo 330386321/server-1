@@ -21,6 +21,7 @@ import com.lawu.eshop.mall.srv.mapper.CommentImageDOMapper;
 import com.lawu.eshop.mall.srv.mapper.CommentMerchantDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentMerchantDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentMerchantService;
+import com.lawu.eshop.utils.DateUtil;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -222,7 +223,14 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     public Page<CommentMerchantBO> getCommentMerchantListOperator(CommentListParam listParam) {
         CommentMerchantDOExample example = new CommentMerchantDOExample();
         example.setOrderByClause("id desc");
-        example.createCriteria().andStatusEqualTo(new Byte("1"));
+        CommentMerchantDOExample.Criteria criteria = example.createCriteria();
+        criteria.andStatusEqualTo(new Byte("1"));
+        if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getBeginDate())){
+            criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(listParam.getBeginDate()));
+        }
+        if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getEndDate())){
+            criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(listParam.getEndDate()));
+        }
         RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
         Page<CommentMerchantBO> page = new Page<>();
         page.setTotalCount(commentMerchantDOMapper.countByExample(example));

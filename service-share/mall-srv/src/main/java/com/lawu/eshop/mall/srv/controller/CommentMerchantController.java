@@ -120,12 +120,13 @@ public class CommentMerchantController extends BaseController {
 
     @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.POST)
     public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@RequestBody CommentListParam listParam) {
-
+        Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListOperator(listParam);
-
+        if(commentMerchantBOPage == null){
+            return successGet(pages);
+        }
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
         List<CommentOperatorDTO> commentOperatorDTOS = CommentMerchantConverter.converterOperatorDTOS(commentMerchantBOS);
-        Page<CommentOperatorDTO> pages = new Page<CommentOperatorDTO>();
         pages.setRecords(commentOperatorDTOS);
         pages.setCurrentPage(listParam.getCurrentPage());
         pages.setTotalCount(commentMerchantBOPage.getTotalCount());
