@@ -19,5 +19,4 @@ bin
 .DS_Store
 
 #Custom
-test
-*.properties
+application.properties
