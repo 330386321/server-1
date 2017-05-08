@@ -49,8 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserBO find(String account, String pwd) {
         UserDOExample example = new UserDOExample();
         example.createCriteria().andAccountEqualTo(account).
-                andPasswordEqualTo(passwordStrategy.encode(pwd)).
-                andStatusEqualTo(StatusEnum.STATUS_VALID.val);
+                andPasswordEqualTo(passwordStrategy.encode(pwd));
         List<UserDO> userDOS = userDOMapper.selectByExample(example);
         return userDOS.isEmpty() ? null : UserConverter.convertBO(userDOS.get(0));
     }
@@ -192,6 +191,16 @@ public class UserServiceImpl implements UserService {
         userDO.setId(id);
         userDO.setStatus(StatusEnum.STATUS_DISABLE.val);
        int row =  userDOMapper.updateByPrimaryKeySelective(userDO);
+        return row;
+    }
+
+    @Override
+    @Transactional
+    public Integer userEnable(Integer id) {
+        UserDO userDO = new UserDO();
+        userDO.setId(id);
+        userDO.setStatus(StatusEnum.STATUS_VALID.val);
+        int row =  userDOMapper.updateByPrimaryKeySelective(userDO);
         return row;
     }
 

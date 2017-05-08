@@ -36,5 +36,7 @@ public interface UserService {
 
     Integer userDisabled(Integer id);
 
+    Integer userEnable(Integer id);
+
     UserListBO finUserById(Integer id);
 }

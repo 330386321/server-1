@@ -1,6 +1,7 @@
 package com.lawu.eshop.operator.api.service.impl;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.operator.dto.UserDTO;
 import com.lawu.eshop.operator.dto.UserRoleDTO;
@@ -49,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ShiroUser find(String account, String password) {
         Result<UserDTO> result = userService.find(account, password);
-        if(result.getModel() == null){
+        if(result.getRet() != ResultCode.SUCCESS){
             return null;
         }
         ShiroUser shiroUser = new ShiroUser();

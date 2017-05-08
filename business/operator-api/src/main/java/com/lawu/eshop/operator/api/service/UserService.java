@@ -59,6 +59,15 @@ public interface UserService {
     Result userDisabled(@PathVariable(value = "id") Integer id);
 
     /**
+     * 启用用户
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "user/userEnable/{id}", method = RequestMethod.PUT)
+    Result userEnable(@PathVariable(value = "id") Integer id);
+
+    /**
      * 查询用户信息详情
      * @param id
      * @return

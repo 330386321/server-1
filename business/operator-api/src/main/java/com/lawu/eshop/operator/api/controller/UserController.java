@@ -106,6 +106,17 @@ public class UserController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "启用用户", notes = "启用用户 [1004,1019,1000]（梅述全）", httpMethod = "PUT")
+  /*  @RequiresPermissions("user:enable")*/
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "userEnable/{id}", method = RequestMethod.PUT)
+    public Result userEnable(@PathVariable(value = "id") Integer id) {
+        if (id == null || id <= 0) {
+            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        return userService.userEnable(id);
+    }
+
     @ApiOperation(value = "查询用户详情", notes = "查询用户详情（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findUserById/{id}", method = RequestMethod.GET)

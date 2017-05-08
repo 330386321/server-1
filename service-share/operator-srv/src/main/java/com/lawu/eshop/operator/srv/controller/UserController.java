@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.operator.constants.StatusEnum;
 import com.lawu.eshop.operator.dto.UserDTO;
 import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.dto.UserRoleDTO;
@@ -47,8 +48,11 @@ public class UserController extends BaseController {
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.POST)
     public Result<UserDTO> find(@PathVariable("account") String account, @RequestParam(value = "pwd") String pwd) {
         UserBO userBO = userService.find(account, pwd);
-        if (userBO == null) {
+        if (userBO == null || userBO.getStatus()== StatusEnum.STATUS_INVALID.val) {
             return successGet(ResultCode.MEMBER_WRONG_PWD);
+        }
+        if(userBO.getStatus()== StatusEnum.STATUS_DISABLE.val){
+            return successGet(ResultCode.USER_ACCOUNT_DISABLE);
         }
         //查询user对应的roleKey
         List<RoleBO> roleBOList = userService.findUserRoleByUserId(userBO.getId());
@@ -189,6 +193,21 @@ public class UserController extends BaseController {
     @RequestMapping(value = "userDisabled/{id}", method = RequestMethod.PUT)
     public Result userDisabled(@PathVariable(value = "id") Integer id){
         Integer row = userService.userDisabled(id);
+        if(row == null || row <=0){
+            return successCreated(ResultCode.UPDATE_FAIL);
+        }
+        return successCreated(ResultCode.SUCCESS);
+    }
+
+    /**
+     * 启用用户
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "userEnable/{id}", method = RequestMethod.PUT)
+    public Result userEnable(@PathVariable(value = "id") Integer id){
+        Integer row = userService.userEnable(id);
         if(row == null || row <=0){
             return successCreated(ResultCode.UPDATE_FAIL);
         }

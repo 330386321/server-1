@@ -13,6 +13,8 @@ public class UserBO {
 
     private String password;
 
+    private Byte status;
+
     public Integer getId() {
         return id;
     }
@@ -43,5 +45,13 @@ public class UserBO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(Byte status) {
+        this.status = status;
     }
 }

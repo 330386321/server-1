@@ -25,6 +25,7 @@ public class UserConverter {
         userBO.setAccount(userDO.getAccount());
         userBO.setPassword(userDO.getPassword());
         userBO.setName(userDO.getName());
+        userBO.setStatus(userDO.getStatus());
         return userBO;
     }
 
