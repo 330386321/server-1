@@ -21,7 +21,6 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
-import com.lawu.eshop.product.constant.ProductStatusEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -53,7 +52,7 @@ public class ShoppingOrderController extends BaseController {
     /**
      * 根据查询参数分页查询
      *
-     * @param params 查询参数
+     * @param param 查询参数
      * @return
      */
     @SuppressWarnings("unchecked")
@@ -79,7 +78,6 @@ public class ShoppingOrderController extends BaseController {
     /**
      * 根据购物订单id查询购物订单详情
      *
-     * @param token
      * @param id
      * @return
      */
@@ -164,7 +162,6 @@ public class ShoppingOrderController extends BaseController {
     /**
      * 取消购物订单
      *
-     * @param token
      * @param id
      * @return
      */

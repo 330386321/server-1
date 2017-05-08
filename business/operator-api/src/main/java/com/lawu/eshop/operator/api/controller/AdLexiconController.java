@@ -30,7 +30,7 @@ public class AdLexiconController {
 	
 	/**
      * 添加词库
-     * @param adPlatform
+     * @param title
      * @return
      */
     @ApiOperation(value = "添加词库", notes = "添加词库[]（张荣成）", httpMethod = "POST")

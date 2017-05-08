@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -424,5 +425,22 @@ public class AdController extends BaseController{
 		AdBO bo=adService.selectById(id);
  		return successAccepted(AdConverter.convertMerchantDetailAdDTO(bo));
     }
+
+	/**
+	 * 运营后台操作广告(下架、删除)
+	 *
+	 * @param id
+	 * @param adStatusEnum
+	 * @return
+	 */
+	@RequestMapping(value = "operatorUpdateAdStatus/{id}", method = RequestMethod.PUT)
+	public Result operatorUpdateAdStatus(@PathVariable Long id, @RequestParam AdStatusEnum adStatusEnum) {
+		AdBO adBO = adService.get(id);
+		if(adBO == null){
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		adService.operatorUpdateAdStatus(id, adStatusEnum);
+		return successCreated();
+	}
 
 }

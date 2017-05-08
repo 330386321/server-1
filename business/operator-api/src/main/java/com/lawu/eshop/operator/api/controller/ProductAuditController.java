@@ -39,7 +39,7 @@ public class ProductAuditController extends BaseController {
     @Autowired
     private LogService logService;
 
-    @ApiOperation(value = "商品审核", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
+    @ApiOperation(value = "商品审列表", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     //@RequiresPermissions("product:list")
     @PageBody
@@ -62,6 +62,9 @@ public class ProductAuditController extends BaseController {
     @RequestMapping(value = "downProduct", method = RequestMethod.PUT)
     public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
         Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
+        if(!isSuccess(result)){
+            return result;
+        }
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
@@ -83,6 +86,9 @@ public class ProductAuditController extends BaseController {
     @RequestMapping(value = "deleteProduct", method = RequestMethod.PUT)
     public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
         Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);
+        if(!isSuccess(result)){
+            return result;
+        }
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();

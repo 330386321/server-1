@@ -1,25 +1,21 @@
 package com.lawu.eshop.operator.api.service;
 
-import com.lawu.eshop.ad.param.ListAdParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(value = "ad-srv")
 public interface AdService {
 	
 	/**
 	 * 查询广告
-	 * @param adMerchantParam
-	 * @param memberId
+	 * @param adPlatParam
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "ad/selectListByPlatForm")
@@ -27,7 +23,6 @@ public interface AdService {
 	
 	/**
 	 * 操作广告下架
-	 * @param statusEnum
 	 * @param id
 	 * @return
 	 */
@@ -36,7 +31,6 @@ public interface AdService {
 	
 	/**
 	 * 操作广告删除
-	 * @param statusEnum
 	 * @param id
 	 * @return
 	 */
@@ -45,7 +39,7 @@ public interface AdService {
 	
 	/**
 	 * 审核视频
-	 * @param statusEnum
+	 * @param auditEnum
 	 * @param id
 	 * @return
 	 */
@@ -68,5 +62,15 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.GET,value = "ad/getAd/{id}")
 	Result<AdDTO> getAdById(@PathVariable("id") Long id);
+
+	/**
+	 * 操作广告(下架、删除)
+	 *
+	 * @param id
+	 * @param adStatusEnum
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT,value = "ad/operatorUpdateAdStatus/{id}")
+	Result operatorUpdateAdStatus(@PathVariable("id") Long id, @RequestParam("adStatusEnum") AdStatusEnum adStatusEnum);
 
 }

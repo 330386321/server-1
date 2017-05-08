@@ -735,4 +735,17 @@ public class AdServiceImpl implements AdService {
 		return AdConverter.convertBO(adDO);
 	}
 
+	@Override
+	public void operatorUpdateAdStatus(Long id, AdStatusEnum adStatusEnum) {
+		AdDO adDO = new AdDO();
+		adDO.setId(id);
+		adDO.setStatus(adStatusEnum.val);
+		adDOMapper.updateByPrimaryKeySelective(adDO);
+		if(adStatusEnum.val == AdStatusEnum.AD_STATUS_OUT.val){
+			matransactionMainAddService.sendNotice(id);
+		}
+		//删除solr中的数据
+		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+	}
+
 }

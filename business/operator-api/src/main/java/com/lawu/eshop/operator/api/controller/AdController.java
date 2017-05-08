@@ -109,9 +109,12 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "updateStatus/{id}", method = RequestMethod.PUT)
-    public Result updateStatus(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adService.updateStatus(id);
+    @RequestMapping(value = "adDown/{id}", method = RequestMethod.PUT)
+    public Result adDown(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+        Result rs = adService.operatorUpdateAdStatus(id, AdStatusEnum.AD_STATUS_OUT);
+        if(!isSuccess(rs)){
+            return rs;
+        }
 
         //发送站内消息
         Result<AdDTO> adDTOResult = adService.getAdById(id);
@@ -142,9 +145,12 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
-    public Result remove(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adService.remove(id);
+    @RequestMapping(value = "adDelete/{id}", method = RequestMethod.PUT)
+    public Result adDelete(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+        Result rs = adService.operatorUpdateAdStatus(id, AdStatusEnum.AD_STATUS_DELETE);
+        if(!isSuccess(rs)){
+            return rs;
+        }
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
@@ -165,6 +171,9 @@ public class AdController extends BaseController {
     @RequestMapping(value = "auditVideoPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_PASS);
+        if(!isSuccess(rs)){
+            return rs;
+        }
 
         //发送站内消息
         Result<AdDTO> adDTOResult = adService.getAdById(id);
@@ -196,6 +205,9 @@ public class AdController extends BaseController {
     @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_UN_PASS);
+        if(!isSuccess(rs)){
+            return rs;
+        }
 
         //发送站内消息
         Result<AdDTO> adDTOResult = adService.getAdById(id);

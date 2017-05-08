@@ -109,6 +109,9 @@ public class MerchantAuditController extends BaseController {
         Integer auditorId = 0;
         auditParam.setAuditorId(auditorId);
         Result result = merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
+        if(!isSuccess(result)){
+            return result;
+        }
 
         //发送站内消息
         Result<MerchantStoreAuditDTO> storeAuditDTOResult = merchantAuditService.getMerchantStoreAuditById(storeAuditId);
