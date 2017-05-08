@@ -270,7 +270,7 @@ public class AdServiceImpl implements AdService {
 
 			}
 			
-		}
+		 }
 		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
 		 Long count=adDOMapper.countByExample(example);

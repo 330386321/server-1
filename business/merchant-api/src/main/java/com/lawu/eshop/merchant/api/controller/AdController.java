@@ -1,7 +1,21 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
@@ -22,16 +36,12 @@ import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 /**
  * 描述：广告管理
@@ -197,14 +207,14 @@ public class AdController extends BaseController {
     	}else{
     		return successCreated(ResultCode.FAIL);
     	}
-    }
+	}
 
 	    @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
 	    @Authorization
 	    @ApiResponse(code = HttpCode.SC_OK, message = "success")
 	    @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
-	    public Result<AdMerchantDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-	    	Result<AdMerchantDTO> rs= adService.selectById(id);
+	    public Result<AdMerchantDetailDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+	    	Result<AdMerchantDetailDTO> rs= adService.selectById(id);
 	    	return rs;
 	    }
 

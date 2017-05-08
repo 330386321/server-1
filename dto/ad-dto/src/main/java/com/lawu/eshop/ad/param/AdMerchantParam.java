@@ -22,7 +22,7 @@ public class AdMerchantParam extends  AbstractPageParam{
     private AdStatusEnum statusEnum;
 	
     @ApiModelProperty(value = "排序类型，ASC正序（默认），DESC反序")
-    private OrderType orderType = OrderType.ASC;
+    private OrderType orderType = OrderType.DESC;
 
 	public AdTypeEnum getTypeEnum() {
 		return typeEnum;

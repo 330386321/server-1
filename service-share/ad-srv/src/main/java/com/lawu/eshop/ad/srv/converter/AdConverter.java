@@ -12,10 +12,12 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -258,6 +260,25 @@ public class AdConverter {
         }
         return adSolrDTOS;
     }
+
+	public static AdMerchantDetailDTO convertMerchantDetailAdDTO(AdBO adBO) {
+		AdMerchantDetailDTO dto=new AdMerchantDetailDTO();
+		if(adBO==null){
+			return dto;
+		}
+		dto.setId(adBO.getId());
+		dto.setTitle(adBO.getTitle());
+		dto.setPutWayEnum(adBO.getPutWayEnum());
+		dto.setStatusEnum(adBO.getStatusEnum());
+		dto.setTotalPoint(adBO.getTotalPoint());
+		dto.setTypeEnum(adBO.getTypeEnum());
+		dto.setBeginTime(adBO.getBeginTime());
+		dto.setAdCount(adBO.getAdCount());
+		dto.setAreas(adBO.getAreas());
+		dto.setMediaUrl(adBO.getMediaUrl());
+		dto.setPoint(adBO.getPoint());
+		return dto;
+	}
 
 
 }
