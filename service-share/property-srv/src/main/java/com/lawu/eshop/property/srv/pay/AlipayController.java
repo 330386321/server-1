@@ -1,5 +1,11 @@
 package com.lawu.eshop.property.srv.pay;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.domain.AlipayTradeAppPayModel;
+import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -12,6 +18,9 @@ import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.utils.DateUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -37,7 +46,7 @@ import java.util.*;
 @RequestMapping(value = "alipay/")
 public class AlipayController extends BaseController {
 
-	//private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
+	private static Logger logger = LoggerFactory.getLogger(AlipayController.class);
 
 	public static final String split = "|";
 
@@ -64,33 +73,56 @@ public class AlipayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 
-		SortedMap<String, String> paramMap = new TreeMap<String, String>();
+		//SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
+		String public_key = "";
 		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
 			appId = propertySrvConfig.getAlipayAppIdMember();
+			public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
 		} else if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMCHANT.val)) {
 			appId = propertySrvConfig.getAlipayAppIdBusiness();
+			public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
 		}
-		paramMap.put("app_id", appId);
-		paramMap.put("method", "alipay.trade.app.pay");
-		paramMap.put("charset", "utf-8");
-		paramMap.put("sign_type", "RSA");
-		paramMap.put("timestamp", DateUtil.getDateTime());
-		paramMap.put("version", "1.0");
-		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrl());
-
+//		paramMap.put("app_id", appId);
+//		paramMap.put("method", "alipay.trade.app.pay");
+//		paramMap.put("charset", "utf-8");
+//		paramMap.put("sign_type", "RSA");
+//		paramMap.put("timestamp", DateUtil.getDateTime());
+//		paramMap.put("version", "1.0");
+//		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrl());
+//
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds() + split + param.getSideUserNum();
-
-		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
-				+ param.getOutTradeNo() + "\",\"total_amount\":\"" + param.getTotalAmount()
-				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
-
-		String paramStr = SignUtils.buildMapToString(paramMap);
-		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipayPrivateKey(),
-				false);
-
-		return successCreated(paramStr + "&" + sign);
+//
+//		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
+//				+ param.getOutTradeNo() + "\",\"total_amount\":\"" + param.getTotalAmount()
+//				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
+//
+//		String paramStr = SignUtils.buildMapToString(paramMap);
+//		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipayPrivateKey(),false);
+//		return successCreated(paramStr + "&" + sign);
+		
+		// 实例化客户端
+		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", appId,
+				propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8", public_key, "RSA");
+		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
+		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
+		model.setSubject(param.getSubject());
+		model.setOutTradeNo(param.getOutTradeNo());
+		model.setTotalAmount(param.getTotalAmount());
+		model.setProductCode("QUICK_MSECURITY_PAY");
+		model.setPassbackParams(passback_params);
+		request.setBizModel(model);
+		request.setNotifyUrl(propertySrvConfig.getAlipayNotifyUrl());
+		String msg = "";
+		try {
+			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
+			msg = response.getBody();// 可以直接给客户端请求，无需再做处理。
+		} catch (AlipayApiException e) {
+			logger.error("支付宝支付封装参数错误，错误信息：{}",e.getMessage());
+			return successCreated(ResultCode.FAIL);
+		}
+		return successCreated(msg);
 	}
 
 	/**

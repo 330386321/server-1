@@ -39,7 +39,7 @@ public class ProductQueryDTO {
 	@ApiModelProperty(value = "封面图片", required = true)
     private String featureImage;
 	
-	@ApiModelProperty(value = "商品型号(PC)", required = true)
+	@ApiModelProperty(value = "商品型号(PC){id:型号ID,name:型号名称,originalPrice:原价,price:现价,inventory:库存}", required = true)
     private String spec;
 	
 	@ApiModelProperty(value = "最低价格", required = true)
