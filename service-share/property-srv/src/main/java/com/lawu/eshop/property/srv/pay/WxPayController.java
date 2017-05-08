@@ -142,7 +142,8 @@ public class WxPayController extends BaseController {
 					packageParams.put("prepayid", prepay_id);
 					packageParams.put("package", "Sign=WXPay");
 					packageParams.put("noncestr", RandomStringGenerator.getRandomStringByLength(32));
-					packageParams.put("timestamp", String.valueOf(System.currentTimeMillis()));
+					String timestamp = String.valueOf(System.currentTimeMillis());
+					packageParams.put("timestamp", timestamp.substring(0, 10));
 					sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
 					packageParams.put("sign", sign);
 				}
@@ -151,5 +152,5 @@ public class WxPayController extends BaseController {
 		}
 		return successCreated(packageParams);
 	}
-
+	
 }
