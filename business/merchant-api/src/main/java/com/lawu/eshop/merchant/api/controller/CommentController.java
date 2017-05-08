@@ -84,10 +84,10 @@ public class CommentController extends BaseController {
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
-    @ApiOperation(value = "根据商家ID查询商品评论信息", notes = "根据商家ID查询商品评论信息 [1002，1004,1000]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "根据商家ID查询商品评论信息", notes = "根据商家ID查询商品评论信息 [1002，1004,1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
-    @RequestMapping(value = "getProductCommentListByMerchantId", method = RequestMethod.POST)
+    @RequestMapping(value = "getProductCommentListByMerchantId", method = RequestMethod.GET)
     public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) throws Exception {
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
