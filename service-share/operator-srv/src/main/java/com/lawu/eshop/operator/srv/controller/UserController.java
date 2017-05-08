@@ -1,18 +1,5 @@
 package com.lawu.eshop.operator.srv.controller;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -28,6 +15,13 @@ import com.lawu.eshop.operator.srv.bo.UserListBO;
 import com.lawu.eshop.operator.srv.converter.UserConverter;
 import com.lawu.eshop.operator.srv.service.UserRoleService;
 import com.lawu.eshop.operator.srv.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author zhangyong
@@ -60,7 +54,7 @@ public class UserController extends BaseController {
         List<RoleBO> roleBOList = userService.findUserRoleByUserId(userBO.getId());
         List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
         Set<String> rolesKeys = new HashSet<>();
-        if (roleBOList.isEmpty()) {
+        if (roleBOList == null) {
             roleBOList = new ArrayList<>();
         } else {
             //查询role对应的permission_key
