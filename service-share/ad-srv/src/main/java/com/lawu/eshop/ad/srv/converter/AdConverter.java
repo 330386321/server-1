@@ -279,6 +279,8 @@ public class AdConverter {
 		dto.setAreas(adBO.getAreas());
 		dto.setMediaUrl(adBO.getMediaUrl());
 		dto.setPoint(adBO.getPoint());
+		dto.setRadius(adBO.getRadius());
+		dto.setContent(adBO.getContent());
 		return dto;
 	}
 

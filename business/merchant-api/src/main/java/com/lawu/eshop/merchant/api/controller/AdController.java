@@ -161,13 +161,13 @@ public class AdController extends BaseController {
     public Result againPutAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
     		@RequestParam @ApiParam(required = true, value = "广告投放时间") String beginTime) {
-    	Result<AdDTO> rs= adService.selectAbById(id);
+		Result<AdMerchantDetailDTO> rs= adService.selectById(id);
     	if(isSuccess(rs)){
     		Long merchantId = UserUtil.getCurrentUserId(getRequest());
         	String userNum = UserUtil.getCurrentUserNum(getRequest());
         	Result<PropertyPointDTO>  propertyPointRs=propertyInfoService.getPropertyPoint(userNum);
         	PropertyPointDTO propertyPointDTO=propertyPointRs.getModel();
-        	AdDTO adDTO=rs.getModel();
+        	AdMerchantDetailDTO adDTO=rs.getModel();
         	if(adDTO.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
         		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
         	}

@@ -47,6 +47,12 @@ public class AdMerchantDetailDTO {
 	
 	@ApiModelProperty(value = "广告附件路径")
     private String mediaUrl;
+	
+	@ApiModelProperty(value = "雷达半径")
+	private Integer radius;
+	
+	@ApiModelProperty(value = "广告内容")
+	private String content;
 
 	public Long getId() {
 		return id;
@@ -134,6 +140,24 @@ public class AdMerchantDetailDTO {
 
 	public void setMediaUrl(String mediaUrl) {
 		this.mediaUrl = mediaUrl;
+	}
+
+	
+
+	public Integer getRadius() {
+		return radius;
+	}
+
+	public void setRadius(Integer radius) {
+		this.radius = radius;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	

@@ -66,7 +66,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public List<AdPlatformBO> selectByPosition(PositionEnum positionEnum) {
         AdPlatformDOExample example = new AdPlatformDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andStatusEqualTo(new Byte("2")).andPositionEqualTo(positionEnum.val);
+        criteria.andStatusEqualTo(new Byte("1")).andPositionEqualTo(positionEnum.val);
         List<AdPlatformDO> DOS = adPlatformDOMapper.selectByExample(example);
         return DOS.isEmpty() ? null : AdPlatformConverter.convertBOS(DOS);
     }

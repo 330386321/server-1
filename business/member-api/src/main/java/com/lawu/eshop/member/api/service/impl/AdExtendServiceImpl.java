@@ -288,6 +288,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		try {
 			 Random random = new Random();  
 			 Integer r=random.nextInt()*B;
+			 //int s = random.nextInt(max)%(max-min+1) + min;
 			 if(r>0 && r<A){
 				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
 			 }else{

@@ -61,7 +61,7 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectRecommend", method = RequestMethod.GET)
     public Result<List<AdRecommendDTO>> selectRecommend() {
-        Result<List<AdPlatformDTO>> rs = adPlatformService.selectByPosition(PositionEnum.POSITON_RECOMMEND);
+        Result<List<AdPlatformDTO>> rs = adPlatformService.selectByPosition(PositionEnum.POSITON_SHOP_CHOOSE);
         List<AdPlatformDTO> list=rs.getModel();
         List<AdRecommendDTO> rdList=new ArrayList<>();
         if(!list.isEmpty()){
