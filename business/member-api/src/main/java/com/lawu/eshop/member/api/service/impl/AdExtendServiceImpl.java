@@ -81,7 +81,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     /**
      * 分母
      */
-    private static final Integer B=1000;
+    private static final Integer B=5;
     
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
     
@@ -287,8 +287,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Future<Result<PraisePointDTO>> future=null;
 		try {
 			 Random random = new Random();  
-			 Integer r=random.nextInt()*B;
-			 //int s = random.nextInt(max)%(max-min+1) + min;
+			 Integer r = random.nextInt(B)%(B+1);
 			 if(r>0 && r<A){
 				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
 			 }else{

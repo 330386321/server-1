@@ -61,15 +61,15 @@ public class WxPayController extends BaseController {
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
 	public Result getPrepayInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam ThirdPayParam param) {
-
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
 		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizIds(param.getBizIds());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
-		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
+		aparam.setUserNum(userNum);
+		aparam.setUserTypeEnum(UserTypeEnum.MEMBER);
 
 		// 查询支付金额
 		double money = 0;
