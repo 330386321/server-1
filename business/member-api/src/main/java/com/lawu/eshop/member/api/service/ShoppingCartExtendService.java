@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 
 /**
@@ -55,5 +56,14 @@ public interface ShoppingCartExtendService {
 	 * @return 返回订单的结算数据
 	 */
 	Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param);
+	
+	/**
+	 * 立即购买,创建订单
+	 * @param memberId 用户id
+	 * @param param 创建订单参数
+	 * @return
+	 * @author Sunny
+	 */
+	Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param);
 	
 }

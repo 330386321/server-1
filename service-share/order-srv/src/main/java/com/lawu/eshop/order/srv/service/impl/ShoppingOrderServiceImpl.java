@@ -887,18 +887,20 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		/*
 		 * 删除购物车记录
+		 * 如果用户是点击立即购物，是不经过购物车的，不需要删除购物车记录
 		 */
-		// 拆分购物车id
-		String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
-		List<Long> shoppingCartIdList = new ArrayList<Long>();
-		for (String shoppingCartIdStr : shoppingCartIdStrAry) {
-			shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
+		if (!StringUtils.isEmpty(shoppingOrderDO.getShoppingCartIdsStr())) {
+			// 拆分购物车id
+			String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
+			List<Long> shoppingCartIdList = new ArrayList<Long>();
+			for (String shoppingCartIdStr : shoppingCartIdStrAry) {
+				shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
+			}
+			
+			ShoppingCartDOExample shoppingCartDOExample = new ShoppingCartDOExample();
+			shoppingCartDOExample.createCriteria().andIdIn(shoppingCartIdList);
+			shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
 		}
-		
-		ShoppingCartDOExample shoppingCartDOExample = new ShoppingCartDOExample();
-		shoppingCartDOExample.createCriteria().andIdIn(shoppingCartIdList);
-		
-		shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
 		
 	}
 	

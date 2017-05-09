@@ -29,7 +29,9 @@ import com.lawu.eshop.order.param.ShoppingCartParam;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementItemParam;
 import com.lawu.eshop.order.param.ShoppingOrderSettlementParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
@@ -379,7 +381,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
     		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
-    		if (shoppingCartProductModelDTO.getStatus().equals(((byte)0x01)) || shoppingCartProductModelDTO.getStatus().equals(((byte)0x03))) {
+    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
     			memberShoppingCartDTO.setIsInvalid(true);
     		} else {
     			memberShoppingCartDTO.setIsInvalid(false);
@@ -423,29 +425,154 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	}
 
 	/**
-	 * 立即购买
+	 * 立即购买,不保存到数据库
 	 * @param param 购物参数
 	 * @return 返回订单的结算数据
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param) {
+		// 查询产品信息
+    	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
+    	if (!isSuccess(resultShoppingCartProductModelDTO)) {
+    		return successCreated(resultShoppingCartProductModelDTO.getRet());
+    	}
+    	
+    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
+    	
+    	// 查询商家名称
+    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
+    	if (!isSuccess(resultMerchantName)) {
+    		return successCreated(resultMerchantName.getRet());
+    	}
+    	
+    	List<MemberShoppingCartDTO> memberShoppingCartDTOList = new ArrayList<MemberShoppingCartDTO>();
+    	MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
+    	memberShoppingCartDTO.setMerchantName(resultMerchantName.getModel());
+    	memberShoppingCartDTO.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
+    	memberShoppingCartDTO.setProductId(shoppingCartProductModelDTO.getProductId());
+    	memberShoppingCartDTO.setProductModelId(shoppingCartProductModelDTO.getId());
+    	memberShoppingCartDTO.setQuantity(param.getQuantity());
+		memberShoppingCartDTO.setProductModelName(shoppingCartProductModelDTO.getName());
+		memberShoppingCartDTO.setProductName(shoppingCartProductModelDTO.getProductName());
+		memberShoppingCartDTO.setFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
+		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
+		memberShoppingCartDTOList.add(memberShoppingCartDTO);
+    	
+    	// 查找用户余额
+    	Result<PropertyBalanceDTO> resultPropertyBalanceDTO = propertyInfoService.getPropertyBalance(memberNum);
+    	if (!isSuccess(resultPropertyBalanceDTO)) {
+    		return successGet(resultPropertyBalanceDTO.getRet());
+    	}
 		
-		// 1.保存购物车记录
-		Result<Long> resultSave = save(memberId, param);
-		if (!isSuccess(resultSave)) {
-			return successGet(resultSave.getRet());
-		}
+		ShoppingCartSettlementDTO shoppingCartSettlementDTO = new ShoppingCartSettlementDTO();
+    	
+    	// 每一个商家的商品会合并在一起，小计金额
+    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<ShoppingCartSettlementItemDTO>();
+		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
+		shoppingCartSettlementItemDTO.setSubtotal(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
+		shoppingCartSettlementItemDTO.setProductNumber(memberShoppingCartDTO.getQuantity());
+		shoppingCartSettlementItemDTO.setItems(memberShoppingCartDTOList);
+		items.add(shoppingCartSettlementItemDTO);
 		
-		// 2.生成结算数据
-		List<Long> idList = new ArrayList<Long>();
-		idList.add(resultSave.getModel());
-		Result<ShoppingCartSettlementDTO> settlementResult = settlement(idList, memberNum);
-		if (!isSuccess(settlementResult)) {
-			return successGet(settlementResult.getRet());
-		}
+    	shoppingCartSettlementDTO.setTotal(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
+    	shoppingCartSettlementDTO.setItems(items);
+    	
+    	// 放入用户余额
+    	shoppingCartSettlementDTO.setBalance(resultPropertyBalanceDTO.getModel().getBalance());
 		
-		return successCreated(settlementResult);
+		return successCreated(shoppingCartSettlementDTO);
+	}
+	
+	/**
+	 * 立即购买创建订单，根据产品型号和数量直接创建订单
+	 * 
+	 * @return 返回订单的id
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Result<Long> buyNowCreateOrder(Long memberId, ShoppingOrderBuyNowCreateOrderForeignParam param) {
+    	// 通过商品型号id列表查询商品信息
+    	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
+    	if (!isSuccess(resultShoppingCartProductModelDTO)) {
+    		return successCreated(resultShoppingCartProductModelDTO.getRet());
+    	}
+    	
+    	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
+    	
+    	// 查询地址
+    	Result<AddressDTO> resultAddressDTO = addressService.get(param.getAddressId());
+    	if (!isSuccess(resultAddressDTO)) {
+    		return successCreated(resultAddressDTO.getRet());
+    	}
+    	
+    	// 查询商家是否支持七天退货
+    	List<Long> merchantIdList = new ArrayList<Long>();
+    	merchantIdList.add(shoppingCartProductModelDTO.getMerchantId());
+    	ShoppingOrderFindUserInfoParam shoppingOrderFindUserInfoParam = new ShoppingOrderFindUserInfoParam();
+    	shoppingOrderFindUserInfoParam.setMerchantIdList(merchantIdList);
+    	shoppingOrderFindUserInfoParam.setMemberId(memberId);
+    	Result<ShoppingOrderFindUserInfoDTO> shoppingOrderFindUserInfoDTOResult = merchantStoreService.shoppingOrderFindUserInfo(shoppingOrderFindUserInfoParam);
+    	if (!isSuccess(shoppingOrderFindUserInfoDTOResult)) {
+    		return successCreated(shoppingOrderFindUserInfoDTOResult.getRet());
+    	}
+    	
+    	ShoppingOrderFindMerchantInfoDTO shoppingOrderFindMerchantInfoDTO = shoppingOrderFindUserInfoDTOResult.getModel().getShoppingOrderFindMerchantInfoDTOList().get(0);
+    	
+    	// 组装订单
+    	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
+    	
+		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
+		shoppingOrderSettlementParam.setMemberId(memberId);
+		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
+		shoppingOrderSettlementParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
+		shoppingOrderSettlementParam.setMerchantStoreId(shoppingOrderFindMerchantInfoDTO.getMerchantStoreId());
+		shoppingOrderSettlementParam.setMerchantNum(shoppingOrderFindMerchantInfoDTO.getMerchantNum());
+		shoppingOrderSettlementParam.setMerchantName(shoppingOrderFindMerchantInfoDTO.getMerchantStoreName());
+		shoppingOrderSettlementParam.setMessage(param.getMessage());
+		shoppingOrderSettlementParam.setFreightPrice(param.getFreightPrice());
+		
+		// 设置收货人信息,对应每个订单
+		shoppingOrderSettlementParam.setConsigneeAddress(resultAddressDTO.getModel().getRegionName() + " " + resultAddressDTO.getModel().getAddr());
+		shoppingOrderSettlementParam.setConsigneeName(resultAddressDTO.getModel().getName());
+		shoppingOrderSettlementParam.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
+		
+		// 是否支持七天退货
+		shoppingOrderSettlementParam.setIsNoReasonReturn(shoppingOrderFindMerchantInfoDTO.getIsNoReasonReturn());
+		
+		// 用户是否是商家粉丝
+		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTO.getIsFans());
+		
+		BigDecimal commodityTotalPrice = new BigDecimal(0);
+		List<ShoppingOrderSettlementItemParam> items = new ArrayList<ShoppingOrderSettlementItemParam>();
+		
+		ShoppingOrderSettlementItemParam shoppingOrderSettlementItemParam = new ShoppingOrderSettlementItemParam();
+		// 加入购物车id,用于在保存订单之后删除购物车记录
+		shoppingOrderSettlementItemParam.setIsAllowRefund(shoppingCartProductModelDTO.getIsAllowRefund());
+		shoppingOrderSettlementItemParam.setProductId(shoppingCartProductModelDTO.getProductId());
+		shoppingOrderSettlementItemParam.setProductName(shoppingCartProductModelDTO.getProductName());
+		shoppingOrderSettlementItemParam.setProductFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
+		shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
+		shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
+		shoppingOrderSettlementItemParam.setQuantity(param.getQuantity());
+		shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
+		shoppingOrderSettlementItemParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
+		commodityTotalPrice = commodityTotalPrice.add(shoppingCartProductModelDTO.getPrice().multiply(new BigDecimal(param.getQuantity())));
+		
+		items.add(shoppingOrderSettlementItemParam);
+		shoppingOrderSettlementParam.setItems(items);
+		// 订单总价等于货物总价+运费
+		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice.add(param.getFreightPrice()));
+		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
+		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
+    	
+    	
+    	// 保存订单
+    	Result<List<Long>> resultIds = shoppingOrderService.save(shoppingOrderSettlementParams);
+    	if (!isSuccess(resultIds)) {
+    		return successCreated(resultIds.getRet());
+    	}
+    	
+    	return successCreated(resultIds);
 	}
 
 }

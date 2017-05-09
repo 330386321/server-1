@@ -29,6 +29,7 @@ import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
+import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderSettlementForeignParam;
 
 import io.swagger.annotations.Api;
@@ -244,5 +245,30 @@ public class ShoppingCartController extends BaseController {
     	
     	return successCreated(result);
     }
-    
+	
+	/**
+	 * 立即购买,创建订单
+	 * @param param 创建订单参数
+	 * @return 返回订单的id
+	 */
+    @SuppressWarnings({"unchecked" })
+	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+	@RequestMapping(value = "buyNowCreateOrder", method = RequestMethod.POST)
+	public Result<ShoppingCartSettlementDTO> buyNowCreateOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "创建订单参数") @Validated ShoppingOrderBuyNowCreateOrderForeignParam param, BindingResult bindingResult) {
+    	String message = validate(bindingResult);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	
+    	Result<Long> result = shoppingcartExtendService.buyNowCreateOrder(memberId, param);
+    	if (!isSuccess(result)) {
+    		return successCreated(result.getRet());
+    	}
+    	
+    	return successCreated(result);
+    }
 }
