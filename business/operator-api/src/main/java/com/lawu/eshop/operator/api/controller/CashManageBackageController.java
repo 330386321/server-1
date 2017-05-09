@@ -1,20 +1,5 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -29,18 +14,19 @@ import com.lawu.eshop.operator.api.service.MessageService;
 import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
-import com.lawu.eshop.property.param.CashBackageOperDataParam;
-import com.lawu.eshop.property.param.CashBackageOperParam;
-import com.lawu.eshop.property.param.CashBackageQueryDataParam;
-import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
-import com.lawu.eshop.property.param.CashBackageQueryParam;
-import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.UserDTO;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 
@@ -120,6 +106,7 @@ public class CashManageBackageController extends BaseController {
 		}
 		CashBackageOperDataParam dparam = new CashBackageOperDataParam();
 		dparam.setId(param.getId());
+		dparam.setUserNum(param.getUserNum());
 		dparam.setCashOperEnum(param.getCashOperEnum());
 		dparam.setFailReason(param.getFailReason());
 		// TODO
