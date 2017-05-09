@@ -57,8 +57,8 @@
     <reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="order-job"/>
 
     <!-- 配置作业-->
-    <!---->
-    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
+    <!--
+    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />-->
 	<job:simple id="shoppingOrderAutoCommentOrderJob" description="自动评论购物订单" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCommentOrderJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 	<job:simple id="shoppingOrderAutoCancelOrderJob" description="自动取消购物订单" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoCancelOrderJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 	<job:simple id="shoppingOrderAutoReceiptJob" description="自动收货" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoReceiptJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
