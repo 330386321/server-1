@@ -29,6 +29,11 @@ public class ShoppingOrderSettlementParam implements Serializable {
 	 */
 	private Long merchantId;
 	
+	/**
+	 * 商家门店id
+	 */
+	private Long merchantStoreId;
+	
     /**
     * 商家编号
     */
@@ -111,6 +116,14 @@ public class ShoppingOrderSettlementParam implements Serializable {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantNum() {

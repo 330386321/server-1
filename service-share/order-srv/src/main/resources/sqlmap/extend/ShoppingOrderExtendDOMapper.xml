@@ -22,49 +22,12 @@
 		<result column="item_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 	</resultMap>
 	
-	<resultMap id="ShoppingOrderBaseResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
-	  <id column="id" jdbcType="BIGINT" property="id" />
-	  <result column="member_id" jdbcType="BIGINT" property="memberId" />
-	  <result column="member_num" jdbcType="VARCHAR" property="memberNum" />
-	  <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
-	  <result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
-	  <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
-	  <result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
-	  <result column="consignee_address" jdbcType="VARCHAR" property="consigneeAddress" />
-	  <result column="consignee_mobile" jdbcType="VARCHAR" property="consigneeMobile" />
-	  <result column="remark" jdbcType="VARCHAR" property="remark" />
-	  <result column="message" jdbcType="VARCHAR" property="message" />
-	  <result column="freight_price" jdbcType="DECIMAL" property="freightPrice" />
-	  <result column="commodity_total_price" jdbcType="DECIMAL" property="commodityTotalPrice" />
-	  <result column="order_total_price" jdbcType="DECIMAL" property="orderTotalPrice" />
-	  <result column="actual_amount" jdbcType="DECIMAL" property="actualAmount" />
-      <result column="commission_status" jdbcType="TINYINT" property="commissionStatus" />
-	  <result column="order_status" jdbcType="TINYINT" property="orderStatus" />
-	  <result column="status" jdbcType="TINYINT" property="status" />
-	  <result column="send_time" jdbcType="INTEGER" property="sendTime" />
-	  <result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
-	  <result column="is_automatic_receipt" jdbcType="BIT" property="isAutomaticReceipt" />
-	  <result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
-	  <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
-	  <result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
-	  <result column="third_number" jdbcType="VARCHAR" property="thirdNumber" />
-	  <result column="waybill_num" jdbcType="VARCHAR" property="waybillNum" />
-	  <result column="express_company_id" jdbcType="INTEGER" property="expressCompanyId" />
-	  <result column="express_company_code" jdbcType="VARCHAR" property="expressCompanyCode" />
-	  <result column="express_company_name" jdbcType="VARCHAR" property="expressCompanyName" />
-	  <result column="gmt_commission" jdbcType="TIMESTAMP" property="gmtCommission" />
-	  <result column="gmt_payment" jdbcType="TIMESTAMP" property="gmtPayment" />
-	  <result column="gmt_transport" jdbcType="TIMESTAMP" property="gmtTransport" />
-	  <result column="gmt_transaction" jdbcType="TIMESTAMP" property="gmtTransaction" />
-	  <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
-	  <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-	</resultMap>
-	
 	<resultMap id="ShoppingOrderExtendResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO">
 		<id column="id" jdbcType="BIGINT" property="id" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
 		<result column="member_num" jdbcType="VARCHAR" property="memberNum" />
 		<result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+		<result column="merchant_store_id" jdbcType="BIGINT" property="merchantStoreId" />
 		<result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
 		<result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
 		<result column="consignee_name" jdbcType="VARCHAR" property="consigneeName" />
@@ -144,7 +107,7 @@
 	</sql>
 	
 	<sql id="ShoppingOrder_Column_List">
-		so.id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name,
+		so.id, so.member_id, so.member_num, so.merchant_id, merchant_store_id, so.merchant_num, so.merchant_name,
 		so.consignee_name,
 		so.consignee_address,
 		so.consignee_mobile, so.remark,

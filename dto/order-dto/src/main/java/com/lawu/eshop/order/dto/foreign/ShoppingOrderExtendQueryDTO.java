@@ -25,6 +25,12 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	private Long merchantId;
 
 	/**
+	 * 商家门店ID
+	 */
+	@ApiModelProperty(value = "商家门店ID", required = true)
+	private Long merchantStoreId;
+	
+	/**
 	 * 商家名称
 	 */
 	@ApiModelProperty(value = "商家名称", required = true)
@@ -86,6 +92,14 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantName() {

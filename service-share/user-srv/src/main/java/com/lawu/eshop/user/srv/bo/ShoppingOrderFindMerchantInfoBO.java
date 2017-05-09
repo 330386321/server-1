@@ -16,6 +16,11 @@ public class ShoppingOrderFindMerchantInfoBO implements Serializable {
 	private Long merchantId;
 	
     /**
+    * 商家门店id
+    */
+    private Long merchantStoreId;
+	
+    /**
     * 商家编号
     */
     private String merchantNum;
@@ -38,6 +43,14 @@ public class ShoppingOrderFindMerchantInfoBO implements Serializable {
 		this.merchantId = merchantId;
 	}
 	
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
 	public String getMerchantNum() {
 		return merchantNum;
 	}

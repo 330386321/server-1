@@ -32,7 +32,12 @@ public class ShoppingOrderBO implements Serializable {
 	 * 商家ID
 	 */
 	private Long merchantId;
-
+	
+    /**
+    * 门店id
+    */
+    private Long merchantStoreId;
+	
 	/**
 	 * 商家编号
 	 */
@@ -228,6 +233,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantNum() {
