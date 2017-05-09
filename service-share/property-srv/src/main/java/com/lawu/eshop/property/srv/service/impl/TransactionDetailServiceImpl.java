@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
@@ -125,6 +126,18 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		param.setId(transactionDetailDO.getId());
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public boolean verifyOrderIsPaySuccess(NotifyCallBackParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		criteria.andUserNumEqualTo(param.getUserNum()).andThirdTransactionNumEqualTo(param.getOutTradeNo());
+		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+		if(count > 0){
+			return true;
+		}
+		return false;
 	}
 
 }

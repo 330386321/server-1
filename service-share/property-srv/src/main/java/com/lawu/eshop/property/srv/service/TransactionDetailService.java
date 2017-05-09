@@ -1,6 +1,7 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
@@ -38,4 +39,13 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	int save(TransactionDetailSaveDataParam param);
+
+	/**
+	 * 根据用户编号、第三方交易号校验用户是否存在交易记录，存在表示已支付
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月9日 下午4:25:02
+	 */
+	boolean verifyOrderIsPaySuccess(NotifyCallBackParam param);
 }

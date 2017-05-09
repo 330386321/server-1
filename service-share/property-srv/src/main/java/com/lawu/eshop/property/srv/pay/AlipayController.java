@@ -102,6 +102,7 @@ public class AlipayController extends BaseController {
 			logger.error("支付宝支付封装参数错误，错误信息：{}",e.getMessage());
 			return successCreated(ResultCode.FAIL);
 		}
+		System.out.println("------------->"+msg);
 		return successCreated(msg);
 	}
 

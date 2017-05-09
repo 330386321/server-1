@@ -86,6 +86,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			result.setRet(ResultCode.FAIL);
 			result.setMsg("保证金初始记录为空");
 			return result;
+		}else{
+			if(BusinessDepositStatusEnum.VERIFY.val.equals(deposit.getStatus())){
+				result.setRet(ResultCode.SUCCESS);
+				return result;
+			}
 		}
 		BigDecimal dbMoney = deposit.getAmount();
 		BigDecimal backMoney = new BigDecimal(param.getTotalFee());

@@ -82,6 +82,11 @@ public class RechargeServiceImpl implements RechargeService {
 			result.setRet(ResultCode.FAIL);
 			result.setMsg("充值记录为空");
 			return result;
+		}else{
+			if(ThirdPayStatusEnum.SUCCESS.val.equals(recharge.getStatus())){
+				result.setRet(ResultCode.SUCCESS);
+				return result;
+			}
 		}
 		BigDecimal dbMoney = recharge.getRechargeMoney();
 		BigDecimal backMoney = new BigDecimal(param.getTotalFee());
@@ -163,10 +168,6 @@ public class RechargeServiceImpl implements RechargeService {
 		rechargeDOMapper.updateByExampleSelective(rechargeDO, example);
 		
 		result.setRet(ResultCode.SUCCESS);
-		
-		//TODO 发送站内消息
-		
-		
 		
 		return result;
 	}

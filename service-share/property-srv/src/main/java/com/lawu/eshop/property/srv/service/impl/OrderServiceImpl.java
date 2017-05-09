@@ -65,6 +65,12 @@ public class OrderServiceImpl implements OrderService {
 	 */
 	@Override
 	public int doHandleOrderPayNotify(NotifyCallBackParam param) {
+		
+		boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
+		if(isPay){
+			return ResultCode.SUCCESS;
+		}
+		
 		// 新增会员交易记录
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY.val);
@@ -91,6 +97,11 @@ public class OrderServiceImpl implements OrderService {
 	@Transactional
 	public int doHandlePayOrderNotify(NotifyCallBackParam param) {
 
+		boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
+		if(isPay){
+			return ResultCode.SUCCESS;
+		}
+		
 		// 新增会员交易记录，加商家交易明细，加商家财产余额，<更新订单状态>
 
 		// 新增会员交易明细
