@@ -3,8 +3,10 @@ package com.lawu.eshop.operator.api.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.operator.dto.CurrentUserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -41,5 +43,14 @@ public class CommonController extends BaseController {
     public Result logout() {
         SecurityUtils.getSubject().logout();
         return successCreated();
+    }
+
+    @ApiOperation(value = "获取当前用户信息", notes = "获取当前用户信息。（孙林青）", httpMethod = "GET")
+    @RequestMapping(value = "currentUser", method = RequestMethod.GET)
+    @RequiresAuthentication
+    public Result getCurrentUser() {
+        CurrentUserDTO currentUserDTO = new CurrentUserDTO();
+        currentUserDTO.setAccount(UserUtil.getCurrentUserAccount());
+        return successGet(currentUserDTO);
     }
 }
