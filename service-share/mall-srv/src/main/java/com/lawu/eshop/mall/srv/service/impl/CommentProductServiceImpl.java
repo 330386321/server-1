@@ -22,6 +22,7 @@ import com.lawu.eshop.mall.srv.mapper.CommentProductDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
+import com.lawu.eshop.utils.DateUtil;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -224,7 +225,14 @@ public class CommentProductServiceImpl implements CommentProductService {
 	public Page<CommentProductBO> getCommentProductListOperator(CommentListParam listParam) {
 		CommentProductDOExample example = new CommentProductDOExample();
 		example.setOrderByClause("id desc");
-		example.createCriteria().andStatusEqualTo(new Byte("1"));
+		CommentProductDOExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(new Byte("1"));
+		if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getBeginDate())){
+			criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(listParam.getBeginDate()));
+		}
+		if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getEndDate())){
+			criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(listParam.getEndDate()));
+		}
 		RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
 		Page<CommentProductBO> page = new Page<>();
 		page.setTotalCount(commentProductDOMapper.countByExample(example));

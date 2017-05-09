@@ -1,9 +1,6 @@
 package com.lawu.eshop.mall.srv.service;
 
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
@@ -12,6 +9,8 @@ import com.lawu.eshop.mall.param.CommentProductParam;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -53,8 +52,7 @@ public interface CommentProductService {
 
     /**
      * 定时器增加默认好评
-     * @param memberId
-     * @param productId
+     * @param notification
      */
     void saveCommentProductInfoOrderJob(ShoppingOrderAutoCommentNotification notification);
 
