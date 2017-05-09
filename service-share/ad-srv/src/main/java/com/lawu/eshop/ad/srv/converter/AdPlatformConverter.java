@@ -1,14 +1,14 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 平台广告实体转化
@@ -87,6 +87,7 @@ public class AdPlatformConverter {
             adPlatformBO.setType(adPlatformDO.getType());
             adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
             adPlatformBO.setContent(adPlatformDO.getContent());
+            adPlatformBO.setGmtCreate(adPlatformDO.getGmtCreate());
             if (adPlatformDO.getMerchantStoreId() != null)
                 adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
             if (adPlatformDO.getType() == 1) {
@@ -151,6 +152,7 @@ public class AdPlatformConverter {
             adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
             adPlatformDTO.setTypeEnum(adPlatformBO.getTypeEnum());
             adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
+            adPlatformDTO.setGmtCreate(adPlatformBO.getGmtCreate());
             if (adPlatformBO.getType() == 1) {
                 adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
             } else {

@@ -1,19 +1,13 @@
 package com.lawu.eshop.operator.api.service;
 
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
-import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 平台广告管理
@@ -26,7 +20,8 @@ public interface AdPlatformService {
 	
 	/**
 	 * 添加广告
-	 * @param adPlatformParam
+	 * @param adPlatform
+	 * @param url
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/saveAdPlatform")

@@ -63,7 +63,7 @@ public class AdPlatformController extends BaseController {
     @ApiOperation(value = "广告信息查询", notes = "广告信息查询[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
-    public Result<Page<AdPlatformOperatorDTO>> selectByPosition(@ModelAttribute @ApiParam( value = "查询信息") AdPlatformFindParam queryParams) {
+    public Result<Page<AdPlatformOperatorDTO>> selectByPosition(@RequestBody @ApiParam AdPlatformFindParam queryParams) {
         Result<Page<AdPlatformOperatorDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
         if(isSuccess(adPlatformDTOS)){
    		 Page<AdPlatformOperatorDTO> page=adPlatformDTOS.getModel();

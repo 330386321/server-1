@@ -1,12 +1,11 @@
 package com.lawu.eshop.ad.param;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
-
 import io.swagger.annotations.ApiParam;
+
+import java.io.Serializable;
 
 public class AdPlatformFindParam extends AbstractPageParam implements Serializable{
 
@@ -19,7 +18,46 @@ public class AdPlatformFindParam extends AbstractPageParam implements Serializab
 	
 	@ApiParam(name = "title", value = "广告标题")
 	private String title;
-	
+
+	private String beginDate;
+
+	private String endDate;
+
+	private String sortName;
+
+	private String sortOrder;
+
+	public String getBeginDate() {
+		return beginDate;
+	}
+
+	public void setBeginDate(String beginDate) {
+		this.beginDate = beginDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getSortName() {
+		return sortName;
+	}
+
+	public void setSortName(String sortName) {
+		this.sortName = sortName;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
 	public String getTitle() {
 		return title;

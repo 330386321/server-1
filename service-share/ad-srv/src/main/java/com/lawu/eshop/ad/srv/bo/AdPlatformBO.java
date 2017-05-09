@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.srv.bo;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 
+import java.util.Date;
+
 public class AdPlatformBO {
 
 	private Long id;
@@ -24,6 +26,8 @@ public class AdPlatformBO {
 	private PositionEnum positionEnum;
 	
 	private TypeEnum typeEnum;
+
+	private Date gmtCreate;
 	
 	public TypeEnum getTypeEnum() {
 		return typeEnum;
@@ -103,5 +107,13 @@ public class AdPlatformBO {
 
 	public void setMerchantStoreId(Long merchantStoreId) {
 		this.merchantStoreId = merchantStoreId;
+	}
+
+	public Date getGmtCreate() {
+		return gmtCreate;
+	}
+
+	public void setGmtCreate(Date gmtCreate) {
+		this.gmtCreate = gmtCreate;
 	}
 }

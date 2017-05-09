@@ -13,6 +13,8 @@ import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.DateUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,8 +84,14 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         if (param.getTypeEnum() != null) {
             criteria.andTypeEqualTo(param.getTypeEnum().val);
         }
-        if (param.getTitle() != null) {
+        if (StringUtils.isNotEmpty(param.getTitle())) {
             criteria.andTitleLike("%" + param.getTitle() + "%");
+        }
+        if(StringUtils.isNotEmpty(param.getBeginDate())){
+            criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
+        }
+        if(StringUtils.isNotEmpty(param.getEndDate())){
+            criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
         }
         Long count=adPlatformDOMapper.countByExample(example);
         RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
