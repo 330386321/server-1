@@ -226,10 +226,10 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         CommentMerchantDOExample.Criteria criteria = example.createCriteria();
         criteria.andStatusEqualTo(new Byte("1"));
         if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getBeginDate())){
-            criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(listParam.getBeginDate()));
+            criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(listParam.getBeginDate() + " 00:00:00"));
         }
         if(org.apache.commons.lang.StringUtils.isNotEmpty(listParam.getEndDate())){
-            criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(listParam.getEndDate()));
+            criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(listParam.getEndDate() + " 23:59:59"));
         }
         RowBounds rowBounds = new RowBounds(listParam.getOffset(), listParam.getPageSize());
         Page<CommentMerchantBO> page = new Page<>();

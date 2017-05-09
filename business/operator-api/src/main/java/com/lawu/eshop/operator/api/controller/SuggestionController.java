@@ -14,12 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhangyong
@@ -34,10 +29,10 @@ public class SuggestionController extends BaseController {
     private SuggestionService suggestionService;
 
     @PageBody
-    @ApiOperation(value = "意见记录列表", notes = "可以根据时间段查询已经反馈记录 [1004,1002]", httpMethod = "GET")
+    @ApiOperation(value = "意见记录列表", notes = "可以根据时间段查询已经反馈记录 [1004,1002]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "suggestion/getSuggestionList", method = RequestMethod.GET)
-    public Result<Page<SuggestionDTO>> getSuggestionList(@ModelAttribute SuggestionListParam pageParam) {
+    @RequestMapping(value = "suggestion/getSuggestionList", method = RequestMethod.POST)
+    public Result<Page<SuggestionDTO>> getSuggestionList(@RequestBody SuggestionListParam pageParam) {
         if (pageParam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }

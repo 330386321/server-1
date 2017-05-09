@@ -9,14 +9,14 @@ import com.lawu.eshop.mall.srv.domain.SuggestionDO;
 import com.lawu.eshop.mall.srv.domain.SuggestionDOExample;
 import com.lawu.eshop.mall.srv.mapper.SuggestionDOMapper;
 import com.lawu.eshop.mall.srv.service.SuggestionService;
+import com.lawu.eshop.utils.DateUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -48,15 +48,15 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public Page<SuggestionBO> getSuggestionList(SuggestionListParam pageParam) {
         SuggestionDOExample suggestionDOExample = new SuggestionDOExample();
-        if (pageParam.getBeginTime() != null && pageParam.getEndTime() != null) {
-            Date endDate = pageParam.getEndTime();
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(endDate);
-            calendar.add(calendar.DATE, 1);//把日期往后增加一天.整数往后推,负数往前移动
-            endDate = calendar.getTime();   //这个时间就是日期往后推一天的结果
-            suggestionDOExample.createCriteria().andGmtCreateBetween(pageParam.getBeginTime(), endDate);
-        }
         suggestionDOExample.setOrderByClause("id desc");
+        SuggestionDOExample.Criteria criteria = suggestionDOExample.createCriteria();
+        if(StringUtils.isNotEmpty(pageParam.getBeginDate())){
+            criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(pageParam.getBeginDate() + " 00:00:00"));
+        }
+        if(StringUtils.isNotEmpty(pageParam.getEndDate())){
+            criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(pageParam.getEndDate() + " 23:59:59"));
+        }
+
         RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
         Page<SuggestionBO> page = new Page<>();
         page.setTotalCount(suggestionDOMapper.countByExample(suggestionDOExample));

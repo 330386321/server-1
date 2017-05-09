@@ -2,10 +2,8 @@ package com.lawu.eshop.mall.param;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author zhangyong
@@ -14,26 +12,46 @@ import java.util.Date;
 public class SuggestionListParam extends AbstractPageParam implements Serializable{
 
     @ApiModelProperty(value = "开始时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date beginTime;
+    private String beginDate;
 
     @ApiModelProperty(value = "结束时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endTime;
+    private String endDate;
 
-    public Date getBeginTime() {
-        return beginTime;
+    @ApiModelProperty(value = "排序字段")
+    private String sortName;
+
+    @ApiModelProperty(value = "排序方式")
+    private String sortOrder;
+
+    public String getBeginDate() {
+        return beginDate;
     }
 
-    public void setBeginTime(Date beginTime) {
-        this.beginTime = beginTime;
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public Date getEndTime() {
-        return endTime;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getSortName() {
+        return sortName;
+    }
+
+    public void setSortName(String sortName) {
+        this.sortName = sortName;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }

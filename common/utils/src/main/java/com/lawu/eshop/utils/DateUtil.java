@@ -176,14 +176,14 @@ public class DateUtil {
     }
 
     /**
-     * yyyy-MM-dd 字符串转换为Date
+     * yyyy-MM-dd HH:mm:ss 字符串转换为Date
      *
      * @param date
      * @return
      */
     public static Date stringToDate(String date) {
         try {
-            return dateFormat.parse(date);
+            return dateTimeFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }

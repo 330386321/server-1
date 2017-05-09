@@ -57,13 +57,16 @@ public class SuggestionController extends BaseController {
         if (pageParam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
+        Page<SuggestionDTO> pages = new Page<>();
         //查询意见反馈记录
         Page<SuggestionBO> suggestionBOPage = suggestionService.getSuggestionList(pageParam);
+        if(suggestionBOPage == null){
+            return successGet(pages);
+        }
         if (suggestionBOPage.getRecords().isEmpty()) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         List<SuggestionDTO> suggestionDTOS = SuggestionConverter.convertDTOS(suggestionBOPage.getRecords());
-        Page<SuggestionDTO> pages = new Page<>();
         pages.setRecords(suggestionDTOS);
         pages.setTotalCount(suggestionBOPage.getTotalCount());
         pages.setCurrentPage(suggestionBOPage.getCurrentPage());
