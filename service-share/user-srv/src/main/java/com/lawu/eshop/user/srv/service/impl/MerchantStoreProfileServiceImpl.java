@@ -41,7 +41,9 @@ public class MerchantStoreProfileServiceImpl implements MerchantStoreProfileServ
                 .andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
         List<MerchantStoreImageDO> imageDOS = merchantStoreImageDOMapper.selectByExample(example1);
         MerchantStoreProfileBO merchantStoreProfileBO = MerchantStoreConverter.convertBO(merchantStoreDOS.get(0));
-        merchantStoreProfileBO.setLogoUrl(imageDOS.get(0).getPath());
+        if(!imageDOS.isEmpty()){
+            merchantStoreProfileBO.setLogoUrl(imageDOS.get(0).getPath());
+        }
         return  merchantStoreProfileBO;
     }
 }
