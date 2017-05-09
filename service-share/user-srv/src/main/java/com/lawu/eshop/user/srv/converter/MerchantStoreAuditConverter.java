@@ -82,7 +82,11 @@ public class MerchantStoreAuditConverter {
         merchantStoreAuditDTO.setCertifType(merchantStoreParam.getCertifType());
         merchantStoreAuditDTO.setOperatorCardId(merchantStoreParam.getOperatorCardId());
         merchantStoreAuditDTO.setOperatorName(merchantStoreParam.getOperatorName());
-        merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl());
+        if(StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl().lastIndexOf(",") > 0){
+            merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl().substring(0,merchantStoreParam.getLogoUrl().length() - 1));
+        }else{
+            merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl());
+        }
         if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
             String[] storeUrlArr = merchantStoreParam.getStoreUrl().split(",");
             for (String storeUrl : storeUrlArr) {
