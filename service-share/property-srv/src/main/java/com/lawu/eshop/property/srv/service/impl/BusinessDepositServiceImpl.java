@@ -30,6 +30,8 @@ import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +43,9 @@ import java.util.List;
 
 @Service
 public class BusinessDepositServiceImpl implements BusinessDepositService {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(BusinessDepositServiceImpl.class);
+			
 	@Autowired
 	private BusinessDepositDOMapper businessDepositDOMapper;
 	@Autowired
@@ -89,6 +93,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		}else{
 			if(BusinessDepositStatusEnum.VERIFY.val.equals(deposit.getStatus())){
 				result.setRet(ResultCode.SUCCESS);
+				logger.info("重复回调(判断幂等)");
 				return result;
 			}
 		}

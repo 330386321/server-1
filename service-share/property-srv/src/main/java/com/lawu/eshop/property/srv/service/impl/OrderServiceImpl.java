@@ -20,6 +20,9 @@ import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,8 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+	private static Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+			
 	@Autowired
 	private TransactionDetailService transactionDetailService;
 	@Autowired
@@ -68,6 +73,7 @@ public class OrderServiceImpl implements OrderService {
 		
 		boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
 		if(isPay){
+			logger.info("重复回调(判断幂等)");
 			return ResultCode.SUCCESS;
 		}
 		
@@ -99,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
 
 		boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
 		if(isPay){
+			logger.info("重复回调(判断幂等)");
 			return ResultCode.SUCCESS;
 		}
 		

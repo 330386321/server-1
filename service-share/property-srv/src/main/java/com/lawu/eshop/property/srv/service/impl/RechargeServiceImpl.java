@@ -3,6 +3,8 @@ package com.lawu.eshop.property.srv.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ import com.lawu.eshop.utils.StringUtil;
 @Service
 public class RechargeServiceImpl implements RechargeService {
 
+	private static Logger logger = LoggerFactory.getLogger(RechargeServiceImpl.class);
+			
 	@Autowired
 	private RechargeDOMapper rechargeDOMapper;
 	@Autowired
@@ -85,6 +89,7 @@ public class RechargeServiceImpl implements RechargeService {
 		}else{
 			if(ThirdPayStatusEnum.SUCCESS.val.equals(recharge.getStatus())){
 				result.setRet(ResultCode.SUCCESS);
+				logger.info("重复回调(判断幂等)");
 				return result;
 			}
 		}
