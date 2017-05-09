@@ -1,23 +1,8 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.CashOperEnum;
-import com.lawu.eshop.property.constants.CashStatusEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
@@ -41,6 +26,15 @@ import com.lawu.eshop.property.srv.service.CashManageBackageService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class CashManageBackageServiceImpl implements CashManageBackageService {
@@ -77,8 +71,11 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		} else {
 			Criteria criteria1 = example.createCriteria();
 			criteria1.andUserTypeEqualTo(param.getUserTypeEnum().val);
-			if (param.getBeginDate() != null && param.getEndDate() != null) {
-				criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
+			if (StringUtils.isNotEmpty(param.getBeginDate())){
+				criteria1.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
+			}
+			if(StringUtils.isNotEmpty(param.getEndDate())){
+				criteria1.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
 			}
 			if (!CashStatusEnum.ALL.val.equals(param.getCashStatsuEnum().val)) {
 				criteria1.andStatusEqualTo(param.getCashStatsuEnum().val);

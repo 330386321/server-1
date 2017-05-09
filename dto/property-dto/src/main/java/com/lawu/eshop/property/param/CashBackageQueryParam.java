@@ -1,16 +1,12 @@
 package com.lawu.eshop.property.param;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
-
 import io.swagger.annotations.ApiParam;
+
+import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CashBackageQueryParam extends AbstractPageParam implements Serializable{
@@ -26,13 +22,11 @@ public class CashBackageQueryParam extends AbstractPageParam implements Serializ
 	@ApiParam(name = "regionPath", value = "区域路径(格式：省ID/市ID/区ID)")
 	private String regionPath;
 
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiParam(name = "beginDate", required = true, value = "开始时间")
-	private Date beginDate;
+	private String beginDate;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiParam(name = "endDate", required = true, value = "结束时间")
-	private Date endDate;
+	private String endDate;
 
 	@ApiParam(name = "cashStatsuEnum", required = true, value = "提现状态(全部传空字符串)")
 	private CashStatusEnum cashStatsuEnum;
@@ -56,19 +50,19 @@ public class CashBackageQueryParam extends AbstractPageParam implements Serializ
 		this.regionPath = regionPath;
 	}
 
-	public Date getBeginDate() {
+	public String getBeginDate() {
 		return beginDate;
 	}
 
-	public void setBeginDate(Date beginDate) {
+	public void setBeginDate(String beginDate) {
 		this.beginDate = beginDate;
 	}
 
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
