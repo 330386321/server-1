@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,6 +40,9 @@ public class AdPlatformOperatorDTO {
 	@ApiModelProperty(value = "创建日期")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtCreate;
+
+	@ApiModelProperty(value = "状态")
+	private AdPlatformStatusEnum statusEnum;
 	
 	@ApiModelProperty(value = "POSITON_RECOMMEND 人气推荐 POSITON_SHOP_TOP 要购物顶部广告 POSITON_SHOP_CHOOSE"
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告 SHOPPING_BUY "
@@ -142,5 +146,21 @@ public class AdPlatformOperatorDTO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public String getTypeName() {
+		return typeEnum.getName();
+	}
+
+	public String getPositionName() {
+		return positionEnum.getName();
+	}
+
+	public AdPlatformStatusEnum getStatusEnum() {
+		return statusEnum;
+	}
+
+	public void setStatusEnum(AdPlatformStatusEnum statusEnum) {
+		this.statusEnum = statusEnum;
 	}
 }

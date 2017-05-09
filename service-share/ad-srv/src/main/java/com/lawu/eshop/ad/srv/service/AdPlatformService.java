@@ -91,6 +91,13 @@ public interface AdPlatformService {
      */
     void unShelve(Long id);
 
+    /**
+     * 广告上架
+     *
+     * @param id
+     */
+    void onShelve(Long id);
+
 
     /**
      * 根据类型位置查询广告

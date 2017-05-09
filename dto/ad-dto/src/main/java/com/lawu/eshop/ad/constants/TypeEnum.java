@@ -2,13 +2,23 @@ package com.lawu.eshop.ad.constants;
 
 public enum TypeEnum {
 	
-	TYPE_LINK((byte) 0x01),      //链接
-	TYPE_PRODUCT((byte) 0x02),     //商品
-	TYPE_STORE((byte) 0x03);     //门店
+	TYPE_LINK((byte) 0x01,"链接"),      //链接
+	TYPE_PRODUCT((byte) 0x02, "商品"),     //商品
+	TYPE_STORE((byte) 0x03, "门店");     //门店
     public Byte val;
+    private String name;
 
-    TypeEnum(Byte val) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    TypeEnum(Byte val,String name) {
         this.val = val;
+        this.name = name;
     }
 
     public static TypeEnum getEnum(Byte val) {

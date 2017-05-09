@@ -112,6 +112,13 @@ public class AdPlatformController extends BaseController {
         Result rs = adPlatformService.unShelve(id);
         return rs;
     }
+
+    @ApiOperation(value = "上架广告", notes = "上架广告。（梅述全）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequestMapping(value = "onShelve/{id}", method = RequestMethod.PUT)
+    public Result onShelve(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+        return adPlatformService.onShelve(id);
+    }
     
     
     @ApiOperation(value = "设置广告位", notes = "设置广告位[]（张荣成）", httpMethod = "PUT")

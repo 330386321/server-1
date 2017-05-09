@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
@@ -12,7 +13,6 @@ import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
 import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.utils.DataTransUtil;
 import com.lawu.eshop.utils.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -45,7 +45,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         } else {
             adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         }
-        adPlatformDO.setStatus(new Byte("1"));
+        adPlatformDO.setStatus(AdPlatformStatusEnum.UP.val);
         adPlatformDO.setGmtCreate(new Date());
         adPlatformDO.setGmtModified(new Date());
         adPlatformDO.setContent(adPlatformParam.getContent());
@@ -59,7 +59,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDOExample example = new AdPlatformDOExample();
         example.createCriteria().andIdEqualTo(id);
         AdPlatformDO adPlatformDO = new AdPlatformDO();
-        adPlatformDO.setStatus(new Byte("0"));
+        adPlatformDO.setStatus(AdPlatformStatusEnum.DELETE.val);
         Integer i = adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
         return i;
     }
@@ -68,7 +68,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public List<AdPlatformBO> selectByPosition(PositionEnum positionEnum) {
         AdPlatformDOExample example = new AdPlatformDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andStatusEqualTo(new Byte("1")).andPositionEqualTo(positionEnum.val);
+        criteria.andStatusEqualTo(AdPlatformStatusEnum.UP.val).andPositionEqualTo(positionEnum.val);
         List<AdPlatformDO> DOS = adPlatformDOMapper.selectByExample(example);
         return DOS.isEmpty() ? null : AdPlatformConverter.convertBOS(DOS);
     }
@@ -77,7 +77,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public Page<AdPlatformBO> selectList(AdPlatformFindParam param) {
         AdPlatformDOExample example = new AdPlatformDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andStatusNotEqualTo(new Byte("0"));
+        criteria.andStatusNotEqualTo(AdPlatformStatusEnum.DELETE.val);
         if (param.getPositionEnum() != null) {
             criteria.andPositionEqualTo(param.getPositionEnum().val);
         }
@@ -110,7 +110,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public Integer issueAd(Long id) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
-        adPlatformDO.setStatus(new Byte("2"));
+        adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
         Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
         return i;
     }
@@ -153,15 +153,23 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     public void unShelve(Long id) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
-        adPlatformDO.setStatus(new Byte("3"));
+        adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
         Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
 
     }
 
     @Override
+    public void onShelve(Long id) {
+        AdPlatformDO adPlatformDO = new AdPlatformDO();
+        adPlatformDO.setId(id);
+        adPlatformDO.setStatus(AdPlatformStatusEnum.UP.val);
+        adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
+    }
+
+    @Override
     public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum) {
         AdPlatformDOExample example = new AdPlatformDOExample();
-        example.createCriteria().andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(DataTransUtil.intToByte(1));
+        example.createCriteria().andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
         return AdPlatformConverter.convertBOS(adPlatformDOS);
     }

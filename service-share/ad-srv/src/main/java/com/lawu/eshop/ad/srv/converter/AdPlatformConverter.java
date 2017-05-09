@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.converter;
 
+import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
@@ -87,6 +88,9 @@ public class AdPlatformConverter {
             adPlatformBO.setType(adPlatformDO.getType());
             adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
             adPlatformBO.setContent(adPlatformDO.getContent());
+            adPlatformBO.setTypeEnum(TypeEnum.getEnum(adPlatformDO.getType()));
+            adPlatformBO.setPositionEnum(PositionEnum.getEnum(adPlatformDO.getPosition()));
+            adPlatformBO.setStatus(adPlatformDO.getStatus());
             adPlatformBO.setGmtCreate(adPlatformDO.getGmtCreate());
             if (adPlatformDO.getMerchantStoreId() != null)
                 adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
@@ -152,6 +156,7 @@ public class AdPlatformConverter {
             adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
             adPlatformDTO.setTypeEnum(adPlatformBO.getTypeEnum());
             adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
+            adPlatformDTO.setStatusEnum(AdPlatformStatusEnum.getEnum(adPlatformBO.getStatus()));
             adPlatformDTO.setGmtCreate(adPlatformBO.getGmtCreate());
             if (adPlatformBO.getType() == 1) {
                 adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());

@@ -60,6 +60,14 @@ public interface AdPlatformService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/unShelve/{id}")
 	Result unShelve(@PathVariable("id") Long id);
+
+	/**
+	 * 上架广告
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/onShelve/{id}")
+	Result onShelve(@PathVariable("id") Long id);
 	
 	/**
 	 * 设置广告位

@@ -28,6 +28,8 @@ public class AdPlatformBO {
 	private TypeEnum typeEnum;
 
 	private Date gmtCreate;
+
+	private Byte status;
 	
 	public TypeEnum getTypeEnum() {
 		return typeEnum;
@@ -115,5 +117,13 @@ public class AdPlatformBO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public Byte getStatus() {
+		return status;
+	}
+
+	public void setStatus(Byte status) {
+		this.status = status;
 	}
 }
