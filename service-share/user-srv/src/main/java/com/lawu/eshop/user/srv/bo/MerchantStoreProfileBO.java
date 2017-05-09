@@ -44,6 +44,8 @@ public class MerchantStoreProfileBO {
 
     private Byte certifType;
 
+    private String logoUrl;
+
 
 
     public Long getMerchantId() {
@@ -100,5 +102,13 @@ public class MerchantStoreProfileBO {
 
     public void setCertifType(Byte certifType) {
         this.certifType = certifType;
+    }
+
+    public String getLogoUrl() {
+        return logoUrl;
+    }
+
+    public void setLogoUrl(String logoUrl) {
+        this.logoUrl = logoUrl;
     }
 }

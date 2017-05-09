@@ -116,9 +116,9 @@ public class MerchantStoreController extends BaseController {
         }
         //判断回显照片
         if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
-            merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
+            merchantStoreParam.setStoreUrl(storeUrls + merchantStoreParam.getStoreUrl());
         } else {
-            merchantStoreParam.setStoreUrl(otherUrls.toString());
+            merchantStoreParam.setStoreUrl(storeUrls.toString());
         }
         if (StringUtils.isNotEmpty(merchantStoreParam.getEnvironmentUrl())) {
             merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());
@@ -210,9 +210,9 @@ public class MerchantStoreController extends BaseController {
         }
         //判断回显照片
         if (StringUtils.isNotEmpty(merchantStoreParam.getStoreUrl())) {
-            merchantStoreParam.setStoreUrl(otherUrls + merchantStoreParam.getStoreUrl());
+            merchantStoreParam.setStoreUrl(storeUrls + merchantStoreParam.getStoreUrl());
         } else {
-            merchantStoreParam.setStoreUrl(otherUrls.toString());
+            merchantStoreParam.setStoreUrl(storeUrls.toString());
         }
         if (StringUtils.isNotEmpty(merchantStoreParam.getEnvironmentUrl())) {
             merchantStoreParam.setEnvironmentUrl(environmentUrls + merchantStoreParam.getEnvironmentUrl());

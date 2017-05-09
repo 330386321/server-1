@@ -1,9 +1,13 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +24,24 @@ public class MerchantStoreProfileServiceImpl implements MerchantStoreProfileServ
 
     @Autowired
     private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+    @Autowired
+    private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
 
     @Override
-    public MerchantStoreProfileBO findMerchantStoreInfo(Long merchantProfileId) {
+    public MerchantStoreProfileBO findMerchantStoreInfo(Long mid) {
         MerchantStoreProfileDOExample example = new MerchantStoreProfileDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantProfileId);
+        example.createCriteria().andMerchantIdEqualTo(mid);
 
         List<MerchantStoreProfileDO> merchantStoreDOS = merchantStoreProfileDOMapper.selectByExample(example);
-
-        return merchantStoreDOS.isEmpty() ? null : MerchantStoreConverter.convertBO(merchantStoreDOS.get(0));
+        if(merchantStoreDOS.isEmpty()){
+            return null;
+        }
+        MerchantStoreImageDOExample example1 = new MerchantStoreImageDOExample();
+        example1.createCriteria().andMerchantIdEqualTo(mid)
+                .andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
+        List<MerchantStoreImageDO> imageDOS = merchantStoreImageDOMapper.selectByExample(example1);
+        MerchantStoreProfileBO merchantStoreProfileBO = MerchantStoreConverter.convertBO(merchantStoreDOS.get(0));
+        merchantStoreProfileBO.setLogoUrl(imageDOS.get(0).getPath());
+        return  merchantStoreProfileBO;
     }
 }
