@@ -1303,6 +1303,16 @@ public class ShoppingOrderItemExtendDOExample {
             addCriterion("so.merchant_id =", value, "merchantId");
             return (Criteria) this;
         }
+
+        public ShoppingOrderItemExtendDOExample.Criteria andOrderNumEqualTo(String value) {
+            addCriterion("so.order_num =", value, "orderNum");
+            return (ShoppingOrderItemExtendDOExample.Criteria) this;
+        }
+
+        public ShoppingOrderItemExtendDOExample.Criteria andConsigneeNameLike(String value) {
+            addCriterion("so.consignee_name like", value, "consigneeName");
+            return (ShoppingOrderItemExtendDOExample.Criteria) this;
+        }
         
     }
 

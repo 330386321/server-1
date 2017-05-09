@@ -1,12 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
@@ -20,6 +13,13 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
@@ -169,8 +169,20 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	public Page<ShoppingOrderItemExtendBO> selectRefundPage(ShoppingRefundQueryForeignParam param) {
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+
+		if (StringUtils.isNotEmpty(param.getKeyword())) {
+			shoppingOrderItemExtendDOExample.clear();
+			ShoppingOrderItemExtendDOExample.Criteria orderNumCriteria = shoppingOrderItemExtendDOExample.or();
+			orderNumCriteria.andOrderNumEqualTo(param.getKeyword());
+			orderNumCriteria.getAllCriteria().addAll(shoppingOrderItemExtendDOExampleCriteria.getAllCriteria());
+
+			ShoppingOrderItemExtendDOExample.Criteria paroductCriteria = shoppingOrderItemExtendDOExample.or();
+			paroductCriteria.andConsigneeNameLike("%"+ param.getKeyword() + "%");
+			paroductCriteria.getAllCriteria().addAll(shoppingOrderItemExtendDOExampleCriteria.getAllCriteria());
+		}
 		
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
@@ -182,9 +194,6 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		if (count == null || count <= 0) {
 			return rtn;
 		}
-		
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		
 		// 按照退款详情的创建时间排序
 		shoppingOrderItemExtendDOExample.setOrderByClause("srd.gmt_create desc");
