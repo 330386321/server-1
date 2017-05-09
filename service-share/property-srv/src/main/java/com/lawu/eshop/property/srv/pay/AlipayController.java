@@ -10,14 +10,12 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipaySubmit;
-import com.lawu.eshop.pay.sdk.alipay.util.SignUtils;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.AliPayConfigParam;
 import com.lawu.eshop.property.param.PcAlipayDataParam;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
-import com.lawu.eshop.utils.DateUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +71,6 @@ public class AlipayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 
-		//SortedMap<String, String> paramMap = new TreeMap<String, String>();
 		String appId = "";
 		String public_key = "";
 		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
@@ -81,29 +78,12 @@ public class AlipayController extends BaseController {
 			public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
 		} else if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMCHANT.val)) {
 			appId = propertySrvConfig.getAlipayAppIdBusiness();
-			public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
+			public_key = propertySrvConfig.getAlipayEdianBusinessPublicKey();
 		}
-//		paramMap.put("app_id", appId);
-//		paramMap.put("method", "alipay.trade.app.pay");
-//		paramMap.put("charset", "utf-8");
-//		paramMap.put("sign_type", "RSA");
-//		paramMap.put("timestamp", DateUtil.getDateTime());
-//		paramMap.put("version", "1.0");
-//		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrl());
-//
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
 				+ split + param.getBizIds() + split + param.getSideUserNum();
-//
-//		paramMap.put("biz_content", "{\"subject\":\"" + param.getSubject() + "\",\"out_trade_no\":\""
-//				+ param.getOutTradeNo() + "\",\"total_amount\":\"" + param.getTotalAmount()
-//				+ "\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"passback_params\":\"" + passback_params + "\"}");
-//
-//		String paramStr = SignUtils.buildMapToString(paramMap);
-//		String sign = SignUtils.getSign(paramMap, propertySrvConfig.getAlipayPrivateKey(),false);
-//		return successCreated(paramStr + "&" + sign);
-		
 		// 实例化客户端
-		AlipayClient alipayClient = new DefaultAlipayClient("https://openapi.alipay.com/gateway.do", appId,
+		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(), appId,
 				propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8", public_key, "RSA");
 		AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 		AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();

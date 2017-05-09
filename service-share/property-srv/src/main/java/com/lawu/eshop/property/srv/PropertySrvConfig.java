@@ -46,6 +46,9 @@ public class PropertySrvConfig {
 
     @Value(value = "${alipay_edian_member_public_key}")
     private String alipayEdianMemberPublicKey;
+    
+    @Value(value = "${alipay_edian_business_public_key}")
+    private String alipayEdianBusinessPublicKey;
 
     @Value(value = "${alipay_sign_type}")
     private String alipaySignType;
@@ -67,6 +70,9 @@ public class PropertySrvConfig {
 
     @Value(value = "${alipay_return_url_pc}")
     private String alipayReturnUrlPc;
+    
+    @Value(value = "${alipay_gateway_url}")
+    private String alipayGateway;
 
 
     //微信支付参数
@@ -257,4 +263,13 @@ public class PropertySrvConfig {
     public String getWxpayIp() {
         return wxpayIp;
     }
+
+	public String getAlipayEdianBusinessPublicKey() {
+		return alipayEdianBusinessPublicKey;
+	}
+
+	public String getAlipayGateway() {
+		return alipayGateway;
+	}
+    
 }
