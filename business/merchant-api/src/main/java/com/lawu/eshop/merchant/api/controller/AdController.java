@@ -123,6 +123,8 @@ public class AdController extends BaseController {
         return rsAd;
     }
     
+
+
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
