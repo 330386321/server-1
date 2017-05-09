@@ -61,8 +61,8 @@
     <reg:zookeeper id="adCenter" server-lists="${zookeeper.servers}" namespace="ad-job"/>
 
     <!-- 配置作业-->
-   <!--  <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
+    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
         <job:simple id="adJob" description="广告投放或者结束" class="com.lawu.eshop.ad.srv.job.AdJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
-	 -->
+	 
 
 </beans>
