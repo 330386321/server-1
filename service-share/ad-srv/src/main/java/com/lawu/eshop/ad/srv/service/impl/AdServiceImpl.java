@@ -98,6 +98,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setMediaUrl(adSaveParam.getMediaUrl());
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
+		adDO.setViewcount(0);
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		try {
 			if(adParam.getBeginTime()!=null){

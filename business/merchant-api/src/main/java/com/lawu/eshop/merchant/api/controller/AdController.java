@@ -1,5 +1,6 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,11 +106,15 @@ public class AdController extends BaseController {
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStore(merchantId);
-    	MerchantStoreDTO storeDTO= storeRs.getModel();
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
-    	adSave.setLatitude(storeDTO.getLatitude());
-    	adSave.setLongitude(storeDTO.getLongitude());
+    	if(isSuccess(storeRs)){
+    		MerchantStoreDTO storeDTO= storeRs.getModel();
+        	if(storeDTO!=null){
+        		adSave.setLatitude(storeDTO.getLatitude());
+            	adSave.setLongitude(storeDTO.getLongitude());
+        	}
+    	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(mediaUrl);
     	adSave.setMerchantId(merchantId);
@@ -117,8 +122,7 @@ public class AdController extends BaseController {
     	Result rsAd = adService.saveAd(adSave);
         return rsAd;
     }
-
-
+    
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization

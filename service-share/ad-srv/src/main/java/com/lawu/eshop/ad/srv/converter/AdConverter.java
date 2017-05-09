@@ -17,7 +17,6 @@ import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -56,6 +55,7 @@ public class AdConverter {
 		adBO.setMerchantLongitude(adDO.getMerchantLongitude());
 		adBO.setAreas(adDO.getAreas());
 		adBO.setRadius(adDO.getRadius());
+		adBO.setContent(adDO.getContent());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){
@@ -114,6 +114,7 @@ public class AdConverter {
 		adDTO.setIsPraise(adBO.getIsPraise());
 		adDTO.setAreas(adBO.getAreas());
 		adDTO.setRadius(adBO.getRadius());
+		adDTO.setContent(adBO.getContent());
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}
