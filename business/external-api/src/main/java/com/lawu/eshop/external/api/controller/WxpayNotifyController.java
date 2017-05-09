@@ -147,7 +147,7 @@ public class WxpayNotifyController extends BaseController {
 		if (ResultCode.SUCCESS == result.getRet()) {
 			logger.info("APP微信回调成功");
 			PrintWriter out = response.getWriter();
-			out.print("success");// 请不要修改或删除
+			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
 			out.flush();
 			out.close();
 
@@ -234,7 +234,7 @@ public class WxpayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
-						// TODO 保证金回调
+						result = depositService.doHandleDepositNotify(param);
 
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
@@ -255,7 +255,7 @@ public class WxpayNotifyController extends BaseController {
 		if (ResultCode.SUCCESS == result.getRet()) {
 			logger.info("APP微信回调成功");
 			PrintWriter out = response.getWriter();
-			out.print("success");// 请不要修改或删除
+			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
 			out.flush();
 			out.close();
 
