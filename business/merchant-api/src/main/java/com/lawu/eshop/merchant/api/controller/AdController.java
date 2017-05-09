@@ -82,8 +82,8 @@ public class AdController extends BaseController {
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
-    	String mediaUrl="";
-    	HttpServletRequest request = getRequest();
+    	String mediaUrl="ad_image/1494313734283103218.png";
+    	/*HttpServletRequest request = getRequest();
     	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
@@ -94,7 +94,7 @@ public class AdController extends BaseController {
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl").toString();
             }
-    	}
+    	}*/
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
