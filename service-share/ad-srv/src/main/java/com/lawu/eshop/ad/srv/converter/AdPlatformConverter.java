@@ -37,11 +37,9 @@ public class AdPlatformConverter {
         adPlatformBO.setMediaUrl(adPlatformDO.getMediaUrl());
         adPlatformBO.setTypeEnum(TypeEnum.getEnum(adPlatformDO.getType()));
         adPlatformBO.setPositionEnum(PositionEnum.getEnum(adPlatformDO.getPosition()));
-        if (adPlatformDO.getType() == 1) {
-            adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
-        } else {
-            adPlatformBO.setProductId(adPlatformDO.getProductId());
-        }
+        adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
+        adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
+        adPlatformBO.setProductId(adPlatformDO.getProductId());
         return adPlatformBO;
 
     }
@@ -181,12 +179,9 @@ public class AdPlatformConverter {
         adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
         adPlatformDTO.setPositionEnum(adPlatformBO.getPositionEnum());
         adPlatformDTO.setTypeEnum(adPlatformBO.getTypeEnum());
-        if (adPlatformBO.getType() == 1) {
-            adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
-        } else {
-            adPlatformDTO.setProductId(adPlatformBO.getProductId());
-        }
-        
+        adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
+        adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
+        adPlatformDTO.setProductId(adPlatformBO.getProductId());
         return adPlatformDTO;
     }
 }

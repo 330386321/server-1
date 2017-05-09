@@ -25,6 +25,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
@@ -147,13 +148,17 @@ public class AdPlatformController extends BaseController {
     @ApiOperation(value = "修改广告", notes = "修改广告[1011|1015|1010]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-    public Result update(@PathVariable @ApiParam(required = true, value = "广告id") Long id,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
+    public Result update(@PathVariable @ApiParam(required = true, value = "广告id") Long id,
+                         @ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform,
+                         @RequestParam @ApiParam(required = true, value = "附件路径") String mediaUrl) {
     	 HttpServletRequest request = getRequest();
-    	 String mediaUrl = "";
-         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
-         if(!"".equals(retMap.get("imgUrl"))){
-        	 mediaUrl = retMap.get("imgUrl").toString();
+    	 if(StringUtils.isEmpty(mediaUrl)){
+             Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
+             if(!"".equals(retMap.get("imgUrl"))){
+                 mediaUrl = retMap.get("imgUrl").toString();
+             }
          }
+
         Result rs = adPlatformService.update(id, adPlatform, mediaUrl);
         return rs;
     }

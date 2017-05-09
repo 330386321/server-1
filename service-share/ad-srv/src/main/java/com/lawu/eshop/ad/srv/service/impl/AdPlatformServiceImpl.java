@@ -126,19 +126,18 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     }
 
     @Override
+    @Transactional
     public Integer update(Long id, AdPlatformParam adPlatformParam, String url) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setTitle(adPlatformParam.getTitle());
+        adPlatformDO.setContent(adPlatformParam.getContent());
         adPlatformDO.setMediaUrl(url);
-        //纯链接
-        if (adPlatformParam.getTypeEnum().equals(TypeEnum.TYPE_LINK)) {
-            adPlatformDO.setType(new Byte("1"));
-            adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
-        } else { //商品
-            adPlatformDO.setType(new Byte("2"));
-            adPlatformDO.setProductId(adPlatformParam.getProductId());
-        }
+        adPlatformDO.setType(adPlatformParam.getTypeEnum().val);
+        adPlatformDO.setLinkUrl(adPlatformParam.getLinkUrl());
+        adPlatformDO.setProductId(adPlatformParam.getProductId());
+        adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
+        adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
         Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
         return i;
     }
