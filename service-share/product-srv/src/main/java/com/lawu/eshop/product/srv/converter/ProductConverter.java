@@ -296,7 +296,7 @@ public class ProductConverter {
         document.setField("name_s", productDO.getName());
         document.addField("categoryId_i", productDO.getCategoryId());
         document.addField("content_s", productDO.getContent());
-        document.addField("averageDailySales_d", productDO.getAverageDailySales());
+        document.addField("averageDailySales_d", productDO.getAverageDailySales() == null ? 0 : productDO.getAverageDailySales().doubleValue());
         return document;
     }
 
