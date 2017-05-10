@@ -868,7 +868,7 @@ public class ProductServiceImpl implements ProductService {
             document.setField("name_s", solrDocument.get("name_s"));
             document.addField("categoryId_i", solrDocument.get("categoryId_i"));
             document.addField("content_s", solrDocument.get("content_s"));
-            document.addField("averageDailySales_d", averageDailySales);
+            document.addField("averageDailySales_d", averageDailySales == null ? 0 : averageDailySales.doubleValue());
             document.addField("originalPrice_d", solrDocument.get("originalPrice_d"));
             document.addField("price_d", solrDocument.get("price_d"));
             document.addField("inventory_i", solrDocument.get("inventory_i"));

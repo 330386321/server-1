@@ -27,7 +27,7 @@
         </if>
     </select>
 
-    <select id="listMerchantStore" resultMap="com.lawu.eshop.user.srv.domain.MerchantStoreDO" parameterType="com.lawu.eshop.user.param.ListMerchantStoreParam">
+    <select id="listMerchantStore" resultType="com.lawu.eshop.user.srv.domain.MerchantStoreDO" parameterType="com.lawu.eshop.user.param.ListMerchantStoreParam">
         SELECT ms.id,ms.merchant_id as merchantId,ms.name,ms.region_path as regionPath,ms.region_name as regionName,ms.longitude,ms.latitude,
         ms.industry_path as industryPath,ms.industry_name as industryName,ms.favorite_number as favoriteNumber,ms.average_consume_amount as averageConsumeAmount,
         ms.average_score as averageScore

@@ -10,6 +10,8 @@ import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(value = "ad-srv")
 public interface AdService {
 	
@@ -72,5 +74,23 @@ public interface AdService {
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/operatorUpdateAdStatus/{id}")
 	Result operatorUpdateAdStatus(@PathVariable("id") Long id, @RequestParam("adStatusEnum") AdStatusEnum adStatusEnum);
+
+	/**
+	 * 查询上架中的平面视频广告
+	 *
+	 * @param listAdParam
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.POST, value = "ad/listFlatVideoAd")
+	Result<List<AdDTO>> listFlatVideoAd(@ModelAttribute ListAdParam listAdParam);
+
+	/**
+	 * 更新平面视频广告索引
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.PUT, value = "ad/updateAdIndex/{id}")
+	Result updateAdIndex(@PathVariable("id") Long id);
 
 }
