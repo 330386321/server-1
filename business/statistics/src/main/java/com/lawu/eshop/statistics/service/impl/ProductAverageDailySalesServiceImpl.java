@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.service.impl;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.statistics.service.ProductAverageDailySalesService;
 import com.lawu.eshop.statistics.service.ProductService;
 import com.lawu.eshop.utils.DateUtil;
@@ -22,19 +23,28 @@ public class ProductAverageDailySalesServiceImpl implements ProductAverageDailyS
 
     @Override
     public void executeProductAverageDailySales() {
-        Result<List<ProductInfoDTO>> result = productService.listProduct();
-        if (result.getRet() != ResultCode.SUCCESS) {
-            return;
-        }
+        ListProductParam listProductParam = new ListProductParam();
+        listProductParam.setPageSize(50);
+        int currentPage = 0;
 
-        for (ProductInfoDTO productInfoDTO : result.getModel()) {
-            int days = DateUtil.daysOfTwo(productInfoDTO.getGmtCreate());
-            int salesVolume = productInfoDTO.getTotalSalesVolume();
-            double averageDailySales = 0;
-            if (days > 0) {
-                averageDailySales = (double) salesVolume / days;
+        Result<List<ProductInfoDTO>> result = null;
+        while (true){
+            currentPage ++;
+            listProductParam.setCurrentPage(currentPage);
+            result = productService.listProduct(listProductParam);
+            if (result == null || result.getRet() != ResultCode.SUCCESS) {
+                return;
             }
-            productService.updateAverageDailySalesById(productInfoDTO.getId(), new BigDecimal(averageDailySales));
+
+            for (ProductInfoDTO productInfoDTO : result.getModel()) {
+                int days = DateUtil.daysOfTwo(productInfoDTO.getGmtCreate());
+                int salesVolume = productInfoDTO.getTotalSalesVolume();
+                double averageDailySales = 0;
+                if (days > 0) {
+                    averageDailySales = (double) salesVolume / days;
+                }
+                productService.updateAverageDailySalesById(productInfoDTO.getId(), new BigDecimal(averageDailySales));
+            }
         }
     }
 }

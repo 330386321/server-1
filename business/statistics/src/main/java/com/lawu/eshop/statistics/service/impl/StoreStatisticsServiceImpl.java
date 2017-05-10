@@ -7,6 +7,7 @@ import com.lawu.eshop.statistics.service.CommentMerchantService;
 import com.lawu.eshop.statistics.service.MerchantStoreService;
 import com.lawu.eshop.statistics.service.StoreStatisticsService;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,19 +30,28 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
 
     @Override
     public void executeStoreStatistics() {
-        Result<List<MerchantStoreDTO>> result = merchantStoreService.listMerchantStore();
-        if (result.getRet() != ResultCode.SUCCESS) {
-            return;
-        }
+        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
+        listMerchantStoreParam.setPageSize(50);
+        int currentPage = 0;
 
-        for (MerchantStoreDTO merchantStoreDTO : result.getModel()) {
-            Result<CommentGradeDTO> commentGradeDTOResult = commentMerchantService.getCommentAvgGrade(merchantStoreDTO.getMerchantId());
-            if (commentGradeDTOResult.getRet() == ResultCode.SUCCESS) {
-                StoreStatisticsParam param = new StoreStatisticsParam();
-                param.setAverageConsumeAmount(new BigDecimal(commentGradeDTOResult.getModel().getAverageConsumeAmount()));
-                param.setAverageScore(new BigDecimal(commentGradeDTOResult.getModel().getAvgGrade()));
-                param.setFeedbackRate(new BigDecimal(commentGradeDTOResult.getModel().getGoodGrad()));
-                merchantStoreService.updateStoreStatisticsById(merchantStoreDTO.getMerchantStoreId(), param);
+        Result<List<MerchantStoreDTO>> result = null;
+        while (true){
+            currentPage ++;
+            listMerchantStoreParam.setCurrentPage(currentPage);
+            result = merchantStoreService.listMerchantStore(listMerchantStoreParam);
+            if (result == null || result.getRet() != ResultCode.SUCCESS) {
+                return;
+            }
+
+            for (MerchantStoreDTO merchantStoreDTO : result.getModel()) {
+                Result<CommentGradeDTO> commentGradeDTOResult = commentMerchantService.getCommentAvgGrade(merchantStoreDTO.getMerchantId());
+                if (commentGradeDTOResult.getRet() == ResultCode.SUCCESS) {
+                    StoreStatisticsParam param = new StoreStatisticsParam();
+                    param.setAverageConsumeAmount(new BigDecimal(commentGradeDTOResult.getModel().getAverageConsumeAmount()));
+                    param.setAverageScore(new BigDecimal(commentGradeDTOResult.getModel().getAvgGrade()));
+                    param.setFeedbackRate(new BigDecimal(commentGradeDTOResult.getModel().getGoodGrad()));
+                    merchantStoreService.updateStoreStatisticsById(merchantStoreDTO.getMerchantStoreId(), param);
+                }
             }
         }
     }

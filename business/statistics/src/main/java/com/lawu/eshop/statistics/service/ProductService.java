@@ -2,11 +2,9 @@ package com.lawu.eshop.statistics.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.product.param.ListProductParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,8 +21,8 @@ public interface ProductService {
      *
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "product/listProduct")
-    Result<List<ProductInfoDTO>> listProduct();
+    @RequestMapping(method = RequestMethod.POST, value = "product/listProduct")
+    Result<List<ProductInfoDTO>> listProduct(@ModelAttribute ListProductParam listProductParam);
 
     /**
      * 更新商品日均销量
