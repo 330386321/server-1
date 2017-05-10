@@ -50,4 +50,8 @@ public interface BusinessDepositService {
 	@RequestMapping(value = "businessDeposit/refundDeposit",method = RequestMethod.POST)
 	Result refundDeposit(@RequestBody BusinessRefundDepositDataParam dparam);
 
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "businessDeposit/getDepositValue",method = RequestMethod.GET)
+	Result getDepositValue();
+
 }

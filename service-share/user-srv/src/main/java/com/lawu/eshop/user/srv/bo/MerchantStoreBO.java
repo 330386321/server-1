@@ -2,6 +2,8 @@ package com.lawu.eshop.user.srv.bo;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.user.dto.CertifTypeEnum;
+
 /**
  * 商家门店信息
  * Created by Administrator on 2017/3/24.
@@ -88,7 +90,17 @@ public class MerchantStoreBO {
      */
     private String principalMobile;
 
-    public String getName() {
+    private CertifTypeEnum certifType;
+    
+    public CertifTypeEnum getCertifType() {
+		return certifType;
+	}
+
+	public void setCertifType(CertifTypeEnum certifType) {
+		this.certifType = certifType;
+	}
+
+	public String getName() {
         return name;
     }
 

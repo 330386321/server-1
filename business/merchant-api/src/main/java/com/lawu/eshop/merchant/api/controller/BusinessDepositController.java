@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BusinessDepositService;
+import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.OrderService;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.property.dto.BusinessDepositDetailDTO;
@@ -22,7 +23,7 @@ import com.lawu.eshop.property.param.BusinessDepositSaveDataParam;
 import com.lawu.eshop.property.param.BusinessDepositSaveParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositDataParam;
 import com.lawu.eshop.property.param.BusinessRefundDepositParam;
-import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +48,8 @@ public class BusinessDepositController extends BaseController {
 	private BusinessDepositService businessDepositService;
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private MerchantStoreService merchantStoreService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -59,10 +62,18 @@ public class BusinessDepositController extends BaseController {
 		bparam.setBusinessId(UserUtil.getCurrentUserId(getRequest()));
 		bparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		bparam.setBusinessAccount(UserUtil.getCurrentAccount(getRequest()));
-		bparam.setBusinessName(param.getBusinessName());
-		bparam.setProvinceId(param.getProvinceId());
-		bparam.setCityId(param.getCityId());
-		bparam.setAreaId(param.getAreaId());
+		Result<MerchantStoreDTO> store = merchantStoreService.selectMerchantStoreByMId(UserUtil.getCurrentUserId(getRequest()));
+		if(store.getRet() != ResultCode.SUCCESS){
+			return store;
+		}
+		String region = store.getModel().getRegionPath();
+		if(region == null || region.split("/").length != 3){
+			return successCreated(ResultCode.STORE_REGION_PATH_ERROR);
+		}
+		bparam.setBusinessName(store.getModel().getName());
+		bparam.setProvinceId(region.split("/")[0]);
+		bparam.setCityId(region.split("/")[1]);
+		bparam.setAreaId(region.split("/")[2]);
 		return businessDepositService.save(bparam);
 	}
 
@@ -95,5 +106,13 @@ public class BusinessDepositController extends BaseController {
 		dparam.setUserName(UserUtil.getCurrentUserNum(getRequest()));
 
 		return businessDepositService.refundDeposit(dparam);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "获取保证金", notes = "获取保证金,[]（杨清华）", httpMethod = "GET")
+	@Authorization
+	@RequestMapping(value = "getDepositValue", method = RequestMethod.GET)
+	public Result getDepositValue(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+		return businessDepositService.getDepositValue();
 	}
 }

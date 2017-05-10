@@ -297,6 +297,7 @@ public class MerchantStoreConverter {
         bo.setMerchantId(merchantStoreDO.getMerchantId());
         bo.setIndustryPath(merchantStoreDO.getIndustryPath());
         bo.setIndustryName(merchantStoreDO.getIndustryName());
+        bo.setRegionPath(merchantStoreDO.getRegionPath());
         return bo;
     }
 
@@ -312,6 +313,7 @@ public class MerchantStoreConverter {
         dto.setMerchantId(merchantStoreBO.getMerchantId());
         dto.setIndustryPath(merchantStoreBO.getIndustryPath());
         dto.setIndustryName(merchantStoreBO.getIndustryName());
+        dto.setRegionPath(merchantStoreBO.getRegionPath());
         return dto;
     }
 

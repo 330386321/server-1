@@ -12,6 +12,32 @@ import com.lawu.eshop.user.param.*;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.*;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.user.srv.service.MerchantAuditService;
+import com.lawu.eshop.user.srv.service.MerchantStoreImageService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +63,9 @@ public class MerchantStoreController extends BaseController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MerchantStoreImageService merchantStoreImageService;
 	
 	@Autowired
 	private MerchantStoreProfileService merchantStoreProfileService;
@@ -366,11 +395,17 @@ public class MerchantStoreController extends BaseController {
 		if (storeBO == null) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
+		List<MerchantStoreImageBO> logo = merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_LOGO);
 		MemberProductStoreDTO dto = new MemberProductStoreDTO();
 		dto.setStoreId(storeBO.getMerchantStoreId());
 		dto.setStoreName(storeBO.getName());
 		dto.setSupportEleven(storeBO.getIsNoReasonReturn());
-		dto.setLogo(storeBO.getLogoUrl() == null ? "" : storeBO.getLogoUrl());
+		if(logo == null || logo.isEmpty()){
+			dto.setLogo("");
+		}else{
+			dto.setLogo(logo.get(0).getPath());
+		}
+		
 		return successCreated(dto);
 	}
 	
@@ -430,5 +465,4 @@ public class MerchantStoreController extends BaseController {
 		merchantStoreService.updateStoreIndex(id);
 		return successCreated();
 	}
-
 }

@@ -94,4 +94,13 @@ public interface MerchantStoreService {
     @RequestMapping(value = "merchantStore/applyPhysicalStore/{merchantId}", method = RequestMethod.PUT)
     public Result applyPhysicalStore(@PathVariable(value = "merchantId") Long merchantId, @ModelAttribute ApplyStoreParam param);
 
+    /**
+     * 
+     * @param id
+     * @return
+     * @author yangqh
+     * @date 2017年5月10日 下午4:15:30
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/selectMerchantStoreByMId")
+    Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long id);
 }

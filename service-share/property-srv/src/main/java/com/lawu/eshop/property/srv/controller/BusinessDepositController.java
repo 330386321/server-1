@@ -206,4 +206,15 @@ public class BusinessDepositController extends BaseController {
 		return successCreated(retCode);
 
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "getDepositValue", method = RequestMethod.GET)
+	public Result getDepositValue() {
+		String deposit = propertyService.getValue(PropertyType.MERCHANT_BONT);
+		if ("".equals(deposit)) {
+			deposit = PropertyType.MERCHANT_BONT_DEFAULT;
+		}
+		return successCreated(deposit);
+
+	}
 }
