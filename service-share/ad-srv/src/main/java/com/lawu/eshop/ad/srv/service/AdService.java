@@ -201,4 +201,19 @@ public interface AdService {
      */
     void operatorUpdateAdStatus(Long id, AdStatusEnum adStatusEnum);
 
+    /**
+     * 查询上架中的平面视频广告
+     *
+     * @param listAdParam
+     * @return
+     */
+    List<AdBO> listFlatVideoAd(ListAdParam listAdParam);
+
+    /**
+     * 更新平面视频广告索引
+     *
+     * @param id
+     */
+    void updateAdIndex(Long id);
+
 }

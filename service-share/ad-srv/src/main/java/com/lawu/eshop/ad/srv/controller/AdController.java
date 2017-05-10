@@ -1,38 +1,9 @@
 package com.lawu.eshop.ad.srv.controller;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.dto.ClickAdPointDTO;
-import com.lawu.eshop.ad.dto.PraisePointDTO;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.AdsolrFindParam;
-import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
@@ -45,6 +16,17 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚接口提供
@@ -440,6 +422,33 @@ public class AdController extends BaseController{
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		adService.operatorUpdateAdStatus(id, adStatusEnum);
+		return successCreated();
+	}
+
+	/**
+	 * 查询上架中的平面视频广告
+	 *
+	 * @param listAdParam
+	 * @return
+	 */
+	@RequestMapping(value = "listFlatVideoAd", method = RequestMethod.POST)
+	public Result<List<AdDTO>> listFlatVideoAd(@RequestBody ListAdParam listAdParam) {
+		List<AdBO> adBOS = adService.listFlatVideoAd(listAdParam);
+		if(adBOS == null || adBOS.isEmpty()){
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		return successGet(AdConverter.convertDTOS(adBOS));
+	}
+
+	/**
+	 * 更新平面视频广告索引
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "updateAdIndex/{id}", method = RequestMethod.PUT)
+	public Result updateAdIndex(@PathVariable Long id) {
+		adService.updateAdIndex(id);
 		return successCreated();
 	}
 

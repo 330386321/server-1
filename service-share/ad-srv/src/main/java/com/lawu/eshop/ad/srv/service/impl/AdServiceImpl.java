@@ -19,6 +19,7 @@ import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.AdArithmeticUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -746,6 +747,35 @@ public class AdServiceImpl implements AdService {
 		}
 		//删除solr中的数据
 		SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+	}
+
+	@Override
+	public List<AdBO> listFlatVideoAd(ListAdParam listAdParam) {
+		AdDOExample adDOExample = new AdDOExample();
+		List<Byte> statusList = new ArrayList<>();
+		statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+		statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+		List<Byte> typeList = new ArrayList<>();
+		typeList.add(AdTypeEnum.AD_TYPE_FLAT.val);
+		typeList.add(AdTypeEnum.AD_TYPE_VIDEO.val);
+		adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList);
+		RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
+		List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
+		return AdConverter.convertBOS(adDOS);
+	}
+
+	@Override
+	public void updateAdIndex(Long id) {
+		AdDO adDO = adDOMapper.selectByPrimaryKey(id);
+		if(adDO == null){
+			return;
+		}
+
+		SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		if(solrDocument == null){
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		}
 	}
 
 }

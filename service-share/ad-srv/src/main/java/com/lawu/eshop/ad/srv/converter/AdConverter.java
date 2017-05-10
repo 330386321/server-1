@@ -1,23 +1,18 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdPraiseDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * E赚实体转化
@@ -206,7 +201,7 @@ public class AdConverter {
 	 /**
      * SolrInputDocument
      *
-     * @param productDO
+     * @param adDO
      * @return
      */
     public static SolrInputDocument convertSolrInputDocument(AdDO adDO) {
@@ -216,10 +211,9 @@ public class AdConverter {
         document.addField("merchantId_s", adDO.getMerchantId());
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
-        document.addField("longitude_s", adDO.getMerchantLongitude());
-        document.addField("latitude_s", adDO.getMerchantLatitude());
-        document.addField("status_s", 2);
-        document.addField("count_i", 0);
+		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
+        document.addField("status_s", adDO.getStatus());
+        document.addField("count_i", adDO.getViewcount());
         document.addField("type_i", adDO.getType());
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){
