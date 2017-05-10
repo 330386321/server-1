@@ -1,8 +1,8 @@
 package com.lawu.eshop.user.srv.service;
 
-import com.lawu.eshop.user.param.StoreStatisticsParam;
-
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 
 import java.util.List;
@@ -46,11 +46,11 @@ public interface MerchantStoreService {
 
 
     /**
-     * 查询所有审核通过的门店
+     * 查询所有审核通过的实体店铺
      *
      * @return
      */
-    List<MerchantStoreBO> listMerchantStore();
+    List<MerchantStoreBO> listMerchantStore(ListMerchantStoreParam listMerchantStoreParam);
 
     /**
      * 更新门店统计数据
@@ -59,5 +59,12 @@ public interface MerchantStoreService {
      * @param param
      */
     void updateStoreStatisticsById(Long id, StoreStatisticsParam param);
+
+    /**
+     * 更新门店索引
+     *
+     * @param id
+     */
+    void updateStoreIndex(Long id);
 
 }

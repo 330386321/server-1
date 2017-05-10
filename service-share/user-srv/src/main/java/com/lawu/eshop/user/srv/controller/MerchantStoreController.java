@@ -1,16 +1,5 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -18,31 +7,17 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.CashUserInfoDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
-import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
-import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
-import com.lawu.eshop.user.param.ApplyStoreParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.param.*;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.service.MemberService;
-import com.lawu.eshop.user.srv.service.MerchantAuditService;
-import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
-import com.lawu.eshop.user.srv.service.MerchantStoreService;
+import com.lawu.eshop.user.srv.service.*;
 import com.lawu.eshop.utils.BeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商家门店 Created by Administrator on 2017/3/24.
@@ -412,4 +387,48 @@ public class MerchantStoreController extends BaseController {
 		ManageTypeEnum type=merchantStoreProfileService.getManageType(merchantId);
 		return successCreated(type);
 	}
+
+	/**
+	 * 查询所有审核通过的实体店铺
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = "listMerchantStore", method = RequestMethod.POST)
+	public Result<List<MerchantStoreDTO>> listMerchantStore(@RequestBody ListMerchantStoreParam listMerchantStoreParam) {
+		List<MerchantStoreBO> merchantStoreBOS = merchantStoreService.listMerchantStore(listMerchantStoreParam);
+		if (merchantStoreBOS == null || merchantStoreBOS.isEmpty()) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		return successGet(MerchantStoreConverter.convertStoreDTO(merchantStoreBOS));
+	}
+
+	/**
+	 * 更新门店统计数据，同时更新solr
+	 *
+	 * @param id
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "updateStoreStatistics/{id}", method = RequestMethod.PUT)
+	public Result updateStoreStatistics(@PathVariable Long id, @RequestBody StoreStatisticsParam param) {
+		MerchantStoreBO merchantStoreBO = merchantStoreService.getMerchantStoreById(id);
+		if (merchantStoreBO == null) {
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		merchantStoreService.updateStoreStatisticsById(id, param);
+		return successCreated();
+	}
+
+	/**
+	 * 更新门店索引
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "updateStoreIndex/{id}", method = RequestMethod.PUT)
+	public Result updateStoreIndex(@PathVariable Long id) {
+		merchantStoreService.updateStoreIndex(id);
+		return successCreated();
+	}
+
 }

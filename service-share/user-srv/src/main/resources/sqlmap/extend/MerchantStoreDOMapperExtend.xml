@@ -27,4 +27,13 @@
         </if>
     </select>
 
+    <select id="listMerchantStore" resultMap="com.lawu.eshop.user.srv.domain.MerchantStoreDO" parameterType="com.lawu.eshop.user.param.ListMerchantStoreParam">
+        SELECT ms.id,ms.merchant_id as merchantId,ms.name,ms.region_path as regionPath,ms.region_name as regionName,ms.longitude,ms.latitude,
+        ms.industry_path as industryPath,ms.industry_name as industryName,ms.favorite_number as favoriteNumber,ms.average_consume_amount as averageConsumeAmount,
+        ms.average_score as averageScore
+        FROM merchant_store ms INNER JOIN merchant_store_profile msp on ms.merchant_id = msp.merchant_id
+        WHERE ms.status = #{status} and msp.manage_type = #{manageType}
+        limit #{offset} , #{pageSize}
+    </select>
+
 </mapper>

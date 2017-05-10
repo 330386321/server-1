@@ -1,7 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
@@ -9,7 +10,11 @@ import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -28,6 +33,12 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private UserSrvConfig userSrvConfig;
+
+    @Autowired
+    private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
+
+    @Autowired
+    private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -76,10 +87,8 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 	}
 
     @Override
-    public List<MerchantStoreBO> listMerchantStore() {
-        MerchantStoreDOExample example = new MerchantStoreDOExample();
-        example.createCriteria().andStatusEqualTo(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
-        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(example);
+    public List<MerchantStoreBO> listMerchantStore(ListMerchantStoreParam listMerchantStoreParam) {
+        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapperExtend.listMerchantStore(listMerchantStoreParam);
         return MerchantStoreConverter.convertStoreBO(merchantStoreDOS);
     }
 
@@ -107,6 +116,24 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount());
             document.addField("averageScore_d", param.getAverageScore());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
+            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        }
+    }
+
+    @Override
+    public void updateStoreIndex(Long id) {
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        if(merchantStoreDO == null){
+            return;
+        }
+
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        if(solrDocument == null){
+            MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+            merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
+            List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+            String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+            SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
             SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         }
     }
