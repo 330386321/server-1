@@ -49,6 +49,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setOrderNum(orderNum);
         payOrderDO.setGmtCreate(new Date());
         payOrderDO.setGmtModified(new Date());
+		payOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
         payOrderDO.setMerchantNum(param.getMerchantNum());
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.val);//待支付
