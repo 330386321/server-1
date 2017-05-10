@@ -1,0 +1,1 @@
+ALTER TABLE pay_order ADD COLUMN `member_num` VARCHAR (19) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户编号' AFTER `member_id`;
