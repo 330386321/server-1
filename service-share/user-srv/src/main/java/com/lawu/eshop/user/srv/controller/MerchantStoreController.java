@@ -16,6 +16,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -39,6 +40,7 @@ import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
 import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
 
@@ -60,6 +62,9 @@ public class MerchantStoreController extends BaseController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private MerchantStoreProfileService merchantStoreProfileService;
 
 	/**
 	 * 门店信息查询
@@ -392,5 +397,19 @@ public class MerchantStoreController extends BaseController {
 		dto.setSupportEleven(storeBO.getIsNoReasonReturn());
 		dto.setLogo(storeBO.getLogoUrl() == null ? "" : storeBO.getLogoUrl());
 		return successCreated(dto);
+	}
+	
+	/**
+	 * 查询店铺类型
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "getManageType", method = RequestMethod.GET)
+	public Result<ManageTypeEnum> getManageType(@RequestParam Long merchantId) {
+		if (merchantId == null) {
+			return successCreated(ResultCode.ID_EMPTY);
+		}
+		ManageTypeEnum type=merchantStoreProfileService.getManageType(merchantId);
+		return successCreated(type);
 	}
 }

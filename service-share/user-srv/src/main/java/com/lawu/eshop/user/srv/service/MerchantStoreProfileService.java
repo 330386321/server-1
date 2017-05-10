@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service;
 
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 
 /**
@@ -9,5 +10,12 @@ import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 public interface MerchantStoreProfileService {
 
     MerchantStoreProfileBO findMerchantStoreInfo(Long merchantProfileId);
+    
+    /**
+     * 根据商家查询店铺类型
+     * @param merchantId
+     * @return
+     */
+    ManageTypeEnum getManageType(Long merchantId);
 
 }

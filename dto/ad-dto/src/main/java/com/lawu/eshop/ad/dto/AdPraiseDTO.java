@@ -3,6 +3,8 @@ package com.lawu.eshop.ad.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class AdPraiseDTO {
@@ -45,6 +47,9 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty(value = "是否抢赞")
 	private Boolean isPraise;
+	
+	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
+	private ManageTypeEnum manageTypeEnum;
 
 	public Integer getCount() {
 		return count;
@@ -148,6 +153,14 @@ public class AdPraiseDTO {
 
 	public void setIsPraise(Boolean isPraise) {
 		this.isPraise = isPraise;
+	}
+
+	public ManageTypeEnum getManageTypeEnum() {
+		return manageTypeEnum;
+	}
+
+	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
+		this.manageTypeEnum = manageTypeEnum;
 	}
 
 	

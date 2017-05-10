@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
@@ -46,4 +47,17 @@ public class MerchantStoreProfileServiceImpl implements MerchantStoreProfileServ
         }
         return  merchantStoreProfileBO;
     }
+
+	@Override
+	public ManageTypeEnum getManageType(Long merchantId) {
+		 MerchantStoreProfileDOExample example = new MerchantStoreProfileDOExample();
+	     example.createCriteria().andMerchantIdEqualTo(merchantId);
+	     List<MerchantStoreProfileDO> merchantStoreDOS = merchantStoreProfileDOMapper.selectByExample(example);
+	     if(!merchantStoreDOS.isEmpty()){
+	    	 return ManageTypeEnum.getEnum(merchantStoreDOS.get(0).getManageType());
+	     }else{
+	    	 return null;
+	     }
+	    
+	}
 }

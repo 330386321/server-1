@@ -1,14 +1,16 @@
 package com.lawu.eshop.ad.dto;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import io.swagger.annotations.ApiModelProperty;
 
 
 public class AdDTO {
@@ -91,7 +93,9 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "AD_STATUS_SHOOT 开枪中  AD_STATUS_TOBEGIN 即将开始 AD_STATUS_END 已结束")
 	private AdPraiseStatusEnum adPraiseStatusEnum;
-
+	
+	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
+	private ManageTypeEnum manageTypeEnum;
 
 	public Long getId() {
 		return id;
@@ -335,6 +339,26 @@ public class AdDTO {
 	}
 
 
+	public AdPraiseStatusEnum getAdPraiseStatusEnum() {
+		return adPraiseStatusEnum;
+	}
+
+
+	public void setAdPraiseStatusEnum(AdPraiseStatusEnum adPraiseStatusEnum) {
+		this.adPraiseStatusEnum = adPraiseStatusEnum;
+	}
+
+
+	public ManageTypeEnum getManageTypeEnum() {
+		return manageTypeEnum;
+	}
+
+
+	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
+		this.manageTypeEnum = manageTypeEnum;
+	}
+
+	
 	
 
 	

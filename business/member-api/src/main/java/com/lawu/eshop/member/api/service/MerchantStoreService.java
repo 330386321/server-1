@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
 import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
@@ -114,4 +115,14 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getMemberProductDetailStore")
     Result<MemberProductStoreDTO> getMemberProductDetailStore(@RequestParam("merchantId") Long merchantId);
+    
+    /**
+     * 查询店铺类型
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getManageType")
+    Result<ManageTypeEnum> getManageType(@RequestParam("merchantId") Long merchantId);
+    
+    
 }
