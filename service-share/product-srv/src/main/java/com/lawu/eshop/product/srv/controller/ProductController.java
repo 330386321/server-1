@@ -258,9 +258,9 @@ public class ProductController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "listProduct", method = RequestMethod.GET)
-    public Result<List<ProductInfoDTO>> listProduct() {
-        List<ProductInfoBO> productInfoBOS = productService.listProduct();
+    @RequestMapping(value = "listProduct", method = RequestMethod.POST)
+    public Result<List<ProductInfoDTO>> listProduct(@RequestBody ListProductParam listProductParam) {
+        List<ProductInfoBO> productInfoBOS = productService.listProduct(listProductParam);
         if (productInfoBOS == null || productInfoBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -282,6 +282,18 @@ public class ProductController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         productService.updateAverageDailySalesById(id, averageDailySales);
+        return successCreated();
+    }
+
+    /**
+     * 更新商品索引
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "updateProductIndex/{id}", method = RequestMethod.PUT)
+    public Result updateProductIndex(@PathVariable Long id) {
+        productService.updateProductIndex(id);
         return successCreated();
     }
 

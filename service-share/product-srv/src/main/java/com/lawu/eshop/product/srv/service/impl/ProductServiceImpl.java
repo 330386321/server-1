@@ -845,10 +845,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductInfoBO> listProduct() {
+    public List<ProductInfoBO> listProduct(ListProductParam listProductParam) {
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
-        List<ProductDO> productDOS = productDOMapper.selectByExample(example);
+        RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
+        List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
         return ProductConverter.convertInfoBO(productDOS);
     }
 
@@ -873,6 +874,55 @@ public class ProductServiceImpl implements ProductService {
             document.addField("inventory_i", solrDocument.get("inventory_i"));
             document.addField("salesVolume_i", solrDocument.get("salesVolume_i"));
             ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(Integer.valueOf(solrDocument.get("categoryId_i").toString()));
+            if (productCategoryeDO != null) {
+                String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                for (String categoryId : categoryIdArr) {
+                    document.addField("categoryId_is", categoryId);
+                }
+            }
+            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+    }
+
+    @Override
+    public void updateProductIndex(Long id) {
+        ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
+        if(productDO == null){
+            return;
+        }
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        if(solrDocument == null){
+            SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+
+            ProductModelDOExample example = new ProductModelDOExample();
+            example.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
+            List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(example);
+            int inventory = 0;
+            int salesVolume = 0;
+            double originalPrice = 0;
+            double price = 0;
+            int traverseCnt = 0;
+            if (!productModelDOS.isEmpty()) {
+                for (ProductModelDO productModelDO : productModelDOS) {
+                    if (traverseCnt == 0) {
+                        price = productModelDO.getPrice().doubleValue();
+                    }
+                    if (productModelDO.getOriginalPrice().doubleValue() > originalPrice) {
+                        originalPrice = productModelDO.getOriginalPrice().doubleValue();
+                    }
+                    if (productModelDO.getPrice().doubleValue() < price) {
+                        price = productModelDO.getPrice().doubleValue();
+                    }
+                    inventory += productModelDO.getInventory();
+                    salesVolume += productModelDO.getSalesVolume();
+                    traverseCnt++;
+                }
+            }
+            document.addField("originalPrice_d", originalPrice);
+            document.addField("price_d", price);
+            document.addField("inventory_i", inventory);
+            document.addField("salesVolume_i", salesVolume);
+            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
             if (productCategoryeDO != null) {
                 String[] categoryIdArr = productCategoryeDO.getPath().split("/");
                 for (String categoryId : categoryIdArr) {

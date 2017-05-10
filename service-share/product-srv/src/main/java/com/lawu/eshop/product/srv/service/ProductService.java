@@ -123,7 +123,7 @@ public interface ProductService {
      *
      * @return
      */
-    List<ProductInfoBO> listProduct();
+    List<ProductInfoBO> listProduct(ListProductParam listProductParam);
 
     /**
      * 更新商品平均日销量
@@ -132,6 +132,13 @@ public interface ProductService {
      * @param averageDailySales
      */
     void updateAverageDailySalesById(Long id, BigDecimal averageDailySales);
+
+    /**
+     * 更新商品索引
+     *
+     * @param id
+     */
+    void updateProductIndex(Long id);
 
     /**
      * 查询所有上架的商品
