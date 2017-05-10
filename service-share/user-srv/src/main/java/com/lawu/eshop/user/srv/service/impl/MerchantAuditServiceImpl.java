@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
@@ -66,10 +67,14 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
 
             //查询门店信息记录
             MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(auditParam.getMerchantStoreId());
+            //查询商家店铺扩展信息
+            MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
+            merchantStoreProfileDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+            List<MerchantStoreProfileDO> merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
+
             if (merchantStoreDO != null && merchantStoreDO.getId() > 0) {
                 MerchantStoreDO newStoreDO = new MerchantStoreDO();
                 newStoreDO.setId(merchantStoreDO.getId());
-                newStoreDO.setStatus(auditParam.getStoreStatusEnum().val);
                 newStoreDO.setGmtModified(new Date());
                 if (MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val == auditParam.getAuditStatusEnum().val) {
                     //审核通过
@@ -77,6 +82,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         //修改门店资料信息
                         if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
                             // 新增记录 修改门店信息状态
+                            newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
                             merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                         } else {
                             //修改更新门店信息
@@ -187,13 +193,6 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                                 merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
                                 merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                             }
-
-                            SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO.getMerchantId(), auditParam.getMerchantStoreId(), merchantStoreParam);
-                            document.addField("storePic_s", merchantStoreParam.getStoreUrl());
-                            document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
-                            document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount().doubleValue());
-                            document.addField("averageScore_d", merchantStoreDO.getAverageScore().doubleValue());
-                            SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
                         }
                     } else {
                         //申请实体店铺
@@ -247,10 +246,34 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
 
+                        if(!merchantStoreProfileDOS.isEmpty()){
+                            MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
+                            merchantStoreProfileDO.setId(merchantStoreProfileDOS.get(0).getId());
+                            merchantStoreProfileDO.setManageType(ManageTypeEnum.ENTITY.val);
+                            merchantStoreProfileDOMapper.updateByPrimaryKeySelective(merchantStoreProfileDO);
+                        }
                     }
 
+                    MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+                    merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
+                    List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+                    String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+
+                    boolean isEntity = false;
+                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType()== ManageTypeEnum.ENTITY.val){
+                        isEntity = true;
+                    }
+                    if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val == auditParam.getTypeEnum().val || isEntity){
+                        SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
+                        SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+                    }
                 } else {
                     //审核不通过
+                    if(merchantStoreDO.getStatus() == MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val){
+                        //已经通过审核的门店
+                      return;
+                    }
+                    newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECK_FAILED.val);
                     merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                 }
             }

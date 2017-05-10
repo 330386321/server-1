@@ -1,34 +1,19 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.BeanUtils;
 
-import com.lawu.eshop.user.dto.CertifTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
-import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
-import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
-import com.lawu.eshop.user.dto.StoreSolrDTO;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.utils.DataTransUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商家门店信息转换
@@ -355,20 +340,23 @@ public class MerchantStoreConverter {
     /**
      * SolrInputDocument
      *
-     * @param merchantId
-     * @param merchantStoreId
-     * @param merchantStoreParam
+     * @param merchantStoreDO
+     * @param storePic
      * @return
      */
-    public static SolrInputDocument convertSolrInputDocument(Long merchantId, Long merchantStoreId, MerchantStoreParam merchantStoreParam) {
+    public static SolrInputDocument convertSolrInputDocument(MerchantStoreDO merchantStoreDO, String storePic) {
         SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", merchantStoreId);
-        document.addField("merchantId_l", merchantId);
-        document.addField("name_s", merchantStoreParam.getName());
-        document.addField("regionPath_s", merchantStoreParam.getRegionPath());
-        document.addField("latLon_p", merchantStoreParam.getLatitude() + "," + merchantStoreParam.getLongitude());
-        document.addField("industryPath_s", merchantStoreParam.getIndustryPath());
-        document.addField("industryName_s", merchantStoreParam.getIndustryName());
+        document.addField("id", merchantStoreDO.getId());
+        document.addField("merchantId_l", merchantStoreDO.getMerchantId());
+        document.addField("name_s", merchantStoreDO.getName());
+        document.addField("regionPath_s", merchantStoreDO.getRegionPath());
+        document.addField("latLon_p", merchantStoreDO.getLatitude() + "," + merchantStoreDO.getLongitude());
+        document.addField("industryPath_s", merchantStoreDO.getIndustryPath());
+        document.addField("industryName_s", merchantStoreDO.getIndustryName());
+        document.addField("favoriteNumber_i", merchantStoreDO.getFavoriteNumber());
+        document.addField("averageConsumeAmount_d", merchantStoreDO.getAverageConsumeAmount() == null ? 0 : merchantStoreDO.getAverageConsumeAmount().doubleValue());
+        document.addField("averageScore_d", merchantStoreDO.getAverageScore() == null ? 0 : merchantStoreDO.getAverageScore().doubleValue());
+        document.addField("storePic_s", storePic);
         return document;
     }
 

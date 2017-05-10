@@ -1,7 +1,6 @@
 package com.lawu.eshop.user.param;
 
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import io.swagger.annotations.ApiParam;
 
@@ -17,11 +16,6 @@ public class MerchantAuditParam {
     @ApiParam(name = "auditStatusEnum", value = "审核状态",required = true)
     private MerchantAuditStatusEnum auditStatusEnum;
 
-    /**
-     * 门店状态
-     */
-    @ApiParam(name = "storeStatusEnum", value = "门店状态",required = true)
-    private MerchantStatusEnum storeStatusEnum;
 
     /**
      * 审核备注
@@ -49,13 +43,6 @@ public class MerchantAuditParam {
         this.auditStatusEnum = auditStatusEnum;
     }
 
-    public MerchantStatusEnum getStoreStatusEnum() {
-        return storeStatusEnum;
-    }
-
-    public void setStoreStatusEnum(MerchantStatusEnum storeStatusEnum) {
-        this.storeStatusEnum = storeStatusEnum;
-    }
 
     public String getRemark() {
         return remark;
