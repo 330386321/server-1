@@ -445,9 +445,6 @@ public class AdServiceImpl implements AdService {
 		//平面和视频点击次数加一
 		int i=0;
 		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
-			hits+=1;
-			adDO.setHits(hits);
-			adDOMapper.updateByPrimaryKey(adDO);
 			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
 			memberAdRecordD.setAdId(adDO.getId());
 			memberAdRecordD.setPoint(adDO.getPoint());
@@ -457,15 +454,19 @@ public class AdServiceImpl implements AdService {
 			memberAdRecordD.setClickDate(new Date());
 			i=memberAdRecordDOMapper.insert(memberAdRecordD);
 			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
-		}else if(hits==adDO.getAdCount()){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
+			hits+=1;
+			adDO.setHits(hits);
+			if(hits==adDO.getAdCount()){
+				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
+				adDOMapper.updateByPrimaryKey(adDO);
+				//删除solr中的数据
+				SolrInputDocument document = new SolrInputDocument();
+				document.addField("id", adDO.getId());
+				document.addField("status_s", 1);
+			    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+			}
 			adDOMapper.updateByPrimaryKey(adDO);
-			//删除solr中的数据
-			SolrInputDocument document = new SolrInputDocument();
-			document.addField("id", adDO.getId());
-			document.addField("status_s", 1);
-		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
-		}  
+		}
 		return i;
 	}
 
