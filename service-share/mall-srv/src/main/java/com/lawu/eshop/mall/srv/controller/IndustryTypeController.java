@@ -37,4 +37,18 @@ public class IndustryTypeController extends BaseController {
         return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
     }
 
+    /**
+     * 查询父行业下的所有行业
+     *
+     * @return
+     */
+    @RequestMapping(value = "listIndustryType/{parentId}", method = RequestMethod.GET)
+    public Result<List<IndustryTypeDTO>> listIndustryType(@PathVariable Short parentId) {
+        List<IndustryTypeBO> industryTypeBOS = industryTypeService.listIndustryTypeByParentId(parentId);
+        if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
+    }
+
 }
