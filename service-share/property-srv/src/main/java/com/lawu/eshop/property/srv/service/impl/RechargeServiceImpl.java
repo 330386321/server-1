@@ -108,7 +108,7 @@ public class RechargeServiceImpl implements RechargeService {
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(bizFlagInt)) {
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 			
 			tdsParam.setTitle(TransactionTitleEnum.RECHARGE.val);
 			
@@ -119,8 +119,8 @@ public class RechargeServiceImpl implements RechargeService {
 			infoDoView.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 			
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(bizFlagInt)) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 
 			tdsParam.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);
 			
