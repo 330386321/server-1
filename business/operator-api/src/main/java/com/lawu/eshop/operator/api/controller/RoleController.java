@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class RoleController extends BaseController {
     private RoleService roleService;
 
     @ApiOperation(value = "查询角色信息记录", notes = "查询角色信息记录 [1004，1000]（章勇）", httpMethod = "GET")
-   // @RequiresPermissions("role:find")
+    @RequiresPermissions("role:find")
     @PageBody
     @RequestMapping(value = "findroleList", method = RequestMethod.GET)
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -57,7 +58,7 @@ public class RoleController extends BaseController {
 
 
     @ApiOperation(value = "添加角色信息", notes = "添加角色信息 [1004,1000]（章勇）", httpMethod = "POST")
-    //@RequiresPermissions("role:add")
+    @RequiresPermissions("role:add")
     @RequestMapping(value = "addRole", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result addRole(@ModelAttribute RoleInfoParam param) {
@@ -69,7 +70,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation(value = "编辑角色信息", notes = "编辑角色信息 [1004,1000]（章勇）", httpMethod = "PUT")
-    //@RequiresPermissions("role:edit")
+    @RequiresPermissions("role:edit")
     @RequestMapping(value = "editRole/{id}", method = RequestMethod.PUT)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result updateRole(@PathVariable(value = "id") @ApiParam(value = "角色ID", required = true) Integer id, @ModelAttribute RoleInfoParam param) {
@@ -81,7 +82,7 @@ public class RoleController extends BaseController {
     }
 
     @ApiOperation(value = "删除角色信息", notes = "删除角色信息 [1004，2102,1000]（章勇）", httpMethod = "PUT")
-    //@RequiresPermissions("role:del")
+    @RequiresPermissions("role:del")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "delRole/{id}", method = RequestMethod.PUT)
     public Result delRole(@PathVariable(value = "id") Integer id) {
@@ -101,7 +102,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "权限关联", notes = "权限关联 [1004，2103,1000]（章勇）", httpMethod = "POST")
-    //@RequiresPermissions("role:add_permission")
+    @RequiresPermissions("role:add_permission")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "addRolePermission", method = RequestMethod.POST)
     Result addRolePermission(@RequestParam(value = "roleId")  Integer roleId,

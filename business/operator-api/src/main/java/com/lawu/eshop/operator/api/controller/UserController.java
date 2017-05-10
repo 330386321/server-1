@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class UserController extends BaseController {
     private UserService userService;
 
     @ApiOperation(value = "新增用户", notes = "新增用户 [1004，1005]（章勇）", httpMethod = "POST")
- /*   @RequiresPermissions("user:add")*/
+    @RequiresPermissions("user:add")
     @RequestMapping(value = "addUser", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result addUser(@RequestParam(value = "account") @ApiParam(value = "账号", required = true) String account,
@@ -46,7 +47,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息 [1003，1019]（章勇）", httpMethod = "PUT")
-    /*@RequiresPermissions("user:edit")*/
+    @RequiresPermissions("user:edit")
     @RequestMapping(value = "editUser", method = RequestMethod.PUT)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result editUser(@ModelAttribute UserParam userParam) {
@@ -59,7 +60,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-  /*  @RequiresPermissions("user:find")*/
+    @RequiresPermissions("user:find")
     @PageBody
     @RequestMapping(value = "findUserList", method = RequestMethod.GET)
     public Result<Page<UserListDTO>> findUserList(@ModelAttribute UserPageParam pageParam) {
@@ -71,7 +72,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "分配角色", notes = "分配角色 [1004，2101，1005，1000]（章勇）", httpMethod = "POST")
-    /*@RequiresPermissions("user:assign_role")*/
+    @RequiresPermissions("user:assign_role")
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") String roleId) {
@@ -84,7 +85,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "删除用户", notes = "删除用户 （章勇）", httpMethod = "PUT")
- /*   @RequiresPermissions("user:del")*/
+    @RequiresPermissions("user:del")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "delUser/{id}", method = RequestMethod.PUT)
     public Result delUser(@PathVariable(value = "id") Integer id) {
@@ -95,7 +96,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "禁用用户", notes = "禁用用户 [1004,1019,1000]（章勇）", httpMethod = "PUT")
-  /*  @RequiresPermissions("user:disable")*/
+    @RequiresPermissions("user:disable")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "userDisabled/{id}", method = RequestMethod.PUT)
     public Result userDisabled(@PathVariable(value = "id") Integer id) {
@@ -107,7 +108,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "启用用户", notes = "启用用户 [1004,1019,1000]（梅述全）", httpMethod = "PUT")
-  /*  @RequiresPermissions("user:enable")*/
+    @RequiresPermissions("user:enable")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "userEnable/{id}", method = RequestMethod.PUT)
     public Result userEnable(@PathVariable(value = "id") Integer id) {

@@ -50,7 +50,9 @@ public class ShiroRealm extends AuthorizingRealm {
             // 用户的角色对应的所有权限，如果只使用角色定义访问权限，下面的四行可以不要
             List<ShiroRole> roleList = user.getRoles();
             for (ShiroRole role : roleList) {
-                info.addStringPermissions(role.getPermissionsKey());
+                if(role.getPermissionsKey() !=null){
+                    info.addStringPermissions(role.getPermissionsKey());
+                }
             }
             return info;
         }

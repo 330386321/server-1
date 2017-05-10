@@ -14,7 +14,10 @@ import com.lawu.eshop.operator.param.PerssionParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,11 +36,11 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "查询权限信息", notes = "查询权限信息 （章勇）", httpMethod = "GET")
     @RequestMapping(value = "getPermssion", method = RequestMethod.GET)
-    // @RequiresAuthentication
+    @RequiresAuthentication
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    public Result<List<PermissionDTO>> getPermssion(@RequestParam("account") String account) {
+    public Result<List<PermissionDTO>> getPermssion() {
 
-       // String account = UserUtil.getCurrentUserAccount();
+        String account = UserUtil.getCurrentUserAccount();
         if (StringUtils.isEmpty(account)) {
             return successGet(ResultCode.USER_NOT_LOGIN);
         }
@@ -47,7 +50,7 @@ public class PermissonController extends BaseController {
     }
 
     @ApiOperation(value = "新增权限", notes = "新增权限 [1004，1005]（章勇）", httpMethod = "POST")
-    // @RequiresPermissions("permssion:add")
+     @RequiresPermissions("permission:add")
     @RequestMapping(value = "addPermssion", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result addPermssion(@ModelAttribute PerssionParam perssionParam) {
@@ -59,7 +62,7 @@ public class PermissonController extends BaseController {
     }
 
     @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
-    // @RequiresPermissions("permssion:find")
+     @RequiresPermissions("permission:find")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
     @RequestMapping(value = "findPermissionList", method = RequestMethod.GET)
@@ -72,7 +75,6 @@ public class PermissonController extends BaseController {
     }
 
     @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
-    // @RequiresPermissions("permssion:find")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findAllPermissionList", method = RequestMethod.GET)
     public Result<List<PermissionListDTO>> findAllPerminnionList() {
@@ -82,7 +84,6 @@ public class PermissonController extends BaseController {
 
 
     @ApiOperation(value = "根据roleId查询权限记录ID", notes = "根据roleId查询权限记录ID [1000]（章勇）", httpMethod = "GET")
-    // @RequiresPermissions("permssion:find")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "findPermissionListByRoleId/{roleId}", method = RequestMethod.GET)
     public Result<List<PermissionListDTO>> findPermissionListByRoleId(@PathVariable(value = "roleId") Integer roleId) {
@@ -92,6 +93,7 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "删除权限记录", notes = "删除权限记录 [1004，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("permission:del")
     @RequestMapping(value = "delPermission", method = RequestMethod.POST)
     public Result delPermission(@RequestParam(value = "permissionIds") String permissionIds) {
         if (StringUtils.isEmpty(permissionIds)) {
@@ -113,6 +115,7 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "编辑权限信息", notes = "编辑权限信息 [1004，1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("permission:edit")
     @RequestMapping(value = "editPermission/{id}", method = RequestMethod.PUT)
     public Result editPermission(@PathVariable(value = "id") Integer id, @ModelAttribute PerssionParam perssionParam) {
         if (id == null) {
