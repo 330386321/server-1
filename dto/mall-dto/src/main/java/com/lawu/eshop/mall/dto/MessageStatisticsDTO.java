@@ -1,7 +1,10 @@
 package com.lawu.eshop.mall.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.Date;
 
 /**
  * 站内信息统计信息
@@ -26,6 +29,9 @@ public class MessageStatisticsDTO {
     @ApiModelProperty(name = "type",value = "消息类型")
     private MessageTypeEnum type;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date gmtCreate;
+
     public Integer getNoReadCount() {
         return noReadCount;
     }
@@ -48,5 +54,13 @@ public class MessageStatisticsDTO {
 
     public void setType(MessageTypeEnum type) {
         this.type = type;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 }

@@ -47,6 +47,7 @@ public class MessageController extends BaseController {
             MessageStatisticsBO messageStatisticsBO = messageService.selectLastMessage(userNum);
             messageStatisticsDTO.setContent(messageStatisticsBO.getContent());
             messageStatisticsDTO.setType(MessageTypeEnum.getEnum(messageStatisticsBO.getType()));
+            messageStatisticsDTO.setGmtCreate(messageStatisticsBO.getGmtCreate());
             return successGet(messageStatisticsDTO);
         }
         return successGet(messageStatisticsDTO);
