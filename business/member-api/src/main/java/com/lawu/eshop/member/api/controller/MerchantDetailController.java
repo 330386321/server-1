@@ -8,7 +8,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
-import com.lawu.eshop.mall.constants.MerchantFavoredTypeEnum;
 import com.lawu.eshop.mall.dto.MerchantFavoredDTO;
 import com.lawu.eshop.member.api.service.MerchantFavoredService;
 import com.lawu.eshop.member.api.service.MerchantStoreImageService;
@@ -66,13 +65,10 @@ public class MerchantDetailController extends BaseController {
         Result<MerchantFavoredDTO> merResult = merchantFavoredService.findFavoredByMerchantId(storeDetailDTO.getMerchantId());
         if (isSuccess(merResult)) {
             MerchantFavoredDTO merchantFavoredDTO = merResult.getModel();
-            if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val) {
-                storeDetailDTO.setPreferentialClause("每满" + merchantFavoredDTO.getReachAmount() + "减" + merchantFavoredDTO.getFavoredAmount());
-            } else if (merchantFavoredDTO.getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val) {
-                storeDetailDTO.setPreferentialClause("满" + merchantFavoredDTO.getReachAmount() + "减" + merchantFavoredDTO.getFavoredAmount());
-            } else {
-                storeDetailDTO.setPreferentialClause(merchantFavoredDTO.getDiscountRate() + "折");
-            }
+            storeDetailDTO.setTypeEnum(com.lawu.eshop.user.constants.MerchantFavoredTypeEnum.getEnum(merchantFavoredDTO.getTypeEnum().val));
+            storeDetailDTO.setReachAmount(merchantFavoredDTO.getReachAmount());
+            storeDetailDTO.setFavoredAmount(merchantFavoredDTO.getFavoredAmount());
+            storeDetailDTO.setDiscountRate(merchantFavoredDTO.getDiscountRate());
             storeDetailDTO.setMerchantFavoredId(merchantFavoredDTO.getId());
             storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
             storeDetailDTO.setValidTime(DateUtil.getDateFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateFormat(merchantFavoredDTO.getEntireEndTime()));

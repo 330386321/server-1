@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.dto;
 
+import com.lawu.eshop.user.constants.MerchantFavoredTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -46,9 +47,6 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "好评率")
     private BigDecimal feedbackRate;
 
-    @ApiModelProperty(value = "优惠信息")
-    private String preferentialClause;
-
     @ApiModelProperty(value = "优惠时间")
     private String preferentialTime;
 
@@ -60,6 +58,18 @@ public class StoreDetailDTO {
 
     @ApiModelProperty(value = "优惠信息ID")
     private Long merchantFavoredId;
+
+    @ApiModelProperty(value = "TYPE_FULL：每满，TYPE_FULL_REDUCE：满减，TYPE_DISCOUNT：折扣")
+    private MerchantFavoredTypeEnum typeEnum;
+
+    @ApiModelProperty(value = "满额")
+    private BigDecimal reachAmount;
+
+    @ApiModelProperty(value = "优惠金额")
+    private BigDecimal favoredAmount;
+
+    @ApiModelProperty(value = "折扣率")
+    private BigDecimal discountRate;
 
     public String getName() {
         return name;
@@ -99,14 +109,6 @@ public class StoreDetailDTO {
 
     public void setIntro(String intro) {
         this.intro = intro;
-    }
-
-    public String getPreferentialClause() {
-        return preferentialClause;
-    }
-
-    public void setPreferentialClause(String preferentialClause) {
-        this.preferentialClause = preferentialClause;
     }
 
     public String getPreferentialTime() {
@@ -195,5 +197,37 @@ public class StoreDetailDTO {
 
     public void setMerchantFavoredId(Long merchantFavoredId) {
         this.merchantFavoredId = merchantFavoredId;
+    }
+
+    public MerchantFavoredTypeEnum getTypeEnum() {
+        return typeEnum;
+    }
+
+    public void setTypeEnum(MerchantFavoredTypeEnum typeEnum) {
+        this.typeEnum = typeEnum;
+    }
+
+    public BigDecimal getReachAmount() {
+        return reachAmount;
+    }
+
+    public void setReachAmount(BigDecimal reachAmount) {
+        this.reachAmount = reachAmount;
+    }
+
+    public BigDecimal getFavoredAmount() {
+        return favoredAmount;
+    }
+
+    public void setFavoredAmount(BigDecimal favoredAmount) {
+        this.favoredAmount = favoredAmount;
+    }
+
+    public BigDecimal getDiscountRate() {
+        return discountRate;
+    }
+
+    public void setDiscountRate(BigDecimal discountRate) {
+        this.discountRate = discountRate;
     }
 }

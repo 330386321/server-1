@@ -25,7 +25,7 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
     @Override
     public List<MerchantStoreImageBO> listMerchantStoreImageByType(Long merchantId, MerchantStoreImageEnum merchantStoreImageEnum) {
         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-        merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(merchantStoreImageEnum.val);
+        merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(merchantStoreImageEnum.val).andStatusEqualTo(true);
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
         return MerchantStoreImageConverter.convertBO(merchantStoreImageDOS);
     }
