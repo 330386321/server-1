@@ -17,6 +17,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "名称")
     private String name;
 
+    @ApiModelProperty(value = "区域名称")
+    private String regionName;
+
     @ApiModelProperty(value = "地址")
     private String address;
 
@@ -240,5 +243,13 @@ public class StoreDetailDTO {
 
     public void setValidDayTime(String validDayTime) {
         this.validDayTime = validDayTime;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

@@ -167,6 +167,7 @@ public class MerchantStoreConverter {
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
         storeDetailDTO.setMerchantId(storeDetailBO.getMerchantId());
         storeDetailDTO.setName(storeDetailBO.getName());
+        storeDetailDTO.setRegionName(storeDetailBO.getRegionName());
         storeDetailDTO.setAddress(storeDetailBO.getAddress());
         storeDetailDTO.setPrincipalMobile(storeDetailBO.getPrincipalMobile());
         storeDetailDTO.setStorePic(storeDetailBO.getStorePic());
@@ -216,6 +217,7 @@ public class MerchantStoreConverter {
         StoreDetailBO storeDetailBO = new StoreDetailBO();
         storeDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
         storeDetailBO.setName(merchantStoreDO.getName());
+        storeDetailBO.setRegionName(merchantStoreDO.getRegionName());
         storeDetailBO.setAddress(merchantStoreDO.getAddress());
         storeDetailBO.setPrincipalMobile(merchantStoreDO.getPrincipalMobile());
         storeDetailBO.setIntro(merchantStoreDO.getIntro());

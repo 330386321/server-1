@@ -12,6 +12,8 @@ public class StoreDetailBO {
 
     private String name;
 
+    private String regionName;
+
     private String address;
 
     private String principalMobile;
@@ -136,5 +138,13 @@ public class StoreDetailBO {
 
     public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }
