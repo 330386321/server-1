@@ -38,7 +38,7 @@ public interface AdSrvService {
 	 * @author yangqh
 	 */
 	@RequestMapping(method = RequestMethod.POST, value = "commission/updateMemberAdRecardStatus")
-	int updateMemberAdRecardStatus(@RequestParam Long id);
+	int updateMemberAdRecardStatus(@RequestParam("id") Long id);
 	
 	/**
 	 * 查询所有广告集合

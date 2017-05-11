@@ -4,7 +4,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.param.*;
-import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -33,9 +32,6 @@ public class OrderController extends BaseController {
 
 	@Autowired
 	private OrderService orderService;
-
-	@Autowired
-	private PropertySrvConfig propertySrvConfig;
 
 	/**
 	 * 用户微信/支付宝订单支付回调

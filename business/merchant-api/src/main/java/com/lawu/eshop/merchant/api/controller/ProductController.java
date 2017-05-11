@@ -257,87 +257,87 @@ public class ProductController extends BaseController {
 		StringBuffer productImageStr = new StringBuffer();
 		StringBuffer productDetailImageStr = new StringBuffer();
 		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
-//		Collection<Part> parts = null;
-//		try {
-//			parts = request.getParts();
-//			
-//			for (Part part : parts) {
-//				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part, merchantApiConfig.getImageUploadUrl());
-//				String resultFlag = map.get("resultFlag");
-//				if (!"0".equals(resultFlag)) {
-//					return successCreated(resultFlag);
-//				}
-//
-//				String imgUrl = map.get("imgUrl");
-//				if ("".equals(imgUrl)) {
-//					continue;
-//					// logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})",productId);
-//					// return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
-//				}
-//
-//				String fileName = part.getName();
-//				if (fileName.contains(ProductImagePrefix.featureImage)) {
-//					featureImageStr.append(imgUrl).append(",");
-//
-//				} else if (fileName.contains(ProductImagePrefix.productIamge)) {
-//					productImageStr.append(imgUrl).append(",");
-//
-//				} else if (fileName.contains(ProductImagePrefix.productDetailImage)) {
-//					productDetailImageStr.append(imgUrl).append(",");
-//
-//				}
-//			}
-//		} catch (IOException e) {
-//			logger.error("上传商品图片异常，失败(productId={})", productId);
-//			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
-//		} catch (ServletException ex) {
-//            logger.info("Servlet异常，没有提交图片文件");
-//        }
+		Collection<Part> parts = null;
+		try {
+			parts = request.getParts();
+			
+			for (Part part : parts) {
+				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part, merchantApiConfig.getImageUploadUrl());
+				String resultFlag = map.get("resultFlag");
+				if (!"0".equals(resultFlag)) {
+					return successCreated(resultFlag);
+				}
+
+				String imgUrl = map.get("imgUrl");
+				if ("".equals(imgUrl)) {
+					continue;
+					// logger.error("上传商品图片失败，上传文件方法返回路径为空(productId={})",productId);
+					// return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+				}
+
+				String fileName = part.getName();
+				if (fileName.contains(ProductImagePrefix.featureImage)) {
+					featureImageStr.append(imgUrl).append(",");
+
+				} else if (fileName.contains(ProductImagePrefix.productIamge)) {
+					productImageStr.append(imgUrl).append(",");
+
+				} else if (fileName.contains(ProductImagePrefix.productDetailImage)) {
+					productDetailImageStr.append(imgUrl).append(",");
+
+				}
+			}
+		} catch (IOException e) {
+			logger.error("上传商品图片异常，失败(productId={})", productId);
+			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
+		} catch (ServletException ex) {
+            logger.info("Servlet异常，没有提交图片文件");
+        }
 //		
 		String featureImage = featureImageStr.toString();
 		String productImage = productImageStr.toString();
 		String productDetailImage = productDetailImageStr.toString();
-//		if (productId == 0L) {
-//			if ("".equals(productImage)) {
-//				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
-//			}
-//			if ("".equals(productDetailImage)) {
-//				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
-//			}
-//
-//			if ("".equals(featureImage)) {
-//				featureImage = productImage.split(",")[0];
-//			}
-//		} else {
-//			String backImageUrls = product.getBackProductImageUrls();
-//			backImageUrls = URLDecoder.decode(backImageUrls);
-//			if ((backImageUrls == null || "[]".equals(backImageUrls) || "".equals(backImageUrls))
-//					&& "".equals(productImage)) {
-//				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
-//			}
-//			if (!"".equals(backImageUrls) && !"[]".equals(backImageUrls)) {
-//				String image = StringUtil.getJsonListToString(backImageUrls);
-//				productImage = image + "," + productImage;
-//			}
-//			if ("".equals(featureImage)) {
-//				featureImage = productImage.split(",")[0];
-//			}
-//
-//			String backDetailImageUrls = product.getBackProductDetailImageUrls();
-//			backDetailImageUrls = URLDecoder.decode(backDetailImageUrls);
-//			if (!"".equals(backDetailImageUrls) && !"[]".equals(backDetailImageUrls)) {
-//				productDetailImage = getUpdateLaterImageDetailUrl(productDetailImage, backDetailImageUrls);
-//			}
-//		}
-//		
-//		productImage = productImage.substring(0, productImage.lastIndexOf(","));
-//		if(!"".equals(productDetailImage)){
-//			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
-//		}	
+		if (productId == 0L) {
+			if ("".equals(productImage)) {
+				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
+			}
+			if ("".equals(productDetailImage)) {
+				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
+			}
+
+			if ("".equals(featureImage)) {
+				featureImage = productImage.split(",")[0];
+			}
+		} else {
+			String backImageUrls = product.getBackProductImageUrls();
+			backImageUrls = URLDecoder.decode(backImageUrls);
+			if ((backImageUrls == null || "[]".equals(backImageUrls) || "".equals(backImageUrls))
+					&& "".equals(productImage)) {
+				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
+			}
+			if (!"".equals(backImageUrls) && !"[]".equals(backImageUrls)) {
+				String image = StringUtil.getJsonListToString(backImageUrls);
+				productImage = image + "," + productImage;
+			}
+			if ("".equals(featureImage)) {
+				featureImage = productImage.split(",")[0];
+			}
+
+			String backDetailImageUrls = product.getBackProductDetailImageUrls();
+			backDetailImageUrls = URLDecoder.decode(backDetailImageUrls);
+			if (!"".equals(backDetailImageUrls) && !"[]".equals(backDetailImageUrls)) {
+				productDetailImage = getUpdateLaterImageDetailUrl(productDetailImage, backDetailImageUrls);
+			}
+		}
 		
-		featureImage = "/test/a.jpg";
-		productImage = "/test/b.jpg";
-		productDetailImage = "/test/c.jpg";
+		productImage = productImage.substring(0, productImage.lastIndexOf(","));
+		if(!"".equals(productDetailImage)){
+			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
+		}	
+		
+//		featureImage = "/test/a.jpg";
+//		productImage = "/test/b.jpg";
+//		productDetailImage = "/test/c.jpg";
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
 		dataProduct.setProductId(productId);

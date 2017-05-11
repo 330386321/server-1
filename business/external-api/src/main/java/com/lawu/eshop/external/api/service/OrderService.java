@@ -27,7 +27,7 @@ public interface OrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "recharge/doHandleOrderPayNotify")
+	@RequestMapping(method = RequestMethod.POST, value = "order/doHandleOrderPayNotify")
 	Result doHandleOrderPayNotify(@RequestBody NotifyCallBackParam param);
 
 	/**
@@ -36,7 +36,7 @@ public interface OrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "recharge/doHandlePayOrderNotify")
-	Result doHandlePayOrderNotify(NotifyCallBackParam param);
+	@RequestMapping(method = RequestMethod.POST, value = "order/doHandlePayOrderNotify")
+	Result doHandlePayOrderNotify(@RequestBody NotifyCallBackParam param);
 
 }
