@@ -53,8 +53,6 @@ public abstract class AbstractTokenManager implements TokenManager {
     @Override
     public String createToken(String type, String userNo, Long userId, String account) {
         String id = String.valueOf(userId);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, tokenExpireSeconds);
         // JWT
         String token = Jwts
                 .builder()
@@ -62,7 +60,7 @@ public abstract class AbstractTokenManager implements TokenManager {
                 .setId(userNo)
                 .setSubject(account)
                 .setAudience(id)
-                .setExpiration(calendar.getTime())
+                .setIssuedAt(Calendar.getInstance().getTime())
                 .signWith(SignatureAlgorithm.HS512, AbstractTokenManager.TOKEN_KEY)
                 .compact();
 

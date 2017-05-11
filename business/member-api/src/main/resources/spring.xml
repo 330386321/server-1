@@ -28,7 +28,7 @@
        <!--管理验证信息的bean-->
        <bean id="tokenManager" class="com.lawu.eshop.authorization.manager.impl.CacheTokenManager">
               <!--Token失效时间-->
-              <property name="tokenExpireSeconds" value="3600" />
+              <property name="tokenExpireSeconds" value="86400" />
               <property name="cacheService" ref="redisCacheService" />
               <property name="singleTokenWithUser" value="false" />
        </bean>
