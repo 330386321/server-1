@@ -33,7 +33,7 @@ public class PcAlipayParam implements Serializable {
 	@NotNull(message = "thirdPayBodyEnum不能为空")
 	private ThirdPayBodyEnum thirdPayBodyEnum;
 
-	@ApiParam(name = "bizFlagEnum", required = true, value = "交易类型（BUSINESS_PAY_BALANCE:商家充值余额;BUSINESS_PAY_POINT:商家充值积分;BUSINESS_PAY_BOND:缴纳保证金;MEMBER_PAY_BALANCE:用户充值余额;MEMBER_PAY_POINT:用户充值积分;MEMBER_PAY_ORDER：订单付款；MEMBER_PAY_BILL:买单）")
+	@ApiParam(name = "bizFlagEnum", required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868")
 	@NotNull(message = "bizFlagEnum不能为空")
 	private ThirdPartyBizFlagEnum bizFlagEnum;
 

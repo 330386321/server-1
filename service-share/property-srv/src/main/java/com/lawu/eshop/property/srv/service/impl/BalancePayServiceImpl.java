@@ -99,12 +99,11 @@ public class BalancePayServiceImpl implements BalancePayService {
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
-		
 		String transactionNum = param.getOrderNum();
 		//新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(param.getTitle());
-		tdsParam.setTransactionNum(transactionNum);
+		tdsParam.setTransactionNum(transactionNum+"1");
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
@@ -123,7 +122,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增商家交易明细
 		TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
 		tdsParam1.setTitle(param.getTitle());
-		tdsParam1.setTransactionNum(transactionNum);
+		tdsParam1.setTransactionNum(transactionNum+"2");
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
 		tdsParam1.setTransactionAccount(param.getAccount());
@@ -144,7 +143,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		for(int i = 0 ; i < bizIds.length ; i++){
 			payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(bizIds[i]));
 		}
-		
 		
 		return ResultCode.SUCCESS;
 	}
