@@ -34,7 +34,7 @@ public class BalancePayDataParam extends BalancePayParam{
 	private String totalAmount;
 	
 	//订单号
-	@NotBlank(message = "orderNum不能为空")
+	//@NotBlank(message = "orderNum不能为空")
 	private String orderNum;
 	
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
