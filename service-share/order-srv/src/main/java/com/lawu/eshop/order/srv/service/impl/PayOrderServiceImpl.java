@@ -106,6 +106,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 		bo.setActualMoney(payDO.getActualAmount().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 		bo.setBusinessUserNum(payDO.getMerchantNum());
 		bo.setPayOrderStatusEnum(PayOrderStatusEnum.getEnum(payDO.getStatus()));
+		bo.setOrderNum(payDO.getOrderNum());
 		return bo;
 	}
 

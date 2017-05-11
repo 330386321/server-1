@@ -18,6 +18,7 @@ import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
@@ -178,12 +179,15 @@ public class RechargeServiceImpl implements RechargeService {
 	}
 
 	@Override
-	public double getRechargeMoney(String rechargeId) {
+	public ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(String rechargeId) {
 		RechargeDO recharge = rechargeDOMapper.selectByPrimaryKey(Long.valueOf(rechargeId));
 		if(recharge == null){
-			return 0;
+			return null;
 		}
-		return recharge.getRechargeMoney().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		ThirdPayCallBackQueryPayOrderDTO rechargeDTO = new ThirdPayCallBackQueryPayOrderDTO();
+		rechargeDTO.setActualMoney(recharge.getRechargeMoney().setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+		rechargeDTO.setOrderNum(recharge.getRechargeNumber());
+		return rechargeDTO;
 	}
 
 }

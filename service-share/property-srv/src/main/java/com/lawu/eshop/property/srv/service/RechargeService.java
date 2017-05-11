@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 
@@ -39,7 +40,7 @@ public interface RechargeService {
 	 * @param rechargeId
 	 * @return
 	 */
-	double getRechargeMoney(String rechargeId);
+	ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(String rechargeId);
 
 
 

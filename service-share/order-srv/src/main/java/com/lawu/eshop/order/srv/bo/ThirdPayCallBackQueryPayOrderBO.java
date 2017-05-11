@@ -6,6 +6,7 @@ public class ThirdPayCallBackQueryPayOrderBO {
 	private PayOrderStatusEnum payOrderStatusEnum;
 	private double actualMoney;
 	private String businessUserNum;
+	private String orderNum;
 	public double getActualMoney() {
 		return actualMoney;
 	}
@@ -23,6 +24,12 @@ public class ThirdPayCallBackQueryPayOrderBO {
 	}
 	public void setPayOrderStatusEnum(PayOrderStatusEnum payOrderStatusEnum) {
 		this.payOrderStatusEnum = payOrderStatusEnum;
+	}
+	public String getOrderNum() {
+		return orderNum;
+	}
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
 	}
 	
 }

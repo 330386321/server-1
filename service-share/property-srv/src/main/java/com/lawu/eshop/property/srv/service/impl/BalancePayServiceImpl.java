@@ -13,11 +13,16 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.RechargeSaveParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.domain.RechargeDO;
+import com.lawu.eshop.property.srv.domain.RechargeDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
+import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.BalancePayService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
@@ -49,7 +54,8 @@ public class BalancePayServiceImpl implements BalancePayService {
 	private PropertyService propertyService;
 	@Autowired
 	private PointDetailService pointDetailService;
-
+	@Autowired
+	private RechargeDOMapper rechargeDOMapper;
 	
 	@Override
 	@Transactional
@@ -94,7 +100,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 			return retCode;
 		}
 		
-		String transactionNum = StringUtil.getRandomNum("");
+		String transactionNum = param.getOrderNum();
 		//新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(param.getTitle());
@@ -181,7 +187,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		infoDoView1.setPoint(new BigDecimal(point));
 		propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView1);
 		
-		String num = StringUtil.getRandomNum("");
+		String num = param.getOrderNum();
 		
 		//新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
@@ -207,6 +213,13 @@ public class BalancePayServiceImpl implements BalancePayService {
 		pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		pdsParam.setRemark("");
 		pointDetailService.save(pdsParam);
+		
+		RechargeDO recharge = new RechargeDO();
+		recharge.setStatus(ThirdPayStatusEnum.SUCCESS.val);
+		recharge.setGmtModified(new Date());
+		RechargeDOExample example = new RechargeDOExample();
+		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
+		rechargeDOMapper.updateByExampleSelective(recharge, example);
 		
 		return ResultCode.SUCCESS;
 	}

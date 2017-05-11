@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 
 /**
@@ -36,7 +37,7 @@ public interface RechargeService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "recharge/getRechargeMoney")
-	double getRechargeMoney(@RequestParam("rechargeId") String rechargeId);
+	ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(@RequestParam("rechargeId") String rechargeId);
 
    
 }

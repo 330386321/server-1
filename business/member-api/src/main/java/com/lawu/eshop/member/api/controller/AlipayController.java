@@ -89,7 +89,8 @@ public class AlipayController extends BaseController {
 
 		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			money = rechargeService.getRechargeMoney(param.getBizIds());
+			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
+			money = recharge.getActualMoney();
 			
 		}
 		if(money == 0){

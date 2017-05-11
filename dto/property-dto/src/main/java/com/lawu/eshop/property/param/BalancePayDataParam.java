@@ -33,6 +33,10 @@ public class BalancePayDataParam extends BalancePayParam{
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
 	private String totalAmount;
 	
+	//订单号
+	@NotBlank(message = "orderNum不能为空")
+	private String orderNum;
+	
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 	private String title;
@@ -91,6 +95,14 @@ public class BalancePayDataParam extends BalancePayParam{
 
 	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+
+	public String getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
 	}
 
 	

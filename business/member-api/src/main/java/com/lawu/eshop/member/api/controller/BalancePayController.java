@@ -104,6 +104,7 @@ public class BalancePayController extends BaseController {
 		}
 		dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
 		dparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
+		dparam.setOrderNum(payOrderCallback.getOrderNum());
 
 		return balancePayService.billPay(dparam);
 	}
@@ -121,9 +122,10 @@ public class BalancePayController extends BaseController {
 		dparam.setUserNum(userNum);
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
-		double money = rechargeService.getRechargeMoney(param.getBizIds());
-		dparam.setTotalAmount(String.valueOf(money));
-
+		ThirdPayCallBackQueryPayOrderDTO payOrderCallback = rechargeService.getRechargeMoney(param.getBizIds());
+		dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));
+		dparam.setOrderNum(payOrderCallback.getOrderNum());
+		
 		Result result = balancePayService.balancePayPoint(dparam);
 		if(ResultCode.SUCCESS != result.getRet()){
 			return result;
@@ -134,7 +136,7 @@ public class BalancePayController extends BaseController {
 		messageInfoParam.setRelateId(0L);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
 		MessageTempParam messageTempParam = new MessageTempParam();
-		messageTempParam.setRechargeBalance(new BigDecimal(money));
+		messageTempParam.setRechargeBalance(new BigDecimal(payOrderCallback.getActualMoney()));
 		// messageTempParam.setPoint(new BigDecimal(""));
 		if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 			messageTempParam.setUserName("E店会员");

@@ -19,6 +19,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
+import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.service.PropertyService;
@@ -111,11 +112,11 @@ public class RechargeController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getRechargeMoney", method = RequestMethod.GET)
-	public double getRechargeMoney(@RequestParam String rechargeId) {
+	public ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(@RequestParam String rechargeId) {
 		if(rechargeId == null || "".equals(rechargeId)){
-			return 0L;
+			return null;
 		}
-		double rechargeMoney = rechargeService.getRechargeMoney(rechargeId);
-		return rechargeMoney;
+		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(rechargeId);
+		return recharge;
 	}
 }

@@ -28,7 +28,8 @@ public interface PayOrderService {
     @RequestMapping(value = "payOrder/getpayOrderList/{memberId}", method = RequestMethod.POST)
     public Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderListParam param);
 
-    @RequestMapping(value = "payOrder/delPayOrderInfo/{id}", method = RequestMethod.DELETE)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "payOrder/delPayOrderInfo/{id}", method = RequestMethod.DELETE)
     public Result delPayOrderInfo(@PathVariable("id") Long id);
     
     /**
