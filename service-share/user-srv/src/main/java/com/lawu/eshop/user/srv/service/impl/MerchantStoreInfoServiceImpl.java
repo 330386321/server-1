@@ -1,16 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
@@ -20,39 +9,19 @@ import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.FansMerchantDO;
-import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
-import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 商家门店service Created by Administrator on 2017/3/24.
@@ -484,6 +453,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         if (merchantStoreDO == null) {
             return null;
         }
+
         //查询门店照
         MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
         merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
@@ -498,6 +468,10 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
         storeDetailBO.setStorePic(storePic);
         storeDetailBO.setPicCount(picCount);
+
+        //查询商家编号
+        MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantStoreDO.getMerchantId());
+        storeDetailBO.setUserNum(merchantDO == null ? "" : merchantDO.getNum());
 
         //查询是否被收藏
         FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();

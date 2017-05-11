@@ -36,6 +36,8 @@ public class StoreDetailBO {
 
     private Boolean isFavorite;
 
+    private String userNum;
+
     public String getName() {
         return name;
     }
@@ -146,5 +148,13 @@ public class StoreDetailBO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

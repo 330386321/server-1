@@ -14,6 +14,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "商家ID")
     private Long merchantId;
 
+    @ApiModelProperty(value = "商家编号")
+    private String userNum;
+
     @ApiModelProperty(value = "名称")
     private String name;
 
@@ -251,5 +254,13 @@ public class StoreDetailDTO {
 
     public void setRegionName(String regionName) {
         this.regionName = regionName;
+    }
+
+    public String getUserNum() {
+        return userNum;
+    }
+
+    public void setUserNum(String userNum) {
+        this.userNum = userNum;
     }
 }

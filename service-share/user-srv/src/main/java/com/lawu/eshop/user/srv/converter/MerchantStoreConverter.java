@@ -166,6 +166,7 @@ public class MerchantStoreConverter {
 
         StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
         storeDetailDTO.setMerchantId(storeDetailBO.getMerchantId());
+        storeDetailDTO.setUserNum(storeDetailBO.getUserNum());
         storeDetailDTO.setName(storeDetailBO.getName());
         storeDetailDTO.setRegionName(storeDetailBO.getRegionName());
         storeDetailDTO.setAddress(storeDetailBO.getAddress());
