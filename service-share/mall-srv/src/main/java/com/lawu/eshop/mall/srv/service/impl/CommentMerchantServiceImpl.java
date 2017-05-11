@@ -138,7 +138,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
 
         CommentMerchantPageParam merchantPageParam = new CommentMerchantPageParam();
-        merchantPageParam.setCurrentPage(listParam.getOffset());
+        merchantPageParam.setCurrentPage(listParam.getCurrentPage());
         merchantPageParam.setPageSize(listParam.getPageSize());
         merchantPageParam.setMerchantId(listParam.getMerchantId());
         //查询评论列表信息
