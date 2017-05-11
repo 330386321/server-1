@@ -11,6 +11,7 @@ import com.lawu.eshop.mall.srv.mapper.SmsRecordDOMapper;
 import com.lawu.eshop.mall.srv.mapper.VerifyCodeDOMapper;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.StringUtil;
 import constants.SmsConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +81,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         //插入短信记录
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setMobile(mobile);
-        smsRecordDO.setContent(mallSrvConfig.getSmsTemplate().replace("{smsCode}", smsCode));
+        smsRecordDO.setContent(StringUtil.getUtf8String(mallSrvConfig.getSmsTemplate()).replace("{smsCode}", smsCode));
         smsRecordDO.setIp(ip);
         smsRecordDO.setType(purpose.val);
         smsRecordDO.setIsSuccess(SmsConstant.SMS_SEND_FAIL);

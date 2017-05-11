@@ -10,6 +10,7 @@ import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
 import com.lawu.eshop.utils.RandomUtil;
+import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.SmsUtil;
@@ -61,7 +62,7 @@ public class SmsRecordController extends BaseController {
         smsConfigParam.setSmsPassword(mallSrvConfig.getSmsPassword());
         smsConfigParam.setSmsSerialNumber(mallSrvConfig.getSmsSerialNumber());
         smsConfigParam.setSmsF(mallSrvConfig.getSmsF());
-        smsConfigParam.setSmsTemplate(mallSrvConfig.getSmsTemplate());
+        smsConfigParam.setSmsTemplate(StringUtil.getUtf8String(mallSrvConfig.getSmsTemplate()));
         Map<String, Object> returnMap = SmsUtil.sendSms(mobile, smsCode, ip, smsConfigParam);
         smsRecordService.updateSmsRecordResult(smsRecordBO.getId(),(Boolean) returnMap.get("sendCode"),returnMap.get("sendResult").toString());
         if (!(Boolean) returnMap.get("sendCode")) {

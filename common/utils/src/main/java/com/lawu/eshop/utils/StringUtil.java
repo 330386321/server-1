@@ -2,6 +2,7 @@ package com.lawu.eshop.utils;
 
 import com.alibaba.fastjson.JSONArray;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -133,5 +134,23 @@ public class StringUtil {
             rt.add((String) o);
         }
         return rt;
+    }
+
+    /**
+     * ISO-8859-1 转换 UTF-8编码
+     *
+     * @param isoString
+     * @return
+     */
+    public static String getUtf8String(String isoString){
+        if(isoString == null || isoString.trim().length() == 0){
+            return "";
+        }
+        try {
+            return new String(isoString.getBytes("iso-8859-1"),"utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return isoString;
     }
 }
