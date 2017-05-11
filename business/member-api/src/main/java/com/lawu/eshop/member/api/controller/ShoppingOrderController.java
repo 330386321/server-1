@@ -57,7 +57,7 @@ public class ShoppingOrderController extends BaseController {
     @Autowired
 	private MemberApiConfig memberApiConfig;
 	
-	/**
+    /**
 	 * 分页查询购物订单
 	 * 
 	 * @param token
@@ -320,6 +320,7 @@ public class ShoppingOrderController extends BaseController {
 		ShoppingOrderPaymentForeignDTO shoppingOrderPaymentForeignDTO = new ShoppingOrderPaymentForeignDTO();
 		shoppingOrderPaymentForeignDTO.setId(result.getModel().getId());
 		shoppingOrderPaymentForeignDTO.setOrderNum(result.getModel().getOrderNum());
+		shoppingOrderPaymentForeignDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
 		shoppingOrderPaymentForeignDTO.setBalance(propertyBalanceDTOResult.getModel().getBalance());
 		
 		return successGet(shoppingOrderPaymentForeignDTO);

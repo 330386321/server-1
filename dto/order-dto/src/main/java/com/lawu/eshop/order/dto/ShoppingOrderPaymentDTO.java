@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -20,6 +21,12 @@ public class ShoppingOrderPaymentDTO implements Serializable {
 	@ApiModelProperty(value = "订单编号", required = true)
 	private String orderNum;
 	
+	/**
+	 * 订单总价
+	 */
+	@ApiModelProperty(value = "订单总价", required = true)
+	private BigDecimal orderTotalPrice;
+	
 	public Long getId() {
 		return id;
 	}
@@ -34,6 +41,14 @@ public class ShoppingOrderPaymentDTO implements Serializable {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public BigDecimal getOrderTotalPrice() {
+		return orderTotalPrice;
+	}
+
+	public void setOrderTotalPrice(BigDecimal orderTotalPrice) {
+		this.orderTotalPrice = orderTotalPrice;
 	}
 	
 }
