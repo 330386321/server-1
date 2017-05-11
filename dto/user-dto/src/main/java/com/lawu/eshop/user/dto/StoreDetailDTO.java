@@ -47,8 +47,11 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "好评率")
     private BigDecimal feedbackRate;
 
-    @ApiModelProperty(value = "优惠时间")
+    @ApiModelProperty(value = "每周优惠时间")
     private String preferentialTime;
+
+    @ApiModelProperty(value = "每天优惠时间")
+    private String validDayTime;
 
     @ApiModelProperty(value = "有效时间")
     private String validTime;
@@ -229,5 +232,13 @@ public class StoreDetailDTO {
 
     public void setDiscountRate(BigDecimal discountRate) {
         this.discountRate = discountRate;
+    }
+
+    public String getValidDayTime() {
+        return validDayTime;
+    }
+
+    public void setValidDayTime(String validDayTime) {
+        this.validDayTime = validDayTime;
     }
 }

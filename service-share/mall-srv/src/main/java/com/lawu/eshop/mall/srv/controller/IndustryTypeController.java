@@ -10,6 +10,7 @@ import com.lawu.eshop.mall.srv.service.IndustryTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +35,15 @@ public class IndustryTypeController extends BaseController {
         if (industryTypeBOS == null || industryTypeBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
-        return successGet(IndustryTypeConverter.convertDTO(industryTypeBOS));
+        List<IndustryTypeDTO> industryTypeDTOS = new ArrayList<>();
+        for (IndustryTypeBO industryTypeBO : industryTypeBOS) {
+            IndustryTypeDTO industryTypeDTO = IndustryTypeConverter.convertDTO(industryTypeBO);
+            if (industryTypeDTO != null) {
+                industryTypeDTO.setIndustryTypeDTOS(IndustryTypeConverter.convertDTO(industryTypeBO.getIndustryTypeBOList()));
+            }
+            industryTypeDTOS.add(industryTypeDTO);
+        }
+        return successGet(industryTypeDTOS);
     }
 
     /**

@@ -2,6 +2,8 @@ package com.lawu.eshop.mall.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 /**
  * @author meishuquan
  * @date 2017/4/5.
@@ -22,6 +24,9 @@ public class IndustryTypeDTO {
 
     @ApiModelProperty(value = "图片路径")
     private String imageUrl;
+
+    @ApiModelProperty(value = "二级行业")
+    List<IndustryTypeDTO> industryTypeDTOS;
 
     public Integer getId() {
         return id;
@@ -61,5 +66,13 @@ public class IndustryTypeDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public List<IndustryTypeDTO> getIndustryTypeDTOS() {
+        return industryTypeDTOS;
+    }
+
+    public void setIndustryTypeDTOS(List<IndustryTypeDTO> industryTypeDTOS) {
+        this.industryTypeDTOS = industryTypeDTOS;
     }
 }

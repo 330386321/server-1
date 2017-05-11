@@ -70,7 +70,8 @@ public class MerchantDetailController extends BaseController {
             storeDetailDTO.setFavoredAmount(merchantFavoredDTO.getFavoredAmount());
             storeDetailDTO.setDiscountRate(merchantFavoredDTO.getDiscountRate());
             storeDetailDTO.setMerchantFavoredId(merchantFavoredDTO.getId());
-            storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "～" + merchantFavoredDTO.getValidDayEndTime());
+            storeDetailDTO.setValidDayTime(merchantFavoredDTO.getValidDayBeginTime() + "-" + merchantFavoredDTO.getValidDayEndTime());
+            storeDetailDTO.setPreferentialTime(merchantFavoredDTO.getValidWeekTime() + merchantFavoredDTO.getValidDayBeginTime() + "-" + merchantFavoredDTO.getValidDayEndTime());
             storeDetailDTO.setValidTime(DateUtil.getDateFormat(merchantFavoredDTO.getEntireBeginTime()) + "至" + DateUtil.getDateFormat(merchantFavoredDTO.getEntireEndTime()));
         }
         return successGet(storeDetailDTO);
