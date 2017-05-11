@@ -211,4 +211,15 @@ public class UserServiceImpl implements UserService {
         UserListBO userListBO = UserConverter.cover(userDO);
         return userListBO;
     }
+
+    @Override
+    public UserListBO getUserByAccount(String account) {
+        UserDOExample userDOExample = new UserDOExample();
+        userDOExample.createCriteria().andAccountEqualTo(account);
+        List<UserDO> userDOS = userDOMapper.selectByExample(userDOExample);
+        if(userDOS == null || userDOS.isEmpty()){
+            return null;
+        }
+        return UserConverter.cover(userDOS.get(0));
+    }
 }

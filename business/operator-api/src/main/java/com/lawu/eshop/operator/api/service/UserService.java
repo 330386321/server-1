@@ -74,4 +74,13 @@ public interface UserService {
      */
     @RequestMapping(value = "user/findUserById/{id}", method = RequestMethod.GET)
     Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id);
+
+    /**
+     * 根据账号查询用户
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "user/getUser/{account}",method = RequestMethod.GET)
+    Result<UserListDTO> getUserByAccount(@PathVariable(value = "account") String account);
 }

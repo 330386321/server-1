@@ -105,8 +105,11 @@ public class MerchantAuditController extends BaseController {
     @RequestMapping(value = "updateMerchantAudit", method = RequestMethod.POST)
     public Result updateMerchantAudit(@RequestParam @ApiParam(required = true, value = "门店审核ID") Long storeAuditId,
                                       @ModelAttribute @ApiParam MerchantAuditParam auditParam) {
-        // TODO 获取登录人ID
         Integer auditorId = 0;
+        Result<UserListDTO> userResult = userService.getUserByAccount(UserUtil.getCurrentUserAccount());
+        if(isSuccess(userResult)){
+            auditorId = userResult.getModel().getId();
+        }
         auditParam.setAuditorId(auditorId);
         Result result = merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
         if(!isSuccess(result)){

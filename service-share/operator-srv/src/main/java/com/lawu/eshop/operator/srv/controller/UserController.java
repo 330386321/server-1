@@ -29,7 +29,7 @@ import java.util.Set;
  * @date 2017/4/19.
  */
 @RestController
-@RequestMapping(value = "user")
+@RequestMapping(value = "user/")
 public class UserController extends BaseController {
 
     @Autowired
@@ -227,6 +227,21 @@ public class UserController extends BaseController {
         }
         UserListDTO userListDTO = UserConverter.coverDTO(userListBO);
         return successGet(userListDTO);
+    }
+
+    /**
+     * 根据账号查询用户
+     *
+     * @param account
+     * @return
+     */
+    @RequestMapping(value = "getUser/{account}", method = RequestMethod.GET)
+    public Result<UserListDTO> getUser(@PathVariable(value = "account") String account){
+        UserListBO userListBO = userService.getUserByAccount(account);
+        if(userListBO == null){
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(UserConverter.coverDTO(userListBO));
     }
 
 }

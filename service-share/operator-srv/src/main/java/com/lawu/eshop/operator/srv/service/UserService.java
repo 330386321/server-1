@@ -39,4 +39,12 @@ public interface UserService {
     Integer userEnable(Integer id);
 
     UserListBO finUserById(Integer id);
+
+    /**
+     * 根据账号查询用户
+     *
+     * @param account
+     * @return
+     */
+    UserListBO getUserByAccount(String account);
 }
