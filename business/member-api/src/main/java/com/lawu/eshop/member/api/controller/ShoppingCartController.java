@@ -256,7 +256,7 @@ public class ShoppingCartController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "buyNowCreateOrder", method = RequestMethod.POST)
-	public Result<ShoppingCartSettlementDTO> buyNowCreateOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "创建订单参数") @Validated ShoppingOrderBuyNowCreateOrderForeignParam param, BindingResult bindingResult) {
+	public Result<Long> buyNowCreateOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "创建订单参数") @Validated ShoppingOrderBuyNowCreateOrderForeignParam param, BindingResult bindingResult) {
     	String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);

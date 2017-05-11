@@ -356,6 +356,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemExtendDO);
 		
 		// 更新退款详情
+		shoppingRefundDetailDO.setIsAgree(param.getIsAgree());
 		shoppingRefundDetailDO.setRefusalReasons(param.getRefusalReasons());
 		shoppingRefundDetailDO.setGmtRefund(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());

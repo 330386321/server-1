@@ -77,6 +77,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		
+		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingOrderItemExtendBO.getShoppingRefundDetail();
 		ShoppingRefundDetailDTO shoppingRefundDetailDTO = ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO);
 		
 		// 倒计时在服务端放入
@@ -90,12 +91,12 @@ public class ShoppingRefundDetailController extends BaseController {
 				if (ShoppingRefundTypeEnum.REFUND.equals(shoppingOrderItemExtendBO.getShoppingRefundDetail().getType())) {
 					// 1)退款类型为退款
 					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
-					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+					date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 					countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				} else {
 					// 2)退款类型为退货退款
 					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_RETURN_REFUND_REFUND_TIME);
-					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+					date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 					countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				}
 				break;
@@ -104,7 +105,7 @@ public class ShoppingRefundDetailController extends BaseController {
 				
 				// 自动退款时间
 				time = propertyService.getByName(PropertyNameConstant.FILL_RETURN_ADDRESS_REFUND_TIME);
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case TO_BE_RETURNED:
@@ -112,7 +113,7 @@ public class ShoppingRefundDetailController extends BaseController {
 				
 				// 自动取消退款申请时间
 				time = propertyService.getByName(PropertyNameConstant.TO_BE_RETURNED_REVOKE_TIME);
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case TO_BE_REFUNDED:
@@ -120,7 +121,7 @@ public class ShoppingRefundDetailController extends BaseController {
 				
 				// 自动退款时间
 				time = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case REFUND_FAILED:
@@ -128,7 +129,7 @@ public class ShoppingRefundDetailController extends BaseController {
 				
 				// 自动取消退款申请时间
 				time = propertyService.getByName(PropertyNameConstant.REFUND_FAILED_REVOKE_TIME);
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case PLATFORM_INTERVENTION:
@@ -139,14 +140,14 @@ public class ShoppingRefundDetailController extends BaseController {
 				} else {
 					time = propertyService.getByName(PropertyNameConstant.PLATFORM_INTERVENTION_RETURN_REFUND_TIME);
 				}
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case REFUND_SUCCESSFULLY:
 				// 7.退款成功，退款到账提示时间
 				
 				time = propertyService.getByName(PropertyNameConstant.REFUND_TO_THE_ACCOUNT_TIME);
-				date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
 				shoppingRefundDetailDTO.setGmtToAccount(date);
 				
 				break;

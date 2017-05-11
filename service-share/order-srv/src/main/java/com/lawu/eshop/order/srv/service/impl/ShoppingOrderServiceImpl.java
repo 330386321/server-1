@@ -218,7 +218,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 		
 		// 如果总记录为0，不再执行后续操作直接返回
-		if (count == null || count <= 0) {
+		if (count == null || count <= 0  || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
 		
@@ -240,6 +240,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
+		
+		rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 		
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
@@ -1131,6 +1133,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria =  shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
+		// 订单状态为交易成功并且是退款状态
+		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
 		long evaluationCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 		
