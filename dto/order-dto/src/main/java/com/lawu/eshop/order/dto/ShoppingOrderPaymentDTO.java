@@ -9,9 +9,9 @@ public class ShoppingOrderPaymentDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 购物订单项id
+	 * 购物订单id
 	 */
-	@ApiModelProperty(value = "购物订单项id", required = true)
+	@ApiModelProperty(value = "购物订单id", required = true)
 	private Long id;
 	
 	/**

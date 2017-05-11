@@ -67,7 +67,7 @@ public interface AddressService {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.DELETE, value = "address/remove/{id}")
-	Result delete(@PathVariable("id") Long userId);
+	Result delete(@PathVariable("id") Long userId, @RequestParam("userNum") String userNum);
 
 	/**
 	 * 修改默认地址

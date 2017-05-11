@@ -230,8 +230,10 @@ public class ShoppingOrderConverter {
 			return rtn;
 		}
 
-		BeanUtils.copyProperties(shoppingOrderBO, rtn);
-
+		rtn = new ShoppingOrderPaymentDTO();
+		rtn.setId(shoppingOrderBO.getId());
+		rtn.setOrderNum(shoppingOrderBO.getOrderNum());
+		
 		return rtn;
 	}
 }
