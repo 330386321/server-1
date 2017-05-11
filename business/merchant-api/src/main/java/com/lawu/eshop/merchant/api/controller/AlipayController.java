@@ -108,7 +108,7 @@ public class AlipayController extends BaseController {
 
 		PcAlipayDataParam aparam = new PcAlipayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setSubject(param.getSubject());
+		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));

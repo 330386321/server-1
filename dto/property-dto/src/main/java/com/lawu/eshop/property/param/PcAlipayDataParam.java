@@ -35,6 +35,9 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 	@ApiParam(name = "outTradeNo", required = true, value = "商户订单号")
 	@NotBlank(message = "outTradeNo不能为空")
 	private String outTradeNo;
+	
+	@NotBlank(message = "subject不能为空")
+	private String subject;
 
 	public String getOutTradeNo() {
 		return outTradeNo;
@@ -58,6 +61,14 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 
 	public void setUserNum(String userNum) {
 		this.userNum = userNum;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 }
