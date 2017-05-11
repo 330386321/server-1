@@ -22,6 +22,7 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.merchant.api.service.BalancePayService;
 import com.lawu.eshop.merchant.api.service.MessageService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -65,7 +66,8 @@ public class BalancePayController extends BaseController {
 		dparam.setUserNum(userNum);
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
 
-		double money = rechargeService.getRechargeMoney(param.getBizIds());
+		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
+		double money = recharge.getActualMoney();
 		dparam.setTotalAmount(String.valueOf(money));
 
 		Result result = balancePayService.balancePayPoint(dparam);

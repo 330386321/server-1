@@ -91,7 +91,7 @@ public class WxPayController extends BaseController {
 				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			money = recharge.getActualMoney();
-
+			
 		}
 		if (money == 0) {
 			return successCreated(ResultCode.MONEY_IS_ZERO);

@@ -30,7 +30,6 @@ public class PcAlipayParam implements Serializable {
 	private String bizId;
 	
 	@ApiParam(name = "thirdPayBodyEnum", required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868")
-	@NotNull(message = "thirdPayBodyEnum不能为空")
 	private ThirdPayBodyEnum thirdPayBodyEnum;
 
 	@ApiParam(name = "bizFlagEnum", required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868")
