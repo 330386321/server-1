@@ -53,6 +53,8 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         ListFansRealParam listFansRealParam = new ListFansRealParam();
         listFansRealParam.setMerchantId(merchantId);
         listFansRealParam.setRegionPath(listFansParam.getRegionPath());
+        listFansRealParam.setCurrentPage(listFansParam.getCurrentPage());
+        listFansRealParam.setPageSize(listFansParam.getPageSize());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listFans(listFansRealParam);
 
         Page<FansMerchantBO> page = new Page<>();
