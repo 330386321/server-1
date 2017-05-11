@@ -66,7 +66,7 @@ public interface AdService {
 	 * @param num
 	 * @return
 	 */
-	@RequestMapping(value = "ad/clickPraise/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "ad/clickPraise/{id}", method = RequestMethod.PUT)
     public Result<PraisePointDTO> clickPraise(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
 	/**
@@ -75,7 +75,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/clickAd/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "ad/clickAd/{id}", method = RequestMethod.PUT)
     public Result<ClickAdPointDTO> clickAd(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
 	
@@ -111,7 +111,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.GET)
+	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
 	
 	/**

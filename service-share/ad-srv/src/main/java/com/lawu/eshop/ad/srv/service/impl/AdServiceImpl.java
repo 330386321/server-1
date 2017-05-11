@@ -526,6 +526,7 @@ public class AdServiceImpl implements AdService {
 	 * 抢赞
 	 */
 	@Override
+	@Transactional
 	public BigDecimal clickPraise(Long id,Long memberId,String num) {
 		PointPoolDOExample ppexample=new PointPoolDOExample();
 		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("1"))

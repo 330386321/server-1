@@ -246,9 +246,9 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
-     @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "GET")
+     @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "PUT")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
+     @RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
      public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
          Result rs = adExtendService.clickPraise(id);
@@ -257,9 +257,9 @@ public class AdController extends BaseController {
 
      @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
-     @ApiOperation(value = "点击广告", notes = "点击广告[5008]（张荣成）", httpMethod = "GET")
+     @ApiOperation(value = "点击广告", notes = "点击广告[5008]（张荣成）", httpMethod = "PUT")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
+     @RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
      public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                    @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	 Long memberId=UserUtil.getCurrentUserId(getRequest());
@@ -304,9 +304,9 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-26", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "领取红包", notes = "领取红包[1002|5004]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "领取红包", notes = "领取红包[1002|5004]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
+    @RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     		@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId
     		,@RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
@@ -344,9 +344,9 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-05-02", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    @RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.GET)
+    @RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
     public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result<PropertyPointDTO> result = propertyInfoService.getPropertyPoint(userNum);

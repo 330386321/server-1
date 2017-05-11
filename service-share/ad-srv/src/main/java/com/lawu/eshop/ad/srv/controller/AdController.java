@@ -144,7 +144,7 @@ public class AdController extends BaseController{
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
     public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId ,@RequestParam String num) {
 		boolean flag=memberAdRecordService.isClickToDay(memberId, id);
 		if(flag){
@@ -251,7 +251,7 @@ public class AdController extends BaseController{
 	 * @param num
 	 * @return
 	 */
-	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
     public Result<PraisePointDTO> clickPraise(@PathVariable Long id,@RequestParam Long memberId,@RequestParam String num) {
 		Boolean flag=pointPoolService.selectStatusByMember(id, memberId);
 		if(flag)
@@ -321,7 +321,7 @@ public class AdController extends BaseController{
      * @param memberNum
      * @return
      */
-	@RequestMapping(value = "getRedPacket", method = RequestMethod.GET)
+	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId,@RequestParam String memberNum) {
     	BigDecimal point=adService.getRedPacket(merchantId,memberId,memberNum);
     	PraisePointDTO dto=new PraisePointDTO();
