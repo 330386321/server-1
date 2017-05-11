@@ -10,9 +10,9 @@ import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductService;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.param.ListProductParam;
-import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -48,7 +48,7 @@ public class IndexController extends BaseController {
     public Result updateStoreIndex() {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
         listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
-        listMerchantStoreParam.setManageType(ManageTypeEnum.ENTITY.val);
+        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
         listMerchantStoreParam.setPageSize(50);
         int currentPage = 0;
         while (true) {

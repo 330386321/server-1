@@ -2,10 +2,10 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
@@ -249,7 +249,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                         if(!merchantStoreProfileDOS.isEmpty()){
                             MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
                             merchantStoreProfileDO.setId(merchantStoreProfileDOS.get(0).getId());
-                            merchantStoreProfileDO.setManageType(ManageTypeEnum.ENTITY.val);
+                            merchantStoreProfileDO.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
                             merchantStoreProfileDOMapper.updateByPrimaryKeySelective(merchantStoreProfileDO);
                         }
                     }
@@ -260,7 +260,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
 
                     boolean isEntity = false;
-                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType()== ManageTypeEnum.ENTITY.val){
+                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType()== MerchantStoreTypeEnum.ENTITY_MERCHANT.val){
                         isEntity = true;
                     }
                     if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val == auditParam.getTypeEnum().val || isEntity){
