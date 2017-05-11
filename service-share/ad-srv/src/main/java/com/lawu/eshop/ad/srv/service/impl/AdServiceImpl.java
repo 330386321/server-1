@@ -100,6 +100,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setType(adParam.getTypeEnum().val);
 		adDO.setPutWay(adParam.getPutWayEnum().val);
 		adDO.setViewcount(0);
+		adDO.setHits(0);
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		try {
 			if(adParam.getBeginTime()!=null){
@@ -267,7 +268,7 @@ public class AdServiceImpl implements AdService {
 				if(adMerchantParam.getPutWayEnum()!=null){
 					c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 				}
-
+ 
 			}
 			
 		 }
@@ -442,8 +443,6 @@ public class AdServiceImpl implements AdService {
 	public Integer clickAd(Long id, Long memberId,String num) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		Integer hits= adDO.getHits();
-		if(hits==null)
-			hits=0;
 		//平面和视频点击次数加一
 		int i=0;
 		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
@@ -460,7 +459,7 @@ public class AdServiceImpl implements AdService {
 			adDO.setHits(hits);
 			if(hits==adDO.getAdCount()){
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
-				adDOMapper.updateByPrimaryKey(adDO);
+				adDO.setGmtModified(new Date());
 				//删除solr中的数据
 				SolrInputDocument document = new SolrInputDocument();
 				document.addField("id", adDO.getId());

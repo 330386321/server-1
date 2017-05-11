@@ -52,4 +52,7 @@ public interface MessageService {
 
     @RequestMapping(value = "message/delMessageStatus/{messageId}", method = RequestMethod.DELETE)
     Result delMessageStatus(@PathVariable("messageId") Long messageId);
+    
+    @RequestMapping(value = "message/selectMessageById/{id}", method = RequestMethod.GET)
+    Result<MessageDTO> selectMessageById(@PathVariable("id") Long id);
 }

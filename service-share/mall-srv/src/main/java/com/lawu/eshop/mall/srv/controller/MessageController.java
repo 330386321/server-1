@@ -200,5 +200,11 @@ public class MessageController extends BaseController {
         }
         return successCreated();
     }
+    
+    @RequestMapping(value = "selectMessageById/{id}", method = RequestMethod.GET)
+    public Result<MessageDTO> selectMessageById(@PathVariable("id") Long id) {
+    	MessageBO messageBO=messageService.selectMessageId(id);
+        return successCreated(MessageConverter.coverDTO(messageBO));
+    }
 
 }

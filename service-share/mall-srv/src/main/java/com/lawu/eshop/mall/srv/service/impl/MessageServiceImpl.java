@@ -250,4 +250,10 @@ public class MessageServiceImpl implements MessageService {
         page.setRecords(messageBOS);
         return page;
     }
+
+	@Override
+	public MessageBO selectMessageId(Long id) {
+		MessageDO messageDO=messageDOMapper.selectByPrimaryKey(id);
+		return MessageConverter.coverBO(messageDO);
+	}
 }

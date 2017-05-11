@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.MessageDTO;
@@ -72,5 +73,43 @@ public class MessageController extends BaseController {
     public Result del(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         Result result = messageService.delMessageStatus(messageId);
         return successDelete(result);
+    }
+    
+    @ApiOperation(value = "站内信息操作（批量删除）", notes = "站内信息操作（批量删除） [1000]（张荣成）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "batchDel", method = RequestMethod.PUT)
+    public Result batchDel(@RequestParam("messageIds") String messageIds, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	if(messageIds == null){
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        String[] ids=messageIds.split(",");
+        for (String messageId : ids) {
+        	 Result result = messageService.delMessageStatus(Long.parseLong(messageId));
+		}
+        return successDelete();
+    }
+    
+    @ApiOperation(value = "站内信息操作（批量标记已读）", notes = "站内信息操作（批量标记已读） [1000]（张荣成）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "batchRead", method = RequestMethod.PUT)
+    public Result batchRead(@RequestParam("messageIds") String messageIds, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	if(messageIds == null){
+            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        String[] ids=messageIds.split(",");
+        for (String messageId : ids) {
+        	 Result result = messageService.updateMessageStatus(Long.parseLong(messageId));
+		}
+        return successCreated();
+    }
+    
+    @ApiOperation(value = "站内信息操作（消息详情）", notes = "站内信息操作（消息详情） []（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "selectMessageDetail/{id}", method = RequestMethod.GET)
+    public Result<MessageDTO> selectMessageDetail(@PathVariable("id") Long id, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        return messageService.selectMessageById(id);
     }
 }

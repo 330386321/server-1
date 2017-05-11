@@ -59,4 +59,6 @@ public interface MessageService {
     void saveMessageToAll(OperatorMessageParam messageInfoParam);
 
     Page<MessageBO> getOperatorMessageList(MessageQueryParam param);
+    
+    MessageBO selectMessageId(Long id);
 }

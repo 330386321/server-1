@@ -22,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdPage;
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
+import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
@@ -355,7 +357,57 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		return successGet(newPage);
 	}
 	
-
-	
+	@Override
+	public Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		AdMemberParam param = new AdMemberParam();
+		param.setCurrentPage(adEgainParam.getCurrentPage());
+		param.setPageSize(adEgainParam.getPageSize());
+		param.setTypeEnum(adEgainParam.getTypeEnum());
+		param.setLatitude(adEgainParam.getLatitude());
+		param.setLongitude(adEgainParam.getLongitude());
+		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
+		List<AdDTO> list = pageDTOS.getModel().getRecords();
+		List<AdDTO> newList = screem(param, list, memberId);
+		AdPage<AdDTO> adpage = new AdPage<>();
+		List<AdDTO> screenList = adpage.page(newList, param.getPageSize(), param.getCurrentPage());
+		List<AdFlatVideoDTO> egainList = new ArrayList<>();
+		for (AdDTO adDTO : screenList) {
+			AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
+			Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService
+					.selectMerchantStoreByMId(adDTO.getMerchantId());
+			Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(adDTO.getMerchantId());
+			adFlatVideoDTO.setId(adDTO.getId());
+			adFlatVideoDTO.setContent(adDTO.getContent());
+			adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
+			adFlatVideoDTO.setIsFavorite(adDTO.getIsFavorite());
+			adFlatVideoDTO.setLogoUrl(adDTO.getLogoUrl());
+			adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
+			adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
+			adFlatVideoDTO.setTitle(adDTO.getTitle());
+			adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());
+			adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
+			adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
+			adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
+			adFlatVideoDTO.setName(adDTO.getName());
+			adFlatVideoDTO.setViewCount(adDTO.getViewCount());
+			adFlatVideoDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+			adFlatVideoDTO.setName(merchantStoreDTO.getModel().getName());
+			adFlatVideoDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+			adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val));
+			
+			//广告词
+			Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
+			if(isSuccess(adLexiconDTOS)){
+				adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
+			}
+			egainList.add(adFlatVideoDTO);
+		}
+		Page<AdFlatVideoDTO> newPage = new Page<AdFlatVideoDTO>();
+		newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
+		newPage.setTotalCount(newList.size());
+		newPage.setRecords(egainList);
+		return successGet(newPage);
+	}
 
 }

@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.service;
 import java.util.List;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
@@ -52,5 +53,7 @@ public interface AdExtendService {
     Result<AdPraiseDTO> selectAbPraiseById(Long id);
 	
 	
-    Result<PraisePointDTO> clickPraise(Long id);
+   Result<PraisePointDTO> clickPraise(Long id);
+    
+   Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam);
 }

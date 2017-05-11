@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
+import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
@@ -50,6 +51,7 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -154,10 +156,12 @@ public class AdController extends BaseController {
         	adEgainDTO.setMerchantId(adDTO.getMerchantId());
         	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
         	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+        	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
         	if(isSuccess(merchantStoreDTO)){
         		adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
             	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
             	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+            	adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
         	}
         	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
         	if(isSuccess(mpRs)){
@@ -358,6 +362,16 @@ public class AdController extends BaseController {
 	      return rs;
 	  }
     	
+    }
+    
+    @ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
+    public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                                 @ModelAttribute @ApiParam( value = "查询信息") AdEgainParam adEgainParam) {
+    	Result<Page<AdFlatVideoDTO>>  pageDTOS=adExtendService.selectEgainAd(adEgainParam);
+    	return pageDTOS;
     }
 
 } 

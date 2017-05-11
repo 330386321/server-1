@@ -139,7 +139,7 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
 	public Result remove(@PathVariable Long id,@RequestParam String userNum) {
 		boolean flag=addressService.isCheckAddress(id, userNum);
-		if(flag){
+		if(!flag){
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
 		Integer i = addressService.remove(id);

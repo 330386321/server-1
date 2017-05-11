@@ -92,4 +92,18 @@ public class MessageConverter {
         }
         return list;
     }
+
+	public static MessageDTO coverDTO(MessageBO messageBO) {
+		 MessageDTO messageDTO = new MessageDTO();
+		 if(messageBO==null){
+			 return messageDTO;
+		 }
+         messageDTO.setStatusEnum(MessageStatusReturnEnum.getEnum(messageBO.getStatus()));
+         messageDTO.setId(messageBO.getId());
+         messageDTO.setMessageTypeEnum(MessageTypeEnum.getEnum(messageBO.getType()));
+         messageDTO.setContent(messageBO.getContent());
+         messageDTO.setTitle(messageBO.getTitle());
+         messageDTO.setGmtCreate(messageBO.getGmtCreate());
+		 return messageDTO;
+	}
 }
