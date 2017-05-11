@@ -63,7 +63,8 @@ public class PayOrderController extends BaseController {
             if(favoredDTOResult.getModel() !=null){
                 if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val){
                     //每满xxx减xxx
-                    realFavoredAmount = (canFavoredAmount/(favoredDTOResult.getModel().getReachAmount().doubleValue()))*favoredDTOResult.getModel().getFavoredAmount().doubleValue();
+                    int m =  (int)(canFavoredAmount/(favoredDTOResult.getModel().getReachAmount().doubleValue()));
+                    realFavoredAmount =  m*favoredDTOResult.getModel().getFavoredAmount().doubleValue();
                 }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val){
                     //满xxx减xxx
                     if((canFavoredAmount-favoredDTOResult.getModel().getReachAmount().doubleValue()) >=0){
