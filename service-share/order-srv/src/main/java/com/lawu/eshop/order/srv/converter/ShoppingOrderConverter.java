@@ -233,6 +233,7 @@ public class ShoppingOrderConverter {
 		rtn = new ShoppingOrderPaymentDTO();
 		rtn.setId(shoppingOrderBO.getId());
 		rtn.setOrderNum(shoppingOrderBO.getOrderNum());
+		rtn.setOrderTotalPrice(shoppingOrderBO.getOrderTotalPrice());
 		
 		return rtn;
 	}
