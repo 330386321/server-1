@@ -138,8 +138,8 @@ public class CommentProductServiceImpl implements CommentProductService {
 		commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
 
 		CommentProductPageParam productPageParam = new CommentProductPageParam();
-		productPageParam.setCurrentPage(listParam.getOffset());
-		productPageParam.setPageSize(listParam.getCurrentPage());
+		productPageParam.setCurrentPage(listParam.getCurrentPage());
+		productPageParam.setPageSize(listParam.getPageSize());
 		productPageParam.setProductId(listParam.getProductId());
 		// 查询评论列表信息
 		List<CommentProductDOView> commentProductDOViews = commentProductDOMapperExtend
