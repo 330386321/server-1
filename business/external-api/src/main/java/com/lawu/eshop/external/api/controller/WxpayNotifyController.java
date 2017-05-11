@@ -114,18 +114,18 @@ public class WxpayNotifyController extends BaseController {
 
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(bizFlagInt)
-							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(bizFlagInt)) {
+							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = orderService.doHandleOrderPayNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = orderService.doHandlePayOrderNotify(param);
 
 					} else {
@@ -230,10 +230,10 @@ public class WxpayNotifyController extends BaseController {
 
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagInt)) {
+							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
 
-					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagInt)) {
+					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
 
 					} else {

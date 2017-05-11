@@ -438,6 +438,7 @@ public class AdServiceImpl implements AdService {
 	}
 	
 	@Override
+	@Transactional
 	public Integer clickAd(Long id, Long memberId,String num) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		Integer hits= adDO.getHits();
