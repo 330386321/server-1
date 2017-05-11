@@ -12,7 +12,7 @@ public class InviteFansParam {
     @ApiModelProperty(value = "会员编号,以逗号分隔", required = true)
     private String nums;
 
-    @ApiModelProperty(value = "邀请区域,全国为空字符串", required = true)
+    @ApiModelProperty(value = "邀请区域,全国为空字符串", required = false)
     private String regionName;
 
     @ApiModelProperty(value = "性别，SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--全部", required = true)
