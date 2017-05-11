@@ -4,7 +4,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.property.srv.bo.PayOrderNotification;
+import com.lawu.eshop.mq.dto.order.PayOrderNotification;
 import com.lawu.eshop.property.srv.constans.TransactionConstant;
 import org.springframework.stereotype.Service;
 
