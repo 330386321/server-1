@@ -62,6 +62,7 @@ public class ResultCode {
     public static final int PUSH_HAS_NOUSER = 2104;
     public static final int ROLE_HAS_NOPERMISSION = 2105;
     public static final int USER_ACCOUNT_DISABLE = 2106;
+    public static final int USER_ACCOUNT_EXIST = 2107;
 
 
     // 商品模块代码 3xxx
@@ -187,6 +188,7 @@ public class ResultCode {
         ResultCode.messageMap.put(ROLE_HAS_NOPERMISSION, "没有相关联权限");
         ResultCode.messageMap.put(PUSH_HAS_NOUSER, "没有可推送用户");
         ResultCode.messageMap.put(USER_ACCOUNT_DISABLE, "账号已停用，请联系管理员");
+        ResultCode.messageMap.put(USER_ACCOUNT_EXIST, "账号已存在");
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");

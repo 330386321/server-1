@@ -42,8 +42,11 @@ public class UserController extends BaseController {
         if (StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Result result = userService.addUser(account, name, password);
-        return result;
+        Result<UserListDTO> userResult = userService.getUserByAccount(account);
+        if(isSuccess(userResult)){
+            return successGet(ResultCode.USER_ACCOUNT_EXIST);
+        }
+        return userService.addUser(account, name, password);
     }
 
     @ApiOperation(value = "修改用户信息", notes = "修改用户信息 [1003，1019]（章勇）", httpMethod = "PUT")
@@ -54,8 +57,11 @@ public class UserController extends BaseController {
         if (userParam == null || userParam.getId() <= 0) {
             return successCreated(ResultCode.ID_EMPTY);
         }
-        Result result = userService.editUser(userParam);
-        return result;
+        Result<UserListDTO> userResult = userService.getUserByAccount(userParam.getAccount());
+        if(isSuccess(userResult) && userResult.getModel().getId().intValue() != userParam.getId()){
+            return successGet(ResultCode.USER_ACCOUNT_EXIST);
+        }
+        return userService.editUser(userParam);
     }
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
