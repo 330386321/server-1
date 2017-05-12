@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -81,7 +82,8 @@ public class AlipayController extends BaseController {
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			String bond = bondRet.getModel().toString();
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
@@ -103,21 +105,21 @@ public class AlipayController extends BaseController {
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口", notes = "app调用支付宝时需要的请求参数，[]，(杨清华)", httpMethod = "POST")
-	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public void initPcPay(@RequestParam @ApiParam(required = true, value = "token") String token,
 			@ModelAttribute @ApiParam PcAlipayParam param) throws IOException {
-
+		String userNum = UserUtil.getCurrentUserNumByToken(token);
 		PcAlipayDataParam aparam = new PcAlipayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(param.getThirdPayBodyEnum().val);
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
-		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		aparam.setUserNum(userNum);
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			String bond = bondRet.getModel().toString();
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}

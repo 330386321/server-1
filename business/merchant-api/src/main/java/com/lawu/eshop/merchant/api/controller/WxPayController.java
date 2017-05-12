@@ -1,13 +1,22 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Map;
+import java.util.SortedMap;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -22,9 +31,11 @@ import com.lawu.eshop.merchant.api.service.WxPayService;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
+import com.lawu.eshop.property.constants.ThirdPayBodyEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.ThirdPayDataParam;
 import com.lawu.eshop.property.param.ThirdPayParam;
+import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
@@ -72,7 +83,8 @@ public class WxPayController extends BaseController {
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			String bond = bondRet.getModel().toString();
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
@@ -93,39 +105,53 @@ public class WxPayController extends BaseController {
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "GET")
 	@Authorization
-	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
-	public Result initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@ModelAttribute @ApiParam ThirdPayParam param) throws IOException {
+	@RequestMapping(value = "initPcPay", method = RequestMethod.GET)
+	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@RequestParam @ApiParam(required = true, value = "业务表ID") String bizIds,
+			@RequestParam @ApiParam(required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868") ThirdPayBodyEnum thirdPayBodyEnum,
+			@RequestParam @ApiParam(required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868") ThirdPartyBizFlagEnum bizFlagEnum)
+			throws IOException {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setSubject(param.getThirdPayBodyEnum().val);
-		aparam.setBizIds(param.getBizIds());
-		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
-		aparam.setBizFlagEnum(param.getBizFlagEnum());
+		aparam.setSubject(thirdPayBodyEnum.val);
+		aparam.setBizIds(bizIds);
+		aparam.setThirdPayBodyEnum(thirdPayBodyEnum);
+		aparam.setBizFlagEnum(bizFlagEnum);
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			String bond = propertyService.getValue(PropertyType.MERCHANT_BONT);
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagEnum.val)) {
+			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+			String bond = bondRet.getModel().toString();
 			if ("".equals(bond)) {
 				bond = PropertyType.MERCHANT_BONT_DEFAULT;
 			}
 			aparam.setTotalAmount(bond);
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(bizFlagEnum.val)
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(bizFlagEnum.val)) {
+			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(bizIds);
 			double money = recharge.getActualMoney();
 			if (money == 0) {
-				return successCreated(ResultCode.MONEY_IS_ZERO);
+				return;
 			}
 			aparam.setTotalAmount(String.valueOf(money));
 		}
-
-		return wxPayService.getPrepayInfo(aparam);
+		Result ret = wxPayService.getPrepayInfo(aparam);
+		HttpServletResponse response = getResponse();
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Cache-Control", "no-cache");
+		response.setDateHeader("Expires", 0);
+		response.setContentType("image/jpeg");
+		Map<Object, Object> map = (Map<Object, Object>) ret.getModel();
+		BufferedImage buffImg = QrCodeUtil.generateQrCode(map.get("codeUrl").toString());
+		// 将图像输出到Servlet输出流中。
+		ServletOutputStream sos = response.getOutputStream();
+		ImageIO.write(buffImg, "jpeg", sos);
+		sos.close();
 	}
 
 }

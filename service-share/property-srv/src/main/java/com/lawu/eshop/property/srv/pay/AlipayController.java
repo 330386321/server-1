@@ -5,6 +5,7 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
+import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -80,8 +81,8 @@ public class AlipayController extends BaseController {
 			appId = propertySrvConfig.getAlipayAppIdBusiness();
 			public_key = propertySrvConfig.getAlipayEdianBusinessPublicKey();
 		}
-		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split + param.getThirdPayBodyEnum().val
-				+ split + param.getBizIds() + split + param.getSideUserNum();
+		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split
+				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum();
 		// 实例化客户端
 		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(), appId,
 				propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8", public_key, "RSA");
@@ -99,10 +100,10 @@ public class AlipayController extends BaseController {
 			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
 			msg = response.getBody();// 可以直接给客户端请求，无需再做处理。
 		} catch (AlipayApiException e) {
-			logger.error("支付宝支付封装参数错误，错误信息：{}",e.getMessage());
+			logger.error("支付宝支付封装参数错误，错误信息：{}", e.getMessage());
 			return successCreated(ResultCode.FAIL);
 		}
-		System.out.println("------------->"+msg);
+		System.out.println("------------->" + msg);
 		return successCreated(msg);
 	}
 
@@ -125,7 +126,7 @@ public class AlipayController extends BaseController {
 			}
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
-		
+
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("service", "create_direct_pay_by_user");
 		paramMap.put("partner", propertySrvConfig.getAlipayPartner());
@@ -150,12 +151,41 @@ public class AlipayController extends BaseController {
 					param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P");
 		}
 		paramMap.put("total_fee", param.getTotalAmount());
-
+		
 		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
 		aliPayConfigParam.setAlipaySignType(propertySrvConfig.getAlipaySignType());
 		aliPayConfigParam.setAlipayPrivateKey(propertySrvConfig.getAlipayPrivateKey());
 		aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
-		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认",aliPayConfigParam);
+		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认", aliPayConfigParam);
+
+		//-------------------------------
+//		String extra_common_param = "";
+//		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+//			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split
+//					+ "商家缴纳保证金P" + split + param.getBizId();
+//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)) {
+//			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值余额P";
+//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+//			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P";
+//		}
+//		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(),
+//				propertySrvConfig.getAlipayAppIdBusiness(), propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8",
+//				propertySrvConfig.getAlipayEdianBusinessPublicKey(), "RSA");
+//		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
+//		alipayRequest.setReturnUrl(propertySrvConfig.getAlipayReturnUrlPc());
+//		alipayRequest.setNotifyUrl(propertySrvConfig.getAlipayNotifyUrlPc());
+//		alipayRequest.setBizContent("{" + "    \"out_trade_no\":\""+param.getOutTradeNo()+"\","
+//				+ "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," + "    \"total_amount\":"+param.getTotalAmount()+","
+//				+ "    \"subject\":\""+param.getSubject()+"\","
+//				+ "    \"passback_params\":\""+extra_common_param+"\"}");
+//		String form = "";
+//		try {
+//			form = alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
+//		} catch (AlipayApiException e) {
+//			e.printStackTrace();
+//		}
+		//------------------------------------------------------------------------
+
 		return successCreated(sHtmlText);
 	}
 

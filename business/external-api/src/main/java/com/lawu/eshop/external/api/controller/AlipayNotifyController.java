@@ -241,6 +241,8 @@ public class AlipayNotifyController extends BaseController {
 		String total_fee = new String(request.getParameter("total_fee").getBytes("ISO-8859-1"), "UTF-8");
 		String extra_common_param = new String(request.getParameter("extra_common_param").getBytes("ISO-8859-1"),
 				"UTF-8");
+//		String extra_common_param = new String(request.getParameter("passback_params").getBytes("ISO-8859-1"),
+//				"UTF-8");
 		String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
 		String app_id = new String(request.getParameter("app_id").getBytes("ISO-8859-1"), "UTF-8");
 		String buyer_email = new String(request.getParameter("buyer_email").getBytes("ISO-8859-1"), "UTF-8");
@@ -259,8 +261,9 @@ public class AlipayNotifyController extends BaseController {
 			result = successCreated(ResultCode.FAIL, "app_id不匹配");
 		} else {
 			b = AlipayNotify.verify(params, aliPayConfigParam);
+			//b = AlipaySignature.rsaCheckV1(params, alipay_pc_public_key, externalApiConfig.getAlipayInputCharset(), externalApiConfig.getAlipaySignType());
 		}
-
+		
 		if (!b) {
 			result = successCreated(ResultCode.FAIL, "PC支付宝回调验签失败！");
 		} else {
