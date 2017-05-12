@@ -27,6 +27,7 @@ import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.service.PropertyService;
@@ -77,7 +78,7 @@ public class ShoppingRefundDetailController extends BaseController {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingOrderItemExtendBO.getShoppingRefundDetail();
+		ShoppingRefundDetailExtendBO shoppingRefundDetailBO = shoppingOrderItemExtendBO.getShoppingRefundDetail();
 		ShoppingRefundDetailDTO shoppingRefundDetailDTO = ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO);
 		
 		// 倒计时在服务端放入

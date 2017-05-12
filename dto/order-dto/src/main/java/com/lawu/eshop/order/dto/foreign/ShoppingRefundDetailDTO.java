@@ -3,11 +3,13 @@ package com.lawu.eshop.order.dto.foreign;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.order.dto.ShoppingRefundProcessDTO;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -165,6 +167,12 @@ public class ShoppingRefundDetailDTO implements Serializable {
 	 */
 	@ApiModelProperty(value = "退款状态|TO_BE_CONFIRMED 待商家确认|FILL_RETURN_ADDRESS 填写退货地址|TO_BE_RETURNED 待退货|TO_BE_REFUNDED 待退款|REFUND_SUCCESSFULLY 退款成功|REFUND_FAILED 退款失败|PLATFORM_INTERVENTION 平台介入")
 	private RefundStatusEnum refundStatus;
+	
+	/**
+	 * 退款流程
+	 */
+	@ApiModelProperty(value = "退款流程", required = true)
+	private List<ShoppingRefundProcessDTO> shoppingRefundProcessList;
 	
 	public Long getId() {
 		return id;
@@ -356,6 +364,14 @@ public class ShoppingRefundDetailDTO implements Serializable {
 
 	public void setRefundStatus(RefundStatusEnum refundStatus) {
 		this.refundStatus = refundStatus;
+	}
+
+	public List<ShoppingRefundProcessDTO> getShoppingRefundProcessList() {
+		return shoppingRefundProcessList;
+	}
+
+	public void setShoppingRefundProcessList(List<ShoppingRefundProcessDTO> shoppingRefundProcessList) {
+		this.shoppingRefundProcessList = shoppingRefundProcessList;
 	}
 
 }

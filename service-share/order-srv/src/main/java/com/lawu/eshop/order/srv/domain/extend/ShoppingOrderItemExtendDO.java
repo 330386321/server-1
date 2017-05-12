@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
-import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 
 public class ShoppingOrderItemExtendDO extends ShoppingOrderItemDO implements Serializable {
 	
@@ -13,18 +12,18 @@ public class ShoppingOrderItemExtendDO extends ShoppingOrderItemDO implements Se
     /**
      * 退款详情
      */
-    private ShoppingRefundDetailDO shoppingRefundDetail;
+    private ShoppingRefundDetailExtendDO shoppingRefundDetail;
     
     /**
      * 购物订单
      */
     private ShoppingOrderDO shoppingOrder;
 
-	public ShoppingRefundDetailDO getShoppingRefundDetail() {
+	public ShoppingRefundDetailExtendDO getShoppingRefundDetail() {
 		return shoppingRefundDetail;
 	}
 
-	public void setShoppingRefundDetail(ShoppingRefundDetailDO shoppingRefundDetail) {
+	public void setShoppingRefundDetail(ShoppingRefundDetailExtendDO shoppingRefundDetail) {
 		this.shoppingRefundDetail = shoppingRefundDetail;
 	}
 

@@ -9,18 +9,18 @@ public class ShoppingOrderItemExtendBO extends ShoppingOrderItemBO implements Se
     /**
      * 退款详情
      */
-    private ShoppingRefundDetailBO shoppingRefundDetail;
+    private ShoppingRefundDetailExtendBO shoppingRefundDetail;
     
     /**
      * 购物订单
      */
     private ShoppingOrderBO shoppingOrder;
 
-	public ShoppingRefundDetailBO getShoppingRefundDetail() {
+	public ShoppingRefundDetailExtendBO getShoppingRefundDetail() {
 		return shoppingRefundDetail;
 	}
 
-	public void setShoppingRefundDetail(ShoppingRefundDetailBO shoppingRefundDetail) {
+	public void setShoppingRefundDetail(ShoppingRefundDetailExtendBO shoppingRefundDetail) {
 		this.shoppingRefundDetail = shoppingRefundDetail;
 	}
 

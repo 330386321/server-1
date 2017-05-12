@@ -30,12 +30,14 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
+import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
+import com.lawu.eshop.order.srv.mapper.ShoppingRefundProcessDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderExtendDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.PropertyService;
@@ -47,6 +49,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 	@Autowired
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
+	
+	@Autowired
+	private ShoppingRefundProcessDOMapper shoppingRefundProcessDOMapper;
 
 	@Autowired
 	private ShoppingOrderItemDOMapper shoppingOrderItemDOMapper;
@@ -129,10 +134,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundProcess(true);
 		ShoppingOrderItemExtendDOExample.Criteria criteria = shoppingOrderItemExtendDOExample.createCriteria();
 		criteria.andIdEqualTo(shoppingOrderItemId);
 		// 找到有效记录
 		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
+		
+		shoppingOrderItemExtendDOExample.setOrderByClause("srp.gmt_create desc");
 		
 		List<ShoppingOrderItemExtendDO> list = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
@@ -172,6 +180,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setGmtModified(new Date());
 
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		
+		// 加入退款流程
+		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setGmtCreate(new Date());
+		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 
 		return result;
 	}
@@ -211,7 +226,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		// 退款状态必须为填写退货地址
-		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue())) {
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue())
+				&& (shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue()) && ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundDetailDO.getType()))) {
 			return ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS;
 		}
 		
@@ -231,6 +247,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingOrderItemDO.setSendTime(0);
 		shoppingOrderItemDO.setGmtModified(new Date());
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		
+		// 加入退款流程
+		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setGmtCreate(new Date());
+		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		return ResultCode.SUCCESS;
 	}
@@ -296,6 +319,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setIsAgree(param.getIsAgree());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		
+		// 加入退款流程
+		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setGmtCreate(new Date());
+		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 
 		return ResultCode.SUCCESS;
 	}
@@ -336,9 +366,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			return ResultCode.NOT_REFUNDING;
 		}
 
-		// 退款状态必须为填写退货地址
+		// 退款状态必须为待退款或者平台介入状态
 		if (!shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED.getValue())
-				&& !shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue())) {
+				&& !shoppingOrderItemExtendDO.getRefundStatus().equals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue())
+				// 待确认状态，如果退款类型为退款可以直接退款
+				&& !(ShoppingRefundTypeEnum.REFUND.getValue().equals(shoppingRefundDetailDO.getType()) && RefundStatusEnum.TO_BE_CONFIRMED.getValue().equals(shoppingOrderItemExtendDO.getRefundStatus())) ) {
 			return ResultCode.ORDER_NOT_TO_BE_REFUNDED;
 		}
 		
@@ -361,6 +393,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setGmtRefund(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		
+		// 加入退款流程
+		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemExtendDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setGmtCreate(new Date());
+		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		if (param.getIsAgree()) {
 			// 如果当前订单下的所有订单项都是交易关闭状态。关闭订单
@@ -418,6 +457,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundDetailDO.setGmtIntervention(new Date());
 		shoppingRefundDetailDO.setGmtModified(new Date());
 		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		
+		// 加入退款流程
+		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setGmtCreate(new Date());
+		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 
 		return result;
 

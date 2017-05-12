@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
@@ -47,28 +46,24 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
     /**
      * 付款时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd")
 	@ApiModelProperty(value = "付款时间", required = true)
     private Date gmtPayment;
 
     /**
      * 发货时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "发货时间", required = true)
     private Date gmtTransport;
 
     /**
      * 交易时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "交易时间", required = true)
     private Date gmtTransaction;
 
     /**
      * 创建时间
      */
-	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	@ApiModelProperty(value = "创建时间", required = true)
     private Date gmtCreate;
     

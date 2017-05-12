@@ -86,8 +86,8 @@ public class ResultCode {
     public static final int ORDER_NOT_TO_BE_REFUNDED = 4013;
     public static final int ORDER_NOT_REFUND_FAILED = 4014;
     public static final int ORDER_NOT_COMPLETE_STATUS = 4015;
-
     public static final int PAY_ORDER_FAVORED_AMOUNT_UNEQUAL = 4016;
+    public static final int ORDER_HAS_BEEN_REFUNDED = 4017;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -213,7 +213,8 @@ public class ResultCode {
         ResultCode.messageMap.put(ORDER_NOT_REFUND_FAILED, "订单退款状态不是退款失败");
         ResultCode.messageMap.put(ORDER_NOT_COMPLETE_STATUS, "订单不是完成状态");
         ResultCode.messageMap.put(PAY_ORDER_FAVORED_AMOUNT_UNEQUAL, "买单优惠金额不正确");
-
+        ResultCode.messageMap.put(ORDER_HAS_BEEN_REFUNDED, "订单已经是退款状态");
+        
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");

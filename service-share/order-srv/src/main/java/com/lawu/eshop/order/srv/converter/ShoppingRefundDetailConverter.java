@@ -56,6 +56,7 @@ public class ShoppingRefundDetailConverter {
 		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
 		rtn.setDescribe(shoppingOrderItemExtendBO.getShoppingRefundDetail().getDescription());
 		rtn.setPaymentMethod(shoppingOrderItemExtendBO.getShoppingOrder().getPaymentMethod());
+		rtn.setShoppingRefundProcessList(ShoppingRefundProcessConverter.convertShoppingRefundProcessDTOList(shoppingOrderItemExtendBO.getShoppingRefundDetail().getShoppingRefundProcessList()));
 		
 		return rtn;
 	}

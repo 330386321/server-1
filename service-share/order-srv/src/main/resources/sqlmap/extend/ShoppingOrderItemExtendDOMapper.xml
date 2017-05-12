@@ -22,11 +22,11 @@
 		<result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
 
 		<!-- one to one -->
-		<association property="shoppingRefundDetail" javaType="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO" resultMap="ShoppingRefundDetailResultMap" />
+		<association property="shoppingRefundDetail" javaType="com.lawu.eshop.order.srv.domain.extend.ShoppingRefundDetailExtendDO" resultMap="ShoppingRefundDetailResultMap" />
 		<association property="shoppingOrder" javaType="com.lawu.eshop.order.srv.domain.ShoppingOrderDO" resultMap="ShoppingOrderResultMap" />
 	</resultMap>
 
-	<resultMap id="ShoppingRefundDetailResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO">
+	<resultMap id="ShoppingRefundDetailResultMap" type="com.lawu.eshop.order.srv.domain.extend.ShoppingRefundDetailExtendDO">
 		<id column="srd_id" jdbcType="BIGINT" property="id" />
 		<result column="shopping_order_item_id" jdbcType="BIGINT" property="shoppingOrderItemId" />
 		<result column="type" jdbcType="TINYINT" property="type" />
@@ -51,8 +51,18 @@
 		<result column="gmt_intervention" jdbcType="TIMESTAMP" property="gmtIntervention" />
 		<result column="srd_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
 		<result column="srd_gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+		
+		<!-- 级联查询 -->
+		<collection property="shoppingRefundProcessList" column="srp_id" javaType="list" ofType="com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO" resultMap="ShoppingRefundProcessResultMap"/>
 	</resultMap>
-
+	
+	<resultMap id="ShoppingRefundProcessResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO">
+	    <id column="srp_id" jdbcType="BIGINT" property="id" />
+	    <result column="shopping_refund_detail_id" jdbcType="BIGINT" property="shoppingRefundDetailId" />
+	    <result column="srp_refund_status" jdbcType="TINYINT" property="refundStatus" />
+	    <result column="srp_gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+	</resultMap>
+	
 	<resultMap id="ShoppingOrderResultMap" type="com.lawu.eshop.order.srv.domain.ShoppingOrderDO">
 		<id column="so_id" jdbcType="BIGINT" property="id" />
 		<result column="member_id" jdbcType="BIGINT" property="memberId" />
@@ -139,7 +149,11 @@
 		srd.gmt_submit, srd.gmt_intervention,
 		srd.gmt_create as srd_gmt_create, srd.gmt_modified as srd_gmt_modified
 	</sql>
-
+	
+	<sql id="ShoppingRefundProcess_Column_List">
+    	srp.id as srp_id, srp.shopping_refund_detail_id, srp.refund_status as srp_refund_status, srp.gmt_create as srp_gmt_create
+  	</sql>
+	
 	<sql id="ShoppingOrder_Column_List">
 		so.id as so_id, so.member_id, so.member_num, so.merchant_id, so.merchant_num, so.merchant_name,
 		so.consignee_name as so_consignee_name,
@@ -156,7 +170,7 @@
 		so.gmt_transaction,
 		so.gmt_create as so_gmt_create, so.gmt_modified as so_gmt_modified
 	</sql>
-
+	
 	<select id="selectByExample" parameterType="com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample" resultMap="ShoppingOrderItemExtendResultMap">
 		select
 		<if test="distinct">distinct</if>
@@ -169,12 +183,19 @@
 			,
 			<include refid="ShoppingRefundDetail_Column_List" />
 		</if>
+		<if test="isIncludeShoppingRefundProcess">
+			,
+			<include refid="ShoppingRefundProcess_Column_List" />
+		</if>
 		from shopping_order_item soi
 		<if test="isIncludeShoppingOrder">
 			left join shopping_order so on soi.shopping_order_id = so.id
 		</if>
 		<if test="isIncludeShoppingRefundDetail">
 			left join shopping_refund_detail srd on soi.id = srd.shopping_order_item_id
+		</if>
+		<if test="isIncludeShoppingRefundProcess">
+			left join shopping_refund_process srp on srp.shopping_refund_detail_id = srd.id
 		</if>
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />

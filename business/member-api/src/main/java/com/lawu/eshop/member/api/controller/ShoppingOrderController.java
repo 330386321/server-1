@@ -1,5 +1,24 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -14,30 +33,23 @@ import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
-import com.lawu.eshop.order.dto.foreign.*;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemRefundDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingOrderPaymentForeignDTO;
 import com.lawu.eshop.order.param.ShoppingOrderRequestRefundParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToMemberParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author Sunny
@@ -65,7 +77,6 @@ public class ShoppingOrderController extends BaseController {
 	 * @return
 	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
-	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询购物订单", notes = "根据订单状态和是否评论分页查询购物订单。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
@@ -76,10 +87,10 @@ public class ShoppingOrderController extends BaseController {
 		Result<Page<ShoppingOrderExtendQueryDTO>> result = shoppingOrderService.selectPageByMemberId(memberId, param);
 
 		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
+			return successGet(result.getRet());
 		}
 
-		return successCreated(result);
+		return successGet(result.getModel());
 	}
 
 	/**
@@ -219,7 +230,7 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.POST)
-	public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id") Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
+	public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required= true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
 		
 		String message = validate(bindingResult);
     	if (message != null) {
@@ -274,7 +285,6 @@ public class ShoppingOrderController extends BaseController {
 	 *            查询参数
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -288,7 +298,7 @@ public class ShoppingOrderController extends BaseController {
 		if (!isSuccess(result)) {
 			return successGet(result.getRet());
 		}
-		return successGet(result);
+		return successGet(result.getModel());
 	}
 	
 	/**

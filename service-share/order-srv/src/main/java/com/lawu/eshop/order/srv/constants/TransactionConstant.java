@@ -95,4 +95,9 @@ public class TransactionConstant {
      */
     public static final byte CREATE_ORDER_FANS = 0x0f;
     
+    /**
+     * 商家同意退款-删除评论
+     */
+    public static final  byte AGREE_TO_REFUND_DELETE_COMMENT = 0x10;
+    
 }

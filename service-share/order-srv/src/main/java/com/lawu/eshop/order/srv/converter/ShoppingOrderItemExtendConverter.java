@@ -41,7 +41,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemExtendDO.getOrderStatus()));
 		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemExtendDO.getRefundStatus()));
 		
-		rtn.setShoppingRefundDetail(ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendDO.getShoppingRefundDetail()));
+		rtn.setShoppingRefundDetail(ShoppingRefundDetailExtendConverter.convert(shoppingOrderItemExtendDO.getShoppingRefundDetail()));
 		rtn.setShoppingOrder(ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderItemExtendDO.getShoppingOrder()));
 		
 		return rtn;
