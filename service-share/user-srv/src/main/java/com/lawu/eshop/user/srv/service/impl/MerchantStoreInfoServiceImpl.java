@@ -143,7 +143,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreDO.setAverageScore(BigDecimal.ZERO);
         merchantStoreDO.setFeedbackRate(BigDecimal.ZERO);
         // 设置门店待审核状态
-        if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val.equals(merchantStoreParam.getCertifType())) {
+        if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val== merchantStoreParam.getCertifType().val) {
             // 填写身份证用户需要交保证金
             merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val);
         } else {
