@@ -213,6 +213,7 @@ public class AdController extends BaseController {
     	}
 	}
 
+	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

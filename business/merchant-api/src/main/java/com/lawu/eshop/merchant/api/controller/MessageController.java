@@ -74,7 +74,8 @@ public class MessageController extends BaseController {
         Result result = messageService.delMessageStatus(messageId);
         return successDelete(result);
     }
-    
+
+    @Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（批量删除）", notes = "站内信息操作（批量删除） [1000]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -89,7 +90,8 @@ public class MessageController extends BaseController {
 		}
         return successDelete();
     }
-    
+
+    @Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（批量标记已读）", notes = "站内信息操作（批量标记已读） [1000]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -104,7 +106,8 @@ public class MessageController extends BaseController {
 		}
         return successCreated();
     }
-    
+
+    @Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（消息详情）", notes = "站内信息操作（消息详情） []（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization

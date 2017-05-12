@@ -362,7 +362,8 @@ public class AdController extends BaseController {
 	  }
     	
     }
-    
+
+    @Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -251,6 +251,7 @@ public class ShoppingCartController extends BaseController {
 	 * @param param 创建订单参数
 	 * @return 返回订单的id
 	 */
+	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @SuppressWarnings({"unchecked" })
 	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
