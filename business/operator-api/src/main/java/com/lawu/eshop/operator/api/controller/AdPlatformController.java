@@ -136,13 +136,12 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "saveAdPlatform", method = RequestMethod.POST)
     public Result saveAdPlatform(@ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform) {
     	 HttpServletRequest request = getRequest();
-    	 String mediaUrl = "";
          Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
-         if(!"".equals(retMap.get("imgUrl"))){
-        	 mediaUrl = retMap.get("imgUrl").toString();
-         }
-        Result rs = adPlatformService.saveAdPlatform(adPlatform,mediaUrl);
-        return rs;
+        if(!"0".equals(retMap.get("resultFlag"))){
+            return successCreated(Integer.parseInt(retMap.get("resultFlag").toString()));
+        }
+        String mediaUrl = retMap.get("imgUrl").toString();
+        return adPlatformService.saveAdPlatform(adPlatform,mediaUrl);
     }
     
     @ApiOperation(value = "修改广告", notes = "修改广告[1011|1015|1010]（张荣成）", httpMethod = "POST")
@@ -152,15 +151,15 @@ public class AdPlatformController extends BaseController {
                          @ModelAttribute @ApiParam(required = true, value = "广告信息") AdPlatformParam adPlatform,
                          @RequestParam @ApiParam(required = true, value = "附件路径") String mediaUrl) {
     	 HttpServletRequest request = getRequest();
-    	 if(StringUtils.isEmpty(mediaUrl)){
+    	 if(StringUtils.isEmpty(mediaUrl) || !mediaUrl.startsWith(FileDirConstant.DIR_AD_IMAGE)){
              Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, operatorApiConfig.getImageUploadUrl());
-             if(!"".equals(retMap.get("imgUrl"))){
-                 mediaUrl = retMap.get("imgUrl").toString();
+             if(!"0".equals(retMap.get("resultFlag"))){
+                 return successCreated(Integer.parseInt(retMap.get("resultFlag").toString()));
              }
+             mediaUrl = retMap.get("imgUrl").toString();
          }
 
-        Result rs = adPlatformService.update(id, adPlatform, mediaUrl);
-        return rs;
+        return adPlatformService.update(id, adPlatform, mediaUrl);
     }
 
     
