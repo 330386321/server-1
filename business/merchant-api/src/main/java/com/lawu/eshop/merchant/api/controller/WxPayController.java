@@ -3,7 +3,6 @@ package com.lawu.eshop.merchant.api.controller;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
-import java.util.SortedMap;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -104,23 +102,22 @@ public class WxPayController extends BaseController {
 	}
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@ApiOperation(value = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码", notes = "PC端商家充值余额、积分、缴纳保证金接口返回扫码支付二维码，[]，(杨清华)", httpMethod = "GET")
-	@Authorization
 	@RequestMapping(value = "initPcPay", method = RequestMethod.GET)
-	public void initPcPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+	public void initPcPay(@RequestParam @ApiParam(required = true, value = "token") String token,
 			@RequestParam @ApiParam(required = true, value = "业务表ID") String bizIds,
 			@RequestParam @ApiParam(required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868") ThirdPayBodyEnum thirdPayBodyEnum,
 			@RequestParam @ApiParam(required = true, value = "参考链接：http://192.168.1.21:8090/pages/viewpage.action?pageId=1998868") ThirdPartyBizFlagEnum bizFlagEnum)
 			throws IOException {
-
+		String userNum = UserUtil.getCurrentUserNumByToken(token);
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setSubject(thirdPayBodyEnum.val);
 		aparam.setBizIds(bizIds);
 		aparam.setThirdPayBodyEnum(thirdPayBodyEnum);
 		aparam.setBizFlagEnum(bizFlagEnum);
-		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		aparam.setUserNum(userNum);
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
 
 		// 查询支付金额
