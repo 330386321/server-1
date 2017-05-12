@@ -9,6 +9,7 @@ import com.lawu.eshop.operator.srv.domain.UserRoleDOExample;
 import com.lawu.eshop.operator.srv.mapper.RolePermissionDOMapper;
 import com.lawu.eshop.operator.srv.mapper.UserRoleDOMapper;
 import com.lawu.eshop.operator.srv.service.UserRoleService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,15 +83,17 @@ public class UserRoleServiceImpl implements UserRoleService {
         example.createCriteria().andRoleIdEqualTo(roleId);
         rolePermissionDOMapper.deleteByExample(example);
 
-        String[] idString = permissionIds.split(",");
-        Integer[] id = new Integer[idString.length];
-        for (int i = 0; i < idString.length; i++) {
-            id[i] = Integer.valueOf(idString[i]);
-            RolePermissionDO rolePermissionDO = new RolePermissionDO();
-            rolePermissionDO.setRoleId(roleId);
-            rolePermissionDO.setPermissionId(id[i]);
-            rolePermissionDO.setGmtCreate(new Date());
-            rolePermissionDOMapper.insert(rolePermissionDO);
+        if(StringUtils.isNotEmpty(permissionIds)){
+            String[] idString = permissionIds.split(",");
+            Integer[] id = new Integer[idString.length];
+            for (int i = 0; i < idString.length; i++) {
+                id[i] = Integer.valueOf(idString[i]);
+                RolePermissionDO rolePermissionDO = new RolePermissionDO();
+                rolePermissionDO.setRoleId(roleId);
+                rolePermissionDO.setPermissionId(id[i]);
+                rolePermissionDO.setGmtCreate(new Date());
+                rolePermissionDOMapper.insert(rolePermissionDO);
+            }
         }
     }
 

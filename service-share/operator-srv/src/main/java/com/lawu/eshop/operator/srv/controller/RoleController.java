@@ -113,7 +113,7 @@ public class RoleController extends BaseController {
      * 权限关联
      *
      * @param roleId
-     * @param permissionId
+     * @param permissionIds
      * @return
      */
     @RequestMapping(value = "addRolePermission", method = RequestMethod.POST)

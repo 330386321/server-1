@@ -98,7 +98,7 @@ public class RoleController extends BaseController {
      * 权限关联
      *
      * @param roleId
-     * @param permissionId
+     * @param permissionIds
      * @return
      */
     @ApiOperation(value = "权限关联", notes = "权限关联 [1004，2103,1000]（章勇）", httpMethod = "POST")
