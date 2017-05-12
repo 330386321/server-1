@@ -64,6 +64,7 @@ public class MerchantAuditController extends BaseController {
         auditInfoDTO.setGmtCreate(storeAuditBO.getGmtCreate());
         auditInfoDTO.setMerchantAuditStatusEnum(MerchantAuditStatusEnum.getEnum(storeAuditBO.getStatus()));
         auditInfoDTO.setStoreStatus(merchantStoreBO.getStatusEnum());
+        auditInfoDTO.setStoreId(merchantStoreBO.getMerchantStoreId());
         return successGet(auditInfoDTO);
     }
 

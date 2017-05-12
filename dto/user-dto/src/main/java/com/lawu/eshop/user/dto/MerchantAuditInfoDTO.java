@@ -26,6 +26,8 @@ public class MerchantAuditInfoDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date gmtCreate;
 
+    private Long storeId;
+
     public MerchantAuditStatusEnum getMerchantAuditStatusEnum() {
         return merchantAuditStatusEnum;
     }
@@ -56,5 +58,13 @@ public class MerchantAuditInfoDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 }
