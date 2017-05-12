@@ -40,8 +40,10 @@ import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
+import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.utils.DistanceUtil;
@@ -60,6 +62,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     
     @Autowired
     private FansMerchantService fansMerchantService;
+    
+    @Autowired
+    private MerchantProfileService merchantProfileService;
     
     /**
      * 核心线程数，指保留的线程池大小
@@ -401,6 +406,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			if(isSuccess(adLexiconDTOS)){
 				adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
 			}
+			Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+        	if(isSuccess(mpRs)){
+        		adFlatVideoDTO.setJdUrl(mpRs.getModel().getJdUrl());
+        		adFlatVideoDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
+        		adFlatVideoDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
+        		adFlatVideoDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
+        	}
 			egainList.add(adFlatVideoDTO);
 		}
 		Page<AdFlatVideoDTO> newPage = new Page<AdFlatVideoDTO>();

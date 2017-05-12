@@ -8,6 +8,7 @@ import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.*;
 import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
@@ -777,6 +778,13 @@ public class AdServiceImpl implements AdService {
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
+	}
+
+	@Override
+	public RedPacketInfoBO getRedPacketInfo(Long mechantId) {
+		PointPoolDOExample example =new PointPoolDOExample();
+		example.createCriteria().andTypeEqualTo(new Byte("2"));
+		return null;
 	}
 
 }

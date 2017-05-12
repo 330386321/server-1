@@ -115,17 +115,20 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	FavoriteMerchantBO favoriteMerchantBO =new FavoriteMerchantBO();
         	favoriteMerchantBO.setFansCount(count);
         	favoriteMerchantBO=FavoriteMerchantConverter.convertListBO(favoriteMerchantDOView);
-        	if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
-				 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
-						 favoriteMerchantDOView.getLongitude().doubleValue(), favoriteMerchantDOView.getLatitude().doubleValue());
-				 favoriteMerchantBO.setDistance(distance); 
-        	}
-        	
         	FansMerchantDOExample fmExample=new FansMerchantDOExample();
         	fmExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
         	Integer fansCount=0;
         	fansCount=fansMerchantDOMapper.countByExample(fmExample);
         	favoriteMerchantBO.setFansCount(fansCount);
+        	MerchantStoreDOExample merchantStoreDOExample=new MerchantStoreDOExample();
+        	merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
+        	List<MerchantStoreDO> merchantStoreDOList=merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
+        	if(merchantStoreDOList!=null){
+        		 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
+        				 merchantStoreDOList.get(0).getLongitude().doubleValue(),  merchantStoreDOList.get(0).getLatitude().doubleValue());
+        		 favoriteMerchantBO.setDistance(distance);
+        	}
+        	
         	listBO.add(favoriteMerchantBO);
 		}
         Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();

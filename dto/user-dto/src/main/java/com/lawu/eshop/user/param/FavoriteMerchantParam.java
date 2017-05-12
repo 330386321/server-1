@@ -16,6 +16,14 @@ public class FavoriteMerchantParam extends AbstractPageParam{
 	@ApiParam (name="latitude", value = "纬度")
 	private Double latitude;
 
+	public ManageTypeEnum getManageTypeEnum() {
+		return manageTypeEnum;
+	}
+
+	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
+		this.manageTypeEnum = manageTypeEnum;
+	}
+
 	public Double getLongitude() {
 		return longitude;
 	}
@@ -32,13 +40,6 @@ public class FavoriteMerchantParam extends AbstractPageParam{
 		this.latitude = latitude;
 	}
 
-	public ManageTypeEnum getManageTypeEnum() {
-		return manageTypeEnum;
-	}
-
-	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
-		this.manageTypeEnum = manageTypeEnum;
-	}
-
+	
 	
 }

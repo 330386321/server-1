@@ -215,7 +215,7 @@ public class AdController extends BaseController {
     }
 
 
-    @Audit(date = "2017-04-13", reviewer = "孙林青")
+     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @ApiOperation(value = "Top3排行榜", notes = "Top3排行榜,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -319,7 +319,6 @@ public class AdController extends BaseController {
     	    	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	    	rs=adService.getRedPacket(merchantId,memberId,userNum);
     	    	fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
-
     	    	
     		}else{
     			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
@@ -373,5 +372,5 @@ public class AdController extends BaseController {
     	Result<Page<AdFlatVideoDTO>>  pageDTOS=adExtendService.selectEgainAd(adEgainParam);
     	return pageDTOS;
     }
-
+    
 } 
