@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +32,9 @@ public class CommonController extends BaseController {
         try {
             SecurityUtils.getSubject().login(new UsernamePasswordToken(account, password));
             return successCreated();
-        } catch (AuthenticationException e) {
-
+        }catch (LockedAccountException lae) {
+            return successCreated(ResultCode.USER_ACCOUNT_DISABLE);
+        }catch (AuthenticationException e) {
             return successCreated(ResultCode.MEMBER_WRONG_PWD);
         }
     }

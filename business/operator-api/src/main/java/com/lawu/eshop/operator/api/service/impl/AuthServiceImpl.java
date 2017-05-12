@@ -8,6 +8,7 @@ import com.lawu.eshop.operator.dto.UserRoleDTO;
 import om.lawu.eshop.shiro.AuthService;
 import om.lawu.eshop.shiro.model.ShiroRole;
 import om.lawu.eshop.shiro.model.ShiroUser;
+import org.apache.shiro.authc.LockedAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ShiroUser find(String account, String password) {
         Result<UserDTO> result = userService.find(account, password);
+        if(result.getRet() == ResultCode.USER_ACCOUNT_DISABLE){
+            throw new LockedAccountException();
+        }
         if(result.getRet() != ResultCode.SUCCESS){
             return null;
         }
