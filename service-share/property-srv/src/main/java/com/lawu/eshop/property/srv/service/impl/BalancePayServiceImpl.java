@@ -17,7 +17,6 @@ import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
-import com.lawu.eshop.property.param.RechargeSaveParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
@@ -74,7 +73,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccount(param.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 		
@@ -109,7 +108,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccount(param.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 		//减会员财产余额
@@ -128,7 +127,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam1.setTransactionAccount(param.getAccount());
 		tdsParam1.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam1.setAmount(new BigDecimal(param.getTotalAmount()));
-		tdsParam1.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam1);
 		//加商家财产余额
@@ -196,7 +195,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccount(param.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
 		

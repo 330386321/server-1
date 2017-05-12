@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.param.TestQuery1Param;
 import com.lawu.eshop.property.param.TestQueryParam;
 import com.lawu.eshop.property.srv.bo.QueryPropertyBO;
@@ -35,7 +36,7 @@ public class PropertyServiceImpl implements PropertyService {
 		example.createCriteria().andNameEqualTo(key);
 		List<PropertyDO> list = propertyDOMapper.selectByExample(example);
 		if (list == null || list.isEmpty()) {
-			return "";
+			return PropertyType.MERCHANT_BONT_DEFAULT;
 		}
 		return list.get(0).getValue();
 	}

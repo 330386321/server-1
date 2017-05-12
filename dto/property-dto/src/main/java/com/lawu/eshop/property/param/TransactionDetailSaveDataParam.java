@@ -63,7 +63,7 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	/**
 	 * 业务类型操作对应的业务表ID
 	 */
-	private Long bizId;
+	private String bizId;
 
 	/**
 	 * 备注
@@ -128,11 +128,11 @@ public class TransactionDetailSaveDataParam implements Serializable {
 		this.amount = amount;
 	}
 
-	public Long getBizId() {
+	public String getBizId() {
 		return bizId;
 	}
 
-	public void setBizId(Long bizId) {
+	public void setBizId(String bizId) {
 		this.bizId = bizId;
 	}
 

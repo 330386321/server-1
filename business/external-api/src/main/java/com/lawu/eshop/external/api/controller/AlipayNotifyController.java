@@ -21,6 +21,8 @@ import com.lawu.eshop.external.api.ExternalApiConfig;
 import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
+import com.lawu.eshop.external.api.service.PayOrderService;
+import com.lawu.eshop.external.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -28,7 +30,9 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.AliPayConfigParam;
@@ -64,6 +68,10 @@ public class AlipayNotifyController extends BaseController {
 	private ExternalApiConfig externalApiConfig;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private PayOrderService payOrderService;
+	@Autowired
+	private PropertySrvPropertyService propertyService;
 
 	/**
 	 * 支付宝异步回调接口
@@ -148,22 +156,46 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_logon_id);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
+					double dTotalMoney = Double.valueOf(total_amount).doubleValue();
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = rechargeService.doHandleRechargeNotify(param);
-
+						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
+						if (recharge.getActualMoney() == dTotalMoney) {
+							result = rechargeService.doHandleRechargeNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = depositService.doHandleDepositNotify(param);
-
+						Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+						String bond = bondRet.getModel().toString();
+						double dbond = Double.valueOf(bond).doubleValue();
+						if (dbond == dTotalMoney) {
+							result = depositService.doHandleDepositNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = orderService.doHandleOrderPayNotify(param);
-
+						double money = payOrderService.selectOrderMoney(param.getBizIds());
+						if (money == dTotalMoney) {
+							result = orderService.doHandleOrderPayNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = orderService.doHandlePayOrderNotify(param);
-
+						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+								.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+						if (payOrderCallback.getActualMoney() == dTotalMoney) {
+							result = orderService.doHandlePayOrderNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}
@@ -241,8 +273,9 @@ public class AlipayNotifyController extends BaseController {
 		String total_fee = new String(request.getParameter("total_fee").getBytes("ISO-8859-1"), "UTF-8");
 		String extra_common_param = new String(request.getParameter("extra_common_param").getBytes("ISO-8859-1"),
 				"UTF-8");
-//		String extra_common_param = new String(request.getParameter("passback_params").getBytes("ISO-8859-1"),
-//				"UTF-8");
+		// String extra_common_param = new
+		// String(request.getParameter("passback_params").getBytes("ISO-8859-1"),
+		// "UTF-8");
 		String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
 		String app_id = new String(request.getParameter("app_id").getBytes("ISO-8859-1"), "UTF-8");
 		String buyer_email = new String(request.getParameter("buyer_email").getBytes("ISO-8859-1"), "UTF-8");
@@ -261,9 +294,11 @@ public class AlipayNotifyController extends BaseController {
 			result = successCreated(ResultCode.FAIL, "app_id不匹配");
 		} else {
 			b = AlipayNotify.verify(params, aliPayConfigParam);
-			//b = AlipaySignature.rsaCheckV1(params, alipay_pc_public_key, externalApiConfig.getAlipayInputCharset(), externalApiConfig.getAlipaySignType());
+			// b = AlipaySignature.rsaCheckV1(params, alipay_pc_public_key,
+			// externalApiConfig.getAlipayInputCharset(),
+			// externalApiConfig.getAlipaySignType());
 		}
-		
+
 		if (!b) {
 			result = successCreated(ResultCode.FAIL, "PC支付宝回调验签失败！");
 		} else {

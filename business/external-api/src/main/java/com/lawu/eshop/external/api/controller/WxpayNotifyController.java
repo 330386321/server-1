@@ -4,6 +4,8 @@ import com.lawu.eshop.external.api.ExternalApiConfig;
 import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
+import com.lawu.eshop.external.api.service.PayOrderService;
+import com.lawu.eshop.external.api.service.PropertySrvPropertyService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -11,8 +13,10 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
+import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
@@ -62,6 +66,10 @@ public class WxpayNotifyController extends BaseController {
 	private ExternalApiConfig externalApiConfig;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private PayOrderService payOrderService;
+	@Autowired
+	private PropertySrvPropertyService propertyService;
 
 	/**
 	 * APP微信异步回调接口
@@ -117,17 +125,40 @@ public class WxpayNotifyController extends BaseController {
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = rechargeService.doHandleRechargeNotify(param);
-
+						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
+						if (recharge.getActualMoney() == dmoney) {
+							result = rechargeService.doHandleRechargeNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = depositService.doHandleDepositNotify(param);
-
+						Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
+						String bond = bondRet.getModel().toString();
+						double dbond = Double.valueOf(bond).doubleValue();
+						if (dbond == dmoney) {
+							result = depositService.doHandleDepositNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = orderService.doHandleOrderPayNotify(param);
-
+						double money = payOrderService.selectOrderMoney(param.getBizIds());
+						if (money == dmoney) {
+							result = orderService.doHandleOrderPayNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = orderService.doHandlePayOrderNotify(param);
-
+						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
+								.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+						if (payOrderCallback.getActualMoney() == dmoney) {
+							result = orderService.doHandlePayOrderNotify(param);
+						} else {
+							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+						}
 					} else {
 						result = successCreated(ResultCode.FAIL, "非法的业务类型回调");
 					}

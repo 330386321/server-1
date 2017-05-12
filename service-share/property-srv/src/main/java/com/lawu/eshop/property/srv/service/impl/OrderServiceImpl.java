@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
@@ -114,27 +114,27 @@ public class OrderServiceImpl implements OrderService {
 		// 新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.PAY.val);
-		tdsParam.setTransactionNum(param.getOutTradeNo());
+		tdsParam.setTransactionNum(param.getOutTradeNo()+"1");
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		transactionDetailService.save(tdsParam);
 
 		// 新增商家交易明细
 		TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
 		tdsParam1.setTitle(TransactionTitleEnum.PAY.val);
-		tdsParam1.setTransactionNum(param.getOutTradeNo());
+		tdsParam1.setTransactionNum(param.getOutTradeNo()+"2");
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam1.setTransactionType(MerchantTransactionTypeEnum.PAY.getValue());
 		tdsParam1.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam1.setAmount(new BigDecimal(param.getTotalFee()));
-		tdsParam1.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
 		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam1);
@@ -147,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 		// 更新订单状态
-		payOrderTransactionMainServiceImpl.sendNotice(tdsParam1.getId());
+		payOrderTransactionMainServiceImpl.sendNotice(Long.valueOf(param.getBizIds()));
 
 		return ResultCode.SUCCESS;
 	}
@@ -241,7 +241,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionAccount("");
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
-		tdsParam.setBizId(Long.valueOf(param.getOrderItemIds().split(",")[0]));
+		tdsParam.setBizId(param.getOrderItemIds().split(",")[0]);
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);
 
@@ -330,7 +330,7 @@ public class OrderServiceImpl implements OrderService {
 				tdsParam.setTransactionAccount(accounts[i]);
 				tdsParam.setTransactionAccountType(payWays[i]);
 				tdsParam.setAmount(freeze.getMoney());
-				tdsParam.setBizId(Long.valueOf(orderIds[i]));
+				tdsParam.setBizId(orderIds[i]);
 				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 				transactionDetailService.save(tdsParam);
 
@@ -373,7 +373,7 @@ public class OrderServiceImpl implements OrderService {
 			tdsParam.setTransactionAccount(accounts[i]);
 			tdsParam.setTransactionAccountType(payWays[i]);
 			tdsParam.setAmount(new BigDecimal(orderActualMoneys[i]));
-			tdsParam.setBizId(Long.valueOf(orderIds[i]));
+			tdsParam.setBizId(orderIds[i]);
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 			transactionDetailService.save(tdsParam);
 

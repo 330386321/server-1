@@ -126,6 +126,7 @@ public class ResultCode {
     public static final int PAY_ORDER_IS_SUCCESS = 6020;
     public static final int BANK_ACCOUNT_IS_EXIST = 6021;
     public static final int STORE_REGION_PATH_ERROR = 6022;
+    public static final int NOTIFY_MONEY_ERROR = 6023;
 
 
 
@@ -248,6 +249,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PAY_ORDER_IS_SUCCESS, "重复买单");
         ResultCode.messageMap.put(BANK_ACCOUNT_IS_EXIST, "已经绑定该银行卡");
         ResultCode.messageMap.put(STORE_REGION_PATH_ERROR, "门店所属区域不正确（需要精确到区）");
+        ResultCode.messageMap.put(NOTIFY_MONEY_ERROR, "回调金额与表中的金额不一致");
 
 
         // 商城模块 7xxx

@@ -163,7 +163,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(new BigDecimal(cashMoney));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
-		tdsParam.setBizId(withdrawCashDO.getId());
+		tdsParam.setBizId(withdrawCashDO.getId().toString());
 		transactionDetailService.save(tdsParam);
 
 		// 更新财产记录，减

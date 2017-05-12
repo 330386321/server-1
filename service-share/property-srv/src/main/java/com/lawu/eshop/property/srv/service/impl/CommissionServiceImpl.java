@@ -89,7 +89,7 @@ public class CommissionServiceImpl implements CommissionService {
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 		tdsParam.setAmount(actureMoneyIn);
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-		tdsParam.setBizId(0L);
+		tdsParam.setBizId("");
 		transactionDetailService.save(tdsParam);
 
 		// 加会员财产余额
@@ -149,7 +149,7 @@ public class CommissionServiceImpl implements CommissionService {
 				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 				tdsParam.setAmount(param.getActureMoneyIn());
 				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-				tdsParam.setBizId(param.getBizId());
+				tdsParam.setBizId(param.getBizId().toString());
 				transactionDetailService.save(tdsParam);
 
 				// 加用户（会员或商家）财产余额
@@ -203,7 +203,7 @@ public class CommissionServiceImpl implements CommissionService {
 			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
 			tdsParam.setAmount(param.getActureMoneyIn());
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-			tdsParam.setBizId(param.getBizId());
+			tdsParam.setBizId(param.getBizId().toString());
 			transactionDetailService.save(tdsParam);
 
 			// 加用户（会员或商家）财产余额

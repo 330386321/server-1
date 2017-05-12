@@ -4,8 +4,10 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 
 /**
@@ -29,5 +31,11 @@ public interface RechargeService {
 	@RequestMapping(method = RequestMethod.POST, value = "recharge/doHandleRechargeNotify")
 	Result doHandleRechargeNotify(@RequestBody NotifyCallBackParam param);
 
-   
+	/**
+	 * 获取需要充值的金额
+	 * @param bizIds
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "recharge/getRechargeMoney")
+	ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(@RequestParam("rechargeId") String rechargeId);
 }

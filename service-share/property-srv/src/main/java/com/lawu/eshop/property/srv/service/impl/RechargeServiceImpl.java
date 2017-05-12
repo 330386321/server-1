@@ -159,7 +159,7 @@ public class RechargeServiceImpl implements RechargeService {
 		}
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
-		tdsParam.setBizId(Long.valueOf(param.getBizIds()));
+		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);

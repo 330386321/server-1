@@ -131,7 +131,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getPoint()));
-		tdsParam.setBizId(0L);
+		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		transactionDetailService.save(tdsParam);
@@ -162,7 +162,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getPoint()));
-		tdsParam.setBizId(0L);
+		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		transactionDetailService.save(tdsParam);
