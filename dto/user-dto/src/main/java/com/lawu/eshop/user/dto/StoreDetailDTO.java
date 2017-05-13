@@ -80,6 +80,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "折扣率")
     private BigDecimal discountRate;
 
+    @ApiModelProperty(value = "是否逾期：true--是，false--否")
+    private Boolean isOverdue ;
+
     public String getName() {
         return name;
     }
@@ -262,5 +265,13 @@ public class StoreDetailDTO {
 
     public void setUserNum(String userNum) {
         this.userNum = userNum;
+    }
+
+    public Boolean getIsOverdue() {
+        return isOverdue;
+    }
+
+    public void setIsOverdue(Boolean overdue) {
+        isOverdue = overdue;
     }
 }

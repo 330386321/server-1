@@ -222,6 +222,27 @@ public class DateUtil {
         return (int) (intervalMilli / (24 * 60 * 60 * 1000));
     }
 
+    /**
+     * 判断是否超过当前时间
+     *
+     * @param beginDate
+     * @return
+     */
+    public static Boolean isOverdue(Date beginDate) {
+        if (null == beginDate) {
+            return false;
+        }
+
+        try {
+            Date endDate = new Date();
+            String date = dateFormat.format(beginDate) + " 23:59:59";
+            long intervalMilli = endDate.getTime() - dateTimeFormat.parse(date).getTime();
+            return intervalMilli > 0;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
