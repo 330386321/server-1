@@ -16,6 +16,7 @@ import com.lawu.eshop.mall.param.CommentProductListParam;
 import com.lawu.eshop.merchant.api.service.CommentService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.ProductService;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -163,7 +164,7 @@ public class CommentController extends BaseController {
         for (CommentProductIdDTO commentProductIdDTO : productIds.getModel().getRecords()) {
             //查询商品信息
             CommentProductInfoDTO commentProductInfoDTO = new CommentProductInfoDTO();
-            Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentProductIdDTO.getProductModelId());
+            Result<ProductInfoDTO> product = productService.selectProductById(commentProductIdDTO.getProductId());
             commentProductInfoDTO.setName(product.getModel().getName());
             commentProductInfoDTO.setImgUrl(product.getModel().getFeatureImage());
             commentProductInfoDTO.setProductId(commentProductIdDTO.getProductId());

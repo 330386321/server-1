@@ -5,6 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.product.dto.ProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
@@ -62,11 +63,21 @@ public interface ProductService {
 	Result saveProduct(@RequestBody EditProductDataParam product);
 
     /**
-     * 根据商品ID查询商品详情信息
+     * 根据型号ID查询商品详情信息
      *
      * @param productModelId 型号ID
      * @return
      */
     @RequestMapping(value = "productModel/selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
     Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception;
+
+    /**
+     * 根据商品ID查询商品详情信息
+     *
+     * @param productModelId 型号ID
+     * @return
+     */
+    @RequestMapping(value = "product/selectProductById", method = RequestMethod.GET)
+    Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId) throws Exception;
+
 }
