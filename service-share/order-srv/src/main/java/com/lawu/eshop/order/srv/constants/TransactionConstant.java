@@ -107,4 +107,8 @@ public class TransactionConstant {
      */
     public static final byte TRADING_SUCCESS_INCREASE_SALES = 0x11;
     
+    /**
+     * 确认收货之后，超过退款时间，打款给商家
+     */
+    public static final byte TRADING_SUCCESS_PAYMENTS_TO_MERCHANT = 0x12;
 }

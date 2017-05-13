@@ -127,7 +127,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Autowired
 	@Qualifier("shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl;
-
+	
+	@Autowired
+	@Qualifier("shoppingOrderPaymentsToMerchantTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderPaymentsToMerchantTransactionMainServiceImpl;
+	
 	/**
 	 * 
 	 * @param params
@@ -559,8 +563,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 更新购物订单的状态
 		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
-		// 不是自动收货
 		shoppingOrderDO.setIsAutomaticReceipt(isAutomaticReceipt);
+		// 如果是自动收货，设置订单的状态为完成
+		if (isAutomaticReceipt) {
+			shoppingOrderDO.setIsDone(true);
+		}
 		// 更改订单状态为交易成功
 		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		// 更新成交时间
@@ -640,7 +647,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue()) && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue()) && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())) {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
-
+		
+		if (!shoppingOrderItemDO.getIsAllowRefund()) {
+			return ResultCode.ORDER_NOT_REFUND;
+		}
+		
+		// 订单是已完成状态不允许退款
+		if (shoppingOrderDO.getIsDone()) {
+			return ResultCode.ORDER_NOT_REFUND;
+		}
+		
 		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
 
 		// 买家收货(交易成功)七天之内才能被允许退款
@@ -650,10 +666,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		// 如果订单是自动收货或者不允许退款，则不允许退款操作
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && shoppingOrderDO.getIsAutomaticReceipt()) {
-			return ResultCode.ORDER_NOT_REFUND;
-		}
-
-		if (!shoppingOrderItemDO.getIsAllowRefund()) {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
@@ -994,13 +1006,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
 		shoppingOrderExtendDOExampleCriteria.andMerchantIdEqualTo(merchantId);
-
+		
+		/*
+		 * 查找订单项状态不为交易取消和交易成功的数目
+		 */
 		List<Byte> processingStatus = new ArrayList<Byte>();
 		processingStatus.add(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		processingStatus.add(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 
 		shoppingOrderExtendDOExampleCriteria.andSOIOrderStatusNotIn(processingStatus);
 
+		
 		long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 
 		return ShoppingOrderConverter.convert(count);
@@ -1104,19 +1120,31 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public void executeAutoReceipt() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
 
 		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
 
 		// 查找所有超时未收货的订单，自动收货
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
+		boolean is_done = true;
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			tradingSuccess(item.getId(), true);
+			// 判断订单下的所有订单项是否有正在退款中的
+			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
+				if (ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
+					is_done = false;
+					break;
+				}
+			}
+			
+			if (is_done) {
+				tradingSuccess(item.getId(), true);
+			}
 		}
 	}
 
@@ -1343,7 +1371,50 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		return ReportConvert.convert(reportFansSaleTransFormDOList);
 	}
+	
+	/**
+	 * 订单收货之后
+	 * 如果超过退款申请时间，直接付款给商家
+	 * 如果订单中正在退款的商品，跳过不处理
+	 * 更新订单项不允许退款
+	 * 
+	 * @author Sunny
+	 */
+	@Override
+	public void executeAutoPaymentsToMerchant() {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
+		
+		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
+		
+		//  查找订单以及订单项状态都为交易成功的订单
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		criteria.andIsDoneEqualTo(false);
+		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
+		
+		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
+		boolean is_done = true;
+		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
+			// 判断订单下的所有订单项是否有正在退款中的
+			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
+				if (ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
+					is_done = false;
+					break;
+				}
+			}
+			
+			if (is_done) {
+				item.setIsDone(true);
+				shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
+				
+				shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(item.getId());
+			}
+		}
+	}
+	
 	/**************************************************************
 	 * PRIVATE METHOD
 	 **************************************************************/

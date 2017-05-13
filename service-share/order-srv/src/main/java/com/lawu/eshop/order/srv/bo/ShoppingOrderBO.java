@@ -127,6 +127,11 @@ public class ShoppingOrderBO implements Serializable {
 	 * 是否自动收货(0-否|1-是)
 	 */
 	private Boolean isAutomaticReceipt;
+	
+    /**
+    * 当前订单是否完成(0-未完成|1-已完成)
+    */
+    private Boolean isDone;
 
 	/**
 	 * 对应的购物车相应的id(多个id用,分隔)
@@ -385,6 +390,14 @@ public class ShoppingOrderBO implements Serializable {
 
 	public void setIsAutomaticReceipt(Boolean isAutomaticReceipt) {
 		this.isAutomaticReceipt = isAutomaticReceipt;
+	}
+
+	public Boolean getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(Boolean isDone) {
+		this.isDone = isDone;
 	}
 
 	public String getShoppingCartIdsStr() {

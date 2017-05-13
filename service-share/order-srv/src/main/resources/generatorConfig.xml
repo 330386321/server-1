@@ -64,8 +64,11 @@
         <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
         <table tableName="shopping_refund_process" domainObjectName="ShoppingRefundProcessDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+        <table tableName="shopping_order" domainObjectName="ShoppingOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

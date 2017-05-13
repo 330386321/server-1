@@ -1656,6 +1656,66 @@ public class ShoppingOrderDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsDoneIsNull() {
+            addCriterion("is_done is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneIsNotNull() {
+            addCriterion("is_done is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneEqualTo(Boolean value) {
+            addCriterion("is_done =", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotEqualTo(Boolean value) {
+            addCriterion("is_done <>", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneGreaterThan(Boolean value) {
+            addCriterion("is_done >", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_done >=", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneLessThan(Boolean value) {
+            addCriterion("is_done <", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_done <=", value, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneIn(List<Boolean> values) {
+            addCriterion("is_done in", values, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotIn(List<Boolean> values) {
+            addCriterion("is_done not in", values, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_done between", value1, value2, "isDone");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDoneNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_done not between", value1, value2, "isDone");
+            return (Criteria) this;
+        }
+
         public Criteria andShoppingCartIdsStrIsNull() {
             addCriterion("shopping_cart_ids_str is null");
             return (Criteria) this;

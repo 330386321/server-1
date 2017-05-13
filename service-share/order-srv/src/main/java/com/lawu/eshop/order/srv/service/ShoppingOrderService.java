@@ -274,4 +274,12 @@ public interface ShoppingOrderService {
 	 */
 	List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
 	
+	/**
+	 * 订单收货之后
+	 * 如果超过退款申请时间，直接付款给商家
+	 * 
+	 * @author Sunny
+	 */
+	void executeAutoPaymentsToMerchant();
+	
 }

@@ -45,6 +45,7 @@
 		<result column="send_time" jdbcType="INTEGER" property="sendTime" />
 		<result column="is_no_reason_return" jdbcType="BIT" property="isNoReasonReturn" />
 		<result column="is_automatic_receipt" jdbcType="BIT" property="isAutomaticReceipt" />
+		<result column="is_done" jdbcType="BIT" property="isDone" />
 		<result column="shopping_cart_ids_str" jdbcType="VARCHAR" property="shoppingCartIdsStr" />
 		<result column="order_num" jdbcType="VARCHAR" property="orderNum" />
 		<result column="payment_method" jdbcType="TINYINT" property="paymentMethod" />
@@ -114,7 +115,7 @@
 		so.message, so.freight_price, so.commodity_total_price,
 		so.order_total_price, so.actual_amount, so.commission_status,
 		so.order_status, so.status, so.send_time,
-		so.is_no_reason_return, so.is_automatic_receipt, so.shopping_cart_ids_str,
+		so.is_no_reason_return, so.is_automatic_receipt, so.is_done, so.shopping_cart_ids_str,
 		so.order_num, so.payment_method, so.third_number, so.is_needs_logistics, so.waybill_num, so.express_company_id, so.express_company_code,
 		so.express_company_name, so.gmt_commission,
 		so.gmt_payment, so.gmt_transport,

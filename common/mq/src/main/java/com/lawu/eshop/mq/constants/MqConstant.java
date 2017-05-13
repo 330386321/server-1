@@ -181,6 +181,12 @@ public class MqConstant {
      */
     public static final String TAG_TRADING_SUCCESS_INCREASE_SALES = "trading_success_increase_sales";
     
+    /**
+     * 确认收货之后执行定时任务，如果超过退款时间发布的MQ消息
+     * 发送到资产模块，打款给商家
+     */
+    public static final String TAG_TRADING_SUCCESS_PAYMENTS_TO_MERCHANT = "trading_success_payments_to_merchant";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";
