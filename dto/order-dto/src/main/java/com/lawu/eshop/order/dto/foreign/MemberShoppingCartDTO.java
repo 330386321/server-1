@@ -41,6 +41,12 @@ public class MemberShoppingCartDTO extends ShoppingCartDTO implements Serializab
     @ApiModelProperty(value = "是否失效", required = true)
     private Boolean isInvalid;
     
+    /**
+    * 库存
+    */
+    @ApiModelProperty(value = "库存", required = true)
+    private Integer inventory;
+    
 	public String getProductName() {
 		return productName;
 	}
@@ -79,6 +85,14 @@ public class MemberShoppingCartDTO extends ShoppingCartDTO implements Serializab
 
 	public void setIsInvalid(Boolean isInvalid) {
 		this.isInvalid = isInvalid;
+	}
+
+	public Integer getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Integer inventory) {
+		this.inventory = inventory;
 	}
     
 }

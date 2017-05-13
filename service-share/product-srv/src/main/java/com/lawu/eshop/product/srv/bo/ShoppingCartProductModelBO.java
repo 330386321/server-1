@@ -46,6 +46,11 @@ public class ShoppingCartProductModelBO implements Serializable {
 	 * 是否支持退换货(0-否1-是)
 	 */
 	private Boolean isAllowRefund;
+	
+    /**
+    * 库存
+    */
+    private Integer inventory;
 
 	public Long getId() {
 		return id;
@@ -125,6 +130,14 @@ public class ShoppingCartProductModelBO implements Serializable {
 
 	public void setIsAllowRefund(Boolean isAllowRefund) {
 		this.isAllowRefund = isAllowRefund;
+	}
+
+	public Integer getInventory() {
+		return inventory;
+	}
+
+	public void setInventory(Integer inventory) {
+		this.inventory = inventory;
 	}
 
 }

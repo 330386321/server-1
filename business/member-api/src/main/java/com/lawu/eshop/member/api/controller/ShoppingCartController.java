@@ -198,7 +198,7 @@ public class ShoppingCartController extends BaseController {
      */
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @SuppressWarnings({"unchecked" })
-	@ApiOperation(value = "创建订单", notes = "根据订单参数创建订单。[1002|1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+	@ApiOperation(value = "创建订单", notes = "根据订单参数创建订单。[1002|1003|1004|1005|4018]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "createOrder", method = RequestMethod.POST)
@@ -253,7 +253,7 @@ public class ShoppingCartController extends BaseController {
 	 */
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @SuppressWarnings({"unchecked" })
-	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005]（蒋鑫俊）", httpMethod = "POST")
+	@ApiOperation(value = "立即购买，创建订单", notes = "立即购买，创建订单。[1003|1004|1005|4018]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "buyNowCreateOrder", method = RequestMethod.POST)

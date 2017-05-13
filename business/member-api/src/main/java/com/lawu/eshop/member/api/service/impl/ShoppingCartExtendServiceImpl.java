@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.member.api.service.AddressService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductModelService;
@@ -163,11 +164,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
     		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
-    		if (shoppingCartProductModelDTO.getStatus().equals(((byte)0x01)) || shoppingCartProductModelDTO.getStatus().equals(((byte)0x03))) {
+    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
     			memberShoppingCartDTO.setIsInvalid(true);
     		} else {
     			memberShoppingCartDTO.setIsInvalid(false);
     		}
+    		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
     		
     		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
     			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
@@ -259,7 +261,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	// 组装订单
     	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
-    	shoppingCartDTOMap.forEach( (key,value) -> {
+    	
+    	for (Map.Entry<Long, List<ShoppingCartDTO>> entry : shoppingCartDTOMap.entrySet()) {	
+    		Long key = entry.getKey();
+    		List<ShoppingCartDTO> value = entry.getValue();
     		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
     		shoppingOrderSettlementParam.setMemberId(memberId);
     		shoppingOrderSettlementParam.setMemberNum(shoppingOrderFindUserInfoDTOResult.getModel().getMemberNum());
@@ -295,6 +300,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
     			shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
     			shoppingOrderSettlementItemParam.setQuantity(shoppingCartDTO.getQuantity());
+    			
+    			// 判断库存
+    			if (shoppingCartProductModelDTO.getInventory() < shoppingCartDTO.getQuantity()) {
+    				return successCreated(ResultCode.INVENTORY_SHORTAGE);
+    			}
+    			
     			shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
     			shoppingOrderSettlementItemParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     			commodityTotalPrice = commodityTotalPrice.add(shoppingCartProductModelDTO.getPrice().multiply(new BigDecimal(shoppingCartDTO.getQuantity())));
@@ -305,7 +316,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice.add(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice()));
     		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
     		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
-    	});
+    	};
     	
     	
     	// 保存订单
@@ -456,6 +467,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		memberShoppingCartDTO.setProductName(shoppingCartProductModelDTO.getProductName());
 		memberShoppingCartDTO.setFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
 		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
+		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
+			memberShoppingCartDTO.setIsInvalid(true);
+		} else {
+			memberShoppingCartDTO.setIsInvalid(false);
+		}
+		
 		memberShoppingCartDTOList.add(memberShoppingCartDTO);
     	
     	// 查找用户余额
@@ -553,6 +570,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementItemParam.setProductFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
 		shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
 		shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
+		// 判断库存
+		if (shoppingCartProductModelDTO.getInventory() < param.getQuantity()) {
+			return successCreated(ResultCode.INVENTORY_SHORTAGE);
+		}
 		shoppingOrderSettlementItemParam.setQuantity(param.getQuantity());
 		shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
 		shoppingOrderSettlementItemParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
