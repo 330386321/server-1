@@ -25,8 +25,8 @@ public class MerchantInfoConverter {
 
         MerchantProfileBO merchantProfileBO = new MerchantProfileBO();
         merchantProfileBO.setId(merchantProfileDO.getId());
-        merchantProfileBO.setInviteMemberCount(merchantProfileDO.getInviteMemberCount());
-        merchantProfileBO.setInviteMerchantCount(merchantProfileDO.getInviteMerchantCount());
+        merchantProfileBO.setInviteMemberCount(merchantProfileDO.getInviteMemberCount()+merchantProfileDO.getInviteMemberCount2()+merchantProfileDO.getInviteMemberCount3());
+        merchantProfileBO.setInviteMerchantCount(merchantProfileDO.getInviteMerchantCount()+merchantProfileDO.getInviteMerchantCount2()+merchantProfileDO.getInviteMerchantCount3());
 
         return merchantProfileBO;
 
