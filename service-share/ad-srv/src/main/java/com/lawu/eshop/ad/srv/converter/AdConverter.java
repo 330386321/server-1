@@ -111,6 +111,8 @@ public class AdConverter {
 		adDTO.setAreas(adBO.getAreas());
 		adDTO.setRadius(adBO.getRadius());
 		adDTO.setContent(adBO.getContent());
+		adDTO.setIsFavorite(adBO.getIsFavorite());
+		adDTO.setIsPraise(adBO.getIsPraise());
 		Date date=new Date();
 		Long time=adBO.getBeginTime().getTime()-date.getTime();
 		if(time>0){

@@ -386,10 +386,21 @@ public class AdServiceImpl implements AdService {
 			fAexample.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 			Long count=favoriteAdDOMapper.countByExample(fAexample);
 			AdBO BO=AdConverter.convertBO(adDO);
-			if(count.intValue()>0){
+			if(count.intValue()>0){  //是否收藏
 				BO.setIsFavorite(true);
 			}else{
 				BO.setIsFavorite(false);
+			}
+			if(adDO.getType()==3){
+				PointPoolDOExample ppexample=new PointPoolDOExample();
+				ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
+						                   .andStatusEqualTo(new Byte("1")).andMemberIdEqualTo(memberId);
+				Long isPraise=pointPoolDOMapper.countByExample(ppexample);
+				 if(isPraise>0){ //是否 抢赞
+					 BO.setIsPraise(true);
+				 }else{
+					 BO.setIsPraise(false);
+				 }
 			}
 			BOS.add(BO);
 		}

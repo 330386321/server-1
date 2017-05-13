@@ -38,24 +38,24 @@ public class AdPage<T> {
 			    	}else{
 			    		result = list.subList(0, endNum);
 			    	}
-    	       }
+    	       }else{
+       	    	//截取起始下标
+       	    	int fromIndex = (startNum - 1) * endNum;
+       	    	//截取截止下标
+       	    	int toIndex = startNum * endNum;
+       	    	/*计算截取截止下标*/
+       	    	if ((totalCount - toIndex) % endNum >= 0){
+       	    		toIndex = startNum * endNum;
+       	    	}else{
+       	    		toIndex = (startNum - 1) * endNum + (totalCount % endNum);
+       	    	}
+       	    	if (totalCount >= toIndex){
+       	    		result = list.subList(fromIndex, toIndex);
+       	    	}
+           	  
+           	}
     	    }
-    	    else{
-    	    	//截取起始下标
-    	    	int fromIndex = (startNum - 1) * endNum;
-    	    	//截取截止下标
-    	    	int toIndex = startNum * endNum;
-    	    	/*计算截取截止下标*/
-    	    	if ((totalCount - toIndex) % endNum >= 0){
-    	    		toIndex = startNum * endNum;
-    	    	}else{
-    	    		toIndex = (startNum - 1) * endNum + (totalCount % endNum);
-    	    	}
-    	    	if (totalCount >= toIndex){
-    	    		result = list.subList(fromIndex, toIndex);
-    	    	}
-        	  
-        	}
+    	    
     	}
     	return result;
     	
