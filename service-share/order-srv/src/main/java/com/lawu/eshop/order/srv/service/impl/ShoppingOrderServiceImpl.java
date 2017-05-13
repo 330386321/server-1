@@ -1318,11 +1318,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		List<ReportRiseRateView> rtn = new ArrayList<ReportRiseRateView>();
 		int x = 0;
 		BigDecimal total = new BigDecimal(0);// 总金额
-		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
 
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
-		shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
 		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
 
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
@@ -1352,12 +1349,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param) {
-		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
-
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
 		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
-		shoppingOrderReportDataParam.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		shoppingOrderReportDataParam.setRefundRequestTime(Integer.valueOf(refundRequestTime));
 
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(param.getFlag().getValue())) {
 			shoppingOrderReportDataParam.setFlag(ReportFansRiseRateEnum.DAY.getValue());

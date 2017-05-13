@@ -17,16 +17,6 @@ public class ShoppingOrderReportDataParam implements Serializable {
 	private String gmtCreate;
 	
 	/**
-	 * 订单状态
-	 */
-	private Byte orderStatus;
-	
-	/**
-	 * 允许退款时间(天)
-	 */
-	private Integer refundRequestTime;
-	
-	/**
 	 * 商家id
 	 */
 	private Long merchantId;
@@ -42,22 +32,6 @@ public class ShoppingOrderReportDataParam implements Serializable {
 
 	public void setGmtCreate(String gmtCreate) {
 		this.gmtCreate = gmtCreate;
-	}
-
-	public Byte getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(Byte orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-
-	public Integer getRefundRequestTime() {
-		return refundRequestTime;
-	}
-
-	public void setRefundRequestTime(Integer refundRequestTime) {
-		this.refundRequestTime = refundRequestTime;
 	}
 
 	public Long getMerchantId() {
