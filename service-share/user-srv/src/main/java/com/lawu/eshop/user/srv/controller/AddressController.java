@@ -143,8 +143,9 @@ public class AddressController extends BaseController {
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
 		Integer i = addressService.remove(id);
+		
 		if (i > 0) {
-			return successDelete();
+			return successCreated();
 		} else {
 			return successCreated(ResultCode.FAIL);
 		}

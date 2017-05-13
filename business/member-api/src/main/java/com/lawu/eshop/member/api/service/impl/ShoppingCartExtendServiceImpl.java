@@ -398,12 +398,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	ShoppingCartSettlementDTO shoppingCartSettlementDTO = new ShoppingCartSettlementDTO();
     	
     	BigDecimal total = new BigDecimal(0);
-    	Integer productNumber = new Integer(0);
     	// 每一个商家的商品会合并在一起，小计金额
     	List<ShoppingCartSettlementItemDTO> items = new ArrayList<ShoppingCartSettlementItemDTO>();
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> entry : memberShoppingCartDTOMap.entrySet()) {
     		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
     		BigDecimal subtotal = new BigDecimal(0);
+    		Integer productNumber = new Integer(0);
     		for (MemberShoppingCartDTO memberShoppingCartDTO : entry.getValue()) {
     			subtotal = subtotal.add(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
     			productNumber += memberShoppingCartDTO.getQuantity();

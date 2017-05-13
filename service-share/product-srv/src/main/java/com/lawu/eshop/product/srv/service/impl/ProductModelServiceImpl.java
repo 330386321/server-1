@@ -42,11 +42,23 @@ public class ProductModelServiceImpl implements ProductModelService {
 
 	@Override
 	public ShoppingCartProductModelBO getShoppingCartProductModel(Long id) {
+		ShoppingCartProductModelBO rtn = null;
+		
 		ProductModelDO productModelDO =  productModelDOMapper.selectByPrimaryKey(id);
+		
+		if (productModelDO == null || productModelDO.getId() == null || productModelDO.getId() <= 0) {
+			return rtn;
+		}
 		
 		ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
 		
-		return ShoppingCartProductModelConverter.convert(productModelDO, productDO);
+		if (productDO == null || productDO.getId() == null || productDO.getId() <= 0) {
+			return rtn;
+		}
+		
+		rtn = ShoppingCartProductModelConverter.convert(productModelDO, productDO);
+		
+		return rtn;
 	}
 	
 	@Override
