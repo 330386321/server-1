@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
@@ -17,6 +18,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorPar
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 
@@ -149,7 +151,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Yangqh
 	 */
-	double selectOrderMoney(String orderIds);
+	Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds);
 
 	/**
 	 * 减少产品库存成功回调 更改订单的状态为待支付状态

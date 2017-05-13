@@ -25,6 +25,7 @@ import com.lawu.eshop.member.api.service.PayOrderService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
@@ -69,7 +70,7 @@ public class BalancePayController extends BaseController {
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
-	@ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付,[]（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付,[4018]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "orderPay", method = RequestMethod.POST)
 	public Result orderPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {
@@ -77,8 +78,15 @@ public class BalancePayController extends BaseController {
 		dparam.setBizIds(param.getBizIds());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		dparam.setAccount(UserUtil.getCurrentAccount(getRequest()));
-		// 获取订单金额
-		double orderMoney = shoppingOrderService.selectOrderMoney(param.getBizIds());
+		/*
+		 *  获取订单金额
+		 *  考虑商品可能有减库存失败可能
+		 */
+		Result<ShoppingOrderMoneyDTO> result = shoppingOrderService.selectOrderMoney(param.getBizIds());
+		if (!isSuccess(result)) {
+			return successCreated(result.getRet());
+		}
+		double orderMoney = result.getModel().getOrderTotalPrice().doubleValue();
 		dparam.setTotalAmount(String.valueOf(orderMoney));
 
 		return balancePayService.orderPay(dparam);

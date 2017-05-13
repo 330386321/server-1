@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -141,7 +142,7 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
-	double selectOrderMoney(@RequestParam("orderIds") String orderIds);
+	Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds);
 	
 	/**
 	 * 查询各种订单状态的数量

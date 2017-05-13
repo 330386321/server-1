@@ -23,6 +23,7 @@ import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendDetailDTO;
@@ -49,6 +50,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
@@ -491,9 +493,15 @@ public class ShoppingOrderController extends BaseController {
 	 * @author Yangqh
 	 */
 	@RequestMapping(value = "selectOrderMoney", method = RequestMethod.GET)
-	public double selectOrderMoney(@RequestParam String orderIds) {
-		double totalMoney = shoppingOrderService.selectOrderMoney(orderIds);
-		return totalMoney;
+	public Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam String orderIds) {
+		Result<ShoppingOrderMoneyBO> result = shoppingOrderService.selectOrderMoney(orderIds);
+		if (!isSuccess(result)) {
+			return successGet(result.getRet());
+		}
+		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
+		shoppingOrderMoneyDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
+		
+		return successGet(shoppingOrderMoneyDTO);
 	}
 	
 	/**

@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -41,6 +42,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorPar
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
@@ -795,16 +797,37 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		return ResultCode.SUCCESS;
 	}
 
+	/**
+	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+	 * 
+	 * @param orderIds
+	 * @return
+	 * @author Yangqh
+	 */
 	@Override
-	public double selectOrderMoney(String orderIds) {
+	public Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds) {
+		Result<ShoppingOrderMoneyBO> rtn = new Result<ShoppingOrderMoneyBO>();
 		String[] orderIdsArray = orderIds.split(",");
 		BigDecimal total = new BigDecimal("0");
 		for (int i = 0; i < orderIdsArray.length; i++) {
 			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
-			BigDecimal price = orderDO.getCommodityTotalPrice();
-			total = total.add(price);
+			/*
+			 *  判断订单的状态是否是待支付
+			 *  如果不是，说明扣除库存失败，提示买家库存不足
+			 */
+			if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(orderDO.getOrderStatus())) {
+				rtn.setRet(ResultCode.INVENTORY_SHORTAGE);
+				return rtn;
+			}
+			total = total.add(orderDO.getOrderTotalPrice());
 		}
-		return total.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		
+		ShoppingOrderMoneyBO shoppingOrderMoneyBO = new ShoppingOrderMoneyBO();
+		shoppingOrderMoneyBO.setOrderTotalPrice(total);
+		rtn.setModel(shoppingOrderMoneyBO);
+		rtn.setRet(ResultCode.SUCCESS);
+		
+		return rtn;
 	}
 
 	/**
