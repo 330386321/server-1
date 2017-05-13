@@ -50,6 +50,9 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
 	private ManageTypeEnum manageTypeEnum;
+	
+	@ApiModelProperty(value = "商家id")
+	private Long merchantId;
 
 	public Integer getCount() {
 		return count;
@@ -161,6 +164,14 @@ public class AdPraiseDTO {
 
 	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
 		this.manageTypeEnum = manageTypeEnum;
+	}
+
+	public Long getMerchantId() {
+		return merchantId;
+	}
+
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
 	}
 
 	

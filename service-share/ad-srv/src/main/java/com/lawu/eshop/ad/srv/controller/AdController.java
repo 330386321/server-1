@@ -1,12 +1,43 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -16,17 +47,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * E赚接口提供
@@ -154,7 +174,6 @@ public class AdController extends BaseController{
 			ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
 	    	ClickAdPointDTO dto=new ClickAdPointDTO();
 	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
-	    	dto.setAdTotlePoint(clickAdPointBO.getAdTotlePoint());
 			if(i>0){
 	     		return successCreated(dto);
 	     	}else{
@@ -234,8 +253,8 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectPraiseListByMember(@RequestBody AdPraiseParam adPraiseParam) {
-		Page<AdBO> pageBO=  adService.selectPraiseListByMember(adPraiseParam);
+    public Result<Page<AdDTO>> selectPraiseListByMember(@RequestBody AdPraiseParam adPraiseParam,@RequestParam Long memberId) {
+		Page<AdBO> pageBO=  adService.selectPraiseListByMember(adPraiseParam,memberId);
 		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());
@@ -340,7 +359,7 @@ public class AdController extends BaseController{
 		ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
     	ClickAdPointDTO dto=new ClickAdPointDTO();
     	dto.setAddPoint(clickAdPointBO.getAddPoint());
-    	dto.setAdTotlePoint(clickAdPointBO.getAdTotlePoint());
+    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
     	return successGet(dto);
     }
 	
@@ -450,6 +469,24 @@ public class AdController extends BaseController{
 	public Result updateAdIndex(@PathVariable Long id) {
 		adService.updateAdIndex(id);
 		return successCreated();
+	}
+	
+	/**
+	 * 根据商家获取红包相关信息
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
+	public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable Long merchantId) {
+		RedPacketInfoBO redPacketInfoBO= adService.getRedPacketInfo(merchantId);
+		if(redPacketInfoBO==null){
+			return successCreated(ResultCode.AD_RED_PACKGE_PUTED);
+		}else{
+			RedPacketInfoDTO redPacketInfoDTO=new RedPacketInfoDTO();
+			redPacketInfoDTO.setPoint(redPacketInfoBO.getPoint());
+			return successCreated(redPacketInfoDTO);
+		}
+		
 	}
 
 }

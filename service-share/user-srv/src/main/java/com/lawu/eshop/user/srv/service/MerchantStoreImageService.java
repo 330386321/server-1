@@ -19,4 +19,8 @@ public interface MerchantStoreImageService {
      * @return
      */
     List<MerchantStoreImageBO> listMerchantStoreImageByType(Long merchantId, MerchantStoreImageEnum merchantStoreImageEnum);
+    
+    
+    String selectLogoPath(Long merchantId);
+    
 }

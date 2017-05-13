@@ -10,7 +10,7 @@ public class ClickAdPointDTO {
 	private BigDecimal addPoint;
 	
 	@ApiModelProperty(value = "广告总积分")
-	private BigDecimal adTotlePoint;
+	private BigDecimal point;
 
 	public BigDecimal getAddPoint() {
 		return addPoint;
@@ -20,13 +20,15 @@ public class ClickAdPointDTO {
 		this.addPoint = addPoint;
 	}
 
-	public BigDecimal getAdTotlePoint() {
-		return adTotlePoint;
+	public BigDecimal getPoint() {
+		return point;
 	}
 
-	public void setAdTotlePoint(BigDecimal adTotlePoint) {
-		this.adTotlePoint = adTotlePoint;
+	public void setPoint(BigDecimal point) {
+		this.point = point;
 	}
+
+	
 
 	
 	

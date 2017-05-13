@@ -182,7 +182,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Override
 	public Result<Page<AdPraiseDTO>> selectPraiseListByMember(AdPraiseParam adPraiseParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-		Result<Page<AdDTO>>  pageDTOS=adService.selectPraiseListByMember(adPraiseParam);
+		Result<Page<AdDTO>>  pageDTOS=adService.selectPraiseListByMember(adPraiseParam,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
      	List<AdDTO> newList=screem(null,list,memberId);
      	AdPage<AdDTO> adpage=new AdPage<AdDTO>();
@@ -201,9 +201,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
 			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
 			praise.setCount(adDTO.getNumber());
-			praise.setLogoUrl(adDTO.getLogoUrl());
+			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
 			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
 			praise.setMediaUrl(adDTO.getMediaUrl());
+			praise.setIsFavorite(adDTO.getIsFavorite());
+			praise.setIsPraise(adDTO.getIsPraise());
+			praise.setMerchantId(adDTO.getMerchantId());
 			adPraiseDTOS.add(praise);
  		}
      	Page<AdPraiseDTO> newPage=new Page<AdPraiseDTO>();
@@ -232,10 +235,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setTotalPoint(ad.getTotalPoint());
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
 		praise.setCount(ad.getNumber());
-		praise.setLogoUrl(ad.getLogoUrl());
+		praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
 		praise.setNeedBeginTime(ad.getNeedBeginTime());
 		praise.setIsFavorite(ad.getIsFavorite());
 		praise.setIsPraise(ad.getIsPraise());
+		praise.setMediaUrl(ad.getMediaUrl());
+		praise.setMerchantId(ad.getMerchantId());
         return successGet(praise);
 	}
 	

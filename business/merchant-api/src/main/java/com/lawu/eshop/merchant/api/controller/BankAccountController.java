@@ -20,6 +20,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.BankAccountService;
+import com.lawu.eshop.merchant.api.service.CashManageFrontService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.dto.BankAccountDTO;
 import com.lawu.eshop.property.param.BankAccountParam;
@@ -44,6 +45,9 @@ public class BankAccountController extends BaseController{
 	
 	@Autowired
 	private PropertyInfoService propertyInfoService;
+	
+	@Autowired
+	private CashManageFrontService cashManageFrontService;
 	
 	/**
 	 * 
@@ -99,7 +103,15 @@ public class BankAccountController extends BaseController{
     @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                          @PathVariable @ApiParam(required = true, value = "id") Long id) {
-        Result rs = bankAccountService.delete(id);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<Boolean> bankRs= cashManageFrontService.isExistCash(userNum, id);
+    	if(isSuccess(bankRs)){
+    		if(bankRs.getModel()){
+    			return successCreated(ResultCode.BANK_CASH_EXIST);
+    		}else{
+    			 Result rs = bankAccountService.delete(id);
+    		}
+    	}
         return successDelete();
     }
 

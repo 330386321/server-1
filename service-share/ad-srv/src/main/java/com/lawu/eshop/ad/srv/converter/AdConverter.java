@@ -12,6 +12,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -110,6 +111,13 @@ public class AdConverter {
 		adDTO.setAreas(adBO.getAreas());
 		adDTO.setRadius(adBO.getRadius());
 		adDTO.setContent(adBO.getContent());
+		Date date=new Date();
+		Long time=adBO.getBeginTime().getTime()-date.getTime();
+		if(time>0){
+			adDTO.setNeedBeginTime(time);
+		}else{
+			adDTO.setNeedBeginTime(Long.parseLong("0"));
+		}
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());
 		}

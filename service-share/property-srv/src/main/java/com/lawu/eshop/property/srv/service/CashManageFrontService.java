@@ -55,4 +55,12 @@ public interface CashManageFrontService {
 	 * @return
 	 */
 	List<WithdrawCashBO> list(List<Long> ids);
+	
+	/**
+	 * 判断用户是否存在提现申请
+	 * @param userNum
+	 * @param bankAccountId
+	 * @return
+	 */
+	Boolean isExistCash(String userNum,Long bankAccountId);
 }

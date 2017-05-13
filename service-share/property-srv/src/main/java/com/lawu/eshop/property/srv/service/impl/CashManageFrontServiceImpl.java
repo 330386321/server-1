@@ -247,4 +247,21 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		return WithdrawCashBOConverter.convert(withdrawCashDOList);
 	}
 
+	/**
+	 * 是否存在提现
+	 */
+	@Override
+	public Boolean isExistCash(String userNum,Long bankAccountId) {
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum).andBusinessBankAccountIdEqualTo(bankAccountId)
+				.andStatusEqualTo(new Byte("2"));
+		int count = withdrawCashDOMapper.countByExample(example);
+		if(count>0){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+
 }

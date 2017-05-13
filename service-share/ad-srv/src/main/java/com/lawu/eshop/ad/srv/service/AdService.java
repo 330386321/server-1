@@ -97,7 +97,7 @@ public interface AdService {
      * @param adPraiseParam
      * @return
      */
-    Page<AdBO> selectPraiseListByMember(AdPraiseParam adPraiseParam);
+    Page<AdBO> selectPraiseListByMember(AdPraiseParam adPraiseParam,Long memberId);
 
     /**
      * 抢赞
@@ -227,6 +227,6 @@ public interface AdService {
      * @param mechantId
      * @return
      */
-    RedPacketInfoBO getRedPacketInfo(Long mechantId);
+    RedPacketInfoBO getRedPacketInfo(Long mercantId);
 
 }

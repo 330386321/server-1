@@ -53,6 +53,7 @@ public class ResultCode {
     public static final int MERCHANT_STORE_AUDIT_EXIST = 2008;
     public static final int MERCHANT_STORE_NO_EXIST = 2009;
     public static final int MEMBER_NO_EXIST = 2010;
+    public static final int BANK_CASH_EXIST = 2011;
 
     //运营
     public static final int USER_NOT_LOGIN = 2100;
@@ -100,6 +101,7 @@ public class ResultCode {
     public static final int AD_CLICK_EXIST = 5006;
     public static final int AD_PRAISE_POINT_GET = 5007;
     public static final int AD_CLICK_PUTED = 5008;
+    public static final int AD_RED_PACKGE_PUTED=5009;
 
 
     // 资产模块代码 6xxx
@@ -181,6 +183,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MERCHANT_STORE_AUDIT_EXIST, "已经存在未审核记录");
         ResultCode.messageMap.put(MERCHANT_STORE_NO_EXIST, "未查询到门店");
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
+        ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");
@@ -227,6 +230,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_CLICK_EXIST, "今天已经点击过该广告");
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
+        ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "提现金额必须大于等于10元");

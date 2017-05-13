@@ -29,4 +29,17 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
         List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
         return MerchantStoreImageConverter.convertBO(merchantStoreImageDOS);
     }
+
+	@Override
+	public String selectLogoPath(Long merchantId) {
+		 MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+	     merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val).andStatusEqualTo(true);
+	     List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+	     if(!merchantStoreImageDOS.isEmpty()){
+	    	 return merchantStoreImageDOS.get(0).getPath();
+	     }else{
+	    	 return null;
+	     }
+		
+	}
 }

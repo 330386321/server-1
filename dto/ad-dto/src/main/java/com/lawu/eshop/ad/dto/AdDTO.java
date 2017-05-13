@@ -96,6 +96,7 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
 	private ManageTypeEnum manageTypeEnum;
+	
 
 	public Long getId() {
 		return id;

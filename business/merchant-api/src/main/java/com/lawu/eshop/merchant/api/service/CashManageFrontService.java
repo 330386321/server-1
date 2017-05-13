@@ -62,4 +62,13 @@ public interface CashManageFrontService {
 	 */
 	@RequestMapping(value = "cashFront/findCashDetailStatus", method = RequestMethod.GET)
 	Result<List<WithdrawCashStatusDTO>> findCashDetailStatus(@RequestParam("ids") List<Long> ids);
+	
+	/**
+	 * 用户是否存在提现申请
+	 * @param userNum
+	 * @param bankAccountId
+	 * @return
+	 */
+	@RequestMapping(value = "cashFront/isExistCash", method = RequestMethod.GET)
+	Result<Boolean> isExistCash(@RequestParam("userNum") String userNum,@RequestParam("bankAccountId") Long bankAccountId);
 }

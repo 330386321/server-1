@@ -22,6 +22,7 @@ import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.dto.UserTopDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
@@ -303,11 +304,10 @@ public class AdController extends BaseController {
 
 
     @Audit(date = "2017-04-26", reviewer = "孙林青")
-    @Authorization
     @ApiOperation(value = "领取红包", notes = "领取红包[1002|5004]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
-    public Result<PraisePointDTO> getRedPacket(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<PraisePointDTO> getRedPacket(
     		@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId
     		,@RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
     	Result<Boolean> isRegisterRs= memberService.isRegister(mobile);
@@ -372,6 +372,19 @@ public class AdController extends BaseController {
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdEgainParam adEgainParam) {
     	Result<Page<AdFlatVideoDTO>>  pageDTOS=adExtendService.selectEgainAd(adEgainParam);
     	return pageDTOS;
+    }
+    
+    @ApiOperation(value = "获取领取红包之前的信息", notes = "红包信息,[5009]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
+    public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
+    	Result<RedPacketInfoDTO>  rs=adService.getRedPacketInfo(merchantId);
+    	if(isSuccess(rs)){
+    		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(merchantId);
+    		rs.getModel().setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+    		rs.getModel().setName(merchantStoreDTO.getModel().getName());
+    	}
+    	return rs;
     }
     
 } 

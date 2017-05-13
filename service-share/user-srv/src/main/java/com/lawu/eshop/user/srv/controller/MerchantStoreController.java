@@ -83,7 +83,9 @@ public class MerchantStoreController extends BaseController {
 		if (merchantStoreBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
+		String path=merchantStoreImageService.selectLogoPath(merchantId);
 		MerchantStoreDTO merchantStoreDTO = MerchantStoreConverter.convertStoreDTO(merchantStoreBO);
+		merchantStoreDTO.setLogoUrl(path);
 		return successGet(merchantStoreDTO);
 
 	}

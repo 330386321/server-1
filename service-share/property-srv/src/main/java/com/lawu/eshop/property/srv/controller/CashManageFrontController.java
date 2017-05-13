@@ -140,4 +140,16 @@ public class CashManageFrontController extends BaseController {
 
 		return successGet(WithdrawCashBOConverter.convertWithdrawCashStatusDTOList(withdrawCashBOList));
 	}
+	
+	/**
+	 * 判断用户的银行卡是否存在提现申请
+	 * @param userNum
+	 * @param bankAccountId
+	 * @return
+	 */
+	@RequestMapping(value = "isExistCash", method = RequestMethod.GET)
+	public Result<Boolean> isExistCash(@RequestParam String userNum,@RequestParam Long bankAccountId){
+		 Boolean  flag=cashManageService.isExistCash(userNum, bankAccountId);
+		return successCreated(flag);
+	}
 }
