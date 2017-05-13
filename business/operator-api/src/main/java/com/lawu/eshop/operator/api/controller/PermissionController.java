@@ -30,7 +30,7 @@ import java.util.List;
 @Api(tags = "permission")
 @RestController
 @RequestMapping(value = "permission/")
-public class PermissonController extends BaseController {
+public class PermissionController extends BaseController {
     @Autowired
     private PermissonService permissonService;
 
@@ -62,7 +62,7 @@ public class PermissonController extends BaseController {
     }
 
     @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
-     @RequiresPermissions("permission:find")
+     @RequiresPermissions("permission:list")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
     @RequestMapping(value = "findPermissionList", method = RequestMethod.GET)
@@ -76,6 +76,7 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "查询权限记录列表", notes = "查询权限记录列表 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresAuthentication
     @RequestMapping(value = "findAllPermissionList", method = RequestMethod.GET)
     public Result<List<PermissionListDTO>> findAllPerminnionList() {
         List<PermissionListDTO> listDTOS = permissonService.findAllPermissionList();
@@ -85,6 +86,7 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "根据roleId查询权限记录ID", notes = "根据roleId查询权限记录ID [1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresAuthentication
     @RequestMapping(value = "findPermissionListByRoleId/{roleId}", method = RequestMethod.GET)
     public Result<List<PermissionListDTO>> findPermissionListByRoleId(@PathVariable(value = "roleId") Integer roleId) {
         List<PermissionListDTO> listDTOS = permissonService.findPermissionListByRoleId(roleId);
@@ -104,6 +106,7 @@ public class PermissonController extends BaseController {
 
     @ApiOperation(value = "根据ID查询权限信息", notes = "根据ID查询权限信息 [1004，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresAuthentication
     @RequestMapping(value = "findPermissionInfoById/{id}", method = RequestMethod.GET)
     public Result<PermissionListDTO> findPermissionInfoById(@PathVariable(value = "id") Integer id) {
         if (id == null) {

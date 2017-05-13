@@ -19,6 +19,8 @@ import com.lawu.eshop.user.constants.UserCommonConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -58,6 +60,7 @@ public class CashManageBackageController extends BaseController {
 	@PageBody
 	@ApiOperation(value = "商家、用户提现管理", notes = "商家、用户提现明细查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "findCashInfo", method = RequestMethod.POST)
+	@RequiresPermissions("withdraw:list")
 	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryParam param)
 			throws Exception {
 		CashBackageQueryDataParam dparam = new CashBackageQueryDataParam();
@@ -76,6 +79,7 @@ public class CashManageBackageController extends BaseController {
 
 	@ApiOperation(value = "商家、用户提现管理总数统计", notes = "商家、用户提现明细查询总数统计,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "getTotalNum", method = RequestMethod.POST)
+	@RequiresAuthentication
 	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(
 			@ModelAttribute @ApiParam CashBackageQuerySumParam param) {
 		return cashManageBackageService.getTotalNum(param);
@@ -83,6 +87,7 @@ public class CashManageBackageController extends BaseController {
 
 	@PageBody
 	@ApiOperation(value = "商家、用户提现详情", notes = "商家、用户提现详情查询,[]（杨清华）", httpMethod = "POST")
+	@RequiresPermissions("withdraw:detail")
 	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
 	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(
 			@RequestBody @ApiParam CashBackageQueryDetailParam param) {
@@ -94,6 +99,7 @@ public class CashManageBackageController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "商家、用户提现数据操作", notes = "商家、用户提现数据操作,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
+	@RequiresPermissions("withdraw:edit")
 	public Result updateWithdrawCash(@Valid CashBackageOperParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();

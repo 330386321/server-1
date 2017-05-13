@@ -25,6 +25,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,6 +65,7 @@ public class MerchantAuditController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @PageBody
     @RequestMapping(value = "listStoreAudit", method = RequestMethod.POST)
+    @RequiresPermissions("storeAudit:list")
     public Result<Page<MerchantStoreAuditDTO>> listStoreAudit(@RequestBody @ApiParam ListStoreAuditParam auditParam) {
         Result<Page<MerchantStoreAuditDTO>> result = merchantAuditService.listStoreAudit(auditParam);
         List<MerchantStoreAuditDTO> list = result.getModel().getRecords();
@@ -88,6 +90,7 @@ public class MerchantAuditController extends BaseController {
      */
     @ApiOperation(value = "门店审核详情", notes = "查询门店审核详情。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("storeAudit:detail")
     @RequestMapping(value = "getMerchantStoreAudit/{id}", method = RequestMethod.GET)
     public Result<MerchantStoreAuditDTO> getMerchantStoreAudit(@PathVariable @ApiParam(required = true, value = "门店审核ID") Long id) {
         return merchantAuditService.getMerchantStoreAuditById(id);
@@ -102,6 +105,7 @@ public class MerchantAuditController extends BaseController {
      */
     @ApiOperation(value = "门店审核信息", notes = "根据门店审核记录ID更新对应信息  [1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("storeAudit:audit")
     @RequestMapping(value = "updateMerchantAudit", method = RequestMethod.POST)
     public Result updateMerchantAudit(@RequestParam @ApiParam(required = true, value = "门店审核ID") Long storeAuditId,
                                       @ModelAttribute @ApiParam MerchantAuditParam auditParam) {

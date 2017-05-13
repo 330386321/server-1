@@ -16,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +48,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "退款给买家", notes = "退款给买家。[1002|1003|4011|4013]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-	//@RequiresPermissions("shoppingRefundDetail:agreeToRefund")
+	@RequiresPermissions("refund:refundToUser")
     @RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
     public Result agreeToRefund(@PathVariable("id") @ApiParam(value = "退款详情id") Long id) {
     	if (id == null || id <= 0) {
@@ -84,7 +85,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@ApiOperation(value = "撤销退款申请", notes = "买家撤销退款申请。[1002|1003|1004|4011|4014]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@SuppressWarnings("rawtypes")
-	//@RequiresPermissions("shoppingRefundDetail:revokeRefundRequest")
+	@RequiresPermissions("refund:cancel")
 	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.DELETE)
 	public Result revokeRefundRequest(@PathVariable("id") Long id) {
 		

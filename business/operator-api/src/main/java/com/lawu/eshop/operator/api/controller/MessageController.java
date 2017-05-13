@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "指定用户发送系统通知", notes = "指定用户发送系统通知 [1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("message:pushOne")
     @RequestMapping(value = "saveMessage", method = RequestMethod.POST)
     public Result saveMessage(@ModelAttribute OperatorMessageInfoParam messageInfoParam) {
         //增加系统站内消息
@@ -71,6 +73,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "给所有用户发送系统通知", notes = "给所有用户发送系统通知 [1005,1000]", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("message:pushAll")
     @RequestMapping(value = "saveMessageToAll", method = RequestMethod.POST)
     public Result saveMessageToAll(@ModelAttribute OperatorMessageListParam messageInfoParam) {
 
@@ -111,6 +114,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "查询消息列表", notes = "查询消息列表 [1000]", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("message:list")
     @PageBody
     @RequestMapping(value = "getOperatorMessageList", method = RequestMethod.GET)
     public Result<Page<OperatorMessageDTO>> getOperatorMessageList(@ModelAttribute MessageQueryParam param) {
@@ -120,6 +124,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation(value = "消息删除", notes = "消息删除 [1000]（章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequiresPermissions("message:del")
     @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
     public Result delMessage(@PathVariable(value = "ids") String ids) {
         Result result = messageService.delMessageByIds(ids);

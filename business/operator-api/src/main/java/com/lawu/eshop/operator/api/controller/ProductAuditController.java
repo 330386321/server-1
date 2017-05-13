@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ public class ProductAuditController extends BaseController {
 
     @ApiOperation(value = "商品审列表", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("product:list")
+    @RequiresPermissions("productAudit:list")
     @PageBody
     @RequestMapping(value = "listProduct", method = RequestMethod.POST)
     public Result<Page<ProductQueryDTO>> listProduct(@RequestBody @ApiParam ListProductParam listProductParam) {
@@ -50,7 +51,7 @@ public class ProductAuditController extends BaseController {
 
     @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1002|1003]，（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("product:detail")
+    @RequiresPermissions("productAudit:detail")
     @RequestMapping(value = "getProduct/{id}", method = RequestMethod.GET)
     public Result<ProductEditInfoDTO> getProductById(@PathVariable @ApiParam(name = "id", required = true, value = "商品ID") Long id) {
         return productAuditService.selectEditProductById(id);
@@ -58,7 +59,7 @@ public class ProductAuditController extends BaseController {
 
     @ApiOperation(value = "商品批量下架", notes = "商品批量下架，[1002]。(梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("product:down")
+    @RequiresPermissions("productAudit:soldOut")
     @RequestMapping(value = "downProduct", method = RequestMethod.PUT)
     public Result downProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
         Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DOWN);
@@ -82,7 +83,7 @@ public class ProductAuditController extends BaseController {
 
     @ApiOperation(value = "商品批量删除", notes = "商品批量删除，[1002]。(梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("product:del")
+    @RequiresPermissions("productAudit:del")
     @RequestMapping(value = "deleteProduct", method = RequestMethod.PUT)
     public Result deleteProduct(@RequestParam @ApiParam(required = true, value = "商品ID(多个英文逗号分开)") String ids) {
         Result result = productAuditService.updateProductStatus(ids, ProductStatusEnum.PRODUCT_STATUS_DEL);

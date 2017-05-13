@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class CommentManageController extends BaseController{
     @PageBody
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("productComment:list")
     @RequestMapping(value = "getCommentProductListOperator", method = RequestMethod.POST)
     public Result<Page<CommentOperatorDTO>> getCommentProductListOperator(@RequestBody @ApiParam CommentListParam listParam) {
     
@@ -63,6 +65,7 @@ public class CommentManageController extends BaseController{
     @PageBody
     @ApiOperation(value = "评价商家列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("storeComment:list")
     @RequestMapping(value = "getCommentMerchantListOperator", method = RequestMethod.POST)
     public Result<Page<CommentOperatorDTO>> getCommentMerchantListOperator(@RequestBody @ApiParam CommentListParam listParam) {
     	 Result<Page<CommentOperatorDTO>> rsPage= commentProductService.getCommentMerchantListOperator(listParam);
@@ -91,6 +94,7 @@ public class CommentManageController extends BaseController{
 
     @ApiOperation(value = "批量屏蔽商家评价", notes = "屏蔽商家评价 [1004，1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequiresPermissions("storeComment:del")
     @RequestMapping(value = "batchelDelCommentMerchantInfo/", method = RequestMethod.PUT)
     public Result batchelDelCommentMerchantInfo(@RequestParam @ApiParam(value = "评论ID集合 以逗号隔开",required = true) String ids){
         if(ids == null){
@@ -106,6 +110,7 @@ public class CommentManageController extends BaseController{
     
     @ApiOperation(value = "批量屏蔽商品评价", notes = "屏蔽商品评价 [1004，1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequiresPermissions("productComment:del")
     @RequestMapping(value = "batchelDelCommentProductInfo/", method = RequestMethod.PUT)
     public Result batchelDelCommentProductInfo(@RequestParam @ApiParam(value = "评论ID集合 以逗号隔开",required = true) String ids){
         if(ids == null){

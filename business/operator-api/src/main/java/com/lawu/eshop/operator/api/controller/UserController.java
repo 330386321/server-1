@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,7 +67,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequiresPermissions("user:find")
+    @RequiresPermissions("user:list")
     @PageBody
     @RequestMapping(value = "findUserList", method = RequestMethod.GET)
     public Result<Page<UserListDTO>> findUserList(@ModelAttribute UserPageParam pageParam) {
@@ -78,7 +79,7 @@ public class UserController extends BaseController {
     }
 
     @ApiOperation(value = "分配角色", notes = "分配角色 [1004，2101，1005，1000]（章勇）", httpMethod = "POST")
-    @RequiresPermissions("user:assign_role")
+    @RequiresPermissions("user:addRole")
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     public Result assignRoles(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "roleId") String roleId) {
@@ -126,6 +127,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户详情", notes = "查询用户详情（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresAuthentication
     @RequestMapping(value = "findUserById/{id}", method = RequestMethod.GET)
     public Result<UserListDTO> findUserById(@PathVariable(value = "id") Integer id){
 

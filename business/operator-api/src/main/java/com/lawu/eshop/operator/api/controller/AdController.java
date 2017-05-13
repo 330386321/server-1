@@ -29,6 +29,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,6 +71,7 @@ public class AdController extends BaseController {
     @ApiOperation(value = "广告列表", notes = "查询广告列表。（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
+    @RequiresPermissions("adAudit:list")
     @RequestMapping(value = "listAd", method = RequestMethod.POST)
     public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam ListAdParam listAdParam) {
         if (listAdParam.getTypeEnum().val == AdTypeEnum.AD_TYPE_PACKET.val) {
@@ -86,6 +88,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告详情", notes = "查询广告详情。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("adAudit:detail")
     @RequestMapping(value = "getAd/{id}", method = RequestMethod.GET)
     public Result<AdDTO> getAd(@PathVariable @ApiParam(value = "ID") Long id) {
         Result<AdDTO> result = adService.getAdById(id);
@@ -109,6 +112,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告操作下架", notes = "广告操作下架,[5001]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("adAudit:soldOut")
     @RequestMapping(value = "adDown/{id}", method = RequestMethod.PUT)
     public Result adDown(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.operatorUpdateAdStatus(id, AdStatusEnum.AD_STATUS_OUT);
@@ -145,6 +149,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告操作删除", notes = "广告操作删除,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("adAudit:del")
     @RequestMapping(value = "adDelete/{id}", method = RequestMethod.PUT)
     public Result adDelete(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.operatorUpdateAdStatus(id, AdStatusEnum.AD_STATUS_DELETE);
@@ -168,6 +173,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告审核通过", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("adAudit:pass")
     @RequestMapping(value = "auditVideoPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_PASS);
@@ -202,6 +208,7 @@ public class AdController extends BaseController {
 
     @ApiOperation(value = "广告审核不通过", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("adAudit:unpass")
     @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
         Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_UN_PASS);

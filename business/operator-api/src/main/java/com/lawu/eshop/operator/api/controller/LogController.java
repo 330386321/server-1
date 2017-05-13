@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class LogController extends BaseController {
 
     @ApiOperation(value = "日志列表", notes = "查询日志列表。（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequiresPermissions("log:list")
     @PageBody
     @RequestMapping(value = "listLog", method = RequestMethod.POST)
     public Result<Page<LogDTO>> listAd(@RequestBody @ApiParam ListLogParam listLogParam) {

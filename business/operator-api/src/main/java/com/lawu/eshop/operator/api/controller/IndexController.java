@@ -17,6 +17,7 @@ import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,6 +45,7 @@ public class IndexController extends BaseController {
 
     @ApiOperation(value = "更新门店索引", notes = "更新门店索引。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("index:store")
     @RequestMapping(value = "updateStoreIndex", method = RequestMethod.GET)
     public Result updateStoreIndex() {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
@@ -67,6 +69,7 @@ public class IndexController extends BaseController {
 
     @ApiOperation(value = "更新商品索引", notes = "更新商品索引。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("index:product")
     @RequestMapping(value = "updateProductIndex", method = RequestMethod.GET)
     public Result updateProductIndex() {
         ListProductParam listProductParam = new ListProductParam();
@@ -88,6 +91,7 @@ public class IndexController extends BaseController {
 
     @ApiOperation(value = "更新广告索引", notes = "更新广告索引。（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @RequiresPermissions("index:ad")
     @RequestMapping(value = "updateAdIndex", method = RequestMethod.GET)
     public Result updateAdIndex() {
         ListAdParam listAdParam = new ListAdParam();

@@ -26,6 +26,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -59,7 +61,7 @@ public class ShoppingOrderController extends BaseController {
     @ApiOperation(value = "分页查询订单", notes = "根据查询参数分页查询。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
-    //@RequiresPermissions("shoppingOrder:selectPage")
+    @RequiresPermissions("order:list")
     @RequestMapping(value = "selectPage", method = RequestMethod.GET)
     public Result<Page<ShoppingOrderQueryToOperatorDTO>> selectPageByMerchantId(@ModelAttribute @ApiParam(name = "param", value = "查询参数") ShoppingOrderQueryForeignToOperatorParam param) {
         // 校验参数
@@ -84,7 +86,7 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("unchecked")
     @ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("shoppingOrder:get/{id}")
+    @RequiresAuthentication
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
 
@@ -111,7 +113,7 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
     @ApiOperation(value = "更新订单信息", notes = "更新订单信息。[1002|1003]（蒋鑫俊）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("shoppingOrder:updateInformation/{id}")
+    @RequiresPermissions("order:edit")
     @RequestMapping(value = "updateInformation/{id}", method = RequestMethod.POST)
     public Result updateInformation(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "更新参数") @Validated ShoppingOrderUpdateInfomationForeignParam param, BindingResult bindingResult) {
 
@@ -168,7 +170,7 @@ public class ShoppingOrderController extends BaseController {
     @SuppressWarnings("rawtypes")
     @ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-    //@RequiresPermissions("shoppingOrder:cancelOrder/{id}")
+    @RequiresPermissions("order:cancel")
     @RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
     public Result cancelOrder(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
 
@@ -204,7 +206,7 @@ public class ShoppingOrderController extends BaseController {
     @ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
-    //@RequiresPermissions("shoppingOrder:selectRefundPage")
+    @RequiresPermissions("refund:list")
     @RequestMapping(value = "selectRefundPage", method = RequestMethod.GET)
     public Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@ModelAttribute @ApiParam(name = "param", value = "查询参数") ShoppingRefundQueryForeignParam param) {
 

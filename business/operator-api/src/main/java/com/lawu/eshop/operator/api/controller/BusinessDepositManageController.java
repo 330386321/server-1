@@ -1,17 +1,5 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -23,9 +11,19 @@ import com.lawu.eshop.property.param.BusinessDepositOperDataParam;
 import com.lawu.eshop.property.param.BusinessDepositOperParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryDataParam;
 import com.lawu.eshop.property.param.BusinessDepositQueryParam;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 
@@ -55,6 +53,7 @@ public class BusinessDepositManageController extends BaseController {
 	@PageBody
 	@ApiOperation(value = "保证金明细查询", notes = "保证金明细查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
+	@RequiresPermissions("depositcash:list")
 	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryParam param)
 			throws Exception {
 		BusinessDepositQueryDataParam dparam = new BusinessDepositQueryDataParam();
@@ -72,6 +71,7 @@ public class BusinessDepositManageController extends BaseController {
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "保证金运营处理操作", notes = "保证金运营处理操作(核实、受理、成功、失败),[]（杨清华）", httpMethod = "POST")
+	@RequiresPermissions("depositcash:edit")
 	@RequestMapping(value = "updateBusinessDeposit", method = RequestMethod.POST)
 	public Result updateBusinessDeposit(@Valid BusinessDepositOperParam param, BindingResult result) {
 		if (result.hasErrors()) {
