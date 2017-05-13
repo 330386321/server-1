@@ -307,7 +307,7 @@ public class OrderServiceImpl implements OrderService {
 	public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
 		String[] userNums = param.getUserNums().split(",");
 		String[] orderIds = param.getOrderIds().split(",");
-		String[] accounts = param.getAccounts().split(",");
+		//String[] accounts = param.getAccounts().split(",");
 		Byte[] payWays = param.getPayWays();
 		FreezeDOExample example = new FreezeDOExample();
 		List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
@@ -327,7 +327,7 @@ public class OrderServiceImpl implements OrderService {
 				tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 				tdsParam.setUserNum(userNums[i]);
 				tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-				tdsParam.setTransactionAccount(accounts[i]);
+				//tdsParam.setTransactionAccount(accounts[i]);
 				tdsParam.setTransactionAccountType(payWays[i]);
 				tdsParam.setAmount(freeze.getMoney());
 				tdsParam.setBizId(orderIds[i]);
@@ -360,7 +360,7 @@ public class OrderServiceImpl implements OrderService {
 	public int comfirmSysJob(OrderSysJobParam param) {
 		String[] userNums = param.getUserNums().split(",");
 		String[] orderIds = param.getOrderIds().split(",");
-		String[] accounts = param.getAccounts().split(",");
+		//String[] accounts = param.getAccounts().split(",");
 		Byte[] payWays = param.getPayWays();
 		String[] orderActualMoneys = param.getOrderActualMoney().split(",");
 		for (int i = 0; i < userNums.length; i++) {
@@ -370,7 +370,7 @@ public class OrderServiceImpl implements OrderService {
 			tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 			tdsParam.setUserNum(userNums[i]);
 			tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-			tdsParam.setTransactionAccount(accounts[i]);
+			//tdsParam.setTransactionAccount(accounts[i]);
 			tdsParam.setTransactionAccountType(payWays[i]);
 			tdsParam.setAmount(new BigDecimal(orderActualMoneys[i]));
 			tdsParam.setBizId(orderIds[i]);

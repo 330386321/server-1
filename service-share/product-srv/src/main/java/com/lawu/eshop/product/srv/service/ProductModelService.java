@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 
@@ -56,5 +57,13 @@ public interface ProductModelService {
 	 * @author Yangqh
 	 */
 	CommentProductInfoBO selectCommentProductInfo(Long productModelId);
+	
+	/**
+	 * 确认收货，增加销量
+	 * 
+	 * @param notification 接收的数据
+	 * @author Sunny
+	 */
+	int increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification);
 
 }

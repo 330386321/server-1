@@ -175,6 +175,12 @@ public class MqConstant {
      */
     public static final String TAG_CREATE_ORDER_FANS = "create_order_fans";
     
+    /**
+     * 确认收货时发布的MQ消息
+     * 发送到产品模块，添加销量
+     */
+    public static final String TAG_TRADING_SUCCESS_INCREASE_SALES = "trading_success_increase_sales";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";

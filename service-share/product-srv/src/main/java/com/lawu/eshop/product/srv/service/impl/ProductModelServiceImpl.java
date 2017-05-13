@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
@@ -141,6 +143,23 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelInventoryDO.setGmtModified(new Date());
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 			
+			/*
+			 *  减商品总库存
+			 */
+			// 获取商品库存信息
+			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+			
+			if (productDO == null || productDO.getId() == null || productDO.getId() <= 0) {
+				return;
+			}
+			
+			// 计算库存
+			inventory = productDO.getTotalInventory() - param.getQuantity();
+			
+			// 更新库存
+			productModelDO.setInventory(inventory);
+			productModelDO.setGmtModified(new Date());
+			productDOMapper.updateByPrimaryKeySelective(productDO);
 		}
 	}
 	
@@ -202,6 +221,23 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelInventoryDO.setGmtModified(new Date());
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 			
+			/*
+			 * 减商品总库存
+			 */
+			// 获取库存信息
+			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+			
+			if (productDO == null || productDO.getId() == null || productDO.getId() <= 0) {
+				return;
+			}
+			
+			// 计算库存
+			inventory = productDO.getTotalInventory() + param.getQuantity();
+			
+			productDO.setTotalInventory(inventory);
+			productDO.setGmtModified(new Date());
+			productDOMapper.updateByPrimaryKeySelective(productDO);
+			
 		}
 	}
 
@@ -223,5 +259,55 @@ public class ProductModelServiceImpl implements ProductModelService {
 		bo.setModelName(model.getName());
 		bo.setFeatureImage(product.getFeatureImage());
 		return bo;
+	}
+	
+	/**
+	 * 确认收货，增加销量
+	 * 
+	 * @param notification 接收的数据
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public int increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification) {
+		for (ProductModeUpdateInventoryDTO param : notification.getParams()) {
+			
+			/**
+			 * 总价商品型号销量
+			 */
+			// 获取商品型号数据
+			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelid());
+			
+			if (productModelDO == null || productModelDO.getId() == null || productModelDO.getId() <= 0) {
+				return ResultCode.SUCCESS;
+			}
+			
+			// 计算销量
+			Integer salesVolume = productModelDO.getSalesVolume() + param.getQuantity();
+			
+			productModelDO.setSalesVolume(salesVolume);
+			productModelDO.setGmtModified(new Date());
+			productModelDOMapper.updateByPrimaryKeySelective(productModelDO);
+			
+			/*
+			 * 增加商品的总销量
+			 */
+			// 获取库存信息
+			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+			
+			if (productDO == null || productDO.getId() == null || productDO.getId() <= 0) {
+				return ResultCode.SUCCESS;
+			}
+			
+			// 计算库存
+			salesVolume = productDO.getTotalSalesVolume() + param.getQuantity();
+			
+			productDO.setTotalSalesVolume(salesVolume);
+			productDO.setGmtModified(new Date());
+			productDOMapper.updateByPrimaryKeySelective(productDO);
+			
+		}
+		
+		return ResultCode.SUCCESS;
 	}
 }

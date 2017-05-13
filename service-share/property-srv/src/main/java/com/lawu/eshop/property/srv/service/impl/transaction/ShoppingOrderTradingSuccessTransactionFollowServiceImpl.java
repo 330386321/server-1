@@ -10,6 +10,7 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowSer
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessNotification;
 import com.lawu.eshop.property.param.OrderComfirmDataParam;
+import com.lawu.eshop.property.param.OrderSysJobParam;
 import com.lawu.eshop.property.srv.service.OrderService;
 
 /**
@@ -33,14 +34,22 @@ public class ShoppingOrderTradingSuccessTransactionFollowServiceImpl extends Abs
 	    	return null;
 	    }
 	    
-	    // 组装请求参数
-	    OrderComfirmDataParam param = new OrderComfirmDataParam();
-	    param.setBizId(notification.getShoppingOrderId().toString());
-	    param.setTotalOrderMoney(notification.getOrderTotalPrice());
-	    param.setUserNum(notification.getMerchantNum());
+	    if (!notification.getIsAutoReceipt()) {
+		    // 组装请求参数
+		    OrderComfirmDataParam param = new OrderComfirmDataParam();
+		    param.setBizId(notification.getShoppingOrderId().toString());
+		    param.setTotalOrderMoney(notification.getOrderTotalPrice());
+		    param.setUserNum(notification.getMerchantNum());
+		    orderService.comfirmDelivery(param);
+	    } else {
+	    	OrderSysJobParam param = new OrderSysJobParam();
+	    	param.setOrderActualMoney(notification.getOrderTotalPrice());
+	    	param.setOrderIds(notification.getShoppingOrderId().toString());
+	    	param.setUserNums(notification.getMerchantNum());
+	    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
+	    	orderService.comfirmSysJob(param);
+	    }
 	    
-	    orderService.comfirmDelivery(param);
-    	
         return rtn;
     }
 }

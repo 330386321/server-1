@@ -25,6 +25,7 @@ public class TransactionConstant {
     
     /**
      * 确认收货
+     * 用户手动确认收货
      */
     public static final byte TRADING_SUCCESS = 0x04;
 
@@ -99,5 +100,11 @@ public class TransactionConstant {
      * 商家同意退款-删除评论
      */
     public static final  byte AGREE_TO_REFUND_DELETE_COMMENT = 0x10;
+    
+    /**
+     * 确认收货
+     * 增加销量
+     */
+    public static final byte TRADING_SUCCESS_INCREASE_SALES = 0x11;
     
 }

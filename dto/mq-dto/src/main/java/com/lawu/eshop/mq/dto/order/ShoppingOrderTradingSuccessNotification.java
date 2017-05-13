@@ -1,6 +1,7 @@
 package com.lawu.eshop.mq.dto.order;
 
 import com.lawu.eshop.compensating.transaction.Notification;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 
 /**
  * 
@@ -25,7 +26,17 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
      * 订单总价
      */
     private String orderTotalPrice;
-
+    
+    /**
+     * 是否是自动收货
+     */
+    private Boolean isAutoReceipt;
+    
+    /**
+     * 支付方式
+     */
+    private TransactionPayTypeEnum paymentMethod;
+    
 	public Long getShoppingOrderId() {
 		return shoppingOrderId;
 	}
@@ -49,4 +60,21 @@ public class ShoppingOrderTradingSuccessNotification extends Notification {
 	public void setOrderTotalPrice(String orderTotalPrice) {
 		this.orderTotalPrice = orderTotalPrice;
 	}
+
+	public Boolean getIsAutoReceipt() {
+		return isAutoReceipt;
+	}
+
+	public void setIsAutoReceipt(Boolean isAutoReceipt) {
+		this.isAutoReceipt = isAutoReceipt;
+	}
+
+	public TransactionPayTypeEnum getPaymentMethod() {
+		return paymentMethod;
+	}
+
+	public void setPaymentMethod(TransactionPayTypeEnum paymentMethod) {
+		this.paymentMethod = paymentMethod;
+	}
+	
 }

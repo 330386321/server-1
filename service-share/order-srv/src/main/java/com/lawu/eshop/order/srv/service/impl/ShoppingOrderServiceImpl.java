@@ -123,6 +123,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Autowired
 	@Qualifier("shoppingOrderCreateOrderFansTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderCreateOrderFansTransactionMainServiceImpl;
+	
+	@Autowired
+	@Qualifier("shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl;
 
 	/**
 	 * 
@@ -584,8 +588,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 			item.setGmtModified(new Date());
 		}
-
-		// 发送MQ消息通知资产保存资金冻结表
+		
+		// 发送MQ消息通知产品模块增加销量
+		shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl.sendNotice(id);
+		
+		/*
+		 *  发送MQ消息通知资产模块
+		 *  如果是手动收货保存资金冻结表
+		 *  如果是自动收货直接付款给商家
+		 */
 		shoppingOrderTradingSuccessTransactionMainServiceImpl.sendNotice(id);
 
 		return ResultCode.SUCCESS;

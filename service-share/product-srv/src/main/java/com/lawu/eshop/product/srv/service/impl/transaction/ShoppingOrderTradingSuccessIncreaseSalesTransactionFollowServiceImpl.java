@@ -7,18 +7,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 
 /**
+ * 确认收货
+ * 添加商品销量-从事务
  * 
  * @author Sunny
  * @date 2017/04/06
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATE_ORDER)
-public class ShoppingOrderCreateOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCreateOrderNotification, Reply> {
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_TRADING_SUCCESS_INCREASE_SALES)
+public class ShoppingOrderTradingSuccessIncreaseSalesTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderTradingSuccessIncreaseSalesNotification, Reply> {
 	
 	@Autowired
 	private ProductModelService productModelService;
@@ -28,19 +31,24 @@ public class ShoppingOrderCreateOrderTransactionFollowServiceImpl extends Abstra
 	 */
 	@Transactional
     @Override
-    public Reply execute(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
-    	Reply rtn = new Reply();
+    public Reply execute(ShoppingOrderTradingSuccessIncreaseSalesNotification notification) {
+    	Reply rtn = null;
     	
     	// 如果接收的消息为空直接返回
-    	if (shoppingOrderCreateOrderNotification == null) {
+    	if (notification == null) {
     		return rtn;
     	}
     	
     	/*
-    	 *  减商品型号库存，以及在商品型号库存表添加记录
-    	 *  减商品总库存
+    	 * 添加商品型号销量
+    	 * 添加商品总销量
     	 */
-    	productModelService.lessInventory(shoppingOrderCreateOrderNotification);
+    	int resultCode =  productModelService.increaseSales(notification);
+    	if (resultCode != ResultCode.SUCCESS) {
+    		return rtn;
+    	}
+    	
+    	rtn = new Reply();
     	
 		return rtn;
     }
