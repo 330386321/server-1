@@ -63,6 +63,7 @@ import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDOExample.Criteria;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
@@ -997,24 +998,23 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public void executetAutoComment() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		ShoppingOrderExtendDOExample.Criteria shoppingOrderExtendDOExampleCriteria = shoppingOrderExtendDOExample.createCriteria();
-		shoppingOrderExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		shoppingOrderExtendDOExampleCriteria.andSOIIsEvaluationEqualTo(false);
-
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
+		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		
 		// 查找配置表获取自动好评时间
 		String automaticEvaluation = propertyService.getByName(PropertyNameConstant.AUTOMATIC_EVALUATION);
 
 		// 如果交易时间超过automaticEvaluation的记录
-		shoppingOrderExtendDOExampleCriteria.andGmtTransactionDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticEvaluation), new Date());
+		shoppingOrderItemExtendDOExampleCriteria.andSOGmtTransactionDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticEvaluation), new Date());
 
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
-		for (ShoppingOrderExtendDO shoppingOrderExtendDO : shoppingOrderExtendDOList) {
-			for (ShoppingOrderItemDO item : shoppingOrderExtendDO.getItems()) {
-				// 将事务拆解成单个事务
-				commentShoppingOrder(item.getId());
-			}
+		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemExtendDOList) {
+			// 将事务拆解成单个事务
+			commentShoppingOrder(shoppingOrderItemExtendDO.getId());
 		}
 	}
 
@@ -1162,7 +1162,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
-				if (ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
+				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
 					is_done = false;
 					break;
 				}
@@ -1419,7 +1419,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
-				if (ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
+				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
 					is_done = false;
 					break;
 				}

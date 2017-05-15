@@ -1,7 +1,6 @@
 package com.lawu.eshop.user.srv.bo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 我收藏的商家实体
