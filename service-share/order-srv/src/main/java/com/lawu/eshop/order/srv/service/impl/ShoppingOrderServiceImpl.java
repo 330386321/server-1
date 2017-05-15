@@ -174,9 +174,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				rtn.add(id);
 				// 事务补偿(减掉库存)
 				shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
-
-				// 事务补偿(用户成为商家粉丝)
-				shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
+				
+				// 判断用户是否是商家粉丝
+				if (shoppingOrderDO.getIsFans()) {
+					// 事务补偿(用户成为商家粉丝)
+					shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
+				}
 			}
 		}
 
