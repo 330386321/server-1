@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 
 /**
@@ -35,5 +37,5 @@ public interface PayOrderService {
 	 * @author Sunny
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
-	double selectOrderMoney(@RequestParam("orderIds") String orderIds);
+	Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds);
 }

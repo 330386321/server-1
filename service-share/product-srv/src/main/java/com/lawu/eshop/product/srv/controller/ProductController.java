@@ -250,7 +250,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "selectProductCount", method = RequestMethod.GET)
     public Result<Integer> selectProductCount(@RequestParam Long merchantId) {
         int count = productService.selectProductCount(merchantId);
-        return successGet(count);
+        return successCreated(ResultCode.SUCCESS,count+"");
     }
 
     /**
