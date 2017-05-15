@@ -30,6 +30,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
+import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
 import com.lawu.eshop.property.constants.PropertyType;
@@ -180,7 +181,8 @@ public class AlipayNotifyController extends BaseController {
 							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
 						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						double money = payOrderService.selectOrderMoney(param.getBizIds());
+						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
+						double money = order.getModel().getOrderTotalPrice().doubleValue();
 						if (money == dTotalMoney) {
 							result = orderService.doHandleOrderPayNotify(param);
 						} else {

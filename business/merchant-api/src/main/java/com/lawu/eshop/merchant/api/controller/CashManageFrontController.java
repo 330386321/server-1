@@ -61,11 +61,6 @@ public class CashManageFrontController extends BaseController {
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam CashParam param) {
 
-		String cashMoney = param.getCashMoney();
-		if (cashMoney.contains(".") && cashMoney.split("\\.")[1].length() > 2) {
-			return successCreated(ResultCode.MONEY_IS_POINT_2);
-		}
-
 		CashDataParam dataParam = new CashDataParam();
 		dataParam.setCashMoney(param.getCashMoney());
 		dataParam.setBusinessBankAccountId(param.getBusinessBankAccountId());

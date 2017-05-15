@@ -55,16 +55,11 @@ public class CashManageFrontController extends BaseController {
 
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "用户提现", notes = "用户提现，[6001|6002|6003|6004|6005|6006|6007|6008]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "用户提现", notes = "用户提现[]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam CashParam param) {
-
-		String cashMoney = param.getCashMoney();
-		if (cashMoney.contains(".") && cashMoney.split(".")[1].length() > 2) {
-			return successCreated(ResultCode.MONEY_IS_POINT_2);
-		}
 
 		CashDataParam dataParam = new CashDataParam();
 		dataParam.setCashMoney(param.getCashMoney());
