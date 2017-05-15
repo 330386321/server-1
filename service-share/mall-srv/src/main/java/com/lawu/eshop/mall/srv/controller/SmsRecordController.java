@@ -63,7 +63,7 @@ public class SmsRecordController extends BaseController {
         smsConfigParam.setSmsSerialNumber(mallSrvConfig.getSmsSerialNumber());
         smsConfigParam.setSmsF(mallSrvConfig.getSmsF());
         smsConfigParam.setSmsTemplate(StringUtil.getUtf8String(mallSrvConfig.getSmsTemplate()));
-        Map<String, Object> returnMap = SmsUtil.sendSms(mobile, smsCode, ip, smsConfigParam);
+        Map<String, Object> returnMap = SmsUtil.sendSms(smsCode, mobile, ip, smsConfigParam);
         smsRecordService.updateSmsRecordResult(smsRecordBO.getId(),(Boolean) returnMap.get("sendCode"),returnMap.get("sendResult").toString());
         if (!(Boolean) returnMap.get("sendCode")) {
             return successGet(ResultCode.FAIL);
