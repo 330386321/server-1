@@ -71,6 +71,11 @@ public class MerchantInfoController extends BaseController{
         merchantInfoDTO.setAccount(merchantInfoBO.getAccount());
         merchantInfoDTO.setGtCid(merchantInfoBO.getGtCid());
         merchantInfoDTO.setRyToken(merchantInfoBO.getRyToken());
+        //商家扩展信息
+        MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
+        merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());
+        merchantInfoDTO.setInviteMerchantCount(merchantProfileBO.getInviteMerchantCount());
+
         MerchantStoreInfoBO merchantStoreBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
         if(merchantStoreBO != null){
             //门店ID
@@ -84,10 +89,7 @@ public class MerchantInfoController extends BaseController{
                 merchantInfoDTO.setCertifTypeEnum(CertifTypeEnum.getEnum(merchantStoreProfileBO.getCertifType()));
                 merchantInfoDTO.setHeadimg(merchantStoreProfileBO.getLogoUrl());
             }
-            //商家扩展信息
-            MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
-            merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());
-            merchantInfoDTO.setInviteMerchantCount(merchantProfileBO.getInviteMerchantCount());
+
             //查询门店审核状态
             MerchantStoreAuditBO auditBO = merchantStoreInfoService.findStoreAuditInfo(merchantId);
             if(auditBO != null){
