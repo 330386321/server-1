@@ -302,7 +302,7 @@ public class ProductController extends BaseController {
 				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_HEAD);
 			}
 			if ("".equals(productDetailImage)) {
-				return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
+				//return successCreated(ResultCode.IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL);
 			}
 
 			if ("".equals(featureImage)) {

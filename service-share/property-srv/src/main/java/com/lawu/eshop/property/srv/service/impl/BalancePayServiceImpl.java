@@ -29,6 +29,7 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.utils.StringUtil;
 @Service
 public class BalancePayServiceImpl implements BalancePayService {
 	
@@ -199,7 +200,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增积分明细
 		PointDetailSaveDataParam pdsParam = new PointDetailSaveDataParam();
 		pdsParam.setTitle(param.getTitle());
-		pdsParam.setPointNum(num);
 		pdsParam.setUserNum(param.getUserNum());
 		pdsParam.setPointType(transactionType);
 		pdsParam.setPoint(new BigDecimal(point));

@@ -134,7 +134,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		depositDO.setGmtPay(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
-		businessDepositDOMapper.updateByExample(depositDO, example);
+		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
 		// 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
 		HandleDepostMessage message = new HandleDepostMessage();

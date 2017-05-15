@@ -19,6 +19,7 @@ import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 积分明细服务实现
@@ -73,7 +74,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 	public int save(PointDetailSaveDataParam param) {
 		PointDetailDO pointDetailDO = new PointDetailDO();
 		pointDetailDO.setTitle(param.getTitle());
-		pointDetailDO.setPointNum(param.getPointNum());
+		pointDetailDO.setPointNum(StringUtil.getRandomNum(""));
 		pointDetailDO.setUserNum(param.getUserNum());
 		pointDetailDO.setPointType(param.getPointType());
 		pointDetailDO.setPoint(param.getPoint());

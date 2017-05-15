@@ -612,7 +612,7 @@ public class ProductServiceImpl implements ProductService {
                 pmDO.setMerchantId(param.getMerchantId());
                 pmDO.setProductId(productId);
                 pmDO.setName(dataBO.getName());
-                pmDO.setOriginalPrice(dataBO.getOriginalPrice());
+                pmDO.setOriginalPrice(dataBO.getOriginalPrice() == null ? new BigDecimal("0") : dataBO.getOriginalPrice());
                 pmDO.setPrice(dataBO.getPrice());
                 pmDO.setInventory(dataBO.getInventory());
                 pmDO.setStatus(true);
