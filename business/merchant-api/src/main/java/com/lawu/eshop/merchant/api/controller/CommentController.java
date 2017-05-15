@@ -164,7 +164,7 @@ public class CommentController extends BaseController {
         for (CommentProductIdDTO commentProductIdDTO : productIds.getModel().getRecords()) {
             //查询商品信息
             CommentProductInfoDTO commentProductInfoDTO = new CommentProductInfoDTO();
-            Result<ProductInfoDTO> product = productService.selectProductById(commentProductIdDTO.getProductId());
+            Result<ProductInfoDTO> product = productService.getProduct(commentProductIdDTO.getProductId());
             commentProductInfoDTO.setName(product.getModel().getName());
             commentProductInfoDTO.setImgUrl(product.getModel().getFeatureImage());
             commentProductInfoDTO.setProductId(commentProductIdDTO.getProductId());

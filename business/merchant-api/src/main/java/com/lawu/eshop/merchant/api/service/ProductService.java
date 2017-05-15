@@ -77,7 +77,7 @@ public interface ProductService {
      * @param productModelId 型号ID
      * @return
      */
-    @RequestMapping(value = "product/selectProductById", method = RequestMethod.GET)
-    Result<ProductInfoDTO> selectProductById(@RequestParam("productId") Long productId) throws Exception;
+    @RequestMapping(value = "product/getProduct/{id}", method = RequestMethod.GET)
+    Result<ProductInfoDTO> getProduct(@PathVariable("id") Long id);
 
 }
