@@ -253,8 +253,11 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 	@Override
 	public Boolean isExistCash(String userNum,Long bankAccountId) {
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		List<Byte> status=new ArrayList<>();
+		status.add(new Byte("1"));
+		status.add(new Byte("2"));
 		example.createCriteria().andUserNumEqualTo(userNum).andBusinessBankAccountIdEqualTo(bankAccountId)
-				.andStatusEqualTo(new Byte("2"));
+				.andStatusIn(status);
 		int count = withdrawCashDOMapper.countByExample(example);
 		if(count>0){
 			return true;
