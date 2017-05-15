@@ -29,8 +29,6 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.StringUtil;
-
 @Service
 public class BalancePayServiceImpl implements BalancePayService {
 	
@@ -67,7 +65,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(param.getTitle());
-		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
@@ -102,7 +99,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(param.getTitle());
-		tdsParam.setTransactionNum(transactionNum+"1");
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
@@ -110,6 +106,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setBizNum(transactionNum);
 		transactionDetailService.save(tdsParam);
 		//减会员财产余额
 		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -121,7 +118,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增商家交易明细
 		TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
 		tdsParam1.setTitle(param.getTitle());
-		tdsParam1.setTransactionNum(transactionNum+"2");
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
 		tdsParam1.setTransactionAccount(param.getAccount());
@@ -129,6 +125,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam1.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam1.setBizNum(transactionNum);
 		transactionDetailService.save(tdsParam1);
 		//加商家财产余额
 		PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
@@ -189,7 +186,6 @@ public class BalancePayServiceImpl implements BalancePayService {
 		//新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(param.getTitle());
-		tdsParam.setTransactionNum(num);
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(transactionType);
 		tdsParam.setTransactionAccount(param.getAccount());
@@ -197,6 +193,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setBizNum(num);
 		transactionDetailService.save(tdsParam);
 		
 		//新增积分明细

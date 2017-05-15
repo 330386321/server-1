@@ -134,7 +134,7 @@ public class RechargeServiceImpl implements RechargeService {
 				pdsParam.setPointType(MemberTransactionTypeEnum.RECHARGE.getValue());
 			}else if(param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 				pdsParam.setPointType(MerchantTransactionTypeEnum.RECHARGE.getValue());
-			}
+			} 
 			pdsParam.setPoint(recharge.getMoney());
 			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 			pdsParam.setRemark("");
@@ -149,7 +149,6 @@ public class RechargeServiceImpl implements RechargeService {
 		}
 		
 		//新增交易明细
-		tdsParam.setTransactionNum(param.getOutTradeNo());
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		if(param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
@@ -162,6 +161,7 @@ public class RechargeServiceImpl implements RechargeService {
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam);
 		
 		//更新充值表状态

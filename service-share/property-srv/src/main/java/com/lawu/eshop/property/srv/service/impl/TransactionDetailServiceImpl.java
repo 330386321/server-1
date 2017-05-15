@@ -21,6 +21,7 @@ import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 交易明细服务实现
@@ -112,17 +113,18 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 	public int save(TransactionDetailSaveDataParam param) {
 		TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
 		transactionDetailDO.setTitle(param.getTitle());
-		transactionDetailDO.setTransactionNum(param.getTransactionNum());
+		transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
 		transactionDetailDO.setUserNum(param.getUserNum());
 		transactionDetailDO.setTransactionType(param.getTransactionType());
 		transactionDetailDO.setTransactionAccount(param.getTransactionAccount());
 		transactionDetailDO.setTransactionAccountType(param.getTransactionAccountType());
 		transactionDetailDO.setAmount(param.getAmount());
 		transactionDetailDO.setDirection(param.getDirection());
-		transactionDetailDO.setThirdTransactionNum(param.getThirdTransactionNum());
+		transactionDetailDO.setThirdTransactionNum(param.getThirdTransactionNum() == null ? "" : param.getThirdTransactionNum());
 		transactionDetailDO.setBizId(param.getBizId() == null ? "" : param.getBizId().toString());
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
+		transactionDetailDO.setBizNum(param.getBizNum() == null ? "" : param.getBizNum());
 		transactionDetailDOMapper.insertSelective(transactionDetailDO);
 		param.setId(transactionDetailDO.getId());
 		return ResultCode.SUCCESS;

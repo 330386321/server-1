@@ -80,7 +80,6 @@ public class OrderServiceImpl implements OrderService {
 		// 新增会员交易记录
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY.val);
-		tdsParam.setTransactionNum(param.getOutTradeNo());
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
@@ -89,6 +88,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam);
 
 		/*
@@ -114,7 +114,6 @@ public class OrderServiceImpl implements OrderService {
 		// 新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.PAY.val);
-		tdsParam.setTransactionNum(param.getOutTradeNo()+"1");
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
@@ -123,12 +122,12 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
+		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam);
 
 		// 新增商家交易明细
 		TransactionDetailSaveDataParam tdsParam1 = new TransactionDetailSaveDataParam();
 		tdsParam1.setTitle(TransactionTitleEnum.PAY.val);
-		tdsParam1.setTransactionNum(param.getOutTradeNo()+"2");
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam1.setTransactionType(MerchantTransactionTypeEnum.PAY.getValue());
@@ -137,6 +136,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
 		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam1);
 
 		// 加商家财产余额
@@ -235,7 +235,6 @@ public class OrderServiceImpl implements OrderService {
 		// 新增会员订单退款交易记录
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.ORDER_PAY_REFUND.val);
-		tdsParam.setTransactionNum(param.getTradeNo());
 		tdsParam.setUserNum(param.getSideUserNum());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
 		tdsParam.setTransactionAccount("");
@@ -243,6 +242,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
 		tdsParam.setBizId(param.getOrderItemIds().split(",")[0]);
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setBizNum(param.getTradeNo());
 		transactionDetailService.save(tdsParam);
 
 		JsonResult jsonResult = new JsonResult();
@@ -324,7 +324,6 @@ public class OrderServiceImpl implements OrderService {
 				// 新增商家订单付款交易记录
 				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 				tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
-				tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 				tdsParam.setUserNum(userNums[i]);
 				tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
 				//tdsParam.setTransactionAccount(accounts[i]);
@@ -367,7 +366,6 @@ public class OrderServiceImpl implements OrderService {
 			// 新增商家订单付款交易记录
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 			tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
-			tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
 			tdsParam.setUserNum(userNums[i]);
 			tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
 			//tdsParam.setTransactionAccount(accounts[i]);

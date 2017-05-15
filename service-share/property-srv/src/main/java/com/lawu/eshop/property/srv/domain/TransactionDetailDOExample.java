@@ -916,6 +916,76 @@ public class TransactionDetailDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andBizNumIsNull() {
+            addCriterion("biz_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumIsNotNull() {
+            addCriterion("biz_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumEqualTo(String value) {
+            addCriterion("biz_num =", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumNotEqualTo(String value) {
+            addCriterion("biz_num <>", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumGreaterThan(String value) {
+            addCriterion("biz_num >", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumGreaterThanOrEqualTo(String value) {
+            addCriterion("biz_num >=", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumLessThan(String value) {
+            addCriterion("biz_num <", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumLessThanOrEqualTo(String value) {
+            addCriterion("biz_num <=", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumLike(String value) {
+            addCriterion("biz_num like", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumNotLike(String value) {
+            addCriterion("biz_num not like", value, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumIn(List<String> values) {
+            addCriterion("biz_num in", values, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumNotIn(List<String> values) {
+            addCriterion("biz_num not in", values, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumBetween(String value1, String value2) {
+            addCriterion("biz_num between", value1, value2, "bizNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andBizNumNotBetween(String value1, String value2) {
+            addCriterion("biz_num not between", value1, value2, "bizNum");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

@@ -13,17 +13,15 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 public class BusinessRefundDepositDataParam extends BusinessRefundDepositParam{
 
-	@NotBlank(message="userName不能为空")
-	private String userName;
+	@NotBlank(message="userNum不能为空")
+	private String userNum;
 
-	public String getUserName() {
-		return userName;
+	public String getUserNum() {
+		return userNum;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserNum(String userNum) {
+		this.userNum = userNum;
 	}
-
-	
 
 }
