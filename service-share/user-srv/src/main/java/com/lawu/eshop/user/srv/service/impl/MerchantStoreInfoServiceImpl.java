@@ -463,7 +463,11 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         //查询店内环境照数量
         merchantStoreImageDOExample = new MerchantStoreImageDOExample();
         merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
-        int picCount = merchantStoreImageDOMapper.countByExample(merchantStoreImageDOExample);
+        merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+        int picCount = 0;
+        if(!merchantStoreImageDOS.isEmpty() && org.apache.commons.lang.StringUtils.isNotEmpty(merchantStoreImageDOS.get(0).getPath())){
+            picCount = merchantStoreImageDOS.get(0).getPath().split(",").length;
+        }
 
         StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
         storeDetailBO.setStorePic(storePic);
