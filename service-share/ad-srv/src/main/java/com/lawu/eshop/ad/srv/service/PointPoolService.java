@@ -27,6 +27,13 @@ public interface PointPoolService {
 	 */
 	Boolean selectStatusByMember(Long adId,Long memberId);
 	
+	/**
+	 * 判断用户是否已经领取过红包
+	 * @param merchantId 商家id
+	 * @param userNum 会员编号
+	 * @return
+	 */
+	Boolean isGetRedPacket(Long merchantId,String userNum);
 
 	
 	

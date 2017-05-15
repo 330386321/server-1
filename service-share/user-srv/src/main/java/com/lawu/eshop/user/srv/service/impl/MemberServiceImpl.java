@@ -438,14 +438,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean isRegister(String mobile) {
+    public MemberBO isRegister(String mobile) {
         MemberDOExample example = new MemberDOExample();
         example.createCriteria().andMobileEqualTo(mobile).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
         List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
         if (!memberDOS.isEmpty()) {
-            return true;
+        	MemberBO memberBO=new MemberBO();
+        	memberBO.setId(memberDOS.get(0).getId());
+        	memberBO.setNum(memberDOS.get(0).getNum());
+            return memberBO;
         } else {
-            return false;
+            return null;
         }
 
     }

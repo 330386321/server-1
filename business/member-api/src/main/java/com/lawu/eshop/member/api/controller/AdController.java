@@ -30,6 +30,7 @@ import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
+import com.lawu.eshop.ad.param.RegisterGetRedPacketParam;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
@@ -39,6 +40,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
+import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.AdViewService;
@@ -48,6 +50,7 @@ import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
+import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
@@ -57,6 +60,8 @@ import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.UserRedPacketDTO;
+import com.lawu.eshop.user.param.RegisterRealParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -99,6 +104,9 @@ public class AdController extends BaseController {
     
     @Autowired
     private PropertyInfoService propertyInfoService;
+    
+    @Autowired
+    private VerifyCodeService verifyCodeService;
 
 
 
@@ -245,7 +253,7 @@ public class AdController extends BaseController {
      }
 
 
-    @Audit(date = "2017-04-13", reviewer = "孙林青")
+     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "PUT")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -310,21 +318,22 @@ public class AdController extends BaseController {
     public Result<PraisePointDTO> getRedPacket(
     		@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId
     		,@RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
-    	Result<Boolean> isRegisterRs= memberService.isRegister(mobile);
-    	Result<PraisePointDTO> rs=new Result<>();
-    	if(isSuccess(isRegisterRs)){
-    		Boolean flag=isRegisterRs.getModel();
-    		if(flag){ //直接领取红包 并成为粉丝
-    			Long memberId = UserUtil.getCurrentUserId(getRequest());
-    	    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<UserRedPacketDTO> userRs= memberService.isRegister(mobile);
+    	if(userRs!=null){
+    		UserRedPacketDTO userRedPacketDTO=userRs.getModel();
+    		Result<PraisePointDTO> rs=new Result<>();
+    		if(userRedPacketDTO!=null){ //直接领取红包 并成为粉丝
+    			Long memberId = userRs.getModel().getMemberId();
+    	    	String userNum = userRs.getModel().getUserNum();
     	    	rs=adService.getRedPacket(merchantId,memberId,userNum);
     	    	fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
     	    	
-    		}else{
-    			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
     		}
+    		return rs;
+    	}else{
+    		return successCreated(ResultCode.RESOURCE_NOT_FOUND);
     	}
-    	return rs;
+    	
     	
     }
 
@@ -385,6 +394,39 @@ public class AdController extends BaseController {
     		rs.getModel().setName(merchantStoreDTO.getModel().getName());
     	}
     	return rs;
+    }
+    
+    
+    
+    @ApiOperation(value = "注册并领取红包", notes = "注册并领取红包,[1012|1013|1016]（张荣成）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "registerGetRedPacket", method = RequestMethod.POST)
+    public Result registerGetRedPacket(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterGetRedPacketParam param) {
+    	 Result accountResult = memberService.getMemberByAccount(param.getAccount());
+         if (isSuccess(accountResult)) {
+             return successGet(ResultCode.RECORD_EXIST);
+         }
+         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(param.getVerifyCodeId(), param.getSmsCode());
+         if (!isSuccess(smsResult)) {
+             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+         }
+         VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
+         if (!param.getAccount().equals(verifyCodeDTO.getMobile())) {
+             return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
+         }
+         RegisterRealParam registerRealParam = new RegisterRealParam();
+         registerRealParam.setAccount(param.getAccount());
+         registerRealParam.setPwd(param.getPwd());
+         Result rs= memberService.register(registerRealParam);
+         if(isSuccess(rs)){ //注册成功，领取红包
+        	 return successCreated(ResultCode.FAIL);
+         }
+         Result<UserRedPacketDTO> userRs= memberService.isRegister(param.getAccount());
+     	 Long memberId = userRs.getModel().getMemberId();
+	     String userNum = userRs.getModel().getUserNum();
+	     rs=adService.getRedPacket(param.getMerchantId(),memberId,userNum);
+	     fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
+         return rs;
     }
     
 } 
