@@ -524,6 +524,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 			// 更新付款时间
 			shoppingOrderDO.setGmtPayment(new Date());
+			// 更新付款方式以及第三方交易号
+			shoppingOrderDO.setPaymentMethod(notification.getPaymentMethod());
+			shoppingOrderDO.setThirdNumber(notification.getThirdNumber());
 			shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
 			// 更新购物订单项状态
