@@ -40,6 +40,7 @@ public class ResultCode {
     public static final int PAY_PWD_NULL = 1022;
     public static final int PAY_PWD_ERROR = 1023;
     public static final int ILLEGAL_OPERATION = 1024;
+    public static final int VERIFY_SMS_CODE_OVERTIME = 1025;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -170,6 +171,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PAY_PWD_NULL, "支付密码尚未设置");
         ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(ILLEGAL_OPERATION, "非法操作");
+        ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码超时");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");

@@ -37,7 +37,7 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     @Override
     public VerifyCodeBO getVerifyCodeById(Long id) {
         VerifyCodeDO verifyCodeDO = verifyCodeDOMapper.selectByPrimaryKey(id);
-        return verifyCodeDO == null ? null : VerifyCodeConverter.convertBO(verifyCodeDO);
+        return VerifyCodeConverter.convertBO(verifyCodeDO);
     }
 
     @Override

@@ -22,6 +22,9 @@ public class MerchantApiConfig {
     @Value(value="${video.upload.url}")
     private String videoUploadUrl;
 
+    @Value(value="${sms.valid.minutes}")
+    private Integer smsValidMinutes;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -36,5 +39,9 @@ public class MerchantApiConfig {
 
     public String getVideoUploadUrl() {
         return videoUploadUrl;
+    }
+
+    public Integer getSmsValidMinutes() {
+        return smsValidMinutes;
     }
 }

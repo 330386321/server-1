@@ -25,6 +25,7 @@ public class VerifyCodeConverter {
         verifyCodeBO.setId(verifyCodeDO.getId());
         verifyCodeBO.setMobile(verifyCodeDO.getMobile());
         verifyCodeBO.setCode(verifyCodeDO.getCode());
+        verifyCodeBO.setGmtCreate(verifyCodeDO.getGmtCreate());
         return verifyCodeBO;
     }
 

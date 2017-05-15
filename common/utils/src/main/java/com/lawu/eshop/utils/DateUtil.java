@@ -243,6 +243,28 @@ public class DateUtil {
         }
     }
 
+    /**
+     * 短信是否超时
+     *
+     * @param beginDate
+     * @param minutes
+     * @return
+     */
+    public static Boolean smsIsOverdue(Date beginDate, int minutes) {
+        if (null == beginDate) {
+            return false;
+        }
+
+        try {
+            Date endDate = new Date();
+            long intervalMilli = endDate.getTime() - beginDate.getTime();
+            int intervalMinutes = (int) (intervalMilli / (60 * 1000));
+            return intervalMinutes > minutes;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     //-------------------------------------------------------------网上下载暂未用到-------------------------------------------------
 
     /**
