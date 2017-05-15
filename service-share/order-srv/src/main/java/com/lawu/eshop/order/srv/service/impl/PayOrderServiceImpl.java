@@ -53,6 +53,7 @@ public class PayOrderServiceImpl implements PayOrderService {
         payOrderDO.setMerchantNum(param.getMerchantNum());
         payOrderDO.setIsEvaluation(false);//未评
         payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.val);//待支付
+		payOrderDO.setOrderStatus(true);
         payOrderDOMapper.insert(payOrderDO);
         PayOrderBO payOrderBO = new PayOrderBO();
         payOrderBO.setOrderNum(orderNum);
@@ -65,10 +66,10 @@ public class PayOrderServiceImpl implements PayOrderService {
 		PayOrderDOExample example = new PayOrderDOExample();
 		if (param.getEvaluationEnum() == null) {
 			example.createCriteria().andMemberIdEqualTo(memberId)
-					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
 		} else {
 			example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val)
-					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
 		}
 		example.setOrderByClause("id desc");
 		// 分页
@@ -95,7 +96,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	public void delPayOrderInfo(Long id) {
 		PayOrderDO payOrderDO = new PayOrderDO();
 		payOrderDO.setId(id);
-		payOrderDO.setStatus(PayOrderStatusEnum.STATUS_DEL.val);
+		payOrderDO.setOrderStatus(false);
 		payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
 	}
 
