@@ -20,9 +20,9 @@ import java.util.List;
 public class GtPush {
 
 
-	private static String appId = "";// 商家
-	private static String appkey = "";// 商家
-	private static String masterSecret = "";// 商家
+	private static String appId = "y64i2nxRdNASBuhu7PCX25";// 商家
+	private static String appkey = "m7BWuujJ246kECQYw8zk9A";// 商家
+	private static String masterSecret = "rBgXZPQney8aaUvwaVW3b4";// 商家
 
 	private static String appId2 = "";// 用户端
 	private static String appkey2 = "";// 用户端
@@ -296,10 +296,8 @@ public class GtPush {
 	}
 
 	public static void main(String[] args) throws Exception {
-		GtPush p = new GtPush();
-/*
-		System.out.println(p.sendMessageToCidCustoms("测试222", "ccaa65ca9da4c35d25b2b01c2818df78", "测试22"));
-*/
+	/*	GtPush p = new GtPush();
+		System.out.println(p.sendMessageToCid("测试内容4", "7c3c97ee79b1dbf9ac300d1116c97daa", "测试标题4"));*/
 
 		// apnpush();
 	}
