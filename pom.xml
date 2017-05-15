@@ -32,7 +32,8 @@
         <springfox.swagger>2.6.1</springfox.swagger>
         <rocketmq.version>3.2.6</rocketmq.version>
 
-        <elastic.job.version>2.1.0</elastic.job.version>
+        <elastic.job.version>2.1.1</elastic.job.version>
+        <curator.version>2.11.1</curator.version>
     </properties>
 
 
@@ -67,7 +68,12 @@
                 <artifactId>elastic-job-lite-core</artifactId>
                 <version>${elastic.job.version}</version>
             </dependency>
-
+			<dependency>
+			    <groupId>org.apache.curator</groupId>
+			    <artifactId>curator-client</artifactId>
+			    <version>${curator.version}</version>
+			</dependency>
+			
             <!-- 使用springframework自定义命名空间时引入 -->
             <dependency>
                 <groupId>com.dangdang</groupId>

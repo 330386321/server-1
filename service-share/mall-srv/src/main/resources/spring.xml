@@ -34,36 +34,28 @@
     <bean id="rocketMQMessageProducerServiceImpl" class="com.lawu.eshop.mq.message.impl.RocketMQMessageProducerServiceImpl" >
         <property name="defaultMQProducer" ref="defaultMQProducer" />
     </bean>
-
-    <!-- 消息消费者 -->
-   <!-- <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >
-        &lt;!&ndash; Name Server地址列表，多个用分号隔开 &ndash;&gt;
-        <property name="namesrvAddr" value="${mq.namesrv.addrs}"/>
-        &lt;!&ndash; 客户端实例名 &ndash;&gt;
+	
+	<!-- 消息消费者 -->
+    <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >
+        <!-- Name Server地址列表，多个用分号隔开 -->
+        <property name="namesrvAddr" value="192.168.1.22:9876"/>
+        <!-- 客户端实例名 -->
         <property name="instanceName" value="consumer"/>
 
         <property name="consumerGroup" value="mallSrvConsumerGroup"/>
-        &lt;!&ndash; 批量拉消息，一次最多拉多少条， 默认设置为32 &ndash;&gt;
+        <!-- 批量拉消息，一次最多拉多少条， 默认设置为32 -->
         <property name="pullBatchSize" value="35"/>
-        &lt;!&ndash; 批量消费，一次消费多少条消息， 默认设置为1 &ndash;&gt;
+        <!-- 批量消费，一次消费多少条消息， 默认设置为1 -->
         <property name="consumeMessageBatchMaxSize" value="5"/>
-&lt;!&ndash;
         <property name="messageListenerConcurrently" ref="messageConsumerListener" />
-&ndash;&gt;
+        
+    </bean>
 
-    </bean>-->
-
-<!--
-    <bean id="messageConsumerListener" class="com.lawu.eshop.order.srv.mq.MessageConsumerListener" />
--->
+    <bean id="messageConsumerListener" class="com.lawu.eshop.mall.srv.mq.MessageConsumerListener" />
 
     <!--配置作业注册中心 -->
-<!--
     <reg:zookeeper id="regCenter" server-lists="${zookeeper.servers}" namespace="order-job"/>
--->
 
     <!-- 配置作业-->
-    <!--
-    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />-->
-	
+    <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" />
 </beans>
