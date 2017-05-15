@@ -342,6 +342,10 @@ public class AdController extends BaseController{
      */
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId,@RequestParam String memberNum) {
+		Boolean flag=pointPoolService.isGetRedPacket(merchantId, memberNum);
+		if(flag){
+			return successCreated(ResultCode.AD_RED_PACKGE_GET);
+		}
     	BigDecimal point=adService.getRedPacket(merchantId,memberId,memberNum);
     	PraisePointDTO dto=new PraisePointDTO();
     	dto.setPoint(point);

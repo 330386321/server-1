@@ -291,9 +291,17 @@ public class MemberController extends BaseController {
      * @return
      */
     @RequestMapping(value = "isRegister", method = RequestMethod.GET)
-    Result<Boolean> isRegister(@RequestParam("moblie") String moblie) {
-        Boolean flag = memberService.isRegister(moblie);
-        return successCreated(flag);
+    Result<UserRedPacketDTO> isRegister(@RequestParam("moblie") String moblie) {
+    	 MemberBO memberBO = memberService.isRegister(moblie);
+    	 if(memberBO==null){
+    		 return null;
+    	 }else{
+    		 UserRedPacketDTO dto=new UserRedPacketDTO();
+        	 dto.setMemberId(memberBO.getId());
+        	 dto.setUserNum(memberBO.getNum());
+            return successCreated(dto);
+    	 }
+    	
     }
 
     /**

@@ -19,15 +19,19 @@ import com.lawu.eshop.property.srv.bo.BusinessDepositQueryBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDOExample;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
+import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
@@ -56,6 +60,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	private MessageProducerService messageProducerService;
 	@Autowired
 	private PropertyService propertyService;
+	@Autowired
+	private PropertyInfoDOMapper propertyInfoDOMapper;
 
 	@Override
 	@Transactional
@@ -245,6 +251,22 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	@Override
 	public int refundDeposit(BusinessRefundDepositDataParam dparam) {
 
+		// 校验支付密码
+		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
+		infoExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
+		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
+		if (infoList == null || infoList.isEmpty() || infoList.size() < 1) {
+			return ResultCode.PROPERTY_INFO_NULL;
+		} else if (infoList.size() > 1) {
+			return ResultCode.PROPERTY_INFO_OUT_INDEX;
+		} else {
+			PropertyInfoDO info = infoList.get(0);
+			if (!MD5.MD5Encode(dparam.getPayPwd()).equals(info.getPayPassword())) {
+				return ResultCode.PAY_PWD_ERROR;
+			}
+		}
+		
+		// 满90天
 		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getId()));
 		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
 		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
@@ -260,7 +282,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
 		if (bankAccountDo == null) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
-		} else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserName())) {
+		} else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserNum())) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
 		}
 

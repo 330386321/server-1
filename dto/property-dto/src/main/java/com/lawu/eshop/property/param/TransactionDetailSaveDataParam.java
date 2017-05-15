@@ -71,6 +71,8 @@ public class TransactionDetailSaveDataParam implements Serializable {
 	private String remark;
 	
 	private Byte direction;
+	
+	private String bizNum;
 
 	public String getTitle() {
 		return title;
@@ -168,6 +170,12 @@ public class TransactionDetailSaveDataParam implements Serializable {
 		this.direction = direction;
 	}
 
-	
+	public String getBizNum() {
+		return bizNum;
+	}
+
+	public void setBizNum(String bizNum) {
+		this.bizNum = bizNum;
+	}
 
 }

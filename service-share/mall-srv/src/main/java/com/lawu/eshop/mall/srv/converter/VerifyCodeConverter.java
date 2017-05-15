@@ -44,6 +44,7 @@ public class VerifyCodeConverter {
         verifyCodeDTO.setId(verifyCodeBO.getId());
         verifyCodeDTO.setMobile(verifyCodeBO.getMobile());
         verifyCodeDTO.setCode(verifyCodeBO.getCode());
+        verifyCodeDTO.setGmtCreate(verifyCodeBO.getGmtCreate());
         return verifyCodeDTO;
     }
 }

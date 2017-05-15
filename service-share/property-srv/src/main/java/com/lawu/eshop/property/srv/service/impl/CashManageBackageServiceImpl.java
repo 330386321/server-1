@@ -26,6 +26,8 @@ import com.lawu.eshop.property.srv.service.CashManageBackageService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.StringUtil;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -228,7 +230,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			// 新增退回交易明细
 			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
 			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.val);
-			transactionDetailDO.setTransactionNum(wcdo.getCashNumber());
+			transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));//wcdo.getCashNumber()
 			transactionDetailDO.setUserNum(wcdo.getUserNum());
 			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 				transactionDetailDO.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());

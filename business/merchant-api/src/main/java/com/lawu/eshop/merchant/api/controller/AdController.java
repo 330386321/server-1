@@ -105,7 +105,7 @@ public class AdController extends BaseController {
     	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
     		count=memberCountService.findFensCount(merchantId);
     	}
-    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStore(merchantId);
+    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
     	AdSaveParam adSave=new AdSaveParam();
     	adSave.setAdParam(adParam);
     	if(isSuccess(storeRs)){

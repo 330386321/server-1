@@ -117,7 +117,7 @@ public interface MemberService {
      * @param mobile
      * @return
      */
-    Boolean isRegister(String mobile);
+    MemberBO isRegister(String mobile);
 
     /**
      * 根据会员编号查询会员信息

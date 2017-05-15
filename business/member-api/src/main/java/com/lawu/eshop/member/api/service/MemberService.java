@@ -17,6 +17,7 @@ import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -157,5 +158,5 @@ public interface MemberService {
 	 * @return
 	 */
 	@RequestMapping(value = "member/isRegister", method = RequestMethod.GET)
-    Result<Boolean> isRegister(@RequestParam("moblie") String moblie);
+    Result<UserRedPacketDTO> isRegister(@RequestParam("moblie") String moblie);
 }
