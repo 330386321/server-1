@@ -54,7 +54,8 @@
         <property name="topicsTags">
             <map>
                 <entry key="order_srv" value="buy_numbers" />
-                <entry key="mall_srv" value="gtpush" />
+                <entry key="mall_srv" value="gtpush || push_area || pushall" />
+                <entry key="property_srv" value="handle_deposit" />
             </map>
         </property>
 
