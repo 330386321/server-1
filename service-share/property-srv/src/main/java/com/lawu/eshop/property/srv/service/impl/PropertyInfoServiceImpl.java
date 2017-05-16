@@ -144,6 +144,10 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
 		}
+		
+		if(PropertyinfoFreezeEnum.YES.equals(propertyInfoDOS.get(0).getFreeze())){
+			return ResultCode.PROPERTYINFO_FREEZE_YES;
+		}
 
 		PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
 
