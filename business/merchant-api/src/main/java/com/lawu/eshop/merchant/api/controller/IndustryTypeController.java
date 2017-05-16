@@ -2,6 +2,7 @@ package com.lawu.eshop.merchant.api.controller;
 
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.IndustryTypeDTO;
 import com.lawu.eshop.merchant.api.service.IndustryTypeService;
 import io.swagger.annotations.Api;
@@ -28,6 +29,7 @@ public class IndustryTypeController {
     @Autowired
     private IndustryTypeService industryTypeService;
 
+    @Audit(date = "2017-05-16", reviewer = "孙林青")
     @ApiOperation(value = "查询行业", notes = "查询所有行业。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)
@@ -35,6 +37,7 @@ public class IndustryTypeController {
         return industryTypeService.listIndustryType();
     }
 
+    @Audit(date = "2017-05-16", reviewer = "孙林青")
     @ApiOperation(value = "查询父行业下的所有行业", notes = "查询父行业下的所有行业。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listIndustryType/{parentId}", method = RequestMethod.GET)
