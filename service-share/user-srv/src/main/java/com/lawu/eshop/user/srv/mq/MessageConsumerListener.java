@@ -1,12 +1,12 @@
 package com.lawu.eshop.user.srv.mq;
 
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
+import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.UserTypeEnum;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.param.HandleDepostMessage;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
