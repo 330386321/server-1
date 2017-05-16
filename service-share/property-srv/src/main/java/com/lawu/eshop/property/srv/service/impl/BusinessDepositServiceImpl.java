@@ -290,6 +290,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	public BusinessDepositDetailBO selectDeposit(String businessId) {
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andBusinessIdEqualTo(Long.valueOf(businessId));
+		example.setOrderByClause(" id desc ");
 		List<BusinessDepositDO> list = businessDepositDOMapper.selectByExample(example);
 		if (list == null || list.isEmpty()) {
 			return null;
@@ -300,18 +301,24 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
 
 		BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
-		bo.setBankName(bankAccountDO.getNote() == null ? ""
-				: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
-		String accountName = bankAccountDO.getAccountName();
-		if (accountName.length() == 2) {
-			accountName = "*" + accountName.substring(1);
-		} else {
-			accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+		if(bankAccountDO != null){
+			bo.setBankName(bankAccountDO.getNote() == null ? ""
+					: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+			String accountName = bankAccountDO.getAccountName();
+			if (accountName.length() == 2) {
+				accountName = "*" + accountName.substring(1);
+			} else {
+				accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+			}
+			bo.setAccountName(accountName);
+			bo.setCardNo(bankAccountDO.getNote() == null ? ""
+					: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
+							bankAccountDO.getNote().indexOf(")")));
+		}else{
+			bo.setBankName("");
+			bo.setAccountName("");
+			bo.setCardNo("");
 		}
-		bo.setAccountName(accountName);
-		bo.setCardNo(bankAccountDO.getNote() == null ? ""
-				: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
-						bankAccountDO.getNote().indexOf(")")));
 		return bo;
 	}
 
