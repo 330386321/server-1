@@ -592,7 +592,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		List<ShoppingOrderItemDO> shoppingOrderItemDOList = shoppingOrderItemDOMapper.selectByExample(shoppingOrderItemDOExample);
 		// 如果用户确认收货，订单当中还有退款的商品，关闭退款申请
 		for (ShoppingOrderItemDO item : shoppingOrderItemDOList) {
-			// 如果订单项的状态是待退款的状态
+			// 如果订单项的状态是退款中的状态
 			if (item.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 				// 清空退款状态
 				item.setRefundStatus(null);
@@ -600,11 +600,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				ShoppingRefundDetailDOExample shoppingRefundDetailDOExample = new ShoppingRefundDetailDOExample();
 				ShoppingRefundDetailDOExample.Criteria shoppingRefundDetailDOExampleCriteria = shoppingRefundDetailDOExample.createCriteria();
 				shoppingRefundDetailDOExampleCriteria.andShoppingOrderItemIdEqualTo(item.getId());
-				shoppingRefundDetailDOExampleCriteria.andStatusEqualTo(StatusEnum.INVALID.getValue());
+				shoppingRefundDetailDOExampleCriteria.andStatusEqualTo(StatusEnum.VALID.getValue());
+				ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
+				shoppingRefundDetailDO.setStatus(StatusEnum.INVALID.getValue());
+				shoppingRefundDetailDOMapper.updateByExampleSelective(shoppingRefundDetailDO, shoppingRefundDetailDOExample);
 			}
 			// 更改订单项状态为交易成功
 			item.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 			item.setGmtModified(new Date());
+			shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 		}
 		
 		// 发送MQ消息通知产品模块增加销量
