@@ -17,7 +17,8 @@ public enum TransactionTitleEnum {
 	AD_COMMISSION("广告提成"),
 	RECHARGE("余额充值"),
 	DEPOSIT("缴纳保证金"),
-	DEPOSIT_REFUND("缴纳保证金退款");
+	DEPOSIT_REFUND("缴纳保证金退款"),
+	BACKAGE("后台处理");
 	
 	public String val;
 

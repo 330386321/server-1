@@ -7,6 +7,7 @@ import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
@@ -116,7 +117,6 @@ public class PropertyInfoController extends BaseController {
 	 * @param payPwd 明文
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "varifyPayPwd", method = RequestMethod.GET)
 	public Result<Boolean> varifyPayPwd(@RequestParam String userNum, @RequestParam String payPwd) {
 		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
@@ -207,4 +207,17 @@ public class PropertyInfoController extends BaseController {
 		return successCreated(dto);
 	}
 
+	/**
+	 * 运营平台余额积分处理
+	 * @param dparam
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午2:36:23
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateBalanceAndPoint", method = RequestMethod.POST)
+	public Result updateBalanceAndPoint(@RequestBody BackagePropertyinfoDataParam dparam) {
+		int retCode = propertyInfoService.updateBalanceAndPoint(dparam);
+		return successCreated(retCode);
+	}
 }

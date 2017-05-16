@@ -1,9 +1,11 @@
 package com.lawu.eshop.operator.api.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MessagePushDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,4 +33,7 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/selectMerchantInfo")
     Result<MerchantSNSDTO> selectMerchantInfo(@RequestParam("merchantId") Long merchantId);
+    
+    @RequestMapping(value = "merchant/getMerchant/{account}", method = RequestMethod.GET)
+    Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
 }

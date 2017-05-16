@@ -24,7 +24,8 @@ public enum MerchantTransactionTypeEnum {
 	DEPOSIT((byte)0x71,"缴纳保证金"),			//113
 	DEPOSIT_REFUND((byte)0x72,"退缴纳保证金"),	//114
 	SALES_COMMISSION((byte) 0x73, "销售提成"),//115
-	VOLUME_COMMISSION((byte) 0x74, "营业额提成");//116
+	VOLUME_COMMISSION((byte) 0x74, "营业额提成"),//116
+	BACKAGE((byte) 0x75, "后台处理");//117
 	
 	
 	private Byte value;

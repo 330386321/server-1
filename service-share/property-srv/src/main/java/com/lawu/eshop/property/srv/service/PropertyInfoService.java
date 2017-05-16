@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
@@ -95,5 +96,14 @@ public interface PropertyInfoService {
      * @return
      */
     BigDecimal selectLoveAccount(String userNum);
+
+    /**
+     * 运营平台余额积分处理
+     * @param dparam
+     * @return
+     * @author yangqh
+     * @date 2017年5月16日 下午2:39:15
+     */
+	int updateBalanceAndPoint(BackagePropertyinfoDataParam dparam);
 
 }
