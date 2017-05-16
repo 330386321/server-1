@@ -30,6 +30,9 @@ public class FavoriteMerchantDTO {
 	@ApiModelProperty(value = "距离")
 	private int distance;
 	
+	@ApiModelProperty(value = "门店id")
+	private Long merchantStoreId;
+	
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -93,6 +96,14 @@ public class FavoriteMerchantDTO {
 
 	public void setDistance(int distance) {
 		this.distance = distance;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 	
 	

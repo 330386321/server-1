@@ -24,6 +24,8 @@ public class FavoriteMerchantBO {
 	
 	private int distance;
 	
+	private Long merchantStoreId;
+	
 
 	public int getDistance() {
 		return distance;
@@ -80,6 +82,16 @@ public class FavoriteMerchantBO {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
+	
 	
 	
 	

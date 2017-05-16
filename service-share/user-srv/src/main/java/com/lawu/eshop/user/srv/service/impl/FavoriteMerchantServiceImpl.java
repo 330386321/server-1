@@ -124,9 +124,13 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
         	List<MerchantStoreDO> merchantStoreDOList=merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
         	if(merchantStoreDOList!=null){
-        		 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
-        				 merchantStoreDOList.get(0).getLongitude().doubleValue(),  merchantStoreDOList.get(0).getLatitude().doubleValue());
-        		 favoriteMerchantBO.setDistance(distance);
+        		favoriteMerchantBO.setMerchantStoreId(merchantStoreDOList.get(0).getId());
+        		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
+        			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
+            				 merchantStoreDOList.get(0).getLongitude().doubleValue(),  merchantStoreDOList.get(0).getLatitude().doubleValue());
+            		 favoriteMerchantBO.setDistance(distance);
+        		}
+        		
         	}
         	
         	listBO.add(favoriteMerchantBO);

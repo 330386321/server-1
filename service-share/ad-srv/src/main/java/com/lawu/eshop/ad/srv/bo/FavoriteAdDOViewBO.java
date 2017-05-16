@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.bo;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
 
 public class FavoriteAdDOViewBO {
 
@@ -35,6 +36,8 @@ public class FavoriteAdDOViewBO {
 	private String content;
 	
 	private AdStatusEnum  statusEnum;
+	
+	private FavoriteTypeEnum typeEnum;
 	
 	
 	public AdStatusEnum getStatusEnum() {
@@ -92,6 +95,16 @@ public class FavoriteAdDOViewBO {
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
 	}
+
+	public FavoriteTypeEnum getTypeEnum() {
+		return typeEnum;
+	}
+
+	public void setTypeEnum(FavoriteTypeEnum typeEnum) {
+		this.typeEnum = typeEnum;
+	}
+
+	
 	
 	
 

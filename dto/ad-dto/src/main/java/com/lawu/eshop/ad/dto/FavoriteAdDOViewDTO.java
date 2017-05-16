@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.dto;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -32,6 +33,9 @@ public class FavoriteAdDOViewDTO {
 	
 	@ApiModelProperty(value = "AD_STATUS_DELETE 删除 AD_STATUS_ADD 上架 AD_STATUS_PUTING 投放中 AD_STATUS_PUTED 投放结束 AD_STATUS_OUT 下架")
 	private AdStatusEnum  statusEnum;
+	
+	@ApiModelProperty(value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频")
+	private FavoriteTypeEnum typeEnum;
 	
 	
 	public AdStatusEnum getStatusEnum() {
@@ -104,6 +108,14 @@ public class FavoriteAdDOViewDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public FavoriteTypeEnum getTypeEnum() {
+		return typeEnum;
+	}
+
+	public void setTypeEnum(FavoriteTypeEnum typeEnum) {
+		this.typeEnum = typeEnum;
 	}
 	
 	

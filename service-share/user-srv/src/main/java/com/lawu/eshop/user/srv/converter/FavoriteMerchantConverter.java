@@ -36,6 +36,8 @@ public class FavoriteMerchantConverter {
         dto.setIndustryName(favoriteMerchantBO.getIndustryName());
         dto.setPath(favoriteMerchantBO.getPath());
         dto.setDistance(favoriteMerchantBO.getDistance());
+        dto.setMerchantStoreId(favoriteMerchantBO.getMerchantStoreId());
+        dto.setFansCount(favoriteMerchantBO.getFansCount());
         return dto;
     }
 	

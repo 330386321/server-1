@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.FavoriteTypeEnum;
 import com.lawu.eshop.ad.dto.FavoriteAdDOViewDTO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView;
@@ -27,6 +28,7 @@ public class FavoriteAdConverter {
         favoriteProductBO.setMerchantId(favoriteAdDOView.getMerchantId());
         favoriteProductBO.setTitle(favoriteAdDOView.getTitle());
         favoriteProductBO.setStatusEnum(AdStatusEnum.getEnum(favoriteAdDOView.getStatus()));
+        favoriteProductBO.setTypeEnum(FavoriteTypeEnum.getEnum(favoriteAdDOView.getType()));
         return favoriteProductBO;
     }
 	
@@ -65,6 +67,7 @@ public class FavoriteAdConverter {
 		favoriteAdDOViewDTO.setMerchantId(favoriteAdDOViewBO.getMerchantId());
 		favoriteAdDOViewDTO.setTitle(favoriteAdDOViewBO.getTitle());
 		favoriteAdDOViewDTO.setStatusEnum(favoriteAdDOViewBO.getStatusEnum());
+		favoriteAdDOViewDTO.setTypeEnum(favoriteAdDOViewBO.getTypeEnum());
         return favoriteAdDOViewDTO;
     }
 	
