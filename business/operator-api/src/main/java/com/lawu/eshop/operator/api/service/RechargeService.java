@@ -1,0 +1,29 @@
+package com.lawu.eshop.operator.api.service;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
+import com.lawu.eshop.property.param.RechargeQueryDataParam;
+
+/**
+ * 
+ * <p>
+ * Description: 
+ * </p>
+ * @author Yangqh
+ * @date 2017年5月16日 下午2:32:29
+ *
+ */
+@FeignClient(value = "property-srv")
+public interface RechargeService {
+
+
+	@RequestMapping(method = RequestMethod.POST, value = "recharge/selectPropertyinfoList")
+    Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(@RequestBody RechargeQueryDataParam dparam);
+
+}

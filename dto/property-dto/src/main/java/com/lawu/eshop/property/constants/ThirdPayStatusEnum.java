@@ -10,13 +10,15 @@ package com.lawu.eshop.property.constants;
  *
  */
 public enum ThirdPayStatusEnum {
-	PAYING((byte) 0x01), // 待支付
-	SUCCESS((byte) 0x02), // 成功
-	FAILURE((byte) 0x03); // 失败
+	PAYING((byte) 0x01,"待支付"), // 待支付
+	SUCCESS((byte) 0x02,"成功"), // 成功
+	FAILURE((byte) 0x03,"失败"); // 失败
 	public Byte val;
+	public String name;
 
-	ThirdPayStatusEnum(Byte val) {
+	ThirdPayStatusEnum(Byte val,String name) {
 		this.val = val;
+		this.name = name;
 	}
 
 	public static ThirdPayStatusEnum getEnum(Byte val) {

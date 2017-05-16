@@ -10,12 +10,14 @@ package com.lawu.eshop.property.constants;
  *
  */
 public enum PayTypeEnum {
-	BALANCE((byte) 0x01), // 余额
-	POINT((byte) 0x02); // 积分
+	BALANCE((byte) 0x01,"余额"), // 余额
+	POINT((byte) 0x02,"积分"); // 积分
 	public Byte val;
+	public String name;
 
-	PayTypeEnum(Byte val) {
+	PayTypeEnum(Byte val,String name) {
 		this.val = val;
+		this.name = name;
 	}
 
 	public static PayTypeEnum getEnum(Byte val) {

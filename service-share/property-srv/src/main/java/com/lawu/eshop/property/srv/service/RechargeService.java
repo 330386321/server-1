@@ -1,10 +1,13 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 
 /**
  * 
@@ -41,6 +44,15 @@ public interface RechargeService {
 	 * @return
 	 */
 	ThirdPayCallBackQueryPayOrderDTO getRechargeMoney(String rechargeId);
+
+	/**
+	 * 运营平台充值
+	 * @param dparam
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午4:00:48
+	 */
+	Page<BalanceAndPointListQueryBO> selectPropertyinfoList(RechargeQueryDataParam dparam);
 
 
 

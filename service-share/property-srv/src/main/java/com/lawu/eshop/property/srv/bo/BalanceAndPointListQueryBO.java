@@ -1,37 +1,26 @@
-package com.lawu.eshop.property.dto;
+package com.lawu.eshop.property.srv.bo;
 
 import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 
-import io.swagger.annotations.ApiModelProperty;
+public class BalanceAndPointListQueryBO {
 
-public class BalanceAndPointListQueryDTO {
-
-	@ApiModelProperty(value = "充值金额")
 	private String rechargeMoney;
 	
-	@ApiModelProperty(value = "充值比例")
 	private String currentScale;
 	
-	@ApiModelProperty(value = "充值所得金额/积分")
 	private String money;
 
-	@ApiModelProperty(value = "充值类型")
 	private String rechargeType;
 	
-	@ApiModelProperty(value = "充值渠道")
 	private TransactionPayTypeEnum channel;
 
-	@ApiModelProperty(value = "状态")
 	private ThirdPayStatusEnum status;
 	
-	@ApiModelProperty(value = "充值订单号")
 	private String rechargeNumber;
 	
-	@ApiModelProperty(value = "第三方订单号")
 	private String thirdNumber;
 	
-	@ApiModelProperty(value = "充值时间")
 	private String gmtCreate;
 
 	public String getRechargeMoney() {

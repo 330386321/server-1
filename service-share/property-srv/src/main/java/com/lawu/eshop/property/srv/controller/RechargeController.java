@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -13,18 +14,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.utils.BeanUtil;
 
 /**
  * 
@@ -118,5 +126,30 @@ public class RechargeController extends BaseController {
 		}
 		ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(rechargeId);
 		return recharge;
+	}
+	
+	/**
+	 * 运营平台充值
+	 * @param dparam
+	 * @return
+	 * @throws Exception
+	 * @author yangqh
+	 * @date 2017年5月16日 下午3:58:09
+	 */
+	@RequestMapping(value = "selectPropertyinfoList", method = RequestMethod.POST)
+	public Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(@RequestBody RechargeQueryDataParam dparam) throws Exception {
+		Page<BalanceAndPointListQueryBO> page = rechargeService.selectPropertyinfoList(dparam);
+		List<BalanceAndPointListQueryBO> cbos = page.getRecords();
+		List<BalanceAndPointListQueryDTO> dtos = new ArrayList<BalanceAndPointListQueryDTO>();
+		for (BalanceAndPointListQueryBO bo : cbos) {
+			BalanceAndPointListQueryDTO dto = new BalanceAndPointListQueryDTO();
+			BeanUtil.copyProperties(bo, dto);
+			dtos.add(dto);
+		}
+		Page<BalanceAndPointListQueryDTO> pageResult = new Page<BalanceAndPointListQueryDTO>();
+		pageResult.setTotalCount(page.getTotalCount());
+		pageResult.setCurrentPage(page.getCurrentPage());
+		pageResult.setRecords(dtos);
+		return successCreated(pageResult);
 	}
 }
