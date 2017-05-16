@@ -39,7 +39,16 @@ public class ShoppingCartProductModelConverter {
 		if (productDO != null) {
 			shoppingCartProductModelBO.setProductName(productDO.getName());
 			shoppingCartProductModelBO.setFeatureImage(productDO.getFeatureImage());
-			shoppingCartProductModelBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+			if (ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus())) {
+				if (productModelDO.getStatus()) {
+					shoppingCartProductModelBO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
+				} else {
+					shoppingCartProductModelBO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
+				}
+			} else {
+				shoppingCartProductModelBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+			}
+			
 			shoppingCartProductModelBO.setIsAllowRefund(productDO.getIsAllowRefund());
 		}
 

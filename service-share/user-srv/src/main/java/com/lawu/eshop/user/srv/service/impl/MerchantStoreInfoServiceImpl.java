@@ -423,7 +423,6 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
             shoppingOrderFindUserInfoBO = MerchantStoreConverter.convert(merchantStoreDO, merchantDOMap.get(merchantStoreDO.getMerchantId()));
             shoppingOrderFindUserInfoBO.setIsFans(isFans);
             rtn.add(shoppingOrderFindUserInfoBO);
-            
         }
         
         return rtn;

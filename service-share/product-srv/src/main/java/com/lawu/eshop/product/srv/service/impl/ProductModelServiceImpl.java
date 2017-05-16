@@ -158,8 +158,8 @@ public class ProductModelServiceImpl implements ProductModelService {
 			inventory = productDO.getTotalInventory() - param.getQuantity();
 			
 			// 更新库存
-			productModelDO.setInventory(inventory);
-			productModelDO.setGmtModified(new Date());
+			productDO.setTotalInventory(inventory);
+			productDO.setGmtModified(new Date());
 			productDOMapper.updateByPrimaryKeySelective(productDO);
 		}
 	}

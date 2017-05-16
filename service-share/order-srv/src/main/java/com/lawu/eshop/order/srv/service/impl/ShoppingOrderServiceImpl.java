@@ -359,6 +359,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public ShoppingOrderExtendBO get(Long id) {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdEqualTo(id);
 
 		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
