@@ -91,6 +91,7 @@ public class ResultCode {
     public static final int PAY_ORDER_FAVORED_AMOUNT_UNEQUAL = 4016;
     public static final int ORDER_HAS_BEEN_REFUNDED = 4017;
     public static final int INVENTORY_SHORTAGE = 4018;
+    public static final int PRODUCT_HAS_EXPIRED = 4019;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -221,6 +222,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PAY_ORDER_FAVORED_AMOUNT_UNEQUAL, "买单优惠金额不正确");
         ResultCode.messageMap.put(ORDER_HAS_BEEN_REFUNDED, "订单已经是退款状态");
         ResultCode.messageMap.put(INVENTORY_SHORTAGE, "库存不足");
+        ResultCode.messageMap.put(PRODUCT_HAS_EXPIRED, "商品已经失效");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");

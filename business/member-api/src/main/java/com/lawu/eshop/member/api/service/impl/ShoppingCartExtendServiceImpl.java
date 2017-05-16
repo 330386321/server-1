@@ -301,6 +301,11 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
     			shoppingOrderSettlementItemParam.setQuantity(shoppingCartDTO.getQuantity());
     			
+    			// 判断商品是否失效
+    			if (!ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
+    				return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
+    			}
+    			
     			// 判断库存
     			if (shoppingCartProductModelDTO.getInventory() < shoppingCartDTO.getQuantity()) {
     				return successCreated(ResultCode.INVENTORY_SHORTAGE);
@@ -570,10 +575,17 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementItemParam.setProductFeatureImage(shoppingCartProductModelDTO.getFeatureImage());
 		shoppingOrderSettlementItemParam.setProductModelId(shoppingCartProductModelDTO.getId());
 		shoppingOrderSettlementItemParam.setProductModelName(shoppingCartProductModelDTO.getName());
+		
+		// 判断商品是否失效
+		if (!ProductStatusEnum.PRODUCT_STATUS_UP.equals(shoppingCartProductModelDTO.getStatus())) {
+			return successCreated(ResultCode.PRODUCT_HAS_EXPIRED);
+		}
+		
 		// 判断库存
 		if (shoppingCartProductModelDTO.getInventory() < param.getQuantity()) {
 			return successCreated(ResultCode.INVENTORY_SHORTAGE);
 		}
+		
 		shoppingOrderSettlementItemParam.setQuantity(param.getQuantity());
 		shoppingOrderSettlementItemParam.setRegularPrice(shoppingCartProductModelDTO.getOriginalPrice());
 		shoppingOrderSettlementItemParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
