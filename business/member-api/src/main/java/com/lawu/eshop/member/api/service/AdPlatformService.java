@@ -40,4 +40,15 @@ public interface AdPlatformService {
     @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePosition")
     Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum);
 
+    /**
+     * 根据类型位置区域查询广告
+     *
+     * @param typeEnum
+     * @param positionEnum
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePosition")
+    Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum, @RequestParam("regionPath") String regionPath);
+
 }

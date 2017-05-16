@@ -167,9 +167,13 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     }
 
     @Override
-    public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum) {
+    public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum, String regionPath) {
         AdPlatformDOExample example = new AdPlatformDOExample();
-        example.createCriteria().andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
+        Criteria criteria = example.createCriteria();
+        criteria.andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
+        if(StringUtils.isNotEmpty(regionPath)){
+            //criteria.andregion
+        }
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
         return AdPlatformConverter.convertBOS(adPlatformDOS);
     }
