@@ -576,6 +576,66 @@ public class PropertyInfoDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andFreezeIsNull() {
+            addCriterion("freeze is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeIsNotNull() {
+            addCriterion("freeze is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeEqualTo(Byte value) {
+            addCriterion("freeze =", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeNotEqualTo(Byte value) {
+            addCriterion("freeze <>", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeGreaterThan(Byte value) {
+            addCriterion("freeze >", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("freeze >=", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeLessThan(Byte value) {
+            addCriterion("freeze <", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeLessThanOrEqualTo(Byte value) {
+            addCriterion("freeze <=", value, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeIn(List<Byte> values) {
+            addCriterion("freeze in", values, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeNotIn(List<Byte> values) {
+            addCriterion("freeze not in", values, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeBetween(Byte value1, Byte value2) {
+            addCriterion("freeze between", value1, value2, "freeze");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreezeNotBetween(Byte value1, Byte value2) {
+            addCriterion("freeze not between", value1, value2, "freeze");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

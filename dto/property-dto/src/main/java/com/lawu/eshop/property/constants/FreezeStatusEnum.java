@@ -11,7 +11,7 @@ package com.lawu.eshop.property.constants;
  */
 public enum FreezeStatusEnum {
 
-	FREEZE((byte) 0x01), // 冻结
+	FREEZE((byte) 0x00), // 冻结
 	RELEASE((byte) 0x01);//释放
 	
 	public Byte val;

@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.core.page.Page;
@@ -21,8 +22,10 @@ import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.operator.api.service.MerchantService;
 import com.lawu.eshop.operator.api.service.PropertyinfoService;
 import com.lawu.eshop.operator.api.service.RechargeService;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
+import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.param.BackagePropertyinfoParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
@@ -32,6 +35,7 @@ import com.lawu.eshop.user.dto.MerchantDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 /**
  * 
@@ -60,8 +64,7 @@ public class BackagePropertyinfoController extends BaseController {
 	@PageBody
 	@ApiOperation(value = "余额、积分明细查询", notes = "余额、积分明细查询[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "selectPropertyinfoList", method = RequestMethod.POST)
-	public Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(
-			@RequestBody RechargeQueryParam param) {
+	public Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(@RequestBody RechargeQueryParam param) {
 		RechargeQueryDataParam dparam = new RechargeQueryDataParam();
 		String userNum = "";
 		if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
@@ -116,5 +119,35 @@ public class BackagePropertyinfoController extends BaseController {
 		}
 
 		return propertyinfoService.updateBalanceAndPoint(dparam);
+	}
+
+	@ApiOperation(value = "查询用户资产信息（是否冻结）", notes = "查询用户资产信息（是否冻结）[]（杨清华）", httpMethod = "GET")
+	@RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
+	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(
+			@RequestParam @ApiParam(required = true, value = "用户账号") String account,
+			@RequestParam @ApiParam(required = true, value = "用户类型") UserTypeEnum userType) {
+		String userNum = "";
+		if (UserTypeEnum.MEMBER.val.equals(userType.val)) {
+			Result<MemberDTO> member = memberService.getMemberByAccount(account);
+			if (member.getRet() == ResultCode.SUCCESS) {
+				userNum = member.getModel().getNum();
+			}
+		} else if (UserTypeEnum.MEMCHANT.val.equals(userType.val)) {
+			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(account);
+			if (merchant.getRet() == ResultCode.SUCCESS) {
+				userNum = merchant.getModel().getNum();
+			}
+		}else{
+			return successCreated(ResultCode.FAIL,"用户类型参数错误");
+		}
+		return propertyinfoService.getPropertyinfoFreeze(userNum);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "冻结解冻账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "POST")
+	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.POST)
+	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum,
+			@RequestParam @ApiParam(required = true, value = "冻结标记(NO-解冻、YES-冻结)") PropertyinfoFreezeEnum freeze) {
+		return propertyinfoService.updatePropertyinfoFreeze(userNum, freeze);
 	}
 }

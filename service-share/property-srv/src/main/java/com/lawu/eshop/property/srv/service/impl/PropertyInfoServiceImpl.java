@@ -6,6 +6,7 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
@@ -250,6 +251,28 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			pointDetailService.save(pdsParam);
 		}
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int updatePropertyinfoFreeze(String userNum, PropertyinfoFreezeEnum freeze) {
+		PropertyInfoDOExample example = new PropertyInfoDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum);
+		PropertyInfoDO pdo = new PropertyInfoDO();
+		pdo.setFreeze(freeze.val);
+		pdo.setGmtModified(new Date());
+		propertyInfoDOMapper.updateByExample(pdo, example);
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum) {
+		PropertyInfoDOExample example = new PropertyInfoDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> dos = propertyInfoDOMapper.selectByExample(example);
+		if(dos == null || dos.isEmpty()){
+			return null;
+		}
+		return PropertyinfoFreezeEnum.getEnum(dos.get(0).getFreeze());
 	}
 
 }

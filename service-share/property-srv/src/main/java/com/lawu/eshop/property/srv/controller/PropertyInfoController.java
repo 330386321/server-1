@@ -1,12 +1,25 @@
- package com.lawu.eshop.property.srv.controller;
+package com.lawu.eshop.property.srv.controller;
+
+import java.math.BigDecimal;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -17,11 +30,6 @@ import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -31,90 +39,102 @@ import java.math.BigDecimal;
 @RequestMapping(value = "propertyInfo/")
 public class PropertyInfoController extends BaseController {
 
-    @Autowired
-    private PropertyInfoService propertyInfoService;
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
-    /**
-     * 修改用户支付密码
-     *
-     * @param userNum     用户编号
-     * @param originalPwd 原始密码
-     * @param newPwd      新密码
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
+	/**
+	 * 修改用户支付密码
+	 *
+	 * @param userNum
+	 *            用户编号
+	 * @param originalPwd
+	 *            原始密码
+	 * @param newPwd
+	 *            新密码
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updatePayPwd/{userNum}", method = RequestMethod.PUT)
-    public Result updatePayPwd(@PathVariable String userNum, @RequestParam String originalPwd, @RequestParam String newPwd) {
-        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-        if (propertyInfoBO == null) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
-            return successGet(ResultCode.VERIFY_PWD_FAIL);
-        }
-        propertyInfoService.updatePayPwd(userNum,  newPwd);
-        return successCreated();
-    }
+	public Result updatePayPwd(@PathVariable String userNum, @RequestParam String originalPwd,
+			@RequestParam String newPwd) {
+		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+		if (propertyInfoBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
+			return successGet(ResultCode.VERIFY_PWD_FAIL);
+		}
+		propertyInfoService.updatePayPwd(userNum, newPwd);
+		return successCreated();
+	}
 
-    /**
-     * 重置用户支付密码
-     *
-     * @param userNum 用户编号
-     * @param newPwd  新密码
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
+	/**
+	 * 重置用户支付密码
+	 *
+	 * @param userNum
+	 *            用户编号
+	 * @param newPwd
+	 *            新密码
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "resetPayPwd/{userNum}", method = RequestMethod.PUT)
-    public Result resetPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
-        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-        if (propertyInfoBO == null) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        propertyInfoService.updatePayPwd(userNum, newPwd);
-        return successCreated();
-    }
+	public Result resetPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
+		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+		if (propertyInfoBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		propertyInfoService.updatePayPwd(userNum, newPwd);
+		return successCreated();
+	}
 
-    /**
-     * 设置用户支付密码
-     *
-     * @param userNum 用户编号
-     * @param newPwd  新密码
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
+	/**
+	 * 设置用户支付密码
+	 *
+	 * @param userNum
+	 *            用户编号
+	 * @param newPwd
+	 *            新密码
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "setPayPwd/{userNum}", method = RequestMethod.PUT)
-    public Result setPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
-        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-        if (propertyInfoBO == null) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        propertyInfoService.updatePayPwd(userNum, newPwd);
-        return successCreated();
-    }
+	public Result setPayPwd(@PathVariable String userNum, @RequestParam String newPwd) {
+		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+		if (propertyInfoBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		propertyInfoService.updatePayPwd(userNum, newPwd);
+		return successCreated();
+	}
 
-    /**
-     * 查询用户是否设置支付密码
-     *
-     * @param userNum 用户编号
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
+	/**
+	 * 查询用户是否设置支付密码
+	 *
+	 * @param userNum
+	 *            用户编号
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "isSetPayPwd/{userNum}", method = RequestMethod.GET)
-    public Result isSetPayPwd(@PathVariable String userNum) {
-        PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
-        if (propertyInfoBO == null) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
-            return successGet(false);
-        }
-        return successGet(true);
-    }
+	public Result isSetPayPwd(@PathVariable String userNum) {
+		PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(userNum);
+		if (propertyInfoBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
+			return successGet(false);
+		}
+		return successGet(true);
+	}
 
 	/**
 	 * 校验支付密码
-	 * @param userNum 用户编号
-	 * @param payPwd 明文
+	 * 
+	 * @param userNum
+	 *            用户编号
+	 * @param payPwd
+	 *            明文
 	 * @return
 	 */
 	@RequestMapping(value = "varifyPayPwd", method = RequestMethod.GET)
@@ -157,15 +177,17 @@ public class PropertyInfoController extends BaseController {
 		PropertyPointBO propertyPointBO = propertyInfoService.getPropertyPointByUserNum(userNum);
 		return successCreated(PropertyPointConverter.convert(propertyPointBO));
 	}
-	
+
 	/**
 	 * 查询用户商家财产积分余额
+	 * 
 	 * @param userNum
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@RequestMapping(value = "getPropertyInfoMoney/{userNum}", method = RequestMethod.GET)
-	public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum) throws Exception {
+	public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum)
+			throws Exception {
 		PropertyPointAndBalanceBO propertyPointBO = propertyInfoService.getPropertyInfoMoney(userNum);
 		PropertyPointAndBalanceDTO dto = new PropertyPointAndBalanceDTO();
 		BeanUtil.copyProperties(propertyPointBO, dto);
@@ -192,9 +214,10 @@ public class PropertyInfoController extends BaseController {
 		int retCode = propertyInfoService.updatePropertyNumbers(userNum, column, flag, number);
 		return successCreated(retCode);
 	}
-	
+
 	/**
 	 * 查询爱心账户
+	 * 
 	 * @param userNum
 	 * @return
 	 * @throws Exception
@@ -209,6 +232,7 @@ public class PropertyInfoController extends BaseController {
 
 	/**
 	 * 运营平台余额积分处理
+	 * 
 	 * @param dparam
 	 * @return
 	 * @author yangqh
@@ -219,5 +243,40 @@ public class PropertyInfoController extends BaseController {
 	public Result updateBalanceAndPoint(@RequestBody BackagePropertyinfoDataParam dparam) {
 		int retCode = propertyInfoService.updateBalanceAndPoint(dparam);
 		return successCreated(retCode);
+	}
+
+	/**
+	 * 运营平台资金冻结操作
+	 * @param userNum
+	 * @param freeze
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午4:56:44
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.POST)
+	public Result updatePropertyinfoFreeze(@RequestParam String userNum, @RequestParam PropertyinfoFreezeEnum freeze) {
+		int retCode = propertyInfoService.updatePropertyinfoFreeze(userNum,freeze);
+		return successCreated(retCode);
+	}
+	
+	/**
+	 * 运营平台查询用户资金冻结情况
+	 * @param account
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午4:56:25
+	 */
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
+	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(@RequestParam("userNum") String userNum)  {
+		PropertyinfoFreezeEnum freezeEnum = propertyInfoService.getPropertyinfoFreeze(userNum);
+		PropertyinfoFreezeInfoDTO dto = new PropertyinfoFreezeInfoDTO();
+		if(dto == null){
+			return successCreated(ResultCode.FAIL,"用户资产记录为空！");
+		}
+		dto.setFreeze(freezeEnum);
+		dto.setUserNum(userNum);
+		return successCreated(dto);
 	}
 }

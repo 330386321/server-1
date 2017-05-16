@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -105,5 +106,24 @@ public interface PropertyInfoService {
      * @date 2017年5月16日 下午2:39:15
      */
 	int updateBalanceAndPoint(BackagePropertyinfoDataParam dparam);
+
+	/**
+	 * 运营平台冻结解冻
+	 * @param userNum
+	 * @param freeze
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午4:45:22
+	 */
+	int updatePropertyinfoFreeze(String userNum, PropertyinfoFreezeEnum freeze);
+
+	/**
+	 * 运营平台查询用户冻结情况
+	 * @param userNum
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月16日 下午5:21:20
+	 */
+	PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum);
 
 }
