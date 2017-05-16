@@ -419,13 +419,12 @@ public class AdController extends BaseController {
          registerRealParam.setPwd(param.getPwd());
          Result rs= memberService.register(registerRealParam);
          if(isSuccess(rs)){ //注册成功，领取红包
-        	 return successCreated(ResultCode.FAIL);
+        	 Result<UserRedPacketDTO> userRs= memberService.isRegister(param.getAccount());
+         	 Long memberId = userRs.getModel().getMemberId();
+    	     String userNum = userRs.getModel().getUserNum();
+    	     rs=adService.getRedPacket(param.getMerchantId(),memberId,userNum);
+    	     fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
          }
-         Result<UserRedPacketDTO> userRs= memberService.isRegister(param.getAccount());
-     	 Long memberId = userRs.getModel().getMemberId();
-	     String userNum = userRs.getModel().getUserNum();
-	     rs=adService.getRedPacket(param.getMerchantId(),memberId,userNum);
-	     fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
          return rs;
     }
     

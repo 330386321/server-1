@@ -12,6 +12,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -114,11 +115,17 @@ public class AdConverter {
 		adDTO.setIsFavorite(adBO.getIsFavorite());
 		adDTO.setIsPraise(adBO.getIsPraise());
 		Date date=new Date();
-		Long time=adBO.getBeginTime().getTime()-date.getTime();
-		if(time>0){
-			adDTO.setNeedBeginTime(time);
-		}else{
-			adDTO.setNeedBeginTime(Long.parseLong("0"));
+		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){  //开枪倒计时
+			Calendar nowTime = Calendar.getInstance();
+			nowTime.add(Calendar.MINUTE, -5);
+			adDTO.setNeedBeginTime(date.getTime()-adBO.getBeginTime().getTime());
+		}else if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==1){ //结束倒计时
+			Long time=adBO.getBeginTime().getTime()-date.getTime();
+			if(time>0){
+				adDTO.setNeedBeginTime(time);
+			}else{
+				adDTO.setNeedBeginTime(Long.parseLong("0"));
+			}
 		}
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());

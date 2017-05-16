@@ -36,7 +36,7 @@ public class AdPraiseDTO {
 	@ApiModelProperty(name = "logoUrl", value = "logo图片路径")
     private String logoUrl;
 	
-	@ApiModelProperty(value = "倒计时")
+	@ApiModelProperty(value = "开始倒计时")
 	private Long needBeginTime;
 	
 	@ApiModelProperty(value = "是否收藏")
@@ -53,6 +53,7 @@ public class AdPraiseDTO {
 	
 	@ApiModelProperty(value = "商家id")
 	private Long merchantId;
+	
 
 	public Integer getCount() {
 		return count;

@@ -45,6 +45,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         } else {
             adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         }
+        adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
         adPlatformDO.setStatus(AdPlatformStatusEnum.UP.val);
         adPlatformDO.setGmtCreate(new Date());
         adPlatformDO.setGmtModified(new Date());

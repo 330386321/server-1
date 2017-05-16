@@ -525,6 +525,66 @@ public class AdPlatformDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchantStoreIdIsNull() {
+            addCriterion("merchant_store_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIsNotNull() {
+            addCriterion("merchant_store_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdEqualTo(Long value) {
+            addCriterion("merchant_store_id =", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotEqualTo(Long value) {
+            addCriterion("merchant_store_id <>", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThan(Long value) {
+            addCriterion("merchant_store_id >", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id >=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThan(Long value) {
+            addCriterion("merchant_store_id <", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id <=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIn(List<Long> values) {
+            addCriterion("merchant_store_id in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotIn(List<Long> values) {
+            addCriterion("merchant_store_id not in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id not between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -645,6 +705,76 @@ public class AdPlatformDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andRegionPathIsNull() {
+            addCriterion("region_path is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathIsNotNull() {
+            addCriterion("region_path is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathEqualTo(String value) {
+            addCriterion("region_path =", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathNotEqualTo(String value) {
+            addCriterion("region_path <>", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathGreaterThan(String value) {
+            addCriterion("region_path >", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathGreaterThanOrEqualTo(String value) {
+            addCriterion("region_path >=", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathLessThan(String value) {
+            addCriterion("region_path <", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathLessThanOrEqualTo(String value) {
+            addCriterion("region_path <=", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathLike(String value) {
+            addCriterion("region_path like", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathNotLike(String value) {
+            addCriterion("region_path not like", value, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathIn(List<String> values) {
+            addCriterion("region_path in", values, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathNotIn(List<String> values) {
+            addCriterion("region_path not in", values, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathBetween(String value1, String value2) {
+            addCriterion("region_path between", value1, value2, "regionPath");
+            return (Criteria) this;
+        }
+
+        public Criteria andRegionPathNotBetween(String value1, String value2) {
+            addCriterion("region_path not between", value1, value2, "regionPath");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -702,6 +832,76 @@ public class AdPlatformDOExample {
 
         public Criteria andStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIsNull() {
+            addCriterion("content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIsNotNull() {
+            addCriterion("content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentEqualTo(String value) {
+            addCriterion("content =", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotEqualTo(String value) {
+            addCriterion("content <>", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentGreaterThan(String value) {
+            addCriterion("content >", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentGreaterThanOrEqualTo(String value) {
+            addCriterion("content >=", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLessThan(String value) {
+            addCriterion("content <", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLessThanOrEqualTo(String value) {
+            addCriterion("content <=", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentLike(String value) {
+            addCriterion("content like", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotLike(String value) {
+            addCriterion("content not like", value, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentIn(List<String> values) {
+            addCriterion("content in", values, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotIn(List<String> values) {
+            addCriterion("content not in", values, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentBetween(String value1, String value2) {
+            addCriterion("content between", value1, value2, "content");
+            return (Criteria) this;
+        }
+
+        public Criteria andContentNotBetween(String value1, String value2) {
+            addCriterion("content not between", value1, value2, "content");
             return (Criteria) this;
         }
 
@@ -822,136 +1022,6 @@ public class AdPlatformDOExample {
 
         public Criteria andGmtCreateNotBetween(Date value1, Date value2) {
             addCriterion("gmt_create not between", value1, value2, "gmtCreate");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentIsNull() {
-            addCriterion("content is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentIsNotNull() {
-            addCriterion("content is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentEqualTo(String value) {
-            addCriterion("content =", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentNotEqualTo(String value) {
-            addCriterion("content <>", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentGreaterThan(String value) {
-            addCriterion("content >", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentGreaterThanOrEqualTo(String value) {
-            addCriterion("content >=", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentLessThan(String value) {
-            addCriterion("content <", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentLessThanOrEqualTo(String value) {
-            addCriterion("content <=", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentLike(String value) {
-            addCriterion("content like", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentNotLike(String value) {
-            addCriterion("content not like", value, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentIn(List<String> values) {
-            addCriterion("content in", values, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentNotIn(List<String> values) {
-            addCriterion("content not in", values, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentBetween(String value1, String value2) {
-            addCriterion("content between", value1, value2, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andContentNotBetween(String value1, String value2) {
-            addCriterion("content not between", value1, value2, "content");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdIsNull() {
-            addCriterion("merchant_store_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdIsNotNull() {
-            addCriterion("merchant_store_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdEqualTo(Long value) {
-            addCriterion("merchant_store_id =", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdNotEqualTo(Long value) {
-            addCriterion("merchant_store_id <>", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdGreaterThan(Long value) {
-            addCriterion("merchant_store_id >", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("merchant_store_id >=", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdLessThan(Long value) {
-            addCriterion("merchant_store_id <", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdLessThanOrEqualTo(Long value) {
-            addCriterion("merchant_store_id <=", value, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdIn(List<Long> values) {
-            addCriterion("merchant_store_id in", values, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdNotIn(List<Long> values) {
-            addCriterion("merchant_store_id not in", values, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdBetween(Long value1, Long value2) {
-            addCriterion("merchant_store_id between", value1, value2, "merchantStoreId");
-            return (Criteria) this;
-        }
-
-        public Criteria andMerchantStoreIdNotBetween(Long value1, Long value2) {
-            addCriterion("merchant_store_id not between", value1, value2, "merchantStoreId");
             return (Criteria) this;
         }
     }

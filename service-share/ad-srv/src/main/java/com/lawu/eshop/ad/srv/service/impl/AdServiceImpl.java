@@ -1,23 +1,14 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.*;
-import com.lawu.eshop.ad.srv.AdSrvConfig;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.domain.*;
-import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.mapper.*;
-import com.lawu.eshop.ad.srv.service.AdService;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.AdArithmeticUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrDocument;
@@ -28,13 +19,41 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.domain.AdDOExample;
+import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
+import com.lawu.eshop.ad.srv.domain.AdRegionDO;
+import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
+import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
+import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
+import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
+import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.utils.AdArithmeticUtil;
 
 
 /**
@@ -585,18 +604,31 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public void updateRacking() {
 		AdDOExample example=new AdDOExample();
-		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		List<Byte> status=new ArrayList<>();
+		status.add(AdStatusEnum.AD_STATUS_ADD.val);
+		status.add(AdStatusEnum.AD_STATUS_PUTING.val);
+		example.createCriteria().andStatusIn(status);
 		 List<AdDO> listADD=adDOMapper.selectByExample(example);
 		 if(!listADD.isEmpty())
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
-				if(adDO.getBeginTime().getTime()==date.getTime()){
+				if(adDO.getType()!=4 && adDO.getStatus()==1 && adDO.getBeginTime().getTime()>=date.getTime()){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
 					SolrInputDocument document = new SolrInputDocument();
 					document.addField("id", adDO.getId());
 					document.addField("status_s", 3);
 				    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+				}
+				if(adDO.getType()==3 && adDO.getStatus()==2){ //抢赞过五分钟投放结束
+					Calendar nowTime = Calendar.getInstance();
+					nowTime.add(Calendar.MINUTE, -5);
+					if((nowTime.getTime().getTime()-adDO.getBeginTime().getTime())>0){
+						adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+						adDO.setGmtModified(date);
+						adDOMapper.updateByPrimaryKey(adDO);
+					}
 				}
 			}
 		

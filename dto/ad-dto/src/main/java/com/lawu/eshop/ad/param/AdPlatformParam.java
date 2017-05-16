@@ -29,6 +29,9 @@ public class AdPlatformParam {
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告 SHOPPING_BUY "
 			+ "E店必够 SHOPPING_GOODS  特色好货  SHOPPING_BENEFIT 实惠单品 SHOPPING_HOT 热门商品")
 	private PositionEnum positionEnum;
+	
+	@ApiParam(name = "regionPath", value = "区域")
+	private String regionPath;
 
 	public Long getProductId() {
 		return productId;
@@ -84,6 +87,14 @@ public class AdPlatformParam {
 
 	public void setPositionEnum(PositionEnum positionEnum) {
 		this.positionEnum = positionEnum;
+	}
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
 	}
 	
 
