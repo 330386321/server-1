@@ -12,6 +12,7 @@ import com.lawu.eshop.user.srv.domain.extend.FavoriteMerchantDOView;
 import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.FavoriteMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
 import com.lawu.eshop.utils.DistanceUtil;
@@ -41,6 +42,9 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     
     @Resource
     private FansMerchantDOMapper fansMerchantDOMapper;
+    
+    @Resource
+    private MerchantStoreImageDOMapper  merchantStoreImageDOMapper;
 
     @Autowired
     private UserSrvConfig userSrvConfig;
@@ -109,6 +113,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         List<FavoriteMerchantDOView> list=favoriteMerchantDOMapperExtend.selectFavoriteMerchantByRowbounds(view, rowBounds);
         List<FavoriteMerchantBO> listBO=new ArrayList<>();
         for (FavoriteMerchantDOView favoriteMerchantDOView : list) {
+        	//获取粉丝数量
         	FansMerchantDOExample  example=new FansMerchantDOExample();
         	example.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
         	int count=fansMerchantDOMapper.countByExample(example);
@@ -123,7 +128,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	MerchantStoreDOExample merchantStoreDOExample=new MerchantStoreDOExample();
         	merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
         	List<MerchantStoreDO> merchantStoreDOList=merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-        	if(merchantStoreDOList!=null){
+        	if(merchantStoreDOList!=null){ //获取距离
         		favoriteMerchantBO.setMerchantStoreId(merchantStoreDOList.get(0).getId());
         		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
         			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
@@ -132,7 +137,13 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         		}
         		
         	}
-        	
+        	//获取门店logo
+        	MerchantStoreImageDOExample msidExample=new MerchantStoreImageDOExample();
+        	msidExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMemberId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
+        	List<MerchantStoreImageDO>  msiList= merchantStoreImageDOMapper.selectByExample(msidExample);
+        	if(!msiList.isEmpty()){
+        		favoriteMerchantBO.setPath(msiList.get(0).getPath());
+        	}
         	listBO.add(favoriteMerchantBO);
 		}
         Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();

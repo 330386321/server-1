@@ -29,7 +29,7 @@ public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTran
 	    param.setPoint(notification.getPoint().toString());
 	    param.setUserNum(notification.getUserNum());
 	    //param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
-	    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
+	    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
 	    propertyInfoDataService.doHanlderAddPoint(param);
         return new Reply();
     }

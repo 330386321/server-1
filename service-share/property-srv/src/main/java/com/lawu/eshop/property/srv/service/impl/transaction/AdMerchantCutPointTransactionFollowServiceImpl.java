@@ -30,7 +30,7 @@ public class AdMerchantCutPointTransactionFollowServiceImpl extends AbstractTran
 		    param.setPoint(notification.getPoint().toString());
 		    param.setUserNum(notification.getUserNum());
 		    //param.setTransactionTitleEnum(TransactionTitleEnum.AD_RETURN_POINT);
-		    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
+		    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.ADD_AD);
 		    propertyInfoDataService.doHanlderMinusPoint(param);
 	        return new Reply();
 	    }

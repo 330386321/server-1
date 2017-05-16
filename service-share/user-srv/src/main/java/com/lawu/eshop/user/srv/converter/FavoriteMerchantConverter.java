@@ -28,7 +28,7 @@ public class FavoriteMerchantConverter {
     	
         if (favoriteMerchantBO == null) {
             return null;
-        }
+        }  
         FavoriteMerchantDTO dto=new FavoriteMerchantDTO();
         dto.setMerchantId(favoriteMerchantBO.getMerchantId());
         dto.setName(favoriteMerchantBO.getName());
