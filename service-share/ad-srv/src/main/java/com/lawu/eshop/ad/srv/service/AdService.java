@@ -224,9 +224,16 @@ public interface AdService {
     
     /**
      * 根据商家id 获取红包的相关信息
-     * @param mechantId
+     * @param merchantId
      * @return
      */
-    RedPacketInfoBO getRedPacketInfo(Long mercantId);
+    RedPacketInfoBO getRedPacketInfo(Long merchantId);
+    
+	/**
+	 * 判断商家红包是否领完
+	 * @param merchantId
+	 * @return
+	 */
+	Boolean isExistsRedPacket(Long merchantId);
 
 }

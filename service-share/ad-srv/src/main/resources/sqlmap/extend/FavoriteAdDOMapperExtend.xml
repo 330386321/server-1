@@ -15,7 +15,7 @@
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.ad.srv.domain.extend.FavoriteAdDOView" id="selectMyFavoriteAdByRowbounds" >
      select 
     	fa.id as id,
-    	fa.id as ad_id,
+    	fa.ad_id as ad_id,
     	a.title as title,
     	a.content as content,
 		a.media_url as media_url,

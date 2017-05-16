@@ -131,4 +131,12 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable("merchantId") Long merchantId) ;
+	
+	/**
+	 * 判断红包是否领取完
+	 * @param adId
+	 * @return
+	 */
+	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
+	public Result<Boolean> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
 }

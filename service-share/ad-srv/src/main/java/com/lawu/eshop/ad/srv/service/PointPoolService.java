@@ -34,6 +34,8 @@ public interface PointPoolService {
 	 * @return
 	 */
 	Boolean isGetRedPacket(Long merchantId,String userNum);
+	
+
 
 	
 	

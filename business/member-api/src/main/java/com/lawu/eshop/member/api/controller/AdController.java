@@ -428,4 +428,12 @@ public class AdController extends BaseController {
          return rs;
     }
     
+    @ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
+    public Result<Boolean> isExistsRedPacket(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
+    	Result<Boolean> rs= adService.isExistsRedPacket(merchantId);
+    	return rs;
+    }
+    
 } 

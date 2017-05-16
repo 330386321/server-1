@@ -9,7 +9,7 @@ public class ClickAdPointDTO {
 	@ApiModelProperty(value = "今日累计积分")
 	private BigDecimal addPoint;
 	
-	@ApiModelProperty(value = "广告总积分")
+	@ApiModelProperty(value = "广告积分")
 	private BigDecimal point;
 
 	public BigDecimal getAddPoint() {

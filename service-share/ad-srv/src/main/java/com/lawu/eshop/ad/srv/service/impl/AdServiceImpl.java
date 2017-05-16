@@ -846,9 +846,9 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public RedPacketInfoBO getRedPacketInfo(Long mercantId) {
+	public RedPacketInfoBO getRedPacketInfo(Long merchantId) {
 		PointPoolDOExample example =new PointPoolDOExample();
-		example.createCriteria().andMerchantIdEqualTo(mercantId).andStatusEqualTo(new Byte("0")).andTypeEqualTo(new Byte("2"));
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("0")).andTypeEqualTo(new Byte("2"));
 		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(example);
 		RedPacketInfoBO redPacketInfoBO=new RedPacketInfoBO();
 		if(!list.isEmpty()){ 
@@ -862,7 +862,22 @@ public class AdServiceImpl implements AdService {
 		}else{
 			return null;
 		}
+			
+	}
 	
+	@Override
+	public Boolean isExistsRedPacket(Long merchantId) {
+		/*AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
+		long count=pointPoolDOMapper.countByExample(example);
+		if(count>0){
+			return true;
+		}else{
+			return false;
+		}*/
+		
+		return null;
+		
 	}
 
 }

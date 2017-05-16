@@ -174,6 +174,7 @@ public class AdController extends BaseController{
 			ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
 	    	ClickAdPointDTO dto=new ClickAdPointDTO();
 	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
+	    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
 			if(i>0){
 	     		return successCreated(dto);
 	     	}else{
@@ -491,6 +492,17 @@ public class AdController extends BaseController{
 			return successCreated(redPacketInfoDTO);
 		}
 		
+	}
+	
+	/**
+	 * 判断红包是否领取完成
+	 * @param adId
+	 * @return
+	 */
+	@RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
+	public Result<Boolean> isExistsRedPacket(@PathVariable Long merchantId) {
+		Boolean flag= adService.isExistsRedPacket(merchantId);
+		return successCreated(flag);
 	}
 
 }
