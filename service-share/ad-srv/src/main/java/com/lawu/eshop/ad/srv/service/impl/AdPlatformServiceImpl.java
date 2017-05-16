@@ -172,7 +172,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         Criteria criteria = example.createCriteria();
         criteria.andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
         if(StringUtils.isNotEmpty(regionPath)){
-            //criteria.andregion
+            criteria.andRegionPathLike(regionPath + "%");
         }
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
         return AdPlatformConverter.convertBOS(adPlatformDOS);

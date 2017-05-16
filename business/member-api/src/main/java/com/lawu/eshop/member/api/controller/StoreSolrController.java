@@ -65,7 +65,7 @@ public class StoreSolrController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendStore", method = RequestMethod.GET)
     public Result<List<StoreSolrDTO>> listRecommendStore(@RequestParam @ApiParam(name = "regionPath", required = true, value = "区域路径") String regionPath) {
-        Result<List<AdPlatformDTO>> recommendResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_STORE, PositionEnum.POSITON_RECOMMEND, regionPath);
+        Result<List<AdPlatformDTO>> recommendResult = adPlatformService.getAdPlatformByTypePositionRegionPath(TypeEnum.TYPE_STORE, PositionEnum.POSITON_RECOMMEND, regionPath);
         if (!isSuccess(recommendResult)) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }

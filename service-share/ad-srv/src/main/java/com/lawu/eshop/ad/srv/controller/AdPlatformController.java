@@ -196,7 +196,24 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "getAdPlatformByTypePosition", method = RequestMethod.GET)
-    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum, @RequestParam String regionPath) {
+    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum) {
+        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum, "");
+        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
+    }
+
+    /**
+     * 根据类型位置查询广告
+     *
+     * @param typeEnum
+     * @param positionEnum
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "getAdPlatformByTypePositionRegionPath", method = RequestMethod.GET)
+    public Result<List<AdPlatformDTO>> getAdPlatformByTypePositionRegionPath(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum, @RequestParam String regionPath) {
         List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum, regionPath);
         if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
