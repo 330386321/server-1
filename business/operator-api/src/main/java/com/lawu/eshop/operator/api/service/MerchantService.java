@@ -33,7 +33,13 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/selectMerchantInfo")
     Result<MerchantSNSDTO> selectMerchantInfo(@RequestParam("merchantId") Long merchantId);
-    
-    @RequestMapping(value = "merchant/getMerchant/{account}", method = RequestMethod.GET)
+
+    /**
+     * 根据账号查询商户信息
+     *
+     * @param account 商家账号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
     Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
 }

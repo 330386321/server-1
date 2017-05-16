@@ -27,7 +27,13 @@ public interface MemberService {
 
     @RequestMapping(value = "member/findMessagePushByMobile", method = RequestMethod.GET)
     MessagePushDTO findMessagePushByMobile(@RequestParam("moblie") String moblie);
-    
-    @RequestMapping(value = "member/getMember/{account}", method = RequestMethod.GET)
+
+    /**
+     * 根据账号查询会员信息
+     *
+     * @param account 会员账号
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
     Result<MemberDTO> getMemberByAccount(@PathVariable("account") String account);
 }
