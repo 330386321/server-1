@@ -177,7 +177,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				shoppingOrderCreateOrderTransactionMainServiceImpl.sendNotice(id);
 				
 				// 判断用户是否是商家粉丝
-				if (shoppingOrderDO.getIsFans()) {
+				if (!shoppingOrderDO.getIsFans()) {
 					// 事务补偿(用户成为商家粉丝)
 					shoppingOrderCreateOrderFansTransactionMainServiceImpl.sendNotice(id);
 				}
