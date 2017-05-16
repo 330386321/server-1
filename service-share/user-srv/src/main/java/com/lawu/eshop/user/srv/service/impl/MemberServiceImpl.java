@@ -68,6 +68,9 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private UserSrvConfig userSrvConfig;
 
+    @Autowired
+    private MerchantProfileDOMapper merchantProfileDOMapper;
+
 
     @Override
     public MemberBO find(String account, String pwd) {
@@ -252,43 +255,44 @@ public class MemberServiceImpl implements MemberService {
                     } else if (inviteCount >= UserCommonConstant.LEVEL_2_FANS_CNT) {
                         level = UserCommonConstant.LEVEL_2;
                     }
+
+                    //查询推荐的一级会员总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
+                    int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐的二级级会员总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
+                    int inviteMemberCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐的三级会员总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
+                    int inviteMemberCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐的一级商户总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
+                    int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐的二级商户总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
+                    int inviteMerchantCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    //查询推荐的三级级商户总人数
+                    inviteRelationDOExample = new InviteRelationDOExample();
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
+                    int inviteMerchantCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+
                     if (inviteRelationDO1.getType() == UserInviterTypeEnum.INVITER_TYPE_MEMBER.val) {
                         MemberDOExample memberDOExample = new MemberDOExample();
                         memberDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
                         List<MemberDO> memberDOS = memberDOMapper.selectByExample(memberDOExample);
-                        Long inviterInviteId = memberDOS.get(0).getId();
                         memberDO = new MemberDO();
                         memberDO.setLevel(level);
-                        memberDO.setId(inviterInviteId);
+                        memberDO.setId(memberDOS.get(0).getId());
                         memberDOMapper.updateByPrimaryKeySelective(memberDO);
 
-                        //查询推荐的一级会员总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                        int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                        //查询推荐的二级级会员总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                        int inviteMemberCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                        //查询推荐的三级会员总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                        int inviteMemberCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                        //查询推荐的一级商户总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                        int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                        //查询推荐的二级商户总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                        int inviteMerchantCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                        //查询推荐的三级级商户总人数
-                        inviteRelationDOExample = new InviteRelationDOExample();
-                        inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                        int inviteMerchantCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
                         //更新会员扩展信息
                         memberProfileDO = new MemberProfileDO();
-                        memberProfileDO.setId(inviterInviteId);
+                        memberProfileDO.setId(memberDOS.get(0).getId());
                         memberProfileDO.setInviteMemberCount(inviteMemberCount);
                         memberProfileDO.setInviteMemberCount2(inviteMemberCount2);
                         memberProfileDO.setInviteMemberCount3(inviteMemberCount3);
@@ -298,11 +302,26 @@ public class MemberServiceImpl implements MemberService {
                         memberProfileDO.setGmtModified(new Date());
                         memberProfileDOMapper.updateByPrimaryKeySelective(memberProfileDO);
                     } else {
-                        MerchantDO merchantDO = new MerchantDO();
-                        merchantDO.setLevel(level);
                         MerchantDOExample merchantDOExample = new MerchantDOExample();
                         merchantDOExample.createCriteria().andNumEqualTo(inviteRelationDO1.getUserNum());
-                        merchantDOMapper.updateByExampleSelective(merchantDO, merchantDOExample);
+                        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(merchantDOExample);
+
+                        MerchantDO merchantDO = new MerchantDO();
+                        merchantDO.setLevel(level);
+                        merchantDO.setId(merchantDOS.get(0).getId());
+                        merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
+
+                        //更新商户扩展信息
+                        MerchantProfileDO merchantProfileDO = new MerchantProfileDO();
+                        merchantProfileDO.setId(merchantDOS.get(0).getId());
+                        merchantProfileDO.setInviteMemberCount(inviteMemberCount);
+                        merchantProfileDO.setInviteMemberCount2(inviteMemberCount2);
+                        merchantProfileDO.setInviteMemberCount3(inviteMemberCount3);
+                        merchantProfileDO.setInviteMerchantCount(inviteMerchantCount);
+                        merchantProfileDO.setInviteMerchantCount2(inviteMerchantCount2);
+                        merchantProfileDO.setInviteMerchantCount3(inviteMerchantCount3);
+                        merchantProfileDO.setGmtModified(new Date());
+                        merchantProfileDOMapper.updateByPrimaryKeySelective(merchantProfileDO);
                     }
                 }
             }
