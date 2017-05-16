@@ -608,11 +608,16 @@ public class ProductServiceImpl implements ProductService {
         if (!isEdit) {
             ProductModelDO pmDO = null;
             for (ProductModelBO dataBO : speclist) {
+            	BigDecimal bdOriginalPrice = new BigDecimal("0");
+            	if(dataBO.getOriginalPrice() != null){
+            		bdOriginalPrice = dataBO.getOriginalPrice();
+            	}
                 pmDO = new ProductModelDO();
                 pmDO.setMerchantId(param.getMerchantId());
                 pmDO.setProductId(productId);
                 pmDO.setName(dataBO.getName());
-                pmDO.setOriginalPrice(dataBO.getOriginalPrice() == null ? new BigDecimal("0") : dataBO.getOriginalPrice());
+                if(dataBO.getOriginalPrice() != null)
+                pmDO.setOriginalPrice(dataBO.getOriginalPrice());
                 pmDO.setPrice(dataBO.getPrice());
                 pmDO.setInventory(dataBO.getInventory());
                 pmDO.setStatus(true);
@@ -623,8 +628,8 @@ public class ProductServiceImpl implements ProductService {
                 if (traverseCnt == 0) {
                     price = dataBO.getPrice().doubleValue();
                 }
-                if (dataBO.getOriginalPrice().doubleValue() > originalPrice) {
-                    originalPrice = dataBO.getOriginalPrice().doubleValue();
+                if (bdOriginalPrice.doubleValue() > originalPrice) {
+                    originalPrice = bdOriginalPrice.doubleValue();
                 }
                 if (dataBO.getPrice().doubleValue() < price) {
                     price = dataBO.getPrice().doubleValue();
@@ -634,6 +639,10 @@ public class ProductServiceImpl implements ProductService {
             }
         } else {
             for (ProductModelBO dataBO : speclist) {
+            	BigDecimal bdOriginalPrice = new BigDecimal("0");
+            	if(dataBO.getOriginalPrice() != null){
+            		bdOriginalPrice = dataBO.getOriginalPrice();
+            	}
                 if (dataBO.getId() == null || dataBO.getId() == 0L) {
                     ProductModelDO pmDO = new ProductModelDO();
                     pmDO.setMerchantId(param.getMerchantId());
@@ -680,8 +689,8 @@ public class ProductServiceImpl implements ProductService {
                 if (traverseCnt == 0) {
                     price = dataBO.getPrice().doubleValue();
                 }
-                if (dataBO.getOriginalPrice().doubleValue() > originalPrice) {
-                    originalPrice = dataBO.getOriginalPrice().doubleValue();
+                if (bdOriginalPrice.doubleValue() > originalPrice) {
+                    originalPrice = bdOriginalPrice.doubleValue();
                 }
                 if (dataBO.getPrice().doubleValue() < price) {
                     price = dataBO.getPrice().doubleValue();
