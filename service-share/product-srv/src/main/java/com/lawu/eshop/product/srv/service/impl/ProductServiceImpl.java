@@ -616,8 +616,7 @@ public class ProductServiceImpl implements ProductService {
                 pmDO.setMerchantId(param.getMerchantId());
                 pmDO.setProductId(productId);
                 pmDO.setName(dataBO.getName());
-                if(dataBO.getOriginalPrice() != null)
-                pmDO.setOriginalPrice(dataBO.getOriginalPrice());
+                pmDO.setOriginalPrice(bdOriginalPrice);
                 pmDO.setPrice(dataBO.getPrice());
                 pmDO.setInventory(dataBO.getInventory());
                 pmDO.setStatus(true);
@@ -648,7 +647,7 @@ public class ProductServiceImpl implements ProductService {
                     pmDO.setMerchantId(param.getMerchantId());
                     pmDO.setProductId(productId);
                     pmDO.setName(dataBO.getName());
-                    pmDO.setOriginalPrice(dataBO.getOriginalPrice());
+                    pmDO.setOriginalPrice(bdOriginalPrice);
                     pmDO.setPrice(dataBO.getPrice());
                     pmDO.setInventory(dataBO.getInventory());
                     pmDO.setStatus(true);
@@ -661,7 +660,7 @@ public class ProductServiceImpl implements ProductService {
                     modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
                     ProductModelDO modelDO = new ProductModelDO();
 
-                    modelDO.setOriginalPrice(dataBO.getOriginalPrice());
+                    modelDO.setOriginalPrice(bdOriginalPrice);
                     modelDO.setPrice(dataBO.getPrice());
                     modelDO.setInventory(dataBO.getInventory());
                     modelDO.setName(dataBO.getName());
