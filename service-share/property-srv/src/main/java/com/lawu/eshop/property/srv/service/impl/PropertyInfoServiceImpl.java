@@ -222,7 +222,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	public int updateBalanceAndPoint(BackagePropertyinfoDataParam dparam) {
 		PropertyInfoDOEiditView editView = new PropertyInfoDOEiditView();
 		editView.setUserNum(dparam.getUserNum());
-		if (PayTypeEnum.BALANCE.val.equals(dparam.getPayTypeEnum())) {
+		if (PayTypeEnum.BALANCE.val.equals(dparam.getPayTypeEnum().val)) {
 			editView.setBalance(new BigDecimal(dparam.getMoney()));
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
 			
@@ -238,7 +238,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			tdsParam.setAmount(new BigDecimal(dparam.getMoney()));
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 			transactionDetailService.save(tdsParam);
-		} else if (PayTypeEnum.POINT.val.equals(dparam.getPayTypeEnum())) {
+		} else if (PayTypeEnum.POINT.val.equals(dparam.getPayTypeEnum().val)) {
 			editView.setPoint(new BigDecimal(dparam.getMoney()));
 			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
 			
