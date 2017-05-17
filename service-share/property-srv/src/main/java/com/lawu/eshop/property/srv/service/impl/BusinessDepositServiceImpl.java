@@ -301,25 +301,32 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		bo.setAmount(list.get(0).getAmount());
 		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
 
-		BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
-		if(bankAccountDO != null){
-			bo.setBankName(bankAccountDO.getNote() == null ? ""
-					: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
-			String accountName = bankAccountDO.getAccountName();
-			if (accountName.length() == 2) {
-				accountName = "*" + accountName.substring(1);
-			} else {
-				accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+		if(list.get(0).getBusinessBankAccountId() != null){
+			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
+			if(bankAccountDO != null){
+				bo.setBankName(bankAccountDO.getNote() == null ? ""
+						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+				String accountName = bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName();
+				if (accountName.length() == 2) {
+					accountName = "*" + accountName.substring(1);
+				} else {
+					accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
+				}
+				bo.setAccountName(accountName);
+				bo.setCardNo(bankAccountDO.getNote() == null ? ""
+						: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
+								bankAccountDO.getNote().indexOf(")")));
+			}else{
+				bo.setBankName("");
+				bo.setAccountName("");
+				bo.setCardNo("");
 			}
-			bo.setAccountName(accountName);
-			bo.setCardNo(bankAccountDO.getNote() == null ? ""
-					: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
-							bankAccountDO.getNote().indexOf(")")));
 		}else{
 			bo.setBankName("");
 			bo.setAccountName("");
 			bo.setCardNo("");
 		}
+		
 		return bo;
 	}
 
