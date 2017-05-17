@@ -72,6 +72,12 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 	@ApiModelProperty(value = "商品数量", required = true)
 	private Integer amountOfGoods;
 	
+    /**
+    * 当前订单是否完成
+    */
+	@ApiModelProperty(value = "当前订单是否完成", required = true)
+    private Boolean isDone;
+	
 	/**
 	 * 订单项
 	 */
@@ -156,6 +162,14 @@ public class ShoppingOrderExtendQueryDTO implements Serializable {
 
 	public void setAmountOfGoods(Integer amountOfGoods) {
 		this.amountOfGoods = amountOfGoods;
+	}
+
+	public Boolean getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(Boolean isDone) {
+		this.isDone = isDone;
 	}
 
 	public List<ShoppingOrderItemDTO> getItems() {
