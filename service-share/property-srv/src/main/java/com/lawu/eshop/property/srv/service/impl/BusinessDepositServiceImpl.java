@@ -309,7 +309,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				String accountName = bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName();
 				if (accountName.length() == 2) {
 					accountName = "*" + accountName.substring(1);
-				} else {
+				} else if (accountName.length() > 2){
 					accountName = accountName.substring(0, 1) + "*" + accountName.substring(accountName.length() - 1);
 				}
 				bo.setAccountName(accountName);
