@@ -22,6 +22,8 @@ import com.lawu.eshop.user.dto.MerchantDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -57,6 +59,7 @@ public class BackagePropertyinfoController extends BaseController {
 	@PageBody
 	@ApiOperation(value = "余额、积分明细查询", notes = "余额、积分明细查询[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "selectPropertyinfoList", method = RequestMethod.POST)
+	@RequiresAuthentication
 	public Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(@RequestBody RechargeQueryParam param) {
 		RechargeQueryDataParam dparam = new RechargeQueryDataParam();
 		String userNum = "";
@@ -83,6 +86,7 @@ public class BackagePropertyinfoController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "充值余额或积分", notes = "充值余额或积分[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "updateBalanceAndPoint", method = RequestMethod.POST)
+	@RequiresPermissions("account:recharge")
 	public Result updateBalanceAndPoint(@Valid BackagePropertyinfoParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
@@ -115,6 +119,7 @@ public class BackagePropertyinfoController extends BaseController {
 	}
 
 	@ApiOperation(value = "查询用户资产信息（是否冻结）", notes = "查询用户资产信息（是否冻结）[]（杨清华）", httpMethod = "GET")
+	@RequiresAuthentication
 	@RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
 	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(
 			@RequestParam @ApiParam(required = true, value = "用户账号") String account,
@@ -138,6 +143,7 @@ public class BackagePropertyinfoController extends BaseController {
 
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "冻结解冻账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "POST")
+	@RequiresPermissions("account:freeze")
 	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.POST)
 	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum,
 			@RequestParam @ApiParam(required = true, value = "冻结标记(NO-解冻、YES-冻结)") PropertyinfoFreezeEnum freeze) {
