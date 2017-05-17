@@ -612,7 +612,7 @@ public class AdServiceImpl implements AdService {
 		 if(!listADD.isEmpty())
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
-				if(adDO.getType()!=4 && adDO.getStatus()==1 && adDO.getBeginTime().getTime()>=date.getTime()){
+				if(adDO.getType()!=4 && adDO.getStatus()==1 && adDO.getBeginTime().getTime()<=date.getTime()){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
