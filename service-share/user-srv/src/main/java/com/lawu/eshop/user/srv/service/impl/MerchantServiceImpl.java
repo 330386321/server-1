@@ -205,7 +205,7 @@ public class MerchantServiceImpl implements MerchantService {
                     int inviteMerchantCount3 = 0;
                     //查询推荐的一级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andDepthEqualTo(UserCommonConstant.DEPTH_1);
                     List<InviteRelationDO> inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
                     if(!inviteRelationDOList.isEmpty()){
                         for(InviteRelationDO relationDO : inviteRelationDOList){
@@ -218,7 +218,7 @@ public class MerchantServiceImpl implements MerchantService {
                     }
                     //查询推荐的二级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andDepthEqualTo(UserCommonConstant.DEPTH_2);
                     inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
                     if(!inviteRelationDOList.isEmpty()){
                         for(InviteRelationDO relationDO : inviteRelationDOList){
@@ -231,7 +231,7 @@ public class MerchantServiceImpl implements MerchantService {
                     }
                     //查询推荐的三级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
+                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andDepthEqualTo(UserCommonConstant.DEPTH_3);
                     inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
                     if(!inviteRelationDOList.isEmpty()){
                         for(InviteRelationDO relationDO : inviteRelationDOList){
