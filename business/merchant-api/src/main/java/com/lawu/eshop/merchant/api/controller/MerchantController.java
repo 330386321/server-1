@@ -17,6 +17,7 @@ import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
+import com.lawu.eshop.utils.QrCodeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,7 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 
@@ -56,6 +62,9 @@ public class MerchantController extends BaseController {
    
     @Autowired
     private MerchantApiConfig merchantApiConfig;
+
+    @Autowired
+    private AdService adService;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
@@ -239,5 +248,41 @@ public class MerchantController extends BaseController {
         return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
     }
 
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    @ApiOperation(value = "生成身份二维码", notes = "生成身份二维码。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getQrCode", method = RequestMethod.GET)
+    public void getQrCode(@RequestParam @ApiParam(required = true, value = "token") String token) throws IOException {
+        String merchantId = UserUtil.getCurrentUserIdByToken(token);
+        if(StringUtils.isEmpty(merchantId)){
+            return;
+        }
+        HttpServletResponse response = getResponse();
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setDateHeader("Expires", 0);
+        response.setContentType("image/jpeg");
+        BufferedImage buffImg = QrCodeUtil.generateQrCode(merchantApiConfig.getMerchantQrCode() + merchantId);
+        // 将图像输出到Servlet输出流中。
+        ServletOutputStream sos = response.getOutputStream();
+        ImageIO.write(buffImg, "jpeg", sos);
+        sos.close();
+    }
+
+    @ApiOperation(value = "扫描身份二维码", notes = "扫描身份二维码。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getQrCodeContent/{merchantId}", method = RequestMethod.GET)
+    public void getQrCodeContent(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) throws IOException{
+        HttpServletResponse response = getResponse();
+        if(merchantId == null || merchantId <= 0){
+            return;
+        }
+        Result<Boolean> result = adService.isExistsRedPacket(merchantId);
+        if(!result.getModel()){
+            response.sendRedirect(merchantApiConfig.getShareRedpacketUrl() + merchantId);
+        }else{
+            response.sendRedirect(merchantApiConfig.getShareRegisterUrl());
+        }
+    }
 
 }

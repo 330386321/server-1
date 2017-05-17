@@ -28,6 +28,12 @@ public class MerchantApiConfig {
     @Value(value="${merchant.qr.code}")
     private String merchantQrCode;
 
+    @Value(value="${share.redpacket.url}")
+    private String shareRedpacketUrl;
+
+    @Value(value="${share.register.url}")
+    private String shareRegisterUrl;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -50,5 +56,13 @@ public class MerchantApiConfig {
 
     public String getMerchantQrCode() {
         return merchantQrCode;
+    }
+
+    public String getShareRedpacketUrl() {
+        return shareRedpacketUrl;
+    }
+
+    public String getShareRegisterUrl() {
+        return shareRegisterUrl;
     }
 }

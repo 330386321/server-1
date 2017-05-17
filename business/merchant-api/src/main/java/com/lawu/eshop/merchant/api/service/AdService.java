@@ -70,4 +70,12 @@ public interface AdService {
 	@RequestMapping(method = RequestMethod.GET, value = "ad/selectById/{id}")
 	Result<AdMerchantDetailDTO> selectById(@PathVariable("id") Long id);
 
+	/**
+	 * 判断红包是否领取完
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
+	Result<Boolean> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
+
 }
