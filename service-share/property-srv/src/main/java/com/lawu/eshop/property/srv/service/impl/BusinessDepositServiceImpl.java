@@ -122,6 +122,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		depositDO.setPaymentMethod(param.getTransactionPayTypeEnum().val);
 		depositDO.setStatus(BusinessDepositStatusEnum.VERIFY.val);
 		depositDO.setGmtPay(new Date());
+		depositDO.setGmtModified(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
 		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
