@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.dto;
 
-import java.math.BigDecimal;
-
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -12,9 +10,9 @@ public class BusinessDepositDetailDTO {
 	private Long id;
 
 	@ApiModelProperty(value = "金额")
-	private BigDecimal amount;
+	private String amount;
 
-	@ApiModelProperty(value = "状态")
+	@ApiModelProperty(value = "状态['PAYING-待支付', 'VERIFY-已支付未核实', 'VERIFYD-已核实', 'APPLY_REFUND-退款申请', 'ACCPET_REFUND-退款已受理', 'REFUND_SUCCESS-退款成功', 'REFUND_FAILURE-退款失败']")
 	private BusinessDepositStatusEnum businessDepositStatusEnum;
 
 	@ApiModelProperty(value = "银行名称")
@@ -34,11 +32,11 @@ public class BusinessDepositDetailDTO {
 		this.id = id;
 	}
 
-	public BigDecimal getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 

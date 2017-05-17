@@ -8,7 +8,7 @@ public class BusinessDepositDetailBO {
 
 	private Long id;
 
-	private BigDecimal amount;
+	private String amount;
 
 	private BusinessDepositStatusEnum businessDepositStatusEnum;
 
@@ -25,11 +25,11 @@ public class BusinessDepositDetailBO {
 		this.id = id;
 	}
 
-	public BigDecimal getAmount() {
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 

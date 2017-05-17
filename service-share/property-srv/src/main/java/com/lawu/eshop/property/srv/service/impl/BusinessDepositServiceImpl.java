@@ -298,7 +298,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		}
 		BusinessDepositDetailBO bo = new BusinessDepositDetailBO();
 		bo.setId(list.get(0).getId());
-		bo.setAmount(list.get(0).getAmount());
+		bo.setAmount(list.get(0).getAmount().toString());
 		bo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(list.get(0).getStatus()));
 
 		if(list.get(0).getBusinessBankAccountId() != null){
