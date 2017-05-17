@@ -55,6 +55,7 @@ public class ResultCode {
     public static final int MERCHANT_STORE_NO_EXIST = 2009;
     public static final int MEMBER_NO_EXIST = 2010;
     public static final int BANK_CASH_EXIST = 2011;
+    public static final int FANS_MERCHANT = 2012;
 
     //运营
     public static final int USER_NOT_LOGIN = 2100;
@@ -188,6 +189,7 @@ public class ResultCode {
         ResultCode.messageMap.put(MERCHANT_STORE_NO_EXIST, "未查询到门店");
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
+        ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");

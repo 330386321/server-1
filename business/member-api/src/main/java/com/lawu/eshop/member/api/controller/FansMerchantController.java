@@ -5,6 +5,7 @@ import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.FansMerchantService;
@@ -29,7 +30,7 @@ public class FansMerchantController extends BaseController {
     private FansMerchantService fansMerchantService;
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")
-    @ApiOperation(value = "成为商家粉丝", notes = "成为商家粉丝。 (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "成为商家粉丝", notes = "成为商家粉丝。 [2012] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "saveFansMerchant", method = RequestMethod.PUT)
@@ -37,6 +38,10 @@ public class FansMerchantController extends BaseController {
                                    @RequestParam @ApiParam(required = true, value = "商家ID") Long merchantId,
                                    @RequestParam @ApiParam(required = true, value = "粉丝来源") FansMerchantChannelEnum channelEnum ) {
         long memberId = UserUtil.getCurrentUserId(getRequest());
+        Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
+        if(result.getModel()){
+            return successCreated(ResultCode.FANS_MERCHANT);
+        }
         return fansMerchantService.saveFansMerchant(merchantId, memberId, channelEnum);
     }
 
