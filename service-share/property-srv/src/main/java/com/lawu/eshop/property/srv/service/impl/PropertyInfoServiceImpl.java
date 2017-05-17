@@ -258,13 +258,14 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
+	@Transactional
 	public int updatePropertyinfoFreeze(String userNum, PropertyinfoFreezeEnum freeze) {
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
 		PropertyInfoDO pdo = new PropertyInfoDO();
 		pdo.setFreeze(freeze.val);
 		pdo.setGmtModified(new Date());
-		propertyInfoDOMapper.updateByExample(pdo, example);
+		propertyInfoDOMapper.updateByExampleSelective(pdo, example);
 		return ResultCode.SUCCESS;
 	}
 

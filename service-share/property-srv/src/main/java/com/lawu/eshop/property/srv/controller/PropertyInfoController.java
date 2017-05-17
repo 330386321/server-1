@@ -1,25 +1,10 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.math.BigDecimal;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.PropertyBalanceDTO;
-import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
-import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
-import com.lawu.eshop.property.dto.PropertyPointDTO;
-import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
+import com.lawu.eshop.property.dto.*;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -30,6 +15,11 @@ import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author meishuquan
@@ -262,7 +252,7 @@ public class PropertyInfoController extends BaseController {
 	
 	/**
 	 * 运营平台查询用户资金冻结情况
-	 * @param account
+	 * @param userNum
 	 * @return
 	 * @author yangqh
 	 * @date 2017年5月16日 下午4:56:25
@@ -272,7 +262,7 @@ public class PropertyInfoController extends BaseController {
 	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(@RequestParam("userNum") String userNum)  {
 		PropertyinfoFreezeEnum freezeEnum = propertyInfoService.getPropertyinfoFreeze(userNum);
 		PropertyinfoFreezeInfoDTO dto = new PropertyinfoFreezeInfoDTO();
-		if(dto == null){
+		if(freezeEnum == null){
 			return successCreated(ResultCode.FAIL,"用户资产记录为空！");
 		}
 		dto.setFreeze(freezeEnum);
