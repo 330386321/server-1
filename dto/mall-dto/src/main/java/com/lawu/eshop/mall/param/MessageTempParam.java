@@ -71,6 +71,16 @@ public class MessageTempParam {
     @ApiModelProperty(value = "代发货商品数量")
     private Integer productCount;
 
+    @ApiModelProperty(value = "快递名称")
+    private String expressCompanyName;
+
+    @ApiModelProperty(value = "退款金额")
+    private BigDecimal refundAmount;
+
+    @ApiModelProperty(value = "订单金额")
+    private BigDecimal orderAmount;
+
+
     public String getUserName() {
         return userName;
     }
@@ -229,5 +239,29 @@ public class MessageTempParam {
 
     public void setProductCount(Integer productCount) {
         this.productCount = productCount;
+    }
+
+    public BigDecimal getRefundAmount() {
+        return refundAmount;
+    }
+
+    public void setRefundAmount(BigDecimal refundAmount) {
+        this.refundAmount = refundAmount;
+    }
+
+    public BigDecimal getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(BigDecimal orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public String getExpressCompanyName() {
+        return expressCompanyName;
+    }
+
+    public void setExpressCompanyName(String expressCompanyName) {
+        this.expressCompanyName = expressCompanyName;
     }
 }

@@ -118,7 +118,8 @@ public class MessageServiceImpl implements MessageService {
         /**
          * {0}用户昵称、{1}订单编号、{2}运单编号、{3}余额、{4}充值金额、{5}当前积分、{6}消费金额
          * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
-         * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号
+         * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号、{17}广告类型名称、{18}失败原因
+         * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额
          */
 
         //消息替换占位符
@@ -142,6 +143,9 @@ public class MessageServiceImpl implements MessageService {
         content = content.replace("{17}", messageInfoParam.getMessageParam().getAdTypeName());
         content = content.replace("{18}", messageInfoParam.getMessageParam().getFailReason());
         content = content.replace("{19}", messageInfoParam.getMessageParam().getProductCount().toString());
+        content = content.replace("{20}", messageInfoParam.getMessageParam().getExpressCompanyName());
+        content = content.replace("{21}", messageInfoParam.getMessageParam().getRefundAmount().toString());
+        content = content.replace("{22}", messageInfoParam.getMessageParam().getOrderAmount().toString());
 
 
         messageDO.setContent(content);

@@ -11,7 +11,7 @@ public enum MessageTypeEnum {
     MESSAGE_TYPE_ACTIVE((byte) 0x03),//活动消息
     MESSAGE_TYPE_ORDER_START_SEND((byte) 0x04),//订单已发货
     MESSAGE_TYPE_ORDER_SENDING((byte) 0x05),//订单正在派件
-    MESSAGE_TYPE_ORDER_SIGN((byte) 0x05),//订单已签收
+
 
     MESSAGE_TYPE_WITHDRAW_APPLY((byte) 0x06),//提现申请
     MESSAGE_TYPE_WITHDRAW_SUCCESS((byte) 0x07),//提现成功
@@ -47,8 +47,21 @@ public enum MessageTypeEnum {
 
     MESSAGE_TYPE_REDPACKET((byte) 0x30),//现金红包
 
-    MESSAGE_TYPE_AD_DOWN((byte) 0x31),//ad下架
-    MESSAGE_TYPE_INVITE_FANS_MERCHANT((byte) 0x32);//邀请粉丝--商家
+    MESSAGE_TYPE_AD_AUTO_DOWN((byte) 0x31),//ad自动下架
+    MESSAGE_TYPE_INVITE_FANS_MERCHANT((byte) 0x32),//邀请粉丝--商家
+
+    MESSAGE_TYPE_ORDER_SIGN((byte) 0x33),//订单已签收
+
+    MESSAGE_TYPE_SEEAD((byte) 0x33),//看广告获取金额
+    MESSAGE_TYPE_ROB_PIAISE((byte) 0x34),//抢赞获取金额
+
+    MESSAGE_TYPE_CHECK_DEPOSIT_FAIL((byte) 0x35),//保证金审核未通过
+    MESSAGE_TYPE_AD_FORCE_DOWN((byte) 0x36),//ad强制下架
+    MESSAGE_TYPE_REFUND_APPLY((byte) 0x37),//退款申请
+    MESSAGE_TYPE_USE_POINT_AD((byte) 0x38),//消费积分投放广告
+    MESSAGE_TYPE_USE_POINT_REDPACKET((byte) 0x39),//消费积分红包
+    MESSAGE_TYPE_ORDER_SUCCESS((byte) 0x40),//订单成功--商家
+    MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT((byte) 0x41);//买单成功--商家
 
     public Byte val;
 
