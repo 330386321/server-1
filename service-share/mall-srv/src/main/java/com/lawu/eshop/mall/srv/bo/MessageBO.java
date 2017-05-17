@@ -33,6 +33,8 @@ public class MessageBO {
 
     private String userNum;
 
+    private Long relateId;
+
     public Long getId() {
         return id;
     }
@@ -87,5 +89,13 @@ public class MessageBO {
 
     public void setUserNum(String userNum) {
         this.userNum = userNum;
+    }
+
+    public Long getRelateId() {
+        return relateId;
+    }
+
+    public void setRelateId(Long relateId) {
+        this.relateId = relateId;
     }
 }

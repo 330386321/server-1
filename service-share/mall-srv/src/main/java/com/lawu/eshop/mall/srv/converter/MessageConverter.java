@@ -41,6 +41,7 @@ public class MessageConverter {
         messageBO.setStatus(messageDO.getStatus());
         messageBO.setTitle(messageDO.getTitle());
         messageBO.setUserNum(messageDO.getUserNum());
+        messageBO.setRelateId(messageDO.getRelateId());
         messageBO.setGmtCreate(messageDO.getGmtCreate());
         return messageBO;
     }
@@ -58,6 +59,7 @@ public class MessageConverter {
             messageDTO.setContent(messageBO.getContent());
             messageDTO.setTitle(messageBO.getTitle());
             messageDTO.setGmtCreate(messageBO.getGmtCreate());
+            messageDTO.setRelateId(messageBO.getRelateId());
             messageDTOS.add(messageDTO);
         }
         return messageDTOS;
