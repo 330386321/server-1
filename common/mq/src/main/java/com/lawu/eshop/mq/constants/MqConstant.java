@@ -50,6 +50,8 @@ public class MqConstant {
     public static final String TAG_RP_ME_CUT_POINT = "rp_me_cutPoint";
 
     public static final String TAG_AD_USER_CLICK_POINT = "rp_user_cutPoint";
+    
+    public static final String TAG_AD_USER_SWEEP_RED = "rp_user_sweep_red";
 
 
     /******************************************/

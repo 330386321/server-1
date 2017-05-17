@@ -139,7 +139,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	}
         	//获取门店logo
         	MerchantStoreImageDOExample msidExample=new MerchantStoreImageDOExample();
-        	msidExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMemberId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
+        	msidExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
         	List<MerchantStoreImageDO>  msiList= merchantStoreImageDOMapper.selectByExample(msidExample);
         	if(!msiList.isEmpty()){
         		favoriteMerchantBO.setPath(msiList.get(0).getPath());

@@ -97,6 +97,11 @@ public class AdServiceImpl implements AdService {
 	@Autowired
 	@Qualifier("userClickAdTransactionMainServiceImpl")
     private TransactionMainService userClicktransactionMainAddService;
+	
+	
+	@Autowired
+	@Qualifier("userSweepRedTransactionMainServiceImpl")
+    private TransactionMainService userSweepRedtransactionMainAddService;
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
@@ -689,7 +694,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setMemberNum(memberNum);
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
-			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
+			userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
 			if(list.size()==1){ //红包领取完成 将红包下架
 				AdDO ad=new AdDO();
 				ad.setId(pointPoolDO.getAdId());
@@ -867,16 +872,15 @@ public class AdServiceImpl implements AdService {
 	
 	@Override
 	public Boolean isExistsRedPacket(Long merchantId) {
-		/*AdDOExample example = new AdDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
-		long count=pointPoolDOMapper.countByExample(example);
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId)
+		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		long count=adDOMapper.countByExample(example);
 		if(count>0){
-			return true;
-		}else{
 			return false;
-		}*/
-		
-		return null;
+		}else{
+			return true;
+		}
 		
 	}
 
