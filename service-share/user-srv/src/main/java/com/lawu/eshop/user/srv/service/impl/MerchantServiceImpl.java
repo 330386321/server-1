@@ -197,30 +197,51 @@ public class MerchantServiceImpl implements MerchantService {
                         level = UserCommonConstant.LEVEL_2;
                     }
 
-                    //查询推荐的一级会员总人数
+                    int inviteMemberCount = 0;
+                    int inviteMemberCount2 = 0;
+                    int inviteMemberCount3 = 0;
+                    int inviteMerchantCount = 0;
+                    int inviteMerchantCount2 = 0;
+                    int inviteMerchantCount3 = 0;
+                    //查询推荐的一级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
                     inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                    int inviteMemberCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的二级会员总人数
+                    List<InviteRelationDO> inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
+                    if(!inviteRelationDOList.isEmpty()){
+                        for(InviteRelationDO relationDO : inviteRelationDOList){
+                            if(relationDO.getInviteUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+                                inviteMemberCount ++;
+                            }else{
+                                inviteMerchantCount ++;
+                            }
+                        }
+                    }
+                    //查询推荐的二级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
                     inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                    int inviteMemberCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的三级会员总人数
+                    inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
+                    if(!inviteRelationDOList.isEmpty()){
+                        for(InviteRelationDO relationDO : inviteRelationDOList){
+                            if(relationDO.getInviteUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+                                inviteMemberCount2 ++;
+                            }else{
+                                inviteMerchantCount2 ++;
+                            }
+                        }
+                    }
+                    //查询推荐的三级会员/商家总人数
                     inviteRelationDOExample = new InviteRelationDOExample();
                     inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MEMBER.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                    int inviteMemberCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的一级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_1);
-                    int inviteMerchantCount = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的二级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_2);
-                    int inviteMerchantCount2 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
-                    //查询推荐的三级商户总人数
-                    inviteRelationDOExample = new InviteRelationDOExample();
-                    inviteRelationDOExample.createCriteria().andUserNumEqualTo(inviteRelationDO1.getUserNum()).andTypeEqualTo(UserInviterTypeEnum.INVITER_TYPE_MERCHANT.val).andDepthEqualTo(UserCommonConstant.DEPTH_3);
-                    int inviteMerchantCount3 = inviteRelationDOMapper.countByExample(inviteRelationDOExample);
+                    inviteRelationDOList = inviteRelationDOMapper.selectByExample(inviteRelationDOExample);
+                    if(!inviteRelationDOList.isEmpty()){
+                        for(InviteRelationDO relationDO : inviteRelationDOList){
+                            if(relationDO.getInviteUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+                                inviteMemberCount3 ++;
+                            }else{
+                                inviteMerchantCount3 ++;
+                            }
+                        }
+                    }
 
                     if (inviteRelationDO1.getType() == UserInviterTypeEnum.INVITER_TYPE_MEMBER.val) {
                         MemberDOExample memberDOExample = new MemberDOExample();
