@@ -51,7 +51,7 @@ public class MerchantInfoDTO {
     @ApiModelProperty(name = "storeTypeEnum ",value = "门店类型:NORMAL_MERCHANT:普通商铺,ENTITY_MERCHANT:实体商铺")
     private MerchantStoreTypeEnum storeTypeEnum;
 
-    @ApiModelProperty(name = "certifTypeEnum ",value = "门店类型:CERTIF_TYPE_IDCARD:身份证,CERTIF_TYPE_LICENSE:营业执照")
+    @ApiModelProperty(name = "certifTypeEnum ",value = "证件类型:CERTIF_TYPE_IDCARD:身份证,CERTIF_TYPE_LICENSE:营业执照")
     private CertifTypeEnum certifTypeEnum;
 
     @ApiModelProperty(name = "gtCid ",value = "个推CID")
