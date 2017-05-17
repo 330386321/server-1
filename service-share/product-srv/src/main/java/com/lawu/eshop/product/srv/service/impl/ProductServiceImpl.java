@@ -572,6 +572,7 @@ public class ProductServiceImpl implements ProductService {
         int salesVolume = 0;
         double originalPrice = 0;
         double price = 0;
+        double mprice = 0;//max
         int traverseCnt = 0;
 
         boolean isEdit = true;
@@ -626,12 +627,15 @@ public class ProductServiceImpl implements ProductService {
 
                 if (traverseCnt == 0) {
                     price = dataBO.getPrice().doubleValue();
+                    mprice = price;
                 }
                 if (bdOriginalPrice.doubleValue() > originalPrice) {
                     originalPrice = bdOriginalPrice.doubleValue();
                 }
                 if (dataBO.getPrice().doubleValue() < price) {
                     price = dataBO.getPrice().doubleValue();
+                }else{
+                	mprice = dataBO.getPrice().doubleValue();
                 }
                 inventory += dataBO.getInventory();
                 traverseCnt++;
@@ -693,6 +697,8 @@ public class ProductServiceImpl implements ProductService {
                 }
                 if (dataBO.getPrice().doubleValue() < price) {
                     price = dataBO.getPrice().doubleValue();
+                }else{
+                	mprice = dataBO.getPrice().doubleValue();
                 }
                 inventory += dataBO.getInventory();
                 salesVolume += dataBO.getSalesVolume();
@@ -723,7 +729,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
         productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(new BigDecimal(originalPrice));
+        productDO.setMaxPrice(new BigDecimal(mprice));
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);
