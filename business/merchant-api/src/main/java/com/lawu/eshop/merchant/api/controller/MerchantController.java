@@ -269,6 +269,7 @@ public class MerchantController extends BaseController {
         sos.close();
     }
 
+    @Audit(date = "2017-05-17", reviewer = "孙林青")
     @ApiOperation(value = "扫描身份二维码", notes = "扫描身份二维码。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getQrCodeContent/{merchantId}", method = RequestMethod.GET)
