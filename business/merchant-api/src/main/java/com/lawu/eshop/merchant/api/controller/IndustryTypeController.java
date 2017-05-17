@@ -30,10 +30,10 @@ public class IndustryTypeController {
     private IndustryTypeService industryTypeService;
 
     @Audit(date = "2017-05-16", reviewer = "孙林青")
-    @ApiOperation(value = "查询行业", notes = "查询所有行业。 [1100] (章勇)", httpMethod = "GET")
+    @ApiOperation(value = "查询行业(嵌套分组)", notes = "查询所有行业(嵌套分组)。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "listIndustryType", method = RequestMethod.GET)
-    public Result<List<IndustryTypeDTO>> listIndustryType() {
+    @RequestMapping(value = "getIndustryListWithGroup", method = RequestMethod.GET)
+    public Result<List<IndustryTypeDTO>> getIndustryListWithGroup() {
         return industryTypeService.listIndustryType();
     }
 
@@ -45,7 +45,7 @@ public class IndustryTypeController {
         return industryTypeService.listIndustryTypeByParentId(parentId);
     }
 
-    @ApiOperation(value = "查询所有行业", notes = "查询所有行业。 [1100] (章勇)", httpMethod = "GET")
+    @ApiOperation(value = "查询所有行业（不区分级别）", notes = "查询所有行业（不区分级别）。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getAllIndustryList", method = RequestMethod.GET)
     public  Result<List<IndustryTypeDTO>> getAllIndustryList() {
