@@ -44,4 +44,11 @@ public class IndustryTypeController {
     public Result<List<IndustryTypeDTO>> listIndustryType(@PathVariable @ApiParam(required = true, value = "父行业ID") Short parentId) {
         return industryTypeService.listIndustryTypeByParentId(parentId);
     }
+
+    @ApiOperation(value = "查询所有行业", notes = "查询所有行业。 [1100] (章勇)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getAllIndustryList", method = RequestMethod.GET)
+    public  Result<List<IndustryTypeDTO>> getAllIndustryList() {
+        return industryTypeService.getAllIndustryList();
+    }
 }

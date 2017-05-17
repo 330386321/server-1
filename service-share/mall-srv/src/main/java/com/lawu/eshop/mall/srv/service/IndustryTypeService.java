@@ -25,4 +25,5 @@ public interface IndustryTypeService {
      */
     List<IndustryTypeBO> listIndustryTypeByParentId(Short parentId);
 
+    List<IndustryTypeBO> getAllIndustryList();
 }

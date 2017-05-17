@@ -30,4 +30,12 @@ public interface IndustryTypeService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "industryType/listIndustryType/{parentId}")
     Result<List<IndustryTypeDTO>> listIndustryTypeByParentId(@PathVariable("parentId") Short parentId);
+
+    /**
+     * 查询所有行业(不分组)
+     *
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "industryType/getAllIndustryList")
+    Result<List<IndustryTypeDTO>> getAllIndustryList();
 }

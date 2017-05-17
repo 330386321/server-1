@@ -46,4 +46,12 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
         return IndustryTypeConverter.convertBO(industryTypeDOS);
     }
 
+    @Override
+    public List<IndustryTypeBO> getAllIndustryList() {
+        IndustryTypeDOExample example = new IndustryTypeDOExample();
+        example.setOrderByClause("id asc");
+        List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(example);
+        return IndustryTypeConverter.convertBO(industryTypeDOS);
+    }
+
 }
