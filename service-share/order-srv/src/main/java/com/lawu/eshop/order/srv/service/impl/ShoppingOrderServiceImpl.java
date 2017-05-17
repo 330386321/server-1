@@ -663,7 +663,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
-		if (!shoppingOrderItemDO.getIsAllowRefund()) {
+		// 商家还没有发货，无论商品是否允许支持退货都能允许退款
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue()) || !shoppingOrderItemDO.getIsAllowRefund()) {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
