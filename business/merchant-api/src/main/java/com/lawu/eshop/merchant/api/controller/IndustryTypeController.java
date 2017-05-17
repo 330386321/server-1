@@ -45,6 +45,7 @@ public class IndustryTypeController {
         return industryTypeService.listIndustryTypeByParentId(parentId);
     }
 
+    @Audit(date = "2017-05-17", reviewer = "孙林青")
     @ApiOperation(value = "查询所有行业（不区分级别）", notes = "查询所有行业（不区分级别）。 [1100] (章勇)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getAllIndustryList", method = RequestMethod.GET)
