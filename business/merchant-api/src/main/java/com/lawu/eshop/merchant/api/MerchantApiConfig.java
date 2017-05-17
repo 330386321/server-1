@@ -25,6 +25,9 @@ public class MerchantApiConfig {
     @Value(value="${sms.valid.minutes}")
     private Integer smsValidMinutes;
 
+    @Value(value="${merchant.qr.code}")
+    private String merchantQrCode;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -43,5 +46,9 @@ public class MerchantApiConfig {
 
     public Integer getSmsValidMinutes() {
         return smsValidMinutes;
+    }
+
+    public String getMerchantQrCode() {
+        return merchantQrCode;
     }
 }

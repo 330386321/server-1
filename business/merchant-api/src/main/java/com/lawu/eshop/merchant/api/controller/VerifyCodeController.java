@@ -1,19 +1,23 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.utils.IpUtil;
+import com.lawu.eshop.utils.QrCodeUtil;
 import com.lawu.eshop.utils.VerifyCodeUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +42,9 @@ public class VerifyCodeController extends BaseController {
 
     @Autowired
     private VerifyCodeService verifyCodeService;
+
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
@@ -92,20 +99,23 @@ public class VerifyCodeController extends BaseController {
         return verifyCodeService.getVerifyCodeById(id);
     }
 
-    /*@Audit(date = "2017-04-12", reviewer = "孙林青")
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "身份二维码", notes = "身份二维码。 (梅述全)", httpMethod = "GET")
-    @Authorization
     @RequestMapping(value = "getQrCode", method = RequestMethod.GET)
-    public void getQrCode(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) throws IOException {
+    public void getQrCode(@RequestParam @ApiParam(required = true, value = "token") String token) throws IOException {
+        String merchantId = UserUtil.getCurrentUserIdByToken(token);
+        if(StringUtils.isEmpty(merchantId)){
+            return;
+        }
         HttpServletResponse response = getResponse();
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");
-        BufferedImage buffImg = QrCodeUtil.generateQrCode(UserUtil.getCurrentUserNum(getRequest()));
+        BufferedImage buffImg = QrCodeUtil.generateQrCode(merchantApiConfig.getMerchantQrCode() + merchantId);
         // 将图像输出到Servlet输出流中。
         ServletOutputStream sos = response.getOutputStream();
         ImageIO.write(buffImg, "jpeg", sos);
         sos.close();
-    }*/
+    }
 }
