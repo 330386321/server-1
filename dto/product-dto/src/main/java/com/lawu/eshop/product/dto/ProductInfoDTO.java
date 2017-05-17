@@ -69,6 +69,9 @@ public class ProductInfoDTO {
 	
 	@ApiModelProperty(value = "是否收藏")
 	private boolean favoriteFlag;
+	
+	@ApiModelProperty(value = "商品是否支持退换货")
+	private boolean isAllowRefund;
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -212,6 +215,14 @@ public class ProductInfoDTO {
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public boolean isAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setAllowRefund(boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
 	
 }

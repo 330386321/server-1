@@ -110,6 +110,7 @@ public class ProductConverter {
         productInfoBO.setMinPrice(String.valueOf(productDO.getMinPrice()));
         productInfoBO.setGmtCreate(productDO.getGmtCreate());
         productInfoBO.setCategoryId(productDO.getCategoryId());
+        productInfoBO.setAllowRefund(productDO.getIsAllowRefund());
         return productInfoBO;
     }
 

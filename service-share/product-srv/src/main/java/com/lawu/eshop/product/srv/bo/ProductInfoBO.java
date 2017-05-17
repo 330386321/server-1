@@ -28,6 +28,8 @@ public class ProductInfoBO {
 	private String minPrice;
 	private Integer totalSalesVolume;
 	private Integer totalInventory;
+	
+	private boolean isAllowRefund;
     
     public Long getId() {
         return id;
@@ -68,8 +70,6 @@ public class ProductInfoBO {
     public void setFeatureImage(String featureImage) {
         this.featureImage = featureImage;
     }
-
-    
 
     public Date getGmtCreate() {
         return gmtCreate;
@@ -141,6 +141,14 @@ public class ProductInfoBO {
 
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public boolean isAllowRefund() {
+		return isAllowRefund;
+	}
+
+	public void setAllowRefund(boolean isAllowRefund) {
+		this.isAllowRefund = isAllowRefund;
 	}
     
 }

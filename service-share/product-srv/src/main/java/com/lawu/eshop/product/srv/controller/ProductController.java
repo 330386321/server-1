@@ -100,6 +100,7 @@ public class ProductController extends BaseController {
         BeanUtil.copyProperties(productBO, productDTO);
         productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
         productDTO.setImageDetail(productBO.getImageDetail());
+        productDTO.setAllowRefund(productBO.isAllowRefund());
         return successCreated(productDTO);
     }
 
@@ -291,7 +292,8 @@ public class ProductController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "updateProductIndex/{id}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateProductIndex/{id}", method = RequestMethod.PUT)
     public Result updateProductIndex(@PathVariable Long id) {
         productService.updateProductIndex(id);
         return successCreated();
