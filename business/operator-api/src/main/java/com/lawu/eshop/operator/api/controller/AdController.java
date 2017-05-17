@@ -129,7 +129,7 @@ public class AdController extends BaseController {
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageTempParam.setAdTypeName(adDTOResult.getModel().getTypeEnum().getName());
         messageInfoParam.setRelateId(id);
-        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_DOWN);
+        messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志
