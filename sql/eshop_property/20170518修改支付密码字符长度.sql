@@ -1,1 +1,1 @@
-alter table `property_info`  modify  column  `pay_password` char(57)   COMMENT '支付密码密码';
+alter table `property_info`  modify  column  `pay_password` char(57)   COMMENT '支付密码';
