@@ -266,7 +266,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 
-		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 
@@ -342,7 +342,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 
-		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 
@@ -915,7 +915,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 		}
 
-		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
+		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 
