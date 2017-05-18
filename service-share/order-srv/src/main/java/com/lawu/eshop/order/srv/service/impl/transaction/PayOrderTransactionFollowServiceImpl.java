@@ -5,6 +5,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.PayOrderNotification;
+import com.lawu.eshop.mq.dto.user.FansInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
@@ -39,7 +40,11 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
 
         PayOrderDO oldOrder = payOrderDOMapper.selectByPrimaryKey(payOrderId);
-        messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV,MqConstant.TAG_BUY_NUMBERS,oldOrder.getMerchantId());
+        //发送消息增加买单笔数并成为粉丝
+        FansInfo fansInfo = new FansInfo();
+        fansInfo.setMemberId(oldOrder.getMemberId());
+        fansInfo.setMerchantId(oldOrder.getMerchantId());
+        messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV,MqConstant.TAG_BUY_NUMBERS,fansInfo);
 
         return new Reply();
     }

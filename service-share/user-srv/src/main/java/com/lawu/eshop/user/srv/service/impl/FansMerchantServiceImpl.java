@@ -16,6 +16,7 @@ import com.lawu.eshop.user.srv.mapper.extend.FansMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,6 +94,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     }
 
     @Override
+    @Transactional
     public void saveFansMerchant(Long merchantId, Long memberId, FansMerchantChannelEnum channelEnum) {
         FansMerchantDO fansMerchantDO = new FansMerchantDO();
         fansMerchantDO.setMemberId(memberId);

@@ -1,17 +1,17 @@
 package com.lawu.eshop.user.srv.mq;
 
 import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.user.FansInfo;
 import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
 import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MerchantBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.service.FansMerchantService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
@@ -38,13 +38,22 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
     @Autowired
     private UserSrvConfig userSrvConfig;
 
+    @Autowired
+    private FansMerchantService fansMerchantService;
+
     @Override
     public void consumeMessage(String topic, String tags, Object message) {
 
         if(MqConstant.TOPIC_ORDER_SRV.equals(topic) && MqConstant.TAG_BUY_NUMBERS.equals(tags)){
             //增加买单笔数
-            Long merchantId = Long.valueOf(message.toString());
-            merchantStoreInfoService.addMerchantStoreBuyNums(merchantId);
+            FansInfo fansInfo  = (FansInfo) message;
+            merchantStoreInfoService.addMerchantStoreBuyNums(fansInfo.getMerchantId());
+            //成为粉丝
+            FansMerchantBO fansMerchantBO = fansMerchantService.getFansMerchant(fansInfo.getMemberId(),fansInfo.getMerchantId());
+            if(fansMerchantBO == null){
+                //买单增加粉丝
+                fansMerchantService.saveFansMerchant(fansInfo.getMerchantId(),fansInfo.getMemberId(), FansMerchantChannelEnum.PAY);
+            }
 
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH.equals(tags)){
             //发送推送消息
