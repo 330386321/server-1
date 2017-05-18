@@ -27,7 +27,7 @@ public class ShoppingOrderTradingSuccessIncreaseSalesTransactionFollowServiceImp
 	private ProductModelService productModelService;
 	
 	/**
-	 * 减库存
+	 * 添加销量
 	 */
 	@Transactional
     @Override

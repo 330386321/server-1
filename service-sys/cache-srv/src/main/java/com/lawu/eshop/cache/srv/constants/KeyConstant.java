@@ -33,5 +33,10 @@ public class KeyConstant {
      * 广告ID
      */
     public static final String REDIS_KEY_AD = "AD_KEY_MEMBER_ID_";
+    
+    /**
+     * 事务定时任务执行次数
+     */
+    public static final String REDIS_KEY_TRANSACTION_EXECUTION_COUNT_PREFIX = "TRANSACTION_EXECUTION_COUNT_";
 
 }

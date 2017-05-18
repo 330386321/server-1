@@ -435,6 +435,66 @@ public class TransactionRecordDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andTimesIsNull() {
+            addCriterion("times is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesIsNotNull() {
+            addCriterion("times is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesEqualTo(Long value) {
+            addCriterion("times =", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesNotEqualTo(Long value) {
+            addCriterion("times <>", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesGreaterThan(Long value) {
+            addCriterion("times >", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesGreaterThanOrEqualTo(Long value) {
+            addCriterion("times >=", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesLessThan(Long value) {
+            addCriterion("times <", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesLessThanOrEqualTo(Long value) {
+            addCriterion("times <=", value, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesIn(List<Long> values) {
+            addCriterion("times in", values, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesNotIn(List<Long> values) {
+            addCriterion("times not in", values, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesBetween(Long value1, Long value2) {
+            addCriterion("times between", value1, value2, "times");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimesNotBetween(Long value1, Long value2) {
+            addCriterion("times not between", value1, value2, "times");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

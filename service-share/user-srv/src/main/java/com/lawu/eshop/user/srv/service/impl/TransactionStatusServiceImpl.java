@@ -1,14 +1,18 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.compensating.transaction.TransactionStatusService;
-import com.lawu.eshop.user.srv.domain.TransactionRecordDO;
-import com.lawu.eshop.user.srv.domain.TransactionRecordDOExample;
-import com.lawu.eshop.user.srv.mapper.TransactionRecordDOMapper;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import com.lawu.eshop.compensating.transaction.TransactionStatusService;
+import com.lawu.eshop.compensating.transaction.bo.TransactionRecordBO;
+import com.lawu.eshop.user.srv.domain.TransactionRecordDO;
+import com.lawu.eshop.user.srv.domain.TransactionRecordDOExample;
+import com.lawu.eshop.user.srv.mapper.TransactionRecordDOMapper;
 
 /**
  * @author Leach
@@ -50,15 +54,29 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
     }
 
     @Override
-    public List<Long> selectNotDoneList(byte type) {
+    public List<TransactionRecordBO> selectNotDoneList(byte type) {
         TransactionRecordDOExample example = new TransactionRecordDOExample();
         example.createCriteria().andTypeEqualTo(type).andIsProcessedEqualTo(false);
         List<TransactionRecordDO> transactionRecordDOS = transactionRecordDOMapper.selectByExample(example);
-        List<Long> notDoneList = new ArrayList<>();
+        List<TransactionRecordBO> notDoneList = new ArrayList<TransactionRecordBO>();
         for (int i = 0; i < transactionRecordDOS.size(); i++) {
             TransactionRecordDO transactionRecordDO = transactionRecordDOS.get(i);
-            notDoneList.add(transactionRecordDO.getRelateId());
+            
+            TransactionRecordBO transactionRecordBO = new TransactionRecordBO();
+            transactionRecordBO.setId(transactionRecordDO.getId());
+            transactionRecordBO.setRelateId(transactionRecordDO.getRelateId());
+            transactionRecordBO.setTimes(transactionRecordDO.getTimes());
+            notDoneList.add(transactionRecordBO);
         }
         return notDoneList;
     }
+    
+    @Transactional
+	@Override
+	public void updateTimes(Long transactionId, Long times) {
+		TransactionRecordDO record = new TransactionRecordDO();
+		record.setId(transactionId);
+		record.setTimes(times);
+		transactionRecordDOMapper.updateByPrimaryKeySelective(record);
+	}
 }
