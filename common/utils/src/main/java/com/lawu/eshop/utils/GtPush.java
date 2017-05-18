@@ -24,9 +24,9 @@ public class GtPush {
 	private static String appkey = "m7BWuujJ246kECQYw8zk9A";// 商家
 	private static String masterSecret = "rBgXZPQney8aaUvwaVW3b4";// 商家
 
-	private static String appId2 = "";// 用户端
-	private static String appkey2 = "";// 用户端
-	private static String masterSecret2 = "";// 用户端
+	private static String appId2 = "TQd0dTZC8b7Az2zwH4wPk1";// 用户端
+	private static String appkey2 = "vi1F0oUgRYAaxZ3xtPeVUA";// 用户端
+	private static String masterSecret2 = "5f23soSbuN76qvvxOZipc1";// 用户端
 	private static String host = "http://sdk.open.api.igexin.com/apiex.htm";
 
 	/**
@@ -296,8 +296,8 @@ public class GtPush {
 	}
 
 	public static void main(String[] args) throws Exception {
-	/*	GtPush p = new GtPush();
-		System.out.println(p.sendMessageToCid("测试内容4", "7c3c97ee79b1dbf9ac300d1116c97daa", "测试标题4"));*/
+		/*GtPush p = new GtPush();
+		System.out.println(p.sendMessageToCidCustoms("测试内容4", "7025e9871b8450137cdb0df202688d64", "测试标题4"));*/
 
 		// apnpush();
 	}
