@@ -40,6 +40,7 @@ import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.PwdUtil;
 
 @Service
 public class CashManageFrontServiceImpl implements CashManageFrontService {
@@ -107,7 +108,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			}
 
 			// 校验支付密码
-			if (!MD5.MD5Encode(cash.getPayPwd()).equals(info.getPayPassword())) {
+			if (!PwdUtil.verify(cash.getPayPwd(), info.getPayPassword())) {
 				return ResultCode.PAY_PWD_ERROR;
 			}
 		}

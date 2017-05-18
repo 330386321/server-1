@@ -22,6 +22,7 @@ import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
@@ -252,7 +253,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			return ResultCode.PROPERTY_INFO_OUT_INDEX;
 		} else {
 			PropertyInfoDO info = infoList.get(0);
-			if (!MD5.MD5Encode(dparam.getPayPwd()).equals(info.getPayPassword())) {
+			if (!PwdUtil.verify(dparam.getPayPwd(), info.getPayPassword())) {
 				return ResultCode.PAY_PWD_ERROR;
 			}
 		}
