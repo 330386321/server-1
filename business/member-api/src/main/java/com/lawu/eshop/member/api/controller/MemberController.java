@@ -165,7 +165,7 @@ public class MemberController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "注册", notes = "会员注册。[1002|1012|1013|1016|1025] (梅述全)", httpMethod = "POST")
+    @ApiOperation(value = "注册", notes = "会员注册。[1026|1027|1013|1016|1025] (梅述全)", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "register/{verifyCodeId}", method = RequestMethod.POST)
     public Result register(@PathVariable @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
@@ -174,7 +174,7 @@ public class MemberController extends BaseController {
         if (StringUtils.isNotEmpty(registerParam.getInviterAccount())) {
             Result<InviterDTO> inviterResult = inviterService.getInviterByAccount(registerParam.getInviterAccount());
             if (!isSuccess(inviterResult)) {
-                return successGet(ResultCode.RESOURCE_NOT_FOUND);
+                return successGet(ResultCode.INVITER_NO_EXIST);
             }
             InviterDTO inviterDTO = inviterResult.getModel();
             registerRealParam.setInviterId(inviterDTO.getInviterId());
@@ -182,7 +182,7 @@ public class MemberController extends BaseController {
         }
         Result accountResult = memberService.getMemberByAccount(registerParam.getAccount());
         if (isSuccess(accountResult)) {
-            return successGet(ResultCode.RECORD_EXIST);
+            return successGet(ResultCode.ACCOUNT_EXIST);
         }
         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, registerParam.getSmsCode());
         if (!isSuccess(smsResult)) {

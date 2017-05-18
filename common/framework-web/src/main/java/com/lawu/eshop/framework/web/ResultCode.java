@@ -41,6 +41,8 @@ public class ResultCode {
     public static final int PAY_PWD_ERROR = 1023;
     public static final int ILLEGAL_OPERATION = 1024;
     public static final int VERIFY_SMS_CODE_OVERTIME = 1025;
+    public static final int INVITER_NO_EXIST = 1026;
+    public static final int ACCOUNT_EXIST = 1027;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -175,6 +177,8 @@ public class ResultCode {
         ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(ILLEGAL_OPERATION, "非法操作");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码超时");
+        ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在");
+        ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
