@@ -29,6 +29,7 @@ public class RongUserController extends BaseController {
      * @param userId      用户 Id
      * @param name        用户名称
      * @param portraitUri 用户头像 URI
+     *    获取需要根据对应的service去获取
      * @return
      * @throws Exception
      */
