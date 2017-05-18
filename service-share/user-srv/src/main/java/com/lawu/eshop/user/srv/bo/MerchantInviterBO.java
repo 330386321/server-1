@@ -14,7 +14,7 @@ public class MerchantInviterBO {
 	 
 	private String principalMobile;
 	
-	private String regionPath;
+	private String regionName;
 	
 	private String address;
 	
@@ -68,12 +68,13 @@ public class MerchantInviterBO {
 		this.principalMobile = principalMobile;
 	}
 
-	public String getRegionPath() {
-		return regionPath;
+	
+	public String getRegionName() {
+		return regionName;
 	}
 
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 	public String getAddress() {

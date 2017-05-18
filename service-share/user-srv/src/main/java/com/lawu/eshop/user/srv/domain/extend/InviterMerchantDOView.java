@@ -44,7 +44,7 @@ public class InviterMerchantDOView implements Serializable {
 	/**
 	 * 所在区域
 	 */
-	private String regionPath;
+	private String regionName;
 
 	/**
 	 * 负责人名字
@@ -70,6 +70,8 @@ public class InviterMerchantDOView implements Serializable {
 	 * 图片
 	 */
 	private String path;
+	
+	private String address;
 	
 	private Integer inviterCount;
 	
@@ -115,12 +117,13 @@ public class InviterMerchantDOView implements Serializable {
 		this.name = name;
 	}
 
-	public String getRegionPath() {
-		return regionPath;
+
+	public String getRegionName() {
+		return regionName;
 	}
 
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 	public String getPrincipalName() {
@@ -183,4 +186,13 @@ public class InviterMerchantDOView implements Serializable {
 		this.path = path;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	
 }

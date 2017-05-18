@@ -661,7 +661,12 @@ public class AdServiceImpl implements AdService {
 		for (AdDO adDO : DOS) {
 			if(adDO.getType()==3){
 				AdBO BO=AdConverter.convertBO(adDO);
-				BOS.add(BO);
+				PointPoolDOExample ppexample=new PointPoolDOExample();
+				ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
+						                   .andStatusEqualTo(new Byte("1"));
+				 Long count=pointPoolDOMapper.countByExample(ppexample);
+				 BO.setNumber(count.intValue());
+				 BOS.add(BO);
 			}else{
 				if(adDO.getStatus()==2){
 					AdBO BO=AdConverter.convertBO(adDO);

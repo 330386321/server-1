@@ -35,6 +35,8 @@ import com.lawu.eshop.user.srv.domain.MerchantDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
@@ -45,6 +47,7 @@ import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -103,6 +106,9 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MemberProfileDOMapper memberProfileDOMapper;
+    
+    @Autowired
+    private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
 
     @Override
     @Transactional
@@ -338,6 +344,13 @@ public class MerchantServiceImpl implements MerchantService {
         for (InviterMerchantDOView inviterMerchantDOView : inviterMerchantDOS) {
         	 MerchantProfileDO  merchantProfileDO =merchantProfileDOMapper.selectByPrimaryKey(inviterMerchantDOView.getId());
         	 inviterMerchantDOView.setInviterCount(merchantProfileDO.getInviteMerchantCount2()+merchantProfileDO.getInviteMerchantCount3());
+        	//获取门店logo
+         	MerchantStoreImageDOExample msidExample=new MerchantStoreImageDOExample();
+         	msidExample.createCriteria().andMerchantIdEqualTo(inviterMerchantDOView.getId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
+         	List<MerchantStoreImageDO>  msiList= merchantStoreImageDOMapper.selectByExample(msidExample);
+         	if(!msiList.isEmpty()){
+         		inviterMerchantDOView.setPath(msiList.get(0).getPath());
+         	}
 		}
        
         Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();

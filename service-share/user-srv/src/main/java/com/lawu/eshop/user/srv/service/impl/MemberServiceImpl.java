@@ -162,7 +162,8 @@ public class MemberServiceImpl implements MemberService {
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
             c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
             Criteria c2 = example.createCriteria();
-            c2.andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
+            c2.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType)
+            .andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
             example.or(c2);
         }
         RowBounds rowBounds = new RowBounds(memberQuery.getOffset(), memberQuery.getPageSize());

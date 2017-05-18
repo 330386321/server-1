@@ -26,11 +26,13 @@ public class MerchantInviterConverter {
 			FIO.setAccount(inviterMerchantDO.getAccount());
 			FIO.setName(inviterMerchantDO.getName());
 			FIO.setPrincipalName(inviterMerchantDO.getPrincipalName());
-			FIO.setRegionPath(inviterMerchantDO.getRegionPath());
+			FIO.setRegionName(inviterMerchantDO.getRegionName());
 			FIO.setGmtCreate(inviterMerchantDO.getGmtCreate());
 			FIO.setStatusEnum(MerchantStatusEnum.getEnum(inviterMerchantDO.getStatus()));
 			FIO.setPath(inviterMerchantDO.getPath());
+			FIO.setAddress(inviterMerchantDO.getAddress());
 			FIO.setInviterCount(inviterMerchantDO.getInviterCount());
+			FIO.setPrincipalMobile(inviterMerchantDO.getPrincipalMobile());
 			FIBOS.add(FIO);
 			
 		}
@@ -49,15 +51,18 @@ public class MerchantInviterConverter {
         }
         MerchantInviterDTO DTO = new MerchantInviterDTO();
         DTO.setAccount(merchantInviterBO.getAccount());
-        DTO.setRegionPath(merchantInviterBO.getRegionPath());
+        DTO.setRegionName(merchantInviterBO.getRegionName());
         DTO.setAddress(merchantInviterBO.getAddress());
         DTO.setGmtCreate(merchantInviterBO.getGmtCreate());
         DTO.setName(merchantInviterBO.getName());
-        DTO.setPrincipalMobile(merchantInviterBO.getPrincipalMobile());
+        if(merchantInviterBO.getPrincipalMobile()!=null){
+        	 DTO.setPrincipalMobile(merchantInviterBO.getPrincipalMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
+        }
         DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
         DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
         DTO.setPath(merchantInviterBO.getPath());
         DTO.setInviterCount(merchantInviterBO.getInviterCount());
+        DTO.setAddress(merchantInviterBO.getAddress());
         return DTO;
     }
 	

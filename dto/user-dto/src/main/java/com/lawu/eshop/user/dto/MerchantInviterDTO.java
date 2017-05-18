@@ -19,7 +19,7 @@ public class MerchantInviterDTO {
 	private String principalMobile;
 	
 	@ApiModelProperty(value = "区域", required = true)
-	private String regionPath;
+	private String regionName;
 	
 	@ApiModelProperty(value = "详细地址", required = true)
 	private String address;
@@ -67,13 +67,14 @@ public class MerchantInviterDTO {
 	public void setPrincipalMobile(String principalMobile) {
 		this.principalMobile = principalMobile;
 	}
+	
 
-	public String getRegionPath() {
-		return regionPath;
+	public String getRegionName() {
+		return regionName;
 	}
 
-	public void setRegionPath(String regionPath) {
-		this.regionPath = regionPath;
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 	public String getAddress() {
