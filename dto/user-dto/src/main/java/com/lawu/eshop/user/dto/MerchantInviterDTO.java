@@ -2,6 +2,8 @@ package com.lawu.eshop.user.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class MerchantInviterDTO {
@@ -25,6 +27,7 @@ public class MerchantInviterDTO {
 	private String address;
 	
 	@ApiModelProperty(value = "创建时间", required = true)
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	private Date gmtCreate;
 	
 	@ApiModelProperty(value = "图片", required = true)

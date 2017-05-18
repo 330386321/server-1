@@ -436,4 +436,5 @@ public class AdController extends BaseController {
     	return rs;
     }
     
+    
 } 

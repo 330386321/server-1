@@ -112,5 +112,13 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.POST, value = "merchant/saveHeadImage/{merchantId}")
     Result<UserHeadImgDTO> saveHeadImage(@PathVariable("merchantId") Long merchantId, @RequestParam("headimg") String headimg);
+    
+    /**
+     * 获取电话
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "merchant/selectMobile/{merchantId}", method = RequestMethod.GET)
+    public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId);
 
 }

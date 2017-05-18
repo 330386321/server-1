@@ -54,11 +54,20 @@ public class MerchantInviterConverter {
         DTO.setRegionName(merchantInviterBO.getRegionName());
         DTO.setAddress(merchantInviterBO.getAddress());
         DTO.setGmtCreate(merchantInviterBO.getGmtCreate());
-        DTO.setName(merchantInviterBO.getName());
+        if(merchantInviterBO.getName()==null){
+        	 DTO.setName("E点商家");
+        }else{
+        	 DTO.setName(merchantInviterBO.getName());
+        }
         if(merchantInviterBO.getPrincipalMobile()!=null){
         	 DTO.setPrincipalMobile(merchantInviterBO.getPrincipalMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
         }
-        DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
+        if(merchantInviterBO.getPrincipalName()==null){
+       	     DTO.setPrincipalName("E点商家");
+        }else{
+    	     DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
+        }
+      
         DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
         DTO.setPath(merchantInviterBO.getPath());
         DTO.setInviterCount(merchantInviterBO.getInviterCount());

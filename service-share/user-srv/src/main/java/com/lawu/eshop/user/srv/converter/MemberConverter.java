@@ -204,7 +204,11 @@ public class MemberConverter {
             return null;
         }
         EfriendDTO memberDTO = new EfriendDTO();
-        memberDTO.setNickname(memberBO.getNickname());
+        if(memberBO.getNickname()==null){
+        	memberDTO.setNickname("E点用户");
+        }else{
+        	memberDTO.setNickname(memberBO.getNickname());
+        }
         memberDTO.setHeadimg(memberBO.getHeadimg());
         memberDTO.setMobile(memberBO.getMobile());
         memberDTO.setLevel(memberBO.getLevel());

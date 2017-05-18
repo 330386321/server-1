@@ -235,5 +235,12 @@ public interface AdService {
 	 * @return
 	 */
 	Boolean isExistsRedPacket(Long merchantId);
+	
+	/**
+	 * 判断商家是否发过红包
+	 * @param merchantId
+	 * @return
+	 */
+	Boolean isSendRedPacket(Long merchantId);
 
 }

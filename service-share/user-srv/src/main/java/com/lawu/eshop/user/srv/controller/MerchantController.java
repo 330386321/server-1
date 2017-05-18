@@ -213,5 +213,17 @@ public class MerchantController extends BaseController {
         userHeadImgDTO.setHeadImg(headimg);
         return successCreated(userHeadImgDTO);
     }
+    
+    
+    /**
+     * 获取商家电话
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
+    public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId) {
+    	MerchantBO merchantBO=merchantService.getMerchantBOById(merchantId);
+        return successCreated(merchantBO.getMobile());
+    }
 
 }

@@ -15,7 +15,6 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +49,7 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
@@ -80,28 +80,25 @@ public class AdServiceImpl implements AdService {
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
 	
 	@Autowired
-    private StringRedisTemplate stringRedisTemplate;
-	
-	@Autowired
 	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
-    private TransactionMainService mctransactionMainAddService;
+    private TransactionMainService<Reply> mctransactionMainAddService;
 	
 	@Autowired
 	@Qualifier("adMerchantAddPointTransactionMainServiceImpl")
-    private TransactionMainService matransactionMainAddService;
+    private TransactionMainService<Reply> matransactionMainAddService;
 	
 	@Autowired
 	@Qualifier("adUserAddPointTransactionMainServiceImpl")
-    private TransactionMainService adtransactionMainAddService;
+    private TransactionMainService<Reply> adtransactionMainAddService;
 	
 	@Autowired
 	@Qualifier("userClickAdTransactionMainServiceImpl")
-    private TransactionMainService userClicktransactionMainAddService;
+    private TransactionMainService<Reply> userClicktransactionMainAddService;
 	
 	
 	@Autowired
 	@Qualifier("userSweepRedTransactionMainServiceImpl")
-    private TransactionMainService userSweepRedtransactionMainAddService;
+    private TransactionMainService<Reply> userSweepRedtransactionMainAddService;
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
@@ -892,6 +889,19 @@ public class AdServiceImpl implements AdService {
 			return true;
 		}
 		
+	}
+
+	@Override
+	public Boolean isSendRedPacket(Long merchantId) {
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId)
+		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		long count=adDOMapper.countByExample(example);
+		if(count>0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

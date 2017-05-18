@@ -349,7 +349,12 @@ public class MerchantServiceImpl implements MerchantService {
          	msidExample.createCriteria().andMerchantIdEqualTo(inviterMerchantDOView.getId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
          	List<MerchantStoreImageDO>  msiList= merchantStoreImageDOMapper.selectByExample(msidExample);
          	if(!msiList.isEmpty()){
-         		inviterMerchantDOView.setPath(msiList.get(0).getPath());
+         		if(msiList.get(0).getPath()==null){
+         			inviterMerchantDOView.setPath(userSrvConfig.getMerchant_headimg());
+         		}else{
+         			inviterMerchantDOView.setPath(msiList.get(0).getPath());
+         		}
+         		
          	}
 		}
        

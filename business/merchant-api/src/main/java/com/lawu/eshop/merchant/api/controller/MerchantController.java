@@ -285,5 +285,13 @@ public class MerchantController extends BaseController {
             response.sendRedirect(merchantApiConfig.getShareRegisterUrl());
         }
     }
+    
+    @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
+    public Result<String> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) throws IOException{
+    	Result<String> result =merchantService.selectMobile(merchantId);
+    	return result;
+    }
 
 }
