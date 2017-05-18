@@ -83,6 +83,7 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	String mediaUrl="/a/test.jpg";
+    	System.out.println("--------------------->"+mediaUrl);
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
