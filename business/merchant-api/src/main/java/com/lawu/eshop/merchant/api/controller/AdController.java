@@ -82,19 +82,19 @@ public class AdController extends BaseController {
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
-    	String mediaUrl="/a/test.jpg";
-//    	HttpServletRequest request = getRequest();
-//    	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
-//    		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
-//            if(!"".equals(retMap.get("imgUrl"))){
-//            	mediaUrl = retMap.get("imgUrl").toString();
-//            }
-//    	}else if(adParam.getTypeEnum().val==2){//视频投放
-//    		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
-//    		if(!"".equals(retMap.get("videoUrl"))){
-//            	mediaUrl = retMap.get("videoUrl").toString();
-//            }
-//    	}
+    	String mediaUrl="";
+    	HttpServletRequest request = getRequest();
+    	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
+    		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
+            if(!"".equals(retMap.get("imgUrl"))){
+            	mediaUrl = retMap.get("imgUrl").toString();
+            }
+    	}else if(adParam.getTypeEnum().val==2){//视频投放
+    		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
+    		if(!"".equals(retMap.get("videoUrl"))){
+            	mediaUrl = retMap.get("videoUrl").toString();
+            }
+    	}
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
