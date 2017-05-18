@@ -134,6 +134,7 @@ public class MerchantAuditController extends BaseController {
             messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_STORE_FAIL);
             messageTempParam.setFailReason(auditParam.getRemark());
         }
+        messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志

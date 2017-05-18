@@ -130,6 +130,7 @@ public class AdController extends BaseController {
         messageTempParam.setAdTypeName(adDTOResult.getModel().getTypeEnum().getName());
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_AD_FORCE_DOWN);
+        messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志
@@ -191,6 +192,7 @@ public class AdController extends BaseController {
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_SUCCESS);
+        messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志
@@ -227,6 +229,7 @@ public class AdController extends BaseController {
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_FAIL);
+        messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(merchantSNSDTOResult.getModel().getNum(), messageInfoParam);
 
         //保存操作日志

@@ -133,6 +133,7 @@ public class FansMerchantController extends BaseController {
         messageTempParam = new MessageTempParam();
         messageTempParam.setExpendPoint(new BigDecimal(numArray.length));
         messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint());
+        messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(UserUtil.getCurrentUserNum(getRequest()), messageInfoParam);
         return successCreated();
     }
