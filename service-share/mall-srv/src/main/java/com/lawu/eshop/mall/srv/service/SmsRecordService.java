@@ -30,10 +30,9 @@ public interface SmsRecordService {
      * @param ip        IP
      * @param purpose   短信类型
      * @param smsCode   短信码
-     * @param errorCode 验证发送短信错误码
      * @return
      */
-    SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode, int errorCode);
+    SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode);
 
     /**
      * 更新短信发送成功

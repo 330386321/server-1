@@ -52,6 +52,15 @@ public class MallSrvConfig {
     @Value(value = "${sms_is_send}")
     private Boolean isSend;
 
+    @Value(value = "${sms.send.hour.count}")
+    private Integer smsSendHourCount;
+
+    @Value(value = "${sms.send.ip.count}")
+    private Integer smsSendIpCount;
+
+    @Value(value = "${sms.send.mobile.count}")
+    private Integer smsSendMobileCount;
+
     public String getType() {
         return type;
     }
@@ -106,5 +115,17 @@ public class MallSrvConfig {
 
     public Boolean getIsSend() {
         return isSend;
+    }
+
+    public Integer getSmsSendHourCount() {
+        return smsSendHourCount;
+    }
+
+    public Integer getSmsSendIpCount() {
+        return smsSendIpCount;
+    }
+
+    public Integer getSmsSendMobileCount() {
+        return smsSendMobileCount;
     }
 }

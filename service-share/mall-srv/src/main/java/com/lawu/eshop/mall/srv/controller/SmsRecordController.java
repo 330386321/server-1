@@ -43,14 +43,14 @@ public class SmsRecordController extends BaseController {
      */
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable String mobile, @RequestParam String ip, @RequestParam VerifyCodePurposeEnum purpose) throws Exception {
-        String smsCode = RandomUtil.getRandomString(1, 6);
         int errorCode = smsRecordService.verifySendSms(mobile, ip);
-        SmsRecordBO smsRecordBO  = smsRecordService.saveSmsRecord(mobile, ip, purpose, smsCode, errorCode);
-        VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
-        verifyCodeDTO.setId(smsRecordBO.getVirifyCodeId());
         if (errorCode != ResultCode.SUCCESS) {
             return successGet(errorCode);
         }
+        String smsCode = RandomUtil.getRandomString(1, 6);
+        SmsRecordBO smsRecordBO  = smsRecordService.saveSmsRecord(mobile, ip, purpose, smsCode);
+        VerifyCodeDTO verifyCodeDTO = new VerifyCodeDTO();
+        verifyCodeDTO.setId(smsRecordBO.getVirifyCodeId());
         if (!mallSrvConfig.getIsSend()) {
             return successCreated(verifyCodeDTO);
         }

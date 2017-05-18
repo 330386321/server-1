@@ -50,7 +50,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         SmsRecordDOExample smsRecordDOExample = new SmsRecordDOExample();
         smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
         long hourCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
-        if (hourCount >= 2) {
+        if (hourCount >= mallSrvConfig.getSmsSendHourCount()) {
             return ResultCode.SMS_SEND_HOUR_LIMIT;
         }
 
@@ -61,7 +61,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
             smsRecordDOExample = new SmsRecordDOExample();
             smsRecordDOExample.createCriteria().andIpEqualTo(ip).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
             long ipCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
-            if (ipCount >= 5) {
+            if (ipCount >= mallSrvConfig.getSmsSendIpCount()) {
                 return ResultCode.SMS_SEND_IP_LIMIT;
             }
         }
@@ -69,7 +69,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         smsRecordDOExample = new SmsRecordDOExample();
         smsRecordDOExample.createCriteria().andMobileEqualTo(mobile).andGmtCreateGreaterThanOrEqualTo(dfd.parse(startDate)).andGmtCreateLessThanOrEqualTo(dfd.parse(endDate)).andIsSuccessEqualTo(SmsConstant.SMS_SEND_SUCCESS);
         long dayCount = smsRecordDOMapper.countByExample(smsRecordDOExample);
-        if (dayCount >= 5) {
+        if (dayCount >= mallSrvConfig.getSmsSendMobileCount()) {
             return ResultCode.SMS_SEND_MOBILE_LIMIT;
         }
         return ResultCode.SUCCESS;
@@ -77,7 +77,7 @@ public class SmsRecordServiceImpl implements SmsRecordService {
 
     @Override
     @Transactional
-    public SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode, int errorCode) {
+    public SmsRecordBO saveSmsRecord(String mobile, String ip, VerifyCodePurposeEnum purpose, String smsCode) {
         //插入短信记录
         SmsRecordDO smsRecordDO = new SmsRecordDO();
         smsRecordDO.setMobile(mobile);
@@ -85,7 +85,6 @@ public class SmsRecordServiceImpl implements SmsRecordService {
         smsRecordDO.setIp(ip);
         smsRecordDO.setType(purpose.val);
         smsRecordDO.setIsSuccess(SmsConstant.SMS_SEND_FAIL);
-        smsRecordDO.setFailReason(ResultCode.get(errorCode));
         smsRecordDO.setGmtCreate(new Date());
         smsRecordDOMapper.insertSelective(smsRecordDO);
 
