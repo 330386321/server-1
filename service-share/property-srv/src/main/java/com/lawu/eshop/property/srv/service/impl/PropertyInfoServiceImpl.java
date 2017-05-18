@@ -1,5 +1,13 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -28,14 +36,7 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
-import com.lawu.eshop.utils.MD5;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.utils.PwdUtil;
 
 /**
  * 资产管理服务实现
@@ -68,7 +69,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	public void updatePayPwd(String userNum, String newPwd) {
 		PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
 		propertyInfoDO.setUserNum(userNum);
-		propertyInfoDO.setPayPassword(MD5.MD5Encode(newPwd));
+		propertyInfoDO.setPayPassword(PwdUtil.generate(newPwd));
 		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
 		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
 		propertyInfoDOMapper.updateByExampleSelective(propertyInfoDO, propertyInfoDOExample);

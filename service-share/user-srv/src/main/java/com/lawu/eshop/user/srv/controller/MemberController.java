@@ -16,6 +16,8 @@ import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.PwdUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,7 +96,7 @@ public class MemberController extends BaseController {
         if (memberBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        if (!MD5.MD5Encode(originalPwd).equals(memberBO.getPwd())) {
+        if (!PwdUtil.verify(originalPwd, memberBO.getPwd()) ) {
             return successGet(ResultCode.VERIFY_PWD_FAIL);
         }
         memberService.updateLoginPwd(id, newPwd);

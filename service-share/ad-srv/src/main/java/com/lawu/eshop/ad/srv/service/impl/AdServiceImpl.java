@@ -425,8 +425,13 @@ public class AdServiceImpl implements AdService {
 				 }else{
 					 BO.setIsPraise(false);
 				 }
+				 BOS.add(BO); //E赞上架和投放中都显示
+			}else{
+				if(adDO.getStatus()==2){ //平面广告 只显示投放中
+					BOS.add(BO);
+				}
 			}
-			BOS.add(BO);
+			
 		}
 		Page<AdBO> page=new Page<AdBO>();
 		page.setCurrentPage(adMemberParam.getCurrentPage());

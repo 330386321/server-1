@@ -1,10 +1,25 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.math.BigDecimal;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.*;
+import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyPointDTO;
+import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -14,12 +29,7 @@ import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.utils.BeanUtil;
-import com.lawu.eshop.utils.MD5;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.math.BigDecimal;
+import com.lawu.eshop.utils.PwdUtil;
 
 /**
  * @author meishuquan
@@ -51,7 +61,7 @@ public class PropertyInfoController extends BaseController {
 		if (propertyInfoBO == null) {
 			return successGet(ResultCode.NOT_FOUND_DATA);
 		}
-		if (!MD5.MD5Encode(originalPwd).equals(propertyInfoBO.getPayPassword())) {
+		if (!PwdUtil.verify(originalPwd, propertyInfoBO.getPayPassword())) {
 			return successGet(ResultCode.VERIFY_PWD_FAIL);
 		}
 		propertyInfoService.updatePayPwd(userNum, newPwd);
@@ -136,7 +146,7 @@ public class PropertyInfoController extends BaseController {
 		if (StringUtils.isEmpty(propertyInfoBO.getPayPassword())) {
 			return successGet(ResultCode.PAY_PWD_NULL);
 		}
-		if (MD5.MD5Encode(payPwd).equals(propertyInfoBO.getPayPassword())) {
+		if (PwdUtil.verify(payPwd, propertyInfoBO.getPayPassword())) {
 			return successGet(true);
 		}
 		return successGet(false);

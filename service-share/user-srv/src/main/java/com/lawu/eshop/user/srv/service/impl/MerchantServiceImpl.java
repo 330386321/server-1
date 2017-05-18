@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -14,28 +25,35 @@ import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
-import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.InviteRelationDO;
+import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
-import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
-import com.lawu.eshop.utils.MD5;
+import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 商户服务实现
@@ -91,7 +109,7 @@ public class MerchantServiceImpl implements MerchantService {
     public void updateLoginPwd(Long id, String newPwd) {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setId(id);
-        merchantDO.setPwd(MD5.MD5Encode(newPwd));
+        merchantDO.setPwd(PwdUtil.generate(newPwd));
         merchantDOMapper.updateByPrimaryKeySelective(merchantDO);
     }
 
@@ -133,7 +151,7 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantDO merchantDO = new MerchantDO();
         merchantDO.setNum(userNum);
         merchantDO.setAccount(registerRealParam.getAccount());
-        merchantDO.setPwd(MD5.MD5Encode(registerRealParam.getPwd()));
+        merchantDO.setPwd(PwdUtil.generate(registerRealParam.getPwd()));
         merchantDO.setMobile(registerRealParam.getAccount());
         merchantDO.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
         merchantDO.setHeadimg(userSrvConfig.getMerchant_headimg());
@@ -333,13 +351,18 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public MerchantBO find(String account, String pwd) {
-
-
         MerchantDOExample example = new MerchantDOExample();
-        example.createCriteria().andAccountEqualTo(account).andPwdEqualTo(passwordStrategy.encode(pwd));
+        example.createCriteria().andAccountEqualTo(account);
         List<MerchantDO> merchantDOs = merchantDOMapper.selectByExample(example);
-
-        return merchantDOs.isEmpty() ? null : MerchantConverter.convertBO(merchantDOs.get(0));
+        if(!merchantDOs.isEmpty()){
+        	if(PwdUtil.verify(pwd, merchantDOs.get(0).getPwd())){
+        		return MerchantConverter.convertBO(merchantDOs.get(0));
+        	}else{
+        		return null;
+        	}
+        }else{
+        	return null;
+        }
     }
 
     @Override
