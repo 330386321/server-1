@@ -44,6 +44,7 @@ public class LoginUserConverter {
         loginUserDTO.setId(merchantBO.getId());
         loginUserDTO.setNum(merchantBO.getNum());
         loginUserDTO.setAccount(merchantBO.getAccount());
+        loginUserDTO.setRyToken(merchantBO.getRyToken());
         return loginUserDTO;
     }
 }
