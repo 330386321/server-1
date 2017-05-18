@@ -98,6 +98,12 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 	private String merchantNum;
 	
 	/**
+	 * 会员编号
+	 */
+	@ApiModelProperty(value = "会员编号", required = true)
+	private String memberNum;
+	
+	/**
 	 * 倒计时
 	 */
 	@ApiModelProperty(value = "倒计时", required = false)
@@ -231,6 +237,14 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 
 	public void setMerchantNum(String merchantNum) {
 		this.merchantNum = merchantNum;
+	}
+
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
 	}
 
 	public Long getCountdown() {
