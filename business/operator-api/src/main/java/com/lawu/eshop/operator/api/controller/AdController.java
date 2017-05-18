@@ -187,6 +187,7 @@ public class AdController extends BaseController {
 
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setAdTypeName(AdTypeEnum.AD_TYPE_VIDEO.getName());
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_SUCCESS);
@@ -222,6 +223,7 @@ public class AdController extends BaseController {
 
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setAdTypeName(AdTypeEnum.AD_TYPE_VIDEO.getName());
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_FAIL);
