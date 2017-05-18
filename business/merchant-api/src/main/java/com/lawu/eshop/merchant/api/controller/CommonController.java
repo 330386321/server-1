@@ -56,6 +56,7 @@ public class CommonController extends BaseController {
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setUserNum(userDTO.getNum());
         tokenDTO.setToken(token);
+        tokenDTO.setRyToken(userDTO.getRyToken());
 
         return successCreated(tokenDTO);
     }

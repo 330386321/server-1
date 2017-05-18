@@ -13,6 +13,8 @@ public class LoginUserDTO {
 
     private String account;
 
+    private String ryToken;
+
 
     public Long getId() {
         return id;
@@ -36,5 +38,13 @@ public class LoginUserDTO {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
     }
 }

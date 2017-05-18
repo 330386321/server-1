@@ -123,29 +123,32 @@ public class MessageServiceImpl implements MessageService {
          */
 
         //消息替换占位符
-        content = content.replace("{0}", messageInfoParam.getMessageParam().getUserName());
-        content = content.replace("{1}", messageInfoParam.getMessageParam().getOrderNum());
-        content = content.replace("{2}", messageInfoParam.getMessageParam().getWaybillNum());
-        content = content.replace("{3}", messageInfoParam.getMessageParam().getBalance().toString());
-        content = content.replace("{4}", messageInfoParam.getMessageParam().getRechargeBalance().toString());
-        content = content.replace("{5}", messageInfoParam.getMessageParam().getPoint().toString());
-        content = content.replace("{6}", messageInfoParam.getMessageParam().getExpendAmount().toString());
-        content = content.replace("{7}", messageInfoParam.getMessageParam().getFavoredAmount().toString());
-        content = content.replace("{8}", messageInfoParam.getMessageParam().getRefundNum());
-        content = content.replace("{9}", messageInfoParam.getMessageParam().getProductName());
-        content = content.replace("{10}", messageInfoParam.getMessageParam().getEarningAmount().toString());
-        content = content.replace("{11}", messageInfoParam.getMessageParam().getEarningPoint().toString());
-        content = content.replace("{12}", messageInfoParam.getMessageParam().getMerchantName());
-        content = content.replace("{13}", messageInfoParam.getMessageParam().getAdName());
-        content = content.replace("{14}", messageInfoParam.getMessageParam().getStoreName());
-        content = content.replace("{15}", messageInfoParam.getMessageParam().getExpendPoint().toString());
-        content = content.replace("{16}", messageInfoParam.getMessageParam().getRechargeNum());
-        content = content.replace("{17}", messageInfoParam.getMessageParam().getAdTypeName());
-        content = content.replace("{18}", messageInfoParam.getMessageParam().getFailReason());
-        content = content.replace("{19}", messageInfoParam.getMessageParam().getProductCount().toString());
-        content = content.replace("{20}", messageInfoParam.getMessageParam().getExpressCompanyName());
-        content = content.replace("{21}", messageInfoParam.getMessageParam().getRefundAmount().toString());
-        content = content.replace("{22}", messageInfoParam.getMessageParam().getOrderAmount().toString());
+        if (messageInfoParam.getMessageParam() != null) {
+
+            content = content.replace("{0}", messageInfoParam.getMessageParam().getUserName() == null ? "" : messageInfoParam.getMessageParam().getUserName());
+            content = content.replace("{1}", messageInfoParam.getMessageParam().getOrderNum() == null ? "" : messageInfoParam.getMessageParam().getOrderNum());
+            content = content.replace("{2}", messageInfoParam.getMessageParam().getWaybillNum() == null ? "" : messageInfoParam.getMessageParam().getWaybillNum());
+            content = content.replace("{3}", messageInfoParam.getMessageParam().getBalance() == null ? "" : messageInfoParam.getMessageParam().getBalance().toString());
+            content = content.replace("{4}", messageInfoParam.getMessageParam().getRechargeBalance() == null ? "" : messageInfoParam.getMessageParam().getRechargeBalance().toString());
+            content = content.replace("{5}", messageInfoParam.getMessageParam().getPoint() == null ? "" : messageInfoParam.getMessageParam().getPoint().toString());
+            content = content.replace("{6}", messageInfoParam.getMessageParam().getExpendAmount() == null ? "" : messageInfoParam.getMessageParam().getExpendAmount().toString());
+            content = content.replace("{7}", messageInfoParam.getMessageParam().getFavoredAmount() == null ? "" : messageInfoParam.getMessageParam().getFavoredAmount().toString());
+            content = content.replace("{8}", messageInfoParam.getMessageParam().getRefundNum() == null ? "" : messageInfoParam.getMessageParam().getRefundNum());
+            content = content.replace("{9}", messageInfoParam.getMessageParam().getProductName() == null ? "" : messageInfoParam.getMessageParam().getProductName());
+            content = content.replace("{10}", messageInfoParam.getMessageParam().getEarningAmount() == null ? "" : messageInfoParam.getMessageParam().getEarningAmount().toString());
+            content = content.replace("{11}", messageInfoParam.getMessageParam().getEarningPoint() == null ? "" : messageInfoParam.getMessageParam().getEarningPoint().toString());
+            content = content.replace("{12}", messageInfoParam.getMessageParam().getMerchantName() == null ? "" : messageInfoParam.getMessageParam().getMerchantName());
+            content = content.replace("{13}", messageInfoParam.getMessageParam().getAdName() == null ? "" : messageInfoParam.getMessageParam().getAdName());
+            content = content.replace("{14}", messageInfoParam.getMessageParam().getStoreName() == null ? "" : messageInfoParam.getMessageParam().getStoreName());
+            content = content.replace("{15}", messageInfoParam.getMessageParam().getExpendPoint() == null ? "" : messageInfoParam.getMessageParam().getExpendPoint().toString());
+            content = content.replace("{16}", messageInfoParam.getMessageParam().getRechargeNum() == null ? "" : messageInfoParam.getMessageParam().getRechargeNum());
+            content = content.replace("{17}", messageInfoParam.getMessageParam().getAdTypeName() == null ? "" : messageInfoParam.getMessageParam().getAdTypeName());
+            content = content.replace("{18}", messageInfoParam.getMessageParam().getFailReason() == null ? "" : messageInfoParam.getMessageParam().getFailReason());
+            content = content.replace("{19}", messageInfoParam.getMessageParam().getProductCount() == null ? "" : messageInfoParam.getMessageParam().getProductCount().toString());
+            content = content.replace("{20}", messageInfoParam.getMessageParam().getExpressCompanyName() == null ? "" : messageInfoParam.getMessageParam().getExpressCompanyName());
+            content = content.replace("{21}", messageInfoParam.getMessageParam().getRefundAmount() == null ? "" : messageInfoParam.getMessageParam().getRefundAmount().toString());
+            content = content.replace("{22}", messageInfoParam.getMessageParam().getOrderAmount() == null ? "" : messageInfoParam.getMessageParam().getOrderAmount().toString());
+        }
 
 
         messageDO.setContent(content);
@@ -255,9 +258,9 @@ public class MessageServiceImpl implements MessageService {
         return page;
     }
 
-	@Override
-	public MessageBO selectMessageId(Long id) {
-		MessageDO messageDO=messageDOMapper.selectByPrimaryKey(id);
-		return MessageConverter.coverBO(messageDO);
-	}
+    @Override
+    public MessageBO selectMessageId(Long id) {
+        MessageDO messageDO = messageDOMapper.selectByPrimaryKey(id);
+        return MessageConverter.coverBO(messageDO);
+    }
 }

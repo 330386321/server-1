@@ -25,6 +25,7 @@ public class LoginUserConverter {
         loginUserDTO.setId(memberBO.getId());
         loginUserDTO.setNum(memberBO.getNum());
         loginUserDTO.setAccount(memberBO.getAccount());
+        loginUserDTO.setRyToken(memberBO.getRyToken());
         return loginUserDTO;
     }
 

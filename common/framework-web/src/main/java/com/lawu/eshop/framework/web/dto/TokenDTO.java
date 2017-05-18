@@ -14,6 +14,9 @@ public class TokenDTO {
     @ApiModelProperty(value = "用户token，登录后每次请求必须带上该标志", required = true)
     private String token;
 
+    @ApiModelProperty(value = "融云token")
+    private String ryToken;
+
     public String getUserNum() {
         return userNum;
     }
@@ -28,5 +31,13 @@ public class TokenDTO {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public String getRyToken() {
+        return ryToken;
+    }
+
+    public void setRyToken(String ryToken) {
+        this.ryToken = ryToken;
     }
 }
