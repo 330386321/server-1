@@ -79,8 +79,6 @@ public class PwdUtil {
             cs2[i / 3] = md5.charAt(i + 1);  
         }  
         String salt = new String(cs2);  
-        System.out.println(new String(cs1));
-        System.out.println(MD5Encode(PRE+password + salt));
         return MD5Encode(PRE+password + salt).equals(new String(cs1));  
     }  
 	
