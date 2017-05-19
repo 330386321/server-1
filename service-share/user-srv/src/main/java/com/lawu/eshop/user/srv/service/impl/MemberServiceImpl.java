@@ -1,23 +1,8 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.constants.UserInviterTypeEnum;
-import com.lawu.eshop.user.constants.UserSexEnum;
-import com.lawu.eshop.user.constants.UserStatusEnum;
+import com.lawu.eshop.user.constants.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -25,29 +10,27 @@ import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
-import com.lawu.eshop.user.srv.domain.FansMerchantDO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDO;
-import com.lawu.eshop.user.srv.domain.InviteRelationDOExample;
-import com.lawu.eshop.user.srv.domain.MemberDO;
-import com.lawu.eshop.user.srv.domain.MemberDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
-import com.lawu.eshop.user.srv.domain.MemberProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantProfileDO;
-import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.InviteRelationDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
-import com.lawu.eshop.user.srv.mapper.MemberProfileDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 会员信息服务实现
@@ -526,7 +509,20 @@ public class MemberServiceImpl implements MemberService {
         }
         return MemberConverter.convertBO(memberDOS.get(0));
     }
-    
-	
+
+    @Override
+    public RongYunBO getRongYunInfoByNum(String num) {
+        MemberDOExample example = new MemberDOExample();
+        example.createCriteria().andNumEqualTo(num);
+        List<MemberDO> memberDOS = memberDOMapper.selectByExample(example);
+        if (memberDOS.isEmpty()) {
+            return null;
+        }
+        RongYunBO rongYunBO = new RongYunBO();
+        rongYunBO.setUserNum(num);
+        rongYunBO.setNickName(StringUtils.isEmpty(memberDOS.get(0).getNickname()) ? "E店会员" : memberDOS.get(0).getNickname());
+        rongYunBO.setHeadImg(memberDOS.get(0).getHeadimg());
+        return rongYunBO;
+    }
 
 }

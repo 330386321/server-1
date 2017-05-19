@@ -4,10 +4,7 @@ package com.lawu.eshop.merchant.api.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.core.page.PageParam;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +94,7 @@ public interface MerchantService {
     
     /**
      * 商家基本信息
-     * @param id
+     * @param merchantId
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/selectMerchantInfo")
@@ -106,7 +103,7 @@ public interface MerchantService {
     /**
      * 修改头像
      *
-     * @param memberId
+     * @param merchantId
      * @param headimg
      * @return
      */
@@ -120,5 +117,14 @@ public interface MerchantService {
      */
     @RequestMapping(value = "merchant/selectMobile/{merchantId}", method = RequestMethod.GET)
     public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId);
+
+    /**
+     * 根据商家编号查询融云需要的信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(value = "merchant/getRongYunInfo/{num}", method = RequestMethod.GET)
+    Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
 
 }

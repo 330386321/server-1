@@ -1,37 +1,28 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.MessagePushDTO;
-import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
+import com.lawu.eshop.user.srv.converter.RongYunConverter;
 import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.PwdUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -110,7 +101,7 @@ public class MerchantController extends BaseController {
     /**
      * 查询商户信息
      *
-     * @param account 商户账号
+     * @param merchantId 商户账号
      */
     @RequestMapping(value = "selectMerchantInfo", method = RequestMethod.GET)
     public Result<MerchantSNSDTO> selectMerchantInfo(@RequestParam Long merchantId) {
@@ -153,7 +144,6 @@ public class MerchantController extends BaseController {
      * 增加推送、即时通讯token
      * @param id
      * @param cid
-     * @param ryToken
      * @return
      */
     @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
@@ -202,7 +192,7 @@ public class MerchantController extends BaseController {
     /**
      * 修改头像
      *
-     * @param memberId
+     * @param merchantId
      * @param headimg
      * @return
      */
@@ -224,6 +214,21 @@ public class MerchantController extends BaseController {
     public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId) {
     	MerchantBO merchantBO=merchantService.getMerchantBOById(merchantId);
         return successCreated(merchantBO.getMobile());
+    }
+
+    /**
+     * 根据商家编号查询融云需要的信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
+    Result<RongYunDTO> getRongYunInfo(@PathVariable String num) {
+        RongYunBO rongYunBO = merchantService.getRongYunInfoByNum(num);
+        if (rongYunBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(RongYunConverter.convertDTO(rongYunBO));
     }
 
 }

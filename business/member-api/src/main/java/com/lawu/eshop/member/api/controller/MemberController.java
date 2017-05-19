@@ -12,11 +12,10 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
-import com.lawu.eshop.member.api.service.InviterService;
-import com.lawu.eshop.member.api.service.MemberService;
-import com.lawu.eshop.member.api.service.PropertyInfoService;
-import com.lawu.eshop.member.api.service.VerifyCodeService;
+import com.lawu.eshop.member.api.service.*;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.RegisterParam;
@@ -57,6 +56,9 @@ public class MemberController extends BaseController {
 
     @Autowired
     private MemberApiConfig memberApiConfig;
+
+    @Autowired
+    private MerchantService merchantService;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "会员资料信息", notes = "根据会员id获取会员资料信息，成功返回 member [1000]（章勇）", httpMethod = "GET")
@@ -232,5 +234,18 @@ public class MemberController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value = "查询融云需要信息", notes = "查询融云需要信息。 [1004|1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
+    public Result<RongYunDTO> getRongYunInfo(@PathVariable @ApiParam(required = true, value = "用户编号") String num){
+        if(StringUtils.isEmpty(num)){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        if(num.startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+            return memberService.getRongYunInfoByNum(num);
+        }else{
+            return merchantService.getRongYunInfoByNum(num);
+        }
+    }
 
 }

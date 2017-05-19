@@ -7,6 +7,7 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
@@ -126,4 +127,12 @@ public interface MemberService {
      * @return
      */
     MemberBO getMemberByNum(String num);
+
+    /**
+     * 根据会员编号查询融云需要的信息
+     *
+     * @param num
+     * @return
+     */
+    RongYunBO getRongYunInfoByNum(String num);
 }

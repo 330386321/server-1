@@ -11,13 +11,13 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
+import com.lawu.eshop.user.srv.converter.RongYunConverter;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.BeanUtil;
-import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.PwdUtil;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -319,6 +319,21 @@ public class MemberController extends BaseController {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
         return successGet(MemberConverter.convertDTO(memberBO));
+    }
+
+    /**
+     * 根据会员编号查询融云需要的信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
+    Result<RongYunDTO> getRongYunInfo(@PathVariable String num) {
+        RongYunBO rongYunBO = memberService.getRongYunInfoByNum(num);
+        if (rongYunBO == null) {
+            return successGet(ResultCode.NOT_FOUND_DATA);
+        }
+        return successGet(RongYunConverter.convertDTO(rongYunBO));
     }
 
 }

@@ -13,6 +13,7 @@ import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.*;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
+import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
@@ -65,6 +66,9 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private AdService adService;
+
+    @Autowired
+    private MemberService memberService;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
     @ApiOperation(value = "修改登录密码", notes = "根据商户ID修改登录密码。[1002|1009] (梅述全)", httpMethod = "PUT")
@@ -289,9 +293,23 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
-    public Result<String> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId) throws IOException{
+    public Result<String> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId){
     	Result<String> result =merchantService.selectMobile(merchantId);
     	return result;
+    }
+
+    @ApiOperation(value = "查询融云需要信息", notes = "查询融云需要信息。 [1004|1100] (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
+    public Result<RongYunDTO> getRongYunInfo(@PathVariable @ApiParam(required = true, value = "用户编号") String num){
+        if(StringUtils.isEmpty(num)){
+            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+        }
+        if(num.startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+            return memberService.getRongYunInfoByNum(num);
+        }else{
+            return merchantService.getRongYunInfoByNum(num);
+        }
     }
 
 }

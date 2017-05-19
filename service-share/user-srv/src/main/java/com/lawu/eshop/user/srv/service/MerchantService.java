@@ -3,10 +3,7 @@ package com.lawu.eshop.user.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.bo.MerchantBO;
-import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
-import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.*;
 
 import java.util.List;
 
@@ -91,4 +88,12 @@ public interface MerchantService {
     MessagePushBO findMessagePushByMobile(String moblie);
 
     void updateHeadImg(String headimg, Long merchantId);
+
+    /**
+     * 根据商家编号查询融云需要的信息
+     *
+     * @param num
+     * @return
+     */
+    RongYunBO getRongYunInfoByNum(String num);
 }
