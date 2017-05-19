@@ -322,7 +322,7 @@
 		<if test="flag == 2">
 			SELECT DATE_FORMAT(so.gmt_create, "%m") AS keyTxt, sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_create, "%Y") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 			GROUP BY keyTxt
 		</if>
 	  </select>
@@ -331,19 +331,19 @@
 	  	<if test="flag == 1">
 		  	SELECT sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and and so.is_done = 1
+			WHERE DATE_FORMAT(so.gmt_create, "%Y%m") = #{gmtCreate,jdbcType=VARCHAR} and so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 	  	</if>
 	  	<if test="flag == 2">
 	  		SELECT sum(so.actual_amount) AS num
 			FROM shopping_order so
-			WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and and so.is_done = 1
+			WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 	  	</if>
 	  </select>
 	  
   	  <select id="selectByFansSaleTransForm" parameterType="com.lawu.eshop.order.param.ShoppingOrderReportDataParam" resultMap="ReportFansSaleTransFormResultMap">
 	  	  SELECT so.is_fans, COUNT(so.id) as count
 		  FROM shopping_order so
-		  WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and and so.is_done = 1
+		  WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 		  GROUP BY so.is_fans
 	  </select>
 </mapper>
