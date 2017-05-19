@@ -25,6 +25,9 @@ public class MemberApiConfig {
     @Value(value="${sms.valid.minutes}")
     private Integer smsValidMinutes;
 
+    @Value(value="${default_headimg}")
+    private String defaultHeadimg;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -43,5 +46,9 @@ public class MemberApiConfig {
 
     public Integer getSmsValidMinutes() {
         return smsValidMinutes;
+    }
+
+    public String getDefaultHeadimg() {
+        return defaultHeadimg;
     }
 }

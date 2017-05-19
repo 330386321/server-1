@@ -13,6 +13,7 @@ import com.lawu.eshop.mall.dto.*;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.mall.param.CommentMerchantListParam;
 import com.lawu.eshop.mall.param.CommentProductListParam;
+import com.lawu.eshop.merchant.api.MerchantApiConfig;
 import com.lawu.eshop.merchant.api.service.CommentService;
 import com.lawu.eshop.merchant.api.service.MemberService;
 import com.lawu.eshop.merchant.api.service.ProductService;
@@ -43,6 +44,8 @@ public class CommentController extends BaseController {
     private MemberService memberService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private MerchantApiConfig merchantApiConfig;
 
     /**
      * 商家回复商品评价
@@ -119,8 +122,13 @@ public class CommentController extends BaseController {
             commentListDTO.setGrade(commentDTO.getGrade());
             //查询评论用户信息
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-            commentListDTO.setHeadImg(user.getModel().getHeadimg());
-            commentListDTO.setNickName(user.getModel().getNickname());
+            if(commentDTO.getAnonymous()){
+                commentListDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
+                commentListDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+            }else{
+                commentListDTO.setHeadImg(user.getModel().getHeadimg());
+                commentListDTO.setNickName(user.getModel().getNickname());
+            }
             commentListDTO.setLevel(user.getModel().getLevel());
             //查询商品信息
             Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
@@ -204,8 +212,13 @@ public class CommentController extends BaseController {
             commentProductDTO.setGrade(commentDTO.getGrade());
             //查询评论用户信息
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-            commentProductDTO.setHeadImg(user.getModel().getHeadimg());
-            commentProductDTO.setNickName(user.getModel().getNickname());
+            if(commentDTO.getAnonymous()){
+                commentProductDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
+                commentProductDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+            }else{
+                commentProductDTO.setHeadImg(user.getModel().getHeadimg());
+                commentProductDTO.setNickName(user.getModel().getNickname());
+            }
             commentProductDTO.setLevel(user.getModel().getLevel());
             //查询商品信息
             Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
@@ -258,8 +271,13 @@ public class CommentController extends BaseController {
             commentMerchantDTO.setId(commentDTO.getId());
             //查询评论用户信息
             Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-            commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
-            commentMerchantDTO.setNickName(user.getModel().getNickname());
+            if(commentDTO.getAnonymous()){
+                commentMerchantDTO.setHeadImg(merchantApiConfig.getDefaultHeadimg());
+                commentMerchantDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+            }else{
+                commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
+                commentMerchantDTO.setNickName(user.getModel().getNickname());
+            }
             commentMerchantDTO.setLevel(user.getModel().getLevel());
             commentMerchantDTOS.add(commentMerchantDTO);
         }

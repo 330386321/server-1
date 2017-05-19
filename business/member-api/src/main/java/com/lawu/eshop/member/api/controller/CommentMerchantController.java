@@ -122,8 +122,13 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setAvgSpend(commentDTO.getAvgSpend());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-                commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
-                commentMerchantDTO.setNickName(user.getModel().getNickname());
+                if(commentDTO.getAnonymous()){
+                    commentMerchantDTO.setHeadImg(memberApiConfig.getDefaultHeadimg());
+                    commentMerchantDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                }else{
+                    commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
+                    commentMerchantDTO.setNickName(user.getModel().getNickname());
+                }
                 commentMerchantDTO.setLevel(user.getModel().getLevel());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }
@@ -160,8 +165,13 @@ public class CommentMerchantController extends BaseController {
                 commentMerchantDTO.setAvgSpend(commentDTO.getAvgSpend());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-                commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
-                commentMerchantDTO.setNickName(user.getModel().getNickname());
+                if(commentDTO.getAnonymous()){
+                    commentMerchantDTO.setHeadImg(memberApiConfig.getDefaultHeadimg());
+                    commentMerchantDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                }else{
+                    commentMerchantDTO.setHeadImg(user.getModel().getHeadimg());
+                    commentMerchantDTO.setNickName(user.getModel().getNickname());
+                }
                 commentMerchantDTO.setLevel(user.getModel().getLevel());
                 commentMerchantDTOS.add(commentMerchantDTO);
             }

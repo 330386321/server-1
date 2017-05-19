@@ -141,8 +141,14 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setGrade(commentDTO.getGrade());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-                commentProductDTO.setHeadImg(user.getModel().getHeadimg());
-                commentProductDTO.setNickName(user.getModel().getNickname());
+
+                if(commentDTO.getAnonymous()){
+                    commentProductDTO.setHeadImg(memberApiConfig.getDefaultHeadimg());
+                    commentProductDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                }else{
+                    commentProductDTO.setHeadImg(user.getModel().getHeadimg());
+                    commentProductDTO.setNickName(user.getModel().getNickname());
+                }
                 commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
                 Result<CommentProductInfoDTO>  product = productService.selectCommentProductInfo(commentDTO.getProductModelId());
@@ -185,8 +191,13 @@ public class CommentProductController extends BaseController {
                 commentProductDTO.setGrade(commentDTO.getGrade());
                 //查询评论用户信息
                 Result<UserDTO> user = memberService.findMemberInfo(commentDTO.getMemberId());
-                commentProductDTO.setHeadImg(user.getModel().getHeadimg());
-                commentProductDTO.setNickName(user.getModel().getNickname());
+                if(commentDTO.getAnonymous()){
+                    commentProductDTO.setHeadImg(memberApiConfig.getDefaultHeadimg());
+                    commentProductDTO.setNickName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+                }else{
+                    commentProductDTO.setHeadImg(user.getModel().getHeadimg());
+                    commentProductDTO.setNickName(user.getModel().getNickname());
+                }
                 commentProductDTO.setLevel(user.getModel().getLevel());
                 //查询商品信息
                 //查询商品信息

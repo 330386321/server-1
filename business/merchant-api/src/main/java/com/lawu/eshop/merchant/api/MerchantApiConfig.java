@@ -34,6 +34,9 @@ public class MerchantApiConfig {
     @Value(value="${share.register.url}")
     private String shareRegisterUrl;
 
+    @Value(value="${default_headimg}")
+    private String defaultHeadimg;
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -64,5 +67,9 @@ public class MerchantApiConfig {
 
     public String getShareRegisterUrl() {
         return shareRegisterUrl;
+    }
+
+    public String getDefaultHeadimg() {
+        return defaultHeadimg;
     }
 }
