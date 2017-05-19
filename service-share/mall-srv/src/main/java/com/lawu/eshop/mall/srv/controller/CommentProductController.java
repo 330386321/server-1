@@ -107,7 +107,7 @@ public class CommentProductController extends BaseController {
         if (commentProductBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        if(StringUtils.isNotEmpty(commentProductBO.getContent())){
+        if(StringUtils.isNotEmpty(commentProductBO.getReplyContent())){
             return successCreated(ResultCode.COMMENT_REPEAT_REPLY);
         }
         int rows = commentProductService.replyProductComment(commentId, replyContent);

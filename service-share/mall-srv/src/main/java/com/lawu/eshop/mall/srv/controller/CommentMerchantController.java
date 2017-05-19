@@ -99,7 +99,7 @@ public class CommentMerchantController extends BaseController {
         if (commentMerchantBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        if(StringUtils.isNotEmpty(commentMerchantBO.getContent())){
+        if(StringUtils.isNotEmpty(commentMerchantBO.getReplyContent())){
             return successCreated(ResultCode.COMMENT_REPEAT_REPLY);
         }
         int rows = commentMerchantService.replyMerchantComment(commentId, replyContent);
