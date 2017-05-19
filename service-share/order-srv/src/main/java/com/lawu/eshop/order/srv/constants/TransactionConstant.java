@@ -40,11 +40,6 @@ public class TransactionConstant {
     public static final  byte AGREE_TO_REFUND = 0x06;
     
     /**
-     * 提醒卖家发货
-     */
-    public static final  byte REMIND_SHIPMENTS = 0x07;
-    
-    /**
      * 删除订单
      */
     public static final  byte DELETE_SHOPPING_ORDER = 0x08;
@@ -111,4 +106,9 @@ public class TransactionConstant {
      * 确认收货之后，超过退款时间，打款给商家
      */
     public static final byte TRADING_SUCCESS_PAYMENTS_TO_MERCHANT = 0x12;
+    
+    /**
+	 * 订单付款成功,推送给商家
+     */
+    public static final byte PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT = 0x13;
 }

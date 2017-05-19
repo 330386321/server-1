@@ -129,10 +129,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	private TransactionMainService<Reply> shoppingOrderAutoCommentTransactionMainServiceImpl;
 
 	@Autowired
-	@Qualifier("shoppingOrderRemindShipmentsTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingOrderRemindShipmentsTransactionMainServiceImpl;
-
-	@Autowired
 	@Qualifier("shoppingOrderCreateOrderFansTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderCreateOrderFansTransactionMainServiceImpl;
 	
@@ -1167,25 +1163,19 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public void executeAutoRemindShipments() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
-		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
 
-		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
-		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
-		
 		// 查找所有超时未发货的订单，提醒卖家发货
-		List<NotShippedDO> notShippedDOList = shoppingOrderDOExtendMapper.selectByNotShipped();
+		List<NotShippedDO> notShippedDOList = shoppingOrderDOExtendMapper.selectByNotShipped(Integer.valueOf(automaticRemindShipments));
 
-			
-		// 发送站内信和推送
-    	ShoppingOrderRemindShipmentsNotification notification = new ShoppingOrderRemindShipmentsNotification();
-    	messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REMIND_SHIPMENTS, notification);
-
+		for (NotShippedDO item : notShippedDOList) {
+			// 发送站内信和推送
+	    	ShoppingOrderRemindShipmentsNotification notification = new ShoppingOrderRemindShipmentsNotification();
+	    	notification.setQuantity(item.getCount());
+	    	notification.setMerchantNum(item.getMerchantNum());
+	    	
+	    	messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REMIND_SHIPMENTS, notification);
+		}
 	}
 
 	/**

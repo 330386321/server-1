@@ -251,7 +251,7 @@ public class ProductController extends BaseController {
 		}
 
 		String imageContents = product.getImageContents();
-		imageContents = URLDecoder.decode(imageContents);
+		imageContents = URLDecoder.decode (imageContents);
 
 		StringBuffer featureImageStr = new StringBuffer();
 		StringBuffer productImageStr = new StringBuffer();

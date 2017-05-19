@@ -75,6 +75,11 @@
 		<result column="count" property="count" jdbcType="BIGINT" />
 	</resultMap>
 	
+	<resultMap id="NotShippedResultMap" type="com.lawu.eshop.order.srv.domain.extend.NotShippedDO">
+		<result column="merchant_num" property="merchantNum" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="BIGINT" />
+	</resultMap>
+	
 	<sql id="Example_Where_Clause">
 		<where>
 			<foreach collection="oredCriteria" item="criteria" separator="or">
@@ -345,5 +350,12 @@
 		  FROM shopping_order so
 		  WHERE so.merchant_id = #{merchantId,jdbcType=BIGINT} and so.is_done = 1
 		  GROUP BY so.is_fans
+	  </select>
+	  
+	  <!-- 根据商家编号分组查询待发货的数量 -->
+	  <select id="selectByNotShipped" parameterType="int" resultMap="NotShippedResultMap">
+		SELECT count(DISTINCT(so.id)) as count, merchant_num  FROM shopping_order so LEFT JOIN shopping_order_item soi on so.id = soi.shopping_order_id
+		WHERE so.order_status = 2 AND soi.order_status = 2 AND DATE_ADD(so.gmt_payment,INTERVAL #{time} DAY) &lt;= NOW()
+		GROUP BY merchant_num
 	  </select>
 </mapper>

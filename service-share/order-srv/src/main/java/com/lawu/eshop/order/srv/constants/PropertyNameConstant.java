@@ -22,6 +22,11 @@ public class PropertyNameConstant {
 	 * 自动取消未付款订单时间
 	 */
 	public final static String AUTOMATIC_CANCEL_ORDER = "automatic_cancel_order";
+	
+	/**
+	 * 自动提醒买家支付未付款订单时间
+	 */
+	public final static String AUTOMATIC_REMIND_NO_PAYMENT_ORDER = "automatic_remind_no_payment_order";
 
 	/**
 	 * 自动提醒卖家发货时间

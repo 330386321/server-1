@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.ibatis.session.RowBounds;
 
 import com.lawu.eshop.order.param.ShoppingOrderReportDataParam;
+import com.lawu.eshop.order.srv.domain.extend.NotShippedDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
@@ -84,4 +85,12 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
     List<ReportFansSaleTransFormDO> selectByFansSaleTransForm(ShoppingOrderReportDataParam param);
+    
+	/**
+	 * 根据商家编号分组查询待发货的数量
+	 * 
+	 * @param time 提醒买家发货时间
+	 * @return
+	 */
+    List<NotShippedDO> selectByNotShipped(Integer time);
 }

@@ -1,32 +1,32 @@
 package com.lawu.eshop.mq.dto.order;
 
-import com.lawu.eshop.compensating.transaction.Notification;
+import java.io.Serializable;
 
 /**
  * 
  * @author Sunny
  * @date 2017/04/18
  */
-public class ShoppingOrderRemindShipmentsNotification extends Notification {
+public class ShoppingOrderRemindShipmentsNotification implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 购物订单id
+	 * 订单数量
 	 */
-	private Long shoppingOrderId;
+	private Long quantity;
 	
     /**
     * 商家编号
     */
     private String merchantNum;
-
-	public Long getShoppingOrderId() {
-		return shoppingOrderId;
+    
+	public Long getQuantity() {
+		return quantity;
 	}
 
-	public void setShoppingOrderId(Long shoppingOrderId) {
-		this.shoppingOrderId = shoppingOrderId;
+	public void setQuantity(Long quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getMerchantNum() {

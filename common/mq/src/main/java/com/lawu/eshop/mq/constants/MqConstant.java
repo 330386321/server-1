@@ -189,6 +189,19 @@ public class MqConstant {
      */
     public static final String TAG_TRADING_SUCCESS_PAYMENTS_TO_MERCHANT = "trading_success_payments_to_merchant";
     
+    /**
+     * 订单付款成功发布的MQ消息
+     * 发送到商城模块，推送给商家
+     */
+    public static final String TAG_PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT = "payment_successful_push_to_merchant";
+    
+    /**
+     * 定时任务
+     * 提醒买家有未支付的订单-发布的MQ消息
+     * 发送到商城模块，推送给买家
+     */
+    public static final String TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER = "order_no_payment_push_to_member";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";
