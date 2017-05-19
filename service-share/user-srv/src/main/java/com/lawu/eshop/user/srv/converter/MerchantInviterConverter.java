@@ -32,7 +32,6 @@ public class MerchantInviterConverter {
 			FIO.setPath(inviterMerchantDO.getPath());
 			FIO.setAddress(inviterMerchantDO.getAddress());
 			FIO.setInviterCount(inviterMerchantDO.getInviterCount());
-			FIO.setPrincipalMobile(inviterMerchantDO.getPrincipalMobile());
 			FIBOS.add(FIO);
 			
 		}
@@ -49,8 +48,9 @@ public class MerchantInviterConverter {
         if (merchantInviterBO == null) {
             return null;
         }
+       
         MerchantInviterDTO DTO = new MerchantInviterDTO();
-        DTO.setAccount(merchantInviterBO.getAccount());
+        DTO.setAccount(merchantInviterBO.getAccount().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
         DTO.setRegionName(merchantInviterBO.getRegionName());
         DTO.setAddress(merchantInviterBO.getAddress());
         DTO.setGmtCreate(merchantInviterBO.getGmtCreate());
@@ -59,16 +59,17 @@ public class MerchantInviterConverter {
         }else{
         	 DTO.setName(merchantInviterBO.getName());
         }
-        if(merchantInviterBO.getPrincipalMobile()!=null){
-        	 DTO.setPrincipalMobile(merchantInviterBO.getPrincipalMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2"));
-        }
         if(merchantInviterBO.getPrincipalName()==null){
        	     DTO.setPrincipalName("E点商家");
         }else{
     	     DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
         }
-      
-        DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
+        if(merchantInviterBO.getStatusEnum()==null){
+        	 DTO.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
+        }else{
+        	 DTO.setStatusEnum(merchantInviterBO.getStatusEnum());
+        }
+       
         DTO.setPath(merchantInviterBO.getPath());
         DTO.setInviterCount(merchantInviterBO.getInviterCount());
         DTO.setAddress(merchantInviterBO.getAddress());

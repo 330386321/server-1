@@ -381,22 +381,24 @@ public class AdServiceImpl implements AdService {
 	public Page<AdBO> selectListByMember(AdMemberParam adMemberParam,Long memberId) {
 		AdDOExample example=new AdDOExample();
 		Criteria cr= example.createCriteria();
-		Criteria cr2= example.createCriteria();
-		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
-		cr2.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val); //投放中
-		example.or(cr2);
 		if(adMemberParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
-			cr2.andTypeEqualTo(adMemberParam.getTypeEnum().val);
+			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val)
+			.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 		}
 		if(adMemberParam.getOrderTypeEnum()!=null){
+			List<Byte> types=new ArrayList<>();
+			types.add(AdTypeEnum.AD_TYPE_FLAT.val);
+			types.add(AdTypeEnum.AD_TYPE_VIDEO.val);
+			cr.andTypeIn(types);
+			List<Byte> status=new ArrayList<>();
+			status.add(AdStatusEnum.AD_STATUS_ADD.val);
+			status.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			cr.andStatusIn(status);
 			if(adMemberParam.getOrderTypeEnum().val==1){
 				example.setOrderByClause("total_point desc");
-				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
 			}else{
 				example.setOrderByClause("point desc");
 				cr.andAdCountGreaterThanOrEqualTo(20);
-				cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val);
 			}
 		}
 		
@@ -412,23 +414,7 @@ public class AdServiceImpl implements AdService {
 			}else{
 				BO.setIsFavorite(false);
 			}
-			if(adDO.getType()==3){
-				PointPoolDOExample ppexample=new PointPoolDOExample();
-				ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
-						                   .andStatusEqualTo(new Byte("1")).andMemberIdEqualTo(memberId);
-				Long isPraise=pointPoolDOMapper.countByExample(ppexample);
-				 if(isPraise>0){ //是否 抢赞
-					 BO.setIsPraise(true);
-				 }else{
-					 BO.setIsPraise(false);
-				 }
-				 BOS.add(BO); //E赞上架和投放中都显示
-			}else{
-				if(adDO.getStatus()==2){ //平面广告 只显示投放中
-					BOS.add(BO);
-				}
-			}
-			
+			BOS.add(BO);
 		}
 		Page<AdBO> page=new Page<AdBO>();
 		page.setCurrentPage(adMemberParam.getCurrentPage());
@@ -472,7 +458,6 @@ public class AdServiceImpl implements AdService {
 		}else{
 			adBO.setIsFavorite(false);
 		}
-		
 		return adBO;
 	}
 	
