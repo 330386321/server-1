@@ -115,9 +115,8 @@ public class CashManageBackageController extends BaseController {
 		dparam.setUserNum(param.getUserNum());
 		dparam.setCashOperEnum(param.getCashOperEnum());
 		dparam.setFailReason(param.getFailReason());
-		// TODO
-		dparam.setAuditUserId(UserUtil.getCurrentUserId(getRequest()));
-		dparam.setAuditUserName("super");
+		dparam.setAuditUserId(0L);
+		dparam.setAuditUserName(om.lawu.eshop.shiro.util.UserUtil.getCurrentUserAccount());
 		Result result1 = cashManageBackageService.updateWithdrawCash(dparam);
 		if (ResultCode.SUCCESS != result1.getRet()) {
 			return result1;

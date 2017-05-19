@@ -181,7 +181,6 @@ public class AdController extends BaseController{
 	     		return successCreated(ResultCode.AD_CLICK_PUTED);
 	     	}
 		}
-		
 	}
 	
 	/**
