@@ -403,6 +403,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     			memberShoppingCartDTO.setIsInvalid(false);
     		}
     		
+    		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
+    		
     		if (!memberShoppingCartDTOMap.containsKey(shoppingCartDTO.getMerchantId())) {
     			memberShoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
     		}
@@ -477,6 +479,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		} else {
 			memberShoppingCartDTO.setIsInvalid(false);
 		}
+		
+		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
 		
 		memberShoppingCartDTOList.add(memberShoppingCartDTO);
     	
