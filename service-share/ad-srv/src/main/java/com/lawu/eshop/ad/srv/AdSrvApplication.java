@@ -15,8 +15,8 @@ import org.springframework.context.annotation.ImportResource;
  */
 @EnableDiscoveryClient
 @SpringBootApplication
-@ImportResource(locations={"classpath:spring.xml"})
 @ComponentScan({"com.lawu.eshop"})
+@ImportResource(locations={"classpath:spring.xml"})
 public class AdSrvApplication {
 
     private static Logger logger = LoggerFactory.getLogger(AdSrvApplication.class);

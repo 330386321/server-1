@@ -9,6 +9,8 @@ import java.math.BigDecimal;
  * @date 2017/4/12
  */
 public class AdPointNotification extends Notification {
+	
+	private Long id;
     
 	private String userNum;
 	
@@ -29,6 +31,14 @@ public class AdPointNotification extends Notification {
 
 	public void setPoint(BigDecimal point) {
 		this.point = point;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	
