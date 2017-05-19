@@ -19,7 +19,12 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
@@ -58,6 +63,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDOExample;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
+import com.lawu.eshop.order.srv.domain.extend.NotShippedDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
@@ -102,7 +108,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 	@Autowired
 	private PropertyService propertyService;
-
+	
+    @Autowired
+    private MessageProducerService messageProducerService;
+	
 	@Autowired
 	@Qualifier("shoppingOrderTradingSuccessTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderTradingSuccessTransactionMainServiceImpl;
@@ -541,6 +550,18 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 
 			shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
+			
+			/*
+			 * 买家支付成功发送消息给商家提醒买家新增了一个订单
+			 */
+			// 组装要发送的消息
+			ShoppingOrderpaymentSuccessfulNotification shoppingOrderpaymentSuccessfulNotification = new ShoppingOrderpaymentSuccessfulNotification();
+			shoppingOrderpaymentSuccessfulNotification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+			shoppingOrderpaymentSuccessfulNotification.setOrderNum(shoppingOrderDO.getOrderNum());
+			// 发送消MQ息
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT, shoppingOrderpaymentSuccessfulNotification);
+			
+			
 		}
 	}
 
@@ -664,7 +685,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		
 		// 商家还没有发货，无论商品是否允许支持退货都能允许退款
-		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue()) || !shoppingOrderItemDO.getIsAllowRefund()) {
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue()) && !shoppingOrderItemDO.getIsAllowRefund()) {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
@@ -1109,15 +1130,33 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 
 		String automaticCancelOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+		
+		String automaticRemindNoPaymentOrderTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_NO_PAYMENT_ORDER);
 
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		criteria.andGmtCreateDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticCancelOrderTime), new Date());
-
+		criteria.andGmtCreateDateAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindNoPaymentOrderTime), new Date());
+		
 		// 查找所有超时未付款的订单
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			cancelOrder(item.getId());
+			
+			if (item == null || item.getSendTime() <= 0) {
+				/*
+				 * 买家支付成功发送消息给商家提醒买家新增了一个订单
+				 */
+				// 组装要发送的消息
+				ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
+				shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
+				shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
+				// 发送消MQ息
+				messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
+			}
+			
+			boolean isexceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
+			if (isexceeds) {
+				cancelOrder(item.getId());
+			}
 		}
 	}
 
@@ -1130,6 +1169,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	public void executeAutoRemindShipments() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(false);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 
 		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_REMIND_SHIPMENTS);
@@ -1137,14 +1177,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
 		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
-
+		
 		// 查找所有超时未发货的订单，提醒卖家发货
-		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<NotShippedDO> notShippedDOList = shoppingOrderDOExtendMapper.selectByNotShipped();
 
-		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			// 发送站内信和推送
-			shoppingOrderRemindShipmentsTransactionMainServiceImpl.sendNotice(item.getId());
-		}
+			
+		// 发送站内信和推送
+    	ShoppingOrderRemindShipmentsNotification notification = new ShoppingOrderRemindShipmentsNotification();
+    	messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REMIND_SHIPMENTS, notification);
 
 	}
 
