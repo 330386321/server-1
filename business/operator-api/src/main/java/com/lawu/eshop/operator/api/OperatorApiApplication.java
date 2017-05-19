@@ -34,12 +34,12 @@ public class OperatorApiApplication {
         logger.info("operator-api is started");
     }
 
-    @Bean
+    /*@Bean
     public MappingJackson2HttpMessageConverter mappingJacksonHttpMessageConverter() {
         final MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = converter.getObjectMapper();
         // 为mapper注册一个带有SerializerModifier的Factory
         mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(new JsonBeanSerializerModifier()));
         return converter;
-    }
+    }*/
 }
