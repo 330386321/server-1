@@ -64,11 +64,13 @@ public class ProductSolrController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.GET)
     public Result<Page<ProductSearchDTO>> listRecommendProduct(@ModelAttribute @ApiParam ProductSearchParam productSearchParam,
-                                                               @RequestParam @ApiParam(required = true, value = "商品类别ID") Integer categoryId) {
+                                                               @RequestParam @ApiParam(required = true, value = "商品类别ID") Integer categoryId,
+                                                               @RequestParam @ApiParam(required = true, value = "商品ID") Long productId) {
         ProductSearchRealParam param = new ProductSearchRealParam();
         param.setCurrentPage(productSearchParam.getCurrentPage());
         param.setPageSize(productSearchParam.getPageSize());
         param.setCategoryId(categoryId);
+        param.setProductId(productId);
         return productSolrService.listRecommendProduct(param);
     }
 

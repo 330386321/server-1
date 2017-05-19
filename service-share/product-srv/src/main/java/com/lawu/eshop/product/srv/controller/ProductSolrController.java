@@ -68,7 +68,7 @@ public class ProductSolrController extends BaseController {
     public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFilterQueries("categoryId_is:" + param.getCategoryId());
+        query.setFilterQueries("categoryId_is:" + param.getCategoryId() + " AND -id:" + param.getProductId());
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());

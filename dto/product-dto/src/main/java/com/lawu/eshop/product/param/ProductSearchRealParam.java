@@ -8,6 +8,8 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
  */
 public class ProductSearchRealParam extends AbstractPageParam{
 
+    private Long productId;
+
     private Integer categoryId;
 
     private String name;
@@ -26,5 +28,13 @@ public class ProductSearchRealParam extends AbstractPageParam{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
     }
 }
