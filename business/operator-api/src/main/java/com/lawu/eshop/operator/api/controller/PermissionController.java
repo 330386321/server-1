@@ -34,7 +34,7 @@ public class PermissionController extends BaseController {
     @Autowired
     private PermissonService permissonService;
 
-    @ApiOperation(value = "查询权限信息", notes = "查询权限信息 （章勇）", httpMethod = "GET")
+    @ApiOperation(value = "查询权限信息", notes = "查询权限信息 [8100]（章勇）", httpMethod = "GET")
     @RequestMapping(value = "getPermssion", method = RequestMethod.GET)
     @RequiresAuthentication
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

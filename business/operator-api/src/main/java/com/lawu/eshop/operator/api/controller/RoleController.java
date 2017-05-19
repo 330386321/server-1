@@ -83,7 +83,7 @@ public class RoleController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "删除角色信息", notes = "删除角色信息 [1004，2102,1000]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "删除角色信息", notes = "删除角色信息 [1004，8102,1000]（章勇）", httpMethod = "PUT")
     @RequiresPermissions("role:del")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "delRole/{id}", method = RequestMethod.PUT)

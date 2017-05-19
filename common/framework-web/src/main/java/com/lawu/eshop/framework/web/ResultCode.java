@@ -59,16 +59,6 @@ public class ResultCode {
     public static final int BANK_CASH_EXIST = 2011;
     public static final int FANS_MERCHANT = 2012;
 
-    //运营
-    public static final int USER_NOT_LOGIN = 2100;
-    public static final int USER_ROLE_EXIST = 2101;
-    public static final int ROLE_HAS_USER_RELATE = 2102;
-    public static final int ROLE_HAS_PERMISSION = 2103;
-    public static final int PUSH_HAS_NOUSER = 2104;
-    public static final int ROLE_HAS_NOPERMISSION = 2105;
-    public static final int USER_ACCOUNT_DISABLE = 2106;
-    public static final int USER_ACCOUNT_EXIST = 2107;
-
 
     // 商品模块代码 3xxx
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
@@ -144,6 +134,16 @@ public class ResultCode {
     // 商城模块代码 7xxx
     public static final int MESSAGE_HAS_NO_TEMPLATE = 7001;
     public static final int COMMENT_REPEAT_REPLY = 7002;
+
+    //运营 8xxx
+    public static final int USER_NOT_LOGIN = 8100;
+    public static final int USER_ROLE_EXIST = 8101;
+    public static final int ROLE_HAS_USER_RELATE = 8102;
+    public static final int ROLE_HAS_PERMISSION = 8103;
+    public static final int PUSH_HAS_NOUSER = 8104;
+    public static final int ROLE_HAS_NOPERMISSION = 8105;
+    public static final int USER_ACCOUNT_DISABLE = 8106;
+    public static final int USER_ACCOUNT_EXIST = 8107;
 
     // 初始化状态码与文字说明
     static {

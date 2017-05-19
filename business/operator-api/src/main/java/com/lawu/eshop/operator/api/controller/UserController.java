@@ -32,7 +32,7 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "新增用户", notes = "新增用户 [1004，1005]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "新增用户", notes = "新增用户 [1004，8107]（章勇）", httpMethod = "POST")
     @RequiresPermissions("user:add")
     @RequestMapping(value = "addUser", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         return userService.addUser(account, name, password);
     }
 
-    @ApiOperation(value = "修改用户信息", notes = "修改用户信息 [1003，1019]（章勇）", httpMethod = "PUT")
+    @ApiOperation(value = "修改用户信息", notes = "修改用户信息 [1003，8107]（章勇）", httpMethod = "PUT")
     @RequiresPermissions("user:edit")
     @RequestMapping(value = "editUser", method = RequestMethod.PUT)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -65,7 +65,7 @@ public class UserController extends BaseController {
         return userService.editUser(userParam);
     }
 
-    @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004，]（章勇）", httpMethod = "GET")
+    @ApiOperation(value = "查询用户列表", notes = "查询用户列表 [1004]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("user:list")
     @PageBody
@@ -78,7 +78,7 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value = "分配角色", notes = "分配角色 [1004，2101，1005，1000]（章勇）", httpMethod = "POST")
+    @ApiOperation(value = "分配角色", notes = "分配角色 [1004，8101，1005，1000]（章勇）", httpMethod = "POST")
     @RequiresPermissions("user:addRole")
     @RequestMapping(value = "assignRoles", method = RequestMethod.POST)
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
