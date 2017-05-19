@@ -13,6 +13,7 @@ import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,6 +106,9 @@ public class CommentProductController extends BaseController {
         CommentProductBO commentProductBO = commentProductService.findProductComment(commentId);
         if (commentProductBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if(StringUtils.isNotEmpty(commentProductBO.getContent())){
+            return successCreated(ResultCode.COMMENT_REPEAT_REPLY);
         }
         int rows = commentProductService.replyProductComment(commentId, replyContent);
         if (rows == 0 || rows < 0) {

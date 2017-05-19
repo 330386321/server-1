@@ -143,6 +143,7 @@ public class ResultCode {
 
     // 商城模块代码 7xxx
     public static final int MESSAGE_HAS_NO_TEMPLATE = 7001;
+    public static final int COMMENT_REPEAT_REPLY = 7002;
 
     // 初始化状态码与文字说明
     static {
@@ -273,6 +274,7 @@ public class ResultCode {
 
         // 商城模块 7xxx
         ResultCode.messageMap.put(MESSAGE_HAS_NO_TEMPLATE, "未配置对应的消息模板");
+        ResultCode.messageMap.put(COMMENT_REPEAT_REPLY, "已经回复了该评价");
 
 
     }

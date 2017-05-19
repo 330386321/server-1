@@ -14,6 +14,7 @@ import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentMerchantBO;
 import com.lawu.eshop.mall.srv.converter.CommentMerchantConverter;
 import com.lawu.eshop.mall.srv.service.CommentMerchantService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,6 +98,9 @@ public class CommentMerchantController extends BaseController {
         CommentMerchantBO commentMerchantBO = commentMerchantService.findMerchantComment(commentId);
         if (commentMerchantBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        if(StringUtils.isNotEmpty(commentMerchantBO.getContent())){
+            return successCreated(ResultCode.COMMENT_REPEAT_REPLY);
         }
         int rows = commentMerchantService.replyMerchantComment(commentId, replyContent);
         if (rows == 0 || rows < 0) {
