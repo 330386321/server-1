@@ -2,6 +2,7 @@ package com.lawu.eshop.external.api.controller;
 
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -213,18 +214,17 @@ public class AlipayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
+			DecimalFormat df = new DecimalFormat("######0.00");
 			MessageInfoParam messageInfoParam = new MessageInfoParam();
 			messageInfoParam.setRelateId(0L);
 			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(total_amount));
+			messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_amount)));
 			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				// messageTempParam.setBalance(new BigDecimal(""));
 			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				// messageTempParam.setPoint(new BigDecimal(""));
 			}
 			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 				messageTempParam.setUserName("E店会员");
@@ -351,16 +351,15 @@ public class AlipayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
+			DecimalFormat df = new DecimalFormat("######0.00");
 			MessageInfoParam messageInfoParam = new MessageInfoParam();
 			messageInfoParam.setRelateId(0L);
 			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(total_fee));
+			messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_fee)));
 			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				// messageTempParam.setBalance(new BigDecimal(""));
 			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				// messageTempParam.setPoint(new BigDecimal(""));
 			}
 			messageTempParam.setUserName("E店商家");
 			messageInfoParam.setMessageParam(messageTempParam);
