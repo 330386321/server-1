@@ -38,6 +38,7 @@ public class MerchantInfoController extends BaseController{
     @Autowired
     private MerchantStoreProfileService merchantStoreProfileService;
 
+
     /**
      * 设置网站链接
      * @param merchantProfileParam
@@ -71,6 +72,7 @@ public class MerchantInfoController extends BaseController{
         merchantInfoDTO.setAccount(merchantInfoBO.getAccount());
         merchantInfoDTO.setGtCid(merchantInfoBO.getGtCid());
         merchantInfoDTO.setRyToken(merchantInfoBO.getRyToken());
+        merchantInfoDTO.setHeadimg(merchantInfoBO.getHeadimg());
         //商家扩展信息
         MerchantProfileBO merchantProfileBO = merchantProfileService.findMerchantProfileInfo(merchantId);
         merchantInfoDTO.setInviteMemberCount(merchantProfileBO.getInviteMemberCount());
