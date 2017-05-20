@@ -22,9 +22,19 @@ public class ShoppingOrderpaymentSuccessfulNotification implements Serializable 
     private String merchantNum;
     
     /**
+     * 用户编号
+     */
+     private String memberNum;
+    
+    /**
     * 订单编号
     */
     private String orderNum;
+    
+    /**
+     * 商品名称
+     */
+    private String productName;
     
 	public Long getId() {
 		return id;
@@ -42,6 +52,14 @@ public class ShoppingOrderpaymentSuccessfulNotification implements Serializable 
 		this.merchantNum = merchantNum;
 	}
 
+	public String getMemberNum() {
+		return memberNum;
+	}
+
+	public void setMemberNum(String memberNum) {
+		this.memberNum = memberNum;
+	}
+
 	public String getOrderNum() {
 		return orderNum;
 	}
@@ -49,4 +67,13 @@ public class ShoppingOrderpaymentSuccessfulNotification implements Serializable 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
 	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	
 }

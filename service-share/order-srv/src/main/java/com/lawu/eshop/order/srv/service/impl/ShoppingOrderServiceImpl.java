@@ -23,6 +23,7 @@ import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -540,24 +541,35 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
 			com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
 			shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
-
+			
+			List<ShoppingOrderItemDO> shoppingOrderItemDOList = shoppingOrderItemDOMapper.selectByExample(shoppingOrderItemDOExample);
+			
 			ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 			shoppingOrderItemDO.setGmtModified(new Date());
 			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.BE_SHIPPED.getValue());
-
 			shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 			
 			/*
-			 * 买家支付成功发送消息给商家提醒买家新增了一个订单
+			 * 买家支付成功发送
+			 * 推送消息给商家提醒买家新增了一个订单
+			 * 发送推送消息提醒买家支付成功
 			 */
 			// 组装要发送的消息
 			ShoppingOrderpaymentSuccessfulNotification shoppingOrderpaymentSuccessfulNotification = new ShoppingOrderpaymentSuccessfulNotification();
 			shoppingOrderpaymentSuccessfulNotification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+			shoppingOrderpaymentSuccessfulNotification.setMemberNum(shoppingOrderDO.getMemberNum());
 			shoppingOrderpaymentSuccessfulNotification.setOrderNum(shoppingOrderDO.getOrderNum());
+			StringBuilder stringBuilder = new StringBuilder();
+			for (ShoppingOrderItemDO item : shoppingOrderItemDOList) {
+				if (stringBuilder.length() > 0) {
+					stringBuilder.append(",");
+				}
+				stringBuilder.append(item.getProductName());
+			}
+			shoppingOrderpaymentSuccessfulNotification.setProductName(stringBuilder.toString());
+			
 			// 发送消MQ息
-			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT, shoppingOrderpaymentSuccessfulNotification);
-			
-			
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH, shoppingOrderpaymentSuccessfulNotification);
 		}
 	}
 
@@ -604,7 +616,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
-		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		List<ShoppingOrderItemDO> shoppingOrderItemDOList = shoppingOrderItemDOMapper.selectByExample(shoppingOrderItemDOExample);
 		// 如果用户确认收货，订单当中还有退款的商品，关闭退款申请
@@ -627,6 +639,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			item.setGmtModified(new Date());
 			shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 		}
+		
 		
 		// 发送MQ消息通知产品模块增加销量
 		shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl.sendNotice(id);
@@ -767,6 +780,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO); 
+		
+		// 用户申请退款，提醒商家处理
+		ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 		
 		return ResultCode.SUCCESS;
 	}

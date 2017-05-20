@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author Sunny
  * @date 2017/04/18
  */
-public class ShoppingRefundToBeConfirmedForRefundRemindNotification implements Serializable {
+public class ShoppingRefundRefuseRefundRemindNotification implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -15,11 +15,6 @@ public class ShoppingRefundToBeConfirmedForRefundRemindNotification implements S
 	 */
 	private Long shoppingOrderItemId;
 	
-    /**
-    * 商家编号
-    */
-    private String merchantNum;
-    
     /**
      * 用户编号
      */
@@ -31,14 +26,6 @@ public class ShoppingRefundToBeConfirmedForRefundRemindNotification implements S
 
 	public void setShoppingOrderItemId(Long shoppingOrderItemId) {
 		this.shoppingOrderItemId = shoppingOrderItemId;
-	}
-
-	public String getMerchantNum() {
-		return merchantNum;
-	}
-
-	public void setMerchantNum(String merchantNum) {
-		this.merchantNum = merchantNum;
 	}
 
 	public String getMemberNum() {

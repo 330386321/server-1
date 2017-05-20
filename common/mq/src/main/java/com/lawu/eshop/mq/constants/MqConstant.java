@@ -137,23 +137,8 @@ public class MqConstant {
     public static final String TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND = "to_be_confirmed_for_refund_remind";
     
     /**
-     * 退款中-待商家处理
-	 * 退款类型-退货退款
-	 * 商家处理超时发布的MQ消息
-     */
-    public static final String TAG_TO_BE_CONFIRMED_FOR_RETURN_REFUND_REMIND = "to_be_confirmed_for_return_refund_remind";
-    
-    /**
-     * 退款中-商家拒绝退款
-	 * 买家处理超时发布的MQ消息
+     * 退款中-商家填写退货地址发布的MQ消息
 	 * 发送到mall模块，提醒买家操作
-     */
-    public static final String TAG_REFUND_FAILED_REMIND = "refund_failed_remind";
-    
-    /**
-     * 退款中-商家填写退货地址
-	 * 商家处理超时发布的MQ消息
-	 * 发送到mall模块，提醒商家操作
      */
     public static final String TAG_FILL_RETURN_ADDRESS_REMIND = "fill_return_address_remind";
     
@@ -191,9 +176,9 @@ public class MqConstant {
     
     /**
      * 订单付款成功发布的MQ消息
-     * 发送到商城模块，推送给商家
+     * 发送到商城模块，推送给商家和用户
      */
-    public static final String TAG_PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT = "payment_successful_push_to_merchant";
+    public static final String TAG_PAYMENT_SUCCESSFUL_PUSH = "payment_successful_push";
     
     /**
      * 定时任务
@@ -201,6 +186,12 @@ public class MqConstant {
      * 发送到商城模块，推送给买家
      */
     public static final String TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER = "order_no_payment_push_to_member";
+    
+    /**
+     * 商家拒绝退款退款
+     * 发送到商城模块，推送给买家
+     */
+    public static final String TAG_REFUSE_REFUND_REMIND = "refuse_refund_remind";
     
     /******************************************/
     /*******product-srv模块tag **********/

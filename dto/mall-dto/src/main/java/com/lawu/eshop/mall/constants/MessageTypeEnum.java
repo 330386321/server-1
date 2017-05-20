@@ -6,13 +6,10 @@ package com.lawu.eshop.mall.constants;
  */
 public enum MessageTypeEnum {
     MESSAGE_TYPE_INVITE_FANS((byte) 0x01),//邀请粉丝--会员
-    MESSAGE_TYPE_ORDER_PAY((byte) 0x02),//订单付款
 
     MESSAGE_TYPE_ACTIVE((byte) 0x03),//活动消息
-    MESSAGE_TYPE_ORDER_START_SEND((byte) 0x04),//订单已发货
-    MESSAGE_TYPE_ORDER_SENDING((byte) 0x05),//订单正在派件
 
-
+    
     MESSAGE_TYPE_WITHDRAW_APPLY((byte) 0x06),//提现申请
     MESSAGE_TYPE_WITHDRAW_SUCCESS((byte) 0x07),//提现成功
     MESSAGE_TYPE_WITHDRAW_FAIL((byte) 0x08),//提现失败
@@ -21,10 +18,6 @@ public enum MessageTypeEnum {
     MESSAGE_TYPE_RECHARGE_POINT((byte) 0x0A),//积分充值 10
 
     MESSAGE_TYPE_PAY_ORDER_SUCCESS((byte) 0x0B),//买单成功 11
-    MESSAGE_TYPE_REFUND_AGREE((byte) 0x0C),//同意退款 12
-    MESSAGE_TYPE_REFUND_REFUSE((byte) 0x0D),//拒绝退款 13
-    MESSAGE_TYPE_REFUND_SUCCESS((byte) 0x0E),//退款成功 14
-    MESSAGE_TYPE_PAYMENT_SUCCESS((byte) 0x0F),//付款成功 15
     MESSAGE_TYPE_RECOMMEND_MEMBER_BALANCE((byte) 0x10),//推荐E友获取现金 16
     MESSAGE_TYPE_RECOMMEND_MEMBER_POINT((byte) 0x11),//推荐E友获取积分 17
     MESSAGE_TYPE_RECOMMEND_MERCHANT_BALANCE((byte) 0x12),//推荐商家获取现金 18
@@ -36,11 +29,21 @@ public enum MessageTypeEnum {
     MESSAGE_TYPE_CHECK_STORE_SUCCESS((byte) 0x16),//门店审核通过22
     MESSAGE_TYPE_CHECK_STORE_FAIL((byte) 0x17),//门店审核不通过23
     MESSAGE_TYPE_CHECK_DEPOSIT_SUCCESS((byte) 0x18),//保证金审核通过24
-
+    
+    MESSAGE_TYPE_ORDER_PAY((byte) 0x02),//订单付款
+    MESSAGE_TYPE_ORDER_START_SEND((byte) 0x04),//订单已发货
+    MESSAGE_TYPE_ORDER_SENDING((byte) 0x05),//订单正在派件
+    MESSAGE_TYPE_REFUND_AGREE((byte) 0x0C),//同意退款 12
+    MESSAGE_TYPE_REFUND_REFUSE((byte) 0x0D),//拒绝退款 13
+    MESSAGE_TYPE_REFUND_SUCCESS((byte) 0x0E),//退款成功 14
+    MESSAGE_TYPE_PAYMENT_SUCCESS((byte) 0x0F),//付款成功 15
+    MESSAGE_TYPE_RETURN((byte) 0x2B),//商家填写退货地址提醒 43
+    
     //商家端
     MESSAGE_TYPE_NEW_ORDER((byte) 0x19),//新增订单 25
     MESSAGE_TYPE_SEND_NOTICE((byte) 0x1A),//商家发货提醒 26
     MESSAGE_TYPE_RETURN_NOTICE((byte) 0x1B),//商家退货提醒 27
+    MESSAGE_TYPE_REFUND_APPLY((byte) 0x26),//退款申请 38
     MESSAGE_TYPE_USER_SEND((byte) 0x1C),//用户已发货 28
 
     MESSAGE_TYPE_PLATFORM_NOTICE((byte) 0x1D),//平台通知 29
@@ -57,7 +60,6 @@ public enum MessageTypeEnum {
 
     MESSAGE_TYPE_CHECK_DEPOSIT_FAIL((byte) 0x24),//保证金审核未通过 36
     MESSAGE_TYPE_AD_FORCE_DOWN((byte) 0x25),//ad强制下架 37
-    MESSAGE_TYPE_REFUND_APPLY((byte) 0x26),//退款申请 38
     MESSAGE_TYPE_USE_POINT_AD((byte) 0x27),//消费积分投放广告 39
     MESSAGE_TYPE_USE_POINT_REDPACKET((byte) 0x28),//消费积分红包 40
     MESSAGE_TYPE_ORDER_SUCCESS((byte) 0x29),//订单成功--商家 41

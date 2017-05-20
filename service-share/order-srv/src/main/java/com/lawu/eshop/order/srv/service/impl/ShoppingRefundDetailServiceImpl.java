@@ -13,6 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.constants.MqConstant;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeReturnRemindNotification;
+import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
@@ -68,34 +75,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Autowired
 	private PropertyService propertyService;
 	
+    @Autowired
+    private MessageProducerService messageProducerService;
+	
 	@Autowired
 	@Qualifier("shoppingOrderAgreeToRefundTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderAgreeToRefundTransactionMainServiceImpl;
 	
-	@Autowired
-	@Qualifier("shoppingRefundToBeConfirmedForRefundRemindTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundToBeConfirmedForRefundRemindTransactionMainServiceImpl;
-	
-	@Autowired
-	@Qualifier("shoppingRefundToBeConfirmedForReturnRefundRemindTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundToBeConfirmedForReturnRefundRemindTransactionMainServiceImpl;
-	
-	@Autowired
-	@Qualifier("shoppingRefundRefundFailedRemindTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundRefundFailedRemindTransactionMainServiceImpl;
-	
-	@Autowired
-	@Qualifier("shoppingRefundFillReturnAddressTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundFillReturnAddressTransactionMainServiceImpl;
-	
-	@Autowired
-	@Qualifier("shoppingRefundToBeReturnRemindTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundToBeReturnRemindTransactionMainServiceImpl;
-	
-	@Autowired
-	@Qualifier("shoppingRefundToBeRefundRemindTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingRefundToBeRefundRemindTransactionMainServiceImpl;
-
 	@Autowired
 	@Qualifier("shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl")
 	private TransactionMainService<Reply> shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl;
@@ -187,7 +173,17 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
-
+		
+		// 用户填写退货物流，提醒买家退款
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+		ShoppingRefundToBeReturnRemindNotification notification = new ShoppingRefundToBeReturnRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		notification.setOrderNum(shoppingOrderDO.getOrderNum());
+		notification.setWaybillNum(shoppingRefundDetailDO.getWaybillNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_RETURN_REMIND, notification);
+		
 		return result;
 	}
 
@@ -255,6 +251,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
+		// 商家填写退货地址，提醒买家退货
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND, notification);
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -278,7 +281,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		}
 
 		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
-
+		
 		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
 			return ResultCode.RESOURCE_NOT_FOUND;
 		}
@@ -326,7 +329,15 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
-
+		
+		if (!param.getIsAgree()) {
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+			// 商家拒绝退款，提醒买家
+			ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
+			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
+			notification.setMemberNum(shoppingOrderDO.getMemberNum());
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REFUSE_REFUND_REMIND, notification);
+		}
 		return ResultCode.SUCCESS;
 	}
 
@@ -425,6 +436,22 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			
 			// 发送MQ消息给mall模块，删除商品订单评价
 			shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+			
+			// 商家同意退款，提醒买家
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+			ShoppingRefundToBeRefundRemindNotification notification = new ShoppingRefundToBeRefundRemindNotification();
+			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
+			notification.setMemberNum(shoppingOrderDO.getMemberNum());
+			notification.setRefundAmount(shoppingRefundDetailDO.getAmount());
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_RETURN_REMIND, notification);
+			
+		} else {
+			// 商家拒绝退款，提醒买家
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+			ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
+			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
+			notification.setMemberNum(shoppingOrderDO.getMemberNum());
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REFUSE_REFUND_REMIND, notification);
 		}
 		
 		return ResultCode.SUCCESS;
@@ -537,6 +564,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	public void executeAutoToBeConfirmedForRefund() {
 		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
 		
+		// 查询结果包括订单
+		example.setIsIncludeShoppingOrder(true);
 		// 查询结果包括退款详情
 		example.setIsIncludeShoppingRefundDetail(true);
 		
@@ -583,6 +612,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	public void executeAutoToBeConfirmedForReturnRefund() {
 		ShoppingOrderItemExtendDOExample example = new ShoppingOrderItemExtendDOExample();
 		
+		// 查询结果包括订单
+		example.setIsIncludeShoppingOrder(true);
 		// 查询结果包括退款详情
 		example.setIsIncludeShoppingRefundDetail(true);
 		
@@ -606,7 +637,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForReturnRefundRemind(shoppingOrderItemExtendDO);
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
 			}
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
@@ -696,7 +727,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				fillReturnAddressRemind(shoppingOrderItemExtendDO);
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
 			}
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
@@ -774,12 +805,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeRefundRemind(shoppingOrderItemExtendDO);
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
 			}
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(secondRemindTime), Calendar.DAY_OF_YEAR);
 			if (isExceeds && shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 1) {
-				toBeRefundRemind(shoppingOrderItemExtendDO);
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
 			}
 			
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
@@ -804,21 +835,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingOrderItemDO.setSendTime(sendTime);
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
 		
-		// 发送站内信和推送
-		shoppingRefundToBeConfirmedForRefundRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
-	}
-	
-	@Transactional
-	private void toBeConfirmedForReturnRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
-		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		// 用户申请退款，提醒商家处理
+		ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
+		notification.setMemberNum(shoppingOrderItemExtendDO.getShoppingOrder().getMemberNum());
+		notification.setMerchantNum(shoppingOrderItemExtendDO.getShoppingOrder().getMerchantNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 		
-		// 发送站内信和推送
-		shoppingRefundToBeConfirmedForReturnRefundRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 	}
 	
 	@Transactional
@@ -830,21 +853,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingOrderItemDO.setSendTime(sendTime);
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
 		
-		// 发送站内信和推送
-		shoppingRefundToBeConfirmedForReturnRefundRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
-	}
-	
-	@Transactional
-	private void fillReturnAddressRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
-		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
-		
-		// 发送站内信和推送
-		shoppingRefundFillReturnAddressTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+		// 商家拒绝退款，提醒买家
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+		ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderDO.getId());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REFUSE_REFUND_REMIND, notification);
 	}
 	
 	@Transactional
@@ -856,21 +870,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingOrderItemDO.setSendTime(sendTime);
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
 		
-		// 发送站内信和推送
-		shoppingRefundToBeReturnRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
-	}
-	
-	@Transactional
-	private void toBeRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
-		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
-		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
-		
-		// 发送站内信和推送
-		shoppingRefundToBeRefundRemindTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+		// 商家填写退货地址，提醒买家退货
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO
+				.getId());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND, notification);
 	}
 	
 	@Transactional

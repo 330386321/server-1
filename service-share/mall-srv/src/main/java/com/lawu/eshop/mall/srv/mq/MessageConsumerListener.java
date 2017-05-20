@@ -9,6 +9,10 @@ import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 
 /**
@@ -23,25 +27,41 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 	@Override
 	public void consumeMessage(String topic, String tags, Object message) {
-		
+
 		if (MqConstant.TOPIC_ORDER_SRV.equals(topic)) {
-			// 用户付款成功提示买家新增一个订单
-			if (MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH_TO_MERCHANT.equals(tags)) {
+			/*
+			 * 用户付款成功提示买家新增一个订单
+			 * 发送推送消息提醒买家支付成功
+			 */
+			if (MqConstant.TAG_PAYMENT_SUCCESSFUL_PUSH.equals(tags)) {
 				ShoppingOrderpaymentSuccessfulNotification notification = (ShoppingOrderpaymentSuccessfulNotification) message;
 				/*
-				 * 发送站内信
+				 * 发送站内信给商家
 				 */
 				// 组装信息
 				MessageInfoParam MessageInfoParam = new MessageInfoParam();
 				MessageInfoParam.setRelateId(notification.getId());
 				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_NEW_ORDER);
-	
+
 				MessageInfoParam.setMessageParam(new MessageTempParam());
 				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
-	
+
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
-	
+				
+				/*
+				 * 发送站内信以及推送给用户
+				 */
+				MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAYMENT_SUCCESS);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setProductName(notification.getProductName());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+
 			} else
 			// 用户付款成功提示买家新增一个订单
 			if (MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER.equals(tags)) {
@@ -53,10 +73,79 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				MessageInfoParam MessageInfoParam = new MessageInfoParam();
 				MessageInfoParam.setRelateId(notification.getId());
 				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_PAY);
-	
+
 				MessageInfoParam.setMessageParam(new MessageTempParam());
 				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
-	
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+			} else
+			// 用户申请退款，提示商家处理
+			if (MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND.equals(tags)) {
+				ShoppingRefundToBeConfirmedForRefundRemindNotification notification = (ShoppingRefundToBeConfirmedForRefundRemindNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_APPLY);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+			} else 
+			// 商家拒绝退款提醒买家
+			if (MqConstant.TAG_REFUSE_REFUND_REMIND.equals(tags)) {
+				ShoppingRefundRefuseRefundRemindNotification notification = (ShoppingRefundRefuseRefundRemindNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_REFUSE);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+			} else 
+			// 商家填写退货地址，提醒买家退货
+			if (MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND.equals(tags)) {
+				ShoppingRefundFillReturnAddressRemindNotification notification = (ShoppingRefundFillReturnAddressRemindNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RETURN);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+			} else 
+			// 商家退款成功，提醒买家
+			if (MqConstant.TAG_TO_BE_RETURN_REMIND.equals(tags)) {
+				ShoppingRefundToBeRefundRemindNotification notification = (ShoppingRefundToBeRefundRemindNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_SUCCESS);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				MessageInfoParam.getMessageParam().setRefundAmount(notification.getRefundAmount());
+
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
 			}
