@@ -1,12 +1,16 @@
 package com.lawu.eshop.mq.dto.user;
 
+import java.io.Serializable;
+
 /**
  * @author zhangyong
  * @date 2017/5/18.
  */
-public class FansInfo {
+public class FansInfo implements Serializable {
 
-    private Long memberId;
+	private static final long serialVersionUID = 1L;
+
+	private Long memberId;
 
     private Long merchantId;
 

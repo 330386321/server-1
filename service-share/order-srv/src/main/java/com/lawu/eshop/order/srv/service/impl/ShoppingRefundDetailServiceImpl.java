@@ -689,7 +689,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			
 			// 买家操作超过处理时间，平台自动撤销退款申请
-			if (isExceeds) {
+			if (isExceeds && shoppingOrderItemExtendDO.getShoppingRefundDetail() != null) {
 				revokeRefundRequest(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
 			}
 		}
