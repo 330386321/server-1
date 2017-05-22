@@ -20,7 +20,7 @@ import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
-import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
+import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.user.srv.strategy.PasswordStrategy;
 import com.lawu.eshop.utils.PwdUtil;
@@ -71,7 +71,7 @@ public class MerchantServiceImpl implements MerchantService {
     private InviterMerchantDOMapperExtend inviterMerchantDOMapper;
 
     @Autowired
-    private RongMerchantService rongMerchantService;
+    private RongUserService rongUserService;
 
     @Autowired
     private MerchantStoreDOMapperExtend merchantStoreDOMapperExtend;
@@ -290,7 +290,7 @@ public class MerchantServiceImpl implements MerchantService {
             }
         }
         //获取融云token
-        TokenResult tokenResult = rongMerchantService.getRongToken(userNum, "E店商家", userSrvConfig.getMerchant_headimg());
+        TokenResult tokenResult = rongUserService.getRongToken(userNum, "E店商家", userSrvConfig.getMerchant_headimg());
         if (StringUtils.isNotEmpty(tokenResult.getToken())) {
             MerchantDO merchantDO1 = new MerchantDO();
             merchantDO1.setRyToken(tokenResult.getToken());
@@ -436,7 +436,7 @@ public class MerchantServiceImpl implements MerchantService {
         MerchantDO old = merchantDOMapper.selectByPrimaryKey(merchantId);
         List<MerchantStoreProfileDO> olds = merchantStoreProfileDOMapper.selectByExample(example);
         if(!olds.isEmpty()){
-            rongMerchantService.refreshUserInfo(old.getNum(), olds.get(0).getCompanyName(), headimg);
+            rongUserService.refreshUserInfo(old.getNum(), olds.get(0).getCompanyName(), headimg);
         }
     }
 

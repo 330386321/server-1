@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.rong.service;
 
 import com.lawu.eshop.user.srv.rong.models.CheckOnlineResult;
 import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
+import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 
 /**
@@ -37,4 +38,6 @@ public interface RongUserService {
      * @throws Exception
      */
     CheckOnlineResult checkOnline(String userId) throws Exception;
+
+    HistoryMessageResult getHistory(String s);
 }

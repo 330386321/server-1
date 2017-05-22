@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.rong.service.impl;
 
+import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.user.srv.rong.RongCloud;
@@ -34,5 +35,11 @@ public class RongUserServiceImpl implements RongUserService {
     public CheckOnlineResult checkOnline(String userId) throws Exception {
         CheckOnlineResult userCheckOnlineResult = rongCloud.user.checkOnline(userId);
         return userCheckOnlineResult;
+    }
+
+    @Override
+    public HistoryMessageResult getHistory(String date) {
+        HistoryMessageResult messageResult = rongCloud.message.getHistory(date);
+        return  messageResult;
     }
 }

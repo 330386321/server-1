@@ -34,7 +34,6 @@ import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.converter.RongYunConverter;
-import com.lawu.eshop.user.srv.rong.service.RongMerchantService;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.PwdUtil;
 
@@ -48,9 +47,6 @@ public class MerchantController extends BaseController {
 
     @Autowired
     private MerchantService merchantService;
-
-    @Autowired
-    private RongMerchantService rongMerchantService;
 
     @RequestMapping(value = "withPwd/{account}", method = RequestMethod.GET)
     public Result<LoginUserDTO> find(@PathVariable String account, @RequestParam String pwd) {

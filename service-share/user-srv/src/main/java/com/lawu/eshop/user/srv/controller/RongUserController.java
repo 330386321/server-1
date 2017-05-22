@@ -3,11 +3,13 @@ package com.lawu.eshop.user.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.constants.RongOnlineStatusEnum;
+import com.lawu.eshop.user.dto.RongYunHistoryMessageDTO;
 import com.lawu.eshop.user.dto.RongYunOnlineDTO;
 import com.lawu.eshop.user.dto.RongYunRefreshDTO;
 import com.lawu.eshop.user.dto.RongYunTokenDTO;
 import com.lawu.eshop.user.srv.rong.models.CheckOnlineResult;
 import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
+import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 public class RongUserController extends BaseController {
     @Autowired
     private RongUserService rongUserService;
-
     /**
      * 获取融云token
      *
@@ -67,6 +68,22 @@ public class RongUserController extends BaseController {
         refreshDTO.setCode(codeSuccessResult.getCode());
         refreshDTO.setErrorMessage(codeSuccessResult.getErrorMessage());
         return successGet(refreshDTO);
+    }
+
+    /**
+     * 获取消息历史记录
+     * @param date
+     * @return
+     */
+    @RequestMapping(value = "getHistoryMessage", method = RequestMethod.POST)
+    public Result<RongYunHistoryMessageDTO> getHistoryMessage(String date){
+        HistoryMessageResult messageResult = rongUserService.getHistory(date);
+        RongYunHistoryMessageDTO historyMessageDTO = new RongYunHistoryMessageDTO();
+        historyMessageDTO.setCode(messageResult.getCode());
+        historyMessageDTO.setUrl(messageResult.getUrl());
+        historyMessageDTO.setDate(messageResult.getDate());
+        historyMessageDTO.setErrorMessage(messageResult.getErrorMessage());
+        return successGet(historyMessageDTO);
     }
 
 }

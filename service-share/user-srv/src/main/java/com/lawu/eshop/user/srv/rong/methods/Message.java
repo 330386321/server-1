@@ -7,14 +7,18 @@ import com.lawu.eshop.user.srv.rong.models.TemplateMessage;
 import com.lawu.eshop.user.srv.rong.util.GsonUtil;
 import com.lawu.eshop.user.srv.rong.util.HostType;
 import com.lawu.eshop.user.srv.rong.util.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URLEncoder;
 
 
 
 public class Message {
-
+	private static Logger logger = LoggerFactory.getLogger(User.class);
 	private static final String UTF8 = "UTF-8";
 	private String appKey;
 	private String appSecret;
@@ -431,22 +435,36 @@ public class Message {
 	 *
 	 * @return HistoryMessageResult
 	 **/
-	public HistoryMessageResult getHistory(String date) throws Exception {
+	public HistoryMessageResult getHistory(String date) {
 		if (date == null) {
 			throw new IllegalArgumentException("Paramer 'date' is required");
 		}
 		
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("&date=").append(URLEncoder.encode(date.toString(), UTF8));
+		try {
+			sb.append("&date=").append(URLEncoder.encode(date.toString(), UTF8));
+		} catch (UnsupportedEncodingException e) {
+			logger.info("时间格式有误！");
+		}
 		String body = sb.toString();
 	   	if (body.indexOf("&") == 0) {
 	   		body = body.substring(1, body.length());
 	   	}
-	   	
-		HttpURLConnection conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/message/history.json", "application/x-www-form-urlencoded");
-		HttpUtil.setBodyParameter(body, conn);
-	    
-	    return (HistoryMessageResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), HistoryMessageResult.class);
+
+		HttpURLConnection conn = null;
+		try {
+			conn = HttpUtil.CreatePostHttpConnection(HostType.API, appKey, appSecret, "/message/history.json", "application/x-www-form-urlencoded");
+			HttpUtil.setBodyParameter(body, conn);
+		} catch (IOException e) {
+			logger.info("http请求IO异常");
+		}
+		HistoryMessageResult result = null;
+		try {
+			result = (HistoryMessageResult) GsonUtil.fromJson(HttpUtil.returnResult(conn), HistoryMessageResult.class);
+		} catch (Exception e) {
+			logger.info("获取历史记录JSON转换异常");
+		}
+		return result;
 	}
 	
 	/**
