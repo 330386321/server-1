@@ -1,7 +1,6 @@
 package util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.lawu.eshop.utils.RandomUtil;
@@ -20,15 +19,7 @@ public class VideoCutImgUtil {
 	 * @return
 	 */
 	public static String getffmpegPath(){
-		File directory = new File("");//参数为空 
-		String courseFile = null;
-		try {
-			courseFile = directory.getCanonicalPath();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		String path= courseFile +"\\src\\main\\java\\tool\\ffmpeg.exe";
+		String path=VideoCutImgUtil.class.getClassLoader().getResource("ffmpeg.exe").getPath();
 		return path;
 	}
 	

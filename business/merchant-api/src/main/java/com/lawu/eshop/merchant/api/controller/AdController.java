@@ -96,7 +96,7 @@ public class AdController extends BaseController {
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl").toString();
             	//截取视频图片
-            	String veido_path= merchantApiConfig.getVideoUploadUrl()+mediaUrl;
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl;
             	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl());
             }
     	}
