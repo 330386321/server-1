@@ -127,69 +127,85 @@ public class AlipayController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 
-//		Map<String, String> paramMap = new HashMap<String, String>();
-//		paramMap.put("service", "create_direct_pay_by_user");
-//		paramMap.put("partner", propertySrvConfig.getAlipayPartner());
-//		paramMap.put("seller_id", propertySrvConfig.getAlipaySellerId());
-//		paramMap.put("_input_charset", propertySrvConfig.getAlipayInputCharset());
-//		paramMap.put("payment_type", "1");
-//		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrlPc());
-//		paramMap.put("return_url", propertySrvConfig.getAlipayReturnUrlPc());
-//		paramMap.put("anti_phishing_key", "");
-//		paramMap.put("exter_invoke_ip", "");
-//
-//		paramMap.put("out_trade_no", param.getOutTradeNo());
-//		paramMap.put("subject", param.getSubject());
-//		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-//			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
-//					+ "商家缴纳保证金P" + split + param.getBizId());
-//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)) {
-//			paramMap.put("extra_common_param",
-//					param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值余额P");
-//		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-//			paramMap.put("extra_common_param",
-//					param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P");
-//		}
-//		paramMap.put("total_fee", param.getTotalAmount());
-//		
-//		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
-//		aliPayConfigParam.setAlipaySignType(propertySrvConfig.getAlipaySignType());
-//		aliPayConfigParam.setAlipayPrivateKey(propertySrvConfig.getAlipayPrivateKey());
-//		aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
-//		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认", aliPayConfigParam);
-//		
-//		 String html = "<!doctype html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
-//		 sHtmlText = html + sHtmlText;
-		 
-		//-------------------------------
-		String extra_common_param = "";
+		Map<String, String> paramMap = new HashMap<String, String>();
+		paramMap.put("service", "create_direct_pay_by_user");
+		paramMap.put("partner", propertySrvConfig.getAlipayPartner());
+		paramMap.put("seller_id", propertySrvConfig.getAlipaySellerId());
+		paramMap.put("_input_charset", propertySrvConfig.getAlipayInputCharset());
+		paramMap.put("payment_type", "1");
+		paramMap.put("notify_url", propertySrvConfig.getAlipayNotifyUrlPc());
+		paramMap.put("return_url", propertySrvConfig.getAlipayReturnUrlPc());
+		paramMap.put("anti_phishing_key", "");
+		paramMap.put("exter_invoke_ip", "");
+
+		paramMap.put("out_trade_no", param.getOutTradeNo());
+		paramMap.put("subject", param.getSubject());
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split
-					+ "商家缴纳保证金P" + split + param.getBizId();
+			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+					+ "商家缴纳保证金P" + split + param.getBizId());
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)) {
-			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值余额P";
+			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+					+ "商家充值余额P" + split + param.getBizId());
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			extra_common_param = param.getBizFlagEnum().val + split + param.getUserNum() + split + "商家充值积分P";
+			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+					+ "商家充值积分P" + split + param.getBizId());
 		}
-		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(),
-				propertySrvConfig.getAlipayAppIdBusiness(), propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8",
-				propertySrvConfig.getAlipayPublicKey(), "RSA");
-		AlipayTradePagePayRequest alipayRequest = new AlipayTradePagePayRequest();
-		alipayRequest.setReturnUrl(propertySrvConfig.getAlipayReturnUrlPc());
-		alipayRequest.setNotifyUrl(propertySrvConfig.getAlipayNotifyUrlPc());
-		alipayRequest.setBizContent("{" + "    \"out_trade_no\":\""+param.getOutTradeNo()+"\","
-				+ "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," + "    \"total_amount\":"+param.getTotalAmount()+","
-				+ "    \"subject\":\""+param.getSubject()+"\","
-				+ "    \"passback_params\":\""+extra_common_param+"\"}");
-		String sHtmlText = "";
-		try {
-			sHtmlText = alipayClient.pageExecute(alipayRequest).getBody(); // 调用SDK生成表单
-		} catch (AlipayApiException e) {
-			e.printStackTrace();
-		}
+		paramMap.put("total_fee", param.getTotalAmount());
+
+		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
+		aliPayConfigParam.setAlipaySignType(propertySrvConfig.getAlipaySignType());
+		aliPayConfigParam.setAlipayPrivateKey(propertySrvConfig.getAlipayPrivateKey());
+		aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
+		String sHtmlText = AlipaySubmit.buildRequest(paramMap, "get", "确认", aliPayConfigParam);
+
 		String html = "<!doctype html><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
 		sHtmlText = html + sHtmlText;
-		//------------------------------------------------------------------------
+
+		// -------------------------------
+		// String extra_common_param = "";
+		// if
+		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val))
+		// {
+		// extra_common_param = param.getBizFlagEnum().val + split +
+		// param.getUserNum() + split
+		// + "商家缴纳保证金P" + split + param.getBizId();
+		// } else if
+		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val))
+		// {
+		// extra_common_param = param.getBizFlagEnum().val + split +
+		// param.getUserNum() + split + "商家充值余额P";
+		// } else if
+		// (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val))
+		// {
+		// extra_common_param = param.getBizFlagEnum().val + split +
+		// param.getUserNum() + split + "商家充值积分P";
+		// }
+		// AlipayClient alipayClient = new
+		// DefaultAlipayClient(propertySrvConfig.getAlipayGateway(),
+		// propertySrvConfig.getAlipayAppIdBusiness(),
+		// propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8",
+		// propertySrvConfig.getAlipayPublicKey(), "RSA");
+		// AlipayTradePagePayRequest alipayRequest = new
+		// AlipayTradePagePayRequest();
+		// alipayRequest.setReturnUrl(propertySrvConfig.getAlipayReturnUrlPc());
+		// alipayRequest.setNotifyUrl(propertySrvConfig.getAlipayNotifyUrlPc());
+		// alipayRequest.setBizContent("{" + "
+		// \"out_trade_no\":\""+param.getOutTradeNo()+"\","
+		// + " \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," + "
+		// \"total_amount\":"+param.getTotalAmount()+","
+		// + " \"subject\":\""+param.getSubject()+"\","
+		// + " \"passback_params\":\""+extra_common_param+"\"}");
+		// String sHtmlText = "";
+		// try {
+		// sHtmlText = alipayClient.pageExecute(alipayRequest).getBody(); //
+		// 调用SDK生成表单
+		// } catch (AlipayApiException e) {
+		// e.printStackTrace();
+		// }
+		// String html = "<!doctype html><html><head><meta
+		// http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">";
+		// sHtmlText = html + sHtmlText;
+		// ------------------------------------------------------------------------
 
 		return successCreated(sHtmlText);
 	}

@@ -277,13 +277,8 @@ public class AlipayNotifyController extends BaseController {
 		String out_trade_no = new String(request.getParameter("out_trade_no").getBytes("ISO-8859-1"), "UTF-8");
 		String trade_no = new String(request.getParameter("trade_no").getBytes("ISO-8859-1"), "UTF-8");
 		String total_fee = new String(request.getParameter("total_fee").getBytes("ISO-8859-1"), "UTF-8");
-		String extra_common_param = new String(request.getParameter("extra_common_param").getBytes("ISO-8859-1"),
-				"UTF-8");
-		// String extra_common_param = new
-		// String(request.getParameter("passback_params").getBytes("ISO-8859-1"),
-		// "UTF-8");
+		String extra_common_param = request.getParameter("extra_common_param");
 		String trade_status = new String(request.getParameter("trade_status").getBytes("ISO-8859-1"), "UTF-8");
-		String app_id = new String(request.getParameter("app_id").getBytes("ISO-8859-1"), "UTF-8");
 		String buyer_email = new String(request.getParameter("buyer_email").getBytes("ISO-8859-1"), "UTF-8");
 
 		AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
@@ -293,17 +288,9 @@ public class AlipayNotifyController extends BaseController {
 		aliPayConfigParam.setAlipaySignType(externalApiConfig.getAlipaySignType());
 		aliPayConfigParam.setAlipayInputCharset(externalApiConfig.getAlipayInputCharset());
 
-		boolean b = false;
 		int bizFlagInt = 0;
 		String extra[] = null;
-		if (!app_id_business.equals(app_id)) {
-			result = successCreated(ResultCode.FAIL, "app_id不匹配");
-		} else {
-			b = AlipayNotify.verify(params, aliPayConfigParam);
-			// b = AlipaySignature.rsaCheckV1(params, alipay_pc_public_key,
-			// externalApiConfig.getAlipayInputCharset(),
-			// externalApiConfig.getAlipaySignType());
-		}
+		boolean	b = AlipayNotify.verify(params, aliPayConfigParam);
 
 		if (!b) {
 			result = successCreated(ResultCode.FAIL, "PC支付宝回调验签失败！");
@@ -331,6 +318,7 @@ public class AlipayNotifyController extends BaseController {
 					param.setOutTradeNo(out_trade_no);
 					param.setTradeNo(trade_no);
 					param.setBuyerLogonId(buyer_email);
+					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
