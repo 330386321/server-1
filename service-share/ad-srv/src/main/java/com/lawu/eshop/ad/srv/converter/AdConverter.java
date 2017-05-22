@@ -53,6 +53,7 @@ public class AdConverter {
 		adBO.setAreas(adDO.getAreas());
 		adBO.setRadius(adDO.getRadius());
 		adBO.setContent(adDO.getContent());
+		adBO.setVideoImgUrl(adDO.getVideoImgUrl());
 		if(adDO.getPutWay()==1){
 			adBO.setAreas(adDO.getAreas());
 		}else if(adDO.getPutWay()==3){

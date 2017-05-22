@@ -79,7 +79,9 @@ public class AdFlatVideoDTO {
 	
 	@ApiModelProperty(value = "京东链接")
 	private String jdUrl;
-	
+
+	@ApiModelProperty(value = "视频封面图片路径")
+	private String videoImgUrl;
 
 	public Long getId() {
 		return id;
@@ -247,6 +249,14 @@ public class AdFlatVideoDTO {
 
 	public void setJdUrl(String jdUrl) {
 		this.jdUrl = jdUrl;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 
 	

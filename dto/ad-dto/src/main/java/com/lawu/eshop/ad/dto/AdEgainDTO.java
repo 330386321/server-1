@@ -55,6 +55,9 @@ public class AdEgainDTO {
 	
 	@ApiModelProperty(value = "ENTITY 实体  COMMON 普通")
 	private ManageTypeEnum manageTypeEnum;
+	
+	@ApiModelProperty(value = "视频封面图片路径")
+	private String videoImgUrl;
 
 	public Long getId() {
 		return id;
@@ -182,6 +185,14 @@ public class AdEgainDTO {
 
 	public void setManageTypeEnum(ManageTypeEnum manageTypeEnum) {
 		this.manageTypeEnum = manageTypeEnum;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 
 	

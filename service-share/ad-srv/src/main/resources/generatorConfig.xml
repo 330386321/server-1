@@ -42,12 +42,15 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         
-      	 <table tableName="ad_platform" domainObjectName="AdPlatformDO">
+         <table tableName="ad" domainObjectName="AdDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        
+        <!-- 
+         <table tableName="ad_platform" domainObjectName="AdPlatformDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table> 
         
-        
-        <!-- 
          <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

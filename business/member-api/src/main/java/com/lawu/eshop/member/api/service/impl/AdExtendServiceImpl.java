@@ -393,6 +393,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setIsFavorite(adDTO.getIsFavorite());
 			adFlatVideoDTO.setLogoUrl(adDTO.getLogoUrl());
 			adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
+			adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
 			adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
 			adFlatVideoDTO.setTitle(adDTO.getTitle());
 			adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());

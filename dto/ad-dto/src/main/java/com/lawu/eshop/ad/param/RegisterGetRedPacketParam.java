@@ -4,8 +4,8 @@ import io.swagger.annotations.ApiParam;
 
 public class RegisterGetRedPacketParam {
 	
-	@ApiParam (name="verifyCodeId",required = true, value = "手机验证码ID")
-	private Long  verifyCodeId;
+	@ApiParam (name="verifyCodeId",required = true, value = "验证码id")
+	private Long verifyCodeId;
 	
 	@ApiParam (name="account",required = true, value = "注册账号")
 	private String account;
@@ -18,14 +18,6 @@ public class RegisterGetRedPacketParam {
 	
 	@ApiParam (name="merchantId",required = true, value = "商家id")
 	private Long merchantId;
-
-	public Long getVerifyCodeId() {
-		return verifyCodeId;
-	}
-
-	public void setVerifyCodeId(Long verifyCodeId) {
-		this.verifyCodeId = verifyCodeId;
-	}
 
 	public String getAccount() {
 		return account;
@@ -57,6 +49,14 @@ public class RegisterGetRedPacketParam {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getVerifyCodeId() {
+		return verifyCodeId;
+	}
+
+	public void setVerifyCodeId(Long verifyCodeId) {
+		this.verifyCodeId = verifyCodeId;
 	}
 	
 	

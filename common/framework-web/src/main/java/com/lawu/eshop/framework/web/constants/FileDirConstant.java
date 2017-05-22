@@ -17,6 +17,9 @@ public class FileDirConstant {
     //广告视频路径
     public static final String DIR_AD_VIDEO = "ad_video";
     
+    //广告视频封面图片路径
+    public static final String DIR_AD_VIDEO_IMAGE = "ad_video_image";
+    
     // 订单图片路径
     public static final String DIR_ORDER = "order";
 

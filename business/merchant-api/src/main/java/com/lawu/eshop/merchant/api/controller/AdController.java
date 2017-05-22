@@ -43,6 +43,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import util.UploadFileUtil;
+import util.VideoCutImgUtil;
 
 /**
  * 描述：广告管理
@@ -83,6 +84,7 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
     	}
     	String mediaUrl="";
+    	String videoImgUrl="";
     	HttpServletRequest request = getRequest();
     	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
@@ -93,6 +95,9 @@ public class AdController extends BaseController {
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl").toString();
+            	//截取视频图片
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+mediaUrl;
+            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl());
             }
     	}
     	Integer count=0;
@@ -117,6 +122,7 @@ public class AdController extends BaseController {
     	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(mediaUrl);
+    	adSave.setVideoImgUrl(videoImgUrl);
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
     	Result rsAd = adService.saveAd(adSave);

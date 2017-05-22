@@ -36,6 +36,8 @@ public class AdSaveParam {
 	 */
 	private String userNum;
 	
+	private String videoImgUrl;
+	
 
 	public AdParam getAdParam() {
 		return adParam;
@@ -93,7 +95,15 @@ public class AdSaveParam {
 		this.userNum = userNum;
 	}
 
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
 
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
+	}
+
+	
 	
 	
 

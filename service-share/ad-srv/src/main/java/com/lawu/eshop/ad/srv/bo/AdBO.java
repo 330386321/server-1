@@ -69,6 +69,8 @@ public class AdBO {
     * @mbg.generated
     */
    private BigDecimal merchantLatitude;
+   
+   private String videoImgUrl;
 	
 
 	public Boolean getIsPraise() {
@@ -253,6 +255,14 @@ public class AdBO {
 
 	public void setMerchantLatitude(BigDecimal merchantLatitude) {
 		this.merchantLatitude = merchantLatitude;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 	
 	

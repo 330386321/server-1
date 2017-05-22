@@ -162,6 +162,7 @@ public class AdController extends BaseController {
         	adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
         	adEgainDTO.setTitle(adDTO.getTitle());
         	adEgainDTO.setMediaUrl(adDTO.getMediaUrl());
+        	adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
         	adEgainDTO.setMerchantId(adDTO.getMerchantId());
         	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
         	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
@@ -278,7 +279,7 @@ public class AdController extends BaseController {
      }
 
 
-    @Audit(date = "2017-04-13", reviewer = "孙林青")
+     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @Authorization
      @ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "GET")
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -289,7 +290,7 @@ public class AdController extends BaseController {
      }
 
 
-    @Audit(date = "2017-04-13", reviewer = "孙林青")
+     @Audit(date = "2017-04-13", reviewer = "孙林青")
      @ApiOperation(value = "广告搜索", notes = "广告搜索,[]（张荣成）", httpMethod = "GET")
      @Authorization
      @ApiResponse(code = HttpCode.SC_OK, message = "success")
