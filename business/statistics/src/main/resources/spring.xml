@@ -20,4 +20,6 @@
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="productAverageDailySalesJob" description="商品平均日销量" class="com.lawu.eshop.statistics.jobs.ProductAverageDailySalesJob" registry-center-ref="regCenter" cron="0 0 0 0 0 1/7"
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="rongYunDownLoadMessageJob" description="下载融云历史消息" class="com.lawu.eshop.statistics.jobs.RongYunDownLoadMessageJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ? "
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 </beans>
