@@ -333,6 +333,8 @@ public class MerchantServiceImpl implements MerchantService {
          			inviterMerchantDOView.setPath(msiList.get(0).getPath());
          		}
          		
+         	}else{
+         		inviterMerchantDOView.setPath(userSrvConfig.getMerchant_headimg());
          	}
 		}
        

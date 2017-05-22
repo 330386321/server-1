@@ -78,7 +78,6 @@ public class PwdUtil {
         for (int i = 0; i < 48; i += 3) {  
             cs1[i / 3 * 2] = md5.charAt(i);  
             cs1[i / 3 * 2 + 1] = md5.charAt(i + 2); 
-            System.out.println(md5.charAt(i + 2));
             cs2[i / 3] = md5.charAt(i + 1);  
         }  
         String salt = new String(cs2);  
