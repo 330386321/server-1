@@ -5,7 +5,7 @@ import com.lawu.eshop.external.api.service.DepositService;
 import com.lawu.eshop.external.api.service.MessageService;
 import com.lawu.eshop.external.api.service.OrderService;
 import com.lawu.eshop.external.api.service.PayOrderService;
-import com.lawu.eshop.external.api.service.PropertySrvPropertyService;
+import com.lawu.eshop.external.api.service.PropertySrvService;
 import com.lawu.eshop.external.api.service.RechargeService;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -20,6 +20,7 @@ import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.StringUtil;
@@ -71,7 +72,7 @@ public class WxpayNotifyController extends BaseController {
 	@Autowired
 	private PayOrderService payOrderService;
 	@Autowired
-	private PropertySrvPropertyService propertyService;
+	private PropertySrvService propertyService;
 
 	/**
 	 * APP微信异步回调接口
@@ -191,12 +192,15 @@ public class WxpayNotifyController extends BaseController {
 			messageInfoParam.setRelateId(0L);
 			MessageTempParam messageTempParam = new MessageTempParam();
 			messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
 			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
 			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 			}
 			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 				messageTempParam.setUserName("E店会员");
@@ -298,10 +302,13 @@ public class WxpayNotifyController extends BaseController {
 			messageInfoParam.setRelateId(0L);
 			MessageTempParam messageTempParam = new MessageTempParam();
 			messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
 			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
 			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 			}
 			messageTempParam.setUserName("E店商家");
 			messageInfoParam.setMessageParam(messageTempParam);

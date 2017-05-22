@@ -196,13 +196,20 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).name);
 			ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).name);
 			ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
-			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
-			ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
 			ddqbo.setUserNum(bddo.getUserNum());
-			ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
-			ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
-					: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
-			ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
+			if(bddo.getBusinessBankAccountId() != null){
+				BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(bddo.getBusinessBankAccountId());
+				ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
+				ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
+				ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
+						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+				ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
+			}else{
+				ddqbo.setBusinessBankAccount("");
+				ddqbo.setBankNo("");
+				ddqbo.setBankName("");
+				ddqbo.setBankBranchName("");
+			}
 
 			ddqbo.setAuditUserName(bddo.getOperUserName() == null ? "" : bddo.getOperUserName());
 			ddqbo.setRemark(bddo.getRemark() == null ? "" : bddo.getRemark());
