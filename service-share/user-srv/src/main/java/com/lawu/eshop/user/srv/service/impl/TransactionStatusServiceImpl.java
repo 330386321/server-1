@@ -34,7 +34,8 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
         transactionRecord.setType(type);
         transactionRecord.setGmtModified(new Date());
         transactionRecord.setGmtCreate(new Date());
-        transactionRecordDOMapper.insert(transactionRecord);
+        transactionRecord.setTimes(0L);
+        transactionRecordDOMapper.insertSelective(transactionRecord);
         return transactionRecord.getId();
     }
 
