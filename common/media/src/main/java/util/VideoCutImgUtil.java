@@ -18,10 +18,10 @@ public class VideoCutImgUtil {
 	 * 获取ffmpeg路径
 	 * @return
 	 */
-	public static String getffmpegPath(){
+	/*public static String getffmpegPath(){
 		String path=VideoCutImgUtil.class.getClassLoader().getResource("ffmpeg.exe").getPath();
 		return path;
-	}
+	}*/
 	
 	/**
 	 * 视频截图图片
@@ -29,7 +29,7 @@ public class VideoCutImgUtil {
 	 * @param ffmpeg_path
 	 * @return
 	 */
-	public static String processImg(String veido_path,String dir,String baseImageDir) {
+	public static String processImg(String veido_path,String dir,String baseImageDir,String ffmpegUrl) {
 		File file = new File(veido_path);
 		if (!file.exists()) {
 			System.err.println("路径[" + veido_path + "]对应的视频文件不存在!");
@@ -42,7 +42,7 @@ public class VideoCutImgUtil {
         }
 		String AD_IMG_VIDEO=baseImageDir+"\\"+dir+"\\"+newfileName;
 		List<String> commands = new java.util.ArrayList<String>();
-		commands.add(getffmpegPath());
+		commands.add(ffmpegUrl);
 		commands.add("-i");
 		commands.add(veido_path);
 		commands.add("-y");

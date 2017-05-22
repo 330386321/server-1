@@ -53,6 +53,9 @@ public class AdMerchantDetailDTO {
 	
 	@ApiModelProperty(value = "广告内容")
 	private String content;
+	
+	@ApiModelProperty(value = "视频封面图片路径")
+	private String videoImgUrl;
 
 	public Long getId() {
 		return id;
@@ -160,6 +163,14 @@ public class AdMerchantDetailDTO {
 		this.content = content;
 	}
 
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
+	}
+	
 	
 	
 

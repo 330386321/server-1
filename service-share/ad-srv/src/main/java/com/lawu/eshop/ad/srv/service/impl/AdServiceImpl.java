@@ -289,7 +289,7 @@ public class AdServiceImpl implements AdService {
 	}
 
 	/**
-	 * 运营平台(商家)对E赚的管理(下架)
+	 * 运营平台(商家)对广告的管理(下架)
 	 * @param id
 	 * @return
 	 */

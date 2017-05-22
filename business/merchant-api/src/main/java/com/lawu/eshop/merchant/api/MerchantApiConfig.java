@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
  * @date 2017/4/26
  */
 @Component
-public class MerchantApiConfig {
+public class MerchantApiConfig { 
 
 
     @Value(value="${image.url}")
@@ -36,6 +36,9 @@ public class MerchantApiConfig {
 
     @Value(value="${default_headimg}")
     private String defaultHeadimg;
+    
+    @Value(value="${ffmpeg.url}")
+    private String ffmpegUrl;
 
     public String getImageUrl() {
         return imageUrl;
@@ -72,4 +75,9 @@ public class MerchantApiConfig {
     public String getDefaultHeadimg() {
         return defaultHeadimg;
     }
+
+	public String getFfmpegUrl() {
+		return ffmpegUrl;
+	}
+    
 }

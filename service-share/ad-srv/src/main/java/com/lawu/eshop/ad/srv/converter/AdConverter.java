@@ -184,7 +184,6 @@ public class AdConverter {
 		if(adBO==null){
 			return dto;
 		}
-		
 		dto.setId(adBO.getId());
 		dto.setTitle(adBO.getTitle());
 		dto.setMerchantId(adBO.getMerchantId());
@@ -294,6 +293,7 @@ public class AdConverter {
 		dto.setPoint(adBO.getPoint());
 		dto.setRadius(adBO.getRadius());
 		dto.setContent(adBO.getContent());
+		dto.setVideoImgUrl(adBO.getVideoImgUrl());
 		return dto;
 	}
 

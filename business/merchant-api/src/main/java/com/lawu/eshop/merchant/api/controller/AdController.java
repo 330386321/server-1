@@ -96,8 +96,10 @@ public class AdController extends BaseController {
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl").toString();
             	//截取视频图片
-            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl;
-            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl());
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+            	
+            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl()+"/bin/./ffmpeg";  //ffmpeg安装路径
+            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
             }
     	}
     	Integer count=0;
@@ -210,6 +212,7 @@ public class AdController extends BaseController {
         	adSave.setLongitude(storeDTO.getLongitude());
         	adSave.setCount(count);
         	adSave.setMediaUrl(adDTO.getMediaUrl());
+        	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
         	adSave.setMerchantId(merchantId);
         	adSave.setUserNum(userNum);
         	Result rsAd = adService.saveAd(adSave);
