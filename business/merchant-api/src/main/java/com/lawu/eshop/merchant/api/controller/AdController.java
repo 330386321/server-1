@@ -98,7 +98,7 @@ public class AdController extends BaseController {
             	//截取视频图片
             	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
             	
-            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl()+"/bin/./ffmpeg";  //ffmpeg安装路径
+            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
             	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
             }
     	}
