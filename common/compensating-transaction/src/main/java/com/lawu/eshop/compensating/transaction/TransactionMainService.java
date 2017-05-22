@@ -27,5 +27,13 @@ public interface TransactionMainService<R> {
      *
      * @return
      */
-    void check();
+    void check(Long count);
+    
+    /**
+     * 获取当前类注解CompensatingTransactionMain的Topic的属性
+     * 
+     * @return
+     * @author Sunny
+     */
+    String getTopic();
 }

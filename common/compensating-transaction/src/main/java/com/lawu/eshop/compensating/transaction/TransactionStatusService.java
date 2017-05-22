@@ -2,6 +2,8 @@ package com.lawu.eshop.compensating.transaction;
 
 import java.util.List;
 
+import com.lawu.eshop.compensating.transaction.bo.TransactionRecordBO;
+
 /**
  * 事务状态服务类
  * @author Leach
@@ -31,6 +33,14 @@ public interface TransactionStatusService {
      * @param type
      * @return
      */
-    List<Long> selectNotDoneList(byte type);
-
+    List<TransactionRecordBO> selectNotDoneList(byte type);
+    
+    /**
+     * 更新事务记录的执行次数
+     * 
+     * @param transactionId	事务记录id
+     * @param times 当前执行次数
+     * @author Sunny
+     */
+    void updateTimes(Long transactionId, Long times);
 }

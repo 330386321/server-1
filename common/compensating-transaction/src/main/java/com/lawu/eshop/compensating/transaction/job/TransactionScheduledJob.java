@@ -1,18 +1,21 @@
 package com.lawu.eshop.compensating.transaction.job;
 
-import com.dangdang.ddframe.job.api.ShardingContext;
-import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+
+import com.dangdang.ddframe.job.api.ShardingContext;
+import com.dangdang.ddframe.job.api.simple.SimpleJob;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
+import com.lawu.eshop.compensating.transaction.service.CacheService;
 
 /**
  * @author Leach
@@ -23,12 +26,19 @@ public class TransactionScheduledJob implements SimpleJob, InitializingBean, App
     private ApplicationContext applicationContext;
 
     private List<TransactionMainService> transactionMainServiceList = new ArrayList<>();
-
+    
+    @Autowired
+    private CacheService cacheService;
+    
     @Override
     public void execute(ShardingContext shardingContext) {
+    	// 从缓存中获取执行次数
+    	Long count = cacheService.getCount(transactionMainServiceList.get(0).getTopic());
         for (int i = 0; i < transactionMainServiceList.size(); i++) {
-            transactionMainServiceList.get(i).check();
+            transactionMainServiceList.get(i).check(count);
         }
+        // 执行次数加1
+        cacheService.addCount(transactionMainServiceList.get(0).getTopic());
     }
 
     @Override

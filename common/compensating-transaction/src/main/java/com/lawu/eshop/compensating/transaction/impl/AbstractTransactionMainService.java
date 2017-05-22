@@ -1,15 +1,18 @@
 package com.lawu.eshop.compensating.transaction.impl;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.Notification;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.compensating.transaction.TransactionStatusService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
+import com.lawu.eshop.compensating.transaction.bo.TransactionRecordBO;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 补偿性事务主逻辑服务抽象类
@@ -23,7 +26,13 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
 
     @Autowired
     private TransactionStatusService transactionStatusService;
-
+    
+    @Value("${transaction.job.intervalBaseNumber}")
+    private Long intervalBaseNumber;
+    
+    @Value("${transaction.job.exectotalCount}")
+    private Long exectotalCount;
+    
     private CompensatingTransactionMain annotation = this.getClass().getAnnotation(CompensatingTransactionMain.class);
 
     private byte type = annotation.value();
@@ -73,16 +82,31 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
     }
 
     @Override
-    public void check() {
-        List<Long> notDoneList = transactionStatusService.selectNotDoneList(type);
+    public void check(Long count) {
+        List<TransactionRecordBO> notDoneList = transactionStatusService.selectNotDoneList(type);
         for (int i = 0; i < notDoneList.size(); i++) {
-            Long relateId = notDoneList.get(i);
-            N notification = selectNotification(relateId);
-            if (notification == null) {
-                throw new IllegalArgumentException("Can't find the notification by relateId: " + relateId);
-            }
-            messageProducerService.sendMessage(topic, tags, notification);
+        	TransactionRecordBO transactionRecordBO = notDoneList.get(i);
+        	
+        	/*
+        	 * 当前的执行总次数  / ( 执行次数  ^ 基数) == 0
+        	 * 执行次数 < 可执行的次数
+        	 */
+        	if (transactionRecordBO.getTimes() < exectotalCount && count % (long) Math.pow(intervalBaseNumber, transactionRecordBO.getTimes()) == 0) {
+	            N notification = selectNotification(transactionRecordBO.getRelateId());
+	            if (notification == null) {
+	                throw new IllegalArgumentException("Can't find the notification by relateId: " + transactionRecordBO.getRelateId());
+	            }
+	            notification.setTransactionId(transactionRecordBO.getId());
+	            messageProducerService.sendMessage(topic, tags, notification);
+	            
+	            // 更新执行次数
+	            transactionStatusService.updateTimes(transactionRecordBO.getId(), transactionRecordBO.getTimes() + 1);
+        	}
         }
     }
 
+    @Override
+	public String getTopic() {
+		return topic;
+	}
 }
