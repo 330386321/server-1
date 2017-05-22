@@ -105,4 +105,12 @@ public interface MerchantService {
      * @date 2017年5月22日 上午10:53:28
      */
 	MerchantBaseInfoBO getMerchantById(Long merchantId);
+
+    /**
+     * 根据编号查询商户信息
+     *
+     * @param num
+     * @return
+     */
+    MerchantBO getMerchantByNum(String num);
 }

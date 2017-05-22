@@ -1,19 +1,10 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
-import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
@@ -22,6 +13,15 @@ import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 交易明细服务实现
@@ -82,7 +82,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
 		Criteria criteria = transactionDetailDOExample.createCriteria();
 		criteria.andUserNumEqualTo(userNum);
-		
+
 		if (param.getTransactionType() != null) {
 			criteria.andTransactionTypeEqualTo(param.getTransactionType().getValue());	
 		}
@@ -140,6 +140,46 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public Page<TransactionDetailBO> getBackageRechargePageList(TransactionDetailQueryForBackageParam param) {
+		TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+		Criteria criteria = transactionDetailDOExample.createCriteria();
+		if(StringUtils.isNotEmpty(param.getUserNum())){
+			criteria.andUserNumEqualTo(param.getUserNum());
+		}
+		if(param.getMemberTransactionType() == null && param.getMerchantTransactionType() == null){
+			List<Byte> transactionTypeList = new ArrayList<>();
+			transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
+			transactionTypeList.add(MerchantTransactionTypeEnum.BACKAGE.getValue());
+			criteria.andTransactionTypeIn(transactionTypeList);
+		}else{
+			if (param.getMemberTransactionType() != null) {
+				criteria.andTransactionTypeEqualTo(param.getMemberTransactionType().getValue());
+			}
+			if(param.getMerchantTransactionType() != null){
+				criteria.andTransactionTypeEqualTo(param.getMerchantTransactionType().getValue());
+			}
+		}
+		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
+
+		Page<TransactionDetailBO> page = new Page<TransactionDetailBO>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(count);
+
+		// 如果返回的总记录为0，直接返回page
+		if (count <= 0) {
+			return page;
+		}
+
+		transactionDetailDOExample.setOrderByClause("gmt_create desc");
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+
+		List<TransactionDetailBO> transactionDetailBOS = TransactionDetailConverter.convertBOS(transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds));
+		page.setRecords(transactionDetailBOS);
+
+		return page;
 	}
 
 }

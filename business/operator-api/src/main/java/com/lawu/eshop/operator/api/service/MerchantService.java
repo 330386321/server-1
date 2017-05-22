@@ -42,4 +42,14 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchant/{account}")
     Result<MerchantDTO> getMerchantByAccount(@PathVariable("account") String account);
+
+    /**
+     * 根据编号查询商家信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchantByNum")
+    Result<MerchantDTO> getMerchantByNum(@RequestParam("num") String num);
+
 }

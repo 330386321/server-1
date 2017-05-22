@@ -1,21 +1,18 @@
 package com.lawu.eshop.property.srv.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Sunny
@@ -31,7 +28,7 @@ public class PointDetailController extends BaseController {
     /**
      * 根据用户编号和查询参数查询交易明细
      * 
-     * @param userNo 用户编号
+     * @param userNum 用户编号
      * @param pointDetailQueryParam 查询参数
      * @return
      */
@@ -53,4 +50,17 @@ public class PointDetailController extends BaseController {
 	public Result save(@RequestBody PointDetailSaveDataParam param) {
 		return successCreated(pointDetailService.save(param));
 	}
+
+    /**
+     * 查询运营后台充值积分记录
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "getBackagePointPageList", method = RequestMethod.POST)
+    public Result<Page<PointDetailBackageDTO>> getBackagePointPageList(@RequestBody TransactionDetailQueryForBackageParam param) {
+        Page<PointDetailBO> pointDetailBOPage = pointDetailService.getBackagePointPageList(param);
+        return successGet(PointDetailConverter.convertBackageDTOPage(pointDetailBOPage));
+    }
+
 }

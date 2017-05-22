@@ -1,20 +1,20 @@
 package com.lawu.eshop.property.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+import org.springframework.beans.BeanUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 交易明细转换器
@@ -163,6 +163,27 @@ public class TransactionDetailConverter {
 		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
 		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
 		rtn.setRecords(convertTransactionDetailToMerchantDTOS(transactionDetailBOPage.getRecords()));
+		return rtn;
+	}
+
+	public static Page<TransactionDetailBackageDTO> convertTransactionDetailBackageDTOPage(Page<TransactionDetailBO> transactionDetailBOPage) {
+		Page<TransactionDetailBackageDTO> rtn = new Page<TransactionDetailBackageDTO>();
+		rtn.setCurrentPage(transactionDetailBOPage.getCurrentPage());
+		rtn.setTotalCount(transactionDetailBOPage.getTotalCount());
+		List<TransactionDetailBackageDTO> transactionDetailBackageDTOS = new ArrayList<>();
+		if(transactionDetailBOPage.getRecords() == null || transactionDetailBOPage.getRecords().isEmpty()){
+			rtn.setRecords(transactionDetailBackageDTOS);
+			return rtn;
+		}
+		for(TransactionDetailBO transactionDetailBO : transactionDetailBOPage.getRecords()){
+			TransactionDetailBackageDTO transactionDetailBackageDTO = new TransactionDetailBackageDTO();
+			transactionDetailBackageDTO.setTitle(transactionDetailBO.getTitle());
+			transactionDetailBackageDTO.setUserNum(transactionDetailBO.getUserNum());
+			transactionDetailBackageDTO.setAmount(transactionDetailBO.getAmount());
+			transactionDetailBackageDTO.setTransactionDate(transactionDetailBO.getGmtCreate());
+			transactionDetailBackageDTOS.add(transactionDetailBackageDTO);
+		}
+		rtn.setRecords(transactionDetailBackageDTOS);
 		return rtn;
 	}
 

@@ -3,6 +3,7 @@ package com.lawu.eshop.property.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 
 /**
@@ -28,4 +29,13 @@ public interface PointDetailService {
 	 * @return
 	 */
 	int save(PointDetailSaveDataParam param);
+
+	/**
+	 * 查询运营后台充值积分记录
+	 *
+	 * @param param
+	 * @return
+	 */
+	Page<PointDetailBO> getBackagePointPageList(TransactionDetailQueryForBackageParam param);
+
 }

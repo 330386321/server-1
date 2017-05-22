@@ -478,4 +478,12 @@ public class MerchantServiceImpl implements MerchantService {
 		return bo;
 	}
 
+    @Override
+    public MerchantBO getMerchantByNum(String num) {
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andNumEqualTo(num);
+        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+        return merchantDOS.isEmpty() ? null : MerchantConverter.convertBO(merchantDOS.get(0));
+    }
+
 }

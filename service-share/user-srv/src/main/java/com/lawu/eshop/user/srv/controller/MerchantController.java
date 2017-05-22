@@ -258,4 +258,19 @@ public class MerchantController extends BaseController {
         dto.setUserNum(merchantBO.getUserNum());
         return successGet(dto);
     }
+    /**
+     * 根据编号查询商家信息
+     *
+     * @param num
+     * @return
+     */
+    @RequestMapping(value = "getMerchantByNum", method = RequestMethod.GET)
+    public Result<MerchantDTO> getMerchantByNum(@RequestParam String num) {
+        MerchantBO merchantBO = merchantService.getMerchantByNum(num);
+        if (merchantBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        return successGet(MerchantConverter.convertDTO(merchantBO));
+    }
+
 }

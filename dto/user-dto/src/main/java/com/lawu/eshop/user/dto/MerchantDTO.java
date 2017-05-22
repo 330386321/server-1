@@ -11,6 +11,9 @@ public class MerchantDTO {
     @ApiModelProperty(value = "ID")
     private Long id;
 
+    @ApiModelProperty(value = "账号")
+    private String account;
+
     @ApiModelProperty(value = "编号")
     private String num;
 
@@ -50,5 +53,13 @@ public class MerchantDTO {
 
     public void setLevel(Integer level) {
         this.level = level;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
     }
 }

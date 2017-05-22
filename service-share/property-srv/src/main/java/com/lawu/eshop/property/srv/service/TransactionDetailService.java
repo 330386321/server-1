@@ -1,10 +1,7 @@
 package com.lawu.eshop.property.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
-import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 
 /**
@@ -48,4 +45,13 @@ public interface TransactionDetailService {
 	 * @date 2017年5月9日 下午4:25:02
 	 */
 	boolean verifyOrderIsPaySuccess(NotifyCallBackParam param);
+
+	/**
+	 * 查询运营后台充值记录
+	 *
+	 * @param param
+	 * @return
+	 */
+	Page<TransactionDetailBO> getBackageRechargePageList(TransactionDetailQueryForBackageParam param);
+
 }

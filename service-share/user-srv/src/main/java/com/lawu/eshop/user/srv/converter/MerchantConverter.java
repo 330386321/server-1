@@ -1,14 +1,14 @@
 package com.lawu.eshop.user.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.srv.bo.MerchantBO;
 import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 商户信息转换器
@@ -60,6 +60,7 @@ public class MerchantConverter {
 
         MerchantDTO merchantDTO = new MerchantDTO();
         merchantDTO.setId(merchantBO.getId());
+        merchantDTO.setAccount(merchantBO.getAccount());
         merchantDTO.setNum(merchantBO.getNum());
         merchantDTO.setHeadimg(merchantBO.getHeadimg());
         merchantDTO.setLevel(merchantBO.getLevel());
