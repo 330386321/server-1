@@ -286,7 +286,7 @@ public class MerchantController extends BaseController {
         if(!result.getModel()){
             response.sendRedirect(merchantApiConfig.getShareRedpacketUrl() + merchantId);
         }else{
-            response.sendRedirect(merchantApiConfig.getShareRegisterUrl());
+            response.sendRedirect(merchantApiConfig.getShareRegisterUrl() + merchantId);
         }
     }
     
