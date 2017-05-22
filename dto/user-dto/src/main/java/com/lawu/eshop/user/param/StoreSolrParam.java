@@ -28,6 +28,9 @@ public class StoreSolrParam extends AbstractPageParam {
     @ApiModelProperty(value = "纬度", required = true)
     private Double latitude;
 
+    @ApiModelProperty(value = "门店ID，更多商家必传参数")
+    private Long storeId;
+
     @ApiModelProperty(value = "排序类型:INTELLIGENT_SORT--智能排序，DISTANCE_SORT--离我最近，FEEDBACK_SORT--好评优先，POPULARITY_SORT--人气最高")
     private StoreSolrEnum storeSolrEnum;
 
@@ -85,5 +88,13 @@ public class StoreSolrParam extends AbstractPageParam {
 
     public void setLatitude(Double latitude) {
         this.latitude = latitude;
+    }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
     }
 }

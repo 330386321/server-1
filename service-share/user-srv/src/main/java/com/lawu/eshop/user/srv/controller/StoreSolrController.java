@@ -50,6 +50,9 @@ public class StoreSolrController extends BaseController {
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
             stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
         }
+        if(storeSolrParam.getStoreId() != null && storeSolrParam.getStoreId() > 0){
+            stringBuffer.append(" AND -id:").append(storeSolrParam.getStoreId());
+        }
         SolrQuery query = new SolrQuery();
         query.setParam("q", stringBuffer.toString());
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
