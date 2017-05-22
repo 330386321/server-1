@@ -72,6 +72,17 @@ public class ProductInfoDTO {
 	
 	@ApiModelProperty(value = "商品是否支持退换货")
 	private boolean isAllowRefund;
+	
+	@ApiModelProperty(value = "商家编号")
+	private String merchantUserNum;
+
+	public String getMerchantUserNum() {
+		return merchantUserNum;
+	}
+
+	public void setMerchantUserNum(String merchantUserNum) {
+		this.merchantUserNum = merchantUserNum;
+	}
 
 	public Long getMerchantId() {
 		return merchantId;

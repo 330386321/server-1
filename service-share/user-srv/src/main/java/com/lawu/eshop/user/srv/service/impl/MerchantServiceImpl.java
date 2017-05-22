@@ -470,4 +470,12 @@ public class MerchantServiceImpl implements MerchantService {
         return rongYunBO;
     }
 
+	@Override
+	public MerchantBaseInfoBO getMerchantById(Long merchantId) {
+		MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
+		MerchantBaseInfoBO bo = new MerchantBaseInfoBO();
+		bo.setUserNum(merchantDO.getNum());
+		return bo;
+	}
+
 }

@@ -96,4 +96,13 @@ public interface MerchantService {
      * @return
      */
     RongYunBO getRongYunInfoByNum(String num);
+
+    /**
+     * 根据商家ID查询商家基本信息
+     * @param merchantId
+     * @return
+     * @author yangqh
+     * @date 2017年5月22日 上午10:53:28
+     */
+	MerchantBaseInfoBO getMerchantById(Long merchantId);
 }

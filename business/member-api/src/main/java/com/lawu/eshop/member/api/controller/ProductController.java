@@ -21,11 +21,13 @@ import com.lawu.eshop.member.api.service.CommentMerchantService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.FavoriteProductService;
 import com.lawu.eshop.member.api.service.MemberService;
+import com.lawu.eshop.member.api.service.MerchantService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.product.dto.MemberProductCommentInfoDTO;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
+import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 
 import io.swagger.annotations.Api;
@@ -57,6 +59,8 @@ public class ProductController extends BaseController {
 	private MemberService memberService;
 	@Autowired
 	private FavoriteProductService favoriteProductService;
+	@Autowired
+	private MerchantService merchantService;
 
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
@@ -69,6 +73,9 @@ public class ProductController extends BaseController {
 		if (result.getRet() != ResultCode.SUCCESS) {
 			return result;
 		}
+		
+		Result<MerchantBaseInfoDTO> merchantResult = merchantService.getMerchantById(result.getModel().getMerchantId());
+		result.getModel().setMerchantUserNum(merchantResult.getModel().getUserNum());
 
 		// 查询门店信息
 		Result<MemberProductStoreDTO> storeDTOResult = merchantStoreService
