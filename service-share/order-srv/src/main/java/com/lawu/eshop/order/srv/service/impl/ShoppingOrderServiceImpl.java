@@ -1306,6 +1306,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public List<ShoppingOrderExtendBO> commissionShoppingOrder() {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 
 		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
