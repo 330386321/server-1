@@ -383,7 +383,8 @@ public class AdController extends BaseController {
     	Result<Page<AdFlatVideoDTO>>  pageDTOS=adExtendService.selectEgainAd(adEgainParam);
     	return pageDTOS;
     }
-    
+
+    @Audit(date = "2017-05-23", reviewer = "孙林青")
     @ApiOperation(value = "获取领取红包之前的信息", notes = "红包信息,[5009]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
@@ -396,9 +397,8 @@ public class AdController extends BaseController {
     	}
     	return rs;
     }
-    
-    
-    
+
+    @Audit(date = "2017-05-23", reviewer = "孙林青")
     @ApiOperation(value = "注册并领取红包", notes = "注册并领取红包,[1012|1013|1016]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "registerGetRedPacket", method = RequestMethod.POST)
@@ -428,7 +428,7 @@ public class AdController extends BaseController {
          }
          return rs;
     }
-    
+
     @ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)

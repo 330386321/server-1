@@ -298,6 +298,7 @@ public class MerchantController extends BaseController {
     	return result;
     }
 
+    @Audit(date = "2017-05-23", reviewer = "孙林青")
     @ApiOperation(value = "查询融云需要信息", notes = "查询融云需要信息。 [1004|1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
