@@ -25,8 +25,8 @@ public class AdViewServiceImpl implements AdViewExtendService{
 		 List<Long> list=rs.getModel();
 		 if(!list.isEmpty()){
 			 for (Long id : list) {
-				 List<String> count=adViewService.getAdviews(id.toString());
-				 adSrvService.updateViewCount(id, count.size());
+				 Result<List<String>> result=adViewService.getAdviews(id.toString());
+				 adSrvService.updateViewCount(id, result.getModel().size());
 			}
 		 }
 	}
