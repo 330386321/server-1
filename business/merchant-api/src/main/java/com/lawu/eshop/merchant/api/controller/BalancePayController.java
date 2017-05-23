@@ -21,8 +21,10 @@ import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.merchant.api.service.BalancePayService;
 import com.lawu.eshop.merchant.api.service.MessageService;
+import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.merchant.api.service.RechargeService;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -52,6 +54,8 @@ public class BalancePayController extends BaseController {
 	private BalancePayService balancePayService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
@@ -81,7 +85,8 @@ public class BalancePayController extends BaseController {
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
 		MessageTempParam messageTempParam = new MessageTempParam();
 		messageTempParam.setRechargeBalance(new BigDecimal(money));
-		// messageTempParam.setPoint(new BigDecimal(""));
+		Result<PropertyPointAndBalanceDTO> moneyResult = propertyInfoService.getPropertyInfoMoney(userNum);
+		messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 		if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 			messageTempParam.setUserName("E店会员");
 		} else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {

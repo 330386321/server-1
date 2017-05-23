@@ -67,7 +67,8 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						CommissionJobParam param = new CommissionJobParam();
 						param.setUserNum(inviters.get(i).getUserNum());
 						param.setBizId(dto.getId());
-						BigDecimal clickMoney = param.getActureMoneyIn();
+						
+						BigDecimal clickMoney = dto.getPoint();
 
 						BigDecimal sale_commission = null;
 						if (i == 0) {
@@ -89,7 +90,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 							actureMoneyIn = clickMoney.multiply(sale_commission).multiply(actualCommissionScope);// 实际所得余额
 							actureLoveIn = clickMoney.multiply(sale_commission).multiply(loveAccountScale);// 爱心账户
 						}
-						param.setActureLoveIn(actureMoneyIn);
+						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 						
 						if(inviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){

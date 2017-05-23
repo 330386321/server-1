@@ -29,9 +29,8 @@ public class UserClickAdTransactionFollowServiceImpl extends AbstractTransaction
 		    PropertyInfoDataParam param=new PropertyInfoDataParam();
 		    param.setPoint(notification.getPoint().toString());
 		    param.setUserNum(notification.getUserNum());
-		    //param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
 		    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
-		    propertyInfoDataService.doHanlderAddBalance(param);
+		    propertyInfoDataService.doHanlderClickAd(param);
 	        return new Reply();
 	    }
 }

@@ -1,25 +1,31 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.param.PointDetailSaveDataParam;
-import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
-import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
-import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
-import com.lawu.eshop.property.srv.service.PointDetailService;
-import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
-import com.lawu.eshop.property.srv.service.PropertyInfoService;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
+import java.math.BigDecimal;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
+import com.lawu.eshop.property.srv.domain.LoveDetailDO;
+import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
+import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
+import com.lawu.eshop.property.srv.service.PropertyInfoService;
+import com.lawu.eshop.property.srv.service.PropertyService;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * <p>
@@ -40,6 +46,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	private FansInviteDetailDOMapper fansInviteDetailDOMapper;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+	@Autowired
+	private PropertyService propertyService;
+	@Autowired
+	private LoveDetailDOMapper loveDetailDOMapper;
 
 	@Override
 	@Transactional
@@ -170,6 +180,63 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		// 更新用户资产
 		BigDecimal point = new BigDecimal(param.getPoint());
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "M", point);
+		
+		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public int doHanlderClickAd(PropertyInfoDataParam param) {
+		BigDecimal clickMoney = new BigDecimal(param.getPoint());
+		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
+		if ("".equals(ad_commission_0)) {
+			ad_commission_0 = PropertyType.ad_commission_0_default;
+		}
+		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
+		if ("".equals(love_account_scale)) {
+			love_account_scale = PropertyType.love_account_scale_default;
+		}
+		double d_acture_in = 1 - Double.valueOf(love_account_scale).doubleValue(); // 用户实际进账比例：1-爱心账户比例
+		
+		BigDecimal b_ad_commission_0 = new BigDecimal(ad_commission_0);
+		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
+		BigDecimal b_acture_in = new BigDecimal(d_acture_in);
+		
+		BigDecimal actureMoneyIn = clickMoney.multiply(b_ad_commission_0).multiply(b_acture_in);//实际进余额
+		BigDecimal actureLoveIn = clickMoney.multiply(b_ad_commission_0).multiply(b_love_account_scale);//爱心账户
+		
+		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
+		tdsParam.setUserNum(param.getUserNum());
+		tdsParam.setTransactionAccount("");
+		if (param.getMemberTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMemberTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
+		} else if (param.getMerchantTransactionTypeEnum() != null) {
+			tdsParam.setTitle(param.getMerchantTransactionTypeEnum().getName());
+			tdsParam.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
+		}
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+		tdsParam.setAmount(actureMoneyIn);
+		tdsParam.setBizId("");
+		tdsParam.setThirdTransactionNum("");
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		transactionDetailService.save(tdsParam);
+		
+		// 更新用户资产余额
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", actureMoneyIn);
+		
+		LoveDetailDO loveDetailDO = new LoveDetailDO();
+		loveDetailDO.setTitle(LoveTypeEnum.AD_CLICK.getName());
+		loveDetailDO.setLoveNum(param.getUserNum());
+		loveDetailDO.setUserNum(param.getUserNum());
+		loveDetailDO.setLoveType(LoveTypeEnum.AD_CLICK.getValue());
+		loveDetailDO.setAmount(actureLoveIn);
+		loveDetailDO.setRemark("用户点广告所得，计入的爱心账户");
+		loveDetailDO.setGmtCreate(new Date());
+		loveDetailDOMapper.insertSelective(loveDetailDO);
+		
+		//更新爱心账户
+		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "L", "A", actureLoveIn);
 		
 		return ResultCode.SUCCESS;
 	}

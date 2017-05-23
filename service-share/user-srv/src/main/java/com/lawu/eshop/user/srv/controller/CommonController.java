@@ -47,7 +47,7 @@ public class CommonController extends BaseController {
 	 * @param isLevel	是否需要查询上级级别
 	 * @return
 	 */
-	@RequestMapping(value = "selectHigherLevelInviters/{invitedUserNum}", method = RequestMethod.GET)
+	@RequestMapping(value = "selectHigherLevelInviters/{invitedUserNum}", method = RequestMethod.POST)
 	public List<CommissionInvitersUserDTO> selectHigherLevelInviters(@PathVariable String invitedUserNum,
 			@RequestParam int level, @RequestBody boolean isLevel) {
 		List<CommissionInvitersUserDTO> userNumList = commonService.selectHigherLevelInviters(invitedUserNum, level,isLevel);

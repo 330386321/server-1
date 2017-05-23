@@ -40,4 +40,11 @@ public interface PropertyInfoDataService {
 	 * @return
 	 */
 	int doHanlderMinusBalance(PropertyInfoDataParam param);
+	
+	/**
+	 * 用户点广告加余额
+	 * @param param
+	 * @return
+	 */
+	int doHanlderClickAd(PropertyInfoDataParam param);
 }
