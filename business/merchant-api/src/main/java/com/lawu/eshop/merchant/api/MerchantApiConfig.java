@@ -37,8 +37,8 @@ public class MerchantApiConfig {
     @Value(value="${default_headimg}")
     private String defaultHeadimg;
     
-    @Value(value="${ffmpeg.url}")
-    private String ffmpegUrl;
+    /*@Value(value="${ffmpeg.url}")
+    private String ffmpegUrl;*/
 
     public String getImageUrl() {
         return imageUrl;
@@ -76,8 +76,8 @@ public class MerchantApiConfig {
         return defaultHeadimg;
     }
 
-	public String getFfmpegUrl() {
+	/*public String getFfmpegUrl() {
 		return ffmpegUrl;
-	}
+	}*/
     
 }
