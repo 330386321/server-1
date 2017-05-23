@@ -39,24 +39,60 @@ public class ShoppingOrderExtendConverter {
 	 * @return
 	 */
 	public static ShoppingOrderExtendBO convertShoppingOrderExtendDetailBO(ShoppingOrderExtendDO shoppingOrderExtendDO) {
+		ShoppingOrderExtendBO rtn = null;
 		if (shoppingOrderExtendDO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = new ShoppingOrderExtendBO();
-		BeanUtils.copyProperties(shoppingOrderExtendDO, shoppingOrderExtendDetailBO, new String[]{"items", "orderStatus", "commissionStatus"});
+		rtn = new ShoppingOrderExtendBO();
+		
+		rtn.setId(shoppingOrderExtendDO.getId());
+		rtn.setMemberId(shoppingOrderExtendDO.getMemberId());
+		rtn.setMemberNum(shoppingOrderExtendDO.getMemberNum());
+		rtn.setMerchantId(shoppingOrderExtendDO.getMerchantId());
+		rtn.setMerchantStoreId(shoppingOrderExtendDO.getMerchantStoreId());
+		rtn.setMerchantNum(shoppingOrderExtendDO.getMerchantNum());
+		rtn.setMerchantName(shoppingOrderExtendDO.getMerchantName());
+		rtn.setConsigneeName(shoppingOrderExtendDO.getConsigneeName());
+		rtn.setConsigneeAddress(shoppingOrderExtendDO.getConsigneeAddress());
+		rtn.setConsigneeMobile(shoppingOrderExtendDO.getConsigneeMobile());
+		rtn.setRemark(shoppingOrderExtendDO.getRemark());
+		rtn.setMessage(shoppingOrderExtendDO.getMessage());
+		rtn.setFreightPrice(shoppingOrderExtendDO.getFreightPrice());
+		rtn.setCommodityTotalPrice(shoppingOrderExtendDO.getCommodityTotalPrice());
+		rtn.setOrderTotalPrice(shoppingOrderExtendDO.getOrderTotalPrice());
+		rtn.setActualAmount(shoppingOrderExtendDO.getActualAmount());
+		rtn.setSendTime(shoppingOrderExtendDO.getSendTime());
+		rtn.setIsFans(shoppingOrderExtendDO.getIsFans());
+		rtn.setIsNoReasonReturn(shoppingOrderExtendDO.getIsNoReasonReturn());
+		rtn.setIsAutomaticReceipt(shoppingOrderExtendDO.getIsAutomaticReceipt());
+		rtn.setIsDone(shoppingOrderExtendDO.getIsDone());
+		rtn.setShoppingCartIdsStr(shoppingOrderExtendDO.getShoppingCartIdsStr());
+		rtn.setOrderNum(shoppingOrderExtendDO.getOrderNum());
+		rtn.setThirdNumber(shoppingOrderExtendDO.getThirdNumber());
+		rtn.setIsNeedsLogistics(shoppingOrderExtendDO.getIsNeedsLogistics());
+		rtn.setWaybillNum(shoppingOrderExtendDO.getWaybillNum());
+		rtn.setExpressCompanyId(shoppingOrderExtendDO.getExpressCompanyId());
+		rtn.setExpressCompanyCode(shoppingOrderExtendDO.getExpressCompanyCode());
+		rtn.setExpressCompanyName(shoppingOrderExtendDO.getExpressCompanyName());
+		rtn.setGmtCommission(shoppingOrderExtendDO.getGmtCommission());
+		rtn.setGmtPayment(shoppingOrderExtendDO.getGmtPayment());
+		rtn.setGmtTransport(shoppingOrderExtendDO.getGmtTransport());
+		rtn.setGmtTransaction(shoppingOrderExtendDO.getGmtTransaction());
+		rtn.setGmtCreate(shoppingOrderExtendDO.getGmtCreate());
+		rtn.setGmtModified(shoppingOrderExtendDO.getGmtModified());
 		
 		// 转换为枚举类型
-		shoppingOrderExtendDetailBO.setStatus(StatusEnum.getEnum(shoppingOrderExtendDO.getStatus()));
-		shoppingOrderExtendDetailBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderExtendDO.getOrderStatus()));
-		shoppingOrderExtendDetailBO.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendDO.getPaymentMethod()));
-		shoppingOrderExtendDetailBO.setCommissionStatus(CommissionStatusEnum.getEnum(shoppingOrderExtendDO.getCommissionStatus()));
+		rtn.setStatus(StatusEnum.getEnum(shoppingOrderExtendDO.getStatus()));
+		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderExtendDO.getOrderStatus()));
+		rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendDO.getPaymentMethod()));
+		rtn.setCommissionStatus(CommissionStatusEnum.getEnum(shoppingOrderExtendDO.getCommissionStatus()));
 		
 		if (shoppingOrderExtendDO.getItems() != null) {
-			shoppingOrderExtendDetailBO.setItems(ShoppingOrderItemConverter.convert(shoppingOrderExtendDO.getItems()));
+			rtn.setItems(ShoppingOrderItemConverter.convert(shoppingOrderExtendDO.getItems()));
 		}
 		
-		return shoppingOrderExtendDetailBO;
+		return rtn;
 	}
 	
 	public static List<ShoppingOrderExtendBO> convertShoppingOrderExtendBO(List<ShoppingOrderExtendDO> shoppingOrderExtendDOList) {
@@ -86,7 +122,33 @@ public class ShoppingOrderExtendConverter {
 		}
 
 		rtn = new ShoppingOrderExtendDetailDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn, new String[]{"items"});
+		
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setMemberNum(shoppingOrderExtendBO.getMemberNum());
+		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
+		rtn.setMerchantNum(shoppingOrderExtendBO.getMerchantNum());
+		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
+		rtn.setConsigneeName(shoppingOrderExtendBO.getConsigneeName());
+		rtn.setConsigneeAddress(shoppingOrderExtendBO.getConsigneeAddress());
+		rtn.setConsigneeMobile(shoppingOrderExtendBO.getConsigneeMobile());
+		rtn.setFreightPrice(shoppingOrderExtendBO.getFreightPrice());
+		rtn.setCommodityTotalPrice(shoppingOrderExtendBO.getCommodityTotalPrice());
+		rtn.setOrderTotalPrice(shoppingOrderExtendBO.getOrderTotalPrice());
+		rtn.setActualAmount(shoppingOrderExtendBO.getActualAmount());
+		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
+		rtn.setIsDone(shoppingOrderExtendBO.getIsDone());
+		rtn.setOrderNum(shoppingOrderExtendBO.getOrderNum());
+		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
+		rtn.setWaybillNum(shoppingOrderExtendBO.getWaybillNum());
+		rtn.setExpressCompanyId(shoppingOrderExtendBO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingOrderExtendBO.getExpressCompanyName());
+		rtn.setGmtPayment(shoppingOrderExtendBO.getGmtPayment());
+		rtn.setGmtTransport(shoppingOrderExtendBO.getGmtTransport());
+		rtn.setGmtTransaction(shoppingOrderExtendBO.getGmtTransaction());
+		rtn.setGmtCreate(shoppingOrderExtendBO.getGmtCreate());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
+		rtn.setPaymentMethod(shoppingOrderExtendBO.getPaymentMethod());
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
