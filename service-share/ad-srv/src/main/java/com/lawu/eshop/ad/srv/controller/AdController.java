@@ -383,7 +383,7 @@ public class AdController extends BaseController{
 	 * @param count
 	 * @return
 	 */
-	@RequestMapping(value = "updateViewCount/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "updateViewCount/{id}", method = RequestMethod.PUT)
     public Result<List<Long>> updateViewCount(@PathVariable  Long  id,@RequestParam Integer count) {
     	adService.updateViewCount(id, count);
     	return successCreated();
