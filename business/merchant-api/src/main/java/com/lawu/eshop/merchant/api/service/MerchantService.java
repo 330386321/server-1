@@ -116,7 +116,7 @@ public interface MerchantService {
      * @return
      */
     @RequestMapping(value = "merchant/selectMobile/{merchantId}", method = RequestMethod.GET)
-    public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId);
+    public Result<MobileDTO> selectMobile(@PathVariable("merchantId") Long merchantId);
 
     /**
      * 根据商家编号查询融云需要的信息

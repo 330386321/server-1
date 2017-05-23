@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -76,6 +77,6 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
-	Result<Boolean> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
+	Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
 
 }

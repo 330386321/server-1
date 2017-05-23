@@ -20,6 +20,7 @@ import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
@@ -432,8 +433,8 @@ public class AdController extends BaseController {
     @ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
-    public Result<Boolean> isExistsRedPacket(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
-    	Result<Boolean> rs= adService.isExistsRedPacket(merchantId);
+    public Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
+    	Result<IsExistsRedPacketDTO> rs= adService.isExistsRedPacket(merchantId);
     	return rs;
     }
     

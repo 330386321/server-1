@@ -14,6 +14,7 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
@@ -138,5 +139,5 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
-	public Result<Boolean> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
+	public Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
 }

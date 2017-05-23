@@ -1,5 +1,26 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -11,31 +32,32 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
-import com.lawu.eshop.merchant.api.service.*;
+import com.lawu.eshop.merchant.api.service.AdService;
+import com.lawu.eshop.merchant.api.service.InviterService;
+import com.lawu.eshop.merchant.api.service.MemberProfileService;
+import com.lawu.eshop.merchant.api.service.MemberService;
+import com.lawu.eshop.merchant.api.service.MerchantService;
+import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
+import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
+import com.lawu.eshop.user.dto.InviterDTO;
+import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MobileDTO;
+import com.lawu.eshop.user.dto.RongYunDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.QrCodeUtil;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Map;
 
 /**
  * @author meishuquan
@@ -282,8 +304,8 @@ public class MerchantController extends BaseController {
         if(merchantId == null || merchantId <= 0){
             return;
         }
-        Result<Boolean> result = adService.isExistsRedPacket(merchantId);
-        if(!result.getModel()){
+        Result<IsExistsRedPacketDTO> result = adService.isExistsRedPacket(merchantId);
+        if(!result.getModel().getIsExistsRedPacket()){
             response.sendRedirect(merchantApiConfig.getShareRedpacketUrl() + merchantId);
         }else{
             response.sendRedirect(merchantApiConfig.getShareRegisterUrl() + merchantId);
@@ -293,8 +315,8 @@ public class MerchantController extends BaseController {
     @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
-    public Result<String> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId){
-    	Result<String> result =merchantService.selectMobile(merchantId);
+    public Result<MobileDTO> selectMobile(@PathVariable @ApiParam(required = true, value = "商家ID") Long merchantId){
+    	Result<MobileDTO> result =merchantService.selectMobile(merchantId);
     	return result;
     }
 

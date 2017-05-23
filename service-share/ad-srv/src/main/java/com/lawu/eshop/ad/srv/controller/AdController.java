@@ -25,6 +25,7 @@ import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
@@ -499,9 +500,11 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
-	public Result<Boolean> isExistsRedPacket(@PathVariable Long merchantId) {
+	public Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable Long merchantId) {
 		Boolean flag= adService.isExistsRedPacket(merchantId);
-		return successCreated(flag);
+		IsExistsRedPacketDTO dto=new IsExistsRedPacketDTO();
+		dto.setIsExistsRedPacket(flag);
+		return successCreated(dto);
 	}
 
 }

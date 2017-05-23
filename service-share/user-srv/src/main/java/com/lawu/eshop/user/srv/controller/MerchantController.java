@@ -21,6 +21,7 @@ import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantInviterDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MessagePushDTO;
+import com.lawu.eshop.user.dto.MobileDTO;
 import com.lawu.eshop.user.dto.RongYunDTO;
 import com.lawu.eshop.user.dto.UserHeadImgDTO;
 import com.lawu.eshop.user.param.MerchantInviterParam;
@@ -221,9 +222,11 @@ public class MerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)
-    public Result<String> selectMobile(@PathVariable("merchantId") Long merchantId) {
+    public Result<MobileDTO> selectMobile(@PathVariable("merchantId") Long merchantId) {
     	MerchantBO merchantBO=merchantService.getMerchantBOById(merchantId);
-        return successCreated(merchantBO.getMobile());
+    	MobileDTO dto=new MobileDTO();
+    	dto.setMobile(merchantBO.getMobile());
+        return successCreated(dto);
     }
 
     /**
