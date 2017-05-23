@@ -88,9 +88,8 @@ public class BusinessDepositManageController extends BaseController {
 		dparam.setBusinessDepositOperEnum(param.getBusinessDepositOperEnum());
 		dparam.setFailReason(param.getFailReason());
 		dparam.setUserNum(param.getUserNum());
-		// TODO
-		dparam.setOperUserId(1L);
-		dparam.setOperUserName("super");
+		dparam.setOperUserId(0L);
+		dparam.setOperUserName(om.lawu.eshop.shiro.util.UserUtil.getCurrentUserAccount());
 		return businessDepositManageService.updateBusinessDeposit(dparam);
 	}
 }
