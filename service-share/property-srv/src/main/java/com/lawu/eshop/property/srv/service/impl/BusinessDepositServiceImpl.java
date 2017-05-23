@@ -21,7 +21,6 @@ import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.ibatis.session.RowBounds;
@@ -235,9 +234,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
 		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
-			// 核实操作成功后，发送MQ消息修改门店状态为：待审核
+			// 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
 			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
+			message.setShow(true);
 			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
+
 
 		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 退款成功操作后，发送MQ消息修改门店状态为：注销

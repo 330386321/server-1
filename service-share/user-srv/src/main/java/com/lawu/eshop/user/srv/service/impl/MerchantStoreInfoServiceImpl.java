@@ -129,7 +129,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
     @Override
     @Transactional
     public void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam) {
-
+        boolean isShow = true;
         // 新增门店基本信息
         MerchantStoreDO merchantStoreDO = (MerchantStoreDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam,
                 1);
@@ -146,6 +146,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         if (CertifTypeEnum.CERTIF_TYPE_IDCARD.val== merchantStoreParam.getCertifType().val) {
             // 填写身份证用户需要交保证金
             merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_NOT_MONEY.val);
+            isShow = false;
         } else {
             merchantStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
         }
@@ -246,6 +247,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);// 待审核
         merchantStoreAuditDO.setGmtCreate(new Date());
         merchantStoreAuditDO.setType(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
+        merchantStoreAuditDO.setIsShow(isShow);
         merchantStoreAuditDO.setGmtModified(new Date());
         merchantStoreAuditDOMapper.insert(merchantStoreAuditDO);
 
@@ -439,6 +441,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         JSONObject json = JSONObject.fromObject(merchantStoreParam);
         merchantStoreAuditDO.setContent(json.toString());
         merchantStoreAuditDO.setGmtModified(new Date());
+        merchantStoreAuditDO.setIsShow(true);
         merchantStoreAuditDO.setType(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
         merchantStoreAuditDO.setGmtCreate(new Date());
         merchantStoreAuditDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);

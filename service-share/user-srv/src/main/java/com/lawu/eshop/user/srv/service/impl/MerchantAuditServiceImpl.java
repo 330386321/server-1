@@ -314,6 +314,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     public Page<MerchantStoreAuditBO> listAllStoreAudit(ListStoreAuditParam auditParam) {
         MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
         MerchantStoreAuditDOExample.Criteria criteria = example.createCriteria();
+        criteria.andIsShowEqualTo(true);
         if (StringUtils.isNotEmpty(auditParam.getSortName()) && StringUtils.isNotEmpty(auditParam.getSortOrder())) {
             example.setOrderByClause("gmt_modified " + auditParam.getSortOrder());
         }
@@ -339,5 +340,15 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
     public MerchantStoreAuditBO getMerchantStoreAuditById(Long id) {
         MerchantStoreAuditDO merchantStoreAuditDO = merchantStoreAuditDOMapper.selectByPrimaryKey(id);
         return MerchantStoreAuditConverter.convertBO(merchantStoreAuditDO);
+    }
+
+    @Override
+    @Transactional
+    public void setAuditInfoShow(Long merchantId) {
+        MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
+        example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
+        MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
+        merchantStoreAuditDO.setIsShow(true);
+        merchantStoreAuditDOMapper.updateByExample(merchantStoreAuditDO,example);
     }
 }

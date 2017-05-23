@@ -15,6 +15,8 @@ public class HandleDepostMessage implements Serializable {
 
     private MerchantStatusEnum statusEnum;
 
+    private Boolean isShow;
+
     public String getUserNum() {
         return userNum;
     }
@@ -29,5 +31,13 @@ public class HandleDepostMessage implements Serializable {
 
     public void setStatusEnum(MerchantStatusEnum statusEnum) {
         this.statusEnum = statusEnum;
+    }
+
+    public Boolean getShow() {
+        return isShow;
+    }
+
+    public void setShow(Boolean show) {
+        isShow = show;
     }
 }

@@ -495,6 +495,66 @@ public class MerchantStoreAuditDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andIsShowIsNull() {
+            addCriterion("is_show is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowIsNotNull() {
+            addCriterion("is_show is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowEqualTo(Boolean value) {
+            addCriterion("is_show =", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotEqualTo(Boolean value) {
+            addCriterion("is_show <>", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowGreaterThan(Boolean value) {
+            addCriterion("is_show >", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("is_show >=", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowLessThan(Boolean value) {
+            addCriterion("is_show <", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowLessThanOrEqualTo(Boolean value) {
+            addCriterion("is_show <=", value, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowIn(List<Boolean> values) {
+            addCriterion("is_show in", values, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotIn(List<Boolean> values) {
+            addCriterion("is_show not in", values, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_show between", value1, value2, "isShow");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsShowNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("is_show not between", value1, value2, "isShow");
+            return (Criteria) this;
+        }
+
         public Criteria andAuditorIdIsNull() {
             addCriterion("auditor_id is null");
             return (Criteria) this;

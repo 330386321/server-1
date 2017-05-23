@@ -11,10 +11,7 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.*;
-import com.lawu.eshop.user.srv.service.FansMerchantService;
-import com.lawu.eshop.user.srv.service.MemberService;
-import com.lawu.eshop.user.srv.service.MerchantService;
-import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.*;
 import com.lawu.eshop.utils.GtPush;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +37,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
     @Autowired
     private FansMerchantService fansMerchantService;
+
+    @Autowired
+    private MerchantAuditService merchantAuditService;
 
     @Override
     public void consumeMessage(String topic, String tags, Object message) {
@@ -75,6 +75,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
             //修改门店状态
             merchantStoreInfoService.updateMerchantStoreStatus(merchantBO.getId(), info.getStatusEnum().val);
+            if(info.getShow() == true){
+                merchantAuditService.setAuditInfoShow(merchantBO.getId());
+            }
             if(info.getStatusEnum().val == MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val){
                 //查询门店信息
                 MerchantStoreInfoBO storeInfoBO= merchantStoreInfoService.selectMerchantStoreByMId(merchantBO.getId());
