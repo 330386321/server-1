@@ -6,6 +6,7 @@ import com.lawu.eshop.mall.srv.domain.IndustryTypeDO;
 import com.lawu.eshop.mall.srv.domain.IndustryTypeDOExample;
 import com.lawu.eshop.mall.srv.mapper.IndustryTypeDOMapper;
 import com.lawu.eshop.mall.srv.service.IndustryTypeService;
+import com.lawu.eshop.utils.DataTransUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,13 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
     @Override
     public List<IndustryTypeBO> listIndustryType() {
         IndustryTypeDOExample industryTypeDOExample = new IndustryTypeDOExample();
-        industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short("0"));
+        industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short("0")).andStatusEqualTo(DataTransUtil.intToByte(1));
         List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
         List<IndustryTypeBO> industryTypeBOS = IndustryTypeConverter.convertBO(industryTypeDOS);
         if (industryTypeBOS != null && !industryTypeBOS.isEmpty()) {
             for (IndustryTypeBO industryTypeBO : industryTypeBOS) {
                 industryTypeDOExample.clear();
-                industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short(String.valueOf(industryTypeBO.getId())));
+                industryTypeDOExample.createCriteria().andParentIdEqualTo(new Short(String.valueOf(industryTypeBO.getId()))).andStatusEqualTo(DataTransUtil.intToByte(1));
                 industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
                 industryTypeBO.setIndustryTypeBOList(IndustryTypeConverter.convertBO(industryTypeDOS));
             }
@@ -41,7 +42,7 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
     @Override
     public List<IndustryTypeBO> listIndustryTypeByParentId(Short parentId) {
         IndustryTypeDOExample industryTypeDOExample = new IndustryTypeDOExample();
-        industryTypeDOExample.createCriteria().andParentIdEqualTo(parentId);
+        industryTypeDOExample.createCriteria().andParentIdEqualTo(parentId).andStatusEqualTo(DataTransUtil.intToByte(1));
         List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(industryTypeDOExample);
         return IndustryTypeConverter.convertBO(industryTypeDOS);
     }
@@ -50,6 +51,7 @@ public class IndustryTypeServiceImpl implements IndustryTypeService {
     public List<IndustryTypeBO> getAllIndustryList() {
         IndustryTypeDOExample example = new IndustryTypeDOExample();
         example.setOrderByClause("id asc");
+        example.createCriteria().andStatusEqualTo(DataTransUtil.intToByte(1));
         List<IndustryTypeDO> industryTypeDOS = industryTypeDOMapper.selectByExample(example);
         return IndustryTypeConverter.convertBO(industryTypeDOS);
     }
