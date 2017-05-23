@@ -175,7 +175,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		// 用户填写退货物流，提醒买家退款
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 		ShoppingRefundToBeReturnRemindNotification notification = new ShoppingRefundToBeReturnRemindNotification();
 		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
 		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
@@ -252,7 +252,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		// 商家填写退货地址，提醒买家退货
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
 		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
@@ -331,7 +331,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		if (!param.getIsAgree()) {
-			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getId());
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 			// 商家拒绝退款，提醒买家
 			ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
@@ -438,7 +438,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 			
 			// 商家同意退款，提醒买家
-			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 			ShoppingRefundToBeRefundRemindNotification notification = new ShoppingRefundToBeRefundRemindNotification();
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
@@ -447,7 +447,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			
 		} else {
 			// 商家拒绝退款，提醒买家
-			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 			ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
@@ -854,7 +854,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
 		
 		// 商家拒绝退款，提醒买家
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 		ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
 		notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
@@ -871,7 +871,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
 		
 		// 商家填写退货地址，提醒买家退货
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
 		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO
 				.getId());
