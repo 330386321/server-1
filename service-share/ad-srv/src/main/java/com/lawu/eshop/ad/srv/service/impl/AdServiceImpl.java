@@ -832,16 +832,16 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public RedPacketInfoBO getRedPacketInfo(Long merchantId) {
-		PointPoolDOExample example =new PointPoolDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("0")).andTypeEqualTo(new Byte("2"));
-		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(example);
+		AdDOExample example =new AdDOExample();
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("1")).andTypeEqualTo(new Byte("4"));
+		List<AdDO>  list=adDOMapper.selectByExample(example);
 		RedPacketInfoBO redPacketInfoBO=new RedPacketInfoBO();
 		if(!list.isEmpty()){ 
-			PointPoolDO pointPoolDO=list.get(0);
+			AdDO adDO=list.get(0);
 			PointPoolDOExample ppexample =new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(pointPoolDO.getAdId());
+			ppexample.createCriteria().andAdIdEqualTo(adDO.getId());
 			ppexample.setOrderByClause("point desc");
-			List<PointPoolDO>  ppList=pointPoolDOMapper.selectByExample(example);
+			List<PointPoolDO>  ppList=pointPoolDOMapper.selectByExample(ppexample);
 			redPacketInfoBO.setPoint(ppList.get(0).getPoint());
 			return redPacketInfoBO;
 		}else{
