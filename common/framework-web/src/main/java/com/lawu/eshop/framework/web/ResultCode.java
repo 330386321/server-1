@@ -159,14 +159,14 @@ public class ResultCode {
         ResultCode.messageMap.put(UPDATE_FAIL, "更新失败");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD, "上传图片失败");
         ResultCode.messageMap.put(IMAGE_FORMAT_WRONG_UPLOAD, "上传图片格式错误");
-        ResultCode.messageMap.put(RECORD_EXIST, "记录已经存在");
-        ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "图片文件大于500K");
+        ResultCode.messageMap.put(RECORD_EXIST, "该记录已经存在");
+        ResultCode.messageMap.put(IMAGE_SIZE_ERROR, "上传图片应小于500K");
         ResultCode.messageMap.put(NOT_SEND_SMS_MOBILE, "与发送短信手机号不匹配");
         ResultCode.messageMap.put(IMAGE_IS_NULL, "图片格式不正确");
         ResultCode.messageMap.put(MONEY_IS_POINT_2, "金额请保留两位小数");
 
         ResultCode.messageMap.put(UPLOAD_VEDIO_FAIL, "上传视频失败");
-        ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件大于50M");
+        ResultCode.messageMap.put(UPLOAD_SIZE_BIGER, "上传文件应小于50M");
 
         ResultCode.messageMap.put(SMS_SEND_HOUR_LIMIT, "一小时内同一手机号超过发送次数");
         ResultCode.messageMap.put(SMS_SEND_IP_LIMIT, "同一IP 24小时内超过发送次数");
@@ -174,11 +174,11 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_PWD_FAIL, "原始密码错误");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_FAIL, "短信验证码错误");
         ResultCode.messageMap.put(VERIFY_PIC_CODE_FAIL, "图片验证码错误");
-        ResultCode.messageMap.put(PAY_PWD_NULL, "支付密码尚未设置");
+        ResultCode.messageMap.put(PAY_PWD_NULL, "尚未设置支付密码");
         ResultCode.messageMap.put(PAY_PWD_ERROR, "支付密码错误");
         ResultCode.messageMap.put(ILLEGAL_OPERATION, "非法操作");
         ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码超时");
-        ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在");
+        ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在，请重新输入");
         ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
 
         // 用户模块 2xxx
@@ -207,12 +207,12 @@ public class ResultCode {
         ResultCode.messageMap.put(USER_ACCOUNT_EXIST, "账号已存在");
 
         // 商品模块 3xxx
-        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品滚动图片");
+        ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
 
         // 订单模块 4xxx
-        ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "订单已经评价过");
+        ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "该订单已评价");
         ResultCode.messageMap.put(ORDER_NOT_CANCELED, "订单不能被取消");
         ResultCode.messageMap.put(ORDER_NOT_DELETE, "订单不能被删除");
         ResultCode.messageMap.put(ORDER_NOT_PENDING_PAYMENT, "订单不是待支付状态");
@@ -235,12 +235,12 @@ public class ResultCode {
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");
         ResultCode.messageMap.put(AD_PUT_NOT_TIME, "投放时间没有超过两个星期");
-        ResultCode.messageMap.put(AD_FACORITE_EXIST, "广告已经被收藏");
+        ResultCode.messageMap.put(AD_FACORITE_EXIST, "广告已被收藏");
         ResultCode.messageMap.put(AD_RED_PACKGE_EXIST, "请等待红包下架");
         ResultCode.messageMap.put(AD_RED_PACKGE_GET, "红包已经领取");
         ResultCode.messageMap.put(AD_PRAISE_PUTED, "抢赞已经结束");
         ResultCode.messageMap.put(AD_CLICK_EXIST, "今天已经点击过该广告");
-        ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞");
+        ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞了");
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
         // 资产模块 6xxx
