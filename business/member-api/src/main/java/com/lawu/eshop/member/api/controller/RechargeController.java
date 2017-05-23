@@ -12,8 +12,10 @@ import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.RechargeService;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.param.RechargeSaveParam;
 
@@ -52,6 +54,11 @@ public class RechargeController extends BaseController {
 		dparam.setPayTypeEnum(param.getPayTypeEnum());
 		dparam.setTransactionPayTypeEnum(param.getTransactionPayTypeEnum());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		if(TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)
+				&& (param.getPayPwd() == null || "".equals(param.getPayPwd()) )){
+			return successCreated(ResultCode.PAY_PWD_NULL);
+		}
+		dparam.setPayPwd(param.getPayPwd());
 		return rechargeService.save(dparam);
 
 	}

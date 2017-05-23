@@ -29,7 +29,7 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.StringUtil;
+
 @Service
 public class BalancePayServiceImpl implements BalancePayService {
 	

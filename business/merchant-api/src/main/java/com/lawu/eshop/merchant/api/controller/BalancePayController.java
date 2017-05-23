@@ -1,6 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -80,11 +81,12 @@ public class BalancePayController extends BaseController {
 		}
 		
 		// ------------------------------发送站内消息
+		DecimalFormat df = new DecimalFormat("######0.00");
 		MessageInfoParam messageInfoParam = new MessageInfoParam();
 		messageInfoParam.setRelateId(0L);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
 		MessageTempParam messageTempParam = new MessageTempParam();
-		messageTempParam.setRechargeBalance(new BigDecimal(money));
+		messageTempParam.setRechargeBalance(new BigDecimal(df.format(money)));
 		Result<PropertyPointAndBalanceDTO> moneyResult = propertyInfoService.getPropertyInfoMoney(userNum);
 		messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 		if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {

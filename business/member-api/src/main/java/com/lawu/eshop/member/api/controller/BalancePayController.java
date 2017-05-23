@@ -1,6 +1,7 @@
 package com.lawu.eshop.member.api.controller;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,11 +23,13 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.member.api.service.BalancePayService;
 import com.lawu.eshop.member.api.service.MessageService;
 import com.lawu.eshop.member.api.service.PayOrderService;
+import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.RechargeService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.param.BalancePayDataParam;
 import com.lawu.eshop.property.param.BalancePayParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -60,6 +63,8 @@ public class BalancePayController extends BaseController {
 	private RechargeService rechargeService;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
 	/**
 	 * 余额支付订单
@@ -140,12 +145,14 @@ public class BalancePayController extends BaseController {
 		}
 		
 		// ------------------------------发送站内消息
+		DecimalFormat df = new DecimalFormat("######0.00");
 		MessageInfoParam messageInfoParam = new MessageInfoParam();
 		messageInfoParam.setRelateId(0L);
 		messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
 		MessageTempParam messageTempParam = new MessageTempParam();
-		messageTempParam.setRechargeBalance(new BigDecimal(payOrderCallback.getActualMoney()));
-		// messageTempParam.setPoint(new BigDecimal(""));
+		messageTempParam.setRechargeBalance(new BigDecimal(df.format(payOrderCallback.getActualMoney())));
+		Result<PropertyPointAndBalanceDTO> moneyResult = propertyInfoService.getPropertyInfoMoney(userNum);
+		messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
 		if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 			messageTempParam.setUserName("E店会员");
 		} else if (userNum.startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {

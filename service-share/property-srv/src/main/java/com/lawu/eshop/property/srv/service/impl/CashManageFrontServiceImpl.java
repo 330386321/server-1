@@ -39,7 +39,6 @@ import com.lawu.eshop.property.srv.service.CashManageFrontService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.MD5;
 import com.lawu.eshop.utils.PwdUtil;
 
 @Service

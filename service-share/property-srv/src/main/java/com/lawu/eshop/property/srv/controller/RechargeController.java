@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,19 +21,22 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
-import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
-import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
+import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
+import com.lawu.eshop.utils.PwdUtil;
 
 /**
  * 
@@ -52,6 +56,8 @@ public class RechargeController extends BaseController {
 	private RechargeService rechargeService;
 	@Autowired
 	private PropertyService propertySrevice;
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
 	/**
 	 * 用户商家第三方充值余额积分保存充值记录
@@ -86,6 +92,20 @@ public class RechargeController extends BaseController {
 			}
 		}
 		param.setRechargeScale(value);
+		
+		// 余额支付时校验资产财产记录、余额、支付密码
+		if(TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)){
+			PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(param.getUserNum());
+			if(propertyInfoBO == null){
+				return successCreated(ResultCode.PAY_PWD_NULL);
+			}else{
+				// 校验支付密码
+				if (!PwdUtil.verify(param.getPayPwd(), propertyInfoBO.getPayPassword())) {
+					return successCreated(ResultCode.PAY_PWD_ERROR);
+				}
+			}
+		}
+		
 		RechargeSaveDTO dto = rechargeService.save(param);
 		if(dto == null){
 			return successCreated(ResultCode.FAIL, "充值失败！");

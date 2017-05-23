@@ -34,6 +34,9 @@ public class RechargeSaveParam {
 	@ApiParam (name="transactionPayTypeEnum",required = true, value = "充值方式")
 	private TransactionPayTypeEnum transactionPayTypeEnum;
 
+	@ApiParam (name="payPwd",value = "支付密码(余额充值积分时必填)")
+	private String payPwd;
+	
 	public String getRechargeMoney() {
 		return rechargeMoney;
 	}
@@ -56,6 +59,14 @@ public class RechargeSaveParam {
 
 	public void setTransactionPayTypeEnum(TransactionPayTypeEnum transactionPayTypeEnum) {
 		this.transactionPayTypeEnum = transactionPayTypeEnum;
+	}
+
+	public String getPayPwd() {
+		return payPwd;
+	}
+
+	public void setPayPwd(String payPwd) {
+		this.payPwd = payPwd;
 	}
 
 }
