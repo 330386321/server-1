@@ -45,11 +45,9 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
         if (transactionRecord == null) {
             return null;
         }
-        TransactionRecordDO record = new TransactionRecordDO();
-        record.setId(transactionId);
-        record.setIsProcessed(true);
-        record.setGmtModified(new Date());
-        transactionRecordDOMapper.updateByPrimaryKey(record);
+        transactionRecord.setIsProcessed(true);
+        transactionRecord.setGmtModified(new Date());
+        transactionRecordDOMapper.updateByPrimaryKey(transactionRecord);
         return transactionRecord.getRelateId();
     }
 
@@ -77,6 +75,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 		TransactionRecordDO record = new TransactionRecordDO();
 		record.setId(transactionId);
 		record.setTimes(times);
+		record.setGmtModified(new Date());
 		transactionRecordDOMapper.updateByPrimaryKeySelective(record);
 	}
 }
