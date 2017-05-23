@@ -4,6 +4,7 @@ import om.lawu.eshop.shiro.model.ShiroRole;
 import om.lawu.eshop.shiro.model.ShiroUser;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -78,6 +79,7 @@ public class ShiroRealm extends AuthorizingRealm {
         ShiroUser user = authService.find(token.getUsername(), new String(token.getPassword()));
 
         if (user != null) {
+            SecurityUtils.getSubject().getSession().setTimeout(3600000);
             // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
             return new SimpleAuthenticationInfo(user.getAccount(), token.getPassword(), getName());
         }
