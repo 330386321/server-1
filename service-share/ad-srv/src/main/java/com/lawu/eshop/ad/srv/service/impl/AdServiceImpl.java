@@ -457,6 +457,7 @@ public class AdServiceImpl implements AdService {
 			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(0.5)).multiply(new BigDecimal(0.997)));
 			memberAdRecordD.setMemberId(memberId);
 			memberAdRecordD.setMemberNum(num);
+			memberAdRecordD.setStatus(new Byte("0"));
 			memberAdRecordD.setGmtCreate(new Date());
 			memberAdRecordD.setClickDate(new Date());
 			i=memberAdRecordDOMapper.insert(memberAdRecordD);

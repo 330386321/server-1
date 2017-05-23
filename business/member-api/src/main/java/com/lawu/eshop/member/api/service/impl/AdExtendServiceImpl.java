@@ -113,11 +113,15 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-    		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
-     		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-     		adDTO.setName(merchantStoreDTO.getModel().getName());
-     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     		adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+     		if(merchantStoreDTO.getModel()!=null){
+     			adDTO.setName(merchantStoreDTO.getModel().getName());
+     			adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     			adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     		}
+     		if(manageType.getModel()!=null){
+     			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     		}
      		Date date=new Date();
      		Long time=adDTO.getBeginTime().getTime()-date.getTime();
      		if(time>0){
@@ -136,12 +140,12 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Override
 	public Result<List<AdDTO>> selectListPointTotle(AdPointParam adPointParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-		 AdMemberParam param=new AdMemberParam();
-    	 param.setCurrentPage(adPointParam.getCurrentPage());
-    	 param.setPageSize(adPointParam.getPageSize());
-    	 param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
-    	 param.setLatitude(adPointParam.getLatitude());
-    	 param.setLongitude(adPointParam.getLongitude());
+		AdMemberParam param=new AdMemberParam();
+    	param.setCurrentPage(adPointParam.getCurrentPage());
+    	param.setPageSize(adPointParam.getPageSize());
+    	param.setOrderTypeEnum(adPointParam.getOrderTypeEnum());
+    	param.setLatitude(adPointParam.getLatitude());
+    	param.setLongitude(adPointParam.getLongitude());
 		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
      	List<AdDTO> newList= new ArrayList<AdDTO>();
@@ -162,11 +166,19 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      	}
      	for (AdDTO adDTO : newList) {
      		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+     		if(isSuccess(merchantStoreDTO)){
+     			if(merchantStoreDTO.getModel()!=null){
+     				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     	     		adDTO.setName(merchantStoreDTO.getModel().getName());
+     	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     			}
+     		}
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
-     		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-     		adDTO.setName(merchantStoreDTO.getModel().getName());
-     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     		adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     		if(isSuccess(manageType)){
+     			if(manageType.getModel()!=null){
+     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     			}
+     		}
      		Date date=new Date();
      		Long time=adDTO.getBeginTime().getTime()-date.getTime();
      		if(time>0){
@@ -192,16 +204,20 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
      		AdPraiseDTO praise=new AdPraiseDTO();
-     		praise.setName(merchantStoreDTO.getModel().getName());
+     		if(merchantStoreDTO.getModel()!=null){
+     			praise.setName(merchantStoreDTO.getModel().getName());
+     			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     		}
+     		if(manageType.getModel()!=null){
+     			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     		}
      		praise.setId(adDTO.getId());
 			praise.setTitle(adDTO.getTitle());
 			praise.setBeginTime(adDTO.getBeginTime());
 			praise.setEndTime(adDTO.getEndTime());
 			praise.setTotalPoint(adDTO.getTotalPoint());
-			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
 			praise.setCount(adDTO.getNumber());
-			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
 			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
 			praise.setMediaUrl(adDTO.getMediaUrl());
 			praise.setIsFavorite(adDTO.getIsFavorite());
@@ -220,14 +236,18 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		Result<AdDTO> adDTO = adService.selectAbById(id,memberId);
-        Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getModel().getMerchantId());
-        Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getModel().getMerchantId());
         AdDTO ad=adDTO.getModel();
-        ad.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-        ad.setName(merchantStoreDTO.getModel().getName());
-        AdPraiseDTO praise=new AdPraiseDTO();
-        praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
- 		praise.setName(merchantStoreDTO.getModel().getName());
+        Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(ad.getMerchantId());
+ 		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(ad.getMerchantId());
+ 		AdPraiseDTO praise=new AdPraiseDTO();
+ 		if(merchantStoreDTO.getModel()!=null){
+ 			praise.setName(merchantStoreDTO.getModel().getName());
+ 			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+ 			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+ 		}
+ 		if(manageType.getModel()!=null){
+ 			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+ 		}
  		praise.setId(ad.getId());
 		praise.setTitle(ad.getTitle());
 		praise.setBeginTime(ad.getBeginTime());
@@ -235,7 +255,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setTotalPoint(ad.getTotalPoint());
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
 		praise.setCount(ad.getNumber());
-		praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
 		praise.setNeedBeginTime(ad.getNeedBeginTime());
 		praise.setIsFavorite(ad.getIsFavorite());
 		praise.setIsPraise(ad.getIsPraise());
@@ -283,13 +302,15 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     		}else{
     			 Result<MerchantStoreDTO> rs= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
     			 MerchantStoreDTO dto= rs.getModel();
-    			 if(adMemberParam.getLongitude()!=null && adMemberParam.getLatitude()!=null){
-    				 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
-        					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
-        			 if(adDTO.getRadius()!=null && adDTO.getRadius()>distance){
-        				 newList.add(adDTO);
+    			 if(dto!=null){
+    				 if(adMemberParam.getLongitude()!=null && adMemberParam.getLatitude()!=null){
+        				 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
+            					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
+            			 if(adDTO.getRadius()!=null && adDTO.getRadius()>distance){
+            				 newList.add(adDTO);
+            			 }
+            				
         			 }
-        				
     			 }
     			
     		}
@@ -346,11 +367,19 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-    		 Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
-     		adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-     		adDTO.setName(merchantStoreDTO.getModel().getName());
-     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     		adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     		if(isSuccess(merchantStoreDTO)){
+     			if(merchantStoreDTO.getModel()!=null){
+     				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     	     		adDTO.setName(merchantStoreDTO.getModel().getName());
+     	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     			}
+     		}
+     		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+     		if(isSuccess(manageType)){
+     			if(manageType.getModel()!=null){
+     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     			}
+     		}
      		Date date=new Date();
      		Long time=adDTO.getBeginTime().getTime()-date.getTime();
      		if(time>0){
@@ -384,9 +413,20 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		List<AdFlatVideoDTO> egainList = new ArrayList<>();
 		for (AdDTO adDTO : screenList) {
 			AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
-			Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService
-					.selectMerchantStoreByMId(adDTO.getMerchantId());
-			Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(adDTO.getMerchantId());
+			Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+     		if(isSuccess(merchantStoreDTO)){
+     			if(merchantStoreDTO.getModel()!=null){
+     				adFlatVideoDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+     				adFlatVideoDTO.setName(merchantStoreDTO.getModel().getName());
+     	     		adFlatVideoDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     			}
+     		}
+     		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+     		if(isSuccess(manageType)){
+     			if(manageType.getModel()!=null){
+     				adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+     			}
+     		}
 			adFlatVideoDTO.setId(adDTO.getId());
 			adFlatVideoDTO.setContent(adDTO.getContent());
 			adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
@@ -402,11 +442,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
 			adFlatVideoDTO.setName(adDTO.getName());
 			adFlatVideoDTO.setViewCount(adDTO.getViewCount());
-			adFlatVideoDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-			adFlatVideoDTO.setName(merchantStoreDTO.getModel().getName());
-			adFlatVideoDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-			adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val));
-			
 			//广告词
 			Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
 			if(isSuccess(adLexiconDTOS)){
