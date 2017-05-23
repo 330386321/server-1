@@ -8,6 +8,7 @@ import com.lawu.eshop.statistics.service.ProductAverageDailySalesService;
 import com.lawu.eshop.statistics.service.ProductService;
 import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/4/25.
  */
+@Service
 public class ProductAverageDailySalesServiceImpl implements ProductAverageDailySalesService {
 
     @Autowired
