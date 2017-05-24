@@ -584,6 +584,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
         audit.setType(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val);
         audit.setStatus(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
         audit.setContent(JSONObject.fromObject(param).toString());
+        audit.setIsShow(true);
         audit.setGmtCreate(new Date());
         audit.setGmtModified(new Date());
         Integer row = merchantStoreAuditDOMapper.insert(audit);
