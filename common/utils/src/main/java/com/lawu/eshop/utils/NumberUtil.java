@@ -16,7 +16,7 @@ public class NumberUtil {
 	 * 数字的一般格式
 	 * 保留两位小数，没有留0
 	 */
-	private final static String PATTERN_GENERAL = "#.00";
+	private final static String PATTERN_GENERAL = "#0.00";
 	
 	/**
 	 * 格式化BigDecimal为字符串
