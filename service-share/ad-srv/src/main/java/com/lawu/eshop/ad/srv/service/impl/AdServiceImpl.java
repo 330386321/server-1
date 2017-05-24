@@ -654,8 +654,8 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public Integer selectRPIsSend(Long merchantId) {
 		AdDOExample example=new AdDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
-		 Long count=adDOMapper.countByExample(example);
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+		Long count=adDOMapper.countByExample(example);
 		return count.intValue();
 	}
 
