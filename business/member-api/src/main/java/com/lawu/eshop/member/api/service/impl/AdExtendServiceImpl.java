@@ -155,39 +155,41 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      	else
      		newList=newList.subList(0,newList.size());
      	
-     	for(int i=0;i<newList.size();i++){
-     		Calendar calendar = Calendar.getInstance();  //得到日历  
-   		    calendar.setTime(new Date());//把当前时间赋给日历  
-   		    calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前  
-   	        Date before14days = calendar.getTime();   //得到14天前的时间  
-   	        if(before14days.getTime() > newList.get(i).getBeginTime().getTime()){  
-   	        	newList.remove(i);
-   	        }
+     	if(newList.size()>0){
+     		for(int i=0;i<newList.size();i++){
+         		Calendar calendar = Calendar.getInstance();  //得到日历  
+       		    calendar.setTime(new Date());//把当前时间赋给日历  
+       		    calendar.add(Calendar.DAY_OF_MONTH, -14);  //设置为14天前  
+       	        Date before14days = calendar.getTime();   //得到14天前的时间  
+       	        if(before14days.getTime() > newList.get(i).getBeginTime().getTime()){  
+       	        	newList.remove(i);
+       	        }
+         	}
+         	for (AdDTO adDTO : newList) {
+         		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+         		if(isSuccess(merchantStoreDTO)){
+         			if(merchantStoreDTO.getModel()!=null){
+         				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+         	     		adDTO.setName(merchantStoreDTO.getModel().getName());
+         	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+         			}
+         		}
+         		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+         		if(isSuccess(manageType)){
+         			if(manageType.getModel()!=null){
+         				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+         			}
+         		}
+         		Date date=new Date();
+         		Long time=adDTO.getBeginTime().getTime()-date.getTime();
+         		if(time>0){
+         			adDTO.setNeedBeginTime(time);
+         		}else{
+         			adDTO.setNeedBeginTime(0l);
+         		}
+     		}
+       
      	}
-     	for (AdDTO adDTO : newList) {
-     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-     		if(isSuccess(merchantStoreDTO)){
-     			if(merchantStoreDTO.getModel()!=null){
-     				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-     	     		adDTO.setName(merchantStoreDTO.getModel().getName());
-     	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     			}
-     		}
-     		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
-     		if(isSuccess(manageType)){
-     			if(manageType.getModel()!=null){
-     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-     			}
-     		}
-     		Date date=new Date();
-     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
-     		if(time>0){
-     			adDTO.setNeedBeginTime(time);
-     		}else{
-     			adDTO.setNeedBeginTime(0l);
-     		}
- 		}
-   
 		return successGet(newList);
 	}
 

@@ -366,7 +366,7 @@ public class AdController extends BaseController {
 	    }else{
 		  PropertyInfoDataParam param=new PropertyInfoDataParam();
 	      param.setUserNum(userNum);
-	      param.setPoint("30");
+	      param.setPoint("20");
 	      param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
 	      Result  rs=propertyInfoDataService.doHanlderMinusPoint(param);
 	      return rs;

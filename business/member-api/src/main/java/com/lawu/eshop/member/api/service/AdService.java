@@ -106,7 +106,7 @@ public interface AdService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "ad/selectChoiceness")
-	Result<Page<AdDTO>> selectChoiceness(AdMemberParam param);
+	Result<Page<AdDTO>> selectChoiceness(@ModelAttribute AdMemberParam param);
     
     /**
 	 * 领取红包
