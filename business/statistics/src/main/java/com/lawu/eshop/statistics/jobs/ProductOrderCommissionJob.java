@@ -27,13 +27,13 @@ public class ProductOrderCommissionJob implements SimpleJob {
 	private static Logger logger = LoggerFactory.getLogger(ProductOrderCommissionJob.class);
 
 	@Autowired
-	private ProductOrderCommissionService consumeAndSalesCommissionService;
+	private ProductOrderCommissionService productOrderCommissionService;
 
 	@Override
 	public void execute(ShardingContext shardingContext) {
 		logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-		consumeAndSalesCommissionService.executeAutoConsumeAndSalesCommission();
+		productOrderCommissionService.executeAutoConsumeAndSalesCommission();
 
 		logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 	}

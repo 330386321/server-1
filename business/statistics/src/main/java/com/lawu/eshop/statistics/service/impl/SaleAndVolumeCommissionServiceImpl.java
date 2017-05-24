@@ -89,10 +89,10 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
-							actureMoneyIn = actualMoney.multiply(actualCommission);// 第三级进积分，无爱心账户
+							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
 						} else {
-							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope);// 实际所得余额
-							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale);// 爱心账户
+							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
+							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
 						param.setActureLoveIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
@@ -143,10 +143,10 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
-							actureMoneyIn = actualMoney.multiply(actualCommission);// 第三级进积分，无爱心账户
+							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
 						} else {
-							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope);// 实际所得余额
-							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale);// 爱心账户
+							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
+							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
 						param.setActureLoveIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);

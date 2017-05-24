@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.lawu.eshop.statistics.service.ProductOrderCommissionService;
+import com.lawu.eshop.statistics.service.PayOrderCommissionService;
 
 /**
  * 
@@ -27,13 +27,13 @@ public class PayOrderCommissionJob implements SimpleJob {
 	private static Logger logger = LoggerFactory.getLogger(PayOrderCommissionJob.class);
 
 	@Autowired
-	private ProductOrderCommissionService consumeAndSalesCommissionService;
+	private PayOrderCommissionService payOrderCommissionService;
 
 	@Override
 	public void execute(ShardingContext shardingContext) {
 		logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-		consumeAndSalesCommissionService.executeAutoConsumeAndSalesCommission();
+		payOrderCommissionService.executeAutoConsumeAndSalesCommission();
 
 		logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 	}
