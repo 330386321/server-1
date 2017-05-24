@@ -75,7 +75,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
             //修改门店状态
             merchantStoreInfoService.updateMerchantStoreStatus(merchantBO.getId(), info.getStatusEnum().val);
-            if(info.getShow() == true){
+            if(info.getShow()){
                 merchantAuditService.setAuditInfoShow(merchantBO.getId());
             }
             if(info.getStatusEnum().val == MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val){
