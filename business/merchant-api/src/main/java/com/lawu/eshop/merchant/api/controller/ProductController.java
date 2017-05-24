@@ -146,7 +146,7 @@ public class ProductController extends BaseController {
 				if (fileName.contains(ProductImagePrefix.featureImage)) {
 					featureImageStr.append(imgUrl).append(",");
 
-				} else if (fileName.contains(ProductImagePrefix.productIamge)) {
+				} else if (fileName.contains(ProductImagePrefix.productImage)) {
 					productImageStr.append(imgUrl).append(",");
 
 				} else if (fileName.contains(ProductImagePrefix.productDetailImage)) {
@@ -279,7 +279,7 @@ public class ProductController extends BaseController {
 				if (fileName.contains(ProductImagePrefix.featureImage)) {
 					featureImageStr.append(imgUrl).append(",");
 
-				} else if (fileName.contains(ProductImagePrefix.productIamge)) {
+				} else if (fileName.contains(ProductImagePrefix.productImage)) {
 					productImageStr.append(imgUrl).append(",");
 
 				} else if (fileName.contains(ProductImagePrefix.productDetailImage)) {
