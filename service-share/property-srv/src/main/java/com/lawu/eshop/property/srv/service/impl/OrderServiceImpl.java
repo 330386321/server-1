@@ -240,9 +240,9 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setTransactionAccount("");
 		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
-		tdsParam.setBizId(param.getOrderItemIds().split(",")[0]);
+		tdsParam.setBizId(param.getOrderItemIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-		tdsParam.setBizNum(param.getTradeNo());
+		tdsParam.setBizNum(param.getTradeNo() == null ? "" : param.getTradeNo());
 		transactionDetailService.save(tdsParam);
 
 		JsonResult jsonResult = new JsonResult();
@@ -292,8 +292,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		if (jsonResult.isSuccess()) {
-			// TODO 更新订单item状态
-
+			// 更新订单item状态---目前是先修改order-item状态后处理资产
 		} else {
 			throw new Exception(jsonResult.getMessage());
 		}

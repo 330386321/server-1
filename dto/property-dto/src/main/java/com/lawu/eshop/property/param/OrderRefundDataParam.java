@@ -53,7 +53,7 @@ public class OrderRefundDataParam extends OrderRefundParam {
 	@NotBlank(message = "tradeNo不能为空")
 	private String tradeNo;
 
-	//用于区分确认收货后的退款还是在途中退款
+	//用于区分确认收货后的退款还是在途中退款，确认收货后退款需要处理冻结资金
 	@NotNull(message = "orderRefundStatusEnum不能为空")
 	private OrderRefundStatusEnum orderRefundStatusEnum;
 

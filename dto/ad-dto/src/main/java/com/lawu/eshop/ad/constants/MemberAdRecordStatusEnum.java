@@ -2,8 +2,8 @@ package com.lawu.eshop.ad.constants;
 
 public enum MemberAdRecordStatusEnum {
 	
-	NONE((byte) 0x01),      //没有算提成
-	YES((byte) 0x02);     //已算提成
+	NONE((byte) 0x00),      //没有算提成
+	YES((byte) 0x01);     //已算提成
     public Byte val;
     
 
