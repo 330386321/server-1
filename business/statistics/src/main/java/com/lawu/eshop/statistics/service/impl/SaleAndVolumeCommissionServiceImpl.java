@@ -51,18 +51,24 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
 
 			for (ShoppingOrderCommissionDTO order : orders) {
+				if((order.getMemberNum() == null || "".equals(order.getMemberNum())) 
+					&& (order.getMerchantNum() == null || "".equals(order.getMerchantNum()))){
+					logger.error("["+msg+"]查询未计算提成数据时用户编号和商家编号均为空！orderId="+order.getId());
+					continue;
+				}
+				
 				// 查询买家和卖家的上3级推荐
-				List<CommissionInvitersUserDTO> memberInviters = userCommonService
-						.selectHigherLevelInviters(order.getMemberNum(), 3, true);
-				List<CommissionInvitersUserDTO> merchantInviters = userCommonService
-						.selectHigherLevelInviters(order.getMerchantNum(), 3, true);
+				List<CommissionInvitersUserDTO> memberInviters = userCommonService.selectHigherLevelInviters(order.getMemberNum(), 3, true);
+				List<CommissionInvitersUserDTO> merchantInviters = userCommonService.selectHigherLevelInviters(order.getMerchantNum(), 3, true);
 
 				if ((memberInviters == null || memberInviters.isEmpty())
 						&& (merchantInviters == null || merchantInviters.isEmpty())) {// 均无上限，直接修改为已算提成
 					successOrderIds.add(order.getId());
 					continue;
 				}
-
+				
+				logger.info(msg+"，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
+				
 				int retCode1 = ResultCode.FAIL;
 				if (memberInviters != null && !memberInviters.isEmpty() && memberInviters.size() > 0) {
 					int m = 0;
@@ -107,7 +113,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
-						logger.info("actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info(msg+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
@@ -163,7 +169,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
 
-						logger.info("actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info(msg+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode2 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode2) {

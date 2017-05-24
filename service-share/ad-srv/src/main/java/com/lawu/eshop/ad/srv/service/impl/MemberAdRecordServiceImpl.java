@@ -44,6 +44,7 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 		for(MemberAdRecordDO mdo : dos){
 			MemberAdRecodeCommissionBO bo = new MemberAdRecodeCommissionBO();
 			BeanUtil.copyProperties(mdo, bo);
+			bo.setPoint(mdo.getOriginalPoint());
 			bos.add(bo);
 		}
 		return bos;

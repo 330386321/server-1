@@ -31,7 +31,12 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public Map<String, BigDecimal> getAdCommissionPropertys() {
-		Result result = propertyService.getValue(PropertyType.ad_commission_1);
+		Result result = propertyService.getValue(PropertyType.ad_commission_0);
+		String ad_commission_0 = result.getModel().toString();
+		if ("".equals(ad_commission_0)) {
+			ad_commission_0 = PropertyType.ad_commission_0_default;
+		}
+		result = propertyService.getValue(PropertyType.ad_commission_1);
 		String ad_commission_1 = result.getModel().toString();
 		if ("".equals(ad_commission_1)) {
 			ad_commission_1 = PropertyType.ad_commission_1_default;
@@ -55,6 +60,7 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 
 		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+		map.put("ad_commission_0", new BigDecimal(ad_commission_0)); //
 		map.put("ad_commission_1", new BigDecimal(ad_commission_1)); // 上1级提成比例
 		map.put("ad_commission_2", new BigDecimal(ad_commission_2)); // 上2级提成比例
 		map.put("ad_commission_3", new BigDecimal(ad_commission_3)); // 上3级提成比例
