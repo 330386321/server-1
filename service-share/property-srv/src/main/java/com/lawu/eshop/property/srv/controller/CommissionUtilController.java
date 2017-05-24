@@ -49,5 +49,24 @@ public class CommissionUtilController extends BaseController {
 		dto.setActureMoneyIn(bo.getActureMoneyIn());
 		return successCreated(dto);
 	}
+	
+	/**
+	 * 获取用户收入余额，按指定比例计算，计算爱心账户
+	 * @param clickMoney
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月24日 下午1:09:48
+	 */
+	@RequestMapping(value = "getIncomeMoney", method = RequestMethod.PUT)
+	public Result<CommissionUtilDTO> getIncomeMoney(@RequestBody BigDecimal clickMoney)  {
+		if(clickMoney == null || !(clickMoney.compareTo(BigDecimal.ZERO) == 1)){
+			return successCreated(ResultCode.FAIL,"传入金额错误");
+		}
+		CommissionUtilBO bo = commissionUtilService.getIncomeMoney(clickMoney);
+		CommissionUtilDTO dto = new CommissionUtilDTO();
+		dto.setActureLoveIn(bo.getActureLoveIn());
+		dto.setActureMoneyIn(bo.getActureMoneyIn());
+		return successCreated(dto);
+	}
 
 }

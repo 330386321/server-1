@@ -49,4 +49,32 @@ public class CommissionUtilServiceImpl implements CommissionUtilService{
 		return bo;
 	}
 
+	/**
+	 * 获取用户收入余额，按指定比例计算，计算爱心账户
+	 * @param clickMoney
+	 * @return
+	 * @author yangqh
+	 * @date 2017年5月24日 上午11:52:31
+	 */
+	@Override
+	public CommissionUtilBO getIncomeMoney(BigDecimal clickMoney) {
+		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
+		if ("".equals(love_account_scale)) {
+			love_account_scale = PropertyType.love_account_scale_default;
+		}
+		double d_acture_in = 1 - Double.valueOf(love_account_scale).doubleValue(); // 用户实际进账比例：1-爱心账户比例
+		
+		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
+		BigDecimal b_acture_in = new BigDecimal(d_acture_in);
+		
+		BigDecimal actureMoneyIn = clickMoney.multiply(b_acture_in).setScale(6, BigDecimal.ROUND_HALF_UP);//实际进余额
+		BigDecimal actureLoveIn = clickMoney.multiply(b_love_account_scale).setScale(6, BigDecimal.ROUND_HALF_UP);//爱心账户
+		
+		CommissionUtilBO bo = new CommissionUtilBO();
+		bo.setActureMoneyIn(actureMoneyIn);
+		bo.setActureLoveIn(actureLoveIn);
+		
+		return bo;
+	}
+
 }
