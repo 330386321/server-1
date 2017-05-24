@@ -18,7 +18,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingRefundAgreeToRefundDeleteCommentNotif
  * @date 2017/04/18
  */
 @Service
-@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_REMIND_SHIPMENTS)
+@CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_AGREE_TO_REFUND_DELETE_COMMENT)
 public class ShoppingRefundAgreeToRefundDeleteCommentTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingRefundAgreeToRefundDeleteCommentNotification, Reply> {
 
 	@Autowired
@@ -34,7 +34,7 @@ public class ShoppingRefundAgreeToRefundDeleteCommentTransactionFollowServiceImp
 		
 		rtn = new Reply();
 		
-		// 发送站内信
+		// 删除商品评价
 		commentProductService.delCommentByOrderItemId(notification.getShoppingOrderItemId());
 		
 		return rtn;
