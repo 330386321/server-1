@@ -85,10 +85,10 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if(i == 2){
-							actureMoneyIn = clickMoney.multiply(sale_commission);// 第三级进积分，无爱心账户
+							actureMoneyIn = clickMoney.multiply(sale_commission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
 						}else{
-							actureMoneyIn = clickMoney.multiply(sale_commission).multiply(actualCommissionScope);// 实际所得余额
-							actureLoveIn = clickMoney.multiply(sale_commission).multiply(loveAccountScale);// 爱心账户
+							actureMoneyIn = clickMoney.multiply(sale_commission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
+							actureLoveIn = clickMoney.multiply(sale_commission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
 						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);

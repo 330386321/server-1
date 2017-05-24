@@ -12,18 +12,18 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
+import com.lawu.eshop.property.srv.service.CommissionUtilService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
-import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -47,9 +47,9 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Autowired
 	private TransactionDetailService transactionDetailService;
 	@Autowired
-	private PropertyService propertyService;
-	@Autowired
 	private LoveDetailDOMapper loveDetailDOMapper;
+	@Autowired
+	private CommissionUtilService commissionUtilService;
 
 	@Override
 	@Transactional
@@ -185,24 +185,12 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	@Override
+	@Transactional
 	public int doHanlderClickAd(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
-		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
-		if ("".equals(ad_commission_0)) {
-			ad_commission_0 = PropertyType.ad_commission_0_default;
-		}
-		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
-		double d_acture_in = 1 - Double.valueOf(love_account_scale).doubleValue(); // 用户实际进账比例：1-爱心账户比例
-		
-		BigDecimal b_ad_commission_0 = new BigDecimal(ad_commission_0);
-		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
-		BigDecimal b_acture_in = new BigDecimal(d_acture_in);
-		
-		BigDecimal actureMoneyIn = clickMoney.multiply(b_ad_commission_0).multiply(b_acture_in);//实际进余额
-		BigDecimal actureLoveIn = clickMoney.multiply(b_ad_commission_0).multiply(b_love_account_scale);//爱心账户
+		CommissionUtilBO commissionBO = commissionUtilService.getClickAdMine(clickMoney);
+		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
+		BigDecimal actureLoveIn = commissionBO.getActureLoveIn();//爱心账户
 		
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTransactionNum(StringUtil.getRandomNum(""));
@@ -227,7 +215,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		
 		LoveDetailDO loveDetailDO = new LoveDetailDO();
 		loveDetailDO.setTitle(LoveTypeEnum.AD_CLICK.getName());
-		loveDetailDO.setLoveNum(param.getUserNum());
+		loveDetailDO.setLoveNum(StringUtil.getRandomNum(""));
 		loveDetailDO.setUserNum(param.getUserNum());
 		loveDetailDO.setLoveType(LoveTypeEnum.AD_CLICK.getValue());
 		loveDetailDO.setAmount(actureLoveIn);
