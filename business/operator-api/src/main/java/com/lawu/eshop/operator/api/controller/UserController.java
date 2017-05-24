@@ -136,4 +136,15 @@ public class UserController extends BaseController {
         return userListDTOResult;
     }
 
+    @ApiOperation(value = "重置密码", notes = "重置密码 [1003]（章勇）", httpMethod = "PUT")
+    @RequiresPermissions("user:resetPwd")
+    @RequestMapping(value = "resetPwd", method = RequestMethod.PUT)
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    public Result resetPwd(@ModelAttribute UserParam userParam) {
+        if (userParam == null || userParam.getId() <= 0) {
+            return successCreated(ResultCode.ID_EMPTY);
+        }
+        return userService.editUser(userParam);
+    }
+
 }
