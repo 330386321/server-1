@@ -42,9 +42,10 @@ public interface PropertyInfoDataService {
 	int doHanlderMinusBalance(PropertyInfoDataParam param);
 	
 	/**
-	 * 用户点广告加余额
+	 * 用户收入加余额，计算爱心账户： 用户点广告/抢赞/抢红包
 	 * @param param
 	 * @return
 	 */
-	int doHanlderClickAd(PropertyInfoDataParam param);
+	int doHanlderBalanceIncome(PropertyInfoDataParam param);
+	
 }

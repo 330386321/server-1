@@ -8,6 +8,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.ad.AdPointNotification;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -29,9 +30,9 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
 	    PropertyInfoDataParam param=new PropertyInfoDataParam();
 	    param.setPoint(notification.getPoint().toString());
 	    param.setUserNum(notification.getUserNum());
-	    //param.setTransactionTitleEnum(TransactionTitleEnum.CLICK_AD);
-	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
-	    propertyInfoDataService.doHanlderAddBalance(param);
+	    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.AD_QZ);
+	    param.setLoveTypeEnum(LoveTypeEnum.AD_QZ);
+	    propertyInfoDataService.doHanlderBalanceIncome(param);
         return new Reply();
     }
 }

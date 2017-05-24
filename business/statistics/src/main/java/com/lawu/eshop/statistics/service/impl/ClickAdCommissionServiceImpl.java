@@ -56,9 +56,12 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
 
 			for (MemberAdRecodeCommissionDTO dto : ads) {
+				if(dto.getMemberNum() == null || "".equals(dto.getMemberNum())){
+					logger.error("查询未计算提成的点广告记录，返回用户编号为空！");
+					continue;
+				}
 				// 查询用户上3级推荐
-				List<CommissionInvitersUserDTO> inviters = userCommonService
-						.selectHigherLevelInviters(dto.getMemberNum(), 3, false);
+				List<CommissionInvitersUserDTO> inviters = userCommonService.selectHigherLevelInviters(dto.getMemberNum(), 3, false);
 
 				int retCode = ResultCode.FAIL;
 				if (inviters != null && !inviters.isEmpty() && inviters.size() > 0) {
@@ -102,6 +105,8 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						}
 						param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
+						
+						logger.info("点广告：actureMoneyIn="+param.getActureMoneyIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode) {

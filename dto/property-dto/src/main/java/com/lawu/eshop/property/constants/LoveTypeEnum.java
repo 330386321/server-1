@@ -14,7 +14,9 @@ public enum LoveTypeEnum {
 	AD_CLICK((byte) 0x01, "点广告"),
 	AD_COMMISSION((byte) 0x02, "广告提成"),
 	SALES_COMMISSION((byte) 0x03, "销售提成"),
-	VOLUME_COMMISSION((byte) 0x04, "营业额提成");
+	VOLUME_COMMISSION((byte) 0x04, "营业额提成"),
+	AD_QZ((byte) 0x05, "抢赞"),
+	RED_PACKAGE((byte) 0x06, "抢红包");
 
 	private Byte value;
 

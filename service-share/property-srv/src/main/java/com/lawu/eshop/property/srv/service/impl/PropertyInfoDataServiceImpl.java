@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.LoveTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
@@ -184,9 +183,14 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		return ResultCode.SUCCESS;
 	}
 
+	/**
+	 *  用户收入加余额，计算爱心账户： 用户点广告/抢赞/抢红包
+	 * @param param
+	 * @return
+	 */
 	@Override
 	@Transactional
-	public int doHanlderClickAd(PropertyInfoDataParam param) {
+	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
 		CommissionUtilBO commissionBO = commissionUtilService.getClickAdMine(clickMoney);
 		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
@@ -214,12 +218,11 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "B", "A", actureMoneyIn);
 		
 		LoveDetailDO loveDetailDO = new LoveDetailDO();
-		loveDetailDO.setTitle(LoveTypeEnum.AD_CLICK.getName());
+		loveDetailDO.setTitle(param.getLoveTypeEnum().getName());
 		loveDetailDO.setLoveNum(StringUtil.getRandomNum(""));
 		loveDetailDO.setUserNum(param.getUserNum());
-		loveDetailDO.setLoveType(LoveTypeEnum.AD_CLICK.getValue());
+		loveDetailDO.setLoveType(param.getLoveTypeEnum().getValue());
 		loveDetailDO.setAmount(actureLoveIn);
-		loveDetailDO.setRemark("用户点广告所得，计入的爱心账户");
 		loveDetailDO.setGmtCreate(new Date());
 		loveDetailDOMapper.insertSelective(loveDetailDO);
 		
@@ -228,4 +231,6 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		
 		return ResultCode.SUCCESS;
 	}
+	
+	
 }

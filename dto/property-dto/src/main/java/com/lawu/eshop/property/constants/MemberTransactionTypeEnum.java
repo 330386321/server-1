@@ -10,7 +10,7 @@ public enum MemberTransactionTypeEnum {
 
 	RECHARGE((byte) 0x01, "余额充值"),
 	ADVERTISING((byte) 0x02, "点广告"),
-	RED_SWEEP((byte) 0x03, "扫红包"),
+	RED_SWEEP((byte) 0x03, "抢红包"),
 	REFUNDS((byte) 0x04, "退款"),
 	LOWER_INCOME((byte) 0x05, " 广告提成"),
 	PAY((byte) 0x06, "买单"),
@@ -22,7 +22,8 @@ public enum MemberTransactionTypeEnum {
 	SALES_COMMISSION((byte) 0x0C, "销售提成"),
 	VOLUME_COMMISSION((byte) 0x0D, "营业额提成"),
 	PRAISE_AD((byte) 0x0E, "大额抢赞"),
-	BACKAGE((byte) 0x0F, "后台充值");
+	BACKAGE((byte) 0x0F, "后台充值"),
+	AD_QZ((byte) 0x10, "抢赞");
 
 	private Byte value;
 

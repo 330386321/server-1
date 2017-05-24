@@ -1,12 +1,12 @@
 package com.lawu.eshop.property.param;
 
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import javax.validation.constraints.Pattern;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import com.lawu.eshop.property.constants.LoveTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 
 /**
  * <p>
@@ -27,15 +27,15 @@ public class PropertyInfoDataParam {
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "point格式错误或小数位不超过2位")
 	private String point;
 	
-//	@NotNull(message="transactionTitleEnum不能为空")
-//	private TransactionTitleEnum transactionTitleEnum;
-	
 	//业务类型：根据业务需要传，如果是会员业务传memberTransactionTypeEnum
 	private MemberTransactionTypeEnum memberTransactionTypeEnum;
 	
 	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 
+	//爱心账户类型
+	private LoveTypeEnum loveTypeEnum;
+	
     //商家ID(邀请粉丝添加邀请记录参数)
     private Long merchantId;
 
@@ -83,15 +83,15 @@ public class PropertyInfoDataParam {
         this.merchantTransactionTypeEnum = merchantTransactionTypeEnum;
     }
 
-//	public TransactionTitleEnum getTransactionTitleEnum() {
-//		return transactionTitleEnum;
-//	}
-//
-//	public void setTransactionTitleEnum(TransactionTitleEnum transactionTitleEnum) {
-//		this.transactionTitleEnum = transactionTitleEnum;
-//	}
+    public LoveTypeEnum getLoveTypeEnum() {
+		return loveTypeEnum;
+	}
 
-    public Long getMerchantId() {
+	public void setLoveTypeEnum(LoveTypeEnum loveTypeEnum) {
+		this.loveTypeEnum = loveTypeEnum;
+	}
+
+	public Long getMerchantId() {
         return merchantId;
     }
 

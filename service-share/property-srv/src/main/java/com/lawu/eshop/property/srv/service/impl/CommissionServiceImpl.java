@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,8 @@ import com.lawu.eshop.utils.StringUtil;
 
 @Service
 public class CommissionServiceImpl implements CommissionService {
+	
+	private static Logger logger = LoggerFactory.getLogger(CommissionServiceImpl.class);
 
 	@Autowired
 	private PropertyService propertyService;
@@ -134,6 +138,7 @@ public class CommissionServiceImpl implements CommissionService {
 					.andPointTypeEqualTo(param.getTypeVal());
 			List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
 			if (dos != null && dos.size() > 0) {
+				logger.info("isLast已计算过提成，重复计算，直接返回！");
 				return ResultCode.SUCCESS;
 			}
 
@@ -190,6 +195,7 @@ public class CommissionServiceImpl implements CommissionService {
 					.andTransactionTypeEqualTo(param.getTypeVal());
 			List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
 			if (dos != null && dos.size() > 0) {
+				logger.info("已计算过提成，重复计算，直接返回！");
 				return ResultCode.SUCCESS;
 			}
 

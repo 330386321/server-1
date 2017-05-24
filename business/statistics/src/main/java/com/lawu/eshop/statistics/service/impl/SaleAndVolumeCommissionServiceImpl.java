@@ -107,6 +107,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
+						logger.info("actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
 							m++;
@@ -151,16 +153,18 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setActureLoveIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 
-						if (memberInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+						if (merchantInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 							param.setTypeVal(MemberTransactionTypeEnum.VOLUME_COMMISSION.getValue());
 							param.setTypeName(MemberTransactionTypeEnum.VOLUME_COMMISSION.getName());
-						} else if (memberInviters.get(i).getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+						} else if (merchantInviters.get(i).getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
 							param.setTypeVal(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getValue());
 							param.setTypeName(MerchantTransactionTypeEnum.VOLUME_COMMISSION.getName());
 						}
 						param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
 
+						logger.info("actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						
 						retCode2 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode2) {
 							m++;
