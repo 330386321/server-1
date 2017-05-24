@@ -38,12 +38,13 @@ public class ShoppingRefundAgreeToRefundTransactionFollowServiceImpl extends Abs
 	    
 	    // 组装请求参数
 	    OrderRefundDataParam param = new OrderRefundDataParam();
-	    param.setUserNum(notification.getMenberNum());
+	    
 	    param.setLast(notification.getIsLast());
 	    param.setOrderId(notification.getShoppingOrderId().toString());
 	    param.setOrderItemIds(notification.getShoppingOrderItemId().toString());
 	    param.setRefundMoney(notification.getRefundMoney());
-	    param.setSideUserNum(notification.getMerchantNum());
+	    param.setSideUserNum(notification.getMenberNum());
+	    param.setUserNum(notification.getMerchantNum());
 	    param.setTradeNo(notification.getThirdNumber());
 	    param.setOrderRefundStatusEnum(OrderRefundStatusEnum.getEnum(notification.getStatus().getValue()));
 	    param.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(notification.getPaymentMethod().getVal()));

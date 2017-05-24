@@ -442,8 +442,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
 			notification.setRefundAmount(shoppingRefundDetailDO.getAmount());
-			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_RETURN_REMIND, notification);
-			
+			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_REFUND_REMIND, notification);
 		} else {
 			// 商家拒绝退款，提醒买家
 			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());

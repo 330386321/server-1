@@ -353,10 +353,11 @@ public class CommentProductServiceImpl implements CommentProductService {
 	@Transactional
 	public void delCommentByOrderItemId(Long orderItemId) {
 		CommentProductDO commentProductDO = new CommentProductDO();
-		commentProductDO.setOrderItemId(orderItemId);
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andOrderItemIdEqualTo(orderItemId);
 		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
 		commentProductDO.setGmtModified(new Date());
-		commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+		commentProductDOMapper.updateByExampleSelective(commentProductDO, example);
 	}
 
 	@Override

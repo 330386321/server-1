@@ -13,6 +13,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotifica
 import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeReturnRemindNotification;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 
 /**
@@ -132,7 +133,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
 			} else 
 			// 商家退款成功，提醒买家
-			if (MqConstant.TAG_TO_BE_RETURN_REMIND.equals(tags)) {
+			if (MqConstant.TAG_TO_BE_REFUND_REMIND.equals(tags)) {
 				ShoppingRefundToBeRefundRemindNotification notification = (ShoppingRefundToBeRefundRemindNotification) message;
 				/*
 				 * 发送站内信
@@ -148,7 +149,27 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+			} else 
+			// 用户填写退货物流，提醒买家退款
+			if (MqConstant.TAG_TO_BE_RETURN_REMIND.equals(tags)) {
+				ShoppingRefundToBeReturnRemindNotification notification = (ShoppingRefundToBeReturnRemindNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_USER_SEND);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				MessageInfoParam.getMessageParam().setWaybillNum(notification.getWaybillNum());
+				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
 			}
+			
 		}
 	}
 }

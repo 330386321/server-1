@@ -83,11 +83,18 @@ public class MQConsumerFactory {
             while (topicIterator.hasNext()) {
                 Map.Entry<String, List<String>> topic = topicIterator.next();
                 List<String> tags = topic.getValue();
+                
                 String subExpression = tags.get(0);
                 for (int i = 1; i < tags.size(); i++) {
                     subExpression += "|| " + tags.get(i);
                 }
-                consumer.subscribe(topic.getKey(), subExpression);
+                
+                String topicKey = topic.getKey();
+				if (topicsTags.containsKey(topicKey)) {
+                	subExpression +=  "|| " +  topicsTags.get(topicKey);
+                }
+
+                consumer.subscribe(topicKey, subExpression);
             }
         }
     }

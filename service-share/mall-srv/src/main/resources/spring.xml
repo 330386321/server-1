@@ -38,7 +38,7 @@
 	<!-- 消息消费者 -->
     <bean id="defaultMQConsumerFactory" class="com.lawu.eshop.mq.message.MQConsumerFactory" init-method="createDeviceDatagramConsumer" destroy-method="shutdown" >
         <!-- Name Server地址列表，多个用分号隔开 -->
-        <property name="namesrvAddr" value="192.168.1.22:9876"/>
+        <property name="namesrvAddr" value="${mq.namesrv.addrs}"/>
         <!-- 客户端实例名 -->
         <property name="instanceName" value="consumer"/>
 
@@ -48,6 +48,12 @@
         <!-- 批量消费，一次消费多少条消息， 默认设置为1 -->
         <property name="consumeMessageBatchMaxSize" value="5"/>
         <property name="messageListenerConcurrently" ref="messageConsumerListener" />
+        
+        <property name="topicsTags">
+            <map>
+                <entry key="order_srv" value="to_be_return_remind || fill_return_address_remind || refuse_refund_remind || to_be_refund_remind || to_be_return_remind || to_be_confirmed_for_refund_remind" />
+            </map>
+        </property>
         
     </bean>
 
