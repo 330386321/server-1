@@ -146,8 +146,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Override
 	public Integer fillLogisticsInformation(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailLogisticsInformationParam param) {
 		// 更新订单项状态为待退款
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingRefundDetailBO.getShoppingOrderItemId());
+		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailBO.getShoppingOrderItemId());
 		shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
 		// 重置发送提醒的次数
 		shoppingOrderItemDO.setSendTime(0);
