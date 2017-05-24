@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.service.impl;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
@@ -454,7 +455,7 @@ public class AdServiceImpl implements AdService {
 		if(adDO.getType()!=3 && hits<adDO.getAdCount()){
 			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
 			memberAdRecordD.setAdId(adDO.getId());
-			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(0.5)).multiply(new BigDecimal(0.997)));
+			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 			memberAdRecordD.setMemberId(memberId);
 			memberAdRecordD.setMemberNum(num);
 			memberAdRecordD.setStatus(new Byte("0"));
@@ -574,7 +575,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
-			return pointPoolDO.getPoint();
+			return pointPoolDO.getPoint().multiply(new BigDecimal(PropertyType.ad_account_scale_default));
 		}
 		
 	}
@@ -724,7 +725,7 @@ public class AdServiceImpl implements AdService {
 		}
 		AdDO adDO=adDOMapper.selectByPrimaryKey(adId);
 		ClickAdPointBO clickAdPointBO=new ClickAdPointBO();
-		clickAdPointBO.setAdTotlePoint(adDO.getPoint().multiply(new BigDecimal(0.5)).multiply(new BigDecimal(0.997)));
+		clickAdPointBO.setAdTotlePoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
 		clickAdPointBO.setAddPoint(totlePoint);
 		return clickAdPointBO;
 	}

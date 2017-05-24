@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdPage;
+import com.lawu.eshop.ad.constants.AdPraiseConfig;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
@@ -66,34 +67,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     @Autowired
     private MerchantProfileService merchantProfileService;
     
-    /**
-     * 核心线程数，指保留的线程池大小
-     */
-    private static final Integer CORE_POOL_SIZE=20;
-    
-    /**
-     *  指的是线程池的最大数
-     */
-    private static final Integer MAXIMUM_POLL_SIZE=60;
-    
-    /**
-     * 指的是空闲线程结束的超时时间
-     */ 
-    private static final Integer KEEP_ALIVE_TIME=1;
-    
-    /**
-     * 分子
-     */
-    private static final Integer A=5;
-    
-    /**
-     * 分母
-     */
-    private static final Integer B=5;
-    
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
     
-    private ExecutorService  service=new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POLL_SIZE, KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
+    private ExecutorService  service=new ThreadPoolExecutor(AdPraiseConfig.CORE_POOL_SIZE, AdPraiseConfig.MAXIMUM_POLL_SIZE, AdPraiseConfig.KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
     
     private static Logger logger = LoggerFactory.getLogger(AdExtendServiceImpl.class);
 
@@ -331,8 +307,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Future<Result<PraisePointDTO>> future=null;
 		try {
 			 Random random = new Random();  
-			 Integer r = random.nextInt(B)%(B+1);
-			 if(r>0 && r<A){
+			 Integer r = random.nextInt(AdPraiseConfig.B)%(AdPraiseConfig.B+1);
+			 if(r>0 && r<AdPraiseConfig.A){
 				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
 			 }else{
 				 PraisePointDTO dto=new PraisePointDTO();
