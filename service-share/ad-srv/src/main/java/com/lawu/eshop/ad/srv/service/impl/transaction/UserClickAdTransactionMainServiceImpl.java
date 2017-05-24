@@ -29,7 +29,7 @@ public class UserClickAdTransactionMainServiceImpl extends AbstractTransactionMa
     	 MemberAdRecordDO memberAdRecordDO=memberAdRecordDOMapper.selectByPrimaryKey(id);
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(memberAdRecordDO.getMemberNum());
-    	 notification.setPoint(memberAdRecordDO.getPoint());
+    	 notification.setPoint(memberAdRecordDO.getOriginalPoint());
         return notification;
     }
 

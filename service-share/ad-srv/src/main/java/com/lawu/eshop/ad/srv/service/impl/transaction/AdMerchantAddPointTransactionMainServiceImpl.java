@@ -53,7 +53,7 @@ public class AdMerchantAddPointTransactionMainServiceImpl extends AbstractTransa
  				BigDecimal  point=pointPoolDO.getPoint();
  				sum=sum.add(point);
  				//退还积分将积分记录设置为过期
- 				pointPoolDO.setStatus(new Byte("3"));
+ 				pointPoolDO.setStatus(new Byte("2"));
  				pointPoolDOMapper.updateByPrimaryKey(pointPoolDO);
  			}
  			notification.setPoint(sum); 
