@@ -30,7 +30,7 @@ public class AdMerchantCutPointTransactionMainServiceImpl extends AbstractTransa
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(ad.getMerchantNum());
     	 notification.setPoint(ad.getTotalPoint());
-        return notification;
+         return notification;
     }
 
     @Override

@@ -83,7 +83,7 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
 
     @Override
     public void check(Long count) {
-        List<TransactionRecordBO> notDoneList = transactionStatusService.selectNotDoneList(type);
+         List<TransactionRecordBO> notDoneList = transactionStatusService.selectNotDoneList(type);
         for (int i = 0; i < notDoneList.size(); i++) {
         	TransactionRecordBO transactionRecordBO = notDoneList.get(i);
         	
