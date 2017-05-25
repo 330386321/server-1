@@ -1,13 +1,41 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.pay.handle.AlipayBusinessHandle;
 import com.lawu.eshop.pay.handle.WxpayBusinessHandle;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
-import com.lawu.eshop.property.constants.*;
-import com.lawu.eshop.property.param.*;
+import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.constants.FreezeTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.OrderRefundStatusEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.param.AliPayConfigParam;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.OrderComfirmDataParam;
+import com.lawu.eshop.property.param.OrderRefundDataParam;
+import com.lawu.eshop.property.param.OrderReleaseFreezeParam;
+import com.lawu.eshop.property.param.OrderSysJobParam;
+import com.lawu.eshop.property.param.ThirdPayRefundParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.WxPayConfigParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.FreezeDOExample;
@@ -20,18 +48,6 @@ import com.lawu.eshop.property.srv.service.OrderService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.StringUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -336,11 +352,11 @@ public class OrderServiceImpl implements OrderService {
 
 				// 释放冻结资金
 				FreezeDO freezeDO = new FreezeDO();
+				freezeDO.setId(freezeId);
 				freezeDO.setStatus(FreezeStatusEnum.RELEASE.val);
 				freezeDO.setGmtModified(new Date());
-				example.createCriteria().andIdEqualTo(freezeId);
-				freezeDOMapper.updateByExample(freezeDO, example);
-
+				freezeDOMapper.updateByPrimaryKeySelective(freezeDO);
+				
 				// 加会员财产余额
 				PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 				infoDoView.setUserNum(userNums[i]);
@@ -385,5 +401,5 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return ResultCode.SUCCESS;
 	}
-
+	
 }
