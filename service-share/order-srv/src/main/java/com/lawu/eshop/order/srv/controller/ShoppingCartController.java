@@ -121,4 +121,15 @@ public class ShoppingCartController extends BaseController {
 		
 		return successGet(ShoppingCartConverter.convertDTOS(ShoppingCartBOListResult.getModel()));
 	}
+	
+	/**
+	 * 根据用户id列表查询购物车数量
+	 * 
+	 * @param memberId 用户id
+	 * @return
+	 */
+	@RequestMapping(value = "count/{memberId}",  method = RequestMethod.GET)
+	public Result<Long> findListByIds(@PathVariable("memberId") Long memberId) {
+		return successGet(shoppingCartService.count(memberId));
+	}
 }

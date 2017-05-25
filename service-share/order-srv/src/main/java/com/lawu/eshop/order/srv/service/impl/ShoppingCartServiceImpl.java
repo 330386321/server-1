@@ -168,4 +168,17 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 		return successGet(ShoppingCartConverter.convertBOS(list));
 	}
 
+	/**
+	 * 根据用户id列表查询购物车数量
+	 * 
+	 * @param memberId 用户id
+	 * @return
+	 */
+	@Override
+	public Long count(Long memberId) {
+		ShoppingCartDOExample example = new ShoppingCartDOExample();
+		example.createCriteria().andMemberIdEqualTo(memberId);
+		return shoppingCartDOMapper.countByExample(example);
+	}
+
 }

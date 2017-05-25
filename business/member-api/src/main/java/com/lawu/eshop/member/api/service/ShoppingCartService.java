@@ -69,4 +69,13 @@ public interface ShoppingCartService {
 	 */
 	@RequestMapping(value = "shoppingCart/list/findListByIds",  method = RequestMethod.GET)
 	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids);
+	
+	/**
+	 * 根据用户id列表查询购物车数量
+	 * 
+	 * @param memberId 用户id
+	 * @return
+	 */
+	@RequestMapping(value = "shoppingCart/count/{memberId}",  method = RequestMethod.GET)
+	Result<Long> findListByIds(@PathVariable("memberId") Long memberId);
 }

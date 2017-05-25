@@ -72,7 +72,6 @@ public class PwdUtil {
      */  
     public static boolean verify(String password, String md5) {
     	System.out.println(md5.length());
-    	System.out.println("-------------------AAAAAAAAAAAAA---------------------"+md5.length()+"--------------------AAAAAAAAAAAA--------------------");
         char[] cs1 = new char[32];  
         char[] cs2 = new char[16];  
         for (int i = 0; i < 48; i += 3) {  
@@ -81,7 +80,6 @@ public class PwdUtil {
             cs2[i / 3] = md5.charAt(i + 1);  
         }  
         String salt = new String(cs2);  
-        System.out.println("-------------------AAAAAAAAAAAAA---------------------"+cs1.length+"--------------------AAAAAAAAAAAA--------------------");
         return MD5Encode(PRE+password + salt).equals(new String(cs1));  
     }  
 	

@@ -63,4 +63,12 @@ public interface ShoppingCartService {
 	 */
 	Result<List<ShoppingCartBO>> findListByIds(List<Long> ids);
 	
+	/**
+	 * 根据用户id列表查询购物车数量
+	 * 
+	 * @param memberId 用户id
+	 * @return
+	 */
+	Long count(Long memberId);
+	
 }

@@ -46,9 +46,6 @@
         <table tableName="pay_order" domainObjectName="PayOrderDO">
          	<generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
         <table tableName="property" domainObjectName="PropertyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
@@ -67,8 +64,11 @@
         <table tableName="pay_order" domainObjectName="PayOrderDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
