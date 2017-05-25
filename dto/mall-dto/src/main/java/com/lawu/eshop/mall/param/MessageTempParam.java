@@ -10,74 +10,79 @@ import java.math.BigDecimal;
  */
 public class MessageTempParam {
 
-
-    @ApiModelProperty(value = "用户昵称")
+    /**
+     * {0}用户昵称、{1}订单编号、{2}运单编号、{3}余额、{4}充值金额、{5}当前积分、{6}消费金额
+     * {7}优惠金额、{8}退款编号、{9}商品名称、{10}收益金额、{11}收益积分、{12}商家名称
+     * {13}广告名称、{14}门店名称、{15}消费积分、{16}充值编号、{17}广告类型名称、{18}失败原因
+     * {19}代发货商品数量、{20}快递名称、{21}退款金额、{22}订单金额
+     */
+    @ApiModelProperty(value = "用户昵称{0}")
     private String userName;
 
-    @ApiModelProperty(value = "订单编号")
+    @ApiModelProperty(value = "订单编号{1}")
     private String orderNum;
 
-    @ApiModelProperty(value = "运单编号")
+    @ApiModelProperty(value = "运单编号{2}")
     private String waybillNum;
 
-    @ApiModelProperty(value = "余额")
+    @ApiModelProperty(value = "余额{3}")
     private BigDecimal balance;
 
-    @ApiModelProperty(value = "充值金额")
+    @ApiModelProperty(value = "充值金额{4}")
     private BigDecimal rechargeBalance;
 
-    @ApiModelProperty(value = "当前积分")
+    @ApiModelProperty(value = "当前积分{5}")
     private BigDecimal point;
 
-    @ApiModelProperty(value = "消费金额")
+    @ApiModelProperty(value = "消费金额{6}")
     private BigDecimal expendAmount;
 
-    @ApiModelProperty(value = "优惠金额")
+    @ApiModelProperty(value = "优惠金额{7}")
     private BigDecimal favoredAmount;
 
-    @ApiModelProperty(value = "退款编号")
+    @ApiModelProperty(value = "退款编号{8}")
     private String refundNum;
 
-    @ApiModelProperty(value = "商品名称")
+    @ApiModelProperty(value = "商品名称{9}")
     private String productName;
 
-    @ApiModelProperty(value = "收益金额")
+    @ApiModelProperty(value = "收益金额{10}")
     private BigDecimal earningAmount;
 
-    @ApiModelProperty(value = "收益积分")
+    @ApiModelProperty(value = "收益积分{11}")
     private BigDecimal earningPoint;
 
-    @ApiModelProperty(value = "商家名称")
+    @ApiModelProperty(value = "商家名称{12}")
     private String merchantName;
 
-    @ApiModelProperty(value = "广告名称")
+    @ApiModelProperty(value = "广告名称{13}")
     private String adName;
 
-    @ApiModelProperty(value = "门店名称")
+    @ApiModelProperty(value = "门店名称{14}")
     private String storeName;
 
-    @ApiModelProperty(value = "消费积分")
+    @ApiModelProperty(value = "消费积分{15}")
     private BigDecimal expendPoint;
 
-    @ApiModelProperty(value = "充值编号")
+    @ApiModelProperty(value = "充值编号{16}")
     private String rechargeNum;
 
-    @ApiModelProperty(value = "广告类型名称")
+    @ApiModelProperty(value = "广告类型名称{17}")
     private String adTypeName;
 
-    @ApiModelProperty(value = "失败原因")
+    @ApiModelProperty(value = "失败原因{18}")
     private String failReason;
 
-    @ApiModelProperty(value = "代发货商品数量")
+    @ApiModelProperty(value = "代发货商品数量{19}")
     private Integer productCount;
 
-    @ApiModelProperty(value = "快递名称")
+    @ApiModelProperty(value = "快递名称{20}")
     private String expressCompanyName;
 
-    @ApiModelProperty(value = "退款金额")
+    @ApiModelProperty(value = "退款金额{21}")
     private BigDecimal refundAmount;
 
-    @ApiModelProperty(value = "订单金额")
+    @ApiModelProperty(value = "订单金额{22}")
     private BigDecimal orderAmount;
 
 
