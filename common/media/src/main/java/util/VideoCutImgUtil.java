@@ -40,7 +40,7 @@ public class VideoCutImgUtil {
         if (!fileImg.exists()) {
         	fileImg.mkdirs();
         }
-		String AD_IMG_VIDEO=baseImageDir+"\\"+dir+"\\"+newfileName;
+		String AD_IMG_VIDEO=baseImageDir+"/"+dir+"/"+newfileName;
 		List<String> commands = new java.util.ArrayList<String>();
 		commands.add(ffmpegUrl);
 		commands.add("-i");
@@ -58,7 +58,7 @@ public class VideoCutImgUtil {
 			builder.command(commands);
 			builder.start();
 			System.out.println("截取成功");
-			String video_img=dir+"\\"+newfileName;
+			String video_img=dir+"/"+newfileName;
 			return video_img;
 		} catch (Exception e) {
 			e.printStackTrace();
