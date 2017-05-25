@@ -296,28 +296,32 @@ public class AdController extends BaseController{
      */
     @RequestMapping(value = "queryAdByTitle", method = RequestMethod.POST)
     public Result<Page<AdSolrDTO>> queryAdByTitle(@RequestBody AdsolrFindParam adSolrParam) {
-    	String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
+    	
         SolrQuery query = new SolrQuery();
         query.setParam("q", "*:*");
-        if (StringUtils.isNotEmpty(adSolrParam.getTitle())) {  //标题过滤
-            query.setParam("q", "title_s:" + adSolrParam.getTitle() + "*");
+        if (StringUtils.isNotEmpty(adSolrParam.getAdSolrParam().getTitle())) {  //标题过滤
+            query.setParam("q", "title_s:" + adSolrParam.getAdSolrParam().getTitle() + "*");
         }
+        if(adSolrParam.getLatitude()!=null || adSolrParam.getLongitude()!=null){
+        	String latLon = adSolrParam.getLatitude() + "," + adSolrParam.getLongitude();
+        	query.setParam("pt", latLon);
+        	query.setParam("fq", "{!geofilt}");
+            query.setParam("sfield", "latLon_p");
+            query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+    	}
         query.setSort("status_s", SolrQuery.ORDER.desc);
-        query.setParam("pt", latLon);
-        query.setParam("fq", "{!geofilt}");
-        query.setParam("sfield", "latLon_p");
-        query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
+       
         String[] path=adSolrParam.getRegionPath().split("/");
         query.setQuery("area_ss : 0");
         List<Long> merchantIds=adSolrParam.getMerchantIds();
         String str="";
-        if(!merchantIds.isEmpty()){
+        if(merchantIds.size()>0){
         	for (Long id : merchantIds) {
     			str+="merchantId_s:"+id +" or ";
     		}
         	str=str.substring(0,str.length()-3);
+        	 query.setQuery(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
         }
-        query.setQuery(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());
         SolrDocumentList solrDocumentList =new SolrDocumentList();

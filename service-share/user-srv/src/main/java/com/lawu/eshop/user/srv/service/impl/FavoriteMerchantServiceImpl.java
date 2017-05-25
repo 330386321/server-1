@@ -88,6 +88,9 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         if (merchantStoreDO!=null) {
             Integer count = merchantStoreDO.getFavoriteNumber();
             count -= 1;
+            if(count<0){
+            	count=0;
+            }
             merchantStoreDO.setFavoriteNumber(count);
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 

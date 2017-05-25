@@ -231,10 +231,11 @@ public class AdConverter {
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
         document.addField("status_s", adDO.getStatus());
         document.addField("count_i", adDO.getViewcount());
+        document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){
-        		String[] location=adDO.getAreas().split("/");
+        		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
             		document.addField("area_ss", area);
     			}
@@ -253,16 +254,16 @@ public class AdConverter {
      * @return
      */
     public static List<AdSolrDTO> convertDTO(SolrDocumentList solrDocumentList) {
-    	 List<AdSolrDTO> adSolrDTOS = new ArrayList<>();
+    	List<AdSolrDTO> adSolrDTOS = new ArrayList<>();
         if (solrDocumentList==null) {
             return adSolrDTOS;
         }
         for (SolrDocument solrDocument : solrDocumentList) {
-        	AdSolrDTO adSolrDTO = new AdSolrDTO();
-        	adSolrDTO.setId((long)solrDocument.get("id_l"));
+    		AdSolrDTO adSolrDTO = new AdSolrDTO();
+        	adSolrDTO.setId(Long.valueOf(solrDocument.get("id").toString()));
         	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
-        	adSolrDTO.setTitle(solrDocument.get("tilte_s").toString());
-        	adSolrDTO.setContent(solrDocument.get("content_s").toString());
+        	adSolrDTO.setTitle(solrDocument.get("title_s").toString());
+        	//adSolrDTO.setContent(solrDocument.get("content_s").toString());
         	adSolrDTO.setCount((int)solrDocument.get("count_i"));
         	int type=(int)solrDocument.get("type_i");
         	if(type==1){
@@ -271,6 +272,7 @@ public class AdConverter {
         		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_VIDEO);	
         	}
         	adSolrDTOS.add(adSolrDTO);
+        	
         }
         return adSolrDTOS;
     }
