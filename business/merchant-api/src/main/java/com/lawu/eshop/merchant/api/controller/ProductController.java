@@ -72,6 +72,7 @@ public class ProductController extends BaseController {
 		queryData.setProductSortFieldEnum(query.getProductSortFieldEnum());
 		queryData.setOrderType(query.getOrderType());
 		queryData.setIsApp(query.getIsApp());
+		queryData.setCategoryId(query.getCategoryId());
 		queryData.setCurrentPage(query.getCurrentPage());
 		queryData.setPageSize(query.getPageSize());
 		Result<Page<ProductQueryDTO>> page = productService.selectProduct(queryData);

@@ -69,6 +69,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 */
 	@Override
+	@Transactional
 	public int doHandleOrderPayNotify(NotifyCallBackParam param) {
 		
 		boolean isPay = transactionDetailService.verifyOrderIsPaySuccess(param);
@@ -152,8 +153,8 @@ public class OrderServiceImpl implements OrderService {
 		return ResultCode.SUCCESS;
 	}
 
-	@Transactional
 	@Override
+	@Transactional
 	public int comfirmDelivery(OrderComfirmDataParam param) {
 		/*
 		 * 保证MQ事务的幂等性

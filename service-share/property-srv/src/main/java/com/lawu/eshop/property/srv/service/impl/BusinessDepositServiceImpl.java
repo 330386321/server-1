@@ -87,9 +87,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			result.setMsg("保证金初始记录为空");
 			return result;
 		}else{
-			if(BusinessDepositStatusEnum.VERIFY.val.equals(deposit.getStatus())){
+			if(!BusinessDepositStatusEnum.PAYING.val.equals(deposit.getStatus())){
 				result.setRet(ResultCode.SUCCESS);
-				logger.info("重复回调(判断幂等)");
+				logger.info("保证金重复回调(判断幂等)");
 				return result;
 			}
 		}
@@ -124,7 +124,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		depositDO.setGmtPay(new Date());
 		depositDO.setGmtModified(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
+		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.val);
 		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
 		// 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实

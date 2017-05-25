@@ -83,6 +83,9 @@ public class ProductServiceImpl implements ProductService {
         if (query.getName() != null && !"".equals(query.getName())) {
             criteria.andNameLike("%" + query.getName() + "%");
         }
+        if (query.getCategoryId() != null && !"".equals(query.getCategoryId())) {
+            criteria.andCategoryIdEqualTo(Integer.valueOf(query.getCategoryId()));
+        }
         example.setOrderByClause(query.getProductSortFieldEnum().val + " " + query.getOrderType());
 
         // 查询总数

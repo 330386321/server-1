@@ -86,12 +86,13 @@ public class ProductController extends BaseController {
 		if (result.getRet() != ResultCode.SUCCESS) {
 			return result;
 		}
-		Result<Integer> productNumResult = productService.selectProductCount(result.getModel().getMerchantId());
-		storeDTOResult.getModel().setUpProductNum(productNumResult.getMsg() == null ? "0" : productNumResult.getMsg());
-		Result<Integer> fansNumResult = fansMerchantService.countFans(result.getModel().getMerchantId());
-		storeDTOResult.getModel()
-				.setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());
-		result.getModel().setStore(storeDTOResult.getModel());
+		if(storeDTOResult.getModel() != null){
+			Result<Integer> productNumResult = productService.selectProductCount(result.getModel().getMerchantId());
+			storeDTOResult.getModel().setUpProductNum(productNumResult.getMsg() == null ? "0" : productNumResult.getMsg());
+			Result<Integer> fansNumResult = fansMerchantService.countFans(result.getModel().getMerchantId());
+			storeDTOResult.getModel().setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());
+		}
+		result.getModel().setStore(storeDTOResult.getModel());		
 
 		// 查询评价信息
 		Result<List<MemberProductCommentDTO>> commentsResult = commentMerchantService.geNewlyProductComment(productId);
