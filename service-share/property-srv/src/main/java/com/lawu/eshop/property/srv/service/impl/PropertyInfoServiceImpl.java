@@ -1,23 +1,12 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PayTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.PropertyInfoBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
@@ -37,6 +26,15 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -271,14 +269,28 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
-	public PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum) {
+	public Page<PropertyInfoBO> getPropertyinfoPageList(PropertyInfoBackageParam param) {
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
-		example.createCriteria().andUserNumEqualTo(userNum);
-		List<PropertyInfoDO> dos = propertyInfoDOMapper.selectByExample(example);
-		if(dos == null || dos.isEmpty()){
-			return null;
+		PropertyInfoDOExample.Criteria criteria = example.createCriteria();
+		if(StringUtils.isNotEmpty(param.getUserNum())){
+			criteria.andUserNumEqualTo(param.getUserNum());
+		}else if(param.getUserType() != null){
+			if(param.getUserType().val == UserTypeEnum.MEMBER.val){
+				criteria.andUserNumLike(UserCommonConstant.MEMBER_NUM_TAG + "%");
+			}else if(param.getUserType().val == UserTypeEnum.MEMCHANT.val){
+				criteria.andUserNumLike(UserCommonConstant.MERCHANT_NUM_TAG + "%");
+			}
 		}
-		return PropertyinfoFreezeEnum.getEnum(dos.get(0).getFreeze());
+
+		Page<PropertyInfoBO> page = new Page<>();
+		page.setCurrentPage(param.getCurrentPage());
+		page.setTotalCount(propertyInfoDOMapper.countByExample(example));
+
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+
+		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		page.setRecords(PropertyInfoConverter.convertBO(propertyInfoDOS));
+		return page;
 	}
 
 }

@@ -1,10 +1,11 @@
 package com.lawu.eshop.operator.api.service;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
+import com.lawu.eshop.property.dto.PropertyInfoDTO;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
-
+import com.lawu.eshop.property.param.PropertyInfoBackageParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,12 +53,12 @@ public interface PropertyinfoService {
 
 	/**
 	 * 运营平台查询用户资金冻结情况
-	 * @param account
+	 * @param param
 	 * @return
 	 * @author yangqh
 	 * @date 2017年5月16日 下午4:53:07
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "propertyInfo/getPropertyinfoFreeze")
-	Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(@RequestParam("userNum") String userNum);
+	@RequestMapping(method = RequestMethod.POST, value = "propertyInfo/getPropertyinfoPageList")
+	Result<Page<PropertyInfoDTO>> getPropertyinfoPageList(@RequestBody PropertyInfoBackageParam param);
 
 }

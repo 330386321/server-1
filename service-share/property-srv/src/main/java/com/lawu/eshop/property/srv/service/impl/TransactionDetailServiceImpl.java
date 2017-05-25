@@ -149,17 +149,24 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		if(StringUtils.isNotEmpty(param.getUserNum())){
 			criteria.andUserNumEqualTo(param.getUserNum());
 		}
+
+		List<Byte> transactionTypeList = new ArrayList<>();
 		if(param.getMemberTransactionType() == null && param.getMerchantTransactionType() == null){
-			List<Byte> transactionTypeList = new ArrayList<>();
 			transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
+			transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE.getValue());
 			transactionTypeList.add(MerchantTransactionTypeEnum.BACKAGE.getValue());
+			transactionTypeList.add(MerchantTransactionTypeEnum.RECHARGE.getValue());
 			criteria.andTransactionTypeIn(transactionTypeList);
 		}else{
 			if (param.getMemberTransactionType() != null) {
-				criteria.andTransactionTypeEqualTo(param.getMemberTransactionType().getValue());
+				transactionTypeList.add(MemberTransactionTypeEnum.BACKAGE.getValue());
+				transactionTypeList.add(MemberTransactionTypeEnum.RECHARGE.getValue());
+				criteria.andTransactionTypeIn(transactionTypeList);
 			}
 			if(param.getMerchantTransactionType() != null){
-				criteria.andTransactionTypeEqualTo(param.getMerchantTransactionType().getValue());
+				transactionTypeList.add(MerchantTransactionTypeEnum.BACKAGE.getValue());
+				transactionTypeList.add(MerchantTransactionTypeEnum.RECHARGE.getValue());
+				criteria.andTransactionTypeIn(transactionTypeList);
 			}
 		}
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);

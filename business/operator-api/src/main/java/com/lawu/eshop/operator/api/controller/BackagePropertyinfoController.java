@@ -12,7 +12,7 @@ import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
-import com.lawu.eshop.property.dto.PropertyinfoFreezeInfoDTO;
+import com.lawu.eshop.property.dto.PropertyInfoDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -97,15 +97,19 @@ public class BackagePropertyinfoController extends BaseController {
 		TransactionDetailQueryForBackageParam realParam = new TransactionDetailQueryForBackageParam();
 		if(!param.getUserType().val.equals(UserTypeEnum.MEMCHANT_PC.val)){
 			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
-				Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
-				if (member.getRet() == ResultCode.SUCCESS) {
-					userNum = member.getModel().getNum();
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
+					if (member.getRet() == ResultCode.SUCCESS) {
+						userNum = member.getModel().getNum();
+					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
 			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
-				Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
-				if (merchant.getRet() == ResultCode.SUCCESS) {
-					userNum = merchant.getModel().getNum();
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
+					if (merchant.getRet() == ResultCode.SUCCESS) {
+						userNum = merchant.getModel().getNum();
+					}
 				}
 				realParam.setMerchantTransactionType(MerchantTransactionTypeEnum.BACKAGE);
 			}
@@ -148,15 +152,19 @@ public class BackagePropertyinfoController extends BaseController {
 		TransactionDetailQueryForBackageParam realParam = new TransactionDetailQueryForBackageParam();
 		if(!param.getUserType().val.equals(UserTypeEnum.MEMCHANT_PC.val)){
 			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
-				Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
-				if (member.getRet() == ResultCode.SUCCESS) {
-					userNum = member.getModel().getNum();
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
+					if (member.getRet() == ResultCode.SUCCESS) {
+						userNum = member.getModel().getNum();
+					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
 			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
-				Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
-				if (merchant.getRet() == ResultCode.SUCCESS) {
-					userNum = merchant.getModel().getNum();
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
+					if (merchant.getRet() == ResultCode.SUCCESS) {
+						userNum = merchant.getModel().getNum();
+					}
 				}
 				realParam.setMerchantTransactionType(MerchantTransactionTypeEnum.BACKAGE);
 			}
@@ -260,35 +268,72 @@ public class BackagePropertyinfoController extends BaseController {
 		return propertyinfoService.updateBalanceAndPoint(dparam);
 	}
 
-	@ApiOperation(value = "查询用户资产信息（是否冻结）", notes = "查询用户资产信息（是否冻结）[]（杨清华）", httpMethod = "GET")
-	@RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
-	@RequiresPermissions("property:manage")
-	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(
-			@RequestParam @ApiParam(required = true, value = "用户账号") String account,
-			@RequestParam @ApiParam(required = true, value = "用户类型") UserTypeEnum userType) {
+	@PageBody
+	@ApiOperation(value = "查询用户资产信息", notes = "查询用户资产信息 []（杨清华）", httpMethod = "POST")
+	@RequestMapping(value = "getPropertyinfoPageList", method = RequestMethod.POST)
+	@RequiresPermissions("property:list")
+	public Result<Page<PropertyInfoDTO>> getPropertyinfoPageList(@RequestBody PropertyInfoBackageParam param) {
 		String userNum = "";
-		if (UserTypeEnum.MEMBER.val.equals(userType.val)) {
-			Result<MemberDTO> member = memberService.getMemberByAccount(account);
-			if (member.getRet() == ResultCode.SUCCESS) {
-				userNum = member.getModel().getNum();
-			}
-		} else if (UserTypeEnum.MEMCHANT.val.equals(userType.val)) {
-			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(account);
-			if (merchant.getRet() == ResultCode.SUCCESS) {
-				userNum = merchant.getModel().getNum();
-			}
+		if(param.getUserType().val == UserTypeEnum.MEMCHANT_PC.val){
+			param.setUserType(null);
 		}else{
-			return successCreated(ResultCode.FAIL,"用户类型参数错误");
+			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
+					if (member.getRet() == ResultCode.SUCCESS) {
+						userNum = member.getModel().getNum();
+					}
+				}
+			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
+				if(StringUtils.isNotEmpty(param.getAccount())){
+					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
+					if (merchant.getRet() == ResultCode.SUCCESS) {
+						userNum = merchant.getModel().getNum();
+					}
+				}
+			}
+			if(StringUtils.isEmpty(userNum)){
+				param.setUserNum(param.getAccount());
+			}else {
+				param.setUserNum(userNum);
+			}
 		}
-		return propertyinfoService.getPropertyinfoFreeze(userNum);
+		Result<Page<PropertyInfoDTO>> result = propertyinfoService.getPropertyinfoPageList(param);
+		List<PropertyInfoDTO> propertyInfoDTOS = result.getModel().getRecords();
+		if(!propertyInfoDTOS.isEmpty()){
+			for(PropertyInfoDTO propertyInfoDTO : propertyInfoDTOS){
+				if(propertyInfoDTO.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
+					propertyInfoDTO.setAccountType(UserCommonConstant.MEMBER_NUM_TAG);
+					Result<UserDTO> userDTOResult = memberService.getMemberByNum(propertyInfoDTO.getUserNum());
+					if(isSuccess(userDTOResult)){
+						propertyInfoDTO.setAccount(userDTOResult.getModel().getAccount());
+					}
+				}else{
+					propertyInfoDTO.setAccountType(UserCommonConstant.MERCHANT_NUM_TAG);
+					Result<MerchantDTO> merchantDTOResult = merchantService.getMerchantByNum(propertyInfoDTO.getUserNum());
+					if(isSuccess(merchantDTOResult)){
+						propertyInfoDTO.setAccount(merchantDTOResult.getModel().getAccount());
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "冻结解冻账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "冻结账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "PUT")
 	@RequiresPermissions("account:freeze")
-	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.POST)
-	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum,
-			@RequestParam @ApiParam(required = true, value = "冻结标记(NO-解冻、YES-冻结)") PropertyinfoFreezeEnum freeze) {
-		return propertyinfoService.updatePropertyinfoFreeze(userNum, freeze);
+	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.PUT)
+	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
+		return propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.YES);
 	}
+
+	@SuppressWarnings("rawtypes")
+	@ApiOperation(value = "解冻账号", notes = "冻结解冻账号[]（杨清华）", httpMethod = "PUT")
+	@RequiresPermissions("account:unfreeze")
+	@RequestMapping(value = "updatePropertyinfoUnFreeze", method = RequestMethod.PUT)
+	public Result updatePropertyinfoUnFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
+		return propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.NO);
+	}
+
 }
