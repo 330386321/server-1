@@ -420,6 +420,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
 			adFlatVideoDTO.setName(adDTO.getName());
 			adFlatVideoDTO.setViewCount(adDTO.getViewCount());
+			adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
 			//广告词
 			Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
 			if(isSuccess(adLexiconDTOS)){

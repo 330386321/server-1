@@ -115,6 +115,7 @@ public class AdConverter {
 		adDTO.setContent(adBO.getContent());
 		adDTO.setIsFavorite(adBO.getIsFavorite());
 		adDTO.setIsPraise(adBO.getIsPraise());
+		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
 		Date date=new Date();
 		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){  //开枪倒计时
 			Calendar nowTime = Calendar.getInstance();
