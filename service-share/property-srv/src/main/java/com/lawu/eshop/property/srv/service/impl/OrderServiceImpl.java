@@ -204,7 +204,7 @@ public class OrderServiceImpl implements OrderService {
 						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
 						.andBizIdEqualTo(Long.valueOf(param.getOrderId()))
 						.andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
-				freezeDOMapper.updateByExample(freezeDO, example);
+				freezeDOMapper.updateByExampleSelective(freezeDO, example);
 			} else {
 				// 校验退款金额不能大于冻结金额
 				example.createCriteria().andUserNumEqualTo(param.getUserNum())
