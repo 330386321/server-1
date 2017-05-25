@@ -79,12 +79,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
     private MessageProducerService messageProducerService;
 	
 	@Autowired
-	@Qualifier("shoppingOrderAgreeToRefundTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingOrderAgreeToRefundTransactionMainServiceImpl;
+	@Qualifier("shoppingRefundAgreeToRefundTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingRefundAgreeToRefundTransactionMainServiceImpl;
 	
 	@Autowired
-	@Qualifier("shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl;
+	@Qualifier("shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl")
+	private TransactionMainService<Reply> shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl;
 	
 	/**
 	 * 根据购物退货详情id 获取购物退货详情
@@ -431,10 +431,10 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			shoppingOrderExtendDOMapper.updateByPrimaryKeySelective(shoppingOrderExtendDO);
 			
 			// 发送MQ消息给property模块，退款给用户
-			shoppingOrderAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+			shoppingRefundAgreeToRefundTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 			
 			// 发送MQ消息给mall模块，删除商品订单评价
-			shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
+			shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemExtendDO.getId());
 			
 			// 商家同意退款，提醒买家
 			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());

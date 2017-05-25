@@ -16,7 +16,7 @@ import com.lawu.eshop.order.srv.constants.TransactionConstant;
  * @author Sunny
  * @date 2017/04/15
  */
-@Service("shoppingOrderAgreeToRefundDeleteCommentTransactionMainServiceImpl")
+@Service("shoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.AGREE_TO_REFUND_DELETE_COMMENT, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_AGREE_TO_REFUND_DELETE_COMMENT)
 public class ShoppingRefundAgreeToRefundDeleteCommentTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingRefundAgreeToRefundDeleteCommentNotification, Reply> {
 	

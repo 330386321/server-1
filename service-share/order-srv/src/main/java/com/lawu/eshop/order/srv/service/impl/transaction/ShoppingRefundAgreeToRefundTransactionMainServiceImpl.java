@@ -26,7 +26,7 @@ import com.lawu.eshop.utils.NumberUtil;
  * @author Sunny
  * @date 2017/04/15
  */
-@Service("shoppingOrderAgreeToRefundTransactionMainServiceImpl")
+@Service("shoppingRefundAgreeToRefundTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.AGREE_TO_REFUND, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_AGREE_TO_REFUND)
 public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingRefundAgreeToRefundNotification, Reply> {
 	
