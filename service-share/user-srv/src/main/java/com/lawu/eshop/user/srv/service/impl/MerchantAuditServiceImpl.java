@@ -349,6 +349,6 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val);
         MerchantStoreAuditDO merchantStoreAuditDO = new MerchantStoreAuditDO();
         merchantStoreAuditDO.setIsShow(true);
-        merchantStoreAuditDOMapper.updateByExample(merchantStoreAuditDO,example);
+        merchantStoreAuditDOMapper.updateByExampleSelective(merchantStoreAuditDO,example);
     }
 }
