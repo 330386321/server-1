@@ -589,12 +589,12 @@ public class AdServiceImpl implements AdService {
 		List<Byte> status=new ArrayList<>();
 		status.add(AdStatusEnum.AD_STATUS_ADD.val);
 		status.add(AdStatusEnum.AD_STATUS_PUTING.val);
-		example.createCriteria().andStatusIn(status);
+		example.createCriteria().andStatusIn(status).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
 		 List<AdDO> listADD=adDOMapper.selectByExample(example);
 		 if(!listADD.isEmpty())
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
-				if(adDO.getType()!=4 && adDO.getStatus()==1 && adDO.getBeginTime().getTime()<=date.getTime()){
+				if(adDO.getStatus()==1 && adDO.getBeginTime().getTime()<=date.getTime()){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
