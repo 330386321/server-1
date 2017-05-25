@@ -44,7 +44,7 @@ public class PropertyPointConverter {
         }
 
         PropertyPointDTO propertyPointDTO = new PropertyPointDTO();
-        propertyPointDTO.setPoint(propertyPointBO.getPoint());
+        propertyPointDTO.setPoint(propertyPointBO.getPoint().setScale(2,BigDecimal.ROUND_DOWN));
         return  propertyPointDTO;
     }
 }

@@ -190,7 +190,8 @@ public class PropertyInfoController extends BaseController {
 			throws Exception {
 		PropertyPointAndBalanceBO propertyPointBO = propertyInfoService.getPropertyInfoMoney(userNum);
 		PropertyPointAndBalanceDTO dto = new PropertyPointAndBalanceDTO();
-		BeanUtil.copyProperties(propertyPointBO, dto);
+		dto.setBalance(propertyPointBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));
+		dto.setPoint(propertyPointBO.getPoint().setScale(2,BigDecimal.ROUND_DOWN));
 		return successCreated(dto);
 	}
 

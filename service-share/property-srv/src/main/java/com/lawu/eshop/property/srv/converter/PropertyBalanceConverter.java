@@ -43,7 +43,8 @@ public class PropertyBalanceConverter {
             return dto;
         }
         PropertyBalanceDTO propertyBalanceDTO = new PropertyBalanceDTO();
-        propertyBalanceDTO.setBalance(propertyBalanceBO.getBalance());
+        propertyBalanceDTO.setBalance(propertyBalanceBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));
         return  propertyBalanceDTO;
     }
+    
 }
