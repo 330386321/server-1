@@ -78,6 +78,7 @@ public class FansMerchantController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         String[] numArray = param.getNums().split(",");
+        int inviteFansCount = numArray.length;
         String userNum = UserUtil.getCurrentUserNum(getRequest());
 
         Result<Boolean> pwdResult = propertyInfoService.varifyPayPwd(userNum, param.getPayPwd());
@@ -91,12 +92,12 @@ public class FansMerchantController extends BaseController {
         //邀请粉丝扣除积分、插入粉丝邀请记录
         PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
         propertyInfoDataParam.setUserNum(userNum);
-        propertyInfoDataParam.setPoint(String.valueOf(numArray.length));
+        propertyInfoDataParam.setPoint(String.valueOf(inviteFansCount));
         //propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
         propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
-        propertyInfoDataParam.setInviteFansCount(numArray.length);
+        propertyInfoDataParam.setInviteFansCount(inviteFansCount);
         propertyInfoDataParam.setSex(param.getUserSexEnum().val);
         propertyInfoDataParam.setAge(param.getIsAgeLimit() ? param.getStartAge() + "-" + param.getEndAge() : "");
         Result result = propertyInfoService.inviteFans(propertyInfoDataParam);
@@ -131,8 +132,8 @@ public class FansMerchantController extends BaseController {
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
         messageTempParam = new MessageTempParam();
-        messageTempParam.setExpendPoint(new BigDecimal(numArray.length));
-        messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint());
+        messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
+        messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
         messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(UserUtil.getCurrentUserNum(getRequest()), messageInfoParam);
         return successCreated();
