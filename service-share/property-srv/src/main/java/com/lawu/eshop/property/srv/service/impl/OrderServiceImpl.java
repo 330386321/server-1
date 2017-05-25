@@ -304,6 +304,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 定时任务调用 确认收货后7天，订单冻结金额自动加入商家余额账户 :新增商家订单付款交易记录，释放冻结资金，加商家财产余额
 	 */
 	@Override
+	@Transactional
 	public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
 		String[] userNums = param.getUserNums().split(",");
 		String[] orderIds = param.getOrderIds().split(",");
