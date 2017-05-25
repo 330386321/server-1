@@ -55,12 +55,12 @@ public class MerchantInviterConverter {
         DTO.setAddress(merchantInviterBO.getAddress());
         DTO.setGmtCreate(merchantInviterBO.getGmtCreate());
         if(merchantInviterBO.getName()==null){
-        	 DTO.setName("E点商家");
+        	 DTO.setName("E店商家");
         }else{
         	 DTO.setName(merchantInviterBO.getName());
         }
         if(merchantInviterBO.getPrincipalName()==null){
-       	     DTO.setPrincipalName("E点商家");
+       	     DTO.setPrincipalName("E店商家");
         }else{
     	     DTO.setPrincipalName(merchantInviterBO.getPrincipalName());
         }
