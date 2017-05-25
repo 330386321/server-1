@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.mybatis.generator.config.IgnoredColumnException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -136,10 +137,8 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	@Override
 	public int remove(Long memberId, List<Long> ids) {
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
-		example.createCriteria().andIdIn(ids);
-		
+		example.createCriteria().andMemberIdEqualTo(memberId).andIdIn(ids);
 		shoppingCartDOMapper.deleteByExample(example);
-
 		return ResultCode.SUCCESS;
 	}
 
@@ -169,16 +168,20 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	}
 
 	/**
-	 * 根据用户id列表查询购物车数量
+	 * 根据用户id列表查询购物车内商品的数量
 	 * 
 	 * @param memberId 用户id
 	 * @return
 	 */
 	@Override
 	public Long count(Long memberId) {
+		Long rtn = 0L;
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		return shoppingCartDOMapper.countByExample(example);
+		List<ShoppingCartDO> shoppingCartDOList = shoppingCartDOMapper.selectByExample(example);
+		for (ShoppingCartDO item : shoppingCartDOList) {
+			rtn += item.getQuantity();
+		}
+		return rtn;
 	}
-
 }
