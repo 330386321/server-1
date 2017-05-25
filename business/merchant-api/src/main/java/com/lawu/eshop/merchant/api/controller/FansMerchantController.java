@@ -12,10 +12,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
-import com.lawu.eshop.merchant.api.service.FansMerchantService;
-import com.lawu.eshop.merchant.api.service.MemberService;
-import com.lawu.eshop.merchant.api.service.MessageService;
-import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.merchant.api.service.*;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
@@ -56,6 +53,9 @@ public class FansMerchantController extends BaseController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private MerchantStoreService merchantStoreService;
+
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -93,7 +93,6 @@ public class FansMerchantController extends BaseController {
         PropertyInfoDataParam propertyInfoDataParam = new PropertyInfoDataParam();
         propertyInfoDataParam.setUserNum(userNum);
         propertyInfoDataParam.setPoint(String.valueOf(inviteFansCount));
-        //propertyInfoDataParam.setTransactionTitleEnum(TransactionTitleEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
         propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
         propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
@@ -105,22 +104,21 @@ public class FansMerchantController extends BaseController {
             return result;
         }
 
+        Result<String> stringResult = merchantStoreService.getNameBymerchantId(UserUtil.getCurrentUserId(getRequest()));
         //给会员发送站内消息
         MessageInfoParam messageInfoParam = new MessageInfoParam();
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
         MessageTempParam messageTempParam = new MessageTempParam();
+        messageTempParam.setMerchantName("E店商家");
+        if(isSuccess(stringResult)){
+            messageTempParam.setMerchantName(stringResult.getModel());
+        }
         for (String num : numArray) {
             Result<UserDTO> userDTOResult = memberService.getMemberByNum(num);
-            if (isSuccess(userDTOResult)) {
-                String userName = userDTOResult.getModel().getNickname();
-                if (StringUtils.isEmpty(userName)) {
-                    messageTempParam.setUserName("E店会员");
-                } else {
-                    messageTempParam.setUserName(userName);
-                }
-            } else {
-                messageTempParam.setUserName("E店会员");
+            messageTempParam.setUserName("E店会员");
+            if (isSuccess(userDTOResult) && StringUtils.isNotEmpty(userDTOResult.getModel().getNickname())) {
+                messageTempParam.setUserName(userDTOResult.getModel().getNickname());
             }
             messageInfoParam.setMessageParam(messageTempParam);
             messageService.saveMessage(num, messageInfoParam);
@@ -132,7 +130,7 @@ public class FansMerchantController extends BaseController {
         messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
         messageTempParam = new MessageTempParam();
-        messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
+        messageTempParam.setExpendPoint(new BigDecimal(666));
         messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
         messageInfoParam.setMessageParam(messageTempParam);
         messageService.saveMessage(UserUtil.getCurrentUserNum(getRequest()), messageInfoParam);

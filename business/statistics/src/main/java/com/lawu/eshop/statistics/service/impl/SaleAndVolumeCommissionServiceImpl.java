@@ -100,12 +100,14 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						} else {
 							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
 							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
+						
+							//如果计算出爱心账户为0.000000时默认赋值0.000001
+							if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
+								actureLoveIn = new BigDecimal("0.000001");
+							}
 						}
 						
-						//如果计算出实际提成和爱心账户为0.000000时默认赋值0.000001
-						if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
-							actureLoveIn = new BigDecimal("0.000001");
-						}
+						//如果计算出实际提成为0.000000时默认赋值0.000001
 						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
 							actureMoneyIn = new BigDecimal("0.000001");
 						}
@@ -161,7 +163,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							sale_commission = property.get("sale_commission_3");
 						}
 
-						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level));
+						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
@@ -169,7 +171,18 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						} else {
 							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
 							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
+						
+							//如果计算出爱心账户为0.000000时默认赋值0.000001
+							if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
+								actureLoveIn = new BigDecimal("0.000001");
+							}
 						}
+						
+						//如果计算出实际提成为0.000000时默认赋值0.000001
+						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
+							actureMoneyIn = new BigDecimal("0.000001");
+						}
+						
 						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 

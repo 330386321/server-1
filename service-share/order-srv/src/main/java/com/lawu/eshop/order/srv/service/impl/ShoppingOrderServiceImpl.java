@@ -1470,7 +1470,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		//  查找订单以及订单项状态都为交易成功的订单
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		criteria.andIsDoneEqualTo(false);
-		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
+		criteria.andGmtTransactionAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
 		
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 

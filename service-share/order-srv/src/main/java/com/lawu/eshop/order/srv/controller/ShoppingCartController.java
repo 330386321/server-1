@@ -129,7 +129,7 @@ public class ShoppingCartController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "count/{memberId}",  method = RequestMethod.GET)
-	public Result<Long> findListByIds(@PathVariable("memberId") Long memberId) {
+	public Result<Long> count(@PathVariable("memberId") Long memberId) {
 		return successGet(shoppingCartService.count(memberId));
 	}
 }

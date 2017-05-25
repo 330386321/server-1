@@ -23,6 +23,7 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,9 +88,9 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			result.setMsg("保证金初始记录为空");
 			return result;
 		}else{
-			if(BusinessDepositStatusEnum.VERIFY.val.equals(deposit.getStatus())){
+			if(!BusinessDepositStatusEnum.PAYING.val.equals(deposit.getStatus())){
 				result.setRet(ResultCode.SUCCESS);
-				logger.info("重复回调(判断幂等)");
+				logger.info("保证金重复回调(判断幂等)");
 				return result;
 			}
 		}
@@ -124,7 +125,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		depositDO.setGmtPay(new Date());
 		depositDO.setGmtModified(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));
+		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.val);
 		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
 		// 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
@@ -153,8 +154,11 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 
 		} else {
 			Criteria criteria1 = example.createCriteria();
-			if (param.getBeginDate() != null && param.getEndDate() != null) {
-				criteria1.andGmtCreateBetween(param.getBeginDate(), param.getEndDate());
+			if (StringUtils.isNotEmpty(param.getBeginDate())){
+				criteria1.andGmtPayGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
+			}
+			if(StringUtils.isNotEmpty(param.getEndDate())){
+				criteria1.andGmtPayLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
 			}
 			if (param.getBusinessDepositStatusEnum() != null) {
 				criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);

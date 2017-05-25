@@ -24,6 +24,9 @@ public class ProductQuery extends AbstractPageParam{
 	@ApiParam(value = "商品名称", required = false)
 	private String name;
 	
+	@ApiParam(value = "商品分类ID(最后一级)", required = false)
+	private String categoryId;
+	
 	@ApiParam(value = "排序方式", required = false)
 	private OrderType orderType;
 	
@@ -33,6 +36,12 @@ public class ProductQuery extends AbstractPageParam{
 	@ApiParam(value = "状态(PRODUCT_STATUS_DEL:删除、PRODUCT_STATUS_UP：上架、PRODUCT_STATUS_DOWN：下架)", required = true)
 	private ProductStatusEnum productStatus;
 	
+	public String getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
 	public String getName() {
 		return name;
 	}

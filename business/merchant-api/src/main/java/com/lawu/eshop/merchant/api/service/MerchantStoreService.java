@@ -103,4 +103,14 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/selectMerchantStoreByMId")
     Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long id);
+
+    /**
+     * 根据商家ID查询门店名称
+     *
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getNameBymerchantId/{merchantId}")
+    Result<String> getNameBymerchantId(@PathVariable("merchantId") Long merchantId);
+
 }
