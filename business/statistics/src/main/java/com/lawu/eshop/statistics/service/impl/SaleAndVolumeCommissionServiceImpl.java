@@ -51,6 +51,9 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
 
 			for (ShoppingOrderCommissionDTO order : orders) {
+				
+				logger.info(msg+"，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
+				
 				if((order.getMemberNum() == null || "".equals(order.getMemberNum())) 
 					&& (order.getMerchantNum() == null || "".equals(order.getMerchantNum()))){
 					logger.error("["+msg+"]查询未计算提成数据时用户编号和商家编号均为空！orderId="+order.getId());
@@ -66,8 +69,6 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 					successOrderIds.add(order.getId());
 					continue;
 				}
-				
-				logger.info(msg+"，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
 				
 				int retCode1 = ResultCode.FAIL;
 				if (memberInviters != null && !memberInviters.isEmpty() && memberInviters.size() > 0) {
@@ -113,7 +114,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
-						logger.info(msg+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("["+msg+"-memberInviters],actualCommission="+actualCommission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
+						logger.info("["+msg+"-memberInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
@@ -169,7 +171,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
 
-						logger.info(msg+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("["+msg+"-merchantInviters],actualCommission="+actualCommission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
+						logger.info("["+msg+"-merchantInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode2 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode2) {

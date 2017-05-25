@@ -28,7 +28,6 @@ import com.lawu.eshop.property.srv.bo.PropertyPointBO;
 import com.lawu.eshop.property.srv.converter.PropertyBalanceConverter;
 import com.lawu.eshop.property.srv.converter.PropertyPointConverter;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
-import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
 
 /**
@@ -268,7 +267,6 @@ public class PropertyInfoController extends BaseController {
 	 * @author yangqh
 	 * @date 2017年5月16日 下午4:56:25
 	 */
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
 	public Result<PropertyinfoFreezeInfoDTO> getPropertyinfoFreeze(@RequestParam("userNum") String userNum)  {
 		PropertyinfoFreezeEnum freezeEnum = propertyInfoService.getPropertyinfoFreeze(userNum);
