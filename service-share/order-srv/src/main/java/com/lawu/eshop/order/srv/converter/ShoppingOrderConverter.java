@@ -10,6 +10,7 @@ import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.dto.CommentOrderDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderIsNoOnGoingOrderDTO;
 import com.lawu.eshop.order.dto.ShoppingOrderPaymentDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
@@ -235,6 +236,46 @@ public class ShoppingOrderConverter {
 		rtn.setOrderNum(shoppingOrderBO.getOrderNum());
 		rtn.setOrderTotalPrice(shoppingOrderBO.getOrderTotalPrice());
 		
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderBO
+	 * @return
+	 * @author Sunny
+	 */
+	public static ShoppingOrderCommissionDTO convertShoppingOrderCommissionDTO(ShoppingOrderBO shoppingOrderBO) {
+		ShoppingOrderCommissionDTO rtn = null;
+		
+		if (shoppingOrderBO == null) {	
+			return rtn;
+		}
+		
+		rtn = new ShoppingOrderCommissionDTO();
+		rtn.setId(shoppingOrderBO.getId());
+		rtn.setMemberNum(shoppingOrderBO.getMemberNum());
+		rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
+		rtn.setActualAmount(shoppingOrderBO.getActualAmount());
+		
+		return rtn;
+	}
+	
+	/**
+	 * @param shoppingOrderBOList
+	 * @return
+	 * @author Sunny
+	 */
+	public static List<ShoppingOrderCommissionDTO> convertShoppingOrderCommissionDTOList(List<ShoppingOrderBO> shoppingOrderBOList) {
+		List<ShoppingOrderCommissionDTO> rtn = new ArrayList<ShoppingOrderCommissionDTO>();
+		
+		if (shoppingOrderBOList == null || shoppingOrderBOList.isEmpty()) {
+			return rtn;
+		}
+		
+		for (ShoppingOrderBO item : shoppingOrderBOList) {
+			rtn.add(convertShoppingOrderCommissionDTO(item));
+		}
+
 		return rtn;
 	}
 }

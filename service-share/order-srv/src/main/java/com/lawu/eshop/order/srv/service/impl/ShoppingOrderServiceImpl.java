@@ -1304,25 +1304,22 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Override
-	public List<ShoppingOrderExtendBO> commissionShoppingOrder() {
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
-
-		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
-
-		// 查找超过退款时间的购物订单记录
-		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
-		criteria.andGmtTransactionAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
-
-		// 查找自动确认收货的购物订单记录
-		shoppingOrderExtendDOExample.or().andIsAutomaticReceiptEqualTo(true);
-
-		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
-
-		return ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderDOList);
+	public List<ShoppingOrderBO> commissionShoppingOrder() {
+		/*
+		 * 查找未计算过提成的订单
+		 */
+		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
+		ShoppingOrderDOExample.Criteria shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
+		// 订单状态是交易成功的
+		shoppingOrderDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		// 没有计算过提成的
+		shoppingOrderDOExampleCriteria.andCommissionStatusEqualTo(CommissionStatusEnum.NOT_COUNTED.getValue());
+		// 订单已经完成，钱已经打给商家
+		shoppingOrderDOExampleCriteria.andIsDoneEqualTo(true);
+		
+		List<ShoppingOrderDO> shoppingOrderDOList = shoppingOrderDOMapper.selectByExample(shoppingOrderDOExample);
+		
+		return ShoppingOrderConverter.convert(shoppingOrderDOList);
 	}
 
 	/**

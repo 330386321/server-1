@@ -237,7 +237,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	List<ShoppingOrderExtendBO> commissionShoppingOrder();
+	List<ShoppingOrderBO> commissionShoppingOrder();
 	
 	/**
 	 * 根据订单id更新购物订单的提成状态和提成时间
