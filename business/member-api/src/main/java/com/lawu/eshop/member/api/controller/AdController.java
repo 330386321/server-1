@@ -328,7 +328,13 @@ public class AdController extends BaseController {
     			Long memberId = userRs.getModel().getMemberId();
     	    	String userNum = userRs.getModel().getUserNum();
     	    	rs=adService.getRedPacket(merchantId,memberId,userNum);
-    	    	fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
+    	    	Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId); 
+    	    	if(isSuccess(result)){
+    	    		if(!result.getModel()){
+    	    			fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
+    	    		}
+    	    	}
+    	    	
     	    	
     		}
     		return rs;
