@@ -75,6 +75,17 @@ public class ProductInfoDTO {
 	
 	@ApiModelProperty(value = "商家编号")
 	private String merchantUserNum;
+	
+	@ApiModelProperty(value = "购物车数量")
+	private String shoppingCartNum;
+
+	public String getShoppingCartNum() {
+		return shoppingCartNum;
+	}
+
+	public void setShoppingCartNum(String shoppingCartNum) {
+		this.shoppingCartNum = shoppingCartNum;
+	}
 
 	public String getMerchantUserNum() {
 		return merchantUserNum;

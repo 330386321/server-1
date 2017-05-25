@@ -24,6 +24,7 @@ import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.ProductService;
+import com.lawu.eshop.member.api.service.ShoppingCartService;
 import com.lawu.eshop.product.dto.MemberProductCommentInfoDTO;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
@@ -61,6 +62,8 @@ public class ProductController extends BaseController {
 	private FavoriteProductService favoriteProductService;
 	@Autowired
 	private MerchantService merchantService;
+	@Autowired
+	private ShoppingCartService shoppingCartService;
 
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
 	@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
@@ -122,9 +125,16 @@ public class ProductController extends BaseController {
 		Long userId = UserUtil.getCurrentUserId(getRequest());
 		if (userId == 0L) {
 			result.getModel().setFavoriteFlag(false);
+			result.getModel().setShoppingCartNum("0");
 		} else {
 			boolean isFavorite = favoriteProductService.getUserFavorite(productId, userId);
 			result.getModel().setFavoriteFlag(isFavorite);
+			Result<Long> shoppingCart = shoppingCartService.findListByIds(userId);
+			if(shoppingCart.getModel() == null){
+				result.getModel().setShoppingCartNum("0");
+			}else{
+				result.getModel().setShoppingCartNum(shoppingCart.getModel().toString());
+			}
 		}
 		return result;
 	}
