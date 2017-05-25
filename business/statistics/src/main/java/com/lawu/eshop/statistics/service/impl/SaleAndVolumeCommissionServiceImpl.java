@@ -52,7 +52,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 			for (ShoppingOrderCommissionDTO order : orders) {
 				
-				logger.info(msg+"，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
+				logger.info("["+msg+"]，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
 				
 				if((order.getMemberNum() == null || "".equals(order.getMemberNum())) 
 					&& (order.getMerchantNum() == null || "".equals(order.getMerchantNum()))){
@@ -92,7 +92,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							sale_commission = property.get("sale_commission_3");
 						}
 
-						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level));
+						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
@@ -101,7 +101,16 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
 							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
-						param.setActureLoveIn(actureMoneyIn);
+						
+						//如果计算出实际提成和爱心账户为0.000000时默认赋值0.000001
+						if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
+							actureLoveIn = new BigDecimal("0.000001");
+						}
+						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
+							actureMoneyIn = new BigDecimal("0.000001");
+						}
+						
+						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 
 						if (memberInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
@@ -115,7 +124,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
 						logger.info("["+msg+"-memberInviters],actualCommission="+actualCommission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
-						logger.info("["+msg+"-memberInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("["+msg+"-memberInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureMoneyIn()+",actureLoveIn="+param.getActureLoveIn());
 						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
@@ -126,7 +135,10 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 					if (m == memberInviters.size()) {
 						retCode1 = ResultCode.SUCCESS;
 					}
+				}else{
+					retCode1 = ResultCode.SUCCESS;
 				}
+				
 				int retCode2 = ResultCode.FAIL;
 				if (merchantInviters != null && !merchantInviters.isEmpty() && merchantInviters.size() > 0) {
 					int m = 0;
@@ -158,7 +170,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							actureMoneyIn = actualMoney.multiply(actualCommission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
 							actureLoveIn = actualMoney.multiply(actualCommission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
-						param.setActureLoveIn(actureMoneyIn);
+						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 
 						if (merchantInviters.get(i).getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
@@ -183,6 +195,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 					if (m == merchantInviters.size()) {
 						retCode2 = ResultCode.SUCCESS;
 					}
+				}else{
+					retCode2 = ResultCode.SUCCESS;
 				}
 
 				// 修改订单是否计算提成状态

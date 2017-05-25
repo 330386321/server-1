@@ -94,6 +94,15 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 							actureMoneyIn = clickMoney.multiply(ad_commission_0).multiply(sale_commission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
 							actureLoveIn = clickMoney.multiply(ad_commission_0).multiply(sale_commission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						}
+						
+						//如果计算出实际提成和爱心账户为0.000000时默认赋值0.000001
+						if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
+							actureLoveIn = new BigDecimal("0.000001");
+						}
+						if(actureMoneyIn.compareTo(BigDecimal.ZERO) == 0){
+							actureMoneyIn = new BigDecimal("0.000001");
+						}
+						
 						param.setActureMoneyIn(actureMoneyIn);
 						param.setActureLoveIn(actureLoveIn);
 						
