@@ -118,8 +118,8 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 						
-						logger.info("点广告比例：ad_commission_0="+ad_commission_0+",commission="+sale_commission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
-						logger.info("点广告：actureMoneyIn="+param.getActureMoneyIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("点广告比例：ad_commission_0={},commission={},actualCommissionScope={},loveAccountScale={}",ad_commission_0,sale_commission,actualCommissionScope,loveAccountScale);
+						logger.info("点广告：actureMoneyIn={},actureLoveIn={}",param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode) {

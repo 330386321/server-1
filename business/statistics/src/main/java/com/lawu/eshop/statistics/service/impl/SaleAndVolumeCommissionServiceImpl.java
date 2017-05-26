@@ -52,11 +52,11 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 			for (ShoppingOrderCommissionDTO order : orders) {
 				
-				logger.info("["+msg+"]，订单ID="+order.getId()+"，用户编号="+order.getMemberNum()+"，商家编号="+order.getMerchantNum()+"，金额="+order.getActualAmount());
+				logger.info("[{}]，订单ID={}，用户编号={}，商家编号={}，金额={}",msg,order.getId(),order.getMemberNum(),order.getMerchantNum(),order.getActualAmount());
 				
 				if((order.getMemberNum() == null || "".equals(order.getMemberNum())) 
 					&& (order.getMerchantNum() == null || "".equals(order.getMerchantNum()))){
-					logger.error("["+msg+"]查询未计算提成数据时用户编号和商家编号均为空！orderId="+order.getId());
+					logger.error("[{}]查询未计算提成数据时用户编号和商家编号均为空！orderId={}",msg,order.getId());
 					continue;
 				}
 				
@@ -125,8 +125,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.SALES_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.SALES_COMMISSION.getName());
 
-						logger.info("["+msg+"-memberInviters],actualCommission="+actualCommission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
-						logger.info("["+msg+"-memberInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureMoneyIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("[{}-memberInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
+						logger.info("[{}-memberInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode1 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode1) {
@@ -196,8 +196,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						param.setLoveTypeVal(LoveTypeEnum.VOLUME_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.VOLUME_COMMISSION.getName());
 
-						logger.info("["+msg+"-merchantInviters],actualCommission="+actualCommission+",actualCommissionScope="+actualCommissionScope+",loveAccountScale="+loveAccountScale);
-						logger.info("["+msg+"-merchantInviters],actualMoney="+actualMoney+",actureMoneyIn="+param.getActureLoveIn()+",actureLoveIn="+param.getActureLoveIn());
+						logger.info("[{}-merchantInviters],actualCommission={},actualCommissionScope={},loveAccountScale={}",msg,actualCommission,actualCommissionScope,loveAccountScale);
+						logger.info("[{}-merchantInviters],actualMoney={},actureMoneyIn={},actureLoveIn={}",msg,actualMoney,param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode2 = propertySrvService.calculation(param);
 						if (ResultCode.SUCCESS == retCode2) {
@@ -216,7 +216,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 				if (ResultCode.SUCCESS == retCode1 && ResultCode.SUCCESS == retCode2) {
 					successOrderIds.add(order.getId());
 				} else {
-					logger.error(msg + "提成计算上级收益时返回错误,orderId={},retCode1={},retCode2={}", order.getId(), retCode1,
+					logger.error("{}提成计算上级收益时返回错误,orderId={},retCode1={},retCode2={}", msg, order.getId(), retCode1,
 							retCode2);
 				}
 			}
