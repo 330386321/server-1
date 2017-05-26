@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -62,6 +63,7 @@ public class AdLexiconServiceImpl implements AdLexiconService {
 		AdLexiconBO bo=new AdLexiconBO();
 		bo.setTitle(adDO.getTitle());
 		list.add(bo);
+		Collections.shuffle(list); //随机打乱顺序
 		return list;
 	}
 

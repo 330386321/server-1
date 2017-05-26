@@ -154,6 +154,9 @@ public class MemberServiceImpl implements MemberService {
 
         List<MemberProfileDO> mpList = new ArrayList<MemberProfileDO>();
         for (MemberDO memberDO : memberDOS) {
+        	if(memberDO.getHeadimg()==null){
+        		memberDO.setHeadimg(userSrvConfig.getDefaultHeadimg());
+        	}
             MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
             if (memberProfileDO != null)
                 mpList.add(memberProfileDO);

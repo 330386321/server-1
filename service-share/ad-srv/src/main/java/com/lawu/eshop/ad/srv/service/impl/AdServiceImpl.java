@@ -682,7 +682,7 @@ public class AdServiceImpl implements AdService {
 				ad.setId(pointPoolDO.getAdId());
 				ad.setGmtModified(new Date());
 				ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
-				adDOMapper.updateByPrimaryKey(ad);
+				adDOMapper.updateByPrimaryKeySelective(ad);
 			}
 			return pointPoolDO.getPoint();
 		}else{

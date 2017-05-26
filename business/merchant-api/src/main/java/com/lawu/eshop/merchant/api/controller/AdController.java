@@ -72,12 +72,20 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|6024|6025]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<Long> result=propertyInfoService.getPropertyinfoFreeze(userNum);
+    	if(isSuccess(result)){
+    		if(result.getModel()==1){
+    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+    		}else if(result.getModel()==2){
+    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_EXCEPITON);
+    		}
+    	}
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
     	PropertyPointDTO propertyPointDTO=rs.getModel();
     	if(adParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){

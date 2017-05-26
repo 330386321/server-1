@@ -205,7 +205,7 @@ public class MemberConverter {
         }
         EfriendDTO memberDTO = new EfriendDTO();
         if(memberBO.getNickname()==null){
-        	memberDTO.setNickname("E点用户");
+        	memberDTO.setNickname("E店用户");
         }else{
         	memberDTO.setNickname(memberBO.getNickname());
         }
