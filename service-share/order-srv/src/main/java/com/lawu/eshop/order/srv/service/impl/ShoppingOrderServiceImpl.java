@@ -449,50 +449,33 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Transactional
 	@Override
 	public int deleteOrder(Long id) {
-
 		// 验证
 		if (id == null || id <= 0) {
 			return ResultCode.ID_EMPTY;
 		}
 
-		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 
-		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0) {
+		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
 			return ResultCode.RESOURCE_NOT_FOUND;
 		}
 
 		// 当前订单是否已经删除，实现删除操作的幂等性，返回成功状态码
-		if (shoppingOrderExtendDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+		if (shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
 			return ResultCode.SUCCESS;
 		}
-
-		// 检查订单项的订单状态是否是否是完成状态
-		boolean isDone = true;
-		for (ShoppingOrderItemDO item : shoppingOrderExtendDO.getItems()) {
-			if (!item.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue()) && !item.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue())) {
-				isDone = false;
-				break;
-			}
-		}
-
+		
 		// 订单的当前状态必须已结束状态的订单
-		if (!isDone) {
-			return ResultCode.ORDER_NOT_COMPLETE_STATUS;
-		}
-
-		String deleteOrder = propertyService.getByName(PropertyNameConstant.DELETE_ORDER);
-
-		// 收货时间是否超过七天
-		boolean isExceeds = DateUtil.isExceeds(shoppingOrderExtendDO.getGmtTransaction(), new Date(), Integer.valueOf(deleteOrder), Calendar.DAY_OF_YEAR);
-
-		// 确认收货之后七天之内不能删除订单，如果是自动确认收货没有时间显示
-		if (shoppingOrderExtendDO.getIsAutomaticReceipt() && shoppingOrderExtendDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) || isExceeds) {
+		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
 			return ResultCode.ORDER_NOT_DELETE;
 		}
-
+		
+		// 如果订单的状态是交易成功，检查订单项的订单状态是否是否是完成状态
+		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getIsDone()) {
+			return ResultCode.ORDER_NOT_COMPLETE_STATUS;
+		}
+		
 		// 更新购物订单的状态
-		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
-		shoppingOrderDO.setId(id);
 		shoppingOrderDO.setGmtModified(new Date());
 		// 更改数据状态为删除
 		shoppingOrderDO.setStatus(StatusEnum.INVALID.getValue());
