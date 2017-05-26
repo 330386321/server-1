@@ -360,7 +360,7 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-05-02", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010|6024|6025]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
     public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {

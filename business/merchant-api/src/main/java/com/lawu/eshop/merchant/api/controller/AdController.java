@@ -72,7 +72,7 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|6024|6025]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {

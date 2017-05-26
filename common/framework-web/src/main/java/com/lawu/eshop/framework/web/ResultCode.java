@@ -126,7 +126,8 @@ public class ResultCode {
     public static final int STORE_REGION_PATH_ERROR = 6022;
     public static final int NOTIFY_MONEY_ERROR = 6023;
     public static final int PROPERTYINFO_FREEZE_YES = 6024;
-    public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6025;
+    public static final int PROCESSED_RETURN_SUCCESS = 6025;
+    public static final int PROPERTYINFO_FREEZE_EXCEPITON = 6026;
 
 
 
@@ -271,6 +272,7 @@ public class ResultCode {
         ResultCode.messageMap.put(STORE_REGION_PATH_ERROR, "门店所属区域不正确（需要精确到区）");
         ResultCode.messageMap.put(NOTIFY_MONEY_ERROR, "回调金额与表中的金额不一致");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_YES, "资金已冻结");
+        ResultCode.messageMap.put(PROCESSED_RETURN_SUCCESS, "重复处理，成功返回");
         ResultCode.messageMap.put(PROPERTYINFO_FREEZE_EXCEPITON, "资金出现异常");
 
 

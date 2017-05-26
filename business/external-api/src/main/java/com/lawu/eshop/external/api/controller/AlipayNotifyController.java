@@ -116,6 +116,7 @@ public class AlipayNotifyController extends BaseController {
 		String app_id = new String(request.getParameter("app_id").getBytes("ISO-8859-1"), "UTF-8");
 		String buyer_logon_id = new String(request.getParameter("buyer_logon_id").getBytes("ISO-8859-1"), "UTF-8");
 
+		boolean isSendMsg = false;
 		boolean b = false;
 		int bizFlagInt = 0;
 		String extra[] = null;
@@ -165,6 +166,7 @@ public class AlipayNotifyController extends BaseController {
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+						isSendMsg = true;
 						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
 						if (recharge.getActualMoney() == dTotalMoney) {
 							result = rechargeService.doHandleRechargeNotify(param);
@@ -207,7 +209,8 @@ public class AlipayNotifyController extends BaseController {
 			}
 		}
 
-		if (ResultCode.SUCCESS == result.getRet()) {
+		//成功过处理或已处理过(重复处理)
+		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
 			logger.info("APP支付宝回调成功");
 			PrintWriter out = response.getWriter();
 			out.print("success");// 请不要修改或删除
@@ -215,28 +218,30 @@ public class AlipayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
-			DecimalFormat df = new DecimalFormat("######0.00");
-			MessageInfoParam messageInfoParam = new MessageInfoParam();
-			messageInfoParam.setRelateId(0L);
-			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_amount)));
-			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
-					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
+				DecimalFormat df = new DecimalFormat("######0.00");
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(0L);
+				MessageTempParam messageTempParam = new MessageTempParam();
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_amount)));
+				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+						|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+						|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
+				if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+					messageTempParam.setUserName("E店会员");
+				} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+					messageTempParam.setUserName("E店商家");
+				}
+				messageInfoParam.setMessageParam(messageTempParam);
+				messageService.saveMessage(extra[1], messageInfoParam);
 			}
-			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				messageTempParam.setUserName("E店会员");
-			} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-				messageTempParam.setUserName("E店商家");
-			}
-			messageInfoParam.setMessageParam(messageTempParam);
-			messageService.saveMessage(extra[1], messageInfoParam);
 			// ------------------------------发送站内消息
 
 		} else {
@@ -259,7 +264,6 @@ public class AlipayNotifyController extends BaseController {
 		Result result = successCreated();
 
 		String alipay_pc_public_key = externalApiConfig.getAlipayPublicKey();
-		String app_id_business = externalApiConfig.getAlipayAppIdBusiness();
 
 		Map<String, String> params = new HashMap<String, String>();
 		Map requestParams = request.getParameterMap();
@@ -288,6 +292,7 @@ public class AlipayNotifyController extends BaseController {
 		aliPayConfigParam.setAlipaySignType(externalApiConfig.getAlipaySignType());
 		aliPayConfigParam.setAlipayInputCharset(externalApiConfig.getAlipayInputCharset());
 
+		boolean isSendMsg = false;
 		int bizFlagInt = 0;
 		String extra[] = null;
 		boolean	b = AlipayNotify.verify(params, aliPayConfigParam);
@@ -324,7 +329,8 @@ public class AlipayNotifyController extends BaseController {
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
-
+						isSendMsg = true;
+						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
 
@@ -335,7 +341,8 @@ public class AlipayNotifyController extends BaseController {
 			}
 		}
 
-		if (ResultCode.SUCCESS == result.getRet()) {
+		//成功过处理或已处理过(重复处理)
+		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
 			logger.info("APP支付宝回调成功");
 			PrintWriter out = response.getWriter();
 			out.print("success");// 请不要修改或删除
@@ -343,22 +350,24 @@ public class AlipayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
-			DecimalFormat df = new DecimalFormat("######0.00");
-			MessageInfoParam messageInfoParam = new MessageInfoParam();
-			messageInfoParam.setRelateId(0L);
-			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_fee)));
-			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
+				DecimalFormat df = new DecimalFormat("######0.00");
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(0L);
+				MessageTempParam messageTempParam = new MessageTempParam();
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_fee)));
+				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
+				messageTempParam.setUserName("E店商家");
+				messageInfoParam.setMessageParam(messageTempParam);
+				messageService.saveMessage(extra[1], messageInfoParam);
 			}
-			messageTempParam.setUserName("E店商家");
-			messageInfoParam.setMessageParam(messageTempParam);
-			messageService.saveMessage(extra[1], messageInfoParam);
 			// ------------------------------发送站内消息
 
 		} else {

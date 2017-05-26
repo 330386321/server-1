@@ -99,7 +99,7 @@ public class RechargeServiceImpl implements RechargeService {
 			return result;
 		}else{
 			if(ThirdPayStatusEnum.SUCCESS.val.equals(recharge.getStatus())){
-				result.setRet(ResultCode.SUCCESS);
+				result.setRet(ResultCode.PROCESSED_RETURN_SUCCESS);
 				logger.info("重复回调(判断幂等)");
 				return result;
 			}

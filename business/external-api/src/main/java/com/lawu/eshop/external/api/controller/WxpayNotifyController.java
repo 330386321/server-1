@@ -87,6 +87,7 @@ public class WxpayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
+		boolean isSendMsg = false;
 		double dmoney = 0;
 		int bizFlagInt = 0;
 		String extra[] = null;
@@ -128,6 +129,7 @@ public class WxpayNotifyController extends BaseController {
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+						isSendMsg = false;
 						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
 						if (recharge.getActualMoney() == dmoney) {
 							result = rechargeService.doHandleRechargeNotify(param);
@@ -179,7 +181,9 @@ public class WxpayNotifyController extends BaseController {
 		} else {
 			result = successCreated(ResultCode.FAIL, "APP微信回调验签失败！");
 		}
-		if (ResultCode.SUCCESS == result.getRet()) {
+		
+		//成功过处理或已处理过(重复处理)
+		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
 			logger.info("APP微信回调成功");
 			PrintWriter out = response.getWriter();
 			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
@@ -187,28 +191,30 @@ public class WxpayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
-			DecimalFormat df = new DecimalFormat("######0.00");
-			MessageInfoParam messageInfoParam = new MessageInfoParam();
-			messageInfoParam.setRelateId(0L);
-			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-					|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
-					|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
+				DecimalFormat df = new DecimalFormat("######0.00");
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(0L);
+				MessageTempParam messageTempParam = new MessageTempParam();
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
+						|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
+						|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
+				if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+					messageTempParam.setUserName("E店会员");
+				} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+					messageTempParam.setUserName("E店商家");
+				}
+				messageInfoParam.setMessageParam(messageTempParam);
+				messageService.saveMessage(extra[1], messageInfoParam);
 			}
-			if (extra[1].startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
-				messageTempParam.setUserName("E店会员");
-			} else if (extra[1].startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
-				messageTempParam.setUserName("E店商家");
-			}
-			messageInfoParam.setMessageParam(messageTempParam);
-			messageService.saveMessage(extra[1], messageInfoParam);
 			// ------------------------------发送站内消息
 
 		} else {
@@ -230,24 +236,20 @@ public class WxpayNotifyController extends BaseController {
 		HttpServletResponse response = getResponse();
 		Result result = successCreated();
 
+		boolean isSendMsg = false;
 		double dmoney = 0;
 		int bizFlagInt = 0;
 		String extra[] = null;
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
 		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKey())) {
-			String return_code = packageParams.get("return_code") == null ? ""
-					: packageParams.get("return_code").toString();
+			String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {
-				String result_code = packageParams.get("result_code") == null ? ""
-						: packageParams.get("result_code").toString();
+				String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
 				if ("SUCCESS".equals(result_code)) {
 					String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
-					String transaction_id = packageParams.get("transaction_id") == null ? ""
-							: packageParams.get("transaction_id").toString();
-					String total_fee = packageParams.get("total_fee") == null ? ""
-							: packageParams.get("total_fee").toString();
-					String out_trade_no = packageParams.get("out_trade_no") == null ? ""
-							: packageParams.get("out_trade_no").toString();
+					String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
+					String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
+					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
 					extra = attach.split(splitStr);
 					dmoney = new Double(total_fee).doubleValue();
@@ -269,7 +271,8 @@ public class WxpayNotifyController extends BaseController {
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);
-
+						isSendMsg = true;
+						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
 
@@ -289,7 +292,9 @@ public class WxpayNotifyController extends BaseController {
 		} else {
 			result = successCreated(ResultCode.FAIL, "PC微信回调验签失败！");
 		}
-		if (ResultCode.SUCCESS == result.getRet()) {
+		
+		//成功过处理或已处理过(重复处理)
+		if (ResultCode.SUCCESS == result.getRet() || ResultCode.PROCESSED_RETURN_SUCCESS == result.getRet()) {
 			logger.info("APP微信回调成功");
 			PrintWriter out = response.getWriter();
 			out.print("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");// 请不要修改或删除
@@ -297,22 +302,24 @@ public class WxpayNotifyController extends BaseController {
 			out.close();
 
 			// ------------------------------发送站内消息
-			DecimalFormat df = new DecimalFormat("######0.00");
-			MessageInfoParam messageInfoParam = new MessageInfoParam();
-			messageInfoParam.setRelateId(0L);
-			MessageTempParam messageTempParam = new MessageTempParam();
-			messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
-			Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
-			if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
-				messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
-			} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
-				messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+			if(isSendMsg && ResultCode.SUCCESS == result.getRet()){
+				DecimalFormat df = new DecimalFormat("######0.00");
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(0L);
+				MessageTempParam messageTempParam = new MessageTempParam();
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dmoney)));
+				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
+				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);
+					messageTempParam.setBalance(moneyResult.getModel().getBalance().setScale(2, BigDecimal.ROUND_HALF_UP));
+				} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_POINT);
+					messageTempParam.setPoint(moneyResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
+				}
+				messageTempParam.setUserName("E店商家");
+				messageInfoParam.setMessageParam(messageTempParam);
+				messageService.saveMessage(extra[1], messageInfoParam);
 			}
-			messageTempParam.setUserName("E店商家");
-			messageInfoParam.setMessageParam(messageTempParam);
-			messageService.saveMessage(extra[1], messageInfoParam);
 			// ------------------------------发送站内消息
 
 		} else {

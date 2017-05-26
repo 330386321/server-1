@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import com.lawu.eshop.property.param.RechargeQueryDataParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
-import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
