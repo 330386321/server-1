@@ -686,18 +686,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			return ResultCode.ORDER_NOT_REFUND;
 		}
 		
-		String refundRequestTime = propertyService.getByName(PropertyNameConstant.REFUND_REQUEST_TIME);
-
-		// 买家收货(交易成功)七天之内才能被允许退款
-		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && DateUtil.isExceeds(shoppingOrderDO.getGmtTransaction(), new Date(), Integer.valueOf(refundRequestTime), Calendar.DAY_OF_YEAR)) {
-			return ResultCode.EXCEEDS_RETURN_TIME;
-		}
-
-		// 如果订单是自动收货或者不允许退款，则不允许退款操作
-		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && shoppingOrderDO.getIsAutomaticReceipt()) {
-			return ResultCode.ORDER_NOT_REFUND;
-		}
-		
 		// 更新购物订单项状态
 		shoppingOrderItemDO.setGmtModified(new Date());
 		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
