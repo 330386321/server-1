@@ -34,25 +34,20 @@ public class ShoppingOrderTradingSuccessTransactionFollowServiceImpl extends Abs
 	    	return rtn;
 	    }
 	    
-	    try {
-		    if (!notification.getIsAutoReceipt()) {
-			    // 组装请求参数
-			    OrderComfirmDataParam param = new OrderComfirmDataParam();
-			    param.setBizId(notification.getShoppingOrderId().toString());
-			    param.setTotalOrderMoney(notification.getOrderTotalPrice());
-			    param.setUserNum(notification.getMerchantNum());
-			    orderService.comfirmDelivery(param);
-		    } else {
-		    	OrderSysJobParam param = new OrderSysJobParam();
-		    	param.setOrderActualMoney(notification.getOrderTotalPrice());
-		    	param.setOrderIds(notification.getShoppingOrderId().toString());
-		    	param.setUserNums(notification.getMerchantNum());
-		    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
-		    	orderService.comfirmSysJob(param);
-		    }
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    	return rtn;
+	    if (!notification.getIsAutoReceipt()) {
+		    // 组装请求参数
+		    OrderComfirmDataParam param = new OrderComfirmDataParam();
+		    param.setBizId(notification.getShoppingOrderId().toString());
+		    param.setTotalOrderMoney(notification.getOrderTotalPrice());
+		    param.setUserNum(notification.getMerchantNum());
+		    orderService.comfirmDelivery(param);
+	    } else {
+	    	OrderSysJobParam param = new OrderSysJobParam();
+	    	param.setOrderActualMoney(notification.getOrderTotalPrice());
+	    	param.setOrderIds(notification.getShoppingOrderId().toString());
+	    	param.setUserNums(notification.getMerchantNum());
+	    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
+	    	orderService.comfirmSysJob(param);
 	    }
 	    
 	    rtn = new Reply();

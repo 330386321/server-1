@@ -1,11 +1,14 @@
 package com.lawu.eshop.compensating.transaction.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.lawu.eshop.compensating.transaction.Notification;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 补偿性事务从逻辑服务抽象类
@@ -14,7 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @date 2017/3/29
  */
 public abstract class AbstractTransactionFollowService<N extends Notification, R extends Reply> implements TransactionFollowService<N, R> {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(AbstractTransactionFollowService.class);
+	
     @Autowired
     private MessageProducerService messageProducerService;
 
@@ -27,12 +32,16 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
 
     @Override
     public void receiveNotice(N notification) {
-        R reply = execute(notification);
-        if ( reply != null ) {
-            reply.setTransactionId(notification.getTransactionId());
-            sendCallback(reply);
-        }
-
+    	// 统一处理事务异常，手动捕捉异常，并且打印错误信息
+    	try {
+    		R reply = execute(notification);
+    		if ( reply != null ) {
+                reply.setTransactionId(notification.getTransactionId());
+                sendCallback(reply);
+            }
+    	} catch (Exception e) {
+    		logger.error(e.getMessage());
+    	}
     }
 
     @Override
