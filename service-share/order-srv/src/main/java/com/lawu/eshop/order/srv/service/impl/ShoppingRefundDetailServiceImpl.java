@@ -665,6 +665,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		ShoppingOrderItemExtendDOExample.Criteria criteria = example.createCriteria();
 		
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
+		// 找到其中有效的记录
+		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		criteria.andRefundStatusEqualTo(RefundStatusEnum.REFUND_FAILED.getValue());
 		
 		// 提醒时间
@@ -677,18 +679,16 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
-			// 发送次数为0，发送站内信和推送
-			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				refundFailedRemind(shoppingOrderItemExtendDO);
-			}
-			
-			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
-			
+			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 买家操作超过处理时间，平台自动撤销退款申请
 			if (isExceeds && shoppingOrderItemExtendDO.getShoppingRefundDetail() != null) {
 				revokeRefundRequest(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
+			} else {
+				// 发送次数为0，发送站内信和推送
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+					refundFailedRemind(shoppingOrderItemExtendDO);
+				}
 			}
 		}
 	}
