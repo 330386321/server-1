@@ -1156,22 +1156,28 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			
-			if (item == null || item.getSendTime() <= 0) {
-				/*
-				 * 买家支付成功发送消息给商家提醒买家新增了一个订单
-				 */
-				// 组装要发送的消息
-				ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
-				shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
-				shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
-				// 发送消MQ息
-				messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
-			}
-			
+			// 首先判断是否超过付款时间，如果没有超过，再判断是否已经发送过提醒消息
 			boolean isexceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
 			if (isexceeds) {
 				cancelOrder(item.getId());
+			} else {
+				if (item == null || item.getSendTime() <= 0) {
+					// 更新发送次数，但是不更新更新时间字段
+					int sendTime = item.getSendTime() == null ? 1 : item.getSendTime().intValue() + 1;
+					item.setSendTime(sendTime);
+					shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
+					
+					/*
+					 * 买家支付成功发送消息给商家提醒买家新增了一个订单
+					 */
+					// 组装要发送的消息
+					ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
+					shoppingOrderNoPaymentNotification.setId(item.getId());
+					shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
+					shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
+					// 发送消MQ息
+					messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
+				}
 			}
 		}
 	}

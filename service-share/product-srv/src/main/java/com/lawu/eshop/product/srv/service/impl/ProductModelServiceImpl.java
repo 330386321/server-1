@@ -174,10 +174,6 @@ public class ProductModelServiceImpl implements ProductModelService {
 	@Transactional
 	@Override
 	public void releaseInventory(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
-		if (shoppingOrderCancelOrderNotification == null) {
-			return;
-		}
-		
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCancelOrderNotification.getParams()) {
 			
 			/*
@@ -204,6 +200,9 @@ public class ProductModelServiceImpl implements ProductModelService {
 				return;
 			}
 			
+			/*
+			 * 释放商品型号库存
+			 */
 			// 计算库存
 			Integer inventory = productModelDO.getInventory() + param.getQuantity();
 			
@@ -223,7 +222,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
 			
 			/*
-			 * 减商品总库存
+			 * 释放商品总库存
 			 */
 			// 获取库存信息
 			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
