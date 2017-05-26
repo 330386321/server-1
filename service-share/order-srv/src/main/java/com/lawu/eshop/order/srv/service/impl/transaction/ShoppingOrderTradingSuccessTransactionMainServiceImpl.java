@@ -8,6 +8,7 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessNotification;
+import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -40,6 +41,7 @@ public class ShoppingOrderTradingSuccessTransactionMainServiceImpl extends Abstr
     	}
     	
     	rtn = new ShoppingOrderTradingSuccessNotification();
+    	rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderBO.getPaymentMethod().getVal()));
     	rtn.setMerchantNum(shoppingOrderBO.getMerchantNum());
     	rtn.setShoppingOrderId(shoppingOrderId);
     	rtn.setOrderTotalPrice(NumberUtil.format(shoppingOrderBO.getOrderTotalPrice()));

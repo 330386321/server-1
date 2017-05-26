@@ -1198,16 +1198,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		ShoppingOrderExtendDOExample.Criteria criteria = shoppingOrderExtendDOExample.createCriteria();
 
-		String automaticRemindShipments = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+		String automaticReceiptTime = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
 
-		criteria.andSOIOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
-		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticRemindShipments), new Date());
+		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue());
+		criteria.andGmtTransportAddDayLessThanOrEqualTo(Integer.valueOf(automaticReceiptTime), new Date());
 
 		// 查找所有超时未收货的订单，自动收货
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
-		boolean is_done = true;
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
+			boolean is_done = true;
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
 				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
