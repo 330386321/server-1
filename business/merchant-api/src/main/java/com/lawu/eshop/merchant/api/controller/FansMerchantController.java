@@ -79,7 +79,13 @@ public class FansMerchantController extends BaseController {
         }
         String[] numArray = param.getNums().split(",");
         int inviteFansCount = numArray.length;
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
+
+        Result<Long> freezeResult = propertyInfoService.getPropertyinfoFreeze(userNum);
+        if(freezeResult.getModel() != 0){
+            return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+        }
 
         Result<Boolean> pwdResult = propertyInfoService.varifyPayPwd(userNum, param.getPayPwd());
         if (!isSuccess(pwdResult)) {
@@ -94,7 +100,7 @@ public class FansMerchantController extends BaseController {
         propertyInfoDataParam.setUserNum(userNum);
         propertyInfoDataParam.setPoint(String.valueOf(inviteFansCount));
         propertyInfoDataParam.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INVITE_FANS);
-        propertyInfoDataParam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
+        propertyInfoDataParam.setMerchantId(merchantId);
         propertyInfoDataParam.setRegionName(StringUtils.isEmpty(param.getRegionName()) ? "全国" : param.getRegionName());
         propertyInfoDataParam.setInviteFansCount(inviteFansCount);
         propertyInfoDataParam.setSex(param.getUserSexEnum().val);
@@ -104,10 +110,10 @@ public class FansMerchantController extends BaseController {
             return result;
         }
 
-        Result<String> stringResult = merchantStoreService.getNameBymerchantId(UserUtil.getCurrentUserId(getRequest()));
+        Result<String> stringResult = merchantStoreService.getNameBymerchantId(merchantId);
         //给会员发送站内消息
         MessageInfoParam messageInfoParam = new MessageInfoParam();
-        messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
+        messageInfoParam.setRelateId(merchantId);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS);
         MessageTempParam messageTempParam = new MessageTempParam();
         messageTempParam.setMerchantName("E店商家");
@@ -125,15 +131,15 @@ public class FansMerchantController extends BaseController {
         }
 
         //给商家发送站内消息
-        Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(UserUtil.getCurrentUserNum(getRequest()));
+        Result<PropertyPointDTO> propertyPointDTOResult = propertyInfoService.getPropertyPoint(userNum);
         messageInfoParam = new MessageInfoParam();
-        messageInfoParam.setRelateId(UserUtil.getCurrentUserId(getRequest()));
+        messageInfoParam.setRelateId(merchantId);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_INVITE_FANS_MERCHANT);
         messageTempParam = new MessageTempParam();
-        messageTempParam.setExpendPoint(new BigDecimal(666));
+        messageTempParam.setExpendPoint(new BigDecimal(inviteFansCount));
         messageTempParam.setPoint(propertyPointDTOResult.getModel().getPoint().setScale(2, BigDecimal.ROUND_HALF_UP));
         messageInfoParam.setMessageParam(messageTempParam);
-        messageService.saveMessage(UserUtil.getCurrentUserNum(getRequest()), messageInfoParam);
+        messageService.saveMessage(userNum, messageInfoParam);
         return successCreated();
     }
 
