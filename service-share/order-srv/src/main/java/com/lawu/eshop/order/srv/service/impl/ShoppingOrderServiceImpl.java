@@ -1182,7 +1182,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	    	ShoppingOrderRemindShipmentsNotification notification = new ShoppingOrderRemindShipmentsNotification();
 	    	notification.setQuantity(item.getCount());
 	    	notification.setMerchantNum(item.getMerchantNum());
-	    	
 	    	messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REMIND_SHIPMENTS, notification);
 		}
 	}

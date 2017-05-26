@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
@@ -168,6 +169,22 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+			} else
+			// 用户付款，商家没有发货，如果超过五天，每隔一天提醒一次
+			if (MqConstant.TAG_REMIND_SHIPMENTS.equals(tags)) {
+				ShoppingOrderRemindShipmentsNotification notification = (ShoppingOrderRemindShipmentsNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_SEND_NOTICE);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setProductCount(notification.getQuantity().intValue());
+
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
 			}
 			
 		}
