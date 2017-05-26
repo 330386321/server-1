@@ -571,6 +571,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+		// 找到其中有效的记录
+		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.REFUND.getValue());
 		
 		// 提醒时间
@@ -583,18 +585,16 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
-			// 发送次数为0，发送站内信和推送
-			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
-			}
-			
-			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
-			
+			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
-				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
+				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId(), true);
+			} else {
+				// 发送次数为0，发送站内信和推送
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				}
 			}
 		}
 	}
@@ -619,6 +619,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
+		// 找到其中有效的记录
+		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		criteria.andSRDTypeEqualTo(ShoppingRefundTypeEnum.RETURN_REFUND.getValue());
 		
 		// 提醒时间
@@ -631,18 +633,16 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
-			// 发送次数为0，发送站内信和推送
-			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
-			}
-			
-			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
-			
+			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
 				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
+			} else {
+				// 发送次数为0，发送站内信和推送
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				}
 			}
 		}
 	}
