@@ -100,7 +100,6 @@ public interface PropertyInfoService {
      * @param payPwd
      * @return
      */
-    @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "propertyInfo/varifyPayPwd", method = RequestMethod.GET)
     Result<Boolean> varifyPayPwd(@RequestParam("userNum") String userNum, @RequestParam("payPwd") String payPwd);
     
@@ -120,4 +119,14 @@ public interface PropertyInfoService {
      */
     @RequestMapping(value = "propertyInfo/selectLoveAccount/{userNum}", method = RequestMethod.GET)
     Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum);
+    
+    /**
+	 * 获取用户是否冻结
+	 * @param userNum
+	 * @return 0-否、1-是、2-异常
+	 * @author yangqh
+	 * @date 2017年5月26日 上午11:08:32
+	 */
+	@RequestMapping(value = "propertyInfo/getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
+	Result<Long> getPropertyinfoFreeze(@PathVariable("userNum") String userNum);
 }

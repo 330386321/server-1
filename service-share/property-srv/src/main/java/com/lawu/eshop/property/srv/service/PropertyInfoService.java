@@ -61,13 +61,15 @@ public interface PropertyInfoService {
     int updatePropertyNumbers(String userNum, String column, String flag, BigDecimal number);
 
     /**
-     * 校验余额是否足够
+     * 校验资产财产记录、余额、支付密码、冻结情况
      *
      * @param userNum 用户编号
      * @param amount  金额
+     * @param isVerifyPwd 是否校验支付密码
+     * @param inPwd 传入支付密码
      * @return
      */
-    int validateBalance(String userNum, String amount);
+    int validateBalance(String userNum, String amount,boolean isVerifyPwd,String inPwd);
 
     /**
      * 校验积分是否足够
@@ -127,5 +129,14 @@ public interface PropertyInfoService {
 	 * @date 2017年5月16日 下午5:21:20
 	 */
     Page<PropertyInfoBO> getPropertyinfoPageList(PropertyInfoBackageParam param);
+
+    /**
+     * 获取用户是否冻结
+     * @param userNum
+     * @return
+     * @author yangqh
+     * @date 2017年5月26日 上午11:08:53
+     */
+	Long getPropertyinfoFreeze(String userNum);
 
 }

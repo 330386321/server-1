@@ -257,8 +257,6 @@ public class PropertyInfoController extends BaseController {
 	 * 运营平台查询用户资金冻结情况
 	 * @param param
 	 * @return
-	 * @author yangqh
-	 * @date 2017年5月16日 下午4:56:25
 	 */
 	@RequestMapping(value = "getPropertyinfoPageList", method = RequestMethod.POST)
 	public Result<Page<PropertyInfoDTO>> getPropertyinfoPageList(@RequestBody PropertyInfoBackageParam param)  {
@@ -268,5 +266,17 @@ public class PropertyInfoController extends BaseController {
 		page.setTotalCount(propertyInfoBOPage.getTotalCount());
 		page.setRecords(PropertyInfoConverter.convertDTO(propertyInfoBOPage.getRecords()));
 		return successGet(page);
+	}
+	
+	/** 获取用户是否冻结
+	 * @param userNum
+	 * @return 0-否、1-是、2-异常
+	 * @author yangqh
+	 * @date 2017年5月26日 上午11:08:32
+	 */
+	@RequestMapping(value = "getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
+	public Result<Long> getPropertyinfoFreeze(@PathVariable("userNum") String userNum)  {
+		Long freeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+		return successGet(freeze);
 	}
 }

@@ -26,6 +26,7 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,27 +136,37 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
-	public int validateBalance(String userNum, String amount) {
+	public int validateBalance(String userNum, String amount,boolean isVerifyPwd,String inPwd) {
 		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
 		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
 
+		//校验资产记录，是否为空，记录数=1,
 		if (propertyInfoDOS == null || propertyInfoDOS.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
+		} else if (propertyInfoDOS.size() > 1) {
+			return ResultCode.PROPERTY_INFO_OUT_INDEX;
 		}
 		
+		//校验资金是否冻结
 		if(PropertyinfoFreezeEnum.YES.val.equals(propertyInfoDOS.get(0).getFreeze())){
 			return ResultCode.PROPERTYINFO_FREEZE_YES;
 		}
+		
+		// 校验支付密码
+		if (isVerifyPwd && !PwdUtil.verify(inPwd, propertyInfoDOS.get(0).getPayPassword())) {
+			return ResultCode.PAY_PWD_ERROR;
+		}
 
+		//校验余额是否足够
 		PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
-
 		BigDecimal dbBalance = balanceBO.getBalance();
 		double dBalacne = dbBalance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		double dOrderMoney = new Double(amount).doubleValue();
 		if (dBalacne < dOrderMoney) {
 			return ResultCode.PROPERTY_INFO_BALANCE_LESS;
 		}
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -291,6 +302,17 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		page.setRecords(PropertyInfoConverter.convertBO(propertyInfoDOS));
 		return page;
+	}
+
+	@Override
+	public Long getPropertyinfoFreeze(String userNum) {
+		PropertyInfoDOExample example = new PropertyInfoDOExample();
+		example.createCriteria().andUserNumEqualTo(userNum);
+		List<PropertyInfoDO> dos = propertyInfoDOMapper.selectByExample(example);
+		if(dos == null || dos.isEmpty() || dos.size() > 1){
+			return 2L;
+		}
+		return Long.valueOf(StringUtil.byteToInt(dos.get(0).getFreeze()));
 	}
 
 }

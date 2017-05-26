@@ -16,6 +16,7 @@ import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBillDataParam;
@@ -36,6 +37,7 @@ import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CashManageFrontService;
+import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
@@ -56,30 +58,27 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 	private BankAccountDOMapper bankAccountDOMapper;
 	@Autowired
 	private TransactionDetailService transactionDetailService;
+	@Autowired
+	private PropertyInfoService propertyInfoService;
 
 	@Override
 	@Transactional
 	public int save(CashDataParam cash) {
-
-		/*
-		 * String cashMoney = cash.getCashMoney(); WithdrawCashDOExample example
-		 * = new WithdrawCashDOExample();
-		 * example.createCriteria().andUserNumEqualTo(cash.getUserNum())
-		 * .andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth()); int
-		 * count = withdrawCashDOMapper.countByExample(example); double
-		 * dCashMoney = new Double(cashMoney).doubleValue(); if (count > 1 &&
-		 * dCashMoney <= 5) { return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR; }
-		 */
-
+		
 		// 校验最小金额
 		String minMoney = propertyService.getValue(PropertyType.CASH_MIN_MONEY);
 		if ("".equals(minMoney)) {
 			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
-		String cashMoney = cash.getCashMoney();
-		double dCashMoney = new Double(cashMoney).doubleValue();
+		double dCashMoney = new Double(cash.getCashMoney()).doubleValue();
 		if (dCashMoney < Double.valueOf(minMoney).doubleValue()) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
+		}
+		
+		// 校验资产财产记录、余额、支付密码、冻结情况
+		int retCode = propertyInfoService.validateBalance(cash.getUserNum(), cash.getCashMoney(), true, cash.getPayPwd());
+		if (retCode != ResultCode.SUCCESS) {
+			return retCode;
 		}
 
 		// 校验提交的银行卡是否正确
@@ -89,34 +88,10 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		} else if (!bankAccountDo.getUserNum().trim().equals(cash.getUserNum())) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_MATCH;
 		}
-
-		// 校验资产财产记录、余额、支付密码
-		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
-		infoExample.createCriteria().andUserNumEqualTo(cash.getUserNum());
-		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
-		if (infoList == null || infoList.isEmpty() || infoList.size() < 1) {
-			return ResultCode.PROPERTY_INFO_NULL;
-		} else if (infoList.size() > 1) {
-			return ResultCode.PROPERTY_INFO_OUT_INDEX;
-		} else {
-			PropertyInfoDO info = infoList.get(0);
-			BigDecimal balance = info.getBalance();
-			double dBalacne = balance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-			if (dBalacne < dCashMoney) {
-				return ResultCode.PROPERTY_INFO_BALANCE_LESS;
-			}
-
-			// 校验支付密码
-			if (!PwdUtil.verify(cash.getPayPwd(), info.getPayPassword())) {
-				return ResultCode.PAY_PWD_ERROR;
-			}
-		}
-
+		
 		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
-
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
-		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.val)
-				.andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.val).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
 		int count = withdrawCashDOMapper.countByExample(example);
 		if (count > 0) {
 			String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
@@ -135,7 +110,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		double money = dCashMoney * dCurrentScale;
 
 		// 保存提现表记录
-		withdrawCashDO.setCashMoney(new BigDecimal(cashMoney));
+		withdrawCashDO.setCashMoney(new BigDecimal(cash.getCashMoney()));
 		withdrawCashDO.setCurrentScale(currentScale);
 		withdrawCashDO.setMoney(new BigDecimal(money));
 		withdrawCashDO.setUserNum(cash.getUserNum());
@@ -161,15 +136,19 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setTransactionType(cash.getTransactionType());
 		tdsParam.setTransactionAccount(cash.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
-		tdsParam.setAmount(new BigDecimal(cashMoney));
+		tdsParam.setAmount(new BigDecimal(cash.getCashMoney()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(withdrawCashDO.getId().toString());
 		transactionDetailService.save(tdsParam);
 
+		
+		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
+		infoExample.createCriteria().andUserNumEqualTo(cash.getUserNum());
+		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
 		// 更新财产记录，减
 		PropertyInfoDOView infoDoView = new PropertyInfoDOView();
 		infoDoView.setId(infoList.get(0).getId());
-		infoDoView.setBalance(new BigDecimal(cashMoney));
+		infoDoView.setBalance(new BigDecimal(cash.getCashMoney()));
 		infoDoView.setGmtModified(new Date());
 		propertyInfoDOMapperExtend.updateByPrimaryKeySelective(infoDoView);
 

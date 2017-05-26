@@ -154,7 +154,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 
 	@Override
 	public int doHanlderMinusBalance(PropertyInfoDataParam param) {
-		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getPoint());
+		int retCode = propertyInfoService.validateBalance(param.getUserNum(), param.getPoint(),false,"");
 		if (retCode != ResultCode.SUCCESS) {
 			return retCode;
 		}
@@ -192,7 +192,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Transactional
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
-		CommissionUtilBO commissionBO = commissionUtilService.getClickAdMine(clickMoney);
+		CommissionUtilBO commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
 		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
 		BigDecimal actureLoveIn = commissionBO.getActureLoveIn();//爱心账户
 		
