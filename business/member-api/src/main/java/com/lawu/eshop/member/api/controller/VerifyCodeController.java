@@ -40,7 +40,7 @@ public class VerifyCodeController extends BaseController {
     private VerifyCodeService verifyCodeService;
 
     @Audit(date = "2017-03-09", reviewer = "孙林青")
-    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014|1028] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
@@ -55,7 +55,7 @@ public class VerifyCodeController extends BaseController {
     }
 
     @Audit(date = "2017-03-09", reviewer = "孙林青")
-    @ApiOperation(value = "获取短信验证码(无需图形验证码)", notes = "获取短信验证码。[1006|1007|1008] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "获取短信验证码(无需图形验证码)", notes = "获取短信验证码。[1006|1007|1008|1028] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getSmsCode/{mobile}", method = RequestMethod.GET)
     public Result getSmsCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
