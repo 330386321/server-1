@@ -58,7 +58,7 @@ public class StoreSolrController extends BaseController {
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
             query.setParam("d", String.valueOf(storeSolrParam.getDistance()));
         } else {
-            query.setParam("d", "1000");
+            query.setParam("d", "10000000");
         }
         query.setParam("pt", latLon);
         query.setParam("fq", "{!geofilt}");
