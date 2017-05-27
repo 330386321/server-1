@@ -113,4 +113,22 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 		return productCategoryeDOS.isEmpty() ? new ArrayList<ProductCategoryBO>() : ProductCategoryConverter.convertBOS(productCategoryeDOS);
 	}
 
+	@Override
+	public String getFullCategoryId(Integer id) {
+		String fullCategoryId = "";
+		ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(id);
+		if(productCategoryeDO == null){
+			return fullCategoryId;
+		}
+
+		while (productCategoryeDO.getParentId() > 0){
+			fullCategoryId = fullCategoryId + productCategoryeDO.getId() + ",";
+			productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productCategoryeDO.getParentId());
+			if(productCategoryeDO == null){
+				return fullCategoryId;
+			}
+		}
+		return fullCategoryId;
+	}
+
 }
