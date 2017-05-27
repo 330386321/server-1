@@ -93,19 +93,14 @@ public class WxpayNotifyController extends BaseController {
 		String extra[] = null;
 		SortedMap<Object, Object> packageParams = parseWxNotifyData(request);
 		if (PayCommonUtil.isTenpaySign("UTF-8", packageParams, externalApiConfig.getWxpayKeyApp())) {
-			String return_code = packageParams.get("return_code") == null ? ""
-					: packageParams.get("return_code").toString();
+			String return_code = packageParams.get("return_code") == null ? "" : packageParams.get("return_code").toString();
 			if ("SUCCESS".equals(return_code)) {
-				String result_code = packageParams.get("result_code") == null ? ""
-						: packageParams.get("result_code").toString();
+				String result_code = packageParams.get("result_code") == null ? "" : packageParams.get("result_code").toString();
 				if ("SUCCESS".equals(result_code)) {
 					String attach = packageParams.get("attach") == null ? "" : packageParams.get("attach").toString();
-					String transaction_id = packageParams.get("transaction_id") == null ? ""
-							: packageParams.get("transaction_id").toString();
-					String total_fee = packageParams.get("total_fee") == null ? ""
-							: packageParams.get("total_fee").toString();
-					String out_trade_no = packageParams.get("out_trade_no") == null ? ""
-							: packageParams.get("out_trade_no").toString();
+					String transaction_id = packageParams.get("transaction_id") == null ? "" : packageParams.get("transaction_id").toString();
+					String total_fee = packageParams.get("total_fee") == null ? "" : packageParams.get("total_fee").toString();
+					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
 					extra = attach.split(splitStr);
 					dmoney = new Double(total_fee).doubleValue();
@@ -129,24 +124,12 @@ public class WxpayNotifyController extends BaseController {
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						isSendMsg = false;
-						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
-						if (recharge.getActualMoney() == dmoney) {
-							result = rechargeService.doHandleRechargeNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+						isSendMsg = true;
+						result = rechargeService.doHandleRechargeNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
-						String bond = bondRet.getModel().toString();
-						double dbond = Double.valueOf(bond).doubleValue();
-						if (dbond == dmoney) {
-							result = depositService.doHandleDepositNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+						result = depositService.doHandleDepositNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
 						double money = order.getModel().getOrderTotalPrice().doubleValue();
@@ -270,8 +253,8 @@ public class WxpayNotifyController extends BaseController {
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						result = rechargeService.doHandleRechargeNotify(param);
 						isSendMsg = true;
+						result = rechargeService.doHandleRechargeNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = depositService.doHandleDepositNotify(param);
