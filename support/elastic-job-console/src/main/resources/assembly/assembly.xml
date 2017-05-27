@@ -18,8 +18,8 @@
 	</dependencySets>
 	<fileSets>
 		<fileSet>
-            <directory>src/main/resources/bin</directory>
-            <outputDirectory>bin</outputDirectory>
+            <directory>src/main/resources/deploy</directory>
+            <outputDirectory>deploy</outputDirectory>
             <directoryMode>0755</directoryMode>
             <fileMode>0755</fileMode>
         </fileSet>
