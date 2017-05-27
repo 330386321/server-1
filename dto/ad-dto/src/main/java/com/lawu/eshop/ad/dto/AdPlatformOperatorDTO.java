@@ -52,6 +52,9 @@ public class AdPlatformOperatorDTO {
 	@ApiModelProperty(value = "广告类型")
 	private TypeEnum typeEnum;
 	
+	@ApiModelProperty(value = "区域")
+	private String regionPath;
+	
 	public String getContent() {
 		return content;
 	}
@@ -163,4 +166,14 @@ public class AdPlatformOperatorDTO {
 	public void setStatusEnum(AdPlatformStatusEnum statusEnum) {
 		this.statusEnum = statusEnum;
 	}
+
+	public String getRegionPath() {
+		return regionPath;
+	}
+
+	public void setRegionPath(String regionPath) {
+		this.regionPath = regionPath;
+	}
+	
+	
 }

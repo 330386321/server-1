@@ -610,6 +610,8 @@ public class AdServiceImpl implements AdService {
 						adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 						adDO.setGmtModified(date);
 						adDOMapper.updateByPrimaryKey(adDO);
+						//将没有领完的积分退还给用户
+						matransactionMainAddService.sendNotice(adDO.getId());
 					}
 				}
 			}
@@ -833,7 +835,7 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public RedPacketInfoBO getRedPacketInfo(Long merchantId) {
+	public RedPacketInfoBO getRedPacketInfo(Long merchantId) { 
 		AdDOExample example =new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("1")).andTypeEqualTo(new Byte("4"));
 		List<AdDO>  list=adDOMapper.selectByExample(example);

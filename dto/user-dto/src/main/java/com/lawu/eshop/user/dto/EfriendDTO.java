@@ -25,7 +25,7 @@ public class EfriendDTO {
     private Integer inviterCount;
     
     @ApiModelProperty(value = "注册时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date gmtCreate;
 
 

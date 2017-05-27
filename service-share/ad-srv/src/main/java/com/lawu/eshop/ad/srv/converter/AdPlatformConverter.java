@@ -40,6 +40,7 @@ public class AdPlatformConverter {
         adPlatformBO.setMerchantStoreId(adPlatformDO.getMerchantStoreId());
         adPlatformBO.setLinkUrl(adPlatformDO.getLinkUrl());
         adPlatformBO.setProductId(adPlatformDO.getProductId());
+        adPlatformBO.setRegionPath(adPlatformDO.getRegionPath());
         return adPlatformBO;
 
     }
@@ -144,7 +145,6 @@ public class AdPlatformConverter {
         if (bOS == null || bOS.isEmpty()) {
             return DTOS;
         }
-
         for (AdPlatformBO adPlatformBO : bOS) {
         	AdPlatformOperatorDTO adPlatformDTO = new AdPlatformOperatorDTO();
             adPlatformDTO.setId(adPlatformBO.getId());
@@ -182,6 +182,7 @@ public class AdPlatformConverter {
         adPlatformDTO.setMerchantStoreId(adPlatformBO.getMerchantStoreId());
         adPlatformDTO.setLinkUrl(adPlatformBO.getLinkUrl());
         adPlatformDTO.setProductId(adPlatformBO.getProductId());
+        adPlatformDTO.setRegionPath(adPlatformBO.getRegionPath());
         return adPlatformDTO;
     }
 }

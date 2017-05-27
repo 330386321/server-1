@@ -335,7 +335,6 @@ public class AdController extends BaseController {
     	    		}
     	    	}
     	    	
-    	    	
     		}
     		return rs;
     	}else{
@@ -417,7 +416,7 @@ public class AdController extends BaseController {
     @ApiOperation(value = "注册并领取红包", notes = "注册并领取红包,[1012|1013|1016]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "registerGetRedPacket", method = RequestMethod.POST)
-    public Result registerGetRedPacket(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterGetRedPacketParam param) {
+    public Result<PraisePointDTO> registerGetRedPacket(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterGetRedPacketParam param) {
     	 Result accountResult = memberService.getMemberByAccount(param.getAccount());
          if (isSuccess(accountResult)) {
              return successGet(ResultCode.RECORD_EXIST);
@@ -438,10 +437,18 @@ public class AdController extends BaseController {
         	 Result<UserRedPacketDTO> userRs= memberService.isRegister(param.getAccount());
          	 Long memberId = userRs.getModel().getMemberId();
     	     String userNum = userRs.getModel().getUserNum();
-    	     rs=adService.getRedPacket(param.getMerchantId(),memberId,userNum);
-    	     fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
+    	     Result<PraisePointDTO> rsPoint=adService.getRedPacket(param.getMerchantId(),memberId,userNum);
+    	     Result<Boolean> result = fansMerchantService.isFansMerchant(param.getMerchantId(), memberId); 
+ 	    	if(isSuccess(result)){
+ 	    		if(!result.getModel()){
+ 	    			fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
+ 	    		}
+ 	    	}
+ 	    	return rsPoint;
+         }else{
+        	 return successGet(ResultCode.FAIL);
          }
-         return rs;
+        
     }
 
     @ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
