@@ -34,7 +34,6 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.alipay.util.AlipayNotify;
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
@@ -117,6 +116,7 @@ public class AlipayNotifyController extends BaseController {
 		String buyer_logon_id = new String(request.getParameter("buyer_logon_id").getBytes("ISO-8859-1"), "UTF-8");
 
 		boolean isSendMsg = false;
+		double dTotalMoney = 0;
 		boolean b = false;
 		int bizFlagInt = 0;
 		String extra[] = null;
@@ -160,30 +160,18 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_logon_id);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
-					double dTotalMoney = Double.valueOf(total_amount).doubleValue();
+					dTotalMoney = Double.valueOf(total_amount).doubleValue();
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						isSendMsg = true;
-						ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(extra[3]);
-						if (recharge.getActualMoney() == dTotalMoney) {
-							result = rechargeService.doHandleRechargeNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+						result = rechargeService.doHandleRechargeNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
-						String bond = bondRet.getModel().toString();
-						double dbond = Double.valueOf(bond).doubleValue();
-						if (dbond == dTotalMoney) {
-							result = depositService.doHandleDepositNotify(param);
-						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
-						}
+						result = depositService.doHandleDepositNotify(param);
+						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
 						double money = order.getModel().getOrderTotalPrice().doubleValue();
@@ -223,7 +211,7 @@ public class AlipayNotifyController extends BaseController {
 				MessageInfoParam messageInfoParam = new MessageInfoParam();
 				messageInfoParam.setRelateId(0L);
 				MessageTempParam messageTempParam = new MessageTempParam();
-				messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_amount)));
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dTotalMoney)));
 				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
 				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 						|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
@@ -293,6 +281,7 @@ public class AlipayNotifyController extends BaseController {
 		aliPayConfigParam.setAlipayInputCharset(externalApiConfig.getAlipayInputCharset());
 
 		boolean isSendMsg = false;
+		double dTotalFee = 0;
 		int bizFlagInt = 0;
 		String extra[] = null;
 		boolean	b = AlipayNotify.verify(params, aliPayConfigParam);
@@ -325,6 +314,7 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_email);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
+					dTotalFee = Double.valueOf(total_fee).doubleValue();
 					bizFlagInt = Integer.valueOf(bizFlag).intValue();
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
@@ -355,7 +345,7 @@ public class AlipayNotifyController extends BaseController {
 				MessageInfoParam messageInfoParam = new MessageInfoParam();
 				messageInfoParam.setRelateId(0L);
 				MessageTempParam messageTempParam = new MessageTempParam();
-				messageTempParam.setRechargeBalance(new BigDecimal(df.format(total_fee)));
+				messageTempParam.setRechargeBalance(new BigDecimal(df.format(dTotalFee)));
 				Result<PropertyPointAndBalanceDTO> moneyResult = propertyService.getPropertyInfoMoney(extra[1]);
 				if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
 					messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RECHARGE_BALANCE);

@@ -97,7 +97,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BigDecimal dbMoney = deposit.getAmount();
 		BigDecimal backMoney = new BigDecimal(param.getTotalFee());
 		if (backMoney.compareTo(dbMoney) != 0) {
-			result.setRet(ResultCode.FAIL);
+			result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
 			result.setMsg("保证金回调金额与保证金表保存的金额不一致(回调金额：" + backMoney + ",表中金额:" + dbMoney + ")");
 			return result;
 		}
