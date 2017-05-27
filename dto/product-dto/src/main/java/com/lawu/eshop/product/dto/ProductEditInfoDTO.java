@@ -1,9 +1,8 @@
 package com.lawu.eshop.product.dto;
 
-import java.util.List;
-import java.util.Map;
-
 import io.swagger.annotations.ApiModelProperty;
+
+import java.util.List;
 
 /**
  * 
@@ -24,6 +23,9 @@ public class ProductEditInfoDTO {
 	
 	@ApiModelProperty(value = "商品分类ID")
     private Long category;
+
+	@ApiModelProperty(value = "商品类别完整ID")
+	private String fullCategoryId;
 	
 	@ApiModelProperty(value = "商品分类全称")
 	private String categoryName;
@@ -124,6 +126,12 @@ public class ProductEditInfoDTO {
 	public void setImageDetailUrl(List<String> imageDetailUrl) {
 		this.imageDetailUrl = imageDetailUrl;
 	}
-	
-	
+
+	public String getFullCategoryId() {
+		return fullCategoryId;
+	}
+
+	public void setFullCategoryId(String fullCategoryId) {
+		this.fullCategoryId = fullCategoryId;
+	}
 }

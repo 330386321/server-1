@@ -41,4 +41,12 @@ public interface ProductCategoryService {
 
 	
 	List<ProductCategoryBO> find(Long parentId);
+
+	/**
+	 * 根据商品类别ID查询商品完整ID
+	 *
+	 * @param id
+	 * @return
+	 */
+	String getFullCategoryId(Integer id);
 }
