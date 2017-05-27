@@ -126,5 +126,13 @@ public interface MerchantService {
      */
     @RequestMapping(value = "merchant/getRongYunInfo/{num}", method = RequestMethod.GET)
     Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
+    
+    /**
+     * 判断用户是否注册
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "merchant/isRegister", method = RequestMethod.GET)
+    Result<Boolean> isRegister(@RequestParam("mobile") String mobile);
 
 }

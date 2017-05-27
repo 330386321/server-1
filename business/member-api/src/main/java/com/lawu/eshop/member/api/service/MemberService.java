@@ -155,5 +155,13 @@ public interface MemberService {
      */
     @RequestMapping(value = "member/getRongYunInfo/{num}", method = RequestMethod.GET)
     Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
+    
+    /**
+     * 判断手机号是否存在
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "member/isExistsMobile", method = RequestMethod.GET)
+    Result<Boolean> isExistsMobile(@RequestParam("mobile") String mobile);
 
 }

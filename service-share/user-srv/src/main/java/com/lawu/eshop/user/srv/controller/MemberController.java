@@ -335,5 +335,17 @@ public class MemberController extends BaseController {
         }
         return successGet(RongYunConverter.convertDTO(rongYunBO));
     }
+    
+    
+    /**
+     * 是否存在手机号
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "isExistsMobile", method = RequestMethod.GET)
+    public Result<Boolean> isExistsMobile(@RequestParam String mobile) {
+    	Boolean flag = memberService.isExistsMobile(mobile);
+        return successGet(flag);
+    }
 
 }

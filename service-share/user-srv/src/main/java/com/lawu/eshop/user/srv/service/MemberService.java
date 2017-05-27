@@ -135,4 +135,13 @@ public interface MemberService {
      * @return
      */
     RongYunBO getRongYunInfoByNum(String num);
+    
+    /**
+     * 判断会员手机号是否存在
+     * @param account
+     * @return
+     */
+    Boolean isExistsMobile(String mobile);
+    
+    
 }

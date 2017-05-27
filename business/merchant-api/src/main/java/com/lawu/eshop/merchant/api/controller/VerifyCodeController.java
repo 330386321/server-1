@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
+import com.lawu.eshop.merchant.api.service.MerchantService;
 import com.lawu.eshop.merchant.api.service.SmsRecordService;
 import com.lawu.eshop.merchant.api.service.VerifyCodeService;
 import com.lawu.eshop.utils.IpUtil;
@@ -38,14 +39,30 @@ public class VerifyCodeController extends BaseController {
 
     @Autowired
     private VerifyCodeService verifyCodeService;
+    
+    @Autowired
+    private MerchantService merchantService;
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014|1028] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "获取短信验证码", notes = "获取短信验证码。[1006|1007|1008|1014|1027|2013] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "sendSms/{mobile}", method = RequestMethod.GET)
     public Result sendSms(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
                           @RequestParam @ApiParam(required = true, value = "图形验证码") String picCode,
                           VerifyCodePurposeEnum purpose) {
+    	Result<Boolean> isRegisterFlag= merchantService.isRegister(mobile);
+    	if(isSuccess(isRegisterFlag)){
+    		if(purpose==VerifyCodePurposeEnum.FIND_LOGIN_PWD){ //找回登录密码
+    			if(!isRegisterFlag.getModel()){
+        			return successGet(ResultCode.MOBILE_IS_NOT_EXIST);
+        		}
+        	}else if(purpose==VerifyCodePurposeEnum.USER_REGISTER){ //注册
+        		if(isRegisterFlag.getModel()){
+        			return successGet(ResultCode.ACCOUNT_EXIST);
+        		}
+        	}
+    		
+    	}
         Result result = verifyCodeService.verifyPicCode(mobile, picCode);
         if (!isSuccess(result)) {
             return successGet(ResultCode.VERIFY_PIC_CODE_FAIL);
@@ -55,12 +72,25 @@ public class VerifyCodeController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "获取短信验证码(无需图形验证码)", notes = "获取短信验证码。[1006|1007|1008|1028] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "获取短信验证码(无需图形验证码)", notes = "获取短信验证码。[1006|1007|1008|1027|2013] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getSmsCode/{mobile}", method = RequestMethod.GET)
     public Result getSmsCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
                              VerifyCodePurposeEnum purpose) {
         String ip = IpUtil.getIpAddress(getRequest());
+        Result<Boolean> isRegisterFlag= merchantService.isRegister(mobile);
+    	if(isSuccess(isRegisterFlag)){
+    		if(purpose==VerifyCodePurposeEnum.FIND_LOGIN_PWD){ //找回登录密码
+    			if(!isRegisterFlag.getModel()){
+        			return successGet(ResultCode.MOBILE_IS_NOT_EXIST);
+        		}
+        	}else if(purpose==VerifyCodePurposeEnum.USER_REGISTER){ //注册
+        		if(isRegisterFlag.getModel()){
+        			return successGet(ResultCode.ACCOUNT_EXIST);
+        		}
+        	}
+    		
+    	}
         return smsRecordService.sendSms(mobile, ip, purpose);
     }
 

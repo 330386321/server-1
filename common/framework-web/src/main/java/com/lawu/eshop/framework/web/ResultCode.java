@@ -59,6 +59,7 @@ public class ResultCode {
     public static final int MEMBER_NO_EXIST = 2010;
     public static final int BANK_CASH_EXIST = 2011;
     public static final int FANS_MERCHANT = 2012;
+    public static final int MOBILE_IS_NOT_EXIST = 2013;
 
 
     // 商品模块代码 3xxx
@@ -199,6 +200,8 @@ public class ResultCode {
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
         ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
+        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
+        
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");

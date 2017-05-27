@@ -113,4 +113,11 @@ public interface MerchantService {
      * @return
      */
     MerchantBO getMerchantByNum(String num);
+    
+    /**
+     * 判断商家是否注册
+     * @param account
+     * @return
+     */
+    Boolean isRegister(String account);
 }

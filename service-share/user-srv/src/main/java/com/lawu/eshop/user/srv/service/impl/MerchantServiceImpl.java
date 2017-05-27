@@ -488,4 +488,16 @@ public class MerchantServiceImpl implements MerchantService {
         return merchantDOS.isEmpty() ? null : MerchantConverter.convertBO(merchantDOS.get(0));
     }
 
+	@Override
+	public Boolean isRegister(String account) {
+		 MerchantDOExample example = new MerchantDOExample();
+		 example.createCriteria().andAccountEqualTo(account);
+		 int count = merchantDOMapper.countByExample(example);
+		 if(count>0){
+			 return true;
+		 }else{
+			 return false;
+		 }
+	}
+
 }

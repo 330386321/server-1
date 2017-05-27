@@ -528,4 +528,16 @@ public class MemberServiceImpl implements MemberService {
         return rongYunBO;
     }
 
+	@Override
+	public Boolean isExistsMobile(String mobile) {
+		MemberDOExample example = new MemberDOExample();
+		 example.createCriteria().andAccountEqualTo(mobile);
+		 int count = memberDOMapper.countByExample(example);
+		 if(count>0){
+			 return true;
+		 }else{
+			 return false;
+		 }
+	}
+
 }

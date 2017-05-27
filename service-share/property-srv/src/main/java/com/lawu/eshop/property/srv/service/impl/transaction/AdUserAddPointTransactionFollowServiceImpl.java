@@ -2,6 +2,7 @@ package com.lawu.eshop.property.srv.service.impl.transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
@@ -26,6 +27,7 @@ public class AdUserAddPointTransactionFollowServiceImpl extends AbstractTransact
     private PropertyInfoDataService propertyInfoDataService;
 
     @Override
+    @Transactional
     public Reply execute(AdPointNotification notification) {
 	    PropertyInfoDataParam param=new PropertyInfoDataParam();
 	    param.setPoint(notification.getPoint().toString());
