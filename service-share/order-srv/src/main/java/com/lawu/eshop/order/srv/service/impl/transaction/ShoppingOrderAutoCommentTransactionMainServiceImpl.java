@@ -8,9 +8,9 @@ import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactio
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
-import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
-import com.lawu.eshop.order.srv.service.ShoppingOrderService;
+import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 
 /**
  * 商品订单自动好评事务-主模块
@@ -23,7 +23,7 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 public class ShoppingOrderAutoCommentTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderAutoCommentNotification, Reply> {
 	
 	@Autowired
-	private ShoppingOrderService shoppingOrderService;
+	private ShoppingOrderItemService shoppingOrderItemService;
 	
 	
 	/**
@@ -32,13 +32,12 @@ public class ShoppingOrderAutoCommentTransactionMainServiceImpl extends Abstract
     @Override
     public ShoppingOrderAutoCommentNotification selectNotification(Long shoppingOrderItemId) {
     	ShoppingOrderAutoCommentNotification rtn = new ShoppingOrderAutoCommentNotification();
-    	
-    	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId, false);
-    	rtn.setMemberId(shoppingOrderExtendBO.getMemberId());
-    	rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
-    	rtn.setProductId(shoppingOrderExtendBO.getItems().get(0).getProductId());
-    	rtn.setShoppingOrderItem(shoppingOrderExtendBO.getItems().get(0).getId());
-    	
+    	ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingOrderItemService.getByComment(shoppingOrderItemId);
+    	rtn.setMemberId(shoppingOrderItemExtendBO.getShoppingOrder().getMemberId());
+    	rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());
+    	rtn.setProductId(shoppingOrderItemExtendBO.getProductId());
+    	rtn.setShoppingOrderItem(shoppingOrderItemExtendBO.getId());
+    	rtn.setProductModelId(shoppingOrderItemExtendBO.getProductModelId());
         return rtn;
     }
 }

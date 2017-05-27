@@ -1077,31 +1077,22 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Override
-	public ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId, boolean isAll) {
+	public ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId) {
 		ShoppingOrderExtendBO rtn = null;
 
-		if (isAll) {
-			ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-			shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-			shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-			shoppingOrderExtendDOExample.createCriteria().andSOIIdEqualTo(shoppingOrderItemId);
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.createCriteria().andSOIIdEqualTo(shoppingOrderItemId);
 
-			List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
-			if (shoppingOrderExtendDOList == null || shoppingOrderExtendDOList.isEmpty()) {
-				return rtn;
-			}
-
-			rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDOList.get(0));
-		} else {
-			ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingOrderItemId);
-			if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
-				return rtn;
-			}
-
-			rtn = get(shoppingOrderItemDO.getShoppingOrderId());
+		if (shoppingOrderExtendDOList == null || shoppingOrderExtendDOList.isEmpty()) {
+			return rtn;
 		}
 
+		rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDOList.get(0));
+		
 		return rtn;
 	}
 

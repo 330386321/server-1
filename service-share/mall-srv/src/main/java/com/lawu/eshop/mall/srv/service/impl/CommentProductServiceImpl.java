@@ -271,6 +271,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 		productDO.setMemberId(notification.getMemberId());
 		productDO.setMerchantId(notification.getMerchantId());
 		productDO.setProductId(notification.getProductId());
+		productDO.setProductModelId(notification.getProductModelId());
 		productDO.setOrderItemId(notification.getShoppingOrderItem());
 		productDO.setIsAnonymous(CommentAnonymousEnum.COMMENT_ANONYMOUS.val);// 匿名
 		productDO.setContent("好评");

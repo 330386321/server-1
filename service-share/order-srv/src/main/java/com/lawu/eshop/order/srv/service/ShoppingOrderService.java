@@ -198,7 +198,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId, boolean isAll);
+	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId);
 	
 	/**
 	 * 自动取消为付款的订单
