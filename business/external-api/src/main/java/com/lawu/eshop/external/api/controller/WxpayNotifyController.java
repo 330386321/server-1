@@ -17,7 +17,6 @@ import com.lawu.eshop.order.dto.ShoppingOrderMoneyDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.pay.sdk.weixin.base.PayCommonUtil;
 import com.lawu.eshop.pay.sdk.weixin.base.XMLUtil;
-import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
