@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,12 +43,15 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
+import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.AdViewService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
+import com.lawu.eshop.member.api.service.MerchantService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.PropertyInfoDataService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
@@ -57,12 +61,15 @@ import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
+import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.utils.DateUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -108,6 +115,15 @@ public class AdController extends BaseController {
     
     @Autowired
     private VerifyCodeService verifyCodeService;
+    
+    @Autowired
+    private InviterService inviterService;
+    
+    @Autowired
+    private MemberApiConfig memberApiConfig;
+    
+    @Autowired
+    private MerchantService merchantService;
 
 
 
@@ -413,11 +429,21 @@ public class AdController extends BaseController {
     }
 
     @Audit(date = "2017-05-23", reviewer = "孙林青")
-    @ApiOperation(value = "注册并领取红包", notes = "注册并领取红包,[1012|1013|1016]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "注册并领取红包", notes = "注册并领取红包,[1012|1013|1016|1025|1026|1027]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "registerGetRedPacket", method = RequestMethod.POST)
     public Result<PraisePointDTO> registerGetRedPacket(@ModelAttribute @ApiParam(required = true, value = "注册信息") RegisterGetRedPacketParam param) {
-    	 Result accountResult = memberService.getMemberByAccount(param.getAccount());
+    	 RegisterRealParam registerRealParam = new RegisterRealParam();
+         Result<MerchantBaseInfoDTO> inviterResult = merchantService.getMerchantById(param.getMerchantId());
+         if (!isSuccess(inviterResult)) {
+             return successGet(ResultCode.INVITER_NO_EXIST);
+         }
+         registerRealParam.setInviterId(param.getMerchantId());
+         registerRealParam.setUserNum(inviterResult.getModel().getUserNum());
+         Result accountResult = memberService.getMemberByAccount(param.getAccount());
+         if (isSuccess(accountResult)) {
+             return successGet(ResultCode.ACCOUNT_EXIST);
+         }
          if (isSuccess(accountResult)) {
              return successGet(ResultCode.RECORD_EXIST);
          }
@@ -429,7 +455,9 @@ public class AdController extends BaseController {
          if (!param.getAccount().equals(verifyCodeDTO.getMobile())) {
              return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
          }
-         RegisterRealParam registerRealParam = new RegisterRealParam();
+         if(DateUtil.smsIsOverdue(verifyCodeDTO.getGmtCreate(), memberApiConfig.getSmsValidMinutes())){
+             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
+         }
          registerRealParam.setAccount(param.getAccount());
          registerRealParam.setPwd(param.getPwd());
          Result rs= memberService.register(registerRealParam);

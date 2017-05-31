@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.param;
 
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
 public class RegisterGetRedPacketParam {
@@ -19,6 +20,7 @@ public class RegisterGetRedPacketParam {
 	@ApiParam (name="merchantId",required = true, value = "商家id")
 	private Long merchantId;
 
+	
 	public String getAccount() {
 		return account;
 	}
@@ -58,7 +60,7 @@ public class RegisterGetRedPacketParam {
 	public void setVerifyCodeId(Long verifyCodeId) {
 		this.verifyCodeId = verifyCodeId;
 	}
-	
+
 	
 	
 

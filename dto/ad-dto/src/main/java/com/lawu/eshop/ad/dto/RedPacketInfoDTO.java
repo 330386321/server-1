@@ -14,6 +14,9 @@ public class RedPacketInfoDTO {
 	
 	@ApiModelProperty(value = "商家名称")
 	private String name;
+	
+	@ApiModelProperty(value = "商家账号")
+	private String inviterAccount;
 
 	public BigDecimal getPoint() {
 		return point;
@@ -37,6 +40,14 @@ public class RedPacketInfoDTO {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getInviterAccount() {
+		return inviterAccount;
+	}
+
+	public void setInviterAccount(String inviterAccount) {
+		this.inviterAccount = inviterAccount;
 	}
 	
 	
