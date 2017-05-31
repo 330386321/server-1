@@ -117,9 +117,6 @@ public class AdController extends BaseController {
     private VerifyCodeService verifyCodeService;
     
     @Autowired
-    private InviterService inviterService;
-    
-    @Autowired
     private MemberApiConfig memberApiConfig;
     
     @Autowired
@@ -188,7 +185,11 @@ public class AdController extends BaseController {
         		adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
             	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
             	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-            	adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+            	if(manageType.getModel()!=null){
+         			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+         		}else{
+     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
+     			}
         	}
         	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
         	if(isSuccess(mpRs)){
