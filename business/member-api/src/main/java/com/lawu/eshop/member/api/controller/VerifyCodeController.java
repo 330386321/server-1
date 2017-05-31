@@ -106,7 +106,7 @@ public class VerifyCodeController extends BaseController {
     public void getPicCode(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile, VerifyCodePurposeEnum purpose) throws IOException {
         BufferedImage buffImg = new BufferedImage(120, 40, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = buffImg.createGraphics();
-        String picCode = VerifyCodeUtil.getVerifyCode(g);
+        String picCode = VerifyCodeUtil.getVerifyCode(g); 
         verifyCodeService.savePicCode(mobile, picCode, purpose);
 
         HttpServletResponse response = getResponse();

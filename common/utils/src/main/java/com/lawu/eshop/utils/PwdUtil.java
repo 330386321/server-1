@@ -71,7 +71,6 @@ public class PwdUtil {
      * 校验密码是否正确 
      */  
     public static boolean verify(String password, String md5) {
-    	System.out.println(md5.length());
         char[] cs1 = new char[32];  
         char[] cs2 = new char[16];  
         for (int i = 0; i < 48; i += 3) {  
