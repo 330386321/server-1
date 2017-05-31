@@ -696,30 +696,24 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
 			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
 		} else {
-			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
-		}
-
-		// 后台判断的类型是否跟用户选择的一致
-		boolean isMatches = false;
-		if (shoppingRefundTypeEnum.equals(param.getType())) {
-			isMatches = true;
+			// 判断当前订单是否需要物流
+			if (shoppingOrderDO.getIsNeedsLogistics()) {
+				shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
+			} else {
+				shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
+			}
 		}
 
 		/*
 		 * 如果卖家支持七天无理由退货，跳过商家确认这个阶段
+		 * 后台判断的类型是否跟用户选择的一致
 		 */
-		if (shoppingOrderDO.getIsNoReasonReturn() && isMatches) {
+		if (shoppingOrderDO.getIsNoReasonReturn() && shoppingRefundTypeEnum.equals(param.getType())) {
 			// 订单是否需要物流
-			if (!shoppingOrderDO.getIsNeedsLogistics()) {
+			if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundTypeEnum)) {
 				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
-			} else {
-
-				// 判断订单的当前状态,如果订单还没有发货，退款状态直接是待退款，不需要填写物流
-				if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) || shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())) {
-					shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
-				} else if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
-					shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
-				}
+			} else if (ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundTypeEnum)) {
+				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
 			}
 		} else {
 			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_CONFIRMED.getValue());
