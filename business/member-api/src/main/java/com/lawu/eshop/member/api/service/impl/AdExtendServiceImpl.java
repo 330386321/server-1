@@ -97,9 +97,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		}
      		if(manageType.getModel()!=null){
      			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-     		}else{
- 				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
- 			}
+     		}
      		Date date=new Date();
      		Long time=adDTO.getBeginTime().getTime()-date.getTime();
      		if(time>0){
@@ -156,8 +154,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
          		if(isSuccess(manageType)){
          			if(manageType.getModel()!=null){
          				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-         			}else{
-         				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
          			}
          		}
          		Date date=new Date();
@@ -193,9 +189,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		}
      		if(manageType.getModel()!=null){
      			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-     		}else{
-     			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
-    		}
+     		}
      		praise.setId(adDTO.getId());
 			praise.setTitle(adDTO.getTitle());
 			praise.setBeginTime(adDTO.getBeginTime());
@@ -231,9 +225,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
  		}
  		if(manageType.getModel()!=null){
  			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
- 		}else{
- 			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
-		}
+ 		}
  		praise.setId(ad.getId());
 		praise.setTitle(ad.getTitle());
 		praise.setBeginTime(ad.getBeginTime());
@@ -364,8 +356,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		if(isSuccess(manageType)){
      			if(manageType.getModel()!=null){
      				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-     			}else{
-     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
      			}
      		}
      		Date date=new Date();
@@ -413,8 +403,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		if(isSuccess(manageType)){
      			if(manageType.getModel()!=null){
      				adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-     			}else{
-     				adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
      			}
      		}
 			adFlatVideoDTO.setId(adDTO.getId());

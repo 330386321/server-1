@@ -187,9 +187,7 @@ public class AdController extends BaseController {
             	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
             	if(manageType.getModel()!=null){
          			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-         		}else{
-     				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.valueOf(""));
-     			}
+         		}
         	}
         	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
         	if(isSuccess(mpRs)){

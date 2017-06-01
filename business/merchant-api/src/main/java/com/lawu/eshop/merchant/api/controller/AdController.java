@@ -208,7 +208,7 @@ public class AdController extends BaseController {
         	adParam.setTitle(adDTO.getTitle());
         	adParam.setAdCount(adDTO.getAdCount());
         	adParam.setAreas(adDTO.getAreas());
-        	adParam.setBeginTime(beginTime);
+        	adParam.setBeginTime(beginTime);  
         	adParam.setContent(adDTO.getContent());
         	adParam.setPoint(adDTO.getPoint());
         	adParam.setTotalPoint(adDTO.getTotalPoint());
