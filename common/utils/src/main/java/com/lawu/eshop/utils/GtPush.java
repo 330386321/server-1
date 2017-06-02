@@ -229,12 +229,12 @@ public class GtPush {
     }
 
 
-    public static void main(String[] args) throws Exception {
-    /*	GtPush p = new GtPush();
+  /*  public static void main(String[] args) throws Exception {
+    	GtPush p = new GtPush();
 		JSONObject json = new JSONObject();
-		json.put("title","测试标题3");
-		json.put("content","测试内容3");
-		System.out.println(p.sendMessageToCid(json.toString(),"97b4f9aa7d216a4e2e631f0f8c09a633", "测试标题2"));
-*/
-    }
+		json.put("title","积分充值");
+		json.put("content","充值10块钱");
+		json.put("type","MESSAGE_TYPE_RECHARGE_BALANCE");
+		System.out.println(p.sendMessageToCidCustoms(json.toString(),"7025e9871b8450137cdb0df202688d64", "积分充值"));
+    }*/
 }
