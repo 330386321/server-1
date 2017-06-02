@@ -807,32 +807,44 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			if (ShoppingRefundTypeEnum.RETURN_REFUND.getValue().equals(shoppingOrderItemExtendDO.getShoppingRefundDetail().getType())) {
 				// 发送次数为0，发送站内信和推送
 				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(firstRemindTime), Calendar.DAY_OF_YEAR);
-				if (isExceeds && (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0)) {
-					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				if (!isExceeds) {
+					continue;
+				}
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+					toBeRefundRemind(shoppingOrderItemExtendDO);
+					continue;
 				}
 				
 				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(secondRemindTime), Calendar.DAY_OF_YEAR);
-				if (isExceeds && (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 1)) {
-					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				if (!isExceeds) {
+					continue;
+				}
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 1) {
+					toBeRefundRemind(shoppingOrderItemExtendDO);
+					continue;
 				}
 				
 				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 				// 如果商家未处理时间超过退款时间，平台自动退款
 				if (isExceeds) {
-					agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
+					agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId(), true);
 				}
 			} else if (ShoppingRefundTypeEnum.REFUND.getValue().equals(shoppingOrderItemExtendDO.getShoppingRefundDetail().getType())) {
 				// 如果退款类型为退款
 				// 发送次数为0，发送站内信和推送
 				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(remindTime), Calendar.DAY_OF_YEAR);
-				if (isExceeds && (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0)) {
+				if (!isExceeds) {
+					continue;
+				}
+				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
 					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+					continue;
 				}
 				
 				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(confirmedRefundTime), Calendar.DAY_OF_YEAR);
 				// 如果商家未处理时间超过退款时间，平台自动退款
 				if (isExceeds) {
-					agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
+					agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId(), true);
 				}
 			}
 		}
@@ -853,9 +865,10 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		// 用户申请退款，提醒商家处理
 		ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
-		notification.setMemberNum(shoppingOrderItemExtendDO.getShoppingOrder().getMemberNum());
-		notification.setMerchantNum(shoppingOrderItemExtendDO.getShoppingOrder().getMerchantNum());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND, notification);
 		
 	}
@@ -889,10 +902,29 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 商家填写退货地址，提醒买家退货
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
 		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
-		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO
-				.getId());
+		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND, notification);
+	}
+	
+	@Transactional
+	private void toBeRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+		// 更新发送次数，但是不更新更新时间字段
+		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
+		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
+		ShoppingOrderItemDO.setSendTime(sendTime);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		
+		// 用户填写退货物流，提醒买家退款
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
+		ShoppingRefundToBeReturnRemindNotification notification = new ShoppingRefundToBeReturnRemindNotification();
+		notification.setShoppingOrderItemId(shoppingOrderItemExtendDO.getId());
+		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
+		notification.setMemberNum(shoppingOrderDO.getMemberNum());
+		notification.setOrderNum(shoppingOrderDO.getOrderNum());
+		notification.setWaybillNum(shoppingOrderItemExtendDO.getShoppingRefundDetail().getWaybillNum());
+		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_RETURN_REMIND, notification);
 	}
 	
 	@Transactional

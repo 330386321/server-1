@@ -9,7 +9,7 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 
 /**
- * 自动取消为付款的订单
+ * 自动提醒发货
  * 
  * @author Sunny
  * @date 2017年4月17日
