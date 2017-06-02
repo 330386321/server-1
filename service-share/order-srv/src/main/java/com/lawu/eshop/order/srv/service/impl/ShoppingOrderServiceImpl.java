@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -85,7 +87,9 @@ import com.lawu.eshop.utils.DateUtil;
 
 @Service
 public class ShoppingOrderServiceImpl implements ShoppingOrderService {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderServiceImpl.class);
+	
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
 
@@ -1434,7 +1438,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		criteria.andGmtTransactionAddDayLessThanOrEqualTo(Integer.valueOf(refundRequestTime), new Date());
 		
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
-
+		
+		logger.info("需要释放冻结资金的订单数量:" + shoppingOrderDOList.size());
+		
 		boolean is_done = true;
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			// 判断订单下的所有订单项是否有正在退款中的
