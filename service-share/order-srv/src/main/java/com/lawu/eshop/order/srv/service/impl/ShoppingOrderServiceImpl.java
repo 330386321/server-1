@@ -1447,6 +1447,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			
 			if (is_done) {
 				item.setIsDone(true);
+				item.setGmtModified(new Date());
 				shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
 				
 				shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(item.getId());
