@@ -55,9 +55,9 @@ public class TransactionInitializing implements InitializingBean, ApplicationCon
 
                 Advised advised = (Advised) applicationContext.getBean(mainTransactionServiceBean.getKey());
                 SingletonTargetSource singTarget = (SingletonTargetSource) advised.getTargetSource();
-                transactionMainService = (TransactionMainService) singTarget.getTarget();
+                //transactionMainService = (TransactionMainService) singTarget.getTarget();
 
-                annotation = transactionMainService.getClass().getAnnotation(CompensatingTransactionMain.class);
+                annotation = ((TransactionMainService) singTarget.getTarget()).getClass().getAnnotation(CompensatingTransactionMain.class);
             }
 
             TransactionMainService finalTransactionMainService = transactionMainService;
@@ -88,8 +88,8 @@ public class TransactionInitializing implements InitializingBean, ApplicationCon
 
                 Advised advised = (Advised) applicationContext.getBean(followTransactionServiceBean.getKey());
                 SingletonTargetSource singTarget = (SingletonTargetSource) advised.getTargetSource();
-                transactionFollowService = (TransactionFollowService) singTarget.getTarget();
-                annotation = transactionFollowService.getClass().getAnnotation(CompensatingTransactionFollow.class);
+                //transactionFollowService = (TransactionFollowService) singTarget.getTarget();
+                annotation = ((TransactionFollowService) singTarget.getTarget()).getClass().getAnnotation(CompensatingTransactionFollow.class);
             }
 
             TransactionFollowService finalTransactionFollowService = transactionFollowService;
