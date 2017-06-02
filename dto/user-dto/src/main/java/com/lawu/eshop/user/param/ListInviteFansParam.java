@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -7,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author meishuquan
  * @date 2017/4/26.
  */
-public class ListInviteFansParam {
+public class ListInviteFansParam extends AbstractPageParam{
 
     @ApiModelProperty(value = "区域路径，全国为空", required = false)
     private String regionPath;

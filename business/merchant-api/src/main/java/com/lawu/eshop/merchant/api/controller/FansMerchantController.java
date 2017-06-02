@@ -30,7 +30,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -61,7 +60,7 @@ public class FansMerchantController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listInviteFans", method = RequestMethod.GET)
-    public Result<List<FansMerchantDTO>> listInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<Page<FansMerchantDTO>> listInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                         @ModelAttribute @ApiParam ListInviteFansParam param) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         return fansMerchantService.listInviteFans(merchantId, param);

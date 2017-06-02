@@ -3,7 +3,6 @@ package com.lawu.eshop.user.srv.controller;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
@@ -35,12 +34,13 @@ public class FansMerchantController extends BaseController {
      * @return
      */
     @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.POST)
-    public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansParam param) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, param);
-        if (fansMerchantBOList == null || fansMerchantBOList.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
+    public Result<Page<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansParam param) {
+        Page<FansMerchantBO> fansMerchantBOPage = fansMerchantService.listInviteFans(merchantId, param);
+        Page<FansMerchantDTO> page = new Page<>();
+        page.setCurrentPage(fansMerchantBOPage.getCurrentPage());
+        page.setTotalCount(fansMerchantBOPage.getTotalCount());
+        page.setRecords(FansMerchantConverter.convertDTO(fansMerchantBOPage.getRecords()));
+        return successGet(page);
     }
 
     /**

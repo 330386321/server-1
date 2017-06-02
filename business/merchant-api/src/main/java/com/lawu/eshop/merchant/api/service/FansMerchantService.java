@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.List;
-
 /**
  * @author meishuquan
  * @date 2017/4/6.
@@ -28,7 +26,7 @@ public interface FansMerchantService {
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "fansMerchant/listInviteFans/{merchantId}")
-    Result<List<FansMerchantDTO>> listInviteFans(@PathVariable("merchantId") Long merchantId, @ModelAttribute ListInviteFansParam param);
+    Result<Page<FansMerchantDTO>> listInviteFans(@PathVariable("merchantId") Long merchantId, @ModelAttribute ListInviteFansParam param);
 
     /**
      * 粉丝列表

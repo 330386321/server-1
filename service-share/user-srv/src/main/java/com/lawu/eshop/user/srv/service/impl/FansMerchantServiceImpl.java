@@ -36,7 +36,7 @@ public class FansMerchantServiceImpl implements FansMerchantService {
     private FansMerchantDOMapper fansMerchantDOMapper;
 
     @Override
-    public List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param) {
+    public Page<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param) {
         ListInviteFansRealParam listInviteFansRealParam = new ListInviteFansRealParam();
         listInviteFansRealParam.setMerchantId(merchantId);
         listInviteFansRealParam.setRegionPath(param.getRegionPath());
@@ -45,8 +45,14 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listInviteFansRealParam.setStartAge(param.getStartAge());
         listInviteFansRealParam.setEndAge(param.getEndAge());
         listInviteFansRealParam.setInviteCount(param.getInviteCount());
+        listInviteFansRealParam.setCurrentPage(param.getCurrentPage());
+        listInviteFansRealParam.setPageSize(param.getPageSize());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(listInviteFansRealParam);
-        return FansMerchantConverter.convertBO(fansMerchantDOViewList);
+        Page<FansMerchantBO> page = new Page<>();
+        page.setCurrentPage(param.getCurrentPage());
+        page.setTotalCount(fansMerchantDOMapperExtend.countInviteFans(listInviteFansRealParam));
+        page.setRecords(FansMerchantConverter.convertBO(fansMerchantDOViewList));
+        return page;
     }
 
     @Override

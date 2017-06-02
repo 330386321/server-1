@@ -21,7 +21,7 @@ public interface FansMerchantService {
      * @param param
      * @return
      */
-    List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param);
+    Page<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param);
 
     /**
      * 查询粉丝列表

@@ -1,10 +1,12 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.framework.core.page.AbstractPageParam;
+
 /**
  * @author meishuquan
  * @date 2017/4/26.
  */
-public class ListInviteFansRealParam {
+public class ListInviteFansRealParam extends AbstractPageParam{
 
     private Long merchantId;
 
