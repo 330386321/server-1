@@ -1,20 +1,24 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * E赚实体转化
