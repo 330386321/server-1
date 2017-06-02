@@ -17,6 +17,8 @@ public interface FansMerchantDOMapperExtend {
 
 	List<FansMerchantDOView> listInviteFans(ListInviteFansRealParam listInviteFansRealParam);
 
+	List<FansMerchantDOView> pageListInviteFans(ListInviteFansRealParam listInviteFansRealParam);
+
 	int countInviteFans(ListInviteFansRealParam listInviteFansRealParam);
 
 	List<FansMerchantDOView> listFans(ListFansRealParam listFansRealParam);
