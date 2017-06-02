@@ -3,8 +3,9 @@ package com.lawu.eshop.ad.constants;
 public enum ManageTypeEnum {
 	
 
-    ENTITY((byte) 0x01),      //实体
-    COMMON((byte) 0x02);     //普通
+   
+    COMMON((byte) 0x01),     //普通
+	ENTITY((byte) 0x02);      //实体
     public Byte val;
 
     ManageTypeEnum(Byte val) {

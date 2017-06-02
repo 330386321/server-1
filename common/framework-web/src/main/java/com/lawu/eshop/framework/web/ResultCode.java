@@ -43,6 +43,7 @@ public class ResultCode {
     public static final int VERIFY_SMS_CODE_OVERTIME = 1025;
     public static final int INVITER_NO_EXIST = 1026;
     public static final int ACCOUNT_EXIST = 1027;
+    public static final int SMS_SEND_FAIL = 1028;
 
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
@@ -58,6 +59,7 @@ public class ResultCode {
     public static final int MEMBER_NO_EXIST = 2010;
     public static final int BANK_CASH_EXIST = 2011;
     public static final int FANS_MERCHANT = 2012;
+    public static final int MOBILE_IS_NOT_EXIST = 2013;
 
 
     // 商品模块代码 3xxx
@@ -182,6 +184,7 @@ public class ResultCode {
         ResultCode.messageMap.put(VERIFY_SMS_CODE_OVERTIME, "短信验证码超时");
         ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在，请重新输入");
         ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
+        ResultCode.messageMap.put(SMS_SEND_FAIL, "短信验证码发送失败，请稍后重试！");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
@@ -197,6 +200,8 @@ public class ResultCode {
         ResultCode.messageMap.put(MEMBER_NO_EXIST, "用户不存在");
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
         ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
+        ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
+        
 
         //运营
         ResultCode.messageMap.put(USER_NOT_LOGIN, "用户未登录");

@@ -1,5 +1,13 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
@@ -13,13 +21,6 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingOrderItemExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
@@ -204,5 +205,22 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		rtn.setRecords(ShoppingOrderItemExtendConverter.convert(shoppingOrderItemExtendDOList));
 		
 		return rtn;
+	}
+
+	/**
+	 * 查询购物订单项以及订单资料
+	 * 用于发送评论资料
+	 * 
+	 * @param id 购物订单项id
+	 * @return
+	 */
+	@Override
+	public ShoppingOrderItemExtendBO getByComment(Long id) {
+		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
+		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
+		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
+		shoppingOrderItemExtendDOExampleCriteria.andIdEqualTo(id);
+		List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
+		return shoppingOrderItemExtendDOList.isEmpty() ? null : ShoppingOrderItemExtendConverter.convert(shoppingOrderItemExtendDOList.get(0));
 	}
 }

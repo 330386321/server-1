@@ -1,7 +1,6 @@
 package com.lawu.eshop.product.srv.bo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 产品类别BO
@@ -14,6 +13,7 @@ public class ProductEditInfoBO {
     private Long id;
     private Long merchantId;
     private Long category;
+	private String fullCategoryId;
     private String categoryName;
     private String name;
     private String content;
@@ -98,5 +98,12 @@ public class ProductEditInfoBO {
 	public void setImageDetailUrl(List<String> imageDetailUrl) {
 		this.imageDetailUrl = imageDetailUrl;
 	}
-	
+
+	public String getFullCategoryId() {
+		return fullCategoryId;
+	}
+
+	public void setFullCategoryId(String fullCategoryId) {
+		this.fullCategoryId = fullCategoryId;
+	}
 }

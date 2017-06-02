@@ -63,8 +63,8 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-
-			} else
+				return;
+			}
 			// 用户付款成功提示买家新增一个订单
 			if (MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER.equals(tags)) {
 				ShoppingOrderNoPaymentNotification notification = (ShoppingOrderNoPaymentNotification) message;
@@ -81,7 +81,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-			} else
+				return;
+			}
+			
 			// 用户申请退款，提示商家处理
 			if (MqConstant.TAG_TO_BE_CONFIRMED_FOR_REFUND_REMIND.equals(tags)) {
 				ShoppingRefundToBeConfirmedForRefundRemindNotification notification = (ShoppingRefundToBeConfirmedForRefundRemindNotification) message;
@@ -98,7 +100,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
-			} else 
+				return;
+			}
+			
 			// 商家拒绝退款提醒买家
 			if (MqConstant.TAG_REFUSE_REFUND_REMIND.equals(tags)) {
 				ShoppingRefundRefuseRefundRemindNotification notification = (ShoppingRefundRefuseRefundRemindNotification) message;
@@ -115,7 +119,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-			} else 
+				return;
+			}
+			
 			// 商家填写退货地址，提醒买家退货
 			if (MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND.equals(tags)) {
 				ShoppingRefundFillReturnAddressRemindNotification notification = (ShoppingRefundFillReturnAddressRemindNotification) message;
@@ -132,7 +138,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-			} else 
+				return;
+			}
+			
 			// 商家退款成功，提醒买家
 			if (MqConstant.TAG_TO_BE_REFUND_REMIND.equals(tags)) {
 				ShoppingRefundToBeRefundRemindNotification notification = (ShoppingRefundToBeRefundRemindNotification) message;
@@ -150,7 +158,8 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-			} else 
+				return;
+			}
 			// 用户填写退货物流，提醒买家退款
 			if (MqConstant.TAG_TO_BE_RETURN_REMIND.equals(tags)) {
 				ShoppingRefundToBeReturnRemindNotification notification = (ShoppingRefundToBeReturnRemindNotification) message;
@@ -168,8 +177,10 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
-			} else
+				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				return;
+			}
+			
 			// 用户付款，商家没有发货，如果超过五天，每隔一天提醒一次
 			if (MqConstant.TAG_REMIND_SHIPMENTS.equals(tags)) {
 				ShoppingOrderRemindShipmentsNotification notification = (ShoppingOrderRemindShipmentsNotification) message;

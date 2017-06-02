@@ -64,4 +64,12 @@ public interface ShoppingOrderItemService {
 	 */
 	Page<ShoppingOrderItemExtendBO> selectRefundPage(ShoppingRefundQueryForeignParam param);
 	
+	/**
+	 * 查询购物订单项以及订单资料
+	 * 用于发送评论资料
+	 * 
+	 * @param id 购物订单项id
+	 * @return
+	 */
+	ShoppingOrderItemExtendBO getByComment(Long id);
 }

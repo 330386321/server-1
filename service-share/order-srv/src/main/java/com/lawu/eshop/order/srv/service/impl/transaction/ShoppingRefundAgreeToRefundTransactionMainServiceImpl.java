@@ -40,7 +40,7 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends Abstr
     public ShoppingRefundAgreeToRefundNotification selectNotification(Long shoppingOrderItemId) {
     	ShoppingRefundAgreeToRefundNotification rtn = new ShoppingRefundAgreeToRefundNotification();
     	
-    	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId, true);
+    	ShoppingOrderExtendBO shoppingOrderExtendBO = shoppingOrderService.getByShoppingOrderItemId(shoppingOrderItemId);
     	
     	if (shoppingOrderExtendBO == null || shoppingOrderExtendBO.getId() == null || shoppingOrderExtendBO.getId() <= 0) {
     		return rtn;

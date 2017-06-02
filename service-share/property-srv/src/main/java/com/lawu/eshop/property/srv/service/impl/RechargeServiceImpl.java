@@ -107,7 +107,7 @@ public class RechargeServiceImpl implements RechargeService {
 		BigDecimal dbMoney = recharge.getRechargeMoney();
 		BigDecimal backMoney = new BigDecimal(param.getTotalFee());
 		if (backMoney.compareTo(dbMoney) != 0) {
-			result.setRet(ResultCode.FAIL);
+			result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
 			result.setMsg("充值回调金额与充值表保存的金额不一致(回调金额：" + backMoney + ",表中金额:" + dbMoney + ")");
 			return result;
 		}

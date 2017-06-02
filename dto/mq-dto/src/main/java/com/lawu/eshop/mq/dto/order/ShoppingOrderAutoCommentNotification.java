@@ -30,6 +30,11 @@ public class ShoppingOrderAutoCommentNotification extends Notification {
     * 商品id
     */
     private Long productId;
+    
+	/**
+	 * 商品型号id
+	 */
+	private Long productModelId;
 
 	public Long getShoppingOrderItem() {
 		return shoppingOrderItem;
@@ -61,6 +66,14 @@ public class ShoppingOrderAutoCommentNotification extends Notification {
 
 	public void setProductId(Long productId) {
 		this.productId = productId;
+	}
+
+	public Long getProductModelId() {
+		return productModelId;
+	}
+
+	public void setProductModelId(Long productModelId) {
+		this.productModelId = productModelId;
 	}
 	
 }

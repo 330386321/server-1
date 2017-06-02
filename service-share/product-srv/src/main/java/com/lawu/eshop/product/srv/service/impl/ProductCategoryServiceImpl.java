@@ -7,6 +7,7 @@ import com.lawu.eshop.product.srv.domain.ProductCategoryeDOExample;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.utils.DataTransUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -111,6 +112,26 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 		example.createCriteria().andStatueEqualTo(true).andParentIdEqualTo(parentId.intValue());
 		List<ProductCategoryeDO> productCategoryeDOS = productCategoryeDOMapper.selectByExample(example);
 		return productCategoryeDOS.isEmpty() ? new ArrayList<ProductCategoryBO>() : ProductCategoryConverter.convertBOS(productCategoryeDOS);
+	}
+
+	@Override
+	public String getFullCategoryId(Integer id) {
+		String fullCategoryId = "";
+		ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(id);
+		if(productCategoryeDO == null){
+			return fullCategoryId;
+		}
+
+		while (true){
+			fullCategoryId = fullCategoryId + productCategoryeDO.getId() + ",";
+			productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productCategoryeDO.getParentId());
+			if(productCategoryeDO == null){
+				if(StringUtils.isNotEmpty(fullCategoryId)){
+					fullCategoryId = fullCategoryId.substring(0, fullCategoryId.length() - 1);
+				}
+				return fullCategoryId;
+			}
+		}
 	}
 
 }

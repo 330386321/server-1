@@ -125,6 +125,7 @@ public class ProductController extends BaseController {
         ProductEditInfoDTO productDTO = new ProductEditInfoDTO();
         BeanUtil.copyProperties(productBO, productDTO);
         productDTO.setAllowRefund(productBO.isAllowRefund());
+        productDTO.setFullCategoryId(productBO.getFullCategoryId());
         return successCreated(productDTO);
     }
 

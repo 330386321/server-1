@@ -371,7 +371,9 @@ public class ProductServiceImpl implements ProductService {
         productEditInfoBO.setImageDetailUrl(imageDetails);
 
         String category = productCategoryService.getFullName(productDO.getCategoryId());
+        String fullCategoryId = productCategoryService.getFullCategoryId(productDO.getCategoryId());
         productEditInfoBO.setCategoryName(category);
+        productEditInfoBO.setFullCategoryId(fullCategoryId);
 
         return productEditInfoBO;
     }

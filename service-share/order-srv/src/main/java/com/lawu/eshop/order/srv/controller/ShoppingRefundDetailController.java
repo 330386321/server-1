@@ -121,8 +121,15 @@ public class ShoppingRefundDetailController extends BaseController {
 				// 4.等待商家退款，自动退款
 				
 				// 自动退款时间
-				time = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
-				date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundDetailBO.getType())) {
+					// 如果退款类型为退货退款
+					time = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
+					date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				} else if ((ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundDetailBO.getType()))) {
+					// 如果退款类型为退款
+					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
+					date = DateUtil.add(shoppingRefundDetailBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
+				}
 				countdown = DateUtil.interval(new Date(), date, Calendar.MILLISECOND);
 				break;
 			case REFUND_FAILED:

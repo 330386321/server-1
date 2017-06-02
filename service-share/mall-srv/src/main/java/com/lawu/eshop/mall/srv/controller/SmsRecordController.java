@@ -66,7 +66,7 @@ public class SmsRecordController extends BaseController {
         Map<String, Object> returnMap = SmsUtil.sendSms(smsCode, mobile, ip, smsConfigParam);
         smsRecordService.updateSmsRecordResult(smsRecordBO.getId(),(Boolean) returnMap.get("sendCode"),returnMap.get("sendResult").toString());
         if (!(Boolean) returnMap.get("sendCode")) {
-            return successGet(ResultCode.FAIL);
+            return successGet(ResultCode.SMS_SEND_FAIL);
         }
         return successCreated(verifyCodeDTO);
     }

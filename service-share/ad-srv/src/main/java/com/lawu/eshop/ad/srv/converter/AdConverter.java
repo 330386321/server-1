@@ -247,7 +247,6 @@ public class AdConverter {
         return document;
     }
     
-    
     /**
      * SolrInputDocument
      *
@@ -264,8 +263,8 @@ public class AdConverter {
         	adSolrDTO.setId(Long.valueOf(solrDocument.get("id").toString()));
         	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
         	adSolrDTO.setTitle(solrDocument.get("title_s").toString());
-        	//adSolrDTO.setContent(solrDocument.get("content_s").toString());
-        	adSolrDTO.setCount((int)solrDocument.get("count_i"));
+        	adSolrDTO.setContent(solrDocument.get("content_s").toString());
+        	adSolrDTO.setCount(Integer.valueOf(solrDocument.get("count_i").toString()));
         	int type=(int)solrDocument.get("type_i");
         	if(type==1){
         		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);	

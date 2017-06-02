@@ -139,6 +139,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setProductId(adPlatformParam.getProductId());
         adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
+        adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
         Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
         return i;
     }

@@ -275,5 +275,16 @@ public class MerchantController extends BaseController {
         }
         return successGet(MerchantConverter.convertDTO(merchantBO));
     }
+    
+    /**
+     * 是否注册
+     * @param mobile
+     * @return
+     */
+    @RequestMapping(value = "isRegister", method = RequestMethod.GET)
+    public Result<Boolean> isRegister(@RequestParam String mobile) {
+    	Boolean flag = merchantService.isRegister(mobile);
+        return successGet(flag);
+    }
 
 }
