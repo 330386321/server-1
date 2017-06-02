@@ -117,17 +117,17 @@ public class AdConverter {
 		adDTO.setIsPraise(adBO.getIsPraise());
 		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
 		Date date=new Date();
-		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){  //开枪倒计时
-			Calendar nowTime = Calendar.getInstance();
-			nowTime.add(Calendar.MINUTE, -5);
-			adDTO.setNeedBeginTime(date.getTime()-adBO.getBeginTime().getTime());
-		}else if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==1){ //结束倒计时
-			Long time=adBO.getBeginTime().getTime()-date.getTime();
+		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){ //结束倒计时
+			Long time=adBO.getBeginTime().getTime()+ 300000-date.getTime();
 			if(time>0){
 				adDTO.setNeedBeginTime(time);
 			}else{
 				adDTO.setNeedBeginTime(Long.parseLong("0"));
 			}
+		}else if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==1){ //开枪倒计时
+			Long time=adBO.getBeginTime().getTime()-date.getTime();
+			adDTO.setNeedBeginTime(time);
+			
 		}
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());

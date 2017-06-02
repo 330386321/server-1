@@ -312,7 +312,6 @@ public class AdController extends BaseController{
         query.setSort("status_s", SolrQuery.ORDER.desc);
        
         String[] path=adSolrParam.getRegionPath().split("/");
-        query.setQuery("area_ss : 0");
         List<Long> merchantIds=adSolrParam.getMerchantIds();
         String str="";
         if(merchantIds.size()>0){
@@ -320,7 +319,7 @@ public class AdController extends BaseController{
     			str+="merchantId_s:"+id +" or ";
     		}
         	str=str.substring(0,str.length()-3);
-        	 query.setQuery(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        	 query.setParam(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
         }
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());
