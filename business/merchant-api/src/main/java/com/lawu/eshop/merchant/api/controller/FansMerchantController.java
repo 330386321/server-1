@@ -58,7 +58,7 @@ public class FansMerchantController extends BaseController {
     private MerchantStoreService merchantStoreService;
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。 (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "查询粉丝会员", notes = "查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "listInviteFans", method = RequestMethod.GET)
@@ -69,7 +69,7 @@ public class FansMerchantController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "分页查询粉丝会员", notes = "分页查询可邀请成为粉丝的会员。[1100] (梅述全)", httpMethod = "GET")
+    @ApiOperation(value = "分页查询粉丝会员", notes = "分页查询可邀请成为粉丝的会员。 (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "pageListInviteFans", method = RequestMethod.GET)
