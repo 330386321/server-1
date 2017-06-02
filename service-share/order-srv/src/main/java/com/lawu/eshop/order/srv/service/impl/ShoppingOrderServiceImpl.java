@@ -1441,8 +1441,8 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		logger.info("需要释放冻结资金的订单数量:" + shoppingOrderDOList.size());
 		
-		boolean is_done = true;
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
+			boolean is_done = true;
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
 				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
@@ -1452,11 +1452,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			}
 			
 			if (is_done) {
-				item.setIsDone(true);
-				item.setGmtModified(new Date());
-				shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
-				
-				shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(item.getId());
+				paymentsToMerchant(item.getId());
 			}
 		}
 	}
@@ -1482,14 +1478,22 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
 	/**
-	 * 提醒卖家发货
+	 * 更改订单状态为完成
+	 * 释放冻结资金
 	 * 
 	 * @author Sunny
 	 */
 	@Transactional
-	private void remindShipments(Long shoppingOrderItemId) {
-		// 发送MQ消息，通知mall模块发送推送和站内信
-		shoppingOrderAutoCommentTransactionMainServiceImpl.sendNotice(shoppingOrderItemId);
+	private void paymentsToMerchant(Long shoppingOrderId) {
+		// 更新订单状态为完成
+		ShoppingOrderDO update = new ShoppingOrderDO();
+		update.setId(shoppingOrderId);
+		update.setIsDone(true);
+		update.setGmtModified(new Date());
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
+		
+		// 释放冻结资金
+		shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderId);
 	}
 
 }
