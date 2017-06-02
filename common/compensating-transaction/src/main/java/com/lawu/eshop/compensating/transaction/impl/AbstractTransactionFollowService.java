@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 import com.lawu.eshop.compensating.transaction.Notification;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionFollowService;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import com.lawu.eshop.synchronization.lock.service.FollowTransactionRecordService;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 
 /**

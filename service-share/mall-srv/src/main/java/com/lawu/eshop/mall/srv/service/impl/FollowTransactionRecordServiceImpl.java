@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 import com.lawu.eshop.mall.srv.domain.FollowTransactionRecordDO;
 import com.lawu.eshop.mall.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.mall.srv.mapper.FollowTransactionRecordDOMapper;
-import com.lawu.eshop.synchronization.lock.service.FollowTransactionRecordService;
 
 /**
  * 

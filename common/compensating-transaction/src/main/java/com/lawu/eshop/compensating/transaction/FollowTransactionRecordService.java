@@ -1,4 +1,4 @@
-package com.lawu.eshop.synchronization.lock.service;
+package com.lawu.eshop.compensating.transaction;
 
 /**
  * 

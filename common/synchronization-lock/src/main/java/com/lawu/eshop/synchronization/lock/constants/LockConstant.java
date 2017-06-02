@@ -5,41 +5,58 @@ public class LockConstant {
     /**
      * 分布式事务同步锁前缀
      */
-    public static final String DISTRIBUTED_SYNCHRONIZATION_LOCK = "DISTRIBUTED_SYNCHRONIZATION_LOCK_";
+    public static final String DISTRIBUTED_SYNCHRONIZATION_LOCK = "SYN_LOCK_";
 	
 	/*******************************
 	 * Model Name
 	 *******************************/
-	/**
-     * ad-srv模块
-     */
-    public static final String LOCK_AD_SRV = "AD_SRV";
+    public static enum LockModule {
+    	/**
+         * ad-srv模块
+         */
+    	LOCK_AD_SRV("AD_SRV"),
+    	
+        /**
+         * mall-srv模块
+         */
+    	LOCK_MALL_SRV("MALL_SRV"),
+    	
+        /**
+         * order-srv模块
+         */
+    	LOCK_ORDER_SRV("ORDER_SRV"),
+    	
+        /**
+         * product-srv模块
+         */
+    	LOCK_PRODUCT_SRV("PRODUCT_SRV"),
+    	
+        /**
+         * property-srv模块
+         */
+    	LOCK_PROPERTY_SRV("PROPERTY_SRV"),
+    	
+        /**
+         * user-srv模块
+         */
+    	LOCK_USER_SRV("USER_SRV");
+    	
+    	private String name;
+    	
+    	LockModule(String name){
+    		this.name = name;
+    	}
 
-    /**
-     * mall-srv模块
-     */
-    public static final String LOCK_MALL_SRV = "MALL_SRV";
+		public String getName() {
+			return name;
+		}
 
-    /**
-     * order-srv模块
-     */
-    public static final String LOCK_ORDER_SRV = "ORDER_SRV";
+		public void setName(String name) {
+			this.name = name;
+		}
+    	
+    }
 
-    /**
-     * product-srv模块
-     */
-    public static final String LOCK_PRODUCT_SRV = "PRODUCT_SRV";
-
-    /**
-     * property-srv模块
-     */
-    public static final String LOCK_PROPERTY_SRV = "PROPERTY_SRV";
-
-    /**
-     * user-srv模块
-     */
-    public static final String LOCK_USER_SRV = "USER_SRV";
-    
     /******************************************
      * Lock Name
      ******************************************/

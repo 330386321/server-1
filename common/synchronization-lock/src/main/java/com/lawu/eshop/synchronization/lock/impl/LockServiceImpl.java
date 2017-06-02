@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.synchronization.lock.constants.LockConstant;
+import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
 import com.lawu.eshop.synchronization.lock.service.LockService;
 
 /**
@@ -38,15 +39,15 @@ public class LockServiceImpl implements LockService {
 	 * 如果存在返回false
 	 * 如果不存在，生成一个锁，并且返回true
 	 * 
-	 * @param lockName 锁的名称
+	 * @param lockKey 锁的名称
 	 * @return
 	 * @author Sunny
 	 * @date 2017年5月31日
 	 */
 	@Override
-	public boolean tryLock(String lockName) {
+	public boolean tryLock(String lockKey) {
 		boolean rtn = false;
-		RLock rLock = getLock(lockName);
+		RLock rLock = getLock(lockKey);
 		try {
 			rtn = rLock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
 		} catch (InterruptedException e) {
@@ -54,17 +55,56 @@ public class LockServiceImpl implements LockService {
 		}
 		return rtn;
 	}
-
+	
 	/**
-	 * 释放锁
+	 * 判断锁是否存在
+	 * 如果存在返回false
+	 * 如果不存在，生成一个锁，并且返回true
 	 * 
-	 * @param lockName 锁的名称
+	 * @param lockModule 锁的模块
+	 * @param lockKey 锁的名称
+	 * @param relatedId 关联id
+	 * @return
 	 * @author Sunny
 	 * @date 2017年5月31日
 	 */
 	@Override
-	public void unLock(String lockName) {
-		RLock rLock = getLock(lockName);
+	public boolean tryLock(LockModule lockModule, String lockKey, Long relatedId) {
+		// 拼接锁名
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
+		return tryLock(stringBuffer.toString());
+	}
+	
+	/**
+	 * 判断锁是否存在
+	 * 如果存在返回false
+	 * 如果不存在，生成一个锁，并且返回true
+	 * 
+	 * @param lockModule 锁的模块
+	 * @param lockKey 锁的名称
+	 * @return
+	 * @author Sunny
+	 * @date 2017年5月31日
+	 */
+	@Override
+	public boolean tryLock(LockModule lockModule, String lockKey) {
+		// 拼接锁名
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(lockModule.getName()).append("_").append(lockKey);
+		return tryLock(stringBuffer.toString());
+	}
+
+	/**
+	 * 释放锁
+	 * 
+	 * @param lockKey 锁的名称
+	 * @author Sunny
+	 * @date 2017年5月31日
+	 */
+	@Override
+	public void unLock(String lockKey) {
+		RLock rLock = getLock(lockKey);
 		try {
 			rLock.unlock();
 		} catch (IllegalMonitorStateException e) {
@@ -73,15 +113,48 @@ public class LockServiceImpl implements LockService {
 	}
 	
 	/**
+	 * 释放锁
+	 * 
+	 * @param lockModule 锁的模块
+	 * @param lockKey 锁的名称
+	 * @param relatedId 关联id
+	 * @author Sunny
+	 * @date 2017年5月31日
+	 */
+	@Override
+	public void unLock(LockModule lockModule, String lockKey, Long relatedId) {
+		// 拼接锁名
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
+		unLock(stringBuffer.toString());
+	}
+	
+	/**
+	 * 释放锁
+	 * 
+	 * @param lockModule 锁的模块
+	 * @param lockKey 锁的名称
+	 * @author Sunny
+	 * @date 2017年5月31日
+	 */
+	@Override
+	public void unLock(LockModule lockModule, String lockKey) {
+		// 拼接锁名
+		StringBuffer stringBuffer = new StringBuffer();
+		stringBuffer.append(lockModule.getName()).append("_").append(lockKey);
+		unLock(stringBuffer.toString());
+	}
+	
+	/**
 	 * 获取锁
 	 * 
-	 * @param lockName 锁的名称
+	 * @param lockKey 锁的名称
 	 * @return
 	 * @author Sunny
 	 * @date 2017年5月31日
 	 */
-	private RLock getLock(String lockName){
-		String key = LockConstant.DISTRIBUTED_SYNCHRONIZATION_LOCK.concat(lockName);
+	private RLock getLock(String lockKey){
+		String key = LockConstant.DISTRIBUTED_SYNCHRONIZATION_LOCK.concat(lockKey);
 		return redissonClient.getLock(key);
 	}
 }

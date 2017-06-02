@@ -5,10 +5,10 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 import com.lawu.eshop.product.srv.domain.FollowTransactionRecordDO;
 import com.lawu.eshop.product.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.product.srv.mapper.FollowTransactionRecordDOMapper;
-import com.lawu.eshop.synchronization.lock.service.FollowTransactionRecordService;
 
 /**
  * 

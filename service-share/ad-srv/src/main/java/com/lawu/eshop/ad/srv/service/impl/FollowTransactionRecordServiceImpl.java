@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.ad.srv.domain.FollowTransactionRecordDO;
 import com.lawu.eshop.ad.srv.domain.FollowTransactionRecordDOExample;
 import com.lawu.eshop.ad.srv.mapper.FollowTransactionRecordDOMapper;
-import com.lawu.eshop.synchronization.lock.service.FollowTransactionRecordService;
+import com.lawu.eshop.compensating.transaction.FollowTransactionRecordService;
 
 /**
  * 
