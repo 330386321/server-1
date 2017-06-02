@@ -82,8 +82,11 @@
         <table tableName="message" domainObjectName="MessageDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
+        <table tableName="follow_transaction_record" domainObjectName="FollowTransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

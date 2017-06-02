@@ -16,7 +16,7 @@ import com.lawu.eshop.product.srv.service.ProductModelService;
  * @author Sunny
  * @date 2017/04/06
  */
-@Service
+@Service("shoppingOrderCancelOrderTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCEL_ORDER)
 public class ShoppingOrderCancelOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCancelOrderNotification, Reply> {
 	
@@ -26,8 +26,8 @@ public class ShoppingOrderCancelOrderTransactionFollowServiceImpl extends Abstra
 	/**
 	 * 释放库存
 	 */
-	@Transactional
     @Override
+    @Transactional
     public Reply execute(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
     	Reply rtn = new Reply();
     	

@@ -21,8 +21,9 @@
         <module>mq</module>
         <module>compensating-transaction</module>
         <module>solr-util</module>
-    <module>pay-util</module>
+    	<module>pay-util</module>
         <module>eshop-shiro</module>
-    </modules>
+    	<module>synchronization-lock</module>
+  </modules>
 
 </project>
