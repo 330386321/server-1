@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
@@ -184,7 +185,10 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	}
 
 	/**
-	 *  用户收入加余额，计算爱心账户： 用户点广告/抢赞/抢红包
+	 *  用户收入加余额，计算爱心账户：
+	 *  用户点广告(需要乘以0.5)
+	 *  抢赞
+	 *  抢红包
 	 * @param param
 	 * @return
 	 */
@@ -192,7 +196,12 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Transactional
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
-		CommissionUtilBO commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
+		CommissionUtilBO commissionBO = new CommissionUtilBO();
+		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
+			commissionBO = commissionUtilService.getClickAdMine(clickMoney);
+		}else{
+			commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
+		}
 		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
 		BigDecimal actureLoveIn = commissionBO.getActureLoveIn();//爱心账户
 		
