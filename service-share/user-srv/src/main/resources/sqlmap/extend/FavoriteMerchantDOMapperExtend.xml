@@ -12,7 +12,7 @@
 
   <select resultMap="BaseResultMap" parameterType="com.lawu.eshop.user.srv.domain.extend.FavoriteMerchantDOView" id="selectFavoriteMerchantByRowbounds" >
     SELECT distinct(FM.id),
-    	   MS.merchant_id,
+    	   FM.merchant_id,
     	   MS.`name`,
     	   MS.industry_name,
            MS.latitude ,

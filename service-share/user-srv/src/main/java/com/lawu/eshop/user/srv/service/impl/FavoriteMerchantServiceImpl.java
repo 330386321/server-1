@@ -132,7 +132,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	MerchantStoreDOExample merchantStoreDOExample=new MerchantStoreDOExample();
         	merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
         	List<MerchantStoreDO> merchantStoreDOList=merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-        	if(merchantStoreDOList!=null){ //获取距离
+        	if(!merchantStoreDOList.isEmpty()){ //获取距离
         		favoriteMerchantBO.setMerchantStoreId(merchantStoreDOList.get(0).getId());
         		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
         			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
