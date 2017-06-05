@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 
 import java.util.List;
@@ -22,6 +23,15 @@ public interface FansMerchantService {
      * @return
      */
     List<FansMerchantBO> listInviteFans(Long merchantId, ListInviteFansParam param);
+
+    /**
+     * 分页查询会员邀请粉丝
+     *
+     * @param merchantId
+     * @param param
+     * @return
+     */
+    Page<FansMerchantBO> pageListInviteFans(Long merchantId, PageListInviteFansParam param);
 
     /**
      * 查询粉丝列表

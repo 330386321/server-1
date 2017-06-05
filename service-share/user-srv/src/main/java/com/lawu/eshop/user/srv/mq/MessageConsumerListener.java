@@ -1,10 +1,8 @@
 package com.lawu.eshop.user.srv.mq;
 
+import com.gexin.fastjson.JSONObject;
 import com.lawu.eshop.mq.constants.MqConstant;
-import com.lawu.eshop.mq.dto.user.FansInfo;
-import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
-import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
-import com.lawu.eshop.mq.dto.user.MessagePushInfo;
+import com.lawu.eshop.mq.dto.user.*;
 import com.lawu.eshop.mq.message.impl.AbstractMessageConsumerListener;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -58,16 +56,20 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
+            JSONObject jobj = new JSONObject();
+            jobj.put("title",info.getTitle());
+            jobj.put("content",info.getContent());
+            jobj.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             if(info.getUserNum().contains("M")){
               MemberBO memberBO =  memberService.findMemberByNum(info.getUserNum());
                 //会员单个推送
                 GtPush push = new GtPush();
-                push.sendMessageToCidCustoms(info.getContent(),memberBO.getGtCid(),info.getTitle());
+                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),info.getTitle());
             }else {
                 //商家单个推送
                 MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
                 GtPush push = new GtPush();
-                push.sendMessageToCid(info.getContent(),merchantBO.getGtCid(),info.getTitle());
+                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle());
             }
         } else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic) && MqConstant.TAG_HANDLE_DEPOSIT.equals(tags)){
             //根据商家编号查询商家
@@ -90,28 +92,36 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSHALL.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
+            JSONObject contents = new JSONObject();
+            contents.put("title",info.getTitle());
+            contents.put("content",info.getContent());
+            contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
            if(UserTypeEnum.MEMBER.val==info.getUserType()){
                //推送所有
-               push.pushToAllUser(info.getTitle(),info.getContent());
+               push.pushToAllUser(info.getTitle(),contents.toString());
            }else{
-               push.pushToAllCompany(info.getTitle(),info.getContent());
+               push.pushToAllCompany(info.getTitle(),contents.toString());
            }
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH_AREA.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
+            JSONObject contents = new JSONObject();
+            contents.put("title",info.getTitle());
+            contents.put("content",info.getContent());
+            contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
             List<MessagePushBO> messagePushBOS = null;
             if(UserTypeEnum.MEMBER.val==info.getUserType()){
                 //推送用户
                 messagePushBOS = memberService.findMessagePushList(info.getArea());
                 for(MessagePushBO messagePushBO : messagePushBOS){
-                    push.sendMessageToCidCustoms(info.getContent(),messagePushBO.getGtCid(),info.getTitle());
+                    push.sendMessageToCidCustoms(contents.toString(),messagePushBO.getGtCid(),info.getTitle());
                 }
             }else{
                 messagePushBOS = merchantService.findMessagePushList(info.getArea());
                 for(MessagePushBO messagePushBO : messagePushBOS){
-                    push.sendMessageToCid(info.getContent(),messagePushBO.getGtCid(),info.getTitle());
+                    push.sendMessageToCid(contents.toString(),messagePushBO.getGtCid(),info.getTitle());
                 }
             }
 

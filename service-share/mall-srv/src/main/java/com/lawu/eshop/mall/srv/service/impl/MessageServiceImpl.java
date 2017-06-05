@@ -165,6 +165,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setContent(content);
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(userNum);
+        pushInfo.setMessageType(messageInfoParam.getTypeEnum().val);
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return id;
     }
@@ -198,6 +199,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setContent(messageInfoParam.getContent());
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(userNum);
+        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return row;
     }
@@ -221,6 +223,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setTitle(param.getTitle());
         pushInfo.setContent(param.getContent());
         pushInfo.setUserType(param.getUserTypeEnum().val);
+        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
         //推送全部
         if ("all".equals(param.getArea())) {
             messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSHALL, pushInfo);

@@ -1,20 +1,24 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
 
 /**
  * E赚实体转化
@@ -117,17 +121,17 @@ public class AdConverter {
 		adDTO.setIsPraise(adBO.getIsPraise());
 		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
 		Date date=new Date();
-		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){  //开枪倒计时
-			Calendar nowTime = Calendar.getInstance();
-			nowTime.add(Calendar.MINUTE, -5);
-			adDTO.setNeedBeginTime(date.getTime()-adBO.getBeginTime().getTime());
-		}else if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==1){ //结束倒计时
-			Long time=adBO.getBeginTime().getTime()-date.getTime();
+		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){ //结束倒计时
+			Long time=adBO.getBeginTime().getTime()+ 300000-date.getTime();
 			if(time>0){
 				adDTO.setNeedBeginTime(time);
 			}else{
 				adDTO.setNeedBeginTime(Long.parseLong("0"));
 			}
+		}else if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==1){ //开枪倒计时
+			Long time=adBO.getBeginTime().getTime()-date.getTime();
+			adDTO.setNeedBeginTime(time);
+			
 		}
 		if(adBO.getAreas()!=null){
 			adDTO.setAreas(adBO.getAreas());

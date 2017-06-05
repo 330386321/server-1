@@ -70,7 +70,7 @@ public class ShoppingRefundAgreeToRefundTransactionMainServiceImpl extends Abstr
     	rtn.setMerchantNum(shoppingOrderExtendBO.getMerchantNum());
     	rtn.setShoppingOrderId(shoppingOrderExtendBO.getId());
     	rtn.setShoppingOrderItemId(shoppingOrderItemId);
-    	rtn.setPaymentMethod(TransactionPayTypeEnum.valueOf(shoppingOrderExtendBO.getPaymentMethod().name()));
+    	rtn.setPaymentMethod(TransactionPayTypeEnum.getEnum(shoppingOrderExtendBO.getPaymentMethod().getVal()));
     	rtn.setRefundMoney(NumberUtil.format(refundMoney));
     	rtn.setIsLast(isLast);
     	rtn.setThirdNumber(shoppingOrderExtendBO.getThirdNumber());

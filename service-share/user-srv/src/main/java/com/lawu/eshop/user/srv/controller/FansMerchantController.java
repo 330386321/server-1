@@ -8,6 +8,7 @@ import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.dto.FansMerchantDTO;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.PageListInviteFansParam;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.service.FansMerchantService;
@@ -36,11 +37,28 @@ public class FansMerchantController extends BaseController {
      */
     @RequestMapping(value = "listInviteFans/{merchantId}", method = RequestMethod.POST)
     public Result<List<FansMerchantDTO>> listInviteFans(@PathVariable Long merchantId, @RequestBody ListInviteFansParam param) {
-        List<FansMerchantBO> fansMerchantBOList = fansMerchantService.listInviteFans(merchantId, param);
-        if (fansMerchantBOList == null || fansMerchantBOList.isEmpty()) {
+        List<FansMerchantBO> fansMerchantBOS = fansMerchantService.listInviteFans(merchantId, param);
+        if(fansMerchantBOS == null || fansMerchantBOS.isEmpty()){
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
-        return successGet(FansMerchantConverter.convertDTO(fansMerchantBOList));
+        return successGet(FansMerchantConverter.convertDTO(fansMerchantBOS));
+    }
+
+    /**
+     * 分页查询可邀请的会员
+     *
+     * @param merchantId
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "pageListInviteFans/{merchantId}", method = RequestMethod.POST)
+    public Result<Page<FansMerchantDTO>> pageListInviteFans(@PathVariable Long merchantId, @RequestBody PageListInviteFansParam param) {
+        Page<FansMerchantBO> fansMerchantBOPage = fansMerchantService.pageListInviteFans(merchantId, param);
+        Page<FansMerchantDTO> page = new Page<>();
+        page.setCurrentPage(fansMerchantBOPage.getCurrentPage());
+        page.setTotalCount(fansMerchantBOPage.getTotalCount());
+        page.setRecords(FansMerchantConverter.convertDTO(fansMerchantBOPage.getRecords()));
+        return successGet(page);
     }
 
     /**

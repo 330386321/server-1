@@ -19,6 +19,9 @@ public class MessagePushInfo implements Serializable{
     private Byte userType;
 
     private String area;
+
+    private byte messageType;
+
     public Long getMessageId() {
         return messageId;
     }
@@ -65,5 +68,13 @@ public class MessagePushInfo implements Serializable{
 
     public void setArea(String area) {
         this.area = area;
+    }
+
+    public byte getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(byte messageType) {
+        this.messageType = messageType;
     }
 }

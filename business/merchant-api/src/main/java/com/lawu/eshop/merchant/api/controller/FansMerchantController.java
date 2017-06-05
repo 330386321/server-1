@@ -21,6 +21,7 @@ import com.lawu.eshop.user.dto.UserDTO;
 import com.lawu.eshop.user.param.InviteFansParam;
 import com.lawu.eshop.user.param.ListFansParam;
 import com.lawu.eshop.user.param.ListInviteFansParam;
+import com.lawu.eshop.user.param.PageListInviteFansParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -65,6 +66,17 @@ public class FansMerchantController extends BaseController {
                                                         @ModelAttribute @ApiParam ListInviteFansParam param) {
         long merchantId = UserUtil.getCurrentUserId(getRequest());
         return fansMerchantService.listInviteFans(merchantId, param);
+    }
+
+    @Audit(date = "2017-04-12", reviewer = "孙林青")
+    @ApiOperation(value = "分页查询粉丝会员", notes = "分页查询可邀请成为粉丝的会员。 (梅述全)", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "pageListInviteFans", method = RequestMethod.GET)
+    public Result<Page<FansMerchantDTO>> pageListInviteFans(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                        @ModelAttribute @ApiParam PageListInviteFansParam param) {
+        long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return fansMerchantService.pageListInviteFans(merchantId, param);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")

@@ -2,10 +2,7 @@ package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
-import com.lawu.eshop.user.param.ListFansParam;
-import com.lawu.eshop.user.param.ListFansRealParam;
-import com.lawu.eshop.user.param.ListInviteFansParam;
-import com.lawu.eshop.user.param.ListInviteFansRealParam;
+import com.lawu.eshop.user.param.*;
 import com.lawu.eshop.user.srv.bo.FansMerchantBO;
 import com.lawu.eshop.user.srv.converter.FansMerchantConverter;
 import com.lawu.eshop.user.srv.domain.FansMerchantDO;
@@ -47,6 +44,26 @@ public class FansMerchantServiceImpl implements FansMerchantService {
         listInviteFansRealParam.setInviteCount(param.getInviteCount());
         List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.listInviteFans(listInviteFansRealParam);
         return FansMerchantConverter.convertBO(fansMerchantDOViewList);
+    }
+
+    @Override
+    public Page<FansMerchantBO> pageListInviteFans(Long merchantId, PageListInviteFansParam param) {
+        ListInviteFansRealParam listInviteFansRealParam = new ListInviteFansRealParam();
+        listInviteFansRealParam.setMerchantId(merchantId);
+        listInviteFansRealParam.setRegionPath(param.getRegionPath());
+        listInviteFansRealParam.setSex(param.getUserSexEnum().val);
+        listInviteFansRealParam.setAgeLimit(param.getIsAgeLimit());
+        listInviteFansRealParam.setStartAge(param.getStartAge());
+        listInviteFansRealParam.setEndAge(param.getEndAge());
+        listInviteFansRealParam.setInviteCount(param.getInviteCount());
+        listInviteFansRealParam.setCurrentPage(param.getCurrentPage());
+        listInviteFansRealParam.setPageSize(param.getPageSize());
+        List<FansMerchantDOView> fansMerchantDOViewList = fansMerchantDOMapperExtend.pageListInviteFans(listInviteFansRealParam);
+        Page<FansMerchantBO> page = new Page<>();
+        page.setCurrentPage(param.getCurrentPage());
+        page.setTotalCount(fansMerchantDOMapperExtend.countInviteFans(listInviteFansRealParam));
+        page.setRecords(FansMerchantConverter.convertBO(fansMerchantDOViewList));
+        return page;
     }
 
     @Override

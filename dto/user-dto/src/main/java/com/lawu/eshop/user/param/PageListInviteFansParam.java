@@ -1,34 +1,32 @@
 package com.lawu.eshop.user.param;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
+import com.lawu.eshop.user.constants.UserSexEnum;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * @author meishuquan
- * @date 2017/4/26.
+ * @date 2017/6/2.
  */
-public class ListInviteFansRealParam extends AbstractPageParam{
+public class PageListInviteFansParam extends AbstractPageParam{
 
-    private Long merchantId;
-
+    @ApiModelProperty(value = "区域路径，全国为空", required = false)
     private String regionPath;
 
-    private Byte sex;
+    @ApiModelProperty(value = "性别，SEX_MALE--男，SEX_FEMALE--女，SEX_SECRET--全部", required = true)
+    private UserSexEnum userSexEnum;
 
+    @ApiModelProperty(value = "年龄限制，true--有年龄要求(startAge、endAge必填)，false--没有年龄要求", required = true)
     private Boolean isAgeLimit;
 
+    @ApiModelProperty(value = "最小年龄")
     private Integer startAge;
 
+    @ApiModelProperty(value = "最大年龄")
     private Integer endAge;
 
+    @ApiModelProperty(value = "邀请人数")
     private Integer inviteCount;
-
-    public Long getMerchantId() {
-        return merchantId;
-    }
-
-    public void setMerchantId(Long merchantId) {
-        this.merchantId = merchantId;
-    }
 
     public String getRegionPath() {
         return regionPath;
@@ -38,19 +36,19 @@ public class ListInviteFansRealParam extends AbstractPageParam{
         this.regionPath = regionPath;
     }
 
-    public Byte getSex() {
-        return sex;
+    public UserSexEnum getUserSexEnum() {
+        return userSexEnum;
     }
 
-    public void setSex(Byte sex) {
-        this.sex = sex;
+    public void setUserSexEnum(UserSexEnum userSexEnum) {
+        this.userSexEnum = userSexEnum;
     }
 
-    public Boolean getAgeLimit() {
+    public Boolean getIsAgeLimit() {
         return isAgeLimit;
     }
 
-    public void setAgeLimit(Boolean ageLimit) {
+    public void setIsAgeLimit(Boolean ageLimit) {
         isAgeLimit = ageLimit;
     }
 

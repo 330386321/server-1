@@ -149,6 +149,12 @@ public class ResultCode {
     public static final int USER_ACCOUNT_DISABLE = 8106;
     public static final int USER_ACCOUNT_EXIST = 8107;
 
+    public static final int STORE_AUDIT_RECORD_NOT_EXIST = 8108;
+
+    public static final int STORE_AUDIT_RECORD_AUDITED = 8109;
+
+
+
     // 初始化状态码与文字说明
     static {
 
@@ -212,6 +218,10 @@ public class ResultCode {
         ResultCode.messageMap.put(PUSH_HAS_NOUSER, "没有可推送用户");
         ResultCode.messageMap.put(USER_ACCOUNT_DISABLE, "账号已停用，请联系管理员");
         ResultCode.messageMap.put(USER_ACCOUNT_EXIST, "账号已存在");
+        ResultCode.messageMap.put(STORE_AUDIT_RECORD_NOT_EXIST, "审核记录不存在");
+        ResultCode.messageMap.put(STORE_AUDIT_RECORD_AUDITED, "该门店已经审核过");
+
+
 
         // 商品模块 3xxx
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");
