@@ -82,7 +82,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             if(info.getShow()){
                 merchantAuditService.setAuditInfoShow(merchantBO.getId());
             }
-            if(info.getStatusEnum().val == MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val){
+            if(info.getStatusEnum().val == MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue()){
                 //查询门店信息
                 MerchantStoreInfoBO storeInfoBO= merchantStoreInfoService.selectMerchantStoreByMId(merchantBO.getId());
                 if(storeInfoBO == null){
@@ -99,8 +99,8 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             contents.put("content",info.getContent());
             contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
-            logger.info("gtpush-all-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val==info.getUserType());
-           if(UserTypeEnum.MEMBER.val==info.getUserType()){
+            logger.info("gtpush-all-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
+           if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
                //推送所有
                push.pushToAllUser(info.getTitle(),contents.toString());
            }else{
@@ -115,8 +115,8 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
             List<MessagePushBO> messagePushBOS = null;
-            logger.info("gtpush-area-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val==info.getUserType());
-            if(UserTypeEnum.MEMBER.val==info.getUserType()){
+            logger.info("gtpush-area-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
+            if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
                 //推送用户
                 messagePushBOS = memberService.findMessagePushList(info.getArea());
                 for(MessagePushBO messagePushBO : messagePushBOS){
