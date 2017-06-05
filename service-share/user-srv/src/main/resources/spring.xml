@@ -68,4 +68,7 @@
 
     <!-- 配置作业-->
     <job:simple id="transactionScheduledJob" description="补偿事务" class="com.lawu.eshop.compensating.transaction.job.TransactionScheduledJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	
+	<!-- Lock service -->
+	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 </beans>

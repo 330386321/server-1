@@ -17,11 +17,6 @@
             <artifactId>order-dto</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.lawu.eshop</groupId>
-            <artifactId>synchronization-lock</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 	<build>
         <plugins>

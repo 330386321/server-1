@@ -22,4 +22,7 @@
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="rongYunDownLoadMessageJob" description="下载融云历史消息" class="com.lawu.eshop.statistics.jobs.RongYunDownLoadMessageJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+				
+	<!-- Lock service -->
+	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 </beans>

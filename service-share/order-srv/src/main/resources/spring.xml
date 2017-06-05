@@ -68,4 +68,7 @@
 	<job:simple id="shoppingRefundFillReturnAddressJob" description="商家填写退货地址，商家超时操作，自动退款" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundFillReturnAddressJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="shoppingRefundToBeReturnJob" description="买家填写退货物流信息，买家超时操作，自动取消退款申请" class="com.lawu.eshop.order.srv.jobs.ShoppingRefundToBeReturnJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="shoppingOrderAutoPaymentsToMerchantJob" description="买家收货之后超过退款时间，自动打款给商家" class="com.lawu.eshop.order.srv.jobs.ShoppingOrderAutoPaymentsToMerchantJob" registry-center-ref="regCenter" cron="0/10 * * * * ?" sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	
+	<!-- Lock service -->
+	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
 </beans>
