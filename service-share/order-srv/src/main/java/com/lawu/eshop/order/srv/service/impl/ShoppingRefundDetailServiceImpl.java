@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -54,6 +56,8 @@ import com.lawu.eshop.utils.DateUtil;
 @Service
 public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailService {
 
+	private static Logger logger = LoggerFactory.getLogger(ShoppingRefundDetailServiceImpl.class);
+	
 	@Autowired
 	private ShoppingRefundDetailDOMapper shoppingRefundDetailDOMapper;
 	
@@ -539,7 +543,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 重置发送提醒的次数
 		shoppingOrderItemDO.setSendTime(0);
 		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		shoppingOrderItemDOMapper.updateByPrimaryKey(shoppingOrderItemDO);
 
 		// 更新退款详情
 		// 设置订单的状态为无效
@@ -671,24 +675,28 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		// 提醒时间
 		String remindTime = propertyService.getByName(PropertyNameConstant.REFUND_FAILED_REMIND_TIME);
+		logger.info("提醒买家操作时间:{}", remindTime);
 		// 超过提醒时间
 		criteria.andGmtModifiedAddDayLessThanOrEqualTo(Integer.valueOf(remindTime), new Date());
 		
 		// 自动撤销撤销时间
 		String refundTime = propertyService.getByName(PropertyNameConstant.REFUND_FAILED_REVOKE_TIME);
+		logger.info("自动撤销退款申请时间:{}", refundTime);
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
+		logger.info("退款失败数量:{}", shoppingOrderItemDOList.size());
+		
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
+			// 发送次数为0，发送站内信和推送
+			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+				refundFailedRemind(shoppingOrderItemExtendDO);
+			}
+			
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 买家操作超过处理时间，平台自动撤销退款申请
 			if (isExceeds && shoppingOrderItemExtendDO.getShoppingRefundDetail() != null) {
 				revokeRefundRequest(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId());
-			} else {
-				// 发送次数为0，发送站内信和推送
-				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-					refundFailedRemind(shoppingOrderItemExtendDO);
-				}
 			}
 		}
 	}

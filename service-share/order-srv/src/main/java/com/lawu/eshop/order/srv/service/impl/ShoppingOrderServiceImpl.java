@@ -1439,7 +1439,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 		
-		logger.info("需要释放冻结资金的订单数量:" + shoppingOrderDOList.size());
+		logger.info("需要释放冻结资金的订单数量:{}", shoppingOrderDOList.size());
 		
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
 			boolean is_done = true;
