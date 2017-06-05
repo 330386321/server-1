@@ -11,6 +11,8 @@ import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.service.*;
 import com.lawu.eshop.utils.GtPush;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  * @date 2017/4/11
  */
 public class MessageConsumerListener extends AbstractMessageConsumerListener {
-
+    private static Logger logger = LoggerFactory.getLogger(MessageConsumerListener.class);
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
@@ -97,6 +99,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             contents.put("content",info.getContent());
             contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
+            logger.info("gtpush-all-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val==info.getUserType());
            if(UserTypeEnum.MEMBER.val==info.getUserType()){
                //推送所有
                push.pushToAllUser(info.getTitle(),contents.toString());
@@ -112,6 +115,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
             List<MessagePushBO> messagePushBOS = null;
+            logger.info("gtpush-area-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val==info.getUserType());
             if(UserTypeEnum.MEMBER.val==info.getUserType()){
                 //推送用户
                 messagePushBOS = memberService.findMessagePushList(info.getArea());
