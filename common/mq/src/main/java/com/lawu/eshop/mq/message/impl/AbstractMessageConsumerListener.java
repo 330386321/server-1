@@ -32,6 +32,7 @@ public abstract class AbstractMessageConsumerListener implements MessageListener
             String topic = messageExt.getTopic();
             String tags = messageExt.getTags();
             byte[] body = messageExt.getBody();
+            logger.info("Consume Message: {},{},{}", messageExt.getMsgId(), topic, tags);
             Object object;
             try {
                 object = ByteUtil.byteToObject(body);
