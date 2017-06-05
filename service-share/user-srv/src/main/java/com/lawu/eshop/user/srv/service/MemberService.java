@@ -142,6 +142,7 @@ public interface MemberService {
      * @return
      */
     Boolean isExistsMobile(String mobile);
-    
-    
+
+
+    int delUserGtPush(Long memberId);
 }

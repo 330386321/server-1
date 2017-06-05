@@ -1,42 +1,24 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.LoginUserDTO;
-import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
-import com.lawu.eshop.user.dto.MerchantDTO;
-import com.lawu.eshop.user.dto.MerchantInviterDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.MessagePushDTO;
-import com.lawu.eshop.user.dto.MobileDTO;
-import com.lawu.eshop.user.dto.RongYunDTO;
-import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.srv.bo.MerchantBO;
-import com.lawu.eshop.user.srv.bo.MerchantBaseInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantInviterBO;
-import com.lawu.eshop.user.srv.bo.MessagePushBO;
-import com.lawu.eshop.user.srv.bo.RongYunBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.converter.RongYunConverter;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.PwdUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -285,6 +267,12 @@ public class MerchantController extends BaseController {
     public Result<Boolean> isRegister(@RequestParam String mobile) {
     	Boolean flag = merchantService.isRegister(mobile);
         return successGet(flag);
+    }
+
+    @RequestMapping(value = "delMerchantGtPush", method = RequestMethod.PUT)
+    public Result delMerchantGtPush(@RequestParam Long merchantId){
+        int rows  = merchantService.delMerchantGtPush(merchantId);
+        return successCreated();
     }
 
 }

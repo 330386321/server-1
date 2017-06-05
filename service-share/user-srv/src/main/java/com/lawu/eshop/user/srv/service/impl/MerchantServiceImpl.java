@@ -18,6 +18,7 @@ import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantDOMapperExtend;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
@@ -87,6 +88,9 @@ public class MerchantServiceImpl implements MerchantService {
     
     @Autowired
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
+
+    @Autowired
+    private MerchantDOMapperExtend merchantDOMapperExtend;
 
     @Override
     @Transactional
@@ -499,5 +503,12 @@ public class MerchantServiceImpl implements MerchantService {
 			 return false;
 		 }
 	}
+
+    @Override
+    @Transactional
+    public int delMerchantGtPush(Long merchantId) {
+      int row =  merchantDOMapperExtend.delMerchantGtPush(merchantId);
+        return row;
+    }
 
 }

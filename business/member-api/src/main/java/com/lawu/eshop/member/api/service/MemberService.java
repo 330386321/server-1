@@ -164,4 +164,7 @@ public interface MemberService {
     @RequestMapping(value = "member/isExistsMobile", method = RequestMethod.GET)
     Result<Boolean> isExistsMobile(@RequestParam("mobile") String mobile);
 
+    @RequestMapping(value = "member/delUserGtPush", method = RequestMethod.PUT)
+    Result delUserGtPush(@RequestParam("memberId") Long memberId);
+
 }

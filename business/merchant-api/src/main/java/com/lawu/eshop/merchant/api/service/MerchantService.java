@@ -135,4 +135,7 @@ public interface MerchantService {
     @RequestMapping(value = "merchant/isRegister", method = RequestMethod.GET)
     Result<Boolean> isRegister(@RequestParam("mobile") String mobile);
 
+    @RequestMapping(value = "merchant/delMerchantGtPush", method = RequestMethod.PUT)
+    Result delMerchantGtPush(@RequestParam("merchantId") Long merchantId);
+
 }

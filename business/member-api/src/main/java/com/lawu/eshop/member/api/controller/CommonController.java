@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.manager.TokenManager;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -67,6 +68,8 @@ public class CommonController extends BaseController {
     @Authorization
     @RequestMapping(value = "logout", method = RequestMethod.DELETE)
     public Result logout(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        Long userId = UserUtil.getCurrentUserId(getRequest());
+        memberService.delUserGtPush(userId);
         tokenManager.delRelationshipByToken(token);
         return successDelete();
     }

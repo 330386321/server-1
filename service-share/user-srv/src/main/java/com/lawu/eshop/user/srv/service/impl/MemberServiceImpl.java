@@ -15,6 +15,7 @@ import com.lawu.eshop.user.srv.converter.MemberConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.MemberDOExample.Criteria;
 import com.lawu.eshop.user.srv.mapper.*;
+import com.lawu.eshop.user.srv.mapper.extend.MemberDOMapperExtend;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
 import com.lawu.eshop.user.srv.service.MemberService;
@@ -71,6 +72,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MerchantProfileDOMapper merchantProfileDOMapper;
+
+    @Autowired
+    private MemberDOMapperExtend memberDOMapperExtend;
 
 
     @Override
@@ -539,5 +543,12 @@ public class MemberServiceImpl implements MemberService {
 			 return false;
 		 }
 	}
+
+    @Override
+    @Transactional
+    public int delUserGtPush(Long memberId) {
+       int rows =  memberDOMapperExtend.delUserGtPush(memberId);
+        return rows;
+    }
 
 }

@@ -120,4 +120,6 @@ public interface MerchantService {
      * @return
      */
     Boolean isRegister(String account);
+
+    int delMerchantGtPush(Long merchantId);
 }
