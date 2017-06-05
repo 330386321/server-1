@@ -92,6 +92,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							sale_commission = property.get("sale_commission_3");
 						}
 
+						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,sale_commission,sale_commission_add_scope,level);
+						
 						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
@@ -162,7 +164,9 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 							param.setLast(true);
 							sale_commission = property.get("sale_commission_3");
 						}
-
+						
+						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,sale_commission,sale_commission_add_scope,level);
+						
 						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
