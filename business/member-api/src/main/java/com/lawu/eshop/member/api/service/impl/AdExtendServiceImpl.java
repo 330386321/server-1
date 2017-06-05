@@ -37,6 +37,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
@@ -67,6 +68,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     @Autowired
     private MerchantProfileService merchantProfileService;
     
+    @Autowired
+    private MemberApiConfig memberApiConfig;
+    
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
     
     private ExecutorService  service=new ThreadPoolExecutor(AdPraiseConfig.CORE_POOL_SIZE, AdPraiseConfig.MAXIMUM_POLL_SIZE, AdPraiseConfig.KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
@@ -94,7 +98,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      			adDTO.setName(merchantStoreDTO.getModel().getName());
      			adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      			adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     		}
+     		}else{
+ 				adDTO.setName("E店商家");
+ 				adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+ 			}
      		if(manageType.getModel()!=null){
      			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
      		}
@@ -148,6 +155,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
          				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
          	     		adDTO.setName(merchantStoreDTO.getModel().getName());
          	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+         			}else{
+         				adDTO.setName("E店商家");
+         				adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
          			}
          		}
          		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
@@ -186,7 +196,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      			praise.setName(merchantStoreDTO.getModel().getName());
      			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-     		}
+     		}else{
+     			praise.setName("E店商家");
+     			praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+    		}
      		if(manageType.getModel()!=null){
      			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
      		}
@@ -222,7 +235,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
  			praise.setName(merchantStoreDTO.getModel().getName());
  			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
  			praise.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
- 		}
+ 		}else{
+ 			praise.setName("E店商家");
+ 			praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+		}
  		if(manageType.getModel()!=null){
  			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
  		}
@@ -350,6 +366,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      				adDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      	     		adDTO.setName(merchantStoreDTO.getModel().getName());
      	     		adDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     			}else{
+     				adDTO.setName("E店商家");
+     				adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
      			}
      		}
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
@@ -397,6 +416,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      				adFlatVideoDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
      				adFlatVideoDTO.setName(merchantStoreDTO.getModel().getName());
      	     		adFlatVideoDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+     			}else{
+     				adFlatVideoDTO.setName("E店商家");
+     	     		adFlatVideoDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
      			}
      		}
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
@@ -409,7 +431,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setContent(adDTO.getContent());
 			adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
 			adFlatVideoDTO.setIsFavorite(adDTO.getIsFavorite());
-			adFlatVideoDTO.setLogoUrl(adDTO.getLogoUrl());
 			adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
 			adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
 			adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
@@ -418,7 +439,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
 			adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
 			adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
-			adFlatVideoDTO.setName(adDTO.getName());
 			adFlatVideoDTO.setViewCount(adDTO.getViewCount());
 			adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
 			//广告词

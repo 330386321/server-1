@@ -182,12 +182,18 @@ public class AdController extends BaseController {
         	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
         	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
         	if(isSuccess(merchantStoreDTO)){
-        		adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-            	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
-            	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-            	if(manageType.getModel()!=null){
-         			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-         		}
+        		if(merchantStoreDTO.getModel()!=null){
+        			adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+                	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
+                	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+                	if(manageType.getModel()!=null){
+             			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+             		}
+        		}else{
+        			adEgainDTO.setName("E店商家");
+                	adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+        		}
+        		
         	}
         	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
         	if(isSuccess(mpRs)){
