@@ -132,6 +132,7 @@ public class GtPush {
 
         IPushResult ret = push.pushMessageToApp(message);
         String result = (String) ret.getResponse().get("result");
+        logger.info("gtpush-all-merchant result:result({})", result);
         return result;
     }
 
@@ -158,6 +159,7 @@ public class GtPush {
 
         IPushResult ret = push.pushMessageToApp(message);
         String result = (String) ret.getResponse().get("result");
+        logger.info("gtpush-all-user result:result({})", result);
         return result;
     }
 
