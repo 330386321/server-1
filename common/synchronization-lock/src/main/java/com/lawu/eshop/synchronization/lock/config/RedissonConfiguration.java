@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
  * @author Sunny
  * @date 2017年5月31日
  */
-@Configuration
 public class RedissonConfiguration {
 	
 	@Value("${redis.address}")

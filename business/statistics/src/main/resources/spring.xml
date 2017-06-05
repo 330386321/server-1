@@ -25,4 +25,5 @@
 				
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
+	<bean id="redissonConfiguration" class="com.lawu.eshop.synchronization.lock.config.RedissonConfiguration" />
 </beans>
