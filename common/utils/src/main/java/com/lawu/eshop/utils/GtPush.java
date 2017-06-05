@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by lohas on 2015/5/9. https://github.com/lohasle 个推 推送工程类
+ *  个推 推送工程类
  */
 public class GtPush {
 
