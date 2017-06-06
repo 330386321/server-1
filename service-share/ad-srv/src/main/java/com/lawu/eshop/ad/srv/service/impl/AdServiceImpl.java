@@ -168,7 +168,8 @@ public class AdServiceImpl implements AdService {
 		mctransactionMainAddService.sendNotice(adDO.getId());
 		//将广告添加到solr中
 		if(adDO.getType()==1){
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+			AdDO ad=adDOMapper.selectByPrimaryKey(adDO.getId());
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
 		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
 		return i;

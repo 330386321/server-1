@@ -11,7 +11,7 @@
 	cd ffmpeg-3.3.1
 	
 	yum install gcc
-	yum isntall gcc-c++
+	yum -y install gcc gcc-c++
 
 
 四、路径设置（/usr/local/ffmpeg）
@@ -19,7 +19,7 @@
 	$ ./configure --enable-shared --prefix=/usr/local/ffmpeg
 
 这时候会编译出错（系统中没有yasm指令） 执行
-	$ sudo apt-get install yasm
+	yum install yasm
 
 五、重新编译
 	$ ./configure --enable-shared --prefix=/usr/local/ffmpeg
