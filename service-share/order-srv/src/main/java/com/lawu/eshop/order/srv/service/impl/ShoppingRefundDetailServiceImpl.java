@@ -543,7 +543,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 重置发送提醒的次数
 		shoppingOrderItemDO.setSendTime(0);
 		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDOMapper.updateByPrimaryKey(shoppingOrderItemDO);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 
 		// 更新退款详情
 		// 设置订单的状态为无效
