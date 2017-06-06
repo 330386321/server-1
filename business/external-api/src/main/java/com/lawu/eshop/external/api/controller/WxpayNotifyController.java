@@ -131,12 +131,16 @@ public class WxpayNotifyController extends BaseController {
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
-						double money = order.getModel().getOrderTotalPrice().doubleValue();
-						if (money == dmoney) {
-							result = orderService.doHandleOrderPayNotify(param);
+						if (order == null || order.getModel() == null) {
+							result = successCreated(ResultCode.FAIL, "找不到订单:" + param.getBizIds());
 						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+							double money = order.getModel().getOrderTotalPrice().doubleValue();
+							if (money == dmoney) {
+								result = orderService.doHandleOrderPayNotify(param);
+							} else {
+								result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+								result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+							}
 						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
