@@ -64,7 +64,7 @@ public class ShoppingOrderBO implements Serializable {
 	private String consigneeMobile;
 
 	/**
-	 * 订单备注(退货理由)
+	 * 订单备注
 	 */
 	private String remark;
 

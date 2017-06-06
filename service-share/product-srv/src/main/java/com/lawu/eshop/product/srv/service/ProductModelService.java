@@ -39,7 +39,7 @@ public interface ProductModelService {
 	 * @param shoppingCartCreateOrderNotification 发送的数据
 	 * @author Sunny
 	 */
-	void lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
+	int lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
 	
 	/**
 	 * 取消购物订单

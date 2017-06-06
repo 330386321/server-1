@@ -57,7 +57,7 @@ public class AlipayController extends BaseController {
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[4018]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "app调用支付宝获取请求参数，已签名加密", notes = "app调用支付宝时需要的请求参数，[4020|4021]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
 	public Result getAppAlipayReqParams(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

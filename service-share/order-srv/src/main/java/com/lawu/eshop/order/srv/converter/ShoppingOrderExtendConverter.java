@@ -148,6 +148,7 @@ public class ShoppingOrderExtendConverter {
 		rtn.setGmtCreate(shoppingOrderExtendBO.getGmtCreate());
 		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
 		rtn.setPaymentMethod(shoppingOrderExtendBO.getPaymentMethod());
+		rtn.setRemark(shoppingOrderExtendBO.getRemark());
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {

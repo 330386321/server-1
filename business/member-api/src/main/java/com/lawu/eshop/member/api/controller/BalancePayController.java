@@ -75,7 +75,7 @@ public class BalancePayController extends BaseController {
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@Authorization
-	@ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付,[4018]（杨清华）", httpMethod = "POST")
+	@ApiOperation(value = "商品订单余额支付", notes = "商品订单余额支付,[4020|4021]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "orderPay", method = RequestMethod.POST)
 	public Result orderPay(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam BalancePayParam param) {

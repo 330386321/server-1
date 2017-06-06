@@ -116,6 +116,12 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 	private BigDecimal actualAmount;
 	
 	/**
+	 * 订单备注
+	 */
+	@ApiModelProperty(value = "订单备注", required = false)
+	private String remark;
+	
+	/**
 	 * 物流状态
 	 */
 	@ApiModelProperty(value = "物流状态(ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
@@ -261,6 +267,14 @@ public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO im
 
 	public void setActualAmount(BigDecimal actualAmount) {
 		this.actualAmount = actualAmount;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public ExpressInquiriesDetailStateEnum getState() {

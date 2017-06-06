@@ -26,6 +26,7 @@ import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
+import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -123,7 +124,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 	@Autowired
 	@Qualifier("shoppingOrderCreateOrderTransactionMainServiceImpl")
-	private TransactionMainService<Reply> shoppingOrderCreateOrderTransactionMainServiceImpl;
+	private TransactionMainService<ShoppingOrderCreateOrderReply> shoppingOrderCreateOrderTransactionMainServiceImpl;
 
 	@Autowired
 	@Qualifier("shoppingOrderCancelOrderTransactionMainServiceImpl")
@@ -207,7 +208,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		Criteria baseCriteria = shoppingOrderExtendDOExample.createCriteria();
 
 		// 用户如果删除则不显示
-		baseCriteria.andStatusEqualTo((byte) 0x01);
+		baseCriteria.andStatusEqualTo(StatusEnum.VALID.getValue());
 
 		if (memberId != null) {
 			baseCriteria.andMemberIdEqualTo(memberId);
@@ -220,9 +221,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			if (param.getOrderStatus().equals(ShoppingOrderStatusToMemberEnum.BE_EVALUATED)) {
 				baseCriteria.andSOIIsEvaluationEqualTo(false);
 			}
-		} else {
-			// 如果查询全部状态的订单,不显示待处理的订单
-			baseCriteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.PENDING.getValue());
 		}
 
 		if (!StringUtils.isEmpty(param.getKeyword())) {
@@ -297,9 +295,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (param.getOrderStatus() != null) {
 			// 参数的订单状态是一个数组类型，查询多个参数状态
 			baseCriteria.andOrderStatusIn(Arrays.asList(param.getOrderStatus().getValue()));
-		} else {
-			// 如果查询全部状态的订单,不显示待处理的订单
-			baseCriteria.andOrderStatusNotEqualTo(ShoppingOrderStatusEnum.PENDING.getValue());
 		}
 
 		if (!StringUtils.isEmpty(param.getKeyword())) {
@@ -371,7 +366,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.createCriteria().andIdEqualTo(id);
 
 		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
 
@@ -828,17 +822,23 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	public Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds) {
 		Result<ShoppingOrderMoneyBO> rtn = new Result<ShoppingOrderMoneyBO>();
 		String[] orderIdsArray = orderIds.split(",");
-		BigDecimal total = new BigDecimal("0");
+		BigDecimal total = new BigDecimal(0);
 		for (int i = 0; i < orderIdsArray.length; i++) {
 			ShoppingOrderDO orderDO = shoppingOrderDOMapper.selectByPrimaryKey(Long.valueOf(orderIdsArray[i]));
 			/*
 			 *  判断订单的状态是否是待支付
 			 *  如果不是，说明扣除库存失败，提示买家库存不足
 			 */
-			if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(orderDO.getOrderStatus())) {
-				rtn.setRet(ResultCode.INVENTORY_SHORTAGE);
+			if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(orderDO.getOrderStatus())) {
+				rtn.setRet(ResultCode.THE_ORDER_IS_BEING_PROCESSED);
 				return rtn;
 			}
+			
+			if (ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(orderDO.getOrderStatus())) {
+				rtn.setRet(ResultCode.ORDER_CREATION_FAILED);
+				return rtn;
+			}
+			
 			total = total.add(orderDO.getOrderTotalPrice());
 		}
 		
@@ -938,7 +938,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public void minusInventorySuccess(Long id) {
+	public void minusInventorySuccess(Long id, ShoppingOrderCreateOrderReply reply) {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 
 		/*
@@ -947,37 +947,52 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (!ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderDO.getOrderStatus())) {
 			return;
 		}
-
-		// 设置订单状态为待支付状态
-		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-
+		
+		ShoppingOrderDO shoppingOrderDOUpdate = new ShoppingOrderDO();
+		shoppingOrderDOUpdate.setId(shoppingOrderDO.getId());
+		
 		// 设置购物订单项为待支付状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
 		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
-
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
-
-		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
-
-		/*
-		 * 删除购物车记录 如果用户是点击立即购物，是不经过购物车的，不需要删除购物车记录
-		 */
-		if (!StringUtils.isEmpty(shoppingOrderDO.getShoppingCartIdsStr())) {
-			// 拆分购物车id
-			String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
-			List<Long> shoppingCartIdList = new ArrayList<Long>();
-			for (String shoppingCartIdStr : shoppingCartIdStrAry) {
-				shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
+		
+		if (reply.getResultCode() == ResultCode.SUCCESS) {
+			// 设置订单状态为待支付状态(局部更新)
+			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+			
+			// 设置购物订单项为待支付状态
+			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
+	
+			/*
+			 * 删除购物车记录 如果用户是点击立即购物，是不经过购物车的，不需要删除购物车记录
+			 */
+			if (!StringUtils.isEmpty(shoppingOrderDO.getShoppingCartIdsStr())) {
+				// 拆分购物车id
+				String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
+				List<Long> shoppingCartIdList = new ArrayList<Long>();
+				for (String shoppingCartIdStr : shoppingCartIdStrAry) {
+					shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
+				}
+	
+				ShoppingCartDOExample shoppingCartDOExample = new ShoppingCartDOExample();
+				shoppingCartDOExample.createCriteria().andIdIn(shoppingCartIdList);
+				shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
 			}
-
-			ShoppingCartDOExample shoppingCartDOExample = new ShoppingCartDOExample();
-			shoppingCartDOExample.createCriteria().andIdIn(shoppingCartIdList);
-			shoppingCartDOMapper.deleteByExample(shoppingCartDOExample);
+		} else {
+			// 设置订单状态为交易关闭(局部更新)
+			shoppingOrderDOUpdate.setRemark(ResultCode.get(reply.getResultCode()));
+			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
+	
+			// 设置购物订单项为交易关闭状态
+			shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 		}
+		
+		shoppingOrderDOUpdate.setGmtModified(new Date());
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDOUpdate);
+		
+		shoppingOrderItemDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByExampleSelective(shoppingOrderItemDO, shoppingOrderItemDOExample);
 
 	}
 

@@ -57,7 +57,7 @@ public class WxPayController extends BaseController {
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "app调用微信生成预支付订单返回签名加密参数", notes = "app调用微信生成预支付订单返回签名加密参数，[4018]，(杨清华)", httpMethod = "POST")
+	@ApiOperation(value = "app调用微信生成预支付订单返回签名加密参数", notes = "app调用微信生成预支付订单返回签名加密参数，[4020|4021]，(杨清华)", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "getPrepayInfo", method = RequestMethod.POST)
 	public Result getPrepayInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
