@@ -302,6 +302,6 @@ public class AdConverter {
 		dto.setVideoImgUrl(adBO.getVideoImgUrl());
 		return dto;
 	}
-
+	
 
 }

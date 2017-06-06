@@ -168,8 +168,8 @@ public class AdServiceImpl implements AdService {
 		mctransactionMainAddService.sendNotice(adDO.getId());
 		//将广告添加到solr中
 		if(adDO.getType()==1){
-			AdDO ad=adDOMapper.selectByPrimaryKey(adDO.getId());
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(ad);
+			//AdDO ad=adDOMapper.selectByPrimaryKey(adDO.getId());
+			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
 		return i;
@@ -617,9 +617,7 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					SolrInputDocument document = new SolrInputDocument();
-					document.addField("id", adDO.getId());
-					document.addField("status_s", 3);
+				    SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 				    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 				}
 				if(adDO.getType()==3 && adDO.getStatus()==2){ //抢赞过五分钟投放结束
