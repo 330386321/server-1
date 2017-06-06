@@ -23,14 +23,14 @@ public class GtPush {
 
     private static Logger logger = LoggerFactory.getLogger(GtPush.class);
 
-    private static String appId = "y64i2nxRdNASBuhu7PCX25";// 商家
+  /*  private static String appId = "y64i2nxRdNASBuhu7PCX25";// 商家
     private static String appkey = "m7BWuujJ246kECQYw8zk9A";// 商家
     private static String masterSecret = "rBgXZPQney8aaUvwaVW3b4";// 商家
 
     private static String appId2 = "TQd0dTZC8b7Az2zwH4wPk1";// 用户端
     private static String appkey2 = "vi1F0oUgRYAaxZ3xtPeVUA";// 用户端
     private static String masterSecret2 = "5f23soSbuN76qvvxOZipc1";// 用户端
-    private static String host = "http://sdk.open.api.igexin.com/apiex.htm";
+    private static String host = "http://sdk.open.api.igexin.com/apiex.htm";*/
 
 
     /**
@@ -40,9 +40,9 @@ public class GtPush {
      * @param CID
      * @return
      */
-    public String sendMessageToCid(String contents, String CID, String title) {
+    public String sendMessageToCid(String contents, String CID, String title,String host,String appkey,String masterSecret,String appId) {
         IGtPush push = new IGtPush(host, appkey, masterSecret);
-        TransmissionTemplate template = getTemplateMerchant(title, contents);
+        TransmissionTemplate template = getTemplateMerchant(title, contents,appId,appkey);
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
@@ -78,9 +78,9 @@ public class GtPush {
      * @param CID
      * @return
      */
-    public String sendMessageToCidCustoms(String contents, String CID, String title) {
-        IGtPush push = new IGtPush(host, appkey2, masterSecret2);
-        TransmissionTemplate template = getTemplateUser(title, contents);
+    public String sendMessageToCidCustoms(String contents, String CID, String title,String host,String appkey,String masterSecret,String appId) {
+        IGtPush push = new IGtPush(host, appkey, masterSecret);
+        TransmissionTemplate template = getTemplateUser(title, contents,appId,appkey);
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
@@ -89,7 +89,7 @@ public class GtPush {
         // 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
         message.setPushNetWorkType(0);
         Target target = new Target();
-        target.setAppId(appId2);
+        target.setAppId(appId);
         target.setClientId(CID);
         // target.setAlias(Alias);
         IPushResult ret = null;
@@ -116,9 +116,9 @@ public class GtPush {
      * @param contents
      * @return
      */
-    public String pushToAllCompany(String title, String contents) {
+    public String pushToAllCompany(String title, String contents,String host,String appkey,String masterSecret,String appId) {
         IGtPush push = new IGtPush(host, appkey, masterSecret);
-        TransmissionTemplate template = getTemplateMerchant(title, contents);
+        TransmissionTemplate template = getTemplateMerchant(title, contents,appId,appkey);
         AppMessage message = new AppMessage();
         message.setData(template);
 
@@ -143,9 +143,9 @@ public class GtPush {
      * @param contents
      * @return
      */
-    public String pushToAllUser(String title, String contents) {
-        IGtPush push = new IGtPush(host, appkey2, masterSecret2);
-        TransmissionTemplate template = getTemplateUser(title, contents);
+    public String pushToAllUser(String title, String contents,String host,String appkey,String masterSecret,String appId) {
+        IGtPush push = new IGtPush(host, appkey, masterSecret);
+        TransmissionTemplate template = getTemplateUser(title, contents,appId,appkey);
         AppMessage message = new AppMessage();
         message.setData(template);
 
@@ -154,7 +154,7 @@ public class GtPush {
         message.setOfflineExpireTime(24 * 1000 * 3600);
         // 推送给App的目标用户需要满足的条件
         List<String> appIdList = new ArrayList<String>();
-        appIdList.add(appId2);
+        appIdList.add(appId);
         message.setAppIdList(appIdList);
 
         IPushResult ret = push.pushMessageToApp(message);
@@ -171,7 +171,7 @@ public class GtPush {
      * @return
      * @author zhangyong
      */
-    public static TransmissionTemplate getTemplateMerchant(String title, String contents) {
+    public static TransmissionTemplate getTemplateMerchant(String title, String contents,String appId,String appkey) {
         TransmissionTemplate template = new TransmissionTemplate();
         template.setAppId(appId);
         template.setAppkey(appkey);
@@ -194,10 +194,10 @@ public class GtPush {
      * @param contents
      * @return
      */
-    public static TransmissionTemplate getTemplateUser(String title, String contents) {
+    public static TransmissionTemplate getTemplateUser(String title, String contents,String appId,String appkey) {
         TransmissionTemplate template = new TransmissionTemplate();
-        template.setAppId(appId2);
-        template.setAppkey(appkey2);
+        template.setAppId(appId);
+        template.setAppkey(appkey);
         template.setTransmissionContent(contents);
         template.setTransmissionType(2);
         APNPayload payload = new APNPayload();

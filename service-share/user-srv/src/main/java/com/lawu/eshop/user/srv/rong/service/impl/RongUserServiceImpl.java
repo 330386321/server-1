@@ -1,14 +1,14 @@
 package com.lawu.eshop.user.srv.rong.service.impl;
 
-import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
-import org.springframework.stereotype.Service;
-
+import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.rong.RongCloud;
-import com.lawu.eshop.user.srv.rong.constant.RongYunConstant;
 import com.lawu.eshop.user.srv.rong.models.CheckOnlineResult;
 import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
+import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong
@@ -16,7 +16,11 @@ import com.lawu.eshop.user.srv.rong.service.RongUserService;
  */
 @Service
 public class RongUserServiceImpl implements RongUserService {
-    RongCloud rongCloud = RongCloud.getInstance(RongYunConstant.APP_KEY, RongYunConstant.APP_SECRET);
+
+    @Autowired
+     private UserSrvConfig userSrvConfig;
+
+    RongCloud rongCloud = RongCloud.getInstance(userSrvConfig.getRongYunAppKey(), userSrvConfig.getRongYunAppSecret());
 
     @Override
     public TokenResult getRongToken(String userId, String name, String portraitUri){

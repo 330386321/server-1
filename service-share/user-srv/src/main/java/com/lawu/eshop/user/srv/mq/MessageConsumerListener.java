@@ -66,12 +66,12 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
               MemberBO memberBO =  memberService.findMemberByNum(info.getUserNum());
                 //会员单个推送
                 GtPush push = new GtPush();
-                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),info.getTitle());
+                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
             }else {
                 //商家单个推送
                 MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
                 GtPush push = new GtPush();
-                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle());
+                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),userSrvConfig.getGtMerchantAppId());
             }
         } else if (MqConstant.TOPIC_PROPERTY_SRV.equals(topic) && MqConstant.TAG_HANDLE_DEPOSIT.equals(tags)){
             //根据商家编号查询商家
@@ -102,9 +102,9 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             logger.info("gtpush-all-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
            if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
                //推送所有
-               push.pushToAllUser(info.getTitle(),contents.toString());
+               push.pushToAllUser(info.getTitle(),contents.toString(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
            }else{
-               push.pushToAllCompany(info.getTitle(),contents.toString());
+               push.pushToAllCompany(info.getTitle(),contents.toString(),userSrvConfig.getGtHost(),userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),userSrvConfig.getGtMerchantAppId());
            }
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH_AREA.equals(tags)){
             //发送推送消息
@@ -120,12 +120,12 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
                 //推送用户
                 messagePushBOS = memberService.findMessagePushList(info.getArea());
                 for(MessagePushBO messagePushBO : messagePushBOS){
-                    push.sendMessageToCidCustoms(contents.toString(),messagePushBO.getGtCid(),info.getTitle());
+                    push.sendMessageToCidCustoms(contents.toString(),messagePushBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
                 }
             }else{
                 messagePushBOS = merchantService.findMessagePushList(info.getArea());
                 for(MessagePushBO messagePushBO : messagePushBOS){
-                    push.sendMessageToCid(contents.toString(),messagePushBO.getGtCid(),info.getTitle());
+                    push.sendMessageToCid(contents.toString(),messagePushBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),userSrvConfig.getGtMerchantAppId());
                 }
             }
 
