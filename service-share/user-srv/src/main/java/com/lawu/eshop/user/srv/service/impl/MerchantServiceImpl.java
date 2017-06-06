@@ -295,7 +295,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
         //获取融云token
         TokenResult tokenResult = rongUserService.getRongToken(userNum, "E店商家", userSrvConfig.getMerchant_headimg());
-        if (StringUtils.isNotEmpty(tokenResult.getToken())) {
+        if (tokenResult != null && StringUtils.isNotEmpty(tokenResult.getToken())) {
             MerchantDO merchantDO1 = new MerchantDO();
             merchantDO1.setRyToken(tokenResult.getToken());
             merchantDO1.setId(merchantId);
