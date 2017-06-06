@@ -617,7 +617,7 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-				    SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+				    SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
 				    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 				}
 				if(adDO.getType()==3 && adDO.getStatus()==2){ //抢赞过五分钟投放结束

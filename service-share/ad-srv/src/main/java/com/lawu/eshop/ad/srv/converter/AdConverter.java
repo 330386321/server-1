@@ -303,5 +303,29 @@ public class AdConverter {
 		return dto;
 	}
 	
+	public static SolrInputDocument convertSolrUpdateDocument(AdDO adDO) {
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField("id", adDO.getId());
+        document.addField("mediaUrl_s", adDO.getMediaUrl());
+        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("title_s", adDO.getTitle());
+        document.addField("content_s", adDO.getContent());
+		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
+        document.addField("status_s", "3");
+        document.addField("count_i", adDO.getViewcount());
+        document.addField("radius_i", adDO.getRadius());
+        document.addField("type_i", adDO.getType());
+        if(adDO.getPutWay()==1){
+        	if(adDO.getAreas()!=null){
+        		String[] location=adDO.getAreas().split(",");
+            	for (String area : location) {
+            		document.addField("area_ss", area);
+    			}
+        	}else{
+        		document.addField("area_ss", 0);
+        	}
+        }
+        return document;
+    }
 
 }
