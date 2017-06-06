@@ -119,7 +119,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 	    	 */
 			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
 			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
-			criteria.andShoppingOrderIdEqualTo(param.getProdecutModelid());
+			criteria.andShoppingOrderIdEqualTo(shoppingOrderCreateOrderNotification.getShoppingOrderId());
 			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
 			criteria.andProductModelIdEqualTo(param.getProdecutModelid());
 			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
