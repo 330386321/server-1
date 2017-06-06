@@ -34,5 +34,5 @@ public class RongCloud {
 		}
 		return rongCloud.get(appKey);
 	}
-	 
+
 }

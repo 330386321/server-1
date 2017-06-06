@@ -7,7 +7,10 @@ import com.lawu.eshop.user.srv.rong.models.CodeSuccessResult;
 import com.lawu.eshop.user.srv.rong.models.HistoryMessageResult;
 import com.lawu.eshop.user.srv.rong.models.TokenResult;
 import com.lawu.eshop.user.srv.rong.service.RongUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,12 +18,11 @@ import org.springframework.stereotype.Service;
  * @date 2017/4/14.
  */
 @Service
-public class RongUserServiceImpl implements RongUserService {
+public class RongUserServiceImpl implements RongUserService, InitializingBean, ApplicationContextAware {
 
-    @Autowired
-     private UserSrvConfig userSrvConfig;
+    private ApplicationContext applicationContext;
 
-    RongCloud rongCloud = RongCloud.getInstance(userSrvConfig.getRongYunAppKey(), userSrvConfig.getRongYunAppSecret());
+    private RongCloud rongCloud;
 
     @Override
     public TokenResult getRongToken(String userId, String name, String portraitUri){
@@ -45,5 +47,17 @@ public class RongUserServiceImpl implements RongUserService {
     public HistoryMessageResult getHistory(String date) {
         HistoryMessageResult messageResult = rongCloud.message.getHistory(date);
         return  messageResult;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        UserSrvConfig userSrvConfig = applicationContext.getBean(UserSrvConfig.class);
+        rongCloud = RongCloud.getInstance(userSrvConfig.getRongYunAppKey(), userSrvConfig.getRongYunAppSecret());
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
+        this.applicationContext = applicationContext;
     }
 }
