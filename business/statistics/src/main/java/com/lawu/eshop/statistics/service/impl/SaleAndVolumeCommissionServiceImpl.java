@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.CommissionJobParam;
+import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.property.constants.LoveTypeEnum;
@@ -17,6 +19,7 @@ import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.statistics.service.CommissionCommonService;
 import com.lawu.eshop.statistics.service.CommonPropertyService;
+import com.lawu.eshop.statistics.service.OrderSrvService;
 import com.lawu.eshop.statistics.service.PropertySrvService;
 import com.lawu.eshop.statistics.service.SaleAndVolumeCommissionService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
@@ -33,6 +36,8 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 	private CommissionCommonService userCommonService;
 	@Autowired
 	private PropertySrvService propertySrvService;
+	@Autowired
+	private OrderSrvService orderSrvService;
 
 	/**
 	 * // 查询订单相关用户商家的上级邀请关系 //
@@ -41,8 +46,9 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 	 * 第2级提成：actualMoney*(3‰+0.005*level)*0.997，进余额--每升级一个等级提成比例+0.0005 //
 	 * 第3级提成：actualMoney*(1‰+0.005*level)*0.997 ，若A为用户进余额，若A为商家进广告积分
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void commission(List<Long> successOrderIds, List<ShoppingOrderCommissionDTO> orders, String msg) {
+	public void commission(List<ShoppingOrderCommissionDTO> orders,int flag, String msg) {
 		if (orders != null && orders.size() > 0) {
 
 			Map<String, BigDecimal> property = commonPropertyService.getSaleCommissionPropertys();
@@ -66,7 +72,6 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 				if ((memberInviters == null || memberInviters.isEmpty())
 						&& (merchantInviters == null || merchantInviters.isEmpty())) {// 均无上限，直接修改为已算提成
-					successOrderIds.add(order.getId());
 					continue;
 				}
 				
@@ -218,7 +223,19 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 
 				// 修改订单是否计算提成状态
 				if (ResultCode.SUCCESS == retCode1 && ResultCode.SUCCESS == retCode2) {
+					List<Long> successOrderIds = new ArrayList<Long>();
 					successOrderIds.add(order.getId());
+					if(flag == 1){
+						Result result = orderSrvService.updatePayOrderCommissionStatus(successOrderIds);
+						if (result.getRet() != ResultCode.SUCCESS) {
+							logger.error("买单提成更新订单状态返回错误,retCode={}", result.getRet());
+						}
+					}else if(flag == 2){
+						Result result = orderSrvService.updateCommissionStatus(successOrderIds);
+						if (result.getRet() != ResultCode.SUCCESS) {
+							logger.error("商品订单提成更新订单状态返回错误,retCode={}", result.getRet());
+						}
+					}
 				} else {
 					logger.error("{}提成计算上级收益时返回错误,orderId={},retCode1={},retCode2={}", msg, order.getId(), retCode1,
 							retCode2);

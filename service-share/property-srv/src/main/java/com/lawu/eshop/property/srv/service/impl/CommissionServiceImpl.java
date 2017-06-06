@@ -131,19 +131,22 @@ public class CommissionServiceImpl implements CommissionService {
 
 		String num = StringUtil.getRandomNum("");
 		if (param.isLast()) {
-			// 先判断该上级是否已算过提成
-			PointDetailDOExample example = new PointDetailDOExample();
-			com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria = example.createCriteria();
-			criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
-					.andPointTypeEqualTo(param.getTypeVal());
-			List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
-			if (dos != null && dos.size() > 0) {
-				logger.info("isLast已计算过提成，重复计算，直接返回！");
-				return ResultCode.SUCCESS;
-			}
 
 			// 最后一级若为用户进余额，为商家进广告积分
 			if (param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				
+				// 先查询该上级是否已经算过提成
+				TransactionDetailDOExample example = new TransactionDetailDOExample();
+				Criteria criteria = example.createCriteria();
+				criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
+						.andTransactionTypeEqualTo(param.getTypeVal());
+				List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
+				logger.info("isLast dos={},size={}",dos,dos.size());
+				if (dos != null && dos.size() > 0) {
+					logger.info("isLast已计算过提成，重复计算，直接返回！");
+					return ResultCode.SUCCESS;
+				}
+				
 				// 新增点广告的余额交易明细
 				TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 				tdsParam.setTransactionNum(num);
@@ -165,6 +168,19 @@ public class CommissionServiceImpl implements CommissionService {
 				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 
 			} else if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
+				
+				// 先判断该上级是否已算过提成
+				PointDetailDOExample example = new PointDetailDOExample();
+				com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria criteria = example.createCriteria();
+				criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
+						.andPointTypeEqualTo(param.getTypeVal());
+				List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
+				logger.info("isLast dos={},size={}",dos,dos.size());
+				if (dos != null && dos.size() > 0) {
+					logger.info("isLast已计算过提成，重复计算，直接返回！");
+					return ResultCode.SUCCESS;
+				}
+				
 				// 新增积分明细
 				PointDetailSaveDataParam pointDetailSaveDataParam = new PointDetailSaveDataParam();
 				pointDetailSaveDataParam.setPointNum(num);
@@ -194,6 +210,7 @@ public class CommissionServiceImpl implements CommissionService {
 			criteria.andBizIdEqualTo(param.getBizId().toString()).andUserNumEqualTo(param.getUserNum())
 					.andTransactionTypeEqualTo(param.getTypeVal());
 			List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
+			logger.info("isLast dos={},size={}",dos,dos.size());
 			if (dos != null && dos.size() > 0) {
 				logger.info("已计算过提成，重复计算，直接返回！");
 				return ResultCode.SUCCESS;
