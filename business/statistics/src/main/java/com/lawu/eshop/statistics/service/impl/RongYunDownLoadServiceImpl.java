@@ -49,7 +49,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
                 try {
                     DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", statisticsConfig.getDownLoadDir() + File.separator+ dateFormat);
                 } catch (IOException e) {
-                    logger.info("下载消息失败！IO异常");
+                    logger.error("下载消息失败！IO异常",e);
                 }
             }
         }
