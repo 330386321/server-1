@@ -113,7 +113,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     	FavoriteMerchantDOView view=new FavoriteMerchantDOView();
     	view.setMemberId(memberId);
     	view.setType(pageQuery.getManageTypeEnum().val);
-        RowBounds rowBounds = new RowBounds(pageQuery.getCurrentPage(), pageQuery.getPageSize());
+        RowBounds rowBounds = new RowBounds(pageQuery.getOffset(), pageQuery.getPageSize());
         List<FavoriteMerchantDOView> list=favoriteMerchantDOMapperExtend.selectFavoriteMerchantByRowbounds(view, rowBounds);
         List<FavoriteMerchantBO> listBO=new ArrayList<>();
         for (FavoriteMerchantDOView favoriteMerchantDOView : list) {
