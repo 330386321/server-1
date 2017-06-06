@@ -795,6 +795,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		criteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		criteria.andRefundStatusEqualTo(RefundStatusEnum.TO_BE_REFUNDED.getValue());
 		
+		/*
+		 * 有物流 
+		 */
 		// 第一次提醒时间
 		String firstRemindTime = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REMIND_FIRST_TIME);
 		// 第二次提醒时间
@@ -802,6 +805,9 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		// 退款时间
 		String refundTime = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
 		
+		/* 
+		 * 无物流
+		 */
 		// 提醒时间
 		String remindTime = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REMIND_TIME);
 		// 退款时间
