@@ -697,7 +697,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setMemberNum(memberNum);
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
-			userSweepRedtransactionMainAddService.sendNotice(pointPoolDO.getId());
+			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
 			if(list.size()==1){ //红包领取完成 将红包下架
 				AdDO ad=new AdDO();
 				ad.setId(pointPoolDO.getAdId());
