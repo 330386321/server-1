@@ -16,9 +16,9 @@
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"  />
 	<job:simple id="clickAdCommissionJob" description="点击广告提成" class="com.lawu.eshop.statistics.jobs.ClickAdCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-	<job:simple id="storeStatisticsJob" description="门店人均消费、平均得分、好评率统计" class="com.lawu.eshop.statistics.jobs.StoreStatisticsJob" registry-center-ref="regCenter" cron="0 0 0 1/7 * ?"
+	<job:simple id="storeStatisticsJob" description="门店人均消费、平均得分、好评率统计" class="com.lawu.eshop.statistics.jobs.StoreStatisticsJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
-	<job:simple id="productAverageDailySalesJob" description="商品平均日销量" class="com.lawu.eshop.statistics.jobs.ProductAverageDailySalesJob" registry-center-ref="regCenter" cron="0 0 0 1/7 * ?"
+	<job:simple id="productAverageDailySalesJob" description="商品平均日销量" class="com.lawu.eshop.statistics.jobs.ProductAverageDailySalesJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="rongYunDownLoadMessageJob" description="下载融云历史消息" class="com.lawu.eshop.statistics.jobs.RongYunDownLoadMessageJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
