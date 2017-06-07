@@ -45,6 +45,9 @@ public class ResultCode {
     public static final int ACCOUNT_EXIST = 1027;
     public static final int SMS_SEND_FAIL = 1028;
 
+    public static final int ID_CARD_RECORD_EXIST = 1029;
+    public static final int REG_NUMBER_RECORD_EXIST = 1030;
+
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
     public static final int USER_WRONG_ID = 2001;
@@ -191,6 +194,9 @@ public class ResultCode {
         ResultCode.messageMap.put(INVITER_NO_EXIST, "邀请人不存在，请重新输入");
         ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
         ResultCode.messageMap.put(SMS_SEND_FAIL, "短信验证码发送失败，请稍后重试！");
+
+        ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
+        ResultCode.messageMap.put(REG_NUMBER_RECORD_EXIST, "该执照已经创建过门店");
 
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");

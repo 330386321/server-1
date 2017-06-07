@@ -12,32 +12,6 @@ import com.lawu.eshop.user.param.*;
 import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.service.*;
-import com.lawu.eshop.user.dto.CashUserInfoDTO;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
-import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
-import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
-import com.lawu.eshop.user.dto.StoreDetailDTO;
-import com.lawu.eshop.user.param.ApplyStoreParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MemberBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
-import com.lawu.eshop.user.srv.service.MemberService;
-import com.lawu.eshop.user.srv.service.MerchantAuditService;
-import com.lawu.eshop.user.srv.service.MerchantStoreImageService;
-import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
-import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -130,7 +104,7 @@ public class MerchantStoreController extends BaseController {
 		if (!StringUtils.isEmpty(merchantStoreParam.getRegNumber())) {
 			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getRegNumber(), 1);
 			if (merchantStoreProfileBO != null) {
-				return successCreated(ResultCode.RECORD_EXIST);
+				return successCreated(ResultCode.REG_NUMBER_RECORD_EXIST);
 			}
 		}
 
@@ -138,7 +112,7 @@ public class MerchantStoreController extends BaseController {
 		if (!StringUtils.isEmpty(merchantStoreParam.getOperatorCardId())) {
 			MerchantStoreProfileBO merchantStoreProfileBO = merchantStoreInfoService.selectStoreInfoByExample(merchantStoreParam.getOperatorCardId(), 2);
 			if (merchantStoreProfileBO != null) {
-				return successCreated(ResultCode.RECORD_EXIST);
+				return successCreated(ResultCode.ID_CARD_RECORD_EXIST);
 			}
 		}
 
