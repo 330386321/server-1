@@ -35,7 +35,7 @@ clientPath="/home/backup/mysql/"
 ###定义要镜像的本地文件目录路径 源服务器（必须是绝对路径）###
 serverPath=${backup_dir}
 ###定义生产环境的ip###
-web_ip="192.168.1.25"
+web_ip="192.168.1.23"
 
 # date format for backup file (dd-mm-yyyy)  #
 time="$(date +"%Y-%m-%d")"
