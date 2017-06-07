@@ -145,6 +145,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setGmtCreate(new Date());
 		adDO.setGmtModified(new Date());
 		adDO.setAreas(adParam.getAreas());
+		adDO.setRegionName(adParam.getRegionName());
 		adDO.setContent(adParam.getContent());
 		Integer i=adDOMapper.insert(adDO);
 		if(adParam.getTypeEnum().val==3){ //E赞  红包
@@ -249,14 +250,16 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		if(adMerchantParam.getStatusEnum()==null && adMerchantParam.getTypeEnum()==null && adMerchantParam.getPutWayEnum()==null ){
 			example.createCriteria().andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-					.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
 					.andMerchantIdEqualTo(merchantId);
 		}else{
 			Criteria c1=example.createCriteria();
+			List<Byte> status=new ArrayList<>();
 			
 			if(adMerchantParam.getStatusEnum()!=null){
 				if(adMerchantParam.getStatusEnum().val==3){
-					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val)
+					status.add(AdStatusEnum.AD_STATUS_PUTED.val);
+					status.add(AdStatusEnum.AD_STATUS_OUT.val);
+					c1.andStatusIn(status)
 					.andMerchantIdEqualTo(merchantId);
 					if(adMerchantParam.getTypeEnum()!=null){
 						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
@@ -266,26 +269,21 @@ public class AdServiceImpl implements AdService {
 					}
 
 				}else{
-					c1.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val)
-					.andMerchantIdEqualTo(merchantId);
-					Criteria  c2=example.createCriteria();
-					 c2.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val)
+					status.add(AdStatusEnum.AD_STATUS_ADD.val);
+					status.add(AdStatusEnum.AD_STATUS_PUTING.val);
+					status.add(AdStatusEnum.AD_STATUS_AUDIT.val);
+					c1.andStatusIn(status)
 					.andMerchantIdEqualTo(merchantId);
 					 if(adMerchantParam.getTypeEnum()!=null){
 						c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
-						c2.andTypeEqualTo(adMerchantParam.getTypeEnum().val);
 					 }
 					 if(adMerchantParam.getPutWayEnum()!=null){
 						c1.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
-						c2.andPutWayEqualTo(adMerchantParam.getPutWayEnum().val);
 					 }
-					 example.or(c2);
-
 				}
 
 			}else{
 				c1.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val)
-				.andStatusNotEqualTo(AdStatusEnum.AD_STATUS_OUT.val)
 				.andMerchantIdEqualTo(merchantId);
 				if(adMerchantParam.getTypeEnum()!=null){
 					c1.andTypeEqualTo(adMerchantParam.getTypeEnum().val);

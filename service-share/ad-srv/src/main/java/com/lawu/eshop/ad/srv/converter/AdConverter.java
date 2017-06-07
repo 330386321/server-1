@@ -58,13 +58,10 @@ public class AdConverter {
 		adBO.setRadius(adDO.getRadius());
 		adBO.setContent(adDO.getContent());
 		adBO.setVideoImgUrl(adDO.getVideoImgUrl());
-		if(adDO.getPutWay()==1){
-			adBO.setAreas(adDO.getAreas());
-		}else if(adDO.getPutWay()==3){
-			adBO.setRadius(adDO.getRadius());
-		}else if(adDO.getContent()!=null){
-			adBO.setContent(adDO.getContent());
-		}
+		adBO.setAreas(adDO.getAreas());
+		adBO.setRadius(adDO.getRadius());
+		adBO.setContent(adDO.getContent());
+		adBO.setRegionName(adDO.getRegionName());
         return adBO;
 		
 	}
@@ -300,6 +297,7 @@ public class AdConverter {
 		dto.setRadius(adBO.getRadius());
 		dto.setContent(adBO.getContent());
 		dto.setVideoImgUrl(adBO.getVideoImgUrl());
+		dto.setRegionName(adBO.getRegionName());
 		return dto;
 	}
 	

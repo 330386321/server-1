@@ -43,6 +43,9 @@ public class AdParam {
 
 	@ApiParam (name="adCount", value = "广告数量")
     private Integer adCount;
+	
+	@ApiParam (name="regionName", value = "区域名称")
+	private String regionName;
 
 
 	public String getTitle() {
@@ -154,6 +157,16 @@ public class AdParam {
 
 	public void setAdCount(Integer adCount) {
 		this.adCount = adCount;
+	}
+
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 

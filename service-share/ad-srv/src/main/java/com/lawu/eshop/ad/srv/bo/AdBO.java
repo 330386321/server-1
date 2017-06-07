@@ -71,6 +71,8 @@ public class AdBO {
    private BigDecimal merchantLatitude;
    
    private String videoImgUrl;
+   
+   private String regionName;
 	
 
 	public Boolean getIsPraise() {
@@ -263,6 +265,14 @@ public class AdBO {
 
 	public void setVideoImgUrl(String videoImgUrl) {
 		this.videoImgUrl = videoImgUrl;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 	
 	
