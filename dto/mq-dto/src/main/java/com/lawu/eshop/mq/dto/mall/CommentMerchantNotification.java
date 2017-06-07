@@ -10,7 +10,9 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class CommentMerchantNotification extends Notification {
 
-    @ApiModelProperty(value = "买单ID")
+	private static final long serialVersionUID = 8578002481915305012L;
+	
+	@ApiModelProperty(value = "买单ID")
     private Long payOrderId;
 
     public Long getPayOrderId() {

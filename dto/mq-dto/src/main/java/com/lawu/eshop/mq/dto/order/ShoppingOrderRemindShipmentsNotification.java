@@ -9,8 +9,8 @@ import java.io.Serializable;
  */
 public class ShoppingOrderRemindShipmentsNotification implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 2965410379351297241L;
+
 	/**
 	 * 订单数量
 	 */

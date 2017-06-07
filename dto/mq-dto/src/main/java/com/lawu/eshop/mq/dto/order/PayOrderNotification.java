@@ -8,7 +8,9 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class PayOrderNotification extends Notification {
 
-    private Long payOrderId;
+	private static final long serialVersionUID = -3962777472789107260L;
+	
+	private Long payOrderId;
 
     public Long getPayOrderId() {
         return payOrderId;

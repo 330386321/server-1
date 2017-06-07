@@ -4,7 +4,9 @@ import com.lawu.eshop.compensating.transaction.Notification;
 
 public class DelProductCommentNotification extends Notification {
 
-    private Long productModelId;
+	private static final long serialVersionUID = 5828000640541268908L;
+	
+	private Long productModelId;
 
 	public Long getProductModelId() {
 		return productModelId;

@@ -11,8 +11,8 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class ShoppingOrderTradingSuccessIncreaseSalesNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 1489924393053128663L;
+
 	/**
 	 * 购物订单id
 	 */

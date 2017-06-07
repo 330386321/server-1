@@ -10,8 +10,9 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class ShoppingOrderPaymentNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3823541741697498663L;
 	
+
 	/**
 	 * 购物订单id,多个订单id用逗号分隔
 	 */

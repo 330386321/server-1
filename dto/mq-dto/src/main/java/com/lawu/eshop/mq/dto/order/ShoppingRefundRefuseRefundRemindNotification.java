@@ -8,8 +8,8 @@ import java.io.Serializable;
  */
 public class ShoppingRefundRefuseRefundRemindNotification implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 208133220942939053L;
+
 	/**
 	 * 购物订单项id
 	 */

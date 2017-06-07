@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class ProductModeUpdateInventoryDTO implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 566121492322667451L;
 
 	/**
 	 * 商品模型id

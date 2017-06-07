@@ -7,9 +7,12 @@ import java.io.Serializable;
  * @date 2017/04/18
  */
 public class ShoppingRefundToBeReturnRemindNotification implements Serializable {
-
-	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4001151172998889235L;
+
 	/**
 	 * 购物订单项id
 	 */

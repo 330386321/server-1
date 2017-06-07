@@ -8,10 +8,10 @@ import java.io.Serializable;
  * @date 2017/5/15.
  */
 public class HandleDepostMessage implements Serializable {
+	
+	private static final long serialVersionUID = 4073015142877452444L;
 
-    private static final long serialVersionUID = 1L;
-
-    private String userNum;
+	private String userNum;
 
     private MerchantStatusEnum statusEnum;
 

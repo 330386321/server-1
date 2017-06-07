@@ -7,9 +7,9 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @date 2017/04/18
  */
 public class ShoppingRefundFillReturnAddressRemindNotification extends Notification {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 6723899204000947644L;
+
 	/**
 	 * 购物订单项id
 	 */

@@ -9,8 +9,8 @@ import java.math.BigDecimal;
  */
 public class ShoppingRefundToBeRefundRemindNotification implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 730545997346920509L;
+
 	/**
 	 * 购物订单项id
 	 */

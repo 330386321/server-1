@@ -10,7 +10,7 @@ import com.lawu.eshop.compensating.transaction.Reply;
  */
 public class ShoppingOrderCreateOrderReply extends Reply {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5142282166586603538L;
 	
 	private Integer resultCode;
 

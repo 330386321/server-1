@@ -8,9 +8,9 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @date 2017/04/06
  */
 public class ShoppingOrderCreateOrderFansNotification extends Notification {
-
-	private static final long serialVersionUID = 1L;
 	
+	private static final long serialVersionUID = 579024029688970787L;
+
 	/**
 	 * 用户id
 	 */

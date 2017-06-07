@@ -11,8 +11,8 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
  */
 public class ShoppingRefundAgreeToRefundNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 7550828875292411964L;
+
 	/**
 	 * 购物订单id
 	 */

@@ -9,8 +9,8 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class ShoppingOrderAutoCommentNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -1949216168879419578L;
+
 	/**
 	 * 购物订单id
 	 */

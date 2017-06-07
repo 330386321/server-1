@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class FansInfo implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3621898811051179446L;
 
 	private Long memberId;
 

@@ -8,8 +8,8 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class ShoppingRefundRefundFailedRemindNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 6048554730530763951L;
+
 	/**
 	 * 购物订单id
 	 */

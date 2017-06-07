@@ -8,7 +8,7 @@ import com.lawu.eshop.compensating.transaction.Notification;
  */
 public class CommentProductNotification extends Notification{
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7788009032853163112L;
 	
 	private Long shoppingOrderItemId;
 

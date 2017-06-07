@@ -10,8 +10,8 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
  */
 public class ShoppingOrderPaymentsToMerchantNotification extends Notification {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 4283327727130765097L;
+
 	/**
 	 * 购物订单id
 	 */

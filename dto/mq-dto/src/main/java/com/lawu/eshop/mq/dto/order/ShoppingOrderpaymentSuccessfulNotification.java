@@ -9,9 +9,9 @@ import java.io.Serializable;
  */
 public class ShoppingOrderpaymentSuccessfulNotification implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-    /**
+	private static final long serialVersionUID = -5535747216108586477L;
+
+	/**
     * 订单id
     */
     private Long id;

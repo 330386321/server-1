@@ -7,8 +7,10 @@ import java.io.Serializable;
  * @date 2017/4/14.
  */
 public class MessagePushInfo implements Serializable{
-    private static final long serialVersionUID = 1L;
-    private Long messageId;
+	
+	private static final long serialVersionUID = 3365568735263813470L;
+
+	private Long messageId;
 
     private String title;
 

@@ -8,8 +8,8 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @date 2017/04/18
  */
 public class ShoppingOrderDeleteOrderNotification extends Notification {
-
-	private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = -5967264070363853765L;
 	
 	/**
 	 * 购物订单id
