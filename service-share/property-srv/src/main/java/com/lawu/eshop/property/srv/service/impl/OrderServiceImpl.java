@@ -39,9 +39,12 @@ import com.lawu.eshop.property.param.WxPayConfigParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.FreezeDOExample;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.extend.FreezeDOView;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.FreezeDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
@@ -64,6 +67,8 @@ public class OrderServiceImpl implements OrderService {
 	private PropertyService propertyService;
 	@Autowired
 	private FreezeDOMapperExtend freezeDOMapperExtend;
+	@Autowired
+	private TransactionDetailDOMapper transactionDetailDOMapper;
 
 	@Autowired
 	private PropertySrvConfig propertySrvConfig;
@@ -276,7 +281,6 @@ public class OrderServiceImpl implements OrderService {
 			ThirdPayRefundParam rparam = new ThirdPayRefundParam();
 			rparam.setRefundId(StringUtil.getRandomNumAppend(param.getOrderItemIds().replaceAll(",", "")));
 			rparam.setRefundMoney(param.getRefundMoney());
-			rparam.setTotalMoney(rparam.getTotalMoney());
 			rparam.setTradeNo(param.getTradeNo());
 			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
 				AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
@@ -292,6 +296,17 @@ public class OrderServiceImpl implements OrderService {
 				AlipayBusinessHandle.refund(rparam, jsonResult,aliPayConfigParam);
 
 			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
+				
+				TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+				transactionDetailDOExample.createCriteria().andThirdTransactionNumEqualTo(param.getTradeNo()).andUserNumEqualTo(param.getSideUserNum());
+				List<TransactionDetailDO> transactionDetailList = transactionDetailDOMapper.selectByExample(transactionDetailDOExample);
+				if(transactionDetailList == null || transactionDetailList.isEmpty()){
+					logger.error("微信订单({})退款根据第三方订单号({})和用户编号({})查询交易明细支付总金额时返回为空！",param.getOrderId(),param.getTradeNo(),param.getSideUserNum());
+					return ResultCode.FAIL;
+				}
+				TransactionDetailDO transactionDetailDO = transactionDetailList.get(0);
+				rparam.setTotalMoney(transactionDetailDO.getAmount().toString());
+				
 				WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
 				wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdMember());
 				wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdMember());
