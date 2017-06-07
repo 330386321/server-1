@@ -113,8 +113,8 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             document.addField("industryPath_s", solrDocument.get("industryPath_s"));
             document.addField("industryName_s", solrDocument.get("industryName_s"));
             document.addField("storePic_s", solrDocument.get("storePic_s"));
-            document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount());
-            document.addField("averageScore_d", param.getAverageScore());
+            document.addField("averageConsumeAmount_d", param.getAverageConsumeAmount() == null ? 0 : param.getAverageConsumeAmount().toString());
+            document.addField("averageScore_d", param.getAverageScore() == null ? 0 : param.getAverageScore().toString());
             document.addField("favoriteNumber_i", solrDocument.get("favoriteNumber_i"));
             SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         }

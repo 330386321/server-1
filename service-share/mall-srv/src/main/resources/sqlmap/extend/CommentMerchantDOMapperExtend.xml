@@ -19,7 +19,7 @@
 
     <select id="selectAvgGrade" resultType="java.lang.Double" parameterType="java.lang.Long">
         SELECT
-	    AVG(grade)
+	    ifnull(AVG(grade),0)
       FROM
 	  comment_merchant
 	  WHERE merchant_id =#{merchantId}
@@ -76,7 +76,7 @@
 
     <select id="getAvgSpend" resultType="java.lang.Double" parameterType="java.lang.Long">
         SELECT
-        AVG(avg_spend)
+        ifnull(AVG(avg_spend),0)
         FROM
         comment_merchant
         WHERE merchant_id =#{merchantId} and status=1 and avg_spend >0

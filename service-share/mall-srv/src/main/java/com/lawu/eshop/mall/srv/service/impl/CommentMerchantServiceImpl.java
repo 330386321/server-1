@@ -206,7 +206,10 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).
                 andMerchantIdEqualTo(merchantId);
         Integer totalCount = commentMerchantDOMapper.countByExample(example);
-        double goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        double goodGrade = 0;
+        if(totalCount > 0){
+            goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+        }
 
         //人均消费
         Double averageConsumeAmount = commentMerchantDOMapperExtend.getAvgSpend(merchantId);

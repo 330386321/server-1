@@ -114,9 +114,10 @@ public class CommentMerchantController extends BaseController {
 
         CommentGradeBO commentGradeBO = commentMerchantService.getCommentAvgGrade(merchantId);
         if (commentGradeBO == null) {
-            return successGet();
+            return successGet(ResultCode.NOT_FOUND_DATA);
         }
         CommentGradeDTO commentGradeDTO = new CommentGradeDTO();
+        commentGradeDTO.setAverageConsumeAmount(commentGradeBO.getAverageConsumeAmount());
         commentGradeDTO.setGoodGrad(commentGradeBO.getGoodGrad());
         commentGradeDTO.setAvgGrade(commentGradeBO.getAvgGrade());
         return successGet(commentGradeDTO);
