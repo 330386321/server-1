@@ -78,6 +78,7 @@ public class WxPayController extends BaseController {
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
+		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
@@ -119,6 +120,7 @@ public class WxPayController extends BaseController {
 		aparam.setBizFlagEnum(bizFlagEnum);
 		aparam.setUserNum(userNum);
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
+		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagEnum.val)) {

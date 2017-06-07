@@ -39,6 +39,16 @@ public class PcAlipayDataParam extends PcAlipayParam implements Serializable {
 	@NotBlank(message = "subject不能为空")
 	private String subject;
 
+	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
+	private Long merchantId;
+	
+	public Long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+		
 	public String getOutTradeNo() {
 		return outTradeNo;
 	}

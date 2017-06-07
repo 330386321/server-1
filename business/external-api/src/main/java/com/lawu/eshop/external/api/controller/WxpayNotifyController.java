@@ -127,6 +127,7 @@ public class WxpayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
+						param.setMerchantId(Long.valueOf(extra[5]));
 						result = depositService.doHandleDepositNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {

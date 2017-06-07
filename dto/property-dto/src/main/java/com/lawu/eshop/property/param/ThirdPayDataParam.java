@@ -49,6 +49,15 @@ public class ThirdPayDataParam extends ThirdPayParam {
 	@Pattern(regexp = "^\\d{0,8}\\.{0,1}(\\d{1,2})?$", message = "totalAmount格式错误要求数字或小数位不超过2位")
 	private String totalAmount;
 	
+	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
+	private Long merchantId;
+	
+	public Long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
 	public String getUserNum() {
 		return userNum;
 	}
