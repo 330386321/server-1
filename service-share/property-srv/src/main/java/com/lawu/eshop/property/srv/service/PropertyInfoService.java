@@ -137,6 +137,6 @@ public interface PropertyInfoService {
      * @author yangqh
      * @date 2017年5月26日 上午11:08:53
      */
-	Long getPropertyinfoFreeze(String userNum);
+    PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum);
 
 }

@@ -1,9 +1,25 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoBackageParam;
@@ -26,16 +42,6 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 资产管理服务实现
@@ -305,14 +311,16 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
-	public Long getPropertyinfoFreeze(String userNum) {
+	public PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum) {
+		PropertyinfoFreezeEnum rtn = null;
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> dos = propertyInfoDOMapper.selectByExample(example);
 		if(dos == null || dos.isEmpty() || dos.size() > 1){
-			return 2L;
+			return rtn;
 		}
-		return Long.valueOf(StringUtil.byteToInt(dos.get(0).getFreeze()));
+		rtn = PropertyinfoFreezeEnum.getEnum(dos.get(0).getFreeze());
+		return rtn;
 	}
 
 }

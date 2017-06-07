@@ -1,6 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -35,6 +33,7 @@ import com.lawu.eshop.merchant.api.service.AdService;
 import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
@@ -78,13 +77,13 @@ public class AdController extends BaseController {
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	Result<Long> result=propertyInfoService.getPropertyinfoFreeze(userNum);
-    	if(isSuccess(result)){
-    		if(result.getModel()==1){
+    	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+    	if (isSuccess(resultFreeze)){
+    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
     			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-    		}else if(result.getModel()==2){
-    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_EXCEPITON);
     		}
+    	} else {
+    		return successCreated(resultFreeze.getRet());
     	}
     	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
     	PropertyPointDTO propertyPointDTO=rs.getModel();

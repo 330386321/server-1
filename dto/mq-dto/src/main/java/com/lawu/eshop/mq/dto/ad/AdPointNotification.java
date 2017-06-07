@@ -10,6 +10,8 @@ import java.math.BigDecimal;
  */
 public class AdPointNotification extends Notification {
 	
+	private static final long serialVersionUID = -1487164000601816456L;
+	
 	private Long id;
     
 	private String userNum;

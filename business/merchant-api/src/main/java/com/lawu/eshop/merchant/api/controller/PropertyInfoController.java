@@ -15,6 +15,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
@@ -91,5 +92,19 @@ public class PropertyInfoController extends BaseController {
     public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	return successGet(propertyInfoService.getPropertyInfoMoney(userNum));
+    }
+    
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "获取用户是否冻结", notes = "获取用户是否冻结(NO-否|YES-是)。[6026]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
+    public Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result<PropertyinfoFreezeEnum> result = propertyInfoService.getPropertyinfoFreeze(userNum);
+		if (!isSuccess(result)) {
+			return successGet(result.getRet());
+		}
+        return successGet(result);
     }
 }
