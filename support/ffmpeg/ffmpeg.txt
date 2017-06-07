@@ -32,13 +32,7 @@
 七、安装成功 执行
 	$ /usr/local/ffmpeg/bin/ffmpeg    
  
-	如果提示ffmpeg: error while loading shared libraries: libavdevice.so.56: cannot open shared object file: No such file or directory的错误
-	找到这个库
-	$ sudo find / -name "libavdevice.so.56"
-
-	由结果可见, 在我们编译后的/usr/local/ffmpeg/lib/中存在libavdevice.so.56,  我们需要将这个库链接写到/etc/ld.so.conf中然后执行sudo ldconfig, 操作如下:
-		
-	$ sudo echo '/usr/local/ffmpeg/lib/libavdevice.so.56' >> /etc/ld.so.conf
+	vi /etc/ld.so.conf
 
 	再执行
 	$ sudo ldconfig

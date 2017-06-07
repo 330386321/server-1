@@ -14,7 +14,7 @@
 
 ```bash
     cd /usr/local/eshop/rocketmq/alibaba-rocketmq/bin
-```
+``` 
 1、配置broker.p
 ----
 

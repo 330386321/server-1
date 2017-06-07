@@ -266,6 +266,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞了");
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
+        
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "提现金额必须大于等于10元");
