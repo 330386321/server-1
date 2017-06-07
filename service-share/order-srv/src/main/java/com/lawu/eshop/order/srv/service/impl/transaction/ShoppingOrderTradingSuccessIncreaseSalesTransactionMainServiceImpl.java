@@ -49,7 +49,7 @@ public class ShoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl 
     	List<ProductModeUpdateInventoryDTO> params = new ArrayList<ProductModeUpdateInventoryDTO>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
         	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
-        	productModeUpdateInventoryParam.setProdecutModelid(shoppingOrderItemBO.getProductModelId());
+        	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
         	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
         	params.add(productModeUpdateInventoryParam);
         }

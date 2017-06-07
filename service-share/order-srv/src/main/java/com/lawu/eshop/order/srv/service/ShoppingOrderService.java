@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
 import com.lawu.eshop.order.dto.ReportRiseRerouceDTO;
@@ -161,7 +162,7 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @author Sunny
 	 */
-	void minusInventorySuccess(Long id);
+	void minusInventorySuccess(Long id, ShoppingOrderCreateOrderReply reply);
 	
 	/**
 	 * 更新订单信息

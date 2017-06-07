@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionMainService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
+import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
@@ -26,7 +26,7 @@ import com.lawu.eshop.order.srv.service.ShoppingOrderService;
  */
 @Service("shoppingOrderCreateOrderTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.CREATE_ORDER, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CREATE_ORDER)
-public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCreateOrderNotification, Reply> {
+public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderCreateOrderNotification, ShoppingOrderCreateOrderReply> {
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
@@ -52,7 +52,7 @@ public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends Abstract
         List<ProductModeUpdateInventoryDTO> params = new ArrayList<ProductModeUpdateInventoryDTO>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
         	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
-        	productModeUpdateInventoryParam.setProdecutModelid(shoppingOrderItemBO.getProductModelId());
+        	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());
         	productModeUpdateInventoryParam.setQuantity(shoppingOrderItemBO.getQuantity());
         	params.add(productModeUpdateInventoryParam);
         }
@@ -69,11 +69,11 @@ public class ShoppingOrderCreateOrderTransactionMainServiceImpl extends Abstract
      */
     @Transactional
     @Override
-    public void afterSuccess(Long shoppingOrderId, Reply reply) {
+    public void afterSuccess(Long shoppingOrderId, ShoppingOrderCreateOrderReply reply) {
     	/*
     	 * 更新购物订单以及购物订单的状态为待支付状态
     	 * 删除购物车记录
     	 */
-    	shoppingOrderService.minusInventorySuccess(shoppingOrderId);
+    	shoppingOrderService.minusInventorySuccess(shoppingOrderId, reply);
     }
 }

@@ -13,19 +13,19 @@ public class ProductModeUpdateInventoryDTO implements Serializable {
 	/**
 	 * 商品模型id
 	 */
-	private Long prodecutModelid;
+	private Long prodecutModelId;
 
 	/**
 	 * 数量
 	 */
 	private Integer quantity;
 
-	public Long getProdecutModelid() {
-		return prodecutModelid;
+	public Long getProdecutModelId() {
+		return prodecutModelId;
 	}
 
-	public void setProdecutModelid(Long prodecutModelid) {
-		this.prodecutModelid = prodecutModelid;
+	public void setProdecutModelId(Long prodecutModelId) {
+		this.prodecutModelId = prodecutModelId;
 	}
 
 	public Integer getQuantity() {
