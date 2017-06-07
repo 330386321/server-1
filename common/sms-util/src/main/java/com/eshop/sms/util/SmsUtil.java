@@ -1,9 +1,7 @@
-package util;
+package com.eshop.sms.util;
 
 
-import com.lawu.eshop.mall.param.SmsConfigParam;
 import com.lawu.eshop.utils.DateUtil;
-import constants.SmsConstant;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;

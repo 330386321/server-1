@@ -5,7 +5,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.constants.VerifyCodePurposeEnum;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
-import com.lawu.eshop.mall.param.SmsConfigParam;
+import com.eshop.sms.util.SmsConfigParam;
 import com.lawu.eshop.mall.srv.MallSrvConfig;
 import com.lawu.eshop.mall.srv.bo.SmsRecordBO;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
@@ -13,7 +13,7 @@ import com.lawu.eshop.utils.RandomUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import util.SmsUtil;
+import com.eshop.sms.util.SmsUtil;
 
 import java.text.ParseException;
 import java.util.Map;

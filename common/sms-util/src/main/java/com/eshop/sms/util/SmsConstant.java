@@ -1,4 +1,4 @@
-package constants;
+package com.eshop.sms.util;
 
 /**
  * 发送短信参数
