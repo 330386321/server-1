@@ -1,5 +1,13 @@
 package com.lawu.eshop.mq.message.impl;
 
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import com.alibaba.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import com.alibaba.rocketmq.client.consumer.listener.MessageListenerConcurrently;
@@ -7,12 +15,6 @@ import com.alibaba.rocketmq.common.message.MessageExt;
 import com.lawu.eshop.mq.consumer.CustomConsumer;
 import com.lawu.eshop.mq.consumer.CustomConsumerRegister;
 import com.lawu.eshop.mq.utils.ByteUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * 设备报文消费监听
@@ -36,6 +38,9 @@ public abstract class AbstractMessageConsumerListener implements MessageListener
             Object object;
             try {
                 object = ByteUtil.byteToObject(body);
+            } catch(InvalidClassException e) {
+            	logger.warn("Message type does not match", e);
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             } catch (IOException | ClassNotFoundException e) {
                 logger.error("Failure consumption, later try to consume", e);
                 return ConsumeConcurrentlyStatus.RECONSUME_LATER;
