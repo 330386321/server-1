@@ -103,6 +103,10 @@ public class AdServiceImpl implements AdService {
 
 	@Autowired
 	private AdSrvConfig adSrvConfig;
+	
+	private int currentPage=1;
+	
+	private int currentPageStatus=1;
 
 	/**
 	 * 商家发布E赚
@@ -169,7 +173,6 @@ public class AdServiceImpl implements AdService {
 		mctransactionMainAddService.sendNotice(adDO.getId());
 		//将广告添加到solr中
 		if(adDO.getType()==1){
-			//AdDO ad=adDOMapper.selectByPrimaryKey(adDO.getId());
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
@@ -607,7 +610,9 @@ public class AdServiceImpl implements AdService {
 		status.add(AdStatusEnum.AD_STATUS_ADD.val);
 		status.add(AdStatusEnum.AD_STATUS_PUTING.val);
 		example.createCriteria().andStatusIn(status).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
-		 List<AdDO> listADD=adDOMapper.selectByExample(example);
+		RowBounds rowBounds = new RowBounds((currentPageStatus-1)*100, 100);
+		currentPageStatus++;
+		List<AdDO> listADD=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 if(!listADD.isEmpty())
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
@@ -636,11 +641,11 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public Page<AdBO> selectChoiceness(AdMemberParam adMemberParam) {
 		AdDOExample example=new AdDOExample();
+		List<Byte> status=new ArrayList<>();
+		status.add(AdStatusEnum.AD_STATUS_PUTING.val);
+		status.add(AdStatusEnum.AD_STATUS_ADD.val);
 		Criteria cr= example.createCriteria();
-		cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
-		Criteria cr2= example.createCriteria();
-		cr2.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		example.or(cr2);
+		cr.andStatusIn(status).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
 		example.setOrderByClause("gmt_create desc");
 		if(adMemberParam.getTypeEnum()!=null){
 			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
@@ -750,8 +755,10 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public List<Long> getAllAd() {
 		AdDOExample example =new AdDOExample();
-		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusNotEqualTo(AdStatusEnum.AD_STATUS_DELETE.val);
-		List<AdDO> list=adDOMapper.selectByExample(example);
+		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
+		currentPage++;
+		List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		
 		List<Long> ids=new ArrayList<>();
 		for (AdDO adDO : list) {
@@ -768,11 +775,9 @@ public class AdServiceImpl implements AdService {
 		adDO.setViewcount(count);
 		adDOMapper.updateByPrimaryKeySelective(adDO);
 		//更新solr广告浏览人数
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
-        if (solrDocument != null) {
-        	 SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-			 SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
-        }
+        SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
+		SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+        
 	}
 
 	@Override
