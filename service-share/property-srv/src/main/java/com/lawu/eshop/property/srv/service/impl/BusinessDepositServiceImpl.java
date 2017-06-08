@@ -189,6 +189,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		for (BusinessDepositDO bddo : bddos) {
 			BusinessDepositQueryBO ddqbo = new BusinessDepositQueryBO();
 			ddqbo.setId(bddo.getId());
+			ddqbo.setBusinessId(bddo.getBusinessId());
 			ddqbo.setGmtPay(
 					bddo.getGmtPay() == null ? "" : DateUtil.getDateFormat(bddo.getGmtPay(), "yyyy-MM-dd HH:mm:ss"));
 			ddqbo.setThirdNumber(bddo.getThirdNumber() == null ? "" : bddo.getThirdNumber());

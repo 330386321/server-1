@@ -7,6 +7,8 @@ import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 public class BusinessDepositQueryBO {
 
 	private Long id;
+	
+	 private Long businessId;
 
 	private String gmtPay;
 
@@ -50,6 +52,14 @@ public class BusinessDepositQueryBO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
 	}
 
 	public String getGmtPay() {
