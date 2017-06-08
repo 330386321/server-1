@@ -1,5 +1,8 @@
 package com.lawu.eshop.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 
@@ -11,6 +14,12 @@ import java.net.InetAddress;
  */
 public class IpUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(IpUtil.class);
+
+    private static final String UNKNOWN = "unknown";
+
+    private IpUtil(){}
+
     /**
      * 获取IP地址
      *
@@ -18,35 +27,32 @@ public class IpUtil {
      * @return
      */
     public static String getIpAddress(HttpServletRequest request) {
-        String ipAddress = null;
-        ipAddress = request.getHeader("x-forwarded-for");
+        String ipAddress = request.getHeader("x-forwarded-for");
         if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+                || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("Proxy-Client-IP");
         }
         if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+                || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader("WL-Proxy-Client-IP");
         }
         if (ipAddress == null || ipAddress.length() == 0
-                || "unknown".equalsIgnoreCase(ipAddress)) {
+                || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
             if (ipAddress.equals("127.0.0.1")) {
                 // 根据网卡取本机配置的IP
                 InetAddress inet = null;
                 try {
                     inet = InetAddress.getLocalHost();
+                    ipAddress = inet.getHostAddress();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
-                ipAddress = inet.getHostAddress();
             }
         }
         // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-        if (ipAddress != null && ipAddress.length() > 15) { // "***.***.***.***".length()
-            if (ipAddress.indexOf(",") > 0) {
-                ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
-            }
+        if (ipAddress != null && ipAddress.length() > 15 && ipAddress.indexOf(",") > 0) { // "***.***.***.***".length()
+            ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
         }
         return ipAddress;
     }
@@ -78,9 +84,9 @@ public class IpUtil {
      * @return
      */
     public static String longToIP(long longIp) {
-        StringBuffer sb = new StringBuffer("");
+        StringBuilder sb = new StringBuilder("");
         // 直接右移24位
-        sb.append(String.valueOf((longIp >>> 24)));
+        sb.append(String.valueOf(longIp >>> 24));
         sb.append(".");
         // 将高8位置0，然后右移16位
         sb.append(String.valueOf((longIp & 0x00FFFFFF) >>> 16));
@@ -89,7 +95,7 @@ public class IpUtil {
         sb.append(String.valueOf((longIp & 0x0000FFFF) >>> 8));
         sb.append(".");
         // 将高24位置0
-        sb.append(String.valueOf((longIp & 0x000000FF)));
+        sb.append(String.valueOf(longIp & 0x000000FF));
         return sb.toString();
     }
 
