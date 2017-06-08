@@ -1,12 +1,11 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.HandleDepostMessage;
-import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
-import com.lawu.eshop.mq.message.MessageProducerService;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.BusinessDepositInitDTO;
 import com.lawu.eshop.property.param.*;
@@ -28,6 +27,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,12 +47,23 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private BankAccountDOMapper bankAccountDOMapper;
-	@Autowired
-	private MessageProducerService messageProducerService;
+
 	@Autowired
 	private PropertyService propertyService;
 	@Autowired
 	private PropertyInfoDOMapper propertyInfoDOMapper;
+
+	@Autowired
+	@Qualifier("handleDepositEditStoreStatusTransactionMainServiceImpl")
+	private TransactionMainService<Reply> handleDepositEditStoreStatusTransactionMainServiceImpl;
+
+	@Autowired
+	@Qualifier("handleDepositAuditPassTransactionMainServiceImpl")
+	private TransactionMainService<Reply> handleDepositAuditPassTransactionMainServiceImpl;
+
+	@Autowired
+	@Qualifier("handleDepositAuditCancelTransactionMainServiceImpl")
+	private TransactionMainService<Reply> handleDepositAuditCancelTransactionMainServiceImpl;
 
 	@Override
 	@Transactional
@@ -128,11 +139,12 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.val);
 		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
-		// 回调成功后，发送MQ消息修改门店状态为：已缴保证金待核实
-		HandleDepostMessage message = new HandleDepostMessage();
+		// 回调成功后，发送消息修改门店状态为：已缴保证金待核实
+		handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(param.getMerchantId());
+/*		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
 		message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_GIVE_MONEY_CHECK);
-		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
+		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 
 		result.setRet(ResultCode.SUCCESS);
 		return result;
@@ -240,15 +252,17 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		message.setUserNum(param.getUserNum());
 		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
-			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
+			handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
 			message.setShow(true);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 
 
 		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.val.equals(param.getBusinessDepositOperEnum().val)) {
 			// 退款成功操作后，发送MQ消息修改门店状态为：注销
-			message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);
+			handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
+		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
+			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 		}
 		return ResultCode.SUCCESS;
 	}

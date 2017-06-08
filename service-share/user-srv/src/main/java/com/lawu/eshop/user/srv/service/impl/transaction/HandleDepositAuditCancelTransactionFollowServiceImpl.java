@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author zhangyong
  * @date 2017/6/7.
  */
-@Service("handleDepositAuditPassTransactionFollowServiceImpl")
+@Service("handleDepositAuditCancelTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_DEPOSIT_AUDIT_CANCEL)
 public class HandleDepositAuditCancelTransactionFollowServiceImpl extends AbstractTransactionFollowService<StoreStatusNotification, Reply> {
     @Autowired
