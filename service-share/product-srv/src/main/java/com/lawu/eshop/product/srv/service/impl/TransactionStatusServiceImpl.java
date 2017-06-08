@@ -51,6 +51,10 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
         if (transactionRecord == null) {
             return null;
         }
+        // 是否处理完成
+        if (transactionRecord.getIsProcessed()) {
+        	return null;
+        }
         transactionRecord.setIsProcessed(true);
         transactionRecord.setGmtModified(new Date());
         transactionRecordDOMapper.updateByPrimaryKey(transactionRecord);
