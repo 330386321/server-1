@@ -117,11 +117,7 @@ public interface AdService {
      */
     Integer clickAd(Long id, Long memberId, String num);
 
-    /**
-     * 通过定时器改变广告的状态
-     * 投放中 或者投放结束
-     */
-    void updateRacking();
+
 
     /**
      * 今日精选
@@ -242,5 +238,15 @@ public interface AdService {
 	 * @return
 	 */
 	Boolean isSendRedPacket(Long merchantId);
+
+	/**
+	 * 定时任务修改广告上架
+	 */
+	void updatAdToPutting();
+
+	/**
+	 * 定时任务修改结束
+	 */
+	void updatAdToPuted();
 
 }
