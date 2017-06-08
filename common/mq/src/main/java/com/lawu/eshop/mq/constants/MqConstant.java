@@ -221,6 +221,16 @@ public class MqConstant {
      */
     public static final String TAG_HANDLE_DEPOSIT = "handle_deposit";
 
+   /**
+    * 核实操作成功后，发送消息修改门店状态为：待审核,并修改门店审核显示状态
+    */
+    public static final String TAG_HANDLE_DEPOSIT_AUDIT_PASS = "handle_deposit_audit_pass";
+
+   /**
+    * 退款成功操作后，发送消息修改门店状态为：注销
+    */
+    public static final String TAG_HANDLE_DEPOSIT_AUDIT_CANCEL = "handle_deposit_audit_cancel";
+
     /******************************************/
     /*******user-srv模块tag **********/
 
