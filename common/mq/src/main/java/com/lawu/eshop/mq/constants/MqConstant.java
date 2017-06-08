@@ -193,6 +193,12 @@ public class MqConstant {
      */
     public static final String TAG_REFUSE_REFUND_REMIND = "refuse_refund_remind";
     
+    /**
+     * 商家新增订单交易收入
+     * 发送到商城模块，推送给商家
+     */
+    public static final String TAG_ORDERS_TRADING_INCOME_NOTICE = "orders_trading_income_notice";
+    
     /******************************************/
     /*******product-srv模块tag **********/
     public static final String TAG_DEL_COMMENT = "del_comment";

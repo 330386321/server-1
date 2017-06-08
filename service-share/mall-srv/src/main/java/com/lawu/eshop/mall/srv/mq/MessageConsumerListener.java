@@ -8,6 +8,7 @@ import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderOrdersTradingIncomeNoticeNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
@@ -196,6 +197,29 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 
 				// 保存站内信，并且发送个推
 				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				return;
+			}
+			
+			/*
+			 *  提醒商家新增一笔订单交易收入
+			 *  1、订单自动收货
+			 *  2、订单超过退款时间
+			 */
+			if (MqConstant.TAG_ORDERS_TRADING_INCOME_NOTICE.equals(tags)) {
+				ShoppingOrderOrdersTradingIncomeNoticeNotification notification = (ShoppingOrderOrdersTradingIncomeNoticeNotification) message;
+				/*
+				 * 发送站内信
+				 */
+				// 组装信息
+				MessageInfoParam MessageInfoParam = new MessageInfoParam();
+				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_SUCCESS);
+
+				MessageInfoParam.setMessageParam(new MessageTempParam());
+				MessageInfoParam.getMessageParam().setOrderAmount(notification.getActualAmount());
+				
+				// 保存站内信，并且发送个推
+				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				return;
 			}
 			
 		}
