@@ -64,6 +64,7 @@ alter table favorite_product add KEY idx_member_id(member_id);
 
 alter table product add KEY idx_merchant_id(merchant_id);
 alter table product add KEY idx_merchant_id_status(merchant_id, status);
+alter table product add KEY idx_merchant_id_status_sales(merchant_id, status, total_sales_volume);
 
 alter table product_category add KEY idx_parent_id(parent_id);
 
