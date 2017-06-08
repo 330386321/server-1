@@ -770,9 +770,8 @@ public class AdServiceImpl implements AdService {
 		//更新solr广告浏览人数
         SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
         if (solrDocument != null) {
-            SolrInputDocument document = new SolrInputDocument();
-            document.addField("count_i", count);
-            SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+        	 SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
+			 SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
         }
 	}
 
@@ -791,7 +790,7 @@ public class AdServiceImpl implements AdService {
 			criteria.andTypeEqualTo(listAdParam.getTypeEnum().val);
 		}
 		if(listAdParam.getPutWayEnum() != null){
-			criteria.andPutWayEqualTo(listAdParam.getPutWayEnum().val);
+			criteria.andPutWayEqualTo(listAdParam.getPutWayEnum().val); 
 		}
 		if(listAdParam.getStatusEnum() != null){
 			criteria.andStatusEqualTo(listAdParam.getStatusEnum().val);

@@ -16,7 +16,7 @@
     cd /usr/local/eshop/rocketmq/alibaba-rocketmq/bin
 ``` 
 1、配置broker.p
-----
+----  
 
     第一步生成 Broker 默认配置模版 sh mqbroker -m > broker.p
     第二步修改配置文件, broker.p
