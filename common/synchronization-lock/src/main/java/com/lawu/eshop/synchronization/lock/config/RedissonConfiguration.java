@@ -22,12 +22,18 @@ public class RedissonConfiguration {
 	@Value("${redis.password}")
 	private String password;
 	
+	@Value("${redis.pool.size}")
+	private Integer connectionPoolSize;
+	
 	@Bean
 	public RedissonClient redissonClient() {
 		Config config = new Config();
 		// 只设置地址跟密码，其他配置默认
 		SingleServerConfig singleServerConfig = config.useSingleServer();
 		singleServerConfig.setAddress(address);
+		if (connectionPoolSize != null) {
+			singleServerConfig.setConnectionPoolSize(connectionPoolSize);
+		}
 		if (!StringUtils.isEmpty(password)) {
 			singleServerConfig.setPassword(password);
 		}
