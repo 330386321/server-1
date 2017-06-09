@@ -187,7 +187,7 @@ public class AdController extends BaseController {
                 	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
                 	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
                 	if(manageType.getModel()!=null){
-             			adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+                		adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
              		}
         		}else{
         			adEgainDTO.setName("E店商家");
