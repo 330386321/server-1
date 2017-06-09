@@ -40,6 +40,7 @@
         cp.product_id = #{productId}
         AND ci.type =2
         AND ci.img_url IS NOT NULL
+        AND cp.status = 1
         ORDER  BY
         cp.id DESC
         LIMIT #{offset},#{pageSize}
@@ -56,6 +57,7 @@
         cp.product_id = #{productId}
         AND ci.type =2
         AND ci.img_url IS NOT NULL
+        AND cp.status = 1
     </select>
 
     <!-- 查商家好评总数-->
