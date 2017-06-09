@@ -120,7 +120,7 @@ public class WxPayController extends BaseController {
 		aparam.setBizFlagEnum(bizFlagEnum);
 		aparam.setUserNum(userNum);
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT_PC);
-		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
+		aparam.setMerchantId(Long.valueOf(UserUtil.getCurrentUserIdByToken(token) == null ? "0" : UserUtil.getCurrentUserIdByToken(token)));
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(bizFlagEnum.val)) {
