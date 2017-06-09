@@ -10,7 +10,7 @@ public class MemberShoppingCartGroupDTO implements Serializable {
     /**
      * 同一个商家的商品放在一起
      */
-    List<MemberShoppingCartDTO> item;
+    private List<MemberShoppingCartDTO> item;
 
 	public List<MemberShoppingCartDTO> getItem() {
 		return item;

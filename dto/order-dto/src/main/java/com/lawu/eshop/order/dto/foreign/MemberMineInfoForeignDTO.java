@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import io.swagger.annotations.ApiModel;
@@ -12,10 +11,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017年4月21日
  */
 @ApiModel
-public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDTO implements Serializable {
+public class MemberMineInfoForeignDTO extends ShoppingOrderNumberOfOrderStatusDTO {
     
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 昵称
 	 */

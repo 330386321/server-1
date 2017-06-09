@@ -1,12 +1,8 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderExpressDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderExpressDTO {
 	
     /**
      * 运单编号

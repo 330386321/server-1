@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -8,9 +7,7 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderExtendQueryDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderExtendQueryDTO {
 
 	/**
 	 * 购物订单id

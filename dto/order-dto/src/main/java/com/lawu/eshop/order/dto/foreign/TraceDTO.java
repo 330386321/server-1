@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,10 +11,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/10
  */
 @ApiModel
-public class TraceDTO implements Serializable {
+public class TraceDTO {
 	
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 时间
 	 */

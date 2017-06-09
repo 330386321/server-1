@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -10,9 +9,7 @@ import java.util.List;
  * @author Sunny
  * @date 2017/4/6
  */
-public class ShoppingOrderSettlementParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderSettlementParam {
 
 	/**
 	 * 用户id

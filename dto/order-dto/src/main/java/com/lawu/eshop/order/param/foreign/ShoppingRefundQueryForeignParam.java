@@ -1,9 +1,8 @@
 package com.lawu.eshop.order.param.foreign;
 
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
-import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * 购物退货记录查询参数 
@@ -12,9 +11,7 @@ import java.io.Serializable;
  * @author Sunny
  * @date 2017/4/6
  */
-public class ShoppingRefundQueryForeignParam extends AbstractPageParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingRefundQueryForeignParam extends AbstractPageParam {
 
 	@ApiModelProperty(value = "订单号或收货人")
 	private String keyword;

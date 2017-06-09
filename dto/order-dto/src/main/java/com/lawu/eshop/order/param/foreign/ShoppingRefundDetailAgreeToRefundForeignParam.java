@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param.foreign;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModel;
@@ -15,10 +13,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/12
  */
 @ApiModel
-public class ShoppingRefundDetailAgreeToRefundForeignParam implements Serializable {
+public class ShoppingRefundDetailAgreeToRefundForeignParam {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 商家是否同意退款
 	 */

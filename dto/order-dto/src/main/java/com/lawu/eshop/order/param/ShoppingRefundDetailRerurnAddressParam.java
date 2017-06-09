@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -12,10 +10,8 @@ import io.swagger.annotations.ApiModel;
  * @date 2017/4/12
  */
 @ApiModel
-public class ShoppingRefundDetailRerurnAddressParam implements Serializable {
+public class ShoppingRefundDetailRerurnAddressParam {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 收货人姓名
 	 */

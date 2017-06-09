@@ -1,16 +1,13 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class MemberShoppingCartDTO extends ShoppingCartDTO implements Serializable {
+public class MemberShoppingCartDTO extends ShoppingCartDTO {
 	
-    private static final long serialVersionUID = 1L;
-    
     /**
      * 商品名称
      */

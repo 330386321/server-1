@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param.foreign;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -13,9 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Sunny
  * @date 2017/4/11
  */
-public class ShoppingOrderLogisticsInformationForeignParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderLogisticsInformationForeignParam {
 
 	/**
 	 * 物流编号

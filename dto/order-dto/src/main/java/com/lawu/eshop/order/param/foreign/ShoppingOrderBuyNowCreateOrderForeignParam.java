@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.param.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.validation.constraints.Min;
@@ -16,9 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/6
  */
 @ApiModel
-public class ShoppingOrderBuyNowCreateOrderForeignParam implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderBuyNowCreateOrderForeignParam {
 	
 	/**
 	 * 运费

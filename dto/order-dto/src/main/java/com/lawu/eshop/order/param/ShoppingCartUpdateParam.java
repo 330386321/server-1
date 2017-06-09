@@ -1,14 +1,10 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.Min;
 
 import io.swagger.annotations.ApiParam;
 
-public class ShoppingCartUpdateParam implements Serializable {
-	
-    private static final long serialVersionUID = 1L;
+public class ShoppingCartUpdateParam {
 	
     /**
      * 商品型号ID

@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param.foreign;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusToMemberEnum;
 
@@ -13,9 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Sunny
  * @date 2017/4/6
  */
-public class ShoppingOrderQueryForeignToMemberParam extends AbstractPageParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderQueryForeignToMemberParam extends AbstractPageParam {
 
 	/**
 	 * 订单状态

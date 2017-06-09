@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,10 +7,8 @@ import com.lawu.eshop.order.constants.RefundStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderItemRefundForMerchantDTO implements Serializable {
+public class ShoppingOrderItemRefundForMerchantDTO {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 购物订单退款详情id
 	 */

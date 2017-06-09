@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param.foreign;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -18,9 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/11
  */
 @ApiModel
-public class ShoppingOrderRequestRefundForeignParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderRequestRefundForeignParam {
 
 	/**
 	 * 退货原因

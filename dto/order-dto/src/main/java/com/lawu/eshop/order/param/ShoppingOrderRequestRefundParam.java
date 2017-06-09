@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.order.param.foreign.ShoppingOrderRequestRefundForeignParam;
 
 import io.swagger.annotations.ApiModel;
@@ -14,9 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/11
  */
 @ApiModel
-public class ShoppingOrderRequestRefundParam extends ShoppingOrderRequestRefundForeignParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderRequestRefundParam extends ShoppingOrderRequestRefundForeignParam {
 
 	/**
 	 * 凭证图片

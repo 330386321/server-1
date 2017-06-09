@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 import javax.validation.constraints.NotNull;
 
 import com.lawu.eshop.order.constants.ReportFansRiseRateEnum;
@@ -19,9 +17,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 @ApiModel
-public class ReportParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ReportParam {
 
 	@ApiModelProperty(name = "flag", required = true, value = "标记(DAY-日增长|MONTH-月增长)")
 	@NotNull(message = "flag不能为空")

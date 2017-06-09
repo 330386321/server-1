@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import io.swagger.annotations.ApiModel;
@@ -11,10 +10,8 @@ import io.swagger.annotations.ApiModel;
  * @date 2017年4月25日
  */
 @ApiModel
-public class ShoppingOrderCommissionDTO implements Serializable {
+public class ShoppingOrderCommissionDTO {
     
-	private static final long serialVersionUID = 1L;
-	
 	/**
      * 订单id
      */

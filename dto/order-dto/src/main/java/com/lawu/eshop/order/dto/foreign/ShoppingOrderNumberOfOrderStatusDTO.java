@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -11,10 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017年4月21日
  */
 @ApiModel
-public class ShoppingOrderNumberOfOrderStatusDTO implements Serializable {
+public class ShoppingOrderNumberOfOrderStatusDTO {
     
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 待收货订单的数量
 	 */
