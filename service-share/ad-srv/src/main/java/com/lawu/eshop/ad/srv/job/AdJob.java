@@ -12,9 +12,9 @@ import com.lawu.eshop.ad.srv.service.AdService;
  * @author zhangrc
  * @date 2017/4/14
  */
-public class AdPuttedJob implements SimpleJob {
+public class AdJob implements SimpleJob {
 
-    private static Logger logger = LoggerFactory.getLogger(AdPuttedJob.class);
+    private static Logger logger = LoggerFactory.getLogger(AdJob.class);
 
     @Autowired
 	private AdService adService;
@@ -23,8 +23,8 @@ public class AdPuttedJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-        adService.updatAdToPuted();
-
+        adService.updateRacking();
+        
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }
 }
