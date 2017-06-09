@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 /**
  * 商家填写物流信息
  * api传递给order-srv参数
@@ -9,9 +7,7 @@ import java.io.Serializable;
  * @author Sunny
  * @date 2017/4/6
  */
-public class ShoppingOrderLogisticsInformationParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderLogisticsInformationParam {
 
 	/**
 	 * 物流编号

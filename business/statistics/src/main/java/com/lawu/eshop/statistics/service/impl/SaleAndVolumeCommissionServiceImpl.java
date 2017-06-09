@@ -52,7 +52,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 		if (orders != null && orders.size() > 0) {
 
 			Map<String, BigDecimal> property = commonPropertyService.getSaleCommissionPropertys();
-			BigDecimal sale_commission_add_scope = property.get("sale_commission_add_scope");// 每上升一个级别提成的幅度
+			BigDecimal saleCommissionAddScope = property.get("sale_commission_add_scope");// 每上升一个级别提成的幅度
 			BigDecimal loveAccountScale = property.get("love_account_scale");// 爱心账户比例
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
 
@@ -85,21 +85,21 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(memberInviters.get(i).getLevel());// 等级
-						BigDecimal sale_commission = null;
+						BigDecimal saleCommission = null;
 						if (i == 0) {
-							sale_commission = property.get("sale_commission_1");
+							saleCommission = property.get("sale_commission_1");
 
 						} else if (i == 1) {
-							sale_commission = property.get("sale_commission_2");
+							saleCommission = property.get("sale_commission_2");
 
 						} else if (i == 2) {
 							param.setLast(true);
-							sale_commission = property.get("sale_commission_3");
+							saleCommission = property.get("sale_commission_3");
 						}
 
-						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,sale_commission,sale_commission_add_scope,level);
+						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
-						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
+						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
@@ -158,21 +158,21 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(merchantInviters.get(i).getLevel());// 等级
-						BigDecimal sale_commission = null;
+						BigDecimal saleCommission = null;
 						if (i == 0) {
-							sale_commission = property.get("sale_commission_1");
+							saleCommission = property.get("sale_commission_1");
 
 						} else if (i == 1) {
-							sale_commission = property.get("sale_commission_2");
+							saleCommission = property.get("sale_commission_2");
 
 						} else if (i == 2) {
 							param.setLast(true);
-							sale_commission = property.get("sale_commission_3");
+							saleCommission = property.get("sale_commission_3");
 						}
 						
-						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,sale_commission,sale_commission_add_scope,level);
+						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
-						BigDecimal actualCommission = sale_commission.add(sale_commission_add_scope.multiply(level.subtract(new BigDecimal("1"))));
+						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {

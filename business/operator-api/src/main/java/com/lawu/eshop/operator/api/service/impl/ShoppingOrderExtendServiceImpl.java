@@ -2,7 +2,6 @@ package com.lawu.eshop.operator.api.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -23,7 +22,6 @@ public class ShoppingOrderExtendServiceImpl extends BaseController implements Sh
 	private ShoppingOrderService shoppingOrderService;
 	
 	@SuppressWarnings("rawtypes")
-	@Transactional
 	@Override
 	public Result updateInformation(Long id, ShoppingOrderUpdateInfomationForeignParam param) {
 		Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());

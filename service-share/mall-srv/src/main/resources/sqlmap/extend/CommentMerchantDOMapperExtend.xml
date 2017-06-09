@@ -19,7 +19,7 @@
 
     <select id="selectAvgGrade" resultType="java.lang.Double" parameterType="java.lang.Long">
         SELECT
-	    AVG(grade)
+	    ifnull(AVG(grade),0)
       FROM
 	  comment_merchant
 	  WHERE merchant_id =#{merchantId}
@@ -36,6 +36,7 @@
         cm.merchant_id = #{merchantId}
          AND ci.type =1
         AND ci.img_url IS NOT NULL
+         AND cm.status = 1
     </select>
 
     <!-- 根据商家ID查询用户评论列表(有图片)-->
@@ -57,6 +58,7 @@
         cm.merchant_id = #{merchantId}
         AND ci.type =1
         AND ci.img_url IS NOT NULL
+        AND cm.status = 1
         ORDER  BY
         cm.id DESC
         LIMIT #{offset},#{pageSize}
@@ -76,7 +78,7 @@
 
     <select id="getAvgSpend" resultType="java.lang.Double" parameterType="java.lang.Long">
         SELECT
-        AVG(avg_spend)
+        ifnull(AVG(avg_spend),0)
         FROM
         comment_merchant
         WHERE merchant_id =#{merchantId} and status=1 and avg_spend >0

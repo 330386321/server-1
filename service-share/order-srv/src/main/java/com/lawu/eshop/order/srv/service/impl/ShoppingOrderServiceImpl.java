@@ -23,6 +23,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
+import com.lawu.eshop.mq.dto.order.ShoppingOrderOrdersTradingIncomeNoticeNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderRemindShipmentsNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderpaymentSuccessfulNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundToBeConfirmedForRefundRemindNotification;
@@ -631,7 +632,12 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		 *  如果是自动收货直接付款给商家
 		 */
 		shoppingOrderTradingSuccessTransactionMainServiceImpl.sendNotice(id);
-
+		
+		if (shoppingOrderDO.getIsDone()) {
+			// 提示商家新增一笔订单交易收入
+			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMemberNum());
+		}
+		
 		return ResultCode.SUCCESS;
 	}
 
@@ -1467,7 +1473,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			}
 			
 			if (is_done) {
-				paymentsToMerchant(item.getId());
+				paymentsToMerchant(item);
 			}
 		}
 	}
@@ -1499,16 +1505,34 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Transactional
-	private void paymentsToMerchant(Long shoppingOrderId) {
+	private void paymentsToMerchant(ShoppingOrderExtendDO shoppingOrderExtendDO) {
 		// 更新订单状态为完成
 		ShoppingOrderDO update = new ShoppingOrderDO();
-		update.setId(shoppingOrderId);
+		update.setSendTime(0);
+		update.setId(shoppingOrderExtendDO.getId());
 		update.setIsDone(true);
 		update.setGmtModified(new Date());
 		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
 		
+		// 发送提醒消息
+		ordersTradingIncomeNotice(shoppingOrderExtendDO.getId(), shoppingOrderExtendDO.getActualAmount(), shoppingOrderExtendDO.getMemberNum());
+		
 		// 释放冻结资金
-		shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderId);
+		shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderExtendDO.getId());
 	}
-
+	
+	/**
+	 * 提醒商家新增订单交易收入
+	 * 
+	 * @param shoppingOrderId
+	 * @author Sunny
+	 * @date 2017年6月8日
+	 */
+	private void ordersTradingIncomeNotice(Long shoppingOrderId, BigDecimal actualAmount, String merchantNum){
+		ShoppingOrderOrdersTradingIncomeNoticeNotification notification = new ShoppingOrderOrdersTradingIncomeNoticeNotification();
+		notification.setShoppingOrderId(shoppingOrderId);
+		notification.setActualAmount(actualAmount);
+		notification.setMerchantNum(merchantNum);
+    	messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDERS_TRADING_INCOME_NOTICE, notification);
+	}
 }

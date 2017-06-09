@@ -29,4 +29,18 @@ public class TransactionConstant {
      * 支付商品订单成功
      */
     public static final byte PAY_SHOPPING_ORDER = 0x04;
+
+    /**
+     * 交保证金成功
+     */
+    public static final byte HANDLE_DESPOISIT_SUCCESS = 0x05;
+
+    /**
+     * 交保证金财务审核成功
+     */
+    public static final byte HANDLE_DESPOISIT_AUDIT_PASS = 0x06;
+    /**
+     * 退保证金财务审核注销
+     */
+    public static final byte HANDLE_DESPOISIT_AUDIT_CANCEL = 0x07;
 }

@@ -1,19 +1,14 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.order.constants.ShoppingOrderSortEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
-import com.lawu.eshop.order.constants.SortOrderEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderQueryToOperatorDTO implements Serializable {
+public class ShoppingOrderQueryToOperatorDTO {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
      * 购物订单id
      */

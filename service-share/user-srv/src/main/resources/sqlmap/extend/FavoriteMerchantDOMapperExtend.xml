@@ -20,7 +20,7 @@
            MS.feedback_rate
        FROM favorite_merchant FM 
 	LEFT JOIN merchant_store MS ON FM.merchant_id=MS.merchant_id 
-	LEFT JOIN merchant_store_profile MSP ON FM.merchant_id=MSP.merchant_id  AND MSP.manage_type=#{type,jdbcType=TINYINT}
-	WHERE  FM.member_id=#{memberId,jdbcType=BIGINT}
+	LEFT JOIN merchant_store_profile MSP ON FM.merchant_id=MSP.merchant_id  
+	WHERE  FM.member_id=#{memberId,jdbcType=BIGINT} AND MSP.manage_type=#{type,jdbcType=TINYINT}
   </select>
 </mapper>

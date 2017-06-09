@@ -39,6 +39,8 @@ public class FavoriteAdDOViewBO {
 	
 	private FavoriteTypeEnum typeEnum;
 	
+	private String videoImgUrl;
+	
 	
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
@@ -102,6 +104,14 @@ public class FavoriteAdDOViewBO {
 
 	public void setTypeEnum(FavoriteTypeEnum typeEnum) {
 		this.typeEnum = typeEnum;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 
 	

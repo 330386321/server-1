@@ -80,11 +80,11 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     //审核通过
                     if (MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val == auditParam.getTypeEnum().val) {
                         //修改门店资料信息
-                        if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
+                      /*  if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
                             // 新增记录 修改门店信息状态
                             newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
                             merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
-                        } else {
+                        } else {*/
                             //修改更新门店信息
                             JSONObject jsonObject = JSONObject.fromObject(oldAudit.getContent());
                             MerchantStoreParam merchantStoreParam = (MerchantStoreParam) JSONObject.toBean(jsonObject, MerchantStoreParam.class);
@@ -98,6 +98,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             newStoreDO.setPrincipalName(merchantStoreParam.getPrincipalName());
                             newStoreDO.setPrincipalMobile(merchantStoreParam.getPrincipalMobile());
                             newStoreDO.setIndustryName(merchantStoreParam.getIndustryName());
+                            newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
                             merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
                             //修改更新门店扩展信息
                             MerchantStoreProfileDO profile = new MerchantStoreProfileDO();
@@ -193,7 +194,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                                 merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
                                 merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                             }
-                        }
+
                     } else {
                         //申请实体店铺
                         //先删除对应商家LOGO图片---逻辑删除

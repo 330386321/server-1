@@ -1,14 +1,11 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingCartSettlementDTO implements Serializable {
-	
-    private static final long serialVersionUID = 1L;
+public class ShoppingCartSettlementDTO {
 	
     /**
      * 总计

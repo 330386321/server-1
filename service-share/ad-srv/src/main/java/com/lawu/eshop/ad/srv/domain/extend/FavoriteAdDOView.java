@@ -49,6 +49,8 @@ public class FavoriteAdDOView {
 	
 	private byte status;
 	
+	private String videoImgUrl;
+	
 
 	public byte getStatus() {
 		return status;
@@ -120,6 +122,14 @@ public class FavoriteAdDOView {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 	
 	

@@ -94,7 +94,7 @@ public class VerifyCodeController extends BaseController {
         		if(isRegisterFlag.getModel()){
         			return successGet(ResultCode.ACCOUNT_EXIST);
         		}
-        	}
+        	} 
     		
     	}
         return smsRecordService.sendSms(mobile, ip, purpose);

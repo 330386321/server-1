@@ -39,9 +39,12 @@ import com.lawu.eshop.property.param.WxPayConfigParam;
 import com.lawu.eshop.property.srv.PropertySrvConfig;
 import com.lawu.eshop.property.srv.domain.FreezeDO;
 import com.lawu.eshop.property.srv.domain.FreezeDOExample;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.extend.FreezeDOView;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
 import com.lawu.eshop.property.srv.mapper.FreezeDOMapper;
+import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.FreezeDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.service.OrderService;
@@ -64,6 +67,8 @@ public class OrderServiceImpl implements OrderService {
 	private PropertyService propertyService;
 	@Autowired
 	private FreezeDOMapperExtend freezeDOMapperExtend;
+	@Autowired
+	private TransactionDetailDOMapper transactionDetailDOMapper;
 
 	@Autowired
 	private PropertySrvConfig propertySrvConfig;
@@ -100,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
@@ -134,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(param.getBizIds());
@@ -148,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam1.setTransactionType(MerchantTransactionTypeEnum.PAY.getValue());
-		tdsParam1.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam1.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam1.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
@@ -255,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getSideUserNum());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
 		tdsParam.setTransactionAccount("");
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
 		tdsParam.setBizId(param.getOrderItemIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
@@ -263,7 +268,7 @@ public class OrderServiceImpl implements OrderService {
 		transactionDetailService.save(tdsParam);
 
 		JsonResult jsonResult = new JsonResult();
-		if (TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)) {
+		if (TransactionPayTypeEnum.BALANCE.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
 			// 加会员财产余额
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 			infoDoView.setUserNum(param.getSideUserNum());
@@ -276,9 +281,8 @@ public class OrderServiceImpl implements OrderService {
 			ThirdPayRefundParam rparam = new ThirdPayRefundParam();
 			rparam.setRefundId(StringUtil.getRandomNumAppend(param.getOrderItemIds().replaceAll(",", "")));
 			rparam.setRefundMoney(param.getRefundMoney());
-			rparam.setTotalMoney(rparam.getTotalMoney());
 			rparam.setTradeNo(param.getTradeNo());
-			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
+			if (TransactionPayTypeEnum.ALIPAY.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
 				AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
 				aliPayConfigParam.setAlipayRefundUrl(propertySrvConfig.getAlipayRefundUrl());
 				aliPayConfigParam.setAlipayAppIdMember(propertySrvConfig.getAlipayAppIdMember());
@@ -291,7 +295,18 @@ public class OrderServiceImpl implements OrderService {
 				aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
 				AlipayBusinessHandle.refund(rparam, jsonResult,aliPayConfigParam);
 
-			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
+			} else if (TransactionPayTypeEnum.WX.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
+				
+				TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
+				transactionDetailDOExample.createCriteria().andThirdTransactionNumEqualTo(param.getTradeNo()).andUserNumEqualTo(param.getSideUserNum());
+				List<TransactionDetailDO> transactionDetailList = transactionDetailDOMapper.selectByExample(transactionDetailDOExample);
+				if(transactionDetailList == null || transactionDetailList.isEmpty()){
+					logger.error("微信订单({})退款根据第三方订单号({})和用户编号({})查询交易明细支付总金额时返回为空！",param.getOrderId(),param.getTradeNo(),param.getSideUserNum());
+					return ResultCode.FAIL;
+				}
+				TransactionDetailDO transactionDetailDO = transactionDetailList.get(0);
+				rparam.setTotalMoney(transactionDetailDO.getAmount().toString());
+				
 				WxPayConfigParam wxPayConfigParam = new WxPayConfigParam();
 				wxPayConfigParam.setWxpayAppIdMember(propertySrvConfig.getWxpayAppIdMember());
 				wxPayConfigParam.setWxpayMchIdMember(propertySrvConfig.getWxpayMchIdMember());

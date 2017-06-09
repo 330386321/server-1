@@ -16,7 +16,6 @@ import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBillDataParam;
@@ -41,7 +40,6 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
-import com.lawu.eshop.utils.PwdUtil;
 
 @Service
 public class CashManageFrontServiceImpl implements CashManageFrontService {
@@ -91,7 +89,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		
 		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
-		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.val).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
 		int count = withdrawCashDOMapper.countByExample(example);
 		if (count > 0) {
 			String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
@@ -116,7 +114,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		withdrawCashDO.setUserNum(cash.getUserNum());
 		withdrawCashDO.setUserType(cash.getUserType());
 		withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.val);
-		withdrawCashDO.setStatus(CashStatusEnum.APPLY.val);
+		withdrawCashDO.setStatus(CashStatusEnum.APPLY.getVal());
 		withdrawCashDO.setBusinessBankAccountId(cash.getBusinessBankAccountId());
 		withdrawCashDO.setCashNumber(cash.getCashNumber());
 		withdrawCashDO.setGmtCreate(new Date());
@@ -135,7 +133,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setUserNum(cash.getUserNum());
 		tdsParam.setTransactionType(cash.getTransactionType());
 		tdsParam.setTransactionAccount(cash.getAccount());
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(cash.getCashMoney()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(withdrawCashDO.getId().toString());
@@ -189,13 +187,13 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		bo.setTitle("提现");
 		bo.setCashMoney(cdo.getCashMoney());
 		bo.setMoney(cdo.getMoney());
-		if (CashStatusEnum.APPLY.val.equals(cdo.getStatus())) {
+		if (CashStatusEnum.APPLY.getVal().equals(cdo.getStatus())) {
 			bo.setCashStatus("申请中");
-		} else if (CashStatusEnum.ACCEPT.val.equals(cdo.getStatus())) {
+		} else if (CashStatusEnum.ACCEPT.getVal().equals(cdo.getStatus())) {
 			bo.setCashStatus("受理中");
-		} else if (CashStatusEnum.SUCCESS.val.equals(cdo.getStatus())) {
+		} else if (CashStatusEnum.SUCCESS.getVal().equals(cdo.getStatus())) {
 			bo.setCashStatus("成功");
-		} else if (CashStatusEnum.FAILURE.val.equals(cdo.getStatus())) {
+		} else if (CashStatusEnum.FAILURE.getVal().equals(cdo.getStatus())) {
 			bo.setCashStatus("失败");
 		}
 		bo.setCashNumber(cdo.getCashNumber());

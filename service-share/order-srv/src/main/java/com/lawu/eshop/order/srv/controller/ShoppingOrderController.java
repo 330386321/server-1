@@ -100,7 +100,7 @@ public class ShoppingOrderController extends BaseController {
 
 		// 参数验证
 		if (params == null || params.isEmpty()) {
-			successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
 		}
 
 		List<Long> ids = shoppingOrderService.save(params);

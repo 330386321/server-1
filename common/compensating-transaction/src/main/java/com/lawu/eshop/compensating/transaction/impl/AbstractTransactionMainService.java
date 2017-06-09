@@ -2,6 +2,8 @@ package com.lawu.eshop.compensating.transaction.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ import com.lawu.eshop.mq.message.MessageProducerService;
  */
 public abstract class AbstractTransactionMainService<N extends Notification, R extends Reply> implements TransactionMainService<R> {
 
+	private static Logger logger = LoggerFactory.getLogger(AbstractTransactionMainService.class);
+	
     @Autowired
     private MessageProducerService messageProducerService;
 
@@ -78,6 +82,10 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
     @Override
     public void receiveCallback(R reply) {
         Long relateId = transactionStatusService.success(reply.getTransactionId());
+        if (relateId == null) {
+        	logger.info("回复消息已消费");
+        	return;
+        }
         afterSuccess(relateId, reply);
     }
 

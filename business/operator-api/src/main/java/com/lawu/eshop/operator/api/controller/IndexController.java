@@ -51,7 +51,7 @@ public class IndexController extends BaseController {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
         listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
         listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
-        listMerchantStoreParam.setPageSize(50);
+        listMerchantStoreParam.setPageSize(1000);
         int currentPage = 0;
         while (true) {
             currentPage++;
@@ -73,7 +73,7 @@ public class IndexController extends BaseController {
     @RequestMapping(value = "updateProductIndex", method = RequestMethod.GET)
     public Result updateProductIndex() {
         ListProductParam listProductParam = new ListProductParam();
-        listProductParam.setPageSize(50);
+        listProductParam.setPageSize(1000);
         int currentPage = 0;
         while (true) {
             currentPage++;
@@ -95,7 +95,7 @@ public class IndexController extends BaseController {
     @RequestMapping(value = "updateAdIndex", method = RequestMethod.GET)
     public Result updateAdIndex() {
         ListAdParam listAdParam = new ListAdParam();
-        listAdParam.setPageSize(50);
+        listAdParam.setPageSize(1000);
         int currentPage = 0;
         while (true) {
             currentPage++;

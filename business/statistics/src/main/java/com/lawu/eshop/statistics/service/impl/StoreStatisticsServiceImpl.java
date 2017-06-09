@@ -6,6 +6,8 @@ import com.lawu.eshop.mall.dto.CommentGradeDTO;
 import com.lawu.eshop.statistics.service.CommentMerchantService;
 import com.lawu.eshop.statistics.service.MerchantStoreService;
 import com.lawu.eshop.statistics.service.StoreStatisticsService;
+import com.lawu.eshop.user.constants.ManageTypeEnum;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
@@ -31,7 +33,9 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
     @Override
     public void executeStoreStatistics() {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
-        listMerchantStoreParam.setPageSize(50);
+        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        listMerchantStoreParam.setManageType(ManageTypeEnum.ENTITY.val);
+        listMerchantStoreParam.setPageSize(1000);
         int currentPage = 0;
 
         Result<List<MerchantStoreDTO>> result = null;

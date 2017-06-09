@@ -37,6 +37,9 @@ public class FavoriteAdDOViewDTO {
 	@ApiModelProperty(value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频")
 	private FavoriteTypeEnum typeEnum;
 	
+	@ApiModelProperty(value = "视频封面图片")
+	private String videoImgUrl;
+	
 	
 	public AdStatusEnum getStatusEnum() {
 		return statusEnum;
@@ -116,6 +119,14 @@ public class FavoriteAdDOViewDTO {
 
 	public void setTypeEnum(FavoriteTypeEnum typeEnum) {
 		this.typeEnum = typeEnum;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 	
 	

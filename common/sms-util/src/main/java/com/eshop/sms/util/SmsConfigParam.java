@@ -1,4 +1,4 @@
-package com.lawu.eshop.mall.param;
+package com.eshop.sms.util;
 
 /**
  * @author meishuquan

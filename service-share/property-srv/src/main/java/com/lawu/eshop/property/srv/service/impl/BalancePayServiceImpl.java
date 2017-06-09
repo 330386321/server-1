@@ -69,7 +69,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
@@ -103,7 +103,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(param.getMemberTransactionTypeEnum().getValue());
 		tdsParam.setTransactionAccount(param.getAccount());
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
@@ -122,7 +122,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionType(param.getMerchantTransactionTypeEnum().getValue());
 		tdsParam1.setTransactionAccount(param.getAccount());
-		tdsParam1.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam1.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam1.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
@@ -190,7 +190,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(transactionType);
 		tdsParam.setTransactionAccount(param.getAccount());
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
@@ -209,7 +209,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		pointDetailService.save(pdsParam);
 		
 		RechargeDO recharge = new RechargeDO();
-		recharge.setStatus(ThirdPayStatusEnum.SUCCESS.val);
+		recharge.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
 		recharge.setGmtModified(new Date());
 		RechargeDOExample example = new RechargeDOExample();
 		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds()));

@@ -16,4 +16,6 @@ public class TransactionConstant {
     public static final byte RP_ME_CUT_POINT = 0x04;
     
     public static final byte AD_CLICK_POINT = 0x05;
+    
+   
 }

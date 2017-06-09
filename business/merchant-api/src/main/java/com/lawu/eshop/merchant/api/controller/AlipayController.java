@@ -79,6 +79,7 @@ public class AlipayController extends BaseController {
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
 		aparam.setUserTypeEnum(UserTypeEnum.MEMCHANT);
+		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
@@ -115,6 +116,7 @@ public class AlipayController extends BaseController {
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(userNum);
+		aparam.setMerchantId(Long.valueOf(UserUtil.getCurrentUserIdByToken(token) == null ? "0" : UserUtil.getCurrentUserIdByToken(token)));
 
 		// 查询支付金额
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {

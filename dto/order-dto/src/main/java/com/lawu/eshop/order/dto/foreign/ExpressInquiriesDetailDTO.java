@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
@@ -15,9 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2017/4/10
  */
 @ApiModel
-public class ExpressInquiriesDetailDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ExpressInquiriesDetailDTO {
 	
 	/**
 	 * 成功与否

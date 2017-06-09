@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
 /**
@@ -10,9 +8,7 @@ import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
  * @author Sunny
  * @date 2017/4/15
  */
-public class ShoppingOrderUpdateInfomationParam implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderUpdateInfomationParam {
 
 	/**
 	 * 订单状态

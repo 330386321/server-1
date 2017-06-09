@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -9,10 +8,8 @@ import java.math.BigDecimal;
  * @author Sunny
  * @date 2017/4/6
  */
-public class ShoppingOrderSettlementItemParam implements Serializable {
+public class ShoppingOrderSettlementItemParam {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 对应的购物车Id(在保存订单之后通过这个删除购物车里面的记录)
 	 */

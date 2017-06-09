@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,10 +8,8 @@ import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO implements Serializable {
+public class ShoppingOrderExtendDetailDTO extends ShoppingOrderExtendQueryDTO {
     
-	private static final long serialVersionUID = 1L;
-	
     /**
      * 收货人姓名
      */

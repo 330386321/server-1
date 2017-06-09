@@ -6,8 +6,8 @@ package com.lawu.eshop.property.constants;
  */
 public enum CashStatusEnum {
 	ALL((byte) 0x00, "全部"),APPLY((byte) 0x01, "申请中"), ACCEPT((byte) 0x02, "受理中"), SUCCESS((byte) 0x03, "成功"), FAILURE((byte) 0x04, "失败");
-	public Byte val;
-	public String name;
+	private Byte val;
+	private String name;
 
 	CashStatusEnum(Byte val, String name) {
 		this.val = val;
@@ -23,4 +23,21 @@ public enum CashStatusEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

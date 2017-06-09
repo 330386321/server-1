@@ -76,7 +76,7 @@ import io.swagger.annotations.ApiResponse;
 
 /**
  * 描述：广告管理
- * 
+ *
  * @author zhangrc
  * @date 2017/04/5
  */
@@ -151,68 +151,70 @@ public class AdController extends BaseController {
 		return rs;
 	}
 
-	@Audit(date = "2017-04-13", reviewer = "孙林青")
-	@Authorization
-	@ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
-	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
-	public Result<AdEgainDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result<AdDTO> adRs = adService.selectAbById(id, memberId);
-		AdEgainDTO adEgainDTO = new AdEgainDTO();
-		if (isSuccess(adRs)) {
-			AdDTO adDTO = adRs.getModel();
-			adEgainDTO.setId(adDTO.getId());
-			adEgainDTO.setViewCount(adDTO.getViewCount());
-			adEgainDTO.setContent(adDTO.getContent());
-			adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
-			adEgainDTO.setTitle(adDTO.getTitle());
-			adEgainDTO.setMediaUrl(adDTO.getMediaUrl());
-			adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-			adEgainDTO.setMerchantId(adDTO.getMerchantId());
-			adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
-			Result<MerchantStoreDTO> merchantStoreDTO = merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-			Result<ManageTypeEnum> manageType = merchantStoreService.getManageType(adDTO.getMerchantId());
-			if (isSuccess(merchantStoreDTO)) {
-				if (merchantStoreDTO.getModel() != null) {
-					adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
-					adEgainDTO.setName(merchantStoreDTO.getModel().getName());
-					adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-					if (manageType.getModel() != null) {
-						adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val));
-					}
-				} else {
-					adEgainDTO.setName("E店商家");
-					adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-				}
 
-			}
-			Result<MerchantProfileDTO> mpRs = merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
-			if (isSuccess(mpRs)) {
-				adEgainDTO.setJdUrl(mpRs.getModel().getJdUrl());
-				adEgainDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
-				adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
-				adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
-			}
-
-			if (adDTO.getViewCount() == 0) {
-				adViewService.setAdView(id.toString(), memberId.toString());
-			} else {
-				Result<List<String>> rs = adViewService.getAdviews(id.toString());
-				if (isSuccess(rs)) {
-					for (String str : rs.getModel()) {
-						if (!memberId.toString().equals(str)) {
-							adViewService.setAdView(id.toString(), memberId.toString());
-						}
-					}
-				}
-
-			}
-
-		}
-
-		return successAccepted(adEgainDTO);
-	}
+    @Audit(date = "2017-04-13", reviewer = "孙林青")
+    @Authorization
+    @ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
+    public Result<AdEgainDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                  @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	Long memberId=UserUtil.getCurrentUserId(getRequest());
+        Result<AdDTO> adRs = adService.selectAbById(id,memberId);
+        AdEgainDTO adEgainDTO=new AdEgainDTO();
+        if(isSuccess(adRs)){
+        	AdDTO  adDTO=adRs.getModel();
+        	adEgainDTO.setId(adDTO.getId());
+        	adEgainDTO.setViewCount(adDTO.getViewCount());
+        	adEgainDTO.setContent(adDTO.getContent());
+        	adEgainDTO.setIsFavorite(adDTO.getIsFavorite());
+        	adEgainDTO.setTitle(adDTO.getTitle());
+        	adEgainDTO.setMediaUrl(adDTO.getMediaUrl());
+        	adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
+        	adEgainDTO.setMerchantId(adDTO.getMerchantId());
+        	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
+        	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+        	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
+        	if(isSuccess(merchantStoreDTO)){
+        		if(merchantStoreDTO.getModel()!=null){
+        			adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
+                	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
+                	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
+                	if(manageType.getModel()!=null){
+                		adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+             		}
+        		}else{
+        			adEgainDTO.setName("E店商家");
+                	adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+        		}
+        		
+        	}
+        	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+        	if(isSuccess(mpRs)){
+        		adEgainDTO.setJdUrl(mpRs.getModel().getJdUrl());
+        		adEgainDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
+        		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
+        		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
+        	}
+        	
+        	 if(adDTO.getViewCount()==0){
+        		 adViewService.setAdView(id.toString(), memberId.toString());
+        	 }else{
+        		 Result<List<String>> rs= adViewService.getAdviews(id.toString());
+        		 if(isSuccess(rs)){
+        			 for (String str : rs.getModel()) {
+            			 if(!memberId.toString().equals(str)){
+            				 adViewService.setAdView(id.toString(), memberId.toString());
+            			 }
+    				}
+        		 }
+        		
+        	 }
+        	 
+        }
+       
+        return successAccepted(adEgainDTO);
+    }
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@ApiOperation(value = "会员查询广告列表(E赞)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")

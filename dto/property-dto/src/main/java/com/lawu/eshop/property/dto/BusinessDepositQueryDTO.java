@@ -10,6 +10,9 @@ public class BusinessDepositQueryDTO {
 
 	@ApiModelProperty(value = "主键")
 	private Long id;
+	
+	@ApiModelProperty(value = "商家ID")
+	private Long businessId;
 
 	@ApiModelProperty(value = "支付时间")
 	private String gmtPay;
@@ -69,6 +72,14 @@ public class BusinessDepositQueryDTO {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
 	}
 
 	public String getGmtPay() {

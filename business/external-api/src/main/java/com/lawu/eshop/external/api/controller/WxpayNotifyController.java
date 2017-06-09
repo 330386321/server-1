@@ -127,16 +127,21 @@ public class WxpayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
+						param.setMerchantId(Long.valueOf(extra[5]));
 						result = depositService.doHandleDepositNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
-						double money = order.getModel().getOrderTotalPrice().doubleValue();
-						if (money == dmoney) {
-							result = orderService.doHandleOrderPayNotify(param);
+						if (order == null || order.getModel() == null) {
+							result = successCreated(ResultCode.FAIL, "找不到订单:" + param.getBizIds());
 						} else {
-							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
-							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+							double money = order.getModel().getOrderTotalPrice().doubleValue();
+							if (money == dmoney) {
+								result = orderService.doHandleOrderPayNotify(param);
+							} else {
+								result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
+								result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
+							}
 						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
@@ -256,6 +261,7 @@ public class WxpayNotifyController extends BaseController {
 						result = rechargeService.doHandleRechargeNotify(param);
 						
 					} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(StringUtil.intToByte(bizFlagInt))) {
+						param.setMerchantId(Long.valueOf(extra[5]));
 						result = depositService.doHandleDepositNotify(param);
 
 					} else {

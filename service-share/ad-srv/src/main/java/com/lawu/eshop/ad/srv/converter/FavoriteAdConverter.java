@@ -29,6 +29,7 @@ public class FavoriteAdConverter {
         favoriteProductBO.setTitle(favoriteAdDOView.getTitle());
         favoriteProductBO.setStatusEnum(AdStatusEnum.getEnum(favoriteAdDOView.getStatus()));
         favoriteProductBO.setTypeEnum(FavoriteTypeEnum.getEnum(favoriteAdDOView.getType()));
+        favoriteProductBO.setVideoImgUrl(favoriteAdDOView.getVideoImgUrl());
         return favoriteProductBO;
     }
 	
@@ -68,6 +69,7 @@ public class FavoriteAdConverter {
 		favoriteAdDOViewDTO.setTitle(favoriteAdDOViewBO.getTitle());
 		favoriteAdDOViewDTO.setStatusEnum(favoriteAdDOViewBO.getStatusEnum());
 		favoriteAdDOViewDTO.setTypeEnum(favoriteAdDOViewBO.getTypeEnum());
+		favoriteAdDOViewDTO.setVideoImgUrl(favoriteAdDOViewBO.getVideoImgUrl());
         return favoriteAdDOViewDTO;
     }
 	

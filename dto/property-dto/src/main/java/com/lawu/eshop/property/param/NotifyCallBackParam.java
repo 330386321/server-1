@@ -43,6 +43,16 @@ public class NotifyCallBackParam {
 	@NotNull(message = "transactionPayTypeEnum不能为空")
 	private TransactionPayTypeEnum transactionPayTypeEnum;
 	
+	//商家缴纳保证金时需要回调发送消息改门店状态（事务）
+	private Long merchantId;
+	
+	public Long getMerchantId() {
+		return merchantId;
+	}
+	public void setMerchantId(Long merchantId) {
+		this.merchantId = merchantId;
+	}
+	
 	public String getBizFlag() {
 		return bizFlag;
 	}

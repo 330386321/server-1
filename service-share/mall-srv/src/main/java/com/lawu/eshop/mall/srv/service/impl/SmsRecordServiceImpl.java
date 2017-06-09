@@ -12,7 +12,7 @@ import com.lawu.eshop.mall.srv.mapper.VerifyCodeDOMapper;
 import com.lawu.eshop.mall.srv.service.SmsRecordService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-import constants.SmsConstant;
+import com.eshop.sms.util.SmsConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

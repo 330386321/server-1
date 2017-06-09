@@ -859,7 +859,7 @@ public class ProductServiceImpl implements ProductService {
     public Integer selectProductCount(Long merchantId) {
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val).andMerchantIdEqualTo(merchantId);
-        int count = productDOMapper.countByExample(example);
+        Integer count = productDOMapper.countByExample(example);
         return count;
     }
 

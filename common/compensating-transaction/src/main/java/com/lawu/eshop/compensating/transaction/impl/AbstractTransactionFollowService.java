@@ -1,5 +1,7 @@
 package com.lawu.eshop.compensating.transaction.impl;
 
+import java.lang.reflect.ParameterizedType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,11 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
 		// 从事务幂等性保证，表中存在记录，说明消息已经被成功消费，直接返回
 		if (followTransactionRecordService.isExist(topic, notification.getTransactionId())) {
 			logger.info("消息已经被消费");
+			R reply = newInstance();
+			if ( reply != null ) {
+                reply.setTransactionId(notification.getTransactionId());
+                sendCallback(reply);
+            }
 			return;
 		}
 		
@@ -91,4 +98,22 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
      * @param notification
      */
     public abstract R execute(N notification);
+    
+    /**
+     * 获取R实例化对象
+     * 
+     * @return
+     * @author Sunny
+     * @date 2017年6月8日
+     */
+    @SuppressWarnings("unchecked")
+	private R newInstance(){
+    	 try {
+			return ((Class<R>)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1]).newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			logger.error("实例化泛型异常", e);
+		}
+		return null;
+    }
+    
 }

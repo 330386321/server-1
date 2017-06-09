@@ -5,7 +5,6 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
-import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -82,7 +81,7 @@ public class AlipayController extends BaseController {
 			public_key = propertySrvConfig.getAlipayEdianBusinessPublicKey();
 		}
 		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split
-				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum();
+				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId();
 		// 实例化客户端
 		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(), appId,
 				propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8", public_key, "RSA");
@@ -142,7 +141,7 @@ public class AlipayController extends BaseController {
 		paramMap.put("subject", param.getSubject());
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
 			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
-					+ "商家缴纳保证金P" + split + param.getBizId());
+					+ "商家缴纳保证金P" + split + param.getBizId() + split + param.getMerchantId());
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)) {
 			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
 					+ "商家充值余额P" + split + param.getBizId());

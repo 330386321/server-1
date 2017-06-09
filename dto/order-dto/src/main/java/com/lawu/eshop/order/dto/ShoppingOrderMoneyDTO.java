@@ -1,11 +1,8 @@
 package com.lawu.eshop.order.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShoppingOrderMoneyDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderMoneyDTO {
 
     /**
     * 订单总价

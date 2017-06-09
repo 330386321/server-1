@@ -1,16 +1,12 @@
 package com.lawu.eshop.order.param;
 
-import java.io.Serializable;
-
 /**
  * 
  * @author Sunny
  * @date 2017年5月4日
  */
-public class ShoppingOrderReportDataParam implements Serializable {
+public class ShoppingOrderReportDataParam {
 	
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 创建时间
 	 */

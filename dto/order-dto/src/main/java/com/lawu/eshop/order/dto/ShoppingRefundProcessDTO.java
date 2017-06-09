@@ -1,15 +1,12 @@
 package com.lawu.eshop.order.dto;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class ShoppingRefundProcessDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ShoppingRefundProcessDTO {
 	
 	/**
 	 * 退款状态

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 用户服务启动类
@@ -12,6 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @date 2017/3/10
  */
 @EnableDiscoveryClient
+@ComponentScan({"com.lawu.eshop"})
 @SpringBootApplication
 public class CacheSrvApplication {
 

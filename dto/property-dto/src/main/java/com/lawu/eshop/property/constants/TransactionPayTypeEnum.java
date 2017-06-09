@@ -13,8 +13,8 @@ public enum TransactionPayTypeEnum {
 	BALANCE((byte) 0x01,"余额"), // 余额
 	ALIPAY((byte) 0x02,"支付宝"), // 支付宝
 	WX((byte) 0x03,"微信");// 微信
-	public Byte val;
-	public String name;
+	private Byte val;
+	private String name;
 
 	TransactionPayTypeEnum(Byte val,String name) {
 		this.val = val;
@@ -30,4 +30,21 @@ public enum TransactionPayTypeEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

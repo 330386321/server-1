@@ -1,10 +1,6 @@
 package com.lawu.eshop.order.dto;
 
-import java.io.Serializable;
-
-public class ShoppingOrderIsNoOnGoingOrderDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderIsNoOnGoingOrderDTO {
 
 	/**
 	 * 是否有进行中的订单

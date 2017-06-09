@@ -45,6 +45,9 @@ public class ResultCode {
     public static final int ACCOUNT_EXIST = 1027;
     public static final int SMS_SEND_FAIL = 1028;
 
+    public static final int ID_CARD_RECORD_EXIST = 1029;
+    public static final int REG_NUMBER_RECORD_EXIST = 1030;
+
     // 用户模块代码 2xxx
     public static final int MEMBER_WRONG_PWD = 2000;
     public static final int USER_WRONG_ID = 2001;
@@ -194,6 +197,9 @@ public class ResultCode {
         ResultCode.messageMap.put(ACCOUNT_EXIST, "账号已存在");
         ResultCode.messageMap.put(SMS_SEND_FAIL, "短信验证码发送失败，请稍后重试！");
 
+        ResultCode.messageMap.put(ID_CARD_RECORD_EXIST, "该身份证号已经创建过门店");
+        ResultCode.messageMap.put(REG_NUMBER_RECORD_EXIST, "该执照已经创建过门店");
+
         // 用户模块 2xxx
         ResultCode.messageMap.put(MEMBER_WRONG_PWD, "用户名或密码错误");
         ResultCode.messageMap.put(USER_WRONG_ID, "ID不存在");
@@ -264,6 +270,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞了");
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
+        
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");
         ResultCode.messageMap.put(CASH_MORE_NUM_MAX_MONEY_ERROR, "提现金额必须大于等于10元");
