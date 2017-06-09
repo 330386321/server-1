@@ -26,14 +26,15 @@
 		a.merchant_id as merchant_id
     from favorite_ad fa  
     	left join ad a on fa.ad_id= a.id
-     <where>
-    	fa.member_id=#{memberId,jdbcType=VARCHAR}
+    
 	    <if test="type == 1" >
 	      and a.type =1 or a.type=2
 	    </if>
 	     <if test="type == 2" >
 	      and a.type =3
 	    </if>
-    </where>
+	     <where>
+    		fa.member_id=#{memberId,jdbcType=VARCHAR}
+    	</where>
   </select>
 </mapper>
