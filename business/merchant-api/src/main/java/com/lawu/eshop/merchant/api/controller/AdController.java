@@ -113,7 +113,7 @@ public class AdController extends BaseController {
     	Integer count=0;
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
-    		if(areas==null){
+    		if(areas==null || areas==""){
     			areas="ALL_PLACE";
     		}
     		count=memberCountService.findMemberCount(areas);
