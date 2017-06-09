@@ -35,7 +35,7 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
         ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
         listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
         listMerchantStoreParam.setManageType(ManageTypeEnum.ENTITY.val);
-        listMerchantStoreParam.setPageSize(50);
+        listMerchantStoreParam.setPageSize(1000);
         int currentPage = 0;
 
         Result<List<MerchantStoreDTO>> result = null;

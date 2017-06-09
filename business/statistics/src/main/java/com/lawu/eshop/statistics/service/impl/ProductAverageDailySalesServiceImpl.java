@@ -26,7 +26,7 @@ public class ProductAverageDailySalesServiceImpl implements ProductAverageDailyS
     @Override
     public void executeProductAverageDailySales() {
         ListProductParam listProductParam = new ListProductParam();
-        listProductParam.setPageSize(50);
+        listProductParam.setPageSize(1000);
         int currentPage = 0;
 
         Result<List<ProductInfoDTO>> result = null;
