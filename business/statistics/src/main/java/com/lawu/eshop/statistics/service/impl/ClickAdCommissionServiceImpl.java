@@ -54,7 +54,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 			Map<String, BigDecimal> property = commonPropertyService.getAdCommissionPropertys();
 			BigDecimal loveAccountScale = property.get("love_account_scale");// 爱心账户比例
 			BigDecimal actualCommissionScope = property.get("acture_in_scale");// 实际提成比例=1-爱心账户(0.003)
-			BigDecimal ad_commission_0 = property.get("ad_commission_0");
+			BigDecimal adCommission0 = property.get("ad_commission_0");
 
 			for (MemberAdRecodeCommissionDTO dto : ads) {
 				if(dto.getMemberNum() == null || "".equals(dto.getMemberNum())){
@@ -89,10 +89,10 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						BigDecimal actureMoneyIn = null;
 						BigDecimal actureLoveIn = null;
 						if(i == 2){
-							actureMoneyIn = clickMoney.multiply(ad_commission_0).multiply(sale_commission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
+							actureMoneyIn = clickMoney.multiply(adCommission0).multiply(sale_commission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
 						}else{
-							actureMoneyIn = clickMoney.multiply(ad_commission_0).multiply(sale_commission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
-							actureLoveIn = clickMoney.multiply(ad_commission_0).multiply(sale_commission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
+							actureMoneyIn = clickMoney.multiply(adCommission0).multiply(sale_commission).multiply(actualCommissionScope).setScale(6, BigDecimal.ROUND_HALF_UP);// 实际所得余额
+							actureLoveIn = clickMoney.multiply(adCommission0).multiply(sale_commission).multiply(loveAccountScale).setScale(6, BigDecimal.ROUND_HALF_UP);// 爱心账户
 						
 							//如果计算出爱心账户为0.000000时默认赋值0.000001
 							if(actureLoveIn.compareTo(BigDecimal.ZERO) == 0){
@@ -118,7 +118,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						param.setLoveTypeVal(LoveTypeEnum.AD_COMMISSION.getValue());
 						param.setLoveTypeName(LoveTypeEnum.AD_COMMISSION.getName());
 						
-						logger.info("点广告比例：ad_commission_0={},commission={},actualCommissionScope={},loveAccountScale={}",ad_commission_0,sale_commission,actualCommissionScope,loveAccountScale);
+						logger.info("点广告比例：ad_commission_0={},commission={},actualCommissionScope={},loveAccountScale={}",adCommission0,sale_commission,actualCommissionScope,loveAccountScale);
 						logger.info("点广告：actureMoneyIn={},actureLoveIn={}",param.getActureMoneyIn(),param.getActureLoveIn());
 						
 						retCode = propertySrvService.calculation(param);

@@ -54,7 +54,7 @@ public class RechargeController extends BaseController {
 		dparam.setPayTypeEnum(param.getPayTypeEnum());
 		dparam.setTransactionPayTypeEnum(param.getTransactionPayTypeEnum());
 		dparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
-		if(TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)
+		if(TransactionPayTypeEnum.BALANCE.getVal().equals(param.getTransactionPayTypeEnum().getVal())
 				&& (param.getPayPwd() == null || "".equals(param.getPayPwd()) )){
 			return successCreated(ResultCode.PAY_PWD_NULL);
 		}

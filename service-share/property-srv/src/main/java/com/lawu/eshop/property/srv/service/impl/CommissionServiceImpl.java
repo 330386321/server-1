@@ -90,7 +90,7 @@ public class CommissionServiceImpl implements CommissionService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.ADVERTISING.getValue());
 		tdsParam.setTransactionAccount("");
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(actureMoneyIn);
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		tdsParam.setBizId("");
@@ -154,7 +154,7 @@ public class CommissionServiceImpl implements CommissionService {
 				tdsParam.setTitle(param.getTypeName());
 				tdsParam.setTransactionType(param.getTypeVal());
 				tdsParam.setTransactionAccount("");
-				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+				tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 				tdsParam.setAmount(param.getActureMoneyIn());
 				tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 				tdsParam.setBizId(param.getBizId().toString());
@@ -223,7 +223,7 @@ public class CommissionServiceImpl implements CommissionService {
 			tdsParam.setTitle(param.getTypeName());
 			tdsParam.setTransactionType(param.getTypeVal());
 			tdsParam.setTransactionAccount("");
-			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 			tdsParam.setAmount(param.getActureMoneyIn());
 			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 			tdsParam.setBizId(param.getBizId().toString());

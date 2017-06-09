@@ -12,8 +12,8 @@ package com.lawu.eshop.property.constants;
 public enum PayTypeEnum {
 	BALANCE((byte) 0x01,"余额"), // 余额
 	POINT((byte) 0x02,"积分"); // 积分
-	public Byte val;
-	public String name;
+	private Byte val;
+	private String name;
 
 	PayTypeEnum(Byte val,String name) {
 		this.val = val;
@@ -29,4 +29,21 @@ public enum PayTypeEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

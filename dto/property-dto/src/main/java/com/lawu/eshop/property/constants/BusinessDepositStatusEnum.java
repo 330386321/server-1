@@ -20,8 +20,8 @@ public enum BusinessDepositStatusEnum {
 	REFUND_SUCCESS((byte) 0x05,"退款成功"),
 	REFUND_FAILURE((byte) 0x06,"退款失败");
 	
-	public Byte val;
-	public String name;
+	private Byte val;
+	private String name;
 
 	BusinessDepositStatusEnum(Byte val,String name) {
 		this.val = val;
@@ -37,4 +37,21 @@ public enum BusinessDepositStatusEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

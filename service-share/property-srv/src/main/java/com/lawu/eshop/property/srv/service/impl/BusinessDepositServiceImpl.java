@@ -75,7 +75,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		bddo.setBusinessName(param.getBusinessName());
 		bddo.setDepositNumber(StringUtil.getRandomNum(""));
 		bddo.setAmount(new BigDecimal(param.getDeposit()));
-		bddo.setStatus(BusinessDepositStatusEnum.PAYING.val);
+		bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
 		bddo.setProvinceId(Long.valueOf(param.getProvinceId()));
 		bddo.setCityId(Long.valueOf(param.getCityId()));
 		bddo.setAreaId(Long.valueOf(param.getAreaId()));
@@ -99,7 +99,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			result.setMsg("保证金初始记录为空");
 			return result;
 		}else{
-			if(!BusinessDepositStatusEnum.PAYING.val.equals(deposit.getStatus())){
+			if(!BusinessDepositStatusEnum.PAYING.getVal().equals(deposit.getStatus())){
 				result.setRet(ResultCode.SUCCESS);
 				logger.info("保证金重复回调(判断幂等)");
 				return result;
@@ -120,7 +120,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MerchantTransactionTypeEnum.DEPOSIT.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
@@ -131,12 +131,12 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDO depositDO = new BusinessDepositDO();
 		depositDO.setThirdNumber(param.getTradeNo());
 		depositDO.setThirdAccount(param.getBuyerLogonId());
-		depositDO.setPaymentMethod(param.getTransactionPayTypeEnum().val);
-		depositDO.setStatus(BusinessDepositStatusEnum.VERIFY.val);
+		depositDO.setPaymentMethod(param.getTransactionPayTypeEnum().getVal());
+		depositDO.setStatus(BusinessDepositStatusEnum.VERIFY.getVal());
 		depositDO.setGmtPay(new Date());
 		depositDO.setGmtModified(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();
-		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.val);
+		example.createCriteria().andIdEqualTo(Long.valueOf(param.getBizIds())).andStatusEqualTo(BusinessDepositStatusEnum.PAYING.getVal());
 		businessDepositDOMapper.updateByExampleSelective(depositDO, example);
 
 		// 回调成功后，发送消息修改门店状态为：已缴保证金待核实
@@ -173,13 +173,13 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				criteria1.andGmtPayLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
 			}
 			if (param.getBusinessDepositStatusEnum() != null) {
-				criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().val);
+				criteria1.andStatusEqualTo(param.getBusinessDepositStatusEnum().getVal());
 			} else {
-				criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.val);
+				criteria1.andStatusGreaterThan(BusinessDepositStatusEnum.VERIFY.getVal());
 			}
 
 			if (param.getTransactionPayTypeEnum() != null) {
-				criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().val);
+				criteria1.andPaymentMethodEqualTo(param.getTransactionPayTypeEnum().getVal());
 			}
 			if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
 				if (param.getRegionPath().split("/").length == 1) {
@@ -209,8 +209,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			ddqbo.setDepositNumber(bddo.getDepositNumber() == null ? "" : bddo.getDepositNumber());
 			ddqbo.setBusinessName(bddo.getBusinessName() == null ? "" : bddo.getBusinessName());
 			ddqbo.setAmount(bddo.getAmount() == null ? new BigDecimal("0") : bddo.getAmount());
-			ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).name);
-			ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).name);
+			ddqbo.setPayMethod(TransactionPayTypeEnum.getEnum(bddo.getPaymentMethod()).getName());
+			ddqbo.setStatus(BusinessDepositStatusEnum.getEnum(bddo.getStatus()).getName());
 			ddqbo.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(bddo.getStatus()));
 			ddqbo.setUserNum(bddo.getUserNum());
 			if(bddo.getBusinessBankAccountId() != null){
@@ -306,7 +306,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		}
 
 		BusinessDepositDO bddo = new BusinessDepositDO();
-		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.val);
+		bddo.setStatus(BusinessDepositStatusEnum.APPLY_REFUND.getVal());
 		bddo.setBusinessBankAccountId(Long.valueOf(dparam.getBusinessBankAccountId()));
 		bddo.setGmtRefund(new Date());
 		BusinessDepositDOExample example = new BusinessDepositDOExample();

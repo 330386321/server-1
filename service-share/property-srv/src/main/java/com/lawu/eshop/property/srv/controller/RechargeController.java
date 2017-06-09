@@ -78,7 +78,7 @@ public class RechargeController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
 		}
 		String value = "1";//充值余额
-		if (PayTypeEnum.POINT.val.equals(param.getPayTypeEnum().val)) {
+		if (PayTypeEnum.POINT.getVal().equals(param.getPayTypeEnum().getVal())) {
 			// 获取第三方支付充值积分的比例
 			String name = PropertyType.MEMBER_THIRD_PAY_POINT;
 			if (param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {
@@ -92,7 +92,7 @@ public class RechargeController extends BaseController {
 		param.setRechargeScale(value);
 		
 		// 余额支付时校验资产财产记录、余额、支付密码
-		if(TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)){
+		if(TransactionPayTypeEnum.BALANCE.getVal().equals(param.getTransactionPayTypeEnum().getVal())){
 			PropertyInfoBO propertyInfoBO = propertyInfoService.getPropertyInfoByUserNum(param.getUserNum());
 			if(propertyInfoBO == null){
 				return successCreated(ResultCode.PAY_PWD_NULL);

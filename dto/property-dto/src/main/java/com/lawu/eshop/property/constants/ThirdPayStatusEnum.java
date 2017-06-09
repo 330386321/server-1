@@ -13,8 +13,8 @@ public enum ThirdPayStatusEnum {
 	PAYING((byte) 0x01,"待支付"), // 待支付
 	SUCCESS((byte) 0x02,"成功"), // 成功
 	FAILURE((byte) 0x03,"失败"); // 失败
-	public Byte val;
-	public String name;
+	private Byte val;
+	private String name;
 
 	ThirdPayStatusEnum(Byte val,String name) {
 		this.val = val;
@@ -30,4 +30,21 @@ public enum ThirdPayStatusEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 }

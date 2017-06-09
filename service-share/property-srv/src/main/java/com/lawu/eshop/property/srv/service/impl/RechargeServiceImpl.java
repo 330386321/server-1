@@ -71,9 +71,9 @@ public class RechargeServiceImpl implements RechargeService {
 		double money = dRechargeMoney * dCurrentScale;
 		recharge.setMoney(new BigDecimal(money));
 
-		recharge.setRechargeType(param.getPayTypeEnum().val);
-		recharge.setChannel(param.getTransactionPayTypeEnum().val);
-		recharge.setStatus(ThirdPayStatusEnum.PAYING.val);
+		recharge.setRechargeType(param.getPayTypeEnum().getVal());
+		recharge.setChannel(param.getTransactionPayTypeEnum().getVal());
+		recharge.setStatus(ThirdPayStatusEnum.PAYING.getVal());
 		recharge.setRechargeNumber(StringUtil.getRandomNum(""));
 		recharge.setGmtCreate(new Date());
 		rechargeDOMapper.insertSelective(recharge);
@@ -98,7 +98,7 @@ public class RechargeServiceImpl implements RechargeService {
 			result.setMsg("充值记录为空");
 			return result;
 		}else{
-			if(ThirdPayStatusEnum.SUCCESS.val.equals(recharge.getStatus())){
+			if(ThirdPayStatusEnum.SUCCESS.getVal().equals(recharge.getStatus())){
 				result.setRet(ResultCode.PROCESSED_RETURN_SUCCESS);
 				logger.info("重复回调(判断幂等)");
 				return result;
@@ -166,7 +166,7 @@ public class RechargeServiceImpl implements RechargeService {
 		}else if(param.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
 			tdsParam.setTransactionType(MerchantTransactionTypeEnum.RECHARGE.getValue());
 		}
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
@@ -176,7 +176,7 @@ public class RechargeServiceImpl implements RechargeService {
 		
 		//更新充值表状态
 		RechargeDO rechargeDO = new RechargeDO();
-		rechargeDO.setStatus(ThirdPayStatusEnum.SUCCESS.val);
+		rechargeDO.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
 		rechargeDO.setThirdNumber(param.getTradeNo());
 		rechargeDO.setGmtModified(new Date());
 		RechargeDOExample example = new RechargeDOExample();
@@ -208,7 +208,7 @@ public class RechargeServiceImpl implements RechargeService {
 			criteria.andUserNumEqualTo(dparam.getUserNum());
 		}
 		if(dparam.getStatus() != null){
-			criteria.andStatusEqualTo(dparam.getStatus().val);
+			criteria.andStatusEqualTo(dparam.getStatus().getVal());
 		}
 		if(dparam.getRechargeNumber() != null && !"".equals(dparam.getRechargeNumber())){
 			criteria.andRechargeNumberEqualTo(dparam.getRechargeNumber());
@@ -227,7 +227,7 @@ public class RechargeServiceImpl implements RechargeService {
 			bo.setMoney(rdo.getMoney().toString());
 			bo.setRechargeMoney(rdo.getRechargeMoney().toString());
 			bo.setRechargeNumber(rdo.getRechargeNumber());
-			bo.setRechargeType(PayTypeEnum.getEnum(rdo.getRechargeType()).name);
+			bo.setRechargeType(PayTypeEnum.getEnum(rdo.getRechargeType()).getName());
 			bo.setStatus(ThirdPayStatusEnum.getEnum(rdo.getStatus()));
 			bo.setThirdNumber(rdo.getThirdNumber());
 			cbos.add(bo);

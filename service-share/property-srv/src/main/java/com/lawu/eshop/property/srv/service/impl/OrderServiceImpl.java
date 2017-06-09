@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY_ORDERS.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getUserNum());
 		tdsParam.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.PAY.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(param.getBizIds());
@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam1.setUserNum(param.getSideUserNum());
 		tdsParam1.setTransactionAccount(param.getBuyerLogonId());
 		tdsParam1.setTransactionType(MerchantTransactionTypeEnum.PAY.getValue());
-		tdsParam1.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam1.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam1.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam1.setBizId(param.getBizIds());
 		tdsParam1.setThirdTransactionNum(param.getTradeNo());
@@ -260,7 +260,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setUserNum(param.getSideUserNum());
 		tdsParam.setTransactionType(MemberTransactionTypeEnum.REFUND_ORDERS.getValue());
 		tdsParam.setTransactionAccount("");
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().val);
+		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
 		tdsParam.setAmount(new BigDecimal(param.getRefundMoney()));
 		tdsParam.setBizId(param.getOrderItemIds());
 		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
@@ -268,7 +268,7 @@ public class OrderServiceImpl implements OrderService {
 		transactionDetailService.save(tdsParam);
 
 		JsonResult jsonResult = new JsonResult();
-		if (TransactionPayTypeEnum.BALANCE.val.equals(param.getTransactionPayTypeEnum().val)) {
+		if (TransactionPayTypeEnum.BALANCE.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
 			// 加会员财产余额
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
 			infoDoView.setUserNum(param.getSideUserNum());
@@ -282,7 +282,7 @@ public class OrderServiceImpl implements OrderService {
 			rparam.setRefundId(StringUtil.getRandomNumAppend(param.getOrderItemIds().replaceAll(",", "")));
 			rparam.setRefundMoney(param.getRefundMoney());
 			rparam.setTradeNo(param.getTradeNo());
-			if (TransactionPayTypeEnum.ALIPAY.val.equals(param.getTransactionPayTypeEnum().val)) {
+			if (TransactionPayTypeEnum.ALIPAY.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
 				AliPayConfigParam aliPayConfigParam = new AliPayConfigParam();
 				aliPayConfigParam.setAlipayRefundUrl(propertySrvConfig.getAlipayRefundUrl());
 				aliPayConfigParam.setAlipayAppIdMember(propertySrvConfig.getAlipayAppIdMember());
@@ -295,7 +295,7 @@ public class OrderServiceImpl implements OrderService {
 				aliPayConfigParam.setAlipayInputCharset(propertySrvConfig.getAlipayInputCharset());
 				AlipayBusinessHandle.refund(rparam, jsonResult,aliPayConfigParam);
 
-			} else if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
+			} else if (TransactionPayTypeEnum.WX.getVal().equals(param.getTransactionPayTypeEnum().getVal())) {
 				
 				TransactionDetailDOExample transactionDetailDOExample = new TransactionDetailDOExample();
 				transactionDetailDOExample.createCriteria().andThirdTransactionNumEqualTo(param.getTradeNo()).andUserNumEqualTo(param.getSideUserNum());

@@ -79,8 +79,8 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			if(StringUtils.isNotEmpty(param.getEndDate())){
 				criteria1.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
 			}
-			if (!CashStatusEnum.ALL.val.equals(param.getCashStatsuEnum().val)) {
-				criteria1.andStatusEqualTo(param.getCashStatsuEnum().val);
+			if (!CashStatusEnum.ALL.getVal().equals(param.getCashStatsuEnum().getVal())) {
+				criteria1.andStatusEqualTo(param.getCashStatsuEnum().getVal());
 			}
 
 			if (param.getRegionPath() != null && !"".equals(param.getRegionPath())) {
@@ -107,7 +107,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());
-			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).name);
+			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).getName());
 			bqbo.setCashStatsuEnum(CashStatusEnum.getEnum(cdo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
@@ -135,7 +135,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) throws Exception {
 		WithdrawCashDOView view = new WithdrawCashDOView();
 		view.setUserType(param.getUserTypeEnum().val);
-		view.setStatus(CashStatusEnum.SUCCESS.val);
+		view.setStatus(CashStatusEnum.SUCCESS.getVal());
 		view = withdrawCashDOMapperExtend.getTotalNum(view);
 
 		WithdrawCashBackageQuerySumBO bo = new WithdrawCashBackageQuerySumBO();
@@ -163,7 +163,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			bqbo.setAccount(cdo.getAccount());
 			bqbo.setName(cdo.getName());
 			bqbo.setRegionFullName(cdo.getRegionFullName());
-			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).name);
+			bqbo.setStatus(CashStatusEnum.getEnum(cdo.getStatus()).getName());
 			bqbo.setCashStatsuEnum(CashStatusEnum.getEnum(cdo.getStatus()));
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
@@ -212,7 +212,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			paramList.add(view);
 			withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
 		}
-		if (!CashStatusEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
+		if (!CashStatusEnum.FAILURE.getVal().equals(param.getCashOperEnum().val)) {
 			return ResultCode.SUCCESS;
 		}
 
@@ -238,7 +238,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 				transactionDetailDO.setTransactionType(MerchantTransactionTypeEnum.WITHDRAW_BACK.getValue());
 			}
 			transactionDetailDO.setTransactionAccount(wcdo.getAccount());
-			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 			transactionDetailDO.setAmount(wcdo.getCashMoney());
 			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.val);
 			transactionDetailDO.setBizId(wcdo.getId() == null ? "" : wcdo.getId().toString());
