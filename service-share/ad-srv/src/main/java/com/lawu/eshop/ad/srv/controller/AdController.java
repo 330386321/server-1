@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
+import com.lawu.eshop.ad.dto.ViewDTO;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -39,6 +41,7 @@ import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
@@ -379,9 +382,16 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "getAllAd", method = RequestMethod.GET)
-    public Result<List<Long>> getAllAd() {
-    	List<Long> ids=adService.getAllAd();
-    	return successGet(ids);
+    public Result<List<ViewDTO>> getAllAd() {
+    	List<ViewBO> bos=adService.getAllAd();
+    	List<ViewDTO> dtos=new ArrayList<>();
+    	for (ViewBO viewBO : bos) {
+    		ViewDTO dto=new ViewDTO();
+    		dto.setId(viewBO.getId());
+    		dto.setViewCount(viewBO.getViewCount());
+    		dtos.add(dto);
+		}
+    	return successGet(dtos);
     }
 	
 	/**

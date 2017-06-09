@@ -1,6 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +17,6 @@ public interface AdViewService {
 
 
 	@RequestMapping(value = "adView/getAdviews", method = RequestMethod.GET)
-	Result<List<String>> getAdviews(@RequestParam("adId") String adId);
+	Result<Set<String>> getAdviews(@RequestParam("adId") String adId);
 
 }

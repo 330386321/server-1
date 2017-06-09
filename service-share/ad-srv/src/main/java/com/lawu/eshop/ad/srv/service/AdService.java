@@ -14,6 +14,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
 
 /**
@@ -170,7 +171,7 @@ public interface AdService {
     /**
      * 获取广告
      */
-    List<Long> getAllAd();
+    List<ViewBO> getAllAd();
 
     /**
      * 修改广告浏览次数

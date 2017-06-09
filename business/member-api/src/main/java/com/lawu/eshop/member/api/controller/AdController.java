@@ -3,8 +3,8 @@ package com.lawu.eshop.member.api.controller;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +48,6 @@ import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.AdViewService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
-import com.lawu.eshop.member.api.service.InviterService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantService;
@@ -61,7 +60,6 @@ import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
-import com.lawu.eshop.user.dto.InviterDTO;
 import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
@@ -202,18 +200,21 @@ public class AdController extends BaseController {
         		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
         		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
         	}
-        	
-        	 if(adDTO.getViewCount()==0){
-        		 adViewService.setAdView(id.toString(), memberId.toString());
-        	 }else{
-        		 Result<List<String>> rs= adViewService.getAdviews(id.toString());
-        		 if(isSuccess(rs)){
-        			 for (String str : rs.getModel()) {
-            			 if(!memberId.toString().equals(str)){
-            				 adViewService.setAdView(id.toString(), memberId.toString());
+    		 Result<Set<String>> rs= adViewService.getAdviews(id.toString());
+    		 if(isSuccess(rs)){
+    			 if(rs.getModel().size()>0){
+    				 boolean flag=false;
+    				 for (String str : rs.getModel()) {
+            			 if(memberId.toString().equals(str)){
+            				 flag=true;
             			 }
+    				} 
+    				if(!flag){
+    					adViewService.setAdView(id.toString(), memberId.toString());
     				}
-        		 }
+    			 }else{
+    				 adViewService.setAdView(id.toString(), memberId.toString());
+    			 }
         		
         	 }
         	 

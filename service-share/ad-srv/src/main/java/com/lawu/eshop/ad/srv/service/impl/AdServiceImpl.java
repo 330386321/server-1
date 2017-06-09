@@ -34,6 +34,7 @@ import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
@@ -758,7 +759,7 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
-	public List<Long> getAllAd() {
+	public List<ViewBO> getAllAd() {
 		AdDOExample example =new AdDOExample();
 		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 		RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
@@ -775,11 +776,14 @@ public class AdServiceImpl implements AdService {
 		}else{
 			currentPage++;
 		}
-		List<Long> ids=new ArrayList<>();
+		List<ViewBO> bos=new ArrayList<>();
 		for (AdDO adDO : list) {
-			ids.add(adDO.getId());
+			ViewBO bo=new ViewBO();
+			bo.setId(adDO.getId());
+			bo.setViewCount(adDO.getViewcount());
+			bos.add(bo);
 		}
-		return ids;
+		return bos;
 		
 	}
 
