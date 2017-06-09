@@ -239,6 +239,14 @@ public interface AdService {
 	 */
 	Boolean isSendRedPacket(Long merchantId);
 
-	void updateRacking();
+	/**
+	 * 定时任务修改广告上架
+	 */
+	void updatAdToPutting();
+
+	/**
+	 * 定时任务修改结束
+	 */
+	void updatAdToPuted();
 
 }
