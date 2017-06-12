@@ -57,3 +57,8 @@ change master to master_host='192.168.100.206',master_port=3306,master_user='esh
 ```Bash
 start slave;
 ```
+
+
+参考资料
+======
+http://blog.csdn.net/he90227/article/details/54140422
