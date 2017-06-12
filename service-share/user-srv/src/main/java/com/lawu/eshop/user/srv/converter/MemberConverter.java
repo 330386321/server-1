@@ -10,6 +10,7 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -47,7 +48,11 @@ public class MemberConverter {
         memberBO.setLevel(memberDO.getLevel());
         memberBO.setUserSex(UserSexEnum.getEnum(memberDO.getSex()));
         memberBO.setRegionPath(memberDO.getRegionPath());
-        memberBO.setNickname(memberDO.getNickname());
+        if(StringUtils.isEmpty(memberDO.getNickname())){
+            memberBO.setNickname("E店用户");
+        }else{
+            memberBO.setNickname(memberDO.getNickname());
+        }
         memberBO.setGtCid(memberDO.getGtCid());
         memberBO.setRyToken(memberDO.getRyToken());
         memberBO.setRegionName(memberDO.getRegionName());
