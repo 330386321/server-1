@@ -828,7 +828,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			 *  判断订单的状态是否是待支付
 			 *  如果不是，说明扣除库存失败，提示买家库存不足
 			 */
-			if (ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(orderDO.getOrderStatus())) {
+			if (ShoppingOrderStatusEnum.PENDING.getValue().equals(orderDO.getOrderStatus())) {
 				rtn.setRet(ResultCode.THE_ORDER_IS_BEING_PROCESSED);
 				return rtn;
 			}
