@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -187,7 +188,16 @@ public class ShoppingOrderExtendConverter {
 		}
 
 		rtn = new ShoppingOrderExtendQueryDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn, new String[]{"items"});
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setFreightPrice(shoppingOrderExtendBO.getFreightPrice());
+		rtn.setIsDone(shoppingOrderExtendBO.getIsDone());
+		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
+		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
+		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
+		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
+		rtn.setOrderTotalPrice(shoppingOrderExtendBO.getOrderTotalPrice());
 		
 		int quantity = 0;
 		if (shoppingOrderExtendBO.getItems() != null) {
@@ -221,6 +231,20 @@ public class ShoppingOrderExtendConverter {
 		}
 		
 		return shoppingOrderExtendQueryDTOList;
+	}
+	
+	/**
+	 * ShoppingOrderExtendQueryDTO Page转换
+	 * 
+	 * @param shoppingOrderExtendBOPage
+	 * @return
+	 */
+	public static Page<ShoppingOrderExtendQueryDTO> convertShoppingOrderExtendQueryDTOPage(Page<ShoppingOrderExtendBO> shoppingOrderExtendBOPage) {
+		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderExtendQueryDTO>();
+		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendBOPage.getCurrentPage());
+		shoppingOrderExtendQueryDTOPage.setTotalCount(shoppingOrderExtendBOPage.getTotalCount());
+		shoppingOrderExtendQueryDTOPage.setRecords(convertShoppingOrderExtendQueryDTOList(shoppingOrderExtendBOPage.getRecords()));
+		return shoppingOrderExtendQueryDTOPage;
 	}
 	
 	/**

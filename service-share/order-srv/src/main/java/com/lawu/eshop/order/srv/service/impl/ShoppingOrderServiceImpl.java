@@ -254,31 +254,24 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 分页参数
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
-		// 默认创建时间排序
-		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
-
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
-
-		List<Long> shoppingOrderIdList = new ArrayList<Long>();
-		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
-			shoppingOrderIdList.add(item.getId());
-		}
-
+		List<Long> idList = shoppingOrderDOExtendMapper.selectIdByExample(shoppingOrderExtendDOExample, rowBounds);
+		
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
+		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
 		rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 
-		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
-
+		shoppingOrderExtendDOList = null;
+		
 		return shoppingOrderItemBOPage;
 	}
 

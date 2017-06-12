@@ -93,4 +93,12 @@ public interface ShoppingOrderExtendDOMapper {
 	 * @return
 	 */
     List<NotShippedDO> selectByNotShipped(Integer time);
+    
+	/**
+	 * 根据查询条件查询订单id
+	 * 
+	 * @param example 查询参数
+	 * @return
+	 */
+	List<Long> selectIdByExample(ShoppingOrderExtendDOExample example, RowBounds rowBounds);
 }

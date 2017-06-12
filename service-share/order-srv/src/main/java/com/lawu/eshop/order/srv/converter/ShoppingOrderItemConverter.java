@@ -55,17 +55,33 @@ public class ShoppingOrderItemConverter {
 	 * @return
 	 */
 	public static ShoppingOrderItemBO convert(ShoppingOrderItemDO shoppingOrderItemDO) {
+		ShoppingOrderItemBO rtn = null;
+		
 		if (shoppingOrderItemDO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderItemBO shoppingOrderItemBO = new ShoppingOrderItemBO();
-		BeanUtils.copyProperties(shoppingOrderItemDO, shoppingOrderItemBO, new String[]{"orderStatus", "refundStatus"});
+		rtn = new ShoppingOrderItemBO();
+		BeanUtils.copyProperties(shoppingOrderItemDO, rtn, new String[]{"orderStatus", "refundStatus"});
+		rtn.setId(shoppingOrderItemDO.getId());
+		rtn.setIsAllowRefund(shoppingOrderItemDO.getIsAllowRefund());
+		rtn.setIsEvaluation(shoppingOrderItemDO.getIsEvaluation());
+		rtn.setProductFeatureImage(shoppingOrderItemDO.getProductFeatureImage());
+		rtn.setProductId(shoppingOrderItemDO.getProductId());
+		rtn.setProductModelId(shoppingOrderItemDO.getProductModelId());
+		rtn.setProductModelName(shoppingOrderItemDO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemDO.getProductName());
+		rtn.setQuantity(shoppingOrderItemDO.getQuantity());
+		rtn.setRegularPrice(shoppingOrderItemDO.getRegularPrice());
+		rtn.setSalesPrice(shoppingOrderItemDO.getSalesPrice());
+		rtn.setSendTime(shoppingOrderItemDO.getSendTime());
+		rtn.setShoppingOrderId(shoppingOrderItemDO.getShoppingOrderId());
+		rtn.setGmtCreate(shoppingOrderItemDO.getGmtCreate());
+		rtn.setGmtModified(shoppingOrderItemDO.getGmtModified());
+		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemDO.getOrderStatus()));
+		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemDO.getRefundStatus()));
 		
-		shoppingOrderItemBO.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemDO.getOrderStatus()));
-		shoppingOrderItemBO.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemDO.getRefundStatus()));
-		
-		return shoppingOrderItemBO;
+		return rtn;
 	}
 	
 	/**
@@ -94,14 +110,27 @@ public class ShoppingOrderItemConverter {
 	 * @return
 	 */
 	public static ShoppingOrderItemDTO convert(ShoppingOrderItemBO shoppingOrderItemBO) {
+		ShoppingOrderItemDTO rtn = null;
 		if (shoppingOrderItemBO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderItemDTO shoppingOrderItemDTO = new ShoppingOrderItemDTO();
-		BeanUtils.copyProperties(shoppingOrderItemBO, shoppingOrderItemDTO);
+		rtn = new ShoppingOrderItemDTO();
+		rtn.setId(shoppingOrderItemBO.getId());
+		rtn.setIsAllowRefund(shoppingOrderItemBO.getIsAllowRefund());
+		rtn.setIsEvaluation(shoppingOrderItemBO.getIsEvaluation());
+		rtn.setOrderStatus(shoppingOrderItemBO.getOrderStatus());
+		rtn.setProductFeatureImage(shoppingOrderItemBO.getProductFeatureImage());
+		rtn.setProductId(shoppingOrderItemBO.getProductId());
+		rtn.setProductModelId(shoppingOrderItemBO.getProductModelId());
+		rtn.setProductModelName(shoppingOrderItemBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemBO.getProductName());
+		rtn.setQuantity(shoppingOrderItemBO.getQuantity());
+		rtn.setRefundStatus(shoppingOrderItemBO.getRefundStatus());
+		rtn.setRegularPrice(shoppingOrderItemBO.getRegularPrice());
+		rtn.setSalesPrice(shoppingOrderItemBO.getSalesPrice());
 		
-		return shoppingOrderItemDTO;
+		return rtn;
 	}
 	
 	/**
