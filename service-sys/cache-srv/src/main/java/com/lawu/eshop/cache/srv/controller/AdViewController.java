@@ -1,6 +1,6 @@
 package com.lawu.eshop.cache.srv.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class AdViewController extends BaseController{
     }
 
     @RequestMapping(value = "getAdviews", method = RequestMethod.GET)
-    public Result<List<String>> getAdviews(@RequestParam String adId) {
+    public Result<Set<String>> getAdviews(@RequestParam String adId) {
         return successAccepted(adViewService.getAdviews(adId));
     }
 

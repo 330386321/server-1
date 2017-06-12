@@ -1,6 +1,6 @@
 package com.lawu.eshop.cache.srv.service;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 存储广告浏览记录
@@ -13,7 +13,7 @@ public interface AdViewService {
 	void setAdView(String adId, String memberId);
 	
 	
-	List<String> getAdviews(String adId);
+	Set<String> getAdviews(String adId);
 	
 
 }

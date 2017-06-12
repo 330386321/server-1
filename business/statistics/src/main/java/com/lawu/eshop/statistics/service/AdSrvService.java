@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
+import com.lawu.eshop.ad.dto.ViewDTO;
 import com.lawu.eshop.framework.web.Result;
 
 /**
@@ -45,7 +46,7 @@ public interface AdSrvService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/getAllAd", method = RequestMethod.GET)
-    public Result<List<Long>> getAllAd();
+    public Result<List<ViewDTO>> getAllAd();
 	
 	/**
 	 * 修改广告浏览次数
