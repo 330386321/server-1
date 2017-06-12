@@ -90,14 +90,17 @@ alter table freeze add KEY idx_user_num_status(user_num, status);
 
 alter table love_detail add UNIQUE KEY uk_love_num(love_num);
 alter table love_detail add KEY idx_user_num(user_num);
+alter table love_detail add KEY idx_user_num_gmt_create(user_num, gmt_create);
 
 alter table point_detail add UNIQUE KEY uk_point_num(point_num);
 alter table point_detail add KEY idx_user_num(user_num);
+alter table point_detail add KEY idx_user_num_gmt_create(user_num, gmt_create);
 
 alter table recharge add KEY idx_user_num(user_num);
 
 alter table transaction_detail add UNIQUE KEY uk_transaction_num(transaction_num);
 alter table transaction_detail add KEY idx_user_num(user_num);
+alter table transaction_detail add KEY idx_user_num_gmt_create(user_num, gmt_create);
 
 alter table withdraw_cash add KEY idx_user_num(user_num);
 
