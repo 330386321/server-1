@@ -104,6 +104,7 @@ public class ResultCode {
     public static final int AD_PRAISE_POINT_GET = 5007;
     public static final int AD_CLICK_PUTED = 5008;
     public static final int AD_RED_PACKGE_PUTED=5009;
+    public static final int AD_BEGIN_TIME_NOT_EXIST=5010;
 
 
     // 资产模块代码 6xxx
@@ -270,6 +271,7 @@ public class ResultCode {
         ResultCode.messageMap.put(AD_PRAISE_POINT_GET, "你已经抢到赞了");
         ResultCode.messageMap.put(AD_CLICK_PUTED, "广告已结束或者已点击完");
         ResultCode.messageMap.put(AD_RED_PACKGE_PUTED, "红包已下架");
+        ResultCode.messageMap.put(AD_BEGIN_TIME_NOT_EXIST, "投放时间不能为空");
         
         // 资产模块 6xxx
         ResultCode.messageMap.put(BANK_ACCOUNT_ERROR, "请重新输入你的银行卡号");

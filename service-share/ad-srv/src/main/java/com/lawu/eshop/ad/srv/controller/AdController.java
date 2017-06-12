@@ -323,7 +323,12 @@ public class AdController extends BaseController{
         }
         if(adSolrParam.getRegionPath()!=null){
         	String[] path=adSolrParam.getRegionPath().split("/");
-        	 query.setParam(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        	if(str!=""){
+        		query.setParam(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        	}else{
+        		query.setParam("area_ss:"+path[0] +" or "+ "area_ss:"+path[1] +" or "+ "area_ss:"+path[2]);
+        	}
+        	 
         }else{
         	query.setParam(""+str+" or ('area_ss:"+0+"') ");
         }
