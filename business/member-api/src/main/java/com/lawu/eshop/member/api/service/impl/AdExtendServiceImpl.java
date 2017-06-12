@@ -41,6 +41,7 @@ import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
+import com.lawu.eshop.member.api.service.FavoriteAdService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
@@ -71,6 +72,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     @Autowired
     private MemberApiConfig memberApiConfig;
     
+    @Autowired
+    private FavoriteAdService favoriteAdService;
+    
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
     
     private ExecutorService  service=new ThreadPoolExecutor(AdPraiseConfig.CORE_POOL_SIZE, AdPraiseConfig.MAXIMUM_POLL_SIZE, AdPraiseConfig.KEEP_ALIVE_TIME, TimeUnit.DAYS, queue);
@@ -92,6 +96,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
+    		Result<Boolean> resultFavoriteAd=favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+     		if(isSuccess(resultFavoriteAd)){
+     			adDTO.setIsFavorite(resultFavoriteAd.getModel());
+     		}
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
      		if(merchantStoreDTO.getModel()!=null){
@@ -149,6 +157,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
        	        }
          	}
          	for (AdDTO adDTO : newList) {
+         		Result<Boolean> resultFavoriteAd=favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+         		if(isSuccess(resultFavoriteAd)){
+         			adDTO.setIsFavorite(resultFavoriteAd.getModel());
+         		}
          		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
          		if(isSuccess(merchantStoreDTO)){
          			if(merchantStoreDTO.getModel()!=null){
@@ -192,6 +204,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
      		AdPraiseDTO praise=new AdPraiseDTO();
+     		Result<Boolean> resultFavoriteAd=favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+     		if(isSuccess(resultFavoriteAd)){
+     			praise.setIsFavorite(resultFavoriteAd.getModel());
+     		}
      		if(merchantStoreDTO.getModel()!=null){
      			praise.setName(merchantStoreDTO.getModel().getName());
      			praise.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
@@ -211,7 +227,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			praise.setCount(adDTO.getNumber());
 			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
 			praise.setMediaUrl(adDTO.getMediaUrl());
-			praise.setIsFavorite(adDTO.getIsFavorite());
 			praise.setIsPraise(adDTO.getIsPraise());
 			praise.setMerchantId(adDTO.getMerchantId());
 			adPraiseDTOS.add(praise);
@@ -250,7 +265,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
 		praise.setCount(ad.getNumber());
 		praise.setNeedBeginTime(ad.getNeedBeginTime());
-		praise.setIsFavorite(ad.getIsFavorite());
 		praise.setIsPraise(ad.getIsPraise());
 		praise.setMediaUrl(ad.getMediaUrl());
 		praise.setMerchantId(ad.getMerchantId());
@@ -319,7 +333,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	public Result<PraisePointDTO> clickPraise(Long id) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		
 		Future<Result<PraisePointDTO>> future=null;
 		try {
 			 Random random = new Random();  
@@ -360,6 +373,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
+    		Result<Boolean> resultFavoriteAd=favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+     		if(isSuccess(resultFavoriteAd)){
+     			adDTO.setIsFavorite(resultFavoriteAd.getModel());
+     		}
     		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		if(isSuccess(merchantStoreDTO)){
      			if(merchantStoreDTO.getModel()!=null){
@@ -410,6 +427,10 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		List<AdFlatVideoDTO> egainList = new ArrayList<>();
 		for (AdDTO adDTO : screenList) {
 			AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
+			Result<Boolean> resultFavoriteAd=favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+     		if(isSuccess(resultFavoriteAd)){
+     			adFlatVideoDTO.setIsFavorite(resultFavoriteAd.getModel());
+     		}
 			Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		if(isSuccess(merchantStoreDTO)){
      			if(merchantStoreDTO.getModel()!=null){
@@ -430,7 +451,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			adFlatVideoDTO.setId(adDTO.getId());
 			adFlatVideoDTO.setContent(adDTO.getContent());
 			adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
-			adFlatVideoDTO.setIsFavorite(adDTO.getIsFavorite());
 			adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
 			adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
 			adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());

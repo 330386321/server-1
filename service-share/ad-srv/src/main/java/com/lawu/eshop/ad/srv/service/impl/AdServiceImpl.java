@@ -412,15 +412,7 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
-			FavoriteAdDOExample fAexample=new FavoriteAdDOExample();
-			fAexample.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
-			Long count=favoriteAdDOMapper.countByExample(fAexample);
 			AdBO BO=AdConverter.convertBO(adDO);
-			if(count.intValue()>0){  //是否收藏
-				BO.setIsFavorite(true);
-			}else{
-				BO.setIsFavorite(false);
-			}
 			BOS.add(BO);
 		}
 		Page<AdBO> page=new Page<AdBO>();
@@ -542,27 +534,7 @@ public class AdServiceImpl implements AdService {
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
-			PointPoolDOExample ppexample=new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
-					                   .andStatusEqualTo(new Byte("1"));
-			 Long count=pointPoolDOMapper.countByExample(ppexample);
-			 ppexample.createCriteria().andMemberIdEqualTo(memberId);
-			 Long isPraise=pointPoolDOMapper.countByExample(ppexample);
 			 AdBO BO=AdConverter.convertBO(adDO);
-			 BO.setNumber(count.intValue());
-			 if(isPraise>0){ //是否 抢赞
-				 BO.setIsPraise(true);
-			 }else{
-				 BO.setIsPraise(false);
-			 }
-			 FavoriteAdDOExample fexample=new FavoriteAdDOExample();
-				fexample.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
-				Long fcount=favoriteAdDOMapper.countByExample(fexample);
-				if(fcount>0){ //是否收藏
-					BO.setIsFavorite(true);
-				}else{
-					BO.setIsFavorite(false);
-				}
 			 BOS.add(BO);
 		}
 		Page<AdBO> page=new Page<AdBO>();
@@ -647,11 +619,10 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public Page<AdBO> selectChoiceness(AdMemberParam adMemberParam) {
 		AdDOExample example=new AdDOExample();
-		List<Byte> status=new ArrayList<>();
-		status.add(AdStatusEnum.AD_STATUS_PUTING.val);
-		status.add(AdStatusEnum.AD_STATUS_ADD.val);
 		Criteria cr= example.createCriteria();
-		cr.andStatusIn(status).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
+		cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val)
+		.andStatusLessThanOrEqualTo(AdStatusEnum.AD_STATUS_PUTING.val)
+		.andStatusGreaterThanOrEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		example.setOrderByClause("gmt_create desc");
 		if(adMemberParam.getTypeEnum()!=null){
 			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);

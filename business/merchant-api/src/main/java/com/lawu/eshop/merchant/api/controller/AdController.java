@@ -36,6 +36,7 @@ import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

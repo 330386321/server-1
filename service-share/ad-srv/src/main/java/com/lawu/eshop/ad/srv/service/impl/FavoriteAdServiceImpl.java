@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.FavoriteAdParam;
+import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
@@ -82,6 +84,18 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
         page.setTotalCount(count.intValue());
         page.setRecords(FavoriteAdConverter.convertBOS(views));
 		return page;
+	}
+
+	@Override
+	public Boolean isFavoriteAd(Long adId, Long memberId) {
+		FavoriteAdDOExample fAexample=new FavoriteAdDOExample();
+		fAexample.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId);
+		Long count=favoriteAdDOMapper.countByExample(fAexample);
+		if(count.intValue()>0){  //是否收藏
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

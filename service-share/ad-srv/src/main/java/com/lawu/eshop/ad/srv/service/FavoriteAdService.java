@@ -32,5 +32,13 @@ public interface FavoriteAdService {
 	 * @return
 	 */
 	Page<FavoriteAdDOViewBO> selectMyFavoriteAd(FavoriteAdParam param,Long memberId);
+	
+	/**
+	 * 判断用户是否收藏广告
+	 * @param adId
+	 * @param memberId
+	 * @return
+	 */
+	Boolean isFavoriteAd(Long adId,Long memberId);
 
 }

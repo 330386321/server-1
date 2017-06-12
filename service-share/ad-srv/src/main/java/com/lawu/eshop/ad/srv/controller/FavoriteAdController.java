@@ -79,5 +79,17 @@ public class FavoriteAdController extends BaseController{
     	return successGet(pageDTO);
     	
     }
+	
+	/**
+	 * 是否收藏
+	 * @param adId
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(value = "isFavoriteAd", method = RequestMethod.GET)
+    public Result<Boolean> isFavoriteAd(@RequestParam Long adId,@RequestParam Long memberId) {
+    	return successGet(favoriteAdService.isFavoriteAd(adId, memberId));
+    	
+    }
 
 }

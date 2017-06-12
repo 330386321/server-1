@@ -30,4 +30,6 @@ public interface FavoriteAdService {
 	@RequestMapping(method = RequestMethod.GET, value = "favoriteAd/selectMyFavoriteAd")
 	Result<Page<FavoriteAdDOViewDTO>> selectMyFavoriteAd(@RequestParam("memberId") Long id, @RequestBody FavoriteAdParam param);
 
+	@RequestMapping(value = "favoriteAd/isFavoriteAd", method = RequestMethod.GET)
+    Result<Boolean> isFavoriteAd(@RequestParam("adId") Long adId,@RequestParam("memberId") Long memberId);
 }
