@@ -441,4 +441,15 @@ public class MerchantStoreController extends BaseController {
 		merchantStoreService.updateStoreIndex(id);
 		return successCreated();
 	}
+
+	/**
+	 * 重建门店索引
+	 * @return
+	 */
+	@RequestMapping(value = "rebuildStoreIndex", method = RequestMethod.GET)
+	public Result rebuildStoreIndex() {
+		merchantStoreService.rebuildStoreIndex();
+		return successCreated();
+	}
+
 }

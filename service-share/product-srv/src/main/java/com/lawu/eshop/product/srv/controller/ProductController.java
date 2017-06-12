@@ -301,6 +301,16 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 重建商品索引
+     * @return
+     */
+    @RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
+    public Result rebuildProductIndex() {
+        productService.rebuildProductIndex();
+        return successCreated();
+    }
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam

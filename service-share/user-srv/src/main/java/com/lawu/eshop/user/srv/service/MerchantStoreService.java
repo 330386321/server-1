@@ -67,4 +67,9 @@ public interface MerchantStoreService {
      */
     void updateStoreIndex(Long id);
 
+    /**
+     * 重建门店索引
+     */
+    void rebuildStoreIndex();
+
 }

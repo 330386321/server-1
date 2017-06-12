@@ -1,14 +1,22 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.*;
+import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ViewBO;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
+import com.lawu.eshop.ad.srv.domain.*;
+import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
+import com.lawu.eshop.ad.srv.mapper.*;
+import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.utils.AdArithmeticUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrDocument;
@@ -18,44 +26,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.constants.PropertyType;
-import com.lawu.eshop.ad.constants.RedPacketArithmetic;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.ListAdParam;
-import com.lawu.eshop.ad.srv.AdSrvConfig;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.bo.ViewBO;
-import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.ad.srv.domain.AdDOExample;
-import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.domain.AdRegionDO;
-import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
-import com.lawu.eshop.ad.srv.domain.PointPoolDO;
-import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
-import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
-import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
-import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
-import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
-import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
-import com.lawu.eshop.ad.srv.service.AdService;
-import com.lawu.eshop.compensating.transaction.Reply;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.AdArithmeticUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 /**
@@ -848,6 +823,38 @@ public class AdServiceImpl implements AdService {
 		if(solrDocument == null){
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		}
+	}
+
+	@Override
+	public void rebuildAdIndex() {
+		ListAdParam listAdParam = new ListAdParam();
+		listAdParam.setPageSize(1000);
+		int currentPage = 0;
+
+		while (true) {
+			currentPage ++;
+			listAdParam.setCurrentPage(currentPage);
+			AdDOExample adDOExample = new AdDOExample();
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			List<Byte> typeList = new ArrayList<>();
+			typeList.add(AdTypeEnum.AD_TYPE_FLAT.val);
+			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.val);
+			adDOExample.createCriteria().andStatusIn(statusList).andTypeIn(typeList);
+			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
+			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
+			if (adDOS == null || adDOS.isEmpty()) {
+				return ;
+			}
+
+			Collection<SolrInputDocument> documents = new ArrayList<>();
+			for (AdDO adDO : adDOS) {
+				SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+				documents.add(document);
+			}
+			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 		}
 	}
 

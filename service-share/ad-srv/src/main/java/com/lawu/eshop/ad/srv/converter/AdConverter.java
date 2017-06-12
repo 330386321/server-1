@@ -1,24 +1,20 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdPraiseDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚实体转化
@@ -233,10 +229,12 @@ public class AdConverter {
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
         document.addField("status_s", adDO.getStatus());
         document.addField("count_i", adDO.getViewcount());
-        document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
-        if(adDO.getPutWay()==1){
-        	if(adDO.getAreas()!=null){
+        if(adDO.getRadius() != null){
+			document.addField("radius_i", adDO.getRadius());
+		}
+        if(adDO.getPutWay() == 1){
+        	if(StringUtils.isNotEmpty(adDO.getAreas())){
         		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
             		document.addField("area_ss", area);

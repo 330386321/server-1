@@ -1,19 +1,11 @@
 package com.lawu.eshop.operator.api.controller;
 
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.operator.api.service.AdService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductService;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.param.ListProductParam;
-import com.lawu.eshop.user.dto.MerchantStatusEnum;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
-import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -22,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author meishuquan
@@ -48,23 +38,7 @@ public class IndexController extends BaseController {
     @RequiresPermissions("index:store")
     @RequestMapping(value = "updateStoreIndex", method = RequestMethod.GET)
     public Result updateStoreIndex() {
-        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
-        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
-        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
-        listMerchantStoreParam.setPageSize(1000);
-        int currentPage = 0;
-        while (true) {
-            currentPage++;
-            listMerchantStoreParam.setCurrentPage(currentPage);
-            Result<List<MerchantStoreDTO>> result = merchantStoreService.listMerchantStore(listMerchantStoreParam);
-            if (result == null || !isSuccess(result)) {
-                return successCreated();
-            }
-
-            for (MerchantStoreDTO merchantStoreDTO : result.getModel()) {
-                merchantStoreService.updateStoreIndex(merchantStoreDTO.getMerchantStoreId());
-            }
-        }
+          return merchantStoreService.rebuildStoreIndex();
     }
 
     @ApiOperation(value = "更新商品索引", notes = "更新商品索引。（梅述全）", httpMethod = "GET")
@@ -72,21 +46,7 @@ public class IndexController extends BaseController {
     @RequiresPermissions("index:product")
     @RequestMapping(value = "updateProductIndex", method = RequestMethod.GET)
     public Result updateProductIndex() {
-        ListProductParam listProductParam = new ListProductParam();
-        listProductParam.setPageSize(1000);
-        int currentPage = 0;
-        while (true) {
-            currentPage++;
-            listProductParam.setCurrentPage(currentPage);
-            Result<List<ProductInfoDTO>> result = productService.listProduct(listProductParam);
-            if (result == null || !isSuccess(result)) {
-                return successCreated();
-            }
-
-            for (ProductInfoDTO productInfoDTO : result.getModel()) {
-                productService.updateProductIndex(productInfoDTO.getId());
-            }
-        }
+        return productService.rebuildProductIndex();
     }
 
     @ApiOperation(value = "更新广告索引", notes = "更新广告索引。（梅述全）", httpMethod = "GET")
@@ -94,20 +54,6 @@ public class IndexController extends BaseController {
     @RequiresPermissions("index:ad")
     @RequestMapping(value = "updateAdIndex", method = RequestMethod.GET)
     public Result updateAdIndex() {
-        ListAdParam listAdParam = new ListAdParam();
-        listAdParam.setPageSize(1000);
-        int currentPage = 0;
-        while (true) {
-            currentPage++;
-            listAdParam.setCurrentPage(currentPage);
-            Result<List<AdDTO>> result = adService.listFlatVideoAd(listAdParam);
-            if (result == null || !isSuccess(result)) {
-                return successCreated();
-            }
-
-            for (AdDTO adDTO : result.getModel()) {
-                adService.updateAdIndex(adDTO.getId());
-            }
-        }
+        return adService.rebuildAdIndex();
     }
 }

@@ -953,6 +953,44 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void rebuildProductIndex() {
+        ListProductParam listProductParam = new ListProductParam();
+        listProductParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listProductParam.setCurrentPage(currentPage);
+            ProductDOExample example = new ProductDOExample();
+            example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
+            List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (productDOS == null || productDOS.isEmpty()) {
+                return ;
+            }
+
+            Collection<SolrInputDocument> documents = new ArrayList<>();
+            for (ProductDO productDO : productDOS) {
+                SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+                document.addField("originalPrice_d", productDO.getMaxPrice() == null ? 0 : productDO.getMaxPrice().doubleValue());
+                document.addField("price_d", productDO.getMinPrice() == null ? 0 : productDO.getMinPrice().doubleValue());
+                document.addField("inventory_i", productDO.getTotalInventory());
+                document.addField("salesVolume_i", productDO.getTotalSalesVolume());
+                document.addField("categoryId_is", productDO.getCategoryId());
+                documents.add(document);
+                //ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+                //if (productCategoryeDO != null) {
+                //    String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                //    for (String categoryId : categoryIdArr) {
+                //        document.addField("categoryId_is", categoryId);
+                //    }
+                //}
+            }
+            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+    }
+
+    @Override
     public Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();

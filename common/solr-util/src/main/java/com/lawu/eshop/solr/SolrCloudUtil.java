@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collection;
 
 /**
  * @author meishuquan
@@ -68,6 +69,29 @@ public class SolrCloudUtil {
             }
         } catch (Exception e) {
             logger.error("solr新增异常：{}", e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * 新增
+     *
+     * @param documents
+     * @param solrUrl
+     * @param solrCore
+     * @return
+     */
+    public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore) {
+        CloudSolrClient client = getSolrClient(solrUrl, solrCore);
+        try {
+            UpdateResponse rspAdd = client.add(documents);
+            UpdateResponse rspCommit = client.commit();
+            closeSolrClient(client);
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr新增集合异常：{}", e.getMessage());
         }
         return false;
     }

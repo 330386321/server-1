@@ -93,4 +93,11 @@ public interface AdService {
 	@RequestMapping(method = RequestMethod.PUT, value = "ad/updateAdIndex/{id}")
 	Result updateAdIndex(@PathVariable("id") Long id);
 
+	/**
+	 * 重建广告索引
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "ad/rebuildAdIndex")
+	Result rebuildAdIndex();
+
 }

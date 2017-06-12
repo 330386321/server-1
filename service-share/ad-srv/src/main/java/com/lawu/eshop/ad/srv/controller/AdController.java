@@ -491,6 +491,16 @@ public class AdController extends BaseController{
 		adService.updateAdIndex(id);
 		return successCreated();
 	}
+
+	/**
+	 * 重建平面视频广告索引
+	 * @return
+	 */
+	@RequestMapping(value = "rebuildAdIndex", method = RequestMethod.GET)
+	public Result rebuildAdIndex() {
+		adService.rebuildAdIndex();
+		return successCreated();
+	}
 	
 	/**
 	 * 根据商家获取红包相关信息

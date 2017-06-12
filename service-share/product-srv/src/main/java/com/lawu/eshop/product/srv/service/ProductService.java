@@ -141,6 +141,11 @@ public interface ProductService {
     void updateProductIndex(Long id);
 
     /**
+     * 重建商品索引
+     */
+    void rebuildProductIndex();
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam
