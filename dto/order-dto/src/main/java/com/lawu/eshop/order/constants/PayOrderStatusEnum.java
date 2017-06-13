@@ -9,8 +9,12 @@ public enum PayOrderStatusEnum {
     STATUS_PAY_SUCCESS((byte) 0x02),//2-成功
     STATUS_PAY_fAIL((byte) 0x03);//3-失败
     public Byte val;
+    
+    public Byte getVal() {
+		return val;
+	}
 
-    PayOrderStatusEnum(Byte val) {
+	PayOrderStatusEnum(Byte val) {
         this.val = val;
     }
 

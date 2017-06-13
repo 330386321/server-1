@@ -22,7 +22,7 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
  * @date 2017/04/06
  */
 public class ShoppingOrderItemExtendConverter {
-	
+
 	/**
 	 * ShoppingOrderItemExtendBO转换
 	 * 
@@ -36,17 +36,17 @@ public class ShoppingOrderItemExtendConverter {
 		}
 
 		rtn = new ShoppingOrderItemExtendBO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendDO, rtn, new String[]{"orderStatus", "refundStatus"});
-		
+		BeanUtils.copyProperties(shoppingOrderItemExtendDO, rtn, new String[] { "orderStatus", "refundStatus" });
+
 		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemExtendDO.getOrderStatus()));
 		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemExtendDO.getRefundStatus()));
-		
+
 		rtn.setShoppingRefundDetail(ShoppingRefundDetailExtendConverter.convert(shoppingOrderItemExtendDO.getShoppingRefundDetail()));
 		rtn.setShoppingOrder(ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderItemExtendDO.getShoppingOrder()));
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemExtendBO List转换
 	 * 
@@ -56,17 +56,17 @@ public class ShoppingOrderItemExtendConverter {
 	public static List<ShoppingOrderItemExtendBO> convert(List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList) {
 		List<ShoppingOrderItemExtendBO> rtn = null;
 		if (shoppingOrderItemExtendDOList == null || shoppingOrderItemExtendDOList.isEmpty()) {
-			return null;
+			return rtn;
 		}
-		
+
 		rtn = new ArrayList<ShoppingOrderItemExtendBO>();
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemExtendDOList) {
 			rtn.add(convert(shoppingOrderItemExtendDO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO转换
 	 * 
@@ -89,7 +89,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO List转换
 	 * 
@@ -98,18 +98,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundForMerchantDTO> convertShoppingOrderItemRefundForMerchantDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundForMerchantDTO> rtn = new ArrayList<ShoppingOrderItemRefundForMerchantDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convert(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO Page转换
 	 * 
@@ -123,7 +123,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setRecords(convertShoppingOrderItemRefundForMerchantDTOList(shoppingOrderItemExtendBOPage.getRecords()));
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO转换
 	 * 
@@ -149,7 +149,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO List转换
 	 * 
@@ -158,18 +158,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundForOperatorDTO> convertShoppingOrderItemRefundForOperatorDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundForOperatorDTO> rtn = new ArrayList<ShoppingOrderItemRefundForOperatorDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convertShoppingOrderItemRefundForOperatorDTO(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO Page转换
 	 * 
@@ -183,7 +183,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setRecords(convertShoppingOrderItemRefundForOperatorDTOList(shoppingOrderItemExtendBOPage.getRecords()));
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO转换
 	 * 
@@ -197,7 +197,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		rtn = new ShoppingOrderItemRefundDTO();
 		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn, "");
-		
+
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());
 			rtn.setMerchantName(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantName());
@@ -211,7 +211,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO List转换
 	 * 
@@ -220,18 +220,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundDTO> convertShoppingOrderItemRefundDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundDTO> rtn = new ArrayList<ShoppingOrderItemRefundDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convertShoppingOrderItemRefundDTO(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO Page转换
 	 * 

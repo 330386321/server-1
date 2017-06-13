@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -59,7 +61,9 @@ import util.UploadFileUtil;
 @RestController
 @RequestMapping(value = "shoppingOrder/")
 public class ShoppingOrderController extends BaseController {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderController.class);
+	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
 	
@@ -238,14 +242,13 @@ public class ShoppingOrderController extends BaseController {
     	}
 		
     	HttpServletRequest request = getRequest();
-        StringBuffer headImg = new StringBuffer();
+        StringBuilder headImg = new StringBuilder();
         Collection<Part> parts = null;
         try {
            parts = request.getParts();
-        } catch (IOException e) {
+        } catch (IOException | ServletException e) {
+        	logger.error("读取上传文件异常", e);
             return successCreated(e.getMessage());
-        }
-        catch (ServletException ex){
         }
         if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {

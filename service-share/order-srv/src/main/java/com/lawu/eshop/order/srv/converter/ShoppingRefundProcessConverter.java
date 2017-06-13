@@ -25,7 +25,7 @@ public class ShoppingRefundProcessConverter {
 	public static ShoppingRefundProcessBO convert(ShoppingRefundProcessDO shoppingRefundProcessDO) {
 		ShoppingRefundProcessBO rtn = null;
 		if (shoppingRefundProcessDO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingRefundProcessBO();
@@ -67,7 +67,7 @@ public class ShoppingRefundProcessConverter {
 	public static ShoppingRefundProcessDTO convert(ShoppingRefundProcessBO shoppingRefundProcessBO) {
 		ShoppingRefundProcessDTO rtn = null;
 		if (shoppingRefundProcessBO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingRefundProcessDTO();

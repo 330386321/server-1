@@ -38,18 +38,10 @@ public enum MemberTransactionTypeEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public static MemberTransactionTypeEnum getEnum(Byte val) {
 		MemberTransactionTypeEnum[] values = MemberTransactionTypeEnum.values();
 		for (MemberTransactionTypeEnum object : values) {

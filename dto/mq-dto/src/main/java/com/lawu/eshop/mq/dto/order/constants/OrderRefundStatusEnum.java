@@ -23,10 +23,6 @@ public enum OrderRefundStatusEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	OrderRefundStatusEnum(Byte value){
 		this.value = value;
 	}

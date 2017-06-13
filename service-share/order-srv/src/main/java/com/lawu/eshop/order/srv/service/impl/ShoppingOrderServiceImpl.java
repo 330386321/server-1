@@ -247,7 +247,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 
 		// 如果总记录为0，不再执行后续操作直接返回
-		if (count == null || count <= 0 || param.getOffset() >= count) {
+		if (count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
 
@@ -261,8 +261,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
-
-		rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
 
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
@@ -315,7 +313,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		/*
 		 * 如果count为0，或者offset大于count 不再执行后续操作直接返回
 		 */
-		if (count == null || count <= 0 || param.getOffset() >= count) {
+		if (count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
 
@@ -326,22 +324,17 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
-		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
-
-		List<Long> shoppingOrderIdList = new ArrayList<Long>();
-		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
-			shoppingOrderIdList.add(item.getId());
-		}
-
+		List<Long> idList = shoppingOrderDOExtendMapper.selectIdByExample(shoppingOrderExtendDOExample, rowBounds);
+		
 		shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.createCriteria().andIdIn(shoppingOrderIdList);
+		shoppingOrderExtendDOExample.createCriteria().andIdIn(idList);
 
 		// 默认创建时间排序
 		shoppingOrderExtendDOExample.setOrderByClause("so.gmt_create desc");
 
-		shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
+		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		shoppingOrderItemBOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderExtendBO(shoppingOrderExtendDOList));
 
@@ -886,7 +879,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 
 		// 如果总记录为0，不再执行后续操作直接返回
-		if (count == null || count <= 0) {
+		if (count <= 0 || param.getOffset() >= count) {
 			return shoppingOrderItemBOPage;
 		}
 
@@ -1130,28 +1123,29 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			// 首先判断是否超过付款时间，如果没有超过，再判断是否已经发送过提醒消息
+			// 首先判断是否已经发送过提醒消息，如果没有超过，再判断是否超过付款时间
+			if (item.getSendTime() <= 0) {
+				// 更新发送次数，但是不更新更新时间字段
+				int sendTime = item.getSendTime() == null ? 1 : item.getSendTime().intValue() + 1;
+				item.setSendTime(sendTime);
+				shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
+				
+				/*
+				 * 买家支付成功发送消息给商家提醒买家新增了一个订单
+				 */
+				// 组装要发送的消息
+				ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
+				shoppingOrderNoPaymentNotification.setId(item.getId());
+				shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
+				shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
+				// 发送消MQ息
+				messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
+				continue;
+			}
+			
 			boolean isexceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
 			if (isexceeds) {
 				cancelOrder(item.getId());
-			} else {
-				if (item == null || item.getSendTime() <= 0) {
-					// 更新发送次数，但是不更新更新时间字段
-					int sendTime = item.getSendTime() == null ? 1 : item.getSendTime().intValue() + 1;
-					item.setSendTime(sendTime);
-					shoppingOrderDOMapper.updateByPrimaryKeySelective(item);
-					
-					/*
-					 * 买家支付成功发送消息给商家提醒买家新增了一个订单
-					 */
-					// 组装要发送的消息
-					ShoppingOrderNoPaymentNotification shoppingOrderNoPaymentNotification = new ShoppingOrderNoPaymentNotification();
-					shoppingOrderNoPaymentNotification.setId(item.getId());
-					shoppingOrderNoPaymentNotification.setMemberNum(item.getMemberNum());
-					shoppingOrderNoPaymentNotification.setOrderNum(item.getOrderNum());
-					// 发送消MQ息
-					messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_ORDER_NO_PAYMENT_PUSH_TO_MEMBER, shoppingOrderNoPaymentNotification);
-				}
 			}
 		}
 	}
@@ -1379,10 +1373,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public ReportRiseRateDTO selectByTransactionData(ReportDataParam param) {
-		List<ReportRiseRateView> rtn = new ArrayList<ReportRiseRateView>();
 		int x = 0;
-		BigDecimal total = new BigDecimal(0);// 总金额
-
 		ShoppingOrderReportDataParam shoppingOrderReportDataParam = new ShoppingOrderReportDataParam();
 		shoppingOrderReportDataParam.setMerchantId(param.getMerchantId());
 
@@ -1396,12 +1387,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			x = 12;
 		}
 
-		rtn = shoppingOrderDOExtendMapper.selectByTransactionData(shoppingOrderReportDataParam);
-		total = shoppingOrderDOExtendMapper.selectByTransactionTotalAmount(shoppingOrderReportDataParam);
+		List<ReportRiseRateView> list = shoppingOrderDOExtendMapper.selectByTransactionData(shoppingOrderReportDataParam);
+		// 总金额
+		BigDecimal total = shoppingOrderDOExtendMapper.selectByTransactionTotalAmount(shoppingOrderReportDataParam);
 
-		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(rtn, x);
-		dto.setTotal(total == null ? "0" : total.toString());
-		return dto;
+		ReportRiseRateDTO rtn = ReportConvert.reportBrokeLineShow(list, x);
+		rtn.setTotal(total == null ? "0" : total.toString());
+		return rtn;
 	}
 
 	/**
@@ -1480,7 +1472,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Transactional
-	private void commentShoppingOrder(Long shoppingOrderItemId) {
+	public void commentShoppingOrder(Long shoppingOrderItemId) {
 		// 更新为已评论
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 		shoppingOrderItemDO.setId(shoppingOrderItemId);
@@ -1498,7 +1490,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Sunny
 	 */
 	@Transactional
-	private void paymentsToMerchant(ShoppingOrderExtendDO shoppingOrderExtendDO) {
+	public void paymentsToMerchant(ShoppingOrderExtendDO shoppingOrderExtendDO) {
 		// 更新订单状态为完成
 		ShoppingOrderDO update = new ShoppingOrderDO();
 		update.setSendTime(0);

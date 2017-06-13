@@ -1,9 +1,24 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.param.*;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageParam;
+import com.lawu.eshop.mall.param.MessageQueryParam;
+import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
+import com.lawu.eshop.mall.param.OperatorMessageParam;
+import com.lawu.eshop.mall.param.PushParam;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -18,15 +33,6 @@ import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * message service实现类
@@ -104,10 +110,10 @@ public class MessageServiceImpl implements MessageService {
         MessageDO messageDO = new MessageDO();
         messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
         messageDO.setUserNum(userNum);
-        messageDO.setType(messageInfoParam.getTypeEnum().val);
+        messageDO.setType(messageInfoParam.getTypeEnum().getVal());
         //查询类型对应的消息模板
         MessageTemplateDOExample example = new MessageTemplateDOExample();
-        example.createCriteria().andTypeEqualTo(messageInfoParam.getTypeEnum().val);
+        example.createCriteria().andTypeEqualTo(messageInfoParam.getTypeEnum().getVal());
         example.setOrderByClause("id desc");
         List<MessageTemplateDO> dos = messageTemplateDOMapper.selectByExample(example);
         if (dos.isEmpty()) {
@@ -165,7 +171,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setContent(content);
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(userNum);
-        pushInfo.setMessageType(messageInfoParam.getTypeEnum().val);
+        pushInfo.setMessageType(messageInfoParam.getTypeEnum().getVal());
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return id;
     }
@@ -173,7 +179,7 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public MessageTemplateBO getTemplateByType(MessageTypeEnum typeEnum) {
         MessageTemplateDOExample example = new MessageTemplateDOExample();
-        example.createCriteria().andTypeEqualTo(typeEnum.val);
+        example.createCriteria().andTypeEqualTo(typeEnum.getVal());
         List<MessageTemplateDO> dos = messageTemplateDOMapper.selectByExample(example);
         if (dos.isEmpty()) {
             return null;
@@ -187,7 +193,7 @@ public class MessageServiceImpl implements MessageService {
         MessageDO messageDO = new MessageDO();
         messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
         messageDO.setUserNum(userNum);
-        messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+        messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.getVal());
         messageDO.setContent(messageInfoParam.getContent());
         messageDO.setGmtCreate(new Date());
         messageDO.setGmtModified(new Date());
@@ -199,7 +205,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setContent(messageInfoParam.getContent());
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(userNum);
-        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.getVal());
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return row;
     }
@@ -212,7 +218,7 @@ public class MessageServiceImpl implements MessageService {
             MessageDO messageDO = new MessageDO();
             messageDO.setStatus(MessageStatusEnum.MESSAGE_STATUS_UNREAD.val);
             messageDO.setUserNum(pushParam.getUserNum());
-            messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+            messageDO.setType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.getVal());
             messageDO.setTitle(param.getTitle());
             messageDO.setContent(param.getContent());
             messageDO.setGmtCreate(new Date());
@@ -223,7 +229,7 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setTitle(param.getTitle());
         pushInfo.setContent(param.getContent());
         pushInfo.setUserType(param.getUserTypeEnum().val);
-        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.val);
+        pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.getVal());
         //推送全部
         if ("all".equals(param.getArea())) {
             messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSHALL, pushInfo);

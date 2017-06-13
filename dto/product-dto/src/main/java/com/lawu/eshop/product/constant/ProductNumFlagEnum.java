@@ -11,12 +11,11 @@ public enum ProductNumFlagEnum {
 	ADD("A"),	
 	MINUS("M");
 	
-	public String value;
+	private String value;
 	
 	ProductNumFlagEnum(String value){
 		this.value = value;
 	}
-	
 	
 	public String getValue() {
 		return value;
@@ -26,7 +25,7 @@ public enum ProductNumFlagEnum {
 		this.value = value;
 	}
 
-	public static ProductNumFlagEnum getEnum(Byte val){
+	public static ProductNumFlagEnum getEnum(String val){
 		ProductNumFlagEnum[] values = ProductNumFlagEnum.values();
 		for (ProductNumFlagEnum object : values) {
 			if (object.getValue().equals(val)) {

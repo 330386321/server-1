@@ -118,11 +118,10 @@ public class ShoppingOrderExtendConverter {
 		ShoppingOrderExtendDetailDTO rtn = null;
 		
 		if (shoppingOrderExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingOrderExtendDetailDTO();
-		
 		rtn.setId(shoppingOrderExtendBO.getId());
 		rtn.setMemberNum(shoppingOrderExtendBO.getMemberNum());
 		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());

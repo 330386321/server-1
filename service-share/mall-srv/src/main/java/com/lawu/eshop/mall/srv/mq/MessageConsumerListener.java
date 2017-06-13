@@ -211,14 +211,14 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_SUCCESS);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_SUCCESS);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setOrderAmount(notification.getActualAmount());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setOrderAmount(notification.getActualAmount());
 				
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
 			

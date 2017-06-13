@@ -20,7 +20,7 @@ public class ElasticJobConsoleApplication {
         try {
 			ConsoleBootstrap.main(args);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("启动ElasticJob异常", e);
 		}
         
         logger.info("elastic-job-console is started");

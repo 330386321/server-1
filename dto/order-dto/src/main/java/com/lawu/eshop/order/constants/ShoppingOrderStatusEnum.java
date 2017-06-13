@@ -45,10 +45,6 @@ public enum ShoppingOrderStatusEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	ShoppingOrderStatusEnum(Byte value) {
 		this.value = value;
 	}

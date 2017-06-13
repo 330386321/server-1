@@ -20,10 +20,6 @@ public enum ShoppingRefundTypeEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	ShoppingRefundTypeEnum(Byte value) {
 		this.value = value;
 	}

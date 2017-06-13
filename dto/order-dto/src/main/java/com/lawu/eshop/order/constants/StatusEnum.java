@@ -20,10 +20,6 @@ public enum StatusEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	StatusEnum(Byte value) {
 		this.value = value;
 	}

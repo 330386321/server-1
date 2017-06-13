@@ -65,9 +65,13 @@ public enum MessageTypeEnum {
     MESSAGE_TYPE_ORDER_SUCCESS((byte) 0x29),//订单成功--商家 41
     MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT((byte) 0x2A);//买单成功--商家 42
 
-    public Byte val;
+    private Byte val;
+    
+    public Byte getVal() {
+		return val;
+	}
 
-    MessageTypeEnum(Byte val) {
+	MessageTypeEnum(Byte val) {
         this.val = val;
     }
 
