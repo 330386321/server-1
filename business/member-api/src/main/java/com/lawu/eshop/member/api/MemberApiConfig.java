@@ -27,6 +27,15 @@ public class MemberApiConfig {
 
     @Value(value="${default_headimg}")
     private String defaultHeadimg;
+    
+    @Value(value="${click.praise.ad.times}")
+    private Integer clickPraiseAdTimes;
+    
+    @Value(value="${click.praise.prob}")
+    private Integer clickPraiseProb; 
+    
+    @Value(value="${click.praise.sum.prob}")
+    private Integer clickPraiseSumProb;
 
     public String getImageUrl() {
         return imageUrl;
@@ -51,4 +60,30 @@ public class MemberApiConfig {
     public String getDefaultHeadimg() {
         return defaultHeadimg;
     }
+
+	public Integer getClickPraiseAdTimes() {
+		return clickPraiseAdTimes;
+	}
+
+	public void setClickPraiseAdTimes(Integer clickPraiseAdTimes) {
+		this.clickPraiseAdTimes = clickPraiseAdTimes;
+	}
+
+	public Integer getClickPraiseProb() {
+		return clickPraiseProb;
+	}
+
+	public void setClickPraiseProb(Integer clickPraiseProb) {
+		this.clickPraiseProb = clickPraiseProb;
+	}
+
+	public Integer getClickPraiseSumProb() {
+		return clickPraiseSumProb;
+	}
+
+	public void setClickPraiseSumProb(Integer clickPraiseSumProb) {
+		this.clickPraiseSumProb = clickPraiseSumProb;
+	}
+    
+    
 }

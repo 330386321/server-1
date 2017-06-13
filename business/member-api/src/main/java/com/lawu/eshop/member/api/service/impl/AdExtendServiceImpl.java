@@ -335,8 +335,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Future<Result<PraisePointDTO>> future=null;
 		try {
 			 Random random = new Random();  
-			 Integer r = random.nextInt(AdPraiseConfig.B)%(AdPraiseConfig.B+1);
-			 if(r>0 && r<AdPraiseConfig.A){
+			 Integer r = random.nextInt(memberApiConfig.getClickPraiseSumProb())%(memberApiConfig.getClickPraiseSumProb()+1);
+			 if(r>0 && r<memberApiConfig.getClickPraiseProb()){
 				 future=service.submit(new AdClickPraiseThread(adService,id, memberId, num));
 			 }else{
 				 PraisePointDTO dto=new PraisePointDTO();

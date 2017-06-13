@@ -50,8 +50,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setGmtCreate(new Date());
         adPlatformDO.setGmtModified(new Date());
         adPlatformDO.setContent(adPlatformParam.getContent());
-        Integer id = adPlatformDOMapper.insert(adPlatformDO);
-        return id;
+        return adPlatformDOMapper.insert(adPlatformDO);
     }
 
     @Override
@@ -61,8 +60,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         example.createCriteria().andIdEqualTo(id);
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setStatus(AdPlatformStatusEnum.DELETE.val);
-        Integer i = adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
-        return i;
+        return adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
     }
 
     @Override
