@@ -191,7 +191,7 @@ public class DateUtil {
         try {
             return dateTimeFormat.parse(date);
         } catch (ParseException e) {
-            logger.error("字符串转换为Date异常：" + e);
+            logger.error("字符串转换为Date异常：{}", e);
         }
         return null;
     }
@@ -245,7 +245,7 @@ public class DateUtil {
             long intervalMilli = endDate.getTime() - dateTimeFormat.parse(date).getTime();
             return intervalMilli > 0;
         }catch (Exception e){
-            logger.error("判断是否超过当前时间异常：" + e);
+            logger.error("判断是否超过当前时间异常：{}", e);
             return false;
         }
     }
@@ -268,7 +268,7 @@ public class DateUtil {
             int intervalMinutes = (int) (intervalMilli / (60 * 1000));
             return intervalMinutes > minutes;
         }catch (Exception e){
-            logger.error("短信是否超时异常：" + e);
+            logger.error("短信是否超时异常：{}", e);
             return false;
         }
     }
@@ -286,7 +286,7 @@ public class DateUtil {
         try {
             return new SimpleDateFormat(format).parse(date);
         } catch (ParseException e) {
-            logger.error("日期格式化yyyy-MM-dd异常：" + e);
+            logger.error("日期格式化yyyy-MM-dd异常：{}", e);
         }
         return null;
     }
@@ -323,7 +323,7 @@ public class DateUtil {
         try {
             return dateFormat.parse(date);
         } catch (ParseException e) {
-            logger.error("日期格式化异常：" + e);
+            logger.error("日期格式化异常：{}", e);
         }
         return null;
     }
@@ -338,7 +338,7 @@ public class DateUtil {
         try {
             return dateTimeFormat.parse(date);
         } catch (ParseException e) {
-            logger.error("时间格式化异常：" + e);
+            logger.error("时间格式化异常：{}", e);
         }
         return null;
     }

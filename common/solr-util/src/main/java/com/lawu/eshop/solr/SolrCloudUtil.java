@@ -47,7 +47,7 @@ public class SolrCloudUtil {
             try {
                 solrClient.close();
             } catch (IOException e) {
-                logger.error("solr关闭异常：", e);
+                logger.error("solr关闭异常：{}", e);
             }
         }
     }
@@ -70,7 +70,7 @@ public class SolrCloudUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr新增异常：", e);
+            logger.error("solr新增异常：{}", e);
         }
         return false;
     }
@@ -93,7 +93,7 @@ public class SolrCloudUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr新增集合异常：", e);
+            logger.error("solr新增集合异常：{}", e);
         }
         return false;
     }
@@ -116,7 +116,7 @@ public class SolrCloudUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr删除异常：", e);
+            logger.error("solr删除异常：{}", e);
         }
         return false;
     }
@@ -138,7 +138,7 @@ public class SolrCloudUtil {
             closeSolrClient(client);
             return docsList;
         } catch (Exception e) {
-            logger.error("solr查询异常：", e);
+            logger.error("solr查询异常：{}", e);
         }
         return null;
     }
@@ -164,7 +164,7 @@ public class SolrCloudUtil {
                 solrDocument = docsList.get(0);
             }
         } catch (Exception e) {
-            logger.error("solr通过ID查询异常：", e);
+            logger.error("solr根据ID查询异常：{}", e);
         }
         return solrDocument;
     }
@@ -185,7 +185,7 @@ public class SolrCloudUtil {
             closeSolrClient(client);
             return termsResponse;
         } catch (Exception e) {
-            logger.error("solr查询词频异常：", e);
+            logger.error("solr查询词频异常：{}", e);
         }
         return null;
     }

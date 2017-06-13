@@ -46,7 +46,7 @@ public class IpUtil {
                     inet = InetAddress.getLocalHost();
                     ipAddress = inet.getHostAddress();
                 } catch (Exception e) {
-                    logger.error("获取IP地址异常：" + e);
+                    logger.error("获取IP地址异常：{}", e);
                 }
             }
         }

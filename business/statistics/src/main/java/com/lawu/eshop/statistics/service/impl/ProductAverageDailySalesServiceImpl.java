@@ -29,7 +29,7 @@ public class ProductAverageDailySalesServiceImpl implements ProductAverageDailyS
         listProductParam.setPageSize(1000);
         int currentPage = 0;
 
-        Result<List<ProductInfoDTO>> result = null;
+        Result<List<ProductInfoDTO>> result;
         while (true){
             currentPage ++;
             listProductParam.setCurrentPage(currentPage);
@@ -45,7 +45,7 @@ public class ProductAverageDailySalesServiceImpl implements ProductAverageDailyS
                 if (days > 0) {
                     averageDailySales = (double) salesVolume / days;
                 }
-                productService.updateAverageDailySalesById(productInfoDTO.getId(), new BigDecimal(averageDailySales));
+                productService.updateAverageDailySalesById(productInfoDTO.getId(), BigDecimal.valueOf(averageDailySales));
             }
         }
     }

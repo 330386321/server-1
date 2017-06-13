@@ -23,18 +23,7 @@ public class SolrUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SolrUtil.class);
 
-    /*//solr服务器地址
-    private static final String SOLR_URL = "http://192.168.1.22:8983/solr/";
-
-    //商家索引库
-    public static final String SOLR_MERCHANT_CORE = "merchant";
-
-    //商品索引库
-    public static final String SOLR_PRODUCT_CORE = "product";
-
-    //广告索引库
-    public static final String SOLR_AD_CORE = "ad";*/
-
+    private SolrUtil(){}
 
     /**
      * 获取solr客户端
@@ -58,7 +47,7 @@ public class SolrUtil {
             try {
                 solrClient.close();
             } catch (IOException e) {
-                logger.error("solr关闭异常：{}", e.getMessage());
+                logger.error("solr关闭异常：{}", e);
             }
         }
     }
@@ -81,7 +70,7 @@ public class SolrUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr新增异常：{}", e.getMessage());
+            logger.error("solr新增异常：{}", e);
         }
         return false;
     }
@@ -104,7 +93,7 @@ public class SolrUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr新增集合异常：{}", e.getMessage());
+            logger.error("solr新增集合异常：{}", e);
         }
         return false;
     }
@@ -127,7 +116,7 @@ public class SolrUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr删除异常：{}", e.getMessage());
+            logger.error("solr删除异常：{}", e);
         }
         return false;
     }
@@ -149,7 +138,7 @@ public class SolrUtil {
             closeSolrClient(client);
             return docsList;
         } catch (Exception e) {
-            logger.error("solr查询异常：{}", e.getMessage());
+            logger.error("solr查询异常：{}", e);
         }
         return null;
     }
@@ -175,7 +164,7 @@ public class SolrUtil {
                 solrDocument = docsList.get(0);
             }
         } catch (Exception e) {
-            logger.error("solr查询异常：{}", e.getMessage());
+            logger.error("solr根据ID查询异常：{}", e);
         }
         return solrDocument;
     }
@@ -196,7 +185,7 @@ public class SolrUtil {
             closeSolrClient(client);
             return termsResponse;
         } catch (Exception e) {
-            logger.error("solr查询异常：{}", e.getMessage());
+            logger.error("solr查询词频异常：{}", e);
         }
         return null;
     }
