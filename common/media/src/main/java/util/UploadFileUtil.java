@@ -23,7 +23,19 @@ public class UploadFileUtil {
     private static Logger logger = LoggerFactory.getLogger(UploadFileUtil.class);
 
     private static final  String mapKey = "resultFlag";
+    private static final  String mapKeyMsg = "msg";
     private static final  String mapValue = "0";
+    private static final String IMAGE_FORMAT_WRONG_UPLOAD = "1011";
+    private static final String IMAGE_WRONG_UPLOAD = "1010";
+    private static final String IMAGE_SIZE_ERROR = "1015";
+    private static final String UPLOAD_SIZE_BIGER = "1021";
+    private static final String UPLOAD_VEDIO_FAIL = "1020";
+
+    private static final String IMAGE_FORMAT_WRONG_UPLOAD_MSG = "上传图片格式错误";
+    private static final String UPLOAD_SIZE_BIGER_MSG = "图片文件太大";
+    private static final String UPLOAD_FAIL = "上传失败";
+    private static final String UPLOAD_VIDEO_URL = "videoUrl";
+    private static final String UPLOAD_IMG_URL = "imgUrl";
     private UploadFileUtil(){
 
     }
@@ -39,7 +51,6 @@ public class UploadFileUtil {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
         valsMap.put(mapKey, mapValue);
-        //String bashdir = baseImageDir;// 根路径
         FileOutputStream out = null;
         byte b[] = new byte[1024 * 1024];
         Collection<Part> parts;
@@ -56,15 +67,15 @@ public class UploadFileUtil {
                     extension = extension.substring(extension.lastIndexOf("."));
                     String newfileName = RandomUtil.buildFileName(extension);
                     if (!ValidateUtil.validateImageFormat(extension)) {
-                        valsMap.put(mapKey, "1011");
-                        valsMap.put("msg", "上传图片格式错误");
+                        valsMap.put(mapKey, IMAGE_FORMAT_WRONG_UPLOAD);
+                        valsMap.put(mapKeyMsg, IMAGE_FORMAT_WRONG_UPLOAD_MSG);
                         return valsMap;
                     }
                     // 1M=1024k=1048576字节
                     long fileSize = part.getSize();
                     if (fileSize > 5 * 1048576) {
-                        valsMap.put(mapKey, "1015");
-                        valsMap.put("msg", "图片文件大于5M");
+                        valsMap.put(mapKey, IMAGE_SIZE_ERROR);
+                        valsMap.put(mapKeyMsg, UPLOAD_SIZE_BIGER_MSG);
                         return valsMap;
                     }
                     File file = new File(baseImageDir, dir);
@@ -86,12 +97,12 @@ public class UploadFileUtil {
 
                 }
             }
-            valsMap.put("imgUrl", urlImg);
+            valsMap.put(UPLOAD_IMG_URL, urlImg);
             valsMap.put(mapKey, mapValue);
         } catch (Exception e) {
-            valsMap.put(mapKey, "1010");
-            valsMap.put("msg", "上传图片失败");
-            logger.error("上传图片失败");
+            valsMap.put(mapKey, IMAGE_WRONG_UPLOAD);
+            valsMap.put(mapKeyMsg, UPLOAD_FAIL);
+            logger.error(UPLOAD_FAIL);
         }finally {
             try {
                 out.flush();
@@ -130,15 +141,15 @@ public class UploadFileUtil {
             extension = extension.substring(extension.lastIndexOf("."));
             String newfileName = RandomUtil.buildFileName(extension);
             if (!ValidateUtil.validateImageFormat(extension)) {
-                valsMap.put(mapKey, "1011");
-                valsMap.put("msg", "上传图片格式错误");
+                valsMap.put(mapKey, IMAGE_FORMAT_WRONG_UPLOAD);
+                valsMap.put(mapKeyMsg, IMAGE_FORMAT_WRONG_UPLOAD_MSG);
                 return valsMap;
             }
             // 1M=1024k=1048576字节
             long fileSize = part.getSize();
             if (fileSize > 0.5 * 1048576) {
-                valsMap.put(mapKey, "1015");
-                valsMap.put("msg", "图片文件大于500K");
+                valsMap.put(mapKey, IMAGE_SIZE_ERROR);
+                valsMap.put(mapKeyMsg, UPLOAD_SIZE_BIGER_MSG);
                 return valsMap;
             }
             File file = new File(baseImageDir, dir);
@@ -158,7 +169,7 @@ public class UploadFileUtil {
                 //文件路径，文件类型
                 urlImg =   dir + File.separator + newfileName;
             } catch (IOException e) {
-                logger.error("上传图片失败");
+                logger.error(UPLOAD_FAIL);
             }
             finally {
                 try {
@@ -170,7 +181,7 @@ public class UploadFileUtil {
 
             }
         }
-        valsMap.put("imgUrl", urlImg);
+        valsMap.put(UPLOAD_IMG_URL, urlImg);
         valsMap.put(mapKey, mapValue);
 
         return valsMap;
@@ -201,8 +212,8 @@ public class UploadFileUtil {
                     // 1M=1024k=1048576字节
                     long fileSize = part.getSize();
                     if (fileSize > 50 * 1048576) {
-                        valsMap.put(mapKey, "1021");
-                        valsMap.put("msg", "文件大于50M");
+                        valsMap.put(mapKey, UPLOAD_SIZE_BIGER);
+                        valsMap.put(mapKeyMsg, UPLOAD_SIZE_BIGER_MSG);
                         return valsMap;
                     }
                     File file = new File(baseVideoDir, dir);
@@ -223,12 +234,12 @@ public class UploadFileUtil {
 
                 }
             }
-            valsMap.put("videoUrl", videoUrl);
+            valsMap.put(UPLOAD_VIDEO_URL, videoUrl);
             valsMap.put(mapKey, mapValue);
         } catch (Exception e) {
-            valsMap.put(mapKey, "1020");
-            valsMap.put("msg", "上传视频失败");
-            logger.info("上传视频失败");
+            valsMap.put(mapKey, UPLOAD_VEDIO_FAIL);
+            valsMap.put(mapKeyMsg, UPLOAD_FAIL);
+            logger.info(UPLOAD_FAIL);
         } finally {
             try {
                 out.flush();
