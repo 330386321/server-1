@@ -85,11 +85,10 @@ public class UploadFileUtil {
 
                     InputStream in = part.getInputStream();
                     out = new FileOutputStream(new File(file, newfileName));
-
-                    while (in.read(b) != -1) {
-                        out.write(b, 0, in.read(b));
+                    int index = 0;
+                    while ((index = in.read(b)) != -1) {
+                        out.write(b, 0, index);
                     }
-
                     in.close();
 
                     //文件路径，文件类型
@@ -161,8 +160,9 @@ public class UploadFileUtil {
             try {
                 in = part.getInputStream();
                 out = new FileOutputStream(new File(file, newfileName));
-                while (in.read(b) != -1) {
-                    out.write(b, 0, in.read(b));
+                int index = 0;
+                while ((index = in.read(b)) != -1) {
+                    out.write(b, 0, index);
                 }
                 in.close();
 
@@ -224,8 +224,9 @@ public class UploadFileUtil {
                     InputStream in = part.getInputStream();
                     out = new FileOutputStream(new File(file, newfileName));
 
-                    while (in.read(b) != -1) {
-                        out.write(b, 0, in.read(b));
+                    int index = 0;
+                    while ((index = in.read(b)) != -1) {
+                        out.write(b, 0, index);
                     }
                     in.close();
 
