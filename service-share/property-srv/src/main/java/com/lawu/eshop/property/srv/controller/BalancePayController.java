@@ -1,12 +1,9 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,15 +44,11 @@ public class BalancePayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "orderPay", method = RequestMethod.POST)
 	public Result orderPay(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
 		param.setTitle(TransactionTitleEnum.ORDER_PAY.val);
 		int retCode = balancePayService.balancePayProductOrder(param);
@@ -71,15 +64,11 @@ public class BalancePayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "billPay", method = RequestMethod.POST)
 	public Result billPay(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
 		param.setTitle(TransactionTitleEnum.PAY.val);
@@ -96,15 +85,11 @@ public class BalancePayController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "balancePayPoint", method = RequestMethod.POST)
 	public Result balancePayPoint(@RequestBody @Valid BalancePayDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
 		param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);

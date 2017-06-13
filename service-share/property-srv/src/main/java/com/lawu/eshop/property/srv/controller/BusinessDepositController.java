@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,17 +60,12 @@ public class BusinessDepositController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result<BusinessDepositInitDTO> save(@RequestBody @Valid BusinessDepositSaveDataParam param,
-			BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result<BusinessDepositInitDTO> save(@RequestBody @Valid BusinessDepositSaveDataParam param,BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		String deposit = propertyService.getValue(PropertyType.MERCHANT_BONT);
 		if ("".equals(deposit)) {
 			deposit = PropertyType.MERCHANT_BONT_DEFAULT;
@@ -91,15 +85,11 @@ public class BusinessDepositController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "doHandleDepositNotify", method = RequestMethod.POST)
 	public Result doHandleDepositNotify(@RequestBody @Valid NotifyCallBackParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
 		return businessDepositService.doHandleDepositNotify(param);
 	}
 
@@ -111,17 +101,11 @@ public class BusinessDepositController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
-	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param,
-			BindingResult result) throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryDataParam param,BindingResult result) throws Exception {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		Page<BusinessDepositQueryBO> page = businessDepositService.selectDepositList(param);
 		List<BusinessDepositQueryBO> list = page.getRecords();
@@ -129,7 +113,6 @@ public class BusinessDepositController extends BaseController {
 		for (BusinessDepositQueryBO bo : list) {
 			BusinessDepositQueryDTO dto = new BusinessDepositQueryDTO();
 			BeanUtil.copyProperties(bo, dto);
-			
 			newList.add(dto);
 		}
 		Page<BusinessDepositQueryDTO> pageResult = new Page<BusinessDepositQueryDTO>();
@@ -148,15 +131,11 @@ public class BusinessDepositController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateBusinessDeposit", method = RequestMethod.POST)
 	public Result updateBusinessDeposit(@RequestBody BusinessDepositOperDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		if (BusinessDepositOperEnum.REFUND_FAILURE.val.equals(param.getBusinessDepositOperEnum().val)
 				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {
 			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
@@ -193,15 +172,11 @@ public class BusinessDepositController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "refundDeposit", method = RequestMethod.POST)
 	public Result refundDeposit(@RequestBody BusinessRefundDepositDataParam dparam, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		int retCode = businessDepositService.refundDeposit(dparam);
 		return successCreated(retCode);
 

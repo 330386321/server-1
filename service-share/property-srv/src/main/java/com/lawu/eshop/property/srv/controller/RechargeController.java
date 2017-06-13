@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,17 +65,12 @@ public class RechargeController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestBody @Valid RechargeSaveDataParam param, BindingResult result)
-			throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result save(@RequestBody @Valid RechargeSaveDataParam param, BindingResult result) throws Exception {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		String value = "1";//充值余额
 		if (PayTypeEnum.POINT.getVal().equals(param.getPayTypeEnum().getVal())) {
 			// 获取第三方支付充值积分的比例
@@ -120,15 +114,11 @@ public class RechargeController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "doHandleRechargeNotify", method = RequestMethod.POST)
 	public Result doHandleRechargeNotify(@RequestBody @Valid NotifyCallBackParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		return rechargeService.doHandleRechargeNotify(param);
 	}
 

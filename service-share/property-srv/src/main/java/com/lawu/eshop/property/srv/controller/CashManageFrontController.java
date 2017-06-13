@@ -7,7 +7,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,15 +55,10 @@ public class CashManageFrontController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestBody @Valid CashDataParam cash, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		return successCreated(cashManageService.save(cash));
 	}
