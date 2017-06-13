@@ -85,7 +85,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(memberInviters.get(i).getLevel());// 等级
-						BigDecimal saleCommission = null;
+						BigDecimal saleCommission = property.get("sale_commission_1");
 						if (i == 0) {
 							saleCommission = property.get("sale_commission_1");
 
@@ -158,7 +158,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(merchantInviters.get(i).getLevel());// 等级
-						BigDecimal saleCommission = null;
+						BigDecimal saleCommission = property.get("sale_commission_1");
 						if (i == 0) {
 							saleCommission = property.get("sale_commission_1");
 
