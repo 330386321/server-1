@@ -84,8 +84,7 @@ public class BackagePropertyinfoController extends BaseController {
 		dparam.setStatus(param.getStatus());
 		dparam.setCurrentPage(param.getCurrentPage());
 		dparam.setPageSize(param.getPageSize());
-		Result<Page<BalanceAndPointListQueryDTO>> result = rechargeService.selectPropertyinfoList(dparam);
-		return result;
+		return rechargeService.selectPropertyinfoList(dparam);
 	}
 
 	@PageBody
@@ -205,7 +204,7 @@ public class BackagePropertyinfoController extends BaseController {
 	public Result updateBalance(@Valid BackagePropertyinfoParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
+			StringBuilder es = new StringBuilder();
 			for (FieldError e : errors) {
 				String msg = e.getDefaultMessage();
 				es.append(msg);
@@ -240,7 +239,7 @@ public class BackagePropertyinfoController extends BaseController {
 	public Result updatePoint(@Valid BackagePropertyinfoParam param, BindingResult result) {
 		if (result.hasErrors()) {
 			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
+			StringBuilder es = new StringBuilder();
 			for (FieldError e : errors) {
 				String msg = e.getDefaultMessage();
 				es.append(msg);
