@@ -121,7 +121,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      			adDTO.setNeedBeginTime(0l);
      		}
 		}
-    	Page<AdDTO> newPage=new Page<AdDTO>();
+    	Page<AdDTO> newPage=new Page<>();
     	newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
     	newPage.setTotalCount(newList.size());
     	newPage.setRecords(screenList);
@@ -139,14 +139,13 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	param.setLongitude(adPointParam.getLongitude());
 		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
-     	List<AdDTO> newList= new ArrayList<AdDTO>();
-     	newList=screem(param,list,memberId);
+     	List<AdDTO> newList=screem(param,list,memberId);
      	if(newList.size()>9)
      		newList=newList.subList(0, 9);
      	else
      		newList=newList.subList(0,newList.size());
      	
-     	if(newList.size()>0){
+     	if(!newList.isEmpty()){
      		for(int i=0;i<newList.size();i++){
          		Calendar calendar = Calendar.getInstance();  //得到日历  
        		    calendar.setTime(new Date());//把当前时间赋给日历  
@@ -197,9 +196,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		Result<Page<AdDTO>>  pageDTOS=adService.selectPraiseListByMember(adPraiseParam,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
      	List<AdDTO> newList=screem(null,list,memberId);
-     	AdPage<AdDTO> adpage=new AdPage<AdDTO>();
+     	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
-     	List<AdPraiseDTO> adPraiseDTOS=new ArrayList<AdPraiseDTO>();
+     	List<AdPraiseDTO> adPraiseDTOS=new ArrayList<>();
      	for (AdDTO adDTO : screenList) {
      		Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
      		Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
@@ -231,7 +230,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			praise.setMerchantId(adDTO.getMerchantId());
 			adPraiseDTOS.add(praise);
  		}
-     	Page<AdPraiseDTO> newPage=new Page<AdPraiseDTO>();
+     	Page<AdPraiseDTO> newPage=new Page<>();
      	newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
      	newPage.setTotalCount(newList.size());
      	newPage.setRecords(adPraiseDTOS);
@@ -279,7 +278,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      * @return
      */
     public List<AdDTO> screem(AdMemberParam adMemberParam,List<AdDTO> list,Long memberId ){
-    	List<AdDTO> newList =new ArrayList<AdDTO>();
+    	List<AdDTO> newList =new ArrayList<>();
     	for (AdDTO adDTO : list) {
 			
     		if(adDTO.getPutWayEnum().val==1){ //区域
@@ -403,7 +402,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		}
      		
 		}
-    	Page<AdDTO> newPage=new Page<AdDTO>();
+    	Page<AdDTO> newPage=new Page<>();
     	newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
     	newPage.setTotalCount(screenList.size());
     	newPage.setRecords(screenList);
@@ -475,7 +474,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
         	}
 			egainList.add(adFlatVideoDTO);
 		}
-		Page<AdFlatVideoDTO> newPage = new Page<AdFlatVideoDTO>();
+		Page<AdFlatVideoDTO> newPage = new Page<>();
 		newPage.setCurrentPage(pageDTOS.getModel().getCurrentPage());
 		newPage.setTotalCount(newList.size());
 		newPage.setRecords(egainList);

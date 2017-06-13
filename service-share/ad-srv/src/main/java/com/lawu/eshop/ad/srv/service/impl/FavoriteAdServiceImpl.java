@@ -4,14 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.param.FavoriteAdParam;
-import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
-import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.converter.FavoriteAdConverter;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
@@ -20,7 +17,6 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.FavoriteAdDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
 
 /**
  * 广告收藏接口实现

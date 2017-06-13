@@ -82,9 +82,6 @@ public class AdServiceImpl implements AdService {
 	
 	private int currentPage=1;
 	
-	private int currentPageStatusPutting=1;
-	
-	private int currentPageStatusPuted=1;
 
 	/**
 	 * 商家发布E赚
@@ -162,8 +159,7 @@ public class AdServiceImpl implements AdService {
 	 */
 	public void savePointPool(AdDO adDO,Integer count){	
 		//算法生成积分明细
-	    Integer piontCount=0;
-		piontCount=count%10==0?count/10:count/10+1 ;
+	    Integer piontCount=count%10==0?count/10:count/10+1 ;
 		if(piontCount<=10)
 			 piontCount=10;
 		double[] points=AdArithmeticUtil.getMoney(adDO.getTotalPoint().doubleValue(), piontCount);
@@ -176,7 +172,7 @@ public class AdServiceImpl implements AdService {
 			pointPool.setGmtCreate(new Date());
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(j);
-			pointPool.setPoint(new BigDecimal( points[j]));
+			pointPool.setPoint(BigDecimal.valueOf(points[j]));
 			pointPoolDOMapper.insert(pointPool);
 		}
 	}
@@ -460,7 +456,6 @@ public class AdServiceImpl implements AdService {
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 				adDO.setGmtModified(new Date());
 				//删除solr中的数据
-				SolrInputDocument document = new SolrInputDocument();
 				SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 			}
 			adDOMapper.updateByPrimaryKey(adDO);

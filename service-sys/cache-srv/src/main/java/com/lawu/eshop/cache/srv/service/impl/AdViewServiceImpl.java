@@ -19,14 +19,12 @@ public class AdViewServiceImpl implements AdViewService {
 	public void setAdView(String adId, String memberId) {
 		 String key = KeyConstant.REDIS_KEY_AD.concat(adId);
 		 stringRedisTemplate.opsForSet().add(key, memberId);
-		 
 	}
 
 	@Override
 	public Set<String> getAdviews(String adId) {
 		String key = KeyConstant.REDIS_KEY_AD.concat(adId);
-		Set<String> members=stringRedisTemplate.opsForSet().members(key);
-		return members;
+		return stringRedisTemplate.opsForSet().members(key);
 	}
 	
 	
