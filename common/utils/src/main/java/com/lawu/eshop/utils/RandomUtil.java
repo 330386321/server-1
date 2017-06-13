@@ -18,7 +18,7 @@ public class RandomUtil {
     private static final String STR_6 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String STR_7 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    private static final int TABLE_FIELD_NUM_LENGTH = 12;
+    private RandomUtil(){}
 
     /**
      * 生成随机字符串
@@ -29,7 +29,7 @@ public class RandomUtil {
      * @date 2017/3/22
      */
     public static String getRandomString(int type, int length) {
-        String str = "";
+        String str;
         switch (type) {
             case 1:
                 str = STR_1;
@@ -59,7 +59,7 @@ public class RandomUtil {
             return "";
         }
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(str.length());
             sb.append(str.charAt(number));

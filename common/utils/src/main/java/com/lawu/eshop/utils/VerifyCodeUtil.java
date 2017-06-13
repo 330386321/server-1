@@ -44,7 +44,7 @@ public class VerifyCodeUtil {
             g.drawLine(x, y, x + xl, y + yl);
         }
         // randomCode用于保存随机产生的验证码，以便用户登录后进行验证。
-        StringBuffer randomCode = new StringBuffer();
+        StringBuilder randomCode = new StringBuilder();
         int red = 0, green = 0, blue = 0;
         // 随机产生codeCount数字的验证码。
         for (int i = 0; i < codeCount; i++) {

@@ -6,6 +6,8 @@ package com.lawu.eshop.utils;
  */
 public class DistanceUtil {
 
+    private DistanceUtil(){}
+
     /**
      * 获取两个经纬度之间的距离
      *
