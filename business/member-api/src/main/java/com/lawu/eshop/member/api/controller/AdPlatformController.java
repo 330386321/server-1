@@ -52,8 +52,7 @@ public class AdPlatformController extends BaseController {
     @RequestMapping(value = "selectByPosition", method = RequestMethod.GET)
     public Result<List<AdPlatformDTO>> selectByPosition(@ModelAttribute @ApiParam(required = true, value = "POSITON_RECOMMEND 人气推荐 POSITON_SHOP_TOP 要购物顶部广告 POSITON_SHOP_CHOOSE"
 			+ "要购物今日推荐  POSITON_SHOP_GOODS 要购物精品 POSITON_AD_TOP 看广告顶部广告") PositionEnum positionEnum) {
-        Result<List<AdPlatformDTO>> adPlatformDTOS = adPlatformService.selectByPosition(positionEnum);
-        return adPlatformDTOS;
+        return adPlatformService.selectByPosition(positionEnum);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")

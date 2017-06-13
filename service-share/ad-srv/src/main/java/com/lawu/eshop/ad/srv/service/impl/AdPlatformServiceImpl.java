@@ -110,8 +110,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override
@@ -120,8 +119,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setPosition(positionEnum.val);
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override
@@ -138,8 +136,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
         adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override

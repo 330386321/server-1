@@ -3,7 +3,12 @@ package com.lawu.eshop.utils;
 import java.security.MessageDigest;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PwdUtil {
+	
+	private static Logger logger = LoggerFactory.getLogger(PwdUtil.class);
 
 	/**
 	 * 加盐，固定前缀
@@ -45,7 +50,7 @@ public class PwdUtil {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.debug("加密失败");
 		}
 		return resultString;
 	}

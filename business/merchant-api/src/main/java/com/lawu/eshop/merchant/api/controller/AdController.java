@@ -153,8 +153,7 @@ public class AdController extends BaseController {
     public Result<Page<AdMerchantDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMerchantParam adMerchantParam) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
-    	Result<Page<AdMerchantDTO>>  pageDTOS=adService.selectListByMerchant(adMerchantParam, memberId);
-    	return pageDTOS;
+    	return adService.selectListByMerchant(adMerchantParam, memberId);
     }
 
 
@@ -164,8 +163,7 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
     public Result unShelve(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result rs= adService.updateStatus(id);
-    	return rs;
+    	return adService.updateStatus(id);
     }
 
 
@@ -242,8 +240,7 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
     public Result<AdMerchantDetailDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result<AdMerchantDetailDTO> rs= adService.selectById(id);
-    	return rs;
+    	return adService.selectById(id);
     }
 
 }

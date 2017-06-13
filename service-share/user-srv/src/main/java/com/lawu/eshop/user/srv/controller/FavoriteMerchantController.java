@@ -74,7 +74,7 @@ public class FavoriteMerchantController extends BaseController{
 	 */
 	@RequestMapping(value = "remove/{merchantId}", method = RequestMethod.DELETE)
    public Result remove(@PathVariable Long merchantId, @RequestParam Long memberId) {
-   	  Integer i=favoriteMerchantService.remove(merchantId,memberId);
+   	  favoriteMerchantService.remove(merchantId,memberId);
       return successDelete();
    }
 
