@@ -146,6 +146,11 @@ public interface ProductService {
     void rebuildProductIndex();
 
     /**
+     * 删除无效的商品索引
+     */
+    void delInvalidProductIndex();
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam

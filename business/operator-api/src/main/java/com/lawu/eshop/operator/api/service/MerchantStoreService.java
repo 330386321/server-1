@@ -53,4 +53,11 @@ public interface MerchantStoreService {
 	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/rebuildStoreIndex")
 	Result rebuildStoreIndex();
 
+	/**
+	 * 删除无效门店索引
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/delInvalidStoreIndex")
+	Result delInvalidStoreIndex();
+
 }

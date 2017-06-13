@@ -72,4 +72,9 @@ public interface MerchantStoreService {
      */
     void rebuildStoreIndex();
 
+    /**
+     * 删除无效的门店索引
+     */
+    void delInvalidStoreIndex();
+
 }

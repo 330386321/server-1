@@ -17,4 +17,6 @@ public interface MerchantStoreDOMapperExtend {
     List<MerchantPushView> selectPushInfo(@Param("area") String area);
 
     List<MerchantStoreDO> listMerchantStore(ListMerchantStoreParam listMerchantStoreParam);
+
+    List<MerchantStoreDO> listInvalidMerchantStore(ListMerchantStoreParam listMerchantStoreParam);
 }

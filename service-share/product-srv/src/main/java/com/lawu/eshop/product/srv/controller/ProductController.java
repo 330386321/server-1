@@ -311,6 +311,16 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 删除无效的商品索引
+     * @return
+     */
+    @RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
+    public Result delInvalidProductIndex() {
+        productService.delInvalidProductIndex();
+        return successCreated();
+    }
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam

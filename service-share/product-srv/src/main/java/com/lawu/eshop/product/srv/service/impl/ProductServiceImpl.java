@@ -991,6 +991,31 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void delInvalidProductIndex() {
+        ListProductParam listProductParam = new ListProductParam();
+        listProductParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listProductParam.setCurrentPage(currentPage);
+            ProductDOExample example = new ProductDOExample();
+            example.createCriteria().andStatusNotEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
+            List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (productDOS == null || productDOS.isEmpty()) {
+                return ;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (ProductDO productDO : productDOS) {
+                ids.add(String.valueOf(productDO.getId()));
+            }
+            SolrUtil.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+    }
+
+    @Override
     public Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();

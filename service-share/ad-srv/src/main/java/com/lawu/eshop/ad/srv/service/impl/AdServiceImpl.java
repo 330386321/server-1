@@ -854,6 +854,37 @@ public class AdServiceImpl implements AdService {
 	}
 
 	@Override
+	public void delInvalidAdIndex() {
+		ListAdParam listAdParam = new ListAdParam();
+		listAdParam.setPageSize(1000);
+		int currentPage = 0;
+
+		while (true) {
+			currentPage ++;
+			listAdParam.setCurrentPage(currentPage);
+			AdDOExample adDOExample = new AdDOExample();
+			List<Byte> statusList = new ArrayList<>();
+			statusList.add(AdStatusEnum.AD_STATUS_ADD.val);
+			statusList.add(AdStatusEnum.AD_STATUS_PUTING.val);
+			List<Byte> typeList = new ArrayList<>();
+			typeList.add(AdTypeEnum.AD_TYPE_FLAT.val);
+			typeList.add(AdTypeEnum.AD_TYPE_VIDEO.val);
+			adDOExample.createCriteria().andStatusNotIn(statusList).andTypeIn(typeList);
+			RowBounds rowBounds = new RowBounds(listAdParam.getOffset(), listAdParam.getPageSize());
+			List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(adDOExample, rowBounds);
+			if (adDOS == null || adDOS.isEmpty()) {
+				return ;
+			}
+
+			List<String> ids = new ArrayList<>();
+			for (AdDO adDO : adDOS) {
+				ids.add(String.valueOf(adDO.getId()));
+			}
+			SolrUtil.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		}
+	}
+
+	@Override
 	public RedPacketInfoBO getRedPacketInfo(Long merchantId) { 
 		AdDOExample example =new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("1")).andTypeEqualTo(new Byte("4"));

@@ -170,4 +170,28 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
         }
     }
 
+    @Override
+    public void delInvalidStoreIndex() {
+        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
+        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
+        listMerchantStoreParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listMerchantStoreParam.setCurrentPage(currentPage);
+            List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapperExtend.listInvalidMerchantStore(listMerchantStoreParam);
+            if (merchantStoreDOS == null || merchantStoreDOS.isEmpty()) {
+                return ;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
+                ids.add(String.valueOf(merchantStoreDO.getId()));
+            }
+            SolrUtil.delSolrDocsByIds(ids, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        }
+    }
+
 }

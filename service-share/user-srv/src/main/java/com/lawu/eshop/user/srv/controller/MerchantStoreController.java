@@ -452,4 +452,14 @@ public class MerchantStoreController extends BaseController {
 		return successCreated();
 	}
 
+	/**
+	 * 删除无效的门店索引
+	 * @return
+	 */
+	@RequestMapping(value = "delInvalidStoreIndex", method = RequestMethod.GET)
+	public Result delInvalidStoreIndex() {
+		merchantStoreService.delInvalidStoreIndex();
+		return successCreated();
+	}
+
 }

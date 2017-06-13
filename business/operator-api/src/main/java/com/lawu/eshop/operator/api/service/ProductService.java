@@ -57,4 +57,11 @@ public interface ProductService {
     @RequestMapping(method = RequestMethod.GET, value = "product/rebuildProductIndex")
     Result rebuildProductIndex();
 
+    /**
+     * 删除无效商品索引
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/delInvalidProductIndex")
+    Result delInvalidProductIndex();
+
 }

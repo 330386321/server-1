@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -93,7 +94,7 @@ public class SolrUtil {
                 return true;
             }
         } catch (Exception e) {
-            logger.error("solr新增集合异常：{}", e);
+            logger.error("solr批量新增异常：{}", e);
         }
         return false;
     }
@@ -117,6 +118,29 @@ public class SolrUtil {
             }
         } catch (Exception e) {
             logger.error("solr删除异常：{}", e);
+        }
+        return false;
+    }
+
+    /**
+     * 根据ids删除
+     *
+     * @param ids
+     * @param solrUrl
+     * @param solrCore
+     * @return
+     */
+    public static boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore) {
+        HttpSolrClient client = getSolrClient(solrUrl,solrCore);
+        try {
+            UpdateResponse rspAdd = client.deleteById(String.valueOf(ids));
+            UpdateResponse rspCommit = client.commit();
+            closeSolrClient(client);
+            if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            logger.error("solr批量删除异常：{}", e);
         }
         return false;
     }

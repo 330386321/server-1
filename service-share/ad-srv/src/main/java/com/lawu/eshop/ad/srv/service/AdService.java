@@ -218,6 +218,11 @@ public interface AdService {
      * 重建平面视频广告索引
      */
     void rebuildAdIndex();
+
+    /**
+     * 删除无效的平面视频广告索引
+     */
+    void delInvalidAdIndex();
     
     /**
      * 根据商家id 获取红包的相关信息
