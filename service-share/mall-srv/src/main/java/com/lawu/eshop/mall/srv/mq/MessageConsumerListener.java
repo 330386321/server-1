@@ -212,6 +212,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 */
 				// 组装信息
 				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderId());
 				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_SUCCESS);
 
 				messageInfoParam.setMessageParam(new MessageTempParam());

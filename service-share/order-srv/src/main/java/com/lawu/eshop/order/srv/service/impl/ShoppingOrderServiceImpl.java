@@ -621,7 +621,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		if (shoppingOrderDO.getIsDone()) {
 			// 提示商家新增一笔订单交易收入
-			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMemberNum());
+			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMerchantName());
 		}
 		
 		return ResultCode.SUCCESS;
