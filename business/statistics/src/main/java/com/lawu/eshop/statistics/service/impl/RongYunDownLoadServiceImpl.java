@@ -35,7 +35,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
         Date date = DateUtil.getDayBefore(new Date());//获取前一天的时间
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String dateFormat = sdf.format(date);
-        String dateStr = "";
+        String dateStr;
         for (int i = 1; i < 24; i++) {
             if (i < 10) {
                 dateStr = dateFormat + "0" + i;

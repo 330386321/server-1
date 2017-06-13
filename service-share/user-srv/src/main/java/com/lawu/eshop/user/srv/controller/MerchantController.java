@@ -271,7 +271,7 @@ public class MerchantController extends BaseController {
 
     @RequestMapping(value = "delMerchantGtPush", method = RequestMethod.PUT)
     public Result delMerchantGtPush(@RequestParam Long merchantId){
-        int rows  = merchantService.delMerchantGtPush(merchantId);
+        merchantService.delMerchantGtPush(merchantId);
         return successCreated();
     }
 

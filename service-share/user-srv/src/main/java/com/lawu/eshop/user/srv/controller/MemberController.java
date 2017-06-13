@@ -350,7 +350,7 @@ public class MemberController extends BaseController {
 
     @RequestMapping(value = "delUserGtPush", method = RequestMethod.PUT)
     public Result delUserGtPush(@RequestParam Long memberId){
-        int rows  = memberService.delUserGtPush(memberId);
+        memberService.delUserGtPush(memberId);
         return successCreated();
     }
 
