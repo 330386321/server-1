@@ -459,7 +459,7 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "getClickPraiseAdTimes", method = RequestMethod.GET)
 	public Result<ClickPraiseAdTimesDTO> getClickPraiseAdTimes(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		ClickPraiseAdTimesDTO praiseAdTimesDTO=new ClickPraiseAdTimesDTO();
-		praiseAdTimesDTO.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
+		praiseAdTimesDTO.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes()); 
 		praiseAdTimesDTO.setPraiseProb(memberApiConfig.getClickPraiseProb());
 		return successGet(praiseAdTimesDTO);
 	}
