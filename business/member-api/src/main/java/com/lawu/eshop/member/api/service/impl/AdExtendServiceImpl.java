@@ -221,7 +221,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      		praise.setId(adDTO.getId());
 			praise.setTitle(adDTO.getTitle());
 			praise.setBeginTime(adDTO.getBeginTime());
-			praise.setEndTime(adDTO.getEndTime());
 			praise.setTotalPoint(adDTO.getTotalPoint());
 			praise.setCount(adDTO.getNumber());
 			praise.setNeedBeginTime(adDTO.getNeedBeginTime());
@@ -259,7 +258,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
  		praise.setId(ad.getId());
 		praise.setTitle(ad.getTitle());
 		praise.setBeginTime(ad.getBeginTime());
-		praise.setEndTime(ad.getEndTime());
 		praise.setTotalPoint(ad.getTotalPoint());
 		praise.setMerchantStoreId(ad.getMerchantStoreId());
 		praise.setCount(ad.getNumber());
@@ -278,6 +276,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      * @return
      */
     public List<AdDTO> screem(AdMemberParam adMemberParam,List<AdDTO> list,Long memberId ){
+    	Result<UserDTO> memberDTO=memberService.findMemberInfo(memberId);
+		String memberPath=memberDTO.getModel().getRegionPath();
     	List<AdDTO> newList =new ArrayList<>();
     	for (AdDTO adDTO : list) {
 			
@@ -285,8 +285,6 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     			if(adDTO.getAreas()==null){
     				newList.add(adDTO);
     			}else{
-    				Result<UserDTO> memberDTO=memberService.findMemberInfo(memberId);
-    				String memberPath=memberDTO.getModel().getRegionPath();
     				if(memberPath!=null){
     					String[] memberPaths=memberPath.split("/");
     					String[] path=adDTO.getAreas().split(",");

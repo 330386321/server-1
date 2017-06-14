@@ -1,22 +1,15 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
-import com.lawu.eshop.ad.constants.*;
-import com.lawu.eshop.ad.param.*;
-import com.lawu.eshop.ad.srv.AdSrvConfig;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
-import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
-import com.lawu.eshop.ad.srv.bo.ViewBO;
-import com.lawu.eshop.ad.srv.converter.AdConverter;
-import com.lawu.eshop.ad.srv.domain.*;
-import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.mapper.*;
-import com.lawu.eshop.ad.srv.service.AdService;
-import com.lawu.eshop.compensating.transaction.Reply;
-import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.AdArithmeticUtil;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.solr.common.SolrDocument;
@@ -26,11 +19,46 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.PropertyType;
+import com.lawu.eshop.ad.constants.RedPacketArithmetic;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.srv.AdSrvConfig;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ViewBO;
+import com.lawu.eshop.ad.srv.converter.AdConverter;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.domain.AdDOExample;
+import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
+import com.lawu.eshop.ad.srv.domain.AdRegionDO;
+import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
+import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
+import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
+import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
+import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
+import com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend;
+import com.lawu.eshop.ad.srv.service.AdService;
+import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.compensating.transaction.TransactionMainService;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.utils.AdArithmeticUtil;
 
 
 /**
@@ -43,6 +71,9 @@ public class AdServiceImpl implements AdService {
 	
 	@Autowired
 	private AdDOMapper adDOMapper;
+	
+	@Autowired
+	private AdDOMapperExtend adDOMapperExtend;
 	
 	@Autowired
 	private AdRegionDOMapper adRegionDOMapper;
@@ -357,30 +388,15 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	public Page<AdBO> selectListByMember(AdMemberParam adMemberParam,Long memberId) {
-		AdDOExample example=new AdDOExample();
-		Criteria cr= example.createCriteria();
-		if(adMemberParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val)
-			.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+		AdDOView adView=new AdDOView();
+		if(adMemberParam.getTypeEnum()!=null){ //E赚
+			adView.setType(adMemberParam.getTypeEnum().val);
 		}
-		if(adMemberParam.getOrderTypeEnum()!=null){
-			List<Byte> types=new ArrayList<>();
-			types.add(AdTypeEnum.AD_TYPE_FLAT.val);
-			types.add(AdTypeEnum.AD_TYPE_VIDEO.val);
-			cr.andTypeIn(types);
-			List<Byte> status=new ArrayList<>();
-			status.add(AdStatusEnum.AD_STATUS_ADD.val);
-			status.add(AdStatusEnum.AD_STATUS_PUTING.val);
-			cr.andStatusIn(status);
-			if(adMemberParam.getOrderTypeEnum().val==1){
-				example.setOrderByClause("total_point desc");
-			}else{
-				example.setOrderByClause("point desc");
-				cr.andAdCountGreaterThanOrEqualTo(20);
-			}
+		if(adMemberParam.getOrderTypeEnum()!=null){ //积分榜、人气榜
+			adView.setTopType(adMemberParam.getOrderTypeEnum().val);
 		}
 		
-		List<AdDO> DOS=adDOMapper.selectByExample(example);
+		List<AdDO> DOS=adDOMapperExtend.selectAdTop(adView);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
 			AdBO BO=AdConverter.convertBO(adDO);
@@ -446,9 +462,8 @@ public class AdServiceImpl implements AdService {
 		memberAdRecordD.setClickDate(new Date());
 		memberAdRecordD.setOriginalPoint(adDO.getPoint());
 		memberAdRecordDOMapper.insert(memberAdRecordD);
-		adDO.setHits(hits++);
-		adDOMapper.updateByPrimaryKey(adDO);
-		if(hits==adDO.getAdCount()){
+		adDOMapperExtend.updateHitsByPrimaryKey(id);
+		if(hits++==adDO.getAdCount()){
 			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 			adDO.setGmtModified(new Date());
 			//删除solr中的数据

@@ -27,7 +27,7 @@
     	ms.region_name as region_name,
     	ms.status as status,
     	ms.address as address,
-    	ms.gmt_create as gmtCreate
+    	me.gmt_create as gmtCreate
    			 from merchant me 
       left join merchant_store ms on me.id=ms.merchant_id 
     <where>

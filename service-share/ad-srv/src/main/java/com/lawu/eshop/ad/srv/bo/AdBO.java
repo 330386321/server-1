@@ -26,8 +26,6 @@ public class AdBO {
 
 	private Date beginTime;
 
-	private Date endTime;
-
 	private String areas;
 
 	private Integer radius;
@@ -145,14 +143,6 @@ public class AdBO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
 	}
 
 	public String getAreas() {

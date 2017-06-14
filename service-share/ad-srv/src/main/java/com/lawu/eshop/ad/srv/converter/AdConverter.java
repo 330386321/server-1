@@ -36,7 +36,6 @@ public class AdConverter {
 		adBO.setId(adDO.getId());
 		adBO.setAdCount(adDO.getAdCount());
 		adBO.setBeginTime(adDO.getBeginTime());
-		adBO.setEndTime(adDO.getEndTime());
 		adBO.setMediaUrl(adDO.getMediaUrl());
 		adBO.setMerchantId(adDO.getMerchantId());
 		adBO.setGmtCreate(adDO.getGmtCreate());
@@ -92,7 +91,6 @@ public class AdConverter {
 		adDTO.setId(adBO.getId());
 		adDTO.setAdCount(adBO.getAdCount());
 		adDTO.setBeginTime(adBO.getBeginTime());
-		adDTO.setEndTime(adBO.getEndTime());
 		adDTO.setMediaUrl(adBO.getMediaUrl());
 		adDTO.setMerchantId(adBO.getMerchantId());
 		adDTO.setGmtCreate(adBO.getGmtCreate());
@@ -206,7 +204,6 @@ public class AdConverter {
 			praise.setId(adBO.getId());
 			praise.setTitle(adBO.getTitle());
 			praise.setBeginTime(adBO.getBeginTime());
-			praise.setEndTime(adBO.getEndTime());
 			praise.setTotalPoint(adBO.getTotalPoint());
 		}
 		return DTOS;
