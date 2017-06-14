@@ -1,15 +1,14 @@
 package com.lawu.eshop.property.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
-import org.springframework.beans.BeanUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 积分明细转换器
@@ -27,9 +26,14 @@ public class PointDetailConverter {
 		}
 
 		rtn = new PointDetailBO();
-
-		BeanUtils.copyProperties(pointDetailDO, rtn);
-
+		rtn.setGmtCreate(pointDetailDO.getGmtCreate());
+		rtn.setPoint(pointDetailDO.getPoint());
+		rtn.setPointNum(pointDetailDO.getPointNum());
+		rtn.setPointType(pointDetailDO.getPointType());
+		rtn.setRemark(pointDetailDO.getRemark());
+		rtn.setTitle(pointDetailDO.getTitle());
+		rtn.setUserNum(pointDetailDO.getUserNum());
+		
 		rtn.setDirection(ConsumptionTypeEnum.getEnum(pointDetailDO.getDirection()));
 
 		return rtn;
@@ -59,7 +63,11 @@ public class PointDetailConverter {
 		}
 
 		rtn = new PointDetailDTO();
-		BeanUtils.copyProperties(pointDetailBO, rtn);
+		rtn.setDirection(pointDetailBO.getDirection());
+		rtn.setPoint(pointDetailBO.getPoint());
+		rtn.setRemark(pointDetailBO.getRemark());
+		rtn.setTitle(pointDetailBO.getTitle());
+		
 		rtn.setIntegralDate(pointDetailBO.getGmtCreate());
 
 		return rtn;
