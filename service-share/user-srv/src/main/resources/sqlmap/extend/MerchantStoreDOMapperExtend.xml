@@ -43,4 +43,23 @@
         limit #{offset} , #{pageSize}
     </select>
 
+    <!-- 查询门店名称和门店图片  买单-->
+    <select id="getPayOrderStoreInfo" resultType="com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView">
+        SELECT
+        s.name,
+        i.path,
+        s.merchant_id as merchantId
+        FROM
+        merchant_store AS s
+        LEFT JOIN merchant_store_image AS i ON s.id = i.merchant_store_id
+        WHERE
+        s.status = 1
+        AND i.type = 1
+        AND i.status = 1
+        AND s.merchant_id IN
+        <foreach collection="list" item="merchantId" open="(" close=")" separator=",">
+            #{merchantId}
+        </foreach>
+    </select>
+
 </mapper>

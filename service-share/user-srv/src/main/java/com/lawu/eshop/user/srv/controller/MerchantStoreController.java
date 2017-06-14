@@ -462,4 +462,27 @@ public class MerchantStoreController extends BaseController {
 		return successCreated();
 	}
 
+	/**
+	 * 查询门店name，门店照
+	 * @param merchantIds
+	 * @return
+	 * @author zhangyong
+	 */
+	@RequestMapping(value = "getPayOrderStoreInfo", method = RequestMethod.GET)
+	public Result<List<PayOrderStoreInfoDTO>> getPayOrderStoreInfo(@RequestParam("merchantIds") List<Long> merchantIds) {
+		List<PayOrderStoreInfoBO> storeInfoBOS = merchantStoreInfoService.getPayOrderStoreInfo(merchantIds);
+		if(storeInfoBOS == null){
+			return successGet(new ArrayList<PayOrderStoreInfoDTO>());
+		}
+		List<PayOrderStoreInfoDTO> list = new ArrayList<PayOrderStoreInfoDTO>();
+		for(PayOrderStoreInfoBO storeInfoBO :storeInfoBOS){
+			PayOrderStoreInfoDTO storeInfoDTO = new PayOrderStoreInfoDTO();
+			storeInfoDTO.setName(storeInfoBO.getName());
+			storeInfoDTO.setStoreUrl(storeInfoBO.getStoreUrl());
+			storeInfoDTO.setMerchantId(storeInfoBO.getMerchantId());
+			list.add(storeInfoDTO);
+		}
+		return successGet(list);
+	}
+
 }

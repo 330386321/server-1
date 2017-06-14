@@ -1,17 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
@@ -20,39 +8,21 @@ import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
-import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
-import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
-import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
-import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.FansMerchantDO;
-import com.lawu.eshop.user.srv.domain.FansMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDO;
-import com.lawu.eshop.user.srv.domain.FavoriteMerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantDO;
-import com.lawu.eshop.user.srv.domain.MerchantDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreAuditDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDOExample;
-import com.lawu.eshop.user.srv.mapper.FansMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.FavoriteMerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreAuditDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.domain.*;
+import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * 商家门店service Created by Administrator on 2017/3/24.
@@ -487,7 +457,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
 		merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
 		int picCount = 0;
-		if (!merchantStoreImageDOS.isEmpty() && org.apache.commons.lang.StringUtils.isNotEmpty(merchantStoreImageDOS.get(0).getPath())) {
+		if (!merchantStoreImageDOS.isEmpty() && StringUtils.isNotEmpty(merchantStoreImageDOS.get(0).getPath())) {
 			picCount = merchantStoreImageDOS.get(0).getPath().split(",").length;
 		}
 
@@ -539,17 +509,18 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		if (stores == null || stores.isEmpty()) {
 			return null;
 		}
-		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);// 门店照
-		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
 		MerchantStoreInfoBO merchantStoreInfoBO = new MerchantStoreInfoBO();
 		merchantStoreInfoBO.setName(stores.get(0).getName());
-		if (!merchantStoreImageDOS.isEmpty()) {
-			for (MerchantStoreImageDO merchantStoreImageDO : merchantStoreImageDOS) {
-				Byte type = merchantStoreImageDO.getType();
-				if (type == MerchantStoreImageEnum.STORE_IMAGE_STORE.val) {
-					merchantStoreInfoBO.setStoreUrl(merchantStoreImageDO.getPath());
-				}
+		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+		merchantStoreImageDOExample.createCriteria().andMerchantIdEqualTo(merchantId)
+				.andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val)
+				.andStatusEqualTo(true);// 门店照
+		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+		if (!merchantStoreImageDOS.isEmpty() && merchantStoreImageDOS.get(0) != null) {
+			if (StringUtils.isEmpty(merchantStoreImageDOS.get(0).getPath())) {
+				merchantStoreInfoBO.setStoreUrl("");
+			} else {
+				merchantStoreInfoBO.setStoreUrl(merchantStoreImageDOS.get(0).getPath());
 			}
 		}
 		return merchantStoreInfoBO;
@@ -654,6 +625,28 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			shoppingStoreDetailBO.setFavorite(true);
 		}
 		return shoppingStoreDetailBO;
+	}
+
+	/**
+	 * 查询门店name，门店照
+	 * @param merchantIds
+	 * @return
+	 */
+	@Override
+	public List<PayOrderStoreInfoBO> getPayOrderStoreInfo(List<Long> merchantIds) {
+		List<PayOrderStoreInfoView> storeInfoViews = merchantStoreDOMapperExtend.getPayOrderStoreInfo(merchantIds);
+		if(storeInfoViews.isEmpty()){
+			return  null;
+		}
+		List<PayOrderStoreInfoBO> storeInfoBOS = new ArrayList<PayOrderStoreInfoBO>();
+		for(PayOrderStoreInfoView storeInfoView :storeInfoViews){
+			PayOrderStoreInfoBO merchantStoreInfoBO = new PayOrderStoreInfoBO();
+			merchantStoreInfoBO.setName(storeInfoView.getName());
+			merchantStoreInfoBO.setStoreUrl(storeInfoView.getPath());
+			merchantStoreInfoBO.setMerchantId(storeInfoView.getMerchantId());
+			storeInfoBOS.add(merchantStoreInfoBO);
+		}
+		return storeInfoBOS;
 	}
 
 }

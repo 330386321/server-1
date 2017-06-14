@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.mapper.extend;
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
+import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface MerchantStoreDOMapperExtend {
     List<MerchantStoreDO> listMerchantStore(ListMerchantStoreParam listMerchantStoreParam);
 
     List<MerchantStoreDO> listInvalidMerchantStore(ListMerchantStoreParam listMerchantStoreParam);
+
+    List<PayOrderStoreInfoView> getPayOrderStoreInfo(List<Long> merchantIds);
 }
