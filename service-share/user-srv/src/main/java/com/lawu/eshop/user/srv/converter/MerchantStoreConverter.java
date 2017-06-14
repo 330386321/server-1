@@ -379,16 +379,16 @@ public class MerchantStoreConverter {
 
         for (SolrDocument solrDocument : solrDocumentList) {
             StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
-            storeSolrDTO.setMerchantId(Long.valueOf(solrDocument.get("merchantId_l").toString()));
-            storeSolrDTO.setMerchantStoreId(Long.valueOf(solrDocument.get("id").toString()));
-            storeSolrDTO.setName(solrDocument.get("name_s").toString());
-            storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s").toString());
-            storeSolrDTO.setIndustryName(solrDocument.get("industryName_s").toString());
-            storeSolrDTO.setStorePic(solrDocument.get("storePic_s").toString());
+            storeSolrDTO.setMerchantStoreId(solrDocument.get("id").toString() == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
+            storeSolrDTO.setMerchantId(solrDocument.get("merchantId_l") == null ? 0 : Long.valueOf(solrDocument.get("merchantId_l").toString()));
+            storeSolrDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s") == null ? "" : solrDocument.get("industryPath_s").toString());
+            storeSolrDTO.setIndustryName(solrDocument.get("industryName_s") == null ? "" : solrDocument.get("industryName_s").toString());
+            storeSolrDTO.setStorePic(solrDocument.get("storePic_s") == null ? "" : solrDocument.get("storePic_s").toString());
             storeSolrDTO.setDistance(DataTransUtil.objectToDobule(solrDocument.get("distance"), 3));
-            storeSolrDTO.setFavoriteNumber(Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
-            storeSolrDTO.setAverageConsumeAmount(Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
-            storeSolrDTO.setAverageScore(Double.valueOf(solrDocument.get("averageScore_d").toString()));
+            storeSolrDTO.setFavoriteNumber(solrDocument.get("favoriteNumber_i") == null ? 0 : Integer.valueOf(solrDocument.get("favoriteNumber_i").toString()));
+            storeSolrDTO.setAverageConsumeAmount(solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageConsumeAmount_d").toString()));
+            storeSolrDTO.setAverageScore(solrDocument.get("averageScore_d") == null ? 0.0 : Double.valueOf(solrDocument.get("averageScore_d").toString()));
             storeSolrDTOS.add(storeSolrDTO);
         }
         return storeSolrDTOS;
@@ -402,16 +402,16 @@ public class MerchantStoreConverter {
      */
     public static SolrInputDocument convertSolrInputDocument(SolrDocument solrDocument) {
         SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", solrDocument.get("id"));
-        document.addField("merchantId_l", solrDocument.get("merchantId_l"));
-        document.addField("name_s", solrDocument.get("name_s"));
-        document.addField("regionPath_s", solrDocument.get("regionPath_s"));
-        document.addField("latLon_p", solrDocument.get("latLon_p"));
-        document.addField("industryPath_s", solrDocument.get("industryPath_s"));
-        document.addField("industryName_s", solrDocument.get("industryName_s"));
-        document.addField("storePic_s", solrDocument.get("storePic_s"));
-        document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d"));
-        document.addField("averageScore_d", solrDocument.get("averageScore_d"));
+        document.addField("id", solrDocument.get("id") == null ? 0 : solrDocument.get("id"));
+        document.addField("merchantId_l", solrDocument.get("merchantId_l") == null ? 0 : solrDocument.get("merchantId_l"));
+        document.addField("name_s", solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s"));
+        document.addField("regionPath_s", solrDocument.get("regionPath_s") == null ? "" : solrDocument.get("regionPath_s"));
+        document.addField("latLon_p", solrDocument.get("latLon_p") == null ? "0,0" : solrDocument.get("latLon_p"));
+        document.addField("industryPath_s", solrDocument.get("industryPath_s") == null ? "" : solrDocument.get("industryPath_s"));
+        document.addField("industryName_s", solrDocument.get("industryName_s") == null ? "" : solrDocument.get("industryName_s"));
+        document.addField("storePic_s", solrDocument.get("storePic_s") == null ? "" : solrDocument.get("storePic_s"));
+        document.addField("averageConsumeAmount_d", solrDocument.get("averageConsumeAmount_d") == null ? 0.0 : solrDocument.get("averageConsumeAmount_d"));
+        document.addField("averageScore_d", solrDocument.get("averageScore_d") == null ? 0.0 : solrDocument.get("averageScore_d"));
         return document;
     }
     

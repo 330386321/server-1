@@ -98,7 +98,6 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
             SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
-                document.addField("id", solrDocument.get("id"));
                 document.addField("favoriteNumber_i", count);
                 SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
             }

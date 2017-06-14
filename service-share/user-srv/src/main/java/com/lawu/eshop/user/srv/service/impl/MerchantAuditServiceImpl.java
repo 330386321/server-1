@@ -261,10 +261,10 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
 
                     boolean isEntity = false;
-                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType()== MerchantStoreTypeEnum.ENTITY_MERCHANT.val){
+                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType().byteValue() == MerchantStoreTypeEnum.ENTITY_MERCHANT.val){
                         isEntity = true;
                     }
-                    if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val == auditParam.getTypeEnum().val || isEntity){
+                    if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val.byteValue() == auditParam.getTypeEnum().val || isEntity){
                         SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
                         SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
                     }
