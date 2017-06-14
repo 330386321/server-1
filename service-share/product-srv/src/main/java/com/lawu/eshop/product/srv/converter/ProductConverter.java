@@ -258,35 +258,6 @@ public class ProductConverter {
     /**
      * SolrInputDocument
      *
-     * @param productId
-     * @param param
-     * @return
-     */
-    public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam_bak param) {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", productId);
-        document.addField("featureImage_s", param.getFeatureImage());
-        document.setField("name_s", param.getName());
-        document.addField("categoryId_i", param.getCategoryId());
-        document.addField("content_s", param.getContent());
-        document.addField("averageDailySales_d", 0);
-        return document;
-    }
-
-    public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam param) {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", productId);
-        document.addField("featureImage_s", param.getFeatureImage());
-        document.setField("name_s", param.getName());
-        document.addField("categoryId_i", param.getCategoryId());
-        document.addField("content_s", param.getContent());
-        document.addField("averageDailySales_d", 0);
-        return document;
-    }
-
-    /**
-     * SolrInputDocument
-     *
      * @param productDO
      * @return
      */
@@ -296,8 +267,11 @@ public class ProductConverter {
         document.addField("featureImage_s", productDO.getFeatureImage());
         document.setField("name_s", productDO.getName());
         document.addField("categoryId_i", productDO.getCategoryId());
-        document.addField("content_s", productDO.getContent());
         document.addField("averageDailySales_d", productDO.getAverageDailySales() == null ? 0 : productDO.getAverageDailySales().doubleValue());
+        document.addField("originalPrice_d", productDO.getMaxPrice() == null ? 0 : productDO.getMaxPrice().doubleValue());
+        document.addField("price_d", productDO.getMinPrice() == null ? 0 : productDO.getMinPrice().doubleValue());
+        document.addField("inventory_i", productDO.getTotalInventory());
+        document.addField("salesVolume_i", productDO.getTotalSalesVolume());
         return document;
     }
 
@@ -315,13 +289,12 @@ public class ProductConverter {
 
         for (SolrDocument solrDocument : solrDocumentList) {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-            productSearchDTO.setProductId(Long.valueOf(solrDocument.get("id").toString()));
-            productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
-            productSearchDTO.setName(solrDocument.get("name_s").toString());
-            productSearchDTO.setContent(solrDocument.get("content_s").toString());
-            productSearchDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
-            productSearchDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
-            productSearchDTO.setSalesVolume(Integer.valueOf(solrDocument.get("salesVolume_i").toString()));
+            productSearchDTO.setProductId(solrDocument.get("id") == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
+            productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s") == null ? "" : solrDocument.get("featureImage_s").toString());
+            productSearchDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            productSearchDTO.setOriginalPrice(solrDocument.get("originalPrice_d") == null ? 0.0 : Double.valueOf(solrDocument.get("originalPrice_d").toString()));
+            productSearchDTO.setPrice(solrDocument.get("price_d") == null ? 0.0 : Double.valueOf(solrDocument.get("price_d").toString()));
+            productSearchDTO.setSalesVolume(solrDocument.get("salesVolume_i") == null ? 0 : Integer.valueOf(solrDocument.get("salesVolume_i").toString()));
             productSearchDTOS.add(productSearchDTO);
         }
         return productSearchDTOS;
