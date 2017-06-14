@@ -61,15 +61,10 @@ public class AlipayController extends BaseController {
 	@RequestMapping(value = "getAppAlipayReqParams", method = RequestMethod.POST)
 	public Result getAppAlipayReqParams(@RequestBody @Valid ThirdPayDataParam param, BindingResult result) {
 
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		String appId = "";
 		String public_key = "";
@@ -116,15 +111,10 @@ public class AlipayController extends BaseController {
 	@RequestMapping(value = "initPcPay", method = RequestMethod.POST)
 	public Result initPcPay(@RequestBody @Valid PcAlipayDataParam param, BindingResult result) {
 
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		Map<String, String> paramMap = new HashMap<String, String>();
 		paramMap.put("service", "create_direct_pay_by_user");

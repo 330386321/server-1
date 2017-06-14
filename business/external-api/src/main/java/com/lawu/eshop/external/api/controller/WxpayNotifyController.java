@@ -221,7 +221,7 @@ public class WxpayNotifyController extends BaseController {
 		logger.info("#####################PC微信回调开始#####################");
 		HttpServletRequest request = getRequest();
 		HttpServletResponse response = getResponse();
-		Result result = successCreated();
+		Result result;// = successCreated();
 
 		boolean isSendMsg = false;
 		double dmoney = 0;
@@ -327,7 +327,7 @@ public class WxpayNotifyController extends BaseController {
 	private SortedMap<Object, Object> parseWxNotifyData(HttpServletRequest request) throws Exception {
 		// 读取参数
 		InputStream inputStream;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		inputStream = request.getInputStream();
 		String s;
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -338,8 +338,7 @@ public class WxpayNotifyController extends BaseController {
 		inputStream.close();
 
 		// 解析xml成map
-		Map<String, String> m = new HashMap<String, String>();
-		m = XMLUtil.doXMLParse(sb.toString());
+		Map<String, String> m = XMLUtil.doXMLParse(sb.toString());
 
 		// 过滤空 设置 TreeMap
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();

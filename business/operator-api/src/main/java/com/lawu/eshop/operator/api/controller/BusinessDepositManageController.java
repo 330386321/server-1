@@ -52,8 +52,7 @@ public class BusinessDepositManageController extends BaseController {
 	@ApiOperation(value = "保证金明细查询", notes = "保证金明细查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "selectDepositList", method = RequestMethod.POST)
 	@RequiresPermissions("depositcash:list")
-	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryParam param)
-			throws Exception {
+	public Result<Page<BusinessDepositQueryDTO>> selectDepositList(@RequestBody BusinessDepositQueryParam param) {
 		BusinessDepositQueryDataParam dparam = new BusinessDepositQueryDataParam();
 		dparam.setContent(param.getContent());
 		dparam.setRegionPath(param.getRegionPath());

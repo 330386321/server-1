@@ -233,7 +233,6 @@ public class OrderServiceImpl implements OrderService {
 						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
 						.andBizIdEqualTo(Long.valueOf(param.getOrderId()));
 				List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
-				Long freezeId = 0L;
 				if (freezeDOS == null || freezeDOS.isEmpty()) {
 					return ResultCode.FREEZE_NULL;
 				} else if (freezeDOS.size() > 1) {
@@ -243,14 +242,13 @@ public class OrderServiceImpl implements OrderService {
 					if (freeze.getMoney().compareTo(new BigDecimal(param.getRefundMoney())) < 0) {
 						return ResultCode.FREEZE_MONEY_LESS_REFUND_MONEY;
 					}
-					freezeId = freeze.getId();
+					Long freezeId = freeze.getId();
+					FreezeDOView freezeDoView = new FreezeDOView();
+					freezeDoView.setId(freezeId);
+					freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
+					freezeDoView.setGmtModified(new Date());
+					freezeDOMapperExtend.updateMinusMoney(freezeDoView);
 				}
-
-				FreezeDOView freezeDoView = new FreezeDOView();
-				freezeDoView.setId(freezeId);
-				freezeDoView.setMoney(new BigDecimal(param.getRefundMoney()));
-				freezeDoView.setGmtModified(new Date());
-				freezeDOMapperExtend.updateMinusMoney(freezeDoView);
 			}
 		}
 
@@ -343,12 +341,11 @@ public class OrderServiceImpl implements OrderService {
 		Byte[] payWays = param.getPayWays();
 		FreezeDOExample example = new FreezeDOExample();
 		List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
-		List<FreezeDO> freezeDOS = null;
 		for (int i = 0; i < userNums.length; i++) {
 			example.clear();
 			example.createCriteria().andUserNumEqualTo(userNums[i]).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val)
 					.andBizIdEqualTo(Long.valueOf(orderIds[i])).andStatusEqualTo(FreezeStatusEnum.FREEZE.val);
-			freezeDOS = freezeDOMapper.selectByExample(example);
+			List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
 			if (freezeDOS != null && !freezeDOS.isEmpty() && freezeDOS.size() == 1) {
 				FreezeDO freeze = freezeDOS.get(0);
 				Long freezeId = freeze.getId();

@@ -62,7 +62,7 @@ public class AlipayNotify {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        if (isSign && responseTxt.equals("true")) {
+        if (isSign && "true".equals(responseTxt)) {
             return true;
         } else {
             return false;
@@ -72,7 +72,7 @@ public class AlipayNotify {
     public static boolean verifyApp(Map<String, String> params,String alipay_public_key,String sign_type, String input_charset) {
     	//写日志记录（若要调试，请取消下面两行注释）
         String rWord = "返回回来的参数：" + AlipayCore.createLinkString(params);
-    	System.out.println(rWord);
+//    	System.out.println(rWord);
 	    
     	String responseTxt = "true";
 	    String sign = "";
@@ -81,7 +81,7 @@ public class AlipayNotify {
 
         //写日志记录（若要调试，请取消下面两行注释）
         String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
-	    System.out.println(sWord);
+//	    System.out.println(sWord);
 	    try {
 	    	params.put("_responseTxt", responseTxt);
 	  	    params.put("_isSign", String.valueOf(isSign));

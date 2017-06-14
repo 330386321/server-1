@@ -65,7 +65,7 @@ public class RechargeController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestBody @Valid RechargeSaveDataParam param, BindingResult result) throws Exception {
+	public Result save(@RequestBody @Valid RechargeSaveDataParam param, BindingResult result) {
 		String message = validate(result);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);

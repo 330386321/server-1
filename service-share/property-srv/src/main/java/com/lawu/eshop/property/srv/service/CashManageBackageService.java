@@ -31,7 +31,7 @@ public interface CashManageBackageService {
 	 * @param param
 	 * @return
 	 */
-	WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) throws Exception;
+	WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param);
 
 	/**
 	 * 运营平台提现详情

@@ -97,13 +97,12 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductQueryBO> productBOS = new ArrayList<ProductQueryBO>();
 
-        ProductModelDOExample modelExample = null;
         for (ProductDO productDO : productDOS) {
 
             String specJson = "";
             String category = "";
             if (!query.getIsApp()) {
-                modelExample = new ProductModelDOExample();
+            	ProductModelDOExample modelExample = new ProductModelDOExample();
                 modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
                 // 查询商品型号
                 List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
@@ -377,9 +376,9 @@ public class ProductServiceImpl implements ProductService {
         String spec = param.getSpec();
         List<ProductModelBO> speclist = JSON.parseArray(spec, ProductModelBO.class);
         if (!isEdit) {
-            ProductModelDO pmDO = null;
+        	ProductModelDO pmDO;
             for (ProductModelBO dataBO : speclist) {
-                pmDO = new ProductModelDO();
+            	pmDO = new ProductModelDO();
                 pmDO.setMerchantId(param.getMerchantId());
                 pmDO.setProductId(productId);
                 pmDO.setName(dataBO.getName());
@@ -404,8 +403,9 @@ public class ProductServiceImpl implements ProductService {
                 traverseCnt++;
             }
         } else {
+        	ProductModelDOExample modelExample;
             for (ProductModelBO dataBO : speclist) {
-                ProductModelDOExample modelExample = new ProductModelDOExample();
+                modelExample = new ProductModelDOExample();
                 modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
                 ProductModelDO modelDO = new ProductModelDO();
 
@@ -469,8 +469,8 @@ public class ProductServiceImpl implements ProductService {
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
-        productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(new BigDecimal(originalPrice));
+        productDO.setMinPrice(BigDecimal.valueOf(price));
+        productDO.setMaxPrice(BigDecimal.valueOf(originalPrice));
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);
@@ -486,7 +486,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 保存商品滚动图片信息
-        ProductImageDO pcDO = null;
+        ProductImageDO pcDO;
         String imageUrl = param.getProductImages();
         String[] imageUrls = imageUrl.split(",");
         for (int i = 0; i < imageUrls.length; i++) {
@@ -515,7 +515,7 @@ public class ProductServiceImpl implements ProductService {
                 pcDO.setGmtCreate(new Date());
                 pcDO.setGmtModified(new Date());
                 pcDO.setStatus(true);
-                pcDO.setSortid(Integer.valueOf(key.substring(key.lastIndexOf("-") + 1)));
+                pcDO.setSortid(Integer.valueOf(key.substring(key.lastIndexOf('-') + 1)));
                 pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
                 productImageDOMapper.insert(pcDO);
             }
@@ -942,12 +942,9 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductQueryBO> productBOS = new ArrayList<ProductQueryBO>();
 
-        ProductModelDOExample modelExample = null;
         for (ProductDO productDO : productDOS) {
 
-            String specJson = "";
-            String category = "";
-            modelExample = new ProductModelDOExample();
+            ProductModelDOExample  modelExample = new ProductModelDOExample();
             modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
             // 查询商品型号
             List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
@@ -956,8 +953,8 @@ public class ProductServiceImpl implements ProductService {
                 ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
                 ProductModelBOS.add(productModelBO);
             }
-            specJson = JSON.toJSONString(ProductModelBOS);
-            category = productCategoryService.getFullName(productDO.getCategoryId());
+            String specJson = JSON.toJSONString(ProductModelBOS);
+            String category = productCategoryService.getFullName(productDO.getCategoryId());
             ProductQueryBO productBO = ProductConverter.convertQueryBO(productDO);
             productBO.setSpec(specJson);
 

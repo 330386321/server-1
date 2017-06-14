@@ -59,8 +59,7 @@ public class CashManageBackageController extends BaseController {
 	@ApiOperation(value = "商家、用户提现管理", notes = "商家、用户提现明细查询,[]（杨清华）", httpMethod = "POST")
 	@RequestMapping(value = "findCashInfo", method = RequestMethod.POST)
 	@RequiresPermissions("withdraw:list")
-	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryParam param)
-			throws Exception {
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfo(@RequestBody CashBackageQueryParam param) {
 		CashBackageQueryDataParam dparam = new CashBackageQueryDataParam();
 		dparam.setContent(param.getContent());
 		dparam.setRegionPath(param.getRegionPath());

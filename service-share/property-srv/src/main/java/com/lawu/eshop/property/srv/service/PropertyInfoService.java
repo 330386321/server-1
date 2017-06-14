@@ -86,7 +86,7 @@ public interface PropertyInfoService {
      * @param userNum
      * @return
      */
-    PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception;
+    PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum);
 
     /**
      * 新增用户资产信息

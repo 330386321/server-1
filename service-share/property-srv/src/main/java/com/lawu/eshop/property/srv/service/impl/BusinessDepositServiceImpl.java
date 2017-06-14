@@ -218,7 +218,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
 				ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
 				ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
 				ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
 			}else{
 				ddqbo.setBusinessBankAccount("");
@@ -292,7 +292,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		if ("".equals(sysDays)) {
 			sysDays = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
 		}
-		if (diffDays <= Integer.valueOf(sysDays).intValue()) {
+		if (diffDays <= Integer.parseInt(sysDays)) {
 			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
 		}
 

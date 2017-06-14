@@ -55,9 +55,6 @@ public class MemberServiceImpl implements MemberService {
     private MemberProfileDOMapper memberProfileDOMapper;
 
     @Autowired
-    private PasswordStrategy passwordStrategy;
-
-    @Autowired
     @Qualifier("memberRegTransactionMainServiceImpl")
     private TransactionMainService transactionMainService;
 
@@ -392,7 +389,8 @@ public class MemberServiceImpl implements MemberService {
         MemberDO mdo = memberDOMapper.selectByPrimaryKey(id);
         if (mdo == null) {
             return null;
-        } else if (mdo.getRegionPath() == null || mdo.getRegionPath().split("/").length != 3) {
+        } 
+        if (mdo.getRegionPath() == null || mdo.getRegionPath().split("/").length != 3) {
             return null;
         }
         CashUserInfoBO cashUserInfoBO = new CashUserInfoBO();

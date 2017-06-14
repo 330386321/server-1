@@ -121,7 +121,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		transactionDetailDO.setAmount(param.getAmount());
 		transactionDetailDO.setDirection(param.getDirection());
 		transactionDetailDO.setThirdTransactionNum(param.getThirdTransactionNum() == null ? "" : param.getThirdTransactionNum());
-		transactionDetailDO.setBizId(param.getBizId() == null ? "" : param.getBizId().toString());
+		transactionDetailDO.setBizId(param.getBizId() == null ? "" : param.getBizId());
 		transactionDetailDO.setRemark(param.getRemark());
 		transactionDetailDO.setGmtCreate(new Date());
 		transactionDetailDO.setBizNum(param.getBizNum() == null ? "" : param.getBizNum());

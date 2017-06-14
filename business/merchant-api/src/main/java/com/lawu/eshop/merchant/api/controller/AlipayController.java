@@ -139,7 +139,6 @@ public class AlipayController extends BaseController {
 			HttpServletResponse response = getResponse();
 			response.setContentType("text/html;charset=utf-8");
 			PrintWriter out = response.getWriter();
-			logger.info(obj.toString());
 			out.println(obj.toString());
 		} else {
 			logger.error(result.getRet() + "-->" + result.getMsg());

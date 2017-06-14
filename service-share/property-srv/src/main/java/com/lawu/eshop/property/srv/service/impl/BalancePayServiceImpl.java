@@ -168,8 +168,8 @@ public class BalancePayServiceImpl implements BalancePayService {
 		if("".equals(payScale)){
 			
 		}
-		double dPayMoney = new Double(param.getTotalAmount()).doubleValue();
-		double dPayScale = new Double(payScale).doubleValue();
+		double dPayMoney = Double.parseDouble(param.getTotalAmount());
+		double dPayScale = Double.parseDouble(payScale);
 		double point = dPayMoney * dPayScale;
 		
 		//减财产余额
@@ -179,7 +179,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		infoDoView1.setGmtModified(new Date());
 		propertyInfoDOMapperExtend.updatePropertyInfoMinusBalance(infoDoView1);
 		//加财产积分
-		infoDoView1.setPoint(new BigDecimal(point));
+		infoDoView1.setPoint(BigDecimal.valueOf(point));
 		propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(infoDoView1);
 		
 		String num = param.getOrderNum();
@@ -202,7 +202,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		pdsParam.setTitle(param.getTitle());
 		pdsParam.setUserNum(param.getUserNum());
 		pdsParam.setPointType(transactionType);
-		pdsParam.setPoint(new BigDecimal(point));
+		pdsParam.setPoint(BigDecimal.valueOf(point));
 		pdsParam.setBizId(param.getBizIds());
 		pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
 		pdsParam.setRemark("");

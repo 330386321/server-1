@@ -518,7 +518,8 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		List<MerchantStoreDO> stores = merchantStoreDOMapper.selectByExample(example);
 		if (stores == null || stores.isEmpty()) {
 			return null;
-		} else if (stores.get(0).getRegionPath() == null || stores.get(0).getRegionPath().split("/").length != 3) {
+		} 
+		if (stores.get(0).getRegionPath() == null || stores.get(0).getRegionPath().split("/").length != 3) {
 			return null;
 		}
 		CashUserInfoBO bo = new CashUserInfoBO();

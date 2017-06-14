@@ -52,7 +52,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
 		String path = productCategoryeDOS.get(0).getPath();
 		String[] paths = path.split("/");
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		if (paths.length == 1) {
 			return productCategoryeDOS.get(0).getName();
 		} else if (paths.length == 2) {
@@ -116,20 +116,21 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
 	@Override
 	public String getFullCategoryId(Integer id) {
-		String fullCategoryId = "";
 		ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(id);
 		if(productCategoryeDO == null){
-			return fullCategoryId;
+			return "";
 		}
-
+		
+		StringBuilder fullCategoryId = new StringBuilder();
 		while (true){
-			fullCategoryId = fullCategoryId + productCategoryeDO.getId() + ",";
+			fullCategoryId.append(productCategoryeDO.getId()).append(",");
 			productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productCategoryeDO.getParentId());
 			if(productCategoryeDO == null){
-				if(StringUtils.isNotEmpty(fullCategoryId)){
-					fullCategoryId = fullCategoryId.substring(0, fullCategoryId.length() - 1);
+				String fullCategoryIdStr = fullCategoryId.toString();
+				if(StringUtils.isNotEmpty(fullCategoryId.toString())){
+					fullCategoryIdStr = fullCategoryIdStr.substring(0, fullCategoryIdStr.length() - 1);
 				}
-				return fullCategoryId;
+				return fullCategoryIdStr;
 			}
 		}
 	}
