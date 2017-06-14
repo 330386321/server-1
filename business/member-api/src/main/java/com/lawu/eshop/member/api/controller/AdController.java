@@ -249,7 +249,7 @@ public class AdController extends BaseController {
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
 		List<PointPoolDTO> memberIds = member.getModel();
 		List<UserTopDTO> user = new ArrayList<>();
-		if (memberIds != null)
+		if (!memberIds.isEmpty())
 			for (PointPoolDTO pointPoolDTO : memberIds) {
 				UserTopDTO userTop = new UserTopDTO();
 				userTop.setMoney(pointPoolDTO.getPoint());
