@@ -342,16 +342,6 @@ public class AdController extends BaseController {
 
 	}
 
-	@Audit(date = "2017-05-02", reviewer = "孙林青")
-	@Authorization
-	@ApiOperation(value = "今日获得积分", notes = "今日获得积分[]（张荣成）", httpMethod = "GET")
-	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "getClickAdPoint/{id}", method = RequestMethod.GET)
-	public Result<ClickAdPointDTO> getClickAdPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		return adService.getClickAdPoint(memberId, id);
-	}
-
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@Authorization
@@ -470,6 +460,7 @@ public class AdController extends BaseController {
 	public Result<ClickPraiseAdTimesDTO> getClickPraiseAdTimes(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
 		ClickPraiseAdTimesDTO praiseAdTimesDTO=new ClickPraiseAdTimesDTO();
 		praiseAdTimesDTO.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes());
+		praiseAdTimesDTO.setPraiseProb(memberApiConfig.getClickPraiseProb());
 		return successGet(praiseAdTimesDTO);
 	}
 

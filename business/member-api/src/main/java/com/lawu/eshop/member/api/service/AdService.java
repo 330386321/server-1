@@ -116,14 +116,6 @@ public interface AdService {
 	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
 	
-	/**
-	 * 点击广告获取的积分
-	 * @param memberId
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "ad/getClickAdPoint/{id}", method = RequestMethod.GET)
-    public Result<ClickAdPointDTO> getClickAdPoint(@RequestParam("memberId") Long memberId,@PathVariable("id") Long id);
 	
 	/**
 	 * 获取红包相关信息

@@ -20,7 +20,7 @@ public class AdPraiseConfig {
     /**
      * 概率：分子
      */
-	public final static Integer A=5; 
+	public final static Integer A=10; 
     
     /**
      * 概率：分母

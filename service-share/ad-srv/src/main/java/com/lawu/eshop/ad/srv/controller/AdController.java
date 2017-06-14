@@ -153,12 +153,12 @@ public class AdController extends BaseController{
 		if(flag){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
-			Integer i=adService.clickAd(id, memberId,num);
-			ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
+			BigDecimal point=adService.clickAd(id, memberId,num);
+			ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,point);
 	    	ClickAdPointDTO dto=new ClickAdPointDTO();
 	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
 	    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
-			if(i>0){
+			if(point.compareTo(BigDecimal.valueOf(0))==1){
 	     		return successCreated(dto);
 	     	}else{
 	     		return successCreated(ResultCode.AD_CLICK_PUTED);
@@ -346,20 +346,6 @@ public class AdController extends BaseController{
     	return successGet(dto);
     }
 	
-	/**
-	 * 点击广告获取到的积分
-	 * @param memberId
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(value = "getClickAdPoint/{id}", method = RequestMethod.GET)
-    public Result<ClickAdPointDTO> getClickAdPoint(@RequestParam  Long  memberId,@PathVariable Long id) {
-		ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,id);
-    	ClickAdPointDTO dto=new ClickAdPointDTO();
-    	dto.setAddPoint(clickAdPointBO.getAddPoint());
-    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
-    	return successGet(dto);
-    }
 	
 	/**
 	 * 获取所有的广告ids

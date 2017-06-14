@@ -111,7 +111,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    Integer clickAd(Long id, Long memberId, String num);
+    BigDecimal clickAd(Long id, Long memberId, String num);
 
 
 
@@ -161,7 +161,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    ClickAdPointBO getClickAdPoint(Long memberId, Long adId);
+    ClickAdPointBO getClickAdPoint(Long memberId, BigDecimal point);
 
     /**
      * 获取广告
