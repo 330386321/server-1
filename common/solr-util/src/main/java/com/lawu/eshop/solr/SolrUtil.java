@@ -35,6 +35,9 @@ public class SolrUtil {
      */
     private static HttpSolrClient getSolrClient(String solrUrl, String solrCore) {
         HttpSolrClient solrClient = new HttpSolrClient(solrUrl + solrCore);
+        solrClient.setConnectionTimeout(5000);
+        solrClient.setDefaultMaxConnectionsPerHost(1000);
+        solrClient.setMaxTotalConnections(1000);
         return solrClient;
     }
 

@@ -41,8 +41,7 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProductByCategoryId", method = RequestMethod.POST)
     public Result<Page<ProductSearchDTO>> listProductByCategoryId(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-        query.setFilterQueries("categoryId_i:" + param.getCategoryId());
+        query.setQuery("categoryId_i:" + param.getCategoryId());
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
@@ -67,8 +66,8 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listRecommendProduct", method = RequestMethod.POST)
     public Result<Page<ProductSearchDTO>> listRecommendProduct(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-        query.setFilterQueries("categoryId_i:" + param.getCategoryId() + " AND -id:" + param.getProductId());
+        query.setQuery("categoryId_i:" + param.getCategoryId());
+        query.addFilterQuery("-id:" + param.getProductId());
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
@@ -118,8 +117,7 @@ public class ProductSolrController extends BaseController {
     @RequestMapping(value = "listProductByName", method = RequestMethod.POST)
     public Result<Page<ProductSearchDTO>> listProductByName(@RequestBody ProductSearchRealParam param) {
         SolrQuery query = new SolrQuery();
-        query.setQuery("*:*");
-        query.setFilterQueries("name_s:*" + param.getName() + "*");
+        query.setQuery("name_s:*" + param.getName() + "*");
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
