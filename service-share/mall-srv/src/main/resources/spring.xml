@@ -51,7 +51,7 @@
         
         <property name="topicsTags">
             <map>
-                <entry key="order_srv" value="to_be_return_remind || fill_return_address_remind || refuse_refund_remind || to_be_refund_remind || to_be_return_remind || to_be_confirmed_for_refund_remind || order_no_payment_push_to_member || remind_shipments || orders_trading_income_notice" />
+                <entry key="order_srv" value="to_be_return_remind || fill_return_address_remind || refuse_refund_remind || to_be_refund_remind || to_be_return_remind || to_be_confirmed_for_refund_remind || order_no_payment_push_to_member || remind_shipments || orders_trading_income_notice || payment_successful_push" />
             </map>
         </property>
         
