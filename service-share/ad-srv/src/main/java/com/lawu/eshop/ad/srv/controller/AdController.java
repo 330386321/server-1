@@ -291,25 +291,25 @@ public class AdController extends BaseController{
             query.setParam("sfield", "latLon_p");
             query.setParam("fl", "*,distance:geodist(latLon_p," + latLon + ")");
     	}
-        query.setSort("status_s", SolrQuery.ORDER.desc);
+        query.setSort("status_i", SolrQuery.ORDER.desc);
         List<Long> merchantIds=adSolrParam.getMerchantIds();
         String str="";
         if(merchantIds.size()>0){
         	for (Long id : merchantIds) {
-    			str+="merchantId_s:"+id +" or ";
+    			str+="merchantId_l:"+id +" or ";
     		}
         	str=str.substring(0,str.length()-3);
         }
         if(adSolrParam.getRegionPath()!=null){
         	String[] path=adSolrParam.getRegionPath().split("/");
         	if(str!=""){
-        		query.setParam(""+str+" or ('area_ss:"+path[0]+"') or ('area_ss:"+path[1]+"') or ('area_ss:"+path[2]+"')");
+        		query.setParam(""+str+" or ('area_is:"+path[0]+"') or ('area_is:"+path[1]+"') or ('area_is:"+path[2]+"')");
         	}else{
-        		query.setParam("area_ss:"+path[0] +" or "+ "area_ss:"+path[1] +" or "+ "area_ss:"+path[2]);
+        		query.setParam("area_is:"+path[0] +" or "+ "area_is:"+path[1] +" or "+ "area_is:"+path[2]);
         	}
         	 
         }else{
-        	query.setParam(""+str+" or ('area_ss:"+0+"') ");
+        	query.setParam(""+str+" or ('area_is:"+0+"') ");
         }
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());

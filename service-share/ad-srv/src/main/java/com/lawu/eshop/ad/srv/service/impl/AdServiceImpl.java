@@ -547,17 +547,20 @@ public class AdServiceImpl implements AdService {
 		AdDOExample example=new AdDOExample();
 		example.createCriteria().andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
 		List<AdDO> listADD=adDOMapper.selectByExample(example);
-		if(!listADD.isEmpty())
+		if(!listADD.isEmpty()) {
+			Collection<SolrInputDocument> documents = new ArrayList<>();
 			for (AdDO adDO : listADD) {
-				Date date=new Date();
-				if(adDO.getBeginTime().getTime()<=date.getTime()){
+				Date date = new Date();
+				if (adDO.getBeginTime().getTime() <= date.getTime()) {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-				    SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-				    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+					SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
+					documents.add(document);
 				}
 			}
+			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		}
 	}
 	
 	

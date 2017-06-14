@@ -223,24 +223,22 @@ public class AdConverter {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
-        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("merchantId_l", adDO.getMerchantId());
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
-        document.addField("status_s", adDO.getStatus());
+        document.addField("status_i", adDO.getStatus());
         document.addField("count_i", adDO.getViewcount());
+		document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
-        if(adDO.getRadius() != null){
-			document.addField("radius_i", adDO.getRadius());
-		}
         if(adDO.getPutWay() == 1){
         	if(StringUtils.isNotEmpty(adDO.getAreas())){
         		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
-            		document.addField("area_ss", area);
+            		document.addField("area_is", area);
     			}
         	}else{
-        		document.addField("area_ss", 0);
+        		document.addField("area_is", 0);
         	}
         }
         return document;
@@ -259,12 +257,12 @@ public class AdConverter {
         }
         for (SolrDocument solrDocument : solrDocumentList) {
     		AdSolrDTO adSolrDTO = new AdSolrDTO();
-        	adSolrDTO.setId(Long.valueOf(solrDocument.get("id").toString()));
-        	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
-        	adSolrDTO.setTitle(solrDocument.get("title_s").toString());
-        	adSolrDTO.setContent(solrDocument.get("content_s").toString());
-        	adSolrDTO.setCount(Integer.valueOf(solrDocument.get("count_i").toString()));
-        	int type=(int)solrDocument.get("type_i");
+        	adSolrDTO.setId(solrDocument.get("id") == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
+        	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s") == null ? "" : solrDocument.get("mediaUrl_s").toString());
+        	adSolrDTO.setTitle(solrDocument.get("title_s") == null ? "" : solrDocument.get("title_s").toString());
+        	adSolrDTO.setContent(solrDocument.get("content_s") == null ? "" : solrDocument.get("content_s").toString());
+        	adSolrDTO.setCount(solrDocument.get("count_i") == null ? 0 : Integer.valueOf(solrDocument.get("count_i").toString()));
+        	int type=solrDocument.get("type_i") == null ? 0 : Integer.valueOf(solrDocument.get("type_i").toString());
         	if(type==1){
         		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);	
         	}else{
@@ -303,11 +301,11 @@ public class AdConverter {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
-        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("merchantId_l", adDO.getMerchantId());
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
-        document.addField("status_s", "3");
+        document.addField("status_i", "3");
         document.addField("count_i", adDO.getViewcount());
         document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
@@ -315,10 +313,10 @@ public class AdConverter {
         	if(adDO.getAreas()!=null){
         		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
-            		document.addField("area_ss", area);
+            		document.addField("area_is", area);
     			}
         	}else{
-        		document.addField("area_ss", 0);
+        		document.addField("area_is", 0);
         	}
         }
         return document;
