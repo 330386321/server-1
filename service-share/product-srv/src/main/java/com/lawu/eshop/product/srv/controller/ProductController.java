@@ -137,17 +137,12 @@ public class ProductController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "saveProduct_bak", method = RequestMethod.POST)
-    public Result saveProduct_bak(@RequestBody @Valid EditProductDataParam_bak product,
-                                  BindingResult result) {
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            StringBuffer es = new StringBuffer();
-            for (FieldError e : errors) {
-                String msg = e.getDefaultMessage();
-                es.append(msg);
-            }
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-        }
+    public Result saveProduct_bak(@RequestBody @Valid EditProductDataParam_bak product, BindingResult result) {
+    	String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
         productService.eidtProduct_bak(product);
         return successCreated(ResultCode.SUCCESS);
     }
@@ -162,15 +157,11 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
     public Result saveProduct(@RequestBody @Valid EditProductDataParam product,
                               BindingResult result) {
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            StringBuffer es = new StringBuffer();
-            for (FieldError e : errors) {
-                String msg = e.getDefaultMessage();
-                es.append(msg);
-            }
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-        }
+    	String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
         productService.eidtProduct(product);
         return successCreated(ResultCode.SUCCESS);
     }

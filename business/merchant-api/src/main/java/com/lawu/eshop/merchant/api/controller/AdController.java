@@ -103,12 +103,12 @@ public class AdController extends BaseController {
     	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
-            	mediaUrl = retMap.get("imgUrl").toString();
+            	mediaUrl = retMap.get("imgUrl");
             }
     	}else if(adParam.getTypeEnum().val==2){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
-            	mediaUrl = retMap.get("videoUrl").toString();
+            	mediaUrl = retMap.get("videoUrl");
             	//截取视频图片
             	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
             	

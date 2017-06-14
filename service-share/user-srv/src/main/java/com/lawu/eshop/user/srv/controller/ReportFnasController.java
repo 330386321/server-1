@@ -40,15 +40,11 @@ public class ReportFnasController extends BaseController {
 	@RequestMapping(value = "fansRiseRate", method = RequestMethod.POST)
 	public Result<ReportRiseRateDTO> fansRiseRate(@RequestBody @Valid ReportDataParam dparam,
 			BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		ReportRiseRateDTO dto = reportFansService.fansRiseRate(dparam);
 		return successCreated(dto);
 	}
@@ -64,15 +60,11 @@ public class ReportFnasController extends BaseController {
 	@RequestMapping(value = "fansRiseSource", method = RequestMethod.POST)
 	public Result<List<ReportRiseRerouceDTO>> fansRiseSource(@RequestBody @Valid ReportDataParam dparam,
 			BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		List<ReportRiseRerouceDTO> dtos = reportFansService.fansRiseSource(dparam);
 		return successCreated(dtos);
 	}

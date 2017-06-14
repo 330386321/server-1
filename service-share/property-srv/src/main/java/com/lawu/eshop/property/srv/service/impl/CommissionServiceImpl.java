@@ -71,7 +71,7 @@ public class CommissionServiceImpl implements CommissionService {
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
-		double d_love_account_scale = Double.valueOf(love_account_scale).doubleValue();
+		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 
 		BigDecimal clickMoney = new BigDecimal(param.getPoint()); // 广告点击实际所得
@@ -142,7 +142,7 @@ public class CommissionServiceImpl implements CommissionService {
 						.andTransactionTypeEqualTo(param.getTypeVal());
 				List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
 				logger.info("isLast dos={},size={}",dos,dos.size());
-				if (dos != null && dos.size() > 0) {
+				if (!dos.isEmpty()) {
 					logger.info("isLast已计算过提成，重复计算，直接返回！");
 					return ResultCode.SUCCESS;
 				}
@@ -176,7 +176,7 @@ public class CommissionServiceImpl implements CommissionService {
 						.andPointTypeEqualTo(param.getTypeVal());
 				List<PointDetailDO> dos = pointDetailDOMapper.selectByExample(example);
 				logger.info("isLast dos={},size={}",dos,dos.size());
-				if (dos != null && dos.size() > 0) {
+				if (!dos.isEmpty()) {
 					logger.info("isLast已计算过提成，重复计算，直接返回！");
 					return ResultCode.SUCCESS;
 				}
@@ -211,7 +211,7 @@ public class CommissionServiceImpl implements CommissionService {
 					.andTransactionTypeEqualTo(param.getTypeVal());
 			List<TransactionDetailDO> dos = transactionDetailDOMapper.selectByExample(example);
 			logger.info("isLast dos={},size={}",dos,dos.size());
-			if (dos != null && dos.size() > 0) {
+			if (!dos.isEmpty()) {
 				logger.info("已计算过提成，重复计算，直接返回！");
 				return ResultCode.SUCCESS;
 			}

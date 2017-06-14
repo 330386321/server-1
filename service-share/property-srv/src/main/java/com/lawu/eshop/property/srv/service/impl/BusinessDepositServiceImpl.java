@@ -274,7 +274,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
 		infoExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
 		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
-		if (infoList == null || infoList.isEmpty() || infoList.size() < 1) {
+		if (infoList == null || infoList.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
 		} else if (infoList.size() > 1) {
 			return ResultCode.PROPERTY_INFO_OUT_INDEX;

@@ -119,7 +119,7 @@ public class PayOrderController extends BaseController {
 	 * @author yangqh
 	 */
 	@RequestMapping(value = "selectNotCommissionOrder", method = RequestMethod.GET)
-	public Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder() throws Exception {
+	public Result<List<ShoppingOrderCommissionDTO>> selectNotCommissionOrder() {
 		List<ShoppingOrderCommissionDTO> dtos = payOrderService.selectNotCommissionOrder();
 		return successCreated(dtos);
 	}

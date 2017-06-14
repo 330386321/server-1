@@ -99,7 +99,7 @@ public class AlipayController extends BaseController {
 			AlipayTradeAppPayResponse response = alipayClient.sdkExecute(request);
 			msg = response.getBody();// 可以直接给客户端请求，无需再做处理。
 		} catch (AlipayApiException e) {
-			logger.error("支付宝支付封装参数错误，错误信息：{}", e.getMessage());
+			logger.error("支付宝支付封装参数错误，错误信息：{}", e.getMessage(),e);
 			return successCreated(ResultCode.FAIL);
 		}
 		System.out.println("------------->" + msg);

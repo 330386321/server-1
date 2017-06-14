@@ -16,14 +16,12 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 
@@ -74,15 +72,11 @@ public class BusinessDepositManageController extends BaseController {
 	@RequiresPermissions("depositcash:edit")
 	@RequestMapping(value = "updateBusinessDeposit", method = RequestMethod.POST)
 	public Result updateBusinessDeposit(@Valid BusinessDepositOperParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		BusinessDepositOperDataParam dparam = new BusinessDepositOperDataParam();
 		dparam.setId(param.getId());
 		dparam.setBusinessDepositOperEnum(param.getBusinessDepositOperEnum());

@@ -162,15 +162,11 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "comfirmSysJob", method = RequestMethod.POST)
 	public Result comfirmSysJob(@RequestBody @Valid OrderSysJobParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		int retCode = orderService.comfirmSysJob(param);
 		return successCreated(retCode);
 	}

@@ -1,6 +1,5 @@
 package com.lawu.eshop.operator.api.controller;
 
-import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -23,7 +22,6 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -101,15 +99,11 @@ public class CashManageBackageController extends BaseController {
 	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
 	@RequiresPermissions("withdraw:edit")
 	public Result updateWithdrawCash(@Valid CashBackageOperParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		CashBackageOperDataParam dparam = new CashBackageOperDataParam();
 		dparam.setId(param.getId());
 		dparam.setUserNum(param.getUserNum());

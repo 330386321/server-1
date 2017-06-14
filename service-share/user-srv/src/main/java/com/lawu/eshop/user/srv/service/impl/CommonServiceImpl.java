@@ -90,7 +90,7 @@ public class CommonServiceImpl implements CommonService {
 					MemberDOExample memberExample = new MemberDOExample();
 					memberExample.createCriteria().andNumEqualTo(irdo.getUserNum());
 					List<MemberDO> members = memberDOMapper.selectByExample(memberExample);
-					if(members != null && !members.isEmpty() && members.size() > 0){
+					if(members != null && !members.isEmpty()){
 						user.setLevel(members.get(0).getLevel());
 					}
 				} else if (irdo.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)) {

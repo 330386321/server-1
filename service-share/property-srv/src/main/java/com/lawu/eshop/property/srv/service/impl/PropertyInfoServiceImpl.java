@@ -155,7 +155,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		}
 		
 		//校验资金是否冻结
-		if(PropertyinfoFreezeEnum.YES.val.equals(propertyInfoDOS.get(0).getFreeze())){
+		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
 			return ResultCode.PROPERTYINFO_FREEZE_YES;
 		}
 		
@@ -279,7 +279,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
 		PropertyInfoDO pdo = new PropertyInfoDO();
-		pdo.setFreeze(freeze.val);
+		pdo.setFreeze(freeze.getVal());
 		pdo.setGmtModified(new Date());
 		propertyInfoDOMapper.updateByExampleSelective(pdo, example);
 		return ResultCode.SUCCESS;

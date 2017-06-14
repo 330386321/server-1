@@ -112,20 +112,20 @@ public class ProductController extends BaseController {
 		HttpServletRequest request = getRequest();
 		Long productId = product.getProductId();
 		if ((productId == null || productId == 0L || productId < 0)
-				&& (request.getParts() == null || request.getParts().isEmpty() || request.getParts().size() < 1)) {
+				&& (request.getParts() == null || request.getParts().isEmpty())) {
 			return successCreated(ResultCode.IMAGE_IS_NULL);
 		}
 
 		String imageContents = product.getImageContents();
 		imageContents = URLDecoder.decode(imageContents);
 		List<Object> imageContentsList = JSONArray.parseArray(imageContents, Object.class);
-		if (imageContentsList == null || imageContentsList.isEmpty() || imageContentsList.size() < 1) {
+		if (imageContentsList == null || imageContentsList.isEmpty()) {
 			return successCreated(ResultCode.FAIL, "商品详情图片描述不能为空");
 		}
 		int imageContentsSize = imageContentsList.size();
 
-		StringBuffer featureImageStr = new StringBuffer();
-		StringBuffer productImageStr = new StringBuffer();
+		StringBuilder featureImageStr = new StringBuilder();
+		StringBuilder productImageStr = new StringBuilder();
 		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
 		Collection<Part> parts;
 		try {
@@ -165,7 +165,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("上传商品图片异常，失败(productId={})", productId);
+			logger.error("上传商品图片异常，失败(productId={})", productId,e);
 			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
 		}
 
@@ -207,7 +207,7 @@ public class ProductController extends BaseController {
 					String key = itr.next().toString();
 					Object obj = retMap.get(key);
 					List<String> backList = (List<String>) obj;
-					if (backList != null && !backList.isEmpty() && backList.size() > 0) {
+					if (backList != null && !backList.isEmpty()) {
 						List<String> eList = detailImageMap.get(key);
 						for (int i = 0; i < backList.size(); i++) {
 							eList.add(i, backList.get(i));
@@ -247,16 +247,16 @@ public class ProductController extends BaseController {
 		HttpServletRequest request = getRequest();
 		Long productId = product.getProductId();
 		if ((productId == null || productId == 0L || productId < 0)
-				&& (request.getParts() == null || request.getParts().isEmpty() || request.getParts().size() < 1)) {
+				&& (request.getParts() == null || request.getParts().isEmpty())) {
 			return successCreated(ResultCode.IMAGE_IS_NULL);
 		}
 
 		String imageContents = product.getImageContents();
 		imageContents = URLDecoder.decode (imageContents);
 
-		StringBuffer featureImageStr = new StringBuffer();
-		StringBuffer productImageStr = new StringBuffer();
-		StringBuffer productDetailImageStr = new StringBuffer();
+		StringBuilder featureImageStr = new StringBuilder();
+		StringBuilder productImageStr = new StringBuilder();
+		StringBuilder productDetailImageStr = new StringBuilder();
 		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
 		Collection<Part> parts = null;
 		try {
@@ -289,10 +289,10 @@ public class ProductController extends BaseController {
 				}
 			}
 		} catch (IOException e) {
-			logger.error("上传商品图片异常，失败(productId={})", productId);
+			logger.error("上传商品图片异常，失败(productId={})", productId,e);
 			return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
 		} catch (ServletException ex) {
-            logger.info("Servlet异常，没有提交图片文件");
+            logger.info("Servlet异常，没有提交图片文件",ex);
         }
 //		
 		String featureImage = featureImageStr.toString();
@@ -397,7 +397,7 @@ public class ProductController extends BaseController {
 			backDetailImagesList.addAll(detailImagesList);
 		}
 		
-		StringBuffer nimages = new StringBuffer();
+		StringBuilder nimages = new StringBuilder();
 		for (String image : backDetailImagesList) {
 			nimages.append(image).append(",");
 		}

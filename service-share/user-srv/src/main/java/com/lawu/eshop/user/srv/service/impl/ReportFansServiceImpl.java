@@ -55,21 +55,21 @@ public class ReportFansServiceImpl implements ReportFansService {
 		}
 		int total = 0;
 		for (FansMerchantDOReportView view : list) {
-			int t = Integer.valueOf(view.getNum()).intValue();
+			int t = Integer.parseInt(view.getNum());
 			total = total + t;
 		}
 		Double todayDouble = Double.valueOf(total);
 		List<ReportRiseRerouceDTO> dtos = new ArrayList<ReportRiseRerouceDTO>();
 		for (FansMerchantDOReportView view : list) {
 			ReportRiseRerouceDTO dto = new ReportRiseRerouceDTO();
-			int num = Integer.valueOf(view.getNum()).intValue();
+			int num = Integer.parseInt(view.getNum());
 			Double numDouble = Double.valueOf(num);
 			float p = (float) ((float) (numDouble / todayDouble) * 100);
 			DecimalFormat df = new DecimalFormat("0.00");
 			String ps = df.format(p) + "%";
 
 			dto.setName(ps + FansMerchantChannelEnum
-					.getEnum(StringUtil.intToByte(Integer.valueOf(view.getKeyTxt()).intValue())).getName());
+					.getEnum(StringUtil.intToByte(Integer.parseInt(view.getKeyTxt()))).getName());
 			dto.setValue(view.getNum());
 			dtos.add(dto);
 		}

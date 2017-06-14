@@ -63,15 +63,10 @@ public class WxPayController extends BaseController {
 	public Result getPrepayInfo(@RequestBody @Valid ThirdPayDataParam param, BindingResult result)
 			throws JDOMException, IOException {
 
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		String key = propertySrvConfig.getWxpayKeyApp();
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
@@ -93,7 +88,7 @@ public class WxPayController extends BaseController {
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
 		packageParams.put("out_trade_no", param.getOutTradeNo());
-		Float fTotalAmount = Float.valueOf(param.getTotalAmount());
+		double fTotalAmount = Double.parseDouble(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
 		packageParams.put("total_fee", iTotalAmount + "");
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());

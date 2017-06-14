@@ -49,7 +49,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 		List<MemberAdRecodeCommissionDTO> ads = adService.getNoneCommissionAds();
 
 		// 获取提成比例
-		if (ads != null && ads.size() > 0) {
+		if (ads != null && !ads.isEmpty()) {
 
 			Map<String, BigDecimal> property = commonPropertyService.getAdCommissionPropertys();
 			BigDecimal loveAccountScale = property.get("love_account_scale");// 爱心账户比例

@@ -69,7 +69,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
 		double dCashMoney = new Double(cash.getCashMoney()).doubleValue();
-		if (dCashMoney < Double.valueOf(minMoney).doubleValue()) {
+		if (dCashMoney < Double.parseDouble(minMoney)) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
 		}
 		
@@ -96,7 +96,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			if ("".equals(minusMoney)) {
 				minusMoney = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
 			}
-			dCashMoney = dCashMoney - Double.valueOf(minusMoney).doubleValue();
+			dCashMoney = dCashMoney - Double.parseDouble(minusMoney);
 			withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
 		}
 

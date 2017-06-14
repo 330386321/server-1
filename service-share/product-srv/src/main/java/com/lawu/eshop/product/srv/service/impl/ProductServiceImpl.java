@@ -689,7 +689,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
         productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(new BigDecimal(mprice));
+        productDO.setMaxPrice(BigDecimal.valueOf(mprice));
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);

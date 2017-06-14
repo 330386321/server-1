@@ -56,7 +56,7 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
-		double d_love_account_scale = Double.valueOf(love_account_scale).doubleValue();
+		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 
 		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();
@@ -99,7 +99,7 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
-		double d_love_account_scale = Double.valueOf(love_account_scale).doubleValue();
+		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 
 		Map<String, BigDecimal> map = new HashMap<String, BigDecimal>();

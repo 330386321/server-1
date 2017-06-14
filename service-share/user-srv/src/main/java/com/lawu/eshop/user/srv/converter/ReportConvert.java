@@ -21,7 +21,7 @@ public class ReportConvert {
 			boolean f = true;
 			int j = i + 1;
 			for (FansMerchantDOReportView view : list) {
-				int num = Integer.valueOf(view.getKeyTxt()).intValue();
+				int num = Integer.parseInt(view.getKeyTxt());
 				if (num == j) {
 					f = false;
 					break;
@@ -29,7 +29,7 @@ public class ReportConvert {
 			}
 			if (f) {
 				FansMerchantDOReportView view = new FansMerchantDOReportView();
-				view.setKeyTxt(j + "");
+				view.setKeyTxt(Integer.valueOf(j).toString());
 				view.setNum("0");
 				list.add(i, view);
 			}
