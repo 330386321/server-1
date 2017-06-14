@@ -159,7 +159,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			}
 			
 			// 判断库存
-			if (productDO.getTotalInventory() <= param.getQuantity()) {
+			if (productDO.getTotalInventory() < param.getQuantity()) {
 				return ResultCode.INVENTORY_SHORTAGE;
 			}
 			
