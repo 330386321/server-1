@@ -429,4 +429,20 @@ public class MerchantStoreConverter {
         
         return rtn;
     }
+
+    public static List<StoreSolrInfoDTO> coverStoreSolrDTOS(List<StoreSolrInfoBO> bos) {
+        if (bos.isEmpty()) {
+            return null;
+        }
+        List<StoreSolrInfoDTO> list = new ArrayList<StoreSolrInfoDTO>();
+        for (StoreSolrInfoBO storeSolrInfoBO : bos) {
+            StoreSolrInfoDTO storeSolrInfoDTO = new StoreSolrInfoDTO();
+            storeSolrInfoDTO.setMerchantId(storeSolrInfoBO.getMerchantId());
+            storeSolrInfoDTO.setMerchantStoreId(storeSolrInfoBO.getMerchantStoreId());
+            storeSolrInfoDTO.setIndustryPath(storeSolrInfoBO.getIndustryPath());
+            storeSolrInfoDTO.setIndustryName(storeSolrInfoBO.getIndustryName());
+            list.add(storeSolrInfoDTO);
+        }
+        return list;
+    }
 }

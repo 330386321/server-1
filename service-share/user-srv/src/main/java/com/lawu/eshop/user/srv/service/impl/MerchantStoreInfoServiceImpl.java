@@ -12,6 +12,7 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
@@ -647,6 +648,24 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			storeInfoBOS.add(merchantStoreInfoBO);
 		}
 		return storeInfoBOS;
+	}
+
+	@Override
+	public List<StoreSolrInfoBO> getMerchantStoreByIds(List<Long> merchantStoreIds) {
+		List<StoreSolrInfoDOView> viewList = merchantStoreDOMapperExtend.getMerchantStoreByIds(merchantStoreIds);
+		if(viewList.isEmpty()){
+			return null;
+		}
+		List<StoreSolrInfoBO> storeSolrInfoBOS = new ArrayList<StoreSolrInfoBO>();
+		for(StoreSolrInfoDOView storeInfoView :viewList){
+			StoreSolrInfoBO merchantStoreInfoBO = new StoreSolrInfoBO();
+			merchantStoreInfoBO.setMerchantId(storeInfoView.getMerchantId());
+			merchantStoreInfoBO.setMerchantStoreId(storeInfoView.getMerchantStoreId());
+			merchantStoreInfoBO.setIndustryPath(storeInfoView.getIndustryPath());
+			merchantStoreInfoBO.setIndustryName(storeInfoView.getIndustryName());
+			storeSolrInfoBOS.add(merchantStoreInfoBO);
+		}
+		return storeSolrInfoBOS;
 	}
 
 }

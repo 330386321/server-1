@@ -106,4 +106,6 @@ public interface MerchantStoreInfoService {
     ShoppingStoreDetailBO getShoppingStoreDetailById(Long id, Long memberId);
 
     List<PayOrderStoreInfoBO> getPayOrderStoreInfo(List<Long> merchantIds);
+
+    List<StoreSolrInfoBO> getMerchantStoreByIds(List<Long> merchantStoreIds);
 }

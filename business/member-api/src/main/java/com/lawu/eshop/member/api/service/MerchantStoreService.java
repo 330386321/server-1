@@ -8,6 +8,7 @@ import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -125,4 +126,7 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getPayOrderStoreInfo")
     Result<List<PayOrderStoreInfoDTO>> getPayOrderStoreInfo(@RequestParam("merchantIds") List<Long> merchantIds);
+
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getMerchantStoreByIds")
+    Result<List<StoreSolrInfoDTO>> getMerchantStoreByIds(@RequestParam("merchantStoreIds") List<Long> merchantStoreIds);
 }

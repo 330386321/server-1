@@ -62,4 +62,18 @@
         </foreach>
     </select>
 
+    <select id="getMerchantStoreByIds" resultType="com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView">
+        SELECT
+        id as merchantStoreId,
+        merchant_id as merchantId,
+        industry_path as industryPath,
+        industry_name as industryName
+        FROM
+        merchant_store
+        where id in
+        <foreach collection="list" item="merchantStoreId" open="(" close=")" separator=",">
+            #{merchantStoreId}
+        </foreach>
+    </select>
+
 </mapper>

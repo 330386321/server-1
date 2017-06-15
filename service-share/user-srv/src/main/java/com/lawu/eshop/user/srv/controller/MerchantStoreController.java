@@ -485,4 +485,22 @@ public class MerchantStoreController extends BaseController {
 		return successGet(list);
 	}
 
+	/**
+	 * 要买单人气推荐门店信息
+	 * @param merchantStoreIds
+	 * @return
+	 * @author zhangyong
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "getMerchantStoreByIds")
+	public Result<List<StoreSolrInfoDTO>> getMerchantStoreByIds(@RequestParam("merchantStoreIds") List<Long> merchantStoreIds) {
+
+		List<StoreSolrInfoBO> bos = merchantStoreInfoService.getMerchantStoreByIds(merchantStoreIds);
+		if (bos == null) {
+			return successGet(new ArrayList<StoreSolrInfoDTO>());
+		}
+		List<StoreSolrInfoDTO> storeSolrInfoDTOS = MerchantStoreConverter.coverStoreSolrDTOS(bos);
+
+		return successGet(storeSolrInfoDTOS);
+	}
+
 }
