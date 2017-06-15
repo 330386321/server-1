@@ -1,5 +1,9 @@
 package com.lawu.eshop.user.srv.mapper.extend;
 
+import java.util.List;
+
+import com.lawu.eshop.user.srv.domain.extend.MemberDOView;
+
 /**
  * @author zhangyong
  * @date 2017/6/5.
@@ -7,5 +11,7 @@ package com.lawu.eshop.user.srv.mapper.extend;
 public interface MemberDOMapperExtend {
 
     int delUserGtPush(Long memberId);
+    
+    List<MemberDOView> getMemberByIds(List<Long> memberIds);
 
 }

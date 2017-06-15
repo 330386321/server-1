@@ -6,6 +6,9 @@ import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
+
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -166,5 +169,13 @@ public interface MemberService {
 
     @RequestMapping(value = "member/delUserGtPush", method = RequestMethod.PUT)
     Result delUserGtPush(@RequestParam("memberId") Long memberId);
+    
+    /**
+     * 广告top3排行榜
+     * @param memberIds
+     * @return
+     */
+    @RequestMapping(value = "member/getMemberByIds", method = RequestMethod.GET)
+   	Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
 
 }

@@ -11,6 +11,7 @@ import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
@@ -353,5 +354,20 @@ public class MemberController extends BaseController {
         memberService.delUserGtPush(memberId);
         return successCreated();
     }
+    
+    @RequestMapping(value = "getMemberByIds", method = RequestMethod.GET)
+	public Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds) {
+    	 List<MemberBO>  list=memberService.getMemberByIds(memberIds);
+    	 List<MemberDTO> dtoList=new ArrayList<>();
+    	 for (MemberBO memberBO : list) {
+    		 MemberDTO dto=new MemberDTO();
+    		 dto.setId(memberBO.getId());
+    		 dto.setHeadimg(memberBO.getHeadimg());
+    		 dto.setMobile(memberBO.getMobile());
+    		 dto.setRegionPath(memberBO.getRegionPath());
+    		 dtoList.add(dto);
+		}
+		return successGet(dtoList);
+	}
 
 }
