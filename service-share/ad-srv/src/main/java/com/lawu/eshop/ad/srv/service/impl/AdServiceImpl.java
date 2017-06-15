@@ -441,7 +441,7 @@ public class AdServiceImpl implements AdService {
 					                   .andStatusEqualTo(new Byte("1")).andMemberIdEqualTo(memberId);
 			Long number=pointPoolDOMapper.countByExample(ppexample2);
 			if(number>0){
-				isPraise=true;
+				isPraise=true; 
 			}
 		}
 		adBO.setIsPraise(isPraise);

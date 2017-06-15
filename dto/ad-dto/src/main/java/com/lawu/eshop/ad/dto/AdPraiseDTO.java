@@ -54,6 +54,9 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "商家id")
 	private Long merchantId;
 	
+	@ApiModelProperty(value = "是否扣除积分")
+	private Boolean isDoHanlderMinusPoint;
+	
 
 	public Integer getCount() {
 		return count;
@@ -173,6 +176,14 @@ public class AdPraiseDTO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Boolean getIsDoHanlderMinusPoint() {
+		return isDoHanlderMinusPoint;
+	}
+
+	public void setIsDoHanlderMinusPoint(Boolean isDoHanlderMinusPoint) {
+		this.isDoHanlderMinusPoint = isDoHanlderMinusPoint;
 	}
 
 	

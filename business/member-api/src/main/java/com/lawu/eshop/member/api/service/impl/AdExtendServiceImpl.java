@@ -45,6 +45,9 @@ import com.lawu.eshop.member.api.service.FavoriteAdService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.PropertyInfoDataService;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.dto.MerchantProfileDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
@@ -74,6 +77,9 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     
     @Autowired
     private FavoriteAdService favoriteAdService;
+    
+    @Autowired
+    private PropertyInfoDataService propertyInfoDataService;
     
     private BlockingQueue<Runnable> queue = new LinkedBlockingQueue<Runnable>(); 
     
@@ -175,7 +181,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
          		if(isSuccess(manageType)){
          			if(manageType.getModel()!=null){
          				adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-         			}
+         			} 
          		}
          		Date date=new Date();
          		Long time=adDTO.getBeginTime().getTime()-date.getTime();
@@ -239,6 +245,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Override
 	public Result<AdPraiseDTO> selectAbPraiseById(Long id) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
+		String userNum=UserUtil.getCurrentUserNum(getRequest());
 		Result<AdDTO> adDTO = adService.selectAbById(id,memberId);
         AdDTO ad=adDTO.getModel();
         Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(ad.getMerchantId());
@@ -254,6 +261,17 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		}
  		if(manageType.getModel()!=null){
  			praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+ 		}
+ 		PointDetailQueryData1Param param=new PointDetailQueryData1Param();
+ 		param.setBizId(id.toString());
+ 		param.setPointType(MemberTransactionTypeEnum.PRAISE_AD.getValue());
+ 		param.setUserNum(userNum);
+ 		Result<Integer> result=propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(param);
+ 		if(isSuccess(result)){
+ 			if(result.getModel()==1)
+ 				praise.setIsDoHanlderMinusPoint(true);
+ 			else
+ 				praise.setIsDoHanlderMinusPoint(false);
  		}
  		praise.setId(ad.getId());
 		praise.setTitle(ad.getTitle());

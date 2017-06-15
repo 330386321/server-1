@@ -348,7 +348,7 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010|6024|6026]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
-	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (isSuccess(resultFreeze)) {
@@ -366,6 +366,7 @@ public class AdController extends BaseController {
 			PropertyInfoDataParam param = new PropertyInfoDataParam();
 			param.setUserNum(userNum);
 			param.setPoint("20");
+			param.setBizId(id.toString());
 			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
 			return propertyInfoDataService.doHanlderMinusPoint(param);
 		}
