@@ -278,17 +278,29 @@ public class PropertyInfoController extends BaseController {
 		return successGet(page);
 	}
 	
+<<<<<<< Updated upstream
 	/** 获取用户是否冻结
 	 * @param userNum
+=======
+	/**
+	 * 获取用户是否冻结
+	 * @param userNum
+	 * @return 0-否、1-是、2-异常
+>>>>>>> Stashed changes
 	 * @author yangqh
 	 * @date 2017年5月26日 上午11:08:32
 	 */
 	@RequestMapping(value = "getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
+<<<<<<< Updated upstream
 	public Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@PathVariable("userNum") String userNum)  {
 		PropertyinfoFreezeEnum freeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (freeze == null) {
 			successGet(ResultCode.PROPERTYINFO_FREEZE_EXCEPITON);
 		}
+=======
+	public Result<Long> getPropertyinfoFreeze(@PathVariable("userNum") String userNum)  {
+		Long freeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+>>>>>>> Stashed changes
 		return successGet(freeze);
 	}
 }

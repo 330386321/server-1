@@ -16,6 +16,7 @@ import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
 import com.lawu.eshop.property.constants.PropertyType;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBillDataParam;
@@ -68,8 +69,13 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		if ("".equals(minMoney)) {
 			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
+<<<<<<< Updated upstream
 		double dCashMoney = Double.parseDouble(cash.getCashMoney());
 		if (dCashMoney < Double.parseDouble(minMoney)) {
+=======
+		double dCashMoney = new Double(cash.getCashMoney()).doubleValue();
+		if (dCashMoney < Double.valueOf(minMoney).doubleValue()) {
+>>>>>>> Stashed changes
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
 		}
 		
@@ -89,7 +95,11 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		
 		WithdrawCashDO withdrawCashDO = new WithdrawCashDO();
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
+<<<<<<< Updated upstream
 		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.getVal()).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+=======
+		example.createCriteria().andUserNumEqualTo(cash.getUserNum()).andStatusLessThan(CashStatusEnum.FAILURE.val).andGmtCreateGreaterThanOrEqualTo(DateUtil.getFirstDayOfMonth());
+>>>>>>> Stashed changes
 		int count = withdrawCashDOMapper.countByExample(example);
 		if (count > 0) {
 			String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
@@ -133,7 +143,11 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		tdsParam.setUserNum(cash.getUserNum());
 		tdsParam.setTransactionType(cash.getTransactionType());
 		tdsParam.setTransactionAccount(cash.getAccount());
+<<<<<<< Updated upstream
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
+=======
+		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.val);
+>>>>>>> Stashed changes
 		tdsParam.setAmount(new BigDecimal(cash.getCashMoney()));
 		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
 		tdsParam.setBizId(withdrawCashDO.getId().toString());

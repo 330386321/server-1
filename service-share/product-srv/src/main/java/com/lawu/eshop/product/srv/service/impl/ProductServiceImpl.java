@@ -163,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductInfoBO selectProductById(Long id) throws Exception {
+    public ProductInfoBO selectProductById(Long id) {
         ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
         if (productDO == null) {
             return null;

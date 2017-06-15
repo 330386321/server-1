@@ -137,6 +137,10 @@ public interface PropertyInfoService {
      * @author yangqh
      * @date 2017年5月26日 上午11:08:53
      */
+<<<<<<< Updated upstream
     PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum);
+=======
+	Long getPropertyinfoFreeze(String userNum);
+>>>>>>> Stashed changes
 
 }

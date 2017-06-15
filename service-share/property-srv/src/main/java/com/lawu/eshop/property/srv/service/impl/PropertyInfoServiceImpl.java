@@ -41,6 +41,20 @@ import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.PwdUtil;
+<<<<<<< Updated upstream
+=======
+import com.lawu.eshop.utils.StringUtil;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+>>>>>>> Stashed changes
 
 /**
  * 资产管理服务实现
@@ -154,7 +168,11 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		}
 		
 		//校验资金是否冻结
+<<<<<<< Updated upstream
 		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
+=======
+		if(PropertyinfoFreezeEnum.YES.val.equals(propertyInfoDOS.get(0).getFreeze())){
+>>>>>>> Stashed changes
 			return ResultCode.PROPERTYINFO_FREEZE_YES;
 		}
 		
@@ -311,16 +329,26 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
+<<<<<<< Updated upstream
 	public PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum) {
 		PropertyinfoFreezeEnum rtn = null;
+=======
+	public Long getPropertyinfoFreeze(String userNum) {
+>>>>>>> Stashed changes
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> dos = propertyInfoDOMapper.selectByExample(example);
 		if(dos == null || dos.isEmpty() || dos.size() > 1){
+<<<<<<< Updated upstream
 			return rtn;
 		}
 		rtn = PropertyinfoFreezeEnum.getEnum(dos.get(0).getFreeze());
 		return rtn;
+=======
+			return 2L;
+		}
+		return Long.valueOf(StringUtil.byteToInt(dos.get(0).getFreeze()));
+>>>>>>> Stashed changes
 	}
 
 }

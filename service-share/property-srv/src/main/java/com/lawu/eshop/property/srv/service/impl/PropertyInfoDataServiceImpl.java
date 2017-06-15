@@ -203,12 +203,16 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Transactional
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
+<<<<<<< Updated upstream
 		CommissionUtilBO commissionBO = null;
 		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
 			commissionBO = commissionUtilService.getClickAdMine(clickMoney);
 		}else{
 			commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
 		}
+=======
+		CommissionUtilBO commissionBO = commissionUtilService.getIncomeMoney(clickMoney);
+>>>>>>> Stashed changes
 		BigDecimal actureMoneyIn = commissionBO.getActureMoneyIn();//实际进余额
 		BigDecimal actureLoveIn = commissionBO.getActureLoveIn();//爱心账户
 		

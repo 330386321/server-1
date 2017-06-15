@@ -85,7 +85,7 @@ public class ProductController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
-    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) throws Exception {
+    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) {
         if (productId == null) {
             return successCreated(ResultCode.ID_EMPTY);
         }
@@ -96,8 +96,20 @@ public class ProductController extends BaseController {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
         ProductInfoDTO productDTO = new ProductInfoDTO();
-        BeanUtil.copyProperties(productBO, productDTO);
+        productDTO.setGmtCreate(productBO.getGmtCreate());
+        productDTO.setId(productBO.getId());
+        productDTO.setMerchantId(productBO.getMerchantId());
+        productDTO.setMerchantUserNum(productBO.getMerchantNum());
+        productDTO.setCategoryId(productBO.getCategoryId());
+        productDTO.setName(productBO.getName());
+        productDTO.setFeatureImage(productBO.getFeatureImage());
         productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
+        productDTO.setMaxPrice(productBO.getMaxPrice());
+        productDTO.setMinPrice(productBO.getMinPrice());
+        productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
+        productDTO.setTotalInventory(productBO.getTotalInventory());
+        productDTO.setSpec(productBO.getSpec());
+        productDTO.setContent(productBO.getContent());
         productDTO.setImageDetail(productBO.getImageDetail());
         productDTO.setAllowRefund(productBO.isAllowRefund());
         return successCreated(productDTO);
