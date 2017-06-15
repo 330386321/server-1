@@ -1,13 +1,10 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 
-public class ShoppingRefundProcessBO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ShoppingRefundProcessBO {
 	
     /**
      * 主键

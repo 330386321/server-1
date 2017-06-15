@@ -27,27 +27,35 @@ public class ShoppingCartConverter {
 	 * @return
 	 */
 	public static ShoppingCartBO convert(ShoppingCartDO shoppingCartDO) {
+		ShoppingCartBO rtn = null;
 		if (shoppingCartDO == null) {
 			return null;
 		}
 
-		ShoppingCartBO bo = new ShoppingCartBO();
-		BeanUtils.copyProperties(shoppingCartDO, bo);
+		rtn = new ShoppingCartBO();
+		rtn.setId(shoppingCartDO.getId());
+		rtn.setMerchantId(shoppingCartDO.getMemberId());
+		rtn.setMerchantName(shoppingCartDO.getMerchantName());
+		rtn.setProductId(shoppingCartDO.getProductId());
+		rtn.setProductModelId(shoppingCartDO.getProductModelId());
+		rtn.setQuantity(shoppingCartDO.getQuantity());
+		rtn.setSalesPrice(shoppingCartDO.getSalesPrice());
 
-		return bo;
+		return rtn;
 	}
 
-	public static List<ShoppingCartBO> convertBOS(List<ShoppingCartDO> dos) {
-		if (dos == null || dos.isEmpty()) {
-			return null;
+	public static List<ShoppingCartBO> convertBOS(List<ShoppingCartDO> shoppingCartDOList) {
+		List<ShoppingCartBO> rtn = null;
+		if (shoppingCartDOList == null || shoppingCartDOList.isEmpty()) {
+			return rtn;
 		}
 
-		List<ShoppingCartBO> bos = new ArrayList<ShoppingCartBO>();
-		for (ShoppingCartDO shoppingCartDO : dos) {
-			bos.add(convert(shoppingCartDO));
+		rtn = new ArrayList<ShoppingCartBO>();
+		for (ShoppingCartDO shoppingCartDO : shoppingCartDOList) {
+			rtn.add(convert(shoppingCartDO));
 		}
 
-		return bos;
+		return rtn;
 	}
 
 	/**
@@ -66,7 +74,7 @@ public class ShoppingCartConverter {
 
 		return dto;
 	}
-	
+
 	public static List<ShoppingCartDTO> convertDTOS(List<ShoppingCartBO> bos) {
 		List<ShoppingCartDTO> rtn = new ArrayList<ShoppingCartDTO>();
 		if (bos == null || bos.isEmpty()) {
@@ -79,7 +87,7 @@ public class ShoppingCartConverter {
 
 		return rtn;
 	}
-	
+
 	/**
 	 * DO转换
 	 * 
@@ -96,7 +104,7 @@ public class ShoppingCartConverter {
 
 		return shoppingCartDO;
 	}
-	
+
 	public static ShoppingCartDO convert(ShoppingCartUpdateParam param) {
 		if (param == null) {
 			return null;

@@ -1,12 +1,9 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class ShoppingOrderExtendBO extends ShoppingOrderBO implements Serializable {
+public class ShoppingOrderExtendBO extends ShoppingOrderBO {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 订单项
 	 */

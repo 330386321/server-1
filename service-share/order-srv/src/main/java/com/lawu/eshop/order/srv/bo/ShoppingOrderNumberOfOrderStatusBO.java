@@ -1,11 +1,7 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
-
-public class ShoppingOrderNumberOfOrderStatusBO implements Serializable {
+public class ShoppingOrderNumberOfOrderStatusBO {
     
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 待收货订单的数量
 	 */

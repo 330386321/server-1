@@ -1,7 +1,8 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.util.List;
+
+import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 
 /**
  * 物流实时查询对外暴露数据
@@ -9,9 +10,7 @@ import java.util.List;
  * @author Sunny
  * @date 2017/4/10
  */
-public class ExpressInquiriesDetailBO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class ExpressInquiriesDetailBO {
 	
 	/**
 	 * 成功与否
@@ -25,10 +24,8 @@ public class ExpressInquiriesDetailBO implements Serializable {
 	
 	/**
 	 * 物流状态
-	 * 
-	 * 2-在途中,3-签收,4-问题件
 	 */
-	private String state;
+	private ExpressInquiriesDetailStateEnum state;
 	
 	/**
 	 * 物流轨迹
@@ -51,11 +48,11 @@ public class ExpressInquiriesDetailBO implements Serializable {
 		this.reason = reason;
 	}
 
-	public String getState() {
+	public ExpressInquiriesDetailStateEnum getState() {
 		return state;
 	}
 
-	public void setState(String state) {
+	public void setState(ExpressInquiriesDetailStateEnum state) {
 		this.state = state;
 	}
 

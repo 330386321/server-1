@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
-import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -16,11 +15,9 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
-import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
-import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 
 /**
@@ -152,13 +149,8 @@ public class ShoppingOrderExtendConverter {
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
-			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState()));
-			TraceBO traceBO = expressInquiriesDetailBO.getTraces().get(0);
-			TraceDTO traceDTO = new TraceDTO();
-			traceDTO.setAcceptStation(traceBO.getAcceptStation());
-			traceDTO.setAcceptTime(traceBO.getAcceptTime());
-			traceDTO.setRemark(traceBO.getRemark());
-			rtn.setTrace(traceDTO);
+			rtn.setState(expressInquiriesDetailBO.getState());
+			rtn.setTrace(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
 		}
 		
 		int quantity = 0;
