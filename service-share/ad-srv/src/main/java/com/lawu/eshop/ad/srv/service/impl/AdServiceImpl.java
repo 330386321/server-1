@@ -476,7 +476,8 @@ public class AdServiceImpl implements AdService {
 			if(hits==adDO.getAdCount()){
 				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
 				adDO.setGmtModified(new Date());
-				adDOMapper.updateByPrimaryKeySelective(adDO);
+				adDO.setHits(hits);
+				adDOMapper.updateByPrimaryKey(adDO);
 				//删除solr中的数据
 				SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
 			}
