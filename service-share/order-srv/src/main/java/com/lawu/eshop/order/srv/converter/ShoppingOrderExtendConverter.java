@@ -155,7 +155,9 @@ public class ShoppingOrderExtendConverter {
 			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState()));
 			TraceBO traceBO = expressInquiriesDetailBO.getTraces().get(0);
 			TraceDTO traceDTO = new TraceDTO();
-			BeanUtils.copyProperties(traceBO, traceDTO);
+			traceDTO.setAcceptStation(traceBO.getAcceptStation());
+			traceDTO.setAcceptTime(traceBO.getAcceptTime());
+			traceDTO.setRemark(traceBO.getRemark());
 			rtn.setTrace(traceDTO);
 		}
 		

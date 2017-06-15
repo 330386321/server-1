@@ -350,6 +350,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public ShoppingOrderExtendBO get(Long id) {
+		ShoppingOrderExtendBO rtn = null;
 		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
 		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
@@ -357,10 +358,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
 
 		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0 || shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty()) {
-			return null;
+			return rtn;
 		}
-
-		return ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDO);
+		
+		rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDO);
+		shoppingOrderExtendDO = null;
+		
+		return rtn;
 	}
 
 	/**
