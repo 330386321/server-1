@@ -12,6 +12,7 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView;
 import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -442,37 +443,41 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	@Override
 	public StoreDetailBO getStoreDetailById(Long id, Long memberId) {
 		// 查询门店信息
-		MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
-		if (merchantStoreDO == null) {
+
+		List<StoreDetailDOView>  storeDetailDOViews = merchantStoreDOMapperExtend.getStoreDetailById(id);
+		if(storeDetailDOViews.isEmpty()){
 			return null;
 		}
-
-		// 查询门店照
-		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
-		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-		String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-
-		// 查询店内环境照数量
-		merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
-		merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-		int picCount = 0;
-		if (!merchantStoreImageDOS.isEmpty() && StringUtils.isNotEmpty(merchantStoreImageDOS.get(0).getPath())) {
-			picCount = merchantStoreImageDOS.get(0).getPath().split(",").length;
+		StoreDetailBO storeDetailBO = new StoreDetailBO();
+		storeDetailBO.setMerchantId(storeDetailDOViews.get(0).getMerchantId());
+		storeDetailBO.setName(storeDetailDOViews.get(0).getName());
+		storeDetailBO.setAddress(storeDetailDOViews.get(0).getAddress());
+		storeDetailBO.setAverageConsumeAmount(storeDetailDOViews.get(0).getAverageConsumeAmount());
+		storeDetailBO.setAverageScore(storeDetailDOViews.get(0).getAverageScore());
+		storeDetailBO.setBuyNumbers(storeDetailDOViews.get(0).getBuyNumbers());
+		storeDetailBO.setFavoriteNumber(storeDetailDOViews.get(0).getFavoriteNumber());
+		storeDetailBO.setFeedbackRate(storeDetailDOViews.get(0).getFeedbackRate());
+		storeDetailBO.setIntro(storeDetailDOViews.get(0).getIntro());
+		storeDetailBO.setPrincipalMobile(storeDetailDOViews.get(0).getPrincipalMobile());
+		storeDetailBO.setUserNum(storeDetailDOViews.get(0).getUserNum());
+		storeDetailBO.setRegionName(storeDetailDOViews.get(0).getRegionName());
+		for (StoreDetailDOView storeDetailDOView :storeDetailDOViews){
+			//门店照
+			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_STORE.val.byteValue()){
+				storeDetailBO.setStorePic(storeDetailDOView.getPath());
+			}
+			//环境照
+			if(storeDetailDOView.getType() == MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val.byteValue()){
+				int picCount = 0;
+				if(StringUtils.isNotEmpty(storeDetailDOView.getPath())){
+					picCount = storeDetailDOView.getPath().split(",").length;
+				}
+				storeDetailBO.setPicCount(picCount);
+			}
 		}
-
-		StoreDetailBO storeDetailBO = MerchantStoreConverter.convertBO(merchantStoreDO);
-		storeDetailBO.setStorePic(storePic);
-		storeDetailBO.setPicCount(picCount);
-
-		// 查询商家编号
-		MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantStoreDO.getMerchantId());
-		storeDetailBO.setUserNum(merchantDO == null ? "" : merchantDO.getNum());
-
 		// 查询是否被收藏
 		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeDetailDOViews.get(0).getMerchantId());
 		List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
 		if (favoriteMerchantDOS.isEmpty()) {
 			storeDetailBO.setFavorite(false);

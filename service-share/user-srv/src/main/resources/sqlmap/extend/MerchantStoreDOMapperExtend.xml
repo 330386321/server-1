@@ -76,4 +76,29 @@
         </foreach>
     </select>
 
+    <select id="getStoreDetailById" resultType="com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView" parameterType="java.lang.Long">
+        SELECT
+        s.merchant_id AS merchantId,
+        s.name AS name,
+        s.intro,
+        s.principal_mobile AS principalMobile,
+        s.address AS address,
+        s.buy_numbers AS buyNumbers,
+        s.average_consume_amount AS averageConsumeAmount,
+        s.average_score AS averageScore,
+        s.favorite_number AS favoriteNumber,
+        s.feedback_rate AS feedbackRate,
+        s.region_name as regionName,
+        i.type AS type,
+        i.path AS path,
+        m.num AS userNum
+        FROM
+        merchant_store AS s
+        INNER JOIN merchant AS m ON s.merchant_id = m.id
+        INNER JOIN merchant_store_image AS i ON s.id = i.merchant_store_id
+        WHERE
+        s.id = #{id}
+        AND i. STATUS = 1
+    </select>
+
 </mapper>
