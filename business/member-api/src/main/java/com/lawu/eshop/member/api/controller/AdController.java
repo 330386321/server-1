@@ -447,6 +447,7 @@ public class AdController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-06-15", reviewer = "孙林青")
 	@ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
