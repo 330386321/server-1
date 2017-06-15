@@ -1,11 +1,12 @@
 package com.lawu.eshop.user.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-
-import java.util.List;
 
 /**
  * 店面信息获取
@@ -76,5 +77,12 @@ public interface MerchantStoreService {
      * 删除无效的门店索引
      */
     void delInvalidStoreIndex();
+    
+    /**
+     * 查询商家相关信息
+     * @param merchantIds
+     * @return
+     */
+    List<MerchantAdInfoBO> getAdMerchantStoreByIds(List<Long> merchantIds);
 
 }

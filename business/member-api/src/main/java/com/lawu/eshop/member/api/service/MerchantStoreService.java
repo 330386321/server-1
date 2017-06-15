@@ -129,4 +129,7 @@ public interface MerchantStoreService {
 
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getMerchantStoreByIds")
     Result<List<StoreSolrInfoDTO>> getMerchantStoreByIds(@RequestParam("merchantStoreIds") List<Long> merchantStoreIds);
+    
+    @RequestMapping(value = "merchantStore/getAdMerchantStoreByIds", method = RequestMethod.GET)
+	Result<List<MerchantAdInfoDTO>> getAdMerchantStoreByIds(@RequestParam("merchantIds") List<Long> merchantIds);
 }

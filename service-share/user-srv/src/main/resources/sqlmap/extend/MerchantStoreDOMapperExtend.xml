@@ -115,5 +115,29 @@
         and i.type = 3
         and i.status = 1
     </select>
+    
+     <!-- 广告模块查询商家信息  @author zhangrc @date 2017/06/15 -->
+    <resultMap id="BaseResultAdMerchantMap" type="com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView">
+        <id column="id" property="merchantStoreId" jdbcType="BIGINT" />
+        <result column="merchant_id" property="merchantId" jdbcType="BIGINT" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="path" property="path" jdbcType="VARCHAR" />
+        <result column="manage_type" property="manageType" jdbcType="TINYINT" />
+    </resultMap>
+    <select id="getAdMerchantStoreByIds" resultMap="BaseResultAdMerchantMap">
+        SELECT ms.id,
+			   ms.name,
+			   msi.path,
+			   msp.manage_type,
+			   m.id as merchant_id
+		from   merchant m
+			LEFT JOIN merchant_store  ms on m.id=ms.merchant_id and  ms.`status`=1
+			LEFT JOIN  merchant_store_image msi on ms.id=msi.merchant_store_id and msi.type=3 and msi.`status`=1
+			LEFT JOIN  merchant_store_profile msp on m.id=msp.merchant_id
+		WHERE m.id in
+        <foreach collection="list" item="merchantId" open="(" close=")" separator=",">
+            #{merchantId}
+        </foreach>
+    </select>
 
 </mapper>
