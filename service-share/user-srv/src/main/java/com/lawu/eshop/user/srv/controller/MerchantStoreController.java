@@ -285,6 +285,9 @@ public class MerchantStoreController extends BaseController {
 		if (merchantStoreBO == null) {
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
+		param.setName(merchantStoreBO.getName());
+		param.setPrincipalName(merchantStoreBO.getPrincipalName());
+		param.setPrincipalMobile(merchantStoreBO.getPrincipalMobile());
 		// 添加审核记录
 		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
 		if (row < 0) {

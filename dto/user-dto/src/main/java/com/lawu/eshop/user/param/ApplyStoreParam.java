@@ -19,6 +19,12 @@ public class ApplyStoreParam {
     @ApiModelProperty(name = "storeUrl", value = "门店图片路径")
     private String storeUrl;
 
+    private String name;
+
+    private String principalName;
+
+    private String principalMobile;
+
     public String getLogoUrl() {
         return logoUrl;
     }
@@ -41,5 +47,29 @@ public class ApplyStoreParam {
 
     public void setStoreUrl(String storeUrl) {
         this.storeUrl = storeUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
+    }
+
+    public String getPrincipalMobile() {
+        return principalMobile;
+    }
+
+    public void setPrincipalMobile(String principalMobile) {
+        this.principalMobile = principalMobile;
     }
 }
