@@ -12,6 +12,7 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
+import com.lawu.eshop.user.srv.domain.extend.ShoppingStoreInfoDOView;
 import com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView;
 import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
 import com.lawu.eshop.user.srv.mapper.*;
@@ -589,31 +590,25 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	@Override
 	public ShoppingStoreDetailBO getShoppingStoreDetailById(Long id, Long memberId) {
 		// 查询门店信息
-		MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
-		if (merchantStoreDO == null) {
+
+		ShoppingStoreInfoDOView storeInfoDOView = merchantStoreDOMapperExtend.getShoppingStoreInfo(id);
+		if(storeInfoDOView == null){
 			return null;
 		}
-
 		ShoppingStoreDetailBO shoppingStoreDetailBO = new ShoppingStoreDetailBO();
-		shoppingStoreDetailBO.setMerchantId(merchantStoreDO.getMerchantId());
-		shoppingStoreDetailBO.setName(merchantStoreDO.getName());
-
-		// 查询门店logo
-		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andStatusEqualTo(true).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
-		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
-		String logoPic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
-		shoppingStoreDetailBO.setLogoPic(logoPic);
+		shoppingStoreDetailBO.setName(storeInfoDOView.getName());
+		shoppingStoreDetailBO.setLogoPic(storeInfoDOView.getPath());
+		shoppingStoreDetailBO.setMerchantId(storeInfoDOView.getMerchantId());
 
 		// 查询粉丝数量
 		FansMerchantDOExample fansMerchantDOExample = new FansMerchantDOExample();
-		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+		fansMerchantDOExample.createCriteria().andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
 		int fansCount = fansMerchantDOMapper.countByExample(fansMerchantDOExample);
 		shoppingStoreDetailBO.setFansCount(fansCount);
 
 		// 查询是否关注
 		fansMerchantDOExample = new FansMerchantDOExample();
-		fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+		fansMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
 		List<FansMerchantDO> fansMerchantDOS = fansMerchantDOMapper.selectByExample(fansMerchantDOExample);
 		if (fansMerchantDOS.isEmpty()) {
 			shoppingStoreDetailBO.setFans(false);
@@ -623,7 +618,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 查询是否收藏
 		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
 		List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
 		if (favoriteMerchantDOS.isEmpty()) {
 			shoppingStoreDetailBO.setFavorite(false);

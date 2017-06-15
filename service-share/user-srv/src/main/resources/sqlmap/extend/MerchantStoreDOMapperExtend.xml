@@ -101,4 +101,19 @@
         AND i. STATUS = 1
     </select>
 
+    <select id="getShoppingStoreInfo" resultType="com.lawu.eshop.user.srv.domain.extend.ShoppingStoreInfoDOView"
+            parameterType="java.lang.Long">
+           select
+            s.merchant_id as merchantId,
+            s.name as name,
+            i.path
+        from
+            merchant_store as s
+        inner join merchant_store_image as i on s.id = i.merchant_store_id
+        where
+            s.id = #{id}
+        and i.type = 3
+        and i.status = 1
+    </select>
+
 </mapper>
