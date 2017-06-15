@@ -34,7 +34,7 @@
     radius, point, total_point, ad_count, hits, viewCount, status
   </sql>
   
-  <select id="selectAdTop" parameterType="com.lawu.eshop.ad.srv.domain.extend.AdDOView" resultMap="BaseResultMap">
+  <select id="selectAdAll" parameterType="com.lawu.eshop.ad.srv.domain.extend.AdDOView" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from ad

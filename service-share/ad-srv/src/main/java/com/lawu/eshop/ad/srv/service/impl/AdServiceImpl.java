@@ -43,7 +43,6 @@ import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
 import com.lawu.eshop.ad.srv.domain.AdRegionDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
-import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
@@ -53,6 +52,8 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend;
+import com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend;
+import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.AdService;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -85,7 +86,13 @@ public class AdServiceImpl implements AdService {
 	private PointPoolDOMapper pointPoolDOMapper;
 	
 	@Autowired
+	private PointPoolDOMapperExtend pointPoolDOMapperExtend;
+	 
+	@Autowired
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
+	
+	@Autowired
+	private MemberAdRecordDOMapperExtend MemberAdRecordDOMapperExtend;
 	
 	@Autowired
 	@Qualifier("adMerchantCutPointTransactionMainServiceImpl")
@@ -396,7 +403,7 @@ public class AdServiceImpl implements AdService {
 			adView.setTopType(adMemberParam.getOrderTypeEnum().val);
 		}
 		
-		List<AdDO> DOS=adDOMapperExtend.selectAdTop(adView);
+		List<AdDO> DOS=adDOMapperExtend.selectAdAll(adView);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
 			AdBO BO=AdConverter.convertBO(adDO);
@@ -452,24 +459,29 @@ public class AdServiceImpl implements AdService {
 	public BigDecimal clickAd(Long id, Long memberId,String num) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
 		Integer hits= adDO.getHits();
-		MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
-		memberAdRecordD.setAdId(adDO.getId());
-		memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		memberAdRecordD.setMemberId(memberId);
-		memberAdRecordD.setMemberNum(num);
-		memberAdRecordD.setStatus(new Byte("0"));
-		memberAdRecordD.setGmtCreate(new Date());
-		memberAdRecordD.setClickDate(new Date());
-		memberAdRecordD.setOriginalPoint(adDO.getPoint());
-		memberAdRecordDOMapper.insert(memberAdRecordD);
-		adDOMapperExtend.updateHitsByPrimaryKey(id);
-		if(hits++==adDO.getAdCount()){
-			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
-			adDO.setGmtModified(new Date());
-			//删除solr中的数据
-			SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		if(hits<adDO.getAdCount()){
+			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
+			memberAdRecordD.setAdId(adDO.getId());
+			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+			memberAdRecordD.setMemberId(memberId);
+			memberAdRecordD.setMemberNum(num);
+			memberAdRecordD.setStatus(new Byte("0"));
+			memberAdRecordD.setGmtCreate(new Date());
+			memberAdRecordD.setClickDate(new Date());
+			memberAdRecordD.setOriginalPoint(adDO.getPoint());
+			memberAdRecordDOMapper.insert(memberAdRecordD);
+			//修改点击次数记录
+			adDOMapperExtend.updateHitsByPrimaryKey(id);
+			hits++;
+			if(hits==adDO.getAdCount()){
+				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
+				adDO.setGmtModified(new Date());
+				adDOMapper.updateByPrimaryKeySelective(adDO);
+				//删除solr中的数据
+				SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+			}
+			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		}
-		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		return adDO.getPoint();
 	}
 
@@ -529,19 +541,15 @@ public class AdServiceImpl implements AdService {
 	@Override
 	@Transactional
 	public BigDecimal clickPraise(Long id,Long memberId,String num) {
-		PointPoolDOExample ppexample=new PointPoolDOExample();
-		ppexample.createCriteria().andAdIdEqualTo(id).andTypeEqualTo(new Byte("1"))
-				                   .andStatusEqualTo(new Byte("0"));
 		//查询出没有领取的积分，取出一个给用户
-		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample); 
-		if(list.isEmpty()){ //说明积分领取完
+		PointPoolDO pointPoolDO =pointPoolDOMapperExtend.selectPoint(id);
+		if(pointPoolDO==null){ //说明积分领取完
 			AdDO ad=new AdDO();
 			ad.setId(memberId);
 			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 			adDOMapper.updateByPrimaryKeySelective(ad);
 			return new BigDecimal(0);
 		}else{
-			PointPoolDO pointPoolDO=list.get(0);
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(num);
 			pointPoolDO.setStatus(new Byte("1"));
@@ -696,9 +704,7 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public ClickAdPointBO getClickAdPoint(Long memberId,BigDecimal point) {
-		MemberAdRecordDOExample example=new MemberAdRecordDOExample();
-		example.createCriteria().andClickDateEqualTo(new Date()).andMemberIdEqualTo(memberId);
-		List<MemberAdRecordDO> list= memberAdRecordDOMapper.selectByExample(example);
+		List<MemberAdRecordDO> list= MemberAdRecordDOMapperExtend.selectPointToday(memberId);
 		BigDecimal totlePoint=new BigDecimal(0);
 		if(!list.isEmpty()){
 			for (MemberAdRecordDO memberAdRecordDO : list) {

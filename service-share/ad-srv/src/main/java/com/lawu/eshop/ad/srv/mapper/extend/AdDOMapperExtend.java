@@ -18,5 +18,5 @@ public interface AdDOMapperExtend {
      * @param adDO
      * @return
      */
-    List<AdDO> selectAdTop(AdDOView adDOView);
+    List<AdDO> selectAdAll(AdDOView adDOView);
 }
