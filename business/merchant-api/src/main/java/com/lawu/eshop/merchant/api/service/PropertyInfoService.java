@@ -129,4 +129,5 @@ public interface PropertyInfoService {
 	 */
 	@RequestMapping(value = "propertyInfo/getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
 	Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@PathVariable("userNum") String userNum);
+	
 }

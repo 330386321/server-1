@@ -29,7 +29,6 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -185,7 +184,11 @@ public class ProductServiceImpl implements ProductService {
         List<MemberProductModelDTO> spec = new ArrayList<MemberProductModelDTO>();
         for (ProductModelDO mdo : productModelDOS) {
             MemberProductModelDTO dto = new MemberProductModelDTO();
-            BeanUtil.copyProperties(mdo, dto);
+            dto.setId(mdo.getId());
+            dto.setInventory(mdo.getInventory());
+            dto.setName(mdo.getName());
+            dto.setOriginalPrice(mdo.getOriginalPrice());
+            dto.setPrice(mdo.getPrice());
             spec.add(dto);
         }
         productInfoBO.setSpec(spec);
@@ -521,7 +524,6 @@ public class ProductServiceImpl implements ProductService {
             }
         }
     }
-
 
     @Override
     @Transactional

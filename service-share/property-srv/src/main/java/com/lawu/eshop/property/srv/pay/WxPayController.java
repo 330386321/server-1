@@ -88,7 +88,7 @@ public class WxPayController extends BaseController {
 		packageParams.put("out_trade_no", param.getOutTradeNo());
 		double fTotalAmount = Double.parseDouble(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
-		packageParams.put("total_fee", Integer.valueOf(iTotalAmount));
+		packageParams.put("total_fee", String.valueOf(iTotalAmount));
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split
 				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());

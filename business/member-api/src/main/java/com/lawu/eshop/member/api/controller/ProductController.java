@@ -78,9 +78,9 @@ public class ProductController extends BaseController {
 		}
 		if(storeDTOResult.getModel() != null){
 			Result<Integer> productNumResult = productService.selectProductCount(result.getModel().getMerchantId());
-			storeDTOResult.getModel().setUpProductNum(productNumResult.getModel()== null ? "0" : productNumResult.getModel().toString());
+			storeDTOResult.getModel().setUpProductNum(productNumResult.getModel()== null ? "0" : productNumResult.getModel().toString());//上架商品数量
 			Result<Integer> fansNumResult = fansMerchantService.countFans(result.getModel().getMerchantId());
-			storeDTOResult.getModel().setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());
+			storeDTOResult.getModel().setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());//商家粉丝数量
 		}
 		result.getModel().setStore(storeDTOResult.getModel());		
 

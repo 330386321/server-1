@@ -21,6 +21,9 @@ public class EditProductDataParam extends EditProductParam{
 	@NotNull(message="merchantId不能为空")
 	private Long merchantId;
 	
+	@NotBlank(message="merchantNum不能为空")
+	private String merchantNum;
+	
 	//@ApiParam(value = "详情图片，多张提交key为productDetailImage-'index'-N(例如：productDetailImage-1-1、productDetailImage-1-2,productDetailImage-2-1、productDetailImage-2-2,....)")
 	//private String productDetailImages;
 	private Map<String,List<String>> detailImageMap = null;//存放详情图片
@@ -41,6 +44,14 @@ public class EditProductDataParam extends EditProductParam{
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public String getMerchantNum() {
+		return merchantNum;
+	}
+
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
 	}
 
 	public Map<String, List<String>> getDetailImageMap() {

@@ -22,7 +22,6 @@ import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -295,7 +294,8 @@ public class ProductController extends BaseController {
      * 重建商品索引
      * @return
      */
-    @RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
     public Result rebuildProductIndex() {
         productService.rebuildProductIndex();
         return successCreated();
@@ -305,7 +305,8 @@ public class ProductController extends BaseController {
      * 删除无效的商品索引
      * @return
      */
-    @RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
     public Result delInvalidProductIndex() {
         productService.delInvalidProductIndex();
         return successCreated();

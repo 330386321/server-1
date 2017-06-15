@@ -1,5 +1,6 @@
 package com.lawu.eshop.property.srv.service;
 
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 /**
@@ -47,5 +48,14 @@ public interface PropertyInfoDataService {
 	 * @return
 	 */
 	int doHanlderBalanceIncome(PropertyInfoDataParam param);
+
+	/**
+	 * 根据user_num、point_type、biz_id查询积分明细记录
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月15日 下午12:08:37
+	 */
+	Integer getPointDetailByUserNumAndPointTypeAndBizId(PointDetailQueryData1Param param);
 	
 }

@@ -1,10 +1,7 @@
 package com.lawu.eshop.property.srv.controller;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.param.PropertyInfoDataParam;
-import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
+import com.lawu.eshop.property.param.PropertyInfoDataParam;
+import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 
 /**
  * 
@@ -74,5 +76,24 @@ public class PropertyInfoDataController extends BaseController {
 		
 		int retCode = propertyInfoDataService.doHanlderAddPoint(param);
 		return successCreated(retCode);
+	}
+	
+	/**
+	 * 根据user_num、point_type、biz_id查询积分明细记录
+	 * @param param
+	 * @param result 0-无记录1-有记录
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月15日 下午12:04:17
+	 */
+	@RequestMapping(value = "getPointDetailByUserNumAndPointTypeAndBizId", method = RequestMethod.POST)
+	public Result<Integer> getPointDetailByUserNumAndPointTypeAndBizId(@RequestBody @Valid PointDetailQueryData1Param param, BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
+		Integer dataCode = propertyInfoDataService.getPointDetailByUserNumAndPointTypeAndBizId(param);
+		return successCreated(dataCode);
 	}
 }

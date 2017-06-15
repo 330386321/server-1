@@ -102,7 +102,7 @@ public class ProductController extends BaseController {
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，新增时productId传0，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "saveProduct_bak", method = RequestMethod.POST)
@@ -237,7 +237,7 @@ public class ProductController extends BaseController {
 	}
 
 	@Audit(date = "2017-04-25", reviewer = "孙林青")
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "deprecation" })
 	@ApiOperation(value = "添加、编辑商品", notes = "添加、编辑商品接口，合并成一个接口，[]，（杨清华）", httpMethod = "POST")
 	@Authorization
 	@RequestMapping(value = "saveProduct", method = RequestMethod.POST)
@@ -261,7 +261,6 @@ public class ProductController extends BaseController {
 		Collection<Part> parts = null;
 		try {
 			parts = request.getParts();
-			
 			for (Part part : parts) {
 				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_PRODUCT, part, merchantApiConfig.getImageUploadUrl());
 				String resultFlag = map.get("resultFlag");
@@ -294,7 +293,7 @@ public class ProductController extends BaseController {
 		} catch (ServletException ex) {
             logger.info("Servlet异常，没有提交图片文件",ex);
         }
-//		
+		
 		String featureImage = featureImageStr.toString();
 		String productImage = productImageStr.toString();
 		String productDetailImage = productDetailImageStr.toString();
@@ -336,13 +335,10 @@ public class ProductController extends BaseController {
 			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
 		}	
 		
-//		featureImage = "/test/a.jpg";
-//		productImage = "/test/b.jpg";
-//		productDetailImage = "/test/c.jpg";
-
 		EditProductDataParam dataProduct = new EditProductDataParam();
 		dataProduct.setProductId(productId);
 		dataProduct.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
+		dataProduct.setMerchantNum(UserUtil.getCurrentUserNum(getRequest()));
 		dataProduct.setName(product.getName());
 		dataProduct.setCategoryId(product.getCategoryId());
 		dataProduct.setContent(product.getContent());

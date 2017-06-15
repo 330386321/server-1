@@ -104,6 +104,7 @@ public class ProductConverter {
         productInfoBO.setFeatureImage(productDO.getFeatureImage());
         productInfoBO.setContent(productDO.getContent());
         productInfoBO.setMerchantId(productDO.getMerchantId());
+        productInfoBO.setMerchantNum(productDO.getMerchantNum());
         productInfoBO.setTotalSalesVolume(productDO.getTotalSalesVolume());
         productInfoBO.setTotalInventory(productDO.getTotalInventory());
         productInfoBO.setMaxPrice(String.valueOf(productDO.getMaxPrice()));
@@ -241,13 +242,14 @@ public class ProductConverter {
         ProductDO productDO = new ProductDO();
         productDO.setName(param.getName());
         productDO.setCategoryId(param.getCategoryId());
-        productDO.setMerchantId(param.getMerchantId());
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
         productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
+            productDO.setMerchantId(param.getMerchantId());
+            productDO.setMerchantNum(param.getMerchantNum());
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());
         }

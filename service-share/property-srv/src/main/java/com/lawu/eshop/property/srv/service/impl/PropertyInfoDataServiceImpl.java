@@ -12,14 +12,17 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.CommissionUtilBO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import com.lawu.eshop.property.srv.domain.LoveDetailDO;
+import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.mapper.FansInviteDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.LoveDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
@@ -50,6 +53,8 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	private LoveDetailDOMapper loveDetailDOMapper;
 	@Autowired
 	private CommissionUtilService commissionUtilService;
+	@Autowired
+	private PointDetailDOMapper pointDetailDOMapper;
 
 	@Override
 	@Transactional
@@ -74,6 +79,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 插入邀请粉丝记录
@@ -117,6 +123,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
 		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailService.save(pointDetailSaveDataParam);
 
 		// 更新用户资产
@@ -239,6 +246,18 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		propertyInfoService.updatePropertyNumbers(param.getUserNum(), "L", "A", actureLoveIn);
 		
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public Integer getPointDetailByUserNumAndPointTypeAndBizId(PointDetailQueryData1Param param) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		example.createCriteria().andUserNumEqualTo(param.getUserNum()).andPointTypeEqualTo(param.getPointType()).andBizIdEqualTo(param.getBizId());
+		long count = pointDetailDOMapper.countByExample(example);
+		if(count == 0){
+			return Integer.valueOf(0);
+		}else{
+			return Integer.valueOf(1);
+		}
 	}
 	
 	

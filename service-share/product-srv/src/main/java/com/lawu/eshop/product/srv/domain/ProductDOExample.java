@@ -316,6 +316,76 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchantNumIsNull() {
+            addCriterion("merchant_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumIsNotNull() {
+            addCriterion("merchant_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumEqualTo(String value) {
+            addCriterion("merchant_num =", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumNotEqualTo(String value) {
+            addCriterion("merchant_num <>", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumGreaterThan(String value) {
+            addCriterion("merchant_num >", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumGreaterThanOrEqualTo(String value) {
+            addCriterion("merchant_num >=", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumLessThan(String value) {
+            addCriterion("merchant_num <", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumLessThanOrEqualTo(String value) {
+            addCriterion("merchant_num <=", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumLike(String value) {
+            addCriterion("merchant_num like", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumNotLike(String value) {
+            addCriterion("merchant_num not like", value, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumIn(List<String> values) {
+            addCriterion("merchant_num in", values, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumNotIn(List<String> values) {
+            addCriterion("merchant_num not in", values, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumBetween(String value1, String value2) {
+            addCriterion("merchant_num between", value1, value2, "merchantNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantNumNotBetween(String value1, String value2) {
+            addCriterion("merchant_num not between", value1, value2, "merchantNum");
+            return (Criteria) this;
+        }
+
         public Criteria andCategoryIdIsNull() {
             addCriterion("category_id is null");
             return (Criteria) this;
