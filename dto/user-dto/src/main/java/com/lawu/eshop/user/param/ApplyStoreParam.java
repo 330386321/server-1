@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -24,6 +25,16 @@ public class ApplyStoreParam {
     private String principalName;
 
     private String principalMobile;
+
+    private String industryPath;
+
+    private String industryName;
+
+    private String address;
+
+    private String intro;
+
+    private MerchantStoreTypeEnum manageType;
 
     public String getLogoUrl() {
         return logoUrl;
@@ -71,5 +82,45 @@ public class ApplyStoreParam {
 
     public void setPrincipalMobile(String principalMobile) {
         this.principalMobile = principalMobile;
+    }
+
+    public String getIndustryPath() {
+        return industryPath;
+    }
+
+    public void setIndustryPath(String industryPath) {
+        this.industryPath = industryPath;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public MerchantStoreTypeEnum getManageType() {
+        return manageType;
+    }
+
+    public void setManageType(MerchantStoreTypeEnum manageType) {
+        this.manageType = manageType;
     }
 }

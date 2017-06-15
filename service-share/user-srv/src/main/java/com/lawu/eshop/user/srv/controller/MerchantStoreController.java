@@ -288,6 +288,11 @@ public class MerchantStoreController extends BaseController {
 		param.setName(merchantStoreBO.getName());
 		param.setPrincipalName(merchantStoreBO.getPrincipalName());
 		param.setPrincipalMobile(merchantStoreBO.getPrincipalMobile());
+		param.setIndustryPath(merchantStoreBO.getIndustryPath());
+		param.setIndustryName(merchantStoreBO.getIndustryName());
+		param.setAddress(merchantStoreBO.getAddress());
+		param.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
+		param.setIntro(merchantStoreBO.getIntro());
 		// 添加审核记录
 		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
 		if (row < 0) {
