@@ -26,6 +26,7 @@ sudo docker run -d \
  -e ADDITIONAL_ZOOKEEPER_1=server.1=192.168.100.90:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_2=server.2=192.168.100.91:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_3=clientPort=2181 \
+ -v /etc/localtime:/etc/localtime:ro \
  registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
 ```
 
@@ -37,6 +38,7 @@ sudo docker run -d \
  -e ADDITIONAL_ZOOKEEPER_1=server.1=192.168.100.90:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_2=server.2=192.168.100.91:2888:3888 \
  -e ADDITIONAL_ZOOKEEPER_3=clientPort=2181 \
+ -v /etc/localtime:/etc/localtime:ro \
 registry.cn-hangzhou.aliyuncs.com/acs-sample/zookeeper:3.4.8
 ```
 
