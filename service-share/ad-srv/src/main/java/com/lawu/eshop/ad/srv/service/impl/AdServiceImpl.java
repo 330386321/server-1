@@ -505,6 +505,9 @@ public class AdServiceImpl implements AdService {
 			adDO=adDOMapper.selectByPrimaryKey(id);
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+		}else{
+			//审核不通过退还积分
+			matransactionMainAddService.sendNotice(id);
 		}
 		return i;
 	}
