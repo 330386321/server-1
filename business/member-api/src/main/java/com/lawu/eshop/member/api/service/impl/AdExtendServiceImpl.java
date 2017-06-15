@@ -283,6 +283,8 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		praise.setIsPraise(ad.getIsPraise());
 		praise.setMediaUrl(ad.getMediaUrl());
 		praise.setMerchantId(ad.getMerchantId());
+		praise.setClickPraiseAdTimes(memberApiConfig.getClickPraiseAdTimes()); 
+		praise.setPraiseProb(memberApiConfig.getClickPraiseProb());
         return successGet(praise);
 	}
 	

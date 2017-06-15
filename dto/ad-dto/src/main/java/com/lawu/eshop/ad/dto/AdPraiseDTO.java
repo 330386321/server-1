@@ -57,6 +57,12 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "是否扣除积分")
 	private Boolean isDoHanlderMinusPoint;
 	
+	@ApiModelProperty(value = "假次数")
+	private Integer clickPraiseAdTimes;
+	
+	@ApiModelProperty(value = "概率数")
+	private Integer praiseProb;
+	
 
 	public Integer getCount() {
 		return count;
@@ -184,6 +190,22 @@ public class AdPraiseDTO {
 
 	public void setIsDoHanlderMinusPoint(Boolean isDoHanlderMinusPoint) {
 		this.isDoHanlderMinusPoint = isDoHanlderMinusPoint;
+	}
+
+	public Integer getClickPraiseAdTimes() {
+		return clickPraiseAdTimes;
+	}
+
+	public void setClickPraiseAdTimes(Integer clickPraiseAdTimes) {
+		this.clickPraiseAdTimes = clickPraiseAdTimes;
+	}
+
+	public Integer getPraiseProb() {
+		return praiseProb;
+	}
+
+	public void setPraiseProb(Integer praiseProb) {
+		this.praiseProb = praiseProb;
 	}
 
 	
