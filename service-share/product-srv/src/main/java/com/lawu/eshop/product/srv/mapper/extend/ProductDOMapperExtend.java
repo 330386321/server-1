@@ -1,7 +1,9 @@
 package com.lawu.eshop.product.srv.mapper.extend;
 
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
+import com.lawu.eshop.product.param.ListShoppingProductParam;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
+import com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView;
 
 import java.util.List;
 
@@ -21,7 +23,9 @@ public interface ProductDOMapperExtend {
 	void editTotalSaleVolume(ProductNumsView view);
 
 	void editTotalFavorite(ProductNumsView view);
-	
+
+	List<ShoppingProductDOView> listHotProduct(ListShoppingProductParam listShoppingProductParam);
+
 	List<ProductDOView> listProductByIds(List<Long> ids);
    
 }

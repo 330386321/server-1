@@ -55,4 +55,25 @@
 		  	#{id}
 		</foreach>
 	</select>
+
+	<!-- 要购物门店详情店铺首页-->
+	<select id="listHotProduct" resultType="com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView"
+			parameterType="com.lawu.eshop.product.param.ListShoppingProductParam">
+		SELECT
+			id AS productId,
+			name AS name,
+			min_price AS minPrice,
+			max_price AS maxPrice,
+			content AS content,
+			total_sales_volume AS totalSalesVolume,
+			feature_image AS featureImage
+		FROM
+			product
+		WHERE
+			merchant_id = #{merchantId}
+		AND STATUS = 2
+		ORDER BY total_sales_volume DESC
+		LIMIT #{offset},#{pageSize}
+
+	</select>
 </mapper>

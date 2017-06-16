@@ -36,8 +36,8 @@ public class ShoppingProductController extends BaseController {
         Page<ProductSearchBO> productSearchBOPage = shoppingProductService.listHotProduct(listShoppingProductParam);
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(productSearchBOPage.getRecords()));
-        page.setCurrentPage(productSearchBOPage.getCurrentPage());
-        page.setTotalCount(productSearchBOPage.getTotalCount());
+        page.setCurrentPage(listShoppingProductParam.getCurrentPage());
+        page.setTotalCount(0);
         return successGet(page);
     }
 
