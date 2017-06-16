@@ -1259,12 +1259,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询退货中数量
 		shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 用户可以多次申请退款，查询当中有效的一条记录
-		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		long refundingCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 
 		rtn.setPendingPaymentCount(pendingPaymentCount);

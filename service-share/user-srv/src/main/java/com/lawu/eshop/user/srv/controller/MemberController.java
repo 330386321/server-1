@@ -1,29 +1,47 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
+import com.lawu.eshop.user.dto.EfriendDTO;
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
+import com.lawu.eshop.user.dto.MemberMineInfoDTO;
+import com.lawu.eshop.user.dto.MessagePushDTO;
+import com.lawu.eshop.user.dto.RongYunDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.UserRedPacketDTO;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
 import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
 import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MemberProfileBO;
 import com.lawu.eshop.user.srv.bo.MessagePushBO;
-import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
 import com.lawu.eshop.user.srv.bo.RongYunBO;
 import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MemberConverter;
+import com.lawu.eshop.user.srv.converter.MemberProfileConverter;
 import com.lawu.eshop.user.srv.converter.RongYunConverter;
+import com.lawu.eshop.user.srv.service.MemberProfileService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Leach
@@ -35,7 +53,10 @@ public class MemberController extends BaseController {
 
     @Autowired
     private MemberService memberService;
-
+    
+	@Autowired
+	private  MemberProfileService memberProfileService;
+    
     /**
      * 根据用户名密码查找会员
      *
@@ -369,5 +390,32 @@ public class MemberController extends BaseController {
 		}
 		return successGet(dtoList);
 	}
-
+    
+    /**
+     * 返回我的页面所需要的资料
+     * 
+     * @param memberId
+     * @return
+     * @author Sunny
+     * @date 2017年6月16日
+     */
+    @RequestMapping(value = "findMemberMineInfo/{memberId}", method = RequestMethod.GET)
+    public Result<MemberMineInfoDTO> findMemberMineInfo(@PathVariable("memberId") Long memberId) {
+        MemberBO memberBO = memberService.findMemberInfoById(memberId);
+        if (memberBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        MemberProfileBO memberProfileBO = memberProfileService.get(memberId);
+        
+        if (memberProfileBO == null) {
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        
+        MemberMineInfoDTO memberMineInfoDTO = MemberProfileConverter.convert(memberProfileBO, memberBO);
+        memberProfileBO = null;
+        memberBO = null;
+        
+        return successGet(memberMineInfoDTO);
+    }
 }

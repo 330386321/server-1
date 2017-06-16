@@ -177,5 +177,16 @@ public interface MemberService {
      */
     @RequestMapping(value = "member/getMemberByIds", method = RequestMethod.GET)
    	Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
+    
+    /**
+     * 返回我的页面所需要的资料
+     * 
+     * @param memberId
+     * @return
+     * @author Sunny
+     * @date 2017年6月16日
+     */
+    @RequestMapping(value = "member/findMemberMineInfo/{memberId}", method = RequestMethod.GET)
+    Result<MemberMineInfoDTO> findMemberMineInfo(@PathVariable("memberId") Long memberId);
 
 }

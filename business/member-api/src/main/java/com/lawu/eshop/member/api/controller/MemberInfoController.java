@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,16 +12,14 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
-import com.lawu.eshop.member.api.service.MemberProfileService;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.foreign.MemberMineInfoForeignDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderNumberOfOrderStatusDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
-import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
-import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
-import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MemberMineInfoDTO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,9 +35,6 @@ import io.swagger.annotations.ApiResponse;
 @RestController
 @RequestMapping(value = "memberInfo/")
 public class MemberInfoController extends BaseController {
-
-    @Autowired
-    private MemberProfileService memberProfileService;
 
     @Autowired
     private PropertyInfoService propertyInfoService;
@@ -62,9 +56,9 @@ public class MemberInfoController extends BaseController {
         String memberNum = UserUtil.getCurrentUserNum(getRequest());
         
         // 查询用户信息
-        Result<MemberDTO> resultMemberDTO = memberService.findMemberInfoById(memberId);
-        if (!isSuccess(resultMemberDTO)) {
-        	return successGet(resultMemberDTO.getRet()); 
+        Result<MemberMineInfoDTO> resultMemberMineInfoDTO = memberService.findMemberMineInfo(memberId);
+        if (!isSuccess(resultMemberMineInfoDTO)) {
+        	return successGet(resultMemberMineInfoDTO.getRet()); 
         }
         
         //查询订单状态的数量
@@ -73,36 +67,28 @@ public class MemberInfoController extends BaseController {
         	return successGet(resultShoppingOrderNumberOfOrderStatusDTO.getRet());
         }
         
-        //查询我的E友
-        Result<InviteeMemberCountDTO> resultInviteeMemberCountDTO = memberProfileService.getMemberCount(memberId);
-        if (!isSuccess(resultInviteeMemberCountDTO)) {
-        	return successGet(resultInviteeMemberCountDTO.getRet());
-        }
-        
-        // 查询我推荐的商家
-        Result<InviteeMechantCountDTO> resultInviteeMechantCountDTO = memberProfileService.getMerchantCount(memberId);
-        if (!isSuccess(resultInviteeMechantCountDTO)) {
-        	return successGet(resultInviteeMechantCountDTO.getRet());
-        }
-        
         // 查询爱心账户
         Result<PropertyLoveAccountDTO> resultPropertyLoveAccountDTO = propertyInfoService.selectLoveAccount(memberNum);
         if (!isSuccess(resultPropertyLoveAccountDTO)) {
         	return successGet(resultPropertyLoveAccountDTO.getRet());
         }
         
+        MemberMineInfoDTO memberMineInfoDTO = resultMemberMineInfoDTO.getModel();
         MemberMineInfoForeignDTO memberMineInfoForeignDTO = new MemberMineInfoForeignDTO();
-        memberMineInfoForeignDTO.setNickname(resultMemberDTO.getModel().getNickname());
-        memberMineInfoForeignDTO.setLevel(resultMemberDTO.getModel().getLevel());
-        memberMineInfoForeignDTO.setHeadimg(resultMemberDTO.getModel().getHeadimg());
+        memberMineInfoForeignDTO.setNickname(memberMineInfoDTO.getNickname());
+        memberMineInfoForeignDTO.setLevel(memberMineInfoDTO.getLevel());
+        memberMineInfoForeignDTO.setHeadimg(memberMineInfoDTO.getHeadimg());
         memberMineInfoForeignDTO.setBeShippedCount(resultShoppingOrderNumberOfOrderStatusDTO.getModel().getBeShippedCount());
         memberMineInfoForeignDTO.setEvaluationCount(resultShoppingOrderNumberOfOrderStatusDTO.getModel().getEvaluationCount());
         memberMineInfoForeignDTO.setPendingPaymentCount(resultShoppingOrderNumberOfOrderStatusDTO.getModel().getPendingPaymentCount());
         memberMineInfoForeignDTO.setRefundingCount(resultShoppingOrderNumberOfOrderStatusDTO.getModel().getRefundingCount());
         memberMineInfoForeignDTO.setToBeReceivedCount(resultShoppingOrderNumberOfOrderStatusDTO.getModel().getToBeReceivedCount());
-        memberMineInfoForeignDTO.setInviteeMechantCount(resultInviteeMechantCountDTO.getModel().getInviteeMechantCount());
-        memberMineInfoForeignDTO.setInviteeMemberCount(resultInviteeMemberCountDTO.getModel().getInviteeMemberCount());
         memberMineInfoForeignDTO.setLoveAccount(resultPropertyLoveAccountDTO.getModel().getLoveAccount());
+        memberMineInfoForeignDTO.setInviteeMemberCount(memberMineInfoDTO.getInviteMemberCount());
+        memberMineInfoForeignDTO.setInviteeMechantCount(memberMineInfoDTO.getInviteMerchantCount());
+        resultMemberMineInfoDTO = null;
+        resultShoppingOrderNumberOfOrderStatusDTO = null;
+        resultPropertyLoveAccountDTO = null;
         
         return successGet(memberMineInfoForeignDTO);
     }
