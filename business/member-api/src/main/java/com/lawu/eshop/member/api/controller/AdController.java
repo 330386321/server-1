@@ -330,22 +330,19 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> getRedPacket(@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId, @RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
 		Result<UserRedPacketDTO> userRs = memberService.isRegister(mobile);
-		if (isSuccess(userRs)) {
-			Result<PraisePointDTO> rs = new Result<>();
-			if (userRs.getModel() != null) { // 直接领取红包 并成为粉丝
-				Long memberId = userRs.getModel().getMemberId();
-				String userNum = userRs.getModel().getUserNum();
-				rs = adService.getRedPacket(merchantId, memberId, userNum);
-				Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
-				if (isSuccess(result)) {
-					if (!result.getModel()) {
-						fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
-					}
+		Result<PraisePointDTO> rs = new Result<>();
+		if (userRs != null) { // 直接领取红包 并成为粉丝
+			Long memberId = userRs.getModel().getMemberId();
+			String userNum = userRs.getModel().getUserNum();
+			rs = adService.getRedPacket(merchantId, memberId, userNum);
+			Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
+			if (isSuccess(result)) {
+				if (!result.getModel()) {
+					fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
 				}
-
 			}
 			return rs;
-		} else {
+		}else {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
