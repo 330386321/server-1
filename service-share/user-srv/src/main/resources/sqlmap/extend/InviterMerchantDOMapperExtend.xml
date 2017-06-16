@@ -34,12 +34,8 @@
     	me.inviter_id=#{inviterId,jdbcType=VARCHAR}
     	 and me.inviter_type=#{inviterType,jdbcType=TINYINT}
 	    <if test="name != null and name!=''" >
-	      and ms.name like concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
-	      or (
-	      	me.account like concat(concat('%',#{name,jdbcType=VARCHAR}),'%')
-	        and	me.inviter_id=#{inviterId,jdbcType=VARCHAR}
-    	    and me.inviter_type=#{inviterType,jdbcType=TINYINT}
-	      )
+	      and (ms.name like #{name}
+	      	or me.account like #{name})
 	    </if>
     </where>
   </select>
