@@ -64,7 +64,6 @@
 			name AS name,
 			min_price AS minPrice,
 			max_price AS maxPrice,
-			content AS content,
 			total_sales_volume AS totalSalesVolume,
 			feature_image AS featureImage
 		FROM
@@ -74,6 +73,40 @@
 		AND STATUS = 2
 		ORDER BY total_sales_volume DESC
 		LIMIT #{offset},#{pageSize}
+	</select>
 
+	<select id="listAllProduct" resultType="com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView"
+			parameterType="com.lawu.eshop.product.param.ListShoppingProductParam">
+		SELECT
+		id AS productId,
+		name AS name,
+		min_price AS minPrice,
+		max_price AS maxPrice,
+		total_sales_volume AS totalSalesVolume,
+		feature_image AS featureImage
+		FROM
+		product
+		WHERE
+		merchant_id = #{merchantId}
+		AND STATUS = 2
+		LIMIT #{offset},#{pageSize}
+	</select>
+
+	<select id="listNewProduct" resultType="com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView"
+			parameterType="com.lawu.eshop.product.param.ListShoppingProductParam">
+		SELECT
+		id AS productId,
+		name AS name,
+		min_price AS minPrice,
+		max_price AS maxPrice,
+		total_sales_volume AS totalSalesVolume,
+		feature_image AS featureImage
+		FROM
+		product
+		WHERE
+		merchant_id = #{merchantId}
+		AND STATUS = 2
+		ORDER BY id DESC
+		LIMIT #{offset},#{pageSize}
 	</select>
 </mapper>

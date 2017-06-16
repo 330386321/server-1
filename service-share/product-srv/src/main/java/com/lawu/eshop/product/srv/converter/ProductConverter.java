@@ -9,6 +9,7 @@ import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.domain.ProductDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
+import com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.solr.common.SolrDocument;
@@ -395,6 +396,25 @@ public class ProductConverter {
             productBOS.add(productBO);
         }
         return productBOS;
+    }
+
+    public static List<ProductSearchBO> convertSearchBOS(List<ShoppingProductDOView> productDOViews) {
+        List<ProductSearchBO> productSearchBOS = new ArrayList<>();
+        if(productDOViews == null || productDOViews.isEmpty()){
+            return productSearchBOS;
+        }
+
+        for(ShoppingProductDOView shoppingProductDOView : productDOViews){
+            ProductSearchBO productSearchBO = new ProductSearchBO();
+            productSearchBO.setName(shoppingProductDOView.getName());
+            productSearchBO.setFeatureImage(shoppingProductDOView.getFeatureImage());
+            productSearchBO.setOriginalPrice(shoppingProductDOView.getMaxPrice().doubleValue());
+            productSearchBO.setProductId(shoppingProductDOView.getProductId());
+            productSearchBO.setPrice(shoppingProductDOView.getMinPrice().doubleValue());
+            productSearchBO.setSalesVolume(shoppingProductDOView.getTotalSalesVolume());
+            productSearchBOS.add(productSearchBO);
+        }
+        return productSearchBOS;
     }
 
 }

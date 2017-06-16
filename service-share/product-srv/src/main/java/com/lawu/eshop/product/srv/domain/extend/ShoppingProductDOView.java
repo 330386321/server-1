@@ -14,8 +14,6 @@ public class ShoppingProductDOView  implements Serializable{
 
     private String name;
 
-    private String content;
-
     private String featureImage;
 
     private BigDecimal minPrice;
@@ -38,14 +36,6 @@ public class ShoppingProductDOView  implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getFeatureImage() {

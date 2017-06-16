@@ -26,6 +26,10 @@ public interface ProductDOMapperExtend {
 
 	List<ShoppingProductDOView> listHotProduct(ListShoppingProductParam listShoppingProductParam);
 
+	List<ShoppingProductDOView> listAllProduct(ListShoppingProductParam listShoppingProductParam);
+
+	List<ShoppingProductDOView> listNewProduct(ListShoppingProductParam listShoppingProductParam);
+
 	List<ProductDOView> listProductByIds(List<Long> ids);
    
 }
