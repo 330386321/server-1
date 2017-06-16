@@ -3,12 +3,14 @@ package com.lawu.eshop.member.api.service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.CommentProductInfoDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-
+import com.lawu.eshop.product.dto.ProductSearchDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * <p>
@@ -49,5 +51,14 @@ public interface ProductService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectProductCount")
     Result<Integer> selectProductCount(@RequestParam("merchantId") Long merchantId);
+
+    /**
+     * 根据ids查询商品信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/listProductByIds")
+    Result<List<ProductSearchDTO>> listProductByIds(@RequestParam("ids") List<Long> ids);
 
 }

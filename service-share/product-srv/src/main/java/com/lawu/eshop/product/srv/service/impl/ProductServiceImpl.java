@@ -15,14 +15,12 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductModelBO;
-import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
+import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.*;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
@@ -969,5 +967,10 @@ public class ProductServiceImpl implements ProductService {
         return page;
     }
 
+    @Override
+    public List<ProductBO> listProductByIds(List<Long> ids) {
+        List<ProductDOView> productDOViewList = productDOMapperExtend.listProductByIds(ids);
+        return ProductConverter.convertBOS(productDOViewList);
+    }
 
 }

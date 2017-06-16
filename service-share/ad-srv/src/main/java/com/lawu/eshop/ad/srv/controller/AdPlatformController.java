@@ -4,6 +4,7 @@ import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
+import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
@@ -196,12 +197,9 @@ public class AdPlatformController extends BaseController {
      * @return
      */
     @RequestMapping(value = "getAdPlatformByTypePosition", method = RequestMethod.GET)
-    public Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum) {
-        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum, "");
-        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
-        return successGet(AdPlatformConverter.convertDTOS(adPlatformBOS));
+    public Result<List<AdPlatformProductDTO>> getAdPlatformByTypePosition(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum) {
+        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum);
+        return successGet(AdPlatformConverter.convertDTO(adPlatformBOS));
     }
 
     /**
@@ -214,7 +212,7 @@ public class AdPlatformController extends BaseController {
      */
     @RequestMapping(value = "getAdPlatformByTypePositionRegionPath", method = RequestMethod.GET)
     public Result<List<AdPlatformDTO>> getAdPlatformByTypePositionRegionPath(@RequestParam TypeEnum typeEnum, @RequestParam PositionEnum positionEnum, @RequestParam String regionPath) {
-        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePosition(typeEnum, positionEnum, regionPath);
+        List<AdPlatformBO> adPlatformBOS = adPlatformService.getAdPlatformByTypePositionRegionPath(typeEnum, positionEnum, regionPath);
         if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }

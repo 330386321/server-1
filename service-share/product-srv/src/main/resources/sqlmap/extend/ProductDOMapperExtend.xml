@@ -47,4 +47,12 @@
 		where id =
 		#{productId,jdbcType=BIGINT}
 	</update>
+
+	<select id="listProductByIds" parameterType="java.util.List" resultType="com.lawu.eshop.product.srv.domain.extend.ProductDOView">
+		select id,total_sales_volume as totalSalesVolume,max_price as maxPrice,min_price as minPrice from product
+		WHERE id in
+		<foreach collection="list" item="id" open="(" close=")" separator=",">
+		  	#{id}
+		</foreach>
+	</select>
 </mapper>

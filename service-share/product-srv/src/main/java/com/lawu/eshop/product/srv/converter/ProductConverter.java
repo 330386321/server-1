@@ -6,11 +6,9 @@ import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
-import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductQueryBO;
-import com.lawu.eshop.product.srv.bo.ProductSearchBO;
+import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.solr.common.SolrDocument;
@@ -352,6 +350,51 @@ public class ProductConverter {
             productSearchDTOS.add(productSearchDTO);
         }
         return productSearchDTOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param productBOS
+     * @return
+     */
+    public static List<ProductSearchDTO> convertSearchDTO(List<ProductBO> productBOS) {
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
+        if (productBOS == null || productBOS.isEmpty()) {
+            return productSearchDTOS;
+        }
+        for (ProductBO productBO : productBOS) {
+            ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+            productSearchDTO.setProductId(productBO.getId());
+            productSearchDTO.setSalesVolume(productBO.getTotalSalesVolume());
+            productSearchDTO.setOriginalPrice(productBO.getMaxPrice());
+            productSearchDTO.setPrice(productBO.getMinPrice());
+            productSearchDTOS.add(productSearchDTO);
+        }
+        return productSearchDTOS;
+    }
+
+    /**
+     * VIEW转BO
+     *
+     * @param productDOViewList
+     * @return
+     */
+    public static List<ProductBO> convertBOS(List<ProductDOView> productDOViewList) {
+        List<ProductBO> productBOS = new ArrayList<>();
+        if(productDOViewList == null || productDOViewList.isEmpty()){
+            return productBOS;
+        }
+
+        for(ProductDOView productDOView : productDOViewList){
+            ProductBO productBO = new ProductBO();
+            productBO.setId(productDOView.getId());
+            productBO.setTotalSalesVolume(productDOView.getTotalSalesVolume());
+            productBO.setMaxPrice(productDOView.getMaxPrice());
+            productBO.setMinPrice(productDOView.getMinPrice());
+            productBOS.add(productBO);
+        }
+        return productBOS;
     }
 
 }

@@ -107,6 +107,15 @@ public interface AdPlatformService {
      * @param regionPath
      * @return
      */
-    List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum, String regionPath);
+    List<AdPlatformBO> getAdPlatformByTypePositionRegionPath(TypeEnum typeEnum, PositionEnum positionEnum, String regionPath);
+
+    /**
+     * 根据类型位置查询广告
+     *
+     * @param typeEnum
+     * @param positionEnum
+     * @return
+     */
+    List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum);
 
 }

@@ -2,7 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
-import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -12,7 +12,10 @@ import com.lawu.eshop.member.api.service.AdPlatformService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.member.api.service.ProductSolrService;
 import com.lawu.eshop.member.api.service.RecommendProductCategoryService;
-import com.lawu.eshop.product.dto.*;
+import com.lawu.eshop.product.dto.ProductSearchDTO;
+import com.lawu.eshop.product.dto.ProductSearchWordDTO;
+import com.lawu.eshop.product.dto.RecommendProductCategoryDTO;
+import com.lawu.eshop.product.dto.ShoppingProductDTO;
 import com.lawu.eshop.product.param.ProductSearchParam;
 import com.lawu.eshop.product.param.ProductSearchRealParam;
 import io.swagger.annotations.Api;
@@ -23,7 +26,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author meishuquan
@@ -105,19 +110,15 @@ public class ProductSolrController extends BaseController {
 
         //商品分类
         Result<List<RecommendProductCategoryDTO>> recProCatResult = recommendProductCategoryService.listAllRecommendProductCategory();
-        if (isSuccess(recProCatResult)) {
-            shoppingProductDTO.setRecommendProductCategoryDTOS(recProCatResult.getModel());
-        } else {
-            shoppingProductDTO.setRecommendProductCategoryDTOS(new ArrayList<>());
-        }
+        shoppingProductDTO.setRecommendProductCategoryDTOS(recProCatResult.getModel());
 
         //顶部推荐
-        Result<List<AdPlatformDTO>> topResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_TOP);
-        if (isSuccess(topResult)) {
-            for (AdPlatformDTO adPlatformDTO : topResult.getModel()) {
+        Result<List<AdPlatformProductDTO>> topResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_TOP);
+        if (!topResult.getModel().isEmpty()) {
+            for (AdPlatformProductDTO adPlatformProductDTO : topResult.getModel()) {
                 ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-                productSearchDTO.setProductId(adPlatformDTO.getProductId());
-                productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
+                productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
                 productSearchDTOS.add(productSearchDTO);
             }
         }
@@ -125,10 +126,12 @@ public class ProductSolrController extends BaseController {
 
         //今日推荐
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> chooseResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_CHOOSE);
-        if (isSuccess(chooseResult)) {
-            for (AdPlatformDTO adPlatformDTO : chooseResult.getModel()) {
-                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
+        Result<List<AdPlatformProductDTO>> chooseResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.POSITON_SHOP_CHOOSE);
+        if (!chooseResult.getModel().isEmpty()) {
+            List<Long> ids = new ArrayList<>();
+            for (AdPlatformProductDTO adPlatformProductDTO : chooseResult.getModel()) {
+                ids.add(adPlatformProductDTO.getProductId());
+                /*Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
                 if (isSuccess(productInfoDTOResult)) {
                     ProductSearchDTO productSearchDTO = new ProductSearchDTO();
                     productSearchDTO.setProductId(adPlatformDTO.getProductId());
@@ -137,6 +140,24 @@ public class ProductSolrController extends BaseController {
                     productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
                     productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
                     productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+                    productSearchDTOS.add(productSearchDTO);
+                }*/
+            }
+            Result<List<ProductSearchDTO>> productSearchDTOResult = productService.listProductByIds(ids);
+            if (!productSearchDTOResult.getModel().isEmpty()) {
+                Map<Long, ProductSearchDTO> map = new HashMap<>();
+                for (ProductSearchDTO productSearchDTO : productSearchDTOResult.getModel()) {
+                    map.put(productSearchDTO.getProductId(), productSearchDTO);
+                }
+                ProductSearchDTO productSearchDTO;
+                for (AdPlatformProductDTO adPlatformProductDTO : chooseResult.getModel()) {
+                    productSearchDTO = map.get(adPlatformProductDTO.getProductId());
+                    if(productSearchDTO == null){
+                        productSearchDTO = new ProductSearchDTO();
+                        productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                    }
+                    productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformProductDTO.getTitle());
                     productSearchDTOS.add(productSearchDTO);
                 }
             }
@@ -145,18 +166,27 @@ public class ProductSolrController extends BaseController {
 
         //热门商品
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> hotResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_HOT);
-        if (isSuccess(hotResult)) {
-            for (AdPlatformDTO adPlatformDTO : hotResult.getModel()) {
-                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
-                if (isSuccess(productInfoDTOResult)) {
-                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
-                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+        Result<List<AdPlatformProductDTO>> hotResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_HOT);
+        if (!hotResult.getModel().isEmpty()) {
+            List<Long> ids = new ArrayList<>();
+            for (AdPlatformProductDTO adPlatformProductDTO : hotResult.getModel()) {
+                ids.add(adPlatformProductDTO.getProductId());
+            }
+            Result<List<ProductSearchDTO>> productSearchDTOResult = productService.listProductByIds(ids);
+            if (!productSearchDTOResult.getModel().isEmpty()) {
+                Map<Long, ProductSearchDTO> map = new HashMap<>();
+                for (ProductSearchDTO productSearchDTO : productSearchDTOResult.getModel()) {
+                    map.put(productSearchDTO.getProductId(), productSearchDTO);
+                }
+                ProductSearchDTO productSearchDTO;
+                for (AdPlatformProductDTO adPlatformProductDTO : hotResult.getModel()) {
+                    productSearchDTO = map.get(adPlatformProductDTO.getProductId());
+                    if(productSearchDTO == null){
+                        productSearchDTO = new ProductSearchDTO();
+                        productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                    }
+                    productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformProductDTO.getTitle());
                     productSearchDTOS.add(productSearchDTO);
                 }
             }
@@ -165,18 +195,27 @@ public class ProductSolrController extends BaseController {
 
         //E店必购
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> buyResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BUY);
-        if (isSuccess(buyResult)) {
-            for (AdPlatformDTO adPlatformDTO : buyResult.getModel()) {
-                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
-                if (isSuccess(productInfoDTOResult)) {
-                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
-                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+        Result<List<AdPlatformProductDTO>> buyResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BUY);
+        if (!buyResult.getModel().isEmpty()) {
+            List<Long> ids = new ArrayList<>();
+            for (AdPlatformProductDTO adPlatformProductDTO : buyResult.getModel()) {
+                ids.add(adPlatformProductDTO.getProductId());
+            }
+            Result<List<ProductSearchDTO>> productSearchDTOResult = productService.listProductByIds(ids);
+            if (!productSearchDTOResult.getModel().isEmpty()) {
+                Map<Long, ProductSearchDTO> map = new HashMap<>();
+                for (ProductSearchDTO productSearchDTO : productSearchDTOResult.getModel()) {
+                    map.put(productSearchDTO.getProductId(), productSearchDTO);
+                }
+                ProductSearchDTO productSearchDTO;
+                for (AdPlatformProductDTO adPlatformProductDTO : buyResult.getModel()) {
+                    productSearchDTO = map.get(adPlatformProductDTO.getProductId());
+                    if(productSearchDTO == null){
+                        productSearchDTO = new ProductSearchDTO();
+                        productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                    }
+                    productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformProductDTO.getTitle());
                     productSearchDTOS.add(productSearchDTO);
                 }
             }
@@ -185,18 +224,27 @@ public class ProductSolrController extends BaseController {
 
         //特色好货
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> featureResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_GOODS);
-        if (isSuccess(featureResult)) {
-            for (AdPlatformDTO adPlatformDTO : featureResult.getModel()) {
-                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
-                if (isSuccess(productInfoDTOResult)) {
-                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
-                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+        Result<List<AdPlatformProductDTO>> featureResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_GOODS);
+        if (!featureResult.getModel().isEmpty()) {
+            List<Long> ids = new ArrayList<>();
+            for (AdPlatformProductDTO adPlatformProductDTO : featureResult.getModel()) {
+                ids.add(adPlatformProductDTO.getProductId());
+            }
+            Result<List<ProductSearchDTO>> productSearchDTOResult = productService.listProductByIds(ids);
+            if (!productSearchDTOResult.getModel().isEmpty()) {
+                Map<Long, ProductSearchDTO> map = new HashMap<>();
+                for (ProductSearchDTO productSearchDTO : productSearchDTOResult.getModel()) {
+                    map.put(productSearchDTO.getProductId(), productSearchDTO);
+                }
+                ProductSearchDTO productSearchDTO;
+                for (AdPlatformProductDTO adPlatformProductDTO : featureResult.getModel()) {
+                    productSearchDTO = map.get(adPlatformProductDTO.getProductId());
+                    if(productSearchDTO == null){
+                        productSearchDTO = new ProductSearchDTO();
+                        productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                    }
+                    productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformProductDTO.getTitle());
                     productSearchDTOS.add(productSearchDTO);
                 }
             }
@@ -205,18 +253,27 @@ public class ProductSolrController extends BaseController {
 
         //实惠单品
         productSearchDTOS = new ArrayList<>();
-        Result<List<AdPlatformDTO>> benefitResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BENEFIT);
-        if (isSuccess(benefitResult)) {
-            for (AdPlatformDTO adPlatformDTO : benefitResult.getModel()) {
-                Result<ProductInfoDTO> productInfoDTOResult = productService.getProductById(adPlatformDTO.getProductId());
-                if (isSuccess(productInfoDTOResult)) {
-                    ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-                    productSearchDTO.setProductId(adPlatformDTO.getProductId());
-                    productSearchDTO.setFeatureImage(adPlatformDTO.getMediaUrl());
-                    productSearchDTO.setName(adPlatformDTO.getTitle());
-                    productSearchDTO.setSalesVolume(productInfoDTOResult.getModel().getTotalSalesVolume());
-                    productSearchDTO.setOriginalPrice(Double.valueOf(productInfoDTOResult.getModel().getMaxPrice()));
-                    productSearchDTO.setPrice(Double.valueOf(productInfoDTOResult.getModel().getMinPrice()));
+        Result<List<AdPlatformProductDTO>> benefitResult = adPlatformService.getAdPlatformByTypePosition(TypeEnum.TYPE_PRODUCT, PositionEnum.SHOPPING_BENEFIT);
+        if (!benefitResult.getModel().isEmpty()) {
+            List<Long> ids = new ArrayList<>();
+            for (AdPlatformProductDTO adPlatformDTO : benefitResult.getModel()) {
+                ids.add(adPlatformDTO.getProductId());
+            }
+            Result<List<ProductSearchDTO>> productSearchDTOResult = productService.listProductByIds(ids);
+            if (!productSearchDTOResult.getModel().isEmpty()) {
+                Map<Long, ProductSearchDTO> map = new HashMap<>();
+                for (ProductSearchDTO productSearchDTO : productSearchDTOResult.getModel()) {
+                    map.put(productSearchDTO.getProductId(), productSearchDTO);
+                }
+                ProductSearchDTO productSearchDTO;
+                for (AdPlatformProductDTO adPlatformProductDTO : benefitResult.getModel()) {
+                    productSearchDTO = map.get(adPlatformProductDTO.getProductId());
+                    if(productSearchDTO == null){
+                        productSearchDTO = new ProductSearchDTO();
+                        productSearchDTO.setProductId(adPlatformProductDTO.getProductId());
+                    }
+                    productSearchDTO.setFeatureImage(adPlatformProductDTO.getMediaUrl());
+                    productSearchDTO.setName(adPlatformProductDTO.getTitle());
                     productSearchDTOS.add(productSearchDTO);
                 }
             }

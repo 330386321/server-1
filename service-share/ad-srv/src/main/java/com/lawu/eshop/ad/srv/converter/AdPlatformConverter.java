@@ -5,8 +5,10 @@ import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
 import com.lawu.eshop.ad.dto.AdPlatformOperatorDTO;
+import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,4 +187,51 @@ public class AdPlatformConverter {
         adPlatformDTO.setRegionPath(adPlatformBO.getRegionPath());
         return adPlatformDTO;
     }
+
+    /**
+     * AdPlatformDOView转BOS
+     *
+     * @param adPlatformDOViews
+     * @return
+     */
+    public static List<AdPlatformBO> convertBO(List<AdPlatformDOView> adPlatformDOViews) {
+        List<AdPlatformBO> BOS = new ArrayList<AdPlatformBO>();
+        if (adPlatformDOViews == null || adPlatformDOViews.isEmpty()) {
+            return BOS;
+        }
+
+        for (AdPlatformDOView adPlatformDOView : adPlatformDOViews) {
+            AdPlatformBO adPlatformBO = new AdPlatformBO();
+            adPlatformBO.setProductId(adPlatformDOView.getProductId());
+            adPlatformBO.setMediaUrl(adPlatformDOView.getMediaUrl());
+            adPlatformBO.setTitle(adPlatformDOView.getTitle());
+            BOS.add(adPlatformBO);
+        }
+        return BOS;
+
+    }
+
+    /**
+     * BO转DTO
+     *
+     * @param adPlatformBOS
+     * @return
+     */
+    public static List<AdPlatformProductDTO> convertDTO(List<AdPlatformBO> adPlatformBOS) {
+        List<AdPlatformProductDTO> adPlatformProductDTOS = new ArrayList<>();
+        if (adPlatformBOS == null || adPlatformBOS.isEmpty()) {
+            return adPlatformProductDTOS;
+        }
+
+        for (AdPlatformBO adPlatformBO : adPlatformBOS) {
+            AdPlatformProductDTO adPlatformProductDTO = new AdPlatformProductDTO();
+            adPlatformProductDTO.setProductId(adPlatformBO.getProductId());
+            adPlatformProductDTO.setMediaUrl(adPlatformBO.getMediaUrl());
+            adPlatformProductDTO.setTitle(adPlatformBO.getTitle());
+            adPlatformProductDTOS.add(adPlatformProductDTO);
+        }
+        return adPlatformProductDTOS;
+
+    }
+
 }

@@ -7,6 +7,7 @@ import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -157,5 +158,13 @@ public interface ProductService {
      * @return
      */
     Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam);
+
+    /**
+     * 根据ids查询商品信息
+     *
+     * @param ids
+     * @return
+     */
+    List<ProductBO> listProductByIds(List<Long> ids);
 
 }

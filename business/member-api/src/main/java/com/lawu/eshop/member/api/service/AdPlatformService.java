@@ -3,6 +3,7 @@ package com.lawu.eshop.member.api.service;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
 import com.lawu.eshop.ad.dto.AdPlatformDTO;
+import com.lawu.eshop.ad.dto.AdPlatformProductDTO;
 import com.lawu.eshop.framework.web.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,7 +39,7 @@ public interface AdPlatformService {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "adPlatform/getAdPlatformByTypePosition")
-    Result<List<AdPlatformDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum);
+    Result<List<AdPlatformProductDTO>> getAdPlatformByTypePosition(@RequestParam("typeEnum") TypeEnum typeEnum, @RequestParam("positionEnum") PositionEnum positionEnum);
 
     /**
      * 根据类型位置区域查询广告

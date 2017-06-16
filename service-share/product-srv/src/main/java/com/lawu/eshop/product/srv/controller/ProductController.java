@@ -5,15 +5,13 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.ProductEditInfoDTO;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductPlatDTO;
-import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -338,6 +336,18 @@ public class ProductController extends BaseController {
         page.setTotalCount(productQueryBOPage.getTotalCount());
         page.setRecords(ProductConverter.convertDTOS(productQueryBOPage.getRecords()));
         return successCreated(page);
+    }
+
+    /**
+     * 根据ids查询商品信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "listProductByIds", method = RequestMethod.GET)
+    public Result<List<ProductSearchDTO>> listProductByIds(@RequestParam List<Long> ids) {
+        List<ProductBO> productBOS = productService.listProductByIds(ids);
+        return successGet(ProductConverter.convertSearchDTO(productBOS));
     }
 
 }
