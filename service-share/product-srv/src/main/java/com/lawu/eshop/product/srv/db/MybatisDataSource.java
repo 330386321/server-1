@@ -1,11 +1,12 @@
 package com.lawu.eshop.product.srv.db;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.lawu.eshop.product.srv.ProductSrvConfig;
+import javax.annotation.PreDestroy;
+import javax.sql.DataSource;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -13,8 +14,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.PreDestroy;
-import javax.sql.DataSource;
+import com.alibaba.druid.pool.DruidDataSource;
 
 /**
  * @author Leach
@@ -30,18 +30,12 @@ public class MybatisDataSource {
 
     private final static String CONFIG_LOCATION = "classpath:mapperConfig.xml";
 
-    @Autowired
-    private ProductSrvConfig productSrvConfig;
     private DruidDataSource datasource = null;
 
     @Bean(destroyMethod = "close")
+    @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
-        datasource.setUrl(productSrvConfig.getUrl());
-        datasource.setDbType(productSrvConfig.getType());
-        datasource.setDriverClassName(productSrvConfig.getDriver());
-        datasource.setUsername(productSrvConfig.getUsername());
-        datasource.setPassword(productSrvConfig.getPassword());
         return datasource;
     }
 
