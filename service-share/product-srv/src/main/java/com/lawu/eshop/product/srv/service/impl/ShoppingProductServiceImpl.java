@@ -37,10 +37,10 @@ public class ShoppingProductServiceImpl implements ShoppingProductService {
         Page<ProductSearchBO> page = new Page<>();
         page.setCurrentPage(listShoppingProductParam.getCurrentPage());
         if (productDOViews == null || productDOViews.isEmpty()) {
-            page.setRecords(new ArrayList<ProductSearchBO>());
+            page.setRecords(new ArrayList<>());
             return page;
         } else {
-            List<ProductSearchBO> productSearchBOS = new ArrayList<ProductSearchBO>();
+            List<ProductSearchBO> productSearchBOS = new ArrayList<>();
             ProductSearchBO productSearchBO = null;
             for (ShoppingProductDOView shoppingProductDOView : productDOViews) {
                 productSearchBO = new ProductSearchBO();
