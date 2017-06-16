@@ -203,7 +203,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 	@Transactional
 	public int doHanlderBalanceIncome(PropertyInfoDataParam param) {
 		BigDecimal clickMoney = new BigDecimal(param.getPoint());
-		CommissionUtilBO commissionBO = null;
+		CommissionUtilBO commissionBO;
 		if(MemberTransactionTypeEnum.ADVERTISING.getValue().equals(param.getMemberTransactionTypeEnum().getValue())){
 			commissionBO = commissionUtilService.getClickAdMine(clickMoney);
 		}else{

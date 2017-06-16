@@ -139,5 +139,4 @@ public interface PropertyInfoService {
      */
     PropertyinfoFreezeEnum getPropertyinfoFreeze(String userNum);
 
-
 }

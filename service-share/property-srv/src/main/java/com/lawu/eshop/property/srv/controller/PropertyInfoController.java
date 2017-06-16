@@ -291,7 +291,6 @@ public class PropertyInfoController extends BaseController {
 		if (freeze == null) {
 			successGet(ResultCode.PROPERTYINFO_FREEZE_EXCEPITON);
 		}
-
 		return successGet(freeze);
 	}
 }
