@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
@@ -30,22 +28,31 @@ public class ShoppingOrderItemConverter {
 	 * @return
 	 */
 	public static ShoppingOrderItemDO convert(Long shoppingOrderId, ShoppingOrderSettlementItemParam param) {
+		ShoppingOrderItemDO rtn = null;
 		if (param == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		BeanUtils.copyProperties(param, shoppingOrderItemDO, new String[] { "shoppingOrderId", "orderStatus", "gmtCreate", "gmtModified" });
+		rtn = new ShoppingOrderItemDO();
+		rtn.setIsAllowRefund(param.getIsAllowRefund());
+		rtn.setProductFeatureImage(param.getProductFeatureImage());
+		rtn.setProductId(param.getProductId());
+		rtn.setProductModelId(param.getProductModelId());
+		rtn.setProductName(param.getProductName());
+		rtn.setQuantity(param.getQuantity());
+		rtn.setRegularPrice(param.getRegularPrice());
+		rtn.setSalesPrice(param.getSalesPrice());
+		
 		// 设置订单id
-		shoppingOrderItemDO.setShoppingOrderId(shoppingOrderId);
+		rtn.setShoppingOrderId(shoppingOrderId);
 		// 设置为待处理
-		shoppingOrderItemDO.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
+		rtn.setOrderStatus(ShoppingOrderStatusEnum.PENDING.getValue());
 		// 设置为未评价
-		shoppingOrderItemDO.setIsEvaluation(false);
-		shoppingOrderItemDO.setGmtCreate(new Date());
-		shoppingOrderItemDO.setGmtModified(new Date());
+		rtn.setIsEvaluation(false);
+		rtn.setGmtCreate(new Date());
+		rtn.setGmtModified(new Date());
 
-		return shoppingOrderItemDO;
+		return rtn;
 	}
 	
 	/**
@@ -62,7 +69,6 @@ public class ShoppingOrderItemConverter {
 		}
 
 		rtn = new ShoppingOrderItemBO();
-		BeanUtils.copyProperties(shoppingOrderItemDO, rtn, new String[]{"orderStatus", "refundStatus"});
 		rtn.setId(shoppingOrderItemDO.getId());
 		rtn.setIsAllowRefund(shoppingOrderItemDO.getIsAllowRefund());
 		rtn.setIsEvaluation(shoppingOrderItemDO.getIsEvaluation());

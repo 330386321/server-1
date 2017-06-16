@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 
 public class ShoppingRefundDetailBO {
 
@@ -81,7 +82,12 @@ public class ShoppingRefundDetailBO {
 	 * 物流编号
 	 */
 	private String waybillNum;
-
+	
+    /**
+    * 状态
+    */
+    private StatusEnum status;
+	
 	/**
 	 * 商家是否同意退货申请
 	 */
@@ -240,6 +246,14 @@ public class ShoppingRefundDetailBO {
 
 	public void setWaybillNum(String waybillNum) {
 		this.waybillNum = waybillNum;
+	}
+
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEnum status) {
+		this.status = status;
 	}
 
 	public Boolean getIsAgree() {

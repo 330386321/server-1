@@ -3,8 +3,6 @@ package com.lawu.eshop.order.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -36,8 +34,22 @@ public class ShoppingOrderItemExtendConverter {
 		}
 
 		rtn = new ShoppingOrderItemExtendBO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendDO, rtn, new String[] { "orderStatus", "refundStatus" });
-
+		rtn.setId(shoppingOrderItemExtendDO.getId());
+		rtn.setIsAllowRefund(shoppingOrderItemExtendDO.getIsAllowRefund());
+		rtn.setIsEvaluation(shoppingOrderItemExtendDO.getIsEvaluation());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendDO.getProductFeatureImage());
+		rtn.setProductId(shoppingOrderItemExtendDO.getProductId());
+		rtn.setProductModelId(shoppingOrderItemExtendDO.getProductModelId());
+		rtn.setProductModelName(shoppingOrderItemExtendDO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendDO.getProductName());
+		rtn.setQuantity(shoppingOrderItemExtendDO.getQuantity());
+		rtn.setRegularPrice(shoppingOrderItemExtendDO.getRegularPrice());
+		rtn.setSalesPrice(shoppingOrderItemExtendDO.getSalesPrice());
+		rtn.setSendTime(shoppingOrderItemExtendDO.getSendTime());
+		rtn.setShoppingOrderId(shoppingOrderItemExtendDO.getShoppingOrderId());
+		rtn.setGmtCreate(shoppingOrderItemExtendDO.getGmtCreate());
+		rtn.setGmtModified(shoppingOrderItemExtendDO.getGmtModified());
+		
 		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemExtendDO.getOrderStatus()));
 		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemExtendDO.getRefundStatus()));
 
@@ -79,7 +91,12 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundForMerchantDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
 		}
@@ -136,7 +153,12 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundForOperatorDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
 			rtn.setConsigneeAddress(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeAddress());
@@ -196,7 +218,11 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn, "");
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
 
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());

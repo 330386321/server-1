@@ -1,8 +1,7 @@
 package com.lawu.eshop.order.srv.converter;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingRefundDetailExtendDO;
 
@@ -21,17 +20,40 @@ public class ShoppingRefundDetailExtendConverter {
 	 * @return
 	 */
 	public static ShoppingRefundDetailExtendBO convert(ShoppingRefundDetailExtendDO shoppingRefundDetailExtendDO) {
+		ShoppingRefundDetailExtendBO rtn = null;
 		if (shoppingRefundDetailExtendDO == null) {
 			return null;
 		}
 
-		ShoppingRefundDetailExtendBO shoppingRefundDetailBO = new ShoppingRefundDetailExtendBO();
-		BeanUtils.copyProperties(shoppingRefundDetailExtendDO, shoppingRefundDetailBO, "type", "shoppingRefundProcessList");
+		rtn = new ShoppingRefundDetailExtendBO();
+		rtn.setAmount(shoppingRefundDetailExtendDO.getAmount());
+		rtn.setConsigneeAddress(shoppingRefundDetailExtendDO.getConsigneeAddress());
+		rtn.setConsigneeMobile(shoppingRefundDetailExtendDO.getConsigneeMobile());
+		rtn.setConsigneeName(shoppingRefundDetailExtendDO.getConsigneeName());
+		rtn.setDescription(shoppingRefundDetailExtendDO.getDescription());
+		rtn.setExpressCompanyCode(shoppingRefundDetailExtendDO.getExpressCompanyCode());
+		rtn.setExpressCompanyId(shoppingRefundDetailExtendDO.getExpressCompanyId());
+		rtn.setExpressCompanyName(shoppingRefundDetailExtendDO.getExpressCompanyName());
+		rtn.setGmtCreate(shoppingRefundDetailExtendDO.getGmtCreate());
+		rtn.setGmtConfirmed(shoppingRefundDetailExtendDO.getGmtConfirmed());
+		rtn.setGmtFill(shoppingRefundDetailExtendDO.getGmtFill());
+		rtn.setGmtIntervention(shoppingRefundDetailExtendDO.getGmtIntervention());
+		rtn.setGmtModified(shoppingRefundDetailExtendDO.getGmtModified());
+		rtn.setGmtRefund(shoppingRefundDetailExtendDO.getGmtRefund());
+		rtn.setGmtSubmit(shoppingRefundDetailExtendDO.getGmtSubmit());
+		rtn.setId(shoppingRefundDetailExtendDO.getId());
+		rtn.setIsAgree(shoppingRefundDetailExtendDO.getIsAgree());
+		rtn.setReason(shoppingRefundDetailExtendDO.getReason());
+		rtn.setRefusalReasons(shoppingRefundDetailExtendDO.getRefusalReasons());
+		rtn.setShoppingOrderItemId(shoppingRefundDetailExtendDO.getShoppingOrderItemId());
+		rtn.setVoucherPicture(shoppingRefundDetailExtendDO.getVoucherPicture());
+		rtn.setWaybillNum(shoppingRefundDetailExtendDO.getWaybillNum());
 		
-		shoppingRefundDetailBO.setType(ShoppingRefundTypeEnum.getEnum(shoppingRefundDetailExtendDO.getType()));
-		shoppingRefundDetailBO.setShoppingRefundProcessList(ShoppingRefundProcessConverter.convert(shoppingRefundDetailExtendDO.getShoppingRefundProcessList()));
+		rtn.setStatus(StatusEnum.getEnum(shoppingRefundDetailExtendDO.getStatus()));
+		rtn.setType(ShoppingRefundTypeEnum.getEnum(shoppingRefundDetailExtendDO.getType()));
+		rtn.setShoppingRefundProcessList(ShoppingRefundProcessConverter.convert(shoppingRefundDetailExtendDO.getShoppingRefundProcessList()));
 		
-		return shoppingRefundDetailBO;
+		return rtn;
 	}
 
 }

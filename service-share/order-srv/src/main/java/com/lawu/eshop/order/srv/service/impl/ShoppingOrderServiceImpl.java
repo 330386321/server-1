@@ -1014,8 +1014,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
 			return ResultCode.RESOURCE_NOT_FOUND;
 		}
-
-		shoppingOrderDOMapper.updateByPrimaryKey(ShoppingOrderConverter.convert(shoppingOrderDO, param));
+		
+		shoppingOrderDO = ShoppingOrderConverter.convert(shoppingOrderDO, param);
+		
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
 
 		return ResultCode.SUCCESS;
 	}
@@ -1223,7 +1225,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	public ShoppingOrderNumberOfOrderStatusBO numberOfOrderStartus(Long memberId) {
 		ShoppingOrderNumberOfOrderStatusBO rtn = new ShoppingOrderNumberOfOrderStatusBO();
 
-		// 查询待收货订单的数量
+		// 查询待付款订单的数量
 		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
 		ShoppingOrderDOExample.Criteria shoppingOrderDOExampleCriteria = shoppingOrderDOExample.createCriteria();
 		shoppingOrderDOExampleCriteria.andMemberIdEqualTo(memberId);
