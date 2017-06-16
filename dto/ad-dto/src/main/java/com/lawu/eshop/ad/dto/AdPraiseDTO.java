@@ -18,9 +18,6 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "广告投放开始时间")
 	private Date beginTime;
 
-	@ApiModelProperty(value = "广告投放时间")
-	private Date endTime;
-
 	@ApiModelProperty(value = "广告总积分")
 	private BigDecimal totalPoint;
 
@@ -94,14 +91,6 @@ public class AdPraiseDTO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
 	}
 
 	public BigDecimal getTotalPoint() {

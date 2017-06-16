@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
+import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PropertyType;
 import com.lawu.eshop.ad.constants.RedPacketArithmetic;
 import com.lawu.eshop.ad.param.AdFindParam;
@@ -205,8 +207,8 @@ public class AdServiceImpl implements AdService {
 			PointPoolDO pointPool=new PointPoolDO();
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
-			pointPool.setStatus(new Byte("0"));
-			pointPool.setType(new Byte("1"));
+			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
 			pointPool.setGmtCreate(new Date());
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(j);
@@ -226,8 +228,8 @@ public class AdServiceImpl implements AdService {
 				PointPoolDO pointPool=new PointPoolDO();
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
-				pointPool.setStatus(new Byte("0"));
-				pointPool.setType(new Byte("2"));
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
@@ -240,8 +242,8 @@ public class AdServiceImpl implements AdService {
 				PointPoolDO pointPool=new PointPoolDO();
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
-				pointPool.setStatus(new Byte("0"));
-				pointPool.setType(new Byte("2"));
+				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
@@ -331,7 +333,7 @@ public class AdServiceImpl implements AdService {
 	public Integer updateStatus( Long id) {
 		AdDO adDO=new AdDO();
 		adDO.setId(id);
-		adDO.setStatus(new Byte("4"));
+		adDO.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
 		AdDO ad= adDOMapper.selectByPrimaryKey(id);
 		matransactionMainAddService.sendNotice(ad.getId());
@@ -432,13 +434,13 @@ public class AdServiceImpl implements AdService {
 		boolean isPraise=false;
 		if(adDO.getType()==3){ //获取E赞的抢赞人数
 			PointPoolDOExample ppexample=new PointPoolDOExample();
-			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
-					                   .andStatusEqualTo(new Byte("1"));
+			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
+					                   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
 			praiseCount=pointPoolDOMapper.countByExample(ppexample);
 			
 			PointPoolDOExample ppexample2=new PointPoolDOExample();
-			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
-					                   .andStatusEqualTo(new Byte("1")).andMemberIdEqualTo(memberId);
+			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
+					                   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
 			Long number=pointPoolDOMapper.countByExample(ppexample2);
 			if(number>0){
 				isPraise=true; 
@@ -556,7 +558,7 @@ public class AdServiceImpl implements AdService {
 		}else{
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(num);
-			pointPoolDO.setStatus(new Byte("1"));
+			pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
@@ -613,25 +615,11 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public Page<AdBO> selectChoiceness(AdMemberParam adMemberParam) {
-		AdDOExample example=new AdDOExample();
-		Criteria cr= example.createCriteria();
-		cr.andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val)
-		.andStatusLessThanOrEqualTo(AdStatusEnum.AD_STATUS_PUTING.val)
-		.andStatusGreaterThanOrEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		example.setOrderByClause("gmt_create desc");
-		if(adMemberParam.getTypeEnum()!=null){
-			cr.andTypeEqualTo(adMemberParam.getTypeEnum().val);
-		}
-		List<AdDO> DOS=adDOMapper.selectByExample(example);
+		List<AdDO> DOS=adDOMapperExtend.selectChoiceness();
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
-			if(adDO.getType()==3){
+			if(adDO.getType()==3){ 
 				AdBO BO=AdConverter.convertBO(adDO);
-				PointPoolDOExample ppexample=new PointPoolDOExample();
-				ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(new Byte("1"))
-						                   .andStatusEqualTo(new Byte("1"));
-				 Long count=pointPoolDOMapper.countByExample(ppexample);
-				 BO.setNumber(count.intValue());
 				 BOS.add(BO);
 			}else{
 				if(adDO.getStatus()==2){
@@ -639,7 +627,6 @@ public class AdServiceImpl implements AdService {
 					BOS.add(BO);
 				}
 			}
-			
 		}
 		Page<AdBO> page=new Page<AdBO>();
 		page.setCurrentPage(adMemberParam.getCurrentPage());
@@ -659,8 +646,8 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public BigDecimal getRedPacket(Long merchantId,Long memberId,String memberNum) {
 		PointPoolDOExample ppexample=new PointPoolDOExample();
-		ppexample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(new Byte("2"))
-				                   .andStatusEqualTo(new Byte("0"));
+		ppexample.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val)
+				                   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_NO_GET.val);
 		//查询出没有领取的积分，取出一个给用户
 		List<PointPoolDO>  list=pointPoolDOMapper.selectByExample(ppexample);
 		if(!list.isEmpty()){ 
@@ -698,7 +685,7 @@ public class AdServiceImpl implements AdService {
 		rpexample.createCriteria().andStatusEqualTo(new Byte("1")).andMerchantIdEqualTo(merchantId);
 		AdDO adDO=adDOMapper.selectByExample(rpexample).get(0);
 		PointPoolDOExample example=new PointPoolDOExample();
-		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(new Byte("1")).andAdIdEqualTo(adDO.getId());
+		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andAdIdEqualTo(adDO.getId());
 		List<PointPoolDO> list=pointPoolDOMapper.selectByExample(example);
 		if(list.isEmpty())
 			return false;
@@ -909,7 +896,7 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public RedPacketInfoBO getRedPacketInfo(Long merchantId) { 
 		AdDOExample example =new AdDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(new Byte("1")).andTypeEqualTo(new Byte("4"));
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeEqualTo(AdStatusEnum.AD_STATUS_OUT.val);
 		List<AdDO>  list=adDOMapper.selectByExample(example);
 		RedPacketInfoBO redPacketInfoBO=new RedPacketInfoBO();
 		if(!list.isEmpty()){ 

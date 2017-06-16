@@ -37,4 +37,6 @@ public class DistanceUtil {
                 * longDiffSin * longDiffSin));
         return (int) Math.round(distance);
     }
+    
+
 }

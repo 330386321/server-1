@@ -19,4 +19,10 @@ public interface AdDOMapperExtend {
      * @return
      */
     List<AdDO> selectAdAll(AdDOView adDOView);
+    
+    /**
+     * 精选广告
+     * @return
+     */
+    List<AdDO> selectChoiceness();
 }
