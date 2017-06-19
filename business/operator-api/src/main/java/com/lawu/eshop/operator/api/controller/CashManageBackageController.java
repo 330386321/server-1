@@ -69,7 +69,8 @@ public class CashManageBackageController extends BaseController {
 		dparam.setUserTypeEnum(param.getUserTypeEnum());
 		dparam.setCurrentPage(param.getCurrentPage());
 		dparam.setPageSize(param.getPageSize());
-
+		dparam.setSortOrder(param.getSortOrder());
+		dparam.setSortName(param.getSortName());
 		Result<Page<WithdrawCashBackageQueryDTO>> dtos = cashManageBackageService.findCashInfo(dparam);
 		return dtos;
 	}

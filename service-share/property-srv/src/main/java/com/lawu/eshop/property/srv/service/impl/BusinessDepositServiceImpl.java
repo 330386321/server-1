@@ -190,6 +190,14 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 					criteria1.andAreaIdEqualTo(Long.valueOf(param.getRegionPath().split("/")[2]));
 				}
 			}
+			
+			if (StringUtils.isNotBlank(param.getSortName()) && StringUtils.isNotBlank(param.getSortOrder())) {
+				String sortName = "";
+				if("gmtPay".equals(param.getSortName())){
+					sortName = "gmt_pay";
+				}
+				example.setOrderByClause(sortName + " " + param.getSortOrder());
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());

@@ -62,7 +62,7 @@ public class CashManageBackageController extends BaseController {
 			WithdrawCashBackageQueryDTO dto = new WithdrawCashBackageQueryDTO();
 			BeanUtil.copyProperties(bo, dto);
 			dtos.add(dto);
-		}
+		} 
 		Page<WithdrawCashBackageQueryDTO> pageResult = new Page<WithdrawCashBackageQueryDTO>();
 		pageResult.setTotalCount(page.getTotalCount());
 		pageResult.setCurrentPage(page.getCurrentPage());

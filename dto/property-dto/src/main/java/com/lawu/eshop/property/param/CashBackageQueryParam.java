@@ -33,6 +33,26 @@ public class CashBackageQueryParam extends AbstractPageParam implements Serializ
 	
 	@ApiParam(name = "userTypeEnum", required = true, value = "用户类型")
 	private UserTypeEnum userTypeEnum;
+	
+	//bootsrap table列排序
+	private String sortName;
+	private String sortOrder;
+	
+	public String getSortName() {
+		return sortName;
+	}
+
+	public void setSortName(String sortName) {
+		this.sortName = sortName;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
 	public String getContent() {
 		return content;

@@ -62,6 +62,8 @@ public class BusinessDepositManageController extends BaseController {
 		dparam.setTransactionPayTypeEnum(param.getTransactionPayTypeEnum());
 		dparam.setCurrentPage(param.getCurrentPage());
 		dparam.setPageSize(param.getPageSize());
+		dparam.setSortOrder(param.getSortOrder());
+		dparam.setSortName(param.getSortName());
 		Result<Page<BusinessDepositQueryDTO>> dtos = businessDepositManageService.selectDepositList(dparam);
 		return dtos;
 	}

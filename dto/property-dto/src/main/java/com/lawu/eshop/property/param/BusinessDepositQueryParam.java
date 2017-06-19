@@ -36,6 +36,26 @@ public class BusinessDepositQueryParam  extends AbstractPageParam{
 	@ApiParam(name = "transactionPayTypeEnum", value = "支付方式")
 	private TransactionPayTypeEnum transactionPayTypeEnum;
 
+	//bootsrap table列排序
+	private String sortName;
+	private String sortOrder;
+	
+	public String getSortName() {
+		return sortName;
+	}
+
+	public void setSortName(String sortName) {
+		this.sortName = sortName;
+	}
+
+	public String getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	public String getContent() {
 		return content;
 	}

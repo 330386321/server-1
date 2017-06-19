@@ -91,6 +91,14 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 					criteria1.andAreaIdEqualTo(Integer.valueOf(param.getRegionPath().split("/")[2]));
 				}
 			}
+			
+			if (StringUtils.isNotBlank(param.getSortName()) && StringUtils.isNotBlank(param.getSortOrder())) {
+				String sortName = "";
+				if("gmtCreate".equals(param.getSortName())){
+					sortName = "gmt_create";
+				}
+				example.setOrderByClause(sortName + " " + param.getSortOrder());
+			}
 		}
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
