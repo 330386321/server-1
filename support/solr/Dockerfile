@@ -1,4 +1,4 @@
-FROM solr:5.3.2
+FROM solr:6.5.1-alpine
 MAINTAINER eshop
 
 ADD lib/mmseg4j-core-1.10.0.jar /opt/solr/server/solr-webapp/webapp/WEB-INF/lib/mmseg4j-core-1.10.0.jar
