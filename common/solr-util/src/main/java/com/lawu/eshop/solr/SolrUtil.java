@@ -24,11 +24,11 @@ public class SolrUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SolrUtil.class);
 
-    private static HttpSolrClient productSolrClient;
+    private volatile static HttpSolrClient productSolrClient;
 
-    private static HttpSolrClient merchantSolrClient;
+    private volatile static HttpSolrClient merchantSolrClient;
 
-    private static HttpSolrClient adSolrClient;
+    private volatile static HttpSolrClient adSolrClient;
 
     private static final String PRODUCT_CORE = "product";
 
@@ -38,7 +38,7 @@ public class SolrUtil {
 
     private static final int CONNECTION_TIMEOUT = 5000;
 
-    private static final int DEFAULT_MAX_CONNECTIONS_PERHOST = 1000;
+    private static final int DEFAULT_MAX_CONNECTIONS_PERHOST = 100;
 
     private static final int MAX_TOTAL_CONNECTIONS = 10000;
 
@@ -53,24 +53,42 @@ public class SolrUtil {
      * @param solrCore
      * @return
      */
-    private static void getSolrClient(String solrUrl, String solrCore) {
+    private static void getProductSolrClient(String solrUrl, String solrCore) {
         if (productSolrClient == null) {
-            productSolrClient = new HttpSolrClient(solrUrl + solrCore);
-            productSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
-            productSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
-            productSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+            synchronized (SolrUtil.class) {
+                if (productSolrClient == null) {
+                    productSolrClient = new HttpSolrClient(solrUrl + solrCore);
+                    productSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
+                    productSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
+                    productSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+                }
+            }
         }
+    }
+
+    private static void getMerchantSolrClient(String solrUrl, String solrCore) {
         if (merchantSolrClient == null) {
-            merchantSolrClient = new HttpSolrClient(solrUrl + solrCore);
-            merchantSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
-            merchantSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
-            merchantSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+            synchronized (SolrUtil.class) {
+                if (merchantSolrClient == null) {
+                    merchantSolrClient = new HttpSolrClient(solrUrl + solrCore);
+                    merchantSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
+                    merchantSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
+                    merchantSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+                }
+            }
         }
+    }
+
+    private static void getAdSolrClient(String solrUrl, String solrCore) {
         if (adSolrClient == null) {
-            adSolrClient = new HttpSolrClient(solrUrl + solrCore);
-            adSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
-            adSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
-            adSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+            synchronized (SolrUtil.class) {
+                if (adSolrClient == null) {
+                    adSolrClient = new HttpSolrClient(solrUrl + solrCore);
+                    adSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
+                    adSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
+                    adSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
+                }
+            }
         }
     }
 
@@ -81,18 +99,36 @@ public class SolrUtil {
      * @param solrCore
      * @return
      */
-    /*private static void getSolrClient(String solrUrl, String solrCore) {
+   /* private static void getProductSolrClient(String solrUrl, String solrCore) {
         if (productSolrClient == null) {
-            productSolrClient = new CloudSolrClient(solrUrl);
-            productSolrClient.setDefaultCollection(solrCore);
+            synchronized (SolrUtil.class) {
+                if (productSolrClient == null) {
+                    productSolrClient = new CloudSolrClient(solrUrl);
+                    productSolrClient.setDefaultCollection(solrCore);
+                }
+            }
         }
+    }
+
+    private static void getMerchantSolrClient(String solrUrl, String solrCore) {
         if (merchantSolrClient == null) {
-            merchantSolrClient = new CloudSolrClient(solrUrl);
-            merchantSolrClient.setDefaultCollection(solrCore);
+            synchronized (SolrUtil.class) {
+                if (merchantSolrClient == null) {
+                    merchantSolrClient = new CloudSolrClient(solrUrl);
+                    merchantSolrClient.setDefaultCollection(solrCore);
+                }
+            }
         }
+    }
+
+    private static void getAdSolrClient(String solrUrl, String solrCore) {
         if (adSolrClient == null) {
-            adSolrClient = new CloudSolrClient(solrUrl);
-            adSolrClient.setDefaultCollection(solrCore);
+            synchronized (SolrUtil.class) {
+                if (adSolrClient == null) {
+                    adSolrClient = new CloudSolrClient(solrUrl);
+                    adSolrClient.setDefaultCollection(solrCore);
+                }
+            }
         }
     }*/
 
@@ -120,14 +156,16 @@ public class SolrUtil {
      * @return
      */
     public static boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return addSolrDocs(document, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return addSolrDocs(document, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return addSolrDocs(document, adSolrClient);
         }
         return false;
@@ -142,14 +180,16 @@ public class SolrUtil {
      * @return
      */
     public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return addSolrDocsList(documents, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return addSolrDocsList(documents, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return addSolrDocsList(documents, adSolrClient);
         }
         return false;
@@ -164,14 +204,16 @@ public class SolrUtil {
      * @return
      */
     public static boolean delSolrDocsById(Long id, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return delSolrDocsById(id, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return delSolrDocsById(id, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return delSolrDocsById(id, adSolrClient);
         }
         return false;
@@ -186,14 +228,16 @@ public class SolrUtil {
      * @return
      */
     public static boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return delSolrDocsByIds(ids, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return delSolrDocsByIds(ids, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return delSolrDocsByIds(ids, adSolrClient);
         }
         return false;
@@ -209,14 +253,16 @@ public class SolrUtil {
      * @throws Exception
      */
     public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return getSolrDocsByQuery(query, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return getSolrDocsByQuery(query, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return getSolrDocsByQuery(query, adSolrClient);
         }
         return null;
@@ -231,14 +277,16 @@ public class SolrUtil {
      * @return
      */
     public static SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return getSolrDocsById(id, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return getSolrDocsById(id, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return getSolrDocsById(id, adSolrClient);
         }
         return null;
@@ -253,14 +301,16 @@ public class SolrUtil {
      * @return
      */
     public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrUrl, String solrCore) {
-        getSolrClient(solrUrl, solrCore);
         if (PRODUCT_CORE.equals(solrCore)) {
+            getProductSolrClient(solrUrl, solrCore);
             return getTermsResponseByQuery(query, productSolrClient);
         }
         if (MERCHANT_CORE.equals(solrCore)) {
+            getMerchantSolrClient(solrUrl, solrCore);
             return getTermsResponseByQuery(query, merchantSolrClient);
         }
         if (AD_CORE.equals(solrCore)) {
+            getAdSolrClient(solrUrl, solrCore);
             return getTermsResponseByQuery(query, adSolrClient);
         }
         return null;
