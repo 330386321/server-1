@@ -31,10 +31,6 @@ public enum ExpressInquiriesDetailStateEnum {
 		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	ExpressInquiriesDetailStateEnum(String value){
 		this.value = value;
 	}

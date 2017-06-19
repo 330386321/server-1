@@ -1,11 +1,8 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShoppingOrderMoneyBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderMoneyBO {
 
     /**
     * 订单总价

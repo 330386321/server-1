@@ -14,7 +14,7 @@ public enum PropertyinfoFreezeEnum {
 	NO((byte) 0x00), //否
 	YES((byte) 0x01);//是
 	
-	public Byte val;
+	private Byte val;
 
 	PropertyinfoFreezeEnum(Byte val) {
 		this.val = val;
@@ -29,4 +29,13 @@ public enum PropertyinfoFreezeEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+
+	public void setVal(Byte val) {
+		this.val = val;
+	}
+	
 }

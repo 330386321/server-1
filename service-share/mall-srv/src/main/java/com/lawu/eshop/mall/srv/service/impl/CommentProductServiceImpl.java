@@ -364,15 +364,13 @@ public class CommentProductServiceImpl implements CommentProductService {
 	@Override
 	public List<MemberProductCommentDTO> geNewlyProductComment(Long productId) {
 		CommentProductDOExample example = new CommentProductDOExample();
-		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
-				.andProductIdEqualTo(productId);
-		example.setOrderByClause("id desc");
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).andProductIdEqualTo(productId);
+		example.setOrderByClause(" id desc ");
 		RowBounds rowBounds = new RowBounds(0, 1);
-		Page<CommentProductBO> page = new Page<>();
-		page.setTotalCount(commentProductDOMapper.countByExample(example));
-		page.setCurrentPage(1);
-		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,
-				rowBounds);
+//		Page<CommentProductBO> page = new Page<>();
+//		page.setTotalCount(commentProductDOMapper.countByExample(example));
+//		page.setCurrentPage(1);
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		List<MemberProductCommentDTO> dtos = new ArrayList<MemberProductCommentDTO>();
 		for (CommentProductDO comment : commentProductDOS) {
 			MemberProductCommentDTO dto = new MemberProductCommentDTO();
@@ -381,8 +379,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 			dto.setGrade(comment.getGrade());
 
 			CommentImageDOExample imageDOExample = new CommentImageDOExample();
-			imageDOExample.createCriteria().andCommentIdEqualTo(comment.getId())
-					.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val);
+			imageDOExample.createCriteria().andCommentIdEqualTo(comment.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val).andStatusEqualTo(true);
 			List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
 			List<String> images = new ArrayList<String>();
 			if (!commentImageDOS.isEmpty()) {
@@ -403,8 +400,7 @@ public class CommentProductServiceImpl implements CommentProductService {
 	@Override
 	public Integer getProductCommentCount(Long productId) {
 		CommentProductDOExample example = new CommentProductDOExample();
-		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val)
-				.andProductIdEqualTo(productId);
+		example.createCriteria().andStatusEqualTo(CommentStatusEnum.COMMENT_STATUS_VALID.val).andProductIdEqualTo(productId);
 		int count = commentProductDOMapper.countByExample(example);
 		return count;
 	}

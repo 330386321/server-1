@@ -33,11 +33,11 @@ public class CommissionUtilServiceImpl implements CommissionUtilService{
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
-		double d_acture_in = 1 - Double.valueOf(love_account_scale).doubleValue(); // 用户实际进账比例：1-爱心账户比例
+		double d_acture_in = 1 - Double.parseDouble(love_account_scale); // 用户实际进账比例：1-爱心账户比例
 		
 		BigDecimal b_ad_commission_0 = new BigDecimal(ad_commission_0);
 		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
-		BigDecimal b_acture_in = new BigDecimal(d_acture_in);
+		BigDecimal b_acture_in = BigDecimal.valueOf(d_acture_in);
 		
 		BigDecimal actureMoneyIn = clickMoney.multiply(b_ad_commission_0).multiply(b_acture_in).setScale(6, BigDecimal.ROUND_HALF_UP);//实际进余额
 		BigDecimal actureLoveIn = clickMoney.multiply(b_ad_commission_0).multiply(b_love_account_scale).setScale(6, BigDecimal.ROUND_HALF_UP);//爱心账户
@@ -62,10 +62,10 @@ public class CommissionUtilServiceImpl implements CommissionUtilService{
 		if ("".equals(love_account_scale)) {
 			love_account_scale = PropertyType.love_account_scale_default;
 		}
-		double d_acture_in = 1 - Double.valueOf(love_account_scale).doubleValue(); // 用户实际进账比例：1-爱心账户比例
+		double d_acture_in = 1 - Double.parseDouble(love_account_scale); // 用户实际进账比例：1-爱心账户比例
 		
 		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
-		BigDecimal b_acture_in = new BigDecimal(d_acture_in);
+		BigDecimal b_acture_in = BigDecimal.valueOf(d_acture_in);
 		
 		BigDecimal actureMoneyIn = clickMoney.multiply(b_acture_in).setScale(6, BigDecimal.ROUND_HALF_UP);//实际进余额
 		BigDecimal actureLoveIn = clickMoney.multiply(b_love_account_scale).setScale(6, BigDecimal.ROUND_HALF_UP);//爱心账户

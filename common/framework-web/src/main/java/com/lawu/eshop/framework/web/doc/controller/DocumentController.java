@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,9 @@ import io.swagger.annotations.ApiOperation;
  */
 @Controller
 public class DocumentController extends BaseController{
-
+	
+	private static Logger logger = LoggerFactory.getLogger(DocumentController.class);
+	
 	/**
 	 * 显示审核通过接口列表
 	 * 
@@ -76,15 +80,14 @@ public class DocumentController extends BaseController{
      */
     @SuppressWarnings("unused")
 	private List<ApiDocumentVO> getVoList(Boolean isAudit) {
-    	
-    	if (isAudit == null) {
-    		isAudit = true;
-    	}
-    	
-    	List<ApiDocumentVO> voList = new ArrayList<ApiDocumentVO>();
+    	List<ApiDocumentVO> rtn = new ArrayList<ApiDocumentVO>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
     	try {
+    		/*
+    		 * 不从spring中获取注解。
+    		 * 用反射的方式获取注解
+    		 */
     		if (false) {
     	    	// 注解
     	    	Api api = null;
@@ -128,7 +131,7 @@ public class DocumentController extends BaseController{
 			            	vo.setNotes(apiOperation.notes());
 			            	vo.setHttpMethod(apiOperation.httpMethod());
 		            	}
-		            	voList.add(vo);
+		            	rtn.add(vo);
 		            }
 		        }
     		} else {
@@ -188,18 +191,18 @@ public class DocumentController extends BaseController{
 					            	vo.setNotes(apiOperation.notes());
 					            	vo.setHttpMethod(apiOperation.httpMethod());
 				            	}
-				            	voList.add(vo);
+				            	rtn.add(vo);
 			            	}
 		            	}
 		            }
 		        }
     		}
     	} catch (Exception e) {
-    		e.printStackTrace();
+    		logger.error("查询接口数据异常", e);
     	}
     	
     	// 按照日期和接口排序
-    	Collections.sort(voList, new Comparator <ApiDocumentVO>() {
+    	Collections.sort(rtn, new Comparator <ApiDocumentVO>() {
 			@Override
 			public int compare(ApiDocumentVO o1, ApiDocumentVO o2){
 				
@@ -218,7 +221,7 @@ public class DocumentController extends BaseController{
 			}
 		});
     	
-    	return voList;
+    	return rtn;
     }
     
     public WebApplicationContext getWebApplicationContext() {  

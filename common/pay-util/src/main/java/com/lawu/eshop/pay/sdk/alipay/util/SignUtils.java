@@ -109,10 +109,10 @@ public class SignUtils {
         String tailValue = map.get(tailKey);
         authInfo.append(buildKeyValue(tailKey, tailValue, false));
 
-        logger.error("待签名字符串：" + authInfo.toString());
-        logger.error("私钥：" + rsaKey);
+        logger.error("待签名字符串：{}" , authInfo.toString());
+        logger.error("私钥：{}" , rsaKey);
         String oriSign = SignUtils.sign(authInfo.toString(), rsaKey, rsa2);
-        logger.error("sign：" + oriSign);
+        logger.error("sign：{}" , oriSign);
         String encodedSign = "";
 
         try {

@@ -61,8 +61,7 @@ public class BankAccountController extends BaseController{
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public Result<List<BankAccountDTO>> selectMyBank(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        Result<List<BankAccountDTO>> bankAccountDTOS = bankAccountService.selectMyBank(userNum);
-        return bankAccountDTOS;
+        return bankAccountService.selectMyBank(userNum);
     }
 	
 	/**
@@ -82,8 +81,7 @@ public class BankAccountController extends BaseController{
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 		if(flag.getModel()!=null && (Boolean)flag.getModel()){
-			 Result rs = bankAccountService.saveBankAccount(userNum, bankAccountParam);
-			 return rs;
+			 return bankAccountService.saveBankAccount(userNum, bankAccountParam);
 		}else{
 			 return successCreated(ResultCode.PAY_PWD_ERROR);
 		}

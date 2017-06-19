@@ -46,4 +46,18 @@ public interface MerchantStoreService {
 	@RequestMapping(method = RequestMethod.PUT, value = "merchantStore/updateStoreIndex/{id}")
 	Result updateStoreIndex(@PathVariable("id") Long id);
 
+	/**
+	 * 重建门店索引
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/rebuildStoreIndex")
+	Result rebuildStoreIndex();
+
+	/**
+	 * 删除无效门店索引
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/delInvalidStoreIndex")
+	Result delInvalidStoreIndex();
+
 }

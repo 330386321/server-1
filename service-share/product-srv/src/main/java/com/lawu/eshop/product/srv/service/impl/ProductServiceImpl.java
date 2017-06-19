@@ -15,21 +15,18 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductModelBO;
-import com.lawu.eshop.product.srv.bo.ProductQueryBO;
+import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
 import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
+import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.*;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
@@ -97,13 +94,12 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductQueryBO> productBOS = new ArrayList<ProductQueryBO>();
 
-        ProductModelDOExample modelExample = null;
         for (ProductDO productDO : productDOS) {
 
             String specJson = "";
             String category = "";
             if (!query.getIsApp()) {
-                modelExample = new ProductModelDOExample();
+            	ProductModelDOExample modelExample = new ProductModelDOExample();
                 modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
                 // 查询商品型号
                 List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
@@ -131,6 +127,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public int updateProductStatus(String ids, ProductStatusEnum productStatus) {
         int rows = 0;
+        List<String> delIds = new ArrayList<>();
+        Collection<SolrInputDocument> documents = new ArrayList<>();
         String idArray[] = ids.split(",");
         ProductDOExample examle = new ProductDOExample();
         for (int i = 0; i < idArray.length; i++) {
@@ -141,62 +139,29 @@ public class ProductServiceImpl implements ProductService {
             productDO.setGmtModified(new Date());
             int row = productDOMapper.updateByPrimaryKeySelective(productDO);
             rows = rows + row;
-        }
-        if (rows == idArray.length) {
-            if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DEL.val
-                    || productStatus.val == ProductStatusEnum.PRODUCT_STATUS_DOWN.val) {
-                for (String id : idArray) {
-                    SolrUtil.delSolrDocsById(Long.valueOf(id), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
-                }
-            } else if (productStatus.val == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
-                for (String id : idArray) {
-                    ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(id));
-                    SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
 
-                    ProductModelDOExample example = new ProductModelDOExample();
-                    example.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
-                    List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(example);
-                    int inventory = 0;
-                    int salesVolume = 0;
-                    double originalPrice = 0;
-                    double price = 0;
-                    int traverseCnt = 0;
-                    if (!productModelDOS.isEmpty()) {
-                        for (ProductModelDO productModelDO : productModelDOS) {
-                            if (traverseCnt == 0) {
-                                price = productModelDO.getPrice().doubleValue();
-                            }
-                            if (productModelDO.getOriginalPrice().doubleValue() > originalPrice) {
-                                originalPrice = productModelDO.getOriginalPrice().doubleValue();
-                            }
-                            if (productModelDO.getPrice().doubleValue() < price) {
-                                price = productModelDO.getPrice().doubleValue();
-                            }
-                            inventory += productModelDO.getInventory();
-                            salesVolume += productModelDO.getSalesVolume();
-                            traverseCnt++;
-                        }
-                    }
-                    document.addField("originalPrice_d", originalPrice);
-                    document.addField("price_d", price);
-                    document.addField("inventory_i", inventory);
-                    document.addField("salesVolume_i", salesVolume);
-                    ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
-                    if (productCategoryeDO != null) {
-                        String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-                        for (String categoryId : categoryIdArr) {
-                            document.addField("categoryId_is", categoryId);
-                        }
-                    }
-                    SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
-                }
+            //更新solr索引
+            if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_DEL.val
+                    || productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_DOWN.val) {
+                    delIds.add(idArray[i]);
             }
+            if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
+                    productDO = productDOMapper.selectByPrimaryKey(productDO.getId());
+                    SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+                    documents.add(document);
+            }
+        }
+        if(!delIds.isEmpty()){
+            SolrUtil.delSolrDocsByIds(delIds, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+        if(!documents.isEmpty()){
+            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         }
         return rows;
     }
 
     @Override
-    public ProductInfoBO selectProductById(Long id) throws Exception {
+    public ProductInfoBO selectProductById(Long id) {
         ProductDO productDO = productDOMapper.selectByPrimaryKey(id);
         if (productDO == null) {
             return null;
@@ -217,7 +182,11 @@ public class ProductServiceImpl implements ProductService {
         List<MemberProductModelDTO> spec = new ArrayList<MemberProductModelDTO>();
         for (ProductModelDO mdo : productModelDOS) {
             MemberProductModelDTO dto = new MemberProductModelDTO();
-            BeanUtil.copyProperties(mdo, dto);
+            dto.setId(mdo.getId());
+            dto.setInventory(mdo.getInventory());
+            dto.setName(mdo.getName());
+            dto.setOriginalPrice(mdo.getOriginalPrice());
+            dto.setPrice(mdo.getPrice());
             spec.add(dto);
         }
         productInfoBO.setSpec(spec);
@@ -408,9 +377,9 @@ public class ProductServiceImpl implements ProductService {
         String spec = param.getSpec();
         List<ProductModelBO> speclist = JSON.parseArray(spec, ProductModelBO.class);
         if (!isEdit) {
-            ProductModelDO pmDO = null;
+        	ProductModelDO pmDO;
             for (ProductModelBO dataBO : speclist) {
-                pmDO = new ProductModelDO();
+            	pmDO = new ProductModelDO();
                 pmDO.setMerchantId(param.getMerchantId());
                 pmDO.setProductId(productId);
                 pmDO.setName(dataBO.getName());
@@ -435,8 +404,9 @@ public class ProductServiceImpl implements ProductService {
                 traverseCnt++;
             }
         } else {
+        	ProductModelDOExample modelExample;
             for (ProductModelBO dataBO : speclist) {
-                ProductModelDOExample modelExample = new ProductModelDOExample();
+                modelExample = new ProductModelDOExample();
                 modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
                 ProductModelDO modelDO = new ProductModelDO();
 
@@ -500,8 +470,8 @@ public class ProductServiceImpl implements ProductService {
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
-        productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(new BigDecimal(originalPrice));
+        productDO.setMinPrice(BigDecimal.valueOf(price));
+        productDO.setMaxPrice(BigDecimal.valueOf(originalPrice));
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);
@@ -517,7 +487,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 保存商品滚动图片信息
-        ProductImageDO pcDO = null;
+        ProductImageDO pcDO;
         String imageUrl = param.getProductImages();
         String[] imageUrls = imageUrl.split(",");
         for (int i = 0; i < imageUrls.length; i++) {
@@ -546,27 +516,12 @@ public class ProductServiceImpl implements ProductService {
                 pcDO.setGmtCreate(new Date());
                 pcDO.setGmtModified(new Date());
                 pcDO.setStatus(true);
-                pcDO.setSortid(Integer.valueOf(key.substring(key.lastIndexOf("-") + 1)));
+                pcDO.setSortid(Integer.valueOf(key.substring(key.lastIndexOf('-') + 1)));
                 pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
                 productImageDOMapper.insert(pcDO);
             }
         }
-
-        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productId, param);
-        document.addField("originalPrice_d", originalPrice);
-        document.addField("price_d", price);
-        document.addField("inventory_i", inventory);
-        document.addField("salesVolume_i", salesVolume);
-        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
-        if (productCategoryeDO != null) {
-            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-            for (String categoryId : categoryIdArr) {
-                document.addField("categoryId_is", categoryId);
-            }
-        }
-        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
     }
-
 
     @Override
     @Transactional
@@ -581,7 +536,7 @@ public class ProductServiceImpl implements ProductService {
         int traverseCnt = 0;
 
         boolean isEdit = true;
-        if (productId == 0L || productId == null || productId < 0) {
+        if (productId == null || productId <= 0) {
             // 保存商品信息
             ProductDO productDO = ProductConverter.convertDO(param, 0L);
             String featureImage = productDO.getFeatureImage();
@@ -734,7 +689,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
         productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(new BigDecimal(mprice));
+        productDO.setMaxPrice(BigDecimal.valueOf(mprice));
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);
@@ -784,18 +739,8 @@ public class ProductServiceImpl implements ProductService {
             productImageDOMapper.insert(pcDO);
         }
 
-        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productId, param);
-        document.addField("originalPrice_d", originalPrice);
-        document.addField("price_d", price);
-        document.addField("inventory_i", inventory);
-        document.addField("salesVolume_i", salesVolume);
-        ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(param.getCategoryId());
-        if (productCategoryeDO != null) {
-            String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-            for (String categoryId : categoryIdArr) {
-                document.addField("categoryId_is", categoryId);
-            }
-        }
+        ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
+        SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
         SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
     }
 
@@ -912,43 +857,65 @@ public class ProductServiceImpl implements ProductService {
         SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         if(solrDocument == null){
             SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
-
-            ProductModelDOExample example = new ProductModelDOExample();
-            example.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
-            List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(example);
-            int inventory = 0;
-            int salesVolume = 0;
-            double originalPrice = 0;
-            double price = 0;
-            int traverseCnt = 0;
-            if (!productModelDOS.isEmpty()) {
-                for (ProductModelDO productModelDO : productModelDOS) {
-                    if (traverseCnt == 0) {
-                        price = productModelDO.getPrice().doubleValue();
-                    }
-                    if (productModelDO.getOriginalPrice().doubleValue() > originalPrice) {
-                        originalPrice = productModelDO.getOriginalPrice().doubleValue();
-                    }
-                    if (productModelDO.getPrice().doubleValue() < price) {
-                        price = productModelDO.getPrice().doubleValue();
-                    }
-                    inventory += productModelDO.getInventory();
-                    salesVolume += productModelDO.getSalesVolume();
-                    traverseCnt++;
-                }
-            }
-            document.addField("originalPrice_d", originalPrice);
-            document.addField("price_d", price);
-            document.addField("inventory_i", inventory);
-            document.addField("salesVolume_i", salesVolume);
-            ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
-            if (productCategoryeDO != null) {
-                String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-                for (String categoryId : categoryIdArr) {
-                    document.addField("categoryId_is", categoryId);
-                }
-            }
             SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+    }
+
+    @Override
+    public void rebuildProductIndex() {
+        ListProductParam listProductParam = new ListProductParam();
+        listProductParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listProductParam.setCurrentPage(currentPage);
+            ProductDOExample example = new ProductDOExample();
+            example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
+            List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (productDOS == null || productDOS.isEmpty()) {
+                return ;
+            }
+
+            Collection<SolrInputDocument> documents = new ArrayList<>();
+            for (ProductDO productDO : productDOS) {
+                SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
+                documents.add(document);
+                //ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
+                //if (productCategoryeDO != null) {
+                //    String[] categoryIdArr = productCategoryeDO.getPath().split("/");
+                //    for (String categoryId : categoryIdArr) {
+                //        document.addField("categoryId_is", categoryId);
+                //    }
+                //}
+            }
+            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        }
+    }
+
+    @Override
+    public void delInvalidProductIndex() {
+        ListProductParam listProductParam = new ListProductParam();
+        listProductParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listProductParam.setCurrentPage(currentPage);
+            ProductDOExample example = new ProductDOExample();
+            example.createCriteria().andStatusNotEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
+            List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+            if (productDOS == null || productDOS.isEmpty()) {
+                return ;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (ProductDO productDO : productDOS) {
+                ids.add(String.valueOf(productDO.getId()));
+            }
+            SolrUtil.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
         }
     }
 
@@ -975,12 +942,9 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductQueryBO> productBOS = new ArrayList<ProductQueryBO>();
 
-        ProductModelDOExample modelExample = null;
         for (ProductDO productDO : productDOS) {
 
-            String specJson = "";
-            String category = "";
-            modelExample = new ProductModelDOExample();
+            ProductModelDOExample  modelExample = new ProductModelDOExample();
             modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
             // 查询商品型号
             List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
@@ -989,8 +953,8 @@ public class ProductServiceImpl implements ProductService {
                 ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
                 ProductModelBOS.add(productModelBO);
             }
-            specJson = JSON.toJSONString(ProductModelBOS);
-            category = productCategoryService.getFullName(productDO.getCategoryId());
+            String specJson = JSON.toJSONString(ProductModelBOS);
+            String category = productCategoryService.getFullName(productDO.getCategoryId());
             ProductQueryBO productBO = ProductConverter.convertQueryBO(productDO);
             productBO.setSpec(specJson);
 
@@ -1003,5 +967,10 @@ public class ProductServiceImpl implements ProductService {
         return page;
     }
 
+    @Override
+    public List<ProductBO> listProductByIds(List<Long> ids) {
+        List<ProductDOView> productDOViewList = productDOMapperExtend.listProductByIds(ids);
+        return ProductConverter.convertBOS(productDOViewList);
+    }
 
 }

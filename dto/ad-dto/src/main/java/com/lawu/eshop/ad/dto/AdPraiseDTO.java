@@ -18,9 +18,6 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "广告投放开始时间")
 	private Date beginTime;
 
-	@ApiModelProperty(value = "广告投放时间")
-	private Date endTime;
-
 	@ApiModelProperty(value = "广告总积分")
 	private BigDecimal totalPoint;
 
@@ -54,6 +51,15 @@ public class AdPraiseDTO {
 	@ApiModelProperty(value = "商家id")
 	private Long merchantId;
 	
+	@ApiModelProperty(value = "是否扣除积分")
+	private Boolean isDoHanlderMinusPoint;
+	
+	@ApiModelProperty(value = "假次数")
+	private Integer clickPraiseAdTimes;
+	
+	@ApiModelProperty(value = "概率数")
+	private Integer praiseProb;
+	
 
 	public Integer getCount() {
 		return count;
@@ -85,14 +91,6 @@ public class AdPraiseDTO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
-	}
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
 	}
 
 	public BigDecimal getTotalPoint() {
@@ -173,6 +171,30 @@ public class AdPraiseDTO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Boolean getIsDoHanlderMinusPoint() {
+		return isDoHanlderMinusPoint;
+	}
+
+	public void setIsDoHanlderMinusPoint(Boolean isDoHanlderMinusPoint) {
+		this.isDoHanlderMinusPoint = isDoHanlderMinusPoint;
+	}
+
+	public Integer getClickPraiseAdTimes() {
+		return clickPraiseAdTimes;
+	}
+
+	public void setClickPraiseAdTimes(Integer clickPraiseAdTimes) {
+		this.clickPraiseAdTimes = clickPraiseAdTimes;
+	}
+
+	public Integer getPraiseProb() {
+		return praiseProb;
+	}
+
+	public void setPraiseProb(Integer praiseProb) {
+		this.praiseProb = praiseProb;
 	}
 
 	

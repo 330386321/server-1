@@ -37,7 +37,9 @@ public class PointDetailController extends BaseController {
     	
     	Page<PointDetailBO> pointDetailBOPage = pointDetailService.findPageByUserNum(userNum, pointDetailQueryParam);
     	
-        return successGet(PointDetailConverter.convertDTOPage(pointDetailBOPage));
+    	Page<PointDetailDTO> pointDetailDTOPage = PointDetailConverter.convertDTOPage(pointDetailBOPage);
+    	pointDetailBOPage = null;
+        return successGet(pointDetailDTOPage);
     }
     
     /**

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.FavoriteAdDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.FavoriteAdService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.solr.SolrUtil;
 
 /**
  * 广告收藏接口实现
@@ -82,6 +80,18 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
         page.setTotalCount(count.intValue());
         page.setRecords(FavoriteAdConverter.convertBOS(views));
 		return page;
+	}
+
+	@Override
+	public Boolean isFavoriteAd(Long adId, Long memberId) {
+		FavoriteAdDOExample fAexample=new FavoriteAdDOExample();
+		fAexample.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId);
+		Long count=favoriteAdDOMapper.countByExample(fAexample);
+		if(count.intValue()>0){  //是否收藏
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 }

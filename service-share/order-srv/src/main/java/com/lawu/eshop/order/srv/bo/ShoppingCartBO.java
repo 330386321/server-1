@@ -1,11 +1,8 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShoppingCartBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingCartBO {
 
 	/**
 	 * 主键
@@ -16,11 +13,6 @@ public class ShoppingCartBO implements Serializable {
 	 * 商家ID
 	 */
 	private Long merchantId;
-	
-    /**
-    * 商家编号
-    */
-	private String merchantNum;
 	
 	/**
 	 * 商家名称
@@ -61,14 +53,6 @@ public class ShoppingCartBO implements Serializable {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
-	}
-
-	public String getMerchantNum() {
-		return merchantNum;
-	}
-
-	public void setMerchantNum(String merchantNum) {
-		this.merchantNum = merchantNum;
 	}
 
 	public String getMerchantName() {

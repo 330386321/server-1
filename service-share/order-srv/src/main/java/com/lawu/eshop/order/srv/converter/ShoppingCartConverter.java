@@ -1,9 +1,8 @@
 package com.lawu.eshop.order.srv.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
@@ -27,46 +26,61 @@ public class ShoppingCartConverter {
 	 * @return
 	 */
 	public static ShoppingCartBO convert(ShoppingCartDO shoppingCartDO) {
+		ShoppingCartBO rtn = null;
 		if (shoppingCartDO == null) {
 			return null;
 		}
 
-		ShoppingCartBO bo = new ShoppingCartBO();
-		BeanUtils.copyProperties(shoppingCartDO, bo);
+		rtn = new ShoppingCartBO();
+		rtn.setId(shoppingCartDO.getId());
+		rtn.setMerchantId(shoppingCartDO.getMemberId());
+		rtn.setMerchantName(shoppingCartDO.getMerchantName());
+		rtn.setProductId(shoppingCartDO.getProductId());
+		rtn.setProductModelId(shoppingCartDO.getProductModelId());
+		rtn.setQuantity(shoppingCartDO.getQuantity());
+		rtn.setSalesPrice(shoppingCartDO.getSalesPrice());
 
-		return bo;
+		return rtn;
 	}
 
-	public static List<ShoppingCartBO> convertBOS(List<ShoppingCartDO> dos) {
-		if (dos == null || dos.isEmpty()) {
-			return null;
+	public static List<ShoppingCartBO> convertBOS(List<ShoppingCartDO> shoppingCartDOList) {
+		List<ShoppingCartBO> rtn = null;
+		if (shoppingCartDOList == null || shoppingCartDOList.isEmpty()) {
+			return rtn;
 		}
 
-		List<ShoppingCartBO> bos = new ArrayList<ShoppingCartBO>();
-		for (ShoppingCartDO shoppingCartDO : dos) {
-			bos.add(convert(shoppingCartDO));
+		rtn = new ArrayList<ShoppingCartBO>();
+		for (ShoppingCartDO shoppingCartDO : shoppingCartDOList) {
+			rtn.add(convert(shoppingCartDO));
 		}
 
-		return bos;
+		return rtn;
 	}
 
 	/**
 	 * DTO转换
 	 *
-	 * @param bo
+	 * @param shoppingCartBO
 	 * @return
 	 */
-	public static ShoppingCartDTO convert(ShoppingCartBO bo) {
-		if (bo == null) {
-			return null;
+	public static ShoppingCartDTO convert(ShoppingCartBO shoppingCartBO) {
+		ShoppingCartDTO rtn = null;
+		if (shoppingCartBO == null) {
+			return rtn;
 		}
 
-		ShoppingCartDTO dto = new ShoppingCartDTO();
-		BeanUtils.copyProperties(bo, dto);
+		rtn = new ShoppingCartDTO();
+		rtn.setId(shoppingCartBO.getId());
+		rtn.setMerchantId(shoppingCartBO.getMerchantId());
+		rtn.setMerchantName(shoppingCartBO.getMerchantName());
+		rtn.setProductId(shoppingCartBO.getProductId());
+		rtn.setProductModelId(shoppingCartBO.getProductModelId());
+		rtn.setQuantity(shoppingCartBO.getQuantity());
+		rtn.setSalesPrice(shoppingCartBO.getSalesPrice());
 
-		return dto;
+		return rtn;
 	}
-	
+
 	public static List<ShoppingCartDTO> convertDTOS(List<ShoppingCartBO> bos) {
 		List<ShoppingCartDTO> rtn = new ArrayList<ShoppingCartDTO>();
 		if (bos == null || bos.isEmpty()) {
@@ -79,32 +93,52 @@ public class ShoppingCartConverter {
 
 		return rtn;
 	}
-	
+
 	/**
 	 * DO转换
 	 * 
 	 * @param param
 	 * @return
 	 */
-	public static ShoppingCartDO convert(ShoppingCartSaveParam param) {
+	public static ShoppingCartDO convert(ShoppingCartSaveParam param, Long memberId) {
+		ShoppingCartDO rtn = null;
 		if (param == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingCartDO shoppingCartDO = new ShoppingCartDO();
-		BeanUtils.copyProperties(param, shoppingCartDO);
+		rtn = new ShoppingCartDO();
+		rtn.setMemberId(memberId);
+		rtn.setMerchantId(param.getMerchantId());
+		rtn.setMerchantName(param.getMerchantName());
+		rtn.setProductId(param.getProductId());
+		rtn.setProductModelId(param.getProductModelId());
+		rtn.setQuantity(param.getQuantity());
+		rtn.setSalesPrice(param.getSalesPrice());
+		rtn.setGmtCreate(new Date());
+		rtn.setGmtModified(new Date());
 
-		return shoppingCartDO;
+		return rtn;
 	}
-	
-	public static ShoppingCartDO convert(ShoppingCartUpdateParam param) {
+
+	/**
+	 * 
+	 * @param param
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月16日
+	 */
+	public static ShoppingCartDO convert(ShoppingCartUpdateParam param, Long id) {
+		ShoppingCartDO rtn = null;
 		if (param == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingCartDO shoppingCartDO = new ShoppingCartDO();
-		BeanUtils.copyProperties(param, shoppingCartDO);
-
-		return shoppingCartDO;
+		rtn = new ShoppingCartDO();
+		rtn.setId(id);
+		rtn.setProductModelId(param.getProductModelId());
+		rtn.setQuantity(param.getQuantity());
+		rtn.setGmtModified(new Date());
+		return rtn;
 	}
 }

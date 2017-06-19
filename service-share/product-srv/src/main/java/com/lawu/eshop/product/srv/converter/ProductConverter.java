@@ -6,11 +6,10 @@ import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.dto.ProductSearchDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
-import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductInfoBO;
-import com.lawu.eshop.product.srv.bo.ProductQueryBO;
-import com.lawu.eshop.product.srv.bo.ProductSearchBO;
+import com.lawu.eshop.product.srv.bo.*;
 import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
+import com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.apache.solr.common.SolrDocument;
@@ -104,6 +103,7 @@ public class ProductConverter {
         productInfoBO.setFeatureImage(productDO.getFeatureImage());
         productInfoBO.setContent(productDO.getContent());
         productInfoBO.setMerchantId(productDO.getMerchantId());
+        productInfoBO.setMerchantNum(productDO.getMerchantNum());
         productInfoBO.setTotalSalesVolume(productDO.getTotalSalesVolume());
         productInfoBO.setTotalInventory(productDO.getTotalInventory());
         productInfoBO.setMaxPrice(String.valueOf(productDO.getMaxPrice()));
@@ -241,47 +241,19 @@ public class ProductConverter {
         ProductDO productDO = new ProductDO();
         productDO.setName(param.getName());
         productDO.setCategoryId(param.getCategoryId());
-        productDO.setMerchantId(param.getMerchantId());
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
         productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
+            productDO.setMerchantId(param.getMerchantId());
+            productDO.setMerchantNum(param.getMerchantNum());
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());
         return productDO;
-    }
-
-    /**
-     * SolrInputDocument
-     *
-     * @param productId
-     * @param param
-     * @return
-     */
-    public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam_bak param) {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", productId);
-        document.addField("featureImage_s", param.getFeatureImage());
-        document.setField("name_s", param.getName());
-        document.addField("categoryId_i", param.getCategoryId());
-        document.addField("content_s", param.getContent());
-        document.addField("averageDailySales_d", 0);
-        return document;
-    }
-
-    public static SolrInputDocument convertSolrInputDocument(Long productId, EditProductDataParam param) {
-        SolrInputDocument document = new SolrInputDocument();
-        document.addField("id", productId);
-        document.addField("featureImage_s", param.getFeatureImage());
-        document.setField("name_s", param.getName());
-        document.addField("categoryId_i", param.getCategoryId());
-        document.addField("content_s", param.getContent());
-        document.addField("averageDailySales_d", 0);
-        return document;
     }
 
     /**
@@ -296,8 +268,11 @@ public class ProductConverter {
         document.addField("featureImage_s", productDO.getFeatureImage());
         document.setField("name_s", productDO.getName());
         document.addField("categoryId_i", productDO.getCategoryId());
-        document.addField("content_s", productDO.getContent());
         document.addField("averageDailySales_d", productDO.getAverageDailySales() == null ? 0 : productDO.getAverageDailySales().doubleValue());
+        document.addField("originalPrice_d", productDO.getMaxPrice() == null ? 0 : productDO.getMaxPrice().doubleValue());
+        document.addField("price_d", productDO.getMinPrice() == null ? 0 : productDO.getMinPrice().doubleValue());
+        document.addField("inventory_i", productDO.getTotalInventory());
+        document.addField("salesVolume_i", productDO.getTotalSalesVolume());
         return document;
     }
 
@@ -315,13 +290,12 @@ public class ProductConverter {
 
         for (SolrDocument solrDocument : solrDocumentList) {
             ProductSearchDTO productSearchDTO = new ProductSearchDTO();
-            productSearchDTO.setProductId(Long.valueOf(solrDocument.get("id").toString()));
-            productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s").toString());
-            productSearchDTO.setName(solrDocument.get("name_s").toString());
-            productSearchDTO.setContent(solrDocument.get("content_s").toString());
-            productSearchDTO.setOriginalPrice(Double.valueOf(solrDocument.get("originalPrice_d").toString()));
-            productSearchDTO.setPrice(Double.valueOf(solrDocument.get("price_d").toString()));
-            productSearchDTO.setSalesVolume(Integer.valueOf(solrDocument.get("salesVolume_i").toString()));
+            productSearchDTO.setProductId(solrDocument.get("id") == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
+            productSearchDTO.setFeatureImage(solrDocument.get("featureImage_s") == null ? "" : solrDocument.get("featureImage_s").toString());
+            productSearchDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            productSearchDTO.setOriginalPrice(solrDocument.get("originalPrice_d") == null ? 0.0 : Double.valueOf(solrDocument.get("originalPrice_d").toString()));
+            productSearchDTO.setPrice(solrDocument.get("price_d") == null ? 0.0 : Double.valueOf(solrDocument.get("price_d").toString()));
+            productSearchDTO.setSalesVolume(solrDocument.get("salesVolume_i") == null ? 0 : Integer.valueOf(solrDocument.get("salesVolume_i").toString()));
             productSearchDTOS.add(productSearchDTO);
         }
         return productSearchDTOS;
@@ -377,6 +351,70 @@ public class ProductConverter {
             productSearchDTOS.add(productSearchDTO);
         }
         return productSearchDTOS;
+    }
+
+    /**
+     * DTO转换
+     *
+     * @param productBOS
+     * @return
+     */
+    public static List<ProductSearchDTO> convertSearchDTO(List<ProductBO> productBOS) {
+        List<ProductSearchDTO> productSearchDTOS = new ArrayList<>();
+        if (productBOS == null || productBOS.isEmpty()) {
+            return productSearchDTOS;
+        }
+        for (ProductBO productBO : productBOS) {
+            ProductSearchDTO productSearchDTO = new ProductSearchDTO();
+            productSearchDTO.setProductId(productBO.getId());
+            productSearchDTO.setSalesVolume(productBO.getTotalSalesVolume());
+            productSearchDTO.setOriginalPrice(productBO.getMaxPrice());
+            productSearchDTO.setPrice(productBO.getMinPrice());
+            productSearchDTOS.add(productSearchDTO);
+        }
+        return productSearchDTOS;
+    }
+
+    /**
+     * VIEW转BO
+     *
+     * @param productDOViewList
+     * @return
+     */
+    public static List<ProductBO> convertBOS(List<ProductDOView> productDOViewList) {
+        List<ProductBO> productBOS = new ArrayList<>();
+        if(productDOViewList == null || productDOViewList.isEmpty()){
+            return productBOS;
+        }
+
+        for(ProductDOView productDOView : productDOViewList){
+            ProductBO productBO = new ProductBO();
+            productBO.setId(productDOView.getId());
+            productBO.setTotalSalesVolume(productDOView.getTotalSalesVolume());
+            productBO.setMaxPrice(productDOView.getMaxPrice());
+            productBO.setMinPrice(productDOView.getMinPrice());
+            productBOS.add(productBO);
+        }
+        return productBOS;
+    }
+
+    public static List<ProductSearchBO> convertSearchBOS(List<ShoppingProductDOView> productDOViews) {
+        List<ProductSearchBO> productSearchBOS = new ArrayList<>();
+        if(productDOViews == null || productDOViews.isEmpty()){
+            return productSearchBOS;
+        }
+
+        for(ShoppingProductDOView shoppingProductDOView : productDOViews){
+            ProductSearchBO productSearchBO = new ProductSearchBO();
+            productSearchBO.setName(shoppingProductDOView.getName());
+            productSearchBO.setFeatureImage(shoppingProductDOView.getFeatureImage());
+            productSearchBO.setOriginalPrice(shoppingProductDOView.getMaxPrice().doubleValue());
+            productSearchBO.setProductId(shoppingProductDOView.getProductId());
+            productSearchBO.setPrice(shoppingProductDOView.getMinPrice().doubleValue());
+            productSearchBO.setSalesVolume(shoppingProductDOView.getTotalSalesVolume());
+            productSearchBOS.add(productSearchBO);
+        }
+        return productSearchBOS;
     }
 
 }

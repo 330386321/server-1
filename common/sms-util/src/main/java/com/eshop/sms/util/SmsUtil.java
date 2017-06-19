@@ -22,6 +22,8 @@ public class SmsUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SmsUtil.class);
 
+    private SmsUtil(){}
+
     /**
      * 发送短信验证码
      *
@@ -32,8 +34,7 @@ public class SmsUtil {
      * @throws IOException
      */
     public static Map<String, Object> sendSms(String smsCode, String mobile, String ip,SmsConfigParam smsConfigParam) throws IOException {
-        Map<String, Object> map = new HashMap<String, Object>();
-        String sendResult = "";
+        Map<String, Object> map = new HashMap<>();
         HttpClient httpclient = new HttpClient();
         PostMethod post = new PostMethod(smsConfigParam.getSmsUrl());
         post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, smsConfigParam.getSmsEncoding());
@@ -47,7 +48,7 @@ public class SmsUtil {
         post.addParameter("ExtendAccessNum", "");
         post.addParameter("f", smsConfigParam.getSmsF());
         httpclient.executeMethod(post);
-        sendResult = new String(post.getResponseBody(), smsConfigParam.getSmsEncoding());
+        String sendResult = new String(post.getResponseBody(), smsConfigParam.getSmsEncoding());
         logger.info("发送短信结果：{} --------- {}", sendResult, ip);
         if (sendResult.indexOf("发送短信成功") > 0) {
             map.put("sendCode", SmsConstant.SMS_SEND_SUCCESS);

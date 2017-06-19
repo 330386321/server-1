@@ -40,7 +40,6 @@ import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
 
 /**
@@ -155,7 +154,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		}
 		
 		//校验资金是否冻结
-		if(PropertyinfoFreezeEnum.YES.val.equals(propertyInfoDOS.get(0).getFreeze())){
+		if(PropertyinfoFreezeEnum.YES.getVal().equals(propertyInfoDOS.get(0).getFreeze())){
 			return ResultCode.PROPERTYINFO_FREEZE_YES;
 		}
 		
@@ -168,7 +167,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		PropertyBalanceBO balanceBO = PropertyBalanceConverter.convert(propertyInfoDOS.get(0));
 		BigDecimal dbBalance = balanceBO.getBalance();
 		double dBalacne = dbBalance.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		double dOrderMoney = new Double(amount).doubleValue();
+		double dOrderMoney = Double.parseDouble(amount);
 		if (dBalacne < dOrderMoney) {
 			return ResultCode.PROPERTY_INFO_BALANCE_LESS;
 		}
@@ -188,7 +187,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 
 		BigDecimal dbPoint = propertyInfoDOS.get(0).getPoint();
 		double dPoint = dbPoint.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-		double drPoint = new Double(point).doubleValue();
+		double drPoint = Double.parseDouble(point);
 		if (dPoint < drPoint) {
 			return ResultCode.PROPERTY_INFO_POINT_LESS;
 		}
@@ -196,7 +195,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 	}
 
 	@Override
-	public PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) throws Exception {
+	public PropertyPointAndBalanceBO getPropertyInfoMoney(String userNum) {
 		PropertyInfoDOExample propertyInfoDOExample = new PropertyInfoDOExample();
 		propertyInfoDOExample.createCriteria().andUserNumEqualTo(userNum);
 		List<PropertyInfoDO> propertyInfoDOS = propertyInfoDOMapper.selectByExample(propertyInfoDOExample);
@@ -207,7 +206,8 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			return bo;
 		}
 		PropertyInfoDO pdo = propertyInfoDOS.get(0);
-		BeanUtil.copyProperties(pdo, bo);
+		bo.setBalance(pdo.getBalance());
+		bo.setPoint(pdo.getPoint());
 		return bo;
 	}
 
@@ -279,7 +279,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		PropertyInfoDOExample example = new PropertyInfoDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum);
 		PropertyInfoDO pdo = new PropertyInfoDO();
-		pdo.setFreeze(freeze.val);
+		pdo.setFreeze(freeze.getVal());
 		pdo.setGmtModified(new Date());
 		propertyInfoDOMapper.updateByExampleSelective(pdo, example);
 		return ResultCode.SUCCESS;

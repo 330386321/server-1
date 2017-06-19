@@ -49,7 +49,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void commission(List<ShoppingOrderCommissionDTO> orders,int flag, String msg) {
-		if (orders != null && orders.size() > 0) {
+		if (orders != null && !orders.isEmpty()) {
 
 			Map<String, BigDecimal> property = commonPropertyService.getSaleCommissionPropertys();
 			BigDecimal saleCommissionAddScope = property.get("sale_commission_add_scope");// 每上升一个级别提成的幅度
@@ -76,7 +76,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 				}
 				
 				int retCode1 = ResultCode.FAIL;
-				if (memberInviters != null && !memberInviters.isEmpty() && memberInviters.size() > 0) {
+				if (memberInviters != null && !memberInviters.isEmpty()) {
 					int m = 0;
 					for (int i = 0; i < memberInviters.size(); i++) {
 						CommissionJobParam param = new CommissionJobParam();
@@ -85,7 +85,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(memberInviters.get(i).getLevel());// 等级
-						BigDecimal saleCommission = null;
+						BigDecimal saleCommission = property.get("sale_commission_1");
 						if (i == 0) {
 							saleCommission = property.get("sale_commission_1");
 
@@ -149,7 +149,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 				}
 				
 				int retCode2 = ResultCode.FAIL;
-				if (merchantInviters != null && !merchantInviters.isEmpty() && merchantInviters.size() > 0) {
+				if (merchantInviters != null && !merchantInviters.isEmpty()) {
 					int m = 0;
 					for (int i = 0; i < merchantInviters.size(); i++) {
 						CommissionJobParam param = new CommissionJobParam();
@@ -158,7 +158,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(merchantInviters.get(i).getLevel());// 等级
-						BigDecimal saleCommission = null;
+						BigDecimal saleCommission = property.get("sale_commission_1");
 						if (i == 0) {
 							saleCommission = property.get("sale_commission_1");
 

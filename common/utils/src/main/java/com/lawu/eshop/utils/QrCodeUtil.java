@@ -1,6 +1,8 @@
 package com.lawu.eshop.utils;
 
 import com.swetake.util.Qrcode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,8 +13,12 @@ import java.awt.image.BufferedImage;
  */
 public class QrCodeUtil {
 
+    private static Logger logger = LoggerFactory.getLogger(QrCodeUtil.class);
+
     //二维码尺寸
-    private static final int size = 7;
+    private static final int SIZE = 7;
+
+    private QrCodeUtil(){}
 
     /**
      * 生成二维码
@@ -28,11 +34,11 @@ public class QrCodeUtil {
             qrcodeHandler.setQrcodeErrorCorrect('M');
             qrcodeHandler.setQrcodeEncodeMode('B');
             // 设置设置二维码尺寸，取值范围1-40，值越大尺寸越大，可存储的信息越大
-            qrcodeHandler.setQrcodeVersion(size);
+            qrcodeHandler.setQrcodeVersion(SIZE);
             // 获得内容的字节数组，设置编码格式
             byte[] contentBytes = content.getBytes("utf-8");
             // 图片尺寸
-            int imgSize = 67 + 12 * (size - 1);
+            int imgSize = 67 + 12 * (SIZE - 1);
             bufImg = new BufferedImage(imgSize, imgSize, BufferedImage.TYPE_INT_RGB);
             Graphics2D gs = bufImg.createGraphics();
             // 设置背景颜色
@@ -59,7 +65,7 @@ public class QrCodeUtil {
             gs.dispose();
             bufImg.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("生成二维码异常：{}", e);
         }
         return bufImg;
     }

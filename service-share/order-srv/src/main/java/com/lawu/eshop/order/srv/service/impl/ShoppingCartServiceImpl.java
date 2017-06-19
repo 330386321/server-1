@@ -3,7 +3,6 @@ package com.lawu.eshop.order.srv.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.mybatis.generator.config.IgnoredColumnException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,10 +69,7 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 			
 			return successCreated(shoppingCartDO.getId());
 		} else {
-			shoppingCartDO = ShoppingCartConverter.convert(param);
-			shoppingCartDO.setMemberId(memberId);
-			shoppingCartDO.setGmtCreate(new Date());
-			shoppingCartDO.setGmtModified(new Date());
+			shoppingCartDO = ShoppingCartConverter.convert(param, memberId);
 	
 			// 空值交给Mybatis去处理
 			int result = shoppingCartDOMapper.insertSelective(shoppingCartDO);
@@ -113,12 +109,10 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 			return ResultCode.ILLEGAL_OPERATION;
 		}
 
-		ShoppingCartDO suggestionDO = ShoppingCartConverter.convert(param);
-		suggestionDO.setId(id);
-		suggestionDO.setGmtModified(new Date());
+		ShoppingCartDO shoppingCartDOUpdate = ShoppingCartConverter.convert(param, id);
 
 		// 空值交给Mybatis去处理
-		shoppingCartDOMapper.updateByPrimaryKeySelective(suggestionDO);
+		shoppingCartDOMapper.updateByPrimaryKeySelective(shoppingCartDOUpdate);
 
 		return ResultCode.SUCCESS;
 	}

@@ -1,5 +1,16 @@
 package com.lawu.eshop.user.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -7,17 +18,43 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.*;
-import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
+import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
+import com.lawu.eshop.user.param.ApplyStoreParam;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.bo.CashUserInfoBO;
+import com.lawu.eshop.user.srv.bo.MemberBO;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreImageBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreProfileBO;
+import com.lawu.eshop.user.srv.bo.PayOrderStoreInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingOrderFindMerchantInfoBO;
+import com.lawu.eshop.user.srv.bo.ShoppingStoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreDetailBO;
+import com.lawu.eshop.user.srv.bo.StoreSolrInfoBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.service.*;
+import com.lawu.eshop.user.srv.service.MemberService;
+import com.lawu.eshop.user.srv.service.MerchantAuditService;
+import com.lawu.eshop.user.srv.service.MerchantStoreImageService;
+import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
+import com.lawu.eshop.user.srv.service.MerchantStoreProfileService;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 import com.lawu.eshop.utils.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 商家门店 Created by Administrator on 2017/3/24.
@@ -285,6 +322,14 @@ public class MerchantStoreController extends BaseController {
 		if (merchantStoreBO == null) {
 			return successCreated(ResultCode.NOT_FOUND_DATA);
 		}
+		param.setName(merchantStoreBO.getName());
+		param.setPrincipalName(merchantStoreBO.getPrincipalName());
+		param.setPrincipalMobile(merchantStoreBO.getPrincipalMobile());
+		param.setIndustryPath(merchantStoreBO.getIndustryPath());
+		param.setIndustryName(merchantStoreBO.getIndustryName());
+		param.setAddress(merchantStoreBO.getAddress());
+		param.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
+		param.setIntro(merchantStoreBO.getIntro());
 		// 添加审核记录
 		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
 		if (row < 0) {
@@ -441,4 +486,83 @@ public class MerchantStoreController extends BaseController {
 		merchantStoreService.updateStoreIndex(id);
 		return successCreated();
 	}
+
+	/**
+	 * 重建门店索引
+	 * @return
+	 */
+	@RequestMapping(value = "rebuildStoreIndex", method = RequestMethod.GET)
+	public Result rebuildStoreIndex() {
+		merchantStoreService.rebuildStoreIndex();
+		return successCreated();
+	}
+
+	/**
+	 * 删除无效的门店索引
+	 * @return
+	 */
+	@RequestMapping(value = "delInvalidStoreIndex", method = RequestMethod.GET)
+	public Result delInvalidStoreIndex() {
+		merchantStoreService.delInvalidStoreIndex();
+		return successCreated();
+	}
+
+	/**
+	 * 查询门店name，门店照
+	 * @param merchantIds
+	 * @return
+	 * @author zhangyong
+	 */
+	@RequestMapping(value = "getPayOrderStoreInfo", method = RequestMethod.GET)
+	public Result<List<PayOrderStoreInfoDTO>> getPayOrderStoreInfo(@RequestParam("merchantIds") List<Long> merchantIds) {
+		List<PayOrderStoreInfoBO> storeInfoBOS = merchantStoreInfoService.getPayOrderStoreInfo(merchantIds);
+		if(storeInfoBOS == null){
+			return successGet(new ArrayList<PayOrderStoreInfoDTO>());
+		}
+		List<PayOrderStoreInfoDTO> list = new ArrayList<PayOrderStoreInfoDTO>();
+		for(PayOrderStoreInfoBO storeInfoBO :storeInfoBOS){
+			PayOrderStoreInfoDTO storeInfoDTO = new PayOrderStoreInfoDTO();
+			storeInfoDTO.setName(storeInfoBO.getName());
+			storeInfoDTO.setStoreUrl(storeInfoBO.getStoreUrl());
+			storeInfoDTO.setMerchantId(storeInfoBO.getMerchantId());
+			list.add(storeInfoDTO);
+		}
+		return successGet(list);
+	}
+
+	/**
+	 * 要买单人气推荐门店信息
+	 * @param merchantStoreIds
+	 * @return
+	 * @author zhangyong
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "getMerchantStoreByIds")
+	public Result<List<StoreSolrInfoDTO>> getMerchantStoreByIds(@RequestParam("merchantStoreIds") List<Long> merchantStoreIds) {
+
+		List<StoreSolrInfoBO> bos = merchantStoreInfoService.getMerchantStoreByIds(merchantStoreIds);
+		if (bos == null) {
+			return successGet(new ArrayList<StoreSolrInfoDTO>());
+		}
+		List<StoreSolrInfoDTO> storeSolrInfoDTOS = MerchantStoreConverter.coverStoreSolrDTOS(bos);
+
+		return successGet(storeSolrInfoDTOS);
+	}
+	
+	@RequestMapping(value = "getAdMerchantStoreByIds", method = RequestMethod.GET)
+	public Result<List<MerchantAdInfoDTO>> getAdMerchantStoreByIds(@RequestParam("merchantIds") List<Long> merchantIds) {
+    	 List<MerchantAdInfoBO>  list=merchantStoreService.getAdMerchantStoreByIds(merchantIds);
+    	 List<MerchantAdInfoDTO> dtoList=new ArrayList<>();
+    	 for (MerchantAdInfoBO merchantAdInfoBO : list) {
+    		 MerchantAdInfoDTO dto=new MerchantAdInfoDTO();
+    		 dto.setManageTypeEnum(ManageTypeEnum.getEnum(merchantAdInfoBO.getManageType()));
+    		 dto.setMerchantId(merchantAdInfoBO.getMerchantId());
+    		 dto.setMerchantStoreId(merchantAdInfoBO.getMerchantStoreId());
+    		 dto.setName(merchantAdInfoBO.getName());
+    		 dto.setPath(merchantAdInfoBO.getPath());
+    		 dtoList.add(dto);
+		}
+		return successGet(dtoList);
+	}
+
 }
+

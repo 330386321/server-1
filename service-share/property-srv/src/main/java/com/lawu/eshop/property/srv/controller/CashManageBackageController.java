@@ -8,7 +8,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,17 +78,12 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "getTotalNum", method = RequestMethod.POST)
-	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody @Valid CashBackageQuerySumParam param,
-			BindingResult result) throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result<WithdrawCashBackageQuerySumDTO> getTotalNum(@RequestBody @Valid CashBackageQuerySumParam param,BindingResult result) throws Exception {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		WithdrawCashBackageQuerySumDTO dto = new WithdrawCashBackageQuerySumDTO();
 		WithdrawCashBackageQuerySumBO bo = cashManageBackageService.getTotalNum(param);
 		BeanUtil.copyProperties(bo, dto);
@@ -107,17 +101,12 @@ public class CashManageBackageController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
-	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(
-			@RequestBody @Valid CashBackageQueryDetailParam param, BindingResult result) throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+	public Result<Page<WithdrawCashBackageQueryDTO>> findCashInfoDetail(@RequestBody @Valid CashBackageQueryDetailParam param, BindingResult result) throws Exception {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		Page<WithdrawCashBackageQueryBO> page = cashManageBackageService.findCashInfoDetail(param);
 		List<WithdrawCashBackageQueryBO> cbos = page.getRecords();
 		List<WithdrawCashBackageQueryDTO> dtos = new ArrayList<WithdrawCashBackageQueryDTO>();
@@ -142,15 +131,10 @@ public class CashManageBackageController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateWithdrawCash", method = RequestMethod.POST)
 	public Result updateWithdrawCash(@RequestBody @Valid CashBackageOperDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)
 				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {

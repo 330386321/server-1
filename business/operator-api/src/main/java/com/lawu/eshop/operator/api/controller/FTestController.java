@@ -60,17 +60,12 @@ public class FTestController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public @ResponseBody Result save(@Valid TestQueryParam param,BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		int retcode = testService.save(param);
-		logger.info("retcode="+retcode);
+		logger.info("retcode={}",retcode);
 		return successCreated(retcode);
 	}
 	

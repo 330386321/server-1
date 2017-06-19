@@ -1,14 +1,12 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 
-public class ShoppingRefundDetailBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingRefundDetailBO {
 
 	/**
 	 * 主键
@@ -84,7 +82,12 @@ public class ShoppingRefundDetailBO implements Serializable {
 	 * 物流编号
 	 */
 	private String waybillNum;
-
+	
+    /**
+    * 状态
+    */
+    private StatusEnum status;
+	
 	/**
 	 * 商家是否同意退货申请
 	 */
@@ -243,6 +246,14 @@ public class ShoppingRefundDetailBO implements Serializable {
 
 	public void setWaybillNum(String waybillNum) {
 		this.waybillNum = waybillNum;
+	}
+
+	public StatusEnum getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEnum status) {
+		this.status = status;
 	}
 
 	public Boolean getIsAgree() {

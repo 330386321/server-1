@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.param;
 
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -18,6 +19,22 @@ public class ApplyStoreParam {
 
     @ApiModelProperty(name = "storeUrl", value = "门店图片路径")
     private String storeUrl;
+
+    private String name;
+
+    private String principalName;
+
+    private String principalMobile;
+
+    private String industryPath;
+
+    private String industryName;
+
+    private String address;
+
+    private String intro;
+
+    private MerchantStoreTypeEnum manageType;
 
     public String getLogoUrl() {
         return logoUrl;
@@ -41,5 +58,69 @@ public class ApplyStoreParam {
 
     public void setStoreUrl(String storeUrl) {
         this.storeUrl = storeUrl;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPrincipalName() {
+        return principalName;
+    }
+
+    public void setPrincipalName(String principalName) {
+        this.principalName = principalName;
+    }
+
+    public String getPrincipalMobile() {
+        return principalMobile;
+    }
+
+    public void setPrincipalMobile(String principalMobile) {
+        this.principalMobile = principalMobile;
+    }
+
+    public String getIndustryPath() {
+        return industryPath;
+    }
+
+    public void setIndustryPath(String industryPath) {
+        this.industryPath = industryPath;
+    }
+
+    public String getIndustryName() {
+        return industryName;
+    }
+
+    public void setIndustryName(String industryName) {
+        this.industryName = industryName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getIntro() {
+        return intro;
+    }
+
+    public void setIntro(String intro) {
+        this.intro = intro;
+    }
+
+    public MerchantStoreTypeEnum getManageType() {
+        return manageType;
+    }
+
+    public void setManageType(MerchantStoreTypeEnum manageType) {
+        this.manageType = manageType;
     }
 }

@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.synchronization.lock.constants.LockConstant;
 import com.lawu.eshop.synchronization.lock.constants.LockConstant.LockModule;
@@ -70,9 +69,9 @@ public class LockServiceImpl implements LockService {
 	@Override
 	public boolean tryLock(LockModule lockModule, String lockKey, Long relatedId) {
 		// 拼接锁名
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
-		return tryLock(stringBuffer.toString());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
+		return tryLock(stringBuilder.toString());
 	}
 	
 	/**
@@ -89,9 +88,9 @@ public class LockServiceImpl implements LockService {
 	@Override
 	public boolean tryLock(LockModule lockModule, String lockKey) {
 		// 拼接锁名
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(lockModule.getName()).append("_").append(lockKey);
-		return tryLock(stringBuffer.toString());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(lockModule.getName()).append("_").append(lockKey);
+		return tryLock(stringBuilder.toString());
 	}
 
 	/**
@@ -123,9 +122,9 @@ public class LockServiceImpl implements LockService {
 	@Override
 	public void unLock(LockModule lockModule, String lockKey, Long relatedId) {
 		// 拼接锁名
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
-		unLock(stringBuffer.toString());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(lockModule.getName()).append("_").append(lockKey).append("_").append(relatedId);
+		unLock(stringBuilder.toString());
 	}
 	
 	/**
@@ -139,9 +138,9 @@ public class LockServiceImpl implements LockService {
 	@Override
 	public void unLock(LockModule lockModule, String lockKey) {
 		// 拼接锁名
-		StringBuffer stringBuffer = new StringBuffer();
-		stringBuffer.append(lockModule.getName()).append("_").append(lockKey);
-		unLock(stringBuffer.toString());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(lockModule.getName()).append("_").append(lockKey);
+		unLock(stringBuilder.toString());
 	}
 	
 	/**

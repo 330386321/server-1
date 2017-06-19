@@ -1,6 +1,5 @@
 package com.lawu.eshop.ad.param;
 
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
 public class RegisterGetRedPacketParam {

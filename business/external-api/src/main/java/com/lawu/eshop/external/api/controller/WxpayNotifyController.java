@@ -102,7 +102,7 @@ public class WxpayNotifyController extends BaseController {
 					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
 					extra = attach.split(splitStr);
-					dmoney = new Double(total_fee).doubleValue();
+					dmoney = Double.parseDouble(total_fee);
 					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金、4-用户充值余额、5-用户充值积分、6-订单付款、7-买单
 					String bizFlag = extra[0];
@@ -118,7 +118,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setBuyerLogonId("回调没返回");
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.parseInt(bizFlag);
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
@@ -221,7 +221,7 @@ public class WxpayNotifyController extends BaseController {
 		logger.info("#####################PC微信回调开始#####################");
 		HttpServletRequest request = getRequest();
 		HttpServletResponse response = getResponse();
-		Result result = successCreated();
+		Result result;// = successCreated();
 
 		boolean isSendMsg = false;
 		double dmoney = 0;
@@ -239,7 +239,7 @@ public class WxpayNotifyController extends BaseController {
 					String out_trade_no = packageParams.get("out_trade_no") == null ? "" : packageParams.get("out_trade_no").toString();
 
 					extra = attach.split(splitStr);
-					dmoney = new Double(total_fee).doubleValue();
+					dmoney = Double.parseDouble(total_fee);
 					dmoney = dmoney / 100;
 					// 1-商家充值余额、2-商家充值积分、3-缴纳保证金
 					String bizFlag = extra[0];
@@ -254,7 +254,7 @@ public class WxpayNotifyController extends BaseController {
 					param.setBuyerLogonId("回调没返回");
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.WX);
 
-					bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					bizFlagInt = Integer.parseInt(bizFlag);
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						isSendMsg = true;
@@ -327,7 +327,7 @@ public class WxpayNotifyController extends BaseController {
 	private SortedMap<Object, Object> parseWxNotifyData(HttpServletRequest request) throws Exception {
 		// 读取参数
 		InputStream inputStream;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		inputStream = request.getInputStream();
 		String s;
 		BufferedReader in = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -338,8 +338,7 @@ public class WxpayNotifyController extends BaseController {
 		inputStream.close();
 
 		// 解析xml成map
-		Map<String, String> m = new HashMap<String, String>();
-		m = XMLUtil.doXMLParse(sb.toString());
+		Map<String, String> m = XMLUtil.doXMLParse(sb.toString());
 
 		// 过滤空 设置 TreeMap
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();

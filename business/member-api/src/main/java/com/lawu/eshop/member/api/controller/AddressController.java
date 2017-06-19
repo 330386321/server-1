@@ -66,8 +66,7 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	public Result<AddressDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
-		Result<AddressDTO> addressDTO = addressService.get(id);
-		return addressDTO;
+		return addressService.get(id);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -118,8 +117,7 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
 	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-		Result rs = addressService.update(address, id);
-		return rs;
+		return addressService.update(address, id);
 
 	}
 
@@ -131,8 +129,7 @@ public class AddressController extends BaseController {
 	@RequestMapping(value = "updateDefault/{id}", method = RequestMethod.PUT)
 	public Result updateDefault(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result rs = addressService.updateDefault(id, userNum);
-		return rs;
+		return addressService.updateDefault(id, userNum);
 	}
 
 }

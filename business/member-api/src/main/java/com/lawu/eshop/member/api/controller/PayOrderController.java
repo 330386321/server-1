@@ -19,7 +19,7 @@ import com.lawu.eshop.order.dto.PayOrderIdDTO;
 import com.lawu.eshop.order.dto.PayOrderInfoDTO;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,8 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author zhangyong
@@ -98,6 +97,30 @@ public class PayOrderController extends BaseController {
         }
         List<PayOrderInfoDTO> payOrderInfoDTOS = new ArrayList<>();
         List<PayOrderDTO> payOrderDTOS = pageResult.getModel().getRecords();
+        if(payOrderDTOS.isEmpty()){
+            Page<PayOrderInfoDTO> list = new Page<>();
+            list.setRecords(new ArrayList<PayOrderInfoDTO>());
+            list.setTotalCount(0);
+            list.setCurrentPage(1);
+            return successGet(list);
+        }
+        // 把要查询的id放入list,统一一次性查询
+        Set<Long> merchantIds = new HashSet<Long>();
+        for (PayOrderDTO payOrderDTO : payOrderDTOS) {
+            merchantIds.add(payOrderDTO.getMerchantId());
+        }
+
+        //查询商家信息
+        Result<List<PayOrderStoreInfoDTO>> storeInfoDTOResult = merchantStoreService.getPayOrderStoreInfo(new ArrayList<Long>(merchantIds));
+        Map<Long, PayOrderStoreInfoDTO> storeInfoDTOMap = new HashMap<Long, PayOrderStoreInfoDTO>();
+        if (isSuccess(storeInfoDTOResult) && !storeInfoDTOResult.getModel().isEmpty()) {
+            for (PayOrderStoreInfoDTO storeInfoDTO : storeInfoDTOResult.getModel()) {
+                if (!storeInfoDTOMap.containsKey(storeInfoDTO.getMerchantId())) {
+                    storeInfoDTOMap.put(storeInfoDTO.getMerchantId(), storeInfoDTO);
+                }
+            }
+        }
+        PayOrderStoreInfoDTO storeInfo = null;
         for (PayOrderDTO payOrderDTO : payOrderDTOS) {
             PayOrderInfoDTO payOrderInfoDTO = new PayOrderInfoDTO();
             payOrderInfoDTO.setEvaluationEnum(payOrderDTO.getEvaluationEnum());
@@ -108,11 +131,15 @@ public class PayOrderController extends BaseController {
             payOrderInfoDTO.setMerchantId(payOrderDTO.getMerchantId());
             payOrderInfoDTO.setTotalAmount(payOrderDTO.getTotalAmount());
             //查询相关商家Id
-            MerchantStoreDTO storeInfo = merchantStoreService.findStoreNameAndImgByMerchantId(payOrderDTO.getMerchantId());
-            if (storeInfo != null) {
+            storeInfo = storeInfoDTOMap.get(payOrderDTO.getMerchantId());
+            if (storeInfo == null) {
+                payOrderInfoDTO.setName("");
+                payOrderInfoDTO.setImgUrl("");
+            } else {
                 payOrderInfoDTO.setName(storeInfo.getName());
                 payOrderInfoDTO.setImgUrl(storeInfo.getStoreUrl());
             }
+
             payOrderInfoDTOS.add(payOrderInfoDTO);
         }
         Page<PayOrderInfoDTO> list = new Page<>();

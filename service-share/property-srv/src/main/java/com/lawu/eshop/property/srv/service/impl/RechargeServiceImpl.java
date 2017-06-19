@@ -66,10 +66,10 @@ public class RechargeServiceImpl implements RechargeService {
 		recharge.setRechargeMoney(new BigDecimal(param.getRechargeMoney()));
 		recharge.setCurrentScale(param.getRechargeScale());
 
-		double dCurrentScale = new Double(param.getRechargeScale()).doubleValue();
-		double dRechargeMoney = new Double(param.getRechargeMoney()).doubleValue();
+		double dCurrentScale = Double.parseDouble(param.getRechargeScale());
+		double dRechargeMoney = Double.parseDouble(param.getRechargeMoney());
 		double money = dRechargeMoney * dCurrentScale;
-		recharge.setMoney(new BigDecimal(money));
+		recharge.setMoney(BigDecimal.valueOf(money));
 
 		recharge.setRechargeType(param.getPayTypeEnum().getVal());
 		recharge.setChannel(param.getTransactionPayTypeEnum().getVal());
@@ -115,7 +115,7 @@ public class RechargeServiceImpl implements RechargeService {
 		// 充余额：加财产余额，新增充余额交易明细,修改充值表状态
 		// 充积分：加财产积分，新增积分明细，新增充积分交易明细,修改充值表状态
 
-		int bizFlagInt = Integer.valueOf(param.getBizFlag()).intValue();
+		int bizFlagInt = Integer.parseInt(param.getBizFlag());
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))

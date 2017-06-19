@@ -1,5 +1,15 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -15,15 +25,6 @@ import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 积分明细服务实现
@@ -59,7 +60,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 		page.setTotalCount(count.intValue());
 		
 		// 如果返回的总记录为0，直接返回page
-		if (page.getTotalCount() == null || page.getTotalCount() <= 0) {
+		if (count <= 0 || pointDetailQueryParam.getOffset() >= count) {
 			return page;
 		}
 
@@ -69,7 +70,8 @@ public class PointDetailServiceImpl implements PointDetailService {
 		List<PointDetailDO> list = pointDetailDOMapper.selectByExampleWithRowbounds(pointDetailDOExample, rowBounds);
 
 		page.setRecords(PointDetailConverter.convertBOS(list));
-
+		list = null;
+		
 		return page;
 	}
 

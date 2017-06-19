@@ -45,10 +45,6 @@ public enum RefundStatusEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	RefundStatusEnum(Byte value) {
 		this.value = value;
 	}

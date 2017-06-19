@@ -39,10 +39,6 @@ public class AdDTO {
 	@ApiModelProperty(value = "投放开始时间")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date beginTime;
-
-	@ApiModelProperty(value = "投放所需时间")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date endTime;
 	
 	@ApiModelProperty(value = "区域")
     private String areas;
@@ -177,16 +173,6 @@ public class AdDTO {
 
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
-	}
-
-
-	public Date getEndTime() {
-		return endTime;
-	}
-
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
 	}
 
 

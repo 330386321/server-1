@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -71,12 +73,17 @@ public class AdController extends BaseController {
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
-    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|6024|6026]（张荣成）", httpMethod = "POST")
+    @ApiOperation(value = "添加广告", notes = "添加广告[1011|5000|5003|5010|6024|6026]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	if(adParam.getTypeEnum().val!=4){
+    		if(!StringUtils.isNotEmpty(adParam.getBeginTime())){
+    			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+    		}
+    	}
     	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
     	if (isSuccess(resultFreeze)){
     		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
@@ -96,12 +103,12 @@ public class AdController extends BaseController {
     	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
-            	mediaUrl = retMap.get("imgUrl").toString();
+            	mediaUrl = retMap.get("imgUrl");
             }
     	}else if(adParam.getTypeEnum().val==2){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
-            	mediaUrl = retMap.get("videoUrl").toString();
+            	mediaUrl = retMap.get("videoUrl");
             	//截取视频图片
             	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
             	
@@ -146,8 +153,7 @@ public class AdController extends BaseController {
     public Result<Page<AdMerchantDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") AdMerchantParam adMerchantParam) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
-    	Result<Page<AdMerchantDTO>>  pageDTOS=adService.selectListByMerchant(adMerchantParam, memberId);
-    	return pageDTOS;
+    	return adService.selectListByMerchant(adMerchantParam, memberId);
     }
 
 
@@ -157,8 +163,7 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
     public Result unShelve(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result rs= adService.updateStatus(id);
-    	return rs;
+    	return adService.updateStatus(id);
     }
 
 
@@ -235,8 +240,7 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
     public Result<AdMerchantDetailDTO> selectById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result<AdMerchantDetailDTO> rs= adService.selectById(id);
-    	return rs;
+    	return adService.selectById(id);
     }
 
 }

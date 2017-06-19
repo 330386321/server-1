@@ -159,7 +159,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			}
 			
 			// 判断库存
-			if (productDO.getTotalInventory() <= param.getQuantity()) {
+			if (productDO.getTotalInventory() < param.getQuantity()) {
 				return ResultCode.INVENTORY_SHORTAGE;
 			}
 			
@@ -187,7 +187,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
 			productNumsView.setGmtModified(new Date());
 			productNumsView.setNum(param.getQuantity());
-			productNumsView.setProductId(productModelDO.getId());
+			productNumsView.setProductId(productModelDO.getProductId());
 			productDOMapperExtend.editTotalInventory(productNumsView);
 			
 		}
@@ -252,7 +252,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
 			productNumsView.setGmtModified(new Date());
 			productNumsView.setNum(param.getQuantity());
-			productNumsView.setProductId(productModelDO.getId());
+			productNumsView.setProductId(productModelDO.getProductId());
 			productDOMapperExtend.editTotalInventory(productNumsView);
 		}
 	}
@@ -308,7 +308,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productNumsView.setFlag(ProductNumFlagEnum.ADD.getValue());
 			productNumsView.setGmtModified(new Date());
 			productNumsView.setNum(param.getQuantity());
-			productNumsView.setProductId(productModelDO.getId());
+			productNumsView.setProductId(productModelDO.getProductId());
 			productDOMapperExtend.editTotalSaleVolume(productNumsView);
 			
 			// 获取增加之后的销量，放入solr

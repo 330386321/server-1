@@ -3,8 +3,6 @@ package com.lawu.eshop.order.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
@@ -22,7 +20,7 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
  * @date 2017/04/06
  */
 public class ShoppingOrderItemExtendConverter {
-	
+
 	/**
 	 * ShoppingOrderItemExtendBO转换
 	 * 
@@ -36,17 +34,31 @@ public class ShoppingOrderItemExtendConverter {
 		}
 
 		rtn = new ShoppingOrderItemExtendBO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendDO, rtn, new String[]{"orderStatus", "refundStatus"});
+		rtn.setId(shoppingOrderItemExtendDO.getId());
+		rtn.setIsAllowRefund(shoppingOrderItemExtendDO.getIsAllowRefund());
+		rtn.setIsEvaluation(shoppingOrderItemExtendDO.getIsEvaluation());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendDO.getProductFeatureImage());
+		rtn.setProductId(shoppingOrderItemExtendDO.getProductId());
+		rtn.setProductModelId(shoppingOrderItemExtendDO.getProductModelId());
+		rtn.setProductModelName(shoppingOrderItemExtendDO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendDO.getProductName());
+		rtn.setQuantity(shoppingOrderItemExtendDO.getQuantity());
+		rtn.setRegularPrice(shoppingOrderItemExtendDO.getRegularPrice());
+		rtn.setSalesPrice(shoppingOrderItemExtendDO.getSalesPrice());
+		rtn.setSendTime(shoppingOrderItemExtendDO.getSendTime());
+		rtn.setShoppingOrderId(shoppingOrderItemExtendDO.getShoppingOrderId());
+		rtn.setGmtCreate(shoppingOrderItemExtendDO.getGmtCreate());
+		rtn.setGmtModified(shoppingOrderItemExtendDO.getGmtModified());
 		
 		rtn.setOrderStatus(ShoppingOrderStatusEnum.getEnum(shoppingOrderItemExtendDO.getOrderStatus()));
 		rtn.setRefundStatus(RefundStatusEnum.getEnum(shoppingOrderItemExtendDO.getRefundStatus()));
-		
+
 		rtn.setShoppingRefundDetail(ShoppingRefundDetailExtendConverter.convert(shoppingOrderItemExtendDO.getShoppingRefundDetail()));
 		rtn.setShoppingOrder(ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderItemExtendDO.getShoppingOrder()));
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemExtendBO List转换
 	 * 
@@ -56,17 +68,17 @@ public class ShoppingOrderItemExtendConverter {
 	public static List<ShoppingOrderItemExtendBO> convert(List<ShoppingOrderItemExtendDO> shoppingOrderItemExtendDOList) {
 		List<ShoppingOrderItemExtendBO> rtn = null;
 		if (shoppingOrderItemExtendDOList == null || shoppingOrderItemExtendDOList.isEmpty()) {
-			return null;
+			return rtn;
 		}
-		
+
 		rtn = new ArrayList<ShoppingOrderItemExtendBO>();
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemExtendDOList) {
 			rtn.add(convert(shoppingOrderItemExtendDO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO转换
 	 * 
@@ -79,7 +91,12 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundForMerchantDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
 		}
@@ -89,7 +106,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO List转换
 	 * 
@@ -98,18 +115,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundForMerchantDTO> convertShoppingOrderItemRefundForMerchantDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundForMerchantDTO> rtn = new ArrayList<ShoppingOrderItemRefundForMerchantDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convert(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForMerchantDTO Page转换
 	 * 
@@ -123,7 +140,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setRecords(convertShoppingOrderItemRefundForMerchantDTOList(shoppingOrderItemExtendBOPage.getRecords()));
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO转换
 	 * 
@@ -136,7 +153,12 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundForOperatorDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn);
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setConsigneeName(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeName());
 			rtn.setConsigneeAddress(shoppingOrderItemExtendBO.getShoppingOrder().getConsigneeAddress());
@@ -149,7 +171,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO List转换
 	 * 
@@ -158,18 +180,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundForOperatorDTO> convertShoppingOrderItemRefundForOperatorDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundForOperatorDTO> rtn = new ArrayList<ShoppingOrderItemRefundForOperatorDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convertShoppingOrderItemRefundForOperatorDTO(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundForOperatorDTO Page转换
 	 * 
@@ -183,7 +205,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setRecords(convertShoppingOrderItemRefundForOperatorDTOList(shoppingOrderItemExtendBOPage.getRecords()));
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO转换
 	 * 
@@ -196,8 +218,12 @@ public class ShoppingOrderItemExtendConverter {
 			return rtn;
 		}
 		rtn = new ShoppingOrderItemRefundDTO();
-		BeanUtils.copyProperties(shoppingOrderItemExtendBO, rtn, "");
-		
+		rtn.setId(shoppingOrderItemExtendBO.getId());
+		rtn.setProductFeatureImage(shoppingOrderItemExtendBO.getProductFeatureImage());
+		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
+		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
+		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());
 			rtn.setMerchantName(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantName());
@@ -211,7 +237,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO List转换
 	 * 
@@ -220,18 +246,18 @@ public class ShoppingOrderItemExtendConverter {
 	 */
 	public static List<ShoppingOrderItemRefundDTO> convertShoppingOrderItemRefundDTOList(List<ShoppingOrderItemExtendBO> shoppingOrderItemExtendBOList) {
 		List<ShoppingOrderItemRefundDTO> rtn = new ArrayList<ShoppingOrderItemRefundDTO>();
-		
+
 		if (shoppingOrderItemExtendBOList == null || shoppingOrderItemExtendBOList.isEmpty()) {
 			return rtn;
 		}
-		
+
 		for (ShoppingOrderItemExtendBO shoppingOrderItemExtendBO : shoppingOrderItemExtendBOList) {
 			rtn.add(convertShoppingOrderItemRefundDTO(shoppingOrderItemExtendBO));
 		}
-		
+
 		return rtn;
 	}
-	
+
 	/**
 	 * ShoppingOrderItemRefundDTO Page转换
 	 * 

@@ -24,7 +24,6 @@ import com.lawu.eshop.property.srv.mapper.extend.PropertyInfoDOMapperExtend;
 import com.lawu.eshop.property.srv.mapper.extend.WithdrawCashDOMapperExtend;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 
@@ -112,7 +111,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
 			bqbo.setBankNo(bankAccountDO.getAccountNumber());
-			bqbo.setBankName(bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+			bqbo.setBankName(bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
 			bqbo.setBankBranchName(bankAccountDO.getSubBranchName());
 
 			bqbo.setCashNumber(cdo.getCashNumber());
@@ -132,14 +131,15 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	}
 
 	@Override
-	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) throws Exception {
+	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) {
 		WithdrawCashDOView view = new WithdrawCashDOView();
 		view.setUserType(param.getUserTypeEnum().val);
 		view.setStatus(CashStatusEnum.SUCCESS.getVal());
 		view = withdrawCashDOMapperExtend.getTotalNum(view);
 
 		WithdrawCashBackageQuerySumBO bo = new WithdrawCashBackageQuerySumBO();
-		BeanUtil.copyProperties(view, bo);
+		bo.setSuccessMoney(view.getSuccessMoney());
+		bo.setSuccessNums(view.getSuccessNums());
 		return bo;
 	}
 
@@ -168,7 +168,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(cdo.getBusinessBankAccountId());
 			bqbo.setBusinessBankAccount(bankAccountDO.getAccountName());
 			bqbo.setBankNo(bankAccountDO.getAccountNumber());
-			bqbo.setBankName(bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+			bqbo.setBankName(bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
 			bqbo.setBankBranchName(bankAccountDO.getSubBranchName());
 
 			bqbo.setCashNumber(cdo.getCashNumber());

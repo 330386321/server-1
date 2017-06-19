@@ -3,10 +3,8 @@ package com.lawu.eshop.order.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
-import com.lawu.eshop.order.constants.ExpressInquiriesDetailStateEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.constants.TransactionPayTypeEnum;
@@ -15,11 +13,9 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderExtendQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderItemDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToMerchantDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
-import com.lawu.eshop.order.dto.foreign.TraceDTO;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
-import com.lawu.eshop.order.srv.bo.TraceBO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 
 /**
@@ -117,11 +113,10 @@ public class ShoppingOrderExtendConverter {
 		ShoppingOrderExtendDetailDTO rtn = null;
 		
 		if (shoppingOrderExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingOrderExtendDetailDTO();
-		
 		rtn.setId(shoppingOrderExtendBO.getId());
 		rtn.setMemberNum(shoppingOrderExtendBO.getMemberNum());
 		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
@@ -152,11 +147,8 @@ public class ShoppingOrderExtendConverter {
 		
 		// 如果物流信息存在
 		if (expressInquiriesDetailBO != null && expressInquiriesDetailBO.getTraces() != null && !expressInquiriesDetailBO.getTraces().isEmpty()) {
-			rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetailBO.getState()));
-			TraceBO traceBO = expressInquiriesDetailBO.getTraces().get(0);
-			TraceDTO traceDTO = new TraceDTO();
-			BeanUtils.copyProperties(traceBO, traceDTO);
-			rtn.setTrace(traceDTO);
+			rtn.setState(expressInquiriesDetailBO.getState());
+			rtn.setTrace(ExpressInquiriesDetailConverter.convert(expressInquiriesDetailBO.getTraces().get(0)));
 		}
 		
 		int quantity = 0;
@@ -187,7 +179,16 @@ public class ShoppingOrderExtendConverter {
 		}
 
 		rtn = new ShoppingOrderExtendQueryDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, rtn, new String[]{"items"});
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setFreightPrice(shoppingOrderExtendBO.getFreightPrice());
+		rtn.setIsDone(shoppingOrderExtendBO.getIsDone());
+		rtn.setIsNeedsLogistics(shoppingOrderExtendBO.getIsNeedsLogistics());
+		rtn.setIsNoReasonReturn(shoppingOrderExtendBO.getIsNoReasonReturn());
+		rtn.setMerchantId(shoppingOrderExtendBO.getMerchantId());
+		rtn.setMerchantName(shoppingOrderExtendBO.getMerchantName());
+		rtn.setMerchantStoreId(shoppingOrderExtendBO.getMerchantStoreId());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
+		rtn.setOrderTotalPrice(shoppingOrderExtendBO.getOrderTotalPrice());
 		
 		int quantity = 0;
 		if (shoppingOrderExtendBO.getItems() != null) {
@@ -224,25 +225,44 @@ public class ShoppingOrderExtendConverter {
 	}
 	
 	/**
+	 * ShoppingOrderExtendQueryDTO Page转换
+	 * 
+	 * @param shoppingOrderExtendBOPage
+	 * @return
+	 */
+	public static Page<ShoppingOrderExtendQueryDTO> convertShoppingOrderExtendQueryDTOPage(Page<ShoppingOrderExtendBO> shoppingOrderExtendBOPage) {
+		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderExtendQueryDTO>();
+		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendBOPage.getCurrentPage());
+		shoppingOrderExtendQueryDTOPage.setTotalCount(shoppingOrderExtendBOPage.getTotalCount());
+		shoppingOrderExtendQueryDTOPage.setRecords(convertShoppingOrderExtendQueryDTOList(shoppingOrderExtendBOPage.getRecords()));
+		return shoppingOrderExtendQueryDTOPage;
+	}
+	
+	/**
 	 * ShoppingOrderQueryToMerchantDTO转换
 	 * 
 	 * @param shoppingOrderExtendBO
 	 * @return
 	 */
 	public static ShoppingOrderQueryToMerchantDTO convertShoppingOrderQueryToMerchantDTO(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderQueryToMerchantDTO rtn = null;
 		if (shoppingOrderExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderQueryToMerchantDTO shoppingOrderQueryToMerchantDTO = new ShoppingOrderQueryToMerchantDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, shoppingOrderQueryToMerchantDTO, new String[]{"items"});
+		rtn = new ShoppingOrderQueryToMerchantDTO();
+		rtn.setConsigneeName(shoppingOrderExtendBO.getConsigneeName());
+		rtn.setGmtCreate(shoppingOrderExtendBO.getGmtCreate());
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setOrderNum(shoppingOrderExtendBO.getOrderNum());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
 		
 		if (shoppingOrderExtendBO.getItems() != null && !shoppingOrderExtendBO.getItems().isEmpty()) {
-			shoppingOrderQueryToMerchantDTO.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
+			rtn.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
 		}
 		
 		
-		return shoppingOrderQueryToMerchantDTO;
+		return rtn;
 	}
 	
 	/**
@@ -271,18 +291,23 @@ public class ShoppingOrderExtendConverter {
 	 * @return
 	 */
 	public static ShoppingOrderQueryToOperatorDTO convertShoppingOrderQueryToOperatorDTO(ShoppingOrderExtendBO shoppingOrderExtendBO) {
+		ShoppingOrderQueryToOperatorDTO rtn = null;
 		if (shoppingOrderExtendBO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingOrderQueryToOperatorDTO shoppingOrderQueryToOperatorDTO = new ShoppingOrderQueryToOperatorDTO();
-		BeanUtils.copyProperties(shoppingOrderExtendBO, shoppingOrderQueryToOperatorDTO, new String[]{"items"});
+		rtn = new ShoppingOrderQueryToOperatorDTO();
+		rtn.setConsigneeName(shoppingOrderExtendBO.getConsigneeName());
+		rtn.setGmtCreate(shoppingOrderExtendBO.getGmtCreate());
+		rtn.setId(shoppingOrderExtendBO.getId());
+		rtn.setOrderNum(shoppingOrderExtendBO.getOrderNum());
+		rtn.setOrderStatus(shoppingOrderExtendBO.getOrderStatus());
 		
 		if (shoppingOrderExtendBO.getItems() != null && !shoppingOrderExtendBO.getItems().isEmpty()) {
-			shoppingOrderQueryToOperatorDTO.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
+			rtn.setProductFeatureImage(shoppingOrderExtendBO.getItems().get(0).getProductFeatureImage());
 		}
 		
-		return shoppingOrderQueryToOperatorDTO;
+		return rtn;
 	}
 	
 	/**

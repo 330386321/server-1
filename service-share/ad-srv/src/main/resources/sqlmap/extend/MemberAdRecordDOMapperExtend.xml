@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend">
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.ad.srv.domain.MemberAdRecordDO">
+    <result column="point" jdbcType="DECIMAL" property="point" />
+  </resultMap>
+  
+  <!-- 今天获取积分 -->
+  <select id="selectPointToday" parameterType="java.lang.Long" resultMap="BaseResultMap">
+   select point from member_ad_record  WHERE member_id=#{memberId,jdbcType=BIGINT}   and click_date=date(now())
+  </select>
+ 
+</mapper>

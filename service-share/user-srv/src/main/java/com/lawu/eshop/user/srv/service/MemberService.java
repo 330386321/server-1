@@ -145,4 +145,6 @@ public interface MemberService {
 
 
     int delUserGtPush(Long memberId);
+    
+    List<MemberBO> getMemberByIds(List<Long> memberIds);
 }

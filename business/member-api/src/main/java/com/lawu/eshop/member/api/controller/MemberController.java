@@ -96,7 +96,7 @@ public class MemberController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1100|1013|1025] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "忘记登录密码", notes = "根据会员账号修改登录密码。[1100|1013|1016|1025] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
     public Result resetLoginPwd(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
@@ -106,6 +106,10 @@ public class MemberController extends BaseController {
         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
+        if (!mobile.equals(verifyCodeDTO.getMobile())) {
+            return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), memberApiConfig.getSmsValidMinutes())){
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
@@ -126,7 +130,7 @@ public class MemberController extends BaseController {
     }
 
     @Audit(date = "2017-03-29", reviewer = "孙林青")
-    @ApiOperation(value = "忘记支付密码", notes = "根据会员编号重置支付密码。[1013|1100|1025] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "忘记支付密码", notes = "根据会员编号重置支付密码。[1013|1100|1016|1025] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "resetPayPwd", method = RequestMethod.PUT)
@@ -134,9 +138,14 @@ public class MemberController extends BaseController {
                               @RequestParam @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
                               @RequestParam @ApiParam(required = true, value = "手机验证码") String smsCode,
                               @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String mobile = UserUtil.getCurrentAccount(getRequest());
         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
+        if (!verifyCodeDTO.getMobile().equals(mobile)) {
+            return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), memberApiConfig.getSmsValidMinutes())){
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);

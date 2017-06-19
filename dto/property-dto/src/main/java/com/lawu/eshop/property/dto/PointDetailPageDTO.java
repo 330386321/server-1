@@ -1,15 +1,12 @@
 package com.lawu.eshop.property.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.lawu.eshop.framework.core.page.Page;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class PointDetailPageDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class PointDetailPageDTO {
 	
 	/**
 	 * 用户积分

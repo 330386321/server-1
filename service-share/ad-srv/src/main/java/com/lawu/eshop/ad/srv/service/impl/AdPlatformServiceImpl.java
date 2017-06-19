@@ -3,6 +3,7 @@ package com.lawu.eshop.ad.srv.service.impl;
 import com.lawu.eshop.ad.constants.AdPlatformStatusEnum;
 import com.lawu.eshop.ad.constants.PositionEnum;
 import com.lawu.eshop.ad.constants.TypeEnum;
+import com.lawu.eshop.ad.param.AdPlatformExtendParam;
 import com.lawu.eshop.ad.param.AdPlatformFindParam;
 import com.lawu.eshop.ad.param.AdPlatformParam;
 import com.lawu.eshop.ad.srv.bo.AdPlatformBO;
@@ -10,7 +11,9 @@ import com.lawu.eshop.ad.srv.converter.AdPlatformConverter;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDO;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample;
 import com.lawu.eshop.ad.srv.domain.AdPlatformDOExample.Criteria;
+import com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView;
 import com.lawu.eshop.ad.srv.mapper.AdPlatformDOMapper;
+import com.lawu.eshop.ad.srv.mapper.extend.AdPlatformDOMapperExtend;
 import com.lawu.eshop.ad.srv.service.AdPlatformService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.utils.DateUtil;
@@ -28,6 +31,9 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 
     @Autowired
     private AdPlatformDOMapper adPlatformDOMapper;
+
+    @Autowired
+    private AdPlatformDOMapperExtend adPlatformDOMapperExtend;
 
     @Override
     @Transactional
@@ -50,8 +56,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setGmtCreate(new Date());
         adPlatformDO.setGmtModified(new Date());
         adPlatformDO.setContent(adPlatformParam.getContent());
-        Integer id = adPlatformDOMapper.insert(adPlatformDO);
-        return id;
+        return adPlatformDOMapper.insert(adPlatformDO);
     }
 
     @Override
@@ -61,8 +66,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         example.createCriteria().andIdEqualTo(id);
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setStatus(AdPlatformStatusEnum.DELETE.val);
-        Integer i = adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
-        return i;
+        return adPlatformDOMapper.updateByExampleSelective(adPlatformDO, example);
     }
 
     @Override
@@ -112,8 +116,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override
@@ -122,8 +125,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setPosition(positionEnum.val);
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override
@@ -140,8 +142,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         adPlatformDO.setMerchantStoreId(adPlatformParam.getMerchantStoreId());
         adPlatformDO.setPosition(adPlatformParam.getPositionEnum().val);
         adPlatformDO.setRegionPath(adPlatformParam.getRegionPath());
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-        return i;
+        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override
@@ -168,15 +169,22 @@ public class AdPlatformServiceImpl implements AdPlatformService {
     }
 
     @Override
-    public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum, String regionPath) {
+    public List<AdPlatformBO> getAdPlatformByTypePositionRegionPath(TypeEnum typeEnum, PositionEnum positionEnum, String regionPath) {
         AdPlatformDOExample example = new AdPlatformDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val);
-        if(StringUtils.isNotEmpty(regionPath)){
-            criteria.andRegionPathLike(regionPath + "%");
-        }
+        criteria.andTypeEqualTo(typeEnum.val).andPositionEqualTo(positionEnum.val).andStatusEqualTo(AdPlatformStatusEnum.UP.val).andRegionPathLike(regionPath + "%");
         List<AdPlatformDO> adPlatformDOS = adPlatformDOMapper.selectByExample(example);
         return AdPlatformConverter.convertBOS(adPlatformDOS);
+    }
+
+    @Override
+    public List<AdPlatformBO> getAdPlatformByTypePosition(TypeEnum typeEnum, PositionEnum positionEnum) {
+        AdPlatformExtendParam param = new AdPlatformExtendParam();
+        param.setType(typeEnum.val);
+        param.setPosition(positionEnum.val);
+        param.setStatus(AdPlatformStatusEnum.UP.val);
+        List<AdPlatformDOView> adPlatformDOViews = adPlatformDOMapperExtend.getAdPlatformByTypePosition(param);
+        return AdPlatformConverter.convertBO(adPlatformDOViews);
     }
 
 }

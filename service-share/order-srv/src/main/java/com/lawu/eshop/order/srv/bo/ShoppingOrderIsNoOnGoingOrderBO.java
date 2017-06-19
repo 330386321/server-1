@@ -1,10 +1,6 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
-
-public class ShoppingOrderIsNoOnGoingOrderBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderIsNoOnGoingOrderBO {
 
 	/**
 	 * 是否有进行中的订单

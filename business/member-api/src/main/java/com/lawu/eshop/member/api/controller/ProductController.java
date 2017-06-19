@@ -10,9 +10,9 @@ import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.*;
 import com.lawu.eshop.product.dto.MemberProductCommentInfoDTO;
+import com.lawu.eshop.product.dto.MemberProductModelDTO;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.user.dto.MerchantBaseInfoDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,8 +49,6 @@ public class ProductController extends BaseController {
 	@Autowired
 	private FavoriteProductService favoriteProductService;
 	@Autowired
-	private MerchantService merchantService;
-	@Autowired
 	private ShoppingCartService shoppingCartService;
 	@Autowired
 	private MemberApiConfig memberApiConfig;
@@ -67,23 +65,24 @@ public class ProductController extends BaseController {
 			return result;
 		}
 		
-		Result<MerchantBaseInfoDTO> merchantResult = merchantService.getMerchantById(result.getModel().getMerchantId());
-		result.getModel().setMerchantUserNum(merchantResult.getModel().getUserNum());
+//		Result<MerchantBaseInfoDTO> merchantResult = merchantService.getMerchantById(result.getModel().getMerchantId());
+//		result.getModel().setMerchantUserNum(merchantResult.getModel().getUserNum());
 
 		// 查询门店信息
-		Result<MemberProductStoreDTO> storeDTOResult = merchantStoreService
-				.getMemberProductDetailStore(result.getModel().getMerchantId());
+		Result<MemberProductStoreDTO> storeDTOResult = merchantStoreService.getMemberProductDetailStore(result.getModel().getMerchantId());
 		if (result.getRet() != ResultCode.SUCCESS) {
 			return result;
 		}
 		if(storeDTOResult.getModel() != null){
 			Result<Integer> productNumResult = productService.selectProductCount(result.getModel().getMerchantId());
-			storeDTOResult.getModel().setUpProductNum(productNumResult.getModel()== null ? "0" : productNumResult.getModel().toString());
+			storeDTOResult.getModel().setUpProductNum(productNumResult.getModel()== null ? "0" : productNumResult.getModel().toString());//上架商品数量
 			Result<Integer> fansNumResult = fansMerchantService.countFans(result.getModel().getMerchantId());
-			storeDTOResult.getModel().setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());
+			storeDTOResult.getModel().setFansNum(fansNumResult.getModel() == null ? "0" : fansNumResult.getModel().toString());//商家粉丝数量
 		}
 		result.getModel().setStore(storeDTOResult.getModel());		
 
+		List<MemberProductModelDTO> spec = result.getModel().getSpec();//用于下面查询评价时回显商品型号名称
+		
 		// 查询评价信息
 		Result<List<MemberProductCommentDTO>> commentsResult = commentMerchantService.geNewlyProductComment(productId);
 		List<MemberProductCommentInfoDTO> commentList = new ArrayList<MemberProductCommentInfoDTO>();
@@ -97,17 +96,27 @@ public class ProductController extends BaseController {
 				cidto.setIsAnonymous(comment.getIsAnonymous());
 				cidto.setReplyContent(comment.getReplyContent());
 
-				Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService
-						.selectCommentProductInfo(comment.getProductModelId());
-				cidto.setProductModel(product.getModel().getModelName());
+				//Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(comment.getProductModelId());
+				boolean flag = true;
+				for(MemberProductModelDTO model : spec){
+					if(comment.getProductModelId() == model.getId()){
+						cidto.setProductModel(model.getName());
+						flag = false;
+						break;
+					}
+				}
+				if(flag){
+					cidto.setProductModel("");
+				}
 
 				Result<UserDTO> user = memberService.findMemberInfo(comment.getMemberId());
+				String nickName = user.getModel().getNickname();
 				if(cidto.getIsAnonymous()){
 					cidto.setHeadUrl(memberApiConfig.getDefaultHeadimg());
-					cidto.setName(user.getModel().getNickname().substring(0,1)+"***"+user.getModel().getNickname().substring(user.getModel().getNickname().length()-1,user.getModel().getNickname().length()));
+					cidto.setName(nickName.substring(0,1)+"***"+nickName.substring(nickName.length()-1,nickName.length()));
 				}else{
 					cidto.setHeadUrl(user.getModel().getHeadimg());
-					cidto.setName(user.getModel().getNickname());
+					cidto.setName(nickName);
 				}
 				cidto.setLevel(String.valueOf(user.getModel().getLevel()));
 				commentList.add(cidto);

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.param.PointDetailQueryData1Param;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 
 @FeignClient(value = "property-srv")
@@ -17,4 +18,13 @@ public interface PropertyInfoDataService {
 	@RequestMapping(value = "propertyInfoData/doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestBody @Valid PropertyInfoDataParam param);
 
+	/**
+	 * 根据user_num、point_type、biz_id查询积分明细记录
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月15日 下午12:19:48
+	 */
+	@RequestMapping(value = "propertyInfoData/getPointDetailByUserNumAndPointTypeAndBizId", method = RequestMethod.POST)
+	Result<Integer> getPointDetailByUserNumAndPointTypeAndBizId(@RequestBody PointDetailQueryData1Param param);
 }

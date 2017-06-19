@@ -7,14 +7,12 @@ import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * 
@@ -43,15 +41,10 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "doHandleOrderPayNotify", method = RequestMethod.POST)
 	public Result doHandleOrderPayNotify(@RequestBody @Valid NotifyCallBackParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		int retCode = orderService.doHandleOrderPayNotify(param);
 		return successCreated(retCode);
 	}
@@ -66,15 +59,10 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "doHandlePayOrderNotify", method = RequestMethod.POST)
 	public Result doHandlePayOrderNotify(@RequestBody @Valid NotifyCallBackParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		int retCode = orderService.doHandlePayOrderNotify(param);
 		return successCreated(retCode);
 	}
@@ -89,15 +77,10 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "comfirmDelivery", method = RequestMethod.POST)
 	public Result comfirmDelivery(@RequestBody @Valid OrderComfirmDataParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		int retCode = orderService.comfirmDelivery(param);
 		return successCreated(retCode);
 	}
@@ -114,15 +97,10 @@ public class OrderController extends BaseController {
 	@RequestMapping(value = "doRefundScopeInside", method = RequestMethod.POST)
 	public Result doRefundScopeInside(@RequestBody @Valid OrderRefundDataParam param, BindingResult result)
 			throws Exception {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 		/*if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
 			String certPath = getRequest().getSession().getServletContext().getRealPath(propertySrvConfig.getWxpay_cert_local_path_member());
 		}*/
@@ -140,15 +118,11 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "comfirmReleaseFreeze", method = RequestMethod.POST)
 	public Result comfirmReleaseFreeze(@RequestBody @Valid OrderReleaseFreezeParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
 		int retCode = orderService.comfirmReleaseFreeze(param);
 		return successCreated(retCode);
 	}
@@ -162,15 +136,11 @@ public class OrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "comfirmSysJob", method = RequestMethod.POST)
 	public Result comfirmSysJob(@RequestBody @Valid OrderSysJobParam param, BindingResult result) {
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+		
 		int retCode = orderService.comfirmSysJob(param);
 		return successCreated(retCode);
 	}

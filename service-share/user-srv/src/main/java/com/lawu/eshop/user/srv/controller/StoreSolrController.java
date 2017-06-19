@@ -42,19 +42,19 @@ public class StoreSolrController extends BaseController {
     @RequestMapping(value = "listStore", method = RequestMethod.POST)
     public Result<Page<StoreSolrDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
         String latLon = storeSolrParam.getLatitude() + "," + storeSolrParam.getLongitude();
-        StringBuffer stringBuffer = new StringBuffer("regionPath_s:");
-        stringBuffer.append(storeSolrParam.getRegionPath()).append("*");
+        StringBuilder sb = new StringBuilder("regionPath_s:");
+        sb.append(storeSolrParam.getRegionPath()).append("*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
-            stringBuffer.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
+            sb.append(" AND name_s:*").append(storeSolrParam.getName()).append("*");
         }
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
-            stringBuffer.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
+            sb.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
         }
         if(storeSolrParam.getStoreId() != null && storeSolrParam.getStoreId() > 0){
-            stringBuffer.append(" AND -id:").append(storeSolrParam.getStoreId());
+            sb.append(" AND -id:").append(storeSolrParam.getStoreId());
         }
         SolrQuery query = new SolrQuery();
-        query.setParam("q", stringBuffer.toString());
+        query.setParam("q", sb.toString());
         if (storeSolrParam.getDistance() != null && storeSolrParam.getDistance() > 0) {
             query.setParam("d", String.valueOf(storeSolrParam.getDistance()));
         } else {

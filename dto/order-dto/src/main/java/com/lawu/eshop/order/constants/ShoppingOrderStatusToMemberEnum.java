@@ -28,10 +28,6 @@ public enum ShoppingOrderStatusToMemberEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	ShoppingOrderStatusToMemberEnum(Byte value) {
 		this.value = value;
 	}

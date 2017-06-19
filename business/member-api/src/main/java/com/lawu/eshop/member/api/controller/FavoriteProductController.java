@@ -53,8 +53,7 @@ public class FavoriteProductController extends BaseController{
     public Result addFavoriteProduct(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
     						@RequestParam @ApiParam(required = true, value = "商品id") Long productId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-        Result rs = favoriteProductService.save(memberId, productId);
-        return rs;
+        return favoriteProductService.save(memberId, productId);
     }
 	
 	/**
@@ -71,8 +70,7 @@ public class FavoriteProductController extends BaseController{
     public Result<Page<FavoriteProductDTO>> selectInviteeMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                                  @ModelAttribute @ApiParam( value = "查询信息") FavoriteProductQuery pageQuery) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
-    	Result<Page<FavoriteProductDTO>>  pageDTOS=favoriteProductService.selectMyFavoriteProduct(memberId, pageQuery);
-    	return pageDTOS;
+    	return favoriteProductService.selectMyFavoriteProduct(memberId, pageQuery);
     }
 
 	/**

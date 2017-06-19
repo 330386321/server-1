@@ -321,7 +321,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setOrderTotalPrice(commodityTotalPrice.add(shoppingOrderSettlementForeignParamMap.get(key).getFreightPrice()));
     		shoppingOrderSettlementParam.setCommodityTotalPrice(commodityTotalPrice);
     		shoppingOrderSettlementParams.add(shoppingOrderSettlementParam);
-    	};
+    	}
     	
     	
     	// 保存订单
@@ -421,7 +421,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> entry : memberShoppingCartDTOMap.entrySet()) {
     		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
     		BigDecimal subtotal = new BigDecimal(0);
-    		Integer productNumber = new Integer(0);
+    		Integer productNumber = Integer.valueOf(0);
     		for (MemberShoppingCartDTO memberShoppingCartDTO : entry.getValue()) {
     			subtotal = subtotal.add(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
     			productNumber += memberShoppingCartDTO.getQuantity();

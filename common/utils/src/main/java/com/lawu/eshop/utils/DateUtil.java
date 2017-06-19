@@ -1,5 +1,8 @@
 package com.lawu.eshop.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +13,10 @@ import java.util.*;
  * @date 2017/3/22
  */
 public class DateUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
+
+    private DateUtil(){}
 
     // 默认日期格式
     private static final String DATE_DEFAULT_FORMAT = "yyyy-MM-dd";
@@ -59,7 +66,7 @@ public class DateUtil {
     //int时间格式化
     private static DateFormat timeIntFormat = null;
 
-    private static Calendar gregorianCalendar = null;
+    private static Calendar gregorianCalendar = new GregorianCalendar();
 
     static {
         dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
@@ -70,7 +77,6 @@ public class DateUtil {
         dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
         timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
         timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
-        gregorianCalendar = new GregorianCalendar();
     }
 
     /**
@@ -185,7 +191,7 @@ public class DateUtil {
         try {
             return dateTimeFormat.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("字符串转换为Date异常：{}", e);
         }
         return null;
     }
@@ -239,6 +245,7 @@ public class DateUtil {
             long intervalMilli = endDate.getTime() - dateTimeFormat.parse(date).getTime();
             return intervalMilli > 0;
         }catch (Exception e){
+            logger.error("判断是否超过当前时间异常：{}", e);
             return false;
         }
     }
@@ -261,6 +268,7 @@ public class DateUtil {
             int intervalMinutes = (int) (intervalMilli / (60 * 1000));
             return intervalMinutes > minutes;
         }catch (Exception e){
+            logger.error("短信是否超时异常：{}", e);
             return false;
         }
     }
@@ -278,7 +286,7 @@ public class DateUtil {
         try {
             return new SimpleDateFormat(format).parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("日期格式化yyyy-MM-dd异常：{}", e);
         }
         return null;
     }
@@ -315,7 +323,7 @@ public class DateUtil {
         try {
             return dateFormat.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("日期格式化异常：{}", e);
         }
         return null;
     }
@@ -330,7 +338,7 @@ public class DateUtil {
         try {
             return dateTimeFormat.parse(date);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("时间格式化异常：{}", e);
         }
         return null;
     }

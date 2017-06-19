@@ -1,15 +1,12 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 
-public class ShoppingOrderItemBO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ShoppingOrderItemBO {
 
 	/**
 	 * 主键

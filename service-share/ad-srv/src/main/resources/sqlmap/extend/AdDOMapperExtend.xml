@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.ad.srv.mapper.extend.AdDOMapperExtend">
+  <resultMap id="BaseResultMap" type="com.lawu.eshop.ad.srv.domain.AdDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
+    <result column="merchant_longitude" jdbcType="DECIMAL" property="merchantLongitude" />
+    <result column="merchant_latitude" jdbcType="DECIMAL" property="merchantLatitude" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="media_url" jdbcType="VARCHAR" property="mediaUrl" />
+    <result column="video_img_url" jdbcType="VARCHAR" property="videoImgUrl" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="put_way" jdbcType="TINYINT" property="putWay" />
+    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
+    <result column="areas" jdbcType="VARCHAR" property="areas" />
+    <result column="radius" jdbcType="INTEGER" property="radius" />
+    <result column="point" jdbcType="DECIMAL" property="point" />
+    <result column="total_point" jdbcType="DECIMAL" property="totalPoint" />
+    <result column="ad_count" jdbcType="INTEGER" property="adCount" />
+    <result column="hits" jdbcType="INTEGER" property="hits" />
+    <result column="viewCount" jdbcType="INTEGER" property="viewcount" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  
+ <sql id="Base_Column_List">
+    id, merchant_id, merchant_num, merchant_longitude, merchant_latitude, title, media_url, 
+    video_img_url, content, type, put_way,begin_time, areas,
+    radius, point, total_point, ad_count, hits, viewCount, status
+  </sql>
+  
+  <select id="selectAdAll" parameterType="com.lawu.eshop.ad.srv.domain.extend.AdDOView" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ad
+    <where>
+	      <if test="type != null">
+	       type= #{type,jdbcType=TINYINT}
+	       and status=2
+	      </if>
+	      <!-- 积分榜 -->
+	      <if test="topType ==1">
+	       type=1 and <![CDATA[ status > 0 and status < 3  ]]>
+	       order by total_point desc
+	      	 
+	      </if>
+	      <!-- 人气榜 -->
+	      <if test="topType ==2">
+	      	 type=1 and <![CDATA[ status > 0 and status < 3  ]]>
+	      	 and point>=20
+	      	 order by point desc
+	      </if>
+    </where>
+  </select>
+  
+  <!-- 点击次数加一 -->
+   <update id="updateHitsByPrimaryKey" parameterType="java.lang.Long">
+    update ad set 
+      hits = hits+1
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 精选广告 -->
+  <select id="selectChoiceness"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from ad
+    where
+      	 type !=4 and <![CDATA[ status > 0 and status < 3  ]]>
+      	 order by gmt_create desc
+  </select>
+</mapper>

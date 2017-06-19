@@ -1,24 +1,20 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.utils.RandomUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdPraiseDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚实体转化
@@ -40,7 +36,6 @@ public class AdConverter {
 		adBO.setId(adDO.getId());
 		adBO.setAdCount(adDO.getAdCount());
 		adBO.setBeginTime(adDO.getBeginTime());
-		adBO.setEndTime(adDO.getEndTime());
 		adBO.setMediaUrl(adDO.getMediaUrl());
 		adBO.setMerchantId(adDO.getMerchantId());
 		adBO.setGmtCreate(adDO.getGmtCreate());
@@ -96,7 +91,6 @@ public class AdConverter {
 		adDTO.setId(adBO.getId());
 		adDTO.setAdCount(adBO.getAdCount());
 		adDTO.setBeginTime(adBO.getBeginTime());
-		adDTO.setEndTime(adBO.getEndTime());
 		adDTO.setMediaUrl(adBO.getMediaUrl());
 		adDTO.setMerchantId(adBO.getMerchantId());
 		adDTO.setGmtCreate(adBO.getGmtCreate());
@@ -210,7 +204,6 @@ public class AdConverter {
 			praise.setId(adBO.getId());
 			praise.setTitle(adBO.getTitle());
 			praise.setBeginTime(adBO.getBeginTime());
-			praise.setEndTime(adBO.getEndTime());
 			praise.setTotalPoint(adBO.getTotalPoint());
 		}
 		return DTOS;
@@ -227,22 +220,22 @@ public class AdConverter {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
-        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("merchantId_l", adDO.getMerchantId());
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
-        document.addField("status_s", adDO.getStatus());
+        document.addField("status_i", adDO.getStatus());
         document.addField("count_i", adDO.getViewcount());
-        document.addField("radius_i", adDO.getRadius());
+		document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
-        if(adDO.getPutWay()==1){
-        	if(adDO.getAreas()!=null){
+        if(adDO.getPutWay() == 1){
+        	if(StringUtils.isNotEmpty(adDO.getAreas())){
         		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
-            		document.addField("area_ss", area);
+            		document.addField("area_is", area);
     			}
         	}else{
-        		document.addField("area_ss", 0);
+        		document.addField("area_is", 0);
         	}
         }
         return document;
@@ -261,12 +254,12 @@ public class AdConverter {
         }
         for (SolrDocument solrDocument : solrDocumentList) {
     		AdSolrDTO adSolrDTO = new AdSolrDTO();
-        	adSolrDTO.setId(Long.valueOf(solrDocument.get("id").toString()));
-        	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s").toString());
-        	adSolrDTO.setTitle(solrDocument.get("title_s").toString());
-        	adSolrDTO.setContent(solrDocument.get("content_s").toString());
-        	adSolrDTO.setCount(Integer.valueOf(solrDocument.get("count_i").toString()));
-        	int type=(int)solrDocument.get("type_i");
+        	adSolrDTO.setId(solrDocument.get("id") == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
+        	adSolrDTO.setMediaUrl(solrDocument.get("mediaUrl_s") == null ? "" : solrDocument.get("mediaUrl_s").toString());
+        	adSolrDTO.setTitle(solrDocument.get("title_s") == null ? "" : solrDocument.get("title_s").toString());
+        	adSolrDTO.setContent(solrDocument.get("content_s") == null ? "" : solrDocument.get("content_s").toString());
+        	adSolrDTO.setCount(solrDocument.get("count_i") == null ? 0 : Integer.valueOf(solrDocument.get("count_i").toString()));
+        	int type=solrDocument.get("type_i") == null ? 0 : Integer.valueOf(solrDocument.get("type_i").toString());
         	if(type==1){
         		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);	
         	}else{
@@ -305,11 +298,11 @@ public class AdConverter {
         SolrInputDocument document = new SolrInputDocument();
         document.addField("id", adDO.getId());
         document.addField("mediaUrl_s", adDO.getMediaUrl());
-        document.addField("merchantId_s", adDO.getMerchantId());
+        document.addField("merchantId_l", adDO.getMerchantId());
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
-        document.addField("status_s", "3");
+        document.addField("status_i", "3");
         document.addField("count_i", adDO.getViewcount());
         document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
@@ -317,10 +310,10 @@ public class AdConverter {
         	if(adDO.getAreas()!=null){
         		String[] location=adDO.getAreas().split(",");
             	for (String area : location) {
-            		document.addField("area_ss", area);
+            		document.addField("area_is", area);
     			}
         	}else{
-        		document.addField("area_ss", 0);
+        		document.addField("area_is", 0);
         	}
         }
         return document;

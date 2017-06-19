@@ -6,6 +6,8 @@ package com.lawu.eshop.utils;
  */
 public class DistanceUtil {
 
+    private DistanceUtil(){}
+
     /**
      * 获取两个经纬度之间的距离
      *
@@ -33,6 +35,7 @@ public class DistanceUtil {
                 * Math.asin(Math.sqrt(latDiffSin * latDiffSin
                 + Math.cos(latitude1) * Math.cos(latitude2)
                 * longDiffSin * longDiffSin));
-        return (int) Math.round(distance);
+        return (int) Math.round(distance)/1000;
     }
+    
 }

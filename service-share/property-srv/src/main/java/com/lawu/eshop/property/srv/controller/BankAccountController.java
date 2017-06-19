@@ -72,7 +72,7 @@ public class BankAccountController extends BaseController{
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable Long id) {
 		Integer i = bankAccountService.remove(id);
-		if(id>0){
+		if(i>0){
     		return successDelete();
     	}else{
     		return successCreated(ResultCode.FAIL);

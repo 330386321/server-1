@@ -21,10 +21,6 @@ public enum CommissionStatusEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	CommissionStatusEnum(Byte value) {
 		this.value = value;
 	}

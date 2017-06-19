@@ -6,7 +6,6 @@ import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowSer
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.property.StoreStatusNotification;
 import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
-import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class HandleDepositEditStoreStatusTransactionFollowServiceImpl extends AbstractTransactionFollowService<StoreStatusNotification, Reply> {
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
-    @Autowired
-    private MerchantAuditService merchantAuditService;
+
     /**
      *
      */
@@ -37,9 +35,6 @@ public class HandleDepositEditStoreStatusTransactionFollowServiceImpl extends Ab
 
         rtn = new Reply();
         merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(),MerchantStatusEnum.MERCHANT_STATUS_GIVE_MONEY_CHECK.val);
-        if(notification.getShow()){
-            merchantAuditService.setAuditInfoShow(notification.getMerchantId());
-        }
         return rtn;
     }
 }

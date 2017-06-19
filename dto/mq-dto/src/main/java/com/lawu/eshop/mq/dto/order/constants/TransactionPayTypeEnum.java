@@ -29,10 +29,6 @@ public enum TransactionPayTypeEnum {
 		return val;
 	}
 
-	public void setVal(Byte val) {
-		this.val = val;
-	}
-
 	TransactionPayTypeEnum(Byte val) {
 		this.val = val;
 	}

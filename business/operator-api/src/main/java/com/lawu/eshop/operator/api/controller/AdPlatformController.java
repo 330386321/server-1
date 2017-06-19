@@ -97,7 +97,7 @@ public class AdPlatformController extends BaseController {
     @RequiresPermissions("adPlatForm:del")
     @RequestMapping(value = "removeAdPlatform/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adPlatformService.removeAdPlatform(id);
+        adPlatformService.removeAdPlatform(id);
         return successDelete();
     }
     
@@ -106,8 +106,7 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "issueAd/{id}", method = RequestMethod.PUT)
     public Result issueAd(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adPlatformService.issueAd(id);
-        return rs;
+        return adPlatformService.issueAd(id);
     }
     
     @ApiOperation(value = "下架广告", notes = "下架广告[]（张荣成）", httpMethod = "PUT")
@@ -115,8 +114,7 @@ public class AdPlatformController extends BaseController {
     @RequiresPermissions("adPlatForm:soldOut")
     @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
     public Result unShelve(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adPlatformService.unShelve(id);
-        return rs;
+        return adPlatformService.unShelve(id);
     }
 
     @ApiOperation(value = "上架广告", notes = "上架广告。（梅述全）", httpMethod = "PUT")
@@ -132,8 +130,7 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "setPosition/{id}", method = RequestMethod.PUT)
     public Result setPositon(@PathVariable @ApiParam(required = true, value = "广告id") Long id,@ModelAttribute @ApiParam(required = true, value = "位置") PositionEnum positionEnum) {
-        Result rs = adPlatformService.setPosition(id,positionEnum);
-        return rs;
+        return adPlatformService.setPosition(id,positionEnum);
     }
  
     
@@ -176,8 +173,7 @@ public class AdPlatformController extends BaseController {
     @RequiresAuthentication
     @RequestMapping(value = "select/{id}", method = RequestMethod.GET)
     public Result<AdPlatformOperatorDTO> setPositon(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result<AdPlatformOperatorDTO> rs = adPlatformService.select(id);
-        return rs;
+        return adPlatformService.select(id);
     }
     
     
@@ -187,8 +183,7 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectProductByPlat", method = RequestMethod.GET)
     public Result<List<ProductPlatDTO>> selectProductByPlat(@ModelAttribute @ApiParam ProductParam param) {
-    	Result<List<ProductPlatDTO>> rs=productService.selectProductByPlat(param);
-    	return rs;
+        return productService.selectProductByPlat(param);
     }
     
     
@@ -197,8 +192,7 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "selectAllMerchantStore", method = RequestMethod.GET)
     public Result<List<MerchantStorePlatDTO>> selectAllMerchantStore(@ModelAttribute @ApiParam MerchantStorePlatParam param) {
-    	Result<List<MerchantStorePlatDTO>> rs=merchantStoreService.selectAllMerchantStore(param);
-    	return rs;
+        return merchantStoreService.selectAllMerchantStore(param);
     }
 
 }

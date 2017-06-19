@@ -32,6 +32,8 @@ public class PropertyInfoDataParam {
 	
 	//业务类型：根据业务需要传，如果是商家业务传merchantTransactionTypeEnum
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
+	
+	private String bizId;
 
 	//爱心账户类型
 	private LoveTypeEnum loveTypeEnum;
@@ -63,7 +65,15 @@ public class PropertyInfoDataParam {
         return point;
     }
 
-    public void setPoint(String point) {
+    public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
+
+	public void setPoint(String point) {
         this.point = point;
     }
 

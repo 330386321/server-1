@@ -107,9 +107,6 @@ public class RecommendProductCategoryController extends BaseController {
     @RequestMapping(value = "listAllRecommendProductCategory", method = RequestMethod.GET)
     public Result<List<RecommendProductCategoryDTO>> listAllRecommendProductCategory() {
         List<RecommendProductCategoryBO> recommendProductCategoryBOS = recommendProductCategoryService.listAllRecommendProductCategory();
-        if (recommendProductCategoryBOS == null || recommendProductCategoryBOS.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
-        }
         return successGet(RecommendProductCategoryConverter.convertDTO(recommendProductCategoryBOS));
     }
 

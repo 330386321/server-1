@@ -1,25 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
@@ -32,32 +12,31 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.merchant.api.MerchantApiConfig;
-import com.lawu.eshop.merchant.api.service.AdService;
-import com.lawu.eshop.merchant.api.service.InviterService;
-import com.lawu.eshop.merchant.api.service.MemberProfileService;
-import com.lawu.eshop.merchant.api.service.MemberService;
-import com.lawu.eshop.merchant.api.service.MerchantService;
-import com.lawu.eshop.merchant.api.service.PropertyInfoService;
-import com.lawu.eshop.merchant.api.service.VerifyCodeService;
+import com.lawu.eshop.merchant.api.service.*;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.user.constants.UserCommonConstant;
-import com.lawu.eshop.user.dto.InviteeMechantCountDTO;
-import com.lawu.eshop.user.dto.InviteeMemberCountDTO;
-import com.lawu.eshop.user.dto.InviterDTO;
-import com.lawu.eshop.user.dto.MerchantSNSDTO;
-import com.lawu.eshop.user.dto.MobileDTO;
-import com.lawu.eshop.user.dto.RongYunDTO;
-import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.*;
 import com.lawu.eshop.user.param.RegisterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.QrCodeUtil;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import util.UploadFileUtil;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * @author meishuquan
@@ -105,7 +84,7 @@ public class MerchantController extends BaseController {
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "忘记登录密码", notes = "根据商户账号修改登录密码。[1100|1013|1025] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "忘记登录密码", notes = "根据商户账号修改登录密码。[1100|1013|1016|1025] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "resetLoginPwd/{mobile}", method = RequestMethod.PUT)
     public Result resetLoginPwd(@PathVariable @ApiParam(required = true, value = "手机号码") String mobile,
@@ -115,6 +94,10 @@ public class MerchantController extends BaseController {
         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
+        if (!mobile.equals(verifyCodeDTO.getMobile())) {
+            return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())){
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
@@ -135,7 +118,7 @@ public class MerchantController extends BaseController {
     }
 
     @Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "忘记支付密码", notes = "根据商户编号重置支付密码。[1100|1013|1025] (梅述全)", httpMethod = "PUT")
+    @ApiOperation(value = "忘记支付密码", notes = "根据商户编号重置支付密码。[1100|1013|1016|1025] (梅述全)", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "resetPayPwd", method = RequestMethod.PUT)
@@ -143,9 +126,14 @@ public class MerchantController extends BaseController {
                               @RequestParam @ApiParam(required = true, value = "手机验证码ID") Long verifyCodeId,
                               @RequestParam @ApiParam(required = true, value = "手机验证码") String smsCode,
                               @RequestParam @ApiParam(required = true, value = "新密码") String newPwd) {
+        String mobile = UserUtil.getCurrentAccount(getRequest());
         Result<VerifyCodeDTO> smsResult = verifyCodeService.verifySmsCode(verifyCodeId, smsCode);
         if (!isSuccess(smsResult)) {
             return successGet(ResultCode.VERIFY_SMS_CODE_FAIL);
+        }
+        VerifyCodeDTO verifyCodeDTO = smsResult.getModel();
+        if (!verifyCodeDTO.getMobile().equals(mobile)) {
+            return successGet(ResultCode.NOT_SEND_SMS_MOBILE);
         }
         if(DateUtil.smsIsOverdue(smsResult.getModel().getGmtCreate(), merchantApiConfig.getSmsValidMinutes())){
             return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);

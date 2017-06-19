@@ -1,21 +1,16 @@
 package com.lawu.eshop.ad.srv.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.param.AdFindParam;
-import com.lawu.eshop.ad.param.AdMemberParam;
-import com.lawu.eshop.ad.param.AdMerchantParam;
-import com.lawu.eshop.ad.param.AdPraiseParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
-import com.lawu.eshop.ad.param.ListAdParam;
+import com.lawu.eshop.ad.param.*;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * E赚接口
@@ -116,7 +111,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    Integer clickAd(Long id, Long memberId, String num);
+    BigDecimal clickAd(Long id, Long memberId, String num);
 
 
 
@@ -166,7 +161,7 @@ public interface AdService {
      * @param memberId
      * @return
      */
-    ClickAdPointBO getClickAdPoint(Long memberId, Long adId);
+    ClickAdPointBO getClickAdPoint(Long memberId, BigDecimal point);
 
     /**
      * 获取广告
@@ -218,6 +213,16 @@ public interface AdService {
      * @param id
      */
     void updateAdIndex(Long id);
+
+    /**
+     * 重建平面视频广告索引
+     */
+    void rebuildAdIndex();
+
+    /**
+     * 删除无效的平面视频广告索引
+     */
+    void delInvalidAdIndex();
     
     /**
      * 根据商家id 获取红包的相关信息

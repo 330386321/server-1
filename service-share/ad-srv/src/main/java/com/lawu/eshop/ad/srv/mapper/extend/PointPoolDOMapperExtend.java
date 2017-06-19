@@ -7,5 +7,7 @@ import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 public interface PointPoolDOMapperExtend {
 	
 	List<PointPoolDO> selectMember(Long adId);
-    
+	
+	
+	PointPoolDO selectPoint(Long adId);
 }

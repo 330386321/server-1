@@ -12,9 +12,9 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdPlatformService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
 import com.lawu.eshop.member.api.service.StoreSolrService;
-import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
 import com.lawu.eshop.user.param.StoreSolrParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +23,7 @@ import io.swagger.annotations.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author meishuquan
@@ -69,18 +68,38 @@ public class StoreSolrController extends BaseController {
         if (!isSuccess(recommendResult)) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
+        // 把要查询的id放入list,统一一次性查询
+        Set<Long> merchantStoreIds = new HashSet<Long>();
+        List<AdPlatformDTO> adPlatformDTOS = recommendResult.getModel();
+        for (AdPlatformDTO adPlatformDTO : adPlatformDTOS) {
+            merchantStoreIds.add(adPlatformDTO.getMerchantStoreId());
+        }
 
+        Result<List<StoreSolrInfoDTO>> listResult = merchantStoreService.getMerchantStoreByIds(new ArrayList<Long>(merchantStoreIds));
+        Map<Long,StoreSolrInfoDTO> mapResult = new HashMap<Long,StoreSolrInfoDTO>();
+        if(!listResult.getModel().isEmpty()){
+            for (StoreSolrInfoDTO storeInfoDTO : listResult.getModel()) {
+                if (!mapResult.containsKey(storeInfoDTO.getMerchantStoreId())) {
+                    mapResult.put(storeInfoDTO.getMerchantStoreId(), storeInfoDTO);
+                }
+            }
+        }
         List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
+        StoreSolrInfoDTO storeInfo = null;
         for (AdPlatformDTO adPlatformDTO : recommendResult.getModel()) {
             StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
             storeSolrDTO.setMerchantStoreId(adPlatformDTO.getMerchantStoreId());
             storeSolrDTO.setName(adPlatformDTO.getTitle());
             storeSolrDTO.setStorePic(adPlatformDTO.getMediaUrl());
-            Result<MerchantStoreDTO> merchantStoreDTOResult = merchantStoreService.getMerchantStoreById(adPlatformDTO.getMerchantStoreId());
-            if (isSuccess(merchantStoreDTOResult)) {
-                storeSolrDTO.setMerchantId(merchantStoreDTOResult.getModel().getMerchantId());
-                storeSolrDTO.setIndustryPath(merchantStoreDTOResult.getModel().getIndustryPath());
-                storeSolrDTO.setIndustryName(merchantStoreDTOResult.getModel().getIndustryName());
+            storeInfo = mapResult.get(adPlatformDTO.getMerchantStoreId());
+            if(storeInfo == null){
+                storeSolrDTO.setMerchantId(0L);
+                storeSolrDTO.setIndustryPath("");
+                storeSolrDTO.setIndustryName("");
+            }else{
+                storeSolrDTO.setMerchantId(storeInfo.getMerchantId());
+                storeSolrDTO.setIndustryPath(storeInfo.getIndustryPath());
+                storeSolrDTO.setIndustryName(storeInfo.getIndustryName());
             }
             storeSolrDTOS.add(storeSolrDTO);
         }

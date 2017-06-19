@@ -29,11 +29,9 @@ public class AdViewServiceImpl extends BaseController implements AdViewExtendSer
 		 if(!list.isEmpty()){
 			 for (ViewDTO dto : list) {
 				 Result<Set<String>> result=adViewService.getAdviews(dto.getId().toString());
-				 if(isSuccess(result)){
-					 Integer count=result.getModel().size();
-					 if(dto.getViewCount()!=count){
-						 adSrvService.updateViewCount(dto.getId(), count);
-					 }
+				 Integer count=result.getModel().size();
+				 if(dto.getViewCount()!=count){
+					 adSrvService.updateViewCount(dto.getId(), count);
 				 }
 			}
 		 }

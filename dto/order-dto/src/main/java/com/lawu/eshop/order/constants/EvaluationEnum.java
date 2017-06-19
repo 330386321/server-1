@@ -7,9 +7,13 @@ package com.lawu.eshop.order.constants;
 public enum EvaluationEnum {
     UN_EVALUATION((boolean) false), // 未评
     EVALUATION_SUCCESS((boolean) true);// 已评
-    public Boolean val;
+    private Boolean val;
+    
+    public Boolean getVal() {
+		return val;
+	}
 
-    EvaluationEnum(Boolean val) {
+	EvaluationEnum(Boolean val) {
         this.val = val;
     }
 

@@ -34,10 +34,6 @@ public enum ShoppingOrderSortEnum {
 		return databaseField;
 	}
 
-	public void setDatabaseField(String databaseField) {
-		this.databaseField = databaseField;
-	}
-
 	ShoppingOrderSortEnum(String databaseField) {
 		this.databaseField = databaseField;
 	}

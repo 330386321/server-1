@@ -1,29 +1,35 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import com.lawu.eshop.solr.SolrUtil;
-import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
-import com.lawu.eshop.user.param.ListMerchantStoreParam;
-import com.lawu.eshop.user.param.MerchantStoreParam;
-import com.lawu.eshop.user.param.StoreStatisticsParam;
-import com.lawu.eshop.user.srv.UserSrvConfig;
-import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
-import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
-import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
-import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
-import com.lawu.eshop.user.srv.service.MerchantStoreService;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.dto.MerchantStatusEnum;
+import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
+import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.param.ListMerchantStoreParam;
+import com.lawu.eshop.user.param.MerchantStoreParam;
+import com.lawu.eshop.user.param.StoreStatisticsParam;
+import com.lawu.eshop.user.srv.UserSrvConfig;
+import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
+import com.lawu.eshop.user.srv.service.MerchantStoreService;
 
 @Service
 public class MerchantStoreServiceImpl implements MerchantStoreService {
@@ -137,5 +143,74 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
         }
     }
+
+    @Override
+    public void rebuildStoreIndex() {
+        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
+        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
+        listMerchantStoreParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listMerchantStoreParam.setCurrentPage(currentPage);
+            List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapperExtend.listMerchantStore(listMerchantStoreParam);
+            if (merchantStoreDOS == null || merchantStoreDOS.isEmpty()) {
+                return ;
+            }
+
+            Collection<SolrInputDocument> documents = new ArrayList<>();
+            for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
+                MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+                merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreDO.getId()).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_STORE.val).andStatusEqualTo(true);
+                List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+                String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
+                SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
+                documents.add(document);
+            }
+            SolrUtil.addSolrDocsList(documents, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        }
+    }
+
+    @Override
+    public void delInvalidStoreIndex() {
+        ListMerchantStoreParam listMerchantStoreParam = new ListMerchantStoreParam();
+        listMerchantStoreParam.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
+        listMerchantStoreParam.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT.val);
+        listMerchantStoreParam.setPageSize(1000);
+        int currentPage = 0;
+
+        while (true) {
+            currentPage ++;
+            listMerchantStoreParam.setCurrentPage(currentPage);
+            List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapperExtend.listInvalidMerchantStore(listMerchantStoreParam);
+            if (merchantStoreDOS == null || merchantStoreDOS.isEmpty()) {
+                return ;
+            }
+
+            List<String> ids = new ArrayList<>();
+            for (MerchantStoreDO merchantStoreDO : merchantStoreDOS) {
+                ids.add(String.valueOf(merchantStoreDO.getId()));
+            }
+            SolrUtil.delSolrDocsByIds(ids, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        }
+    }
+
+	@Override
+	public List<MerchantAdInfoBO> getAdMerchantStoreByIds(List<Long> merchantIds) {
+		 List<MerchantAdInfoView> list= merchantStoreDOMapperExtend.getAdMerchantStoreByIds(merchantIds);
+		 List<MerchantAdInfoBO> BOList=new ArrayList<>();
+		 for (MerchantAdInfoView merchantAdInfoView : list) {
+			 MerchantAdInfoBO bo=new MerchantAdInfoBO();
+			 bo.setMerchantId(merchantAdInfoView.getMerchantId());
+			 bo.setMerchantStoreId(merchantAdInfoView.getMerchantStoreId());
+			 bo.setName(merchantAdInfoView.getName());
+			 bo.setPath(merchantAdInfoView.getPath());
+			 bo.setManageType(merchantAdInfoView.getManageType());
+			 BOList.add(bo);
+		}
+		return BOList;
+	}
 
 }

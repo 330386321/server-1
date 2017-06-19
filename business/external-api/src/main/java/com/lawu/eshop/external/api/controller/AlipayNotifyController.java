@@ -160,8 +160,8 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_logon_id);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
-					dTotalMoney = Double.valueOf(total_amount).doubleValue();
-					bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					dTotalMoney = Double.parseDouble(total_amount);
+					bizFlagInt = Integer.parseInt(bizFlag);
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
@@ -315,8 +315,8 @@ public class AlipayNotifyController extends BaseController {
 					param.setBuyerLogonId(buyer_email);
 					param.setTransactionPayTypeEnum(TransactionPayTypeEnum.ALIPAY);
 
-					dTotalFee = Double.valueOf(total_fee).doubleValue();
-					bizFlagInt = Integer.valueOf(bizFlag).intValue();
+					dTotalFee = Double.parseDouble(total_fee);
+					bizFlagInt = Integer.parseInt(bizFlag);
 					if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
 							|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						result = rechargeService.doHandleRechargeNotify(param);

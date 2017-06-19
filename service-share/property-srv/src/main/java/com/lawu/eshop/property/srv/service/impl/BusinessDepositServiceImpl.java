@@ -218,7 +218,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				ddqbo.setBusinessBankAccount(bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName());
 				ddqbo.setBankNo(bankAccountDO.getAccountNumber() == null ? "" : bankAccountDO.getAccountNumber());
 				ddqbo.setBankName(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
 				ddqbo.setBankBranchName(bankAccountDO.getSubBranchName() == null ? "" : bankAccountDO.getSubBranchName());
 			}else{
 				ddqbo.setBusinessBankAccount("");
@@ -274,7 +274,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		PropertyInfoDOExample infoExample = new PropertyInfoDOExample();
 		infoExample.createCriteria().andUserNumEqualTo(dparam.getUserNum());
 		List<PropertyInfoDO> infoList = propertyInfoDOMapper.selectByExample(infoExample);
-		if (infoList == null || infoList.isEmpty() || infoList.size() < 1) {
+		if (infoList == null || infoList.isEmpty()) {
 			return ResultCode.PROPERTY_INFO_NULL;
 		} else if (infoList.size() > 1) {
 			return ResultCode.PROPERTY_INFO_OUT_INDEX;
@@ -292,7 +292,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		if ("".equals(sysDays)) {
 			sysDays = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
 		}
-		if (diffDays <= Integer.valueOf(sysDays).intValue()) {
+		if (diffDays <= Integer.parseInt(sysDays)) {
 			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
 		}
 

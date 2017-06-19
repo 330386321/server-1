@@ -5,15 +5,13 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
-import com.lawu.eshop.product.dto.ProductEditInfoDTO;
-import com.lawu.eshop.product.dto.ProductInfoDTO;
-import com.lawu.eshop.product.dto.ProductPlatDTO;
-import com.lawu.eshop.product.dto.ProductQueryDTO;
+import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.EditProductDataParam;
 import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -22,7 +20,6 @@ import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.utils.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -86,7 +83,7 @@ public class ProductController extends BaseController {
      * @throws Exception
      */
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
-    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) throws Exception {
+    public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) {
         if (productId == null) {
             return successCreated(ResultCode.ID_EMPTY);
         }
@@ -97,8 +94,20 @@ public class ProductController extends BaseController {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
         ProductInfoDTO productDTO = new ProductInfoDTO();
-        BeanUtil.copyProperties(productBO, productDTO);
+        productDTO.setGmtCreate(productBO.getGmtCreate());
+        productDTO.setId(productBO.getId());
+        productDTO.setMerchantId(productBO.getMerchantId());
+        productDTO.setMerchantUserNum(productBO.getMerchantNum());
+        productDTO.setCategoryId(productBO.getCategoryId());
+        productDTO.setName(productBO.getName());
+        productDTO.setFeatureImage(productBO.getFeatureImage());
         productDTO.setImagesHeadUrl(productBO.getImagesHeadUrl());
+        productDTO.setMaxPrice(productBO.getMaxPrice());
+        productDTO.setMinPrice(productBO.getMinPrice());
+        productDTO.setTotalSalesVolume(productBO.getTotalSalesVolume());
+        productDTO.setTotalInventory(productBO.getTotalInventory());
+        productDTO.setSpec(productBO.getSpec());
+        productDTO.setContent(productBO.getContent());
         productDTO.setImageDetail(productBO.getImageDetail());
         productDTO.setAllowRefund(productBO.isAllowRefund());
         return successCreated(productDTO);
@@ -137,17 +146,12 @@ public class ProductController extends BaseController {
      */
     @SuppressWarnings("rawtypes")
     @RequestMapping(value = "saveProduct_bak", method = RequestMethod.POST)
-    public Result saveProduct_bak(@RequestBody @Valid EditProductDataParam_bak product,
-                                  BindingResult result) {
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            StringBuffer es = new StringBuffer();
-            for (FieldError e : errors) {
-                String msg = e.getDefaultMessage();
-                es.append(msg);
-            }
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-        }
+    public Result saveProduct_bak(@RequestBody @Valid EditProductDataParam_bak product, BindingResult result) {
+    	String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
         productService.eidtProduct_bak(product);
         return successCreated(ResultCode.SUCCESS);
     }
@@ -162,15 +166,11 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "saveProduct", method = RequestMethod.POST)
     public Result saveProduct(@RequestBody @Valid EditProductDataParam product,
                               BindingResult result) {
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            StringBuffer es = new StringBuffer();
-            for (FieldError e : errors) {
-                String msg = e.getDefaultMessage();
-                es.append(msg);
-            }
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-        }
+    	String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	
         productService.eidtProduct(product);
         return successCreated(ResultCode.SUCCESS);
     }
@@ -301,6 +301,28 @@ public class ProductController extends BaseController {
     }
 
     /**
+     * 重建商品索引
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
+    public Result rebuildProductIndex() {
+        productService.rebuildProductIndex();
+        return successCreated();
+    }
+
+    /**
+     * 删除无效的商品索引
+     * @return
+     */
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
+    public Result delInvalidProductIndex() {
+        productService.delInvalidProductIndex();
+        return successCreated();
+    }
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam
@@ -314,6 +336,18 @@ public class ProductController extends BaseController {
         page.setTotalCount(productQueryBOPage.getTotalCount());
         page.setRecords(ProductConverter.convertDTOS(productQueryBOPage.getRecords()));
         return successCreated(page);
+    }
+
+    /**
+     * 根据ids查询商品信息
+     *
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "listProductByIds", method = RequestMethod.GET)
+    public Result<List<ProductSearchDTO>> listProductByIds(@RequestParam List<Long> ids) {
+        List<ProductBO> productBOS = productService.listProductByIds(ids);
+        return successGet(ProductConverter.convertSearchDTO(productBOS));
     }
 
 }

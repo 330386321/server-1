@@ -63,7 +63,7 @@ public class PayCommonUtil {
         sb.append("key=" + API_KEY);  
         System.out.println(sb.toString());
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();  
-        System.out.println(sign);
+        //System.out.println(sign);
         return sign;  
     }  
 

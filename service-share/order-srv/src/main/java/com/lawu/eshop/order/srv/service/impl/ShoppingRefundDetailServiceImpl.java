@@ -134,7 +134,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> list = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
 
-		return ShoppingOrderItemExtendConverter.convert((list != null && list.size() > 0) ? list.get(0) : null);
+		return (list != null && !list.isEmpty()) ? ShoppingOrderItemExtendConverter.convert(list.get(0)) : null;
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 		// 退款状态必须为填写退货地址
 		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue())
-				&& (shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue()) && ShoppingRefundTypeEnum.RETURN_REFUND.equals(shoppingRefundDetailDO.getType()))) {
+				&& !(RefundStatusEnum.TO_BE_CONFIRMED.getValue().equals(shoppingOrderItemDO.getRefundStatus()) && ShoppingRefundTypeEnum.RETURN_REFUND.getValue().equals(shoppingRefundDetailDO.getType()))) {
 			return ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS;
 		}
 		
@@ -590,15 +590,16 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
+			// 发送次数为0，发送站内信和推送
+			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				continue;
+			}
+			
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
 				agreeToRefund(shoppingOrderItemExtendDO.getShoppingRefundDetail().getId(), true);
-			} else {
-				// 发送次数为0，发送站内信和推送
-				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
-				}
 			}
 		}
 	}
@@ -638,15 +639,16 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
+			// 发送次数为0，发送站内信和推送
+			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
+				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
+				continue;
+			}
+			
 			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
 				agreeToRefund(shoppingOrderItemExtendDO.getId(), true);
-			} else {
-				// 发送次数为0，发送站内信和推送
-				if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
-					toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
-				}
 			}
 		}
 	}
@@ -729,14 +731,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
 				toBeConfirmedForRefundRemind(shoppingOrderItemExtendDO);
 			}
 			
-			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
+			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			
 			// 如果商家未处理时间超过退款时间，平台自动退款
 			if (isExceeds) {
@@ -767,14 +768,13 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
 		
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 发送次数为0，发送站内信和推送
 			if (shoppingOrderItemExtendDO.getSendTime() == null || shoppingOrderItemExtendDO.getSendTime() <= 0) {
 				toBeReturnRemind(shoppingOrderItemExtendDO);
 			}
 			
-			isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
+			boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(refundTime), Calendar.DAY_OF_YEAR);
 			
 			// 买家操作超过处理时间，平台自动撤销退款申请
 			if (isExceeds) {
@@ -815,12 +815,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		
 		// 超过提醒时间
 		List<ShoppingOrderItemExtendDO> shoppingOrderItemDOList = shoppingOrderItemExtendDOMapper.selectByExample(example);
-		boolean isExceeds = false;
 		for (ShoppingOrderItemExtendDO shoppingOrderItemExtendDO : shoppingOrderItemDOList) {
 			// 如果退款类型为退货退款
 			if (ShoppingRefundTypeEnum.RETURN_REFUND.getValue().equals(shoppingOrderItemExtendDO.getShoppingRefundDetail().getType())) {
 				// 发送次数为0，发送站内信和推送
-				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(firstRemindTime), Calendar.DAY_OF_YEAR);
+				boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(firstRemindTime), Calendar.DAY_OF_YEAR);
 				if (!isExceeds) {
 					continue;
 				}
@@ -846,7 +845,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 			} else if (ShoppingRefundTypeEnum.REFUND.getValue().equals(shoppingOrderItemExtendDO.getShoppingRefundDetail().getType())) {
 				// 如果退款类型为退款
 				// 发送次数为0，发送站内信和推送
-				isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(remindTime), Calendar.DAY_OF_YEAR);
+				boolean isExceeds = DateUtil.isExceeds(shoppingOrderItemExtendDO.getGmtModified(), new Date(), Integer.valueOf(remindTime), Calendar.DAY_OF_YEAR);
 				if (!isExceeds) {
 					continue;
 				}
@@ -868,7 +867,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * Private Method
 	 * **********************************************/
 	@Transactional
-	private void toBeConfirmedForRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+	public void toBeConfirmedForRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		
 		// 更新发送次数，但是不更新更新时间字段
 		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -888,7 +887,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	}
 	
 	@Transactional
-	private void refundFailedRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+	public void refundFailedRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
 		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
 		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
@@ -905,7 +904,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	}
 	
 	@Transactional
-	private void toBeReturnRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+	public void toBeReturnRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
 		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
 		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
@@ -922,7 +921,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	}
 	
 	@Transactional
-	private void toBeRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
+	public void toBeRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
 		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
 		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());

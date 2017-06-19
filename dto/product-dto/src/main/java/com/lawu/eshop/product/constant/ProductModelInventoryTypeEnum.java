@@ -40,10 +40,6 @@ public enum ProductModelInventoryTypeEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-	
 	public ProductModelInventoryTypeEnum getEnum (Byte value) {
 		
 		if (value == null) {

@@ -1,5 +1,15 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -15,15 +25,6 @@ import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -68,7 +69,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 			example.createCriteria().andMemberIdEqualTo(memberId)
 					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
 		} else {
-			example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().val)
+			example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().getVal())
 					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
 		}
 		example.setOrderByClause("id desc");

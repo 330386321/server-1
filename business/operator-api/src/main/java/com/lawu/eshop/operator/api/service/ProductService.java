@@ -42,12 +42,26 @@ public interface ProductService {
     Result<List<ProductInfoDTO>> listProduct(@ModelAttribute ListProductParam listProductParam);
 
     /**
-     * 查询所有上架的商品
+     * 更新商品索引
      *
      * @param id
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT, value = "product/updateProductIndex/{id}")
     Result updateProductIndex(@PathVariable("id") Long id);
+
+    /**
+     * 重建商品索引
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/rebuildProductIndex")
+    Result rebuildProductIndex();
+
+    /**
+     * 删除无效商品索引
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "product/delInvalidProductIndex")
+    Result delInvalidProductIndex();
 
 }

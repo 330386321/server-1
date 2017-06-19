@@ -278,8 +278,10 @@ public class PropertyInfoController extends BaseController {
 		return successGet(page);
 	}
 	
-	/** 获取用户是否冻结
+	/**
+	 * 获取用户是否冻结
 	 * @param userNum
+	 * @return 0-否、1-是、2-异常
 	 * @author yangqh
 	 * @date 2017年5月26日 上午11:08:32
 	 */

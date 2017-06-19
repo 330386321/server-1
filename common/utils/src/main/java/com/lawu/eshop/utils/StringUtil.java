@@ -1,6 +1,8 @@
 package com.lawu.eshop.utils;
 
 import com.alibaba.fastjson.JSONArray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -11,6 +13,10 @@ import java.util.List;
 import java.util.Random;
 
 public class StringUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(StringUtil.class);
+
+    private StringUtil(){}
 
     /**
      * 获取25位随机数
@@ -42,7 +48,7 @@ public class StringUtil {
      * @return
      */
     public static String getRandom(int model, int length) {
-        String strBase = "";
+        String strBase;
         switch (model) {
             case 1:
                 strBase = "0123456789";
@@ -57,7 +63,7 @@ public class StringUtil {
                 return "";
         }
         Random random = new Random();
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int n = random.nextInt(strBase.length());
             String oneString = strBase.substring(n, n + 1);
@@ -112,7 +118,7 @@ public class StringUtil {
      */
     public static String getJsonListToString(String json) {
         List<Object> list = JSONArray.parseArray(json, Object.class);
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         for (Object o : list) {
             str.append(o.toString()).append(",");
         }
@@ -129,7 +135,7 @@ public class StringUtil {
      */
     public static List<String> getJsonListToStringList(String jsonList) {
         List<Object> list = JSONArray.parseArray(jsonList, Object.class);
-        List<String> rt = new ArrayList<String>();
+        List<String> rt = new ArrayList<>();
         for (Object o : list) {
             rt.add((String) o);
         }
@@ -149,7 +155,7 @@ public class StringUtil {
         try {
             return new String(isoString.getBytes("iso-8859-1"),"utf-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            logger.error("转换UTF-8异常：{}", e);
         }
         return isoString;
     }

@@ -68,8 +68,8 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		if ("".equals(minMoney)) {
 			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
 		}
-		double dCashMoney = new Double(cash.getCashMoney()).doubleValue();
-		if (dCashMoney < Double.valueOf(minMoney).doubleValue()) {
+		double dCashMoney = Double.parseDouble(cash.getCashMoney());
+		if (dCashMoney < Double.parseDouble(minMoney)) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
 		}
 		
@@ -96,7 +96,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 			if ("".equals(minusMoney)) {
 				minusMoney = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
 			}
-			dCashMoney = dCashMoney - Double.valueOf(minusMoney).doubleValue();
+			dCashMoney = dCashMoney - Double.parseDouble(minusMoney);
 			withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
 		}
 
@@ -104,13 +104,13 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		if ("".equals(currentScale)) {
 			currentScale = PropertyType.CASH_SCALE_DEFAULT;
 		}
-		double dCurrentScale = new Double(currentScale).doubleValue();
+		double dCurrentScale = Double.parseDouble(currentScale);
 		double money = dCashMoney * dCurrentScale;
 
 		// 保存提现表记录
 		withdrawCashDO.setCashMoney(new BigDecimal(cash.getCashMoney()));
 		withdrawCashDO.setCurrentScale(currentScale);
-		withdrawCashDO.setMoney(new BigDecimal(money));
+		withdrawCashDO.setMoney(BigDecimal.valueOf(money));
 		withdrawCashDO.setUserNum(cash.getUserNum());
 		withdrawCashDO.setUserType(cash.getUserType());
 		withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.val);

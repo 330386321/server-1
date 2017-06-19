@@ -56,8 +56,7 @@ public class FavoriteMerchantController extends BaseController{
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 					   @RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = favoriteMerchantService.save(memberId, merchantId);
-		return rs;
+		return favoriteMerchantService.save(memberId, merchantId);
 	}
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")

@@ -38,7 +38,7 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
         listMerchantStoreParam.setPageSize(1000);
         int currentPage = 0;
 
-        Result<List<MerchantStoreDTO>> result = null;
+        Result<List<MerchantStoreDTO>> result;
         while (true){
             currentPage ++;
             listMerchantStoreParam.setCurrentPage(currentPage);
@@ -51,9 +51,9 @@ public class StoreStatisticsServiceImpl implements StoreStatisticsService {
                 Result<CommentGradeDTO> commentGradeDTOResult = commentMerchantService.getCommentAvgGrade(merchantStoreDTO.getMerchantId());
                 if (commentGradeDTOResult.getRet() == ResultCode.SUCCESS) {
                     StoreStatisticsParam param = new StoreStatisticsParam();
-                    param.setAverageConsumeAmount(new BigDecimal(commentGradeDTOResult.getModel().getAverageConsumeAmount()));
-                    param.setAverageScore(new BigDecimal(commentGradeDTOResult.getModel().getAvgGrade()));
-                    param.setFeedbackRate(new BigDecimal(commentGradeDTOResult.getModel().getGoodGrad()));
+                    param.setAverageConsumeAmount(BigDecimal.valueOf(commentGradeDTOResult.getModel().getAverageConsumeAmount()));
+                    param.setAverageScore(BigDecimal.valueOf(commentGradeDTOResult.getModel().getAvgGrade()));
+                    param.setFeedbackRate(BigDecimal.valueOf(commentGradeDTOResult.getModel().getGoodGrad()));
                     merchantStoreService.updateStoreStatisticsById(merchantStoreDTO.getMerchantStoreId(), param);
                 }
             }

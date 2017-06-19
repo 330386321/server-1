@@ -20,11 +20,16 @@ public class AdPraiseConfig {
     /**
      * 概率：分子
      */
-	public final static Integer A=5; 
+	public final static Integer A=10; 
     
     /**
      * 概率：分母
      */
-	public final static Integer B=5;
+	public final static Integer B=1000;
+	
+	/**
+	 * 点击多少次才有一次真的请求服务端
+	 */
+	public final static Integer CLICK_PRAISE_AD_TIMES=40;
 
 }

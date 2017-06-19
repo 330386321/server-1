@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.srv.bo;
 
-import java.io.Serializable;
-
 /**
  * 物流实时查询对外暴露数据
  * 物流踪迹
@@ -9,10 +7,8 @@ import java.io.Serializable;
  * @author Sunny
  * @date 2017/4/10
  */
-public class TraceBO implements Serializable {
+public class TraceBO {
 	
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 时间
 	 */

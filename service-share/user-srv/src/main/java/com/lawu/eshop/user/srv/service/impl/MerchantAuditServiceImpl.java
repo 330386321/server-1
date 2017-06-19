@@ -79,12 +79,6 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                 if (MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_CHECKED.val == auditParam.getAuditStatusEnum().val) {
                     //审核通过
                     if (MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val == auditParam.getTypeEnum().val) {
-                        //修改门店资料信息
-                      /*  if (MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val != merchantStoreDO.getStatus()) {
-                            // 新增记录 修改门店信息状态
-                            newStoreDO.setStatus(MerchantStatusEnum.MERCHANT_STATUS_CHECKED.val);
-                            merchantStoreDOMapper.updateByPrimaryKeySelective(newStoreDO);
-                        } else {*/
                             //修改更新门店信息
                             JSONObject jsonObject = JSONObject.fromObject(oldAudit.getContent());
                             MerchantStoreParam merchantStoreParam = (MerchantStoreParam) JSONObject.toBean(jsonObject, MerchantStoreParam.class);
@@ -261,10 +255,10 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                     String storePic = merchantStoreImageDOS.isEmpty() ? "" : merchantStoreImageDOS.get(0).getPath();
 
                     boolean isEntity = false;
-                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType()== MerchantStoreTypeEnum.ENTITY_MERCHANT.val){
+                    if(!merchantStoreProfileDOS.isEmpty() && merchantStoreProfileDOS.get(0).getManageType().byteValue() == MerchantStoreTypeEnum.ENTITY_MERCHANT.val){
                         isEntity = true;
                     }
-                    if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val == auditParam.getTypeEnum().val || isEntity){
+                    if(MerchantAuditTypeEnum.AUDIT_TYPE_STORE.val.byteValue() == auditParam.getTypeEnum().val || isEntity){
                         SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(merchantStoreDO, storePic);
                         SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
                     }

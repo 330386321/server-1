@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lawu.eshop.ad.srv.mapper.extend.AdPlatformDOMapperExtend">
+  
+  <select id="getAdPlatformByTypePosition" parameterType="com.lawu.eshop.ad.param.AdPlatformExtendParam" resultType="com.lawu.eshop.ad.srv.domain.extend.AdPlatformDOView">
+    select product_id as productId,title,media_url as mediaUrl from ad_platform
+    where type = #{type} and position = #{position} and status = #{status}
+  </select>
+
+</mapper>

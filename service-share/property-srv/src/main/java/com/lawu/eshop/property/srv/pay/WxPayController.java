@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -63,15 +61,10 @@ public class WxPayController extends BaseController {
 	public Result getPrepayInfo(@RequestBody @Valid ThirdPayDataParam param, BindingResult result)
 			throws JDOMException, IOException {
 
-		if (result.hasErrors()) {
-			List<FieldError> errors = result.getFieldErrors();
-			StringBuffer es = new StringBuffer();
-			for (FieldError e : errors) {
-				String msg = e.getDefaultMessage();
-				es.append(msg);
-			}
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, es.toString());
-		}
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
 
 		String key = propertySrvConfig.getWxpayKeyApp();
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
@@ -93,9 +86,9 @@ public class WxPayController extends BaseController {
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
 		packageParams.put("body", param.getThirdPayBodyEnum().val);
 		packageParams.put("out_trade_no", param.getOutTradeNo());
-		Float fTotalAmount = Float.valueOf(param.getTotalAmount());
+		double fTotalAmount = Double.parseDouble(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
-		packageParams.put("total_fee", iTotalAmount + "");
+		packageParams.put("total_fee", String.valueOf(iTotalAmount));
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
 		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split
 				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());
@@ -109,14 +102,14 @@ public class WxPayController extends BaseController {
 		Map map = XMLUtil.doXMLParse(resXml);
 
 		String return_code = map.get("return_code") == null ? "" : map.get("return_code").toString();
-		if (return_code.equals("FAIL")) {
+		if ("FAIL".equals(return_code)) {
 			String return_msg = map.get("return_msg") == null ? "" : map.get("return_msg").toString();
 			logger.error("微信支付预支付订单失败，return_code={},return_msg={}", return_code, return_msg);
 			return successCreated(ResultCode.FAIL, return_code + ":" + return_msg);
 
 		} else {
 			String result_code = map.get("result_code") == null ? "" : map.get("result_code").toString();
-			if (result_code.equals("FAIL")) {
+			if ("FAIL".equals(result_code)) {
 				String err_code = map.get("err_code") == null ? "" : map.get("err_code").toString();
 				String err_code_des = map.get("err_code_des") == null ? "" : map.get("err_code_des").toString();
 				logger.error("微信支付预支付订单失败，result_code={},err_code={},err_code_des={}", result_code, err_code,

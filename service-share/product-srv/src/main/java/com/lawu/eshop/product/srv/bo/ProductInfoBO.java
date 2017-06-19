@@ -16,6 +16,7 @@ public class ProductInfoBO {
 
     private Long id;
     private Long merchantId;
+    private String merchantNum;
     private Integer categoryId;
     private String name;
     private String content;
@@ -47,7 +48,15 @@ public class ProductInfoBO {
         this.merchantId = merchantId;
     }
 
-    public String getName() {
+    public String getMerchantNum() {
+		return merchantNum;
+	}
+
+	public void setMerchantNum(String merchantNum) {
+		this.merchantNum = merchantNum;
+	}
+
+	public String getName() {
         return name;
     }
 

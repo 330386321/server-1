@@ -15,25 +15,25 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel
 public class ExpressInquiriesDetailDTO {
-	
+
 	/**
 	 * 成功与否
 	 */
 	@ApiModelProperty(value = "成功与否", required = true)
 	private Boolean success;
-	
+
 	/**
 	 * 失败原因
 	 */
 	@ApiModelProperty(value = "失败原因")
 	private String reason;
-	
+
 	/**
 	 * 物流状态
 	 */
 	@ApiModelProperty(value = "物流状态(ON_THE_WAY-在途中|SIGN_IN-签收|PROBLEM_PIECES-问题件)", required = true)
 	private ExpressInquiriesDetailStateEnum state;
-	
+
 	/**
 	 * 物流轨迹
 	 */
@@ -71,5 +71,5 @@ public class ExpressInquiriesDetailDTO {
 	public void setTraces(List<TraceDTO> traces) {
 		this.traces = traces;
 	}
-	
+
 }

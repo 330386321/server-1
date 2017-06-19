@@ -7,6 +7,7 @@ import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
+import com.lawu.eshop.product.srv.bo.ProductBO;
 import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ProductQueryBO;
@@ -42,7 +43,7 @@ public interface ProductService {
      * @param id
      * @return
      */
-    ProductInfoBO selectProductById(Long id) throws Exception;
+    ProductInfoBO selectProductById(Long id);
 
     /**
      * 商家端编辑商品时，根据ID查询商品
@@ -141,11 +142,29 @@ public interface ProductService {
     void updateProductIndex(Long id);
 
     /**
+     * 重建商品索引
+     */
+    void rebuildProductIndex();
+
+    /**
+     * 删除无效的商品索引
+     */
+    void delInvalidProductIndex();
+
+    /**
      * 查询所有上架的商品
      *
      * @param listProductParam
      * @return
      */
     Page<ProductQueryBO> listAllProduct(ListProductParam listProductParam);
+
+    /**
+     * 根据ids查询商品信息
+     *
+     * @param ids
+     * @return
+     */
+    List<ProductBO> listProductByIds(List<Long> ids);
 
 }

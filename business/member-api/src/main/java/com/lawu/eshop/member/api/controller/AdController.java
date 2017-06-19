@@ -128,8 +128,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgain", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectEgain(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
-		Result<Page<AdDTO>> pageDTOS = adExtendService.selectListByMember(adEgainParam);
-		return pageDTOS;
+		return adExtendService.selectListByMember(adEgainParam);
 	}
 
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -138,8 +137,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
 	public Result<Page<AdDTO>> selectChoiceness(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {
-		Result<Page<AdDTO>> pageDTOS = adExtendService.selectChoiceness(param);
-		return pageDTOS;
+		return adExtendService.selectChoiceness(param);
 	}
 
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
@@ -148,8 +146,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
-		Result<List<AdDTO>> rs = adExtendService.selectListPointTotle(adPointParam);
-		return rs;
+		return adExtendService.selectListPointTotle(adPointParam);
 	}
 
 
@@ -158,7 +155,7 @@ public class AdController extends BaseController {
     @ApiOperation(value = "查询单个广告", notes = "查询单个广告[]（张荣成）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectAb/{id}", method = RequestMethod.GET)
-    public Result<AdEgainDTO> selectAbById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    public Result<AdEgainDTO> selectAb(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                   @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
         Result<AdDTO> adRs = adService.selectAbById(id,memberId);
@@ -181,14 +178,17 @@ public class AdController extends BaseController {
         			adEgainDTO.setMerchantStoreId(merchantStoreDTO.getModel().getMerchantStoreId());
                 	adEgainDTO.setName(merchantStoreDTO.getModel().getName());
                 	adEgainDTO.setLogoUrl(merchantStoreDTO.getModel().getLogoUrl());
-                	if(manageType.getModel()!=null){
-                		adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
-             		}
+                	
         		}else{
         			adEgainDTO.setName("E店商家");
                 	adEgainDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
         		}
         		
+        	}
+        	if(isSuccess(manageType)){
+        		if(manageType.getModel()!=null){
+            		adEgainDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum.getEnum(manageType.getModel().val) );
+         		}
         	}
         	Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
         	if(isSuccess(mpRs)){
@@ -199,7 +199,7 @@ public class AdController extends BaseController {
         	}
     		 Result<Set<String>> rs= adViewService.getAdviews(id.toString());
     		 if(isSuccess(rs)){
-    			 if(rs.getModel().size()>0){
+    			 if(!rs.getModel().isEmpty()){
     				 boolean flag=false;
     				 for (String str : rs.getModel()) {
             			 if(memberId.toString().equals(str)){
@@ -226,8 +226,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
 	public Result<Page<AdPraiseDTO>> selectPraiseListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
-		Result<Page<AdPraiseDTO>> rs = adExtendService.selectPraiseListByMember(adPraiseParam);
-		return rs;
+		return adExtendService.selectPraiseListByMember(adPraiseParam);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -236,8 +235,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAbPraise/{id}", method = RequestMethod.GET)
 	public Result<AdPraiseDTO> selectAbPraiseById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Result<AdPraiseDTO> adDTO = adExtendService.selectAbPraiseById(id);
-		return adDTO;
+		return adExtendService.selectAbPraiseById(id);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -248,22 +246,32 @@ public class AdController extends BaseController {
 	public Result<List<UserTopDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
-		List<PointPoolDTO> memberIds = member.getModel();
 		List<UserTopDTO> user = new ArrayList<>();
-		if (memberIds != null)
-			for (PointPoolDTO pointPoolDTO : memberIds) {
-				UserTopDTO userTop = new UserTopDTO();
-				userTop.setMoney(pointPoolDTO.getPoint());
-				MemberDTO userDTO = memberService.findMemberInfoById(pointPoolDTO.getMemberId()).getModel();
-				userTop.setHeadimg(userDTO.getHeadimg());
-				if (userDTO.getRegionPath() != null)
-					userTop.setRegionPath(userDTO.getRegionPath());
-				if (userDTO.getMobile() != null) {
-					userTop.setMobile(userDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-				}
-				user.add(userTop);
+		if(isSuccess(member)){
+			List<PointPoolDTO> top3 = member.getModel();
+			List<Long> memberIds=new ArrayList<>();
+			for (PointPoolDTO pointPoolDTO : top3) {
+				memberIds.add(pointPoolDTO.getMemberId());
 			}
-
+			Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
+			if(isSuccess(resultUser)){
+				List<MemberDTO> listUser=resultUser.getModel();
+				for (MemberDTO memberDTO : listUser) {
+					for (PointPoolDTO pointPoolDTO : top3) {
+						if(memberDTO.getId()==pointPoolDTO.getMemberId()){
+							UserTopDTO userTop = new UserTopDTO();
+							userTop.setMoney(pointPoolDTO.getPoint());
+							userTop.setHeadimg(memberDTO.getHeadimg());
+							userTop.setRegionPath(memberDTO.getRegionPath());
+							userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+							user.add(userTop);
+						}
+					}
+					
+				}
+			}
+			
+		}
 		return successGet(user);
 	}
 
@@ -274,8 +282,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> clickPraise(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Result rs = adExtendService.clickPraise(id);
-		return rs;
+		return adExtendService.clickPraise(id);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -286,8 +293,7 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		Result<ClickAdPointDTO> rs = adService.clickAd(id, memberId, num);
-		return rs;
+		return adService.clickAd(id, memberId, num);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -296,8 +302,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectLexicon", method = RequestMethod.GET)
 	public Result<List<AdLexiconDTO>> selectList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "广告id") Long adId) {
-		Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adId);
-		return adLexiconDTOS;
+		return adService.selectList(adId);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -316,8 +321,7 @@ public class AdController extends BaseController {
 		if (userRS.getModel().getRegionPath() != null) {
 			findParam.setRegionPath(userRS.getModel().getRegionPath());
 		}
-		Result<Page<AdSolrDTO>> page = adService.queryAdByTitle(findParam);
-		return page;
+		return adService.queryAdByTitle(findParam);
 	}
 
 	@Audit(date = "2017-04-26", reviewer = "孙林青")
@@ -326,37 +330,22 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> getRedPacket(@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId, @RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
 		Result<UserRedPacketDTO> userRs = memberService.isRegister(mobile);
-		if (userRs != null) {
-			UserRedPacketDTO userRedPacketDTO = userRs.getModel();
-			Result<PraisePointDTO> rs = new Result<>();
-			if (userRedPacketDTO != null) { // 直接领取红包 并成为粉丝
-				Long memberId = userRs.getModel().getMemberId();
-				String userNum = userRs.getModel().getUserNum();
-				rs = adService.getRedPacket(merchantId, memberId, userNum);
-				Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
-				if (isSuccess(result)) {
-					if (!result.getModel()) {
-						fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
-					}
+		Result<PraisePointDTO> rs = new Result<>();
+		if (userRs != null) { // 直接领取红包 并成为粉丝
+			Long memberId = userRs.getModel().getMemberId();
+			String userNum = userRs.getModel().getUserNum();
+			rs = adService.getRedPacket(merchantId, memberId, userNum);
+			Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
+			if (isSuccess(result)) {
+				if (!result.getModel()) {
+					fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
 				}
-
 			}
 			return rs;
-		} else {
+		}else {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
-	}
-
-	@Audit(date = "2017-05-02", reviewer = "孙林青")
-	@Authorization
-	@ApiOperation(value = "今日获得积分", notes = "今日获得积分[]（张荣成）", httpMethod = "GET")
-	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@RequestMapping(value = "getClickAdPoint/{id}", method = RequestMethod.GET)
-	public Result<ClickAdPointDTO> getClickAdPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result<ClickAdPointDTO> rs = adService.getClickAdPoint(memberId, id);
-		return rs;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -365,7 +354,7 @@ public class AdController extends BaseController {
 	@ApiOperation(value = "抢赞扣除用户积分", notes = "抢赞扣除用户积分[6010|6024|6026]（张荣成）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
-	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (isSuccess(resultFreeze)) {
@@ -383,9 +372,9 @@ public class AdController extends BaseController {
 			PropertyInfoDataParam param = new PropertyInfoDataParam();
 			param.setUserNum(userNum);
 			param.setPoint("20");
+			param.setBizId(id.toString());
 			param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PRAISE_AD);
-			Result rs = propertyInfoDataService.doHanlderMinusPoint(param);
-			return rs;
+			return propertyInfoDataService.doHanlderMinusPoint(param);
 		}
 
 	}
@@ -396,8 +385,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
-		Result<Page<AdFlatVideoDTO>> pageDTOS = adExtendService.selectEgainAd(adEgainParam);
-		return pageDTOS;
+		return adExtendService.selectEgainAd(adEgainParam);
 	}
 
 	@Audit(date = "2017-05-23", reviewer = "孙林青")
@@ -466,12 +454,13 @@ public class AdController extends BaseController {
 
 	}
 
+	@Audit(date = "2017-06-15", reviewer = "孙林青")
 	@ApiOperation(value = "红包是否领取完", notes = "红包是否领取完,[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
 	public Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
-		Result<IsExistsRedPacketDTO> rs = adService.isExistsRedPacket(merchantId);
-		return rs;
+		return adService.isExistsRedPacket(merchantId);
 	}
+	
 
 }

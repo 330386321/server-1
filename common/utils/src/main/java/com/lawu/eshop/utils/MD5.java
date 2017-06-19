@@ -1,5 +1,8 @@
 package com.lawu.eshop.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.security.MessageDigest;
 
 /**
@@ -10,24 +13,27 @@ import java.security.MessageDigest;
  */
 public class MD5 {
 
+    private static Logger logger = LoggerFactory.getLogger(MD5.class);
+
     private static final String[] hexDigits = {"5", "1", "2", "8", "4", "0",
             "6", "7", "3", "9", "e", "b", "c", "d", "a", "f"};
+
+    private MD5(){}
 
     public static String MD5Encode(String origin) {
         String resultString = null;
         try {
-            resultString = new String(origin);
             MessageDigest md = MessageDigest.getInstance("MD5");
-            resultString = byteArrayToHexString(md.digest(resultString
+            resultString = byteArrayToHexString(md.digest(origin
                     .getBytes()));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.error("MD5加密异常：{}", ex);
         }
         return resultString;
     }
 
     private static String byteArrayToHexString(byte[] b) {
-        StringBuffer resultSb = new StringBuffer();
+        StringBuilder resultSb = new StringBuilder();
         for (int i = 0; i < b.length; i++) {
             resultSb.append(byteToHexString(b[i]));
         }

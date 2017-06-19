@@ -51,13 +51,4 @@ public enum ShoppingOrderStatusToMerchantEnum {
 	ShoppingOrderStatusToMerchantEnum(Byte...value) {
 		this.value = value;
 	}
-	
-	public static ShoppingOrderStatusToMerchantEnum getEnum(Byte value){
-		for (ShoppingOrderStatusToMerchantEnum item : ShoppingOrderStatusToMerchantEnum.values()) {
-			if (item.getValue().equals(value)) {
-				return item;
-			}
-		}
-		return null;
-	}
 }
