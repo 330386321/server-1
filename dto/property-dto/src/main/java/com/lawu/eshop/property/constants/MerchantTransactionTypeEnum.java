@@ -19,7 +19,7 @@ public enum MerchantTransactionTypeEnum {
 	ADD_AD((byte)0x6E,"投放广告"),						//110
 	ADD_RED_PACKET((byte)0x6F,"发红包"),					//111
 	AD_RETURN_POINT((byte)0x70,"积分退还"),				//112
-	DEPOSIT((byte)0x71,"缴纳保证金"),						//113
+	DEPOSIT((byte)0x71,"缴纳保证金"),						//113-需求说不要
 	DEPOSIT_REFUND((byte)0x72,"保证金退款"),				//114
 	SALES_COMMISSION((byte) 0x73, "销售提成"),			//115
 	VOLUME_COMMISSION((byte) 0x74, "营业额提成"),			//116

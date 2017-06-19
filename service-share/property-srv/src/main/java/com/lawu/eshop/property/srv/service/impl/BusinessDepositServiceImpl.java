@@ -114,18 +114,18 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		}
 
 		// 新增交易明细
-		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTitle(TransactionTitleEnum.DEPOSIT.val);
-		tdsParam.setTransactionNum(param.getOutTradeNo());
-		tdsParam.setUserNum(param.getUserNum());
-		tdsParam.setTransactionAccount(param.getBuyerLogonId());
-		tdsParam.setTransactionType(MerchantTransactionTypeEnum.DEPOSIT.getValue());
-		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
-		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
-		tdsParam.setBizId(param.getBizIds());
-		tdsParam.setThirdTransactionNum(param.getTradeNo());
-		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
-		transactionDetailService.save(tdsParam);
+//		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
+//		tdsParam.setTitle(TransactionTitleEnum.DEPOSIT.val);
+//		tdsParam.setTransactionNum(param.getOutTradeNo());
+//		tdsParam.setUserNum(param.getUserNum());
+//		tdsParam.setTransactionAccount(param.getBuyerLogonId());
+//		tdsParam.setTransactionType(MerchantTransactionTypeEnum.DEPOSIT.getValue());
+//		tdsParam.setTransactionAccountType(param.getTransactionPayTypeEnum().getVal());
+//		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
+//		tdsParam.setBizId(param.getBizIds());
+//		tdsParam.setThirdTransactionNum(param.getTradeNo());
+//		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+//		transactionDetailService.save(tdsParam);
 
 		// 更新保证金记录状态
 		BusinessDepositDO depositDO = new BusinessDepositDO();
