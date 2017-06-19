@@ -10,21 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class PropertySrvConfig {
 
-    @Value(value = "${db.type}")
-    private String type;
-
-    @Value(value = "${db.driver}")
-    private String driver;
-
-    @Value(value = "${db.url}")
-    private String url;
-
-    @Value(value = "${db.username}")
-    private String username;
-
-    @Value(value = "${db.password}")
-    private String password;
-
     //支付宝支付参数
     @Value(value = "${alipay_partner}")
     private String alipayPartner;
@@ -123,26 +108,6 @@ public class PropertySrvConfig {
 
     @Value(value = "${wxpay_ip}")
     private String wxpayIp;
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public String getAlipayPartner() {
         return alipayPartner;

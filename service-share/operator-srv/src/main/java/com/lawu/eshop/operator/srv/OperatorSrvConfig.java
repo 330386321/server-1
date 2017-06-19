@@ -1,6 +1,5 @@
 package com.lawu.eshop.operator.srv;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,38 +9,4 @@ import org.springframework.stereotype.Component;
 @Component
 public class OperatorSrvConfig {
 
-    @Value(value = "${db.type}")
-    private String type;
-
-    @Value(value = "${db.driver}")
-    private String driver;
-
-    @Value(value = "${db.url}")
-    private String url;
-
-    @Value(value = "${db.username}")
-    private String username;
-
-    @Value(value = "${db.password}")
-    private String password;
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }

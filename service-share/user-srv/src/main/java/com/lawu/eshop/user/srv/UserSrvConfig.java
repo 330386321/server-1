@@ -10,21 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserSrvConfig {
 
-    @Value(value = "${db.type}")
-    private String type;
-
-    @Value(value = "${db.driver}")
-    private String driver;
-
-    @Value(value = "${db.url}")
-    private String url;
-
-    @Value(value = "${db.username}")
-    private String username;
-
-    @Value(value = "${db.password}")
-    private String password;
-
     @Value(value="${image.user_default_headimg}")
     private String user_headimg;
 
@@ -66,26 +51,6 @@ public class UserSrvConfig {
 
     @Value(value = "${rongyun_app_secret}")
     private String rongYunAppSecret;
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public String getUser_headimg() {
         return user_headimg;

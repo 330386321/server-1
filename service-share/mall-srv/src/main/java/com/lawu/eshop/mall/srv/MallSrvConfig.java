@@ -10,21 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MallSrvConfig {
 
-    @Value(value = "${db.type}")
-    private String type;
-
-    @Value(value = "${db.driver}")
-    private String driver;
-
-    @Value(value = "${db.url}")
-    private String url;
-
-    @Value(value = "${db.username}")
-    private String username;
-
-    @Value(value = "${db.password}")
-    private String password;
-
     @Value(value = "${sms_url}")
     private String smsUrl;
 
@@ -60,26 +45,6 @@ public class MallSrvConfig {
 
     @Value(value = "${sms.send.mobile.count}")
     private Integer smsSendMobileCount;
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDriver() {
-        return driver;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 
     public String getSmsUrl() {
         return smsUrl;
