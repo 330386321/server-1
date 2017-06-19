@@ -1,20 +1,25 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
-import com.lawu.eshop.utils.RandomUtil;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 
 /**
  * E赚实体转化
@@ -168,7 +173,8 @@ public class AdConverter {
 			dto.setStatusEnum(adBO.getStatusEnum());
 			dto.setTotalPoint(adBO.getTotalPoint());
 			dto.setTypeEnum(adBO.getTypeEnum());
-			dto.setExpandOrder(RandomUtil.expandOrder());
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmm");
+			dto.setExpandOrder(sdf.format(adBO.getGmtCreate())+adBO.getId());
 			dto.setMemberCount(adBO.getAdCount());
 			DTOS.add(dto);
 		}
@@ -188,7 +194,8 @@ public class AdConverter {
 		dto.setStatusEnum(adBO.getStatusEnum());
 		dto.setTotalPoint(adBO.getTotalPoint());
 		dto.setTypeEnum(adBO.getTypeEnum());
-		dto.setExpandOrder(RandomUtil.expandOrder());
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmm");
+		dto.setExpandOrder(sdf.format(adBO.getGmtCreate())+adBO.getId());
 		dto.setMemberCount(adBO.getAdCount());
 		return dto;
 	}

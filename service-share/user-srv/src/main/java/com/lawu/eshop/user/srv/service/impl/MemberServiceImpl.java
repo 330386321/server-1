@@ -170,7 +170,6 @@ public class MemberServiceImpl implements MemberService {
     	view.setOffset(memberQuery.getOffset());
     	view.setLimit(memberQuery.getPageSize());
     	List<MemberDO> memberDOS = memberDOMapperExtend.selectByExampleWithRowbounds(view);
-    	
         List<MemberProfileDO> mpList = new ArrayList<MemberProfileDO>();
         for (MemberDO memberDO : memberDOS) {
         	if(memberDO.getHeadimg()==null){
