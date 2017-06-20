@@ -625,7 +625,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		
 		if (shoppingOrderDO.getIsDone()) {
 			// 提示商家新增一笔订单交易收入
-			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMerchantName());
+			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMerchantNum());
 		}
 		
 		return ResultCode.SUCCESS;
@@ -1504,7 +1504,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderDOMapper.updateByPrimaryKeySelective(update);
 		
 		// 发送提醒消息
-		ordersTradingIncomeNotice(shoppingOrderExtendDO.getId(), shoppingOrderExtendDO.getActualAmount(), shoppingOrderExtendDO.getMemberNum());
+		ordersTradingIncomeNotice(shoppingOrderExtendDO.getId(), shoppingOrderExtendDO.getActualAmount(), shoppingOrderExtendDO.getMerchantNum());
 		
 		// 释放冻结资金
 		shoppingOrderPaymentsToMerchantTransactionMainServiceImpl.sendNotice(shoppingOrderExtendDO.getId());
