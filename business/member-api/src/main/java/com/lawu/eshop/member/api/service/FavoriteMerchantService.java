@@ -1,7 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,6 +26,6 @@ public interface FavoriteMerchantService {
 	 @RequestMapping(method = RequestMethod.GET,value = "favoriteMerchant/getMyFavoriteMerchant")
 	 Result<Page<FavoriteMerchantDTO>> getMyFavoriteMerchant(@RequestParam("memberId")  Long memberId ,@RequestBody FavoriteMerchantParam pageQuery);
 	 
-	 @RequestMapping(method = RequestMethod.DELETE, value = "favoriteMerchant/remove/{merchantId}")
+	 @RequestMapping(method = RequestMethod.DELETE, value = "favoriteMerchant/remove")
 	 Result remove(@RequestBody FavoriteStoreParam param,@RequestParam("memberId")  Long memberId);
 }

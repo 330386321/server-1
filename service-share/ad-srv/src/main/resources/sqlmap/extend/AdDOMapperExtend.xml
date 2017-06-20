@@ -38,6 +38,7 @@
 	      <if test="type != null">
 	       type= #{type,jdbcType=TINYINT}
 	       and status=2
+	       order by gmt_create desc
 	      </if>
 	      <!-- 积分榜 -->
 	      <if test="topType ==1">

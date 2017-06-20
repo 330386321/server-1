@@ -92,7 +92,7 @@ public class FavoriteMerchantController extends BaseController{
 	@Authorization
 	@ApiOperation(value = "取消商家收藏", notes = "取消商家收藏[]（张荣成）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@RequestMapping(value = "remove/{merchantId}", method = RequestMethod.DELETE)
+	@RequestMapping(value = "remove", method = RequestMethod.DELETE)
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam(value = "查询信息") FavoriteStoreParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
