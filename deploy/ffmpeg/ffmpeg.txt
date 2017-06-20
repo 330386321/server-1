@@ -1,0 +1,51 @@
+﻿Linux 下安装ffmpeg
+
+一、下载地址(已经下载)
+	http://www.ffmpeg.org/download.html  (git clone git://git.kernel.org/pub/scm/git/git.git)
+
+二、解压
+	如果解压有问题  先安装   yum install bzip2
+	$ tar -jxvf ffmpeg-3.3.1.tar.bz2
+
+三、解压后进入ffmpeg的文件夹,查看readme, 可以看到和正常的编译安装步骤无异configure && make && make install
+	cd ffmpeg-3.3.1
+	
+	yum install gcc
+	yum -y install gcc gcc-c++
+
+
+四、路径设置（/usr/local/ffmpeg）
+		
+	$ ./configure --enable-shared --prefix=/usr/local/ffmpeg
+
+这时候会编译出错（系统中没有yasm指令） 执行
+	yum install yasm
+
+五、重新编译
+	$ ./configure --enable-shared --prefix=/usr/local/ffmpeg
+
+六、安装
+	$ make install
+	如果存在权限问题 因为之前编译时指定的文件夹是/usr/local/ffmpeg  所以需要sudo权限
+
+	$ sudo make install
+七、安装成功 执行
+	$ /usr/local/ffmpeg/bin/ffmpeg    
+ 
+	vi /etc/ld.so.conf
+
+	再执行
+	$ sudo ldconfig
+	
+	执行 /usr/local/ffmpeg/bin/ffmpeg –version
+	
+	配置环境变量 path 
+	vim /etc/profile
+	export FFMPEG_HOME=/usr/local/ffmpeg
+	export PATH=$FFMPEG_HOME/bin:$PATH
+	执行 env
+
+
+
+
+
