@@ -88,28 +88,15 @@
         </dependencies>
     </dependencyManagement>
 
-    <!--<build>
+    <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            &lt;!&ndash;<plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <configuration>
-                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
-                </configuration>
-            </plugin>&ndash;&gt;
-            <plugin>
-                &lt;!&ndash;skip deploy (this is just a test module) &ndash;&gt;
-                <artifactId>maven-deploy-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.12</version>
             </plugin>
         </plugins>
-    </build>-->
+    </build>
 
 
     <repositories>
