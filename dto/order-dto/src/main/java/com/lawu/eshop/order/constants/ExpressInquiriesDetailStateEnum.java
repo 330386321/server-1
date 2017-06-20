@@ -8,7 +8,12 @@ package com.lawu.eshop.order.constants;
  */
 public enum ExpressInquiriesDetailStateEnum {
 	
-	//  物流状态 2-在途中,3-签收,4-问题件
+	//  物流状态 0-此单无物流信息,2-在途中,3-签收,4-问题件
+	
+	/**
+	 * 0-此单无物流信息
+	 */
+	NO_INFO("0"),
 	
 	/**
 	 * 2-在途中

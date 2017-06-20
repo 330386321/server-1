@@ -1,10 +1,10 @@
 package com.lawu.eshop.order.srv.utils.express.kdniao;
 
-import com.lawu.eshop.order.srv.OrderSrvConfig;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -12,32 +12,29 @@ import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.lawu.eshop.order.srv.OrderSrvConfig;
+
 @Component
 public class KdniaoTrackQueryAPI {
 
     @Autowired
     private OrderSrvConfig orderSrvConfig;
 
-    //DEMO
     /*
-	{
-		try{
-			Resource resource = new ClassPathResource("application.properties");
-	        Properties props = PropertiesLoaderUtils.loadProperties(resource);
-	        EBusinessID = props.getProperty("express.kauidiniao.EBusinessID");
-	        AppKey = props.getProperty("express.kauidiniao.AppKey");
-	        ReqURL = props.getProperty("express.kauidiniao.ReqURL");
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
+    //DEMO
+    String EBusinessID = "1272920";
+    String AppKey = "58eeb7b2-950e-40c2-ab94-54b9a20c50c2";
+    String ReqURL = "http://api.kdniao.cc/Ebusiness/EbusinessOrderHandle.aspx";
 
 	public static void main(String[] args) {
 		KdniaoTrackQueryAPI api = new KdniaoTrackQueryAPI();
 
 		try {
 
-			String result = api.getOrderTracesByJson("YD", "3901748114998");
+			String result = api.getOrderTracesByJson("YD", "39017481149");
 			System.out.print(result);
 
 			ExpressInquiriesDetail detail = JSONObject.parseObject(result, ExpressInquiriesDetail.class);

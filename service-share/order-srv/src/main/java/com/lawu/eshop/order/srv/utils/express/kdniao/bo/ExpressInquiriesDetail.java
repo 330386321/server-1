@@ -42,7 +42,7 @@ public class ExpressInquiriesDetail implements Serializable {
 	/**
 	 * 物流状态
 	 * 
-	 * 2-在途中,3-签收,4-问题件
+	 * 0-此单无物流信息,2-在途中,3-签收,4-问题件
 	 */
 	private String State;
 	
