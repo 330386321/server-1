@@ -45,7 +45,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -71,7 +71,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("salesVolume_i", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -96,7 +96,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(productSearchParam.getOffset());
         query.setRows(productSearchParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -121,7 +121,7 @@ public class ProductSolrController extends BaseController {
         query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
         query.setStart(param.getOffset());
         query.setRows(param.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -148,7 +148,7 @@ public class ProductSolrController extends BaseController {
         query.set("terms.fl", "name_s");
         query.set("terms.regex", name + "+.*");
         query.set("terms.regex.flag", "case_insensitive");
-        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
 
         List<ProductSearchWordDTO> productSearchWordDTOS = new ArrayList<>();
         if (termsResponse != null) {

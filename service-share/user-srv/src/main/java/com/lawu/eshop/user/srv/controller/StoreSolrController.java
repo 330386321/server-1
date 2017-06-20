@@ -78,7 +78,7 @@ public class StoreSolrController extends BaseController {
         }
         query.setStart(storeSolrParam.getOffset());
         query.setRows(storeSolrParam.getPageSize());
-        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
@@ -105,7 +105,7 @@ public class StoreSolrController extends BaseController {
         query.set("terms.fl", "name_s");
         query.set("terms.regex", name + "+.*");
         query.set("terms.regex.flag", "case_insensitive");
-        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
 
         List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
         if (termsResponse != null) {

@@ -16,11 +16,18 @@ public class AdSrvConfig {
     @Value(value = "${solr_ad_core}")
     private String solrAdCore;
 
+    @Value(value = "${is_cloud_solr}")
+    private Boolean isCloudSolr;
+
     public String getSolrUrl() {
         return solrUrl;
     }
 
     public String getSolrAdCore() {
         return solrAdCore;
+    }
+
+    public Boolean getIsCloudSolr() {
+        return isCloudSolr;
     }
 }

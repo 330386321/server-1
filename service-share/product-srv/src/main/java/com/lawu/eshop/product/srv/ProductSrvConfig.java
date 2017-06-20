@@ -16,6 +16,9 @@ public class ProductSrvConfig {
     @Value(value = "${solr_product_core}")
     private String solrProductCore;
 
+    @Value(value = "${is_cloud_solr}")
+    private Boolean isCloudSolr;
+
     public String getSolrUrl() {
         return solrUrl;
     }
@@ -24,4 +27,7 @@ public class ProductSrvConfig {
         return solrProductCore;
     }
 
+    public Boolean getIsCloudSolr() {
+        return isCloudSolr;
+    }
 }

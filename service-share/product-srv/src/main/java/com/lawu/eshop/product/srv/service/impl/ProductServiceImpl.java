@@ -152,10 +152,10 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         if(!delIds.isEmpty()){
-            SolrUtil.delSolrDocsByIds(delIds, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.delSolrDocsByIds(delIds, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
         if(!documents.isEmpty()){
-            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
         return rows;
     }
@@ -741,7 +741,7 @@ public class ProductServiceImpl implements ProductService {
 
         ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
         SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
-        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
     }
 
 
@@ -824,7 +824,7 @@ public class ProductServiceImpl implements ProductService {
         productDO.setAverageDailySales(averageDailySales);
         productDOMapper.updateByPrimaryKeySelective(productDO);
 
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocument != null) {
             SolrInputDocument document = new SolrInputDocument();
             document.addField("id", solrDocument.get("id"));
@@ -844,7 +844,7 @@ public class ProductServiceImpl implements ProductService {
                     document.addField("categoryId_is", categoryId);
                 }
             }
-            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -854,10 +854,10 @@ public class ProductServiceImpl implements ProductService {
         if(productDO == null){
             return;
         }
-        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+        SolrDocument solrDocument = SolrUtil.getSolrDocsById(id, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if(solrDocument == null){
             SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
-            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -890,7 +890,7 @@ public class ProductServiceImpl implements ProductService {
                 //    }
                 //}
             }
-            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 
@@ -915,7 +915,7 @@ public class ProductServiceImpl implements ProductService {
             for (ProductDO productDO : productDOS) {
                 ids.add(String.valueOf(productDO.getId()));
             }
-            SolrUtil.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+            SolrUtil.delSolrDocsByIds(ids, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
     }
 

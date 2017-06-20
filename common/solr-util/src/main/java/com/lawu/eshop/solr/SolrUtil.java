@@ -2,6 +2,7 @@ package com.lawu.eshop.solr;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.TermsResponse;
@@ -30,13 +31,17 @@ public class SolrUtil {
 
     private volatile static HttpSolrClient adSolrClient;
 
+    private volatile static CloudSolrClient productCloudSolrClient;
+
+    private volatile static CloudSolrClient merchantCloudSolrClient;
+
+    private volatile static CloudSolrClient adCloudSolrClient;
+
     private static final String PRODUCT_CORE = "product";
 
     private static final String MERCHANT_CORE = "merchant";
 
     private static final String AD_CORE = "ad";
-
-    private static final int CONNECTION_TIMEOUT = 5000;
 
     private static final int DEFAULT_MAX_CONNECTIONS_PERHOST = 100;
 
@@ -45,6 +50,30 @@ public class SolrUtil {
     private SolrUtil() {
     }
 
+    private static SolrClient getSolrClient(String solrUrl, String solrCore, Boolean isCloudSolr) {
+        if (PRODUCT_CORE.equals(solrCore)) {
+            if (isCloudSolr) {
+                return getProductCloudSolrClient(solrUrl, solrCore);
+            } else {
+                return getProductSolrClient(solrUrl, solrCore);
+            }
+        }
+        if (MERCHANT_CORE.equals(solrCore)) {
+            if (isCloudSolr) {
+                return getMerchantCloudSolrClient(solrUrl, solrCore);
+            } else {
+                return getMerchantSolrClient(solrUrl, solrCore);
+            }
+        }
+        if (AD_CORE.equals(solrCore)) {
+            if (isCloudSolr) {
+                return getAdCloudSolrClient(solrUrl, solrCore);
+            } else {
+                return getAdSolrClient(solrUrl, solrCore);
+            }
+        }
+        return null;
+    }
 
     /**
      * 获取solr客户端
@@ -53,84 +82,87 @@ public class SolrUtil {
      * @param solrCore
      * @return
      */
-    private static void getProductSolrClient(String solrUrl, String solrCore) {
+    private static SolrClient getProductSolrClient(String solrUrl, String solrCore) {
         if (productSolrClient == null) {
             synchronized (SolrUtil.class) {
                 if (productSolrClient == null) {
                     productSolrClient = new HttpSolrClient(solrUrl + solrCore);
-                    productSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
                     productSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
                     productSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
                 }
             }
         }
+        return productSolrClient;
     }
 
-    private static void getMerchantSolrClient(String solrUrl, String solrCore) {
+    private static SolrClient getMerchantSolrClient(String solrUrl, String solrCore) {
         if (merchantSolrClient == null) {
             synchronized (SolrUtil.class) {
                 if (merchantSolrClient == null) {
                     merchantSolrClient = new HttpSolrClient(solrUrl + solrCore);
-                    merchantSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
                     merchantSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
                     merchantSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
                 }
             }
         }
+        return merchantSolrClient;
     }
 
-    private static void getAdSolrClient(String solrUrl, String solrCore) {
+    private static SolrClient getAdSolrClient(String solrUrl, String solrCore) {
         if (adSolrClient == null) {
             synchronized (SolrUtil.class) {
                 if (adSolrClient == null) {
                     adSolrClient = new HttpSolrClient(solrUrl + solrCore);
-                    adSolrClient.setConnectionTimeout(CONNECTION_TIMEOUT);
                     adSolrClient.setDefaultMaxConnectionsPerHost(DEFAULT_MAX_CONNECTIONS_PERHOST);
                     adSolrClient.setMaxTotalConnections(MAX_TOTAL_CONNECTIONS);
                 }
             }
         }
+        return adSolrClient;
     }
 
     /**
-     * 获取solr客户端
+     * 获取cloudSolr客户端
      *
      * @param solrUrl
      * @param solrCore
      * @return
      */
-   /* private static void getProductSolrClient(String solrUrl, String solrCore) {
-        if (productSolrClient == null) {
+    private static SolrClient getProductCloudSolrClient(String solrUrl, String solrCore) {
+        if (productCloudSolrClient == null) {
             synchronized (SolrUtil.class) {
-                if (productSolrClient == null) {
-                    productSolrClient = new CloudSolrClient(solrUrl);
-                    productSolrClient.setDefaultCollection(solrCore);
+                if (productCloudSolrClient == null) {
+                    productCloudSolrClient = new CloudSolrClient(solrUrl);
+                    productCloudSolrClient.setDefaultCollection(solrCore);
                 }
             }
         }
+        return productCloudSolrClient;
     }
 
-    private static void getMerchantSolrClient(String solrUrl, String solrCore) {
-        if (merchantSolrClient == null) {
+    private static SolrClient getMerchantCloudSolrClient(String solrUrl, String solrCore) {
+        if (merchantCloudSolrClient == null) {
             synchronized (SolrUtil.class) {
-                if (merchantSolrClient == null) {
-                    merchantSolrClient = new CloudSolrClient(solrUrl);
-                    merchantSolrClient.setDefaultCollection(solrCore);
+                if (merchantCloudSolrClient == null) {
+                    merchantCloudSolrClient = new CloudSolrClient(solrUrl);
+                    merchantCloudSolrClient.setDefaultCollection(solrCore);
                 }
             }
         }
+        return merchantCloudSolrClient;
     }
 
-    private static void getAdSolrClient(String solrUrl, String solrCore) {
-        if (adSolrClient == null) {
+    private static SolrClient getAdCloudSolrClient(String solrUrl, String solrCore) {
+        if (adCloudSolrClient == null) {
             synchronized (SolrUtil.class) {
-                if (adSolrClient == null) {
-                    adSolrClient = new CloudSolrClient(solrUrl);
-                    adSolrClient.setDefaultCollection(solrCore);
+                if (adCloudSolrClient == null) {
+                    adCloudSolrClient = new CloudSolrClient(solrUrl);
+                    adCloudSolrClient.setDefaultCollection(solrCore);
                 }
             }
         }
-    }*/
+        return adCloudSolrClient;
+    }
 
     /**
      * 关闭solr客户端
@@ -153,177 +185,14 @@ public class SolrUtil {
      * @param document
      * @param solrUrl
      * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    public static boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return addSolrDocs(document, productSolrClient);
+    public static boolean addSolrDocs(SolrInputDocument document, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
         }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return addSolrDocs(document, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return addSolrDocs(document, adSolrClient);
-        }
-        return false;
-    }
-
-    /**
-     * 新增
-     *
-     * @param documents
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     */
-    public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return addSolrDocsList(documents, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return addSolrDocsList(documents, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return addSolrDocsList(documents, adSolrClient);
-        }
-        return false;
-    }
-
-    /**
-     * 根据ID删除
-     *
-     * @param id
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     */
-    public static boolean delSolrDocsById(Long id, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return delSolrDocsById(id, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return delSolrDocsById(id, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return delSolrDocsById(id, adSolrClient);
-        }
-        return false;
-    }
-
-    /**
-     * 根据ids删除
-     *
-     * @param ids
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     */
-    public static boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return delSolrDocsByIds(ids, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return delSolrDocsByIds(ids, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return delSolrDocsByIds(ids, adSolrClient);
-        }
-        return false;
-    }
-
-    /**
-     * 根据条件查询
-     *
-     * @param query
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     * @throws Exception
-     */
-    public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return getSolrDocsByQuery(query, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return getSolrDocsByQuery(query, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return getSolrDocsByQuery(query, adSolrClient);
-        }
-        return null;
-    }
-
-    /**
-     * 根据主键查询
-     *
-     * @param id
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     */
-    public static SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return getSolrDocsById(id, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return getSolrDocsById(id, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return getSolrDocsById(id, adSolrClient);
-        }
-        return null;
-    }
-
-    /**
-     * 词频统计
-     *
-     * @param query
-     * @param solrUrl
-     * @param solrCore
-     * @return
-     */
-    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrUrl, String solrCore) {
-        if (PRODUCT_CORE.equals(solrCore)) {
-            getProductSolrClient(solrUrl, solrCore);
-            return getTermsResponseByQuery(query, productSolrClient);
-        }
-        if (MERCHANT_CORE.equals(solrCore)) {
-            getMerchantSolrClient(solrUrl, solrCore);
-            return getTermsResponseByQuery(query, merchantSolrClient);
-        }
-        if (AD_CORE.equals(solrCore)) {
-            getAdSolrClient(solrUrl, solrCore);
-            return getTermsResponseByQuery(query, adSolrClient);
-        }
-        return null;
-    }
-
-    /**
-     * 新增
-     *
-     * @param document
-     * @param solrClient
-     * @return
-     */
-    private static boolean addSolrDocs(SolrInputDocument document, SolrClient solrClient) {
         try {
             UpdateResponse rspAdd = solrClient.add(document);
             UpdateResponse rspCommit = solrClient.commit();
@@ -340,10 +209,16 @@ public class SolrUtil {
      * 新增
      *
      * @param documents
-     * @param solrClient
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    private static boolean addSolrDocsList(Collection<SolrInputDocument> documents, SolrClient solrClient) {
+    public static boolean addSolrDocsList(Collection<SolrInputDocument> documents, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
         try {
             UpdateResponse rspAdd = solrClient.add(documents);
             UpdateResponse rspCommit = solrClient.commit();
@@ -360,10 +235,16 @@ public class SolrUtil {
      * 根据ID删除
      *
      * @param id
-     * @param solrClient
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    private static boolean delSolrDocsById(Long id, SolrClient solrClient) {
+    public static boolean delSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
         try {
             UpdateResponse rspAdd = solrClient.deleteById(String.valueOf(id));
             UpdateResponse rspCommit = solrClient.commit();
@@ -380,10 +261,16 @@ public class SolrUtil {
      * 根据ids删除
      *
      * @param ids
-     * @param solrClient
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    private static boolean delSolrDocsByIds(List<String> ids, SolrClient solrClient) {
+    public static boolean delSolrDocsByIds(List<String> ids, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return false;
+        }
         try {
             UpdateResponse rspAdd = solrClient.deleteById(String.valueOf(ids));
             UpdateResponse rspCommit = solrClient.commit();
@@ -400,11 +287,16 @@ public class SolrUtil {
      * 根据条件查询
      *
      * @param query
-     * @param solrClient
-     * @return
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @throws Exception
      */
-    private static SolrDocumentList getSolrDocsByQuery(SolrQuery query, SolrClient solrClient) {
+    public static SolrDocumentList getSolrDocsByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
         try {
             QueryResponse rsp = solrClient.query(query);
             return rsp.getResults();
@@ -418,10 +310,16 @@ public class SolrUtil {
      * 根据主键查询
      *
      * @param id
-     * @param solrClient
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    private static SolrDocument getSolrDocsById(Long id, SolrClient solrClient) {
+    public static SolrDocument getSolrDocsById(Long id, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
         SolrDocument solrDocument = null;
         SolrQuery query = new SolrQuery();
         query.setQuery("id:" + id);
@@ -441,10 +339,16 @@ public class SolrUtil {
      * 词频统计
      *
      * @param query
-     * @param solrClient
+     * @param solrUrl
+     * @param solrCore
+     * @param isCloudSolr
      * @return
      */
-    private static TermsResponse getTermsResponseByQuery(SolrQuery query, SolrClient solrClient) {
+    public static TermsResponse getTermsResponseByQuery(SolrQuery query, String solrUrl, String solrCore, Boolean isCloudSolr) {
+        SolrClient solrClient = getSolrClient(solrUrl, solrCore, isCloudSolr);
+        if (solrClient == null) {
+            return null;
+        }
         try {
             QueryResponse rsp = solrClient.query(query);
             return rsp.getTermsResponse();

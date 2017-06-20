@@ -70,11 +70,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
             //更新solr门店收藏人数
-            SolrDocument solrDocument = SolrUtil.getSolrDocsById(list.get(0).getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+            SolrDocument solrDocument = SolrUtil.getSolrDocsById(list.get(0).getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
                 document.addField("favoriteNumber_i", count);
-                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
             }
         }
         return row;
@@ -97,11 +97,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
             merchantStoreDOMapper.updateByPrimaryKeySelective(merchantStoreDO);
 
             //更新solr门店收藏人数
-            SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+            SolrDocument solrDocument = SolrUtil.getSolrDocsById(merchantStoreDO.getId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
             if (solrDocument != null) {
                 SolrInputDocument document = MerchantStoreConverter.convertSolrInputDocument(solrDocument);
                 document.addField("favoriteNumber_i", count);
-                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+                SolrUtil.addSolrDocs(document, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
             }
         }
         return i;

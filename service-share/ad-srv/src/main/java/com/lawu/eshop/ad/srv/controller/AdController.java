@@ -314,7 +314,7 @@ public class AdController extends BaseController{
         query.setStart(adSolrParam.getOffset());
         query.setRows(adSolrParam.getPageSize());
         SolrDocumentList solrDocumentList =new SolrDocumentList();
-        solrDocumentList = SolrUtil.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
+        solrDocumentList = SolrUtil.getSolrDocsByQuery(query, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
         Page<AdSolrDTO> page = new Page<AdSolrDTO>();
         page.setRecords(AdConverter.convertDTO(solrDocumentList));
         if(solrDocumentList==null){

@@ -1,17 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
@@ -24,13 +12,7 @@ import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
-import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
-import com.lawu.eshop.product.srv.domain.ProductDO;
-import com.lawu.eshop.product.srv.domain.ProductDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
-import com.lawu.eshop.product.srv.domain.ProductModelInventoryDOExample;
+import com.lawu.eshop.product.srv.domain.*;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
@@ -41,6 +23,13 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 import com.lawu.eshop.solr.SolrUtil;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 @Service
 public class ProductModelServiceImpl implements ProductModelService {
@@ -315,7 +304,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
 			
 			// 更新solr商品销量
-			SolrDocument solrDocument = SolrUtil.getSolrDocsById(productDO.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+			SolrDocument solrDocument = SolrUtil.getSolrDocsById(productDO.getId(), productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
 			if (solrDocument != null) {
 				SolrInputDocument document = new SolrInputDocument();
 				document.addField("id", solrDocument.get("id"));
@@ -335,7 +324,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 						document.addField("categoryId_is", categoryId);
 					}
 				}
-				SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore());
+				SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
 			}
 			
 		}

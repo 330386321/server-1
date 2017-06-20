@@ -46,7 +46,7 @@ public class HandleDepositAuditCancelTransactionFollowServiceImpl extends Abstra
         merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
 
         //删除solr门店信息
-        SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore());
+        SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
         return rtn;
     }
 }

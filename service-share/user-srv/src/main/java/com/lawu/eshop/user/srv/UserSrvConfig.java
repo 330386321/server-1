@@ -52,6 +52,9 @@ public class UserSrvConfig {
     @Value(value = "${rongyun_app_secret}")
     private String rongYunAppSecret;
 
+    @Value(value = "${is_cloud_solr}")
+    private Boolean isCloudSolr;
+
     public String getUser_headimg() {
         return user_headimg;
     }
@@ -106,5 +109,9 @@ public class UserSrvConfig {
 
     public String getRongYunAppSecret() {
         return rongYunAppSecret;
+    }
+
+    public Boolean getIsCloudSolr() {
+        return isCloudSolr;
     }
 }
