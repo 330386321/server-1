@@ -1,5 +1,6 @@
 package com.lawu.eshop.user.srv.service.impl;
 
+import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
@@ -478,7 +479,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		}
 		// 查询是否被收藏
 		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeDetailDOViews.get(0).getMerchantId());
+		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeDetailDOViews.get(0).getMerchantId()).andManageTypeEqualTo(ManageTypeEnum.ENTITY.val);
 		List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
 		if (favoriteMerchantDOS.isEmpty()) {
 			storeDetailBO.setFavorite(false);
@@ -618,7 +619,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 查询是否收藏
 		FavoriteMerchantDOExample favoriteMerchantDOExample = new FavoriteMerchantDOExample();
-		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId());
+		favoriteMerchantDOExample.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(storeInfoDOView.getMerchantId()).andManageTypeEqualTo(ManageTypeEnum.COMMON.val);
 		List<FavoriteMerchantDO> favoriteMerchantDOS = favoriteMerchantDOMapper.selectByExample(favoriteMerchantDOExample);
 		if (favoriteMerchantDOS.isEmpty()) {
 			shoppingStoreDetailBO.setFavorite(false);

@@ -6,6 +6,6 @@ import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 
 public interface MemberAdRecordDOMapperExtend {
 	
-	List<MemberAdRecordDO> selectPointToday(Long memberId);
+	List<MemberAdRecordDO> selectPointToday(MemberAdRecordDO marDO);
   
 }

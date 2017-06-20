@@ -186,11 +186,6 @@ public class AdServiceImpl implements AdService {
 		}
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
-		//将广告添加到solr中
-		if(adDO.getType()==1){
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-		    SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore());
-		}
 		return i;
 	}
 	
@@ -695,7 +690,10 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public ClickAdPointBO getClickAdPoint(Long memberId,BigDecimal point) {
-		List<MemberAdRecordDO> list= MemberAdRecordDOMapperExtend.selectPointToday(memberId);
+		MemberAdRecordDO marDO=new MemberAdRecordDO();
+		marDO.setMemberId(memberId);
+		marDO.setClickDate(new Date());
+		List<MemberAdRecordDO> list= MemberAdRecordDOMapperExtend.selectPointToday(marDO);
 		BigDecimal totlePoint=new BigDecimal(0);
 		if(!list.isEmpty()){
 			for (MemberAdRecordDO memberAdRecordDO : list) {

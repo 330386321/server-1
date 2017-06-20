@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
@@ -25,6 +24,7 @@ import com.lawu.eshop.member.api.service.FavoriteMerchantService;
 import com.lawu.eshop.member.api.service.ProductService;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteStoreParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -54,9 +54,9 @@ public class FavoriteMerchantController extends BaseController{
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.PUT)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-					   @RequestParam @ApiParam(required = true, value = "商家id") Long merchantId) {
+			 @ModelAttribute @ApiParam(value = "查询信息") FavoriteStoreParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		return favoriteMerchantService.save(memberId, merchantId);
+		return favoriteMerchantService.save(memberId, param);
 	}
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
@@ -94,9 +94,9 @@ public class FavoriteMerchantController extends BaseController{
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "remove/{merchantId}", method = RequestMethod.DELETE)
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			      @PathVariable @ApiParam(required = true, value = "商家id") Long merchantId) {
+			@ModelAttribute @ApiParam(value = "查询信息") FavoriteStoreParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = favoriteMerchantService.remove(merchantId,memberId);
+		Result rs = favoriteMerchantService.remove(param,memberId);
 		return successDelete();
 	}
 

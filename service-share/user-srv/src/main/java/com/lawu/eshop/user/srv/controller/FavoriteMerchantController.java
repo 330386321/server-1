@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.dto.FavoriteMerchantDTO;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteStoreParam;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
 import com.lawu.eshop.user.srv.service.FavoriteMerchantService;
@@ -40,8 +41,8 @@ public class FavoriteMerchantController extends BaseController{
 	 * @return
 	 */
    @RequestMapping(value = "save", method = RequestMethod.POST)
-   public Result save(@RequestParam  Long memberId ,@RequestParam Long merchantId ) {
-   	   Integer i=favoriteMerchantService.save(memberId,merchantId);
+   public Result save(@RequestParam  Long memberId ,@RequestBody FavoriteStoreParam param) {
+   	   Integer i=favoriteMerchantService.save(memberId,param);
 	   if(i>0){
 	   		return successCreated(ResultCode.SUCCESS);
 	   }else{
@@ -73,8 +74,8 @@ public class FavoriteMerchantController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "remove/{merchantId}", method = RequestMethod.DELETE)
-   public Result remove(@PathVariable Long merchantId, @RequestParam Long memberId) {
-   	  favoriteMerchantService.remove(merchantId,memberId);
+   public Result remove(@RequestBody FavoriteStoreParam param, @RequestParam Long memberId) {
+   	  favoriteMerchantService.remove(param,memberId);
       return successDelete();
    }
 

@@ -6,8 +6,8 @@
   </resultMap>
   
   <!-- 今天获取积分 -->
-  <select id="selectPointToday" parameterType="java.lang.Long" resultMap="BaseResultMap">
-   select point from member_ad_record  WHERE member_id=#{memberId,jdbcType=BIGINT}   and click_date=date(now())
+  <select id="selectPointToday" parameterType="com.lawu.eshop.ad.srv.domain.MemberAdRecordDO" resultMap="BaseResultMap">
+   select point from member_ad_record  WHERE member_id=#{memberId,jdbcType=BIGINT}   and click_date=#{clickDate,jdbcType=DATE}
   </select>
  
 </mapper>

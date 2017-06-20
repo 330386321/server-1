@@ -361,7 +361,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     				 if(adMemberParam.getLongitude()!=null && adMemberParam.getLatitude()!=null){
         				 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
             					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
-            			 if(adDTO.getRadius()!=null && adDTO.getRadius()>distance){
+            			 if(adDTO.getRadius()!=null && adDTO.getRadius()>distance/1000){
             				 newList.add(adDTO);
             			 }
             				

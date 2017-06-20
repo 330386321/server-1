@@ -35,7 +35,7 @@ public class DistanceUtil {
                 * Math.asin(Math.sqrt(latDiffSin * latDiffSin
                 + Math.cos(latitude1) * Math.cos(latitude2)
                 * longDiffSin * longDiffSin));
-        return (int) Math.round(distance)/1000;
+        return (int) Math.round(distance);
     }
     
 }

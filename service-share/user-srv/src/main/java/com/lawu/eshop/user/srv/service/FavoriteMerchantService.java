@@ -2,6 +2,7 @@ package com.lawu.eshop.user.srv.service;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteStoreParam;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 
 /**
@@ -17,7 +18,7 @@ public interface FavoriteMerchantService {
 	 * @param favoriteMerchant
 	 * @return
 	 */
-	Integer save(Long memberId ,Long merchantId);
+	Integer save(Long memberId ,FavoriteStoreParam param);
 	
 	/**
 	 * 我收藏的商家
@@ -32,6 +33,6 @@ public interface FavoriteMerchantService {
 	 * @param memberId
 	 * @return
 	 */
-	Integer remove(Long merchantId,Long memberId);
+	Integer remove(FavoriteStoreParam param,Long memberId);
 
 }

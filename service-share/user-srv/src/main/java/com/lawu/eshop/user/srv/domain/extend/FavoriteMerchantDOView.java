@@ -21,6 +21,10 @@ public class FavoriteMerchantDOView {
 	private BigDecimal feedbackRate;
 
 	private String path;
+	
+	private Long merchantStoreId;
+	
+	private Integer countFs; 
 
 	public Long getMemberId() {
 		return memberId;
@@ -94,4 +98,21 @@ public class FavoriteMerchantDOView {
 		this.path = path;
 	}
 
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
+	public Integer getCountFs() {
+		return countFs;
+	}
+
+	public void setCountFs(Integer countFs) {
+		this.countFs = countFs;
+	}
+	
+	
 }

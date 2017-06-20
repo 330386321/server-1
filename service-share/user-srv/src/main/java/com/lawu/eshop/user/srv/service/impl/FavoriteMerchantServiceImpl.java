@@ -3,6 +3,7 @@ package com.lawu.eshop.user.srv.service.impl;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.param.FavoriteMerchantParam;
+import com.lawu.eshop.user.param.FavoriteStoreParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.FavoriteMerchantBO;
 import com.lawu.eshop.user.srv.converter.FavoriteMerchantConverter;
@@ -51,14 +52,15 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Override
     @Transactional
-    public Integer save(Long memberId, Long merchantId) {
+    public Integer save(Long memberId, FavoriteStoreParam param) {
         FavoriteMerchantDO favoriteMerchant = new FavoriteMerchantDO();
         favoriteMerchant.setMemberId(memberId);
-        favoriteMerchant.setMerchantId(merchantId);
+        favoriteMerchant.setMerchantId(param.getMerchantId());
+        favoriteMerchant.setManageType(param.getManageTypeEnum().val);
         favoriteMerchant.setGmtCreate(new Date());
         int row = favoriteMerchantDOMapper.insert(favoriteMerchant);
         MerchantStoreDOExample example = new MerchantStoreDOExample();
-        example.createCriteria().andMerchantIdEqualTo(merchantId);
+        example.createCriteria().andMerchantIdEqualTo(param.getMerchantId());
         List<MerchantStoreDO> list = merchantStoreDOMapper.selectByExample(example);
         if (!list.isEmpty()) {
             MerchantStoreDO merchantStoreDO = list.get(0);
@@ -80,11 +82,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
     @Override
     @Transactional
-    public Integer remove(Long merchantId,Long memberId) {
+    public Integer remove(FavoriteStoreParam param,Long memberId) {
     	FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
-        example.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(merchantId);
+        example.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(param.getMerchantId()).andManageTypeEqualTo(param.getManageTypeEnum().val);
         Integer i = favoriteMerchantDOMapper.deleteByExample(example);
-        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(merchantId);
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(param.getMerchantId());
         if (merchantStoreDO!=null) {
             Integer count = merchantStoreDO.getFavoriteNumber();
             count -= 1;
@@ -108,7 +110,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     @Override
     public Page<FavoriteMerchantBO> getMyFavoriteMerchant(Long memberId, FavoriteMerchantParam pageQuery) {
     	FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
-    	exmple.createCriteria().andMemberIdEqualTo(memberId);
+    	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val);
     	FavoriteMerchantDOView view=new FavoriteMerchantDOView();
     	view.setMemberId(memberId);
     	view.setType(pageQuery.getManageTypeEnum().val);
@@ -116,30 +118,13 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         List<FavoriteMerchantDOView> list=favoriteMerchantDOMapperExtend.selectFavoriteMerchantByRowbounds(view, rowBounds);
         List<FavoriteMerchantBO> listBO=new ArrayList<>();
         for (FavoriteMerchantDOView favoriteMerchantDOView : list) {
-        	//获取粉丝数量
-        	FansMerchantDOExample  example=new FansMerchantDOExample();
-        	example.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
-        	int count=fansMerchantDOMapper.countByExample(example);
         	FavoriteMerchantBO favoriteMerchantBO =new FavoriteMerchantBO();
-        	favoriteMerchantBO.setFansCount(count);
         	favoriteMerchantBO=FavoriteMerchantConverter.convertListBO(favoriteMerchantDOView);
-        	FansMerchantDOExample fmExample=new FansMerchantDOExample();
-        	fmExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
-        	Integer fansCount=0;
-        	fansCount=fansMerchantDOMapper.countByExample(fmExample);
-        	favoriteMerchantBO.setFansCount(fansCount);
-        	MerchantStoreDOExample merchantStoreDOExample=new MerchantStoreDOExample();
-        	merchantStoreDOExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId());
-        	List<MerchantStoreDO> merchantStoreDOList=merchantStoreDOMapper.selectByExample(merchantStoreDOExample);
-        	if(!merchantStoreDOList.isEmpty()){ //获取距离
-        		favoriteMerchantBO.setMerchantStoreId(merchantStoreDOList.get(0).getId());
-        		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
-        			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
-            				 merchantStoreDOList.get(0).getLongitude().doubleValue(),  merchantStoreDOList.get(0).getLatitude().doubleValue());
-            		 favoriteMerchantBO.setDistance(distance);
-        		}
-        		
-        	}
+    		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
+    			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
+    					 favoriteMerchantDOView.getLongitude().doubleValue(),  favoriteMerchantDOView.getLatitude().doubleValue());
+        		 favoriteMerchantBO.setDistance(distance);
+    		}
         	//获取门店logo
         	MerchantStoreImageDOExample msidExample=new MerchantStoreImageDOExample();
         	msidExample.createCriteria().andMerchantIdEqualTo(favoriteMerchantDOView.getMerchantId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
@@ -150,7 +135,8 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	listBO.add(favoriteMerchantBO);
 		}
         Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();
-        page.setTotalCount(favoriteMerchantDOMapper.countByExample(exmple));
+        Long count=favoriteMerchantDOMapper.countByExample(exmple);
+        page.setTotalCount(count.intValue());
         page.setCurrentPage(pageQuery.getCurrentPage());
         page.setRecords(listBO);
         return page;

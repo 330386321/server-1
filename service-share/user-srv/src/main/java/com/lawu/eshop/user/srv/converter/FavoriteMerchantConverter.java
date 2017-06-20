@@ -21,6 +21,8 @@ public class FavoriteMerchantConverter {
 		FBO.setIndustryName(favoriteMerchantDOView.getIndustryName());
 		FBO.setFeedbackRate(favoriteMerchantDOView.getFeedbackRate());
 		FBO.setPath(favoriteMerchantDOView.getPath());
+		FBO.setMerchantStoreId(favoriteMerchantDOView.getMerchantStoreId());
+		FBO.setFansCount(favoriteMerchantDOView.getCountFs());
 		return FBO;
 	}
 	

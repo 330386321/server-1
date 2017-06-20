@@ -98,6 +98,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         if(StringUtils.isNotEmpty(param.getEndDate())){
             criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
         }
+        example.setOrderByClause("gmt_create desc");
         Long count=adPlatformDOMapper.countByExample(example);
         RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
         List<AdPlatformDO> DOS = adPlatformDOMapper.selectByExampleWithRowbounds(example, rowBounds);
