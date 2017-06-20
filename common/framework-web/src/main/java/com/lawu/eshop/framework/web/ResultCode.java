@@ -63,6 +63,7 @@ public class ResultCode {
     public static final int BANK_CASH_EXIST = 2011;
     public static final int FANS_MERCHANT = 2012;
     public static final int MOBILE_IS_NOT_EXIST = 2013;
+    public static final int MERCHANT_STORE_IS_FAVORITE = 2014;
 
 
     // 商品模块代码 3xxx
@@ -216,6 +217,7 @@ public class ResultCode {
         ResultCode.messageMap.put(BANK_CASH_EXIST, "存在提现申请");
         ResultCode.messageMap.put(FANS_MERCHANT, "已经是商家粉丝");
         ResultCode.messageMap.put(MOBILE_IS_NOT_EXIST, "手机号不存在");
+        ResultCode.messageMap.put(MERCHANT_STORE_IS_FAVORITE, "门店已被收藏");
         
 
         //运营

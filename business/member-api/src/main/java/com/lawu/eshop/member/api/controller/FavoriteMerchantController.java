@@ -50,7 +50,7 @@ public class FavoriteMerchantController extends BaseController{
 
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
-	@ApiOperation(value = "商家收藏", notes = "商家收藏[3003]（张荣成）", httpMethod = "PUT")
+	@ApiOperation(value = "商家收藏", notes = "商家收藏[2014]（张荣成）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "save", method = RequestMethod.PUT)
 	public Result save(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,

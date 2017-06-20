@@ -42,6 +42,9 @@ public class FavoriteMerchantController extends BaseController{
 	 */
    @RequestMapping(value = "save", method = RequestMethod.POST)
    public Result save(@RequestParam  Long memberId ,@RequestBody FavoriteStoreParam param) {
+	   if(favoriteMerchantService.get(memberId, param)){
+		   return successCreated(ResultCode.MERCHANT_STORE_IS_FAVORITE);
+	   }
    	   Integer i=favoriteMerchantService.save(memberId,param);
 	   if(i>0){
 	   		return successCreated(ResultCode.SUCCESS);

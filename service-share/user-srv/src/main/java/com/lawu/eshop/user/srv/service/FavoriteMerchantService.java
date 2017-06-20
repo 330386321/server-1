@@ -34,5 +34,13 @@ public interface FavoriteMerchantService {
 	 * @return
 	 */
 	Integer remove(FavoriteStoreParam param,Long memberId);
+	
+	/**
+	 * 是否收藏
+	 * @param memberId
+	 * @param pageQuery
+	 * @return
+	 */
+	Boolean get(Long memberId,FavoriteStoreParam pageQuery);
 
 }
