@@ -1,18 +1,15 @@
 package com.lawu.eshop.operator.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lawu.eshop.framework.web.json.JsonBeanSerializerModifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 /**
  * @author Leach
@@ -24,6 +21,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 @Configuration
 @ImportResource(locations={"classpath:spring.xml","classpath:shiro-context.xml"})
 @ComponentScan(basePackages={"com.lawu.eshop"})
+@ServletComponentScan(basePackages = {"com.lawu.eshop"})
 public class OperatorApiApplication {
 
     private static Logger logger = LoggerFactory.getLogger(OperatorApiApplication.class);
