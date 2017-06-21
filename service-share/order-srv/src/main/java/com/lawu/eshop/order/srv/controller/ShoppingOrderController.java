@@ -195,9 +195,13 @@ public class ShoppingOrderController extends BaseController {
 		if (shoppingOrderBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
-
+		
+		// 如果快递公司编码和物流编号为空.不查询物流
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
+		if (StringUtils.isNotBlank(shoppingOrderBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderBO.getWaybillNum())) {
+			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
+		}
+		
 		return successGet(ShoppingOrderConverter.covert(shoppingOrderBO, expressInquiriesDetailBO));
 	}
 	
@@ -452,8 +456,9 @@ public class ShoppingOrderController extends BaseController {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		
+		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
-		if (StringUtils.isNotEmpty(shoppingOrderExtendDetailBO.getExpressCompanyCode()) && StringUtils.isNotEmpty(shoppingOrderExtendDetailBO.getWaybillNum())) {
+		if (StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getWaybillNum())) {
 			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExtendDetailBO.getExpressCompanyCode(), shoppingOrderExtendDetailBO.getWaybillNum());
 		}
 		
