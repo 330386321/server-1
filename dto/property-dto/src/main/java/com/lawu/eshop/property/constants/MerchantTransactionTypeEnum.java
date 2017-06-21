@@ -23,7 +23,7 @@ public enum MerchantTransactionTypeEnum {
 	DEPOSIT_REFUND((byte)0x72,"保证金退款"),				//114
 	SALES_COMMISSION((byte) 0x73, "推荐E友收益"),			//115
 	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益"),		//116
-	BACKAGE((byte) 0x75, "充值");						//117 后台充值
+	BACKAGE((byte) 0x75, "平台充值");						//117 后台充值
 	
 	
 	private Byte value;
