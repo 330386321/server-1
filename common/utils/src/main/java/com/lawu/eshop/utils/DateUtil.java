@@ -43,30 +43,30 @@ public class DateUtil {
     private static final String TIME_INT_FORMAT = "HHmmss";
 
     // 默认日期格式化
-    private static DateFormat dateFormat = null;
+    private static DateFormat dateFormat;
 
     // 斜杠日期格式化
-    private static DateFormat dateSpritFormat = null;
+    private static DateFormat dateSpritFormat;
 
     // int日期格式化
-    private static DateFormat dateIntFormat = null;
+    private static DateFormat dateIntFormat;
 
     // 日期时间格式化
-    private static DateFormat dateTimeFormat = null;
+    private static DateFormat dateTimeFormat;
 
     // 斜杠日期时间格式化
-    private static DateFormat dateTimeSpritFormat = null;
+    private static DateFormat dateTimeSpritFormat;
 
     // int日期时间格式化
-    private static DateFormat dateTimeIntFormat = null;
+    private static DateFormat dateTimeIntFormat;
 
     //时间格式化
-    private static DateFormat timeFormat = null;
+    private static DateFormat timeFormat;
 
     //int时间格式化
-    private static DateFormat timeIntFormat = null;
+    private static DateFormat timeIntFormat;
 
-    private static Calendar gregorianCalendar = new GregorianCalendar();
+    private static Calendar gregorianCalendar;
 
     static {
         dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
@@ -77,6 +77,7 @@ public class DateUtil {
         dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
         timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
         timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
+        gregorianCalendar = new GregorianCalendar();
     }
 
     /**

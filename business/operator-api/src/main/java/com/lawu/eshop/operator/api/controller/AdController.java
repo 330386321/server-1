@@ -64,8 +64,7 @@ public class AdController extends BaseController {
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
     public Result<Page<AdDTO>> selectListByMerchant(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                                     @ModelAttribute @ApiParam(value = "查询信息") AdFindParam adPlatParam) {
-        Result<Page<AdDTO>> pageDTOS = adService.selectListByPlatForm(adPlatParam);
-        return pageDTOS;
+        return adService.selectListByPlatForm(adPlatParam);
     }
 
     @ApiOperation(value = "广告列表", notes = "查询广告列表。（梅述全）", httpMethod = "POST")
@@ -98,13 +97,13 @@ public class AdController extends BaseController {
                 adDTO.setAreas("全国");
                 return result;
             }
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuilder = new StringBuilder();
             String[] areasArr = adDTO.getAreas().split(",");
             for (String areas : areasArr) {
                 Result<String> regionFullName = regionService.getRegionFullName(Integer.valueOf(areas));
-                stringBuffer.append(regionFullName.getModel()).append(",");
+                stringBuilder.append(regionFullName.getModel()).append(",");
             }
-            adDTO.setAreas(stringBuffer.substring(0, stringBuffer.length() - 1));
+            adDTO.setAreas(stringBuilder.substring(0, stringBuilder.length() - 1));
         }
         return result;
     }

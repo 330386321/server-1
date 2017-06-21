@@ -1,16 +1,17 @@
 package com.lawu.eshop.utils;
 
 public class IdWorker {
-    private final static long twepoch = 1288834974657L;
-    private final static long workerIdBits = 5L;
-    private final static long datacenterIdBits = 5L;
-    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
-    private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
-    private final static long sequenceBits = 12L;
-    private final static long workerIdShift = sequenceBits;
-    private final static long datacenterIdShift = sequenceBits + workerIdBits;
-    private final static long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
-    private final static long sequenceMask = -1L ^ (-1L << sequenceBits);
+
+    private static final  long TWEPOCH = 1288834974657L;
+    private static final  long WORKER_ID_BITS = 5L;
+    private static final  long DATACENTER_ID_BITS = 5L;
+    private static final long MAX_WORKER_ID = -1L ^ (-1L << WORKER_ID_BITS);
+    private static final long MAX_DATACENTER_ID = -1L ^ (-1L << DATACENTER_ID_BITS);
+    private static final  long SEQUENCE_BITS = 12L;
+    private static final  long WORKER_ID_SHIFT = SEQUENCE_BITS;
+    private static final  long DATACENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS;
+    private static final  long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID_BITS;
+    private static final  long SEQUENCE_MASK = -1L ^ (-1L << SEQUENCE_BITS);
 
     private static long workerId;
     private static long datacenterId;
@@ -19,14 +20,14 @@ public class IdWorker {
 
     @SuppressWarnings("static-access")
     public IdWorker(long workerId, long datacenterId) {
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+        if (workerId > MAX_WORKER_ID || workerId < 0) {
+            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
-            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
+        if (datacenterId > MAX_DATACENTER_ID || datacenterId < 0) {
+            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", MAX_DATACENTER_ID));
         }
-        this.workerId = workerId;
-        this.datacenterId = datacenterId;
+        IdWorker.workerId = workerId;
+        IdWorker.datacenterId = datacenterId;
     }
 
     public synchronized static long nextId() {
@@ -35,7 +36,7 @@ public class IdWorker {
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
         }
         if (lastTimestamp == timestamp) {
-            sequence = (sequence + 1) & sequenceMask;
+            sequence = (sequence + 1) & SEQUENCE_MASK;
             if (sequence == 0) {
                 timestamp = tilNextMillis(lastTimestamp);
             }
@@ -45,7 +46,7 @@ public class IdWorker {
 
         lastTimestamp = timestamp;
 
-        return ((timestamp - twepoch) << timestampLeftShift) | (datacenterId << datacenterIdShift) | (workerId << workerIdShift) | sequence;
+        return ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT) | (datacenterId << DATACENTER_ID_SHIFT) | (workerId << WORKER_ID_SHIFT) | sequence;
     }
 
     protected static long tilNextMillis(long lastTimestamp) {
