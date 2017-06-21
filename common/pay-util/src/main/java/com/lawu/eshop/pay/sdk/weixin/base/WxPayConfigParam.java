@@ -1,4 +1,4 @@
-package com.lawu.eshop.property.param;
+package com.lawu.eshop.pay.sdk.weixin.base;
 
 /**
  * @author meishuquan

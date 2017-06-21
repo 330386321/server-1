@@ -1,7 +1,7 @@
 package com.lawu.eshop.pay.sdk.alipay.util;
 
+import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.alipay.sign.RSA;
-import com.lawu.eshop.property.param.AliPayConfigParam;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

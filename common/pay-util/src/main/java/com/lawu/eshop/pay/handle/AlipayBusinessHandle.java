@@ -4,9 +4,9 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.lawu.eshop.pay.ThirdPayRefundParam;
+import com.lawu.eshop.pay.sdk.alipay.AliPayConfigParam;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
-import com.lawu.eshop.property.param.AliPayConfigParam;
-import com.lawu.eshop.property.param.ThirdPayRefundParam;
 
 /**
  * 
