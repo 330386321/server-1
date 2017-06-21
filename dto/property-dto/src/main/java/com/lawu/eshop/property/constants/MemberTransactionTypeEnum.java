@@ -18,8 +18,8 @@ public enum MemberTransactionTypeEnum {
 	WITHDRAW((byte) 0x09, "提现"),
 	WITHDRAW_BACK((byte) 0x0A, "提现失败"),
 	REFUND_ORDERS((byte) 0x0B, "退款"),
-	SALES_COMMISSION((byte) 0x0C, "销售提成"),
-	VOLUME_COMMISSION((byte) 0x0D, "营业额提成"),
+	SALES_COMMISSION((byte) 0x0C, "推荐E友收益"),
+	VOLUME_COMMISSION((byte) 0x0D, "推荐商家收益"),
 	PRAISE_AD((byte) 0x0E, "抢赞消费"),//抢赞大于300积分的广告扣除20积分
 	BACKAGE((byte) 0x0F, "充值"),//后台充值
 	AD_QZ((byte) 0x10, "抢赞");

@@ -21,8 +21,8 @@ public enum MerchantTransactionTypeEnum {
 	AD_RETURN_POINT((byte)0x70,"积分退还"),				//112
 	DEPOSIT((byte)0x71,"缴纳保证金"),						//113-需求说不要
 	DEPOSIT_REFUND((byte)0x72,"保证金退款"),				//114
-	SALES_COMMISSION((byte) 0x73, "销售提成"),			//115
-	VOLUME_COMMISSION((byte) 0x74, "营业额提成"),			//116
+	SALES_COMMISSION((byte) 0x73, "推荐E友收益"),			//115
+	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益"),		//116
 	BACKAGE((byte) 0x75, "充值");						//117 后台充值
 	
 	
