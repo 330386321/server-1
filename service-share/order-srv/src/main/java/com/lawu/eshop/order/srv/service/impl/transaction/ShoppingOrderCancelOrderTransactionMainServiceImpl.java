@@ -50,7 +50,7 @@ public class ShoppingOrderCancelOrderTransactionMainServiceImpl extends Abstract
         // 组装发送数据
         shoppingOrderCancelOrderNotification.setShoppingOrderId(shoppingOrderId);
         
-        List<ProductModeUpdateInventoryDTO> params = new ArrayList<ProductModeUpdateInventoryDTO>();
+        List<ProductModeUpdateInventoryDTO> params = new ArrayList<>();
         for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderExtendBO.getItems()) {
         	ProductModeUpdateInventoryDTO productModeUpdateInventoryParam = new ProductModeUpdateInventoryDTO();
         	productModeUpdateInventoryParam.setProdecutModelId(shoppingOrderItemBO.getProductModelId());

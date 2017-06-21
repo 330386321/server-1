@@ -78,7 +78,7 @@ public class TransactionDetailController extends BaseController {
     	List<TransactionDetailToMemberDTO> transactionDetailDTOList = result.getModel().getRecords();
     	
     	// 把所有需要查询的id放入set
-    	List<Long> ids = new ArrayList<Long>();
+    	List<Long> ids = new ArrayList<>();
     	for (TransactionDetailToMemberDTO item : transactionDetailDTOList) {
     		if (MemberTransactionTypeEnum.WITHDRAW.equals(item.getTransactionType()) && !StringUtils.isEmpty(item.getBizId())) {
     			ids.add(Long.valueOf(item.getBizId()));
@@ -97,7 +97,7 @@ public class TransactionDetailController extends BaseController {
     	}
     	
     	// 把数据缓存到Map
-    	Map<String, WithdrawCashStatusDTO> withdrawCashStatusDTOMap = new HashMap<String, WithdrawCashStatusDTO>();
+    	Map<String, WithdrawCashStatusDTO> withdrawCashStatusDTOMap = new HashMap<>();
     	for (WithdrawCashStatusDTO item : resultWithdrawCashStatusDTOList.getModel()) {
     		withdrawCashStatusDTOMap.put(item.getId().toString(), item);
     	}
@@ -129,7 +129,7 @@ public class TransactionDetailController extends BaseController {
     @Authorization
     @RequestMapping(value = "getAllTransactionType", method = RequestMethod.GET)
     public Result<List<TransactionTypeDTO>> page(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-    	List<TransactionTypeDTO> list = new ArrayList<TransactionTypeDTO>();
+    	List<TransactionTypeDTO> list = new ArrayList<>();
     	for (MemberTransactionTypeEnum item : MemberTransactionTypeEnum.values()) {
     		TransactionTypeDTO transactionTypeDTO = new TransactionTypeDTO();
     		transactionTypeDTO.setName(item.getName());

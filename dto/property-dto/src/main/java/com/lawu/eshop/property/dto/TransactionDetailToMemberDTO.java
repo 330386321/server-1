@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.dto;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -13,9 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Sunny
  * @date 2017/3/29
  */
-public class TransactionDetailToMemberDTO extends TransactionDetailDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class TransactionDetailToMemberDTO extends TransactionDetailDTO {
 	
 	/**
 	 * 交易类型

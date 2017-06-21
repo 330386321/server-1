@@ -18,6 +18,13 @@ import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
  * @date 2017/3/27
  */
 public class ShoppingCartConverter {
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ShoppingCartConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
 
 	/**
 	 * BO转换
@@ -49,7 +56,7 @@ public class ShoppingCartConverter {
 			return rtn;
 		}
 
-		rtn = new ArrayList<ShoppingCartBO>();
+		rtn = new ArrayList<>();
 		for (ShoppingCartDO shoppingCartDO : shoppingCartDOList) {
 			rtn.add(convert(shoppingCartDO));
 		}
@@ -82,7 +89,7 @@ public class ShoppingCartConverter {
 	}
 
 	public static List<ShoppingCartDTO> convertDTOS(List<ShoppingCartBO> bos) {
-		List<ShoppingCartDTO> rtn = new ArrayList<ShoppingCartDTO>();
+		List<ShoppingCartDTO> rtn = new ArrayList<>();
 		if (bos == null || bos.isEmpty()) {
 			return rtn;
 		}

@@ -25,6 +25,7 @@ public class TransactionServiceImpl implements CacheService {
 	 * @return
 	 * @author Sunny
 	 */
+	@Override
     public Long getCount(String type){
     	Result<Long> result = transactionService.getCount(type);
     	return result.getModel();
@@ -36,6 +37,7 @@ public class TransactionServiceImpl implements CacheService {
 	 * @param key
 	 * @author Sunny
 	 */
+	@Override
     public void addCount(String type){
     	transactionService.addCount(type);
 	}

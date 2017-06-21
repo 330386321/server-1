@@ -91,7 +91,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 		}
 		
 		ProductDOExample productDOExample = new ProductDOExample();
-		productDOExample.createCriteria().andIdIn(new ArrayList<Long>(productIds));
+		productDOExample.createCriteria().andIdIn(new ArrayList<>(productIds));
 		
 		List<ProductDO> productDOs = productDOMapper.selectByExample(productDOExample);
 		

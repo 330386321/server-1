@@ -406,7 +406,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			merchantDOMap.put(merchantDO.getId(), merchantDO);
 		}
 
-		List<ShoppingOrderFindMerchantInfoBO> rtn = new ArrayList<ShoppingOrderFindMerchantInfoBO>();
+		List<ShoppingOrderFindMerchantInfoBO> rtn = new ArrayList<>();
 		FansMerchantDOExample fansMerchantDOExample = null;
 		ShoppingOrderFindMerchantInfoBO shoppingOrderFindUserInfoBO = null;
 		for (MerchantStoreDO merchantStoreDO : merchantStoreDOList) {
@@ -640,7 +640,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		if(storeInfoViews.isEmpty()){
 			return  null;
 		}
-		List<PayOrderStoreInfoBO> storeInfoBOS = new ArrayList<PayOrderStoreInfoBO>();
+		List<PayOrderStoreInfoBO> storeInfoBOS = new ArrayList<>();
 		for(PayOrderStoreInfoView storeInfoView :storeInfoViews){
 			PayOrderStoreInfoBO merchantStoreInfoBO = new PayOrderStoreInfoBO();
 			merchantStoreInfoBO.setName(storeInfoView.getName());
@@ -657,7 +657,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		if(viewList.isEmpty()){
 			return null;
 		}
-		List<StoreSolrInfoBO> storeSolrInfoBOS = new ArrayList<StoreSolrInfoBO>();
+		List<StoreSolrInfoBO> storeSolrInfoBOS = new ArrayList<>();
 		for(StoreSolrInfoDOView storeInfoView :viewList){
 			StoreSolrInfoBO merchantStoreInfoBO = new StoreSolrInfoBO();
 			merchantStoreInfoBO.setMerchantId(storeInfoView.getMerchantId());

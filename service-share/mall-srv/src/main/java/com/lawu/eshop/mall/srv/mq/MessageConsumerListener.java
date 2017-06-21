@@ -42,28 +42,28 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信给商家
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_NEW_ORDER);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_NEW_ORDER);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				
 				/*
 				 * 发送站内信以及推送给用户
 				 */
-				MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAYMENT_SUCCESS);
+				messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_PAYMENT_SUCCESS);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setProductName(notification.getProductName());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setProductName(notification.getProductName());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
 				return;
 			}
 			// 用户付款成功提示买家新增一个订单
@@ -73,15 +73,15 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_PAY);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_ORDER_PAY);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
 				return;
 			}
 			
@@ -92,15 +92,15 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_APPLY);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_APPLY);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
 			
@@ -111,15 +111,15 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_REFUSE);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_REFUSE);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
 				return;
 			}
 			
@@ -130,15 +130,15 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RETURN);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_RETURN);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
 				return;
 			}
 			
@@ -149,16 +149,16 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_SUCCESS);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_REFUND_SUCCESS);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
-				MessageInfoParam.getMessageParam().setRefundAmount(notification.getRefundAmount());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.getMessageParam().setRefundAmount(notification.getRefundAmount());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMemberNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMemberNum(), messageInfoParam);
 				return;
 			}
 			// 用户填写退货物流，提醒买家退款
@@ -168,17 +168,17 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setRelateId(notification.getShoppingOrderItemId());
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_USER_SEND);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setRelateId(notification.getShoppingOrderItemId());
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_USER_SEND);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
-				MessageInfoParam.getMessageParam().setWaybillNum(notification.getWaybillNum());
-				MessageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setUserName(notification.getMemberNum());
+				messageInfoParam.getMessageParam().setWaybillNum(notification.getWaybillNum());
+				messageInfoParam.getMessageParam().setOrderNum(notification.getOrderNum());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
 			
@@ -189,14 +189,14 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
 				 * 发送站内信
 				 */
 				// 组装信息
-				MessageInfoParam MessageInfoParam = new MessageInfoParam();
-				MessageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_SEND_NOTICE);
+				MessageInfoParam messageInfoParam = new MessageInfoParam();
+				messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_SEND_NOTICE);
 
-				MessageInfoParam.setMessageParam(new MessageTempParam());
-				MessageInfoParam.getMessageParam().setProductCount(notification.getQuantity().intValue());
+				messageInfoParam.setMessageParam(new MessageTempParam());
+				messageInfoParam.getMessageParam().setProductCount(notification.getQuantity().intValue());
 
 				// 保存站内信，并且发送个推
-				messageService.saveMessage(notification.getMerchantNum(), MessageInfoParam);
+				messageService.saveMessage(notification.getMerchantNum(), messageInfoParam);
 				return;
 			}
 			

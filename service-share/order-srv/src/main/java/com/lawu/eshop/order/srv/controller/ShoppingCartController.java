@@ -113,13 +113,13 @@ public class ShoppingCartController extends BaseController {
 	@RequestMapping(value = "list/findListByIds",  method = RequestMethod.GET)
 	public Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
 		
-		Result<List<ShoppingCartBO>> ShoppingCartBOListResult = shoppingCartService.findListByIds(ids);
+		Result<List<ShoppingCartBO>> shoppingCartBOListResult = shoppingCartService.findListByIds(ids);
 		
-		if (!isSuccess(ShoppingCartBOListResult)) {
-			return successGet(ShoppingCartBOListResult.getRet());
+		if (!isSuccess(shoppingCartBOListResult)) {
+			return successGet(shoppingCartBOListResult.getRet());
 		}
 		
-		return successGet(ShoppingCartConverter.convertDTOS(ShoppingCartBOListResult.getModel()));
+		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOListResult.getModel()));
 	}
 	
 	/**

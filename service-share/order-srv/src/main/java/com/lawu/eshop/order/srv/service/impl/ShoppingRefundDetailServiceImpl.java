@@ -870,11 +870,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	public void toBeConfirmedForRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		
 		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
 		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		shoppingOrderItemDO.setSendTime(sendTime);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 用户申请退款，提醒商家处理
 		ShoppingRefundToBeConfirmedForRefundRemindNotification notification = new ShoppingRefundToBeConfirmedForRefundRemindNotification();
@@ -889,11 +889,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Transactional
 	public void refundFailedRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
 		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		shoppingOrderItemDO.setSendTime(sendTime);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 商家拒绝退款，提醒买家
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
@@ -906,11 +906,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Transactional
 	public void toBeReturnRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
 		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		shoppingOrderItemDO.setSendTime(sendTime);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 商家填写退货地址，提醒买家退货
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());
@@ -923,11 +923,11 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	@Transactional
 	public void toBeRefundRemind(ShoppingOrderItemExtendDO shoppingOrderItemExtendDO) {
 		// 更新发送次数，但是不更新更新时间字段
-		ShoppingOrderItemDO ShoppingOrderItemDO = new ShoppingOrderItemDO();
-		ShoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
+		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
+		shoppingOrderItemDO.setId(shoppingOrderItemExtendDO.getId());
 		int sendTime = shoppingOrderItemExtendDO.getSendTime() == null ? 1 : shoppingOrderItemExtendDO.getSendTime().intValue() + 1;
-		ShoppingOrderItemDO.setSendTime(sendTime);
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(ShoppingOrderItemDO);
+		shoppingOrderItemDO.setSendTime(sendTime);
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 		
 		// 用户填写退货物流，提醒买家退款
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemExtendDO.getShoppingOrderId());

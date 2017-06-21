@@ -72,7 +72,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 
-		Page<ShoppingOrderItemExtendBO> rtn = new Page<ShoppingOrderItemExtendBO>();
+		Page<ShoppingOrderItemExtendBO> rtn = new Page<>();
 		rtn.setCurrentPage(param.getCurrentPage());
 		rtn.setTotalCount(count.intValue());
 
@@ -101,8 +101,9 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	@Transactional
 	@Override
 	public Integer commentsSuccessful(Long id) {
+		Integer rtn = null;
 		if (id == null || id <= 0) {
-			return null;
+			return rtn;
 		}
 
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
@@ -110,9 +111,8 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 设置为已评论
 		shoppingOrderItemDO.setIsEvaluation(true);
 
-		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
-		return result;
+		rtn = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		return rtn;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 
-		Page<ShoppingOrderItemExtendBO> rtn = new Page<ShoppingOrderItemExtendBO>();
+		Page<ShoppingOrderItemExtendBO> rtn = new Page<>();
 		rtn.setCurrentPage(param.getCurrentPage());
 		rtn.setTotalCount(count.intValue());
 
@@ -186,7 +186,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 		// 查询总记录数
 		Long count = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 
-		Page<ShoppingOrderItemExtendBO> rtn = new Page<ShoppingOrderItemExtendBO>();
+		Page<ShoppingOrderItemExtendBO> rtn = new Page<>();
 		rtn.setCurrentPage(param.getCurrentPage());
 		rtn.setTotalCount(count.intValue());
 

@@ -304,12 +304,8 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectPageByMerchantId/{merchantId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderQueryToMerchantDTO>> selectPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingOrderQueryForeignToMerchantParam param) {
 		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMerchantId(merchantId, param);
-
-		Page<ShoppingOrderQueryToMerchantDTO> shoppingOrderExtendQueryDTOPage = new Page<ShoppingOrderQueryToMerchantDTO>();
-		shoppingOrderExtendQueryDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
-		shoppingOrderExtendQueryDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
-		shoppingOrderExtendQueryDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToMerchantDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
-
+		Page<ShoppingOrderQueryToMerchantDTO> shoppingOrderExtendQueryDTOPage = ShoppingOrderExtendConverter.convertShoppingOrderQueryToMerchantDTOPage(shoppingOrderExtendQueryBOPage);
+		shoppingOrderExtendQueryBOPage = null;
 		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
 	
@@ -452,7 +448,8 @@ public class ShoppingOrderController extends BaseController {
 
 		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = shoppingOrderService.get(id);
 
-		if (shoppingOrderExtendDetailBO == null || shoppingOrderExtendDetailBO.getId() == null || shoppingOrderExtendDetailBO.getId() <= 0 || shoppingOrderExtendDetailBO.getItems() == null || shoppingOrderExtendDetailBO.getItems().isEmpty()) {
+		boolean isNotFind = shoppingOrderExtendDetailBO == null || shoppingOrderExtendDetailBO.getId() == null || shoppingOrderExtendDetailBO.getId() <= 0 || shoppingOrderExtendDetailBO.getItems() == null || shoppingOrderExtendDetailBO.getItems().isEmpty();
+		if (isNotFind) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		

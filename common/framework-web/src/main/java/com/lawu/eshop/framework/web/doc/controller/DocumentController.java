@@ -108,7 +108,8 @@ public class DocumentController extends BaseController{
 		            apiOperation = method.getMethodAnnotation(ApiOperation.class);
 		            audit = method.getMethodAnnotation(Audit.class);
 		            
-		            if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
+		            boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
+		            if (isShow) {
 		            	info = entry.getKey();
 		            	api = method.getBeanType().getAnnotation(Api.class);
 		            	
@@ -159,40 +160,39 @@ public class DocumentController extends BaseController{
 		            	apiOperation = method.getAnnotation(ApiOperation.class);
 		            	requestMapping = method.getAnnotation(RequestMapping.class);
 		            	
-		            	if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
-			            	if (apiOperation != null) {
-			            		// 组装VO对象
-				            	ApiDocumentVO vo = new ApiDocumentVO();
-				            	if (api != null && api.tags() != null) {
-				            		vo.setApiName(Arrays.toString(api.tags()));
-				            	} else {
-				            		//如果Api注解为空,或者tags为空，设置ApiName为空串
-				            		vo.setApiName("");
-				            	}
-				            	
-				            	if (audit != null) {
-					            	vo.setDate(df.parse(audit.date()));
-					            	vo.setReviewer(audit.reviewer());
-				            	}
-				            	
-				            	// 拼装Url
-				            	sb.delete(0, sb.length());
-				            	for (String beanRequestUrl : beanRequestMapping.value()) {
-					            	for (String requestUrl : requestMapping.value()) {
-					            		if (sb.length() > 0) {
-					            			sb.append(",");
-					            		}
-					            		sb.append(beanRequestUrl + requestUrl);
-					            	}
-				            	}
-				            	vo.setPath(sb.toString());
-				            	if (apiOperation != null) {
-					            	vo.setName(apiOperation.value());
-					            	vo.setNotes(apiOperation.notes());
-					            	vo.setHttpMethod(apiOperation.httpMethod());
-				            	}
-				            	rtn.add(vo);
+		            	boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
+		            	if (isShow) {
+		            		// 组装VO对象
+			            	ApiDocumentVO vo = new ApiDocumentVO();
+			            	if (api != null && api.tags() != null) {
+			            		vo.setApiName(Arrays.toString(api.tags()));
+			            	} else {
+			            		//如果Api注解为空,或者tags为空，设置ApiName为空串
+			            		vo.setApiName("");
 			            	}
+			            	
+			            	if (audit != null) {
+				            	vo.setDate(df.parse(audit.date()));
+				            	vo.setReviewer(audit.reviewer());
+			            	}
+			            	
+			            	// 拼装Url
+			            	sb.delete(0, sb.length());
+			            	for (String beanRequestUrl : beanRequestMapping.value()) {
+				            	for (String requestUrl : requestMapping.value()) {
+				            		if (sb.length() > 0) {
+				            			sb.append(",");
+				            		}
+				            		sb.append(beanRequestUrl + requestUrl);
+				            	}
+			            	}
+			            	vo.setPath(sb.toString());
+			            	if (apiOperation != null) {
+				            	vo.setName(apiOperation.value());
+				            	vo.setNotes(apiOperation.notes());
+				            	vo.setHttpMethod(apiOperation.httpMethod());
+			            	}
+			            	rtn.add(vo);
 		            	}
 		            }
 		        }

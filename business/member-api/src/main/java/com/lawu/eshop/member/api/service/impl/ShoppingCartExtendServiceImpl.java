@@ -71,6 +71,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
      *  加入购物车。
      */
     @SuppressWarnings({ "unchecked" })
+    @Override
 	public Result<Long> save(Long memberId, ShoppingCartParam param) {
     	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
     	
@@ -108,8 +109,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @param memberId 会员id
 	 * @return
 	 */
+    @Override
     public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId){
-    	List<MemberShoppingCartGroupDTO> rtn = new ArrayList<MemberShoppingCartGroupDTO>();
+    	List<MemberShoppingCartGroupDTO> rtn = new ArrayList<>();
     	
     	// 通过memberId查询用户购物车资料
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
@@ -129,20 +131,20 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 通过商品型号id列表查询商品信息
-    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(ids));
+    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<>(ids));
     	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
     		return successGet(resultShoppingCartProductModelDTOS.getRet());
     	}
     	
     	// 组装数据
-    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<Long, ShoppingCartProductModelDTO>();
+    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<>();
     	for (ShoppingCartProductModelDTO shoppingCartProductModelDTO : resultShoppingCartProductModelDTOS.getModel()) {
     		if (!shoppingCartProductModelDTOMap.containsKey(shoppingCartProductModelDTO.getId())) {
     			shoppingCartProductModelDTOMap.put(shoppingCartProductModelDTO.getId(), shoppingCartProductModelDTO);
     		}
     	}
     	
-    	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<Long, List<MemberShoppingCartDTO>>();
+    	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<>();
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
@@ -172,7 +174,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
     		
     		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
-    			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
+    			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
     		}
     		
     		map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
@@ -198,8 +200,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	public Result<List<Long>> createOrder(Long memberId, List<ShoppingOrderSettlementForeignParam> params) {
 		
 		// 组装ids查询购物车列表
-		Map<Long, ShoppingOrderSettlementForeignParam> shoppingOrderSettlementForeignParamMap = new HashMap<Long, ShoppingOrderSettlementForeignParam>();
-		List<Long> ids = new ArrayList<Long>();
+		Map<Long, ShoppingOrderSettlementForeignParam> shoppingOrderSettlementForeignParamMap = new HashMap<>();
+		List<Long> ids = new ArrayList<>();
 		for (ShoppingOrderSettlementForeignParam shoppingOrderSettlementForeignParam : params) {
 			ids.addAll(shoppingOrderSettlementForeignParam.getIds());
 			shoppingOrderSettlementForeignParamMap.put(shoppingOrderSettlementForeignParam.getMerchantId(), shoppingOrderSettlementForeignParam);
@@ -212,10 +214,10 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 购物车分单,同一个商家的商品分在同一个订单当中
-    	Map<Long, List<ShoppingCartDTO>> shoppingCartDTOMap = new HashMap<Long, List<ShoppingCartDTO>>();
+    	Map<Long, List<ShoppingCartDTO>> shoppingCartDTOMap = new HashMap<>();
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		if (!shoppingCartDTOMap.containsKey(shoppingCartDTO.getMerchantId())) {
-    			shoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<ShoppingCartDTO>());
+    			shoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
     		}
     		shoppingCartDTOMap.get(shoppingCartDTO.getMerchantId()).add(shoppingCartDTO);
     	}
@@ -227,12 +229,12 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 通过商品型号id列表查询商品信息
-    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(idSet));
+    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<>(idSet));
     	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
     		return successCreated(resultShoppingCartProductModelDTOS.getRet());
     	}
 
-    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<Long, ShoppingCartProductModelDTO>();
+    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<>();
     	for (ShoppingCartProductModelDTO shoppingCartProductModelDTO : resultShoppingCartProductModelDTOS.getModel()) {    	
     		shoppingCartProductModelDTOMap.put(shoppingCartProductModelDTO.getId(), shoppingCartProductModelDTO);
     	}
@@ -244,7 +246,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 查询商家是否支持七天退货
-    	List<Long> merchantIdList = new ArrayList<Long>(shoppingCartDTOMap.keySet());
+    	List<Long> merchantIdList = new ArrayList<>(shoppingCartDTOMap.keySet());
     	ShoppingOrderFindUserInfoParam shoppingOrderFindUserInfoParam = new ShoppingOrderFindUserInfoParam();
     	shoppingOrderFindUserInfoParam.setMerchantIdList(merchantIdList);
     	shoppingOrderFindUserInfoParam.setMemberId(memberId);
@@ -254,13 +256,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 把商家信息放入Map
-    	Map<Long, ShoppingOrderFindMerchantInfoDTO> shoppingOrderFindMerchantInfoDTOMap =  new HashMap<Long, ShoppingOrderFindMerchantInfoDTO>();
+    	Map<Long, ShoppingOrderFindMerchantInfoDTO> shoppingOrderFindMerchantInfoDTOMap =  new HashMap<>();
     	for (ShoppingOrderFindMerchantInfoDTO shoppingOrderFindMerchantInfoDTO : shoppingOrderFindUserInfoDTOResult.getModel().getShoppingOrderFindMerchantInfoDTOList()) {
     		shoppingOrderFindMerchantInfoDTOMap.put(shoppingOrderFindMerchantInfoDTO.getMerchantId(), shoppingOrderFindMerchantInfoDTO);
     	}
     	
     	// 组装订单
-    	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
+    	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<>();
     	
     	for (Map.Entry<Long, List<ShoppingCartDTO>> entry : shoppingCartDTOMap.entrySet()) {	
     		Long key = entry.getKey();
@@ -287,7 +289,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTOMap.get(key).getIsFans());
     		
     		BigDecimal commodityTotalPrice = new BigDecimal(0);
-    		List<ShoppingOrderSettlementItemParam> items = new ArrayList<ShoppingOrderSettlementItemParam>();
+    		List<ShoppingOrderSettlementItemParam> items = new ArrayList<>();
     		for (ShoppingCartDTO shoppingCartDTO : value) {
     			ShoppingOrderSettlementItemParam shoppingOrderSettlementItemParam = new ShoppingOrderSettlementItemParam();
     			ShoppingCartProductModelDTO shoppingCartProductModelDTO = shoppingCartProductModelDTOMap.get(shoppingCartDTO.getProductModelId());
@@ -355,7 +357,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 通过商品型号id列表查询商品信息
-    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<Long>(ids));
+    	Result<List<ShoppingCartProductModelDTO>> resultShoppingCartProductModelDTOS = productModelService.getShoppingCartProductModel(new ArrayList<>(ids));
     	if (!isSuccess(resultShoppingCartProductModelDTOS)) {
     		return successGet(resultShoppingCartProductModelDTOS.getRet());
     	}
@@ -368,14 +370,14 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 组装数据
-    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<Long, ShoppingCartProductModelDTO>();
+    	Map<Long, ShoppingCartProductModelDTO> shoppingCartProductModelDTOMap = new HashMap<>();
     	for (ShoppingCartProductModelDTO shoppingCartProductModelDTO : resultShoppingCartProductModelDTOS.getModel()) {
     		if (!shoppingCartProductModelDTOMap.containsKey(shoppingCartProductModelDTO.getId())) {
     			shoppingCartProductModelDTOMap.put(shoppingCartProductModelDTO.getId(), shoppingCartProductModelDTO);
     		}
     	}
     	
-    	Map<Long, List<MemberShoppingCartDTO>> memberShoppingCartDTOMap = new HashMap<Long, List<MemberShoppingCartDTO>>();
+    	Map<Long, List<MemberShoppingCartDTO>> memberShoppingCartDTOMap = new HashMap<>();
     	
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
@@ -406,7 +408,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
     		
     		if (!memberShoppingCartDTOMap.containsKey(shoppingCartDTO.getMerchantId())) {
-    			memberShoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<MemberShoppingCartDTO>());
+    			memberShoppingCartDTOMap.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
     		}
     		
     		memberShoppingCartDTOMap.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
@@ -417,7 +419,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	BigDecimal total = new BigDecimal(0);
     	// 每一个商家的商品会合并在一起，小计金额
-    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<ShoppingCartSettlementItemDTO>();
+    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<>();
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> entry : memberShoppingCartDTOMap.entrySet()) {
     		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
     		BigDecimal subtotal = new BigDecimal(0);
@@ -463,7 +465,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		return successCreated(resultMerchantName.getRet());
     	}
     	
-    	List<MemberShoppingCartDTO> memberShoppingCartDTOList = new ArrayList<MemberShoppingCartDTO>();
+    	List<MemberShoppingCartDTO> memberShoppingCartDTOList = new ArrayList<>();
     	MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
     	memberShoppingCartDTO.setMerchantName(resultMerchantName.getModel());
     	memberShoppingCartDTO.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
@@ -493,7 +495,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		ShoppingCartSettlementDTO shoppingCartSettlementDTO = new ShoppingCartSettlementDTO();
     	
     	// 每一个商家的商品会合并在一起，小计金额
-    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<ShoppingCartSettlementItemDTO>();
+    	List<ShoppingCartSettlementItemDTO> items = new ArrayList<>();
 		ShoppingCartSettlementItemDTO shoppingCartSettlementItemDTO = new ShoppingCartSettlementItemDTO();
 		shoppingCartSettlementItemDTO.setSubtotal(memberShoppingCartDTO.getSalesPrice().multiply(new BigDecimal(memberShoppingCartDTO.getQuantity())));
 		shoppingCartSettlementItemDTO.setProductNumber(memberShoppingCartDTO.getQuantity());
@@ -532,7 +534,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	}
     	
     	// 查询商家是否支持七天退货
-    	List<Long> merchantIdList = new ArrayList<Long>();
+    	List<Long> merchantIdList = new ArrayList<>();
     	merchantIdList.add(shoppingCartProductModelDTO.getMerchantId());
     	ShoppingOrderFindUserInfoParam shoppingOrderFindUserInfoParam = new ShoppingOrderFindUserInfoParam();
     	shoppingOrderFindUserInfoParam.setMerchantIdList(merchantIdList);
@@ -545,7 +547,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	ShoppingOrderFindMerchantInfoDTO shoppingOrderFindMerchantInfoDTO = shoppingOrderFindUserInfoDTOResult.getModel().getShoppingOrderFindMerchantInfoDTOList().get(0);
     	
     	// 组装订单
-    	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<ShoppingOrderSettlementParam>();
+    	List<ShoppingOrderSettlementParam> shoppingOrderSettlementParams = new ArrayList<>();
     	
 		ShoppingOrderSettlementParam shoppingOrderSettlementParam = new ShoppingOrderSettlementParam();
 		shoppingOrderSettlementParam.setMemberId(memberId);
@@ -569,7 +571,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 		shoppingOrderSettlementParam.setIsFans(shoppingOrderFindMerchantInfoDTO.getIsFans());
 		
 		BigDecimal commodityTotalPrice = new BigDecimal(0);
-		List<ShoppingOrderSettlementItemParam> items = new ArrayList<ShoppingOrderSettlementItemParam>();
+		List<ShoppingOrderSettlementItemParam> items = new ArrayList<>();
 		
 		ShoppingOrderSettlementItemParam shoppingOrderSettlementItemParam = new ShoppingOrderSettlementItemParam();
 		// 加入购物车id,用于在保存订单之后删除购物车记录

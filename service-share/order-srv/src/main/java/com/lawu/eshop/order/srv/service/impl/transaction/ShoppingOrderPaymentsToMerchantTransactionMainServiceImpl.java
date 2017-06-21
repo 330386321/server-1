@@ -1,7 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl.transaction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +12,6 @@ import com.lawu.eshop.mq.dto.order.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.constants.TransactionConstant;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
-import com.lawu.eshop.order.srv.service.impl.ShoppingOrderServiceImpl;
 
 /**
  * 订单超过退款时间，打款给商家-主模块
@@ -25,8 +22,6 @@ import com.lawu.eshop.order.srv.service.impl.ShoppingOrderServiceImpl;
 @Service("shoppingOrderPaymentsToMerchantTransactionMainServiceImpl")
 @CompensatingTransactionMain(value = TransactionConstant.TRADING_SUCCESS_PAYMENTS_TO_MERCHANT, topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_TRADING_SUCCESS_PAYMENTS_TO_MERCHANT)
 public class ShoppingOrderPaymentsToMerchantTransactionMainServiceImpl extends AbstractTransactionMainService<ShoppingOrderPaymentsToMerchantNotification, Reply> {
-	
-	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderServiceImpl.class);
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;

@@ -19,6 +19,13 @@ import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
  * @date 2017/04/06
  */
 public class ShoppingOrderItemConverter {
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ShoppingOrderItemConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
 
 	/**
 	 * ShoppingOrderItemDO转换
@@ -97,16 +104,17 @@ public class ShoppingOrderItemConverter {
 	 * @return
 	 */
 	public static List<ShoppingOrderItemBO> convert(List<ShoppingOrderItemDO> shoppingOrderItemDOList) {
+		List<ShoppingOrderItemBO> rtn = null;
 		if (shoppingOrderItemDOList == null || shoppingOrderItemDOList.isEmpty()) {
-			return null;
+			return rtn;
 		}
 		
-		List<ShoppingOrderItemBO> shoppingOrderItemBOList = new ArrayList<ShoppingOrderItemBO>();
+		rtn = new ArrayList<>();
 		for (ShoppingOrderItemDO shoppingOrderItemDO : shoppingOrderItemDOList) {
-			shoppingOrderItemBOList.add(convert(shoppingOrderItemDO));
+			rtn.add(convert(shoppingOrderItemDO));
 		}
 		
-		return shoppingOrderItemBOList;
+		return rtn;
 	}
 	
 	/**
@@ -146,16 +154,16 @@ public class ShoppingOrderItemConverter {
 	 * @return
 	 */
 	public static List<ShoppingOrderItemDTO> convertShoppingOrderItemDTOList(List<ShoppingOrderItemBO> shoppingOrderItemBOList) {
+		List<ShoppingOrderItemDTO> rtn = new ArrayList<>();
 		if (shoppingOrderItemBOList == null || shoppingOrderItemBOList.isEmpty()) {
-			return null;
+			return rtn;
 		}
 		
-		List<ShoppingOrderItemDTO> shoppingOrderItemDTOList = new ArrayList<ShoppingOrderItemDTO>();
 		for (ShoppingOrderItemBO shoppingOrderItemBO : shoppingOrderItemBOList) {
-			shoppingOrderItemDTOList.add(convert(shoppingOrderItemBO));
+			rtn.add(convert(shoppingOrderItemBO));
 		}
 		
-		return shoppingOrderItemDTOList;
+		return rtn;
 	}
 
 }

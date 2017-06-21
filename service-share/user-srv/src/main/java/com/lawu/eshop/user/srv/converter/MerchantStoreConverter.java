@@ -280,7 +280,7 @@ public class MerchantStoreConverter {
             return null;
         }
 
-        List<ShoppingOrderFindMerchantInfoDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<ShoppingOrderFindMerchantInfoDTO>();
+        List<ShoppingOrderFindMerchantInfoDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<>();
         for (ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
             merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
         }
@@ -434,7 +434,7 @@ public class MerchantStoreConverter {
         if (bos.isEmpty()) {
             return null;
         }
-        List<StoreSolrInfoDTO> list = new ArrayList<StoreSolrInfoDTO>();
+        List<StoreSolrInfoDTO> list = new ArrayList<>();
         for (StoreSolrInfoBO storeSolrInfoBO : bos) {
             StoreSolrInfoDTO storeSolrInfoDTO = new StoreSolrInfoDTO();
             storeSolrInfoDTO.setMerchantId(storeSolrInfoBO.getMerchantId());

@@ -126,7 +126,7 @@ public class ShoppingRefundDetailController extends BaseController {
 					// 如果退款类型为退货退款
 					time = propertyService.getByName(PropertyNameConstant.TO_BE_REFUNDED_REFUND_TIME);
 					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);
-				} else if ((ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundDetailBO.getType()))) {
+				} else if (ShoppingRefundTypeEnum.REFUND.equals(shoppingRefundDetailBO.getType())) {
 					// 如果退款类型为退款
 					time = propertyService.getByName(PropertyNameConstant.TO_BE_CONFIRMED_FOR_REFUND_REFUND_TIME);
 					date = DateUtil.add(shoppingOrderItemExtendBO.getGmtModified(), Integer.valueOf(time), Calendar.DAY_OF_YEAR);

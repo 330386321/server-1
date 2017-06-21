@@ -2,6 +2,13 @@ package com.lawu.eshop.synchronization.lock.constants;
 
 public class LockConstant {
 	
+	/**
+	 * 隐藏构造函数
+	 */
+	private LockConstant() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
     /**
      * 分布式事务同步锁前缀
      */
@@ -10,7 +17,7 @@ public class LockConstant {
 	/*******************************
 	 * Model Name
 	 *******************************/
-    public static enum LockModule {
+    public enum LockModule {
     	/**
          * ad-srv模块
          */
