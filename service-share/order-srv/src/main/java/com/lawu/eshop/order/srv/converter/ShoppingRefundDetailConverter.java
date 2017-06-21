@@ -27,7 +27,7 @@ public class ShoppingRefundDetailConverter {
 	public static ShoppingRefundDetailBO convert(ShoppingRefundDetailDO shoppingRefundDetailDO) {
 		ShoppingRefundDetailBO rtn = null;
 		if (shoppingRefundDetailDO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingRefundDetailBO();

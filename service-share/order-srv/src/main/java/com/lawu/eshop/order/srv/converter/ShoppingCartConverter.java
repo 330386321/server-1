@@ -28,7 +28,7 @@ public class ShoppingCartConverter {
 	public static ShoppingCartBO convert(ShoppingCartDO shoppingCartDO) {
 		ShoppingCartBO rtn = null;
 		if (shoppingCartDO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingCartBO();

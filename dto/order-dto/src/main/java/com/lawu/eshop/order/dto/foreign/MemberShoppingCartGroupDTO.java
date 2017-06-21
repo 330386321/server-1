@@ -1,12 +1,9 @@
 package com.lawu.eshop.order.dto.foreign;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class MemberShoppingCartGroupDTO implements Serializable {
+public class MemberShoppingCartGroupDTO {
 	
-    private static final long serialVersionUID = 1L;
-    
     /**
      * 同一个商家的商品放在一起
      */

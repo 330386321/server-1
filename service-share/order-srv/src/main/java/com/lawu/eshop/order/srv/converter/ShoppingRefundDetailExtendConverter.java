@@ -22,7 +22,7 @@ public class ShoppingRefundDetailExtendConverter {
 	public static ShoppingRefundDetailExtendBO convert(ShoppingRefundDetailExtendDO shoppingRefundDetailExtendDO) {
 		ShoppingRefundDetailExtendBO rtn = null;
 		if (shoppingRefundDetailExtendDO == null) {
-			return null;
+			return rtn;
 		}
 
 		rtn = new ShoppingRefundDetailExtendBO();

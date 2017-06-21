@@ -686,7 +686,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 
 		// 根据订单状态是否需要退货
 		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		ShoppingRefundTypeEnum shoppingRefundTypeEnum = ShoppingRefundTypeEnum.RETURN_REFUND;
+		ShoppingRefundTypeEnum shoppingRefundTypeEnum = null;
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.BE_SHIPPED.getValue())) {
 			shoppingRefundTypeEnum = ShoppingRefundTypeEnum.REFUND;
 		} else {
