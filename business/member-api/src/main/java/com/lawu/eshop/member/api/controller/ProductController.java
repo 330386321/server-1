@@ -57,8 +57,7 @@ public class ProductController extends BaseController {
 	@ApiOperation(value = "查询商品详情", notes = "根据商品ID查询商品详情信息，[]，（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "{productId}", method = RequestMethod.GET)
 	public Result<ProductInfoDTO> selectProductById(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(name = "productId", required = true, value = "商品ID") Long productId)
-			throws Exception {
+			@PathVariable @ApiParam(name = "productId", required = true, value = "商品ID") Long productId) {
 
 		Result<ProductInfoDTO> result = productService.selectProductById(productId);
 		if (result.getRet() != ResultCode.SUCCESS) {

@@ -18,7 +18,6 @@ import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.property.srv.service.PropertyService;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
@@ -43,8 +42,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			
 	@Autowired
 	private BusinessDepositDOMapper businessDepositDOMapper;
-	@Autowired
-	private TransactionDetailService transactionDetailService;
+//	@Autowired
+//	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private BankAccountDOMapper bankAccountDOMapper;
 
@@ -341,7 +340,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			BankAccountDO bankAccountDO = bankAccountDOMapper.selectByPrimaryKey(list.get(0).getBusinessBankAccountId());
 			if(bankAccountDO != null){
 				bo.setBankName(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf("(")));
+						: bankAccountDO.getNote().substring(0, bankAccountDO.getNote().indexOf('(')));
 				String accountName = bankAccountDO.getAccountName() == null ? "" : bankAccountDO.getAccountName();
 				if (accountName.length() == 2) {
 					accountName = "*" + accountName.substring(1);
@@ -350,8 +349,8 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				}
 				bo.setAccountName(accountName);
 				bo.setCardNo(bankAccountDO.getNote() == null ? ""
-						: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf("(") + 1,
-								bankAccountDO.getNote().indexOf(")")));
+						: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf('(') + 1,
+								bankAccountDO.getNote().indexOf('(')));
 			}else{
 				bo.setBankName("");
 				bo.setAccountName("");

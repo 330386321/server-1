@@ -102,7 +102,7 @@ public class WxPayController extends BaseController {
 			money = recharge.getActualMoney();
 			
 		}
-		if (money == 0) {
+		if (StringUtil.doubleCompareTo(money, 0) == 0) {
 			return successCreated(ResultCode.MONEY_IS_ZERO);
 		}
 		aparam.setTotalAmount(String.valueOf(money));

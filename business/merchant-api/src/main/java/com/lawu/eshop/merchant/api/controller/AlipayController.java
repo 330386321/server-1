@@ -93,7 +93,7 @@ public class AlipayController extends BaseController {
 				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			double money = recharge.getActualMoney();
-			if (money == 0) {
+			if (StringUtil.doubleCompareTo(money, 0) == 0) {
 				return successCreated(ResultCode.MONEY_IS_ZERO);
 			}
 			aparam.setTotalAmount(String.valueOf(money));

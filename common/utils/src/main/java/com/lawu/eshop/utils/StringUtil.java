@@ -120,10 +120,10 @@ public class StringUtil {
         List<Object> list = JSONArray.parseArray(json, Object.class);
         StringBuilder str = new StringBuilder();
         for (Object o : list) {
-            str.append(o.toString()).append(",");
+            str.append(o.toString()).append(',');
         }
         String st = str.toString();
-        st = st.substring(0, st.lastIndexOf(","));
+        st = st.substring(0, st.lastIndexOf(','));
         return st;
     }
 
@@ -158,5 +158,22 @@ public class StringUtil {
             logger.error("转换UTF-8异常：{}", e);
         }
         return isoString;
+    }
+    
+    /**
+     * 
+     * @param d1
+     * @param d2
+     * @return
+     * @date 2017年6月21日 下午4:17:46
+     */
+    public static int doubleCompareTo(double d1,double d2){
+    	if(Double.doubleToLongBits(d1) == Double.doubleToLongBits(d2)){
+    		return 0;
+    	}else if(Double.doubleToLongBits(d1) > Double.doubleToLongBits(d2)){
+    		return 1;
+    	}else {
+    		return -1;
+    	}
     }
 }

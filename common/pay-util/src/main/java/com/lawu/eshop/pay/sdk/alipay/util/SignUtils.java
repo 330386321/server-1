@@ -10,14 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.lawu.eshop.pay.sdk.alipay.sign.Base64;
 
 public class SignUtils {
 
-	private static Logger logger = LoggerFactory.getLogger(SignUtils.class);
+//	private static Logger logger = LoggerFactory.getLogger(SignUtils.class);
 			
 	private static final String ALGORITHM = "RSA";
 
@@ -109,10 +106,10 @@ public class SignUtils {
         String tailValue = map.get(tailKey);
         authInfo.append(buildKeyValue(tailKey, tailValue, false));
 
-        logger.error("待签名字符串：{}" , authInfo.toString());
-        logger.error("私钥：{}" , rsaKey);
+//        logger.error("待签名字符串：{}" , authInfo.toString());
+//        logger.error("私钥：{}" , rsaKey);
         String oriSign = SignUtils.sign(authInfo.toString(), rsaKey, rsa2);
-        logger.error("sign：{}" , oriSign);
+//        logger.error("sign：{}" , oriSign);
         String encodedSign = "";
 
         try {

@@ -22,7 +22,6 @@ import com.lawu.eshop.property.srv.domain.PropertyDOExample;
 import com.lawu.eshop.property.srv.domain.PropertyDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.PropertyDOMapper;
 import com.lawu.eshop.property.srv.service.PropertyService;
-import com.lawu.eshop.utils.BeanUtil;
 
 @Service
 public class PropertyServiceImpl implements PropertyService {
@@ -57,7 +56,7 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 	@Override
-	public Page<QueryPropertyBO> query(TestQuery1Param param) throws Exception {
+	public Page<QueryPropertyBO> query(TestQuery1Param param) {
 		PropertyDOExample example = new PropertyDOExample();
 		Criteria criteria = example.createCriteria();
 		if (param.getName() != null && !"".equals(param.getName())) {
@@ -75,7 +74,10 @@ public class PropertyServiceImpl implements PropertyService {
 		List<QueryPropertyBO> bos = new ArrayList<QueryPropertyBO>();
 		for (PropertyDO pdo : listDOS) {
 			QueryPropertyBO bo = new QueryPropertyBO();
-			BeanUtil.copyProperties(pdo, bo);
+			bo.setId(pdo.getId());
+			bo.setName(pdo.getName());
+			bo.setValue(pdo.getValue());
+			bo.setRemark(pdo.getRemark());
 			bos.add(bo);
 		}
 		page.setRecords(bos);
@@ -113,10 +115,13 @@ public class PropertyServiceImpl implements PropertyService {
 	}
 
 	@Override
-	public QueryPropertyBO get(Long propertyId) throws Exception {
+	public QueryPropertyBO get(Long propertyId) {
 		PropertyDO pdo = propertyDOMapper.selectByPrimaryKey(propertyId);
 		QueryPropertyBO bo = new QueryPropertyBO();
-		BeanUtil.copyProperties(pdo, bo);
+		bo.setId(pdo.getId());
+		bo.setName(pdo.getName());
+		bo.setValue(pdo.getValue());
+		bo.setRemark(pdo.getRemark());
 		return bo;
 	}
 

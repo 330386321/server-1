@@ -71,7 +71,7 @@ public class AlipayNotify {
     
     public static boolean verifyApp(Map<String, String> params,String alipay_public_key,String sign_type, String input_charset) {
     	//写日志记录（若要调试，请取消下面两行注释）
-        String rWord = "返回回来的参数：" + AlipayCore.createLinkString(params);
+//        String rWord = "返回回来的参数：" + AlipayCore.createLinkString(params);
 //    	System.out.println(rWord);
 	    
     	String responseTxt = "true";
@@ -80,7 +80,7 @@ public class AlipayNotify {
 	    boolean isSign = getSignVeryfy(params, sign,alipay_public_key,sign_type,input_charset);
 
         //写日志记录（若要调试，请取消下面两行注释）
-        String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
+//        String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
 //	    System.out.println(sWord);
 	    try {
 	    	params.put("_responseTxt", responseTxt);

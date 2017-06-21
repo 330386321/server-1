@@ -25,7 +25,7 @@ public class ReportConvert {
 			boolean f = true;
 			int j = i + 1;
 			for (ReportRiseRateView view : list) {
-				int num = Integer.valueOf(view.getKeyTxt()).intValue();
+				int num = Integer.parseInt(view.getKeyTxt());
 				if (num == j) {
 					f = false;
 					break;
@@ -33,7 +33,7 @@ public class ReportConvert {
 			}
 			if (f) {
 				ReportRiseRateView view = new ReportRiseRateView();
-				view.setKeyTxt(j + "");
+				view.setKeyTxt(Integer.toString(j));
 				view.setNum("0");
 				list.add(i, view);
 			}

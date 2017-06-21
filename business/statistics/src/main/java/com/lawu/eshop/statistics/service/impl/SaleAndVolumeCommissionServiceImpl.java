@@ -100,7 +100,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						logger.info("[{}-memberInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
 						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));//没升一个级别+0.005
-						BigDecimal actureMoneyIn = null;
+						BigDecimal actureMoneyIn;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
 							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户
@@ -173,7 +173,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						logger.info("[{}-merchantInviters],sale_commission={},sale_commission_add_scope={},level={}",msg,saleCommission,saleCommissionAddScope,level);
 						
 						BigDecimal actualCommission = saleCommission.add(saleCommissionAddScope.multiply(level.subtract(new BigDecimal("1"))));
-						BigDecimal actureMoneyIn = null;
+						BigDecimal actureMoneyIn;
 						BigDecimal actureLoveIn = null;
 						if (i == 2) {
 							actureMoneyIn = actualMoney.multiply(actualCommission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户

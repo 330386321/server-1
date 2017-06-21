@@ -216,7 +216,7 @@ public class ProductController extends BaseController {
 				}
 			}
 		}
-		productImage = productImage.substring(0, productImage.lastIndexOf(","));
+		productImage = productImage.substring(0, productImage.lastIndexOf(','));
 
 		EditProductDataParam dataProduct = new EditProductDataParam();
 		dataProduct.setProductId(productId);
@@ -330,9 +330,9 @@ public class ProductController extends BaseController {
 			}
 		}
 		
-		productImage = productImage.substring(0, productImage.lastIndexOf(","));
+		productImage = productImage.substring(0, productImage.lastIndexOf(','));
 		if(!"".equals(productDetailImage)){
-			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(","));
+			productDetailImage = productDetailImage.substring(0, productDetailImage.lastIndexOf(','));
 		}	
 		
 		EditProductDataParam dataProduct = new EditProductDataParam();

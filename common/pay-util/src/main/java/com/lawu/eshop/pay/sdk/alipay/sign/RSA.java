@@ -103,7 +103,7 @@ public class RSA{
         int bufl;
 
         while ((bufl = ins.read(buf)) != -1) {
-            byte[] block = null;
+            byte[] block;
 
             if (buf.length == bufl) {
                 block = buf;

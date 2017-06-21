@@ -1,15 +1,11 @@
 package com.lawu.eshop.operator.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +35,8 @@ public class FTestController extends BaseController {
     @Autowired
     private TestService testService;
 
-    @PageBody
+    @SuppressWarnings("rawtypes")
+	@PageBody
 	@RequestMapping(value = "page", method = RequestMethod.GET)
 	public Result page() throws Exception {
 		Result<Page<QueryPropertyDTO>> dtos = new Result<>();
@@ -49,8 +46,7 @@ public class FTestController extends BaseController {
 	}
 
 	@RequestMapping(value = "jsondata", method = RequestMethod.POST)
-	public TableJson<QueryPropertyDTO> jsondata(@RequestBody TestQuery1Param param)
-			throws Exception {
+	public TableJson<QueryPropertyDTO> jsondata(@RequestBody TestQuery1Param param) {
 		logger.info(param.getName());
 		Result<Page<QueryPropertyDTO>> dtos = testService.query(param);
 		Page<QueryPropertyDTO> page = dtos.getModel();

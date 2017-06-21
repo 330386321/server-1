@@ -21,7 +21,7 @@ public enum MemberTransactionTypeEnum {
 	SALES_COMMISSION((byte) 0x0C, "推荐E友收益"),
 	VOLUME_COMMISSION((byte) 0x0D, "推荐商家收益"),
 	PRAISE_AD((byte) 0x0E, "抢赞消费"),//抢赞大于300积分的广告扣除20积分
-	BACKAGE((byte) 0x0F, "充值"),//后台充值
+	BACKAGE((byte) 0x0F, "平台充值"),//后台充值
 	AD_QZ((byte) 0x10, "抢赞");
 
 	private Byte value;

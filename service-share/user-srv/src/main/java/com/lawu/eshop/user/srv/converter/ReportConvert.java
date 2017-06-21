@@ -29,7 +29,7 @@ public class ReportConvert {
 			}
 			if (f) {
 				FansMerchantDOReportView view = new FansMerchantDOReportView();
-				view.setKeyTxt(Integer.valueOf(j).toString());
+				view.setKeyTxt(Integer.toString(j));
 				view.setNum("0");
 				list.add(i, view);
 			}

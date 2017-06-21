@@ -188,8 +188,7 @@ public class PropertyInfoController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "getPropertyInfoMoney/{userNum}", method = RequestMethod.GET)
-	public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum)
-			throws Exception {
+	public Result<PropertyPointAndBalanceDTO> getPropertyInfoMoney(@PathVariable("userNum") String userNum) {
 		PropertyPointAndBalanceBO propertyPointBO = propertyInfoService.getPropertyInfoMoney(userNum);
 		PropertyPointAndBalanceDTO dto = new PropertyPointAndBalanceDTO();
 		dto.setBalance(propertyPointBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));

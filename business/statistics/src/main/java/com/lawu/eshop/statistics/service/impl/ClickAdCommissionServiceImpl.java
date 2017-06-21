@@ -65,7 +65,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 				List<CommissionInvitersUserDTO> inviters = userCommonService.selectHigherLevelInviters(dto.getMemberNum(), 3, false);
 
 				int retCode = ResultCode.FAIL;
-				if (inviters != null && !inviters.isEmpty() && inviters.size() > 0) {
+				if (inviters != null && !inviters.isEmpty()) {
 					int m = 0;
 					for (int i = 0; i < inviters.size(); i++) {
 						CommissionJobParam param = new CommissionJobParam();
@@ -86,7 +86,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 							sale_commission = property.get("ad_commission_3");
 
 						}
-						BigDecimal actureMoneyIn = null;
+						BigDecimal actureMoneyIn;
 						BigDecimal actureLoveIn = null;
 						if(i == 2){
 							actureMoneyIn = clickMoney.multiply(adCommission0).multiply(sale_commission).setScale(6, BigDecimal.ROUND_HALF_UP);// 第三级进积分，无爱心账户

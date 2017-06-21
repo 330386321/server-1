@@ -15,7 +15,6 @@ import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.service.MemberAdRecordService;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.utils.BeanUtil;
 
 @Service
 public class MemberAdRecordServiceImpl implements MemberAdRecordService {
@@ -36,14 +35,17 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 	}
 
 	@Override
-	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds() throws Exception {
+	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds() {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
 		example.createCriteria().andStatusEqualTo(MemberAdRecordStatusEnum.NONE.val);
 		List<MemberAdRecordDO> dos = memberAdRecordDOMapper.selectByExample(example);
 		List<MemberAdRecodeCommissionBO> bos = new ArrayList<MemberAdRecodeCommissionBO>();
 		for(MemberAdRecordDO mdo : dos){
 			MemberAdRecodeCommissionBO bo = new MemberAdRecodeCommissionBO();
-			BeanUtil.copyProperties(mdo, bo);
+			bo.setId(mdo.getId());
+			bo.setAdId(mdo.getAdId());
+			bo.setMemberNum(mdo.getMemberNum());
+			bo.setStatus(mdo.getStatus());
 			bo.setPoint(mdo.getOriginalPoint());
 			bos.add(bo);
 		}

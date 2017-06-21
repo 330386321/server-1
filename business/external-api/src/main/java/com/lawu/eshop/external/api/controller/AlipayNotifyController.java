@@ -176,16 +176,15 @@ public class AlipayNotifyController extends BaseController {
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(StringUtil.intToByte(bizFlagInt))) {
 						Result<ShoppingOrderMoneyDTO> order = payOrderService.selectOrderMoney(param.getBizIds());
 						double money = order.getModel().getOrderTotalPrice().doubleValue();
-						if (money == dTotalMoney) {
+						if (StringUtil.doubleCompareTo(money, dTotalMoney) == 0) {
 							result = orderService.doHandleOrderPayNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
 							result.setMsg(ResultCode.get(ResultCode.NOTIFY_MONEY_ERROR));
 						}
 					} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(StringUtil.intToByte(bizFlagInt))) {
-						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
-								.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
-						if (payOrderCallback.getActualMoney() == dTotalMoney) {
+						ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
+						if (StringUtil.doubleCompareTo(payOrderCallback.getActualMoney(), dTotalMoney) == 0) {
 							result = orderService.doHandlePayOrderNotify(param);
 						} else {
 							result.setRet(ResultCode.NOTIFY_MONEY_ERROR);
