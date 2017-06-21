@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.controller;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -333,9 +334,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		if (shoppingRefundDetailBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = expressStrategy.inquiries(shoppingRefundDetailBO.getExpressCompanyCode(), shoppingRefundDetailBO.getWaybillNum());
-
+		
+		// 如果快递公司编码和物流编号为空.不查询物流
+		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
+		if (StringUtils.isNotBlank(shoppingRefundDetailBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingRefundDetailBO.getWaybillNum())) {
+			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingRefundDetailBO.getExpressCompanyCode(), shoppingRefundDetailBO.getWaybillNum());
+		}
+		
 		return successGet(ShoppingRefundDetailConverter.covert(shoppingRefundDetailBO, expressInquiriesDetailBO));
 	}
 	
