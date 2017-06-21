@@ -69,11 +69,11 @@ public class StoreSolrController extends BaseController {
             if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.DISTANCE_SORT.val) {
                 query.setParam("sort", "geodist() asc");
             } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.FEEDBACK_SORT.val) {
-                query.setParam("sort", "feedbackRate_d desc");
+                query.setParam("sort", "averageScore_d desc");
             } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.POPULARITY_SORT.val) {
                 query.setParam("sort", "favoriteNumber_i desc");
             } else {
-                query.setParam("sort", "favoriteNumber_i desc,feedbackRate_d desc,geodist() asc");
+                query.setParam("sort", "favoriteNumber_i desc,averageScore_d desc,geodist() asc");
             }
         }
         query.setStart(storeSolrParam.getOffset());
