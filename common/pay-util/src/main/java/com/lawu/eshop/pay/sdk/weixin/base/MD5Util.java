@@ -2,10 +2,12 @@ package com.lawu.eshop.pay.sdk.weixin.base;
 
 import java.security.MessageDigest;
 
+import org.apache.log4j.Logger;
+
 public class MD5Util {  
-  
+	public static final Logger logger = Logger.getLogger(MD5Util.class);
     private static String byteArrayToHexString(byte b[]) {  
-        StringBuffer resultSb = new StringBuffer();  
+    	StringBuilder resultSb = new StringBuilder();  
         for (int i = 0; i < b.length; i++)  
             resultSb.append(byteToHexString(b[i]));  
   
@@ -24,7 +26,7 @@ public class MD5Util {
     public static String MD5Encode(String origin, String charsetname) {  
         String resultString = null;  
         try {  
-            resultString = new String(origin);  
+            resultString = origin;  
             MessageDigest md = MessageDigest.getInstance("MD5");  
             if (charsetname == null || "".equals(charsetname))  
                 resultString = byteArrayToHexString(md.digest(resultString  
@@ -32,7 +34,8 @@ public class MD5Util {
             else  
                 resultString = byteArrayToHexString(md.digest(resultString  
                         .getBytes(charsetname)));  
-        } catch (Exception exception) {  
+        } catch (Exception exception) { 
+        	logger.error("",exception);
         }  
         return resultString;  
     }  

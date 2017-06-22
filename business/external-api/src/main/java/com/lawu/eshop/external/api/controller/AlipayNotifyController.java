@@ -1,6 +1,8 @@
 package com.lawu.eshop.external.api.controller;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.lawu.eshop.external.api.ExternalApiConfig;
 import com.lawu.eshop.external.api.service.DepositService;
@@ -77,12 +80,14 @@ public class AlipayNotifyController extends BaseController {
 
 	/**
 	 * 支付宝异步回调接口
+	 * @throws AlipayApiException 
+	 * @throws IOException 
 	 * 
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "appNotifyHandle", method = RequestMethod.POST)
-	public void appNotifyHandle() throws Exception {
+	public void appNotifyHandle() throws IOException, AlipayApiException  {
 		logger.info("#####################APP支付宝回调开始#####################");
 		HttpServletRequest request = getRequest();
 		HttpServletResponse response = getResponse();
@@ -241,12 +246,14 @@ public class AlipayNotifyController extends BaseController {
 
 	/**
 	 * 支付宝异步回调接口
+	 * @throws IOException 
+	 * @throws  
 	 * 
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "pcNotifyHandle", method = RequestMethod.POST)
-	public void pcNotifyHandle() throws Exception {
+	public void pcNotifyHandle() throws IOException  {
 		logger.info("#####################PC支付宝回调开始#####################");
 		HttpServletRequest request = getRequest();
 		HttpServletResponse response = getResponse();

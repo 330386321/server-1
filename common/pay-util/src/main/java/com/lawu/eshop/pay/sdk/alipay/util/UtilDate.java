@@ -66,7 +66,7 @@ public class UtilDate {
 	 */
 	public static String getThree() {
 		Random rad = new Random();
-		return Integer.valueOf(rad.nextInt(1000)).toString();
+		return Integer.toString(rad.nextInt(1000));
 	}
 
 }

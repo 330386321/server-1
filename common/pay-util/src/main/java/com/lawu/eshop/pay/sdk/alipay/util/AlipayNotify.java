@@ -9,6 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 /* *
@@ -26,6 +29,7 @@ import java.util.Map;
  */
 public class AlipayNotify {
 
+	private static Logger logger = LoggerFactory.getLogger(AlipayNotify.class);
     /**
      * 支付宝消息验证地址
      */
@@ -60,7 +64,8 @@ public class AlipayNotify {
 	    	params.put("_responseTxt", responseTxt);
 	  	    params.put("_isSign", String.valueOf(isSign));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("支付宝验签异常",e);
+			//e.printStackTrace();
 		}
         if (isSign && "true".equals(responseTxt)) {
             return true;
@@ -71,7 +76,7 @@ public class AlipayNotify {
     
     public static boolean verifyApp(Map<String, String> params,String alipay_public_key,String sign_type, String input_charset) {
     	//写日志记录（若要调试，请取消下面两行注释）
-        String rWord = "返回回来的参数：" + AlipayCore.createLinkString(params);
+//        String rWord = "返回回来的参数：" + AlipayCore.createLinkString(params);
 //    	System.out.println(rWord);
 	    
     	String responseTxt = "true";
@@ -80,15 +85,16 @@ public class AlipayNotify {
 	    boolean isSign = getSignVeryfy(params, sign,alipay_public_key,sign_type,input_charset);
 
         //写日志记录（若要调试，请取消下面两行注释）
-        String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
+//        String sWord = "responseTxt=" + responseTxt + ", isSign=" + isSign + "\n 返回回来的参数：" + AlipayCore.createLinkString(params);
 //	    System.out.println(sWord);
 	    try {
 	    	params.put("_responseTxt", responseTxt);
 	  	    params.put("_isSign", String.valueOf(isSign));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("支付宝验签异常app",e);
+			//e.printStackTrace();
 		}
-        if (isSign && responseTxt.equals("true")) {
+        if (isSign && "true".equals(responseTxt)) {
             return true;
         } else {
             return false;
@@ -147,11 +153,11 @@ public class AlipayNotify {
         try {
             URL url = new URL(urlvalue);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection
-                .getInputStream()));
-            inputLine = in.readLine().toString();
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            inputLine = in.readLine();
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("支付宝checkUrl异常",e);
+//            e.printStackTrace();
             inputLine = "";
         }
 
