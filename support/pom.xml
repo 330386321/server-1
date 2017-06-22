@@ -13,6 +13,6 @@
     <modules>
         <module>config-server</module>
         <module>eureka-server</module>
-    	<module>elastic-job-console</module>
+    	<!--<module>elastic-job-console</module>-->
   	</modules>
 </project>
