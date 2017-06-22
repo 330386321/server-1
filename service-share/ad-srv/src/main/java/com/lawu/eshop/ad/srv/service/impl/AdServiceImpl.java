@@ -552,7 +552,7 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
+					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 					documents.add(document);
 				}
 			}
