@@ -1,9 +1,8 @@
 package com.lawu.eshop.mall.srv.converter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import org.springframework.beans.BeanUtils;
 
 import com.lawu.eshop.mall.constants.SuggestionClientType;
 import com.lawu.eshop.mall.constants.SuggestionUserType;
@@ -41,7 +40,12 @@ public class SuggestionConverter {
 		}
 
 		rtn = new SuggestionBO();
-		BeanUtils.copyProperties(suggestionDO, rtn);
+		rtn.setContent(suggestionDO.getContent());
+		rtn.setGmtCreate(suggestionDO.getGmtCreate());
+		rtn.setGmtModified(suggestionDO.getGmtModified());
+		rtn.setId(suggestionDO.getId());
+		rtn.setUserNum(suggestionDO.getUserNum());
+		
 		rtn.setClientType(SuggestionClientType.getEnum(suggestionDO.getClientType()));
 		rtn.setUserType(SuggestionUserType.getEnum(suggestionDO.getUserType()));
 		return rtn;
@@ -52,7 +56,7 @@ public class SuggestionConverter {
 			return null;
 		}
 
-		List<SuggestionBO> bos = new ArrayList<SuggestionBO>();
+		List<SuggestionBO> bos = new ArrayList<>();
 		for (SuggestionDO suggestionDO : dos) {
 			bos.add(convert(suggestionDO));
 		}
@@ -67,14 +71,21 @@ public class SuggestionConverter {
 	 * @return
 	 */
 	public static SuggestionDTO convert(SuggestionBO bo) {
+		SuggestionDTO rtn = null;
 		if (bo == null) {
 			return null;
 		}
 
-		SuggestionDTO dto = new SuggestionDTO();
-		BeanUtils.copyProperties(bo, dto);
+		rtn = new SuggestionDTO();
+		rtn.setContent(bo.getContent());
+		rtn.setGmtCreate(bo.getGmtCreate());
+		rtn.setGmtModified(bo.getGmtModified());
+		rtn.setId(bo.getId());
+		rtn.setUserNum(bo.getUserNum());
+		rtn.setClientType(bo.getClientType());
+		rtn.setUserType(bo.getUserType());
 
-		return dto;
+		return rtn;
 	}
 
 	public static List<SuggestionDTO> convertDTOS(List<SuggestionBO> bos) {
@@ -82,7 +93,7 @@ public class SuggestionConverter {
 			return null;
 		}
 
-		List<SuggestionDTO> dtos = new ArrayList<SuggestionDTO>();
+		List<SuggestionDTO> dtos = new ArrayList<>();
 		for (SuggestionBO bo : bos) {
 			dtos.add(convert(bo));
 		}
@@ -91,29 +102,32 @@ public class SuggestionConverter {
 	}
 	
 	public static SuggestionDO convert(String userNum, SuggestionParam param) {
+		SuggestionDO rtn = null;
 		if (param == null) {
-			return null;
+			return rtn;
 		}
 
-		SuggestionDO suggestionDO = new SuggestionDO();
-		BeanUtils.copyProperties(param, suggestionDO, new String[]{"userType","clientType"});
-		
-		suggestionDO.setUserNum(userNum);
+		rtn = new SuggestionDO();
+		rtn.setContent(param.getContent());
+		rtn.setUserNum(userNum);
 		
 		// 用户类型，1是商家，2是会员
 		if (userNum.startsWith("B")) {
-			suggestionDO.setUserType((byte)1);
+			rtn.setUserType((byte)1);
 		}
 		
 		if (userNum.startsWith("M")) {
-			suggestionDO.setUserType((byte)2);
+			rtn.setUserType((byte)2);
 		}
 		
 		if (param.getClientType() != null) {
-			suggestionDO.setClientType(param.getClientType().value);
+			rtn.setClientType(param.getClientType().value);
 		}
 		
-		return suggestionDO;
+		rtn.setGmtCreate(new Date());
+        rtn.setGmtModified(new Date());
+		
+		return rtn;
 	}
 
 }

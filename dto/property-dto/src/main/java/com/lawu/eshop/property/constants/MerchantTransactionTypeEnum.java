@@ -25,7 +25,6 @@ public enum MerchantTransactionTypeEnum {
 	VOLUME_COMMISSION((byte) 0x74, "推荐商家收益"),		//116
 	BACKAGE((byte) 0x75, "平台充值");						//117 后台充值
 	
-	
 	private Byte value;
 	private String name;
 
@@ -38,18 +37,10 @@ public enum MerchantTransactionTypeEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	public static MerchantTransactionTypeEnum getEnum(Byte val) {
 		MerchantTransactionTypeEnum[] values = MerchantTransactionTypeEnum.values();
 		for (MerchantTransactionTypeEnum object : values) {
