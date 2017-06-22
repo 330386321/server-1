@@ -15,6 +15,13 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 public class PropertyBalanceConverter {
 	
 	/**
+	 * 隐藏默认的构造函数
+	 */
+	private PropertyBalanceConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
+	/**
 	 * PropertyBalanceBO转换器
 	 * 
 	 * @param propertyInfoDO

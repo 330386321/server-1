@@ -47,8 +47,4 @@ public enum ShoppingOrderStatusToMerchantEnum {
 		return value;
 	}
 
-	public void setValue(Byte[] value) {
-		this.value = value;
-	}
-
 }

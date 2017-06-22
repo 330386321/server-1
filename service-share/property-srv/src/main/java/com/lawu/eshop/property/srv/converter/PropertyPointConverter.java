@@ -13,7 +13,14 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
  * @date 2017/3/31
  */
 public class PropertyPointConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private PropertyPointConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * PropertyPointBO转换器
 	 * 

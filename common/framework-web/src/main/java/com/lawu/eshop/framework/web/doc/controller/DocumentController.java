@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -80,7 +79,7 @@ public class DocumentController extends BaseController{
      */
     @SuppressWarnings("unused")
 	private List<ApiDocumentVO> getVoList(Boolean isAudit) {
-    	List<ApiDocumentVO> rtn = new ArrayList<ApiDocumentVO>();
+    	List<ApiDocumentVO> rtn = new ArrayList<>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
     	try {
@@ -202,24 +201,20 @@ public class DocumentController extends BaseController{
     	}
     	
     	// 按照日期和接口排序
-    	Collections.sort(rtn, new Comparator <ApiDocumentVO>() {
-			@Override
-			public int compare(ApiDocumentVO o1, ApiDocumentVO o2){
-				
-				// 先按照时间排序
-				int compare = 0;
-				if (o2.getDate() != null && o1.getDate() != null) {
-					compare = o2.getDate().compareTo(o1.getDate());
-				}
-				
-				// 如果时间相等的话再按照接口排序
-				if (compare == 0) {
-					return o2.getApiName().compareTo(o1.getApiName());
-				}
-				
-				return compare;
+    	Collections.sort(rtn, (o1, o2) -> {
+    		// 先按照时间排序
+			int compare = 0;
+			if (o2.getDate() != null && o1.getDate() != null) {
+				compare = o2.getDate().compareTo(o1.getDate());
 			}
-		});
+			
+			// 如果时间相等的话再按照接口排序
+			if (compare == 0) {
+				return o2.getApiName().compareTo(o1.getApiName());
+			}
+			
+			return compare;
+    	});
     	
     	return rtn;
     }

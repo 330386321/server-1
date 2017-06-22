@@ -36,7 +36,7 @@ public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFol
         //更改订单状态
         PayOrderDO payOrderDO = new PayOrderDO();
         payOrderDO.setId(payOrderId);
-        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
         payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
 
         PayOrderDO oldOrder = payOrderDOMapper.selectByPrimaryKey(payOrderId);

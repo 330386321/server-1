@@ -19,17 +19,13 @@ public enum StatusEnum {
 	
     private Byte value;
     
+    StatusEnum(Byte value) {
+        this.value = value;
+    }
+    
     public Byte getValue() {
 		return value;
 	}
-
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
-	StatusEnum(Byte value) {
-        this.value = value;
-    }
 
     public static StatusEnum getEnum(Byte value) {
         StatusEnum[] values = StatusEnum.values();

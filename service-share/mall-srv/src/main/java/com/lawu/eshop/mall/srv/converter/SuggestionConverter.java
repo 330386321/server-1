@@ -1,15 +1,16 @@
 package com.lawu.eshop.mall.srv.converter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.BeanUtils;
+
 import com.lawu.eshop.mall.constants.SuggestionClientType;
 import com.lawu.eshop.mall.constants.SuggestionUserType;
 import com.lawu.eshop.mall.dto.SuggestionDTO;
 import com.lawu.eshop.mall.param.SuggestionParam;
 import com.lawu.eshop.mall.srv.bo.SuggestionBO;
 import com.lawu.eshop.mall.srv.domain.SuggestionDO;
-import org.springframework.beans.BeanUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -19,7 +20,14 @@ import java.util.List;
  * @date 2017/3/24
  */
 public class SuggestionConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private SuggestionConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * BO转换
 	 *
@@ -27,15 +35,16 @@ public class SuggestionConverter {
 	 * @return
 	 */
 	public static SuggestionBO convert(SuggestionDO suggestionDO) {
+		SuggestionBO rtn = null;
 		if (suggestionDO == null) {
-			return null;
+			return rtn;
 		}
 
-		SuggestionBO bo = new SuggestionBO();
-		BeanUtils.copyProperties(suggestionDO, bo);
-		bo.setClientType(SuggestionClientType.getEnum(suggestionDO.getClientType()));
-		bo.setUserType(SuggestionUserType.getEnum(suggestionDO.getUserType()));
-		return bo;
+		rtn = new SuggestionBO();
+		BeanUtils.copyProperties(suggestionDO, rtn);
+		rtn.setClientType(SuggestionClientType.getEnum(suggestionDO.getClientType()));
+		rtn.setUserType(SuggestionUserType.getEnum(suggestionDO.getUserType()));
+		return rtn;
 	}
 
 	public static List<SuggestionBO> convertBOS(List<SuggestionDO> dos) {

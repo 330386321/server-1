@@ -8,7 +8,8 @@ public enum PayOrderStatusEnum {
 	STATUS_UNPAY((byte) 0x01), // 1-待支付
 	STATUS_PAY_SUCCESS((byte) 0x02), // 2-成功
 	STATUS_PAY_fAIL((byte) 0x03);// 3-失败
-	public Byte val;
+	
+	private Byte val;
 
 	PayOrderStatusEnum(Byte val) {
 		this.val = val;

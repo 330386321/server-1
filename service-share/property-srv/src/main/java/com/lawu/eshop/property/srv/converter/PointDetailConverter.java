@@ -17,7 +17,14 @@ import com.lawu.eshop.property.srv.domain.PointDetailDO;
  * @date 2017/3/30
  */
 public class PointDetailConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private PointDetailConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	public static PointDetailBO convert(PointDetailDO pointDetailDO) {
 		PointDetailBO rtn = null;
 

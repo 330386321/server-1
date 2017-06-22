@@ -22,7 +22,14 @@ import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
  * @date 2017/3/29
  */
 public class TransactionDetailConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private TransactionDetailConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	public static TransactionDetailBO convert(TransactionDetailDO transactionDetailDO) {
 		TransactionDetailBO rtn = null;
 

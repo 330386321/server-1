@@ -3,7 +3,6 @@ package com.lawu.eshop.mall.param;
 import java.io.Serializable;
 
 import com.lawu.eshop.mall.constants.SuggestionClientType;
-import com.lawu.eshop.mall.constants.SuggestionUserType;
 
 import io.swagger.annotations.ApiParam;
 
