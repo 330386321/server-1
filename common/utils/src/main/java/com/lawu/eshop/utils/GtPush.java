@@ -213,7 +213,8 @@ public class GtPush {
 
     private static APNPayload.DictionaryAlertMsg getDictionaryAlertMsg(String title, String contents) {
         APNPayload.DictionaryAlertMsg alertMsg = new APNPayload.DictionaryAlertMsg();
-        alertMsg.setBody(contents);
+      //推送显示返回json字符串
+        alertMsg.setBody("");
         alertMsg.setActionLocKey("ActionLockey");
         JSONObject jobj = JSON.parseObject(contents);
         //推送展示内容
@@ -231,12 +232,15 @@ public class GtPush {
     }
 
 
-  /*  public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
     	GtPush p = new GtPush();
 		JSONObject json = new JSONObject();
 		json.put("title","积分充值");
 		json.put("content","充值10块钱");
 		json.put("type","MESSAGE_TYPE_RECHARGE_BALANCE");
-		System.out.println(p.sendMessageToCidCustoms(json.toString(),"7025e9871b8450137cdb0df202688d64", "积分充值"));
+	System.out.println(p.sendMessageToCid(json.toString(),"97b4f9aa7d216a4e2e631f0f8c09a633",
+                "积分充值","http://sdk.open.api.igexin.com/apiex.htm","m7BWuujJ246kECQYw8zk9A","rBgXZPQney8aaUvwaVW3b4","y64i2nxRdNASBuhu7PCX25"));
+	//System.out.println(p.pushToAllCompany("积分充值",json.toString(),"http://sdk.open.api.igexin.com/apiex.htm","m7BWuujJ246kECQYw8zk9A","rBgXZPQney8aaUvwaVW3b4","y64i2nxRdNASBuhu7PCX25"));
+        System.out.println(p.pushToAllCompany("积分充值",json.toString(),"http://sdk.open.api.igexin.com/apiex.htm","vi1F0oUgRYAaxZ3xtPeVUA","5f23soSbuN76qvvxOZipc1","TQd0dTZC8b7Az2zwH4wPk1"));
     }*/
 }
