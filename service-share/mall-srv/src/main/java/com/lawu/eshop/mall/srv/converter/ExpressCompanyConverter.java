@@ -41,6 +41,7 @@ public class ExpressCompanyConverter {
 		rtn.setName(expressCompanyDO.getName());
 		rtn.setOrdinal(expressCompanyDO.getOrdinal());
 		rtn.setTel(expressCompanyDO.getTel());
+		rtn.setId(expressCompanyDO.getId());
 
 		return rtn;
 	}
