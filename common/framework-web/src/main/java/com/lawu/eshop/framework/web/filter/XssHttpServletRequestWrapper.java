@@ -33,6 +33,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		return escape(value);
 	}
 
+	/*
 	@Override
 	public String getHeader(String name) {
 		String value = super.getHeader(name);
@@ -40,7 +41,8 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 			return null;
 		return escape(value);
 	}
-
+	*/
+	
 	private static String escape(String value) {
 		String rtn = value;
 		if (rtn  == null) {
@@ -58,7 +60,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		rtn = rtn.replace(">", "＞");
 		rtn = rtn.replace(">", "＞");
 		rtn = rtn.replace("#", "＃");
-		rtn = rtn.replace("-", "－");
 		rtn = rtn.replace("*", "×");
 		rtn = rtn.replace("＝", "=");
 		rtn = rtn.replace("!", "！");
