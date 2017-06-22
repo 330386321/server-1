@@ -954,7 +954,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 		
-		if (reply.getResultCode() == ResultCode.SUCCESS) {
+		if (reply.getResultCode() == null || reply.getResultCode().equals(ResultCode.SUCCESS)) {
 			// 设置订单状态为待支付状态(局部更新)
 			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
 			
