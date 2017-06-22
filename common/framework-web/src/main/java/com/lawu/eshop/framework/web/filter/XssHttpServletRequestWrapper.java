@@ -55,7 +55,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		*/
 		// 2-半角转全角
 		rtn = rtn.replace("'", "＇");
-		rtn = rtn.replace("\"", "＂");
 		rtn = rtn.replace("<", "＜");
 		rtn = rtn.replace(">", "＞");
 		rtn = rtn.replace(">", "＞");
