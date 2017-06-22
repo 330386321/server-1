@@ -174,7 +174,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 					List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
 					for (AdDTO adDTO : newList) {
 						for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-							if (adDTO.getMerchantId() == merchantAdInfoDTO.getMerchantId()) {
+							if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
 								Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(),
 										memberId);
 								if (isSuccess(resultFavoriteAd)) {
@@ -225,7 +225,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
 				for (AdDTO adDTO : screenList) {
 					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-						if (adDTO.getMerchantId() == merchantAdInfoDTO.getMerchantId()) {
+						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
 							AdPraiseDTO praise=new AdPraiseDTO();
 							praise.setId(adDTO.getId());
 							praise.setTitle(adDTO.getTitle());
