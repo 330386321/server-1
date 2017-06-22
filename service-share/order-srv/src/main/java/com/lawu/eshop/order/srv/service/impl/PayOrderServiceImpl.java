@@ -1,20 +1,11 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
+import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -25,6 +16,15 @@ import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -148,5 +148,24 @@ public class PayOrderServiceImpl implements PayOrderService {
 		payOrderDOMapper.updateByExampleSelective(payOrder, example);
 		
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public Page<PayOrderBO> getMerchantPayOrderList(Long userId, MerchantPayOrderListParam param) {
+		PayOrderDOExample example = new PayOrderDOExample();
+		example.createCriteria().andMerchantIdEqualTo(userId).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+		example.setOrderByClause("id desc");
+
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		Page<PayOrderBO> page = new Page<>();
+		page.setTotalCount(payOrderDOMapper.countByExample(example));
+		page.setCurrentPage(param.getCurrentPage());
+
+		List<PayOrderDO> payOrderDOS = payOrderDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+
+		List<PayOrderBO> payOrderBOS = PayOrderConverter.coverBOS(payOrderDOS);
+
+		page.setRecords(payOrderBOS);
+		return page;
 	}
 }

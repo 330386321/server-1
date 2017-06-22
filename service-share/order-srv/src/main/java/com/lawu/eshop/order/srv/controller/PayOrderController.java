@@ -1,24 +1,11 @@
 package com.lawu.eshop.order.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.order.dto.PayOrderDTO;
-import com.lawu.eshop.order.dto.PayOrderIdDTO;
-import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
-import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
+import com.lawu.eshop.order.dto.*;
+import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -26,6 +13,11 @@ import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.BeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -94,7 +86,7 @@ public class PayOrderController extends BaseController {
 	/**
 	 * 第三方支付时获取买单的实际总金额，用于调用第三方支付平台
 	 * 
-	 * @param orderIds
+	 * @param orderId
 	 * @return
 	 * @author Yangqh
 	 * @throws Exception
@@ -138,5 +130,28 @@ public class PayOrderController extends BaseController {
 			return successCreated(resultCode);
 		}
 		return successCreated();
+	}
+
+	/**
+	 * 商家端买单列表
+	 * @param userId 商家id
+	 * @param param 分页
+	 * @return
+	 * @author zhangy
+	 */
+	@RequestMapping(value = "getMerchantPayOrderList", method = RequestMethod.POST)
+	public Result<Page<MerchantPayOrderListDTO>> getMerchantPayOrderList(@RequestParam("userId") Long userId, @RequestBody MerchantPayOrderListParam param) {
+
+		Page<PayOrderBO> payOrderBOPage = payOrderService.getMerchantPayOrderList(userId,param);
+		Page<MerchantPayOrderListDTO> payOrderListDTOPage = new Page<>();
+		payOrderListDTOPage.setCurrentPage(payOrderBOPage.getCurrentPage());
+		payOrderListDTOPage.setTotalCount(payOrderBOPage.getTotalCount());
+		if(payOrderBOPage.getRecords() == null){
+			payOrderListDTOPage.setRecords(new ArrayList<>());
+			return successGet(payOrderListDTOPage);
+		}
+		List<MerchantPayOrderListDTO> merchantPayOrderListDTOS = PayOrderConverter.coverDTOS(payOrderBOPage.getRecords());
+		payOrderListDTOPage.setRecords(merchantPayOrderListDTOS);
+		return successGet(payOrderListDTOPage);
 	}
 }

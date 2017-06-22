@@ -1,9 +1,13 @@
 package com.lawu.eshop.order.srv.converter;
 
 import com.lawu.eshop.order.constants.EvaluationEnum;
+import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -39,5 +43,38 @@ public class PayOrderConverter {
         payOrderDTO.setGmtCreate(payOrderBO.getGmtCreate());
         payOrderDTO.setMerchantId(payOrderBO.getMerchantId());
         return payOrderDTO;
+    }
+
+    public static List<PayOrderBO> coverBOS(List<PayOrderDO> payOrderDOS) {
+        if (payOrderDOS == null || payOrderDOS.isEmpty()) {
+            return null;
+        }
+        List<PayOrderBO> payOrderBOS = new ArrayList<>();
+        PayOrderBO payOrderBO = null;
+        for (PayOrderDO payOrderDO : payOrderDOS) {
+            payOrderBO = new PayOrderBO();
+            payOrderBO.setOrderNum(payOrderDO.getOrderNum());
+            payOrderBO.setId(payOrderDO.getId());
+            payOrderBO.setActualAmount(payOrderDO.getActualAmount());
+            payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
+            payOrderBOS.add(payOrderBO);
+        }
+        return payOrderBOS;
+    }
+
+    public static List<MerchantPayOrderListDTO> coverDTOS(List<PayOrderBO> payOrderBOS) {
+        if(payOrderBOS == null){
+            return  new ArrayList<>();
+        }
+        List<MerchantPayOrderListDTO> payOrderListDTOS = new ArrayList<>();
+        MerchantPayOrderListDTO merchantPayOrderListDTO = null;
+        for(PayOrderBO payOrderBO :payOrderBOS){
+            merchantPayOrderListDTO = new MerchantPayOrderListDTO();
+            merchantPayOrderListDTO.setOrderNum(payOrderBO.getOrderNum());
+            merchantPayOrderListDTO.setGmtCreate(payOrderBO.getGmtCreate());
+            merchantPayOrderListDTO.setActualAmount(payOrderBO.getActualAmount());
+            payOrderListDTOS.add(merchantPayOrderListDTO);
+        }
+        return payOrderListDTOS;
     }
 }
