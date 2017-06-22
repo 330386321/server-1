@@ -81,12 +81,18 @@ public abstract class AbstractTransactionMainService<N extends Notification, R e
     @Transactional
     @Override
     public void receiveCallback(R reply) {
-        Long relateId = transactionStatusService.success(reply.getTransactionId());
-        if (relateId == null) {
-        	logger.info("回复消息已消费");
-        	return;
-        }
-        afterSuccess(relateId, reply);
+    	try {
+	        Long relateId = transactionStatusService.success(reply.getTransactionId());
+	        if (relateId == null) {
+	        	logger.info("回复消息已消费");
+	        	return;
+	        }
+	        afterSuccess(relateId, reply);
+    	} catch (Exception e) {
+    		logger.error("回调事务执行异常", e);
+    		// 抛出异常，回滚事务
+    		throw e;
+    	}
     }
 
     @Override
