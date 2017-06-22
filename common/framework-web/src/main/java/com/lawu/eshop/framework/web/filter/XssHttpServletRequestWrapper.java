@@ -43,14 +43,13 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		return escape(value);
 	}
 
-	private String escape(String value) {
+	private static String escape(String value) {
 		String rtn = value;
 		if (rtn  == null) {
 			return rtn;
 		}
 		// escape
 		rtn = StringEscapeUtils.escapeSql(rtn);
-		rtn = StringEscapeUtils.escapeHtml(rtn);
 		return rtn;
 	}
 }
