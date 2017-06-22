@@ -6,7 +6,6 @@
     <modules>
         <module>common</module>
         <module>support</module>
-        <module>web</module>
         <module>dto</module>
         <module>service-sys</module>
         <module>service-share</module>
@@ -89,13 +88,15 @@
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.4.12</version>
-            </plugin>
-        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.4.12</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 
