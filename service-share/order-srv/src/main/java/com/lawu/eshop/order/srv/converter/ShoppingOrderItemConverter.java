@@ -45,6 +45,7 @@ public class ShoppingOrderItemConverter {
 		rtn.setProductFeatureImage(param.getProductFeatureImage());
 		rtn.setProductId(param.getProductId());
 		rtn.setProductModelId(param.getProductModelId());
+		rtn.setProductModelName(param.getProductModelName());
 		rtn.setProductName(param.getProductName());
 		rtn.setQuantity(param.getQuantity());
 		rtn.setRegularPrice(param.getRegularPrice());
