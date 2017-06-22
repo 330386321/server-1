@@ -3,8 +3,6 @@ package com.lawu.eshop.framework.web.filter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	
 	public XssHttpServletRequestWrapper(HttpServletRequest servletRequest) {
@@ -48,8 +46,34 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		if (rtn  == null) {
 			return rtn;
 		}
-		// escape
+		// 1-Escape
+		/*
 		rtn = StringEscapeUtils.escapeSql(rtn);
+		rtn = StringEscapeUtils.escapeHtml(rtn);
+		*/
+		// 2-半角转全角
+		rtn = rtn.replace("'", "＇");
+		rtn = rtn.replace("\"", "＂");
+		rtn = rtn.replace("<", "＜");
+		rtn = rtn.replace(">", "＞");
+		rtn = rtn.replace(">", "＞");
+		rtn = rtn.replace("#", "＃");
+		rtn = rtn.replace("-", "－");
+		rtn = rtn.replace("*", "×");
+		rtn = rtn.replace("＝", "=");
+		rtn = rtn.replace("!", "！");
+		rtn = rtn.replace("+", "＋");
+		rtn = rtn.replace("%", "％");
+		rtn = rtn.replace("(", "（");
+		rtn = rtn.replace(")", "）");
+		// 3-URL编码
+		/*
+		try {
+			rtn = URLEncoder.encode(rtn, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error("编码异常", e)
+		}
+		*/
 		return rtn;
 	}
 }
