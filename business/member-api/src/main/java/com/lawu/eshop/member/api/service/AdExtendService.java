@@ -36,14 +36,14 @@ public interface AdExtendService {
      * @param adMemberParam
      * @return
      */
-    Result<List<AdDTO>> selectListPointTotle(AdPointParam adPointParam);
+    Result<List<AdDTO>> selectAdTopList(AdPointParam adPointParam);
 	
 	/**
 	 * E赞查询
 	 * @param adPraiseParam
 	 * @return
 	 */
-    Result<Page<AdPraiseDTO>> selectPraiseListByMember(AdPraiseParam adPraiseParam);
+    Result<Page<AdPraiseDTO>> selectAdPraiseList(AdPraiseParam adPraiseParam);
     
     /**
      * E赞详情

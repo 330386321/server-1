@@ -157,8 +157,7 @@ public class AdPlatformServiceImpl implements AdPlatformService {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);
         adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
-        Integer i = adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-
+        adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
     }
 
     @Override

@@ -89,7 +89,7 @@ public class BankAccountController extends BaseController{
     		if(bankRs.getModel()){
     			return successCreated(ResultCode.BANK_CASH_EXIST);
     		}else{
-    			 Result rs = bankAccountService.delete(id);
+    			 bankAccountService.delete(id);
     		}
     	}
         return successDelete();
