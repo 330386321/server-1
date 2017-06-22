@@ -230,6 +230,7 @@ public class ShoppingOrderItemExtendConverter {
 		rtn.setProductModelName(shoppingOrderItemExtendBO.getProductModelName());
 		rtn.setProductName(shoppingOrderItemExtendBO.getProductName());
 		rtn.setRefundStatus(shoppingOrderItemExtendBO.getRefundStatus());
+		rtn.setQuantity(shoppingOrderItemExtendBO.getQuantity());
 
 		if (shoppingOrderItemExtendBO.getShoppingOrder() != null) {
 			rtn.setMerchantId(shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId());
