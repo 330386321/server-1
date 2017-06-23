@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class RedissonTest {
 
     private ExecutorService executorService = new ThreadPoolExecutor(3000, 3500, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 
+    @SuppressWarnings("unused")
+	@Ignore
     @Test
     public void lock() throws Exception {
         long startTime = System.currentTimeMillis();
