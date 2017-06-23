@@ -40,7 +40,7 @@ public class ShoppingCartConverter {
 
 		rtn = new ShoppingCartBO();
 		rtn.setId(shoppingCartDO.getId());
-		rtn.setMerchantId(shoppingCartDO.getMemberId());
+		rtn.setMerchantId(shoppingCartDO.getMerchantId());
 		rtn.setMerchantName(shoppingCartDO.getMerchantName());
 		rtn.setProductId(shoppingCartDO.getProductId());
 		rtn.setProductModelId(shoppingCartDO.getProductModelId());
