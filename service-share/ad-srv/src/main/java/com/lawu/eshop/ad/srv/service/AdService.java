@@ -1,16 +1,22 @@
 package com.lawu.eshop.ad.srv.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * E赚接口
@@ -263,5 +269,12 @@ public interface AdService {
 	 * @param adIds
 	 */
 	void batchDeleteAd(List<Long> adIds);
+	
+	/**
+	 * 商家广告详情
+	 * @param id
+	 * @return
+	 */
+	AdDetailBO selectDetail(Long id);
 
 }

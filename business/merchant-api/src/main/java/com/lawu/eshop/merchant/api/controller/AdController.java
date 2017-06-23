@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.param.AdAgainPutParam;
@@ -237,7 +238,7 @@ public class AdController extends BaseController {
 	}
 
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
-    @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
+    @ApiOperation(value = "广告详情(再次投放回显)", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectById/{id}", method = RequestMethod.GET)
@@ -345,4 +346,12 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.FAIL);
     	}
 	}
+    
+    @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "selectDetail/{id}", method = RequestMethod.GET)
+    public Result<AdDetailDTO> selectDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+    	return adService.selectDetail(id);
+    }
 }

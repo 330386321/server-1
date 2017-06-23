@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
@@ -88,5 +89,13 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/batchDeleteAd", method = RequestMethod.DELETE)
 	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids);
+	
+	/**
+	 * 广告详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "ad/selectDetail/{id}", method = RequestMethod.GET)
+	public Result<AdDetailDTO> selectDetail(@PathVariable("id") Long id);
 
 }

@@ -529,5 +529,15 @@ public class AdController extends BaseController{
 		adService.batchDeleteAd(ids);
 		return successDelete();
 	}
+	
+	/**
+	 * 商家详情
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectDetail/{id}", method = RequestMethod.GET)
+	public Result<AdDetailDTO> selectDetail(@PathVariable Long id) {
+		return successCreated(AdConverter.convertDetailDTO(adService.selectDetail(id)));
+	}
 
 }

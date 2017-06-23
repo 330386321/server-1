@@ -5,6 +5,7 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.*;
 import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
@@ -328,5 +329,65 @@ public class AdConverter {
         }
         return document;
     }
+
+	public static AdDetailBO convertDetailBO(AdDO adDO) {
+		AdDetailBO adDetailBO=new AdDetailBO();
+		if(adDO==null){
+			return adDetailBO;
+		}
+		adDetailBO.setId(adDO.getId());
+		adDetailBO.setAdCount(adDO.getAdCount());
+		adDetailBO.setMediaUrl(adDO.getMediaUrl());
+		adDetailBO.setGmtCreate(adDO.getGmtCreate());
+		adDetailBO.setAdCount(adDO.getAdCount());
+		adDetailBO.setPoint(adDO.getPoint());
+		adDetailBO.setTitle(adDO.getTitle());
+		adDetailBO.setTypeEnum(AdTypeEnum.getEnum(adDO.getType()));
+		adDetailBO.setPutWayEnum(PutWayEnum.getEnum(adDO.getPutWay()));
+		adDetailBO.setStatusEnum(AdStatusEnum.getEnum(adDO.getStatus()));
+		adDetailBO.setTotalPoint(adDO.getTotalPoint());
+		adDetailBO.setRadius(adDO.getRadius());
+		adDetailBO.setContent(adDO.getContent());
+		adDetailBO.setVideoImgUrl(adDO.getVideoImgUrl());
+		adDetailBO.setRadius(adDO.getRadius());
+		adDetailBO.setRegionName(adDO.getRegionName());
+		adDetailBO.setRemark(adDO.getRemark());
+		adDetailBO.setAuditTime(adDO.getAuditTime());
+        return adDetailBO;
+		
+		
+	}
+	
+	public static AdDetailDTO convertDetailDTO(AdDetailBO adDetailBO) {
+		AdDetailDTO adDetailDTO=new AdDetailDTO();
+		if(adDetailBO==null){
+			return adDetailDTO;
+		}
+		adDetailDTO.setId(adDetailBO.getId());
+		adDetailDTO.setAdCount(adDetailBO.getAdCount());
+		adDetailDTO.setMediaUrl(adDetailBO.getMediaUrl());
+		adDetailDTO.setGmtCreate(adDetailBO.getGmtCreate());
+		adDetailDTO.setAdCount(adDetailBO.getAdCount());
+		adDetailDTO.setPoint(adDetailBO.getPoint());
+		adDetailDTO.setTitle(adDetailBO.getTitle());
+		adDetailDTO.setTypeEnum(adDetailBO.getTypeEnum());
+		adDetailDTO.setPutWayEnum(adDetailBO.getPutWayEnum());
+		adDetailDTO.setStatusEnum(adDetailBO.getStatusEnum());
+		adDetailDTO.setTotalPoint(adDetailBO.getTotalPoint());
+		adDetailDTO.setRadius(adDetailBO.getRadius());
+		adDetailDTO.setContent(adDetailBO.getContent());
+		adDetailDTO.setVideoImgUrl(adDetailBO.getVideoImgUrl());
+		adDetailDTO.setRadius(adDetailBO.getRadius());
+		adDetailDTO.setRegionName(adDetailBO.getRegionName());
+		adDetailDTO.setRemark(adDetailBO.getRemark());
+		adDetailDTO.setAuditTime(adDetailBO.getAuditTime());
+		adDetailDTO.setAlreadyGetCount(adDetailBO.getAlreadyGetCount());
+		adDetailDTO.setNotGetCount(adDetailBO.getNotGetCount());
+		adDetailDTO.setAlreadyGetPoint(adDetailBO.getAlreadyGetPoint());
+		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
+        return adDetailDTO;
+		
+		
+	}
 
 }
