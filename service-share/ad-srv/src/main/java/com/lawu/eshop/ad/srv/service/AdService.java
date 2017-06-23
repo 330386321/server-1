@@ -254,5 +254,11 @@ public interface AdService {
 	 * 定时任务修改结束
 	 */
 	void updatAdToPuted();
+	
+	/**
+	 * 商家端广告批量删除
+	 * @param adIds
+	 */
+	void batchDeleteAd(List<Long> adIds);
 
 }

@@ -71,4 +71,12 @@
       	 type !=4 and <![CDATA[ status > 0 and status < 3  ]]>
       	 order by gmt_create desc
   </select>
+  
+  <!-- 商家批量删除广告 -->
+  <update id="batchDeleteAd">
+       update ad set status=0 where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

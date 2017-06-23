@@ -916,4 +916,9 @@ public class AdServiceImpl implements AdService {
 		}
 	}
 
+	@Override
+	public void batchDeleteAd(List<Long> adIds) {
+		adDOMapperExtend.batchDeleteAd(adIds);
+	}
+
 }

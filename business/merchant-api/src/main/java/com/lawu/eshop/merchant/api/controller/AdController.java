@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,7 +39,6 @@ import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
-import com.lawu.eshop.utils.StringUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -243,4 +244,17 @@ public class AdController extends BaseController {
     	return adService.selectById(id);
     }
 
+	 @ApiOperation(value = "广告批量删除", notes = "广告批量删除,[]（张荣成）", httpMethod = "DELETE")
+     @Authorization
+     @ApiResponse(code = HttpCode.SC_OK, message = "success")
+     @RequestMapping(value = "batchDeleteAd", method = RequestMethod.DELETE)
+     public Result batchDeleteAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告ids,中间以“/”隔开  如100/101") String ids) {
+		String[] strIds= ids.split("/");
+		List<Long> adIds=new ArrayList<>();
+		for (String str : strIds) {
+			adIds.add(Long.valueOf(str));
+		}
+    	Result rs= adService.batchDeleteAd(adIds);
+    	return successDelete();
+     }
 }

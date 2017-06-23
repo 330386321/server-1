@@ -1,5 +1,7 @@
 package com.lawu.eshop.merchant.api.service;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,5 +80,13 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
 	Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
+	
+	/**
+	 * 商家批量删除广告
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "ad/batchDeleteAd", method = RequestMethod.DELETE)
+	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids);
 
 }

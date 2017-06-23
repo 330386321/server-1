@@ -512,5 +512,17 @@ public class AdController extends BaseController{
 		dto.setIsExistsRedPacket(flag);
 		return successCreated(dto);
 	}
+	
+	
+	/**
+	 * 商家批量删除广告
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "batchDeleteAd", method = RequestMethod.DELETE)
+	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids) {
+		adService.batchDeleteAd(ids);
+		return successDelete();
+	}
 
 }

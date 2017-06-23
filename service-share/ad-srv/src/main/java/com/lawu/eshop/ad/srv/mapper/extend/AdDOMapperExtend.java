@@ -25,4 +25,10 @@ public interface AdDOMapperExtend {
      * @return
      */
     List<AdDO> selectChoiceness();
+    
+    /**
+     * 商家端批量删除
+     * @param adIds
+     */
+    void batchDeleteAd(List<Long> adIds);
 }
