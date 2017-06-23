@@ -54,17 +54,49 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		rtn = StringEscapeUtils.escapeHtml(rtn);
 		*/
 		// 2-半角转全角
-		rtn = rtn.replace("'", "＇");
-		rtn = rtn.replace("<", "＜");
-		rtn = rtn.replace(">", "＞");
-		rtn = rtn.replace(">", "＞");
-		rtn = rtn.replace("#", "＃");
-		rtn = rtn.replace("*", "×");
-		rtn = rtn.replace("＝", "=");
-		rtn = rtn.replace("!", "！");
-		rtn = rtn.replace("+", "＋");
-		rtn = rtn.replace("(", "（");
-		rtn = rtn.replace(")", "）");
+		StringBuilder stringBuilder = new StringBuilder();
+		for(int i = 0; i < rtn.length(); i++) {
+			char c = rtn.charAt(i);
+			switch(c){
+	            case '>':  
+	                stringBuilder.append('＞');//全角大于号  
+	                break;  
+	            case '<':  
+	                stringBuilder.append('＜');//全角小于号  
+	                break;  
+	            case '\'':  
+	                stringBuilder.append('＇');//全角单引号  
+	                break;  
+	            case '&':  
+	                stringBuilder.append('＆');//全角  
+	                break;  
+	            case '\\':  
+	                stringBuilder.append('＼');//全角斜线  
+	                break;  
+	            case '(':  
+	                stringBuilder.append('（');//全角做括号  
+	                break;
+	            case ')':  
+	                stringBuilder.append('）');//全角右括号
+	                break;
+	            case '!':  
+	                stringBuilder.append('！');//全角感叹号 
+	                break;
+	            case '*':  
+	                stringBuilder.append('＊');//全角星号  
+	                break;
+	            case '+':  
+	                stringBuilder.append('＋');//全角星号  
+	                break;
+	            case '＝':  
+	                stringBuilder.append('＝');//全角星号  
+	                break;
+	            default:  
+	                stringBuilder.append(c);  
+	                break;  
+	        }
+        }
+		rtn = stringBuilder.toString();
 		// 3-URL编码
 		/*
 		try {
