@@ -1,9 +1,9 @@
 package com.lawu.eshop.framework.web.filter;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-
-import org.apache.commons.lang.StringEscapeUtils;
 
 public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	
@@ -50,7 +50,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		}
 		// escape
 		rtn = StringEscapeUtils.escapeSql(rtn);
-		rtn = StringEscapeUtils.escapeHtml(rtn);
+		//rtn = StringEscapeUtils.escapeHtml(rtn);
 		return rtn;
 	}
 }

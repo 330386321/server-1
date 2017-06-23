@@ -1,12 +1,12 @@
 package com.lawu.eshop.ad.srv.bo;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class AdBO {
 
@@ -49,6 +49,10 @@ public class AdBO {
 	private Boolean isPraise;
 	
 	private AdPraiseStatusEnum adPraiseStatusEnum;
+
+	private Integer auditorId;
+
+	private String remark;
 	
 	 /**
     *
@@ -264,7 +268,20 @@ public class AdBO {
 	public void setRegionName(String regionName) {
 		this.regionName = regionName;
 	}
-	
-	
 
+	public Integer getAuditorId() {
+		return auditorId;
+	}
+
+	public void setAuditorId(Integer auditorId) {
+		this.auditorId = auditorId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

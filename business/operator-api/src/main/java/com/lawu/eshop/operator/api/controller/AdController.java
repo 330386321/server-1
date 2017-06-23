@@ -21,6 +21,7 @@ import com.lawu.eshop.operator.api.service.*;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
+import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import io.swagger.annotations.Api;
@@ -32,6 +33,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 描述：广告管理
@@ -59,6 +62,9 @@ public class AdController extends BaseController {
     @Autowired
     private MerchantService merchantService;
 
+    @Autowired
+    private UserService userService;
+
     @ApiOperation(value = "广告列表", notes = "广告列表,[]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
@@ -73,16 +79,28 @@ public class AdController extends BaseController {
     @RequiresPermissions("adAudit:list")
     @RequestMapping(value = "listAd", method = RequestMethod.POST)
     public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam ListAdParam listAdParam) {
-        if (listAdParam.getTypeEnum().val == AdTypeEnum.AD_TYPE_PACKET.val) {
+        if (listAdParam.getTypeEnum().val.byteValue() == AdTypeEnum.AD_TYPE_PACKET.val) {
             listAdParam.setTypeEnum(null);
         }
-        if (listAdParam.getPutWayEnum().val == PutWayEnum.PUT_WAY_COMMON.val) {
+        if (listAdParam.getPutWayEnum().val.byteValue() == PutWayEnum.PUT_WAY_COMMON.val) {
             listAdParam.setPutWayEnum(null);
         }
-        if (listAdParam.getStatusEnum().val == AdStatusEnum.AD_STATUS_PUTED.val) {
+        if (listAdParam.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTED.val) {
             listAdParam.setStatusEnum(null);
         }
-        return adService.listAd(listAdParam);
+        Result<Page<AdDTO>> result = adService.listAd(listAdParam);
+        List<AdDTO> list = result.getModel().getRecords();
+        if(list != null && !list.isEmpty()){
+            for(AdDTO adDTO : list){
+                if (adDTO.getAuditorId() != null && adDTO.getAuditorId() > 0) {
+                    Result<UserListDTO> userListDTOResult = userService.findUserById(adDTO.getAuditorId());
+                    if (isSuccess(userListDTOResult)) {
+                        adDTO.setAuditorName(userListDTOResult.getModel().getName());
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     @ApiOperation(value = "广告详情", notes = "查询广告详情。[1002]（梅述全）", httpMethod = "GET")
@@ -176,7 +194,12 @@ public class AdController extends BaseController {
     @RequiresPermissions("adAudit:pass")
     @RequestMapping(value = "auditVideoPass/{id}", method = RequestMethod.PUT)
     public Result auditVideoPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_PASS);
+        Integer auditorId = 0;
+        Result<UserListDTO> userResult = userService.getUserByAccount(UserUtil.getCurrentUserAccount());
+        if(isSuccess(userResult)){
+            auditorId = userResult.getModel().getId();
+        }
+        Result rs = adService.auditVideo(id, auditorId, "", AuditEnum.AD_AUDIT_PASS);
         if(!isSuccess(rs)){
             return rs;
         }
@@ -208,12 +231,18 @@ public class AdController extends BaseController {
         return rs;
     }
 
-    @ApiOperation(value = "广告审核不通过", notes = "广告审核,[]（张荣成）", httpMethod = "PUT")
+    @ApiOperation(value = "广告审核不通过", notes = "广告审核,[8110]（张荣成）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresPermissions("adAudit:unpass")
-    @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.PUT)
-    public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        Result rs = adService.auditVideo(id, AuditEnum.AD_AUDIT_UN_PASS);
+    @RequestMapping(value = "auditVideoUnPass/{id}", method = RequestMethod.POST)
+    public Result auditVideoUnPass(@PathVariable @ApiParam(required = true, value = "广告id") Long id,
+                                   @RequestParam @ApiParam(required = true, value = "审核备注") String remark) {
+        Integer auditorId = 0;
+        Result<UserListDTO> userResult = userService.getUserByAccount(UserUtil.getCurrentUserAccount());
+        if(isSuccess(userResult)){
+            auditorId = userResult.getModel().getId();
+        }
+        Result rs = adService.auditVideo(id, auditorId, remark, AuditEnum.AD_AUDIT_UN_PASS);
         if(!isSuccess(rs)){
             return rs;
         }
@@ -244,6 +273,5 @@ public class AdController extends BaseController {
         logService.saveLog(logParam);
         return rs;
     }
-
 
 }

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-           location="G:/lib/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
+           location="E:/maven/repository/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -42,16 +42,11 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         
-         <table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
+        <!--
+        <table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        
-        <!-- 
          <table tableName="ad_platform" domainObjectName="AdPlatformDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table> 
-        
-         <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="member_ad_record" domainObjectName="MemberAdRecordDO">
@@ -94,8 +89,10 @@
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
         <table tableName="follow_transaction_record" domainObjectName="FollowTransactionRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+        <table tableName="ad" domainObjectName="AdDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

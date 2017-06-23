@@ -1,16 +1,11 @@
 package com.lawu.eshop.ad.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.ad.constants.*;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.ManageTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-
-import io.swagger.annotations.ApiModelProperty;
 
 
 public class AdDTO {
@@ -95,6 +90,15 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "视频封面图片路径")
 	private String videoImgUrl;
+
+	@ApiModelProperty(value = "审核人员ID")
+	private Integer auditorId;
+
+	@ApiModelProperty(value = "审核人")
+	private String  auditorName;
+
+	@ApiModelProperty(value = "审核备注")
+	private String remark;
 
 	public Long getId() {
 		return id;
@@ -357,9 +361,27 @@ public class AdDTO {
 		this.videoImgUrl = videoImgUrl;
 	}
 
-	
-	
+	public Integer getAuditorId() {
+		return auditorId;
+	}
 
-	
-	
+	public void setAuditorId(Integer auditorId) {
+		this.auditorId = auditorId;
+	}
+
+	public String getAuditorName() {
+		return auditorName;
+	}
+
+	public void setAuditorName(String auditorName) {
+		this.auditorName = auditorName;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 }

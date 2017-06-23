@@ -282,7 +282,7 @@ public class AdServiceImpl implements AdService {
 		 }
 		 example.setOrderByClause("gmt_create "+adMerchantParam.getOrderType()+"");
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
-		 Long count=adDOMapper.countByExample(example);
+		 int count=adDOMapper.countByExample(example);
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		 for (AdDO adDO : DOS) {
 			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.val){
@@ -291,7 +291,7 @@ public class AdServiceImpl implements AdService {
 		 }
 		 Page<AdBO> page=new Page<AdBO>();
 		 page.setCurrentPage(adMerchantParam.getCurrentPage());
-		 page.setTotalCount(count.intValue());
+		 page.setTotalCount(count);
 		 page.setRecords(AdConverter.convertBOS(DOS));
 		return page;
 	}
@@ -353,11 +353,11 @@ public class AdServiceImpl implements AdService {
 			cr.andGmtCreateBetween(adPlatParam.getBeginTime(), adPlatParam.getEndTime());
 		}
 		RowBounds rowBounds = new RowBounds(adPlatParam.getOffset(), adPlatParam.getPageSize());
-		Long count=adDOMapper.countByExample(example);
+		int count=adDOMapper.countByExample(example);
 		List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
 		Page<AdBO> page=new Page<AdBO>();
 		page.setCurrentPage(adPlatParam.getCurrentPage());
-		page.setTotalCount(count.intValue());
+		page.setTotalCount(count);
 		page.setRecords(AdConverter.convertBOS(DOS));
 		return page;
 	}
@@ -467,20 +467,24 @@ public class AdServiceImpl implements AdService {
 	 */
 	@Override
 	@Transactional
-	public Integer auditVideo(Long id,AuditEnum auditEnum) {
+	public Integer auditVideo(Long id, Integer auditorId, String remark, AuditEnum auditEnum) {
 		AdDO adDO = new AdDO();
-		if(auditEnum.val==AuditEnum.AD_AUDIT_PASS.val){
+		if (auditEnum.val.byteValue() == AuditEnum.AD_AUDIT_PASS.val) {
 			adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
-		}else{
+			adDO.setRemark("");
+		} else {
 			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT_FAIL.val);
+			adDO.setRemark(remark);
 		}
 		adDO.setId(id);
-		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
-		if(auditEnum.val == AuditEnum.AD_AUDIT_PASS.val){
-			adDO=adDOMapper.selectByPrimaryKey(id);
+		adDO.setAuditorId(auditorId);
+		adDO.setAuditTime(new Date());
+		Integer i = adDOMapper.updateByPrimaryKeySelective(adDO);
+		if (auditEnum.val.byteValue() == AuditEnum.AD_AUDIT_PASS.val) {
+			adDO = adDOMapper.selectByPrimaryKey(id);
 			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
 			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}else{
+		} else {
 			//审核不通过退还积分
 			matransactionMainAddService.sendNotice(id);
 		}
@@ -611,8 +615,8 @@ public class AdServiceImpl implements AdService {
 	public Integer selectRPIsSend(Long merchantId) {
 		AdDOExample example=new AdDOExample();
 		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
-		Long count=adDOMapper.countByExample(example);
-		return count.intValue();
+		int count=adDOMapper.countByExample(example);
+		return count;
 	}
 
 	
@@ -690,12 +694,12 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andTypeNotEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
 		RowBounds rowBounds = new RowBounds((currentPage-1)*100, 100);
 		List<AdDO> list=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
-		Long count=adDOMapper.countByExample(example);
+		int count=adDOMapper.countByExample(example);
 		int totalPageNum;
-		if(count.intValue()%100==0){
-			totalPageNum=count.intValue()/100;
+		if(count%100==0){
+			totalPageNum=count/100;
 		}else{
-			totalPageNum=count.intValue()/100+1;
+			totalPageNum=count/100+1;
 		}
 		if(currentPage>=totalPageNum){
 			currentPage=1;
@@ -751,7 +755,7 @@ public class AdServiceImpl implements AdService {
 
 		Page<AdBO> page = new Page<>();
 		page.setCurrentPage(listAdParam.getCurrentPage());
-		page.setTotalCount((int)adDOMapper.countByExample(example));
+		page.setTotalCount(adDOMapper.countByExample(example));
 
 		List<AdDO> adDOS = adDOMapper.selectByExampleWithRowbounds(example,rowBounds);
 		page.setRecords(AdConverter.convertBOS(adDOS));

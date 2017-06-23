@@ -46,7 +46,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.PUT,value = "ad/auditVideo/{id}")
-    public Result auditVideo(@PathVariable("id") Long id,@RequestBody AuditEnum auditEnum);
+    Result auditVideo(@PathVariable("id") Long id, @RequestParam("auditorId") Integer auditorId, @RequestParam("remark") String remark, @RequestBody AuditEnum auditEnum);
 
 	/**
 	 * 查询广告列表

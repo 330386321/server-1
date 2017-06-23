@@ -57,9 +57,12 @@ public interface AdService {
      * 审核视频广告
      *
      * @param id
+     * @param auditorId
+     * @param remark
+     * @param auditEnum
      * @return
      */
-    Integer auditVideo(Long id, AuditEnum auditEnum);
+    Integer auditVideo(Long id, Integer auditorId, String remark, AuditEnum auditEnum);
 
     /**
      * 运营平台对E赚的查询

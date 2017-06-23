@@ -165,21 +165,26 @@ public class AdController extends BaseController{
 	     	}
 		}
 	}
-	
+
 	/**
 	 * 对视频广告的审核
+	 *
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value = "auditVideo/{id}", method = RequestMethod.PUT)
-    public Result auditVideo(@PathVariable Long id,@RequestBody AuditEnum auditEnum) {
-    	Integer i= adService.auditVideo(id,auditEnum);
- 		if(i>0){
-     		return successCreated(ResultCode.SUCCESS);
-     	}else{
-     		return successCreated(ResultCode.FAIL);
-     	}
-    }
+	public Result auditVideo(@PathVariable Long id, @RequestParam Integer auditorId, @RequestParam String remark, @RequestBody AuditEnum auditEnum) {
+		AdBO adBO = adService.selectById(id);
+		if(adBO != null && adBO.getStatusEnum().val.byteValue() != AdStatusEnum.AD_STATUS_AUDIT.val){
+			return successGet(ResultCode.AD_AUDITED);
+		}
+		Integer i = adService.auditVideo(id, auditorId, remark, auditEnum);
+		if (i > 0) {
+			return successCreated(ResultCode.SUCCESS);
+		} else {
+			return successCreated(ResultCode.FAIL);
+		}
+	}
 	
 	/**
 	 * 运营查询广告

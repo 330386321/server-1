@@ -1,25 +1,20 @@
 package com.lawu.eshop.ad.srv.converter;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
+import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.PutWayEnum;
+import com.lawu.eshop.ad.dto.*;
+import com.lawu.eshop.ad.srv.bo.AdBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 
-import com.lawu.eshop.ad.constants.AdStatusEnum;
-import com.lawu.eshop.ad.constants.AdTypeEnum;
-import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDTO;
-import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
-import com.lawu.eshop.ad.dto.AdPraiseDTO;
-import com.lawu.eshop.ad.dto.AdSolrDTO;
-import com.lawu.eshop.ad.srv.bo.AdBO;
-import com.lawu.eshop.ad.srv.domain.AdDO;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * E赚实体转化
@@ -62,6 +57,8 @@ public class AdConverter {
 		adBO.setRadius(adDO.getRadius());
 		adBO.setContent(adDO.getContent());
 		adBO.setRegionName(adDO.getRegionName());
+		adBO.setAuditorId(adDO.getAuditorId());
+		adBO.setRemark(adDO.getRemark());
         return adBO;
 		
 	}
@@ -116,6 +113,8 @@ public class AdConverter {
 		adDTO.setIsFavorite(adBO.getIsFavorite());
 		adDTO.setIsPraise(adBO.getIsPraise());
 		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
+		adDTO.setAuditorId(adBO.getAuditorId());
+		adDTO.setRemark(adBO.getRemark());
 		Date date=new Date();
 		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ 300000-date.getTime();
