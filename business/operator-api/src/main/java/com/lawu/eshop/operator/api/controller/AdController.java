@@ -255,6 +255,7 @@ public class AdController extends BaseController {
         MessageTempParam messageTempParam = new MessageTempParam();
         messageTempParam.setAdTypeName(AdTypeEnum.AD_TYPE_VIDEO.getName());
         messageTempParam.setAdName(adDTOResult.getModel().getTitle());
+        messageTempParam.setFailReason(remark);
         messageInfoParam.setRelateId(id);
         messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_CHECK_AD_FAIL);
         messageInfoParam.setMessageParam(messageTempParam);
