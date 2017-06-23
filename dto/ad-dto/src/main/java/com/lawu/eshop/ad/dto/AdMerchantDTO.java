@@ -44,6 +44,18 @@ public class AdMerchantDTO {
 	
 	@ApiModelProperty(value = "推广单号")
 	private String expandOrder;
+	
+	@ApiModelProperty(value = "广告附件路径")
+    private String mediaUrl;
+	
+	@ApiModelProperty(value = "视频封面图片路径")
+	private String videoImgUrl;
+	
+	@ApiModelProperty(value = "雷达半径")
+    private Integer radius;
+	
+	@ApiModelProperty(value = "区域名称")
+	private String regionName;
 
 	public Long getId() {
 		return id;
@@ -123,6 +135,38 @@ public class AdMerchantDTO {
 
 	public void setExpandOrder(String expandOrder) {
 		this.expandOrder = expandOrder;
+	}
+
+	public String getMediaUrl() {
+		return mediaUrl;
+	}
+
+	public void setMediaUrl(String mediaUrl) {
+		this.mediaUrl = mediaUrl;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
+	}
+
+	public Integer getRadius() {
+		return radius;
+	}
+
+	public void setRadius(Integer radius) {
+		this.radius = radius;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
 	}
 
 	

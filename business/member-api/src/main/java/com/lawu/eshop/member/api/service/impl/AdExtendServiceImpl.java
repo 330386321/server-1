@@ -525,7 +525,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 							if (merchantAdInfoDTO.getPath() != null) {
 								adFlatVideoDTO.setLogoUrl(merchantAdInfoDTO.getPath());
 							} else {
-								adFlatVideoDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+								adFlatVideoDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg()); 
 							}
 							if (merchantAdInfoDTO.getManageTypeEnum() != null) {
 								adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum

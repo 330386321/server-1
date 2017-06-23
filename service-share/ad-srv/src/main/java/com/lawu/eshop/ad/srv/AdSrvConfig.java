@@ -18,6 +18,9 @@ public class AdSrvConfig {
 
     @Value(value = "${is_cloud_solr}")
     private Boolean isCloudSolr;
+    
+    @Value(value = "${image.ad_default_mediaUrl}")
+    private String adDefaultMediaUrl;
 
     public String getSolrUrl() {
         return solrUrl;
@@ -30,4 +33,14 @@ public class AdSrvConfig {
     public Boolean getIsCloudSolr() {
         return isCloudSolr;
     }
+
+	public String getAdDefaultMediaUrl() {
+		return adDefaultMediaUrl;
+	}
+
+	public void setAdDefaultMediaUrl(String adDefaultMediaUrl) {
+		this.adDefaultMediaUrl = adDefaultMediaUrl;
+	}
+    
+    
 }

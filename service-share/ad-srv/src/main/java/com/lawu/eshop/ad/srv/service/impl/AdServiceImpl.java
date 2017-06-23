@@ -284,6 +284,11 @@ public class AdServiceImpl implements AdService {
 		 RowBounds rowBounds = new RowBounds(adMerchantParam.getOffset(), adMerchantParam.getPageSize());
 		 Long count=adDOMapper.countByExample(example);
 		 List<AdDO> DOS=adDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		 for (AdDO adDO : DOS) {
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_PACKET.val){
+				adDO.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+			}
+		 }
 		 Page<AdBO> page=new Page<AdBO>();
 		 page.setCurrentPage(adMerchantParam.getCurrentPage());
 		 page.setTotalCount(count.intValue());

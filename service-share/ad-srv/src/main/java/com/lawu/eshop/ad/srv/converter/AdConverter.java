@@ -176,6 +176,10 @@ public class AdConverter {
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmm");
 			dto.setExpandOrder(sdf.format(adBO.getGmtCreate())+adBO.getId());
 			dto.setMemberCount(adBO.getAdCount());
+			dto.setMediaUrl(adBO.getMediaUrl());
+			dto.setVideoImgUrl(adBO.getVideoImgUrl());
+			dto.setRadius(adBO.getRadius());
+			dto.setRegionName(adBO.getRegionName());
 			DTOS.add(dto);
 		}
 		return DTOS;
