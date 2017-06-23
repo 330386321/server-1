@@ -63,7 +63,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		rtn = rtn.replace("＝", "=");
 		rtn = rtn.replace("!", "！");
 		rtn = rtn.replace("+", "＋");
-		rtn = rtn.replace("%", "％");
 		rtn = rtn.replace("(", "（");
 		rtn = rtn.replace(")", "）");
 		// 3-URL编码
