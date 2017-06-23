@@ -7,10 +7,7 @@ import com.lawu.eshop.product.dto.ProductSearchWordDTO;
 import com.lawu.eshop.product.param.ProductSearchParam;
 import com.lawu.eshop.product.param.ProductSearchRealParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -66,4 +63,6 @@ public interface ProductSolrService {
     @RequestMapping(method = RequestMethod.GET, value = "productSolr/listProductSearchWord")
     Result<List<ProductSearchWordDTO>> listProductSearchWord(@RequestParam("name") String name);
 
+    @RequestMapping(method = RequestMethod.POST, value = "productSolr/findProductSearchList")
+    List<ProductSearchDTO> findProductSearchList(@RequestBody  ProductSearchParam searchParam);
 }

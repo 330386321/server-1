@@ -2,6 +2,8 @@ package com.lawu.eshop.user.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import java.util.List;
+
 /**
  * @author meishuquan
  * @date 2017/4/21.
@@ -25,6 +27,11 @@ public class ShoppingStoreDetailDTO {
 
     @ApiModelProperty(value = "门店logo")
     private String logoPic;
+
+    @ApiModelProperty(value = "门店是否存在（注销状态） true:是，false:否")
+    private boolean isExistStore;
+
+    private List<ProductSearchListDTO> productList;
 
     public Long getMerchantId() {
         return merchantId;
@@ -72,5 +79,21 @@ public class ShoppingStoreDetailDTO {
 
     public void setLogoPic(String logoPic) {
         this.logoPic = logoPic;
+    }
+
+    public List<ProductSearchListDTO> getProductList() {
+        return productList;
+    }
+
+    public void setProductList(List<ProductSearchListDTO> productList) {
+        this.productList = productList;
+    }
+
+    public boolean isExistStore() {
+        return isExistStore;
+    }
+
+    public void setExistStore(boolean existStore) {
+        isExistStore = existStore;
     }
 }

@@ -42,4 +42,16 @@ public class MerchantStoreImageServiceImpl implements MerchantStoreImageService 
 	     }
 		
 	}
+
+	@Override
+	public String selectLogoUrlByStoreId(Long id) {
+		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
+		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(id).andTypeEqualTo(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val).andStatusEqualTo(true);
+		List<MerchantStoreImageDO> merchantStoreImageDOS = merchantStoreImageDOMapper.selectByExample(merchantStoreImageDOExample);
+		if (!merchantStoreImageDOS.isEmpty()) {
+			return merchantStoreImageDOS.get(0).getPath();
+		} else {
+			return "";
+		}
+	}
 }

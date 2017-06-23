@@ -171,4 +171,21 @@ public class ProductSolrController extends BaseController {
         return successGet(productSearchWordDTOS);
     }
 
+    /**
+     * 查询日销量商品列表
+     * @param searchParam
+     * @return
+     * @author zhangy
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "findProductSearchList")
+    public List<ProductSearchDTO> findProductSearchList(@RequestBody  ProductSearchParam searchParam){
+        SolrQuery query = new SolrQuery();
+        query.setQuery("*:*");
+        query.setSort("averageDailySales_d", SolrQuery.ORDER.desc);
+        query.setStart(searchParam.getOffset());
+        query.setRows(searchParam.getPageSize());
+        SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
+        return  ProductConverter.convertDTO(solrDocumentList);
+    }
+
 }

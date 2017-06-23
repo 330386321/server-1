@@ -1,12 +1,13 @@
 package com.lawu.eshop.user.srv.service;
 
-import java.util.List;
-
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
+
+import java.util.List;
 
 /**
  * 店面信息获取
@@ -85,4 +86,5 @@ public interface MerchantStoreService {
      */
     List<MerchantAdInfoBO> getAdMerchantStoreByIds(List<Long> merchantIds);
 
+    MerchantStoreStatusBO merchantStoreIsExist(Long id);
 }

@@ -132,4 +132,21 @@ public interface MerchantStoreService {
     
     @RequestMapping(value = "merchantStore/getAdMerchantStoreByIds", method = RequestMethod.GET)
 	Result<List<MerchantAdInfoDTO>> getAdMerchantStoreByIds(@RequestParam("merchantIds") List<Long> merchantIds);
+
+    /**
+     * 判断门店是否存在
+     * @param id
+     * @return
+     * @author zhangy
+     */
+    @RequestMapping(value = "merchantStore/merchantStoreIsExist/{id}", method = RequestMethod.GET)
+    MerchantStoreStatusDTO merchantStoreIsExist(@PathVariable("id") Long id);
+
+    /**
+     * 查询logo图片
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/getLogoUrlByStoreId/{id}", method = RequestMethod.GET)
+    String getLogoUrlByStoreId(@PathVariable("id") Long id);
 }

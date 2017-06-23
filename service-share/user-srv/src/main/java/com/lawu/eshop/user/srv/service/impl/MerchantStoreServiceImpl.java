@@ -10,6 +10,7 @@ import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
+import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
@@ -211,5 +212,19 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 		}
 		return BOList;
 	}
+
+    @Override
+    public MerchantStoreStatusBO merchantStoreIsExist(Long id) {
+        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(id);
+        MerchantStoreStatusBO storeStatusBO = new MerchantStoreStatusBO();
+        if (merchantStoreDO == null) {
+            storeStatusBO.setExist(false);
+            return storeStatusBO;
+        } else {
+            storeStatusBO.setExist(true);
+            storeStatusBO.setStatus(merchantStoreDO.getStatus());
+            return storeStatusBO;
+        }
+    }
 
 }
