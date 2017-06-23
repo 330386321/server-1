@@ -50,7 +50,7 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
 		// 从事务幂等性保证，表中存在记录，说明消息已经被成功消费，直接返回
 		if (followTransactionRecordService.isExist(topic, notification.getTransactionId())) {
 			logger.info("消息已经被消费");
-			R reply = newInstance();
+			R reply = getReply(notification);
 			if ( reply != null ) {
                 reply.setTransactionId(notification.getTransactionId());
                 sendCallback(reply);
@@ -100,20 +100,18 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
     public abstract R execute(N notification);
     
     /**
-     * 获取R实例化对象
-     * 
-     * @return
-     * @author Sunny
-     * @date 2017年6月8日
+     * 默认为返回一个Reply空对象
+     * 需要的话可以Override
+     *
+     * @param notification
      */
     @SuppressWarnings("unchecked")
-	private R newInstance(){
-    	 try {
+	public R getReply(N notification){
+    	try {
 			return ((Class<R>)((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1]).newInstance();
 		} catch (InstantiationException | IllegalAccessException e) {
 			logger.error("实例化泛型异常", e);
 		}
-		return null;
+    	return null;
     }
-    
 }
