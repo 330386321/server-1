@@ -34,6 +34,10 @@ public class ApplyStoreParam {
 
     private String intro;
 
+    private String regionPath;
+
+    private String regionName;
+
     private MerchantStoreTypeEnum manageType;
 
     public String getLogoUrl() {
@@ -122,5 +126,21 @@ public class ApplyStoreParam {
 
     public void setManageType(MerchantStoreTypeEnum manageType) {
         this.manageType = manageType;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 }

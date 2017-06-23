@@ -49,18 +49,36 @@ public class MerchantDetailController extends BaseController {
     @Autowired
     private ProductSolrService productSolrService;
 
+    @Autowired
+    private StoreSolrService storeSolrService;
+
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "要买单门店详情", notes = "要买单门店详情(用户评价、更多商家查询其他接口)。[1002]（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "store/{id}", method = RequestMethod.GET)
     public Result<StoreDetailDTO> storeDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                                               @PathVariable @ApiParam(required = true, value = "门店ID") Long id) {
+        //判断门店是否存在
+        MerchantStoreStatusDTO storeStatusDTO = merchantStoreService.merchantStoreIsExist(id);
+        if (!storeStatusDTO.isExist()) {
+            return successGet(ResultCode.MERCHANT_STORE_NO_EXIST);
+        }
+        if (MerchantStatusEnum.MERCHANT_STATUS_CANCEL.val.byteValue() == storeStatusDTO.getStatus()) {
+            //门店状态注销，查询门店的logo
+            String storeUrl = merchantStoreService.getStoreUrlByStoreId(id);
+            StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
+            storeDetailDTO.setStorePic(storeUrl);
+            storeDetailDTO.setExistStore(false);
+            return successGet(storeDetailDTO);
+        }
+
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         Result<StoreDetailDTO> stoResult = merchantStoreService.getStoreDetailById(id, memberId);
         if (!isSuccess(stoResult)) {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         StoreDetailDTO storeDetailDTO = stoResult.getModel();
+        storeDetailDTO.setExistStore(true);
         Result<MerchantFavoredDTO> merResult = merchantFavoredService.findFavoredByMerchantId(storeDetailDTO.getMerchantId());
         if (isSuccess(merResult)) {
             MerchantFavoredDTO merchantFavoredDTO = merResult.getModel();

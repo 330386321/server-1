@@ -83,6 +83,9 @@ public class StoreDetailDTO {
     @ApiModelProperty(value = "是否逾期：true--是，false--否")
     private Boolean isOverdue ;
 
+    @ApiModelProperty(value = "门店是否存在（注销状态） true:是,false:否")
+    private boolean isExistStore;
+
     public String getName() {
         return name;
     }
@@ -273,5 +276,13 @@ public class StoreDetailDTO {
 
     public void setIsOverdue(Boolean overdue) {
         isOverdue = overdue;
+    }
+
+    public boolean isExistStore() {
+        return isExistStore;
+    }
+
+    public void setExistStore(boolean existStore) {
+        isExistStore = existStore;
     }
 }

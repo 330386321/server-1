@@ -24,4 +24,6 @@ public interface MerchantStoreImageService {
     String selectLogoPath(Long merchantId);
 
     String selectLogoUrlByStoreId(Long id);
+
+    String getStoreUrlByStoreId(Long id);
 }

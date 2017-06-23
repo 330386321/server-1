@@ -149,4 +149,7 @@ public interface MerchantStoreService {
      */
     @RequestMapping(value = "merchantStore/getLogoUrlByStoreId/{id}", method = RequestMethod.GET)
     String getLogoUrlByStoreId(@PathVariable("id") Long id);
+
+    @RequestMapping(value = "merchantStore/getStoreUrlByStoreId/{id}", method = RequestMethod.GET)
+    String getStoreUrlByStoreId(@PathVariable("id") Long id);
 }

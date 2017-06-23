@@ -293,6 +293,8 @@ public class MerchantStoreController extends BaseController {
 		param.setAddress(merchantStoreBO.getAddress());
 		param.setManageType(MerchantStoreTypeEnum.ENTITY_MERCHANT);
 		param.setIntro(merchantStoreBO.getIntro());
+		param.setRegionPath(merchantStoreBO.getRegionPath());
+		param.setRegionName(merchantStoreBO.getRegionName());
 		// 添加审核记录
 		Integer row = merchantStoreInfoService.applyPhysicalStore(merchantId, merchantStoreBO.getMerchantStoreId(), param);
 		if (row < 0) {
@@ -554,6 +556,17 @@ public class MerchantStoreController extends BaseController {
 	public String getLogoUrlByStoreId(@PathVariable("id") Long id){
 
 		return merchantStoreImageService.selectLogoUrlByStoreId(id);
+	}
+
+	/**
+	 * 查询store图片
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getStoreUrlByStoreId/{id}", method = RequestMethod.GET)
+	public String getStoreUrlByStoreId(@PathVariable("id") Long id){
+
+		return merchantStoreImageService.getStoreUrlByStoreId(id);
 	}
 
 
