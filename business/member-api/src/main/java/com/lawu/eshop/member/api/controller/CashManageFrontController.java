@@ -3,7 +3,6 @@ package com.lawu.eshop.member.api.controller;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +18,6 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.member.api.service.CashManageFrontService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.dto.WithdrawCashDetailDTO;
 import com.lawu.eshop.property.dto.WithdrawCashQueryDTO;
 import com.lawu.eshop.property.param.CashBillDataParam;
 import com.lawu.eshop.property.param.CashBillParam;
@@ -94,15 +92,17 @@ public class CashManageFrontController extends BaseController {
 			@ModelAttribute @ApiParam CashBillParam param) {
 		CashBillDataParam cparam = new CashBillDataParam();
 		cparam.setUserNum(UserUtil.getCurrentUserNum(getRequest()));
+		cparam.setCurrentPage(param.getCurrentPage());
+		cparam.setPageSize(param.getPageSize());
 		return cashManageFrontService.findCashList(cparam);
 	}
 
-	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@ApiOperation(value = "提现详情", notes = "用户提现详情，[]，(杨清华)", httpMethod = "GET")
-	@Authorization
-	@RequestMapping(value = "cashDetail/{id}", method = RequestMethod.GET)
-	public Result<WithdrawCashDetailDTO> cashDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
-			@PathVariable @ApiParam(required = true, value = "提现记录ID") Long id) {
-		return cashManageFrontService.cashDetail(id);
-	}
+//	@Audit(date = "2017-04-15", reviewer = "孙林青")
+//	@ApiOperation(value = "提现详情", notes = "用户提现详情，[]，(杨清华)", httpMethod = "GET")
+//	@Authorization
+//	@RequestMapping(value = "cashDetail/{id}", method = RequestMethod.GET)
+//	public Result<WithdrawCashDetailDTO> cashDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+//			@PathVariable @ApiParam(required = true, value = "提现记录ID") Long id) {
+//		return cashManageFrontService.cashDetail(id);
+//	}
 }

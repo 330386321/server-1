@@ -77,10 +77,15 @@ public class CashManageFrontController extends BaseController {
 		for (WithdrawCashQueryBO bo : cbos) {
 			WithdrawCashQueryDTO dto = new WithdrawCashQueryDTO();
 			dto.setId(bo.getId());
+			dto.setTitle(bo.getTitle());
 			dto.setCashMoney(bo.getCashMoney());
 			dto.setCashStatusEnum(bo.getCashStatusEnum());
 			dto.setCdate(bo.getCdate());
-			dto.setTitle(bo.getTitle());
+			dto.setAcceptDate(bo.getAcceptDate());
+			dto.setFinishDate(bo.getFinishDate());
+			dto.setRemark(bo.getRemark());
+			dto.setActualCashMoney(bo.getActualCashMoney());
+			dto.setChargedMoney(bo.getChargedMoney());
 			dtos.add(dto);
 		}
 		Page<WithdrawCashQueryDTO> pageResult = new Page<WithdrawCashQueryDTO>();

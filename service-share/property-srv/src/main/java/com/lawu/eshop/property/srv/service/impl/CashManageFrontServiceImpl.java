@@ -157,6 +157,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 	public Page<WithdrawCashQueryBO> findCashList(CashBillDataParam cash) {
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
 		example.createCriteria().andUserNumEqualTo(cash.getUserNum());
+		example.setOrderByClause(" id desc ");
 		RowBounds rowBounds = new RowBounds(cash.getOffset(), cash.getPageSize());
 		Page<WithdrawCashQueryBO> page = new Page<WithdrawCashQueryBO>();
 		page.setTotalCount(withdrawCashDOMapper.countByExample(example));
@@ -166,10 +167,18 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		for (WithdrawCashDO cdo : listDOS) {
 			WithdrawCashQueryBO bo = new WithdrawCashQueryBO();
 			bo.setId(cdo.getId());
+			bo.setTitle("提现金额");
 			bo.setCashMoney(cdo.getCashMoney());
-			bo.setCdate(DateUtil.getDateFormat(cdo.getGmtCreate(), "yyyy-MM-dd"));
 			bo.setCashStatusEnum(CashStatusEnum.getEnum(cdo.getStatus()));
-			bo.setTitle("提现");
+			bo.setCdate(cdo.getGmtCreate());
+			bo.setAcceptDate(cdo.getGmtAccept());
+			bo.setFinishDate(cdo.getGmtFinish());
+			if(CashStatusEnum.FAILURE.getVal().equals(cdo.getStatus())){
+				bo.setRemark(cdo.getAuditFaildReason());
+			}else{
+				bo.setActualCashMoney(cdo.getMoney());
+				bo.setChargedMoney(cdo.getCashMoney().subtract(cdo.getMoney()));
+			}
 			cbos.add(bo);
 		}
 		page.setRecords(cbos);
