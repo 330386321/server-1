@@ -26,7 +26,7 @@
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <docker.image.prefix>eshop</docker.image.prefix>
+        <docker.image.prefix>registry.eshop.com</docker.image.prefix>
 
         <springfox.swagger>2.6.1</springfox.swagger>
         <rocketmq.version>3.2.6</rocketmq.version>
@@ -94,9 +94,6 @@
                     <groupId>com.spotify</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>0.4.12</version>
-                    <configuration>
-                        <registryUrl>registry.eshop.com</registryUrl>
-                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
