@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.param.AdAgainPutParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
@@ -244,17 +245,104 @@ public class AdController extends BaseController {
     	return adService.selectById(id);
     }
 
-	 @ApiOperation(value = "广告批量删除", notes = "广告批量删除,[]（张荣成）", httpMethod = "DELETE")
-     @Authorization
-     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-     @RequestMapping(value = "batchDeleteAd", method = RequestMethod.DELETE)
-     public Result batchDeleteAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告ids,中间以“/”隔开  如100/101") String ids) {
-		String[] strIds= ids.split("/");
-		List<Long> adIds=new ArrayList<>();
+	@ApiOperation(value = "广告批量删除", notes = "广告批量删除,[]（张荣成）", httpMethod = "DELETE")
+	@Authorization
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "batchDeleteAd", method = RequestMethod.DELETE)
+	public Result batchDeleteAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+			@RequestParam @ApiParam(required = true, value = "广告ids,中间以“/”隔开  如100/101") String ids) {
+		String[] strIds = ids.split("/");
+		List<Long> adIds = new ArrayList<>();
 		for (String str : strIds) {
 			adIds.add(Long.valueOf(str));
 		}
-    	Result rs= adService.batchDeleteAd(adIds);
-    	return successDelete();
-     }
+		Result rs = adService.batchDeleteAd(adIds);
+		return successDelete();
+	}
+	
+	
+    @ApiOperation(value = "广告再次投放(2.2.0)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
+    @Authorization
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @RequestMapping(value = "againSaveAd/{id}", method = RequestMethod.POST)
+    public Result againSaveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+    		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
+    		@ModelAttribute @ApiParam(required = true, value = "广告信息") AdAgainPutParam adAgainParam) {
+		Result<AdMerchantDetailDTO> result= adService.selectById(id);
+    	if(isSuccess(result)){
+    		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        	String userNum = UserUtil.getCurrentUserNum(getRequest());
+        	if(!StringUtils.isNotEmpty(adAgainParam.getBeginTime())){
+    			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+    		}
+        	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+        	if (isSuccess(resultFreeze)){
+        		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
+        			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+        		}
+        	} else {
+        		return successCreated(resultFreeze.getRet());
+        	}
+        	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
+        	PropertyPointDTO propertyPointDTO=rs.getModel();
+        	if(adAgainParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+        		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+        	}
+        	String mediaUrl="";
+        	String videoImgUrl="";
+        	HttpServletRequest request = getRequest();
+        	if(result.getModel().getTypeEnum().val==1 || result.getModel().getTypeEnum().val==3){ //平面投放
+        		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
+                if(!"".equals(retMap.get("imgUrl"))){
+                	mediaUrl = retMap.get("imgUrl");
+                }
+        	}else if(result.getModel().getTypeEnum().val==2){//视频投放
+        		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
+        		if(!"".equals(retMap.get("videoUrl"))){
+                	mediaUrl = retMap.get("videoUrl");
+                	//截取视频图片
+                	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+                	
+                	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
+                	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
+                }
+        	}
+        	Integer count=0;
+        	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==1){
+        		String areas=adAgainParam.getAreas();
+        		if(areas==null || areas==""){
+        			areas="ALL_PLACE";
+        		}
+        		count=memberCountService.findMemberCount(areas);
+        	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==2){
+        		count=memberCountService.findFensCount(merchantId);
+        	}
+        	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
+        	MerchantStoreDTO storeDTO= storeRs.getModel();
+        	AdSaveParam adSave=new AdSaveParam();
+        	AdParam adParam=new AdParam();
+        	adParam.setTitle(adAgainParam.getTitle());
+        	adParam.setAdCount(adAgainParam.getAdCount());
+        	adParam.setAreas(adAgainParam.getAreas());
+        	adParam.setBeginTime(adAgainParam.getBeginTime());  
+        	adParam.setContent(adAgainParam.getContent());
+        	adParam.setPoint(adAgainParam.getPoint());
+        	adParam.setTotalPoint(adAgainParam.getTotalPoint());
+        	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
+        	adParam.setRadius(adAgainParam.getRadius());
+        	adParam.setTypeEnum(result.getModel().getTypeEnum());
+        	adSave.setAdParam(adParam);
+        	adSave.setLatitude(storeDTO.getLatitude());
+        	adSave.setLongitude(storeDTO.getLongitude());
+        	adSave.setCount(count);
+        	adSave.setMediaUrl(mediaUrl);
+        	adSave.setVideoImgUrl(videoImgUrl);
+        	adSave.setMerchantId(merchantId);
+        	adSave.setUserNum(userNum);
+        	Result rsAd = adService.saveAd(adSave);
+        	return rsAd;
+    	}else{
+    		return successCreated(ResultCode.FAIL);
+    	}
+	}
 }
