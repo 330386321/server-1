@@ -31,7 +31,7 @@ public class ShoppingOrderItemRefundForOperatorDTO extends ShoppingOrderItemRefu
     /**
     * 申请平台介入时间
     */
-	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
 	@ApiModelProperty(value = "申请平台介入时间", required = true)
     private Date gmtIntervention;
 

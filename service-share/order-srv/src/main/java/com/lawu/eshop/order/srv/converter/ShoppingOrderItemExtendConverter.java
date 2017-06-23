@@ -174,6 +174,7 @@ public class ShoppingOrderItemExtendConverter {
 		}
 		if (shoppingOrderItemExtendBO.getShoppingRefundDetail() != null) {
 			rtn.setShoppingRefundDetailId(shoppingOrderItemExtendBO.getShoppingRefundDetail().getId());
+			rtn.setGmtCreate(shoppingOrderItemExtendBO.getShoppingRefundDetail().getGmtCreate());
 			rtn.setGmtIntervention(shoppingOrderItemExtendBO.getShoppingRefundDetail().getGmtIntervention());
 		}
 		return rtn;
