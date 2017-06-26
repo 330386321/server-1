@@ -1,5 +1,6 @@
 package com.lawu.eshop.member.api.service;
 
+import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,4 +41,7 @@ public interface PayOrderService {
      */
 	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectThirdPayCallBackQueryPayOrder")
 	ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam("orderId") String orderId);
+
+    @RequestMapping(method = RequestMethod.GET, value = "payOrder/getOrderInfo")
+    MemberPayOrderInfoDTO getOrderInfo(@RequestParam("id") Long id);
 }

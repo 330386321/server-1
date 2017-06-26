@@ -140,4 +140,22 @@
         </foreach>
     </select>
 
+    <select id="getPayOrderDetailStoreInfo" resultType="com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView" parameterType="java.lang.Long">
+        SELECT
+        s.name,
+        i.path,
+        s.merchant_id as merchantId,
+        s.address,
+        s.principal_mobile as principalMobile,
+        s.id as merchantStoreId
+        FROM
+        merchant_store AS s
+        LEFT JOIN merchant_store_image AS i ON s.id = i.merchant_store_id
+        WHERE
+        s.status = 1
+        AND i.type = 1
+        AND i.status = 1
+        AND s.merchant_id =  #{merchantId}
+    </select>
+
 </mapper>

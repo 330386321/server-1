@@ -326,6 +326,66 @@ public class CommentMerchantDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayOrderIdIsNull() {
+            addCriterion("pay_order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdIsNotNull() {
+            addCriterion("pay_order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdEqualTo(Long value) {
+            addCriterion("pay_order_id =", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdNotEqualTo(Long value) {
+            addCriterion("pay_order_id <>", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdGreaterThan(Long value) {
+            addCriterion("pay_order_id >", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("pay_order_id >=", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdLessThan(Long value) {
+            addCriterion("pay_order_id <", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdLessThanOrEqualTo(Long value) {
+            addCriterion("pay_order_id <=", value, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdIn(List<Long> values) {
+            addCriterion("pay_order_id in", values, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdNotIn(List<Long> values) {
+            addCriterion("pay_order_id not in", values, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdBetween(Long value1, Long value2) {
+            addCriterion("pay_order_id between", value1, value2, "payOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayOrderIdNotBetween(Long value1, Long value2) {
+            addCriterion("pay_order_id not between", value1, value2, "payOrderId");
+            return (Criteria) this;
+        }
+
         public Criteria andReplyContentIsNull() {
             addCriterion("reply_content is null");
             return (Criteria) this;

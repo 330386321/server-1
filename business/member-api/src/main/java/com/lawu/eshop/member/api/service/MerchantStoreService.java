@@ -152,4 +152,12 @@ public interface MerchantStoreService {
 
     @RequestMapping(value = "merchantStore/getStoreUrlByStoreId/{id}", method = RequestMethod.GET)
     String getStoreUrlByStoreId(@PathVariable("id") Long id);
+
+    /**
+     * 买单详情门店信息
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getPayOrderDetailStoreInfo")
+    PayOrderMerchantStoreInfoDTO getPayOrderDetailStoreInfo(@RequestParam("merchantId") Long merchantId);
 }

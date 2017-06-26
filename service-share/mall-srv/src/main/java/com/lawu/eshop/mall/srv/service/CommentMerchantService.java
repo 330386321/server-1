@@ -56,4 +56,5 @@ public interface CommentMerchantService {
 
     void delCommentMerchantInfo(Long commentId);
 
+    Byte getGradeByOrderId(Long payOrderId, Long memberId);
 }

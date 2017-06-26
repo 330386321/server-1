@@ -147,4 +147,10 @@ public class CommentMerchantController extends BaseController {
         return  successDelete(ResultCode.SUCCESS);
     }
 
+    @RequestMapping(value = "getGradeByOrderId", method = RequestMethod.GET)
+    public Byte getGradeByOrderId(@RequestParam("id") Long id, @RequestParam("memberId") Long memberId) {
+        Byte grade = commentMerchantService.getGradeByOrderId(id, memberId);
+        return grade;
+    }
+
 }

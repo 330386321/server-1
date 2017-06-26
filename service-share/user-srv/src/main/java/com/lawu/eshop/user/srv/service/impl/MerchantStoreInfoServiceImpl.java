@@ -669,4 +669,11 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		return storeSolrInfoBOS;
 	}
 
+	@Override
+	public PayOrderStoreInfoBO getPayOrderDetailStoreInfo(Long merchantId) {
+		PayOrderStoreInfoView storeInfoView = merchantStoreDOMapperExtend.getPayOrderDetailStoreInfo(merchantId);
+		PayOrderStoreInfoBO payOrderStoreInfoBO = MerchantStoreConverter.coverPayOrderStoreInfoBO(storeInfoView);
+		return payOrderStoreInfoBO;
+	}
+
 }

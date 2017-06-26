@@ -6,6 +6,7 @@ import com.lawu.eshop.user.srv.bo.*;
 import com.lawu.eshop.user.srv.domain.MerchantDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
 import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
 import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -444,5 +445,18 @@ public class MerchantStoreConverter {
             list.add(storeSolrInfoDTO);
         }
         return list;
+    }
+
+    public static PayOrderStoreInfoBO coverPayOrderStoreInfoBO(PayOrderStoreInfoView storeInfoView) {
+        if (storeInfoView == null) {
+            return null;
+        }
+        PayOrderStoreInfoBO payOrderStoreInfoBO = new PayOrderStoreInfoBO();
+        payOrderStoreInfoBO.setMerchantStoreId(storeInfoView.getMerchantStoreId());
+        payOrderStoreInfoBO.setName(storeInfoView.getName());
+        payOrderStoreInfoBO.setAddress(storeInfoView.getAddress());
+        payOrderStoreInfoBO.setPrincipalMobile(storeInfoView.getPrincipalMobile());
+        payOrderStoreInfoBO.setStoreUrl(storeInfoView.getPath());
+        return payOrderStoreInfoBO;
     }
 }

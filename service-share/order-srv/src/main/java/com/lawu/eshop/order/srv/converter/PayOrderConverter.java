@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv.converter;
 
 import com.lawu.eshop.order.constants.EvaluationEnum;
+import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -27,6 +28,7 @@ public class PayOrderConverter {
         payOrderBO.setFavoredAmount(payOrderDO.getFavoredAmount());
         payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
         payOrderBO.setMerchantId(payOrderDO.getMerchantId());
+        payOrderBO.setOrderNum(payOrderDO.getOrderNum());
         return payOrderBO;
     }
 
@@ -76,5 +78,21 @@ public class PayOrderConverter {
             payOrderListDTOS.add(merchantPayOrderListDTO);
         }
         return payOrderListDTOS;
+    }
+
+    public static MemberPayOrderInfoDTO coverOrderInfoDTO(PayOrderBO payOrderBO) {
+        if(payOrderBO == null){
+            return  null;
+        }
+        MemberPayOrderInfoDTO infoDTO = new MemberPayOrderInfoDTO();
+        infoDTO.setId(payOrderBO.getId());
+        infoDTO.setMerchantId(payOrderBO.getMerchantId());
+        infoDTO.setActualAmount(payOrderBO.getActualAmount());
+        infoDTO.setEvaluationEnum(EvaluationEnum.getEnum(payOrderBO.getEvaluation()));
+        infoDTO.setFavoredAmount(payOrderBO.getFavoredAmount());
+        infoDTO.setGmtCreate(payOrderBO.getGmtCreate());
+        infoDTO.setOrderNum(payOrderBO.getOrderNum());
+        infoDTO.setTotalAmount(payOrderBO.getTotalAmount());
+        return  infoDTO;
     }
 }

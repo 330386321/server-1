@@ -1,17 +1,11 @@
 package com.lawu.eshop.user.srv.mapper.extend;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
-import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
-import com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView;
-import com.lawu.eshop.user.srv.domain.extend.ShoppingStoreInfoDOView;
-import com.lawu.eshop.user.srv.domain.extend.StoreDetailDOView;
-import com.lawu.eshop.user.srv.domain.extend.StoreSolrInfoDOView;
+import com.lawu.eshop.user.srv.domain.extend.*;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -35,4 +29,6 @@ public interface MerchantStoreDOMapperExtend {
     ShoppingStoreInfoDOView getShoppingStoreInfo(Long id);
     
     List<MerchantAdInfoView> getAdMerchantStoreByIds(List<Long> merchantIds);
+
+    PayOrderStoreInfoView getPayOrderDetailStoreInfo(Long merchantId);
 }

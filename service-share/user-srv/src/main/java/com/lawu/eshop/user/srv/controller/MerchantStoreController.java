@@ -569,6 +569,22 @@ public class MerchantStoreController extends BaseController {
 		return merchantStoreImageService.getStoreUrlByStoreId(id);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "getPayOrderDetailStoreInfo")
+	public PayOrderMerchantStoreInfoDTO getPayOrderDetailStoreInfo(@RequestParam("merchantId") Long merchantId){
+
+		PayOrderStoreInfoBO payOrderStoreInfoBO = merchantStoreInfoService.getPayOrderDetailStoreInfo(merchantId);
+		if(payOrderStoreInfoBO == null){
+			return null;
+		}
+		PayOrderMerchantStoreInfoDTO payOrderMerchantStoreInfoDTO = new PayOrderMerchantStoreInfoDTO();
+		payOrderMerchantStoreInfoDTO.setStoreUrl(payOrderStoreInfoBO.getStoreUrl());
+		payOrderMerchantStoreInfoDTO.setMerchantStoreId(payOrderStoreInfoBO.getMerchantStoreId());
+		payOrderMerchantStoreInfoDTO.setPrincipalMobile(payOrderStoreInfoBO.getPrincipalMobile());
+		payOrderMerchantStoreInfoDTO.setAddress(payOrderStoreInfoBO.getAddress());
+		payOrderMerchantStoreInfoDTO.setName(payOrderStoreInfoBO.getName());
+		return payOrderMerchantStoreInfoDTO;
+	}
+
 
 }
 

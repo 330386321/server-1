@@ -15,6 +15,12 @@ public class PayOrderStoreInfoView implements Serializable {
 
     private Long merchantId;
 
+    private Long merchantStoreId;
+
+    private String principalMobile;
+
+    private String address;
+
     public String getName() {
         return name;
     }
@@ -37,5 +43,29 @@ public class PayOrderStoreInfoView implements Serializable {
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Long getMerchantStoreId() {
+        return merchantStoreId;
+    }
+
+    public void setMerchantStoreId(Long merchantStoreId) {
+        this.merchantStoreId = merchantStoreId;
+    }
+
+    public String getPrincipalMobile() {
+        return principalMobile;
+    }
+
+    public void setPrincipalMobile(String principalMobile) {
+        this.principalMobile = principalMobile;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

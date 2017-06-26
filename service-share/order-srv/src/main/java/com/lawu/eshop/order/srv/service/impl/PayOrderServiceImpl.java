@@ -35,6 +35,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	@Autowired
 	private PayOrderDOMapper payOrderDOMapper;
 
+
     @Override
     @Transactional
     public PayOrderBO savePayOrderInfo(Long memberId, PayOrderParam param,String numNum) {
@@ -167,5 +168,12 @@ public class PayOrderServiceImpl implements PayOrderService {
 
 		page.setRecords(payOrderBOS);
 		return page;
+	}
+
+	@Override
+	public PayOrderBO getOrderInfo(Long id) {
+		PayOrderDO payOrderDO = payOrderDOMapper.selectByPrimaryKey(id);
+
+		return  PayOrderConverter.coverBO(payOrderDO);
 	}
 }

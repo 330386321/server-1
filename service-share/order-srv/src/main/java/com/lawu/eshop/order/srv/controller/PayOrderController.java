@@ -154,4 +154,20 @@ public class PayOrderController extends BaseController {
 		payOrderListDTOPage.setRecords(merchantPayOrderListDTOS);
 		return successGet(payOrderListDTOPage);
 	}
+
+	/**
+	 * 用户买单详情
+	 * @param id
+	 * @param memberId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "getOrderInfo")
+	public MemberPayOrderInfoDTO getOrderInfo(@RequestParam("id") Long id) {
+		PayOrderBO payOrderBO = payOrderService.getOrderInfo(id);
+		if (payOrderBO == null) {
+			return null;
+		}
+		MemberPayOrderInfoDTO memberPayOrderInfoDTO = PayOrderConverter.coverOrderInfoDTO(payOrderBO);
+		return memberPayOrderInfoDTO;
+	}
 }

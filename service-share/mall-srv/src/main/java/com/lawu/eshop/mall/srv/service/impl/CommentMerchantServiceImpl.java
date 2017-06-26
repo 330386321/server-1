@@ -64,7 +64,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setGrade(param.getGradeEnum().val);
         commentMerchantDO.setAvgSpend(param.getAvgSpend());
         commentMerchantDO.setIsAnonymous(param.getAnonymousEnum().val);//匿名
-
+        commentMerchantDO.setPayOrderId(param.getOrderId());
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO.setGmtCreate(new Date());
         commentMerchantDO.setGmtModified(new Date());
@@ -260,6 +260,17 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setId(commentId);
         commentMerchantDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
         commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
+    }
+
+    @Override
+    public Byte getGradeByOrderId(Long payOrderId, Long memberId) {
+        CommentMerchantDOExample example = new CommentMerchantDOExample();
+        example.createCriteria().andPayOrderIdEqualTo(payOrderId).andMemberIdEqualTo(memberId);
+        List<CommentMerchantDO> commentMerchantDOS = commentMerchantDOMapper.selectByExample(example);
+        if (!commentMerchantDOS.isEmpty()) {
+            return commentMerchantDOS.get(0).getGrade();
+        }
+        return 0;
     }
 
 }

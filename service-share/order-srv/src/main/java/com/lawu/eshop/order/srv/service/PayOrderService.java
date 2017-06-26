@@ -59,4 +59,6 @@ public interface PayOrderService {
 	int updateCommissionStatus(List<Long> ids);
 
     Page<PayOrderBO> getMerchantPayOrderList(Long userId, MerchantPayOrderListParam param);
+
+	PayOrderBO getOrderInfo(Long id);
 }
