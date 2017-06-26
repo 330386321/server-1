@@ -64,49 +64,50 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "saveMerchantStoreInfo", method = RequestMethod.POST)
-    public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result saveMerchantStoreInfo(@ModelAttribute @ApiParam MerchantStoreParam merchantStoreParam,
+                                        @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
-        StringBuffer idCardUrls = new StringBuffer();        //身份证照
-        StringBuffer storeUrls = new StringBuffer();        //门店照
-        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
-        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
-        StringBuffer licenseUrls = new StringBuffer();        //营业执照
-        StringBuffer otherUrls = new StringBuffer();
+        StringBuilder idCardUrls = new StringBuilder();        //身份证照
+        StringBuilder storeUrls = new StringBuilder();        //门店照
+        StringBuilder environmentUrls = new StringBuilder();        //店内环境照
+        StringBuilder storeLogoUrls = new StringBuilder();    //店铺logo
+        StringBuilder licenseUrls = new StringBuilder();        //营业执照
+        StringBuilder otherUrls = new StringBuilder();
         Collection<Part> parts = null;
         try {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.info("stackTrace:{}",e.getStackTrace().toString());
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("Servlet异常");
+            logger.info("异常情况:{}",ex);
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, merchantApiConfig.getImageUploadUrl());
-                String flag = map.get("resultFlag");
+                String flag = map.get(UploadFileTypeConstant.RESULT_FLAG);
                 String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
-                    String imgUrl = map.get("imgUrl");
+                    String imgUrl = map.get(UploadFileTypeConstant.IMG_URL);
                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                    else  if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -160,47 +161,46 @@ public class MerchantStoreController extends BaseController {
                                              @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
-        StringBuffer idCardUrls = new StringBuffer();        //身份证照
-        StringBuffer storeUrls = new StringBuffer();        //门店照
-        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
-        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
-        StringBuffer licenseUrls = new StringBuffer();        //营业执照
-        StringBuffer otherUrls = new StringBuffer();
+        StringBuilder idCardUrls = new StringBuilder();        //身份证照
+        StringBuilder storeUrls = new StringBuilder();        //门店照
+        StringBuilder environmentUrls = new StringBuilder();        //店内环境照
+        StringBuilder storeLogoUrls = new StringBuilder();    //店铺logo
+        StringBuilder licenseUrls = new StringBuilder();        //营业执照
+        StringBuilder otherUrls = new StringBuilder();
 
         Collection<Part> parts = null;
         try {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.info("IOException:{}",e.getStackTrace().toString());
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("Servlet异常");
+            logger.info("异常情况:{}","Servlet异常");
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, merchantApiConfig.getImageUploadUrl());
-                String flag = map.get("resultFlag");
+                String flag = map.get(UploadFileTypeConstant.RESULT_FLAG);
                 String fileName = part.getName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
-                    String imgUrl = map.get("imgUrl");
+                    String imgUrl = map.get(UploadFileTypeConstant.IMG_URL);
                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
-                    }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    } else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -263,19 +263,19 @@ public class MerchantStoreController extends BaseController {
     public Result applyPhysicalStore(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
-        StringBuffer storeUrls = new StringBuffer();        //门店照
-        StringBuffer environmentUrls = new StringBuffer();        //店内环境照
-        StringBuffer storeLogoUrls = new StringBuffer();    //店铺logo
+        StringBuilder storeUrls = new StringBuilder();        //门店照
+        StringBuilder environmentUrls = new StringBuilder();        //店内环境照
+        StringBuilder storeLogoUrls = new StringBuilder();    //店铺logo
 
         Collection<Part> parts = null;
         try {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.info("IOException {}",e.getStackTrace().toString());
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("Servlet异常");
+            logger.info("异常情况:{}",ex);
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {

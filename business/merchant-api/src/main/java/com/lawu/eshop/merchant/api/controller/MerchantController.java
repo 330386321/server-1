@@ -209,8 +209,7 @@ public class MerchantController extends BaseController {
         if(id == null || id <= 0 ||  "".equals(cid)){
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
-        Result result = merchantService.setGtAndRongYunInfo(id,cid);
-        return result;
+        return merchantService.setGtAndRongYunInfo(id,cid);
     }
 
 
@@ -253,10 +252,10 @@ public class MerchantController extends BaseController {
     public Result<UserHeadImgDTO> saveHeadImage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
-        String headImg = "";
+        String headImg;
         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD, merchantApiConfig.getImageUploadUrl());
         if(!"".equals(retMap.get("imgUrl"))){
-            headImg = retMap.get("imgUrl").toString();
+            headImg = retMap.get("imgUrl");
             return    merchantService.saveHeadImage(merchantId, headImg);
         }
         return successCreated(ResultCode.IMAGE_WRONG_UPLOAD);
