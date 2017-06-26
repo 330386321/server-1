@@ -110,6 +110,7 @@ public class ProductController extends BaseController {
         productDTO.setContent(productBO.getContent());
         productDTO.setImageDetail(productBO.getImageDetail());
         productDTO.setAllowRefund(productBO.isAllowRefund());
+        productDTO.setProductStatus(productBO.getProductStatus());
         return successCreated(productDTO);
     }
 

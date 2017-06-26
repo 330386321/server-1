@@ -111,6 +111,7 @@ public class ProductConverter {
         productInfoBO.setGmtCreate(productDO.getGmtCreate());
         productInfoBO.setCategoryId(productDO.getCategoryId());
         productInfoBO.setAllowRefund(productDO.getIsAllowRefund());
+        productInfoBO.setProductStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
         return productInfoBO;
     }
 

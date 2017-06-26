@@ -3,6 +3,7 @@ package com.lawu.eshop.product.srv.bo;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.MemberProductImageDetailDTO;
 import com.lawu.eshop.product.dto.MemberProductModelDTO;
 
@@ -31,6 +32,8 @@ public class ProductInfoBO {
 	private Integer totalInventory;
 	
 	private boolean isAllowRefund;
+	
+	private ProductStatusEnum productStatus;
     
     public Long getId() {
         return id;
@@ -158,6 +161,14 @@ public class ProductInfoBO {
 
 	public void setAllowRefund(boolean isAllowRefund) {
 		this.isAllowRefund = isAllowRefund;
+	}
+
+	public ProductStatusEnum getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(ProductStatusEnum productStatus) {
+		this.productStatus = productStatus;
 	}
     
 }

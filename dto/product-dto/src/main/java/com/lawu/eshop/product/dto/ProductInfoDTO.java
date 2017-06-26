@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lawu.eshop.product.constant.ProductStatusEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -78,6 +79,9 @@ public class ProductInfoDTO {
 	
 	@ApiModelProperty(value = "购物车数量")
 	private String shoppingCartNum;
+	
+	@ApiModelProperty(value = "商品状态(PRODUCT_STATUS_DEL-删除、PRODUCT_STATUS_UP-上架、PRODUCT_STATUS_DOWN-下架)")
+	private ProductStatusEnum productStatus;
 
 	public String getShoppingCartNum() {
 		return shoppingCartNum;
@@ -245,6 +249,14 @@ public class ProductInfoDTO {
 
 	public void setAllowRefund(boolean isAllowRefund) {
 		this.isAllowRefund = isAllowRefund;
+	}
+
+	public ProductStatusEnum getProductStatus() {
+		return productStatus;
+	}
+
+	public void setProductStatus(ProductStatusEnum productStatus) {
+		this.productStatus = productStatus;
 	}
 	
 }
