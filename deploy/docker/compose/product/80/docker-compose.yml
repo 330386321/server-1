@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+
+  cache-srv:
+    image: registry.eshop.com/cache-srv
+    container_name: cache-srv
+    ports:
+      - "7001:7001"
+    networks:
+      - eshopNet
+  ad-srv:
+    image: registry.eshop.com/ad-srv
+    container_name: ad-srv
+    ports:
+      - "8001:8001"
+    networks:
+      - eshopNet
+  mall-srv:
+    image: registry.eshop.com/mall-srv
+    container_name: mall-srv
+    ports:
+      - "8002:8002"
+    networks:
+      - eshopNet
+  order-srv:
+    image: registry.eshop.com/order-srv
+    container_name: order-srv
+    ports:
+      - "8003:8003"
+    networks:
+      - eshopNet
+  product-srv:
+    image: registry.eshop.com/product-srv
+    container_name: product-srv
+    ports:
+      - "8004:8004"
+    networks:
+      - eshopNet
+  property-srv:
+    image: registry.eshop.com/property-srv
+    container_name: property-srv
+    ports:
+      - "8005:8005"
+    networks:
+      - eshopNet
+  user-srv:
+    image: registry.eshop.com/user-srv
+    container_name: user-srv
+    ports:
+      - "8006:8006"
+    networks:
+      - eshopNet
+  operator-srv:
+    image: registry.eshop.com/ad-srv
+    container_name: ad-srv
+    ports:
+      - "8007:8007"
+    networks:
+      - eshopNet
+
+
+networks:
+  eshopNet:
+    driver: overlay
