@@ -256,7 +256,7 @@ public class AdController extends BaseController {
 				List<MemberDTO> listUser=resultUser.getModel();
 				for (MemberDTO memberDTO : listUser) {
 					for (PointPoolDTO pointPoolDTO : top3) {
-						if(memberDTO.getId()==pointPoolDTO.getMemberId()){
+						if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
 							UserTopDTO userTop = new UserTopDTO();
 							userTop.setMoney(pointPoolDTO.getPoint());
 							userTop.setHeadimg(memberDTO.getHeadimg());
