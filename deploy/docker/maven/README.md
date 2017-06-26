@@ -43,7 +43,7 @@ sudo docker run -d --privileged --name docker-maven \
 构建docker镜像
 ======
 ```bash    
-sudo docker exec -it docker-maven /bin/bash cd /usr/src/server & mvn clean package -Dmaven.test.skip -DpushImage
+sudo docker exec -it maven mvn clean package -Dmaven.test.skip -DpushImage
 ```
 
 

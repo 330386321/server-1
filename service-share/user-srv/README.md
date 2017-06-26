@@ -9,5 +9,5 @@ docker build -t eshop/user-srv:1.0-SNAPSHOT .
 ```Bash
 sudo docker run --name user-srv -it -d -p 8006:8006 \
     -v /etc/localtime:/etc/localtime:ro \
-    registry.eshop.com/user-srv --spring.profiles.active=product 
+    registry.eshop.com/user-srv --spring.cloud.config.profile=product --spring.cloud.config.uri=http://192.168.100.80:8080
 ```
