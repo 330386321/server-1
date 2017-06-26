@@ -3,7 +3,7 @@ package com.lawu.eshop.pay.sdk.weixin.sdk;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
 import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData;
 import com.lawu.eshop.pay.sdk.weixin.sdk.service.RefundService;
-import com.lawu.eshop.property.param.WxPayConfigParam;
+import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 
 /**
  * 

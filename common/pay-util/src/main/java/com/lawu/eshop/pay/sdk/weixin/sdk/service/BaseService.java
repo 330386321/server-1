@@ -1,7 +1,7 @@
 package com.lawu.eshop.pay.sdk.weixin.sdk.service;
 
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.JsonResult;
-import com.lawu.eshop.property.param.WxPayConfigParam;
+import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 
 import java.io.IOException;
 import java.security.KeyManagementException;

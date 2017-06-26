@@ -29,7 +29,7 @@ import org.springframework.core.io.Resource;
 
 import com.lawu.eshop.pay.sdk.weixin.sdk.protocol.refund_protocol.RefundResData;
 import com.lawu.eshop.pay.sdk.weixin.sdk.service.IServiceRequest;
-import com.lawu.eshop.property.param.WxPayConfigParam;
+import com.lawu.eshop.pay.sdk.weixin.base.WxPayConfigParam;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;

@@ -1,4 +1,4 @@
-package com.lawu.eshop.property.param;
+package com.lawu.eshop.pay;
 
 public class ThirdPayRefundParam {
 	//第三方平台订单号
