@@ -497,6 +497,7 @@ public class AdServiceImpl implements AdService {
 		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 		}
+		example.setOrderByClause("gmt_create desc");
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
