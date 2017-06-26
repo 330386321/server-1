@@ -530,9 +530,8 @@ public class ProductServiceImpl implements ProductService {
         Long productId = param.getProductId();
         int inventory = 0;
         int salesVolume = 0;
-        double originalPrice = 0;
-        double price = 0;
-        double mprice = 0;//max
+        BigDecimal price = new BigDecimal("0");
+        BigDecimal mprice = new BigDecimal("0");//修改为型号中最低价对应的原价,用于商品首页显示
         int traverseCnt = 0;
 
         boolean isEdit = true;
@@ -569,7 +568,7 @@ public class ProductServiceImpl implements ProductService {
         if (!isEdit) {
             ProductModelDO pmDO = null;
             for (ProductModelBO dataBO : speclist) {
-            	BigDecimal bdOriginalPrice = new BigDecimal("0");
+            	BigDecimal bdOriginalPrice = new BigDecimal("0");//原价等于空时保存数据库为0
             	if(dataBO.getOriginalPrice() != null){
             		bdOriginalPrice = dataBO.getOriginalPrice();
             	}
@@ -586,16 +585,12 @@ public class ProductServiceImpl implements ProductService {
                 productModelDOMapper.insertSelective(pmDO);
 
                 if (traverseCnt == 0) {
-                    price = dataBO.getPrice().doubleValue();
-                    mprice = price;
+                    price = dataBO.getPrice();
+                    mprice = dataBO.getOriginalPrice() == null ? dataBO.getPrice() : dataBO.getOriginalPrice();//原价等于空时取现价
                 }
-                if (bdOriginalPrice.doubleValue() > originalPrice) {
-                    originalPrice = bdOriginalPrice.doubleValue();
-                }
-                if (dataBO.getPrice().doubleValue() < price) {
-                    price = dataBO.getPrice().doubleValue();
-                }else{
-                	mprice = dataBO.getPrice().doubleValue();
+                if (dataBO.getPrice().compareTo(price) == -1) {
+                    price = dataBO.getPrice();
+                    mprice = dataBO.getOriginalPrice() == null ? dataBO.getPrice() : dataBO.getOriginalPrice();//原价等于空时取现价
                 }
                 inventory += dataBO.getInventory();
                 traverseCnt++;
@@ -648,17 +643,13 @@ public class ProductServiceImpl implements ProductService {
                     }
                 }
 
-
                 if (traverseCnt == 0) {
-                    price = dataBO.getPrice().doubleValue();
+                    price = dataBO.getPrice();
+                    mprice = dataBO.getOriginalPrice() == null ? dataBO.getPrice() : dataBO.getOriginalPrice();//原价等于空时取现价
                 }
-                if (bdOriginalPrice.doubleValue() > originalPrice) {
-                    originalPrice = bdOriginalPrice.doubleValue();
-                }
-                if (dataBO.getPrice().doubleValue() < price) {
-                    price = dataBO.getPrice().doubleValue();
-                }else{
-                	mprice = dataBO.getPrice().doubleValue();
+                if (dataBO.getPrice().compareTo(price) == -1) {
+                    price = dataBO.getPrice();
+                    mprice = dataBO.getOriginalPrice() == null ? dataBO.getPrice() : dataBO.getOriginalPrice();//原价等于空时取现价
                 }
                 inventory += dataBO.getInventory();
                 salesVolume += dataBO.getSalesVolume();
@@ -688,8 +679,8 @@ public class ProductServiceImpl implements ProductService {
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
-        productDO.setMinPrice(new BigDecimal(price));
-        productDO.setMaxPrice(BigDecimal.valueOf(mprice));
+        productDO.setMinPrice(price);
+        productDO.setMaxPrice(mprice);
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andIdEqualTo(productId);
         productDOMapper.updateByExampleSelective(productDO, example);
