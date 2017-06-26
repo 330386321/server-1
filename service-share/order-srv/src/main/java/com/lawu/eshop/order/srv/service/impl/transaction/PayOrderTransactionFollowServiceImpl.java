@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_PAYORDER)
 public class PayOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<PayOrderNotification, Reply> {
 
-    ;
     @Autowired
     private PayOrderDOMapper payOrderDOMapper;
 
