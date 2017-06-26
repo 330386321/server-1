@@ -247,25 +247,27 @@ public class AdController extends BaseController {
 		List<UserTopDTO> user = new ArrayList<>();
 		if(isSuccess(member)){
 			List<PointPoolDTO> top3 = member.getModel();
-			List<Long> memberIds=new ArrayList<>();
-			for (PointPoolDTO pointPoolDTO : top3) {
-				memberIds.add(pointPoolDTO.getMemberId());
-			}
-			Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
-			if(isSuccess(resultUser)){
-				List<MemberDTO> listUser=resultUser.getModel();
-				for (MemberDTO memberDTO : listUser) {
-					for (PointPoolDTO pointPoolDTO : top3) {
-						if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
-							UserTopDTO userTop = new UserTopDTO();
-							userTop.setMoney(pointPoolDTO.getPoint());
-							userTop.setHeadimg(memberDTO.getHeadimg());
-							userTop.setRegionPath(memberDTO.getRegionPath());
-							userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-							user.add(userTop);
+			if(!top3.isEmpty()){
+				List<Long> memberIds=new ArrayList<>();
+				for (PointPoolDTO pointPoolDTO : top3) {
+					memberIds.add(pointPoolDTO.getMemberId());
+				}
+				Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
+				if(isSuccess(resultUser)){
+					List<MemberDTO> listUser=resultUser.getModel();
+					for (MemberDTO memberDTO : listUser) {
+						for (PointPoolDTO pointPoolDTO : top3) {
+							if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
+								UserTopDTO userTop = new UserTopDTO();
+								userTop.setMoney(pointPoolDTO.getPoint());
+								userTop.setHeadimg(memberDTO.getHeadimg());
+								userTop.setRegionPath(memberDTO.getRegionPath());
+								userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+								user.add(userTop);
+							}
 						}
+						
 					}
-					
 				}
 			}
 			
