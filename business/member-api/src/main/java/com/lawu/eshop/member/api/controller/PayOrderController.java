@@ -51,7 +51,8 @@ public class PayOrderController extends BaseController {
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
-    public Result<PayOrderIdDTO> savePayOrderInfo(@ModelAttribute PayOrderParam param, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<PayOrderIdDTO> savePayOrderInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                  @ModelAttribute PayOrderParam param) {
         Long memberId = UserUtil.getCurrentUserId(getRequest());
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         //查询优惠信息记录
@@ -64,15 +65,14 @@ public class PayOrderController extends BaseController {
                     //每满xxx减xxx
                     int m =  (int)(canFavoredAmount/(favoredDTOResult.getModel().getReachAmount().doubleValue()));
                     realFavoredAmount =  m*favoredDTOResult.getModel().getFavoredAmount().doubleValue();
-                }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val){
+                } else if (favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val
+                        && (canFavoredAmount - favoredDTOResult.getModel().getReachAmount().doubleValue()) >= 0) {
                     //满xxx减xxx
-                    if((canFavoredAmount-favoredDTOResult.getModel().getReachAmount().doubleValue()) >=0){
-                        realFavoredAmount = favoredDTOResult.getModel().getFavoredAmount().doubleValue();
-                    }
+                    realFavoredAmount = favoredDTOResult.getModel().getFavoredAmount().doubleValue();
                 }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val){
                     realFavoredAmount = canFavoredAmount*((10-favoredDTOResult.getModel().getDiscountRate().doubleValue())/10);
                 }
-                BigDecimal realFavoredAmount2 =   new   BigDecimal(realFavoredAmount);
+                BigDecimal realFavoredAmount2 =   BigDecimal.valueOf(realFavoredAmount);
                 double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
                 if(rfa2 != param.getFavoredAmount()){
                     return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
@@ -105,14 +105,14 @@ public class PayOrderController extends BaseController {
             return successGet(list);
         }
         // 把要查询的id放入list,统一一次性查询
-        Set<Long> merchantIds = new HashSet<Long>();
+        Set<Long> merchantIds = new HashSet<>();
         for (PayOrderDTO payOrderDTO : payOrderDTOS) {
             merchantIds.add(payOrderDTO.getMerchantId());
         }
 
         //查询商家信息
         Result<List<PayOrderStoreInfoDTO>> storeInfoDTOResult = merchantStoreService.getPayOrderStoreInfo(new ArrayList<Long>(merchantIds));
-        Map<Long, PayOrderStoreInfoDTO> storeInfoDTOMap = new HashMap<Long, PayOrderStoreInfoDTO>();
+        Map<Long, PayOrderStoreInfoDTO> storeInfoDTOMap = new HashMap<>();
         if (isSuccess(storeInfoDTOResult) && !storeInfoDTOResult.getModel().isEmpty()) {
             for (PayOrderStoreInfoDTO storeInfoDTO : storeInfoDTOResult.getModel()) {
                 if (!storeInfoDTOMap.containsKey(storeInfoDTO.getMerchantId())) {
@@ -120,7 +120,7 @@ public class PayOrderController extends BaseController {
                 }
             }
         }
-        PayOrderStoreInfoDTO storeInfo = null;
+        PayOrderStoreInfoDTO storeInfo;
         for (PayOrderDTO payOrderDTO : payOrderDTOS) {
             PayOrderInfoDTO payOrderInfoDTO = new PayOrderInfoDTO();
             payOrderInfoDTO.setEvaluationEnum(payOrderDTO.getEvaluationEnum());
@@ -156,9 +156,8 @@ public class PayOrderController extends BaseController {
     @RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.DELETE)
     public Result delPayOrderInfo(@PathVariable("id") Long id, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         if (id == null) {
-            return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+            return successDelete();
         }
-        Result result = payOrderService.delPayOrderInfo(id);
-        return successDelete(result);
+        return payOrderService.delPayOrderInfo(id);
     }
 }

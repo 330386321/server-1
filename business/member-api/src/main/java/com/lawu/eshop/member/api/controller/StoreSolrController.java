@@ -85,7 +85,7 @@ public class StoreSolrController extends BaseController {
             }
         }
         List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
-        StoreSolrInfoDTO storeInfo = null;
+        StoreSolrInfoDTO storeInfo;
         for (AdPlatformDTO adPlatformDTO : recommendResult.getModel()) {
             StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
             storeSolrDTO.setMerchantStoreId(adPlatformDTO.getMerchantStoreId());
