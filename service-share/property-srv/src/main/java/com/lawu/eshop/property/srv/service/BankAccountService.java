@@ -40,6 +40,20 @@ public interface BankAccountService {
 	 */
 	Boolean selectByAccount(String account);
 	
+	/**
+	 * 单个查询
+	 * @param id
+	 * @return
+	 */
+	BankAccountBO selectAccount(Long id);
+	
+	/**
+	 * 修改银行卡
+	 * @param id
+	 * @param bankAccountParam
+	 * @return
+	 */
+	Integer updateBankAccount(Long id ,BankAccountParam bankAccountParam);
 	
 
 }

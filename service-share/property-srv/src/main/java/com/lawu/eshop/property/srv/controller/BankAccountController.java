@@ -78,5 +78,32 @@ public class BankAccountController extends BaseController{
     		return successCreated(ResultCode.FAIL);
     	}
     }
+	
+	/**
+	 * 单个查询
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "selectAccount/{id}", method = RequestMethod.GET)
+    public Result<BankAccountDTO> selectAccount(@PathVariable Long id) {
+		BankAccountBO BO = bankAccountService.selectAccount(id);
+		return  successAccepted(BankAccountConverter.convertDTO(BO));
+    }
+	
+	/**
+	 * 修改
+	 * @param id
+	 * @param bankAccountParam
+	 * @return
+	 */
+	@RequestMapping(value = "updateBankAccount/{id}", method = RequestMethod.PUT)
+    public Result updateBankAccount(@PathVariable Long id,@RequestBody BankAccountParam bankAccountParam) {
+		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber());
+		if(!flag){
+			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
+		}
+		bankAccountService.updateBankAccount(id, bankAccountParam);
+		return  successCreated();
+    }
 
 }

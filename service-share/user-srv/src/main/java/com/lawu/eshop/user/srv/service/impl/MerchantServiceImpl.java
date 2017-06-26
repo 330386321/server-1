@@ -91,6 +91,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Autowired
     private MerchantDOMapperExtend merchantDOMapperExtend;
+    
 
     @Override
     @Transactional
@@ -312,8 +313,8 @@ public class MerchantServiceImpl implements MerchantService {
     
     @Override
     public Page<MerchantInviterBO> getMerchantByInviter(Long userId, MerchantInviterParam pageParam, byte inviterType) {
-    	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(userId);
-    	int count = memberProfileDO.getInviteMerchantCount().intValue();
+    	MerchantProfileDO merchantProfileDO = merchantProfileDOMapper.selectByPrimaryKey(userId);
+    	int count = merchantProfileDO.getInviteMerchantCount().intValue();
     	
     	InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
         inviterMerchantDO.setInviterId(userId);
@@ -325,7 +326,7 @@ public class MerchantServiceImpl implements MerchantService {
         //推荐的商家
         List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
         for (InviterMerchantDOView inviterMerchantDOView : inviterMerchantDOS) {
-        	 MerchantProfileDO merchantProfileDO =merchantProfileDOMapper.selectByPrimaryKey(inviterMerchantDOView.getId());
+        	 merchantProfileDO =merchantProfileDOMapper.selectByPrimaryKey(inviterMerchantDOView.getId());
         	 if(merchantProfileDO == null){
         		 inviterMerchantDOView.setInviterCount(0);
         	 }else{

@@ -92,4 +92,28 @@ public class BankAccountServiceImpl implements BankAccountService {
 			return false;
 	}
 
+	@Override
+	public BankAccountBO selectAccount(Long id) {
+		BankAccountDO bankAccountDO =bankAccountDOMapper.selectByPrimaryKey(id);
+		BankAccountBO bankAccountBO=new BankAccountBO();
+	    bankAccountBO.setId(bankAccountDO.getId());
+	    bankAccountBO.setAccountName(bankAccountDO.getAccountName());
+	    bankAccountBO.setAccountNumber(bankAccountDO.getAccountNumber());
+	    bankAccountBO.setSubBranchName(bankAccountDO.getSubBranchName());
+	    BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountDO.getBankId());
+	    bankAccountBO.setBankName(bankDO.getName());
+		return bankAccountBO;
+	}
+
+	@Override
+	public Integer updateBankAccount(Long id, BankAccountParam bankAccountParam) {
+		BankAccountDO bankAccountDO=new BankAccountDO();
+		bankAccountDO.setId(id);
+		bankAccountDO.setAccountName(bankAccountParam.getAccountName());
+		bankAccountDO.setAccountNumber(bankAccountParam.getAccountNumber());
+		bankAccountDO.setBankId(bankAccountParam.getBankId());
+		bankAccountDO.setSubBranchName(bankAccountParam.getSubBranchName());
+		return bankAccountDOMapper.updateByPrimaryKeySelective(bankAccountDO);
+	}
+
 }

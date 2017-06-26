@@ -158,12 +158,10 @@ public class MemberServiceImpl implements MemberService {
     public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType) {
     	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
     	int count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
-    	
-        Byte status = 1;
     	InviterUserDOView view = new InviterUserDOView();
     	view.setInviterId(inviterId);
     	view.setInviterType(inviterType);
-    	view.setStatus(status);
+    	view.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
     	if (memberQuery.getAccountOrNickName() != null && !"".equals(memberQuery.getAccountOrNickName().trim())) {
            view.setContent("%" + memberQuery.getAccountOrNickName()+ "%");
         }
@@ -190,14 +188,13 @@ public class MemberServiceImpl implements MemberService {
 //    @Override
     public Page<MemberBO> findMemberListByUser_bak(Long inviterId, MemberQuery memberQuery, byte inviterType) {
         MemberDOExample example = new MemberDOExample();
-        Byte status = 1;
         Criteria c1 = example.createCriteria();
-        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType);
+        c1.andInviterIdEqualTo(inviterId).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andInviterTypeEqualTo(inviterType);
         int count = memberDOMapper.countByExample(example);
         if (memberQuery.getAccountOrNickName() != null) { //存在模糊查询
             c1.andAccountLike("%" + memberQuery.getAccountOrNickName() + "%");
             Criteria c2 = example.createCriteria();
-            c2.andInviterIdEqualTo(inviterId).andStatusEqualTo(status).andInviterTypeEqualTo(inviterType)
+            c2.andInviterIdEqualTo(inviterId).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val).andInviterTypeEqualTo(inviterType)
             .andNicknameLike("%" + memberQuery.getAccountOrNickName() + "%");
             example.or(c2);
         }
