@@ -537,7 +537,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	@Override
 	public MerchantStoreAuditBO findStoreAuditInfo(Long merchantId) {
 		MerchantStoreAuditDOExample example = new MerchantStoreAuditDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andTypeEqualTo(MerchantAuditTypeEnum.AUDIT_TYPE_EDIT_INFO.val);
+		example.createCriteria().andMerchantIdEqualTo(merchantId);
 		example.setOrderByClause("id desc");
 		List<MerchantStoreAuditDO> merchantStoreAuditDOS = merchantStoreAuditDOMapper.selectByExample(example);
 		if (merchantStoreAuditDOS.isEmpty()) {
