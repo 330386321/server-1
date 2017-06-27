@@ -92,22 +92,22 @@ public class MerchantStoreController extends BaseController {
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get(UploadFileTypeConstant.IMG_URL);
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && StringUtils.isNotEmpty(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    else  if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                    else  if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && StringUtils.isNotEmpty(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -186,21 +186,21 @@ public class MerchantStoreController extends BaseController {
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get(UploadFileTypeConstant.IMG_URL);
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && StringUtils.isNotEmpty(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
-                    } else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    } else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && !"".equals(imgUrl)) {
+                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && !"".equals(imgUrl)) {
+                    else if (StringUtils.isNotEmpty(imgUrl) && fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) ) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -285,13 +285,13 @@ public class MerchantStoreController extends BaseController {
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) &&  StringUtils.isNotEmpty(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) &&  StringUtils.isNotEmpty(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && !"".equals(imgUrl)) {
+                    if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) &&  StringUtils.isNotEmpty(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
                 } else {
