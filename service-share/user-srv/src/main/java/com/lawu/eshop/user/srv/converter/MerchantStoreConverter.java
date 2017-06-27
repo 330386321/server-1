@@ -382,6 +382,7 @@ public class MerchantStoreConverter {
             storeSolrDTO.setMerchantStoreId(solrDocument.get("id").toString() == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
             storeSolrDTO.setMerchantId(solrDocument.get("merchantId_l") == null ? 0 : Long.valueOf(solrDocument.get("merchantId_l").toString()));
             storeSolrDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            storeSolrDTO.setRegionPath(solrDocument.get("regionPath_s") == null ? "" : solrDocument.get("regionPath_s").toString());
             storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s") == null ? "" : solrDocument.get("industryPath_s").toString());
             storeSolrDTO.setIndustryName(solrDocument.get("industryName_s") == null ? "" : solrDocument.get("industryName_s").toString());
             storeSolrDTO.setStorePic(solrDocument.get("storePic_s") == null ? "" : solrDocument.get("storePic_s").toString());

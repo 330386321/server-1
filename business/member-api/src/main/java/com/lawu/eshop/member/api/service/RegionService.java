@@ -5,6 +5,7 @@ import com.lawu.eshop.mall.dto.RegionDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,5 +20,15 @@ public interface RegionService {
      * @return
      */
     @RequestMapping(value = "region/getRegionList", method = RequestMethod.GET)
-    public Result<List<RegionDTO>> getRegionList();
+    Result<List<RegionDTO>> getRegionList();
+
+    /**
+     * 根据区域路径查询区域名称
+     *
+     * @param regionPath
+     * @return
+     */
+    @RequestMapping(value = "region/getAreaName", method = RequestMethod.GET)
+    Result<String> getAreaName(@RequestParam("regionPath") String regionPath);
+
 }

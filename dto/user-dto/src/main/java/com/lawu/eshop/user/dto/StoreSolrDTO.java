@@ -38,6 +38,12 @@ public class StoreSolrDTO {
     @ApiModelProperty(value = "平均评分")
     private Double averageScore;
 
+    @ApiModelProperty(value = "主营业务")
+    private String regionPath;
+
+    @ApiModelProperty(value = "主营业务名称")
+    private String areaName;
+
     public Long getMerchantId() {
         return merchantId;
     }
@@ -116,5 +122,21 @@ public class StoreSolrDTO {
 
     public void setIndustryName(String industryName) {
         this.industryName = industryName;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
+    }
+
+    public String getAreaName() {
+        return areaName;
+    }
+
+    public void setAreaName(String areaName) {
+        this.areaName = areaName;
     }
 }
