@@ -22,5 +22,12 @@ public interface InviterMerchantDOMapperExtend {
 	 */
 	List<InviterMerchantDOView> selectInviterMerchantByRowbounds(InviterMerchantDOView inviterMerchantDO,RowBounds rowBounds);
 	
+	/**
+	 * 我邀请的商家总数
+	 * @param merchantInviter
+	 * @return
+	 */
+	Integer selectInviterMerchantCount(InviterMerchantDOView inviterMerchantDO);
+	
    
 }

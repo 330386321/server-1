@@ -159,11 +159,10 @@ public class MemberServiceImpl implements MemberService {
     	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
     	int count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
     	
-        Byte status = 1;
     	InviterUserDOView view = new InviterUserDOView();
     	view.setInviterId(inviterId);
     	view.setInviterType(inviterType);
-    	view.setStatus(status);
+    	view.setStatus(UserStatusEnum.MEMBER_STATUS_VALID.val);
     	if (memberQuery.getAccountOrNickName() != null && !"".equals(memberQuery.getAccountOrNickName().trim())) {
            view.setContent("%" + memberQuery.getAccountOrNickName()+ "%");
         }
