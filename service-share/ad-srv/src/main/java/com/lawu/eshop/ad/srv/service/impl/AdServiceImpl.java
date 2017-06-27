@@ -471,11 +471,7 @@ public class AdServiceImpl implements AdService {
 		}
 		adDO.setId(id);
 		Integer i=adDOMapper.updateByPrimaryKeySelective(adDO);
-		if(auditEnum.val == AuditEnum.AD_AUDIT_PASS.val){
-			adDO=adDOMapper.selectByPrimaryKey(id);
-			SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-			SolrUtil.addSolrDocs(document, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-		}else{
+		if(auditEnum.val != AuditEnum.AD_AUDIT_PASS.val){
 			//审核不通过退还积分
 			matransactionMainAddService.sendNotice(id);
 		}
@@ -553,8 +549,10 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
-					documents.add(document);
+					if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
+						SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+						documents.add(document);
+					}
 				}
 			}
 			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
