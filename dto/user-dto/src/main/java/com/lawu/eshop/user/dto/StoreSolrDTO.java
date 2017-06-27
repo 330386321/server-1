@@ -38,10 +38,10 @@ public class StoreSolrDTO {
     @ApiModelProperty(value = "平均评分")
     private Double averageScore;
 
-    @ApiModelProperty(value = "主营业务")
+    @ApiModelProperty(value = "区域路径")
     private String regionPath;
 
-    @ApiModelProperty(value = "主营业务名称")
+    @ApiModelProperty(value = "区域名称")
     private String areaName;
 
     public Long getMerchantId() {
