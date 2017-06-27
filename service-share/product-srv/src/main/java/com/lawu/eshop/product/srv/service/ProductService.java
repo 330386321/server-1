@@ -3,7 +3,6 @@ package com.lawu.eshop.product.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
@@ -52,13 +51,6 @@ public interface ProductService {
      * @return
      */
     ProductEditInfoBO selectEditProductById(Long productId);
-
-    /**
-     * 编辑商品
-     *
-     * @param product
-     */
-    void eidtProduct_bak(EditProductDataParam_bak product);
 
     /**
      * 编辑商品

@@ -7,7 +7,6 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.*;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
@@ -137,24 +136,6 @@ public class ProductController extends BaseController {
         productDTO.setAllowRefund(productBO.isAllowRefund());
         productDTO.setFullCategoryId(productBO.getFullCategoryId());
         return successCreated(productDTO);
-    }
-
-    /**
-     * 添加、编辑商品
-     *
-     * @param product
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
-    @RequestMapping(value = "saveProduct_bak", method = RequestMethod.POST)
-    public Result saveProduct_bak(@RequestBody @Valid EditProductDataParam_bak product, BindingResult result) {
-    	String message = validate(result);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
-    	
-        productService.eidtProduct_bak(product);
-        return successCreated(ResultCode.SUCCESS);
     }
 
     /**

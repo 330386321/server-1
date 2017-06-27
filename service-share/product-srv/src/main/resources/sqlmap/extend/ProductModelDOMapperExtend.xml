@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend">
-	<update id="editInventory" parameterType="com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView">
+<mapper
+	namespace="com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend">
+	<update id="editInventory"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView">
 		update product_model set
 		<if test='flag == "M"'>
 			inventory = inventory - #{num,jdbcType=INTEGER},
@@ -10,10 +12,12 @@
 			inventory = inventory + #{num,jdbcType=INTEGER},
 		</if>
 		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-		where id = #{productModelId,jdbcType=BIGINT}
+		where id =
+		#{productModelId,jdbcType=BIGINT}
 	</update>
-	
-	<update id="editSaleVolume" parameterType="com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView">
+
+	<update id="editSaleVolume"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView">
 		update product_model set
 		<if test='flag == "M"'>
 			sales_volume = sales_volume - #{num,jdbcType=INTEGER},
@@ -22,6 +26,19 @@
 			sales_volume = sales_volume + #{num,jdbcType=INTEGER},
 		</if>
 		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
-		where id = #{productModelId,jdbcType=BIGINT}
+		where id =
+		#{productModelId,jdbcType=BIGINT}
+	</update>
+
+	<update id="updateByExampleSelective" parameterType="com.lawu.eshop.product.srv.domain.extend.ProductModelDOView">
+		update product_model set
+		name = #{name,jdbcType=VARCHAR},
+		original_price = #{originalPrice,jdbcType=DECIMAL},
+		price = #{price,jdbcType=DECIMAL},
+		<if test="inventory != 0">
+			inventory = inventory + #{inventory,jdbcType=INTEGER},
+		</if>
+		gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=BIGINT}
 	</update>
 </mapper>

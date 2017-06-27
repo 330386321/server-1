@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.mapper.extend;
 
+import com.lawu.eshop.product.srv.domain.extend.ProductModelDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 
 /**
@@ -13,5 +14,7 @@ public interface ProductModelDOMapperExtend {
 	void editInventory(ProductModelNumsView view);
 	
 	void editSaleVolume(ProductModelNumsView view);
+
+	void updateByExampleSelective(ProductModelDOView modelDO);
    
 }

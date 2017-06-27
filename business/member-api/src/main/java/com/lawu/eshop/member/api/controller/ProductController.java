@@ -98,7 +98,7 @@ public class ProductController extends BaseController {
 				//Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(comment.getProductModelId());
 				boolean flag = true;
 				for(MemberProductModelDTO model : spec){
-					if(comment.getProductModelId() == model.getId()){
+					if(comment.getProductModelId().longValue() == model.getId().longValue()){
 						cidto.setProductModel(model.getName());
 						flag = false;
 						break;

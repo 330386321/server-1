@@ -109,4 +109,19 @@
 		ORDER BY id DESC
 		LIMIT #{offset},#{pageSize}
 	</select>
+	
+	<update id="updateByExampleSelective"
+		parameterType="com.lawu.eshop.product.srv.domain.extend.ProductDOEditView">
+		update product set
+			total_sales_volume = #{totalSalesVolume,jdbcType=INTEGER},
+			min_price = #{minPrice,jdbcType=DECIMAL},
+        	max_price = #{maxPrice,jdbcType=DECIMAL},
+		<if test='flag == "U"'>
+			total_inventory = total_inventory + #{totalInventory,jdbcType=INTEGER}
+		</if>
+		<if test='flag == "A"'>
+			total_inventory = #{totalInventory,jdbcType=INTEGER}
+		</if>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
 </mapper>

@@ -1,5 +1,22 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -10,36 +27,40 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.MemberProductImageDetailDTO;
 import com.lawu.eshop.product.dto.MemberProductModelDTO;
 import com.lawu.eshop.product.param.EditProductDataParam;
-import com.lawu.eshop.product.param.EditProductDataParam_bak;
 import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.*;
+import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductModelBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
+import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
+import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
+import com.lawu.eshop.product.srv.domain.ProductImageDO;
+import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
+import com.lawu.eshop.product.srv.domain.extend.ProductModelDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.*;
+import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
+import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -67,6 +88,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductSrvConfig productSrvConfig;
+    
+    @Autowired
+    private ProductModelDOMapperExtend productModelDOMapperExtend;
 
     @Autowired
     @Qualifier("delProductCommentTransactionMainServiceImpl")
@@ -347,182 +371,6 @@ public class ProductServiceImpl implements ProductService {
         return productEditInfoBO;
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Override
-    @Transactional
-    public void eidtProduct_bak(EditProductDataParam_bak param) {
-
-        Long productId = param.getProductId();
-        int inventory = 0;
-        int salesVolume = 0;
-        double originalPrice = 0;
-        double price = 0;
-        int traverseCnt = 0;
-
-        boolean isEdit = true;
-        if (productId == 0L || productId == null || productId < 0) {
-            // 保存商品信息
-            ProductDO productDO = ProductConverter.convertDO(param, 0L);
-            productDOMapper.insertSelective(productDO);
-            productId = productDO.getId();
-            isEdit = false;
-        } else {
-            // 修改商品基本信息
-            ProductDO productDO = ProductConverter.convertDO(param, productId);
-            ProductDOExample example = new ProductDOExample();
-            example.createCriteria().andIdEqualTo(productId);
-            productDOMapper.updateByExampleSelective(productDO, example);
-        }
-
-        String spec = param.getSpec();
-        List<ProductModelBO> speclist = JSON.parseArray(spec, ProductModelBO.class);
-        if (!isEdit) {
-        	ProductModelDO pmDO;
-            for (ProductModelBO dataBO : speclist) {
-            	pmDO = new ProductModelDO();
-                pmDO.setMerchantId(param.getMerchantId());
-                pmDO.setProductId(productId);
-                pmDO.setName(dataBO.getName());
-                pmDO.setOriginalPrice(dataBO.getOriginalPrice());
-                pmDO.setPrice(dataBO.getPrice());
-                pmDO.setInventory(dataBO.getInventory());
-                pmDO.setStatus(true);
-                pmDO.setGmtCreate(new Date());
-                pmDO.setGmtModified(new Date());
-                productModelDOMapper.insertSelective(pmDO);
-
-                if (traverseCnt == 0) {
-                    price = dataBO.getPrice().doubleValue();
-                }
-                if (dataBO.getOriginalPrice().doubleValue() > originalPrice) {
-                    originalPrice = dataBO.getOriginalPrice().doubleValue();
-                }
-                if (dataBO.getPrice().doubleValue() < price) {
-                    price = dataBO.getPrice().doubleValue();
-                }
-                inventory += dataBO.getInventory();
-                traverseCnt++;
-            }
-        } else {
-        	ProductModelDOExample modelExample;
-            for (ProductModelBO dataBO : speclist) {
-                modelExample = new ProductModelDOExample();
-                modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
-                ProductModelDO modelDO = new ProductModelDO();
-
-                modelDO.setOriginalPrice(dataBO.getOriginalPrice());
-                modelDO.setPrice(dataBO.getPrice());
-                modelDO.setInventory(dataBO.getInventory());
-                modelDO.setName(dataBO.getName());
-                modelDO.setGmtModified(new Date());
-                productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
-
-                Integer inventoryTrans = dataBO.getInventoryTrans();
-                if (dataBO.getInventory() != inventoryTrans) {
-                    ProductModelInventoryDO pmiDO = new ProductModelInventoryDO();
-                    pmiDO.setProductModelId(dataBO.getId());
-                    if (dataBO.getInventory() > inventoryTrans) {
-                        pmiDO.setQuantity(dataBO.getInventory() - inventoryTrans);
-                        pmiDO.setType(ProductModelInventoryTypeEnum.PLUS.getValue());
-                    } else {
-                        pmiDO.setQuantity(inventoryTrans - dataBO.getInventory());
-                        pmiDO.setType(ProductModelInventoryTypeEnum.MINUS.getValue());
-                    }
-                    pmiDO.setGmtCreate(new Date());
-                    pmiDO.setGmtModified(new Date());
-                    productModelInventoryDOMapper.insertSelective(pmiDO);
-                }
-
-                if (traverseCnt == 0) {
-                    price = dataBO.getPrice().doubleValue();
-                }
-                if (dataBO.getOriginalPrice().doubleValue() > originalPrice) {
-                    originalPrice = dataBO.getOriginalPrice().doubleValue();
-                }
-                if (dataBO.getPrice().doubleValue() < price) {
-                    price = dataBO.getPrice().doubleValue();
-                }
-                inventory += dataBO.getInventory();
-                salesVolume += dataBO.getSalesVolume();
-                traverseCnt++;
-            }
-
-        }
-
-        // 删除商品型号信息
-        if (param.getDeleteSpecIds() != null && !"".equals(param.getDeleteSpecIds())) {
-            String deleteSpecIds = param.getDeleteSpecIds();
-            List<String> specIdsList = Arrays.asList(deleteSpecIds.split(","));
-            for (String specId : specIdsList) {
-                ProductModelDOExample modelExample = new ProductModelDOExample();
-                modelExample.createCriteria().andIdEqualTo(Long.valueOf(specId));
-                ProductModelDO modelDO = new ProductModelDO();
-                modelDO.setStatus(false);
-                modelDO.setGmtModified(new Date());
-                productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
-
-                // 逻辑删除商品型号评价
-                delProductCommentTransactionMainServiceImpl.sendNotice(Long.valueOf(specId));
-            }
-        }
-
-        // 修改商品库存、销量、最高价、最低价
-        ProductDO productDO = new ProductDO();
-        productDO.setTotalInventory(inventory);
-        productDO.setTotalSalesVolume(salesVolume);
-        productDO.setMinPrice(BigDecimal.valueOf(price));
-        productDO.setMaxPrice(BigDecimal.valueOf(originalPrice));
-        ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andIdEqualTo(productId);
-        productDOMapper.updateByExampleSelective(productDO, example);
-
-        if (isEdit) {
-            // 删除产品图片
-            ProductImageDOExample imageExample = new ProductImageDOExample();
-            imageExample.createCriteria().andProductIdEqualTo(productId);
-            ProductImageDO imageDO = new ProductImageDO();
-            imageDO.setStatus(false);
-            imageDO.setGmtModified(new Date());
-            productImageDOMapper.updateByExampleSelective(imageDO, imageExample);
-        }
-
-        // 保存商品滚动图片信息
-        ProductImageDO pcDO;
-        String imageUrl = param.getProductImages();
-        String[] imageUrls = imageUrl.split(",");
-        for (int i = 0; i < imageUrls.length; i++) {
-            pcDO = new ProductImageDO();
-            pcDO.setProductId(Long.valueOf(productId));
-            pcDO.setImagePath(imageUrls[i]);
-            pcDO.setGmtCreate(new Date());
-            pcDO.setGmtModified(new Date());
-            pcDO.setSortid(0);
-            pcDO.setStatus(true);
-            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
-            productImageDOMapper.insert(pcDO);
-        }
-
-        // 保存商品详情图片
-        Map<String, List<String>> detailImageMap = param.getDetailImageMap();
-        Iterator itr = detailImageMap.keySet().iterator();
-        while (itr.hasNext()) {
-            String key = itr.next().toString();
-            Object obj = detailImageMap.get(key);
-            List<String> images = (List<String>) obj;
-            for (String s1 : images) {
-                pcDO = new ProductImageDO();
-                pcDO.setProductId(Long.valueOf(productId));
-                pcDO.setImagePath(s1);
-                pcDO.setGmtCreate(new Date());
-                pcDO.setGmtModified(new Date());
-                pcDO.setStatus(true);
-                pcDO.setSortid(Integer.valueOf(key.substring(key.lastIndexOf('-') + 1)));
-                pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
-                productImageDOMapper.insert(pcDO);
-            }
-        }
-    }
-
     @Override
     @Transactional
     public void eidtProduct(EditProductDataParam param) {
@@ -613,33 +461,33 @@ public class ProductServiceImpl implements ProductService {
                     pmDO.setGmtCreate(new Date());
                     pmDO.setGmtModified(new Date());
                     productModelDOMapper.insertSelective(pmDO);
-
+                    
+//                    inventory += dataBO.getInventory();
                 } else {
-                    ProductModelDOExample modelExample = new ProductModelDOExample();
-                    modelExample.createCriteria().andIdEqualTo(Long.valueOf(dataBO.getId()));
-                    ProductModelDO modelDO = new ProductModelDO();
-
+                	ProductModelDOView modelDO = new ProductModelDOView();
+                    modelDO.setId(Long.valueOf(dataBO.getId()));
                     modelDO.setOriginalPrice(bdOriginalPrice);
                     modelDO.setPrice(dataBO.getPrice());
-                    modelDO.setInventory(dataBO.getInventory());
+                    Integer gapInventory = dataBO.getInventory() - dataBO.getInventoryTrans();
+                    modelDO.setInventory(gapInventory);
                     modelDO.setName(dataBO.getName());
                     modelDO.setGmtModified(new Date());
-                    productModelDOMapper.updateByExampleSelective(modelDO, modelExample);
+                    productModelDOMapperExtend.updateByExampleSelective(modelDO);
 
-                    Integer inventoryTrans = dataBO.getInventoryTrans();
-                    if (dataBO.getInventory() != inventoryTrans) {
+                    if (gapInventory != 0) {
                         ProductModelInventoryDO pmiDO = new ProductModelInventoryDO();
                         pmiDO.setProductModelId(dataBO.getId());
-                        if (dataBO.getInventory() > inventoryTrans) {
-                            pmiDO.setQuantity(dataBO.getInventory() - inventoryTrans);
-                            pmiDO.setType(ProductModelInventoryTypeEnum.PLUS.getValue());
-                        } else {
-                            pmiDO.setQuantity(inventoryTrans - dataBO.getInventory());
-                            pmiDO.setType(ProductModelInventoryTypeEnum.MINUS.getValue());
+                        pmiDO.setQuantity(Math.abs(gapInventory.intValue()));
+                        if (gapInventory > 0) {
+                        	pmiDO.setType(ProductModelInventoryTypeEnum.PLUS.getValue());
+                        }else if(gapInventory < 0){
+                        	pmiDO.setType(ProductModelInventoryTypeEnum.MINUS.getValue());
                         }
                         pmiDO.setGmtCreate(new Date());
                         pmiDO.setGmtModified(new Date());
                         productModelInventoryDOMapper.insertSelective(pmiDO);
+                        
+//                        inventory += gapInventory;
                     }
                 }
 
@@ -655,7 +503,6 @@ public class ProductServiceImpl implements ProductService {
                 salesVolume += dataBO.getSalesVolume();
                 traverseCnt++;
             }
-
         }
 
         // 删除商品型号信息
@@ -676,6 +523,14 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 修改商品库存、销量、最高价、最低价
+//        ProductDOEditView productDO = new ProductDOEditView();
+//        productDO.setTotalInventory(inventory);
+//        productDO.setTotalSalesVolume(salesVolume);
+//        productDO.setMinPrice(price);
+//        productDO.setMaxPrice(mprice);
+//        productDO.setId(productId);
+//        productDO.setFlag(!isEdit ? "A" : "U");
+//        productDOMapperExtend.updateByExampleSelective(productDO);//删除型号的情况(需要删除总库存)目前不好判断
         ProductDO productDO = new ProductDO();
         productDO.setTotalInventory(inventory);
         productDO.setTotalSalesVolume(salesVolume);
