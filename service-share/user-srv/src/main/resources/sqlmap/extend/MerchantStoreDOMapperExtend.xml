@@ -158,4 +158,16 @@
         AND s.merchant_id =  #{merchantId}
     </select>
 
+    <select id="getPayOrderMerchantInfo" resultType="com.lawu.eshop.user.srv.domain.extend.PayOrderStoreInfoView"
+            parameterType="java.lang.Long">
+        SELECT
+        s.name,
+        m.account
+        FROM
+        merchant AS m
+        LEFT JOIN merchant_store AS s ON m.id = s.merchant_id
+        WHERE
+        m.id =  #{merchantId}
+    </select>
+
 </mapper>

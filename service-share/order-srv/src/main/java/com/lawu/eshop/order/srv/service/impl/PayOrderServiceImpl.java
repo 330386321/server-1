@@ -6,6 +6,7 @@ import com.lawu.eshop.order.constants.CommissionStatusEnum;
 import com.lawu.eshop.order.constants.PayOrderStatusEnum;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
+import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -15,7 +16,9 @@ import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -175,5 +178,38 @@ public class PayOrderServiceImpl implements PayOrderService {
 		PayOrderDO payOrderDO = payOrderDOMapper.selectByPrimaryKey(id);
 
 		return  PayOrderConverter.coverBO(payOrderDO);
+	}
+
+	@Override
+	public Page<PayOrderBO> getOperatorPayOrderList(OperatorPayOrderParam param) {
+
+		PayOrderDOExample example = new PayOrderDOExample();
+		PayOrderDOExample.Criteria criteria = example.createCriteria();
+		if (param.getMerchantId() != null) {
+			criteria.andMerchantIdEqualTo(param.getMerchantId());
+		}
+		if (param.getMemberId() != null) {
+			criteria.andMemberIdEqualTo(param.getMemberId());
+		}
+		if (StringUtils.isNotEmpty(param.getBeginDate())) {
+			criteria.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
+		}
+		if (StringUtils.isNotEmpty(param.getEndDate())) {
+			criteria.andGmtCreateLessThanOrEqualTo(DateUtil.stringToDate(param.getEndDate() + " 23:59:59"));
+		}
+		if (StringUtils.isNotEmpty(param.getOrderNum())) {
+			criteria.andOrderNumEqualTo(param.getOrderNum());
+		}
+		example.setOrderByClause("id desc");
+
+		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
+		Page<PayOrderBO> page = new Page<>();
+		page.setTotalCount(payOrderDOMapper.countByExample(example));
+		page.setCurrentPage(param.getCurrentPage());
+
+		List<PayOrderDO> payOrderDOS = payOrderDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+		List<PayOrderBO> payOrderBOS = PayOrderConverter.coverBOS(payOrderDOS);
+		page.setRecords(payOrderBOS);
+		return page;
 	}
 }

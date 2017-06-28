@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.*;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
+import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -158,7 +159,6 @@ public class PayOrderController extends BaseController {
 	/**
 	 * 用户买单详情
 	 * @param id
-	 * @param memberId
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "getOrderInfo")
@@ -169,5 +169,24 @@ public class PayOrderController extends BaseController {
 		}
 		MemberPayOrderInfoDTO memberPayOrderInfoDTO = PayOrderConverter.coverOrderInfoDTO(payOrderBO);
 		return memberPayOrderInfoDTO;
+	}
+
+	/**
+	 * 运营平台查询买单列表
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "getOperatorPayOrderList", method = RequestMethod.POST)
+	public Result<Page<OperatorPayOrderListDTO>> getOperatorPayOrderList(@RequestBody OperatorPayOrderParam param) {
+		if (param.getCurrentPage() < 1) {
+			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+		}
+		Page<PayOrderBO> payOrderBOPage = payOrderService.getOperatorPayOrderList(param);
+		Page<OperatorPayOrderListDTO> page = new Page<>();
+		page.setCurrentPage(payOrderBOPage.getCurrentPage());
+		page.setTotalCount(payOrderBOPage.getTotalCount());
+		page.setRecords(PayOrderConverter.coverOperatorPayOrderListDTOS(
+				payOrderBOPage.getRecords()));
+		return successGet(page);
 	}
 }

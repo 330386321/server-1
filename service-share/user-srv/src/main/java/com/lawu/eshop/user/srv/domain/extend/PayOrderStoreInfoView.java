@@ -21,6 +21,8 @@ public class PayOrderStoreInfoView implements Serializable {
 
     private String address;
 
+    private String account;
+
     public String getName() {
         return name;
     }
@@ -67,5 +69,13 @@ public class PayOrderStoreInfoView implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public String getAccount() {
+        return account;
     }
 }

@@ -31,4 +31,6 @@ public interface MerchantStoreDOMapperExtend {
     List<MerchantAdInfoView> getAdMerchantStoreByIds(List<Long> merchantIds);
 
     PayOrderStoreInfoView getPayOrderDetailStoreInfo(Long merchantId);
+
+    PayOrderStoreInfoView getPayOrderMerchantInfo(Long merchantId);
 }

@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
+import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -61,4 +62,6 @@ public interface PayOrderService {
     Page<PayOrderBO> getMerchantPayOrderList(Long userId, MerchantPayOrderListParam param);
 
 	PayOrderBO getOrderInfo(Long id);
+
+    Page<PayOrderBO> getOperatorPayOrderList(OperatorPayOrderParam param);
 }

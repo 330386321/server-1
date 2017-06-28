@@ -19,6 +19,8 @@ public class MerchantInfoBO {
 
     private String ryToken;
 
+    private String name;
+
     public String getAccount() {
         return account;
     }
@@ -49,5 +51,13 @@ public class MerchantInfoBO {
 
     public void setRyToken(String ryToken) {
         this.ryToken = ryToken;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

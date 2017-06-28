@@ -602,6 +602,24 @@ public class MerchantStoreController extends BaseController {
 		return payOrderMerchantStoreInfoDTO;
 	}
 
+	/**
+	 * 查询运营平台买单列表商家name  account
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "getPayOrderMerchantInfo")
+	OperatorMerchantInfoDTO getPayOrderMerchantInfo(@RequestParam("merchantId") Long merchantId) {
+
+		MerchantInfoBO merchantInfoBO = merchantStoreInfoService.getPayOrderMerchantInfo(merchantId);
+		if (merchantInfoBO == null) {
+			return null;
+		}
+		OperatorMerchantInfoDTO merchantInfoDTO = new OperatorMerchantInfoDTO();
+		merchantInfoDTO.setAccount(merchantInfoBO.getAccount());
+		merchantInfoDTO.setName(merchantInfoBO.getName());
+		return merchantInfoDTO;
+	}
+
 
 }
 
