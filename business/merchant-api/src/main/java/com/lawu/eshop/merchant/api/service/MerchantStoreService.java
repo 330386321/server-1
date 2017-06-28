@@ -112,5 +112,16 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchantStore/getNameBymerchantId/{merchantId}")
     Result<String> getNameBymerchantId(@PathVariable("merchantId") Long merchantId);
+    
+	/**
+	 * 根据商家id查询商家门店id
+	 * 
+	 * @param merchantId
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月27日
+	 */
+	@RequestMapping(value = "merchantStore/merchantStoreId/{merchantId}", method = RequestMethod.GET)
+	Result<Long> getMerchantStoreId(@PathVariable("merchantId") Long merchantId); 
 
 }

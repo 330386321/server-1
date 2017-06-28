@@ -85,6 +85,15 @@
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+        <table tableName="discount_package" domainObjectName="DiscountPackageDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="discount_package_content" domainObjectName="DiscountPackageContentDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="discount_package_image" domainObjectName="DiscountPackageImageDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
         -->
         <table tableName="comment_merchant" domainObjectName="CommentMerchantDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>

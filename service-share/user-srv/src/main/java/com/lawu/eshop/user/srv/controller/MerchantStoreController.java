@@ -528,6 +528,23 @@ public class MerchantStoreController extends BaseController {
 		}
 		return successGet(dtoList);
 	}
+	
+	/**
+	 * 根据商家id查询商家门店id
+	 * 
+	 * @param merchantId
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月27日
+	 */
+	@RequestMapping(value = "merchantStoreId/{merchantId}", method = RequestMethod.GET)
+	public Result<Long> getMerchantStoreById(@PathVariable("merchantId") Long merchantId) {
+		MerchantStoreBO merchantStoreBO = merchantStoreService.selectMerchantStore(merchantId);
+		if (merchantStoreBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
+		return successGet(merchantStoreBO.getId());
+	}
 
 	/**
 	 * 判断门店是否存在

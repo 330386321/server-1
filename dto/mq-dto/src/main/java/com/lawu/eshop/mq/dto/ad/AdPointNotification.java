@@ -18,6 +18,15 @@ public class AdPointNotification extends Notification {
 	
 	private BigDecimal point;
 	
+	private Long adId;
+	
+	public Long getAdId() {
+		return adId;
+	}
+
+	public void setAdId(Long adId) {
+		this.adId = adId;
+	}
 
 	public String getUserNum() {
 		return userNum;
