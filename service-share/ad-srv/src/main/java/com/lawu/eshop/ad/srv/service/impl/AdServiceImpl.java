@@ -176,7 +176,7 @@ public class AdServiceImpl implements AdService {
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
 			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
 			pointPool.setGmtCreate(new Date());
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(j);
@@ -197,7 +197,7 @@ public class AdServiceImpl implements AdService {
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
@@ -211,7 +211,7 @@ public class AdServiceImpl implements AdService {
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
