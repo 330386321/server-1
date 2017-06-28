@@ -1,7 +1,5 @@
 package com.lawu.eshop.framework.web.filter;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
@@ -71,9 +69,6 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 	                break;
 	            case '&':
 	                stringBuilder.append('＆');//全角
-	                break;
-	            case '\\':
-	                stringBuilder.append('＼');//全角斜线
 	                break;
 	            case '(':
 	                stringBuilder.append('（');//全角做括号
