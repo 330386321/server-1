@@ -569,7 +569,7 @@ public class AdServiceImpl implements AdService {
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
 				Calendar nowTime = Calendar.getInstance();
-				nowTime.add(Calendar.MINUTE, -5);
+				nowTime.add(Calendar.MINUTE, -20);
 				if((nowTime.getTime().getTime()-adDO.getBeginTime().getTime())>0){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 					adDO.setGmtModified(date);
