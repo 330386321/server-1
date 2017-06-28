@@ -1,9 +1,9 @@
 package com.lawu.eshop.jobs.service.impl;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.jobs.JobsConfig;
 import com.lawu.eshop.jobs.service.RongYunDownLoadService;
 import com.lawu.eshop.jobs.service.RongYunService;
-import com.lawu.eshop.statistics.StatisticsConfig;
 import com.lawu.eshop.user.dto.RongYunHistoryMessageDTO;
 import com.lawu.eshop.utils.DateUtil;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +28,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
     @Autowired
     private RongYunService rongYunService;
     @Autowired
-    private StatisticsConfig statisticsConfig;
+    private JobsConfig jobsConfig;
 
     @Override
     public void downLoadMessageFile() {
@@ -47,7 +47,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
             RongYunHistoryMessageDTO messageDTO = messageDTOResult.getModel();
             if (StringUtils.isNotEmpty(messageDTO.getUrl())) {
                 try {
-                    DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", statisticsConfig.getDownLoadDir() + File.separator+ dateFormat);
+                    DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", jobsConfig.getDownLoadDir() + File.separator+ dateFormat);
                 } catch (IOException e) {
                     logger.error("下载消息失败！IO异常",e);
                 }
