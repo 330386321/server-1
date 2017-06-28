@@ -18,7 +18,7 @@
         <module>operator-api</module>
         <module>agent-api</module>
         <module>external-api</module>
-        <module>statistics</module>
+        <module>jobs</module>
     </modules>
 
     <dependencies>
