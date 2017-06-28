@@ -67,11 +67,11 @@
         <table tableName="transaction_record" domainObjectName="TransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
+        <table tableName="follow_transaction_record" domainObjectName="FollowTransactionRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         -->
-        <table tableName="follow_transaction_record" domainObjectName="FollowTransactionRecordDO">
+        <table tableName="shopping_cart" domainObjectName="ShoppingCartDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

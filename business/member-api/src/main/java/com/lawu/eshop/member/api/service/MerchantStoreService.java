@@ -1,15 +1,26 @@
 package com.lawu.eshop.member.api.service;
 
+import java.util.List;
+
+import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.product.dto.MemberProductStoreDTO;
 import com.lawu.eshop.user.constants.ManageTypeEnum;
-import com.lawu.eshop.user.dto.*;
+import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
+import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.dto.PayOrderStoreInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
+import com.lawu.eshop.user.dto.ShoppingStoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreDetailDTO;
+import com.lawu.eshop.user.dto.StoreSolrInfoDTO;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
-import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Sunny
@@ -24,8 +35,8 @@ public interface MerchantStoreService {
      * @param merchantId
      * @return
      */
-    @RequestMapping(value = "merchantStore/getNameBymerchantId/{merchantId}", method = RequestMethod.GET)
-    public Result<String> getNameByMerchantId(@PathVariable("merchantId") Long merchantId);
+    @RequestMapping(value = "merchantStore/shoppingCart/{merchantId}", method = RequestMethod.GET)
+    public Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCart(@PathVariable("merchantId") Long merchantId);
 
     /**
      * 根据商家ID查询门店是否支持七天无理由退货

@@ -20,6 +20,7 @@ import com.lawu.eshop.user.constants.ManageTypeEnum;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CashUserInfoDTO;
 import com.lawu.eshop.user.dto.MerchantAdInfoDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStorePlatDTO;
@@ -185,16 +186,17 @@ public class MerchantStoreController extends BaseController {
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "getNameBymerchantId/{merchantId}", method = RequestMethod.GET)
-	public Result<String> getNameByMerchantId(@PathVariable("merchantId") Long merchantId) {
+	@RequestMapping(value = "shoppingCart/{merchantId}", method = RequestMethod.GET)
+	public Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCart(@PathVariable("merchantId") Long merchantId) {
 
 		MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
 
-		if (merchantStoreInfoBO == null || StringUtils.isEmpty(merchantStoreInfoBO.getName())) {
+		if (merchantStoreInfoBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
-		return successGet(merchantStoreInfoBO.getName());
+		MerchantInfoForShoppingCartDTO rtn = MerchantStoreConverter.convert(merchantStoreInfoBO);
+		return successGet(rtn);
 	}
 
 	/**

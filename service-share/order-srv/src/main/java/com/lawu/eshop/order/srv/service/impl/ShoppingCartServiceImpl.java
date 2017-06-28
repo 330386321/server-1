@@ -1,6 +1,5 @@
 package com.lawu.eshop.order.srv.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,9 @@ import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingCartUpdateQuantityDO;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
+import com.lawu.eshop.order.srv.mapper.extend.ShoppingCartExtendDOMapper;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -30,17 +31,16 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
+	
+	@Autowired
+	private ShoppingCartExtendDOMapper shoppingCartExtendDOMapper;
 
 	@Override
 	public List<ShoppingCartBO> findListByMemberId(Long memberId) {
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
-
-		if (memberId == null) {
-			return null;
-		}
-
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		return ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
+		List<ShoppingCartBO> rtn = ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
+		return rtn;
 	}
 
 	/**
@@ -48,38 +48,23 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 * 
 	 * @param memberId 会员id
 	 * @param param 保存参数
-	 * @return
 	 * @author Sunny
 	 */
 	@Transactional
 	@Override
-	public Result<Long> save(Long memberId, ShoppingCartSaveParam param) {
-		
+	public void save(Long memberId, ShoppingCartSaveParam param) {
 		// 查看用户购物车是否有重复记录
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andProductModelIdEqualTo(param.getProductModelId());
-		List<ShoppingCartDO> list = shoppingCartDOMapper.selectByExample(example);
+		List<Long> list = shoppingCartExtendDOMapper.selectIdByExample(example);
 		
-		ShoppingCartDO shoppingCartDO = null;
 		if (list != null && !list.isEmpty()) {
-			shoppingCartDO = list.get(0);
-			shoppingCartDO.setGmtModified(new Date());
-			shoppingCartDO.setQuantity(shoppingCartDO.getQuantity() + param.getQuantity());
-			shoppingCartDOMapper.updateByPrimaryKeySelective(shoppingCartDO);
-			
-			return successCreated(shoppingCartDO.getId());
+			ShoppingCartUpdateQuantityDO shoppingCartUpdateQuantityDO =  ShoppingCartConverter.convertShoppingCartUpdateQuantityDO(param, list.get(0));
+			shoppingCartExtendDOMapper.updateQuantityByPrimaryKey(shoppingCartUpdateQuantityDO);
 		} else {
-			shoppingCartDO = ShoppingCartConverter.convert(param, memberId);
-	
-			// 空值交给Mybatis去处理
-			int result = shoppingCartDOMapper.insertSelective(shoppingCartDO);
-	
-			if (result <= 0) {
-				return successCreated(ResultCode.SAVE_FAIL);
-			}
+			ShoppingCartDO shoppingCartDO = ShoppingCartConverter.convert(param, memberId);
+			shoppingCartDOMapper.insert(shoppingCartDO);
 		}
-		
-		return successCreated(shoppingCartDO.getId());
 	}
 
 	/**

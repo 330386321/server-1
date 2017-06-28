@@ -2,37 +2,49 @@ package com.lawu.eshop.order.param;
 
 import java.math.BigDecimal;
 
+/**
+ * api请求srv参数<p>
+ * 保存购物车参数
+ * 
+ * @author Sunny
+ * @date 2017年6月28日
+ */
 public class ShoppingCartSaveParam {
-	
-    /**
-     * 商家ID
-     */
-    private Long merchantId;
 
-    /**
-     * 商家名称
-     */
-    private String merchantName;
+	/**
+	 * 商家ID
+	 */
+	private Long merchantId;
 
-    /**
-     * 商品ID
-     */
-    private Long productId;
+	/**
+	 * 商家门店id
+	 */
+	private Long merchantStoreId;
 
-    /**
-     * 商品型号ID
-     */
-    private Long productModelId;
+	/**
+	 * 商家名称
+	 */
+	private String merchantName;
 
-    /**
-     * 数量
-     */
-    private Integer quantity;
+	/**
+	 * 商品ID
+	 */
+	private Long productId;
 
-    /**
-     * 现价
-     */
-    private BigDecimal salesPrice;
+	/**
+	 * 商品型号ID
+	 */
+	private Long productModelId;
+
+	/**
+	 * 数量
+	 */
+	private Integer quantity;
+
+	/**
+	 * 现价
+	 */
+	private BigDecimal salesPrice;
 
 	public Long getMerchantId() {
 		return merchantId;
@@ -40,6 +52,14 @@ public class ShoppingCartSaveParam {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantName() {
@@ -81,5 +101,5 @@ public class ShoppingCartSaveParam {
 	public void setSalesPrice(BigDecimal salesPrice) {
 		this.salesPrice = salesPrice;
 	}
-    
+
 }

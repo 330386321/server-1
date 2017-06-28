@@ -36,6 +36,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
 import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
 import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
@@ -70,9 +71,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     /**
      *  加入购物车。
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-	public Result<Long> save(Long memberId, ShoppingCartParam param) {
+	public Result save(Long memberId, ShoppingCartParam param) {
     	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
     	
     	if (!isSuccess(resultShoppingCartProductModelDTO)) {
@@ -81,23 +82,24 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
     	
-    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
+    	Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCartResult = merchantStoreService.getMerchantInfoForShoppingCart(shoppingCartProductModelDTO.getMerchantId());
     	
-    	if (!isSuccess(resultMerchantName)) {
-    		return successCreated(resultMerchantName.getRet());
+    	if (!isSuccess(getMerchantInfoForShoppingCartResult)) {
+    		return successCreated(getMerchantInfoForShoppingCartResult);
     	}
     	
     	ShoppingCartSaveParam shoppingCartSaveParam = new ShoppingCartSaveParam();
-    	shoppingCartSaveParam.setMerchantName(resultMerchantName.getModel());
+    	shoppingCartSaveParam.setMerchantName(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreName());
+    	shoppingCartSaveParam.setMerchantStoreId(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreId());
     	shoppingCartSaveParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
     	shoppingCartSaveParam.setProductId(shoppingCartProductModelDTO.getProductId());
     	shoppingCartSaveParam.setProductModelId(shoppingCartProductModelDTO.getId());
     	shoppingCartSaveParam.setQuantity(param.getQuantity());
     	shoppingCartSaveParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     	
-    	Result<Long> result = shoppingCartService.save(memberId, shoppingCartSaveParam);
+    	Result result = shoppingCartService.save(memberId, shoppingCartSaveParam);
     	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
+    		return successCreated(result);
     	}
     			
     	return successCreated(result);
@@ -150,6 +152,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
     		memberShoppingCartDTO.setId(shoppingCartDTO.getId());
     		memberShoppingCartDTO.setMerchantId(shoppingCartDTO.getMerchantId());
+    		memberShoppingCartDTO.setMerchantStoreId(shoppingCartDTO.getMerchantStoreId());
     		memberShoppingCartDTO.setMerchantName(shoppingCartDTO.getMerchantName());
     		memberShoppingCartDTO.setProductId(shoppingCartDTO.getProductId());
     		memberShoppingCartDTO.setProductModelId(shoppingCartDTO.getProductModelId());
@@ -449,6 +452,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @param param 购物参数
 	 * @return 返回订单的结算数据
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param) {
 		// 查询产品信息
@@ -460,14 +464,15 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
     	
     	// 查询商家名称
-    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
-    	if (!isSuccess(resultMerchantName)) {
-    		return successCreated(resultMerchantName.getRet());
+    	Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCartResult = merchantStoreService.getMerchantInfoForShoppingCart(shoppingCartProductModelDTO.getMerchantId());
+    	if (!isSuccess(getMerchantInfoForShoppingCartResult)) {
+    		return successCreated(getMerchantInfoForShoppingCartResult);
     	}
     	
     	List<MemberShoppingCartDTO> memberShoppingCartDTOList = new ArrayList<>();
     	MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
-    	memberShoppingCartDTO.setMerchantName(resultMerchantName.getModel());
+    	memberShoppingCartDTO.setMerchantName(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreName());
+    	memberShoppingCartDTO.setMerchantStoreId(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreId());
     	memberShoppingCartDTO.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
     	memberShoppingCartDTO.setProductId(shoppingCartProductModelDTO.getProductId());
     	memberShoppingCartDTO.setProductModelId(shoppingCartProductModelDTO.getId());

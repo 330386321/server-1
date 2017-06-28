@@ -14,6 +14,11 @@ public class ShoppingCartBO {
 	 */
 	private Long merchantId;
 	
+    /**
+    * 商家门店id
+    */
+    private Long merchantStoreId;
+	
 	/**
 	 * 商家名称
 	 */
@@ -53,6 +58,14 @@ public class ShoppingCartBO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantName() {

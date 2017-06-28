@@ -19,6 +19,12 @@ public class ShoppingCartDTO {
 	private Long merchantId;
     
     /**
+    * 商家门店id
+    */
+    @ApiModelProperty(value = "商家门店id", required = true)
+    private Long merchantStoreId;
+    
+    /**
      * 商家名称
      */
     @ApiModelProperty(value = "商家名称", required = true)
@@ -62,6 +68,14 @@ public class ShoppingCartDTO {
 
 	public void setMerchantId(Long merchantId) {
 		this.merchantId = merchantId;
+	}
+
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
 	}
 
 	public String getMerchantName() {

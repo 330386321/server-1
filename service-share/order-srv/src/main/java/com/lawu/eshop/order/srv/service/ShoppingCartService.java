@@ -29,10 +29,9 @@ public interface ShoppingCartService {
 	 * 
 	 * @param memberId 会员id
 	 * @param param 保存参数
-	 * @return
 	 * @author Sunny
 	 */
-	Result<Long> save(Long memberId, ShoppingCartSaveParam param);
+	void save(Long memberId, ShoppingCartSaveParam param);
 	
 	/**
 	 * 根据id更新购物车
