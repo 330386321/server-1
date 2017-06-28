@@ -3,6 +3,8 @@ package com.lawu.eshop.member.api;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * @author Leach
  * @date 2017/4/26
@@ -36,6 +38,12 @@ public class MemberApiConfig {
     
     @Value(value="${click.praise.sum.prob}")
     private Integer clickPraiseSumProb;
+    
+    @Value(value="${inviter.merchant.url}")
+    private String inviterMerchantUrl;
+    
+    @Value(value="${inviter.member.url}")
+    private String inviterMemberUrl;
 
     public String getImageUrl() {
         return imageUrl;
@@ -83,6 +91,14 @@ public class MemberApiConfig {
 
 	public void setClickPraiseSumProb(Integer clickPraiseSumProb) {
 		this.clickPraiseSumProb = clickPraiseSumProb;
+	}
+
+	public String getInviterMerchantUrl() {
+		return inviterMerchantUrl;
+	}
+
+	public String getInviterMemberUrl() {
+		return inviterMemberUrl;
 	}
     
     

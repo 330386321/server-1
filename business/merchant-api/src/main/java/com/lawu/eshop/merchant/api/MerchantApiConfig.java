@@ -39,6 +39,12 @@ public class MerchantApiConfig {
     
     @Value(value="${ffmpeg.url}")
     private String ffmpegUrl;
+    
+    @Value(value="${inviter.merchant.url}")
+    private String inviterMerchantUrl;
+    
+    @Value(value="${inviter.member.url}")
+    private String inviterMemberUrl;
 
     public String getImageUrl() {
         return imageUrl;
@@ -79,5 +85,14 @@ public class MerchantApiConfig {
 	public String getFfmpegUrl() {
 		return ffmpegUrl;
 	}
+
+	public String getInviterMerchantUrl() {
+		return inviterMerchantUrl;
+	}
+
+	public String getInviterMemberUrl() {
+		return inviterMemberUrl;
+	}
+
     
 }

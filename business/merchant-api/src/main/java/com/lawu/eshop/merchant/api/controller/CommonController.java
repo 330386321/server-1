@@ -81,6 +81,8 @@ public class CommonController extends BaseController {
         ConfigDTO configDTO = new ConfigDTO();
         configDTO.setImageUrl(merchantApiConfig.getImageUrl());
         configDTO.setVideoUrl(merchantApiConfig.getVideoUrl());
+        configDTO.setInviterMemberUrl(merchantApiConfig.getInviterMemberUrl());
+        configDTO.setInviterMerchantUrl(merchantApiConfig.getInviterMerchantUrl());
         return successCreated(configDTO);
     }
 
