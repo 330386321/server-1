@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.param.ListStoreAuditParam;
 import com.lawu.eshop.user.param.MerchantAuditParam;
 import com.lawu.eshop.user.srv.bo.MerchantStoreAuditBO;
@@ -72,6 +73,7 @@ public class MerchantAuditController extends BaseController {
         auditInfoDTO.setMerchantAuditStatusEnum(MerchantAuditStatusEnum.getEnum(storeAuditBO.getStatus()));
         auditInfoDTO.setStoreStatus(merchantStoreBO.getStatusEnum());
         auditInfoDTO.setStoreId(merchantStoreBO.getMerchantStoreId());
+        auditInfoDTO.setAuditTypeEnum(MerchantAuditTypeEnum.getEnum(storeAuditBO.getType()));
         return successGet(auditInfoDTO);
     }
 
