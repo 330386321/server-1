@@ -6,17 +6,16 @@ import com.lawu.eshop.jobs.service.RongYunDownLoadService;
 import com.lawu.eshop.jobs.service.RongYunService;
 import com.lawu.eshop.user.dto.RongYunHistoryMessageDTO;
 import com.lawu.eshop.utils.DateUtil;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import util.DownLoadUtil;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @author zhangyong

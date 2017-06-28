@@ -1,14 +1,32 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.*;
+import com.lawu.eshop.property.constants.CashOperEnum;
+import com.lawu.eshop.property.constants.CashStatusEnum;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
+import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
+import com.lawu.eshop.property.constants.TransactionTitleEnum;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
 import com.lawu.eshop.property.srv.domain.BankAccountDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
@@ -26,16 +44,6 @@ import com.lawu.eshop.property.srv.service.CashManageBackageService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class CashManageBackageServiceImpl implements CashManageBackageService {
@@ -256,6 +264,23 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 		}
 
 		return ResultCode.SUCCESS;
+	}
+
+	@Override
+	public List<WithdrawCashReportBO> selectWithdrawCashListByDateAndStatus(WithdrawCashReportParam param) {
+		WithdrawCashDOExample example = new WithdrawCashDOExample();
+		example.createCriteria().andStatusEqualTo(param.getStatus()).andGmtFinishEqualTo(DateUtil.getDateFormat(param.getDate()));
+		List<WithdrawCashDO> rntList = withdrawCashDOMapper.selectByExample(example);
+		List<WithdrawCashReportBO> wrbs = new ArrayList<WithdrawCashReportBO>();
+		for (WithdrawCashDO cdo : rntList) {
+			WithdrawCashReportBO wrb = new WithdrawCashReportBO();
+			wrb.setId(cdo.getId());
+			wrb.setUserNum(cdo.getUserNum());
+			wrb.setFinishDate(DateUtil.getDateFormat(cdo.getGmtModified(), "yyyy-MM-dd"));
+			wrb.setCashMoney(cdo.getMoney());
+			wrbs.add(wrb);
+		}
+		return wrbs;
 	}
 
 }

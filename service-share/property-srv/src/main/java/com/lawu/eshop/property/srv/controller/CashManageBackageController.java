@@ -20,12 +20,15 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQueryDTO;
 import com.lawu.eshop.property.dto.WithdrawCashBackageQuerySumDTO;
+import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
 import com.lawu.eshop.utils.BeanUtil;
 
@@ -143,6 +146,37 @@ public class CashManageBackageController extends BaseController {
 
 		int retCode = cashManageBackageService.updateWithdrawCash(param);
 		return successCreated(retCode);
-
 	}
+	
+	
+	// -------------------------------统计报表
+	
+	/**
+	 * 查询某天平台用户商家提现成功的记录
+	 * @param param
+	 * @param result
+	 * @return
+	 * @throws Exception
+	 * @author yangqh
+	 * @date 2017年6月28日 下午4:32:19
+	 */
+	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
+	public Result<List<WithdrawCashReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid WithdrawCashReportParam param, BindingResult result) throws Exception {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	List<WithdrawCashReportDTO> dtos = new ArrayList<>();
+    	List<WithdrawCashReportBO> rntList = cashManageBackageService.selectWithdrawCashListByDateAndStatus(param);
+		for(WithdrawCashReportBO bo : rntList){
+			WithdrawCashReportDTO dto = new WithdrawCashReportDTO();
+			dto.setId(bo.getId());
+			dto.setCashMoney(bo.getCashMoney());
+			dto.setFinishDate(bo.getFinishDate());
+			dto.setUserNum(bo.getUserNum());
+			dtos.add(dto);
+		}
+		return successCreated(dtos);
+	}
+	
 }
