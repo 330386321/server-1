@@ -10,11 +10,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.SortedMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.lawu.eshop.pay.sdk.alipay.sign.Base64;
 
 public class SignUtils {
 
-//	private static Logger logger = LoggerFactory.getLogger(SignUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(SignUtils.class);
 			
 	private static final String ALGORITHM = "RSA";
 

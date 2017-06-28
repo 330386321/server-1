@@ -154,7 +154,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	@Override
 	public Page<PayOrderBO> getMerchantPayOrderList(Long userId, MerchantPayOrderListParam param) {
 		PayOrderDOExample example = new PayOrderDOExample();
-		example.createCriteria().andMerchantIdEqualTo(userId).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+		example.createCriteria().andMerchantIdEqualTo(userId).andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		example.setOrderByClause("id desc");
 
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
