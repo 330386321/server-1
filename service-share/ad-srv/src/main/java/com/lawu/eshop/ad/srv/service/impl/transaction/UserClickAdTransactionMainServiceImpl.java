@@ -30,6 +30,7 @@ public class UserClickAdTransactionMainServiceImpl extends AbstractTransactionMa
     	 AdPointNotification notification=new AdPointNotification();
     	 notification.setUserNum(memberAdRecordDO.getMemberNum());
     	 notification.setPoint(memberAdRecordDO.getOriginalPoint());
+    	 notification.setAdId(memberAdRecordDO.getAdId());
         return notification;
     }
 

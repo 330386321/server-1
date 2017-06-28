@@ -240,6 +240,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		loveDetailDO.setLoveType(param.getLoveTypeEnum().getValue());
 		loveDetailDO.setAmount(actureLoveIn);
 		loveDetailDO.setGmtCreate(new Date());
+		loveDetailDO.setBizId(param.getTempBizId());
 		loveDetailDOMapper.insertSelective(loveDetailDO);
 		
 		//更新爱心账户

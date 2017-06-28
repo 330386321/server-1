@@ -27,9 +27,10 @@ public class UserSweepRedTransactionMainServiceImpl extends AbstractTransactionM
     @Override
     public AdPointNotification selectNotification(Long id) {
     	PointPoolDO pointPoolDO=pointPoolDOMapper.selectByPrimaryKey(id);
-    	 AdPointNotification notification=new AdPointNotification();
-    	 notification.setUserNum(pointPoolDO.getMemberNum());
-    	 notification.setPoint(pointPoolDO.getPoint());
+    	AdPointNotification notification=new AdPointNotification();
+    	notification.setUserNum(pointPoolDO.getMemberNum());
+    	notification.setPoint(pointPoolDO.getPoint());
+    	notification.setAdId(pointPoolDO.getAdId());
         return notification;
     }
 

@@ -245,6 +245,7 @@ public class CommissionServiceImpl implements CommissionService {
 			loveDetailDO.setAmount(param.getActureLoveIn());
 			loveDetailDO.setRemark("");
 			loveDetailDO.setGmtCreate(new Date());
+			loveDetailDO.setBizId(param.getTempBidId() == null ? "0" : param.getTempBidId().toString());
 			loveDetailDOMapper.insertSelective(loveDetailDO);
 
 			// 加会员财产爱心账户

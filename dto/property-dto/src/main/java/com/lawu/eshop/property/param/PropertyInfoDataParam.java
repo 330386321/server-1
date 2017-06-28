@@ -34,6 +34,8 @@ public class PropertyInfoDataParam {
 	private MerchantTransactionTypeEnum merchantTransactionTypeEnum;
 	
 	private String bizId;
+	
+	private String tempBizId;
 
 	//爱心账户类型
 	private LoveTypeEnum loveTypeEnum;
@@ -53,7 +55,15 @@ public class PropertyInfoDataParam {
     //年龄区间(邀请粉丝添加邀请记录参数)
     private String age;
 
-    public String getUserNum() {
+    public String getTempBizId() {
+		return tempBizId;
+	}
+
+	public void setTempBizId(String tempBizId) {
+		this.tempBizId = tempBizId;
+	}
+
+	public String getUserNum() {
         return userNum;
     }
 

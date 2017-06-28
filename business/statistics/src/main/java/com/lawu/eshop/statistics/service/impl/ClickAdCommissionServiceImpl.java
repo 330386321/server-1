@@ -71,6 +71,7 @@ public class ClickAdCommissionServiceImpl implements ClickAdCommissionService {
 						CommissionJobParam param = new CommissionJobParam();
 						param.setUserNum(inviters.get(i).getUserNum());
 						param.setBizId(dto.getId());
+						param.setTempBidId(dto.getAdId());
 						
 						BigDecimal clickMoney = dto.getPoint();
 

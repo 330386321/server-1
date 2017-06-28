@@ -82,6 +82,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						CommissionJobParam param = new CommissionJobParam();
 						param.setUserNum(memberInviters.get(i).getUserNum());
 						param.setBizId(order.getId());
+						param.setTempBidId(order.getId());
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(memberInviters.get(i).getLevel());// 等级
@@ -155,6 +156,7 @@ public class SaleAndVolumeCommissionServiceImpl implements SaleAndVolumeCommissi
 						CommissionJobParam param = new CommissionJobParam();
 						param.setUserNum(merchantInviters.get(i).getUserNum());
 						param.setBizId(order.getId());
+						param.setTempBidId(order.getId());
 						BigDecimal actualMoney = order.getActualAmount();
 
 						BigDecimal level = new BigDecimal(merchantInviters.get(i).getLevel());// 等级

@@ -29,6 +29,7 @@ public class AdUserAddPointTransactionMainServiceImpl extends AbstractTransactio
     	 AdPointNotification notification =new AdPointNotification();
     	 notification.setPoint(pointPoolDO.getPoint());
     	 notification.setUserNum(pointPoolDO.getMemberNum());
+    	 notification.setAdId(pointPoolDO.getAdId());
         return notification;
     }
 
