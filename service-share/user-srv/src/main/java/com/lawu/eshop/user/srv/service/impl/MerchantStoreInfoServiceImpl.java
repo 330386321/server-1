@@ -546,6 +546,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		MerchantStoreAuditBO merchantStoreAuditBO = new MerchantStoreAuditBO();
 		merchantStoreAuditBO.setId(merchantStoreAuditDOS.get(0).getId());
 		merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
+		merchantStoreAuditBO.setType(merchantStoreAuditDOS.get(0).getType());
 		return merchantStoreAuditBO;
 	}
 

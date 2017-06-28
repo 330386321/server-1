@@ -7,6 +7,7 @@ import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
 import com.lawu.eshop.user.dto.CertifTypeEnum;
 import com.lawu.eshop.user.dto.MerchantInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import com.lawu.eshop.user.dto.param.MerchantSizeLinkDTO;
 import com.lawu.eshop.user.param.MerchantProfileParam;
 import com.lawu.eshop.user.srv.bo.*;
@@ -56,7 +57,7 @@ public class MerchantInfoController extends BaseController{
 
     /**
      * 查询商家主页基本信息
-     * @param merchantProfileId
+     * @param merchantId
      * @return
      */
     @RequestMapping(value = "getCurrentMerchantInfo/{merchantId}", method = RequestMethod.GET)
@@ -96,6 +97,7 @@ public class MerchantInfoController extends BaseController{
             MerchantStoreAuditBO auditBO = merchantStoreInfoService.findStoreAuditInfo(merchantId);
             if(auditBO != null){
                 merchantInfoDTO.setAuditStatusEnum(MerchantAuditStatusEnum.getEnum(auditBO.getStatus()));
+                merchantInfoDTO.setAuditTypeEnum(MerchantAuditTypeEnum.getEnum(auditBO.getType()));
             }
         }
         return successGet(merchantInfoDTO);
