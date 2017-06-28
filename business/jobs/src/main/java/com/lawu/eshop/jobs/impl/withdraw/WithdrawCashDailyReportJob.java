@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
-import com.lawu.eshop.jobs.service.WithdrawCashDayReportService;
+import com.lawu.eshop.jobs.service.WithdrawCashReportService;
 
 /**
  * 
@@ -17,18 +17,18 @@ import com.lawu.eshop.jobs.service.WithdrawCashDayReportService;
  * @date 2017年6月28日 下午2:32:35
  *
  */
-public class WithdrawCashDayReportJob implements SimpleJob {
+public class WithdrawCashDailyReportJob implements SimpleJob {
 
-    private static Logger logger = LoggerFactory.getLogger(WithdrawCashDayReportJob.class);
+    private static Logger logger = LoggerFactory.getLogger(WithdrawCashDailyReportJob.class);
 
     @Autowired
-    private WithdrawCashDayReportService withdrawCashDayReportService;
+    private WithdrawCashReportService withdrawCashReportService;
     
     @Override
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-        withdrawCashDayReportService.executeCollectData();
+        withdrawCashReportService.executeCollectDailyData();
         
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }
