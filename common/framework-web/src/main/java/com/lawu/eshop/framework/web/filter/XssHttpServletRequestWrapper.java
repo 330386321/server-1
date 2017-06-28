@@ -42,7 +42,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		return escape(value);
 	}
 	*/
-	
+
 	private static String escape(String value) {
 		String rtn = value;
 		if (rtn  == null) {
@@ -58,42 +58,39 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		for(int i = 0; i < rtn.length(); i++) {
 			char c = rtn.charAt(i);
 			switch(c){
-	            case '>':  
-	                stringBuilder.append('＞');//全角大于号  
-	                break;  
-	            case '<':  
-	                stringBuilder.append('＜');//全角小于号  
-	                break;  
-	            case '\'':  
-	                stringBuilder.append('＇');//全角单引号  
-	                break;  
-	            case '&':  
-	                stringBuilder.append('＆');//全角  
-	                break;  
-	            case '\\':  
-	                stringBuilder.append('＼');//全角斜线  
-	                break;  
-	            case '(':  
-	                stringBuilder.append('（');//全角做括号  
+	            case '>':
+	                stringBuilder.append('＞');//全角大于号
 	                break;
-	            case ')':  
+	            case '<':
+	                stringBuilder.append('＜');//全角小于号
+	                break;
+	            case '\'':
+	                stringBuilder.append('＇');//全角单引号
+	                break;
+	            case '&':
+	                stringBuilder.append('＆');//全角
+	                break;
+	            case '(':
+	                stringBuilder.append('（');//全角做括号
+	                break;
+	            case ')':
 	                stringBuilder.append('）');//全角右括号
 	                break;
-	            case '!':  
-	                stringBuilder.append('！');//全角感叹号 
+	            case '!':
+	                stringBuilder.append('！');//全角感叹号
 	                break;
-	            case '*':  
-	                stringBuilder.append('＊');//全角星号  
+	            case '*':
+	                stringBuilder.append('＊');//全角星号
 	                break;
-	            case '+':  
-	                stringBuilder.append('＋');//全角星号  
+	            case '+':
+	                stringBuilder.append('＋');//全角星号
 	                break;
-	            case '＝':  
-	                stringBuilder.append('＝');//全角星号  
+	            case '＝':
+	                stringBuilder.append('＝');//全角星号
 	                break;
-	            default:  
-	                stringBuilder.append(c);  
-	                break;  
+	            default:
+	                stringBuilder.append(c);
+	                break;
 	        }
         }
 		rtn = stringBuilder.toString();
