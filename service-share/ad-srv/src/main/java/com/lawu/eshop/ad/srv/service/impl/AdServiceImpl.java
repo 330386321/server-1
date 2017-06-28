@@ -487,13 +487,14 @@ public class AdServiceImpl implements AdService {
 		Criteria cr= example.createCriteria();
 		cr.andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val); 
 		if(adPraiseParam.getStatusEnum().val==1){  //开枪中
-			example.setOrderByClause("gmt_create asc");
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+			example.setOrderByClause("gmt_create asc");
 		}else if(adPraiseParam.getStatusEnum().val==2){ //即将开始
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+			example.setOrderByClause("begin_time desc");
 		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
-			example.setOrderByClause("gmt_create desc");
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
+			example.setOrderByClause("gmt_create desc");
 		}
 		
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
