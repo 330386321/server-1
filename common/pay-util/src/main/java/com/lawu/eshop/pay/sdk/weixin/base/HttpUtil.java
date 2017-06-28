@@ -30,9 +30,10 @@ public class HttpUtil {
             if(contentType != null)  
                 conn.setRequestProperty("content-type", contentType);  
             OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream(), DEFAULT_ENCODING);  
+            String data1 = data;
             if(data == null)  
-                data = "";  
-            writer.write(data);   
+            	data1 = "";  
+            writer.write(data1);   
             writer.flush();  
             writer.close();    
 
@@ -45,12 +46,13 @@ public class HttpUtil {
             }  
             return sb.toString();  
         } catch (IOException e) {  
-            logger.error("Error connecting to " + urlStr + ": " + e.getMessage());  
+            logger.error("Error connecting to " + urlStr + ": " + e.getMessage(),e);  
         } finally {  
             try {  
                 if (reader != null)  
                     reader.close();  
             } catch (IOException e) {  
+            	logger.error("",e);
             }  
         }  
         return null;  

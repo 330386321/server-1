@@ -39,6 +39,7 @@ public interface AddressService {
 	/**
 	 * 查询所有地址
 	 * 
+	 * @deprecated
 	 * @return
 	 */
 	@Deprecated

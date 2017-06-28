@@ -50,8 +50,8 @@ public class MessageController extends BaseController {
     public Result saveMessage(@ModelAttribute OperatorMessageInfoParam messageInfoParam) {
         //增加系统站内消息
         String moblie = messageInfoParam.getMoblie();
-        String userNum = "";
-        MessagePushDTO messagePushDTO = null;
+        String userNum ;
+        MessagePushDTO messagePushDTO;
         if (UserTypeEnum.MEMBER.val == messageInfoParam.getUserType().val) {
             //查询用户信息
             messagePushDTO = memberService.findMessagePushByMobile(moblie);
@@ -67,8 +67,7 @@ public class MessageController extends BaseController {
             userNum = messagePushDTO.getUserNum();
         }
 
-        Result result = messageService.saveMessageOperator(userNum, messageInfoParam);
-        return result;
+        return messageService.saveMessageOperator(userNum, messageInfoParam);
     }
 
     @ApiOperation(value = "给所有用户发送系统通知", notes = "给所有用户发送系统通知 [1005,1000]", httpMethod = "POST")
@@ -81,7 +80,7 @@ public class MessageController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         //查询所有用户信息
-        Result<List<MessagePushDTO>> result = null;
+        Result<List<MessagePushDTO>> result;
         String area = messageInfoParam.getArea();
         if (StringUtils.isEmpty(area)) {
             area = "all";
@@ -108,8 +107,7 @@ public class MessageController extends BaseController {
         param.setTitle(messageInfoParam.getTitle());
         param.setContent(messageInfoParam.getContent());
         //增加系统站内消息
-        Result r = messageService.saveMessageToAll(param);
-        return r;
+        return messageService.saveMessageToAll(param);
     }
 
     @ApiOperation(value = "查询消息列表", notes = "查询消息列表 [1000]", httpMethod = "GET")
@@ -127,7 +125,6 @@ public class MessageController extends BaseController {
     @RequiresPermissions("message:del")
     @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
     public Result delMessage(@PathVariable(value = "ids") String ids) {
-        Result result = messageService.delMessageByIds(ids);
-        return result;
+        return messageService.delMessageByIds(ids);
     }
 }

@@ -40,15 +40,15 @@ public enum ShoppingOrderStatusEnum {
 	REFUNDING((byte) 0x06);
 
 	private Byte value;
-
-	public Byte getValue() {
-		return value;
-	}
-
+	
 	ShoppingOrderStatusEnum(Byte value) {
 		this.value = value;
 	}
 	
+	public Byte getValue() {
+		return value;
+	}
+
 	public static ShoppingOrderStatusEnum getEnum(Byte value){
 		for (ShoppingOrderStatusEnum item : ShoppingOrderStatusEnum.values()) {
 			if (item.getValue().equals(value)) {

@@ -1,5 +1,13 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.param.SuggestionListParam;
 import com.lawu.eshop.mall.param.SuggestionParam;
@@ -10,14 +18,6 @@ import com.lawu.eshop.mall.srv.domain.SuggestionDOExample;
 import com.lawu.eshop.mall.srv.mapper.SuggestionDOMapper;
 import com.lawu.eshop.mall.srv.service.SuggestionService;
 import com.lawu.eshop.utils.DateUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 反馈意见服务实现
@@ -35,8 +35,6 @@ public class SuggestionServiceImpl implements SuggestionService {
     @Override
     public Integer save(String userNum, SuggestionParam param) {
         SuggestionDO suggestionDO = SuggestionConverter.convert(userNum, param);
-        suggestionDO.setGmtCreate(new Date());
-        suggestionDO.setGmtModified(new Date());
 
         // 空值交给Mybatis去处理
         int result = suggestionDOMapper.insertSelective(suggestionDO);

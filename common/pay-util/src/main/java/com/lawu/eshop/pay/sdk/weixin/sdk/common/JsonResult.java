@@ -10,9 +10,9 @@ import java.io.Serializable;
 public class JsonResult implements Serializable {
 
 	/**
-	 * serialVersionUID
+	 * 
 	 */
-	private static final long serialVersionUID = -2244221401956011209L;
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 数据

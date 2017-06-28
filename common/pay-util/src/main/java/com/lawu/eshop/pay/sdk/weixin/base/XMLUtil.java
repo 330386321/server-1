@@ -32,15 +32,16 @@ public class XMLUtil {
      */  
 	@SuppressWarnings("unchecked")
 	public static Map doXMLParse(String strxml) throws JDOMException, IOException {  
-        strxml = strxml.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");  
+		String strxml1 = strxml;
+		strxml1 = strxml1.replaceFirst("encoding=\".*\"", "encoding=\"UTF-8\"");  
   
-        if(null == strxml || "".equals(strxml)) {  
+        if(null == strxml1 || "".equals(strxml1)) {  
             return null;  
         }  
           
         Map m = new HashMap();  
           
-        InputStream in = new ByteArrayInputStream(strxml.getBytes("UTF-8"));  
+        InputStream in = new ByteArrayInputStream(strxml1.getBytes("UTF-8"));  
         SAXBuilder builder = new SAXBuilder();  
         org.jdom.Document doc = builder.build(in);
         org.jdom.Element root = doc.getRootElement();  
@@ -49,7 +50,7 @@ public class XMLUtil {
         while(it.hasNext()) {  
             Element e = (Element) it.next();  
             String k = e.getName();  
-            String v = "";  
+            String v;  
             List children = e.getChildren();  
             if(children.isEmpty()) {  
                 v = e.getTextNormalize();  
@@ -72,7 +73,7 @@ public class XMLUtil {
      * @return String 
      */  
     public static String getChildrenText(List children) {  
-        StringBuffer sb = new StringBuffer();  
+    	StringBuilder sb = new StringBuilder();  
         if(!children.isEmpty()) {  
             Iterator it = children.iterator();  
             while(it.hasNext()) {  

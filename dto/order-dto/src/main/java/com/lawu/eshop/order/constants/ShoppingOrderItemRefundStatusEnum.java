@@ -8,12 +8,12 @@ public enum ShoppingOrderItemRefundStatusEnum {
 	 * 0-待商家确认
 	 */
 	TO_BE_CONFIRMED((byte) 0x00),
-	
+
 	/**
 	 * 1-填写退货地址
 	 */
-	FILL_RETURN_ADDRESS((byte)0x01),
-	
+	FILL_RETURN_ADDRESS((byte) 0x01),
+
 	/**
 	 * 2-待退货
 	 */
@@ -28,12 +28,12 @@ public enum ShoppingOrderItemRefundStatusEnum {
 	 * 4-退款成功
 	 */
 	REFUND_SUCCESSFULLY((byte) 0x04),
-	
+
 	/**
 	 * 5-退款失败
 	 */
 	REFUND_FAILED((byte) 0x05),
-	
+
 	/**
 	 * 6-平台介入
 	 */
@@ -41,15 +41,15 @@ public enum ShoppingOrderItemRefundStatusEnum {
 
 	private Byte value;
 
+	ShoppingOrderItemRefundStatusEnum(Byte value) {
+		this.value = value;
+	}
+
 	public Byte getValue() {
 		return value;
 	}
 
-	ShoppingOrderItemRefundStatusEnum(Byte value) {
-		this.value = value;
-	}
-	
-	public static ShoppingOrderItemRefundStatusEnum getEnum(Byte value){
+	public static ShoppingOrderItemRefundStatusEnum getEnum(Byte value) {
 		for (ShoppingOrderItemRefundStatusEnum item : ShoppingOrderItemRefundStatusEnum.values()) {
 			if (item.getValue().equals(value)) {
 				return item;

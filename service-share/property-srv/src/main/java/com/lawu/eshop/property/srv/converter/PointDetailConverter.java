@@ -17,7 +17,14 @@ import com.lawu.eshop.property.srv.domain.PointDetailDO;
  * @date 2017/3/30
  */
 public class PointDetailConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private PointDetailConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	public static PointDetailBO convert(PointDetailDO pointDetailDO) {
 		PointDetailBO rtn = null;
 
@@ -46,7 +53,7 @@ public class PointDetailConverter {
 			return rtn;
 		}
 
-		rtn = new ArrayList<PointDetailBO>();
+		rtn = new ArrayList<>();
 
 		for (PointDetailDO item : pointDetailDOS) {
 			rtn.add(convert(item));
@@ -74,7 +81,7 @@ public class PointDetailConverter {
 	}
 
 	public static List<PointDetailDTO> convertDTOS(List<PointDetailBO> pointDetailBOS) {
-		List<PointDetailDTO> rtn = new ArrayList<PointDetailDTO>();
+		List<PointDetailDTO> rtn = new ArrayList<>();
 
 		if (pointDetailBOS == null || pointDetailBOS.isEmpty()) {
 			return rtn;
@@ -88,7 +95,7 @@ public class PointDetailConverter {
 	}
 	
 	public static Page<PointDetailDTO> convertDTOPage(Page<PointDetailBO> pointDetailBOPage) {
-		Page<PointDetailDTO> rtn = new Page<PointDetailDTO>();
+		Page<PointDetailDTO> rtn = new Page<>();
 		rtn.setCurrentPage(pointDetailBOPage.getCurrentPage());
 		rtn.setTotalCount(pointDetailBOPage.getTotalCount());
 		rtn.setRecords(convertDTOS(pointDetailBOPage.getRecords()));
@@ -96,7 +103,7 @@ public class PointDetailConverter {
 	}
 
 	public static Page<PointDetailBackageDTO> convertBackageDTOPage(Page<PointDetailBO> pointDetailBOPage) {
-		Page<PointDetailBackageDTO> rtn = new Page<PointDetailBackageDTO>();
+		Page<PointDetailBackageDTO> rtn = new Page<>();
 		rtn.setCurrentPage(pointDetailBOPage.getCurrentPage());
 		rtn.setTotalCount(pointDetailBOPage.getTotalCount());
 		List<PointDetailBackageDTO> pointDetailBackageDTOS = new ArrayList<>();

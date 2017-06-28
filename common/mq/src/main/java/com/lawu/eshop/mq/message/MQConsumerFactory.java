@@ -91,10 +91,8 @@ public class MQConsumerFactory {
                 
                 String topicKey = topic.getKey();
                 
-                if (topicsTags != null && !topicsTags.isEmpty()) {
-					if (topicsTags.containsKey(topicKey)) {
-	                	subExpression +=  "|| " +  topicsTags.get(topicKey);
-	                }
+                if (topicsTags != null && !topicsTags.isEmpty() && topicsTags.containsKey(topicKey)) {
+                	subExpression +=  "|| " +  topicsTags.get(topicKey);
                 }
                 consumer.subscribe(topicKey, subExpression);
             }

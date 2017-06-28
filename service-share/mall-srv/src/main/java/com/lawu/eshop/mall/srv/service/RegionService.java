@@ -20,4 +20,12 @@ public interface RegionService {
      * @return
      */
     String getRegionFullName(Integer id);
+
+    /**
+     * 根据区域路径查询区域名称
+     *
+     * @param regionPath
+     * @return
+     */
+    String getAreaName(String regionPath);
 }

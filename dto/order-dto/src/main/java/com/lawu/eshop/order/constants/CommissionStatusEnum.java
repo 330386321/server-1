@@ -16,15 +16,15 @@ public enum CommissionStatusEnum {
 	CALCULATED((byte)0x01);
 
 	private Byte value;
-
-	public Byte getValue() {
-		return value;
-	}
-
+	
 	CommissionStatusEnum(Byte value) {
 		this.value = value;
 	}
 	
+	public Byte getValue() {
+		return value;
+	}
+
 	public static CommissionStatusEnum getEnum(Byte value){
 		for (CommissionStatusEnum item : CommissionStatusEnum.values()) {
 			if (item.getValue().equals(value)) {

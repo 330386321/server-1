@@ -47,8 +47,7 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         merchantFavoredDO.setStatus(StatusEnum.STATUS_VALID.val);
         merchantFavoredDO.setGmtCreate(new Date());
         merchantFavoredDO.setGmtModified(new Date());
-        int id = merchantFavoredDOMapper.insert(merchantFavoredDO);
-        return id;
+        return  merchantFavoredDOMapper.insert(merchantFavoredDO);
     }
 
     @Override
@@ -56,7 +55,6 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         MerchantFavoredDOExample example = new MerchantFavoredDOExample();
         example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
         List<MerchantFavoredDO> merchantFavoredDOS = merchantFavoredDOMapper.selectByExample(example);
-        MerchantFavoredBO merchantFavoredBO = new MerchantFavoredBO();
         if (!merchantFavoredDOS.isEmpty()) {
             return MerchantFavoredConverter.coverBO(merchantFavoredDOS.get(0));
         }
@@ -77,7 +75,6 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         MerchantFavoredDOExample example = new MerchantFavoredDOExample();
         example.createCriteria().andIdEqualTo(id).andStatusEqualTo(StatusEnum.STATUS_VALID.val);
         List<MerchantFavoredDO> merchantFavoredDOS = merchantFavoredDOMapper.selectByExample(example);
-        MerchantFavoredBO merchantFavoredBO = new MerchantFavoredBO();
         if (!merchantFavoredDOS.isEmpty()) {
             return MerchantFavoredConverter.coverBO(merchantFavoredDOS.get(0));
         }
@@ -106,7 +103,6 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
         merchantFavoredDO.setEntireBeginTime(param.getEntireBeginTime());
         merchantFavoredDO.setEntireEndTime(param.getEntireEndTime());
         merchantFavoredDO.setGmtModified(new Date());
-        Integer row = merchantFavoredDOMapper.updateByExampleSelective(merchantFavoredDO, example);
-        return row;
+        return merchantFavoredDOMapper.updateByExampleSelective(merchantFavoredDO, example);
     }
 }

@@ -29,9 +29,12 @@ public class Util {
      * 通过反射的方式遍历对象的属性和属性值，方便调试
      *
      * @param o 要遍历的对象
+     * @throws IllegalAccessException 
+     * @throws IllegalArgumentException 
      * @throws Exception
      */
-    public static void reflect(Object o) throws Exception {
+    @SuppressWarnings("rawtypes")
+	public static void reflect(Object o) throws IllegalArgumentException, IllegalAccessException {
         Class cls = o.getClass();
         Field[] fields = cls.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
@@ -43,7 +46,7 @@ public class Util {
 
     public static byte[] readInput(InputStream in) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int len = 0;
+        int len;
         byte[] buffer = new byte[1024];
         while ((len = in.read(buffer)) > 0) {
             out.write(buffer, 0, len);
@@ -65,7 +68,7 @@ public class Util {
 
     public static InputStream getStringStream(String sInputString) {
         ByteArrayInputStream tInputStringStream = null;
-        if (sInputString != null && !sInputString.trim().equals("")) {
+        if (sInputString != null && !"".equals(sInputString.trim())) {
             tInputStringStream = new ByteArrayInputStream(sInputString.getBytes());
         }
         return tInputStringStream;

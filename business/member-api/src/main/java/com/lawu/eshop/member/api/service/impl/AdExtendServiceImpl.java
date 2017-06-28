@@ -100,7 +100,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
    	    param.setLongitude(adEgainParam.getLongitude());
 		Result<Page<AdDTO>>  pageDTOS=adService.selectListByMember(param,memberId);
     	List<AdDTO> list =pageDTOS.getModel().getRecords();
-    	List<AdDTO> newList=screem(param,list,memberId);
+    	List<AdDTO> newList=adFilter(param,list,memberId);
     	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	for (AdDTO adDTO : screenList) {
@@ -137,7 +137,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	}
 	
 	@Override
-	public Result<List<AdDTO>> selectListPointTotle(AdPointParam adPointParam) {
+	public Result<List<AdDTO>> selectAdTopList(AdPointParam adPointParam) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		AdMemberParam param = new AdMemberParam();
 		param.setCurrentPage(adPointParam.getCurrentPage());
@@ -146,7 +146,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		param.setLatitude(adPointParam.getLatitude());
 		param.setLongitude(adPointParam.getLongitude());
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
-		List<AdDTO> newList = screem(param, pageDTOS.getModel().getRecords(), memberId);
+		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
 		if (newList.size() > 9) {
 			newList = newList.subList(0, 9);
 		}else{
@@ -206,11 +206,11 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	}
 
 	@Override
-	public Result<Page<AdPraiseDTO>> selectPraiseListByMember(AdPraiseParam adPraiseParam) {
+	public Result<Page<AdPraiseDTO>> selectAdPraiseList(AdPraiseParam adPraiseParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		Result<Page<AdDTO>>  pageDTOS=adService.selectPraiseListByMember(adPraiseParam,memberId);
      	List<AdDTO> list =pageDTOS.getModel().getRecords();
-     	List<AdDTO> newList=screem(null,list,memberId);
+     	List<AdDTO> newList=adFilter(null,list,memberId);
      	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, adPraiseParam.getPageSize(), adPraiseParam.getCurrentPage());
      	List<AdPraiseDTO> adPraiseDTOS=new ArrayList<>();
@@ -326,7 +326,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
      * @param memberId
      * @return
      */
-    public List<AdDTO> screem(AdMemberParam adMemberParam,List<AdDTO> list,Long memberId ){
+    public List<AdDTO> adFilter(AdMemberParam adMemberParam,List<AdDTO> list,Long memberId ){
     	Result<UserDTO> memberDTO=memberService.findMemberInfo(memberId);
 		String memberPath=memberDTO.getModel().getRegionPath();
     	List<AdDTO> newList =new ArrayList<>();
@@ -415,7 +415,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
    	    param.setLatitude(adChoicenessParam.getLatitude());
    	    param.setLongitude(adChoicenessParam.getLongitude());
 		Result<Page<AdDTO>>  pageDTOS=adService.selectChoiceness(param);
-    	List<AdDTO> newList=screem(param,pageDTOS.getModel().getRecords(),memberId);
+    	List<AdDTO> newList=adFilter(param,pageDTOS.getModel().getRecords(),memberId);
     	AdPage<AdDTO> adpage=new AdPage<>();
     	List<AdDTO>  screenList=adpage.page(newList, param.getPageSize(), param.getCurrentPage());
     	
@@ -431,6 +431,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
 				for (AdDTO adDTO : screenList) {
 					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+						
 						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
 							Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(),
 									memberId);
@@ -482,7 +483,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		param.setLatitude(adEgainParam.getLatitude());
 		param.setLongitude(adEgainParam.getLongitude());
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
-		List<AdDTO> newList = screem(param, pageDTOS.getModel().getRecords(), memberId);
+		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, param.getPageSize(), param.getCurrentPage());
 		List<AdFlatVideoDTO> egainList = new ArrayList<>();
@@ -497,6 +498,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
 				for (AdDTO adDTO : screenList) {
 					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+						
 						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
 							AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
 							adFlatVideoDTO.setId(adDTO.getId());

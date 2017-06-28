@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.lawu.eshop.pay.sdk.weixin.base.RandomStringGenerator;
 import com.lawu.eshop.pay.sdk.weixin.sdk.common.Signature;
 
@@ -18,7 +20,7 @@ import com.lawu.eshop.pay.sdk.weixin.sdk.common.Signature;
  *
  */
 public class RefundReqData {
-
+	public static final Logger logger = Logger.getLogger(RefundReqData.class);
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
@@ -155,8 +157,10 @@ public class RefundReqData {
                     map.put(field.getName(), obj);
                 }
             } catch (IllegalArgumentException e) {
+            	logger.error("",e);
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
+            	logger.error("",e);
                 e.printStackTrace();
             }
         }

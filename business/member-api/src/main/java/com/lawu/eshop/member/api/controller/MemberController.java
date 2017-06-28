@@ -219,7 +219,7 @@ public class MemberController extends BaseController {
     public Result<UserHeadImgDTO> saveHeadImage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
-        String headImg = "";
+        String headImg ;
         Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_HEAD, memberApiConfig.getImageUploadUrl());
         if(!"".equals(retMap.get("imgUrl"))){
              headImg = retMap.get("imgUrl").toString();

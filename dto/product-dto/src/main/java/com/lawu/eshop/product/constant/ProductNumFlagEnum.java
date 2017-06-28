@@ -21,10 +21,6 @@ public enum ProductNumFlagEnum {
 		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-
 	public static ProductNumFlagEnum getEnum(String val){
 		ProductNumFlagEnum[] values = ProductNumFlagEnum.values();
 		for (ProductNumFlagEnum object : values) {

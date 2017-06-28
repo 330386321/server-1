@@ -112,7 +112,7 @@ public class BalancePayController extends BaseController {
 				.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 		if (payOrderCallback == null) {
 			return successCreated(ResultCode.PAY_ORDER_NULL);
-		} else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.val.equals(payOrderCallback.getPayOrderStatusEnum().val)) {
+		} else if (PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal().equals(payOrderCallback.getPayOrderStatusEnum().getVal())) {
 			return successCreated(ResultCode.PAY_ORDER_IS_SUCCESS);
 		}
 		dparam.setTotalAmount(String.valueOf(payOrderCallback.getActualMoney()));

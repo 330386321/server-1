@@ -83,7 +83,7 @@ public class AdController extends BaseController{
 	@RequestMapping(value = "selectListByMerchant", method = RequestMethod.POST)
     public Result<Page<AdMerchantDTO>> selectListByMerchant(@RequestBody AdMerchantParam adMerchantParam,@RequestParam Long memberId) {
 		Page<AdBO> pageBO=  adService.selectListByMerchant(adMerchantParam, memberId);
-		Page<AdMerchantDTO> pageDTO=new Page<AdMerchantDTO>();
+		Page<AdMerchantDTO> pageDTO=new Page<>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());
 		pageDTO.setTotalCount(pageBO.getTotalCount());
 		pageDTO.setRecords(AdConverter.convertMerchantAdDTOS(pageBO.getRecords()));
@@ -159,7 +159,7 @@ public class AdController extends BaseController{
 	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
 	    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
 			if(point.compareTo(BigDecimal.valueOf(0))==1){
-	     		return successCreated(dto);
+	     		return successCreated(dto); 
 	     	}else{
 	     		return successCreated(ResultCode.AD_CLICK_PUTED);
 	     	}

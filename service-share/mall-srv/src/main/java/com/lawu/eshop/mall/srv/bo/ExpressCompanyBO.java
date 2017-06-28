@@ -1,7 +1,5 @@
 package com.lawu.eshop.mall.srv.bo;
 
-import java.util.Date;
-
 /**
  * 意见反馈BO
  *

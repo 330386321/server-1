@@ -13,6 +13,10 @@ import java.net.URL;
  */
 public class DownLoadUtil {
     private static Logger logger = LoggerFactory.getLogger(DownLoadUtil.class);
+
+    private DownLoadUtil(){
+
+    }
     /**
      * 从输入流中获取字节数组
      * @param inputStream
@@ -21,7 +25,7 @@ public class DownLoadUtil {
      */
     public static  byte[] readInputStream(InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
-        int len = 0;
+        int len;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         while((len = inputStream.read(buffer)) != -1) {
             bos.write(buffer, 0, len);
@@ -58,15 +62,11 @@ public class DownLoadUtil {
         File file = new File(saveDir+ File.separator+fileName);
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(getData);
-        if(fos!=null){
-            fos.close();
-        }
-        if(inputStream!=null){
-            inputStream.close();
-        }
 
+        fos.close();
+        inputStream.close();
 
-        logger.info("info:"+url+" download success");
+        logger.info("info:url={} download success",url);
 
     }
 

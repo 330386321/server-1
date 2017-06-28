@@ -13,14 +13,12 @@ import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.response.TermsResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author meishuquan
@@ -69,11 +67,11 @@ public class StoreSolrController extends BaseController {
             if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.DISTANCE_SORT.val) {
                 query.setParam("sort", "geodist() asc");
             } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.FEEDBACK_SORT.val) {
-                query.setParam("sort", "feedbackRate_d desc");
+                query.setParam("sort", "averageScore_d desc");
             } else if (storeSolrParam.getStoreSolrEnum().val == StoreSolrEnum.POPULARITY_SORT.val) {
                 query.setParam("sort", "favoriteNumber_i desc");
             } else {
-                query.setParam("sort", "favoriteNumber_i desc,feedbackRate_d desc,geodist() asc");
+                query.setParam("sort", "favoriteNumber_i desc,averageScore_d desc,geodist() asc");
             }
         }
         query.setStart(storeSolrParam.getOffset());
@@ -98,33 +96,33 @@ public class StoreSolrController extends BaseController {
      */
     @RequestMapping(value = "listStoreSearchWord", method = RequestMethod.GET)
     public Result<List<StoreSearchWordDTO>> listStoreSearchWord(@RequestParam String name) {
-        SolrQuery query = new SolrQuery();
-        query.set("q", "*:*");
-        query.set("qt", "/terms");
-        query.set("terms", "true");
-        query.set("terms.fl", "name_s");
-        query.set("terms.regex", name + "+.*");
-        query.set("terms.regex.flag", "case_insensitive");
-        TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+        //SolrQuery query = new SolrQuery();
+        //query.set("q", "*:*");
+        //query.set("qt", "/terms");
+        //query.set("terms", "true");
+        //query.set("terms.fl", "name_s");
+        //query.set("terms.regex", name + "+.*");
+        //query.set("terms.regex.flag", "case_insensitive");
+        //TermsResponse termsResponse = SolrUtil.getTermsResponseByQuery(query, userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
 
         List<StoreSearchWordDTO> storeSearchWordDTOS = new ArrayList<>();
-        if (termsResponse != null) {
-            Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
-            for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
-                List<TermsResponse.Term> termList = termsEntry.getValue();
-                for (TermsResponse.Term term : termList) {
-                    StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
-                    storeSearchWordDTO.setName(term.getTerm());
-                    storeSearchWordDTO.setCount((int) term.getFrequency());
-                    storeSearchWordDTOS.add(storeSearchWordDTO);
-                }
-            }
-        } else {
-            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
-            storeSearchWordDTO.setName(name);
-            storeSearchWordDTO.setCount(0);
-            storeSearchWordDTOS.add(storeSearchWordDTO);
-        }
+        //if (termsResponse != null) {
+        //    Map<String, List<TermsResponse.Term>> termsMap = termsResponse.getTermMap();
+        //    for (Map.Entry<String, List<TermsResponse.Term>> termsEntry : termsMap.entrySet()) {
+        //        List<TermsResponse.Term> termList = termsEntry.getValue();
+        //        for (TermsResponse.Term term : termList) {
+        //            StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
+        //            storeSearchWordDTO.setName(term.getTerm());
+        //            storeSearchWordDTO.setCount((int) term.getFrequency());
+        //            storeSearchWordDTOS.add(storeSearchWordDTO);
+        //        }
+        //    }
+        //} else {
+        //    StoreSearchWordDTO storeSearchWordDTO = new StoreSearchWordDTO();
+        //    storeSearchWordDTO.setName(name);
+        //    storeSearchWordDTO.setCount(0);
+        //    storeSearchWordDTOS.add(storeSearchWordDTO);
+        //}
         return successGet(storeSearchWordDTOS);
     }
 

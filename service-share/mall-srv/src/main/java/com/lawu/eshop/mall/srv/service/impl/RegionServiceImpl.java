@@ -7,6 +7,7 @@ import com.lawu.eshop.mall.srv.domain.extend.RegionDOView;
 import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.RegionDOMMapperExtend;
 import com.lawu.eshop.mall.srv.service.RegionService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +60,22 @@ public class RegionServiceImpl implements RegionService {
             cnt++;
         } while (cnt < 2);
         return regionFullName;
+    }
+
+    @Override
+    public String getAreaName(String regionPath) {
+        String areaName = "";
+        if (StringUtils.isEmpty(regionPath)) {
+            return areaName;
+        }
+        String[] paths = regionPath.split("/");
+        if (paths.length < 3) {
+            return areaName;
+        }
+        RegionDO regionDO = regionDOMapper.selectByPrimaryKey(Integer.valueOf(paths[2]));
+        if (regionDO == null || StringUtils.isEmpty(regionDO.getName())) {
+            return areaName;
+        }
+        return regionDO.getName();
     }
 }

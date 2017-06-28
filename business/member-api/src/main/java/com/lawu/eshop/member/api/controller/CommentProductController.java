@@ -84,23 +84,22 @@ public class CommentProductController extends BaseController {
         if(commentOrderDTO.getModel().getEvaluation()){
             return successCreated(ResultCode.PRODUCT_EVALUATE_TRUE);
         }
-        StringBuffer headImg = new StringBuffer();
+        StringBuilder headImg = new StringBuilder();
         Collection<Part> parts = null;
         try {
                 parts = request.getParts();
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.info("IO异常：{}",e);
             return successCreated(e.getMessage());
         }
         catch (ServletException ex){
-            logger.info("Servlet异常");
+            logger.info("Servlet异常：{}",ex);
         }
         if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, memberApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
-                String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");

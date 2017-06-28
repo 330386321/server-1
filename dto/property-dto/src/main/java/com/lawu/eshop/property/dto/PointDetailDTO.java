@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,9 +8,7 @@ import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class PointDetailDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class PointDetailDTO {
 	
     /**
      * 积分标题

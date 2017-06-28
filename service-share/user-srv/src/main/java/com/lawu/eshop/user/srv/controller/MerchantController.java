@@ -152,7 +152,7 @@ public class MerchantController extends BaseController {
     @RequestMapping(value = "findMessagePushList",method = RequestMethod.GET)
     Result<List<MessagePushDTO>> findMessagePushList(@RequestParam(value = "area") String area){
         List<MessagePushBO> list = merchantService.findMessagePushList(area);
-        if(list == null||list.isEmpty() || list.size() == 0){
+        if(list == null||list.isEmpty()){
           return   successGet(new ArrayList<>());
         }
         List<MessagePushDTO> messagePushDTOS = new ArrayList<>();

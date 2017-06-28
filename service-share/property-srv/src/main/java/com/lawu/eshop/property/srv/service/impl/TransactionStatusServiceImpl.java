@@ -80,7 +80,7 @@ public class TransactionStatusServiceImpl implements TransactionStatusService {
 		TransactionRecordDOExample example = new TransactionRecordDOExample();
 		example.createCriteria().andTypeEqualTo(type).andIsProcessedEqualTo(false);
 		List<TransactionRecordDO> transactionRecordDOS = transactionRecordDOMapper.selectByExample(example);
-		List<TransactionRecordBO> notDoneList = new ArrayList<TransactionRecordBO>();
+		List<TransactionRecordBO> notDoneList = new ArrayList<>();
 		for (int i = 0; i < transactionRecordDOS.size(); i++) {
 			TransactionRecordDO transactionRecordDO = transactionRecordDOS.get(i);
 

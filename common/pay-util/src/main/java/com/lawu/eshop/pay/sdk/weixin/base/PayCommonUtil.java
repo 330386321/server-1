@@ -15,7 +15,7 @@ public class PayCommonUtil {
      * @return boolean 
      */  
     public static boolean isTenpaySign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {  
-        StringBuffer sb = new StringBuffer();  
+    	StringBuilder sb = new StringBuilder();  
         Set es = packageParams.entrySet();  
         Iterator it = es.iterator();  
         while(it.hasNext()) {  
@@ -49,7 +49,7 @@ public class PayCommonUtil {
      * @return 
      */  
 	public static String createSign(String characterEncoding, SortedMap<Object, Object> packageParams, String API_KEY) {  
-        StringBuffer sb = new StringBuffer();  
+		StringBuilder sb = new StringBuilder();  
         Set es = packageParams.entrySet();  
         Iterator it = es.iterator();  
         while (it.hasNext()) {  
@@ -61,7 +61,7 @@ public class PayCommonUtil {
             }  
         }  
         sb.append("key=" + API_KEY);  
-        System.out.println(sb.toString());
+//        System.out.println(sb.toString());
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();  
         //System.out.println(sign);
         return sign;  
@@ -76,7 +76,7 @@ public class PayCommonUtil {
      * @return 
      */  
     public static String getRequestXml(SortedMap<Object, Object> parameters) {  
-        StringBuffer sb = new StringBuffer();  
+    	StringBuilder sb = new StringBuilder();  
         sb.append("<xml>");  
         Set es = parameters.entrySet();  
         Iterator it = es.iterator();  

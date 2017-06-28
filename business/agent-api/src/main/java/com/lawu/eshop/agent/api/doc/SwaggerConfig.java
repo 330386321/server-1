@@ -27,7 +27,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 	
 	@Value(value="${swagger.api.audit}")
-	private boolean ISAUDIT;
+	private boolean isAudit;
 	
     @Bean
     public Docket adminApi() {
@@ -36,7 +36,7 @@ public class SwaggerConfig {
                 .forCodeGeneration(true)
                 .pathMapping("/")
                 .select()
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ISAUDIT ? Audit.class : ApiOperation.class))
+                .apis(RequestHandlerSelectors.withMethodAnnotation(isAudit ? Audit.class : ApiOperation.class))
                 .paths(paths())
                 .build()
                 .apiInfo(apiInfo())

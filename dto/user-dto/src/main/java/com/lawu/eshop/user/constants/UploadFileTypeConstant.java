@@ -37,4 +37,8 @@ public class UploadFileTypeConstant {
      */
     public static final String UPLOAD_RETURN_TYPE = "0";
 
+    public static final String RESULT_FLAG = "resultFlag";
+
+    public static final String IMG_URL = "imgUrl";
+
 }

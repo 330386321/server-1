@@ -54,7 +54,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 		payOrderDO.setCommissionStatus(CommissionStatusEnum.NOT_COUNTED.getValue());
         payOrderDO.setMerchantNum(param.getMerchantNum());
         payOrderDO.setIsEvaluation(false);//未评
-        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.val);//待支付
+        payOrderDO.setStatus(PayOrderStatusEnum.STATUS_UNPAY.getVal());//待支付
 		payOrderDO.setOrderStatus(true);
         payOrderDOMapper.insert(payOrderDO);
         PayOrderBO payOrderBO = new PayOrderBO();
@@ -68,10 +68,10 @@ public class PayOrderServiceImpl implements PayOrderService {
 		PayOrderDOExample example = new PayOrderDOExample();
 		if (param.getEvaluationEnum() == null) {
 			example.createCriteria().andMemberIdEqualTo(memberId)
-					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal()).andOrderStatusEqualTo(true);
 		} else {
 			example.createCriteria().andMemberIdEqualTo(memberId).andIsEvaluationEqualTo(param.getEvaluationEnum().getVal())
-					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val).andOrderStatusEqualTo(true);
+					.andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal()).andOrderStatusEqualTo(true);
 		}
 		example.setOrderByClause("id desc");
 		// 分页
@@ -123,7 +123,7 @@ public class PayOrderServiceImpl implements PayOrderService {
 	@Override
 	public List<ShoppingOrderCommissionDTO> selectNotCommissionOrder() {
 		PayOrderDOExample example = new PayOrderDOExample();
-		example.createCriteria().andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.val)
+		example.createCriteria().andStatusEqualTo(PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal())
 				.andCommissionStatusEqualTo(CommissionStatusEnum.NOT_COUNTED.getValue());
 		List<PayOrderDO> dos = payOrderDOMapper.selectByExample(example);
 		List<ShoppingOrderCommissionDTO> dtos = new ArrayList<ShoppingOrderCommissionDTO>();

@@ -48,4 +48,19 @@ public class ShoppingOrderCreateOrderTransactionFollowServiceImpl extends Abstra
 		rtn.setResultCode(resultCode);
 		return rtn;
     }
+	
+	@Override
+	public ShoppingOrderCreateOrderReply getReply(ShoppingOrderCreateOrderNotification notification) {
+		ShoppingOrderCreateOrderReply rtn = null;
+		
+    	// 如果接收的消息为空直接返回
+    	if (notification == null) {
+    		return rtn;
+    	}
+		
+		int resultCode =  productModelService.checkLessInventory(notification);
+		rtn = new ShoppingOrderCreateOrderReply();
+		rtn.setResultCode(resultCode);
+		return rtn;
+	}
 }

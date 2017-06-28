@@ -43,7 +43,8 @@ public class SignUtils {
 
 			return Base64.encode(signed);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("支付宝签名异常",e);
+//			e.printStackTrace();
 		}
 
 		return null;
@@ -84,6 +85,7 @@ public class SignUtils {
         try {
             sb.append(URLEncoder.encode(value, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
+        	logger.error("支付宝封装参数异常",e);
             sb.append(value);
         }
         return sb.toString();
@@ -115,7 +117,8 @@ public class SignUtils {
         try {
             encodedSign = URLEncoder.encode(oriSign, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        	logger.error("支付宝获取签名异常",e);
+//            e.printStackTrace();
         }
         return "sign=" + encodedSign;
     }

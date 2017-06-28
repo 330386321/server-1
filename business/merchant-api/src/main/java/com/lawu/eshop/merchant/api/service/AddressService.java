@@ -27,6 +27,7 @@ public interface AddressService {
 	/**
 	 * 添加收货地址
 	 * 
+	 * @deprecated
 	 * @param address
 	 */
 	@Deprecated

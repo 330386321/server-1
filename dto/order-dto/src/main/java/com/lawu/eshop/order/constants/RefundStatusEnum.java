@@ -41,14 +41,14 @@ public enum RefundStatusEnum {
 
 	private Byte value;
 
-	public Byte getValue() {
-		return value;
-	}
-
 	RefundStatusEnum(Byte value) {
 		this.value = value;
 	}
 	
+	public Byte getValue() {
+		return value;
+	}
+
 	public static RefundStatusEnum getEnum(Byte value){
 		for (RefundStatusEnum item : RefundStatusEnum.values()) {
 			if (item.getValue().equals(value)) {

@@ -30,12 +30,12 @@ public enum ShoppingOrderSortEnum {
 	
 	private String databaseField;
 	
-	public String getDatabaseField() {
-		return databaseField;
-	}
-
 	ShoppingOrderSortEnum(String databaseField) {
 		this.databaseField = databaseField;
 	}
 	
+	public String getDatabaseField() {
+		return databaseField;
+	}
+
 }

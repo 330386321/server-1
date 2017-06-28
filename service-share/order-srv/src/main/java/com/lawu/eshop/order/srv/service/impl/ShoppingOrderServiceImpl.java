@@ -157,13 +157,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public List<Long> save(List<ShoppingOrderSettlementParam> params) {
 
-		List<Long> rtn = new ArrayList<Long>();
+		List<Long> rtn = new ArrayList<>();
 
 		// 插入订单
 		for (ShoppingOrderSettlementParam shoppingOrderSettlementParam : params) {
 			ShoppingOrderDO shoppingOrderDO = ShoppingOrderConverter.convert(shoppingOrderSettlementParam);
 
-			List<Long> shoppingCartIdList = new ArrayList<Long>();
+			List<Long> shoppingCartIdList = new ArrayList<>();
 			for (ShoppingOrderSettlementItemParam item : shoppingOrderSettlementParam.getItems()) {
 				shoppingCartIdList.add(item.getShoppingCartId());
 			}
@@ -242,7 +242,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询总记录数
 		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 
-		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<>();
 		shoppingOrderItemBOPage.setTotalCount(count.intValue());
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 
@@ -304,11 +304,11 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询总记录数
 		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 
-		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<>();
 		shoppingOrderItemBOPage.setTotalCount(count.intValue());
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 		// 初始一条空记录
-		shoppingOrderItemBOPage.setRecords(new ArrayList<ShoppingOrderExtendBO>());
+		shoppingOrderItemBOPage.setRecords(new ArrayList<>());
 
 		/*
 		 * 如果count为0，或者offset大于count 不再执行后续操作直接返回
@@ -356,8 +356,9 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
 
 		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
-
-		if (shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0 || shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty()) {
+		
+		boolean isNotFind = shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0 || shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty();
+		if (isNotFind) {
 			return rtn;
 		}
 		
@@ -878,7 +879,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询总记录数
 		Long count = shoppingOrderDOExtendMapper.countByExample(shoppingOrderExtendDOExample);
 
-		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<ShoppingOrderExtendBO>();
+		Page<ShoppingOrderExtendBO> shoppingOrderItemBOPage = new Page<>();
 		shoppingOrderItemBOPage.setTotalCount(count.intValue());
 		shoppingOrderItemBOPage.setCurrentPage(param.getCurrentPage());
 
@@ -900,7 +901,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 如果参数中的keyword有值，查询结果的订单项会缺少，所有先找出所有购物订单id再通过去查找购物订单以及级联的购物订单项
 		List<ShoppingOrderExtendDO> shoppingOrderExtendDOList = shoppingOrderDOExtendMapper.selectByExampleWithRowbounds(shoppingOrderExtendDOExample, rowBounds);
 
-		List<Long> shoppingOrderIdList = new ArrayList<Long>();
+		List<Long> shoppingOrderIdList = new ArrayList<>();
 		for (ShoppingOrderExtendDO item : shoppingOrderExtendDOList) {
 			shoppingOrderIdList.add(item.getId());
 		}
@@ -953,7 +954,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 		
-		if (reply.getResultCode() == ResultCode.SUCCESS) {
+		if (reply.getResultCode().equals(ResultCode.SUCCESS)) {
 			// 设置订单状态为待支付状态(局部更新)
 			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
 			
@@ -966,7 +967,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			if (!StringUtils.isEmpty(shoppingOrderDO.getShoppingCartIdsStr())) {
 				// 拆分购物车id
 				String[] shoppingCartIdStrAry = StringUtils.split(shoppingOrderDO.getShoppingCartIdsStr(), ",");
-				List<Long> shoppingCartIdList = new ArrayList<Long>();
+				List<Long> shoppingCartIdList = new ArrayList<>();
 				for (String shoppingCartIdStr : shoppingCartIdStrAry) {
 					shoppingCartIdList.add(Long.valueOf(shoppingCartIdStr));
 				}
@@ -1065,7 +1066,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		/*
 		 * 查找订单项状态不为交易取消和交易成功的数目
 		 */
-		List<Byte> processingStatus = new ArrayList<Byte>();
+		List<Byte> processingStatus = new ArrayList<>();
 		processingStatus.add(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		processingStatus.add(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 
@@ -1198,16 +1199,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		List<ShoppingOrderExtendDO> shoppingOrderDOList = shoppingOrderDOExtendMapper.selectByExample(shoppingOrderExtendDOExample);
 
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			boolean is_done = true;
+			boolean isDone = true;
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
 				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
-					is_done = false;
+					isDone = false;
 					break;
 				}
 			}
 			
-			if (is_done) {
+			if (isDone) {
 				tradingSuccess(item.getId(), true);
 			}
 		}
@@ -1452,16 +1453,16 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		logger.info("需要释放冻结资金的订单数量:{}", shoppingOrderDOList.size());
 		
 		for (ShoppingOrderExtendDO item : shoppingOrderDOList) {
-			boolean is_done = true;
+			boolean isDone = true;
 			// 判断订单下的所有订单项是否有正在退款中的
 			for (ShoppingOrderItemDO shoppingOrderItemDO : item.getItems()) {
 				if (ShoppingOrderStatusEnum.REFUNDING.getValue().equals(shoppingOrderItemDO.getOrderStatus())) {
-					is_done = false;
+					isDone = false;
 					break;
 				}
 			}
 			
-			if (is_done) {
+			if (isDone) {
 				paymentsToMerchant(item);
 			}
 		}

@@ -23,15 +23,7 @@ public class GtPush {
 
     private static Logger logger = LoggerFactory.getLogger(GtPush.class);
 
-  /*  private static String appId = "y64i2nxRdNASBuhu7PCX25";// 商家
-    private static String appkey = "m7BWuujJ246kECQYw8zk9A";// 商家
-    private static String masterSecret = "rBgXZPQney8aaUvwaVW3b4";// 商家
-
-    private static String appId2 = "TQd0dTZC8b7Az2zwH4wPk1";// 用户端
-    private static String appkey2 = "vi1F0oUgRYAaxZ3xtPeVUA";// 用户端
-    private static String masterSecret2 = "5f23soSbuN76qvvxOZipc1";// 用户端
-    private static String host = "http://sdk.open.api.igexin.com/apiex.htm";*/
-
+    public static final String RESULT ="result";
 
     /**
      * 单推
@@ -53,20 +45,19 @@ public class GtPush {
         Target target = new Target();
         target.setAppId(appId);
         target.setClientId(CID);
-        // target.setAlias(Alias);
         IPushResult ret = null;
         try {
             ret = push.pushMessageToSingle(message, target);
         } catch (RequestException e) {
-            e.printStackTrace();
+            logger.info("gtPush--服务器响应异常，{}",e);
             ret = push.pushMessageToSingle(message, target, e.getRequestId());
         }
         if (ret != null) {
-            String result = (String) ret.getResponse().get("result");
-            logger.info("gtpush result:result({})", result);
+            String result = (String) ret.getResponse().get(RESULT);
+            logger.info("gtPush result:result({})", result);
             return result;
         } else {
-            logger.error("gtpush--服务器响应异常");
+            logger.info("gtPush 推送失败:{}","gtPush--服务器响应异常");
             return "false";
         }
     }
@@ -91,7 +82,6 @@ public class GtPush {
         Target target = new Target();
         target.setAppId(appId);
         target.setClientId(CID);
-        // target.setAlias(Alias);
         IPushResult ret = null;
         try {
             ret = push.pushMessageToSingle(message, target);
@@ -100,7 +90,7 @@ public class GtPush {
             ret = push.pushMessageToSingle(message, target, e.getRequestId());
         }
         if (ret != null) {
-            String result = (String) ret.getResponse().get("result");
+            String result = (String) ret.getResponse().get(RESULT);
             logger.info("gtpush result:result({})", result);
             return result;
         } else {
@@ -126,12 +116,12 @@ public class GtPush {
         // 离线有效时间，单位为毫秒，可选
         message.setOfflineExpireTime(24 * 1000 * 3600);
         // 推送给App的目标用户需要满足的条件
-        List<String> appIdList = new ArrayList<String>();
+        List<String> appIdList = new ArrayList<>();
         appIdList.add(appId);
         message.setAppIdList(appIdList);
 
         IPushResult ret = push.pushMessageToApp(message);
-        String result = (String) ret.getResponse().get("result");
+        String result = (String) ret.getResponse().get(RESULT);
         logger.info("gtpush-all-merchant result:result({})", result);
         return result;
     }
@@ -153,12 +143,12 @@ public class GtPush {
         // 离线有效时间，单位为毫秒，可选
         message.setOfflineExpireTime(24 * 1000 * 3600);
         // 推送给App的目标用户需要满足的条件
-        List<String> appIdList = new ArrayList<String>();
+        List<String> appIdList = new ArrayList<>();
         appIdList.add(appId);
         message.setAppIdList(appIdList);
 
         IPushResult ret = push.pushMessageToApp(message);
-        String result = (String) ret.getResponse().get("result");
+        String result = (String) ret.getResponse().get(RESULT);
         logger.info("gtpush-all-user result:result({})", result);
         return result;
     }
@@ -213,7 +203,8 @@ public class GtPush {
 
     private static APNPayload.DictionaryAlertMsg getDictionaryAlertMsg(String title, String contents) {
         APNPayload.DictionaryAlertMsg alertMsg = new APNPayload.DictionaryAlertMsg();
-        alertMsg.setBody(contents);
+      //推送显示返回json字符串
+        alertMsg.setBody("");
         alertMsg.setActionLocKey("ActionLockey");
         JSONObject jobj = JSON.parseObject(contents);
         //推送展示内容
@@ -229,14 +220,4 @@ public class GtPush {
 
         return alertMsg;
     }
-
-
-  /*  public static void main(String[] args) throws Exception {
-    	GtPush p = new GtPush();
-		JSONObject json = new JSONObject();
-		json.put("title","积分充值");
-		json.put("content","充值10块钱");
-		json.put("type","MESSAGE_TYPE_RECHARGE_BALANCE");
-		System.out.println(p.sendMessageToCidCustoms(json.toString(),"7025e9871b8450137cdb0df202688d64", "积分充值"));
-    }*/
 }

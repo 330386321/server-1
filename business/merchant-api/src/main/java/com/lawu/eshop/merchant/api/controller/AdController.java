@@ -82,11 +82,9 @@ public class AdController extends BaseController {
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-    	if(adParam.getTypeEnum().val!=4){
-    		if(!StringUtils.isNotEmpty(adParam.getBeginTime())){
-    			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
-    		}
-    	}
+		if(adParam.getTypeEnum().val!=4 && !StringUtils.isNotEmpty(adParam.getBeginTime())){
+			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+		}
     	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
     	if (isSuccess(resultFreeze)){
     		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
@@ -144,8 +142,7 @@ public class AdController extends BaseController {
     	adSave.setVideoImgUrl(videoImgUrl);
     	adSave.setMerchantId(merchantId);
     	adSave.setUserNum(userNum);
-    	Result rsAd = adService.saveAd(adSave);
-        return rsAd;
+        return adService.saveAd(adSave);
     }
     
     @Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -176,7 +173,7 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	Result rs= adService.remove(id);
+    	adService.remove(id);
     	return successDelete();
     }
 
@@ -230,8 +227,7 @@ public class AdController extends BaseController {
         	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
         	adSave.setMerchantId(merchantId);
         	adSave.setUserNum(userNum);
-        	Result rsAd = adService.saveAd(adSave);
-        	return rsAd;
+        	return adService.saveAd(adSave);
     	}else{
     		return successCreated(ResultCode.FAIL);
     	}

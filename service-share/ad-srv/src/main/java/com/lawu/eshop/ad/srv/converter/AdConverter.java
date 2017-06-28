@@ -239,6 +239,7 @@ public class AdConverter {
         document.addField("count_i", adDO.getViewcount());
 		document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
+        document.addField("videoImgUrl_s", adDO.getVideoImgUrl());
         if(adDO.getPutWay() == 1){
         	if(StringUtils.isNotEmpty(adDO.getAreas())){
         		String[] location=adDO.getAreas().split(",");
@@ -271,6 +272,7 @@ public class AdConverter {
         	adSolrDTO.setContent(solrDocument.get("content_s") == null ? "" : solrDocument.get("content_s").toString());
         	adSolrDTO.setCount(solrDocument.get("count_i") == null ? 0 : Integer.valueOf(solrDocument.get("count_i").toString()));
         	int type=solrDocument.get("type_i") == null ? 0 : Integer.valueOf(solrDocument.get("type_i").toString());
+        	adSolrDTO.setVideoImgUrl(solrDocument.get("videoImgUrl_s") == null ? "" : solrDocument.get("videoImgUrl_s").toString());
         	if(type==1){
         		adSolrDTO.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);	
         	}else{
@@ -313,10 +315,11 @@ public class AdConverter {
         document.addField("title_s", adDO.getTitle());
         document.addField("content_s", adDO.getContent());
 		document.addField("latLon_p", adDO.getMerchantLatitude() + "," +  adDO.getMerchantLongitude());
-        document.addField("status_i", "3");
+        document.addField("status_i", adDO.getType());
         document.addField("count_i", adDO.getViewcount());
         document.addField("radius_i", adDO.getRadius());
         document.addField("type_i", adDO.getType());
+        document.addField("videoImgUrl_s", adDO.getVideoImgUrl());
         if(adDO.getPutWay()==1){
         	if(adDO.getAreas()!=null){
         		String[] location=adDO.getAreas().split(",");
