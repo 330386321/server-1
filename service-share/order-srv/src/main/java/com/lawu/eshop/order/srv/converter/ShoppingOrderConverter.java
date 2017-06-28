@@ -34,6 +34,13 @@ import com.lawu.eshop.utils.RandomUtil;
  * @date 2017/04/06
  */
 public class ShoppingOrderConverter {
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ShoppingOrderConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
 
 	/**
 	 * ShoppingOrderDO转换
@@ -273,7 +280,7 @@ public class ShoppingOrderConverter {
 			return rtn;
 		}
 		
-		rtn = new ArrayList<ShoppingOrderBO>();
+		rtn = new ArrayList<>();
 		
 		for (ShoppingOrderDO item : shoppingOrderDOList) {
 			rtn.add(convertShoppingOrderBO(item));
@@ -353,7 +360,7 @@ public class ShoppingOrderConverter {
 	 * @author Sunny
 	 */
 	public static List<ShoppingOrderCommissionDTO> convertShoppingOrderCommissionDTOList(List<ShoppingOrderBO> shoppingOrderBOList) {
-		List<ShoppingOrderCommissionDTO> rtn = new ArrayList<ShoppingOrderCommissionDTO>();
+		List<ShoppingOrderCommissionDTO> rtn = new ArrayList<>();
 		
 		if (shoppingOrderBOList == null || shoppingOrderBOList.isEmpty()) {
 			return rtn;

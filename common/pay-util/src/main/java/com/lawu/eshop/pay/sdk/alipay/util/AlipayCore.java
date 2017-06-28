@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.methods.multipart.FilePartSource;
 import org.apache.commons.httpclient.methods.multipart.PartSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /* *
  *类名：AlipayFunction
@@ -26,6 +29,8 @@ import org.apache.commons.httpclient.methods.multipart.PartSource;
 
 public class AlipayCore {
 
+	private static Logger logger = LoggerFactory.getLogger(AlipayCore.class);
+			
     /** 
      * 除去数组中的空值和签名参数
      * @param sArray 签名参数组
@@ -38,11 +43,12 @@ public class AlipayCore {
         if (sArray == null || sArray.size() <= 0) {
             return result;
         }
-
-        for (String key : sArray.keySet()) {
+        Iterator<String> iterator = sArray.keySet().iterator();
+        while(iterator.hasNext()) {
+        	String key = iterator.next();
             String value = sArray.get(key);
-            if (value == null || value.equals("") || key.equalsIgnoreCase("sign")
-                || key.equalsIgnoreCase("sign_type")) {
+            if (value == null || "".equals(value) || "sign".equalsIgnoreCase(key)
+                || "sign_type".equalsIgnoreCase(key)) {
                 continue;
             }
             result.put(key, value);
@@ -61,20 +67,22 @@ public class AlipayCore {
         List<String> keys = new ArrayList<String>(params.keySet());
         Collections.sort(keys);
 
-        String prestr = "";
+        StringBuilder prestr = new StringBuilder();
 
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = params.get(key);
 
             if (i == keys.size() - 1) {//拼接时，不包括最后一个&字符
-                prestr = prestr + key + "=" + value;
+            	prestr.append(key).append("=").append(value);
+                //prestr = prestr + key + "=" + value;
             } else {
-                prestr = prestr + key + "=" + value + "&";
+            	prestr.append(key).append("=").append(value).append("&");
+                //prestr = prestr + key + "=" + value + "&";
             }
         }
 
-        return prestr;
+        return prestr.toString();
     }
 
     /** 
@@ -87,13 +95,15 @@ public class AlipayCore {
             writer = new FileWriter("" + "alipay_log_" + System.currentTimeMillis()+".txt");
             writer.write(sWord);
         } catch (Exception e) {
-            e.printStackTrace();
+        	logger.error("支付宝写log异常1",e);
+            //e.printStackTrace();
         } finally {
             if (writer != null) {
                 try {
                     writer.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                	logger.error("支付宝写log异常2",e);
+                    //e.printStackTrace();
                 }
             }
         }
@@ -107,10 +117,10 @@ public class AlipayCore {
      */
     public static String getAbstract(String strFilePath, String file_digest_type) throws IOException {
         PartSource file = new FilePartSource(new File(strFilePath));
-    	if(file_digest_type.equals("MD5")){
+    	if("MD5".equals(file_digest_type)){
     		return DigestUtils.md5Hex(file.createInputStream());
     	}
-    	else if(file_digest_type.equals("SHA")) {
+    	else if("SHA".equals(file_digest_type)) {
     		return DigestUtils.sha256Hex(file.createInputStream());
     	}
     	else {

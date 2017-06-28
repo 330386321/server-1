@@ -1,16 +1,11 @@
 package com.lawu.eshop.mall.param;
 
-import java.io.Serializable;
-
 import com.lawu.eshop.mall.constants.SuggestionClientType;
-import com.lawu.eshop.mall.constants.SuggestionUserType;
 
 import io.swagger.annotations.ApiParam;
 
-public class SuggestionParam implements Serializable{
+public class SuggestionParam {
 
-	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 建议内容
 	 */

@@ -55,7 +55,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 		Long count = pointDetailDOMapper.countByExample(pointDetailDOExample);
 		
-		Page<PointDetailBO> page = new Page<PointDetailBO>();
+		Page<PointDetailBO> page = new Page<>();
 		page.setCurrentPage(pointDetailQueryParam.getCurrentPage());
 		page.setTotalCount(count.intValue());
 		
@@ -122,7 +122,7 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 		Long count = pointDetailDOMapper.countByExample(pointDetailDOExample);
 
-		Page<PointDetailBO> page = new Page<PointDetailBO>();
+		Page<PointDetailBO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
 		page.setTotalCount(count.intValue());
 

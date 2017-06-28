@@ -1,6 +1,5 @@
 package com.lawu.eshop.property.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -16,9 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @author Sunny
  * @date 2017/3/29
  */
-public class TransactionDetailDTO implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+public class TransactionDetailDTO {
 	
     /**
      * 交易标题

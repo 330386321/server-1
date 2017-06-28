@@ -272,7 +272,7 @@ public class SolrUtil {
             return false;
         }
         try {
-            UpdateResponse rspAdd = solrClient.deleteById(String.valueOf(ids));
+            UpdateResponse rspAdd = solrClient.deleteById(ids);
             UpdateResponse rspCommit = solrClient.commit();
             if (rspAdd.getStatus() == 0 && rspCommit.getStatus() == 0) {
                 return true;

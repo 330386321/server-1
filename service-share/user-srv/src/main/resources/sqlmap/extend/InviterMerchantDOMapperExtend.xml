@@ -39,4 +39,21 @@
 	    </if>
     </where>
   </select>
+  
+  <select resultType="java.lang.Integer" parameterType="com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView" id="selectInviterMerchantCount" >
+     select
+    	count(*)
+   			 from merchant me 
+      left join merchant_store ms on me.id=ms.merchant_id 
+    <where>
+    	me.inviter_id=#{inviterId,jdbcType=VARCHAR}
+    	 and me.inviter_type=#{inviterType,jdbcType=TINYINT}
+	    <if test="name != null and name!=''" >
+	      and (ms.name like #{name}
+	      	or me.account like #{name})
+	    </if>
+    </where>
+  </select>
+  
+  
 </mapper>

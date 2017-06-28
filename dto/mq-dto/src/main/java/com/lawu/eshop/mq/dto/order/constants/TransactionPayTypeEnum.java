@@ -25,12 +25,12 @@ public enum TransactionPayTypeEnum {
 
 	private Byte val;
 
-	public Byte getVal() {
-		return val;
-	}
-
 	TransactionPayTypeEnum(Byte val) {
 		this.val = val;
+	}
+	
+	public Byte getVal() {
+		return val;
 	}
 
 	public static TransactionPayTypeEnum getEnum(Byte val) {

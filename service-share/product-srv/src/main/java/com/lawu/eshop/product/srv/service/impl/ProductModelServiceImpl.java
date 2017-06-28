@@ -1,5 +1,17 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
@@ -12,7 +24,13 @@ import com.lawu.eshop.product.srv.ProductSrvConfig;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
+import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
+import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDOExample;
 import com.lawu.eshop.product.srv.domain.extend.ProductModelNumsView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
 import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
@@ -23,13 +41,6 @@ import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.mapper.extend.ProductModelDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductModelService;
 import com.lawu.eshop.solr.SolrUtil;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 public class ProductModelServiceImpl implements ProductModelService {
@@ -91,7 +102,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 		}
 		
 		ProductDOExample productDOExample = new ProductDOExample();
-		productDOExample.createCriteria().andIdIn(new ArrayList<Long>(productIds));
+		productDOExample.createCriteria().andIdIn(new ArrayList<>(productIds));
 		
 		List<ProductDO> productDOs = productDOMapper.selectByExample(productDOExample);
 		
@@ -193,25 +204,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 	@Transactional
 	@Override
 	public void releaseInventory(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
-		
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCancelOrderNotification.getParams()) {
-			
-			/*
-	    	 * 可能重复收到MQ消息
-	    	 * 需要实现幂等性
-	    	 */
-			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
-			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
-			criteria.andShoppingOrderIdEqualTo(shoppingOrderCancelOrderNotification.getShoppingOrderId());
-			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CANCEL_ORDER.getValue());
-			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
-			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
-			
-			// 如果记录已经存在。继续循环
-			if (count > 0) {
-				continue;
-			}
-			
 			// 获取商品型号数据
 			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
 			
@@ -329,6 +322,63 @@ public class ProductModelServiceImpl implements ProductModelService {
 			
 		}
 		
+		return ResultCode.SUCCESS;
+	}
+	
+	/**
+	 * 检查库存是否扣除成功
+	 * 
+	 * @param shoppingOrderCreateOrderNotification 接收的数据
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public int checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
+		
+		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
+			
+			/*
+	    	 * 可能重复收到MQ消息
+	    	 * 需要实现幂等性
+	    	 */
+			ProductModelInventoryDOExample productModelInventoryDOExample = new ProductModelInventoryDOExample();
+			ProductModelInventoryDOExample.Criteria criteria = productModelInventoryDOExample.createCriteria();
+			criteria.andShoppingOrderIdEqualTo(shoppingOrderCreateOrderNotification.getShoppingOrderId());
+			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
+			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
+			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
+			
+			// 如果记录已经存在。继续循环
+			if (count > 0) {
+				continue;
+			}
+			
+			// 获取商品型号之前的库存数据
+			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
+			
+			// 获取商品库存信息
+			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
+			
+			/*
+			 *  判断商品是否有效
+			 *  商品状态是否是上架状态
+			 *  商品型号状态是否正常
+			 */
+			if (!ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus()) || !productModelDO.getStatus()) {
+				return ResultCode.PRODUCT_HAS_EXPIRED;
+			}
+			
+			// 判断库存
+			if (productModelDO.getInventory() < param.getQuantity()) {
+				return ResultCode.INVENTORY_SHORTAGE;
+			}
+			
+			// 判断库存
+			if (productDO.getTotalInventory() < param.getQuantity()) {
+				return ResultCode.INVENTORY_SHORTAGE;
+			}
+			
+		}
 		return ResultCode.SUCCESS;
 	}
 }

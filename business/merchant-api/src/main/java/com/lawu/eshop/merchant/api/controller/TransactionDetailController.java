@@ -73,7 +73,7 @@ public class TransactionDetailController extends BaseController {
     	List<TransactionDetailToMerchantDTO> transactionDetailDTOList = result.getModel().getRecords();
     	
     	// 把所有需要查询的id放入set
-    	List<Long> ids = new ArrayList<Long>();
+    	List<Long> ids = new ArrayList<>();
     	for (TransactionDetailToMerchantDTO item : transactionDetailDTOList) {
     		if (MerchantTransactionTypeEnum.WITHDRAW.equals(item.getTransactionType()) && !StringUtils.isEmpty(item.getBizId())) {
     			ids.add(Long.valueOf(item.getBizId()));
@@ -92,7 +92,7 @@ public class TransactionDetailController extends BaseController {
     	}
     	
     	// 把数据缓存到Map
-    	Map<String, WithdrawCashStatusDTO> withdrawCashStatusDTOMap = new HashMap<String, WithdrawCashStatusDTO>();
+    	Map<String, WithdrawCashStatusDTO> withdrawCashStatusDTOMap = new HashMap<>();
     	for (WithdrawCashStatusDTO item : resultWithdrawCashStatusDTOList.getModel()) {
     		withdrawCashStatusDTOMap.put(item.getId().toString(), item);
     	}

@@ -3,6 +3,9 @@ package util;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.lawu.eshop.utils.RandomUtil;
 
 /**
@@ -14,14 +17,7 @@ import com.lawu.eshop.utils.RandomUtil;
  */
 public class VideoCutImgUtil {
 	
-	/**
-	 * 获取ffmpeg路径
-	 * @return
-	 */
-	/*public static String getffmpegPath(){
-		String path=VideoCutImgUtil.class.getClassLoader().getResource("ffmpeg.exe").getPath();
-		return path;
-	}*/
+	 private static Logger logger = LoggerFactory.getLogger(VideoCutImgUtil.class);
 	
 	/**
 	 * 视频截图图片
@@ -32,7 +28,7 @@ public class VideoCutImgUtil {
 	public static String processImg(String veido_path,String dir,String baseImageDir,String ffmpegUrl) {
 		File file = new File(veido_path);
 		if (!file.exists()) {
-			System.err.println("路径[" + veido_path + "]对应的视频文件不存在!");
+			logger.debug("路径[" + veido_path + "]对应的视频文件不存在!");
 			return null;
 		}
 		String newfileName =RandomUtil.buildFileName(".jpg");
@@ -57,11 +53,11 @@ public class VideoCutImgUtil {
 			ProcessBuilder builder = new ProcessBuilder();
 			builder.command(commands);
 			builder.start();
-			System.out.println("截取成功");
+			logger.debug("截取图片成功");
 			String video_img=dir+"/"+newfileName;
 			return video_img;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug("截取图片失败");
 			return null;
 		}
 	}

@@ -21,6 +21,13 @@ import com.lawu.eshop.order.srv.utils.express.kdniao.bo.Trace;
 public class ExpressInquiriesDetailConverter {
 
 	/**
+	 * 隐藏构造方法
+	 */
+	private ExpressInquiriesDetailConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+
+	/**
 	 * ExpressInquiriesDatailBO转换
 	 *
 	 * @param expressInquiriesDetail
@@ -28,17 +35,18 @@ public class ExpressInquiriesDetailConverter {
 	 * @return
 	 */
 	public static ExpressInquiriesDetailBO convert(ExpressInquiriesDetail expressInquiriesDetail) {
+		ExpressInquiriesDetailBO rtn = null;
 		if (expressInquiriesDetail == null) {
-			return null;
+			return rtn;
 		}
 
-		ExpressInquiriesDetailBO expressInquiriesDetailBO = new ExpressInquiriesDetailBO();
-		expressInquiriesDetailBO.setSuccess(expressInquiriesDetail.getSuccess());
-		expressInquiriesDetailBO.setReason(expressInquiriesDetail.getReason());
-		expressInquiriesDetailBO.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetail.getState()));
-		expressInquiriesDetailBO.setTraces(convert(expressInquiriesDetail.getTraces()));
+		rtn = new ExpressInquiriesDetailBO();
+		rtn.setSuccess(expressInquiriesDetail.getSuccess());
+		rtn.setReason(expressInquiriesDetail.getReason());
+		rtn.setState(ExpressInquiriesDetailStateEnum.getEnum(expressInquiriesDetail.getState()));
+		rtn.setTraces(convert(expressInquiriesDetail.getTraces()));
 
-		return expressInquiriesDetailBO;
+		return rtn;
 	}
 
 	/**
@@ -75,7 +83,7 @@ public class ExpressInquiriesDetailConverter {
 			return rtn;
 		}
 
-		rtn = new ArrayList<TraceBO>();
+		rtn = new ArrayList<>();
 		for (Trace trace : traceList) {
 			rtn.add(convert(trace));
 		}
@@ -139,7 +147,7 @@ public class ExpressInquiriesDetailConverter {
 			return rtn;
 		}
 
-		rtn = new ArrayList<TraceDTO>();
+		rtn = new ArrayList<>();
 		for (TraceBO traceBO : traceBOList) {
 			rtn.add(convert(traceBO));
 		}

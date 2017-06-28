@@ -16,6 +16,13 @@ import java.util.List;
  */
 public class PayOrderConverter {
 
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private PayOrderConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+
     public static PayOrderBO coverBO(PayOrderDO payOrderDO) {
         if (payOrderDO == null) {
             return null;
@@ -33,18 +40,19 @@ public class PayOrderConverter {
     }
 
     public static PayOrderDTO coverDTO(PayOrderBO payOrderBO) {
+    	PayOrderDTO rtn = null;
         if (payOrderBO == null) {
             return null;
         }
-        PayOrderDTO payOrderDTO = new PayOrderDTO();
-        payOrderDTO.setId(payOrderBO.getId());
-        payOrderDTO.setTotalAmount(payOrderBO.getTotalAmount());
-        payOrderDTO.setActualAmount(payOrderBO.getActualAmount());
-        payOrderDTO.setEvaluationEnum(EvaluationEnum.getEnum(payOrderBO.getEvaluation()));
-        payOrderDTO.setFavoredAmount(payOrderBO.getFavoredAmount());
-        payOrderDTO.setGmtCreate(payOrderBO.getGmtCreate());
-        payOrderDTO.setMerchantId(payOrderBO.getMerchantId());
-        return payOrderDTO;
+        rtn = new PayOrderDTO();
+        rtn.setId(payOrderBO.getId());
+        rtn.setTotalAmount(payOrderBO.getTotalAmount());
+        rtn.setActualAmount(payOrderBO.getActualAmount());
+        rtn.setEvaluationEnum(EvaluationEnum.getEnum(payOrderBO.getEvaluation()));
+        rtn.setFavoredAmount(payOrderBO.getFavoredAmount());
+        rtn.setGmtCreate(payOrderBO.getGmtCreate());
+        rtn.setMerchantId(payOrderBO.getMerchantId());
+        return rtn;
     }
 
     public static List<PayOrderBO> coverBOS(List<PayOrderDO> payOrderDOS) {

@@ -3,8 +3,6 @@ package com.lawu.eshop.property.srv.converter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.property.constants.CashChannelEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.constants.UserTypeEnum;
@@ -21,6 +19,13 @@ import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 public class WithdrawCashBOConverter {
 	
 	/**
+	 * 隐藏默认的构造方法
+	 */
+	private WithdrawCashBOConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
+	/**
 	 * WithdrawCashDO 转 WithdrawCashBO
 	 * 
 	 * @param withdrawCashDO
@@ -34,8 +39,27 @@ public class WithdrawCashBOConverter {
         }
         
         rtn = new WithdrawCashBO();
+        rtn.setAccount(withdrawCashDO.getAccount());
+        rtn.setAreaId(withdrawCashDO.getAreaId());
+        rtn.setAuditFaildReason(withdrawCashDO.getAuditFaildReason());
+        rtn.setAuditUserId(withdrawCashDO.getAuditUserId());
+        rtn.setAuditUserName(withdrawCashDO.getAuditUserName());
+        rtn.setBusinessBankAccountId(withdrawCashDO.getBusinessBankAccountId());
+        rtn.setCashMoney(withdrawCashDO.getCashMoney());
+        rtn.setCashNumber(withdrawCashDO.getCashNumber());
+        rtn.setCityId(withdrawCashDO.getCityId());
+        rtn.setCurrentScale(withdrawCashDO.getCurrentScale());
+        rtn.setGmtCreate(withdrawCashDO.getGmtCreate());
+        rtn.setGmtModified(withdrawCashDO.getGmtModified());
+        rtn.setId(withdrawCashDO.getId());
+        rtn.setMoney(withdrawCashDO.getMoney());
+        rtn.setName(withdrawCashDO.getName());
+        rtn.setProvinceId(withdrawCashDO.getProvinceId());
+        rtn.setRegionFullName(withdrawCashDO.getRegionFullName());
+        rtn.setRemark(withdrawCashDO.getRemark());
+        rtn.setThirdNumber(withdrawCashDO.getThirdNumber());
+        rtn.setUserNum(withdrawCashDO.getUserNum());
         
-        BeanUtils.copyProperties(withdrawCashDO, rtn);
         rtn.setStatus(CashStatusEnum.getEnum(withdrawCashDO.getStatus()));
         rtn.setUserType(UserTypeEnum.getEnum(withdrawCashDO.getUserType()));
         rtn.setChannel(CashChannelEnum.getEnum(withdrawCashDO.getChannel()));
@@ -56,7 +80,7 @@ public class WithdrawCashBOConverter {
             return rtn;
         }
         
-        rtn = new ArrayList<WithdrawCashBO>();
+        rtn = new ArrayList<>();
         
         for (WithdrawCashDO item : withdrawCashDOList) {
         	rtn.add(convert(item));
@@ -79,8 +103,8 @@ public class WithdrawCashBOConverter {
         }
         
         rtn = new WithdrawCashStatusDTO();
-        
-        BeanUtils.copyProperties(withdrawCashBO, rtn);
+        rtn.setId(withdrawCashBO.getId());
+        rtn.setStatus(withdrawCashBO.getStatus());
         
         return rtn;
     }
@@ -98,7 +122,7 @@ public class WithdrawCashBOConverter {
             return rtn;
         }
         
-        rtn = new ArrayList<WithdrawCashStatusDTO>();
+        rtn = new ArrayList<>();
         
         for (WithdrawCashBO item : withdrawCashBOList) {
         	rtn.add(convert(item));

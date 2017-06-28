@@ -107,7 +107,10 @@ public abstract class BaseController {
 	public Result successAccepted(Result result) {
 		return response(HttpCode.SC_ACCEPTED, result);
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> successDelete(T model) {
 		return response(HttpCode.SC_NO_CONTENT, ResultCode.SUCCESS, ResultCode.get(ResultCode.SUCCESS), null, model);
@@ -117,16 +120,25 @@ public abstract class BaseController {
 		return successDelete(null);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failCreated(int retCode, T model) {
 		return response(HttpCode.SC_BAD_REQUEST, retCode, ResultCode.get(retCode), null, model);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failCreated(int retCode) {
 		return failCreated(retCode, null);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failCreated(String debug) {
 		return response(HttpCode.SC_BAD_REQUEST, HttpCode.SC_BAD_REQUEST, HttpCode.get(HttpCode.SC_BAD_REQUEST), debug, null);
@@ -140,26 +152,41 @@ public abstract class BaseController {
 		return failUnauthorized(retCode, null);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failForbidden(int retCode, T model) {
 		return response(HttpCode.SC_FORBIDDEN, retCode, ResultCode.get(retCode), null, model);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failForbidden(int retCode) {
 		return failForbidden(retCode, null);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failGone(int retCode, T model) {
 		return response(HttpCode.SC_GONE, retCode, ResultCode.get(retCode), null, model);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failGone(String debug) {
 		return response(HttpCode.SC_GONE, HttpCode.SC_GONE, HttpCode.get(HttpCode.SC_GONE), debug, null);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	@Deprecated
 	public <T> Result<T> failGone(int retCode) {
 		return failGone(retCode, null);

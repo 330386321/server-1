@@ -11,7 +11,6 @@ import com.lawu.eshop.operator.srv.domain.LogDO;
 import com.lawu.eshop.operator.srv.domain.LogDOExample;
 import com.lawu.eshop.operator.srv.mapper.LogDOMapper;
 import com.lawu.eshop.operator.srv.service.LogService;
-import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,15 +50,13 @@ public class LogServiceImpl implements LogService {
     @Override
     public Page<LogBO> listLog(ListLogParam listLogParam) {
         LogDOExample example = new LogDOExample();
+        example.setOrderByClause("id desc");
         LogDOExample.Criteria criteria = example.createCriteria();
-        if (listLogParam.getTypeEnum().val != OperationTypeEnum.ALL.val) {
+        if (listLogParam.getTypeEnum().val.byteValue() != OperationTypeEnum.ALL.val) {
             criteria.andOperationTypeEqualTo(listLogParam.getTypeEnum().val);
         }
-        if (listLogParam.getModuleEnum().val != ModuleEnum.ALL.val) {
+        if (listLogParam.getModuleEnum().val.byteValue() != ModuleEnum.ALL.val) {
             criteria.andModuleEqualTo(listLogParam.getModuleEnum().val);
-        }
-        if (StringUtils.isNotEmpty(listLogParam.getSortName()) && StringUtils.isNotEmpty(listLogParam.getSortOrder())) {
-            example.setOrderByClause("gmt_create " + listLogParam.getSortOrder());
         }
 
         RowBounds rowBounds = new RowBounds(listLogParam.getOffset(), listLogParam.getPageSize());

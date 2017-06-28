@@ -11,6 +11,13 @@ import com.lawu.eshop.order.srv.domain.extend.ReportFansSaleTransFormDO;
 import com.lawu.eshop.order.srv.domain.extend.ReportRiseRateView;
 
 public class ReportConvert {
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ReportConvert() {
+		throw new IllegalAccessError("Utility class");
+	}
 
 	/**
 	 * 增量折线图转换，没数据的x轴默认填充并赋值0
@@ -39,8 +46,8 @@ public class ReportConvert {
 			}
 		}
 		
-		List<String> dates = new ArrayList<String>();
-		List<String> nums = new ArrayList<String>();
+		List<String> dates = new ArrayList<>();
+		List<String> nums = new ArrayList<>();
 		for (ReportRiseRateView view : list) {
 			dates.add(Integer.valueOf(view.getKeyTxt()).toString());
 			nums.add(view.getNum());
@@ -59,9 +66,9 @@ public class ReportConvert {
 	 * @author Sunny
 	 */
 	public static List<ReportRiseRerouceDTO> convert(List<ReportFansSaleTransFormDO> list) {
-		List<ReportRiseRerouceDTO> rtn = new ArrayList<ReportRiseRerouceDTO>();
+		List<ReportRiseRerouceDTO> rtn = new ArrayList<>();
 		
-		Map<String, ReportFansSaleTransFormDO> reportFansSaleTransFormDOMap = new HashMap<String, ReportFansSaleTransFormDO>();
+		Map<String, ReportFansSaleTransFormDO> reportFansSaleTransFormDOMap = new HashMap<>();
 		for (ReportFansSaleTransFormDO item : list) {
 			reportFansSaleTransFormDOMap.put(item.getIsFans(), item);
 		}

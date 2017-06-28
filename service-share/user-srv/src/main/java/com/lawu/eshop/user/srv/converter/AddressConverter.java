@@ -45,7 +45,7 @@ public class AddressConverter {
 		if (addressDOS == null) {
 			return null;
 		}
-		List<AddressBO> addressBOS = new ArrayList<AddressBO>();
+		List<AddressBO> addressBOS = new ArrayList<>();
 		for (AddressDO addressDO : addressDOS) {
 			addressBOS.add(convertBO(addressDO));
 		}
@@ -77,7 +77,7 @@ public class AddressConverter {
 	}
 
 	public static List<AddressDTO> convertListDOTS(List<AddressBO> addressBOS) {
-		List<AddressDTO> rtn = new ArrayList<AddressDTO>();
+		List<AddressDTO> rtn = new ArrayList<>();
 		
 		if (addressBOS == null || addressBOS.isEmpty()) {
 			return rtn;

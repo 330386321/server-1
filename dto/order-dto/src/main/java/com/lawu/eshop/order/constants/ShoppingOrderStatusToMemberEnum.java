@@ -24,14 +24,14 @@ public enum ShoppingOrderStatusToMemberEnum {
 
 	private Byte value;
 
-	public Byte getValue() {
-		return value;
-	}
-
 	ShoppingOrderStatusToMemberEnum(Byte value) {
 		this.value = value;
 	}
 	
+	public Byte getValue() {
+		return value;
+	}
+
 	public static ShoppingOrderStatusToMemberEnum getEnum(Byte value){
 		for (ShoppingOrderStatusToMemberEnum item : ShoppingOrderStatusToMemberEnum.values()) {
 			if (item.getValue().equals(value)) {

@@ -16,7 +16,9 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Categories.IncludeCategory;
 
 public class UploadFile {
 	
@@ -24,6 +26,7 @@ public class UploadFile {
 	String FILE_PATH = "C://Users//Administrator//Desktop//陈记烧鹅.jpg";
 	String AUTHORIZATION = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJNRVJDSEFOVCIsImp0aSI6IkIwMDAxIiwic3ViIjoiMTg2OTY1MjM2NTgiLCJhdWQiOiIxIiwiaWF0IjoxNDk4NTQ2MzQ4fQ.ZFXd7Lo15V0KFLaZa_xfY92DFupNdLHLU6LkvzrftctU6DBavfcJI29CMKICFLtUACV5bh4VG-hO5PV4Uk-DsQ";
 	
+	@Ignore
 	@Test
 	public void uploadForHttpClient4(){
         CloseableHttpClient httpclient = HttpClients.createDefault();

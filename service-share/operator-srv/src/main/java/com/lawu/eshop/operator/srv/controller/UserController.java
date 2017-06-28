@@ -58,13 +58,12 @@ public class UserController extends BaseController {
         List<RoleBO> roleBOList = userService.findUserRoleByUserId(userBO.getId());
         List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
         Set<String> rolesKeys = new HashSet<>();
-        if (roleBOList == null) {
-            roleBOList = new ArrayList<>();
-        } else {
+        UserRoleDTO userRoleDTO;
+        if (!roleBOList.isEmpty()) {
             //查询role对应的permission_key
             for (RoleBO roleBO : roleBOList) {
                 rolesKeys.add(roleBO.getRoleKey());
-                UserRoleDTO userRoleDTO = new UserRoleDTO();
+                userRoleDTO = new UserRoleDTO();
                 userRoleDTO.setRoleKey(roleBO.getRoleKey());
                 List<String> permissionKeyList = userService.findRolePermission(roleBO.getId());
                 userRoleDTO.setPermissionsKey(permissionKeyList);
@@ -95,9 +94,7 @@ public class UserController extends BaseController {
         List<RoleBO> roleBOList = userService.findUserRoleByUserId(userBO.getId());
         List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
         Set<String> rolesKeys = new HashSet<>();
-        if (roleBOList.isEmpty()) {
-            roleBOList = new ArrayList<>();
-        } else {
+        if (!roleBOList.isEmpty()) {
             //查询role对应的permission_key
             for (RoleBO roleBO : roleBOList) {
                 rolesKeys.add(roleBO.getRoleKey());

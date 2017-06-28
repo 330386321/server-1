@@ -26,10 +26,6 @@ public enum ConsumptionTypeEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-	
 	public static ConsumptionTypeEnum getEnum(Byte val) {
 		ConsumptionTypeEnum[] values = ConsumptionTypeEnum.values();
 		for (ConsumptionTypeEnum object : values) {

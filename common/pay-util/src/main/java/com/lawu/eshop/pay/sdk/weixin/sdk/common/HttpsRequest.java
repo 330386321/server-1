@@ -23,6 +23,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -45,6 +46,8 @@ import com.thoughtworks.xstream.io.xml.XmlFriendlyNameCoder;
  *
  */
 public class HttpsRequest implements IServiceRequest {
+	
+	private static Logger logger = LoggerFactory.getLogger(HttpsRequest.class);
 
 	public interface ResultListener {
 
@@ -52,7 +55,7 @@ public class HttpsRequest implements IServiceRequest {
 
 	}
 
-	private static Log log = new Log(LoggerFactory.getLogger(HttpsRequest.class));
+//	private static Log log = new Log(LoggerFactory.getLogger(HttpsRequest.class));
 
 	// 表示请求器是否已经做了初始化工作
 	private boolean hasInit = false;
@@ -84,9 +87,11 @@ public class HttpsRequest implements IServiceRequest {
 		try {
 			keyStore.load(resource.getInputStream(), wxPayConfigParam.getWxpayCertPasswordMember().toCharArray());// 设置证书密码
 		} catch (CertificateException e) {
-			e.printStackTrace();
+			logger.error("",e);
+//			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
+			logger.error("",e);
+//			e.printStackTrace();
 		} finally {
 			//instream.close();
 		}
@@ -138,11 +143,10 @@ public class HttpsRequest implements IServiceRequest {
 
 		// 将要提交给API的数据对象转换成XML格式数据Post给API
 		String postDataXML = xStreamForRequestPostData.toXML(xmlObj);
-		postDataXML = postDataXML
-				.replaceAll("com.lawu.eshop.pay.srv.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData", "xml");
+		postDataXML = postDataXML.replaceAll("com.lawu.eshop.pay.srv.sdk.weixin.sdk.protocol.refund_protocol.RefundReqData", "xml");
 
-		Util.log("API，POST过去的数据是：");
-		Util.log(postDataXML);
+//		Util.log("API，POST过去的数据是：");
+//		Util.log(postDataXML);
 
 		// 得指明使用UTF-8编码，否则到API服务器XML的中文不能被成功识别
 		StringEntity postEntity = new StringEntity(postDataXML, "UTF-8");
@@ -152,7 +156,7 @@ public class HttpsRequest implements IServiceRequest {
 		// 设置请求器的配置
 		httpPost.setConfig(requestConfig);
 
-		Util.log("executing request" + httpPost.getRequestLine());
+//		Util.log("executing request" + httpPost.getRequestLine());
 
 		try {
 			HttpResponse response = httpClient.execute(httpPost);
@@ -160,15 +164,15 @@ public class HttpsRequest implements IServiceRequest {
 			HttpEntity entity = response.getEntity();
 
 			result = EntityUtils.toString(entity, "UTF-8");
-			Util.log("result=" + result);
+//			Util.log("result=" + result);
 			RefundResData refundResData = (RefundResData) Util.getObjectFromXML(result, RefundResData.class);
 			String consoleMsg = "退款成功";
-			if (refundResData.getReturn_code().equals("FAIL")) {
+			if ("FAIL".equals(refundResData.getReturn_code())) {
 				consoleMsg = "退款API系统返回失败，" + refundResData.getReturn_msg();
 				jsonResult.setSuccess(false);
 			} else {
-				Util.log("退款API系统成功返回数据");
-				if (refundResData.getResult_code().equals("FAIL")) {
+//				Util.log("退款API系统成功返回数据");
+				if ("FAIL".equals(refundResData.getResult_code())) {
 					consoleMsg = "退款异常，错误码：" + refundResData.getErr_code() + "，错误信息：" + refundResData.getErr_code_des();
 					jsonResult.setSuccess(false);
 				} else {
@@ -177,18 +181,19 @@ public class HttpsRequest implements IServiceRequest {
 					jsonResult.setData(refundResData);
 				}
 			}
-			Util.log(consoleMsg);
+			logger.info(consoleMsg);
+//			Util.log(consoleMsg);
 		} catch (ConnectionPoolTimeoutException e) {
-			log.e("http get throw ConnectionPoolTimeoutException(wait time out)");
+			logger.error("http get throw ConnectionPoolTimeoutException(wait time out)",e);
 			jsonResult.setSuccess(false);
 		} catch (ConnectTimeoutException e) {
-			log.e("http get throw ConnectTimeoutException");
+			logger.error("http get throw ConnectTimeoutException",e);
 			jsonResult.setSuccess(false);
 		} catch (SocketTimeoutException e) {
-			log.e("http get throw SocketTimeoutException");
+			logger.error("http get throw SocketTimeoutException",e);
 			jsonResult.setSuccess(false);
 		} catch (Exception e) {
-			log.e("http get throw Exception");
+			logger.error("http get throw Exception",e);
 			jsonResult.setSuccess(false);
 		} finally {
 			httpPost.abort();
@@ -204,7 +209,7 @@ public class HttpsRequest implements IServiceRequest {
 	 *            连接时长，默认10秒
 	 */
 	public void setSocketTimeout(int socketTimeout) {
-		socketTimeout = socketTimeout;
+		this.socketTimeout = socketTimeout;
 		resetRequestConfig();
 	}
 
@@ -215,7 +220,7 @@ public class HttpsRequest implements IServiceRequest {
 	 *            传输时长，默认30秒
 	 */
 	public void setConnectTimeout(int connectTimeout) {
-		connectTimeout = connectTimeout;
+		this.connectTimeout = connectTimeout;
 		resetRequestConfig();
 	}
 
@@ -231,6 +236,6 @@ public class HttpsRequest implements IServiceRequest {
 	 *            设置HttpsRequest的请求器配置
 	 */
 	public void setRequestConfig(RequestConfig requestConfig) {
-		requestConfig = requestConfig;
+		this.requestConfig = requestConfig;
 	}
 }

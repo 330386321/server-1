@@ -65,5 +65,13 @@ public interface ProductModelService {
 	 * @author Sunny
 	 */
 	int increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification);
+	
+	/**
+	 * 检查库存是否扣除成功
+	 * 
+	 * @param shoppingOrderCreateOrderNotification 接收的数据
+	 * @author Sunny
+	 */
+	int checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
 
 }

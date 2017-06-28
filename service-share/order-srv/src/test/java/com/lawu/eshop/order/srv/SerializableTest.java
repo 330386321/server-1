@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,6 +15,7 @@ import com.lawu.eshop.order.dto.foreign.ExpressInquiriesDetailDTO;
 
 public class SerializableTest {
 
+	@Ignore
 	@Test
 	public void serTest() {
 		

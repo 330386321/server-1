@@ -1,6 +1,7 @@
 package com.lawu.eshop.order.srv;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class ShoppingOrderControllerTest {
         mvc = MockMvcBuilders.standaloneSetup(shoppingOrderController).build();
     }
 
+    @Ignore
     @Test
     public void setMemberTokenOneToOne() throws Exception {
         MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get("/shoppingOrder/getExpressInfo/75").accept(MediaType.APPLICATION_JSON)).andReturn();

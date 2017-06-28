@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
         List<UserRoleDOView> userRoleDOViews = userRoleDOMapperExtend.findUserRoleByUserId(userId);
         if (userRoleDOViews.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<RoleBO> roleBOS = new ArrayList<>();
         for (UserRoleDOView userRoleDOView : userRoleDOViews) {

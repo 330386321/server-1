@@ -35,6 +35,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 		return escape(value);
 	}
 
+	/*
 	@Override
 	public String getHeader(String name) {
 		String value = super.getHeader(name);
@@ -42,15 +43,70 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
 			return null;
 		return escape(value);
 	}
+	*/
 
-	private String escape(String value) {
+	private static String escape(String value) {
 		String rtn = value;
 		if (rtn  == null) {
 			return rtn;
 		}
-		// escape
+		// 1-Escape
+		/*
 		rtn = StringEscapeUtils.escapeSql(rtn);
-		//rtn = StringEscapeUtils.escapeHtml(rtn);
+		rtn = StringEscapeUtils.escapeHtml(rtn);
+		*/
+		// 2-半角转全角
+		StringBuilder stringBuilder = new StringBuilder();
+		for(int i = 0; i < rtn.length(); i++) {
+			char c = rtn.charAt(i);
+			switch(c){
+	            case '>':
+	                stringBuilder.append('＞');//全角大于号
+	                break;
+	            case '<':
+	                stringBuilder.append('＜');//全角小于号
+	                break;
+	            case '\'':
+	                stringBuilder.append('＇');//全角单引号
+	                break;
+	            case '&':
+	                stringBuilder.append('＆');//全角
+	                break;
+	            case '\\':
+	                stringBuilder.append('＼');//全角斜线
+	                break;
+	            case '(':
+	                stringBuilder.append('（');//全角做括号
+	                break;
+	            case ')':
+	                stringBuilder.append('）');//全角右括号
+	                break;
+	            case '!':
+	                stringBuilder.append('！');//全角感叹号
+	                break;
+	            case '*':
+	                stringBuilder.append('＊');//全角星号
+	                break;
+	            case '+':
+	                stringBuilder.append('＋');//全角星号
+	                break;
+	            case '＝':
+	                stringBuilder.append('＝');//全角星号
+	                break;
+	            default:
+	                stringBuilder.append(c);
+	                break;
+	        }
+        }
+		rtn = stringBuilder.toString();
+		// 3-URL编码
+		/*
+		try {
+			rtn = URLEncoder.encode(rtn, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error("编码异常", e)
+		}
+		*/
 		return rtn;
 	}
 }

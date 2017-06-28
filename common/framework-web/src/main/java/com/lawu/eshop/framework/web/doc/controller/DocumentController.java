@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -80,7 +79,7 @@ public class DocumentController extends BaseController{
      */
     @SuppressWarnings("unused")
 	private List<ApiDocumentVO> getVoList(Boolean isAudit) {
-    	List<ApiDocumentVO> rtn = new ArrayList<ApiDocumentVO>();
+    	List<ApiDocumentVO> rtn = new ArrayList<>();
     	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     	
     	try {
@@ -108,7 +107,8 @@ public class DocumentController extends BaseController{
 		            apiOperation = method.getMethodAnnotation(ApiOperation.class);
 		            audit = method.getMethodAnnotation(Audit.class);
 		            
-		            if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
+		            boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
+		            if (isShow) {
 		            	info = entry.getKey();
 		            	api = method.getBeanType().getAnnotation(Api.class);
 		            	
@@ -159,40 +159,39 @@ public class DocumentController extends BaseController{
 		            	apiOperation = method.getAnnotation(ApiOperation.class);
 		            	requestMapping = method.getAnnotation(RequestMapping.class);
 		            	
-		            	if ((audit != null && isAudit) || (!isAudit && audit == null && apiOperation != null)) {
-			            	if (apiOperation != null) {
-			            		// 组装VO对象
-				            	ApiDocumentVO vo = new ApiDocumentVO();
-				            	if (api != null && api.tags() != null) {
-				            		vo.setApiName(Arrays.toString(api.tags()));
-				            	} else {
-				            		//如果Api注解为空,或者tags为空，设置ApiName为空串
-				            		vo.setApiName("");
-				            	}
-				            	
-				            	if (audit != null) {
-					            	vo.setDate(df.parse(audit.date()));
-					            	vo.setReviewer(audit.reviewer());
-				            	}
-				            	
-				            	// 拼装Url
-				            	sb.delete(0, sb.length());
-				            	for (String beanRequestUrl : beanRequestMapping.value()) {
-					            	for (String requestUrl : requestMapping.value()) {
-					            		if (sb.length() > 0) {
-					            			sb.append(",");
-					            		}
-					            		sb.append(beanRequestUrl + requestUrl);
-					            	}
-				            	}
-				            	vo.setPath(sb.toString());
-				            	if (apiOperation != null) {
-					            	vo.setName(apiOperation.value());
-					            	vo.setNotes(apiOperation.notes());
-					            	vo.setHttpMethod(apiOperation.httpMethod());
-				            	}
-				            	rtn.add(vo);
+		            	boolean isShow = ((audit != null && isAudit) || (!isAudit && audit == null)) && apiOperation != null;
+		            	if (isShow) {
+		            		// 组装VO对象
+			            	ApiDocumentVO vo = new ApiDocumentVO();
+			            	if (api != null && api.tags() != null) {
+			            		vo.setApiName(Arrays.toString(api.tags()));
+			            	} else {
+			            		//如果Api注解为空,或者tags为空，设置ApiName为空串
+			            		vo.setApiName("");
 			            	}
+			            	
+			            	if (audit != null) {
+				            	vo.setDate(df.parse(audit.date()));
+				            	vo.setReviewer(audit.reviewer());
+			            	}
+			            	
+			            	// 拼装Url
+			            	sb.delete(0, sb.length());
+			            	for (String beanRequestUrl : beanRequestMapping.value()) {
+				            	for (String requestUrl : requestMapping.value()) {
+				            		if (sb.length() > 0) {
+				            			sb.append(",");
+				            		}
+				            		sb.append(beanRequestUrl + requestUrl);
+				            	}
+			            	}
+			            	vo.setPath(sb.toString());
+			            	if (apiOperation != null) {
+				            	vo.setName(apiOperation.value());
+				            	vo.setNotes(apiOperation.notes());
+				            	vo.setHttpMethod(apiOperation.httpMethod());
+			            	}
+			            	rtn.add(vo);
 		            	}
 		            }
 		        }
@@ -202,24 +201,20 @@ public class DocumentController extends BaseController{
     	}
     	
     	// 按照日期和接口排序
-    	Collections.sort(rtn, new Comparator <ApiDocumentVO>() {
-			@Override
-			public int compare(ApiDocumentVO o1, ApiDocumentVO o2){
-				
-				// 先按照时间排序
-				int compare = 0;
-				if (o2.getDate() != null && o1.getDate() != null) {
-					compare = o2.getDate().compareTo(o1.getDate());
-				}
-				
-				// 如果时间相等的话再按照接口排序
-				if (compare == 0) {
-					return o2.getApiName().compareTo(o1.getApiName());
-				}
-				
-				return compare;
+    	Collections.sort(rtn, (o1, o2) -> {
+    		// 先按照时间排序
+			int compare = 0;
+			if (o2.getDate() != null && o1.getDate() != null) {
+				compare = o2.getDate().compareTo(o1.getDate());
 			}
-		});
+			
+			// 如果时间相等的话再按照接口排序
+			if (compare == 0) {
+				return o2.getApiName().compareTo(o1.getApiName());
+			}
+			
+			return compare;
+    	});
     	
     	return rtn;
     }

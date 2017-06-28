@@ -11,3 +11,4 @@
 		<plugin interceptor="com.lawu.eshop.mybatis.pagination.MySQLPaginationInterceptor" />
 	</plugins>
 </configuration>
+

@@ -12,6 +12,8 @@ import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.util.IdleConnectionTimeoutThread;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.FilePartSource;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
@@ -35,6 +37,8 @@ import java.util.List;
 
 public class HttpProtocolHandler {
 
+	private static Logger logger = LoggerFactory.getLogger(HttpProtocolHandler.class);
+	
 	private static String DEFAULT_CHARSET = "GBK";
 
 	/** 连接超时时间，由bean factory设置，缺省为8秒钟 */
@@ -51,7 +55,7 @@ public class HttpProtocolHandler {
 	private int defaultMaxTotalConn = 80;
 
 	/** 默认等待HttpConnectionManager返回连接超时（只有在达到最大连接数时起作用）：1秒 */
-	private static final long defaultHttpConnectionManagerTimeout = 3 * 1000;
+	private static final long defaultHttpConnectionManagerTimeout = 3000;
 
 	/**
 	 * HTTP连接管理器，该连接管理器必须是线程安全的.
@@ -130,7 +134,7 @@ public class HttpProtocolHandler {
 
 			// parseNotifyConfig会保证使用GET方法时，request一定使用QueryString
 			method.setQueryString(request.getQueryString());
-		} else if (strParaFileName.equals("") && strFilePath.equals("")) {
+		} else if ("".equals(strParaFileName) && "".equals(strFilePath)) {
 			// post模式且不带上传文件
 			method = new PostMethod(request.getUrl());
 			((PostMethod) method).addParameters(request.getParameters());
@@ -164,13 +168,13 @@ public class HttpProtocolHandler {
 			}
 			response.setResponseHeaders(method.getResponseHeaders());
 		} catch (UnknownHostException ex) {
-
+			logger.error("",ex);
 			return null;
 		} catch (IOException ex) {
-
+			logger.error("",ex);
 			return null;
 		} catch (Exception ex) {
-
+			logger.error("",ex);
 			return null;
 		} finally {
 			method.releaseConnection();
@@ -189,7 +193,7 @@ public class HttpProtocolHandler {
 			return "null";
 		}
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 
 		for (int i = 0; i < nameValues.length; i++) {
 			NameValuePair nameValue = nameValues[i];

@@ -18,6 +18,5 @@ public interface MemberDOMapperExtend {
 
 	List<MemberDO> selectByExampleWithRowbounds(InviterUserDOView view);
 
-   
 
 }

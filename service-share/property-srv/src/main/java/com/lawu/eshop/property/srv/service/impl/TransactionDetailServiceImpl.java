@@ -52,7 +52,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		}
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
 		
-		Page<TransactionDetailBO> page = new Page<TransactionDetailBO>();
+		Page<TransactionDetailBO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
 		page.setTotalCount(count);
 		
@@ -89,7 +89,7 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		
 		int count = transactionDetailDOMapper.countByExample(transactionDetailDOExample);
 		
-		Page<TransactionDetailBO> page = new Page<TransactionDetailBO>();
+		Page<TransactionDetailBO> page = new Page<>();
 		page.setCurrentPage(param.getCurrentPage());
 		page.setTotalCount(count);
 		

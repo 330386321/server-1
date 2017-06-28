@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.dto;
 
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -65,6 +66,9 @@ public class MerchantInfoDTO {
 
     @ApiModelProperty(name = "isNOReasonReturn", value= "是否支持无理由退货true：是，false：否")
     private Boolean isNOReasonReturn;
+
+    @ApiModelProperty(name = "审核类型", value= "AUDIT_TYPE_STORE：申请实体店，AUDIT_TYPE_EDIT_INFO：修改资料")
+    private MerchantAuditTypeEnum auditTypeEnum;
 
     public Integer getInviteMemberCount() {
         return inviteMemberCount;
@@ -168,5 +172,13 @@ public class MerchantInfoDTO {
 
     public void setNOReasonReturn(Boolean NOReasonReturn) {
         isNOReasonReturn = NOReasonReturn;
+    }
+
+    public MerchantAuditTypeEnum getAuditTypeEnum() {
+        return auditTypeEnum;
+    }
+
+    public void setAuditTypeEnum(MerchantAuditTypeEnum auditTypeEnum) {
+        this.auditTypeEnum = auditTypeEnum;
     }
 }

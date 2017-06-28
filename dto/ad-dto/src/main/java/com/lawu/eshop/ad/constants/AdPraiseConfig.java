@@ -16,20 +16,5 @@ public class AdPraiseConfig {
      * 指的是空闲线程结束的超时时间
      */ 
 	public final static Integer KEEP_ALIVE_TIME=1;
-    
-    /**
-     * 概率：分子
-     */
-	public final static Integer A=10; 
-    
-    /**
-     * 概率：分母
-     */
-	public final static Integer B=1000;
-	
-	/**
-	 * 点击多少次才有一次真的请求服务端
-	 */
-	public final static Integer CLICK_PRAISE_AD_TIMES=40;
 
 }

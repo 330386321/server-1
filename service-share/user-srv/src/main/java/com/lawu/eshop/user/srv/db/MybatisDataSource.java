@@ -26,9 +26,9 @@ import com.alibaba.druid.pool.DruidDataSource;
 public class MybatisDataSource {
 
     /** mybaits mapper xml搜索路径 **/
-    private final static String MAPPER_LOCATIONS = "classpath*:sqlmap/**/*.xml";
+    private static final String MAPPER_LOCATIONS = "classpath*:sqlmap/**/*.xml";
 
-    private final static String CONFIG_LOCATION = "classpath:mapperConfig.xml";
+    private static final String CONFIG_LOCATION = "classpath:mapperConfig.xml";
 
     private DruidDataSource datasource = null;
 

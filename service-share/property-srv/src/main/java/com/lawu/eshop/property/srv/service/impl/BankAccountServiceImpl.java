@@ -36,12 +36,6 @@ public class BankAccountServiceImpl implements BankAccountService {
 	@Override
 	@Transactional
 	public Integer saveBankAccount(String userNum,BankAccountParam bankAccountParam) {
-		String accountNumber=bankAccountParam.getAccountNumber();
-		String reg="^(?!0)\\d{15,19}$"; 
-		boolean flag=accountNumber.matches(reg);
-		if(!flag){
-			return 0;
-		}
 		BankAccountDO bankAccountDO=new BankAccountDO();
 		bankAccountDO.setUserNum(userNum);
 		bankAccountDO.setAccountName(bankAccountParam.getAccountName());
@@ -50,7 +44,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 		bankAccountDO.setSubBranchName(bankAccountParam.getSubBranchName());
 		bankAccountDO.setStatus(new Byte("1"));
 		BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountParam.getBankId());
-		String str=accountNumber.substring(accountNumber.length()-4, accountNumber.length());
+		String str=bankAccountParam.getAccountNumber().substring(bankAccountParam.getAccountNumber().length()-4, bankAccountParam.getAccountNumber().length());
 		String number=bankDO.getName()+"("+str+")";
 		bankAccountDO.setNote(number);
 		Integer id= bankAccountDOMapper.insert(bankAccountDO);

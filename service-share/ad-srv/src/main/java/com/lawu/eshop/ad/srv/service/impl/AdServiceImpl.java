@@ -204,7 +204,7 @@ public class AdServiceImpl implements AdService {
 			pointPool.setAdId(adDO.getId());
 			pointPool.setMerchantId(adDO.getMerchantId());
 			pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+			pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
 			pointPool.setGmtCreate(new Date());
 			pointPool.setGmtModified(new Date());
 			pointPool.setOrdinal(j);
@@ -225,7 +225,7 @@ public class AdServiceImpl implements AdService {
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
@@ -239,7 +239,7 @@ public class AdServiceImpl implements AdService {
 				pointPool.setAdId(adDO.getId());
 				pointPool.setMerchantId(adDO.getMerchantId());
 				pointPool.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
-				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+				pointPool.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
 				pointPool.setGmtCreate(new Date());
 				pointPool.setGmtModified(new Date());
 				pointPool.setOrdinal(j);
@@ -534,6 +534,7 @@ public class AdServiceImpl implements AdService {
 		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 		}
+		example.setOrderByClause("gmt_create desc");
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
@@ -589,8 +590,10 @@ public class AdServiceImpl implements AdService {
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
 					adDO.setGmtModified(date);
 					adDOMapper.updateByPrimaryKey(adDO);
-					SolrInputDocument document = AdConverter.convertSolrUpdateDocument(adDO);
-					documents.add(document);
+					if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
+						SolrInputDocument document = AdConverter.convertSolrInputDocument(adDO);
+						documents.add(document);
+					}
 				}
 			}
 			SolrUtil.addSolrDocsList(documents, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
@@ -962,7 +965,7 @@ public class AdServiceImpl implements AdService {
 			detail.setNotGetCount(adDO.getAdCount()-adDO.getHits());
 			detail.setAlreadyGetPoint(adDO.getPoint().multiply(BigDecimal.valueOf(adDO.getHits())));
 			detail.setNotGetPoint(adDO.getTotalPoint().subtract(adDO.getPoint().multiply(BigDecimal.valueOf(adDO.getHits()))));
-			
+
 		}else if(adDO.getType()==AdTypeEnum.AD_TYPE_PRAISE.val){
 			PointPoolDOExample example =new PointPoolDOExample();
 			example.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)

@@ -23,6 +23,9 @@ public class AdSolrDTO {
 	
 	@ApiModelProperty(value = "广告类型(AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 )")
     private AdTypeEnum typeEnum;
+	
+	@ApiModelProperty(value = "视频封面图片路径")
+	private String videoImgUrl;
 
 	public AdTypeEnum getTypeEnum() {
 		return typeEnum;
@@ -70,6 +73,14 @@ public class AdSolrDTO {
 
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+	public String getVideoImgUrl() {
+		return videoImgUrl;
+	}
+
+	public void setVideoImgUrl(String videoImgUrl) {
+		this.videoImgUrl = videoImgUrl;
 	}
 
 	

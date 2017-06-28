@@ -146,7 +146,7 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
 	public Result<List<AdDTO>> selectListPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointParam adPointParam) {
-		return adExtendService.selectListPointTotle(adPointParam);
+		return adExtendService.selectAdTopList(adPointParam);
 	}
 
 
@@ -202,9 +202,7 @@ public class AdController extends BaseController {
     			 if(!rs.getModel().isEmpty()){
     				 boolean flag=false;
     				 for (String str : rs.getModel()) {
-            			 if(memberId.toString().equals(str)){
-            				 flag=true;
-            			 }
+            			 flag=memberId.toString().equals(str);
     				} 
     				if(!flag){
     					adViewService.setAdView(id.toString(), memberId.toString());
@@ -225,8 +223,8 @@ public class AdController extends BaseController {
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
-	public Result<Page<AdPraiseDTO>> selectPraiseListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
-		return adExtendService.selectPraiseListByMember(adPraiseParam);
+	public Result<Page<AdPraiseDTO>> selectAdPraiseList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPraiseParam adPraiseParam) {
+		return adExtendService.selectAdPraiseList(adPraiseParam);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -243,31 +241,33 @@ public class AdController extends BaseController {
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "memberRanking/{id}", method = RequestMethod.GET)
-	public Result<List<UserTopDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
+	public Result<List<UserTopDTO>> memberRanking(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
 		List<UserTopDTO> user = new ArrayList<>();
 		if(isSuccess(member)){
 			List<PointPoolDTO> top3 = member.getModel();
-			List<Long> memberIds=new ArrayList<>();
-			for (PointPoolDTO pointPoolDTO : top3) {
-				memberIds.add(pointPoolDTO.getMemberId());
-			}
-			Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
-			if(isSuccess(resultUser)){
-				List<MemberDTO> listUser=resultUser.getModel();
-				for (MemberDTO memberDTO : listUser) {
-					for (PointPoolDTO pointPoolDTO : top3) {
-						if(memberDTO.getId()==pointPoolDTO.getMemberId()){
-							UserTopDTO userTop = new UserTopDTO();
-							userTop.setMoney(pointPoolDTO.getPoint());
-							userTop.setHeadimg(memberDTO.getHeadimg());
-							userTop.setRegionPath(memberDTO.getRegionPath());
-							userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-							user.add(userTop);
+			if(!top3.isEmpty()){
+				List<Long> memberIds=new ArrayList<>();
+				for (PointPoolDTO pointPoolDTO : top3) {
+					memberIds.add(pointPoolDTO.getMemberId());
+				}
+				Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
+				if(isSuccess(resultUser)){
+					List<MemberDTO> listUser=resultUser.getModel();
+					for (MemberDTO memberDTO : listUser) {
+						for (PointPoolDTO pointPoolDTO : top3) {
+							if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
+								UserTopDTO userTop = new UserTopDTO();
+								userTop.setMoney(pointPoolDTO.getPoint());
+								userTop.setHeadimg(memberDTO.getHeadimg());
+								userTop.setRegionPath(memberDTO.getRegionPath());
+								userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+								user.add(userTop);
+							}
 						}
+						
 					}
-					
 				}
 			}
 			
@@ -330,18 +330,16 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
 	public Result<PraisePointDTO> getRedPacket(@RequestParam @ApiParam(required = true, value = "商家id") Long merchantId, @RequestParam @ApiParam(required = true, value = "用户电话") String mobile) {
 		Result<UserRedPacketDTO> userRs = memberService.isRegister(mobile);
-		Result<PraisePointDTO> rs = new Result<>();
 		if (userRs != null) { // 直接领取红包 并成为粉丝
 			Long memberId = userRs.getModel().getMemberId();
 			String userNum = userRs.getModel().getUserNum();
-			rs = adService.getRedPacket(merchantId, memberId, userNum);
 			Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
 			if (isSuccess(result)) {
 				if (!result.getModel()) {
 					fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
 				}
 			}
-			return rs;
+			return adService.getRedPacket(merchantId, memberId, userNum);
 		}else {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}

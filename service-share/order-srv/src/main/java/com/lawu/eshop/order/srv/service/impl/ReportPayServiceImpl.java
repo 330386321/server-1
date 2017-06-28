@@ -40,16 +40,16 @@ public class ReportPayServiceImpl implements ReportPayService {
 		String total = "0";// 总金额
 		if (ReportFansRiseRateEnum.DAY.getValue().equals(dparam.getFlag().getValue())) {
 			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 			x = DateUtil.getNowMonthDay();
 			total = payOrderExtendDOMapper.payVolumeTotal(DateUtil.getDateFormat(new Date(), "yyyyMM"),
-					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		} else if (ReportFansRiseRateEnum.MONTH.getValue().equals(dparam.getFlag().getValue())) {
 			list = payOrderExtendDOMapper.payVolumeRiseRate(DateUtil.getDateFormat(new Date(), "yyyy"),
-					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					dparam.getFlag().getValue(), dparam.getMerchantId(), PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 			x = 12;
 			total = payOrderExtendDOMapper.payVolumeTotal("", dparam.getFlag().getValue(), dparam.getMerchantId(),
-					PayOrderStatusEnum.STATUS_PAY_SUCCESS.val);
+					PayOrderStatusEnum.STATUS_PAY_SUCCESS.getVal());
 		}
 		ReportRiseRateDTO dto = ReportConvert.reportBrokeLineShow(list, x);
 		dto.setTotal(total == null ? "0" : total);

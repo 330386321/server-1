@@ -17,7 +17,14 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
  * @date 2017/04/11
  */
 public class ShoppingRefundDetailConverter {
-
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ShoppingRefundDetailConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * ShoppingRefundDetailBO转换
 	 * 

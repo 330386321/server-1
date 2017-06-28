@@ -4,14 +4,21 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class RSA{
+	
+	private static Logger logger = LoggerFactory.getLogger(RSA.class);
 	
 	public static final String  SIGN_ALGORITHMS = "SHA1WithRSA";
 	
@@ -42,7 +49,7 @@ public class RSA{
         }
         catch (Exception e) 
         {
-        	e.printStackTrace();
+        	logger.error("支付宝签名错误！",e);
         }
         
         return null;
@@ -77,7 +84,7 @@ public class RSA{
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			logger.error("支付宝验签错误！",e);
 		}
 		
 		return false;
@@ -124,9 +131,11 @@ public class RSA{
 	/**
 	* 得到私钥
 	* @param key 密钥字符串（经过base64编码）
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeySpecException 
 	* @throws Exception
 	*/
-	public static PrivateKey getPrivateKey(String key) throws Exception {
+	public static PrivateKey getPrivateKey(String key) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
 		byte[] keyBytes;
 		

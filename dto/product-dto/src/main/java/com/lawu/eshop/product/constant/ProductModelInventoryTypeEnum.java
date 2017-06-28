@@ -30,12 +30,12 @@ public enum ProductModelInventoryTypeEnum {
 	 */
 	CANCEL_ORDER((byte)0x04);
 	
+	private Byte value;
+
 	ProductModelInventoryTypeEnum (Byte value){
 		this.value = value;
 	}
 	
-	private Byte value;
-
 	public Byte getValue() {
 		return value;
 	}

@@ -11,6 +11,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.AdPlatformService;
 import com.lawu.eshop.member.api.service.MerchantStoreService;
+import com.lawu.eshop.member.api.service.RegionService;
 import com.lawu.eshop.member.api.service.StoreSolrService;
 import com.lawu.eshop.user.dto.StoreSearchWordDTO;
 import com.lawu.eshop.user.dto.StoreSolrDTO;
@@ -20,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,12 +45,24 @@ public class StoreSolrController extends BaseController {
     @Autowired
     private MerchantStoreService merchantStoreService;
 
+    @Autowired
+    private RegionService regionService;
+
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "搜索门店/猜你喜欢/更多商家", notes = "搜索门店(名称搜索)/猜你喜欢(全部商家)/更多商家(同行业商家)。[1100] (梅述全)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "listStore", method = RequestMethod.GET)
     public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {
-        return storeSolrService.listStore(storeSolrParam);
+        Result<Page<StoreSolrDTO>> result = storeSolrService.listStore(storeSolrParam);
+        if (result != null && !result.getModel().getRecords().isEmpty()) {
+            for (StoreSolrDTO storeSolrDTO : result.getModel().getRecords()) {
+                if (StringUtils.isNotEmpty(storeSolrDTO.getRegionPath())) {
+                    String areaName = regionService.getAreaName(storeSolrDTO.getRegionPath()).getModel();
+                    storeSolrDTO.setAreaName(areaName);
+                }
+            }
+        }
+        return result;
     }
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
@@ -85,7 +99,7 @@ public class StoreSolrController extends BaseController {
             }
         }
         List<StoreSolrDTO> storeSolrDTOS = new ArrayList<>();
-        StoreSolrInfoDTO storeInfo = null;
+        StoreSolrInfoDTO storeInfo;
         for (AdPlatformDTO adPlatformDTO : recommendResult.getModel()) {
             StoreSolrDTO storeSolrDTO = new StoreSolrDTO();
             storeSolrDTO.setMerchantStoreId(adPlatformDTO.getMerchantStoreId());

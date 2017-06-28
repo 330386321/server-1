@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,10 @@ import java.util.List;
  */
 public class MessageConsumerListener extends AbstractMessageConsumerListener {
     private static Logger logger = LoggerFactory.getLogger(MessageConsumerListener.class);
+
+    public static final String TITLE = "title";
+    public static final String CONTENT = "content";
+    public static final String TYPE = "type";
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
@@ -63,27 +68,31 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
             JSONObject jobj = new JSONObject();
-            jobj.put("title",info.getTitle());
-            jobj.put("content",info.getContent());
-            jobj.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
+            jobj.put(TITLE,info.getTitle());
+            jobj.put(CONTENT,info.getContent());
+            jobj.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             if(info.getUserNum().contains("M")){
               MemberBO memberBO =  memberService.findMemberByNum(info.getUserNum());
                 //会员单个推送
                 GtPush push = new GtPush();
-                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
+                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),
+                        info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),
+                        userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
             }else {
                 //商家单个推送
                 MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
                 GtPush push = new GtPush();
-                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),userSrvConfig.getGtMerchantAppId());
+                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),
+                        userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),
+                        userSrvConfig.getGtMerchantAppId());
             }
         } else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSHALL.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
             JSONObject contents = new JSONObject();
-            contents.put("title",info.getTitle());
-            contents.put("content",info.getContent());
-            contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
+            contents.put(TITLE,info.getTitle());
+            contents.put(CONTENT,info.getContent());
+            contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
             logger.info("gtpush-all-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
            if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
@@ -96,11 +105,11 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
             JSONObject contents = new JSONObject();
-            contents.put("title",info.getTitle());
-            contents.put("content",info.getContent());
-            contents.put("type", MessageTypeEnum.getEnum(info.getMessageType()));
+            contents.put(TITLE,info.getTitle());
+            contents.put(CONTENT,info.getContent());
+            contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
-            List<MessagePushBO> messagePushBOS = null;
+            List<MessagePushBO> messagePushBOS = new ArrayList<>();
             logger.info("gtpush-area-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
             if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
                 //推送用户

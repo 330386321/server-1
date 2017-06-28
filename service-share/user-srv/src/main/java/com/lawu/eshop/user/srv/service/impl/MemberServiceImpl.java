@@ -158,6 +158,7 @@ public class MemberServiceImpl implements MemberService {
     public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType) {
     	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
     	int count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+
     	InviterUserDOView view = new InviterUserDOView();
     	view.setInviterId(inviterId);
     	view.setInviterType(inviterType);

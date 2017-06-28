@@ -85,7 +85,7 @@ public class AlipaySubmit {
 		Map<String, String> sPara = buildRequestPara(sParaTemp,aliPayConfigParam.getAlipaySignType(), aliPayConfigParam.getAlipayPrivateKey(), aliPayConfigParam.getAlipayInputCharset());
 		List<String> keys = new ArrayList<String>(sPara.keySet());
 
-		StringBuffer sbHtml = new StringBuffer();
+		StringBuilder sbHtml = new StringBuilder();
 
 		sbHtml.append("<form id=\"alipaysubmit\" name=\"alipaysubmit\" action=\"" + ALIPAY_GATEWAY_NEW
 				+ "_input_charset=" + aliPayConfigParam.getAlipayInputCharset() + "\" method=\"" + strMethod + "\">");
@@ -117,7 +117,7 @@ public class AlipaySubmit {
 		// 构造访问query_timestamp接口的URL串
 		String strUrl = ALIPAY_GATEWAY_NEW + "service=query_timestamp&partner=" + partner
 				+ "&_input_charset" + input_charset;
-		StringBuffer result = new StringBuffer();
+		StringBuilder result = new StringBuilder();
 
 		SAXReader reader = new SAXReader();
 		Document doc = reader.read(new URL(strUrl).openStream());
@@ -126,7 +126,7 @@ public class AlipaySubmit {
 
 		for (Node node : nodeList) {
 			// 截取部分不需要解析的信息
-			if (node.getName().equals("is_success") && node.getText().equals("T")) {
+			if ("is_success".equals(node.getName()) && "T".equals(node.getText())) {
 				// 判断是否有成功标示
 				List<Node> nodeList1 = doc.selectNodes("//response/timestamp/*");
 				for (Node node1 : nodeList1) {
@@ -139,7 +139,7 @@ public class AlipaySubmit {
 	}
 
 	public static String buildOutLoginRequest(String txt) {
-		StringBuffer sbHtml = new StringBuffer();
+		StringBuilder sbHtml = new StringBuilder();
 		sbHtml.append("<script>alert(\"" + txt + "\");</script>");
 		return sbHtml.toString();
 	}

@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.BeanUtils;
-
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
@@ -20,7 +18,14 @@ import com.lawu.eshop.product.srv.domain.ProductModelDO;
  * @date 2017/3/30
  */
 public class ShoppingCartProductModelConverter {
-
+	
+	/**
+	 * 隐藏默认的构造函数
+	 */
+	private ShoppingCartProductModelConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	/**
 	 * BO转换
 	 * 
@@ -29,30 +34,37 @@ public class ShoppingCartProductModelConverter {
 	 * @return
 	 */
 	public static ShoppingCartProductModelBO convert(ProductModelDO productModelDO, ProductDO productDO) {
+		ShoppingCartProductModelBO rtn = null;
 		if (productModelDO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingCartProductModelBO shoppingCartProductModelBO = new ShoppingCartProductModelBO();
-		BeanUtils.copyProperties(productModelDO, shoppingCartProductModelBO);
-
+		rtn = new ShoppingCartProductModelBO();
+		rtn.setId(productModelDO.getId());
+		rtn.setInventory(productModelDO.getInventory());
+		rtn.setMerchantId(productModelDO.getMerchantId());
+		rtn.setName(productModelDO.getName());
+		rtn.setOriginalPrice(productModelDO.getOriginalPrice());
+		rtn.setPrice(productModelDO.getPrice());
+		rtn.setProductId(productModelDO.getProductId());
+		
 		if (productDO != null) {
-			shoppingCartProductModelBO.setProductName(productDO.getName());
-			shoppingCartProductModelBO.setFeatureImage(productDO.getFeatureImage());
+			rtn.setProductName(productDO.getName());
+			rtn.setFeatureImage(productDO.getFeatureImage());
 			if (ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus())) {
 				if (productModelDO.getStatus()) {
-					shoppingCartProductModelBO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
+					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
 				} else {
-					shoppingCartProductModelBO.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
+					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
 				}
 			} else {
-				shoppingCartProductModelBO.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+				rtn.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
 			}
 			
-			shoppingCartProductModelBO.setIsAllowRefund(productDO.getIsAllowRefund());
+			rtn.setIsAllowRefund(productDO.getIsAllowRefund());
 		}
 
-		return shoppingCartProductModelBO;
+		return rtn;
 	}
 	
 	/**
@@ -63,23 +75,25 @@ public class ShoppingCartProductModelConverter {
 	 * @return
 	 */
 	public static List<ShoppingCartProductModelBO> convert(List<ProductModelDO> productModelDOS, List<ProductDO> productDOS) {
+		List<ShoppingCartProductModelBO> rtn = null;
+		
 		if (productModelDOS == null || productModelDOS.isEmpty() || productDOS == null || productDOS.isEmpty()) {
-			return null;
+			return rtn;
 		}
 		
-		Map<Long, ProductDO> productDOMap = new HashMap<Long, ProductDO>();
+		Map<Long, ProductDO> productDOMap = new HashMap<>();
 		for (ProductDO productDO : productDOS) {
 			if (!productDOMap.containsKey(productDO.getId())) {
 				productDOMap.put(productDO.getId(), productDO);
 			}
 		}
 		
-		List<ShoppingCartProductModelBO> shoppingCartProductModelBOS = new ArrayList<ShoppingCartProductModelBO>();
+		rtn = new ArrayList<>();
 		for (ProductModelDO productModelDO : productModelDOS) {
-			shoppingCartProductModelBOS.add(convert(productModelDO, productDOMap.get(productModelDO.getProductId())));
+			rtn.add(convert(productModelDO, productDOMap.get(productModelDO.getProductId())));
 		}
 		
-		return shoppingCartProductModelBOS;
+		return rtn;
 	}
 
 	/**
@@ -89,14 +103,25 @@ public class ShoppingCartProductModelConverter {
 	 * @return
 	 */
 	public static ShoppingCartProductModelDTO convert(ShoppingCartProductModelBO shoppingCartProductModelBO) {
+		ShoppingCartProductModelDTO rtn = null;
 		if (shoppingCartProductModelBO == null) {
-			return null;
+			return rtn;
 		}
 
-		ShoppingCartProductModelDTO shoppingCartProductModelDTO = new ShoppingCartProductModelDTO();
-		BeanUtils.copyProperties(shoppingCartProductModelBO, shoppingCartProductModelDTO);
+		rtn = new ShoppingCartProductModelDTO();
+		rtn.setFeatureImage(shoppingCartProductModelBO.getFeatureImage());
+		rtn.setId(shoppingCartProductModelBO.getId());
+		rtn.setInventory(shoppingCartProductModelBO.getInventory());
+		rtn.setIsAllowRefund(shoppingCartProductModelBO.getIsAllowRefund());
+		rtn.setMerchantId(shoppingCartProductModelBO.getMerchantId());
+		rtn.setName(shoppingCartProductModelBO.getName());
+		rtn.setOriginalPrice(shoppingCartProductModelBO.getOriginalPrice());
+		rtn.setPrice(shoppingCartProductModelBO.getPrice());
+		rtn.setProductId(shoppingCartProductModelBO.getProductId());
+		rtn.setProductName(shoppingCartProductModelBO.getProductName());
+		rtn.setStatus(shoppingCartProductModelBO.getStatus());
 
-		return shoppingCartProductModelDTO;
+		return rtn;
 	}
 	
 	/**
@@ -106,16 +131,17 @@ public class ShoppingCartProductModelConverter {
 	 * @return
 	 */
 	public static List<ShoppingCartProductModelDTO> convert(List<ShoppingCartProductModelBO> shoppingCartProductModelBOS) {
+		List<ShoppingCartProductModelDTO> rtn = null;
 		if (shoppingCartProductModelBOS == null || shoppingCartProductModelBOS.isEmpty()) {
-			return null;
+			return rtn;
 		}
 		
-		List<ShoppingCartProductModelDTO> shoppingCartProductModelDTOS = new ArrayList<ShoppingCartProductModelDTO>();
+		rtn = new ArrayList<>();
 		for (ShoppingCartProductModelBO shoppingCartProductModelBO : shoppingCartProductModelBOS) {
-			shoppingCartProductModelDTOS.add(convert(shoppingCartProductModelBO));
+			rtn.add(convert(shoppingCartProductModelBO));
 		}
 		
-		return shoppingCartProductModelDTOS;
+		return rtn;
 	}
 
 }

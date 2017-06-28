@@ -15,6 +15,13 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
  * @date 2017/04/11
  */
 public class ShoppingRefundProcessConverter {
+	
+	/**
+	 * 隐藏默认的构造器
+	 */
+	private ShoppingRefundProcessConverter() {
+		throw new IllegalAccessError("Utility class");
+	}
 
 	/**
 	 * ShoppingRefundProcessBO转换
@@ -49,7 +56,7 @@ public class ShoppingRefundProcessConverter {
 			return rtn;
 		}
 
-		rtn = new ArrayList<ShoppingRefundProcessBO>();
+		rtn = new ArrayList<>();
 		
 		for (ShoppingRefundProcessDO item : shoppingRefundProcessDOList) {
 			rtn.add(convert(item));
@@ -84,7 +91,7 @@ public class ShoppingRefundProcessConverter {
 	 * @return
 	 */
 	public static List<ShoppingRefundProcessDTO> convertShoppingRefundProcessDTOList(List<ShoppingRefundProcessBO> shoppingRefundProcessBOList) {
-		List<ShoppingRefundProcessDTO> rtn = new ArrayList<ShoppingRefundProcessDTO>();
+		List<ShoppingRefundProcessDTO> rtn = new ArrayList<>();
 		if (shoppingRefundProcessBOList  == null || shoppingRefundProcessBOList.isEmpty()) {
 			return rtn;
 		}

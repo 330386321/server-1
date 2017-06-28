@@ -281,7 +281,7 @@ public class MerchantStoreConverter {
             return null;
         }
 
-        List<ShoppingOrderFindMerchantInfoDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<ShoppingOrderFindMerchantInfoDTO>();
+        List<ShoppingOrderFindMerchantInfoDTO> merchantStoreNoReasonReturnDTOList = new ArrayList<>();
         for (ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO : merchantStoreNoReasonReturnBOList) {
             merchantStoreNoReasonReturnDTOList.add(convert(merchantStoreNoReasonReturnBO));
         }
@@ -383,6 +383,7 @@ public class MerchantStoreConverter {
             storeSolrDTO.setMerchantStoreId(solrDocument.get("id").toString() == null ? 0 : Long.valueOf(solrDocument.get("id").toString()));
             storeSolrDTO.setMerchantId(solrDocument.get("merchantId_l") == null ? 0 : Long.valueOf(solrDocument.get("merchantId_l").toString()));
             storeSolrDTO.setName(solrDocument.get("name_s") == null ? "" : solrDocument.get("name_s").toString());
+            storeSolrDTO.setRegionPath(solrDocument.get("regionPath_s") == null ? "" : solrDocument.get("regionPath_s").toString());
             storeSolrDTO.setIndustryPath(solrDocument.get("industryPath_s") == null ? "" : solrDocument.get("industryPath_s").toString());
             storeSolrDTO.setIndustryName(solrDocument.get("industryName_s") == null ? "" : solrDocument.get("industryName_s").toString());
             storeSolrDTO.setStorePic(solrDocument.get("storePic_s") == null ? "" : solrDocument.get("storePic_s").toString());
@@ -435,7 +436,7 @@ public class MerchantStoreConverter {
         if (bos.isEmpty()) {
             return null;
         }
-        List<StoreSolrInfoDTO> list = new ArrayList<StoreSolrInfoDTO>();
+        List<StoreSolrInfoDTO> list = new ArrayList<>();
         for (StoreSolrInfoBO storeSolrInfoBO : bos) {
             StoreSolrInfoDTO storeSolrInfoDTO = new StoreSolrInfoDTO();
             storeSolrInfoDTO.setMerchantId(storeSolrInfoBO.getMerchantId());

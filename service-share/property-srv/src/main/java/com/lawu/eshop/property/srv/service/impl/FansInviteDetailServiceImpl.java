@@ -36,7 +36,7 @@ public class FansInviteDetailServiceImpl implements FansInviteDetailService {
         page.setTotalCount(fansInviteDetailDOMapper.countByExample(example));
         page.setCurrentPage(listFansInviteDetailParam.getCurrentPage());
 
-        List<FansInviteDetailDO> fansInviteDetailDOS = fansInviteDetailDOMapper.selectByExampleWithRowbounds(example, rowBounds);
+        List<FansInviteDetailDO> fansInviteDetailDOS = fansInviteDetailDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
         page.setRecords(FansInviteDetailConverter.convertBO(fansInviteDetailDOS));
         return page;
     }

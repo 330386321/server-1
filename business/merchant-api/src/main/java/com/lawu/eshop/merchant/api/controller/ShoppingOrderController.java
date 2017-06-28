@@ -128,8 +128,8 @@ public class ShoppingOrderController extends BaseController {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
 		
-		ShoppingOrderLogisticsInformationParam ShoppingOrderLogisticsInformationParam = new ShoppingOrderLogisticsInformationParam();
-		ShoppingOrderLogisticsInformationParam.setIsNeedsLogistics(param.getIsNeedsLogistics());
+		ShoppingOrderLogisticsInformationParam shoppingOrderLogisticsInformationParam = new ShoppingOrderLogisticsInformationParam();
+		shoppingOrderLogisticsInformationParam.setIsNeedsLogistics(param.getIsNeedsLogistics());
 		
 		if (param.getIsNeedsLogistics()) {
 			Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
@@ -137,13 +137,13 @@ public class ShoppingOrderController extends BaseController {
 				return successCreated(resultExpressCompanyDTO.getRet());
 			}
 	
-			ShoppingOrderLogisticsInformationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
-			ShoppingOrderLogisticsInformationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
-			ShoppingOrderLogisticsInformationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());
-			ShoppingOrderLogisticsInformationParam.setWaybillNum(param.getWaybillNum());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());
+			shoppingOrderLogisticsInformationParam.setWaybillNum(param.getWaybillNum());
 		}
 		
-		Result result = shoppingOrderService.fillLogisticsInformation(id, ShoppingOrderLogisticsInformationParam);
+		Result result = shoppingOrderService.fillLogisticsInformation(id, shoppingOrderLogisticsInformationParam);
 		if (!isSuccess(result)) {
 			return successCreated(result.getRet());
 		}
