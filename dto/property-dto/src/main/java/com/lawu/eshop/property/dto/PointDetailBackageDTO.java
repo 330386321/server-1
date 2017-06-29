@@ -31,6 +31,12 @@ public class PointDetailBackageDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date gmtCreate;
 
+    @ApiModelProperty(value = "关联充值ID", required = true)
+    private String bizId;
+
+    @ApiModelProperty(value = "支付方式", required = true)
+    private String payType;
+
     public String getAccount() {
         return account;
     }
@@ -77,5 +83,21 @@ public class PointDetailBackageDTO {
 
     public void setGmtCreate(Date gmtCreate) {
         this.gmtCreate = gmtCreate;
+    }
+
+    public String getBizId() {
+        return bizId;
+    }
+
+    public void setBizId(String bizId) {
+        this.bizId = bizId;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

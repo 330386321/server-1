@@ -12,6 +12,7 @@ import com.lawu.eshop.user.srv.converter.LoginUserConverter;
 import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.converter.RongYunConverter;
+import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.service.MerchantService;
 import com.lawu.eshop.utils.PwdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,6 +274,24 @@ public class MerchantController extends BaseController {
     public Result delMerchantGtPush(@RequestParam Long merchantId){
         merchantService.delMerchantGtPush(merchantId);
         return successCreated();
+    }
+
+    /**
+     * 根据商家ID查询商家基本信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getMerchantView/{id}", method = RequestMethod.GET)
+    public Result<MerchantViewDTO> getMerchantView(@PathVariable Long id){
+        MerchantDOView merchantDOView = merchantService.getMerchantView(id);
+        if(merchantDOView == null){
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
+        }
+        MerchantViewDTO merchantViewDTO = new MerchantViewDTO();
+        merchantViewDTO.setAccount(merchantDOView.getAccount());
+        merchantViewDTO.setStoreName(merchantDOView.getStoreName());
+        return successGet(merchantViewDTO);
     }
 
 }

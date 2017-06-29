@@ -192,6 +192,8 @@ public class BackagePropertyinfoController extends BaseController {
 						pointDetailBackageDTO.setAccount(merchantDTOResult.getModel().getAccount());
 					}
 				}
+				Result<String> payType = rechargeService.getRechargePayType(Long.valueOf(pointDetailBackageDTO.getBizId()));
+				pointDetailBackageDTO.setPayType(payType.getModel());
 			}
 		}
 		return result;

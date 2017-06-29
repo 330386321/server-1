@@ -23,6 +23,7 @@ import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -73,16 +74,26 @@ public class AdController extends BaseController {
     @RequiresPermissions("adAudit:list")
     @RequestMapping(value = "listAd", method = RequestMethod.POST)
     public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam ListAdParam listAdParam) {
-        if (listAdParam.getTypeEnum().val == AdTypeEnum.AD_TYPE_PACKET.val) {
+        if (listAdParam.getTypeEnum().val.byteValue() == AdTypeEnum.AD_TYPE_PACKET.val) {
             listAdParam.setTypeEnum(null);
         }
-        if (listAdParam.getPutWayEnum().val == PutWayEnum.PUT_WAY_COMMON.val) {
+        if (listAdParam.getPutWayEnum().val.byteValue() == PutWayEnum.PUT_WAY_COMMON.val) {
             listAdParam.setPutWayEnum(null);
         }
-        if (listAdParam.getStatusEnum().val == AdStatusEnum.AD_STATUS_PUTED.val) {
+        if (listAdParam.getStatusEnum().val.byteValue() == AdStatusEnum.AD_STATUS_PUTED.val) {
             listAdParam.setStatusEnum(null);
         }
-        return adService.listAd(listAdParam);
+        Result<Page<AdDTO>> result = adService.listAd(listAdParam);
+        if(result != null && !result.getModel().getRecords().isEmpty()){
+            for(AdDTO adDTO : result.getModel().getRecords()){
+                Result<MerchantViewDTO> merchantViewDTOResult = merchantService.getMerchantView(adDTO.getMerchantId());
+                if(isSuccess(merchantViewDTOResult)){
+                    adDTO.setName(merchantViewDTOResult.getModel().getStoreName());
+                    adDTO.setAccount(merchantViewDTOResult.getModel().getAccount());
+                }
+            }
+        }
+        return result;
     }
 
     @ApiOperation(value = "广告详情", notes = "查询广告详情。[1002]（梅述全）", httpMethod = "GET")

@@ -5,4 +5,9 @@
     <update id="delMerchantGtPush"  parameterType="java.lang.Long">
         update merchant set gt_cid = NULL where id = #{merchantId}
     </update>
+    
+    <select id="getMerchantViewById" parameterType="java.lang.Long" resultType="com.lawu.eshop.user.srv.domain.extend.MerchantDOView">
+        select m.account,ms.name as storeName from merchant m left join merchant_store ms on m.id = ms.merchant_id
+        where m.id = #{id}
+    </select>
 </mapper>

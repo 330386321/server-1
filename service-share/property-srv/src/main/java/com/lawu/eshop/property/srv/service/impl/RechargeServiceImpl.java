@@ -1,35 +1,12 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.constants.PayTypeEnum;
-import com.lawu.eshop.property.constants.PropertyInfoDirectionEnum;
-import com.lawu.eshop.property.constants.ThirdPartyBizFlagEnum;
-import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
-import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
-import com.lawu.eshop.property.constants.TransactionTitleEnum;
+import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
-import com.lawu.eshop.property.param.NotifyCallBackParam;
-import com.lawu.eshop.property.param.PointDetailSaveDataParam;
-import com.lawu.eshop.property.param.RechargeQueryDataParam;
-import com.lawu.eshop.property.param.RechargeSaveDataParam;
-import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
@@ -42,6 +19,17 @@ import com.lawu.eshop.property.srv.service.TransactionDetailService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class RechargeServiceImpl implements RechargeService {
@@ -235,5 +223,19 @@ public class RechargeServiceImpl implements RechargeService {
 		page.setRecords(cbos);
 		return page;
 	}
+
+    @Override
+    public String getRechargePayType(Long id) {
+		String payType = "";
+		RechargeDO rechargeDO = rechargeDOMapper.selectByPrimaryKey(id);
+		if(rechargeDO == null || rechargeDO.getChannel() == null){
+			return payType;
+		}
+		TransactionPayTypeEnum payTypeEnum = TransactionPayTypeEnum.getEnum(rechargeDO.getChannel());
+		if(payTypeEnum == null){
+			return payType;
+		}
+		return payTypeEnum.getName();
+    }
 
 }
