@@ -70,6 +70,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
+    public static final int GOODS_PRODUCT_INVENTORY = 3004;
 
     // 订单模块代码 4xxx
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -238,6 +239,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
+        ResultCode.messageMap.put(GOODS_PRODUCT_INVENTORY, "存在商品库存为0无法上架");
 
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "该订单已评价");

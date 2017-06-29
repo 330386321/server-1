@@ -132,6 +132,14 @@ public class ProductServiceImpl implements ProductService {
         String idArray[] = ids.split(",");
         ProductDOExample examle = new ProductDOExample();
         for (int i = 0; i < idArray.length; i++) {
+        	
+        	if(productStatus.val.equals(ProductStatusEnum.PRODUCT_STATUS_UP.val)){
+        		ProductDO rntProduct = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
+        		if(rntProduct.getTotalInventory() == 0){
+        			return -1;
+        		}
+        	}
+        	
             examle.clear();
             ProductDO productDO = new ProductDO();
             productDO.setId(Long.valueOf(idArray[i]));
