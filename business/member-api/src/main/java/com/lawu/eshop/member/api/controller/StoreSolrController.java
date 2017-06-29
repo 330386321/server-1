@@ -55,7 +55,7 @@ public class StoreSolrController extends BaseController {
     public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {
         Result<Page<StoreSolrDTO>> result = storeSolrService.listStore(storeSolrParam);
         if (!isSuccess(result)) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
+            return result;
         }
         for (StoreSolrDTO storeSolrDTO : result.getModel().getRecords()) {
             if (StringUtils.isNotEmpty(storeSolrDTO.getRegionPath())) {
