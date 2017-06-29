@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
-import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
-import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
+import com.lawu.eshop.statistics.srv.bo.RechargeBalanceDailyBO;
+import com.lawu.eshop.statistics.srv.service.RechargeBalanceService;
 
 /**
  * 
@@ -27,15 +27,15 @@ import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
  * Description: 
  * </p>
  * @author Yangqh
- * @date 2017年6月28日 下午5:42:20
+ * @date 2017年6月29日 下午4:53:16
  *
  */
 @RestController
-@RequestMapping(value = "withdrawCash/")
-public class WithdrawCashController extends BaseController {
+@RequestMapping(value = "rechargeBalance/")
+public class RechargeBalanceController extends BaseController {
 
 	@Autowired
-	private WithdrawCashService withdrawCashService;
+	private RechargeBalanceService rechargeBalanceService;
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveDaily", method = RequestMethod.POST)
@@ -44,7 +44,7 @@ public class WithdrawCashController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	withdrawCashService.saveDaily(param);
+    	rechargeBalanceService.saveDaily(param);
 		return successCreated(ResultCode.SUCCESS);
 	}
 	
@@ -55,16 +55,16 @@ public class WithdrawCashController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	withdrawCashService.saveMonth(param);
+    	rechargeBalanceService.saveMonth(param);
 		return successCreated(ResultCode.SUCCESS);
 	}
 	
 	@RequestMapping(value = "getDailyList", method = RequestMethod.GET)
-	public Result<List<ReportWithdrawDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate) {
-		List<ReportWithdrawDailyBO> rntList = withdrawCashService.getDailyList(reportDate);
-		List<ReportWithdrawDailyDTO> dtoList = new ArrayList<>();
-		for(ReportWithdrawDailyBO rdo : rntList){
-			ReportWithdrawDailyDTO dto = new ReportWithdrawDailyDTO();
+	public Result<List<RechargeBalanceDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate) {
+		List<RechargeBalanceDailyBO> rntList = rechargeBalanceService.getDailyList(reportDate);
+		List<RechargeBalanceDailyDTO> dtoList = new ArrayList<>();
+		for(RechargeBalanceDailyBO rdo : rntList){
+			RechargeBalanceDailyDTO dto = new RechargeBalanceDailyDTO();
 			dto.setGmtCreate(rdo.getGmtCreate());
 			dto.setGmtReport(rdo.getGmtReport());
 			dto.setId(rdo.getId());
@@ -79,14 +79,14 @@ public class WithdrawCashController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "deleteDailyByReportDate", method = RequestMethod.DELETE)
 	public Result deleteDailyByReportDate(@RequestParam("reportDate") String reportDate) {
-		withdrawCashService.deleteDailyByReportDate(reportDate);
+		rechargeBalanceService.deleteDailyByReportDate(reportDate);
 		return successCreated(ResultCode.SUCCESS);
 	}
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "deleteMonthByReportDate", method = RequestMethod.DELETE)
 	public Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate) {
-		withdrawCashService.deleteMonthByReportDate(reportDate);
+		rechargeBalanceService.deleteMonthByReportDate(reportDate);
 		return successCreated(ResultCode.SUCCESS);
 	}
 }

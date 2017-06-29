@@ -1,13 +1,17 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
+import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
+import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 
 /**
  * 
@@ -53,6 +57,15 @@ public interface RechargeService {
 	 * @date 2017年5月16日 下午4:00:48
 	 */
 	Page<BalanceAndPointListQueryBO> selectPropertyinfoList(RechargeQueryDataParam dparam);
+
+	/**
+	 * 统计报表按日查询某天充值月成功记录
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月29日 下午5:28:21
+	 */
+	List<RechargeReportBO> selectWithdrawCashListByDateAndStatus(RechargeReportParam param);
 
 
 

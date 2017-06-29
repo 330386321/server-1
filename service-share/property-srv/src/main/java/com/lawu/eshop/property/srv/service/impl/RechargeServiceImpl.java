@@ -28,9 +28,11 @@ import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
+import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
+import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
@@ -234,6 +236,24 @@ public class RechargeServiceImpl implements RechargeService {
 		}
 		page.setRecords(cbos);
 		return page;
+	}
+
+	@Override
+	public List<RechargeReportBO> selectWithdrawCashListByDateAndStatus(RechargeReportParam param) {
+		RechargeDOExample example = new RechargeDOExample();
+		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andStatusEqualTo(param.getStatus()).andRechargeTypeEqualTo(param.getRechargeType()).andGmtModifiedBetween(begin, end);
+		List<RechargeDO> rntList = rechargeDOMapper.selectByExample(example);
+		List<RechargeReportBO> bos = new ArrayList<>();
+		for(RechargeDO rdo : rntList){
+			RechargeReportBO bo = new RechargeReportBO();
+			bo.setId(rdo.getId());
+			bo.setRechargeMoney(rdo.getRechargeMoney());
+			bo.setUserNum(rdo.getUserNum());
+			bos.add(bo);
+		}
+		return bos;
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lawu.eshop.statistics.param.ReportWithdrawParam;
+import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDOExample;
@@ -27,22 +27,24 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	private ReportWithdrawMonthDOMapper reportWithdrawMonthDOMapper;
 	
 	@Override
-	public void saveDaily(ReportWithdrawParam param) {
+	public void saveDaily(ReportKCommonParam param) {
 		ReportWithdrawDailyDO record = new ReportWithdrawDailyDO();
 		record.setGmtCreate(param.getGmtCreate());
 		record.setGmtReport(param.getGmtReport());
-		record.setMoney(param.getMoney());
-		record.setUserType(param.getUserType());
+		record.setMemberMoney(param.getMemberMoney());
+		record.setMerchantMoney(param.getMerchantMoney());
+		record.setTotalMoney(param.getTotalMoney());
 		reportWithdrawDailyDOMapper.insertSelective(record);
 	}
 
 	@Override
-	public void saveMonth(ReportWithdrawParam param) {
+	public void saveMonth(ReportKCommonParam param) {
 		ReportWithdrawMonthDO record = new ReportWithdrawMonthDO();
 		record.setGmtCreate(param.getGmtCreate());
 		record.setGmtReport(param.getGmtReport());
-		record.setMoney(param.getMoney());
-		record.setUserType(param.getUserType());
+		record.setMemberMoney(param.getMemberMoney());
+		record.setMerchantMoney(param.getMerchantMoney());
+		record.setTotalMoney(param.getTotalMoney());
 		reportWithdrawMonthDOMapper.insertSelective(record);
 		
 	}
@@ -60,8 +62,9 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 			bo.setGmtCreate(rdo.getGmtCreate());
 			bo.setGmtReport(rdo.getGmtReport());
 			bo.setId(rdo.getId());
-			bo.setMoney(rdo.getMoney());
-			bo.setUserType(rdo.getUserType());
+			bo.setMemberMoney(rdo.getMemberMoney());
+			bo.setMerchantMoney(rdo.getMerchantMoney());
+			bo.setTotalMoney(rdo.getTotalMoney());
 			boList.add(bo);
 		}
 		return boList;

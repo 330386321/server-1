@@ -1,29 +1,26 @@
-package com.lawu.eshop.statistics.srv.bo;
+package com.lawu.eshop.statistics.param;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ReportWithdrawDailyBO {
+import javax.validation.constraints.NotNull;
 
-	private Long id;
-
+public class ReportKCommonParam {
+   
+	@NotNull(message="gmtReport不能为空")
     private Date gmtReport;
 
+	@NotNull(message="gmtCreate不能为空")
     private Date gmtCreate;
 
+	@NotNull(message="memberMoney不能为空")
 	private BigDecimal memberMoney;
 
+	@NotNull(message="merchantMoney不能为空")
     private BigDecimal merchantMoney;
 
+	@NotNull(message="totalMoney不能为空")
     private BigDecimal totalMoney;
-	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Date getGmtReport() {
 		return gmtReport;
@@ -64,5 +61,5 @@ public class ReportWithdrawDailyBO {
 	public void setTotalMoney(BigDecimal totalMoney) {
 		this.totalMoney = totalMoney;
 	}
-
+    
 }

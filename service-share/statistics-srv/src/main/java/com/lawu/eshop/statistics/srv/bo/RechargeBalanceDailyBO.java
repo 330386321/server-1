@@ -3,7 +3,7 @@ package com.lawu.eshop.statistics.srv.bo;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ReportWithdrawDailyBO {
+public class RechargeBalanceDailyBO {
 
 	private Long id;
 

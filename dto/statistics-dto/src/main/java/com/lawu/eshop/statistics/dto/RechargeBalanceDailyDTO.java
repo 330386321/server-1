@@ -1,9 +1,9 @@
-package com.lawu.eshop.statistics.srv.bo;
+package com.lawu.eshop.statistics.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ReportWithdrawDailyBO {
+public class RechargeBalanceDailyDTO {
 
 	private Long id;
 
@@ -11,12 +11,12 @@ public class ReportWithdrawDailyBO {
 
     private Date gmtCreate;
 
-	private BigDecimal memberMoney;
+    private BigDecimal memberMoney;
 
     private BigDecimal merchantMoney;
 
     private BigDecimal totalMoney;
-	
+    
 	public Long getId() {
 		return id;
 	}
@@ -65,4 +65,5 @@ public class ReportWithdrawDailyBO {
 		this.totalMoney = totalMoney;
 	}
 
+   
 }

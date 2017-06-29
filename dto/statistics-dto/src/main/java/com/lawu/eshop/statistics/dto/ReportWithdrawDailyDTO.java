@@ -7,36 +7,22 @@ public class ReportWithdrawDailyDTO {
 
 	private Long id;
 
-    private BigDecimal money;
-
-    private Byte userType;
-
     private Date gmtReport;
 
     private Date gmtCreate;
 
+    private BigDecimal memberMoney;
+
+    private BigDecimal merchantMoney;
+
+    private BigDecimal totalMoney;
+    
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public BigDecimal getMoney() {
-		return money;
-	}
-
-	public void setMoney(BigDecimal money) {
-		this.money = money;
-	}
-
-	public Byte getUserType() {
-		return userType;
-	}
-
-	public void setUserType(Byte userType) {
-		this.userType = userType;
 	}
 
 	public Date getGmtReport() {
@@ -53,6 +39,30 @@ public class ReportWithdrawDailyDTO {
 
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
+	}
+
+	public BigDecimal getMemberMoney() {
+		return memberMoney;
+	}
+
+	public void setMemberMoney(BigDecimal memberMoney) {
+		this.memberMoney = memberMoney;
+	}
+
+	public BigDecimal getMerchantMoney() {
+		return merchantMoney;
+	}
+
+	public void setMerchantMoney(BigDecimal merchantMoney) {
+		this.merchantMoney = merchantMoney;
+	}
+
+	public BigDecimal getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(BigDecimal totalMoney) {
+		this.totalMoney = totalMoney;
 	}
 
    

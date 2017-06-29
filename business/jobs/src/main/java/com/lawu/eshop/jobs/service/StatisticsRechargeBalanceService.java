@@ -9,30 +9,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 
 @FeignClient(value= "statistics-srv")
-public interface StatisticsWithdrawCashService {
+public interface StatisticsRechargeBalanceService {
 
-	//-----------------------------提现统计
+	//-----------------------------充值余额
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveDaily")
+	@RequestMapping(method = RequestMethod.POST, value = "rechargeBalance/saveDaily")
 	Result saveDaily(@RequestBody ReportKCommonParam reportWithdraw);
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.POST, value = "withdrawCash/saveMonth")
+	@RequestMapping(method = RequestMethod.POST, value = "rechargeBalance/saveMonth")
 	Result saveMonth(@RequestBody ReportKCommonParam reportWithdraw);
 	
-	@RequestMapping(method = RequestMethod.GET, value = "withdrawCash/getDailyList")
-	Result<List<ReportWithdrawDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
+	@RequestMapping(method = RequestMethod.GET, value = "rechargeBalance/getDailyList")
+	Result<List<RechargeBalanceDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
 
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.DELETE, value = "withdrawCash/deleteDailyByReportDate")
+	@RequestMapping(method = RequestMethod.DELETE, value = "rechargeBalance/deleteDailyByReportDate")
 	Result deleteDailyByReportDate(@RequestParam("reportDate") String reportDate);
 	
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(method = RequestMethod.DELETE, value = "withdrawCash/deleteMonthByReportDate")
+	@RequestMapping(method = RequestMethod.DELETE, value = "rechargeBalance/deleteMonthByReportDate")
 	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);	
 	
 }

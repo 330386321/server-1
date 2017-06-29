@@ -11,55 +11,57 @@ import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.jobs.service.PropertyWithdrawCashService;
-import com.lawu.eshop.jobs.service.StatisticsWithdrawCashService;
-import com.lawu.eshop.jobs.service.WithdrawCashReportService;
-import com.lawu.eshop.property.constants.CashStatusEnum;
-import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
-import com.lawu.eshop.property.param.WithdrawCashReportParam;
-import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
+import com.lawu.eshop.jobs.service.PropertyRechargeService;
+import com.lawu.eshop.jobs.service.RechargeBalanceReportService;
+import com.lawu.eshop.jobs.service.StatisticsRechargeBalanceService;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.ThirdPayStatusEnum;
+import com.lawu.eshop.property.dto.RechargeReportDTO;
+import com.lawu.eshop.property.param.RechargeReportParam;
+import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.DateUtil;
 
 @Service
-public class WithdrawCashReportServiceImpl implements WithdrawCashReportService {
+public class RechargeBalanceReportServiceImpl implements RechargeBalanceReportService {
 
-	private static Logger logger = LoggerFactory.getLogger(WithdrawCashReportServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(RechargeBalanceReportServiceImpl.class);
 
 	@Autowired
-	private PropertyWithdrawCashService propertyWithdrawCashService;
+	private PropertyRechargeService propertyRechargeService;
 	@Autowired
-	private StatisticsWithdrawCashService statisticsWithdrawCashService;
+	private StatisticsRechargeBalanceService statisticsRechargeBalanceService;
 	
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void executeCollectDailyData() {
 		String today = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
-		statisticsWithdrawCashService.deleteDailyByReportDate(today);
+		statisticsRechargeBalanceService.deleteDailyByReportDate(today);
 		
-		WithdrawCashReportParam param = new WithdrawCashReportParam();
+		RechargeReportParam param = new RechargeReportParam();
 		param.setDate(today);
-		param.setStatus(CashStatusEnum.SUCCESS.getVal());
-		Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectWithdrawCashListByDateAndStatus(param);
+		param.setStatus(ThirdPayStatusEnum.SUCCESS.getVal());
+		param.setRechargeType(PayTypeEnum.BALANCE.getVal());
+		Result<List<RechargeReportDTO>> rntResult = propertyRechargeService.selectWithdrawCashListByDateAndStatus(param);
 		
 		if(ResultCode.SUCCESS != rntResult.getRet()){
-			logger.error("提现报表统计定时采集数据异常：{}",rntResult.getMsg());
+			logger.error("充值余额报表统计定时采集数据异常：{}",rntResult.getMsg());
 			return;
 		}
 		
-		List<WithdrawCashReportDTO> rntList = rntResult.getModel();
+		List<RechargeReportDTO> rntList = rntResult.getModel();
 		if(rntList.isEmpty()){
-			logger.info("提现报表统计(按日)定时采集数据srv返回空！");
+			logger.info("充值余额报表统计(按日)定时采集数据srv返回空！");
 		}
 		
 		BigDecimal memberMoney = new BigDecimal("0");
 		BigDecimal merchantMoney = new BigDecimal("0");
-		for(WithdrawCashReportDTO dto : rntList){
+		for(RechargeReportDTO dto : rntList){
 			if(dto.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
-				memberMoney = memberMoney.add(dto.getCashMoney());
+				memberMoney = memberMoney.add(dto.getRechargeMoney());
 			}else if(dto.getUserNum().startsWith(UserCommonConstant.MERCHANT_NUM_TAG)){
-				merchantMoney = merchantMoney.add(dto.getCashMoney());
+				merchantMoney = merchantMoney.add(dto.getRechargeMoney());
 			}
 		}
 		
@@ -69,9 +71,9 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		reportWithdraw.setMemberMoney(memberMoney);
 		reportWithdraw.setMerchantMoney(merchantMoney);
 		reportWithdraw.setTotalMoney(memberMoney.add(merchantMoney));
-		Result result = statisticsWithdrawCashService.saveDaily(reportWithdraw);
+		Result result = statisticsRechargeBalanceService.saveDaily(reportWithdraw);
 		if(result.getRet() != ResultCode.SUCCESS){
-			logger.error("提现报表统计时采集数据保存report_withdraw_daily表异常！");
+			logger.error("充值余额报表统计时采集数据保存report_recharge_balance_daily表异常！");
 		}
 	}
 
@@ -79,18 +81,18 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 	@Override
 	public void executeCollectMonthData() {
 		String month = DateUtil.getDateFormat(DateUtil.getMonthBefore(new Date()),"yyyy-MM");
-		statisticsWithdrawCashService.deleteMonthByReportDate(month);
+		statisticsRechargeBalanceService.deleteMonthByReportDate(month);
 		
-		Result<List<ReportWithdrawDailyDTO>> rntResult = statisticsWithdrawCashService.getDailyList(month);
-		List<ReportWithdrawDailyDTO> rntList = rntResult.getModel();
+		Result<List<RechargeBalanceDailyDTO>> rntResult = statisticsRechargeBalanceService.getDailyList(month);
+		List<RechargeBalanceDailyDTO> rntList = rntResult.getModel();
 		if(rntList.isEmpty()){
-			logger.info("提现报表统计(按月)定时采集数据srv返回空！");
+			logger.info("充值余额报表统计(按月)定时采集数据srv返回空！");
 		}
 		
 		BigDecimal memberMoney = new BigDecimal("0");
 		BigDecimal merchantMoney = new BigDecimal("0");
 		BigDecimal totalMoney = new BigDecimal("0");
-		for(ReportWithdrawDailyDTO dto : rntList){
+		for(RechargeBalanceDailyDTO dto : rntList){
 			memberMoney = memberMoney.add(dto.getMemberMoney());
 			merchantMoney = merchantMoney.add(dto.getMerchantMoney());
 			totalMoney = totalMoney.add(dto.getTotalMoney());
@@ -102,9 +104,9 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		reportWithdraw.setMemberMoney(memberMoney);
 		reportWithdraw.setMerchantMoney(merchantMoney);
 		reportWithdraw.setTotalMoney(totalMoney);
-		Result result = statisticsWithdrawCashService.saveMonth(reportWithdraw);
+		Result result = statisticsRechargeBalanceService.saveMonth(reportWithdraw);
 		if(result.getRet() != ResultCode.SUCCESS){
-			logger.error("提现报表统计定时采集数据保存report_withdraw_month表异常！");
+			logger.error("充值余额报表统计定时采集数据保存report_recharge_balance_month表异常！");
 		}
 	}
 	

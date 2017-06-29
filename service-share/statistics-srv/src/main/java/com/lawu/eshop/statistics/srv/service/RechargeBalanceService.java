@@ -3,15 +3,15 @@ package com.lawu.eshop.statistics.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
-import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
+import com.lawu.eshop.statistics.srv.bo.RechargeBalanceDailyBO;
 
-public interface WithdrawCashService {
+public interface RechargeBalanceService {
 
 	void saveDaily(ReportKCommonParam param);
 
 	void saveMonth(ReportKCommonParam param);
 
-	List<ReportWithdrawDailyBO> getDailyList(String reportDate);
+	List<RechargeBalanceDailyBO> getDailyList(String reportDate);
 
 	void deleteDailyByReportDate(String reportDate);
 

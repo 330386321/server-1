@@ -283,123 +283,183 @@ public class ReportWithdrawDailyDOExample {
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIsNull() {
-            addCriterion("money is null");
+        public Criteria andMemberMoneyIsNull() {
+            addCriterion("member_money is null");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIsNotNull() {
-            addCriterion("money is not null");
+        public Criteria andMemberMoneyIsNotNull() {
+            addCriterion("member_money is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyEqualTo(BigDecimal value) {
-            addCriterion("money =", value, "money");
+        public Criteria andMemberMoneyEqualTo(BigDecimal value) {
+            addCriterion("member_money =", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotEqualTo(BigDecimal value) {
-            addCriterion("money <>", value, "money");
+        public Criteria andMemberMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("member_money <>", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyGreaterThan(BigDecimal value) {
-            addCriterion("money >", value, "money");
+        public Criteria andMemberMoneyGreaterThan(BigDecimal value) {
+            addCriterion("member_money >", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("money >=", value, "money");
+        public Criteria andMemberMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("member_money >=", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyLessThan(BigDecimal value) {
-            addCriterion("money <", value, "money");
+        public Criteria andMemberMoneyLessThan(BigDecimal value) {
+            addCriterion("member_money <", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("money <=", value, "money");
+        public Criteria andMemberMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("member_money <=", value, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyIn(List<BigDecimal> values) {
-            addCriterion("money in", values, "money");
+        public Criteria andMemberMoneyIn(List<BigDecimal> values) {
+            addCriterion("member_money in", values, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotIn(List<BigDecimal> values) {
-            addCriterion("money not in", values, "money");
+        public Criteria andMemberMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("member_money not in", values, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("money between", value1, value2, "money");
+        public Criteria andMemberMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("member_money between", value1, value2, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("money not between", value1, value2, "money");
+        public Criteria andMemberMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("member_money not between", value1, value2, "memberMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeIsNull() {
-            addCriterion("user_type is null");
+        public Criteria andMerchantMoneyIsNull() {
+            addCriterion("merchant_money is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeIsNotNull() {
-            addCriterion("user_type is not null");
+        public Criteria andMerchantMoneyIsNotNull() {
+            addCriterion("merchant_money is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeEqualTo(Byte value) {
-            addCriterion("user_type =", value, "userType");
+        public Criteria andMerchantMoneyEqualTo(BigDecimal value) {
+            addCriterion("merchant_money =", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeNotEqualTo(Byte value) {
-            addCriterion("user_type <>", value, "userType");
+        public Criteria andMerchantMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("merchant_money <>", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeGreaterThan(Byte value) {
-            addCriterion("user_type >", value, "userType");
+        public Criteria andMerchantMoneyGreaterThan(BigDecimal value) {
+            addCriterion("merchant_money >", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("user_type >=", value, "userType");
+        public Criteria andMerchantMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_money >=", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeLessThan(Byte value) {
-            addCriterion("user_type <", value, "userType");
+        public Criteria andMerchantMoneyLessThan(BigDecimal value) {
+            addCriterion("merchant_money <", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("user_type <=", value, "userType");
+        public Criteria andMerchantMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("merchant_money <=", value, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeIn(List<Byte> values) {
-            addCriterion("user_type in", values, "userType");
+        public Criteria andMerchantMoneyIn(List<BigDecimal> values) {
+            addCriterion("merchant_money in", values, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeNotIn(List<Byte> values) {
-            addCriterion("user_type not in", values, "userType");
+        public Criteria andMerchantMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("merchant_money not in", values, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeBetween(Byte value1, Byte value2) {
-            addCriterion("user_type between", value1, value2, "userType");
+        public Criteria andMerchantMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_money between", value1, value2, "merchantMoney");
             return (Criteria) this;
         }
 
-        public Criteria andUserTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("user_type not between", value1, value2, "userType");
+        public Criteria andMerchantMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("merchant_money not between", value1, value2, "merchantMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyIsNull() {
+            addCriterion("total_money is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyIsNotNull() {
+            addCriterion("total_money is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyEqualTo(BigDecimal value) {
+            addCriterion("total_money =", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyNotEqualTo(BigDecimal value) {
+            addCriterion("total_money <>", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyGreaterThan(BigDecimal value) {
+            addCriterion("total_money >", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_money >=", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyLessThan(BigDecimal value) {
+            addCriterion("total_money <", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_money <=", value, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyIn(List<BigDecimal> values) {
+            addCriterion("total_money in", values, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyNotIn(List<BigDecimal> values) {
+            addCriterion("total_money not in", values, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_money between", value1, value2, "totalMoney");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_money not between", value1, value2, "totalMoney");
             return (Criteria) this;
         }
 
