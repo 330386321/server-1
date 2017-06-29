@@ -55,10 +55,16 @@ public class ShoppingCartProductModelConverter {
 				if (productModelDO.getStatus()) {
 					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
 				} else {
+					rtn.setGmtDown(productModelDO.getGmtModified());
 					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_DEL);
 				}
 			} else {
 				rtn.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
+				if (ProductStatusEnum.PRODUCT_STATUS_DOWN.val.equals(productDO.getStatus())) {
+					rtn.setGmtDown(productDO.getGmtDown());
+				} else {
+					rtn.setGmtDown(productDO.getGmtModified());
+				}
 			}
 			
 			rtn.setIsAllowRefund(productDO.getIsAllowRefund());
@@ -120,6 +126,7 @@ public class ShoppingCartProductModelConverter {
 		rtn.setProductId(shoppingCartProductModelBO.getProductId());
 		rtn.setProductName(shoppingCartProductModelBO.getProductName());
 		rtn.setStatus(shoppingCartProductModelBO.getStatus());
+		rtn.setGmtDown(shoppingCartProductModelBO.getGmtDown());
 
 		return rtn;
 	}

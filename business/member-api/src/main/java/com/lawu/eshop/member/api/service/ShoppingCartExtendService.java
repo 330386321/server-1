@@ -3,7 +3,7 @@ package com.lawu.eshop.member.api.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingCartQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderBuyNowCreateOrderForeignParam;
@@ -31,7 +31,7 @@ public interface ShoppingCartExtendService {
 	 * @param memberId 会员id
 	 * @return
 	 */
-	Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId);
+	Result<ShoppingCartQueryDTO> findListByMemberId(Long memberId);
 	
 	/**
 	 * 根据购物车id列表生成结算数据

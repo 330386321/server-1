@@ -2,6 +2,7 @@ package com.lawu.eshop.product.srv.bo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.lawu.eshop.product.constant.ProductStatusEnum;
 
@@ -51,6 +52,11 @@ public class ShoppingCartProductModelBO implements Serializable {
     * 库存
     */
     private Integer inventory;
+    
+    /**
+    * 下架时间
+    */
+    private Date gmtDown;
 
 	public Long getId() {
 		return id;
@@ -138,6 +144,14 @@ public class ShoppingCartProductModelBO implements Serializable {
 
 	public void setInventory(Integer inventory) {
 		this.inventory = inventory;
+	}
+
+	public Date getGmtDown() {
+		return gmtDown;
+	}
+
+	public void setGmtDown(Date gmtDown) {
+		this.gmtDown = gmtDown;
 	}
 
 }

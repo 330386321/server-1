@@ -25,7 +25,7 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.ShoppingCartExtendService;
 import com.lawu.eshop.member.api.service.ShoppingCartService;
-import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingCartQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
@@ -89,16 +89,16 @@ public class ShoppingCartController extends BaseController {
      */
 	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "查询用户的购物车列表", notes = "根据memberId查询用户的购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
+    @ApiOperation(value = "查询购物车列表", notes = "查询购物车列表。[1004]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "findListByMemberId", method = RequestMethod.GET)
-    public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<ShoppingCartQueryDTO> findListByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-     	Result<List<MemberShoppingCartGroupDTO>> result = shoppingcartExtendService.findListByMemberId(memberId);
+     	Result<ShoppingCartQueryDTO> result = shoppingcartExtendService.findListByMemberId(memberId);
     	if (!isSuccess(result)) {
-    		return successGet(result.getRet());
+    		return successGet(result);
     	}
      	
     	return successGet(result);

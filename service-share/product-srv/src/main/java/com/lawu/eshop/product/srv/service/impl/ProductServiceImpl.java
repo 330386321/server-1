@@ -1,5 +1,24 @@
 package com.lawu.eshop.product.srv.service.impl;
 
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrInputDocument;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
@@ -15,31 +34,34 @@ import com.lawu.eshop.product.param.ListProductParam;
 import com.lawu.eshop.product.param.ProductParam;
 import com.lawu.eshop.product.query.ProductDataQuery;
 import com.lawu.eshop.product.srv.ProductSrvConfig;
-import com.lawu.eshop.product.srv.bo.*;
+import com.lawu.eshop.product.srv.bo.ProductBO;
+import com.lawu.eshop.product.srv.bo.ProductEditInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductInfoBO;
+import com.lawu.eshop.product.srv.bo.ProductModelBO;
+import com.lawu.eshop.product.srv.bo.ProductQueryBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.converter.ProductModelConverter;
-import com.lawu.eshop.product.srv.domain.*;
+import com.lawu.eshop.product.srv.domain.ProductCategoryeDO;
+import com.lawu.eshop.product.srv.domain.ProductDO;
+import com.lawu.eshop.product.srv.domain.ProductDOExample;
 import com.lawu.eshop.product.srv.domain.ProductDOExample.Criteria;
+import com.lawu.eshop.product.srv.domain.ProductImageDO;
+import com.lawu.eshop.product.srv.domain.ProductImageDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelDO;
+import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
+import com.lawu.eshop.product.srv.domain.ProductModelInventoryDO;
 import com.lawu.eshop.product.srv.domain.extend.ProductDOView;
 import com.lawu.eshop.product.srv.domain.extend.ProductNumsView;
-import com.lawu.eshop.product.srv.mapper.*;
+import com.lawu.eshop.product.srv.mapper.ProductCategoryeDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductImageDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
+import com.lawu.eshop.product.srv.mapper.ProductModelInventoryDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ProductCategoryService;
 import com.lawu.eshop.product.srv.service.ProductService;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.io.File;
-import java.math.BigDecimal;
-import java.util.*;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -88,7 +110,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询总数
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
         Page<ProductQueryBO> page = new Page<>();
-        page.setTotalCount(productDOMapper.countByExample(example));
+        page.setTotalCount(Long.valueOf(productDOMapper.countByExample(example)).intValue());
         page.setCurrentPage(query.getCurrentPage());
         List<ProductDO> productDOS = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
 
@@ -141,11 +163,15 @@ public class ProductServiceImpl implements ProductService {
         	}
         	
             examle.clear();
-            ProductDO productDO = new ProductDO();
-            productDO.setId(Long.valueOf(idArray[i]));
+            ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
             productDO.setStatus(productStatus.val);
+            if (ProductStatusEnum.PRODUCT_STATUS_DOWN.equals(productStatus)) {
+            	productDO.setGmtDown(new Date());
+            } else {
+            	productDO.setGmtDown(null);
+            }
             productDO.setGmtModified(new Date());
-            int row = productDOMapper.updateByPrimaryKeySelective(productDO);
+            int row = productDOMapper.updateByPrimaryKey(productDO);
             rows = rows + row;
 
             //更新solr索引
@@ -154,7 +180,6 @@ public class ProductServiceImpl implements ProductService {
                     delIds.add(idArray[i]);
             }
             if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
-                    productDO = productDOMapper.selectByPrimaryKey(productDO.getId());
                     SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
                     documents.add(document);
             }
@@ -812,7 +837,7 @@ public class ProductServiceImpl implements ProductService {
     public Integer selectProductCount(Long merchantId) {
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val).andMerchantIdEqualTo(merchantId);
-        Integer count = productDOMapper.countByExample(example);
+        Integer count = Long.valueOf(productDOMapper.countByExample(example)).intValue();
         return count;
     }
 
@@ -944,7 +969,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询总数
         RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
         Page<ProductQueryBO> page = new Page<>();
-        page.setTotalCount(productDOMapper.countByExample(example));
+        page.setTotalCount(Long.valueOf(productDOMapper.countByExample(example)).intValue());
         page.setCurrentPage(listProductParam.getCurrentPage());
         List<ProductDO> productDOS = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
 

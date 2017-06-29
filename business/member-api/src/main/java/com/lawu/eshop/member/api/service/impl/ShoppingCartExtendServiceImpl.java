@@ -24,6 +24,7 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartDTO;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingCartQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementItemDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
@@ -112,8 +113,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @return
 	 */
     @Override
-    public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId){
-    	List<MemberShoppingCartGroupDTO> rtn = new ArrayList<>();
+    public Result<ShoppingCartQueryDTO> findListByMemberId(Long memberId){
+    	ShoppingCartQueryDTO rtn = new ShoppingCartQueryDTO();
     	
     	// 通过memberId查询用户购物车资料
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
@@ -146,6 +147,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		}
     	}
     	
+    	List<MemberShoppingCartDTO> shoppingCartInvalidList = new ArrayList<>();
     	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<>();
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
@@ -169,26 +171,33 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
     		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
-    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
-    			memberShoppingCartDTO.setIsInvalid(true);
-    		} else {
-    			memberShoppingCartDTO.setIsInvalid(false);
-    		}
     		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
+    		memberShoppingCartDTO.setGmtDown(shoppingCartProductModelDTO.getGmtDown());
     		
     		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
     			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
     		}
     		
-    		map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
+    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
+    			memberShoppingCartDTO.setIsInvalid(true);
+    			shoppingCartInvalidList.add(memberShoppingCartDTO);
+    		} else {
+    			memberShoppingCartDTO.setIsInvalid(false);
+    			map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
+    		}
     	}
     	
+    	List<MemberShoppingCartGroupDTO> memberShoppingCartGroupDTOList = new ArrayList<>();
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> item : map.entrySet()) {
     		MemberShoppingCartGroupDTO memberShoppingCartGroupDTO = new MemberShoppingCartGroupDTO();
     		memberShoppingCartGroupDTO.setItem(item.getValue());
-    		rtn.add(memberShoppingCartGroupDTO);
+    		memberShoppingCartGroupDTOList.add(memberShoppingCartGroupDTO);
     	}
+    	rtn.setShoppingCartGroupList(memberShoppingCartGroupDTOList);
     	
+    	shoppingCartInvalidList.sort((o1, o2) -> o2.getGmtDown().compareTo(o1.getGmtDown()));
+    	
+    	rtn.setShoppingCartInvalidList(shoppingCartInvalidList);
     	return successGet(rtn);
     }
     

@@ -1,11 +1,15 @@
 package com.lawu.eshop.order.dto.foreign;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel
 public class MemberShoppingCartDTO extends ShoppingCartDTO {
 	
     /**
@@ -43,6 +47,13 @@ public class MemberShoppingCartDTO extends ShoppingCartDTO {
     */
     @ApiModelProperty(value = "库存", required = true)
     private Integer inventory;
+    
+    /**
+    * 下架时间
+    */
+    @ApiModelProperty(value = "下架时间")
+    @JsonFormat
+    private Date gmtDown;
     
 	public String getProductName() {
 		return productName;
@@ -90,6 +101,14 @@ public class MemberShoppingCartDTO extends ShoppingCartDTO {
 
 	public void setInventory(Integer inventory) {
 		this.inventory = inventory;
+	}
+
+	public Date getGmtDown() {
+		return gmtDown;
+	}
+
+	public void setGmtDown(Date gmtDown) {
+		this.gmtDown = gmtDown;
 	}
     
 }
