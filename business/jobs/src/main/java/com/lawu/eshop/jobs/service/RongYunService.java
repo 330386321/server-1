@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author zhangyong
  * @date 2017/5/22.
  */
-@FeignClient(value = "store-srv")
+@FeignClient(value = "user-srv")
 public interface RongYunService {
     @RequestMapping(value = "rongUser/getHistoryMessage", method = RequestMethod.POST)
     public Result<RongYunHistoryMessageDTO> getHistoryMessage(@RequestParam("date") String date);

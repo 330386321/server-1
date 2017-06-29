@@ -16,7 +16,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/4/25.
  */
-@FeignClient(value = "store-srv")
+@FeignClient(value = "user-srv")
 public interface MerchantStoreService {
 
     /**

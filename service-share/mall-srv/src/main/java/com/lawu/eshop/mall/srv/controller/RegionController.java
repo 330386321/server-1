@@ -62,4 +62,23 @@ public class RegionController extends BaseController {
         return successGet(areaPath);
     }
 
+    /**
+     * 查询城市列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "getRegionLevelTwo", method = RequestMethod.GET)
+    public Result<List<RegionDTO>> getRegionLevelTwo() {
+        List<RegionDTO> regionDTOS = new ArrayList<>();
+        List<RegionBO> regionBOS = regionService.getRegionLevelTwo();
+        if (regionBOS.isEmpty()) {
+            return successGet(regionDTOS);
+        }
+        for (RegionBO regionBO : regionBOS) {
+            RegionDTO regionDTO = RegionConverter.coverDTO(regionBO);
+            regionDTOS.add(regionDTO);
+        }
+        return successGet(regionDTOS);
+    }
+
 }

@@ -28,4 +28,12 @@ public interface RegionService {
      * @return
      */
     String getAreaName(String regionPath);
+
+    /**
+     * 查询城市列表
+     *
+     * @return
+     */
+    List<RegionBO> getRegionLevelTwo();
+
 }

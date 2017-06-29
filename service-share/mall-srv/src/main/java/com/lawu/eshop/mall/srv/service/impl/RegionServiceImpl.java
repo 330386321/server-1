@@ -1,8 +1,10 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
+import com.lawu.eshop.mall.constants.RegionLevelEnum;
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
 import com.lawu.eshop.mall.srv.domain.RegionDO;
+import com.lawu.eshop.mall.srv.domain.RegionDOExample;
 import com.lawu.eshop.mall.srv.domain.extend.RegionDOView;
 import com.lawu.eshop.mall.srv.mapper.RegionDOMapper;
 import com.lawu.eshop.mall.srv.mapper.extend.RegionDOMMapperExtend;
@@ -77,5 +79,13 @@ public class RegionServiceImpl implements RegionService {
             return areaName;
         }
         return regionDO.getName();
+    }
+
+    @Override
+    public List<RegionBO> getRegionLevelTwo() {
+        RegionDOExample example = new RegionDOExample();
+        example.createCriteria().andLevelEqualTo(RegionLevelEnum.REGION_LEVEL_TWO.val);
+        List<RegionDO> regionDOS = regionDOMapper.selectByExample(example);
+        return RegionConverter.coverBO(regionDOS);
     }
 }
