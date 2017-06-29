@@ -17,6 +17,7 @@ import com.lawu.eshop.jobs.service.WithdrawCashReportService;
 import com.lawu.eshop.property.constants.CashStatusEnum;
 import com.lawu.eshop.property.dto.WithdrawCashReportDTO;
 import com.lawu.eshop.property.param.WithdrawCashReportParam;
+import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
 import com.lawu.eshop.statistics.param.ReportWithdrawParam;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserTypeEnum;
@@ -80,10 +81,37 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void executeCollectMonthData() {
-		// TODO Auto-generated method stub
+		String month = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM");
+		Result<List<ReportWithdrawDailyDTO>> rntResult = statisticsWithdrawCashService.getDailyList(month);
+		List<ReportWithdrawDailyDTO> rntList = rntResult.getModel();
+		BigDecimal memberMoney = new BigDecimal("0");
+		BigDecimal merchantMoney = new BigDecimal("0");
+		for(ReportWithdrawDailyDTO dto : rntList){
+			if(UserTypeEnum.MEMBER.val.equals(dto.getUserType())){
+				memberMoney = memberMoney.add(dto.getMoney());
+			}else if(UserTypeEnum.MEMCHANT.val.equals(dto.getUserType())){
+				merchantMoney = merchantMoney.add(dto.getMoney());
+			}
+		}
+		ReportWithdrawParam reportWithdraw = new ReportWithdrawParam();
+		reportWithdraw.setGmtCreate(new Date());
+		reportWithdraw.setGmtReport(DateUtil.formatDate(month+"-01", "yyyy-MM-dd"));
+		reportWithdraw.setMoney(memberMoney);
+		reportWithdraw.setUserType(UserTypeEnum.MEMBER.val);
+		Result result = statisticsWithdrawCashService.saveDaily(reportWithdraw);
+		if(result.getRet() != ResultCode.SUCCESS){
+			logger.error("提现报表统计定时采集数据保存用户提现记录(report_withdraw_month)异常！");
+		}
 		
+		reportWithdraw.setMoney(merchantMoney);
+		reportWithdraw.setUserType(UserTypeEnum.MEMCHANT.val);
+		result = statisticsWithdrawCashService.saveMonth(reportWithdraw);
+		if(result.getRet() != ResultCode.SUCCESS){
+			logger.error("提现报表统计定时采集数据保存商家提现记录(report_withdraw_month)异常！");
+		}
 	}
 	
 }

@@ -19,7 +19,6 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
 import com.lawu.eshop.statistics.param.ReportWithdrawParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
-import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
 
 /**

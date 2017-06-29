@@ -160,7 +160,7 @@ public class CashManageBackageController extends BaseController {
 	 * @author yangqh
 	 * @date 2017年6月28日 下午4:32:19
 	 */
-	@RequestMapping(value = "findCashInfoDetail", method = RequestMethod.POST)
+	@RequestMapping(value = "selectWithdrawCashListByDateAndStatus", method = RequestMethod.POST)
 	public Result<List<WithdrawCashReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid WithdrawCashReportParam param, BindingResult result) throws Exception {
 		String message = validate(result);
     	if (message != null) {
