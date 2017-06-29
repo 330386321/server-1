@@ -1,5 +1,6 @@
 package com.lawu.eshop.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.math.BigDecimal;
@@ -24,10 +25,14 @@ public class OperatorPayOrderListDTO {
     @ApiModelProperty(value = "商家名称")
     private String merchantName;
 
+    @ApiModelProperty(value = "商家账号")
+    private String merchantAccount;
+
     @ApiModelProperty(value = "用户账号")
     private String memberAccount;
 
     @ApiModelProperty(value = "买单时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtCreate;
 
     @ApiModelProperty(value = "用户ID")
@@ -95,5 +100,13 @@ public class OperatorPayOrderListDTO {
 
     public void setMemberId(Long memberId) {
         this.memberId = memberId;
+    }
+
+    public String getMerchantAccount() {
+        return merchantAccount;
+    }
+
+    public void setMerchantAccount(String merchantAccount) {
+        this.merchantAccount = merchantAccount;
     }
 }

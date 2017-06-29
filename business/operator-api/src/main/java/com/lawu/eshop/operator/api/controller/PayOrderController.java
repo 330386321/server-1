@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +53,7 @@ public class PayOrderController extends BaseController{
 
     @ApiOperation(value = "查询买单列表", notes = "查询买单列表。[1004,]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-   // @RequiresPermissions("payOrder:list")
+    @RequiresPermissions("payOrder:list")
     @PageBody
     @RequestMapping(value = "getOperatorPayOrderList", method = RequestMethod.GET)
     public Result<Page<OperatorPayOrderListDTO>> getOperatorPayOrderList(@ModelAttribute OperatorPayOrderParam param){
@@ -79,7 +80,7 @@ public class PayOrderController extends BaseController{
                 OperatorMerchantInfoDTO operatorMerchantInfoDTO =
                         merchantStoreService.getPayOrderMerchantInfo(orderListDTO.getMerchantId());
                 if(operatorMerchantInfoDTO != null){
-                    orderListDTO.setMemberAccount(operatorMerchantInfoDTO.getAccount());
+                    orderListDTO.setMerchantAccount(operatorMerchantInfoDTO.getAccount());
                     orderListDTO.setMerchantName(operatorMerchantInfoDTO.getName());
                 }
                 //查询用户账号
