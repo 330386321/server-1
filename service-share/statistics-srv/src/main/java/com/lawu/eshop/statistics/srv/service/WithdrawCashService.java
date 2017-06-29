@@ -13,6 +13,10 @@ public interface WithdrawCashService {
 
 	List<ReportWithdrawDailyBO> getDailyList(String reportDate);
 
+	void deleteDailyByReportDate(String reportDate);
+
+	void deleteMonthByReportDate(String reportDate);
+
 	
 
 }

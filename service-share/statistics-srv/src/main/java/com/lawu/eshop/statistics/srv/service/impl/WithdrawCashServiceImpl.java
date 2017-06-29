@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDO;
+import com.lawu.eshop.statistics.srv.domain.ReportWithdrawMonthDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportWithdrawMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.WithdrawCashService;
@@ -48,7 +50,9 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	@Override
 	public List<ReportWithdrawDailyBO> getDailyList(String reportDate) {
 		ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
-		example.createCriteria().andGmtReportEqualTo(DateUtil.formatDate(reportDate, "yyyy-MM-dd"));
+		Date begin = DateUtil.formatDate(reportDate+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.getLastDayOfMonth(begin);
+		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
 		List<ReportWithdrawDailyBO> boList = new ArrayList<>();
 		for(ReportWithdrawDailyDO rdo : rntList){
@@ -63,4 +67,18 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		return boList;
 	}
 
+	@Override
+	public void deleteDailyByReportDate(String reportDate) {
+		ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
+		example.createCriteria().andGmtReportEqualTo(DateUtil.formatDate(reportDate, "yyyy-MM-dd"));
+		reportWithdrawDailyDOMapper.deleteByExample(example);
+	}
+
+	@Override
+	public void deleteMonthByReportDate(String reportDate) {
+		ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
+		example.createCriteria().andGmtReportEqualTo(DateUtil.formatDate(reportDate, "yyyy-MM"));
+		reportWithdrawMonthDOMapper.deleteByExample(example);
+	}
+	
 }

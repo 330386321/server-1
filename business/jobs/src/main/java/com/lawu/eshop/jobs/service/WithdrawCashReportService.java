@@ -1,8 +1,5 @@
 package com.lawu.eshop.jobs.service;
 
-import org.springframework.cloud.netflix.feign.FeignClient;
-
-@FeignClient(value= "statistics-srv")
 public interface WithdrawCashReportService {
 
 	/**

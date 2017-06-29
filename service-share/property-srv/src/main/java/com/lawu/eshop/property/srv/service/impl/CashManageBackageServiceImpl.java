@@ -269,15 +269,17 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	@Override
 	public List<WithdrawCashReportBO> selectWithdrawCashListByDateAndStatus(WithdrawCashReportParam param) {
 		WithdrawCashDOExample example = new WithdrawCashDOExample();
-		example.createCriteria().andStatusEqualTo(param.getStatus()).andGmtFinishEqualTo(DateUtil.getDateFormat(param.getDate()));
+		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andStatusEqualTo(param.getStatus()).andGmtFinishBetween(begin, end);
 		List<WithdrawCashDO> rntList = withdrawCashDOMapper.selectByExample(example);
 		List<WithdrawCashReportBO> wrbs = new ArrayList<WithdrawCashReportBO>();
 		for (WithdrawCashDO cdo : rntList) {
 			WithdrawCashReportBO wrb = new WithdrawCashReportBO();
 			wrb.setId(cdo.getId());
 			wrb.setUserNum(cdo.getUserNum());
-			wrb.setFinishDate(DateUtil.getDateFormat(cdo.getGmtModified(), "yyyy-MM-dd"));
-			wrb.setCashMoney(cdo.getMoney());
+			wrb.setFinishDate(DateUtil.getDateFormat(cdo.getGmtFinish(), "yyyy-MM-dd"));
+			wrb.setCashMoney(cdo.getCashMoney());
 			wrbs.add(wrb);
 		}
 		return wrbs;

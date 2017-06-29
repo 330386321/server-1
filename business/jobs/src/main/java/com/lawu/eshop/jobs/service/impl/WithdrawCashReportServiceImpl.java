@@ -36,8 +36,10 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void executeCollectDailyData() {
-		WithdrawCashReportParam param = new WithdrawCashReportParam();
 		String today = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM-dd");
+		statisticsWithdrawCashService.deleteDailyByReportDate(today);
+		
+		WithdrawCashReportParam param = new WithdrawCashReportParam();
 		param.setDate(today);
 		param.setStatus(CashStatusEnum.SUCCESS.getVal());
 		Result<List<WithdrawCashReportDTO>> rntResult = propertyWithdrawCashService.selectWithdrawCashListByDateAndStatus(param);
@@ -84,7 +86,9 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void executeCollectMonthData() {
-		String month = DateUtil.getDateFormat(DateUtil.getDayBefore(new Date()),"yyyy-MM");
+		String month = DateUtil.getDateFormat(DateUtil.getMonthBefore(new Date()),"yyyy-MM");
+		statisticsWithdrawCashService.deleteMonthByReportDate(month);
+		
 		Result<List<ReportWithdrawDailyDTO>> rntResult = statisticsWithdrawCashService.getDailyList(month);
 		List<ReportWithdrawDailyDTO> rntList = rntResult.getModel();
 		BigDecimal memberMoney = new BigDecimal("0");
@@ -101,7 +105,7 @@ public class WithdrawCashReportServiceImpl implements WithdrawCashReportService 
 		reportWithdraw.setGmtReport(DateUtil.formatDate(month+"-01", "yyyy-MM-dd"));
 		reportWithdraw.setMoney(memberMoney);
 		reportWithdraw.setUserType(UserTypeEnum.MEMBER.val);
-		Result result = statisticsWithdrawCashService.saveDaily(reportWithdraw);
+		Result result = statisticsWithdrawCashService.saveMonth(reportWithdraw);
 		if(result.getRet() != ResultCode.SUCCESS){
 			logger.error("提现报表统计定时采集数据保存用户提现记录(report_withdraw_month)异常！");
 		}

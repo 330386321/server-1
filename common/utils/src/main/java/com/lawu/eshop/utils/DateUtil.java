@@ -485,6 +485,19 @@ public class DateUtil {
         gregorianCalendar.set(Calendar.DATE, day + 1);
         return gregorianCalendar.getTime();
     }
+    
+    /**
+     * 获取日期前一月
+     *
+     * @param date
+     * @return
+     */
+    public static Date getMonthBefore(Date date) {
+        gregorianCalendar.setTime(date);
+        int day = gregorianCalendar.get(Calendar.MONTH);
+        gregorianCalendar.set(Calendar.MONTH, day - 1);
+        return gregorianCalendar.getTime();
+    }
 
     /**
      * 获取当前年

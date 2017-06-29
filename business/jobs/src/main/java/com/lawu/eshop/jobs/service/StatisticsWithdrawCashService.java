@@ -32,4 +32,12 @@ public interface StatisticsWithdrawCashService {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "withdrawCash/getDailyList")
 	Result<List<ReportWithdrawDailyDTO>> getDailyList(@RequestParam("reportDate") String reportDate);
+
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.DELETE, value = "withdrawCash/deleteDailyByReportDate")
+	Result deleteDailyByReportDate(@RequestParam("reportDate") String reportDate);
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(method = RequestMethod.DELETE, value = "withdrawCash/deleteMonthByReportDate")
+	Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate);
 }

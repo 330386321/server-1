@@ -74,4 +74,18 @@ public class WithdrawCashController extends BaseController {
 		}
 		return successCreated(dtoList);
 	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "deleteDailyByReportDate", method = RequestMethod.DELETE)
+	public Result deleteDailyByReportDate(@RequestParam("reportDate") String reportDate) {
+		withdrawCashService.deleteDailyByReportDate(reportDate);
+		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "deleteMonthByReportDate", method = RequestMethod.DELETE)
+	public Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate) {
+		withdrawCashService.deleteMonthByReportDate(reportDate);
+		return successCreated(ResultCode.SUCCESS);
+	}
 }

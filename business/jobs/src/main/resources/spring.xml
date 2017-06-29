@@ -16,7 +16,7 @@
 	<job:simple id="payOrderCommissionJob" description="买单提成" class="com.lawu.eshop.jobs.impl.payorder.PayOrderCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}"  />
 	<job:simple id="clickAdCommissionJob" description="点击广告提成" class="com.lawu.eshop.jobs.impl.ad.ClickAdCommissionJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
-		sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="storeStatisticsJob" description="门店人均消费、平均得分、好评率统计" class="com.lawu.eshop.jobs.impl.store.StoreStatisticsJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="productAverageDailySalesJob" description="商品平均日销量" class="com.lawu.eshop.jobs.impl.product.ProductAverageDailySalesJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
@@ -26,6 +26,8 @@
 	
 	<job:simple id="withdrawCashDailyReportJob" description="提现日统计" class="com.lawu.eshop.jobs.impl.withdraw.WithdrawCashDailyReportJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="withdrawCashMonthReportJob" description="提现月统计" class="com.lawu.eshop.jobs.impl.withdraw.WithdrawCashMonthReportJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+				harding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="userRegDailyJob" description="用户注册日统计" class="com.lawu.eshop.jobs.impl.user.UserRegDailyJob" registry-center-ref="regCenter" cron="0 0 0 1/1 * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="userRegMonthJob" description="用户注册月统计" class="com.lawu.eshop.jobs.impl.user.UserRegMonthJob" registry-center-ref="regCenter" cron="0 0 0 0 1/1 ?"
