@@ -5,11 +5,13 @@ import com.lawu.eshop.jobs.service.CollectionUserActiveService;
 import com.lawu.eshop.jobs.service.UserActiveService;
 import com.lawu.eshop.jobs.service.UserActiveStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author zhangyong
  * @date 2017/6/29.
  */
+@Service
 public class UserActiveStatisticsServiceImpl implements UserActiveStatisticsService{
 
     @Autowired
