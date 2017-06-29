@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="F:/1/maven/repository/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar"/>
+            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -43,27 +43,25 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--<table tableName="report_withdraw_daily" domainObjectName="ReportWithdrawDailyDO">
+        <!--
+        <table tableName="report_withdraw_daily" domainObjectName="ReportWithdrawDailyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="report_withdraw_month" domainObjectName="ReportWithdrawMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="report_user_reg_area" domainObjectName="ReportUserRegAreaDO">
+        -->
+        <!--<table tableName="report_user_active_daily" domainObjectName="ReportUserActiveDailyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="report_user_reg_daily" domainObjectName="ReportUserRegDailyDO">
+        <table tableName="report_user_active_month" domainObjectName="ReportUserActiveMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="report_user_reg_month" domainObjectName="ReportUserRegMonthDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="report_recharge_balance_daily" domainObjectName="ReportRechargeBalanceDailyDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="report_recharge_balance_month" domainObjectName="ReportRechargeBalanceMonthDO">
+        <table tableName="report_user_active_area_daily" domainObjectName="ReportUserActiveAreaDailyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        
+        <table tableName="user_visit_record" domainObjectName="UserVisitRecordDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.statistics.srv.mapper.extend.UserActiveDOMapperExtend" >
+
+    <select id="collectionMemberActiveDaily" resultType="java.lang.Integer"  parameterType="java.util.Date">
+        select count(1) from user_visit_record
+        where user_type = 2
+         and gmt_create=#{gmtCreate}
+    </select>
+
+
+    <select id="collectionMerchantActiveDaily" resultType="java.lang.Integer" parameterType="java.util.Date">
+        select count(1) from user_visit_record
+         where user_type = 1
+         and gmt_create=#{gmtCreate}
+    </select>
+
+
+
+</mapper>
