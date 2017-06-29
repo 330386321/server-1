@@ -81,4 +81,13 @@ public class MessageController extends BaseController {
        Result result = messageService.delMessageStatus(messageId);
         return successDelete(result);
     }
+
+    @ApiOperation(value = "消息批量删除", notes = "消息批量删除 （章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
+    public Result delMessage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                             @PathVariable(value = "ids") String ids) {
+        return messageService.delMessageByIds(ids);
+    }
 }

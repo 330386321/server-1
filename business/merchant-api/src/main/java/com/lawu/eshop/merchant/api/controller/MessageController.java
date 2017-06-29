@@ -115,4 +115,13 @@ public class MessageController extends BaseController {
     public Result<MessageDTO> selectMessageDetail(@PathVariable("id") Long id, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         return messageService.selectMessageById(id);
     }
+
+    @ApiOperation(value = "消息批量删除", notes = "消息批量删除 （章勇）", httpMethod = "DELETE")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @Authorization
+    @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
+    public Result delMessage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                             @PathVariable(value = "ids") String ids) {
+        return messageService.delMessageByIds(ids);
+    }
 }
