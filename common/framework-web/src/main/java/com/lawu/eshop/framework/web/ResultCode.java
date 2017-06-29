@@ -94,6 +94,7 @@ public class ResultCode {
     public static final int PRODUCT_HAS_EXPIRED = 4019;
     public static final int THE_ORDER_IS_BEING_PROCESSED = 4020;
     public static final int ORDER_CREATION_FAILED = 4021;
+    public static final int MAX_SHOPPING_CART_QUANTITY = 4022;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -263,6 +264,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PRODUCT_HAS_EXPIRED, "商品已经失效");
         ResultCode.messageMap.put(THE_ORDER_IS_BEING_PROCESSED, "订单正在处理");
         ResultCode.messageMap.put(ORDER_CREATION_FAILED, "订单创建失败");
+        ResultCode.messageMap.put(MAX_SHOPPING_CART_QUANTITY, "购物车数量已达上限");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");

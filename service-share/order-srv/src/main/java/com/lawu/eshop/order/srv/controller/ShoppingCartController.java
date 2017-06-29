@@ -18,6 +18,7 @@ import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
+import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -39,7 +40,11 @@ public class ShoppingCartController extends BaseController {
 	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
 	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
-		shoppingCartService.save(memberId, param);
+		try {
+			shoppingCartService.save(memberId, param);
+		} catch (MoreThanMaximumException e) {
+			return successCreated(ResultCode.MAX_SHOPPING_CART_QUANTITY);
+		}
 		return successCreated();
 	}
 

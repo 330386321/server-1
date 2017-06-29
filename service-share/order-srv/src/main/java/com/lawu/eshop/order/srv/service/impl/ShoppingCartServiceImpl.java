@@ -12,12 +12,15 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
+import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingCartUpdateQuantityDO;
+import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingCartExtendDOMapper;
+import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -34,6 +37,9 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	
 	@Autowired
 	private ShoppingCartExtendDOMapper shoppingCartExtendDOMapper;
+	
+	@Autowired
+	private PropertyService propertyService;
 
 	@Override
 	public List<ShoppingCartBO> findListByMemberId(Long memberId) {
@@ -52,7 +58,7 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 */
 	@Transactional
 	@Override
-	public void save(Long memberId, ShoppingCartSaveParam param) {
+	public void save(Long memberId, ShoppingCartSaveParam param) throws MoreThanMaximumException {
 		// 查看用户购物车是否有重复记录
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andProductModelIdEqualTo(param.getProductModelId());
@@ -62,6 +68,15 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 			ShoppingCartUpdateQuantityDO shoppingCartUpdateQuantityDO =  ShoppingCartConverter.convertShoppingCartUpdateQuantityDO(param, list.get(0));
 			shoppingCartExtendDOMapper.updateQuantityByPrimaryKey(shoppingCartUpdateQuantityDO);
 		} else {
+			example.clear();
+			example.createCriteria().andMemberIdEqualTo(memberId);
+			long count = shoppingCartDOMapper.countByExample(example);
+			int maxShoppingCartQuantity = Integer.valueOf(propertyService.getByName(PropertyNameConstant.MAX_SHOPPING_CART_QUANTITY));
+			
+			if (count > maxShoppingCartQuantity) {
+				throw new MoreThanMaximumException("购物车数量已达上限");
+			}
+			
 			ShoppingCartDO shoppingCartDO = ShoppingCartConverter.convert(param, memberId);
 			shoppingCartDOMapper.insert(shoppingCartDO);
 		}
