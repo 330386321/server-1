@@ -9,9 +9,9 @@
 
        <task:executor id="executor" pool-size="${eshop.executor.pool.size:20}" />
        <!-- 开启@AspectJ AOP代理 -->
-       <aop:aspectj-autoproxy proxy-target-class="true"/>
+       <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
        <!--开启注解调度支持 @Async -->
-       <task:annotation-driven executor="executor" proxy-target-class="true"/>
+       <task:annotation-driven executor="executor" />
 
        <bean id="asyncEventApplicationListener" class="com.lawu.eshop.framework.core.event.AsyncEventApplicationListener" />
        <bean id="syncEventApplicationListener" class="com.lawu.eshop.framework.core.event.SyncEventApplicationListener" />
