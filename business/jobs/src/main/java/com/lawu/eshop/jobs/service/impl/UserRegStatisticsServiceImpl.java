@@ -9,6 +9,7 @@ import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.user.param.CollectionUserRegParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
  * @author meishuquan
  * @date 2017/6/29.
  */
+@Service
 public class UserRegStatisticsServiceImpl implements UserRegStatisticsService {
 
     @Autowired
