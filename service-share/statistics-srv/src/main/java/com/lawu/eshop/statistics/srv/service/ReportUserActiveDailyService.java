@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.service;
 
 import com.lawu.eshop.statistics.param.UserActiveParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface ReportUserActiveDailyService {
     List<ReportUserActiveBO> getUserActiveListDaily(UserActiveParam param);
 
     List<ReportUserActiveBO> getUserActiveListMonth(UserActiveParam param);
+
+    List<ReportUserActiveAreaDailyBO> getReportUserActiveAreaDailyList(String reportDate);
 }

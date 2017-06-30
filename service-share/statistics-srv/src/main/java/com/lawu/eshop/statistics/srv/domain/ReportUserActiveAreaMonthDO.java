@@ -3,7 +3,7 @@ package com.lawu.eshop.statistics.srv.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ReportUserActiveAreaMonth implements Serializable {
+public class ReportUserActiveAreaMonthDO implements Serializable {
     /**
      *
      * 主键

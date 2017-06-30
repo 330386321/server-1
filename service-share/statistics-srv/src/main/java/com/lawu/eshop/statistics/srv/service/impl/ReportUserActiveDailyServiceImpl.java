@@ -1,10 +1,14 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
 import com.lawu.eshop.statistics.param.UserActiveParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveDailyDO;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserActiveDOView;
+import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveAreaDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.extend.ReportUserActiveDOMapperExtend;
 import com.lawu.eshop.statistics.srv.mapper.extend.UserActiveDOMapperExtend;
@@ -33,6 +37,9 @@ public class ReportUserActiveDailyServiceImpl implements ReportUserActiveDailySe
     @Autowired
     private ReportUserActiveDOMapperExtend reportUserActiveDOMapperExtend;
 
+    @Autowired
+    private ReportUserActiveAreaDailyDOMapper reportUserActiveAreaDailyDOMapper;
+
     @Override
     @Transactional
     public void saveUserActiveDaily(Integer memberCount, Integer merchantCount) {
@@ -57,6 +64,15 @@ public class ReportUserActiveDailyServiceImpl implements ReportUserActiveDailySe
     public List<ReportUserActiveBO> getUserActiveListMonth(UserActiveParam param) {
         List<ReportUserActiveDOView> userActiveDOViews = reportUserActiveDOMapperExtend.getUserActiveListMonth(param);
         List<ReportUserActiveBO> reportUserActiveBOS = UserActiveConverter.coverReportBOS(userActiveDOViews);
+        return reportUserActiveBOS;
+    }
+
+    @Override
+    public List<ReportUserActiveAreaDailyBO> getReportUserActiveAreaDailyList(String reportDate) {
+        ReportUserActiveAreaDailyDOExample example = new ReportUserActiveAreaDailyDOExample();
+        example.createCriteria().andGmtReportEqualTo(DateUtil.formatDate(reportDate,"yyyy-MM-dd"));
+       List<ReportUserActiveAreaDailyDO> areaDailyDOS = reportUserActiveAreaDailyDOMapper.selectByExample(example);
+        List<ReportUserActiveAreaDailyBO> reportUserActiveBOS = UserActiveConverter.coverReportAreaBOS(areaDailyDOS);
         return reportUserActiveBOS;
     }
 }

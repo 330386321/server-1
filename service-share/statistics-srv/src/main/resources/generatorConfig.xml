@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <classPathEntry
-            location="F:/1/maven/repository/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar"/>
+            location="D:/maven/LocalWarehouse/mysql/mysql-connector-java/5.1.34/mysql-connector-java-5.1.34.jar"/>
     <context id="MysqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
     	<!-- 再次生成xml时候是覆盖 -->
     	<property name="mergeable" value="false"></property>
@@ -63,11 +63,9 @@
         <table tableName="user_visit_record" domainObjectName="UserVisitRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="report_point_consume_daily" domainObjectName="ReportPointConsumeDailyDO">
+        <table tableName="report_user_active_area_month" domainObjectName="ReportUserActiveAreaMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="report_point_consume_month" domainObjectName="ReportPointConsumeMonthDO">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+
     </context>
 </generatorConfiguration>

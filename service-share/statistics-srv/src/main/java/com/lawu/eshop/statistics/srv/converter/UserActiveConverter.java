@@ -1,9 +1,14 @@
 package com.lawu.eshop.statistics.srv.converter;
 
+import com.lawu.eshop.statistics.dto.ReportUserActiveAreaDTO;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.dto.UserActiveListDTO;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserActiveDOView;
 import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
 
@@ -77,5 +82,71 @@ public class UserActiveConverter {
             listDTOS.add(userActiveListDTO);
         }
         return listDTOS;
+    }
+
+    public static List<ReportUserActiveAreaDailyBO> coverReportAreaBOS(List<ReportUserActiveAreaDailyDO> areaDailyDOS) {
+        if(areaDailyDOS.isEmpty()){
+            return new ArrayList<>();
+        }
+        List<ReportUserActiveAreaDailyBO> reportUserActiveBOS = new ArrayList<>();
+        for(ReportUserActiveAreaDailyDO reportUserActiveDO : areaDailyDOS){
+            ReportUserActiveAreaDailyBO reportUserActiveBO = new ReportUserActiveAreaDailyBO();
+            reportUserActiveBO.setMerchantCount(reportUserActiveDO.getMerchantCount());
+            reportUserActiveBO.setMemberCount(reportUserActiveDO.getMemberCount());
+            reportUserActiveBO.setGmtReport(reportUserActiveDO.getGmtReport());
+            reportUserActiveBO.setCityId(reportUserActiveDO.getCityId());
+            reportUserActiveBO.setCityName(reportUserActiveDO.getCityName());
+            reportUserActiveBOS.add(reportUserActiveBO);
+        }
+        return reportUserActiveBOS;
+    }
+
+    public static List<ReportUserActiveAreaDTO> coverReportAreaDTOS(List<ReportUserActiveAreaDailyBO> listBOS) {
+        if (listBOS.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<ReportUserActiveAreaDTO> reportUserActiveDTOS = new ArrayList<>();
+        for (ReportUserActiveAreaDailyBO reportUserActiveAreaDailyBO : listBOS) {
+            ReportUserActiveAreaDTO reportUserActiveAreaDTO = new ReportUserActiveAreaDTO();
+            reportUserActiveAreaDTO.setMerchantCount(reportUserActiveAreaDailyBO.getMerchantCount());
+            reportUserActiveAreaDTO.setMemberCount(reportUserActiveAreaDailyBO.getMemberCount());
+            reportUserActiveAreaDTO.setCityId(reportUserActiveAreaDailyBO.getCityId());
+            reportUserActiveAreaDTO.setCityName(reportUserActiveAreaDailyBO.getCityName());
+            reportUserActiveDTOS.add(reportUserActiveAreaDTO);
+        }
+        return reportUserActiveDTOS;
+    }
+
+    public static List<ReportUserActiveAreaMonthBO> coverReportAreaMonthBOS(List<ReportUserActiveAreaMonthDO> areaMonthDOS) {
+        if (areaMonthDOS.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<ReportUserActiveAreaMonthBO> reportUserActiveBOS = new ArrayList<>();
+        for (ReportUserActiveAreaMonthDO reportUserActiveDO : areaMonthDOS) {
+            ReportUserActiveAreaMonthBO reportUserActiveBO = new ReportUserActiveAreaMonthBO();
+            reportUserActiveBO.setMerchantCount(reportUserActiveDO.getMerchantCount());
+            reportUserActiveBO.setMemberCount(reportUserActiveDO.getMemberCount());
+            reportUserActiveBO.setGmtReport(reportUserActiveDO.getGmtReport());
+            reportUserActiveBO.setCityId(reportUserActiveDO.getCityId());
+            reportUserActiveBO.setCityName(reportUserActiveDO.getCityName());
+            reportUserActiveBOS.add(reportUserActiveBO);
+        }
+        return reportUserActiveBOS;
+    }
+
+    public static List<ReportUserActiveAreaDTO> coverReportAreaMonthDTOS(List<ReportUserActiveAreaMonthBO> listBOS) {
+        if (listBOS.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<ReportUserActiveAreaDTO> reportUserActiveDTOS = new ArrayList<>();
+        for (ReportUserActiveAreaMonthBO reportUserActiveAreaBO : listBOS) {
+            ReportUserActiveAreaDTO reportUserActiveAreaDTO = new ReportUserActiveAreaDTO();
+            reportUserActiveAreaDTO.setMerchantCount(reportUserActiveAreaBO.getMerchantCount());
+            reportUserActiveAreaDTO.setMemberCount(reportUserActiveAreaBO.getMemberCount());
+            reportUserActiveAreaDTO.setCityId(reportUserActiveAreaBO.getCityId());
+            reportUserActiveAreaDTO.setCityName(reportUserActiveAreaBO.getCityName());
+            reportUserActiveDTOS.add(reportUserActiveAreaDTO);
+        }
+        return reportUserActiveDTOS;
     }
 }

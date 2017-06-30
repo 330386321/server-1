@@ -2,16 +2,16 @@ package com.lawu.eshop.statistics.srv.controller;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.ReportUserActiveAreaDTO;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.dto.UserActiveListDTO;
 import com.lawu.eshop.statistics.param.UserActiveParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
-import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaDailyService;
-import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
-import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
-import com.lawu.eshop.statistics.srv.service.UserActiveService;
+import com.lawu.eshop.statistics.srv.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +34,12 @@ public class UserActiveController extends BaseController{
     @Autowired
     private ReportUserActiveDailyService reportUserActiveDailyService;
 
+
     @Autowired
     private ReportUserActiveAreaDailyService reportUserActiveAreaDailyService;
+
+    @Autowired
+    private ReportUserActiveAreaMonthService reportUserActiveAreaMonthService;
 
     @RequestMapping(value = "collectionMemberActiveDaily", method = RequestMethod.GET)
     Result<Integer> collectionMemberActiveDaily(){
@@ -119,6 +123,23 @@ public class UserActiveController extends BaseController{
         List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListMonth(param);
         List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
         return successGet(listDTOS);
+    }
+
+    @RequestMapping(value = "getReportUserActiveAreaDailyList", method = RequestMethod.GET)
+    Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaDailyList(@RequestParam(value = "reportDate") String reportDate) {
+
+        List<ReportUserActiveAreaDailyBO> listBOS = reportUserActiveDailyService.getReportUserActiveAreaDailyList(reportDate);
+        List<ReportUserActiveAreaDTO> list = UserActiveConverter.coverReportAreaDTOS(listBOS);
+        return successGet(list);
+    }
+
+
+    @RequestMapping(value = "getReportUserActiveAreaMonthList", method = RequestMethod.GET)
+    Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaMonthList(@RequestParam(value = "reportDate") String reportDate) {
+
+        List<ReportUserActiveAreaMonthBO> listBOS = reportUserActiveAreaMonthService.getReportUserActiveAreaMonthList(reportDate);
+        List<ReportUserActiveAreaDTO> list = UserActiveConverter.coverReportAreaMonthDTOS(listBOS);
+        return successGet(list);
     }
 
 }
