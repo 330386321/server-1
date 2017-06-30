@@ -9,4 +9,6 @@ public interface UserActiveStatisticsService {
     void executeCollectionUserActiveDaily();
 
     void executeCollectionUserActiveMonth();
+
+    void executeCollectionUserActiveAreaDaily();
 }

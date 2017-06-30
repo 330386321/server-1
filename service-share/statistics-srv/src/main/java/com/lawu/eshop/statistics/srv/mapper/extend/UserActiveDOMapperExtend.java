@@ -1,5 +1,7 @@
 package com.lawu.eshop.statistics.srv.mapper.extend;
 
+import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
+
 import java.util.Date;
 
 /**
@@ -14,4 +16,8 @@ public interface UserActiveDOMapperExtend {
     Integer collectionMemberActiveMonth(Date nowDate);
 
     Integer collectionMerchantActiveMonth(Date nowDate);
+
+    UserActiveDOView collectionMemberActiveAreaDaily(Date time);
+
+    UserActiveDOView collectionMerchantActiveAreaDaily(Date time);
 }

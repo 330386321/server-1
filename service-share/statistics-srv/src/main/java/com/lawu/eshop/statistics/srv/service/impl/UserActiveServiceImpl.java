@@ -1,5 +1,7 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
+import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
 import com.lawu.eshop.statistics.srv.mapper.extend.UserActiveDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
 import com.lawu.eshop.utils.DateUtil;
@@ -41,5 +43,19 @@ public class UserActiveServiceImpl implements UserActiveService {
     public Integer collectionMerchantActiveMonth() {
         Integer count = userActiveDOMapperExtend.collectionMerchantActiveMonth(DateUtil.getNowDate());
         return count;
+    }
+
+    @Override
+    public UserActiveBO collectionMemberActiveAreaDaily() {
+        Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
+        UserActiveDOView userActiveBO = userActiveDOMapperExtend.collectionMemberActiveAreaDaily(time);
+        return null;
+    }
+
+    @Override
+    public UserActiveBO collectionMerchantActiveAreaDaily() {
+        Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
+        UserActiveDOView userActiveBO = userActiveDOMapperExtend.collectionMerchantActiveAreaDaily(time);
+        return null;
     }
 }

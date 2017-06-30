@@ -68,4 +68,37 @@ public class UserActiveController extends BaseController{
         return  successCreated();
     }
 
+   /* @RequestMapping(value = "collectionMemberActiveAreaDaily", method = RequestMethod.GET)
+    Result<UserActiveDTO> collectionMemberActiveAreaDaily(){
+
+        UserActiveBO userActiveBO = userActiveService.collectionMemberActiveAreaDaily();
+
+        if (userActiveBO == null){
+            return successGet();
+        }else{
+            UserActiveDTO  userActiveDTO = new UserActiveDTO();
+            userActiveDTO.setCityId(userActiveBO.getCityId());
+            userActiveDTO.setCityName(userActiveBO.getCityName());
+            userActiveDTO.setUserCount(userActiveBO.getUserCount());
+            userActiveDTO.setVisitDate(userActiveBO.getVisitDate());
+            return successGet(userActiveDTO);
+        }
+
+    }
+
+    @RequestMapping(value = "collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
+    Result<UserActiveDTO> collectionMerchantActiveAreaDaily(){
+        UserActiveBO userActiveBO = userActiveService.collectionMerchantActiveAreaDaily();
+        if (userActiveBO == null){
+            return successGet();
+        }else{
+            UserActiveDTO  activeDTO = new UserActiveDTO();
+            activeDTO.setCityId(userActiveBO.getCityId());
+            activeDTO.setCityName(userActiveBO.getCityName());
+            activeDTO.setUserCount(userActiveBO.getUserCount());
+            activeDTO.setVisitDate(userActiveBO.getVisitDate());
+            return successGet(activeDTO);
+        }
+    }*/
+
 }

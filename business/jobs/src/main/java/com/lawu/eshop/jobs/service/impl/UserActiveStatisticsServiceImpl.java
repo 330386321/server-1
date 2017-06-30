@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.jobs.service.CollectionUserActiveService;
 import com.lawu.eshop.jobs.service.UserActiveService;
 import com.lawu.eshop.jobs.service.UserActiveStatisticsService;
+import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,14 @@ public class UserActiveStatisticsServiceImpl implements UserActiveStatisticsServ
         Result<Integer> merchantResult = collectionUserActiveService.collectionMerchantActiveMonth();
 
         userActiveService.saveUserActiveMonth(memberResult.getModel(), merchantResult.getModel());
+    }
+
+    @Override
+    public void executeCollectionUserActiveAreaDaily() {
+
+        Result<UserActiveDTO> memberResult = collectionUserActiveService.collectionMemberActiveAreaDaily();
+
+        Result<UserActiveDTO> merchantResult = collectionUserActiveService.collectionMerchantActiveAreaDaily();
+
     }
 }

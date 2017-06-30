@@ -1,6 +1,7 @@
 package com.lawu.eshop.jobs.service;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,4 +24,10 @@ public interface CollectionUserActiveService {
 
     @RequestMapping(value = "userActive/collectionMerchantActiveMonth", method = RequestMethod.GET)
     Result<Integer> collectionMerchantActiveMonth();
+
+    @RequestMapping(value = "userActive/collectionMemberActiveAreaDaily", method = RequestMethod.GET)
+    Result<UserActiveDTO> collectionMemberActiveAreaDaily();
+
+    @RequestMapping(value = "userActive/collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
+    Result<UserActiveDTO> collectionMerchantActiveAreaDaily();
 }
