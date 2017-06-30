@@ -116,6 +116,7 @@ public class MessageController extends BaseController {
         return messageService.selectMessageById(id);
     }
 
+    @Audit(date = "2017-06-30", reviewer = "孙林青")
     @ApiOperation(value = "消息批量删除", notes = "消息批量删除 （章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization

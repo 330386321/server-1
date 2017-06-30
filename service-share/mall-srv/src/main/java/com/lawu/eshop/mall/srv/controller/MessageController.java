@@ -198,7 +198,7 @@ public class MessageController extends BaseController {
             lids[i] = Long.valueOf(idString[i]);
             messageService.updateMessageStatus(lids[i], MessageStatusEnum.MESSAGE_STATUS_DELETE);
         }
-        return successCreated();
+        return successDelete();
     }
     
     @RequestMapping(value = "selectMessageById/{id}", method = RequestMethod.GET)
