@@ -33,8 +33,6 @@
 
         <elastic.job.version>2.1.4</elastic.job.version>
         <curator.version>2.11.1</curator.version>
-
-        <aspectjrt.version>1.8.10</aspectjrt.version>
     </properties>
 
 
@@ -93,16 +91,6 @@
                 <version>${elastic.job.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${aspectjrt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${aspectjrt.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
