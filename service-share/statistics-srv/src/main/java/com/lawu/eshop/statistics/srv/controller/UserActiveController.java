@@ -2,6 +2,9 @@ package com.lawu.eshop.statistics.srv.controller;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.UserActiveDTO;
+import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
+import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
@@ -68,37 +71,20 @@ public class UserActiveController extends BaseController{
         return  successCreated();
     }
 
-   /* @RequestMapping(value = "collectionMemberActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMemberActiveAreaDaily(){
+    @RequestMapping(value = "collectionMemberActiveAreaDaily", method = RequestMethod.GET)
+    Result<UserActiveDTO> collectionMemberActiveAreaDaily() {
 
         UserActiveBO userActiveBO = userActiveService.collectionMemberActiveAreaDaily();
-
-        if (userActiveBO == null){
-            return successGet();
-        }else{
-            UserActiveDTO  userActiveDTO = new UserActiveDTO();
-            userActiveDTO.setCityId(userActiveBO.getCityId());
-            userActiveDTO.setCityName(userActiveBO.getCityName());
-            userActiveDTO.setUserCount(userActiveBO.getUserCount());
-            userActiveDTO.setVisitDate(userActiveBO.getVisitDate());
-            return successGet(userActiveDTO);
-        }
+        UserActiveDTO userActiveDTO = UserActiveConverter.coverDTO(userActiveBO);
+        return successGet(userActiveDTO);
 
     }
 
     @RequestMapping(value = "collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMerchantActiveAreaDaily(){
+    Result<UserActiveDTO> collectionMerchantActiveAreaDaily() {
         UserActiveBO userActiveBO = userActiveService.collectionMerchantActiveAreaDaily();
-        if (userActiveBO == null){
-            return successGet();
-        }else{
-            UserActiveDTO  activeDTO = new UserActiveDTO();
-            activeDTO.setCityId(userActiveBO.getCityId());
-            activeDTO.setCityName(userActiveBO.getCityName());
-            activeDTO.setUserCount(userActiveBO.getUserCount());
-            activeDTO.setVisitDate(userActiveBO.getVisitDate());
-            return successGet(activeDTO);
-        }
-    }*/
+        UserActiveDTO userActiveDTO = UserActiveConverter.coverDTO(userActiveBO);
+        return successGet(userActiveDTO);
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
+import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
 import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
 import com.lawu.eshop.statistics.srv.mapper.extend.UserActiveDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
@@ -48,14 +49,16 @@ public class UserActiveServiceImpl implements UserActiveService {
     @Override
     public UserActiveBO collectionMemberActiveAreaDaily() {
         Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
-        UserActiveDOView userActiveBO = userActiveDOMapperExtend.collectionMemberActiveAreaDaily(time);
-        return null;
+        UserActiveDOView userActiveDOView = userActiveDOMapperExtend.collectionMemberActiveAreaDaily(time);
+        UserActiveBO userActiveBO = UserActiveConverter.coverBO(userActiveDOView);
+        return userActiveBO;
     }
 
     @Override
     public UserActiveBO collectionMerchantActiveAreaDaily() {
         Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
-        UserActiveDOView userActiveBO = userActiveDOMapperExtend.collectionMerchantActiveAreaDaily(time);
-        return null;
+        UserActiveDOView userActiveDOView = userActiveDOMapperExtend.collectionMerchantActiveAreaDaily(time);
+        UserActiveBO userActiveBO = UserActiveConverter.coverBO(userActiveDOView);
+        return userActiveBO;
     }
 }
