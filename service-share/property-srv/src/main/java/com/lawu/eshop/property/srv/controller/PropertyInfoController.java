@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyInfoDTO;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
@@ -286,11 +287,13 @@ public class PropertyInfoController extends BaseController {
 	 * @date 2017年5月26日 上午11:08:32
 	 */
 	@RequestMapping(value = "getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
-	public Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@PathVariable("userNum") String userNum)  {
+	public Result<PropertyInfoFreezeDTO> getPropertyinfoFreeze(@PathVariable("userNum") String userNum)  {
 		PropertyinfoFreezeEnum freeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (freeze == null) {
 			successGet(ResultCode.PROPERTYINFO_FREEZE_EXCEPITON);
 		}
-		return successGet(freeze);
+		PropertyInfoFreezeDTO rtn = new PropertyInfoFreezeDTO();
+		rtn.setStatus(freeze);
+		return successGet(rtn);
 	}
 }

@@ -15,8 +15,8 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.member.api.service.PropertyInfoService;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 
@@ -104,12 +104,9 @@ public class PropertyInfoController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getPropertyinfoFreeze", method = RequestMethod.GET)
-    public Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<PropertyInfoFreezeDTO> getPropertyinfoFreeze(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
-        Result<PropertyinfoFreezeEnum> result = propertyInfoService.getPropertyinfoFreeze(userNum);
-		if (!isSuccess(result)) {
-			return successGet(result.getRet());
-		}
+        Result<PropertyInfoFreezeDTO> result = propertyInfoService.getPropertyinfoFreeze(userNum);
         return successGet(result);
     }
 

@@ -57,6 +57,7 @@ import com.lawu.eshop.member.api.service.PropertyInfoService;
 import com.lawu.eshop.member.api.service.VerifyCodeService;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.property.param.PropertyInfoDataParam;
 import com.lawu.eshop.user.constants.FansMerchantChannelEnum;
@@ -354,9 +355,9 @@ public class AdController extends BaseController {
 	@RequestMapping(value = "doHanlderMinusPoint", method = RequestMethod.POST)
 	public Result doHanlderMinusPoint(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@RequestParam @ApiParam(required = true, value = "广告id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+		Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
 		if (isSuccess(resultFreeze)) {
-			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())) {
+			if (PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())) {
 				return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
 			}
 		} else {
