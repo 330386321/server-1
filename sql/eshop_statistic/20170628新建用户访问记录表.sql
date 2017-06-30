@@ -6,6 +6,7 @@ CREATE TABLE `user_visit_record` (
   `visit_count` int(8) unsigned DEFAULT NULL COMMENT '访问次数',
   `city_id` int(8) unsigned DEFAULT '0' COMMENT '市级区域ID',
   `city_name` varchar(50) DEFAULT '' COMMENT '市级名称',
+  `visit_date` date NOT NULL COMMENT '访问日期',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) COMMENT='用户访问记录';
