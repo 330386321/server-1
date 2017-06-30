@@ -174,15 +174,14 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
     		memberShoppingCartDTO.setGmtDown(shoppingCartProductModelDTO.getGmtDown());
     		
-    		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
-    			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
-    		}
-    		
     		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
     			memberShoppingCartDTO.setIsInvalid(true);
     			shoppingCartInvalidList.add(memberShoppingCartDTO);
     		} else {
     			memberShoppingCartDTO.setIsInvalid(false);
+    			if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
+        			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
+        		}
     			map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
     		}
     	}
