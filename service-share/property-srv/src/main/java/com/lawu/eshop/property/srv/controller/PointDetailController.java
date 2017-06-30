@@ -1,18 +1,33 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.dto.PointConsumeReportDTO;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
+import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
 import com.lawu.eshop.property.srv.service.PointDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Sunny
@@ -65,4 +80,47 @@ public class PointDetailController extends BaseController {
         return successGet(PointDetailConverter.convertBackageDTOPage(pointDetailBOPage));
     }
 
+    /**
+     * 
+     * @param param
+     * @param result
+     * @return
+     * @author yangqh
+     * @date 2017年6月30日 下午2:34:30
+     */
+    @RequestMapping(value = "selectPointDetailListByDateAndDirection", method = RequestMethod.POST)
+	public Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirection(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	List<PointConsumeReportDTO> dtos = new ArrayList<>();
+    	List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirection(param);
+		for(PointConsumeReportBO bo : rntList){
+			PointConsumeReportDTO dto = new PointConsumeReportDTO();
+			dto.setId(bo.getId());
+			dto.setPoint(bo.getPoint());
+			dto.setUserNum(bo.getUserNum());
+			dtos.add(dto);
+		}
+		return successCreated(dtos);
+	}
+    
+    @RequestMapping(value = "selectPointDetailListByDateAndDirectionAndPointType", method = RequestMethod.POST)
+	public Result<List<PointConsumeReportDTO>> selectPointDetailListByDateAndDirectionAndPointType(@RequestBody @Valid PointDetailReportParam param, BindingResult result) {
+		String message = validate(result);
+    	if (message != null) {
+    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+    	}
+    	List<PointConsumeReportDTO> dtos = new ArrayList<>();
+    	List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
+		for(PointConsumeReportBO bo : rntList){
+			PointConsumeReportDTO dto = new PointConsumeReportDTO();
+			dto.setId(bo.getId());
+			dto.setPoint(bo.getPoint());
+			dto.setUserNum(bo.getUserNum());
+			dtos.add(dto);
+		}
+		return successCreated(dtos);
+	}
 }

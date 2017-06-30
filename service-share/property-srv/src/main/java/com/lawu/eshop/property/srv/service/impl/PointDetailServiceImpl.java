@@ -15,8 +15,10 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
+import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.converter.PointDetailConverter;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
@@ -24,6 +26,7 @@ import com.lawu.eshop.property.srv.domain.PointDetailDOExample;
 import com.lawu.eshop.property.srv.domain.PointDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 
 /**
@@ -140,5 +143,41 @@ public class PointDetailServiceImpl implements PointDetailService {
 
 		return page;
     }
+
+	@Override
+	public List<PointConsumeReportBO> selectPointDetailListByDateAndDirection(PointDetailReportParam param) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andDirectionEqualTo(param.getDirection()).andGmtCreateBetween(begin, end);
+		List<PointDetailDO> rntList = pointDetailDOMapper.selectByExample(example);
+		List<PointConsumeReportBO> bos = new ArrayList<>();
+		for(PointDetailDO pdo : rntList){
+			PointConsumeReportBO bo = new PointConsumeReportBO();
+			bo.setId(pdo.getId());
+			bo.setPoint(pdo.getPoint());
+			bo.setUserNum(pdo.getUserNum());
+			bos.add(bo);
+		}
+		return bos;
+	}
+
+	@Override
+	public List<PointConsumeReportBO> selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param) {
+		PointDetailDOExample example = new PointDetailDOExample();
+		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andDirectionEqualTo(param.getDirection()).andPointTypeEqualTo(param.getPointType()).andGmtCreateBetween(begin, end);
+		List<PointDetailDO> rntList = pointDetailDOMapper.selectByExample(example);
+		List<PointConsumeReportBO> bos = new ArrayList<>();
+		for(PointDetailDO pdo : rntList){
+			PointConsumeReportBO bo = new PointConsumeReportBO();
+			bo.setId(pdo.getId());
+			bo.setPoint(pdo.getPoint());
+			bo.setUserNum(pdo.getUserNum());
+			bos.add(bo);
+		}
+		return bos;
+	}
 
 }

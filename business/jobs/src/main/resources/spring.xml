@@ -38,6 +38,10 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 	<job:simple id="rechargeBalanceMonthReportJob" description="充值余额月统计" class="com.lawu.eshop.jobs.impl.recharge.RechargeBalanceMonthReportJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="pointConsumeDailyReportJob" description="积分消费日统计" class="com.lawu.eshop.jobs.impl.pointConsume.PointConsumeDailyReportJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
+	<job:simple id="pointConsumeMonthReportJob" description="积分消费月统计" class="com.lawu.eshop.jobs.impl.pointConsume.PointConsumeMonthReportJob" registry-center-ref="regCenter" cron="0/10 * * * * ?"
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 				
 	<!-- Lock service -->
 	<bean id="lockServiceImpl" class="com.lawu.eshop.synchronization.lock.impl.LockServiceImpl" />
