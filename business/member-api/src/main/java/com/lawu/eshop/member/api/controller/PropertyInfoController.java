@@ -98,7 +98,8 @@ public class PropertyInfoController extends BaseController {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         return propertyInfoService.varifyPayPwd(userNum, payPwd);
     }
-    
+
+    @Audit(date = "2017-06-30", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "获取用户是否冻结", notes = "获取用户是否冻结(NO-否|YES-是)。[6026]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
