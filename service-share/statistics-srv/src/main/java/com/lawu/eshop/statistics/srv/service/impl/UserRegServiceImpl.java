@@ -9,6 +9,7 @@ import com.lawu.eshop.statistics.srv.mapper.ReportUserRegAreaDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegMonthDOMapper;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
+import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class UserRegServiceImpl implements UserRegService {
         ReportUserRegDailyDO reportUserRegDailyDO = new ReportUserRegDailyDO();
         reportUserRegDailyDO.setMemberCount(memberCount);
         reportUserRegDailyDO.setMerchantCount(merchantCount);
-        reportUserRegDailyDO.setGmtReport(new Date());
+        reportUserRegDailyDO.setGmtReport(DateUtil.getDayBefore(new Date()));
         reportUserRegDailyDO.setGmtCreate(new Date());
         reportUserRegDailyDOMapper.insertSelective(reportUserRegDailyDO);
     }
@@ -45,7 +46,7 @@ public class UserRegServiceImpl implements UserRegService {
         ReportUserRegMonthDO reportUserRegMonthDO = new ReportUserRegMonthDO();
         reportUserRegMonthDO.setMemberCount(memberCount);
         reportUserRegMonthDO.setMerchantCount(merchantCount);
-        reportUserRegMonthDO.setGmtReport(new Date());
+        reportUserRegMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
         reportUserRegMonthDO.setGmtCreate(new Date());
         reportUserRegMonthDOMapper.insertSelective(reportUserRegMonthDO);
     }
