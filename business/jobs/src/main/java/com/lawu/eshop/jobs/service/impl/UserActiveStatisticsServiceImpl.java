@@ -8,6 +8,8 @@ import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author zhangyong
  * @date 2017/6/29.
@@ -39,10 +41,17 @@ public class UserActiveStatisticsServiceImpl implements UserActiveStatisticsServ
 
     @Override
     public void executeCollectionUserActiveAreaDaily() {
-
-        Result<UserActiveDTO> memberResult = collectionUserActiveService.collectionMemberActiveAreaDaily();
-
-        Result<UserActiveDTO> merchantResult = collectionUserActiveService.collectionMerchantActiveAreaDaily();
+        //查询用户活跃总数并统计
+        Result<List<UserActiveDTO>> memberResult = collectionUserActiveService.collectionMemberActiveAreaDaily();
+        if(memberResult.getModel() != null && !memberResult.getModel().isEmpty()){
+            userActiveService.saveUserActiveAreaDaily(memberResult.getModel());
+        }
+        //查询商家活跃总数
+        Result<List<UserActiveDTO>> merchantResult = collectionUserActiveService.collectionMerchantActiveAreaDaily();
+        //更新统计商家总数
+        if(merchantResult.getModel() != null && !merchantResult.getModel().isEmpty()){
+            userActiveService.saveMerchantActiveAreaDaily(merchantResult.getModel());
+        }
 
     }
 }

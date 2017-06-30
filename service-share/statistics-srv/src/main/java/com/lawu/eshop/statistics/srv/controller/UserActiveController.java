@@ -3,16 +3,19 @@ package com.lawu.eshop.statistics.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
+import com.lawu.eshop.statistics.dto.UserActiveListDTO;
+import com.lawu.eshop.statistics.param.UserActiveParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveAreaDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -31,6 +34,9 @@ public class UserActiveController extends BaseController{
     @Autowired
     private ReportUserActiveDailyService reportUserActiveDailyService;
 
+    @Autowired
+    private ReportUserActiveAreaDailyService reportUserActiveAreaDailyService;
+
     @RequestMapping(value = "collectionMemberActiveDaily", method = RequestMethod.GET)
     Result<Integer> collectionMemberActiveDaily(){
 
@@ -44,7 +50,7 @@ public class UserActiveController extends BaseController{
         return successGet(count);
     }
 
-    @RequestMapping(value = "saveUserActiveDaily", method = RequestMethod.GET)
+    @RequestMapping(value = "saveUserActiveDaily", method = RequestMethod.POST)
     Result saveUserActiveDaily(@RequestParam(value = "memberCount") Integer memberCount,
                                @RequestParam(value = "merchantCount") Integer merchantCount){
         reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
@@ -64,7 +70,7 @@ public class UserActiveController extends BaseController{
         return successGet(count);
     }
 
-    @RequestMapping(value = "saveUserActiveMonth", method = RequestMethod.GET)
+    @RequestMapping(value = "saveUserActiveMonth", method = RequestMethod.POST)
     Result saveUserActiveMonth(@RequestParam(value = "memberCount") Integer memberCount,
                                @RequestParam(value = "merchantCount") Integer merchantCount){
         reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
@@ -72,19 +78,47 @@ public class UserActiveController extends BaseController{
     }
 
     @RequestMapping(value = "collectionMemberActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMemberActiveAreaDaily() {
+    Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily() {
 
-        UserActiveBO userActiveBO = userActiveService.collectionMemberActiveAreaDaily();
-        UserActiveDTO userActiveDTO = UserActiveConverter.coverDTO(userActiveBO);
-        return successGet(userActiveDTO);
+        List<UserActiveBO> userActiveBOS = userActiveService.collectionMemberActiveAreaDaily();
+        List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(userActiveBOS);
+        return successGet(userActiveDTOS);
 
     }
 
     @RequestMapping(value = "collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMerchantActiveAreaDaily() {
-        UserActiveBO userActiveBO = userActiveService.collectionMerchantActiveAreaDaily();
-        UserActiveDTO userActiveDTO = UserActiveConverter.coverDTO(userActiveBO);
-        return successGet(userActiveDTO);
+    Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily() {
+        List<UserActiveBO> userActiveBOS = userActiveService.collectionMerchantActiveAreaDaily();
+        List<UserActiveDTO> userActiveDTOS = UserActiveConverter.coverDTOS(userActiveBOS);
+        return successGet(userActiveDTOS);
+    }
+
+    @RequestMapping(value = "userActive/saveUserActiveAreaDaily", method = RequestMethod.POST)
+    Result saveUserActiveAreaDaily(@RequestBody List<UserActiveDTO> userActiveDTOS){
+        reportUserActiveAreaDailyService.saveUserActiveAreaDaily(userActiveDTOS);
+        return  successCreated();
+    }
+
+    @RequestMapping(value = "userActive/saveMerchantActiveAreaDaily", method = RequestMethod.POST)
+    Result saveMerchantActiveAreaDaily(@RequestBody List<UserActiveDTO> userActiveDTOS){
+        reportUserActiveAreaDailyService.saveMerchantActiveAreaDaily(userActiveDTOS);
+        return  successCreated();
+    }
+
+
+    @RequestMapping(value = "getUserActiveListDaily",method = RequestMethod.POST)
+    Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestBody UserActiveParam param){
+
+        List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListDaily(param);
+        List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
+        return successGet(listDTOS);
+    }
+
+    @RequestMapping(value = "getUserActiveListMonth",method = RequestMethod.POST)
+    Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestBody UserActiveParam param){
+        List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListMonth(param);
+        List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
+        return successGet(listDTOS);
     }
 
 }

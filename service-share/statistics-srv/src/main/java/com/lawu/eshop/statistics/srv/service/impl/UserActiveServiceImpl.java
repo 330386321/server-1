@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -47,18 +48,18 @@ public class UserActiveServiceImpl implements UserActiveService {
     }
 
     @Override
-    public UserActiveBO collectionMemberActiveAreaDaily() {
+    public List<UserActiveBO> collectionMemberActiveAreaDaily() {
         Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
-        UserActiveDOView userActiveDOView = userActiveDOMapperExtend.collectionMemberActiveAreaDaily(time);
-        UserActiveBO userActiveBO = UserActiveConverter.coverBO(userActiveDOView);
-        return userActiveBO;
+        List<UserActiveDOView> userActiveDOViews = userActiveDOMapperExtend.collectionMemberActiveAreaDaily(time);
+        List<UserActiveBO> userActiveBOS = UserActiveConverter.coverBOS(userActiveDOViews);
+        return userActiveBOS;
     }
 
     @Override
-    public UserActiveBO collectionMerchantActiveAreaDaily() {
+    public List<UserActiveBO> collectionMerchantActiveAreaDaily() {
         Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
-        UserActiveDOView userActiveDOView = userActiveDOMapperExtend.collectionMerchantActiveAreaDaily(time);
-        UserActiveBO userActiveBO = UserActiveConverter.coverBO(userActiveDOView);
-        return userActiveBO;
+        List<UserActiveDOView>  userActiveDOViews = userActiveDOMapperExtend.collectionMerchantActiveAreaDaily(time);
+        List<UserActiveBO> userActiveBOS = UserActiveConverter.coverBOS(userActiveDOViews);
+        return userActiveBOS;
     }
 }

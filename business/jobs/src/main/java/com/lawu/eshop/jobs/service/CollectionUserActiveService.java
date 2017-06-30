@@ -6,6 +6,8 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 /**
  * @author zhangyong
  * @date 2017/6/29.
@@ -26,8 +28,8 @@ public interface CollectionUserActiveService {
     Result<Integer> collectionMerchantActiveMonth();
 
     @RequestMapping(value = "userActive/collectionMemberActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMemberActiveAreaDaily();
+    Result<List<UserActiveDTO>> collectionMemberActiveAreaDaily();
 
     @RequestMapping(value = "userActive/collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
-    Result<UserActiveDTO> collectionMerchantActiveAreaDaily();
+    Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily();
 }

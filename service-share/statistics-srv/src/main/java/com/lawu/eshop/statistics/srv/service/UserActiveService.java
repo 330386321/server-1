@@ -2,6 +2,8 @@ package com.lawu.eshop.statistics.srv.service;
 
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
 
+import java.util.List;
+
 /**
  * @author zhangyong
  * @date 2017/6/29.
@@ -15,7 +17,7 @@ public interface UserActiveService {
 
     Integer collectionMerchantActiveMonth();
 
-    UserActiveBO collectionMemberActiveAreaDaily();
+    List<UserActiveBO> collectionMemberActiveAreaDaily();
 
-    UserActiveBO collectionMerchantActiveAreaDaily();
+    List<UserActiveBO> collectionMerchantActiveAreaDaily();
 }
