@@ -57,4 +57,18 @@ public class RegionConverter {
         }
         return regionBOList;
     }
+
+    public static RegionBO coverBO(RegionDO regionDO) {
+        if (regionDO == null) {
+            return null;
+        }
+        RegionBO regionBO = new RegionBO();
+        regionBO.setId(regionDO.getId());
+        regionBO.setName(regionDO.getName());
+        regionBO.setParentId(regionDO.getParentId());
+        regionBO.setPath(regionDO.getPath());
+        regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDO.getLevel()));
+        return regionBO;
+    }
+
 }

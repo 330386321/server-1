@@ -3,10 +3,8 @@ package com.lawu.eshop.statistics.srv.converter;
 import com.lawu.eshop.statistics.dto.ReportUserRegAreaDTO;
 import com.lawu.eshop.statistics.dto.ReportUserRegDTO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
-import com.lawu.eshop.statistics.srv.bo.ReportUserRegBO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDO;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDO;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,48 +14,6 @@ import java.util.List;
  * @date 2017/6/30.
  */
 public class ReportUserRegConverter {
-
-    /**
-     * DO转BO
-     *
-     * @param regDailyDOList
-     * @return
-     */
-    public static List<ReportUserRegBO> convertDailyBO(List<ReportUserRegDailyDO> regDailyDOList) {
-        List<ReportUserRegBO> regBOList = new ArrayList<>();
-        if (regDailyDOList == null || regDailyDOList.isEmpty()) {
-            return regBOList;
-        }
-        for (ReportUserRegDailyDO regDailyDO : regDailyDOList) {
-            ReportUserRegBO regBO = new ReportUserRegBO();
-            regBO.setMemberCount(regDailyDO.getMemberCount());
-            regBO.setMerchantCount(regDailyDO.getMerchantCount());
-            regBO.setGmtReport(regDailyDO.getGmtReport());
-            regBOList.add(regBO);
-        }
-        return regBOList;
-    }
-
-    /**
-     * DO转BO
-     *
-     * @param regMonthDOList
-     * @return
-     */
-    public static List<ReportUserRegBO> convertMonthBO(List<ReportUserRegMonthDO> regMonthDOList) {
-        List<ReportUserRegBO> regBOList = new ArrayList<>();
-        if (regMonthDOList == null || regMonthDOList.isEmpty()) {
-            return regBOList;
-        }
-        for (ReportUserRegMonthDO regMonthDO : regMonthDOList) {
-            ReportUserRegBO regBO = new ReportUserRegBO();
-            regBO.setMemberCount(regMonthDO.getMemberCount());
-            regBO.setMerchantCount(regMonthDO.getMerchantCount());
-            regBO.setGmtReport(regMonthDO.getGmtReport());
-            regBOList.add(regBO);
-        }
-        return regBOList;
-    }
 
     /**
      * DO转BO
@@ -86,48 +42,6 @@ public class ReportUserRegConverter {
     /**
      * BO转DTO
      *
-     * @param regBOList
-     * @return
-     */
-    public static List<ReportUserRegDTO> convertDailyDTO(List<ReportUserRegBO> regBOList) {
-        List<ReportUserRegDTO> regDTOList = new ArrayList<>();
-        if (regBOList == null || regBOList.isEmpty()) {
-            return regDTOList;
-        }
-        for (ReportUserRegBO regBO : regBOList) {
-            ReportUserRegDTO regDTO = new ReportUserRegDTO();
-            regDTO.setMemberCount(regBO.getMemberCount());
-            regDTO.setMerchantCount(regBO.getMerchantCount());
-            regDTO.setGmtReport(regBO.getGmtReport());
-            regDTOList.add(regDTO);
-        }
-        return regDTOList;
-    }
-
-    /**
-     * BO转DTO
-     *
-     * @param regBOList
-     * @return
-     */
-    public static List<ReportUserRegDTO> convertMonthDTO(List<ReportUserRegBO> regBOList) {
-        List<ReportUserRegDTO> regDTOList = new ArrayList<>();
-        if (regBOList == null || regBOList.isEmpty()) {
-            return regDTOList;
-        }
-        for (ReportUserRegBO regBO : regBOList) {
-            ReportUserRegDTO regDTO = new ReportUserRegDTO();
-            regDTO.setMemberCount(regBO.getMemberCount());
-            regDTO.setMerchantCount(regBO.getMerchantCount());
-            regDTO.setGmtReport(regBO.getGmtReport());
-            regDTOList.add(regDTO);
-        }
-        return regDTOList;
-    }
-
-    /**
-     * BO转DTO
-     *
      * @param regAreaBOList
      * @return
      */
@@ -148,4 +62,26 @@ public class ReportUserRegConverter {
         }
         return regAreaDTOList;
     }
+
+    /**
+     * View转DTO
+     *
+     * @param regDOViewList
+     * @return
+     */
+    public static List<ReportUserRegDTO> convertDTO(List<ReportUserRegDOView> regDOViewList) {
+        List<ReportUserRegDTO> regDTOList = new ArrayList<>();
+        if (regDOViewList == null || regDOViewList.isEmpty()) {
+            return regDTOList;
+        }
+        for (ReportUserRegDOView regDOView : regDOViewList) {
+            ReportUserRegDTO regDTO = new ReportUserRegDTO();
+            regDTO.setMemberCount(regDOView.getMemberCount());
+            regDTO.setMerchantCount(regDOView.getMerchantCount());
+            regDTO.setGmtReport(regDOView.getGmtReport());
+            regDTOList.add(regDTO);
+        }
+        return regDTOList;
+    }
+
 }

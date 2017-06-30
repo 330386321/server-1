@@ -81,4 +81,16 @@ public class RegionController extends BaseController {
         return successGet(regionDTOS);
     }
 
+    /**
+     * 根据区域ID查询区域信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getRegion/{id}", method = RequestMethod.GET)
+    public Result<RegionDTO> getRegion(@PathVariable Integer id) {
+        RegionBO regionBO = regionService.getRegionById(id);
+        return successGet(RegionConverter.coverDTO(regionBO));
+    }
+
 }

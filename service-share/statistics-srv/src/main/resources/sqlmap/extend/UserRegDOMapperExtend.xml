@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.statistics.srv.mapper.extend.UserRegDOMapperExtend" >
+
+    <select id="getReportUserRegDaily" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView" parameterType="com.lawu.eshop.statistics.param.UserRegParam">
+        select member_count as memberCount,merchant_count as merchantCount,gmt_report as gmtReport
+        from report_user_reg_daily where year(gmt_report)=#{year} and month(gmt_report)=#{month}
+    </select>
+
+    <select id="getReportUserRegMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView" parameterType="com.lawu.eshop.statistics.param.UserRegParam">
+        select member_count as memberCount,merchant_count as merchantCount,gmt_report as gmtReport
+        from report_user_reg_month where year(gmt_report)=#{year}
+    </select>
+
+</mapper>

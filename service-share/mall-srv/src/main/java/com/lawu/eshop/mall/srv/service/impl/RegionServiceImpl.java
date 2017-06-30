@@ -88,4 +88,10 @@ public class RegionServiceImpl implements RegionService {
         List<RegionDO> regionDOS = regionDOMapper.selectByExample(example);
         return RegionConverter.coverBO(regionDOS);
     }
+
+    @Override
+    public RegionBO getRegionById(Integer id) {
+        RegionDO regionDO = regionDOMapper.selectByPrimaryKey(id);
+        return RegionConverter.coverBO(regionDO);
+    }
 }

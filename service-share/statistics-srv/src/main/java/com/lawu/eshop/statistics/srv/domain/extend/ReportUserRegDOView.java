@@ -1,4 +1,4 @@
-package com.lawu.eshop.statistics.srv.bo;
+package com.lawu.eshop.statistics.srv.domain.extend;
 
 import java.util.Date;
 
@@ -6,7 +6,7 @@ import java.util.Date;
  * @author meishuquan
  * @date 2017/6/30.
  */
-public class ReportUserRegBO {
+public class ReportUserRegDOView {
 
     private Integer memberCount;
 

@@ -36,4 +36,12 @@ public interface RegionService {
      */
     List<RegionBO> getRegionLevelTwo();
 
+    /**
+     * 根据区域ID查询区域信息
+     *
+     * @param id
+     * @return
+     */
+    RegionBO getRegionById(Integer id);
+
 }

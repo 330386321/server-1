@@ -1,6 +1,11 @@
 package com.lawu.eshop.statistics.srv.service;
 
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
+import com.lawu.eshop.statistics.param.UserRegParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
+
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -30,5 +35,28 @@ public interface UserRegService {
      * @param param
      */
     void updateUserRegArea(UserRegAreaParam param);
+
+    /**
+     * 查询日统计列表
+     *
+     * @param param
+     * @return
+     */
+    List<ReportUserRegDOView> getReportUserRegDaily(UserRegParam param);
+
+    /**
+     * 查询月统计列表
+     *
+     * @param param
+     * @return
+     */
+    List<ReportUserRegDOView> getReportUserRegMonth(UserRegParam param);
+
+    /**
+     * 查询区域统计列表
+     *
+     * @return
+     */
+    List<ReportUserRegAreaBO> getReportUserRegArea();
 
 }

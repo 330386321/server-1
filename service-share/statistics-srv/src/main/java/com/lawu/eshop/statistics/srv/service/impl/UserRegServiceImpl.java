@@ -1,19 +1,25 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
 import com.lawu.eshop.statistics.param.UserRegAreaParam;
+import com.lawu.eshop.statistics.param.UserRegParam;
+import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
+import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDOExample;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDO;
+import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegAreaDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegMonthDOMapper;
+import com.lawu.eshop.statistics.srv.mapper.extend.UserRegDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.UserRegService;
 import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author meishuquan
@@ -30,6 +36,9 @@ public class UserRegServiceImpl implements UserRegService {
 
     @Autowired
     private ReportUserRegAreaDOMapper reportUserRegAreaDOMapper;
+
+    @Autowired
+    private UserRegDOMapperExtend userRegDOMapperExtend;
 
     @Override
     public void saveUserRegDaily(Integer memberCount, Integer merchantCount) {
@@ -62,5 +71,22 @@ public class UserRegServiceImpl implements UserRegService {
         ReportUserRegAreaDOExample example = new ReportUserRegAreaDOExample();
         example.createCriteria().andCityIdEqualTo(param.getCityId());
         reportUserRegAreaDOMapper.updateByExampleSelective(reportUserRegAreaDO, example);
+    }
+
+    @Override
+    public List<ReportUserRegDOView> getReportUserRegDaily(UserRegParam param) {
+        return userRegDOMapperExtend.getReportUserRegDaily(param);
+    }
+
+    @Override
+    public List<ReportUserRegDOView> getReportUserRegMonth(UserRegParam param) {
+        return userRegDOMapperExtend.getReportUserRegMonth(param);
+    }
+
+    @Override
+    public List<ReportUserRegAreaBO> getReportUserRegArea() {
+        ReportUserRegAreaDOExample example = new ReportUserRegAreaDOExample();
+        List<ReportUserRegAreaDO> regAreaDOList = reportUserRegAreaDOMapper.selectByExample(example);
+        return ReportUserRegConverter.convertAreaBO(regAreaDOList);
     }
 }

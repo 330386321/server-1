@@ -55,6 +55,11 @@
         </dependency>
         <dependency>
             <groupId>com.lawu.eshop</groupId>
+            <artifactId>statistics-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lawu.eshop</groupId>
             <artifactId>eshop-shiro</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
