@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.srv.controller;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.srv.service.ReportUserActiveDailyService;
+import com.lawu.eshop.statistics.srv.service.ReportUserActiveMonthService;
 import com.lawu.eshop.statistics.srv.service.UserActiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,9 @@ public class UserActiveController extends BaseController{
 
     @Autowired
     private UserActiveService userActiveService;
+
+    @Autowired
+    private ReportUserActiveMonthService reportUserActiveMonthService;
 
     @Autowired
     private ReportUserActiveDailyService reportUserActiveDailyService;
@@ -43,4 +47,25 @@ public class UserActiveController extends BaseController{
         reportUserActiveDailyService.saveUserActiveDaily(memberCount, merchantCount);
         return  successCreated();
     }
+
+    @RequestMapping(value = "collectionMemberActiveMonth", method = RequestMethod.GET)
+    Result<Integer> collectionMemberActiveMonth(){
+
+        Integer count = userActiveService.collectionMemberActiveMonth();
+        return successGet(count);
+    }
+
+    @RequestMapping(value = "collectionMerchantActiveMonth", method = RequestMethod.GET)
+    Result<Integer> collectionMerchantActiveMonth(){
+        Integer count = userActiveService.collectionMerchantActiveMonth();
+        return successGet(count);
+    }
+
+    @RequestMapping(value = "saveUserActiveMonth", method = RequestMethod.GET)
+    Result saveUserActiveMonth(@RequestParam(value = "memberCount") Integer memberCount,
+                               @RequestParam(value = "merchantCount") Integer merchantCount){
+        reportUserActiveMonthService.saveUserActiveMonth(memberCount, merchantCount);
+        return  successCreated();
+    }
+
 }

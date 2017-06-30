@@ -7,4 +7,6 @@ package com.lawu.eshop.jobs.service;
 public interface UserActiveStatisticsService {
 
     void executeCollectionUserActiveDaily();
+
+    void executeCollectionUserActiveMonth();
 }

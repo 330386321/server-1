@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "statistics-srv")
 public interface UserActiveService {
 
-    @RequestMapping(value = "userActive/saveUserActiveDaily", method = RequestMethod.POST)
+    @RequestMapping(value = "userActive/saveUserActiveDaily", method = RequestMethod.GET)
     Result saveUserActiveDaily(@RequestParam(value = "memberCount") Integer memberCount,
+                               @RequestParam(value = "merchantCount") Integer merchantCount);
+
+    @RequestMapping(value = "userActive/saveUserActiveMonth", method = RequestMethod.GET)
+    Result saveUserActiveMonth(@RequestParam(value = "memberCount") Integer memberCount,
                                @RequestParam(value = "merchantCount") Integer merchantCount);
 }

@@ -7,4 +7,6 @@ package com.lawu.eshop.statistics.srv.service;
 public interface ReportUserActiveDailyService {
 
     void saveUserActiveDaily(Integer memberCount, Integer merchantCount);
+
+
 }

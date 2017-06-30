@@ -5,14 +5,36 @@
     <select id="collectionMemberActiveDaily" resultType="java.lang.Integer"  parameterType="java.util.Date">
         select count(1) from user_visit_record
         where user_type = 2
-         and gmt_create=#{gmtCreate}
+         and visit_date=#{visitDate}
     </select>
 
 
     <select id="collectionMerchantActiveDaily" resultType="java.lang.Integer" parameterType="java.util.Date">
         select count(1) from user_visit_record
          where user_type = 1
-         and gmt_create=#{gmtCreate}
+         and visit_date=#{visitDate}
+    </select>
+
+    <select id="collectionMemberActiveMonth" resultType="java.lang.Integer"  parameterType="java.util.Date">
+        SELECT
+            count(1)
+        FROM
+            user_visit_record
+        WHERE
+            user_type = 2
+        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1;
+    </select>
+
+
+    <select id="collectionMerchantActiveMonth" resultType="java.lang.Integer" parameterType="java.util.Date">
+        SELECT
+            count(1)
+        FROM
+            user_visit_record
+        WHERE
+            user_type = 1
+            date_add(curdate(),interval -1 month)
+        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1;
     </select>
 
 

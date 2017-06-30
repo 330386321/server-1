@@ -8,4 +8,8 @@ public interface UserActiveService {
     Integer collectionMemberActiveDaily();
 
     Integer collectionMerchantActiveDaily();
+
+    Integer collectionMemberActiveMonth();
+
+    Integer collectionMerchantActiveMonth();
 }

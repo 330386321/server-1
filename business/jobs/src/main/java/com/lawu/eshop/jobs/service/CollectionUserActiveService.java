@@ -17,4 +17,10 @@ public interface CollectionUserActiveService {
 
     @RequestMapping(value = "userActive/collectionMerchantActiveDaily", method = RequestMethod.GET)
     Result<Integer> collectionMerchantActiveDaily();
+
+    @RequestMapping(value = "userActive/collectionMemberActiveMonth", method = RequestMethod.GET)
+    Result<Integer> collectionMemberActiveMonth();
+
+    @RequestMapping(value = "userActive/collectionMerchantActiveMonth", method = RequestMethod.GET)
+    Result<Integer> collectionMerchantActiveMonth();
 }

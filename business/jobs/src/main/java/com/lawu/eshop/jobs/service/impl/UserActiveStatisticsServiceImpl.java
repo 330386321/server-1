@@ -27,4 +27,12 @@ public class UserActiveStatisticsServiceImpl implements UserActiveStatisticsServ
         userActiveService.saveUserActiveDaily(memberResult.getModel(), merchantResult.getModel());
 
     }
+
+    @Override
+    public void executeCollectionUserActiveMonth() {
+        Result<Integer> memberResult = collectionUserActiveService.collectionMemberActiveMonth();
+        Result<Integer> merchantResult = collectionUserActiveService.collectionMerchantActiveMonth();
+
+        userActiveService.saveUserActiveMonth(memberResult.getModel(), merchantResult.getModel());
+    }
 }

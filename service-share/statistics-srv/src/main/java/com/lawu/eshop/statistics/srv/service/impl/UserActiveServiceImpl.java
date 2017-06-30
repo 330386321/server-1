@@ -30,4 +30,16 @@ public class UserActiveServiceImpl implements UserActiveService {
         Integer count = userActiveDOMapperExtend.collectionMerchantActiveDaily(time);
         return count;
     }
+
+    @Override
+    public Integer collectionMemberActiveMonth() {
+        Integer count = userActiveDOMapperExtend.collectionMemberActiveMonth(DateUtil.getNowDate());
+        return count;
+    }
+
+    @Override
+    public Integer collectionMerchantActiveMonth() {
+        Integer count = userActiveDOMapperExtend.collectionMerchantActiveMonth(DateUtil.getNowDate());
+        return count;
+    }
 }

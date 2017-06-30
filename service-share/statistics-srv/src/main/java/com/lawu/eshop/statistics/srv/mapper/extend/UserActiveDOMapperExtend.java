@@ -10,4 +10,8 @@ public interface UserActiveDOMapperExtend {
     Integer collectionMemberActiveDaily(Date time);
 
     Integer collectionMerchantActiveDaily(Date time);
+
+    Integer collectionMemberActiveMonth(Date nowDate);
+
+    Integer collectionMerchantActiveMonth(Date nowDate);
 }
