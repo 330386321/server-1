@@ -93,7 +93,6 @@ public class WithdrawCashController extends BaseController {
 	
 	/**
 	 * 
-	 * @param flag 1-day2-month
 	 * @param date 时间条件
 	 * @param isTotal 0-区分商家用户1-平台总提现
 	 * @return
@@ -101,7 +100,7 @@ public class WithdrawCashController extends BaseController {
 	 * @date 2017年7月3日 上午10:28:40
 	 */
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
-	public ReportCommonBackDTO selectReport(@RequestParam("flag") String flag,@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return withdrawCashService.selectReport(flag,date,flag);
+	public ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
+		return withdrawCashService.selectReport(date,isTotal);
 	}
 }

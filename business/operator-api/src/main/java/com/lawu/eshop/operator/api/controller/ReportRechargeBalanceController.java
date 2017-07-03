@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.operator.api.service.ReportWithdrawCashService;
+import com.lawu.eshop.operator.api.service.ReportRechargeBalanceService;
 import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 
 import io.swagger.annotations.Api;
@@ -21,23 +21,22 @@ import io.swagger.annotations.ApiOperation;
  * Description: 
  * </p>
  * @author Yangqh
- * @date 2017年6月30日 下午5:20:16
+ * @date 2017年7月3日 下午3:17:53
  *
  */
 @Api(tags = "reportWithdrawCash")
 @RestController
-@RequestMapping(value = "reportWithdrawCash/")
-public class ReportWithdrawCashController extends BaseController {
+@RequestMapping(value = "reportRechargeBalance/")
+public class ReportRechargeBalanceController extends BaseController {
 
 	@Autowired
-	private ReportWithdrawCashService reportWithdrawCashService;
+	private ReportRechargeBalanceService reportRechargeBalanceService;
 
-	@ApiOperation(value = "提现日/月统计", notes = "提现日/月统计,[]（杨清华）", httpMethod = "GET")
+	@ApiOperation(value = "余额充值日/月统计", notes = "余额充值日/月统计,[]（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
-	@RequiresPermissions("report:withdraw")
+	@RequiresPermissions("report:rechargeBalance")
 	public Result<ReportCommonBackDTO> selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		
-		return successCreated(reportWithdrawCashService.selectReport(date,isTotal));
+		return successCreated(reportRechargeBalanceService.selectReport(date,isTotal));
 	}
 
 	

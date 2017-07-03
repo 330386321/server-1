@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.RechargeBalanceDailyDTO;
+import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.RechargeBalanceDailyBO;
 import com.lawu.eshop.statistics.srv.service.RechargeBalanceService;
@@ -88,5 +89,18 @@ public class RechargeBalanceController extends BaseController {
 	public Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate) {
 		rechargeBalanceService.deleteMonthByReportDate(reportDate);
 		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	/**
+	 * 
+	 * @param date
+	 * @param isTotal
+	 * @return
+	 * @author yangqh
+	 * @date 2017年7月3日 下午3:22:46
+	 */
+	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
+	public ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
+		return rechargeBalanceService.selectReport(date,isTotal);
 	}
 }

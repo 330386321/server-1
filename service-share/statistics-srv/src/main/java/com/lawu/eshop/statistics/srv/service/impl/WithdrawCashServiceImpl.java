@@ -55,7 +55,7 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	public List<ReportWithdrawDailyBO> getDailyList(String reportDate) {
 		ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
 		Date begin = DateUtil.formatDate(reportDate+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
+		Date end = DateUtil.getLastDayOfMonth(begin);
 		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
 		List<ReportWithdrawDailyBO> boList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	}
 
 	@Override
-	public ReportCommonBackDTO selectReport(String flag,String date,String isTotal) {
+	public ReportCommonBackDTO selectReport(String date,String isTotal) {
 		if("".equals(date)){
 			date = DateUtil.getDateFormat(new Date(), "yyyy-MM");
 		}
@@ -96,10 +96,10 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		List<BigDecimal> yAxisMemberData = new ArrayList<>();
 		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
 		List<BigDecimal> yAxisTotalData = new ArrayList<>();
-		if("1".equals(flag)){
+		if(date.length() > 4){
 			ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
-			Date begin = DateUtil.formatDate(date+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-			Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
+			Date begin = DateUtil.formatDate(date+"-01", "yyyy-MM-dd");
+			Date end = DateUtil.getLastDayOfMonth(begin);
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
@@ -113,10 +113,10 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 					yAxisTotalData.add(rdo.getTotalMoney().setScale(2));
 				}
 			}
-		}else if("2".equals(flag)){
+		}else {
 			ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
-			Date begin = DateUtil.formatDate(date+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-			Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
+			Date begin = DateUtil.formatDate(date+"-01-01", "yyyy-MM-dd");
+			Date end = DateUtil.formatDate(date+"-12-01", "yyyy-MM-dd");
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportWithdrawMonthDO> rntList = reportWithdrawMonthDOMapper.selectByExample(example);
@@ -135,6 +135,7 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		dto.setyAxisMemberData(yAxisMemberData);
 		dto.setyAxisMerchantData(yAxisMerchantData);
 		dto.setyAxisTotalData(yAxisTotalData);
+		dto.setDate(date);
 		return dto;
 	}
 	

@@ -2,6 +2,7 @@ package com.lawu.eshop.statistics.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.PointConsumeDailyBO;
 
@@ -16,6 +17,8 @@ public interface PointConsumeService {
 	void deleteDailyByReportDate(String reportDate);
 
 	void deleteMonthByReportDate(String reportDate);
+
+	ReportCommonBackDTO selectReport(String date, String isTotal);
 
 	
 

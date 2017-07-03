@@ -13,14 +13,13 @@ import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
  * Description: 
  * </p>
  * @author Yangqh
- * @date 2017年6月30日 下午5:44:45
+ * @date 2017年7月3日 下午3:38:48
  *
  */
 @FeignClient(value = "statistics-srv")
-public interface ReportWithdrawCashService {
+public interface ReportPointConsumeService {
 
-
-	@RequestMapping(value = "withdrawCash/selectReport",method = RequestMethod.GET)
+	@RequestMapping(value = "pointConsume/selectReport",method = RequestMethod.GET)
 	ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal);
 
 }
