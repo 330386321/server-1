@@ -38,6 +38,7 @@ import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -49,6 +50,7 @@ import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
+import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
@@ -63,6 +65,7 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.AdArithmeticUtil;
+import com.lawu.eshop.utils.DateUtil;
 
 
 /**
@@ -559,6 +562,7 @@ public class AdServiceImpl implements AdService {
 			AdDO ad=new AdDO();
 			ad.setId(memberId);
 			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+			ad.setGmtModified(new Date());
 			adDOMapper.updateByPrimaryKeySelective(ad);
 			return new BigDecimal(0);
 		}else{
@@ -995,6 +999,27 @@ public class AdServiceImpl implements AdService {
 			detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
 		}
 		return detail;
+	}
+
+	@Override
+	public List<ReportAdBO> selectReportAdEarnings() {
+		int currentPage=0;
+		RowBounds rowBounds = new RowBounds(100 * (currentPage - 1), 100);
+		List<ReportAdView> list =adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+		List<ReportAdBO> listBO=new ArrayList<>();
+		for (ReportAdView reportAdView : list) {
+			ReportAdBO bo=new ReportAdBO();
+			bo.setGmtCreate(reportAdView.getGmtCreate());
+			bo.setId(reportAdView.getId());
+			bo.setMerchantId(reportAdView.getMerchantId());
+			bo.setMerchantNum(reportAdView.getMerchantNum());
+			bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
+			bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
+			bo.setTotalPoint(reportAdView.getTotalPoint());
+			bo.setTitle(reportAdView.getTitle());
+			listBO.add(bo);
+		}
+		return listBO;
 	}
 
 }

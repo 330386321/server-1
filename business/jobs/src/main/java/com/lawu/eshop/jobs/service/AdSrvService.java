@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
+import com.lawu.eshop.ad.dto.ReportAdDTO;
 import com.lawu.eshop.ad.dto.ViewDTO;
 import com.lawu.eshop.framework.web.Result;
 
@@ -56,5 +57,12 @@ public interface AdSrvService {
 	 */
 	@RequestMapping(value = "ad/updateViewCount/{id}", method = RequestMethod.PUT)
     public Result<List<Long>> updateViewCount(@PathVariable("id")  Long  id,@RequestParam("count") Integer count);
+	
+	/**
+	 * 广告统计
+	 * @return
+	 */
+	@RequestMapping(value = "ad/selectReportAdEarnings", method = RequestMethod.GET)
+	public Result<List<ReportAdDTO>> selectReportAdEarnings();
 
 }

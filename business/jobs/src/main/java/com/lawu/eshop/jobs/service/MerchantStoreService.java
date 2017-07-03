@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -35,4 +36,12 @@ public interface MerchantStoreService {
      */
     @RequestMapping(method = RequestMethod.PUT, value = "merchantStore/updateStoreStatistics/{id}")
     void updateStoreStatisticsById(@PathVariable("id") Long id, @ModelAttribute StoreStatisticsParam param);
+    
+    /**
+     * 商家信息查询
+     * @param merchantId
+     * @return
+     */
+    @RequestMapping(value = "merchantStore/selectMerchantStoreByMId", method = RequestMethod.GET)
+	public Result<MerchantStoreDTO> selectMerchantStoreByMId(@RequestParam("merchantId") Long merchantId); 
 }

@@ -1,13 +1,50 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.common.SolrDocumentList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.ad.constants.AdStatusEnum;
+import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
-import com.lawu.eshop.ad.dto.*;
-import com.lawu.eshop.ad.param.*;
+import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdDetailDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDTO;
+import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
+import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.PraisePointDTO;
+import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
+import com.lawu.eshop.ad.dto.ReportAdDTO;
+import com.lawu.eshop.ad.dto.ViewDTO;
+import com.lawu.eshop.ad.param.AdFindParam;
+import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPraiseParam;
+import com.lawu.eshop.ad.param.AdSaveParam;
+import com.lawu.eshop.ad.param.AdsolrFindParam;
+import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.service.AdService;
@@ -18,18 +55,6 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.solr.SolrUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  * E赚接口提供
@@ -538,6 +563,29 @@ public class AdController extends BaseController{
 	@RequestMapping(value = "selectDetail/{id}", method = RequestMethod.GET)
 	public Result<AdDetailDTO> selectDetail(@PathVariable Long id) {
 		return successCreated(AdConverter.convertDetailDTO(adService.selectDetail(id)));
+	}
+	
+	/**
+	 * 广告收益统计
+	 * @return
+	 */
+	@RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.GET)
+	public Result<List<ReportAdDTO>> selectReportAdEarnings() {
+		List<ReportAdBO> list = adService.selectReportAdEarnings();
+		List<ReportAdDTO> listDTO = new ArrayList<>();
+		for (ReportAdBO reportAdBO : list) {
+			ReportAdDTO dto = new ReportAdDTO();
+			dto.setGmtCreate(reportAdBO.getGmtCreate());
+			dto.setId(reportAdBO.getId());
+			dto.setMerchantId(reportAdBO.getMerchantId());
+			dto.setMerchantNum(reportAdBO.getMerchantNum());
+			dto.setStatusEnum(reportAdBO.getStatusEnum());
+			dto.setTypeEnum(reportAdBO.getTypeEnum());
+			dto.setTotalPoint(reportAdBO.getTotalPoint());
+			dto.setTitle(reportAdBO.getTitle());
+			listDTO.add(dto);
+		}
+		return successCreated(listDTO);
 	}
 
 }

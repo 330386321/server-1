@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend" >
+
+	<resultMap id="BaseResultMap" type="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    <result column="user_totle_point" jdbcType="DECIMAL" property="userTotalPoint" />
+	    <result column="love_totle_point" jdbcType="DECIMAL" property="loveTotalPoint" />
+	</resultMap>
+  
+ 	<select id="getReportAdEarningsPoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(point) as user_totle_point
+	    from point_detail
+	    where
+	      	point_type =#{pointType,jdbcType=TINYINT}
+	      	and biz_id=#{bizId,jdbcType=VARCHAR}
+	 </select>
+	 
+	 
+	 <select id="getReportAdEarningsLovePoint"  resultMap="BaseResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView">
+	    select
+	    	sum(amount) as love_totle_point
+	    from love_detail
+	    where
+	      	love_type =#{pointType,jdbcType=TINYINT}
+	      	and biz_id=#{bizId,jdbcType=VARCHAR}
+	 </select>
+</mapper>
