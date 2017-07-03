@@ -569,6 +569,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(num);
 			pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+			pointPoolDO.setGmtModified(new Date());
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
@@ -667,6 +668,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setStatus(new Byte("1"));
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(memberNum);
+			pointPoolDO.setGmtModified(new Date());
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
