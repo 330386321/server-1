@@ -1136,6 +1136,66 @@ public class ProductDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andGmtDownIsNull() {
+            addCriterion("gmt_down is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownIsNotNull() {
+            addCriterion("gmt_down is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownEqualTo(Date value) {
+            addCriterion("gmt_down =", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownNotEqualTo(Date value) {
+            addCriterion("gmt_down <>", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownGreaterThan(Date value) {
+            addCriterion("gmt_down >", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownGreaterThanOrEqualTo(Date value) {
+            addCriterion("gmt_down >=", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownLessThan(Date value) {
+            addCriterion("gmt_down <", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownLessThanOrEqualTo(Date value) {
+            addCriterion("gmt_down <=", value, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownIn(List<Date> values) {
+            addCriterion("gmt_down in", values, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownNotIn(List<Date> values) {
+            addCriterion("gmt_down not in", values, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownBetween(Date value1, Date value2) {
+            addCriterion("gmt_down between", value1, value2, "gmtDown");
+            return (Criteria) this;
+        }
+
+        public Criteria andGmtDownNotBetween(Date value1, Date value2) {
+            addCriterion("gmt_down not between", value1, value2, "gmtDown");
+            return (Criteria) this;
+        }
+
         public Criteria andGmtModifiedIsNull() {
             addCriterion("gmt_modified is null");
             return (Criteria) this;

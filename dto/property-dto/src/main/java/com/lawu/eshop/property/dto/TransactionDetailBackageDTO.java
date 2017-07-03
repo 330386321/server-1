@@ -21,6 +21,9 @@ public class TransactionDetailBackageDTO {
     @ApiModelProperty(value = "交易标题", required = true)
     private String title;
 
+    @ApiModelProperty(value = "支付方式", required = true)
+    private String payType;
+
     @ApiModelProperty(value = "用户编号", required = true)
     private String userNum;
 
@@ -77,5 +80,13 @@ public class TransactionDetailBackageDTO {
 
     public void setAccountType(String accountType) {
         this.accountType = accountType;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
     }
 }

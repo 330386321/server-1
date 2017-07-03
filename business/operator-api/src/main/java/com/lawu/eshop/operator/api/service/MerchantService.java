@@ -3,6 +3,7 @@ package com.lawu.eshop.operator.api.service;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.user.dto.MerchantDTO;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
 import com.lawu.eshop.user.dto.MessagePushDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,5 +52,14 @@ public interface MerchantService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchantByNum")
     Result<MerchantDTO> getMerchantByNum(@RequestParam("num") String num);
+
+    /**
+     * 根据商家ID查询商家基本信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "merchant/getMerchantView/{id}")
+    Result<MerchantViewDTO> getMerchantView(@PathVariable("id") Long id);
 
 }

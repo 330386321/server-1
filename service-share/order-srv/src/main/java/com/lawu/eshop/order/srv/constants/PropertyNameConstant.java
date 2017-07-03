@@ -129,4 +129,8 @@ public class PropertyNameConstant {
 	 */
 	public static final String REFUND_TO_THE_ACCOUNT_TIME = "refund_to_the_account_time";
 	
+	/**
+	 * 用户添加购物车数量
+	 */
+	public static final String MAX_SHOPPING_CART_QUANTITY = "max_shopping_cart_quantity";
 }

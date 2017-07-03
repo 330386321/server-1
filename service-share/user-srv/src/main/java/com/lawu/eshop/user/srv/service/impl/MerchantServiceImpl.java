@@ -15,6 +15,7 @@ import com.lawu.eshop.user.srv.converter.MerchantConverter;
 import com.lawu.eshop.user.srv.converter.MerchantInviterConverter;
 import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.InviterMerchantDOView;
+import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 import com.lawu.eshop.user.srv.domain.extend.MerchantPushView;
 import com.lawu.eshop.user.srv.mapper.*;
 import com.lawu.eshop.user.srv.mapper.extend.InviterMerchantDOMapperExtend;
@@ -554,6 +555,11 @@ public class MerchantServiceImpl implements MerchantService {
     public int delMerchantGtPush(Long merchantId) {
       int row =  merchantDOMapperExtend.delMerchantGtPush(merchantId);
         return row;
+    }
+
+    @Override
+    public MerchantDOView getMerchantView(Long id) {
+        return merchantDOMapperExtend.getMerchantViewById(id);
     }
 
 }

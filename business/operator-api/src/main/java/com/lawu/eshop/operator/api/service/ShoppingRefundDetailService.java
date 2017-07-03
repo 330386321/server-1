@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 
 /**
  * @author Sunny
  * @date 2017/04/14
  */
-@FeignClient(value = "order-srv")
+@FeignClient(value = "order-srv", path = "shoppingRefundDetail/")
 public interface ShoppingRefundDetailService {
 	
 	/**
@@ -26,7 +27,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/agreeToRefund/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
 	
 	/**
@@ -37,6 +38,16 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
 	Result revokeRefundRequest(@PathVariable("id") Long id);
+	
+	/**
+	 * 根据订单项id查询退款详情
+	 * 
+	 * @param shoppingOrderitemId
+	 *            购物订单项id
+	 * @return
+	 */
+	@RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
+	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
 }

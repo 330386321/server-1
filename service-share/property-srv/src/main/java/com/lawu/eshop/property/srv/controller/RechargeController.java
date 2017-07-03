@@ -1,18 +1,5 @@
 package com.lawu.eshop.property.srv.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
@@ -34,6 +21,13 @@ import com.lawu.eshop.property.srv.service.RechargeService;
 import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -160,4 +154,17 @@ public class RechargeController extends BaseController {
 		pageResult.setRecords(dtos);
 		return successCreated(pageResult);
 	}
+
+	/**
+	 * 根据ID查询充值支付方式
+	 *
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "getRechargePayType/{id}", method = RequestMethod.GET)
+	public Result<String> getRechargePayType(@PathVariable Long id) {
+		String payType = rechargeService.getRechargePayType(id);
+		return successGet(payType);
+	}
+
 }

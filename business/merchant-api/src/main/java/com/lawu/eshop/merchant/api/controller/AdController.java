@@ -39,6 +39,7 @@ import com.lawu.eshop.merchant.api.service.MemberCountService;
 import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.merchant.api.service.PropertyInfoService;
 import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
@@ -85,9 +86,9 @@ public class AdController extends BaseController {
 		if(adParam.getTypeEnum().val!=4 && !StringUtils.isNotEmpty(adParam.getBeginTime())){
 			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 		}
-    	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+    	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
     	if (isSuccess(resultFreeze)){
-    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
+    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel().getStatus())){
     			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
     		}
     	} else {

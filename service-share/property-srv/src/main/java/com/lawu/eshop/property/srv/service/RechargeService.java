@@ -32,7 +32,6 @@ public interface RechargeService {
 	/**
 	 * 用户商家充值余额积分回调
 	 * @param param
-	 * @param result
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -54,6 +53,12 @@ public interface RechargeService {
 	 */
 	Page<BalanceAndPointListQueryBO> selectPropertyinfoList(RechargeQueryDataParam dparam);
 
-
+	/**
+	 * 根据ID查询充值方式
+	 *
+	 * @param id
+	 * @return
+	 */
+	String getRechargePayType(Long id);
 
 }

@@ -1,14 +1,14 @@
 package com.lawu.eshop.property.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.dto.PointDetailBackageDTO;
 import com.lawu.eshop.property.dto.PointDetailDTO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 积分明细转换器
@@ -40,7 +40,7 @@ public class PointDetailConverter {
 		rtn.setRemark(pointDetailDO.getRemark());
 		rtn.setTitle(pointDetailDO.getTitle());
 		rtn.setUserNum(pointDetailDO.getUserNum());
-		
+		rtn.setBizId(pointDetailDO.getBizId());
 		rtn.setDirection(ConsumptionTypeEnum.getEnum(pointDetailDO.getDirection()));
 
 		return rtn;
@@ -116,6 +116,7 @@ public class PointDetailConverter {
 			pointDetailBackageDTO.setTitle(pointDetailBO.getTitle());
 			pointDetailBackageDTO.setUserNum(pointDetailBO.getUserNum());
 			pointDetailBackageDTO.setPoint(pointDetailBO.getPoint());
+			pointDetailBackageDTO.setBizId(pointDetailBO.getBizId());
 			pointDetailBackageDTO.setGmtCreate(pointDetailBO.getGmtCreate());
 			pointDetailBackageDTOS.add(pointDetailBackageDTO);
 		}

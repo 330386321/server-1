@@ -18,6 +18,7 @@ import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
+import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
 /**
@@ -36,33 +37,31 @@ public class ShoppingCartController extends BaseController {
 	 * 
 	 * @param param
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "{memberId}", method = RequestMethod.POST)
-	public Result<Long> save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
-		
-		Result<Long> result = shoppingCartService.save(memberId, param);
-		
-		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
+	public Result save(@PathVariable("memberId") Long memberId, @RequestBody ShoppingCartSaveParam param) {
+		try {
+			shoppingCartService.save(memberId, param);
+		} catch (MoreThanMaximumException e) {
+			return successCreated(ResultCode.MAX_SHOPPING_CART_QUANTITY);
 		}
-		
-		return successCreated(result);
+		return successCreated();
 	}
-	
+
 	/**
 	 * 根据memberId查询用户的购物车列表
 	 * 
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(value = "list/{memberId}",  method = RequestMethod.GET)
-	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId){
-		
+	@RequestMapping(value = "list/{memberId}", method = RequestMethod.GET)
+	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId) {
+
 		List<ShoppingCartBO> shoppingCartBOList = shoppingCartService.findListByMemberId(memberId);
-		
+
 		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));
 	}
-	
+
 	/**
 	 * 根据id更新购物车的商品（使用实时更新不采用批量更新的方式）
 	 * 
@@ -73,16 +72,16 @@ public class ShoppingCartController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
 	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam param) {
-		
+
 		int resultCode = shoppingCartService.update(id, memberId, param);
-		
+
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-		
+
 		return successCreated();
 	}
-	
+
 	/**
 	 * 根据id列表删除购物车的商品
 	 * 
@@ -95,40 +94,40 @@ public class ShoppingCartController extends BaseController {
 	@RequestMapping(value = "delete", method = RequestMethod.PUT)
 	public Result delete(@RequestParam("memberId") Long memberId, @RequestBody List<Long> ids) {
 		int resultCode = shoppingCartService.remove(memberId, ids);
-		
+
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-		
+
 		return successCreated();
 	}
-	
-	
+
 	/**
 	 * 根据购物车id列表查询购物车列表
 	 * 
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(value = "list/findListByIds",  method = RequestMethod.GET)
+	@RequestMapping(value = "list/findListByIds", method = RequestMethod.GET)
 	public Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
-		
+
 		Result<List<ShoppingCartBO>> shoppingCartBOListResult = shoppingCartService.findListByIds(ids);
-		
+
 		if (!isSuccess(shoppingCartBOListResult)) {
 			return successGet(shoppingCartBOListResult.getRet());
 		}
-		
+
 		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOListResult.getModel()));
 	}
-	
+
 	/**
 	 * 根据用户id列表查询购物车数量
 	 * 
-	 * @param memberId 用户id
+	 * @param memberId
+	 *            用户id
 	 * @return
 	 */
-	@RequestMapping(value = "count/{memberId}",  method = RequestMethod.GET)
+	@RequestMapping(value = "count/{memberId}", method = RequestMethod.GET)
 	public Result<Long> count(@PathVariable("memberId") Long memberId) {
 		return successGet(shoppingCartService.count(memberId));
 	}

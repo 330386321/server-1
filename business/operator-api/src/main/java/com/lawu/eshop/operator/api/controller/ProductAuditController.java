@@ -7,6 +7,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.operator.api.service.LogService;
+import com.lawu.eshop.operator.api.service.MerchantService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
@@ -16,6 +17,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
 import com.lawu.eshop.product.dto.ProductQueryDTO;
 import com.lawu.eshop.product.param.ListProductParam;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -40,13 +42,26 @@ public class ProductAuditController extends BaseController {
     @Autowired
     private LogService logService;
 
+    @Autowired
+    private MerchantService merchantService;
+
     @ApiOperation(value = "商品审列表", notes = "查询所有门店上架中商品  [1002]（梅述全）", httpMethod = "POST")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequiresPermissions("productAudit:list")
     @PageBody
     @RequestMapping(value = "listProduct", method = RequestMethod.POST)
     public Result<Page<ProductQueryDTO>> listProduct(@RequestBody @ApiParam ListProductParam listProductParam) {
-        return productAuditService.listProduct(listProductParam);
+        Result<Page<ProductQueryDTO>> result = productAuditService.listProduct(listProductParam);
+        if(result != null && !result.getModel().getRecords().isEmpty()){
+            for(ProductQueryDTO productQueryDTO : result.getModel().getRecords()){
+                Result<MerchantViewDTO> merchantViewDTOResult = merchantService.getMerchantView(productQueryDTO.getMerchantId());
+                if(isSuccess(merchantViewDTOResult)){
+                    productQueryDTO.setStoreName(merchantViewDTOResult.getModel().getStoreName());
+                    productQueryDTO.setAccount(merchantViewDTOResult.getModel().getAccount());
+                }
+            }
+        }
+        return result;
     }
 
     @ApiOperation(value = "查询商品详情", notes = "编辑商品时，根据商品ID查询商品详情信息，[1002|1003]，（梅述全）", httpMethod = "GET")

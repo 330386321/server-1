@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
+import com.lawu.eshop.property.dto.PropertyInfoFreezeDTO;
 import com.lawu.eshop.property.dto.PropertyLoveAccountDTO;
 import com.lawu.eshop.property.dto.PropertyPointAndBalanceDTO;
 import com.lawu.eshop.property.dto.PropertyPointDTO;
@@ -122,6 +122,6 @@ public interface PropertyInfoService {
 	 * @date 2017年5月26日 上午11:08:32
 	 */
 	@RequestMapping(value = "propertyInfo/getPropertyinfoFreeze/{userNum}", method = RequestMethod.GET)
-	Result<PropertyinfoFreezeEnum> getPropertyinfoFreeze(@PathVariable("userNum") String userNum);
+	Result<PropertyInfoFreezeDTO> getPropertyinfoFreeze(@PathVariable("userNum") String userNum);
 
 }

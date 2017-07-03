@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
+import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 
 /**
  * 购物车服务接口
@@ -29,10 +30,9 @@ public interface ShoppingCartService {
 	 * 
 	 * @param memberId 会员id
 	 * @param param 保存参数
-	 * @return
 	 * @author Sunny
 	 */
-	Result<Long> save(Long memberId, ShoppingCartSaveParam param);
+	void save(Long memberId, ShoppingCartSaveParam param) throws MoreThanMaximumException;
 	
 	/**
 	 * 根据id更新购物车

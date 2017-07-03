@@ -54,12 +54,13 @@ public class StoreSolrController extends BaseController {
     @RequestMapping(value = "listStore", method = RequestMethod.GET)
     public Result<Page<StoreSolrDTO>> listStore(@ModelAttribute @ApiParam StoreSolrParam storeSolrParam) {
         Result<Page<StoreSolrDTO>> result = storeSolrService.listStore(storeSolrParam);
-        if (result != null && !result.getModel().getRecords().isEmpty()) {
-            for (StoreSolrDTO storeSolrDTO : result.getModel().getRecords()) {
-                if (StringUtils.isNotEmpty(storeSolrDTO.getRegionPath())) {
-                    String areaName = regionService.getAreaName(storeSolrDTO.getRegionPath()).getModel();
-                    storeSolrDTO.setAreaName(areaName);
-                }
+        if (!isSuccess(result)) {
+            return result;
+        }
+        for (StoreSolrDTO storeSolrDTO : result.getModel().getRecords()) {
+            if (StringUtils.isNotEmpty(storeSolrDTO.getRegionPath())) {
+                String areaName = regionService.getAreaName(storeSolrDTO.getRegionPath()).getModel();
+                storeSolrDTO.setAreaName(areaName);
             }
         }
         return result;

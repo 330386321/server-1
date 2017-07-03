@@ -43,6 +43,7 @@ public class ProductConverter {
         for (ProductQueryBO productBO : productBOS) {
             ProductQueryDTO productDTO = new ProductQueryDTO();
             productDTO.setId(productBO.getId());
+            productDTO.setMerchantId(productBO.getMerchantId());
             productDTO.setName(productBO.getName());
             productDTO.setCategory(productBO.getCategory());
             productDTO.setFeatureImage(productBO.getFeatureImage());
@@ -67,6 +68,7 @@ public class ProductConverter {
     public static ProductQueryBO convertQueryBO(ProductDO productDO) {
         ProductQueryBO productBO = new ProductQueryBO();
         productBO.setId(productDO.getId());
+        productBO.setMerchantId(productDO.getMerchantId());
         productBO.setName(productDO.getName());
         productBO.setFeatureImage(productDO.getFeatureImage());
         productBO.setGmtCreate(DateUtil.getDateFormat(productDO.getGmtCreate(), "yyyy-MM-dd"));

@@ -70,6 +70,7 @@ public class ResultCode {
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_HEAD = 3000;
     public static final int IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL = 3001;
     public static final int GOODS_PRODUCT_FACORITE_EXIST = 3003;
+    public static final int GOODS_PRODUCT_INVENTORY = 3004;
 
     // 订单模块代码 4xxx
     public static final int PRODUCT_EVALUATE_TRUE = 4001;
@@ -93,6 +94,7 @@ public class ResultCode {
     public static final int PRODUCT_HAS_EXPIRED = 4019;
     public static final int THE_ORDER_IS_BEING_PROCESSED = 4020;
     public static final int ORDER_CREATION_FAILED = 4021;
+    public static final int MAX_SHOPPING_CART_QUANTITY = 4022;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -240,6 +242,7 @@ public class ResultCode {
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_HEAD, "请上传商品图片");
         ResultCode.messageMap.put(IMAGE_WRONG_UPLOAD_PRODUCT_DETAIL, "请上传商品描述图片");
         ResultCode.messageMap.put(GOODS_PRODUCT_FACORITE_EXIST, "商品已经被收藏");
+        ResultCode.messageMap.put(GOODS_PRODUCT_INVENTORY, "存在商品库存为0无法上架");
 
         // 订单模块 4xxx
         ResultCode.messageMap.put(PRODUCT_EVALUATE_TRUE, "该订单已评价");
@@ -263,6 +266,7 @@ public class ResultCode {
         ResultCode.messageMap.put(PRODUCT_HAS_EXPIRED, "商品已经失效");
         ResultCode.messageMap.put(THE_ORDER_IS_BEING_PROCESSED, "订单正在处理");
         ResultCode.messageMap.put(ORDER_CREATION_FAILED, "订单创建失败");
+        ResultCode.messageMap.put(MAX_SHOPPING_CART_QUANTITY, "购物车数量已达上限");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");

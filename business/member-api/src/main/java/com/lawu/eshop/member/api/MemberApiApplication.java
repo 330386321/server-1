@@ -4,12 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+
+import com.lawu.eshop.framework.web.filter.XssFilter;
 
 /**
  * 会员api启动类
@@ -22,7 +25,6 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ImportResource(locations = {"classpath:spring.xml"})
 @ComponentScan(basePackages = {"com.lawu.eshop"})
-@ServletComponentScan(basePackages = {"com.lawu.eshop"})
 public class MemberApiApplication {
 
     private static Logger logger = LoggerFactory.getLogger(MemberApiApplication.class);
@@ -41,6 +43,13 @@ public class MemberApiApplication {
         mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(new JsonBeanSerializerModifier()));
         return converter;
     }*/
-
+    
+    @Bean
+    public FilterRegistrationBean  filterRegistrationBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setFilter(new XssFilter());
+        registrationBean.addUrlPatterns("/*");;
+        return registrationBean;
+    }
 }
 

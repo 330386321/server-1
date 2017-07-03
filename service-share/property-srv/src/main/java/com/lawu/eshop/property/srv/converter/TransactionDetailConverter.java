@@ -1,8 +1,5 @@
 package com.lawu.eshop.property.srv.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
@@ -14,6 +11,9 @@ import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 交易明细转换器
@@ -51,7 +51,7 @@ public class TransactionDetailConverter {
 		rtn.setUserNum(transactionDetailDO.getUserNum());
 		
 		rtn.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
-		rtn.setTransactionAccountType(TransactionPayTypeEnum.getEnum(transactionDetailDO.getTransactionType()));
+		rtn.setTransactionAccountType(TransactionPayTypeEnum.getEnum(transactionDetailDO.getTransactionAccountType()));
 
 		return rtn;
 	}
@@ -206,6 +206,7 @@ public class TransactionDetailConverter {
 		for(TransactionDetailBO transactionDetailBO : transactionDetailBOPage.getRecords()){
 			TransactionDetailBackageDTO transactionDetailBackageDTO = new TransactionDetailBackageDTO();
 			transactionDetailBackageDTO.setTitle(transactionDetailBO.getTitle());
+			transactionDetailBackageDTO.setPayType(transactionDetailBO.getTransactionAccountType().getName());
 			transactionDetailBackageDTO.setUserNum(transactionDetailBO.getUserNum());
 			transactionDetailBackageDTO.setAmount(transactionDetailBO.getAmount());
 			transactionDetailBackageDTO.setTransactionDate(transactionDetailBO.getGmtCreate());

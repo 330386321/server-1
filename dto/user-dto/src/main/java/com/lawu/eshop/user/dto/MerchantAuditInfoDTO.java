@@ -2,6 +2,7 @@ package com.lawu.eshop.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.user.constants.MerchantAuditStatusEnum;
+import com.lawu.eshop.user.dto.param.MerchantAuditTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
@@ -27,6 +28,9 @@ public class MerchantAuditInfoDTO {
     private Date gmtCreate;
 
     private Long storeId;
+
+    @ApiModelProperty(value = "审核类型：AUDIT_TYPE_STORE：申请实体店，AUDIT_TYPE_EDIT_INFO：修改资料")
+    private MerchantAuditTypeEnum auditTypeEnum;
 
     public MerchantAuditStatusEnum getMerchantAuditStatusEnum() {
         return merchantAuditStatusEnum;
@@ -66,5 +70,13 @@ public class MerchantAuditInfoDTO {
 
     public void setStoreId(Long storeId) {
         this.storeId = storeId;
+    }
+
+    public MerchantAuditTypeEnum getAuditTypeEnum() {
+        return auditTypeEnum;
+    }
+
+    public void setAuditTypeEnum(MerchantAuditTypeEnum auditTypeEnum) {
+        this.auditTypeEnum = auditTypeEnum;
     }
 }

@@ -7,10 +7,7 @@ import com.lawu.eshop.mall.dto.MessageStatisticsDTO;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageParam;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 站内信息接口
@@ -36,7 +33,6 @@ public interface MessageService {
      * 站内信息操作（已读，删除）
      *
      * @param messageId
-     * @param statusEnum
      */
     @RequestMapping(method = RequestMethod.PUT, value = "message/updateMessageStatus/{messageId}")
     Result updateMessageStatus(@PathVariable("messageId") Long messageId);
@@ -55,4 +51,12 @@ public interface MessageService {
     
     @RequestMapping(value = "message/selectMessageById/{id}", method = RequestMethod.GET)
     Result<MessageDTO> selectMessageById(@PathVariable("id") Long id);
+
+    /**
+     * 批量删除消息
+     * @param ids
+     * @return
+     */
+    @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
+    Result delMessageByIds(@RequestParam("ids") String ids);
 }

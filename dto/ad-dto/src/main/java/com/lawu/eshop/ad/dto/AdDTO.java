@@ -1,11 +1,11 @@
 package com.lawu.eshop.ad.dto;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.ad.constants.*;
 import io.swagger.annotations.ApiModelProperty;
-
-import java.math.BigDecimal;
-import java.util.Date;
 
 
 public class AdDTO {
@@ -90,6 +90,9 @@ public class AdDTO {
 	
 	@ApiModelProperty(value = "视频封面图片路径")
 	private String videoImgUrl;
+
+    @ApiModelProperty(value = "商家账号")
+    private String account;
 
 	@ApiModelProperty(value = "审核人员ID")
 	private Integer auditorId;
@@ -361,6 +364,9 @@ public class AdDTO {
 		this.videoImgUrl = videoImgUrl;
 	}
 
+    public String getAccount() {
+        return account;
+    }
 	public Integer getAuditorId() {
 		return auditorId;
 	}
@@ -373,6 +379,9 @@ public class AdDTO {
 		return auditorName;
 	}
 
+    public void setAccount(String account) {
+        this.account = account;
+    }
 	public void setAuditorName(String auditorName) {
 		this.auditorName = auditorName;
 	}

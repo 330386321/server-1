@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductSrvConfig productSrvConfig;
-    
+
     @Autowired
     private ProductModelDOMapperExtend productModelDOMapperExtend;
 
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询总数
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
         Page<ProductQueryBO> page = new Page<>();
-        page.setTotalCount(productDOMapper.countByExample(example));
+        page.setTotalCount(Long.valueOf(productDOMapper.countByExample(example)).intValue());
         page.setCurrentPage(query.getCurrentPage());
         List<ProductDO> productDOS = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
 
@@ -156,12 +156,24 @@ public class ProductServiceImpl implements ProductService {
         String idArray[] = ids.split(",");
         ProductDOExample examle = new ProductDOExample();
         for (int i = 0; i < idArray.length; i++) {
+
+        	if(productStatus.val.equals(ProductStatusEnum.PRODUCT_STATUS_UP.val)){
+        		ProductDO rntProduct = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
+        		if(rntProduct.getTotalInventory() == 0){
+        			return -1;
+        		}
+        	}
+
             examle.clear();
-            ProductDO productDO = new ProductDO();
-            productDO.setId(Long.valueOf(idArray[i]));
+            ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
             productDO.setStatus(productStatus.val);
+            if (ProductStatusEnum.PRODUCT_STATUS_DOWN.equals(productStatus)) {
+            	productDO.setGmtDown(new Date());
+            } else {
+            	productDO.setGmtDown(null);
+            }
             productDO.setGmtModified(new Date());
-            int row = productDOMapper.updateByPrimaryKeySelective(productDO);
+            int row = productDOMapper.updateByPrimaryKey(productDO);
             rows = rows + row;
 
             //更新solr索引
@@ -170,7 +182,6 @@ public class ProductServiceImpl implements ProductService {
                     delIds.add(idArray[i]);
             }
             if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
-                    productDO = productDOMapper.selectByPrimaryKey(productDO.getId());
                     SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
                     documents.add(document);
             }
@@ -461,7 +472,7 @@ public class ProductServiceImpl implements ProductService {
                     pmDO.setGmtCreate(new Date());
                     pmDO.setGmtModified(new Date());
                     productModelDOMapper.insertSelective(pmDO);
-                    
+
 //                    inventory += dataBO.getInventory();
                 } else {
                 	ProductModelDOView modelDO = new ProductModelDOView();
@@ -486,7 +497,7 @@ public class ProductServiceImpl implements ProductService {
                         pmiDO.setGmtCreate(new Date());
                         pmiDO.setGmtModified(new Date());
                         productModelInventoryDOMapper.insertSelective(pmiDO);
-                        
+
 //                        inventory += gapInventory;
                     }
                 }
@@ -650,7 +661,7 @@ public class ProductServiceImpl implements ProductService {
     public Integer selectProductCount(Long merchantId) {
         ProductDOExample example = new ProductDOExample();
         example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val).andMerchantIdEqualTo(merchantId);
-        Integer count = productDOMapper.countByExample(example);
+        Integer count = Long.valueOf(productDOMapper.countByExample(example)).intValue();
         return count;
     }
 
@@ -782,7 +793,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询总数
         RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
         Page<ProductQueryBO> page = new Page<>();
-        page.setTotalCount(productDOMapper.countByExample(example));
+        page.setTotalCount(Long.valueOf(productDOMapper.countByExample(example)).intValue());
         page.setCurrentPage(listProductParam.getCurrentPage());
         List<ProductDO> productDOS = productDOMapper.selectByExampleWithBLOBsWithRowbounds(example, rowBounds);
 

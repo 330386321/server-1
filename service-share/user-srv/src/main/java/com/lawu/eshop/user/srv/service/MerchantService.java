@@ -4,6 +4,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.user.param.MerchantInviterParam;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.srv.bo.*;
+import com.lawu.eshop.user.srv.domain.extend.MerchantDOView;
 
 import java.util.List;
 
@@ -122,4 +123,12 @@ public interface MerchantService {
     Boolean isRegister(String account);
 
     int delMerchantGtPush(Long merchantId);
+
+    /**
+     * 根据商家ID查询商家基本信息
+     *
+     * @param id
+     * @return
+     */
+    MerchantDOView getMerchantView(Long id);
 }

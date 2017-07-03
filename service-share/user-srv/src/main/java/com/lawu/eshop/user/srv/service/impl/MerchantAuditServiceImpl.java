@@ -288,6 +288,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
         merchantStoreAuditBO.setStatus(merchantStoreAuditDOS.get(0).getStatus());
         merchantStoreAuditBO.setRemark(merchantStoreAuditDOS.get(0).getRemark());
         merchantStoreAuditBO.setGmtCreate(merchantStoreAuditDOS.get(0).getGmtCreate());
+        merchantStoreAuditBO.setType(merchantStoreAuditDOS.get(0).getType());
         return merchantStoreAuditBO;
     }
 

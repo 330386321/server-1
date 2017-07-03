@@ -460,4 +460,23 @@ public class MerchantStoreConverter {
         payOrderStoreInfoBO.setStoreUrl(storeInfoView.getPath());
         return payOrderStoreInfoBO;
     }
+
+    /**
+     * MerchantInfoForShoppingCartDTO 转换
+     *
+     * @param merchantStoreInfoBO
+     * @return
+     * @author Sunny
+     * @date 2017年6月29日
+     */
+    public static MerchantInfoForShoppingCartDTO convert(MerchantStoreInfoBO merchantStoreInfoBO) {
+    	MerchantInfoForShoppingCartDTO rtn = null;
+        if (merchantStoreInfoBO == null) {
+            return rtn;
+        }
+        rtn = new MerchantInfoForShoppingCartDTO();
+        rtn.setMerchantStoreId(merchantStoreInfoBO.getMerchantStoreId());
+        rtn.setMerchantStoreName(merchantStoreInfoBO.getName());
+        return rtn;
+    }
 }

@@ -24,6 +24,7 @@ import com.lawu.eshop.member.api.service.ShoppingOrderService;
 import com.lawu.eshop.order.dto.ShoppingCartDTO;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartDTO;
 import com.lawu.eshop.order.dto.foreign.MemberShoppingCartGroupDTO;
+import com.lawu.eshop.order.dto.foreign.ShoppingCartQueryDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingCartSettlementItemDTO;
 import com.lawu.eshop.order.param.ShoppingCartParam;
@@ -36,6 +37,7 @@ import com.lawu.eshop.product.constant.ProductStatusEnum;
 import com.lawu.eshop.product.dto.ShoppingCartProductModelDTO;
 import com.lawu.eshop.property.dto.PropertyBalanceDTO;
 import com.lawu.eshop.user.dto.AddressDTO;
+import com.lawu.eshop.user.dto.MerchantInfoForShoppingCartDTO;
 import com.lawu.eshop.user.dto.ShoppingOrderFindMerchantInfoDTO;
 import com.lawu.eshop.user.dto.ShoppingOrderFindUserInfoDTO;
 import com.lawu.eshop.user.param.ShoppingOrderFindUserInfoParam;
@@ -70,9 +72,9 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     /**
      *  加入购物车。
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-	public Result<Long> save(Long memberId, ShoppingCartParam param) {
+	public Result save(Long memberId, ShoppingCartParam param) {
     	Result<ShoppingCartProductModelDTO> resultShoppingCartProductModelDTO = productModelService.getShoppingCartProductModel(param.getProductModelId());
     	
     	if (!isSuccess(resultShoppingCartProductModelDTO)) {
@@ -81,23 +83,24 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
     	
-    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
+    	Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCartResult = merchantStoreService.getMerchantInfoForShoppingCart(shoppingCartProductModelDTO.getMerchantId());
     	
-    	if (!isSuccess(resultMerchantName)) {
-    		return successCreated(resultMerchantName.getRet());
+    	if (!isSuccess(getMerchantInfoForShoppingCartResult)) {
+    		return successCreated(getMerchantInfoForShoppingCartResult);
     	}
     	
     	ShoppingCartSaveParam shoppingCartSaveParam = new ShoppingCartSaveParam();
-    	shoppingCartSaveParam.setMerchantName(resultMerchantName.getModel());
+    	shoppingCartSaveParam.setMerchantName(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreName());
+    	shoppingCartSaveParam.setMerchantStoreId(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreId());
     	shoppingCartSaveParam.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
     	shoppingCartSaveParam.setProductId(shoppingCartProductModelDTO.getProductId());
     	shoppingCartSaveParam.setProductModelId(shoppingCartProductModelDTO.getId());
     	shoppingCartSaveParam.setQuantity(param.getQuantity());
     	shoppingCartSaveParam.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     	
-    	Result<Long> result = shoppingCartService.save(memberId, shoppingCartSaveParam);
+    	Result result = shoppingCartService.save(memberId, shoppingCartSaveParam);
     	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
+    		return successCreated(result);
     	}
     			
     	return successCreated(result);
@@ -110,8 +113,8 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @return
 	 */
     @Override
-    public Result<List<MemberShoppingCartGroupDTO>> findListByMemberId(Long memberId){
-    	List<MemberShoppingCartGroupDTO> rtn = new ArrayList<>();
+    public Result<ShoppingCartQueryDTO> findListByMemberId(Long memberId){
+    	ShoppingCartQueryDTO rtn = new ShoppingCartQueryDTO();
     	
     	// 通过memberId查询用户购物车资料
     	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByMemberId(memberId);
@@ -144,12 +147,14 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		}
     	}
     	
+    	List<MemberShoppingCartDTO> shoppingCartInvalidList = new ArrayList<>();
     	Map<Long, List<MemberShoppingCartDTO>> map = new HashMap<>();
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = null;
     	for (ShoppingCartDTO shoppingCartDTO : resultShoppingCartDTOS.getModel()) {
     		MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
     		memberShoppingCartDTO.setId(shoppingCartDTO.getId());
     		memberShoppingCartDTO.setMerchantId(shoppingCartDTO.getMerchantId());
+    		memberShoppingCartDTO.setMerchantStoreId(shoppingCartDTO.getMerchantStoreId());
     		memberShoppingCartDTO.setMerchantName(shoppingCartDTO.getMerchantName());
     		memberShoppingCartDTO.setProductId(shoppingCartDTO.getProductId());
     		memberShoppingCartDTO.setProductModelId(shoppingCartDTO.getProductModelId());
@@ -166,26 +171,33 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     		memberShoppingCartDTO.setSalesPrice(shoppingCartProductModelDTO.getPrice());
     		// 计算差价(商品表的现价减去购物车表价格,正为涨价,负为降价)
     		memberShoppingCartDTO.setDifference(shoppingCartProductModelDTO.getPrice().subtract(shoppingCartDTO.getSalesPrice()));
-    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
-    			memberShoppingCartDTO.setIsInvalid(true);
-    		} else {
-    			memberShoppingCartDTO.setIsInvalid(false);
-    		}
     		memberShoppingCartDTO.setInventory(shoppingCartProductModelDTO.getInventory());
+    		memberShoppingCartDTO.setGmtDown(shoppingCartProductModelDTO.getGmtDown());
     		
     		if (!map.containsKey(shoppingCartDTO.getMerchantId())) {
     			map.put(shoppingCartDTO.getMerchantId(), new ArrayList<>());
     		}
     		
-    		map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
+    		if (shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DEL) || shoppingCartProductModelDTO.getStatus().equals(ProductStatusEnum.PRODUCT_STATUS_DOWN)) {
+    			memberShoppingCartDTO.setIsInvalid(true);
+    			shoppingCartInvalidList.add(memberShoppingCartDTO);
+    		} else {
+    			memberShoppingCartDTO.setIsInvalid(false);
+    			map.get(shoppingCartDTO.getMerchantId()).add(memberShoppingCartDTO);
+    		}
     	}
     	
+    	List<MemberShoppingCartGroupDTO> memberShoppingCartGroupDTOList = new ArrayList<>();
     	for (Map.Entry<Long, List<MemberShoppingCartDTO>> item : map.entrySet()) {
     		MemberShoppingCartGroupDTO memberShoppingCartGroupDTO = new MemberShoppingCartGroupDTO();
     		memberShoppingCartGroupDTO.setItem(item.getValue());
-    		rtn.add(memberShoppingCartGroupDTO);
+    		memberShoppingCartGroupDTOList.add(memberShoppingCartGroupDTO);
     	}
+    	rtn.setShoppingCartGroupList(memberShoppingCartGroupDTOList);
     	
+    	shoppingCartInvalidList.sort((o1, o2) -> o2.getGmtDown().compareTo(o1.getGmtDown()));
+    	
+    	rtn.setShoppingCartInvalidList(shoppingCartInvalidList);
     	return successGet(rtn);
     }
     
@@ -449,6 +461,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @param param 购物参数
 	 * @return 返回订单的结算数据
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public Result<ShoppingCartSettlementDTO> buyNow(Long memberId, String memberNum, ShoppingCartParam param) {
 		// 查询产品信息
@@ -460,14 +473,15 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
     	ShoppingCartProductModelDTO shoppingCartProductModelDTO = resultShoppingCartProductModelDTO.getModel();
     	
     	// 查询商家名称
-    	Result<String> resultMerchantName = merchantStoreService.getNameByMerchantId(shoppingCartProductModelDTO.getMerchantId());
-    	if (!isSuccess(resultMerchantName)) {
-    		return successCreated(resultMerchantName.getRet());
+    	Result<MerchantInfoForShoppingCartDTO> getMerchantInfoForShoppingCartResult = merchantStoreService.getMerchantInfoForShoppingCart(shoppingCartProductModelDTO.getMerchantId());
+    	if (!isSuccess(getMerchantInfoForShoppingCartResult)) {
+    		return successCreated(getMerchantInfoForShoppingCartResult);
     	}
     	
     	List<MemberShoppingCartDTO> memberShoppingCartDTOList = new ArrayList<>();
     	MemberShoppingCartDTO memberShoppingCartDTO = new MemberShoppingCartDTO();
-    	memberShoppingCartDTO.setMerchantName(resultMerchantName.getModel());
+    	memberShoppingCartDTO.setMerchantName(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreName());
+    	memberShoppingCartDTO.setMerchantStoreId(getMerchantInfoForShoppingCartResult.getModel().getMerchantStoreId());
     	memberShoppingCartDTO.setMerchantId(shoppingCartProductModelDTO.getMerchantId());
     	memberShoppingCartDTO.setProductId(shoppingCartProductModelDTO.getProductId());
     	memberShoppingCartDTO.setProductModelId(shoppingCartProductModelDTO.getId());

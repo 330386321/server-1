@@ -24,6 +24,7 @@ import com.lawu.eshop.operator.constants.OperationTypeEnum;
 import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
+import com.lawu.eshop.user.dto.MerchantViewDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -97,6 +98,11 @@ public class AdController extends BaseController {
                     if (isSuccess(userListDTOResult)) {
                         adDTO.setAuditorName(userListDTOResult.getModel().getName());
                     }
+                }
+                Result<MerchantViewDTO> merchantViewDTOResult = merchantService.getMerchantView(adDTO.getMerchantId());
+                if(isSuccess(merchantViewDTOResult)){
+                    adDTO.setName(merchantViewDTOResult.getModel().getStoreName());
+                    adDTO.setAccount(merchantViewDTOResult.getModel().getAccount());
                 }
             }
         }

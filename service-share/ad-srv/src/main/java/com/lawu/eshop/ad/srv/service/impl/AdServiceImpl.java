@@ -529,12 +529,15 @@ public class AdServiceImpl implements AdService {
 		cr.andTypeEqualTo(AdTypeEnum.AD_TYPE_PRAISE.val); 
 		if(adPraiseParam.getStatusEnum().val==1){  //开枪中
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTING.val);
+			example.setOrderByClause("gmt_create asc");
 		}else if(adPraiseParam.getStatusEnum().val==2){ //即将开始
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
+			example.setOrderByClause("begin_time desc");
 		}else if(adPraiseParam.getStatusEnum().val==3){ //已结束
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
+			example.setOrderByClause("gmt_create desc");
 		}
-		example.setOrderByClause("gmt_create desc");
+		
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
@@ -610,7 +613,7 @@ public class AdServiceImpl implements AdService {
 			for (AdDO adDO : listADD) {
 				Date date=new Date();
 				Calendar nowTime = Calendar.getInstance();
-				nowTime.add(Calendar.MINUTE, -5);
+				nowTime.add(Calendar.MINUTE, -20);
 				if((nowTime.getTime().getTime()-adDO.getBeginTime().getTime())>0){
 					adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
 					adDO.setGmtModified(date);

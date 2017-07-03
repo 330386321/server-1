@@ -9,6 +9,7 @@ import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
+import com.lawu.eshop.order.srv.domain.extend.ShoppingCartUpdateQuantityDO;
 
 /**
  *
@@ -41,6 +42,7 @@ public class ShoppingCartConverter {
 		rtn = new ShoppingCartBO();
 		rtn.setId(shoppingCartDO.getId());
 		rtn.setMerchantId(shoppingCartDO.getMerchantId());
+		rtn.setMerchantStoreId(shoppingCartDO.getMerchantStoreId());
 		rtn.setMerchantName(shoppingCartDO.getMerchantName());
 		rtn.setProductId(shoppingCartDO.getProductId());
 		rtn.setProductModelId(shoppingCartDO.getProductModelId());
@@ -79,6 +81,7 @@ public class ShoppingCartConverter {
 		rtn = new ShoppingCartDTO();
 		rtn.setId(shoppingCartBO.getId());
 		rtn.setMerchantId(shoppingCartBO.getMerchantId());
+		rtn.setMerchantStoreId(shoppingCartBO.getMerchantStoreId());
 		rtn.setMerchantName(shoppingCartBO.getMerchantName());
 		rtn.setProductId(shoppingCartBO.getProductId());
 		rtn.setProductModelId(shoppingCartBO.getProductModelId());
@@ -112,10 +115,10 @@ public class ShoppingCartConverter {
 		if (param == null) {
 			return rtn;
 		}
-
 		rtn = new ShoppingCartDO();
 		rtn.setMemberId(memberId);
 		rtn.setMerchantId(param.getMerchantId());
+		rtn.setMerchantStoreId(param.getMerchantStoreId());
 		rtn.setMerchantName(param.getMerchantName());
 		rtn.setProductId(param.getProductId());
 		rtn.setProductModelId(param.getProductModelId());
@@ -123,7 +126,6 @@ public class ShoppingCartConverter {
 		rtn.setSalesPrice(param.getSalesPrice());
 		rtn.setGmtCreate(new Date());
 		rtn.setGmtModified(new Date());
-
 		return rtn;
 	}
 
@@ -146,6 +148,27 @@ public class ShoppingCartConverter {
 		rtn.setProductModelId(param.getProductModelId());
 		rtn.setQuantity(param.getQuantity());
 		rtn.setGmtModified(new Date());
+		return rtn;
+	}
+	
+	/**
+	 * ShoppingCartUpdateQuantityDO转换
+	 * 
+	 * @param param
+	 * @param id
+	 * @return
+	 * @author Sunny
+	 * @date 2017年6月28日
+	 */
+	public static ShoppingCartUpdateQuantityDO convertShoppingCartUpdateQuantityDO(ShoppingCartSaveParam param, Long id) {
+		ShoppingCartUpdateQuantityDO rtn = null;
+		if (param == null) {
+			return rtn;
+		}
+
+		rtn = new ShoppingCartUpdateQuantityDO();
+		rtn.setId(id);
+		rtn.setQuantity(param.getQuantity());
 		return rtn;
 	}
 }

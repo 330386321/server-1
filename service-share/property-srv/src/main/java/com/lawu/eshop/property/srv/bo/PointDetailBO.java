@@ -1,10 +1,10 @@
 package com.lawu.eshop.property.srv.bo;
 
+import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.lawu.eshop.property.constants.ConsumptionTypeEnum;
 
 public class PointDetailBO implements Serializable {
 	
@@ -54,6 +54,8 @@ public class PointDetailBO implements Serializable {
      * 创建时间
      */
     private Date gmtCreate;
+
+    private String bizId;
 
 	public Long getId() {
 		return id;
@@ -126,5 +128,12 @@ public class PointDetailBO implements Serializable {
 	public void setGmtCreate(Date gmtCreate) {
 		this.gmtCreate = gmtCreate;
 	}
-    
+
+	public String getBizId() {
+		return bizId;
+	}
+
+	public void setBizId(String bizId) {
+		this.bizId = bizId;
+	}
 }
