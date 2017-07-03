@@ -1,5 +1,8 @@
 package com.lawu.eshop.member.api.event;
 
+import com.lawu.eshop.framework.core.type.UserType;
+import com.lawu.eshop.framework.web.interceptor.UserVisitEvent;
+import com.lawu.eshop.framework.web.interceptor.UserVisitEventPublish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -9,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @date 2017/6/29
  */
 @Component
-public class EventPublisher {
+public class EventPublisher implements UserVisitEventPublish {
 
     @Autowired
     ApplicationContext applicationContext;
@@ -18,4 +21,9 @@ public class EventPublisher {
         applicationContext.publishEvent(new LoginEvent(this, userId));
     }
 
+    @Override
+    public void publishUserVisitEvent(String userNum) {
+
+        applicationContext.publishEvent(new UserVisitEvent(this, userNum, UserType.MEMBER));
+    }
 }

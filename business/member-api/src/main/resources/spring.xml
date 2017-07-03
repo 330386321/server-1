@@ -24,6 +24,9 @@
                      <property name="testId" value="1"/>
                      <property name="testAccount" value="test" />
               </bean>
+
+              <!--访问拦截器-->
+              <bean id="userVisitInterceptor" class="com.lawu.eshop.framework.web.interceptor.UserVisitInterceptor" />
        </mvc:interceptors>
 
        <!--管理验证信息的bean-->
