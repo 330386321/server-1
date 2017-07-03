@@ -76,9 +76,9 @@ public class BankAccountServiceImpl implements BankAccountService {
 	}
 
 	@Override
-	public Boolean selectByAccount(String account) {
+	public Boolean selectByAccount(String account,String userNum) {
 		BankAccountDOExample example = new BankAccountDOExample();
-		example.createCriteria().andAccountNumberEqualTo(account).andStatusEqualTo(new Byte("1"));
+		example.createCriteria().andAccountNumberEqualTo(account).andStatusEqualTo(new Byte("1")).andUserNumEqualTo(userNum);
 		List<BankAccountDO>  list=bankAccountDOMapper.selectByExample(example);
 		if(list.isEmpty())
 			return true;
