@@ -1,4 +1,4 @@
-package com.lawu.eshop.jobs.impl.pointConsume;
+package com.lawu.eshop.jobs.impl.consume;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +11,15 @@ import com.lawu.eshop.jobs.service.PointConsumeReportService;
 /**
  * 
  * <p>
- * Description: 积分消费（按月）
+ * Description: 积分消费（按日）
  * </p>
  * @author Yangqh
- * @date 2017年6月29日 下午5:07:52
+ * @date 2017年6月30日 上午11:28:23
  *
  */
-public class PointConsumeMonthReportJob implements SimpleJob {
+public class PointConsumeDailyReportJob implements SimpleJob {
 
-    private static Logger logger = LoggerFactory.getLogger(PointConsumeMonthReportJob.class);
+    private static Logger logger = LoggerFactory.getLogger(PointConsumeDailyReportJob.class);
 
     @Autowired
     private PointConsumeReportService pointConsumeReportService;
@@ -28,7 +28,7 @@ public class PointConsumeMonthReportJob implements SimpleJob {
     public void execute(ShardingContext shardingContext) {
         logger.debug("------{}-{} starting------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
 
-        pointConsumeReportService.executeCollectMonthData();
+        pointConsumeReportService.executeCollectDailyData();
         
         logger.debug("------{}-{} finished------", this.getClass().getSimpleName(), shardingContext.getShardingItem());
     }
