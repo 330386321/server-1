@@ -11,4 +11,6 @@ public interface UserActiveStatisticsService {
     void executeCollectionUserActiveMonth();
 
     void executeCollectionUserActiveAreaDaily();
+
+    void executeCollectionUserActiveAreaMonth();
 }

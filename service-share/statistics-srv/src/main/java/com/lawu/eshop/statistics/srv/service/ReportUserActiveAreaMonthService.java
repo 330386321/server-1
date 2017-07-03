@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service;
 
+import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 
 import java.util.List;
@@ -11,4 +12,8 @@ import java.util.List;
 public interface ReportUserActiveAreaMonthService {
 
     List<ReportUserActiveAreaMonthBO> getReportUserActiveAreaMonthList(String reportDate);
+
+    void saveUserActiveAreaMonth(List<UserActiveDTO> userActiveDTOS);
+
+    void saveMerchantActiveAreaMonth(List<UserActiveDTO> list);
 }

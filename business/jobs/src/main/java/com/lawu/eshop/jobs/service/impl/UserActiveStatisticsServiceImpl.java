@@ -54,4 +54,19 @@ public class UserActiveStatisticsServiceImpl implements UserActiveStatisticsServ
         }
 
     }
+
+    @Override
+    public void executeCollectionUserActiveAreaMonth() {
+        //查询用户活跃总数并统计
+        Result<List<UserActiveDTO>> memberResult = collectionUserActiveService.collectionMemberActiveAreaMonth();
+        if(memberResult.getModel() != null && !memberResult.getModel().isEmpty()){
+            userActiveService.saveUserActiveAreaMonth(memberResult.getModel());
+        }
+        //查询商家活跃总数
+        Result<List<UserActiveDTO>> merchantResult = collectionUserActiveService.collectionMerchantActiveAreaMonth();
+        //更新统计商家总数
+        if(merchantResult.getModel() != null && !merchantResult.getModel().isEmpty()){
+            userActiveService.saveMerchantActiveAreaMonth(merchantResult.getModel());
+        }
+    }
 }

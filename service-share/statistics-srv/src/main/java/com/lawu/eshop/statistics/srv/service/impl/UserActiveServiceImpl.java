@@ -62,4 +62,20 @@ public class UserActiveServiceImpl implements UserActiveService {
         List<UserActiveBO> userActiveBOS = UserActiveConverter.coverBOS(userActiveDOViews);
         return userActiveBOS;
     }
+
+    @Override
+    public List<UserActiveBO> collectionMemberActiveAreaMonth() {
+        Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
+        List<UserActiveDOView>  userActiveDOViews = userActiveDOMapperExtend.collectionMemberActiveAreaMonth(time);
+        List<UserActiveBO> userActiveBOS = UserActiveConverter.coverBOS(userActiveDOViews);
+        return userActiveBOS;
+    }
+
+    @Override
+    public List<UserActiveBO> collectionMerchantActiveAreaMonth() {
+        Date time = DateUtil.getDayBefore(DateUtil.getNowDate());
+        List<UserActiveDOView>  userActiveDOViews = userActiveDOMapperExtend.collectionMerchantActiveAreaMonth(time);
+        List<UserActiveBO> userActiveBOS = UserActiveConverter.coverBOS(userActiveDOViews);
+        return userActiveBOS;
+    }
 }

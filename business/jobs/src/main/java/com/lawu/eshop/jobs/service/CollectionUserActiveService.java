@@ -32,4 +32,10 @@ public interface CollectionUserActiveService {
 
     @RequestMapping(value = "userActive/collectionMerchantActiveAreaDaily", method = RequestMethod.GET)
     Result<List<UserActiveDTO>> collectionMerchantActiveAreaDaily();
+
+    @RequestMapping(value = "userActive/collectionMemberActiveAreaMonth", method = RequestMethod.GET)
+    Result<List<UserActiveDTO>> collectionMemberActiveAreaMonth();
+
+    @RequestMapping(value = "userActive/collectionMerchantActiveAreaMonth", method = RequestMethod.GET)
+    Result<List<UserActiveDTO>> collectionMerchantActiveAreaMonth();
 }

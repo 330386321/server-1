@@ -33,7 +33,7 @@
             user_visit_record
         WHERE
             user_type = 1
-        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1;
+        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1
     </select>
 
     <select id="collectionMemberActiveAreaDaily" resultType="com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView"
@@ -66,6 +66,43 @@
         WHERE
         user_type = 1
         AND visit_date = #{visitDate}
+        AND city_id != 0
+        GROUP BY
+        city_id,
+        city_name,
+        visit_date
+    </select>
+
+
+    <select id="collectionMemberActiveAreaMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView"  parameterType="java.util.Date">
+        SELECT
+        count(1) as userCount,
+        city_id as cityId,
+        city_name as cityName,
+        visit_date as visitDate
+        FROM
+        user_visit_record
+        WHERE
+        user_type = 1
+        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1
+        AND city_id != 0
+        GROUP BY
+        city_id,
+        city_name,
+        visit_date
+    </select>
+
+    <select id="collectionMerchantActiveAreaMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView"  parameterType="java.util.Date">
+        SELECT
+        count(1) as userCount,
+        city_id as cityId,
+        city_name as cityName,
+        visit_date as visitDate
+        FROM
+        user_visit_record
+        WHERE
+        user_type = 2
+        AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1
         AND city_id != 0
         GROUP BY
         city_id,

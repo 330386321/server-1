@@ -30,4 +30,10 @@ public interface UserActiveService {
 
     @RequestMapping(value = "userActive/saveMerchantActiveAreaDaily", method = RequestMethod.POST)
     Result saveMerchantActiveAreaDaily(@RequestBody List<UserActiveDTO> activeDTOS);
+
+    @RequestMapping(value = "userActive/saveUserActiveAreaMonth", method = RequestMethod.POST)
+    Result saveUserActiveAreaMonth(@RequestBody List<UserActiveDTO> model);
+
+    @RequestMapping(value = "userActive/saveMerchantActiveAreaMonth", method = RequestMethod.POST)
+    Result saveMerchantActiveAreaMonth(@RequestBody List<UserActiveDTO> list);
 }

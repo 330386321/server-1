@@ -20,4 +20,8 @@ public interface UserActiveService {
     List<UserActiveBO> collectionMemberActiveAreaDaily();
 
     List<UserActiveBO> collectionMerchantActiveAreaDaily();
+
+    List<UserActiveBO> collectionMemberActiveAreaMonth();
+
+    List<UserActiveBO> collectionMerchantActiveAreaMonth();
 }

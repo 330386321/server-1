@@ -23,4 +23,7 @@ public interface UserActiveDOMapperExtend {
     List<UserActiveDOView>  collectionMerchantActiveAreaDaily(Date time);
 
 
+    List<UserActiveDOView> collectionMemberActiveAreaMonth(Date time);
+
+    List<UserActiveDOView> collectionMerchantActiveAreaMonth(Date time);
 }
