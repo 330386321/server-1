@@ -22,6 +22,7 @@
     	left join product pd on fp.product_id=pd.id
     <where>
     	fp.member_id=#{memberId,jdbcType=BIGINT}
+    	ORDER BY fp.gmt_create desc
     </where>
   </select>
 </mapper>
