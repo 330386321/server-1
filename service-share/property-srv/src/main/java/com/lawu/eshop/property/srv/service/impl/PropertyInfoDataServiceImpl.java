@@ -78,7 +78,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			return ResultCode.BIZ_TYPE_NULL;
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
-		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailService.save(pointDetailSaveDataParam);
 
@@ -122,7 +122,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 			return ResultCode.BIZ_TYPE_NULL;
 		}
 		pointDetailSaveDataParam.setPoint(new BigDecimal(param.getPoint()));
-		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		pointDetailSaveDataParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		pointDetailSaveDataParam.setBizId(param.getBizId());
 		pointDetailService.save(pointDetailSaveDataParam);
 
@@ -150,7 +150,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setAmount(new BigDecimal(param.getPoint()));
 		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
-		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产
@@ -181,7 +181,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setAmount(new BigDecimal(param.getPoint()));
 		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
-		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产
@@ -227,7 +227,7 @@ public class PropertyInfoDataServiceImpl implements PropertyInfoDataService {
 		tdsParam.setAmount(actureMoneyIn);
 		tdsParam.setBizId("");
 		tdsParam.setThirdTransactionNum("");
-		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		transactionDetailService.save(tdsParam);
 		
 		// 更新用户资产余额

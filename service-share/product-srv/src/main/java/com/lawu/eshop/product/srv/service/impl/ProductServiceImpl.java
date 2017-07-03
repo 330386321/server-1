@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
         if (query.getCategoryId() != null && !"".equals(query.getCategoryId())) {
             criteria.andCategoryIdEqualTo(Integer.valueOf(query.getCategoryId()));
         }
-        example.setOrderByClause(query.getProductSortFieldEnum().val + " " + query.getOrderType());
+        example.setOrderByClause(query.getProductSortFieldEnum().getVal() + " " + query.getOrderType());
 
         // 查询总数
         RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());

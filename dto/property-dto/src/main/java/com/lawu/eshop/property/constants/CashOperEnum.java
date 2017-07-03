@@ -15,7 +15,7 @@ public enum CashOperEnum {
 	ACCEPT((byte) 0x02), // 受理
 	SUCCESS((byte) 0x03), // 成功
 	FAILURE((byte) 0x04); // 失败
-	public Byte val;
+	private Byte val;
 
 	CashOperEnum(Byte val) {
 		this.val = val;
@@ -30,4 +30,9 @@ public enum CashOperEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

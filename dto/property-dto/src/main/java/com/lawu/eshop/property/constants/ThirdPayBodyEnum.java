@@ -29,7 +29,7 @@ public enum ThirdPayBodyEnum {
 	B_RECHARGE_POINT_P("商家充值积分P"),
 	B_PAY_BOND_P("缴纳保证金P");
 	
-	public String val;
+	private String val;
 
 	ThirdPayBodyEnum(String val) {
 		this.val = val;
@@ -44,4 +44,9 @@ public enum ThirdPayBodyEnum {
 		}
 		return null;
 	}
+
+	public String getVal() {
+		return val;
+	}
+	
 }

@@ -120,11 +120,11 @@ public class CashManageBackageController extends BaseController {
 		MessageInfoParam messageInfoParam = new MessageInfoParam();
 		messageInfoParam.setRelateId(0L);
 		MessageTempParam messageTempParam = new MessageTempParam();
-		if (CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)) {
+		if (CashOperEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal())) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_APPLY);
-		} else if (CashOperEnum.SUCCESS.val.equals(param.getCashOperEnum().val)) {
+		} else if (CashOperEnum.SUCCESS.getVal().equals(param.getCashOperEnum().getVal())) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_SUCCESS);
-		} else if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)) {
+		} else if (CashOperEnum.FAILURE.getVal().equals(param.getCashOperEnum().getVal())) {
 			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_WITHDRAW_FAIL);
 			messageTempParam.setFailReason(param.getFailReason());
 		}

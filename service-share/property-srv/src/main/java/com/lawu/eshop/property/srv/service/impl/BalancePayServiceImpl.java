@@ -72,7 +72,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
-		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		transactionDetailService.save(tdsParam);
 		
 		//减会员财产余额
@@ -106,7 +106,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
-		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		tdsParam.setBizNum(transactionNum);
 		transactionDetailService.save(tdsParam);
 		//减会员财产余额
@@ -125,7 +125,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam1.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam1.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam1.setBizId(param.getBizIds());
-		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam1.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		tdsParam1.setBizNum(transactionNum);
 		transactionDetailService.save(tdsParam1);
 		//加商家财产余额
@@ -193,7 +193,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(param.getTotalAmount()));
 		tdsParam.setBizId(param.getBizIds());
-		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		tdsParam.setBizNum(num);
 		transactionDetailService.save(tdsParam);
 		
@@ -204,7 +204,7 @@ public class BalancePayServiceImpl implements BalancePayService {
 		pdsParam.setPointType(transactionType);
 		pdsParam.setPoint(BigDecimal.valueOf(point));
 		pdsParam.setBizId(param.getBizIds());
-		pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		pdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		pdsParam.setRemark("");
 		pointDetailService.save(pdsParam);
 		

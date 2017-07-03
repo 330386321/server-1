@@ -243,7 +243,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(editView);
 			
 			TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-			tdsParam.setTitle(TransactionTitleEnum.BACKAGE.val);
+			tdsParam.setTitle(TransactionTitleEnum.BACKAGE.getVal());
 			tdsParam.setUserNum(dparam.getUserNum());
 			if(dparam.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
 				tdsParam.setTransactionType(MemberTransactionTypeEnum.BACKAGE.getValue());
@@ -252,14 +252,14 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 			}
 			tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 			tdsParam.setAmount(new BigDecimal(dparam.getMoney()));
-			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+			tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			transactionDetailService.save(tdsParam);
 		} else if (PayTypeEnum.POINT.getVal().equals(dparam.getPayTypeEnum().getVal())) {
 			editView.setPoint(new BigDecimal(dparam.getMoney()));
 			propertyInfoDOMapperExtend.updatePropertyInfoAddPoint(editView);
 			
 			PointDetailSaveDataParam pdsParam = new PointDetailSaveDataParam();
-			pdsParam.setTitle(TransactionTitleEnum.BACKAGE.val);
+			pdsParam.setTitle(TransactionTitleEnum.BACKAGE.getVal());
 			pdsParam.setUserNum(dparam.getUserNum());
 			if(dparam.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
 				pdsParam.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
@@ -267,7 +267,7 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 				pdsParam.setPointType(MerchantTransactionTypeEnum.BACKAGE.getValue());
 			} 
 			pdsParam.setPoint(new BigDecimal(dparam.getMoney()));
-			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			pointDetailService.save(pdsParam);
 		}
 		return ResultCode.SUCCESS;
@@ -292,9 +292,9 @@ public class PropertyInfoServiceImpl implements PropertyInfoService {
 		if(StringUtils.isNotEmpty(param.getUserNum())){
 			criteria.andUserNumEqualTo(param.getUserNum());
 		}else if(param.getUserType() != null){
-			if(param.getUserType().val == UserTypeEnum.MEMBER.val){
+			if(param.getUserType().getVal() == UserTypeEnum.MEMBER.getVal()){
 				criteria.andUserNumLike(UserCommonConstant.MEMBER_NUM_TAG + "%");
-			}else if(param.getUserType().val == UserTypeEnum.MEMCHANT.val){
+			}else if(param.getUserType().getVal() == UserTypeEnum.MEMCHANT.getVal()){
 				criteria.andUserNumLike(UserCommonConstant.MERCHANT_NUM_TAG + "%");
 			}
 		}

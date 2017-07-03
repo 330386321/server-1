@@ -246,7 +246,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 	@Transactional
 	public int updateBusinessDeposit(BusinessDepositOperDataParam param) {
 		BusinessDepositDO bddo = new BusinessDepositDO();
-		bddo.setStatus(param.getBusinessDepositOperEnum().val);
+		bddo.setStatus(param.getBusinessDepositOperEnum().getVal());
 		bddo.setOperUserId(param.getOperUserId());
 		bddo.setOperUserName(param.getOperUserName());
 		bddo.setRemark(param.getFailReason() == null ? "" : param.getFailReason());
@@ -257,7 +257,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 
 		HandleDepostMessage message = new HandleDepostMessage();
 		message.setUserNum(param.getUserNum());
-		if (BusinessDepositOperEnum.VERIFYD.val.equals(param.getBusinessDepositOperEnum().val)) {
+		if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
 			// 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
 			handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
 		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
@@ -265,7 +265,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 
 
-		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.val.equals(param.getBusinessDepositOperEnum().val)) {
+		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
 			// 退款成功操作后，发送MQ消息修改门店状态为：注销
 			handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
 		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);

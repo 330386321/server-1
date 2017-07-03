@@ -113,7 +113,7 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		withdrawCashDO.setMoney(BigDecimal.valueOf(money));
 		withdrawCashDO.setUserNum(cash.getUserNum());
 		withdrawCashDO.setUserType(cash.getUserType());
-		withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.val);
+		withdrawCashDO.setChannel(CashChannelEnum.ARTIFICIAL.getVal());
 		withdrawCashDO.setStatus(CashStatusEnum.APPLY.getVal());
 		withdrawCashDO.setBusinessBankAccountId(cash.getBusinessBankAccountId());
 		withdrawCashDO.setCashNumber(cash.getCashNumber());
@@ -128,14 +128,14 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 
 		// 新增交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTitle(TransactionTitleEnum.CASH.val);
+		tdsParam.setTitle(TransactionTitleEnum.CASH.getVal());
 		tdsParam.setTransactionNum(cash.getCashNumber());
 		tdsParam.setUserNum(cash.getUserNum());
 		tdsParam.setTransactionType(cash.getTransactionType());
 		tdsParam.setTransactionAccount(cash.getAccount());
 		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 		tdsParam.setAmount(new BigDecimal(cash.getCashMoney()));
-		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		tdsParam.setBizId(withdrawCashDO.getId().toString());
 		transactionDetailService.save(tdsParam);
 

@@ -41,7 +41,7 @@ public class PointConsumeReportServiceImpl implements PointConsumeReportService 
 		
 		PointDetailReportParam param = new PointDetailReportParam();
 		param.setDate(today);
-		param.setDirection(PropertyInfoDirectionEnum.OUT.val);
+		param.setDirection(PropertyInfoDirectionEnum.OUT.getVal());
 		Result<List<PointConsumeReportDTO>> rntResult = propertyPointDetailService.selectPointDetailListByDateAndDirection(param);
 		
 		if(ResultCode.SUCCESS != rntResult.getRet()){
@@ -65,7 +65,7 @@ public class PointConsumeReportServiceImpl implements PointConsumeReportService 
 		}
 		
 		//查询当日退回的积分总额
-		param.setDirection(PropertyInfoDirectionEnum.IN.val);
+		param.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		param.setPointType(MerchantTransactionTypeEnum.AD_RETURN_POINT.getValue());
 		Result<List<PointConsumeReportDTO>> rntPointBackResult = propertyPointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
 		List<PointConsumeReportDTO> rntBackList = rntPointBackResult.getModel();

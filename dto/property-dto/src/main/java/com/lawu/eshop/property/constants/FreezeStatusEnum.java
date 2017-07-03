@@ -14,7 +14,7 @@ public enum FreezeStatusEnum {
 	FREEZE((byte) 0x00), // 冻结
 	RELEASE((byte) 0x01);//释放
 	
-	public Byte val;
+	private Byte val;
 
 	FreezeStatusEnum(Byte val) {
 		this.val = val;
@@ -29,4 +29,9 @@ public enum FreezeStatusEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

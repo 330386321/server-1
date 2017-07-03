@@ -139,7 +139,7 @@ public class CashManageBackageController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
 
-		if (CashOperEnum.FAILURE.val.equals(param.getCashOperEnum().val)
+		if (CashOperEnum.FAILURE.getVal().equals(param.getCashOperEnum().getVal())
 				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {
 			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
 		}

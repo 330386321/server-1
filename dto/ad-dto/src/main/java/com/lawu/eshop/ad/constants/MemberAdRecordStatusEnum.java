@@ -4,7 +4,8 @@ public enum MemberAdRecordStatusEnum {
 	
 	NONE((byte) 0x00),      //没有算提成
 	YES((byte) 0x01);     //已算提成
-    public Byte val;
+	
+    private Byte val;
     
 
     MemberAdRecordStatusEnum(Byte val) {
@@ -20,5 +21,9 @@ public enum MemberAdRecordStatusEnum {
         }
         return null;
     }
+
+	public Byte getVal() {
+		return val;
+	}
 
 }

@@ -15,7 +15,7 @@ public enum BusinessDepositOperEnum {
 	ACCPET_REFUND((byte) 0x04),//受理
 	REFUND_SUCCESS((byte) 0x05),//成功
 	REFUND_FAILURE((byte) 0x06);//失败
-	public Byte val;
+	private Byte val;
 
 	BusinessDepositOperEnum(Byte val) {
 		this.val = val;
@@ -30,4 +30,9 @@ public enum BusinessDepositOperEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

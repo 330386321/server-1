@@ -20,7 +20,7 @@ public enum TransactionTitleEnum {
 	DEPOSIT_REFUND("保证金退款"),
 	BACKAGE("平台处理");
 	
-	public String val;
+	private String val;
 
 	TransactionTitleEnum(String val) {
 		this.val = val;
@@ -35,4 +35,9 @@ public enum TransactionTitleEnum {
 		}
 		return null;
 	}
+
+	public String getVal() {
+		return val;
+	}
+	
 }

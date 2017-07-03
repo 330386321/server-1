@@ -18,7 +18,7 @@ public enum ThirdPartyBizFlagEnum {
 	MEMBER_PAY_POINT((byte) 0x05), // 用户充值积分
 	MEMBER_PAY_ORDER((byte) 0x06), // 订单付款
 	MEMBER_PAY_BILL((byte) 0x07);// 买单
-	public Byte val;
+	private Byte val;
 
 	ThirdPartyBizFlagEnum(Byte val) {
 		this.val = val;
@@ -33,4 +33,9 @@ public enum ThirdPartyBizFlagEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

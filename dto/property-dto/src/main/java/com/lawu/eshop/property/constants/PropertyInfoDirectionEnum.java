@@ -12,7 +12,7 @@ package com.lawu.eshop.property.constants;
 public enum PropertyInfoDirectionEnum {
 	OUT((byte) 0x01),
 	IN((byte) 0x02);
-	public Byte val;
+	private Byte val;
 
 	PropertyInfoDirectionEnum(Byte val) {
 		this.val = val;
@@ -27,4 +27,9 @@ public enum PropertyInfoDirectionEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

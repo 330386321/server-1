@@ -66,7 +66,7 @@ public class WxPayController extends BaseController {
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
-		aparam.setSubject(param.getThirdPayBodyEnum().val);
+		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizIds(param.getBizIds());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(userNum);
@@ -74,7 +74,7 @@ public class WxPayController extends BaseController {
 
 		// 查询支付金额
 		double money = 0;
-		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.val.equals(param.getBizFlagEnum().val)) {
+		if (ThirdPartyBizFlagEnum.MEMBER_PAY_BILL.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO payOrderCallback = payOrderService
 					.selectThirdPayCallBackQueryPayOrder(param.getBizIds());
 			if(payOrderCallback == null){
@@ -85,7 +85,7 @@ public class WxPayController extends BaseController {
 			aparam.setSideUserNum(payOrderCallback.getBusinessUserNum());
 			money = payOrderCallback.getActualMoney();
 
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.val.equals(param.getBizFlagEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_ORDER.getVal().equals(param.getBizFlagEnum().getVal())) {
 			/*
 			 *  获取订单金额
 			 *  考虑商品可能有减库存失败可能
@@ -96,8 +96,8 @@ public class WxPayController extends BaseController {
 			}
 			money = result.getModel().getOrderTotalPrice().doubleValue();
 			
-		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			money = recharge.getActualMoney();
 			

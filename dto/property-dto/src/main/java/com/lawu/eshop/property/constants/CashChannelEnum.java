@@ -12,7 +12,7 @@ package com.lawu.eshop.property.constants;
 public enum CashChannelEnum {
 	ARTIFICIAL((byte) 0x01), // 人工
 	DPAY((byte) 0x02); // 代付
-	public Byte val;
+	private Byte val;
 
 	CashChannelEnum(Byte val) {
 		this.val = val;
@@ -27,4 +27,9 @@ public enum CashChannelEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

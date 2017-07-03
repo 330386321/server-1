@@ -15,7 +15,7 @@ public enum ProductSortFieldEnum {
 	TOTAL_SALES_VOLUME("total_sales_volume"),//销量
 	CDATE("gmt_create");			//创建时间
 	
-	public String val;
+	private String val;
 	ProductSortFieldEnum(String val){
 		this.val = val;
 	}
@@ -29,7 +29,9 @@ public enum ProductSortFieldEnum {
 		}
 		return null;
 	}
-	
-	
+
+	public String getVal() {
+		return val;
+	}
 	
 }

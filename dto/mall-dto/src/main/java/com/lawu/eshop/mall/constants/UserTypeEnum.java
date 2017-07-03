@@ -7,7 +7,7 @@ package com.lawu.eshop.mall.constants;
 public enum UserTypeEnum {
     MEMBER((byte) 0x01),      //用户
     MEMCHANT((byte) 0x02);     //商家
-    public Byte val;
+    private Byte val;
 
     UserTypeEnum(Byte val) {
         this.val = val;
@@ -22,4 +22,9 @@ public enum UserTypeEnum {
         }
         return null;
     }
+
+	public Byte getVal() {
+		return val;
+	}
+    
 }

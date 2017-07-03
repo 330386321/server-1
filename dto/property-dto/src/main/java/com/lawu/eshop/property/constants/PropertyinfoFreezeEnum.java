@@ -34,8 +34,4 @@ public enum PropertyinfoFreezeEnum {
 		return val;
 	}
 
-	public void setVal(Byte val) {
-		this.val = val;
-	}
-	
 }

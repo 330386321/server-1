@@ -9,7 +9,7 @@ public enum SexEnum {
     SEX_MALE((byte) 0x00),      //男
     SEX_SECRET((byte) 0x01),     //全部
     SEX_FEMALE((byte) 0x02);    //女
-    public Byte val;
+    private Byte val;
 
     SexEnum(Byte val) {
         this.val = val;
@@ -24,5 +24,9 @@ public enum SexEnum {
         }
         return null;
     }
+
+	public Byte getVal() {
+		return val;
+	}
 
 }

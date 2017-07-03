@@ -79,7 +79,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
 		} else {
 			Criteria criteria1 = example.createCriteria();
-			criteria1.andUserTypeEqualTo(param.getUserTypeEnum().val);
+			criteria1.andUserTypeEqualTo(param.getUserTypeEnum().getVal());
 			if (StringUtils.isNotEmpty(param.getBeginDate())){
 				criteria1.andGmtCreateGreaterThanOrEqualTo(DateUtil.stringToDate(param.getBeginDate() + " 00:00:00"));
 			}
@@ -149,7 +149,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 	@Override
 	public WithdrawCashBackageQuerySumBO getTotalNum(CashBackageQuerySumParam param) {
 		WithdrawCashDOView view = new WithdrawCashDOView();
-		view.setUserType(param.getUserTypeEnum().val);
+		view.setUserType(param.getUserTypeEnum().getVal());
 		view.setStatus(CashStatusEnum.SUCCESS.getVal());
 		view = withdrawCashDOMapperExtend.getTotalNum(view);
 
@@ -215,12 +215,12 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			paramList.clear();
 			WithdrawCashOperDOView view = new WithdrawCashOperDOView();
 			view.setId(Integer.valueOf(idsArray[i]));
-			view.setStatus(param.getCashOperEnum().val);
+			view.setStatus(param.getCashOperEnum().getVal());
 			view.setAuditFailReason(param.getFailReason() == null ? "" : param.getFailReason());
 			view.setAuditUserId(param.getAuditUserId() == null ? 0 : param.getAuditUserId());
 			view.setAuditUserName(param.getAuditUserName() == null ? "" : param.getAuditUserName());
 			view.setGmtModified(new Date());
-			if (CashOperEnum.ACCEPT.val.equals(param.getCashOperEnum().val)) {
+			if (CashOperEnum.ACCEPT.getVal().equals(param.getCashOperEnum().getVal())) {
 				view.setGmtAccept(new Date());
 			} else {
 				view.setGmtFinish(new Date());
@@ -228,7 +228,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			paramList.add(view);
 			withdrawCashDOMapperExtend.updateBatchWithdrawCashStatus(paramList);
 		}
-		if (!CashStatusEnum.FAILURE.getVal().equals(param.getCashOperEnum().val)) {
+		if (!CashStatusEnum.FAILURE.getVal().equals(param.getCashOperEnum().getVal())) {
 			return ResultCode.SUCCESS;
 		}
 
@@ -245,7 +245,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 
 			// 新增退回交易明细
 			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
-			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.val);
+			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
 			transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));//wcdo.getCashNumber()
 			transactionDetailDO.setUserNum(wcdo.getUserNum());
 			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
@@ -256,7 +256,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			transactionDetailDO.setTransactionAccount(wcdo.getAccount());
 			transactionDetailDO.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
 			transactionDetailDO.setAmount(wcdo.getCashMoney());
-			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.val);
+			transactionDetailDO.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			transactionDetailDO.setBizId(wcdo.getId() == null ? "" : wcdo.getId().toString());
 			transactionDetailDO.setRemark("");
 			transactionDetailDO.setGmtCreate(new Date());
