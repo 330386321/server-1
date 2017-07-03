@@ -28,7 +28,7 @@ public class ReportSalesMonthConverter {
         rtn.setPayOrderAmount(param.getPayOrderAmount());
         rtn.setShoppingOrderAmount(param.getShoppingOrderAmount());
         rtn.setTotalAmount(param.getPayOrderAmount().add(param.getShoppingOrderAmount()));
-        rtn.setGmtReport(DateUtil.getDayBefore(DateUtil.getNowDate()));
+        rtn.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(DateUtil.getNowDate())));
         rtn.setGmtCreate(new Date());
         return rtn;
     }
