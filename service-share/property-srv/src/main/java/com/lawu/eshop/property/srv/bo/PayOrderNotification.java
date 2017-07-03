@@ -6,6 +6,7 @@ import com.lawu.eshop.compensating.transaction.Notification;
  * @author zhangyong
  * @date 2017/4/13.
  */
+@SuppressWarnings("serial")
 public class PayOrderNotification extends Notification {
 
     private Long payOrderId;

@@ -1,7 +1,5 @@
 package com.lawu.eshop.property.srv.bo;
 
-import java.math.BigDecimal;
-
 import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 
 public class BusinessDepositDetailBO {

@@ -32,7 +32,8 @@ public class RecommendProductCategoryController extends BaseController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "saveRecommendProductCategory", method = RequestMethod.POST)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "saveRecommendProductCategory", method = RequestMethod.POST)
     public Result saveRecommendProductCategory(@RequestBody EditRecommendProductCategoryParam param) {
         recommendProductCategoryService.saveRecommendProductCategory(param);
         return successCreated();
@@ -44,7 +45,8 @@ public class RecommendProductCategoryController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "deleteRecommendProductCategory/{id}", method = RequestMethod.DELETE)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "deleteRecommendProductCategory/{id}", method = RequestMethod.DELETE)
     public Result deleteRecommendProductCategory(@PathVariable Long id) {
         RecommendProductCategoryBO recommendProductCategoryBO = recommendProductCategoryService.getRecommendProductCategoryById(id);
         if (recommendProductCategoryBO == null) {
@@ -61,7 +63,8 @@ public class RecommendProductCategoryController extends BaseController {
      * @param param
      * @return
      */
-    @RequestMapping(value = "updateRecommendProductCategory/{id}", method = RequestMethod.PUT)
+    @SuppressWarnings("rawtypes")
+	@RequestMapping(value = "updateRecommendProductCategory/{id}", method = RequestMethod.PUT)
     public Result updateRecommendProductCategory(@PathVariable Long id, @RequestBody EditRecommendProductCategoryParam param) {
         RecommendProductCategoryBO recommendProductCategoryBO = recommendProductCategoryService.getRecommendProductCategoryById(id);
         if (recommendProductCategoryBO == null) {

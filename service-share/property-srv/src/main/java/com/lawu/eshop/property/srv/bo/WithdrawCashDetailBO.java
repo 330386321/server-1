@@ -2,8 +2,6 @@ package com.lawu.eshop.property.srv.bo;
 
 import java.math.BigDecimal;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class WithdrawCashDetailBO {
 	private Long id;
 	private BigDecimal cashMoney;//出账金额

@@ -37,6 +37,7 @@ public class BankAccountController extends BaseController{
 	 * @param bankAccountParam
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "saveBankAccount", method = RequestMethod.POST)
     public Result saveBankAccount(@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
 		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber());
@@ -69,6 +70,7 @@ public class BankAccountController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable Long id) {
 		Integer i = bankAccountService.remove(id);
@@ -96,6 +98,7 @@ public class BankAccountController extends BaseController{
 	 * @param bankAccountParam
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateBankAccount/{id}", method = RequestMethod.PUT)
     public Result updateBankAccount(@PathVariable Long id,@RequestBody BankAccountParam bankAccountParam) {
 		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber());
