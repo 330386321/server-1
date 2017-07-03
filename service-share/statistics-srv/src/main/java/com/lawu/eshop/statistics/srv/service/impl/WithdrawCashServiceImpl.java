@@ -1,5 +1,6 @@
 package com.lawu.eshop.statistics.srv.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
 import com.lawu.eshop.statistics.srv.domain.ReportWithdrawDailyDO;
@@ -53,7 +55,7 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 	public List<ReportWithdrawDailyBO> getDailyList(String reportDate) {
 		ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
 		Date begin = DateUtil.formatDate(reportDate+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.getLastDayOfMonth(begin);
+		Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
 		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
 		List<ReportWithdrawDailyBO> boList = new ArrayList<>();
@@ -82,6 +84,58 @@ public class WithdrawCashServiceImpl implements WithdrawCashService {
 		ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
 		example.createCriteria().andGmtReportEqualTo(DateUtil.formatDate(reportDate, "yyyy-MM"));
 		reportWithdrawMonthDOMapper.deleteByExample(example);
+	}
+
+	@Override
+	public ReportCommonBackDTO selectReport(String flag,String date,String isTotal) {
+		if("".equals(date)){
+			date = DateUtil.getDateFormat(new Date(), "yyyy-MM");
+		}
+		ReportCommonBackDTO dto = new ReportCommonBackDTO();
+		List<String> xAxisData = new ArrayList<>();
+		List<BigDecimal> yAxisMemberData = new ArrayList<>();
+		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
+		List<BigDecimal> yAxisTotalData = new ArrayList<>();
+		if("1".equals(flag)){
+			ReportWithdrawDailyDOExample example = new ReportWithdrawDailyDOExample();
+			Date begin = DateUtil.formatDate(date+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
+			example.createCriteria().andGmtReportBetween(begin, end);
+			example.setOrderByClause(" gmt_report asc ");
+			List<ReportWithdrawDailyDO> rntList = reportWithdrawDailyDOMapper.selectByExample(example);
+			for(ReportWithdrawDailyDO rdo : rntList){
+				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "dd");
+				xAxisData.add(day);
+				if("0".equals(isTotal)){
+					yAxisMemberData.add(rdo.getMemberMoney().setScale(2));
+					yAxisMerchantData.add(rdo.getMerchantMoney().setScale(2));
+				}else{
+					yAxisTotalData.add(rdo.getTotalMoney().setScale(2));
+				}
+			}
+		}else if("2".equals(flag)){
+			ReportWithdrawMonthDOExample example = new ReportWithdrawMonthDOExample();
+			Date begin = DateUtil.formatDate(date+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
+			Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
+			example.createCriteria().andGmtReportBetween(begin, end);
+			example.setOrderByClause(" gmt_report asc ");
+			List<ReportWithdrawMonthDO> rntList = reportWithdrawMonthDOMapper.selectByExample(example);
+			for(ReportWithdrawMonthDO rdo : rntList){
+				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "MM");
+				xAxisData.add(day);
+				if("0".equals(isTotal)){
+					yAxisMemberData.add(rdo.getMemberMoney().setScale(2));
+					yAxisMerchantData.add(rdo.getMerchantMoney().setScale(2));
+				}else{
+					yAxisTotalData.add(rdo.getTotalMoney().setScale(2));
+				}
+			}
+		}
+		dto.setxAxisData(xAxisData);
+		dto.setyAxisMemberData(yAxisMemberData);
+		dto.setyAxisMerchantData(yAxisMerchantData);
+		dto.setyAxisTotalData(yAxisTotalData);
+		return dto;
 	}
 	
 }

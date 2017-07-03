@@ -53,7 +53,7 @@ public class RechargeBalanceServiceImpl implements RechargeBalanceService {
 	public List<RechargeBalanceDailyBO> getDailyList(String reportDate) {
 		ReportRechargeBalanceDailyDOExample example = new ReportRechargeBalanceDailyDOExample();
 		Date begin = DateUtil.formatDate(reportDate+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.getLastDayOfMonth(begin);
+		Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
 		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportRechargeBalanceDailyDO> rntList = reportRechargeBalanceDailyDOMapper.selectByExample(example);
 		List<RechargeBalanceDailyBO> boList = new ArrayList<>();

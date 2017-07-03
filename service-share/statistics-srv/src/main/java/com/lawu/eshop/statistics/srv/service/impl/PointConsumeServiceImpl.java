@@ -53,7 +53,7 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 	public List<PointConsumeDailyBO> getDailyList(String reportDate) {
 		ReportPointConsumeDailyDOExample example = new ReportPointConsumeDailyDOExample();
 		Date begin = DateUtil.formatDate(reportDate+"-01 00:00:00", "yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.getLastDayOfMonth(begin);
+		Date end = DateUtil.getDayAfter(DateUtil.getLastDayOfMonth(begin));
 		example.createCriteria().andGmtReportBetween(begin, end);
 		List<ReportPointConsumeDailyDO> rntList = reportPointConsumeDailyDOMapper.selectByExample(example);
 		List<PointConsumeDailyBO> boList = new ArrayList<>();

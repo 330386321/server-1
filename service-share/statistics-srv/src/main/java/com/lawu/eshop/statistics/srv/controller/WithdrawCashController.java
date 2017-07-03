@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 import com.lawu.eshop.statistics.dto.ReportWithdrawDailyDTO;
 import com.lawu.eshop.statistics.param.ReportKCommonParam;
 import com.lawu.eshop.statistics.srv.bo.ReportWithdrawDailyBO;
@@ -88,5 +89,19 @@ public class WithdrawCashController extends BaseController {
 	public Result deleteMonthByReportDate(@RequestParam("reportDate") String reportDate) {
 		withdrawCashService.deleteMonthByReportDate(reportDate);
 		return successCreated(ResultCode.SUCCESS);
+	}
+	
+	/**
+	 * 
+	 * @param flag 1-day2-month
+	 * @param date 时间条件
+	 * @param isTotal 0-区分商家用户1-平台总提现
+	 * @return
+	 * @author yangqh
+	 * @date 2017年7月3日 上午10:28:40
+	 */
+	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
+	public ReportCommonBackDTO selectReport(@RequestParam("flag") String flag,@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
+		return withdrawCashService.selectReport(flag,date,flag);
 	}
 }
