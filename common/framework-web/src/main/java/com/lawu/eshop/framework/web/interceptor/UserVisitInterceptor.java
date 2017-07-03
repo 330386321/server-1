@@ -1,6 +1,7 @@
 package com.lawu.eshop.framework.web.interceptor;
 
 import com.lawu.eshop.authorization.util.UserUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -34,7 +35,12 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute(VisitConstants.REQUEST_LOCATION_PATH, request.getHeader(VisitConstants.HEADER_LOCATION_PATH));
         request.setAttribute(VisitConstants.REQUEST_CHANNEL, request.getHeader(VisitConstants.HEADER_CHANNEL));
 
-        userVisitEventPublish.publishUserVisitEvent(UserUtil.getCurrentUserNum(request));
+        String currentUserNum = UserUtil.getCurrentUserNum(request);
+
+        if (StringUtils.isNotBlank(currentUserNum)) {
+
+            userVisitEventPublish.publishUserVisitEvent(currentUserNum);
+        }
 
         return true;
     }
