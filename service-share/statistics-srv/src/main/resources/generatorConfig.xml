@@ -50,8 +50,7 @@
         <table tableName="report_withdraw_month" domainObjectName="ReportWithdrawMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        -->
-        <!--<table tableName="report_user_active_daily" domainObjectName="ReportUserActiveDailyDO">
+        <table tableName="report_user_active_daily" domainObjectName="ReportUserActiveDailyDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
         <table tableName="report_user_active_month" domainObjectName="ReportUserActiveMonthDO">
@@ -62,7 +61,14 @@
         </table>
         <table tableName="user_visit_record" domainObjectName="UserVisitRecordDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>-->
+        </table>
+        <table tableName="report_sales_daily" domainObjectName="ReportSalesDailyDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="report_sales_month" domainObjectName="ReportSalesMonthDO">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        -->
         <table tableName="report_user_active_area_month" domainObjectName="ReportUserActiveAreaMonthDO">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
