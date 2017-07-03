@@ -273,7 +273,7 @@ public class AdController extends BaseController {
         	if(!StringUtils.isNotEmpty(adAgainParam.getBeginTime())){
     			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
     		}
-        	Result<PropertyinfoFreezeEnum> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+        	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
         	if (isSuccess(resultFreeze)){
         		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
         			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
