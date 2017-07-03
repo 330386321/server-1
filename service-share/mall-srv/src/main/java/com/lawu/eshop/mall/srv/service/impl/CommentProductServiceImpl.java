@@ -252,6 +252,17 @@ public class CommentProductServiceImpl implements CommentProductService {
 		List<CommentProductBO> commentProductBOS = new ArrayList<>();
 		for (CommentProductDO commentProductDO : commentProductDOS) {
 			CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+			CommentImageDOExample commentImageExample=new CommentImageDOExample();
+			commentImageExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
+			.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val).andStatusEqualTo(true);
+			
+			 List<CommentImageDO>  list=commentImageDOMapper.selectByExample(commentImageExample);
+			 
+			 List<String> listImg=new ArrayList<>();
+			 for (CommentImageDO commentImageDO : list) {
+				 listImg.add(commentImageDO.getImgUrl());
+			 }
+			commentProductBO.setUrlImgs(listImg);
 			commentProductBOS.add(commentProductBO);
 		}
 		page.setRecords(commentProductBOS);

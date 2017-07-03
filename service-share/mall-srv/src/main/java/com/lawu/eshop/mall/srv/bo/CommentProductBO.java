@@ -45,8 +45,9 @@ public class CommentProductBO {
     private Byte grade;
 
     private Long productModelId;
+   
 
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 

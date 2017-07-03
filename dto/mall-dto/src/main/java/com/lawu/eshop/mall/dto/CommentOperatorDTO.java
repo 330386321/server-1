@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -26,6 +27,9 @@ public class CommentOperatorDTO {
     
     @ApiModelProperty(value = "名称")
     private String name;
+    
+    @ApiModelProperty(value = "评价图片列表")
+    private List urlImgs;
 
     public Long getId() {
         return id;
@@ -66,6 +70,15 @@ public class CommentOperatorDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public List getUrlImgs() {
+		return urlImgs;
+	}
+
+	public void setUrlImgs(List urlImgs) {
+		this.urlImgs = urlImgs;
+	}
     
+	
     
 }

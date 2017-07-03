@@ -59,6 +59,7 @@ public class CommentMerchantBO {
      * 人均消费
      */
     private BigDecimal avgSpend;
+   
 
     public Long getId() {
         return id;
