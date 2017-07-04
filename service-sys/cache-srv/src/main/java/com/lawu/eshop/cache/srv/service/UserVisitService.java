@@ -1,5 +1,7 @@
 package com.lawu.eshop.cache.srv.service;
 
+import com.lawu.eshop.framework.core.type.UserType;
+
 import java.util.Map;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Map;
  */
 public interface UserVisitService {
 
-    void addUserVisitCount(String userNum, String nowTimeStr, Long userId);
+    void addUserVisitCount(String userNum, String nowTimeStr, Long userId,UserType type);
 
     Map<String,String> getVisitRecords(Integer currentPage,String time,Byte type);
 

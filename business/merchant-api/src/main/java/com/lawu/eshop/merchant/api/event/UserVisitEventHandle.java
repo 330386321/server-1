@@ -18,6 +18,6 @@ public class UserVisitEventHandle implements AsyncEventHandle<UserVisitEvent> {
     public void execute(UserVisitEvent event) {
         String nowTimeStr = DateUtil.getIntDate();
 
-        userVisitService.addUserVisitCount(event.getUserNum(),nowTimeStr);
+        userVisitService.addUserVisitCount(event.getUserNum(),nowTimeStr,event.getUserId(),event.getUserType());
     }
 }

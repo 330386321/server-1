@@ -28,15 +28,19 @@ public class UserVisitServiceImpl implements UserVisitService {
     private RedisTemplate<String,String> redisTemplate;
 
     @Override
-    public void addUserVisitCount(String userNum, String nowTimeStr, Long userId) {
+    public void addUserVisitCount(String userNum, String nowTimeStr, Long userId,UserType type) {
         String time = nowTimeStr.concat("_");
-        String suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time);
+        String suffix = "";
+        if(UserType.MEMBER.equals(type)){
+            //用户
+            suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time);
+        }else{
+            suffix = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time);
+        }
         Long currPage = userId / 100 + 1;
         String keySuffix = suffix.concat(String.valueOf(currPage)+"_");
         String key = keySuffix.concat(userNum);
         String oldVal = stringRedisTemplate.opsForValue().get(key);
-
-      //  System.out.println(new String(ss));
         if (StringUtils.isEmpty(oldVal)) {
             //如果不存在放1
             stringRedisTemplate.opsForValue().set(key, "1");

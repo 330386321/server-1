@@ -1,6 +1,7 @@
 package com.lawu.eshop.cache.srv.controller;
 
 import com.lawu.eshop.cache.srv.service.UserVisitService;
+import com.lawu.eshop.framework.core.type.UserType;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ public class UserVisitController extends BaseController {
     @Autowired
     private UserVisitService userVisitService;
 
-    @RequestMapping(value = "addUserVisitCount")
+    @RequestMapping(value = "addUserVisitCount",method = RequestMethod.POST)
     public Result addUserVisitCount(@RequestParam("userNum") String userNum,
                                     @RequestParam("nowTimeStr") String nowTimeStr,
-                                    @RequestParam("userId") Long userId){
-        userVisitService.addUserVisitCount(userNum,nowTimeStr,userId);
+                                    @RequestParam("userId") Long userId, @RequestParam("type") UserType type){
+        userVisitService.addUserVisitCount(userNum,nowTimeStr,userId,type);
         return successCreated();
     }
 
