@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,5 +94,14 @@ public class RegionServiceImpl implements RegionService {
     public RegionBO getRegionById(Integer id) {
         RegionDO regionDO = regionDOMapper.selectByPrimaryKey(id);
         return RegionConverter.coverBO(regionDO);
+    }
+
+    @Override
+    public void updateRegionLonLat(Integer id, BigDecimal longitude, BigDecimal latitude) {
+        RegionDO regionDO = new RegionDO();
+        regionDO.setId(id);
+        regionDO.setLongitude(longitude);
+        regionDO.setLatitude(latitude);
+        regionDOMapper.updateByPrimaryKeySelective(regionDO);
     }
 }
