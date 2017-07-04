@@ -5,11 +5,13 @@ import com.lawu.eshop.framework.web.interceptor.UserVisitEvent;
 import com.lawu.eshop.merchant.api.service.UserVisitService;
 import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zhangyong
  * @date 2017/7/3.
  */
+@Component
 public class UserVisitEventHandle implements AsyncEventHandle<UserVisitEvent> {
 
     @Autowired

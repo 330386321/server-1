@@ -5,11 +5,13 @@ import com.lawu.eshop.framework.web.interceptor.UserVisitEvent;
 import com.lawu.eshop.framework.web.interceptor.UserVisitEventPublish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 /**
  * @author zhangyong
  * @date 2017/7/4.
  */
+@Component
 public class EventPublisher implements UserVisitEventPublish {
     @Autowired
     ApplicationContext applicationContext;
