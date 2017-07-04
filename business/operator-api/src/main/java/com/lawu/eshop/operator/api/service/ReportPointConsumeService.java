@@ -20,6 +20,6 @@ import com.lawu.eshop.statistics.dto.ReportCommonBackDTO;
 public interface ReportPointConsumeService {
 
 	@RequestMapping(value = "pointConsume/selectReport",method = RequestMethod.GET)
-	ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal);
+	ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate);
 
 }

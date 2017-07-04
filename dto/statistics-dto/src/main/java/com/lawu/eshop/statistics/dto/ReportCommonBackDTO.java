@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ReportCommonBackDTO {
-	private String date;
+	private String bdate;
+	private String edate;
 	private List<String> xAxisData;
 	private List<BigDecimal> yAxisMemberData;
 	private List<BigDecimal> yAxisMerchantData;
@@ -33,11 +34,18 @@ public class ReportCommonBackDTO {
 	public void setyAxisTotalData(List<BigDecimal> yAxisTotalData) {
 		this.yAxisTotalData = yAxisTotalData;
 	}
-	public String getDate() {
-		return date;
+	public String getBdate() {
+		return bdate;
 	}
-	public void setDate(String date) {
-		this.date = date;
+	public void setBdate(String bdate) {
+		this.bdate = bdate;
 	}
+	public String getEdate() {
+		return edate;
+	}
+	public void setEdate(String edate) {
+		this.edate = edate;
+	}
+	
    
 }

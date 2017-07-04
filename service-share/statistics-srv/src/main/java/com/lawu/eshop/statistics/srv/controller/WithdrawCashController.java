@@ -100,7 +100,7 @@ public class WithdrawCashController extends BaseController {
 	 * @date 2017年7月3日 上午10:28:40
 	 */
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
-	public ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return withdrawCashService.selectReport(date,isTotal);
+	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		return withdrawCashService.selectReport(bdate,edate);
 	}
 }

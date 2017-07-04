@@ -35,9 +35,9 @@ public class ReportWithdrawCashController extends BaseController {
 	@ApiOperation(value = "提现日/月统计", notes = "提现日/月统计,[]（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
 	@RequiresPermissions("report:withdraw")
-	public Result<ReportCommonBackDTO> selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
+	public Result<ReportCommonBackDTO> selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
 		
-		return successCreated(reportWithdrawCashService.selectReport(date,isTotal));
+		return successCreated(reportWithdrawCashService.selectReport(bdate,edate));
 	}
 
 	

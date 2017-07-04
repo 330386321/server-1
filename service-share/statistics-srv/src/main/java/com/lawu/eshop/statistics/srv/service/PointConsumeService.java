@@ -18,7 +18,7 @@ public interface PointConsumeService {
 
 	void deleteMonthByReportDate(String reportDate);
 
-	ReportCommonBackDTO selectReport(String date, String isTotal);
+	ReportCommonBackDTO selectReport(String bdate, String edate);
 
 	
 

@@ -100,7 +100,7 @@ public class PointConsumeController extends BaseController {
 	 * @date 2017年7月3日 下午3:40:52
 	 */
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
-	public ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return pointConsumeService.selectReport(date,isTotal);
+	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		return pointConsumeService.selectReport(bdate,edate);
 	}
 }

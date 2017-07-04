@@ -35,8 +35,8 @@ public class ReportPointConsumeController extends BaseController {
 	@ApiOperation(value = "积分消费日/月统计", notes = "积分消费日/月统计,[]（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
 	@RequiresPermissions("report:pointConsume")
-	public Result<ReportCommonBackDTO> selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return successCreated(reportPointConsumeService.selectReport(date,isTotal));
+	public Result<ReportCommonBackDTO> selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		return successCreated(reportPointConsumeService.selectReport(bdate,edate));
 	}
 
 	

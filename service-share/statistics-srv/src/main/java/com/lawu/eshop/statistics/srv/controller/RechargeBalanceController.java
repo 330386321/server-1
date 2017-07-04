@@ -100,7 +100,7 @@ public class RechargeBalanceController extends BaseController {
 	 * @date 2017年7月3日 下午3:22:46
 	 */
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
-	public ReportCommonBackDTO selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return rechargeBalanceService.selectReport(date,isTotal);
+	public ReportCommonBackDTO selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		return rechargeBalanceService.selectReport(bdate,edate);
 	}
 }

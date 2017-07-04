@@ -87,55 +87,51 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 	}
 	
 	@Override
-	public ReportCommonBackDTO selectReport(String date,String isTotal) {
-		if("".equals(date)){
-			date = DateUtil.getDateFormat(new Date(), "yyyy-MM");
+	public ReportCommonBackDTO selectReport(String bdate,String edate) {
+		if("".equals(bdate) || "".equals(edate)){
+			bdate = DateUtil.getDateFormat(new Date(), "yyyy-MM")+"-01";
+			edate = DateUtil.getDateFormat(new Date(), "yyyy-MM-dd");
 		}
 		ReportCommonBackDTO dto = new ReportCommonBackDTO();
 		List<String> xAxisData = new ArrayList<>();
 		List<BigDecimal> yAxisMemberData = new ArrayList<>();
 		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
 		List<BigDecimal> yAxisTotalData = new ArrayList<>();
-		if(date.length() > 4){
+		if(bdate.length() > 4){
 			ReportPointConsumeDailyDOExample example = new ReportPointConsumeDailyDOExample();
-			Date begin = DateUtil.formatDate(date+"-01", "yyyy-MM-dd");
-			Date end = DateUtil.getLastDayOfMonth(begin);
+			Date begin = DateUtil.formatDate(bdate, "yyyy-MM-dd");
+			Date end = DateUtil.formatDate(edate, "yyyy-MM-dd");
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportPointConsumeDailyDO> rntList = reportPointConsumeDailyDOMapper.selectByExample(example);
 			for(ReportPointConsumeDailyDO rdo : rntList){
-				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "dd");
+				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "MM-dd");
 				xAxisData.add(day);
-				if("0".equals(isTotal)){
-					yAxisMemberData.add(rdo.getMemberPoint().setScale(2));
-					yAxisMerchantData.add(rdo.getMerchantPoint().setScale(2));
-				}else{
-					yAxisTotalData.add(rdo.getTotalPoint().setScale(2));
-				}
+				yAxisMemberData.add(rdo.getMemberPoint().setScale(2));
+				yAxisMerchantData.add(rdo.getMerchantPoint().setScale(2));
+				yAxisTotalData.add(rdo.getTotalPoint().setScale(2));
 			}
 		}else {
 			ReportPointConsumeMonthDOExample example = new ReportPointConsumeMonthDOExample();
-			Date begin = DateUtil.formatDate(date+"-01-01", "yyyy-MM-dd");
-			Date end = DateUtil.formatDate(date+"-12-01", "yyyy-MM-dd");
+			Date begin = DateUtil.formatDate(bdate+"-01-01", "yyyy-MM-dd");
+			Date end = DateUtil.formatDate(edate+"-12-01", "yyyy-MM-dd");
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportPointConsumeMonthDO> rntList = reportPointConsumeMonthDOMapper.selectByExample(example);
 			for(ReportPointConsumeMonthDO rdo : rntList){
-				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "MM");
+				String day = DateUtil.getDateFormat(rdo.getGmtReport(), "yyyy-MM");
 				xAxisData.add(day);
-				if("0".equals(isTotal)){
-					yAxisMemberData.add(rdo.getMemberPoint().setScale(2));
-					yAxisMerchantData.add(rdo.getMerchantPoint().setScale(2));
-				}else{
-					yAxisTotalData.add(rdo.getTotalPoint().setScale(2));
-				}
+				yAxisMemberData.add(rdo.getMemberPoint().setScale(2));
+				yAxisMerchantData.add(rdo.getMerchantPoint().setScale(2));
+				yAxisTotalData.add(rdo.getTotalPoint().setScale(2));
 			}
 		}
 		dto.setxAxisData(xAxisData);
 		dto.setyAxisMemberData(yAxisMemberData);
 		dto.setyAxisMerchantData(yAxisMerchantData);
 		dto.setyAxisTotalData(yAxisTotalData);
-		dto.setDate(date);
+		dto.setBdate(bdate);
+		dto.setEdate(edate);
 		return dto;
 	}
 }

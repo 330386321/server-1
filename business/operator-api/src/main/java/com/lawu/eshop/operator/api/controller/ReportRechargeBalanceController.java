@@ -35,8 +35,8 @@ public class ReportRechargeBalanceController extends BaseController {
 	@ApiOperation(value = "余额充值日/月统计", notes = "余额充值日/月统计,[]（杨清华）", httpMethod = "GET")
 	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
 	@RequiresPermissions("report:rechargeBalance")
-	public Result<ReportCommonBackDTO> selectReport(@RequestParam("date") String date,@RequestParam("isTotal") String isTotal) {
-		return successCreated(reportRechargeBalanceService.selectReport(date,isTotal));
+	public Result<ReportCommonBackDTO> selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		return successCreated(reportRechargeBalanceService.selectReport(bdate,edate));
 	}
 
 	

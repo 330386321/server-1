@@ -18,7 +18,7 @@ public interface WithdrawCashService {
 
 	void deleteMonthByReportDate(String reportDate);
 
-	ReportCommonBackDTO selectReport(String date,String isTotal);
+	ReportCommonBackDTO selectReport(String bdate,String edate);
 
 	
 
