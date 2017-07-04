@@ -9,7 +9,8 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.bo.UserActiveBO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportUserActiveAreaMonthDO;
-import com.lawu.eshop.statistics.srv.domain.extend.ReportUserActiveDOView;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveDailyDO;
+import com.lawu.eshop.statistics.srv.domain.ReportUserActiveMonthDO;
 import com.lawu.eshop.statistics.srv.domain.extend.UserActiveDOView;
 
 import java.util.ArrayList;
@@ -53,16 +54,16 @@ public class UserActiveConverter {
         return userActiveDTOS;
     }
 
-    public static List<ReportUserActiveBO> coverReportBOS(List<ReportUserActiveDOView> userActiveDOViews) {
-        if(userActiveDOViews.isEmpty()){
+    public static List<ReportUserActiveBO> coverReportBOS(List<ReportUserActiveMonthDO> userActiveMonthDOS) {
+        if(userActiveMonthDOS.isEmpty()){
             return new ArrayList<>();
         }
         List<ReportUserActiveBO> reportUserActiveBOS = new ArrayList<>();
-        for(ReportUserActiveDOView reportUserActiveDOView : userActiveDOViews){
+        for(ReportUserActiveMonthDO reportUserActiveDO : userActiveMonthDOS){
             ReportUserActiveBO reportUserActiveBO = new ReportUserActiveBO();
-            reportUserActiveBO.setMerchantCount(reportUserActiveDOView.getMerchantCount());
-            reportUserActiveBO.setMemberCount(reportUserActiveDOView.getMemberCount());
-            reportUserActiveBO.setGmtReport(reportUserActiveDOView.getGmtReport());
+            reportUserActiveBO.setGmtReport(reportUserActiveDO.getGmtReport());
+            reportUserActiveBO.setMerchantCount(reportUserActiveDO.getMerchantCount());
+            reportUserActiveBO.setMemberCount(reportUserActiveDO.getMemberCount());
             reportUserActiveBOS.add(reportUserActiveBO);
         }
         return reportUserActiveBOS;
@@ -109,8 +110,8 @@ public class UserActiveConverter {
         for (ReportUserActiveAreaDailyBO reportUserActiveAreaDailyBO : listBOS) {
             ReportUserActiveAreaDTO reportUserActiveAreaDTO = new ReportUserActiveAreaDTO();
             reportUserActiveAreaDTO.setMerchantCount(reportUserActiveAreaDailyBO.getMerchantCount());
-            reportUserActiveAreaDTO.setMemberCount(reportUserActiveAreaDailyBO.getMemberCount());
             reportUserActiveAreaDTO.setCityId(reportUserActiveAreaDailyBO.getCityId());
+            reportUserActiveAreaDTO.setMemberCount(reportUserActiveAreaDailyBO.getMemberCount());
             reportUserActiveAreaDTO.setCityName(reportUserActiveAreaDailyBO.getCityName());
             reportUserActiveDTOS.add(reportUserActiveAreaDTO);
         }
@@ -143,10 +144,27 @@ public class UserActiveConverter {
             ReportUserActiveAreaDTO reportUserActiveAreaDTO = new ReportUserActiveAreaDTO();
             reportUserActiveAreaDTO.setMerchantCount(reportUserActiveAreaBO.getMerchantCount());
             reportUserActiveAreaDTO.setMemberCount(reportUserActiveAreaBO.getMemberCount());
-            reportUserActiveAreaDTO.setCityId(reportUserActiveAreaBO.getCityId());
             reportUserActiveAreaDTO.setCityName(reportUserActiveAreaBO.getCityName());
+            reportUserActiveAreaDTO.setCityId(reportUserActiveAreaBO.getCityId());
             reportUserActiveDTOS.add(reportUserActiveAreaDTO);
         }
         return reportUserActiveDTOS;
     }
+
+    public static List<ReportUserActiveBO> coverReportBOSWithDOS(List<ReportUserActiveDailyDO> userActiveDailyDOS) {
+        if(userActiveDailyDOS.isEmpty()){
+            return new ArrayList<>();
+        }
+        List<ReportUserActiveBO> reportUserActiveBOS = new ArrayList<>();
+        for(ReportUserActiveDailyDO reportUserActiveDOView : userActiveDailyDOS){
+            ReportUserActiveBO reportUserActiveBO = new ReportUserActiveBO();
+            reportUserActiveBO.setMerchantCount(reportUserActiveDOView.getMerchantCount());
+            reportUserActiveBO.setMemberCount(reportUserActiveDOView.getMemberCount());
+            reportUserActiveBO.setGmtReport(reportUserActiveDOView.getGmtReport());
+            reportUserActiveBOS.add(reportUserActiveBO);
+        }
+        return reportUserActiveBOS;
+    }
+
+
 }

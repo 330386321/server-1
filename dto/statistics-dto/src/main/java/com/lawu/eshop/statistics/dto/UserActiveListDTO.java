@@ -18,7 +18,7 @@ public class UserActiveListDTO {
     private Integer merchantCount;
 
     @ApiModelProperty(value = "日期")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone = "GMT+8")
     private Date gmtReport;
 
     public Integer getMemberCount() {

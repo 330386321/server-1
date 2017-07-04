@@ -5,7 +5,6 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.statistics.dto.ReportUserActiveAreaDTO;
 import com.lawu.eshop.statistics.dto.UserActiveDTO;
 import com.lawu.eshop.statistics.dto.UserActiveListDTO;
-import com.lawu.eshop.statistics.param.UserActiveParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaMonthBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
@@ -112,25 +111,27 @@ public class UserActiveController extends BaseController{
 
     /**
      * 查询一个天活跃用户记录列表（按时间）
-     * @param param
+     * @param beginTime,endTime
      * @return
      */
-    @RequestMapping(value = "getUserActiveListDaily",method = RequestMethod.POST)
-    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestBody UserActiveParam param){
+    @RequestMapping(value = "getUserActiveListDaily",method = RequestMethod.GET)
+    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam("beginTime") String beginTime,
+                                                                  @RequestParam("endTime") String endTime){
 
-        List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListDaily(param);
+        List<ReportUserActiveBO> listBOS = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
         List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
         return successGet(listDTOS);
     }
 
     /**
      * 查询一个月活跃用户记录列表（按时间）
-     * @param param
+     * @param beginTime,endTime
      * @return
      */
-    @RequestMapping(value = "getUserActiveListMonth",method = RequestMethod.POST)
-    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestBody UserActiveParam param){
-        List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListMonth(param);
+    @RequestMapping(value = "getUserActiveListMonth",method = RequestMethod.GET)
+    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam("beginTime") String beginTime,
+                                                                  @RequestParam("endTime") String endTime){
+        List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListMonth(beginTime,endTime);
         List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
         return successGet(listDTOS);
     }
