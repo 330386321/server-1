@@ -18,12 +18,12 @@ import java.util.List;
 public interface UserActiveService {
 
     @RequestMapping(value = "userActive/getUserActiveListDaily",method = RequestMethod.GET)
-    Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam("beginTime") String beginTime,
-                                                           @RequestParam("endTime") String endTime);
+    Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam(value ="beginTime", required = false)  String beginTime,
+                                                           @RequestParam(value ="endTime",required = false)  String endTime);
 
     @RequestMapping(value = "userActive/getUserActiveListMonth",method = RequestMethod.GET)
-    Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam("beginTime") String beginTime,
-                                                           @RequestParam("endTime") String endTime);
+    Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam(value ="beginTime", required = false) String beginTime,
+                                                           @RequestParam(value ="endTime", required = false) String endTime);
 
     @RequestMapping(value = "userActive/getReportUserActiveAreaDailyList",method = RequestMethod.GET)
     Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaDailyList(@RequestParam(value = "reportDate") String reportDate);

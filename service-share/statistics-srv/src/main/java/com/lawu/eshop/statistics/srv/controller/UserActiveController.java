@@ -110,13 +110,13 @@ public class UserActiveController extends BaseController{
 
 
     /**
-     * 查询一个天活跃用户记录列表（按时间）
+     * 查询一天活跃用户记录列表（按时间）
      * @param beginTime,endTime
      * @return
      */
     @RequestMapping(value = "getUserActiveListDaily",method = RequestMethod.GET)
-    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam("beginTime") String beginTime,
-                                                                  @RequestParam("endTime") String endTime){
+    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam(required = false)  String beginTime,
+                                                                  @RequestParam(required = false)  String endTime){
 
         List<ReportUserActiveBO> listBOS = reportUserActiveDailyService.getUserActiveListDaily(beginTime, endTime);
         List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
@@ -129,8 +129,8 @@ public class UserActiveController extends BaseController{
      * @return
      */
     @RequestMapping(value = "getUserActiveListMonth",method = RequestMethod.GET)
-    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam("beginTime") String beginTime,
-                                                                  @RequestParam("endTime") String endTime){
+    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam(required = false) String beginTime,
+                                                                  @RequestParam(required = false) String endTime){
         List<ReportUserActiveBO> listBOS =  reportUserActiveDailyService.getUserActiveListMonth(beginTime,endTime);
         List<UserActiveListDTO> listDTOS = UserActiveConverter.coverReportDTOS(listBOS);
         return successGet(listDTOS);

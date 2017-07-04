@@ -40,16 +40,16 @@ public class UserActiveController extends BaseController{
     @ApiOperation(value = "查询活跃用户日统计列表", notes = "查询活跃用户日统计列表（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value ="getUserActiveListDaily" ,method = RequestMethod.GET)
-    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam("beginTime") String beginTime,
-                                                                  @RequestParam("endTime") String endTime){
+    public Result<List<UserActiveListDTO>> getUserActiveListDaily(@RequestParam(required = false)  String beginTime,
+                                                                  @RequestParam(required = false)  String endTime){
         return userActiveService.getUserActiveListDaily(beginTime,endTime);
     }
 
     @ApiOperation(value = "查询活跃用户月统计列表", notes = "查询活跃用户月统计列表（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value ="getUserActiveListMonth" ,method = RequestMethod.GET)
-    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam("beginTime") String beginTime,
-                                                                  @RequestParam("endTime") String endTime){
+    public Result<List<UserActiveListDTO>> getUserActiveListMonth(@RequestParam(required = false) String beginTime,
+                                                                  @RequestParam(required = false) String endTime){
         return userActiveService.getUserActiveListMonth(beginTime,endTime);
     }
 
