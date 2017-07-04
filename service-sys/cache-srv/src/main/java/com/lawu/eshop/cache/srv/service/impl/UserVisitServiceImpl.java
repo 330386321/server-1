@@ -55,7 +55,7 @@ public class UserVisitServiceImpl implements UserVisitService {
         if(UserType.MEMBER.val.byteValue() == type){
             suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time+"_");
         }else{
-            suffix = KeyConstant.REDIS_KEY_USER_VISIT_COUNT.concat(time+"_");
+            suffix = KeyConstant.REDIS_KEY_MERCHANT_VISIT_COUNT.concat(time+"_");
         }
 
         String pattern = suffix.concat(currentPage.toString()+"*");

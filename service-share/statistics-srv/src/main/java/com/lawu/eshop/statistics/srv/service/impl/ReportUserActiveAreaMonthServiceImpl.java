@@ -38,7 +38,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
         for (UserActiveDTO userActiveDTO : userActiveDTOS) {
             ReportUserActiveAreaMonthDO  reportUserActiveAreaMonthDO = new ReportUserActiveAreaMonthDO();
             reportUserActiveAreaMonthDO.setCityName(userActiveDTO.getCityName());
-            reportUserActiveAreaMonthDO.setGmtReport(userActiveDTO.getVisitDate());
+            reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
             reportUserActiveAreaMonthDO.setGmtCreate(new Date());
             reportUserActiveAreaMonthDO.setMemberCount(userActiveDTO.getUserCount());
             reportUserActiveAreaMonthDO.setCityId(userActiveDTO.getCityId());
@@ -57,7 +57,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
                 //不存在新增一条统计记录
                 ReportUserActiveAreaMonthDO  reportUserActiveAreaMonthDO = new ReportUserActiveAreaMonthDO();
                 reportUserActiveAreaMonthDO.setCityName(userActiveDTO.getCityName());
-                reportUserActiveAreaMonthDO.setGmtReport(userActiveDTO.getVisitDate());
+                reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
                 reportUserActiveAreaMonthDO.setGmtCreate(new Date());
                 reportUserActiveAreaMonthDO.setMerchantCount(userActiveDTO.getUserCount());
                 reportUserActiveAreaMonthDO.setCityId(userActiveDTO.getCityId());

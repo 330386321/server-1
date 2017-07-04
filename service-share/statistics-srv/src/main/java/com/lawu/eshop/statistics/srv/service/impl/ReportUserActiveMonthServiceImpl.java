@@ -25,7 +25,7 @@ public class ReportUserActiveMonthServiceImpl implements ReportUserActiveMonthSe
         userActiveMonthDO.setMemberCount(memberCount);
         userActiveMonthDO.setMerchantCount(merchantCount);
         userActiveMonthDO.setGmtCreate(new Date());
-        userActiveMonthDO.setGmtReport(DateUtil.getDayBefore(DateUtil.getNowDate()));
+        userActiveMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
         reportUserActiveMonthDOMapper.insertSelective(userActiveMonthDO);
     }
 }

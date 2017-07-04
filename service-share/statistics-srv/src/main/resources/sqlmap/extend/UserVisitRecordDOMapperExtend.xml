@@ -4,14 +4,14 @@
 
     <select id="collectionMemberActiveDaily" resultType="java.lang.Integer"  parameterType="java.util.Date">
         select count(1) from user_visit_record
-        where user_type = 2
+        where user_type = 1
          and visit_date=#{visitDate}
     </select>
 
 
     <select id="collectionMerchantActiveDaily" resultType="java.lang.Integer" parameterType="java.util.Date">
         select count(1) from user_visit_record
-         where user_type = 1
+         where user_type = 2
          and visit_date=#{visitDate}
     </select>
 
@@ -21,7 +21,7 @@
         FROM
             user_visit_record
         WHERE
-            user_type = 2
+            user_type = 1
         AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1;
     </select>
 
@@ -32,7 +32,7 @@
         FROM
             user_visit_record
         WHERE
-            user_type = 1
+            user_type = 2
         AND PERIOD_DIFF(DATE_FORMAT(#{visitDate},'%Y%m'), DATE_FORMAT(visit_date,'%Y%m')) =1
     </select>
 
@@ -46,7 +46,7 @@
         FROM
             user_visit_record
         WHERE
-            user_type = 2
+            user_type = 1
         AND visit_date = #{visitDate}
         AND city_id != 0
         GROUP BY
@@ -64,7 +64,7 @@
         FROM
         user_visit_record
         WHERE
-        user_type = 1
+        user_type = 2
         AND visit_date = #{visitDate}
         AND city_id != 0
         GROUP BY

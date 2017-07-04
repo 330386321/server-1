@@ -9,6 +9,7 @@ import com.lawu.eshop.user.dto.VisitUserInfoDTO;
 import com.lawu.eshop.utils.DateUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @author zhangyong
  * @date 2017/7/3.
  */
+@Service
 public class UserVisitServiceImpl implements UserVisitService {
 
     @Autowired
@@ -68,7 +70,8 @@ public class UserVisitServiceImpl implements UserVisitService {
                         } else {
                             //查询 城市名称
                             String path = userInfoDTO.getRegionPath();
-                            Integer cityId = Integer.valueOf(path.substring(path.lastIndexOf("/")));
+
+                            Integer cityId = Integer.valueOf(path.substring(path.indexOf("/") + 1, path.lastIndexOf("/")));
                             userVisitRecordParam.setCityId(cityId);
                             Result<RegionDTO> regionDTO = regionService.getRegion(cityId);
                             if (regionDTO != null && regionDTO.getModel() != null) {
@@ -108,7 +111,7 @@ public class UserVisitServiceImpl implements UserVisitService {
                         } else {
                             //查询 城市名称
                             String regionPath = merchantInfo.getRegionPath();
-                            Integer cityId = Integer.valueOf(regionPath.substring(regionPath.lastIndexOf("/")));
+                            Integer cityId = Integer.valueOf(regionPath.substring(regionPath.indexOf("/") + 1, regionPath.lastIndexOf("/")));
                             param.setCityId(cityId);
                             Result<RegionDTO> region = regionService.getRegion(cityId);
                             if (region != null && region.getModel() != null && !region.getModel().getName().isEmpty()) {

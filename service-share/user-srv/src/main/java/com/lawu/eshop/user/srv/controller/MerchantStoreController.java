@@ -626,7 +626,7 @@ public class MerchantStoreController extends BaseController {
 	 * @param merchantNum
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/findAccountAndRegionPathByNum")
+	@RequestMapping(method = RequestMethod.GET, value = "findAccountAndRegionPathByNum")
 	VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum){
 		MerchantInfoBO merchantInfoBO = merchantStoreService.findAccountAndRegionPathByNum(merchantNum);
 		VisitUserInfoDTO visitUserInfoDTO = new VisitUserInfoDTO();

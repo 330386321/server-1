@@ -25,6 +25,6 @@ public interface RegionService {
     Result<List<RegionDTO>> getRegionLevelTwo();
 
     @RequestMapping(value = "region/getRegion/{id}", method = RequestMethod.GET)
-    Result<RegionDTO> getRegion(@PathVariable Integer id);
+    Result<RegionDTO> getRegion(@PathVariable("id") Integer id);
 
 }
