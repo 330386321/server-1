@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -92,13 +93,13 @@ public class DiscountPackageController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "list", method = RequestMethod.GET)
-	public Result<List<DiscountPackageQueryDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "优惠套餐查询参数", required = true) @ModelAttribute @Validated DiscountPackageQueryForeignParam param, BindingResult bindingResult) {
+	public Result<Page<DiscountPackageQueryDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "优惠套餐查询参数", required = true) @ModelAttribute @Validated DiscountPackageQueryForeignParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
-		Result<List<DiscountPackageQueryDTO>> result = discountPackageService.listForMerchant(merchantId, param);
+		Result<Page<DiscountPackageQueryDTO>> result = discountPackageService.listForMerchant(merchantId, param);
 		return successGet(result);
 	}
 	

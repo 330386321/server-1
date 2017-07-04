@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
@@ -32,7 +33,7 @@ public interface DiscountPackageService {
 	 * @date 2017年6月26日
 	 */
 	@RequestMapping(value = "merchant/list/{merchantId}", method = RequestMethod.POST)
-	Result<List<DiscountPackageQueryDTO>> listForMerchant(@PathVariable("merchantId") Long merchantId, @RequestBody DiscountPackageQueryForeignParam param);
+	Result<Page<DiscountPackageQueryDTO>> listForMerchant(@PathVariable("merchantId") Long merchantId, @RequestBody DiscountPackageQueryForeignParam param);
 	
 	/**
 	 * 根据优惠套餐id查询优惠套餐详情

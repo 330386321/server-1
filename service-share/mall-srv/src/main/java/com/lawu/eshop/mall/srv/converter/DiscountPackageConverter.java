@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.DiscountPackageStatusEnum;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.mall.param.DiscountPackageSaveParam;
@@ -194,6 +195,23 @@ public class DiscountPackageConverter {
 		for (DiscountPackageBO discountPackageBO : discountPackageBOList) {
 			rtn.add(convert(discountPackageBO));
 		}
+		return rtn;
+	}
+	
+	/**
+	 * <code>Page&lt;DiscountPackageQueryDTO&gt;<code>转换<code>List&lt;DiscountPackageBO&gt;<code>
+	 *
+	 * @param discountPackageBOList
+	 * @return
+	 */
+	public static Page<DiscountPackageQueryDTO> convertDiscountPackageQueryDTOPage(List<DiscountPackageBO> discountPackageBOList) {
+		Page<DiscountPackageQueryDTO> rtn = new Page<>();
+		if (discountPackageBOList == null || discountPackageBOList.isEmpty()) {
+			return rtn;
+		}
+		rtn.setTotalCount(discountPackageBOList.size());
+		rtn.setCurrentPage(1);
+		rtn.setRecords(convertDiscountPackageQueryDTOList(discountPackageBOList));
 		return rtn;
 	}
 }

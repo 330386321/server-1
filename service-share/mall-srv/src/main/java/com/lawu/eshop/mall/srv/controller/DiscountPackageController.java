@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -48,8 +49,8 @@ public class DiscountPackageController extends BaseController {
 	 * @date 2017年6月26日
 	 */
 	@RequestMapping(value = "member/list/{merchantId}", method = RequestMethod.GET)
-	public Result<List<DiscountPackageQueryDTO>> listForMember(@PathVariable("merchantId") Long merchantId) {
-		List<DiscountPackageQueryDTO> rtn = DiscountPackageConverter.convertDiscountPackageQueryDTOList(discountPackageService.listForMember(merchantId));
+	public Result<Page<DiscountPackageQueryDTO>> listForMember(@PathVariable("merchantId") Long merchantId) {
+		Page<DiscountPackageQueryDTO> rtn = DiscountPackageConverter.convertDiscountPackageQueryDTOPage(discountPackageService.listForMember(merchantId));
 		return successGet(rtn);
 	}
 	
@@ -63,8 +64,8 @@ public class DiscountPackageController extends BaseController {
 	 * @date 2017年6月26日
 	 */
 	@RequestMapping(value = "merchant/list/{merchantId}", method = RequestMethod.POST)
-	public Result<List<DiscountPackageQueryDTO>> listForMerchant(@PathVariable("merchantId") Long merchantId, @RequestBody DiscountPackageQueryForeignParam param) {
-		List<DiscountPackageQueryDTO> rtn = DiscountPackageConverter.convertDiscountPackageQueryDTOList(discountPackageService.listForMerchant(merchantId, param));
+	public Result<Page<DiscountPackageQueryDTO>> listForMerchant(@PathVariable("merchantId") Long merchantId, @RequestBody DiscountPackageQueryForeignParam param) {
+		Page<DiscountPackageQueryDTO> rtn = DiscountPackageConverter.convertDiscountPackageQueryDTOPage(discountPackageService.listForMerchant(merchantId, param));
 		return successGet(rtn);
 	}
 	
