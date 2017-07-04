@@ -55,7 +55,7 @@ public class ReportAdEarningsController extends BaseController{
 	 * @param query
 	 * @return
 	 */
-	@RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.GET)
+	@RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.POST)
 	public Result<Page<ReportAdEarningsDTO>> selectReportAdEarnings(@RequestBody ReportAdEarningsQueryParam query){
 		 
 		 Page<ReportAdEarningsBO>  pageBO=reportAdEarningsService.selectReportAdEarnings(query);

@@ -17,6 +17,7 @@ import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
@@ -51,15 +52,17 @@ public class ReportAdEarningsController extends BaseController{
 	
 	
 	
-	@ApiOperation(value = "广告收益列表", notes = "广告收益列表,[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "广告收益列表", notes = "广告收益列表,[]（张荣成）", httpMethod = "POST")
+	@PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.GET)
+    @RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.POST)
     public Result<Page<ReportAdEarningsDTO>> selectReportAdEarnings(@ModelAttribute @ApiParam(value = "查询信息") ReportAdEarningsQueryParam param) {
         return reportAdEarningsService.selectReportAdEarnings(param);
     }
 	
 	
 	@ApiOperation(value = "广告收益详情列表", notes = "广告收益详情列表,[]（张荣成）", httpMethod = "GET")
+	@PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getReportAdEarningsDetail", method = RequestMethod.GET)
     public Result<Page<ReportAdEarningsPointDetailDTO>> getReportAdEarningsDetail(@ModelAttribute @ApiParam(value = "查询信息") ReportAdEarningsDetailParam param) {

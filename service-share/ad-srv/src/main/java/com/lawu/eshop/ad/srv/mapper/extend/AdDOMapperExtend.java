@@ -41,4 +41,10 @@ public interface AdDOMapperExtend {
      * @return
      */
 	List<ReportAdView> selectReportAdEarningsByRowbounds(RowBounds rowBounds);
+	
+	/**
+	 * 收益总记录数
+	 * @return
+	 */
+	Integer selectReportAdEarningscount();
 }

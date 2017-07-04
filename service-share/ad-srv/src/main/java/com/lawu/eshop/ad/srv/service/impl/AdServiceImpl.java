@@ -126,6 +126,7 @@ public class AdServiceImpl implements AdService {
 	
 	private int currentPage=1;
 	
+	private int reportCurrentPage=1;
 
 	/**
 	 * 商家发布E赚
@@ -1005,8 +1006,19 @@ public class AdServiceImpl implements AdService {
 
 	@Override
 	public List<ReportAdBO> selectReportAdEarnings() {
-		int currentPage=0;
-		RowBounds rowBounds = new RowBounds(100 * (currentPage - 1), 100);
+		int count=adDOMapperExtend.selectReportAdEarningscount();
+		int totalPageNum;
+		if(count%1000==0){
+			totalPageNum=count/1000;
+		}else{
+			totalPageNum=count/1000+1;
+		}
+		if(reportCurrentPage>=totalPageNum){
+			reportCurrentPage=1;
+		}else{
+			reportCurrentPage++;
+		}
+		RowBounds rowBounds = new RowBounds(1000 * (reportCurrentPage - 1), 1000);
 		List<ReportAdView> list =adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
 		List<ReportAdBO> listBO=new ArrayList<>();
 		for (ReportAdView reportAdView : list) {
@@ -1021,6 +1033,7 @@ public class AdServiceImpl implements AdService {
 			bo.setTitle(reportAdView.getTitle());
 			listBO.add(bo);
 		}
+		
 		return listBO;
 	}
 

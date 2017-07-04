@@ -18,7 +18,7 @@ public interface ReportAdEarningsService {
 	 * @param query
 	 * @return
 	 */
-	@RequestMapping(value = "reportAdEarnings/selectReportAdEarnings", method = RequestMethod.GET)
+	@RequestMapping(value = "reportAdEarnings/selectReportAdEarnings", method = RequestMethod.POST)
 	public Result<Page<ReportAdEarningsDTO>> selectReportAdEarnings(@RequestBody ReportAdEarningsQueryParam query);
 
 }
