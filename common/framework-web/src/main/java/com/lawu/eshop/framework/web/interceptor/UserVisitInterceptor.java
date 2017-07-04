@@ -36,10 +36,10 @@ public class UserVisitInterceptor extends HandlerInterceptorAdapter {
         request.setAttribute(VisitConstants.REQUEST_CHANNEL, request.getHeader(VisitConstants.HEADER_CHANNEL));
 
         String currentUserNum = UserUtil.getCurrentUserNum(request);
-
+        Long userId = UserUtil.getCurrentUserId(request);
         if (StringUtils.isNotBlank(currentUserNum)) {
 
-            userVisitEventPublish.publishUserVisitEvent(currentUserNum);
+            userVisitEventPublish.publishUserVisitEvent(currentUserNum,userId);
         }
 
         return true;

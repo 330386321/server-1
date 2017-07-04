@@ -22,8 +22,8 @@ public class EventPublisher implements UserVisitEventPublish {
     }
 
     @Override
-    public void publishUserVisitEvent(String userNum) {
+    public void publishUserVisitEvent(String userNum,Long userId) {
 
-        applicationContext.publishEvent(new UserVisitEvent(this, userNum, UserType.MEMBER));
+        applicationContext.publishEvent(new UserVisitEvent(this, userNum, UserType.MEMBER,userId));
     }
 }

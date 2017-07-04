@@ -13,10 +13,13 @@ public class UserVisitEvent extends AsyncEvent {
 
     private UserType userType;
 
-    public UserVisitEvent(Object source, String userNum, UserType userType) {
+    private Long userId;
+
+    public UserVisitEvent(Object source, String userNum, UserType userType,Long userId) {
         super(source);
         this.userNum = userNum;
         this.userType = userType;
+        this.userId = userId;
     }
 
     public String getUserNum() {
@@ -25,5 +28,9 @@ public class UserVisitEvent extends AsyncEvent {
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }

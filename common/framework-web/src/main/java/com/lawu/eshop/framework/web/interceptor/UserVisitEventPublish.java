@@ -7,5 +7,5 @@ package com.lawu.eshop.framework.web.interceptor;
 public interface UserVisitEventPublish {
 
 
-    void publishUserVisitEvent(String userNum);
+    void publishUserVisitEvent(String userNum,Long userId);
 }

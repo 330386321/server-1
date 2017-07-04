@@ -39,4 +39,14 @@ public class KeyConstant {
      */
     public static final String REDIS_KEY_TRANSACTION_EXECUTION_COUNT_PREFIX = "TRANSACTION_EXECUTION_COUNT_";
 
+    /**
+     * 会员接口访问次数
+     */
+    public static final String REDIS_KEY_USER_VISIT_COUNT = "USER_VISIT_COUNT_";
+
+    /**
+     * 会员接口访问次数
+     */
+    public static final String REDIS_KEY_MERCHANT_VISIT_COUNT = "MERCHANT_VISIT_COUNT_";
+
 }
