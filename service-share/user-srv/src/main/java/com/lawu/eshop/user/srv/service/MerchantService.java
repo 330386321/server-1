@@ -122,4 +122,6 @@ public interface MerchantService {
     Boolean isRegister(String account);
 
     int delMerchantGtPush(Long merchantId);
+
+    Integer getTotalCount();
 }

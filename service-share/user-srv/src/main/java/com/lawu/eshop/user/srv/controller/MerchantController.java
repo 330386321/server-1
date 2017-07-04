@@ -275,4 +275,9 @@ public class MerchantController extends BaseController {
         return successCreated();
     }
 
+    @RequestMapping(value = "getTotalCount",method = RequestMethod.GET)
+    public Integer getTotalCount(){
+        return merchantService.getTotalCount();
+    }
+
 }

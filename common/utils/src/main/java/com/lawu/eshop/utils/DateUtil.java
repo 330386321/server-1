@@ -45,7 +45,7 @@ public class DateUtil {
 
     //int时间格式
     private static final String TIME_INT_FORMAT = "HHmmss";
-    
+
     // 默认日期格式化
     private static DateFormat dateFormat;
 
@@ -463,7 +463,7 @@ public class DateUtil {
         gregorianCalendar.add(Calendar.DAY_OF_MONTH, -1);
         return gregorianCalendar.getTime();
     }
-    
+
     /**
      * 获取指定年的第一个月
      *
@@ -487,7 +487,7 @@ public class DateUtil {
         gregorianCalendar.set(Calendar.MONTH, gregorianCalendar.getActualMaximum(Calendar.MONTH));
         return gregorianCalendar.getTime();
     }
-    
+
     /**
      * 获取指定天的第一秒
      *
@@ -703,10 +703,10 @@ public class DateUtil {
 		}
         return rtn;
     }
-    
+
     /**
      * 获取date中field的值
-     * 
+     *
      * @param date
      * @param field @see {@link java.util.Calendar#Calendar Calendar}
      * @return
@@ -718,10 +718,10 @@ public class DateUtil {
     	calendar.setTime(date);
     	return calendar.get(field);
     }
-    
+
     /**
      * 获取date中field的最大值
-     * 
+     *
      * @param date
      * @param field @see {@link java.util.Calendar#Calendar Calendar}
      * @return
@@ -732,5 +732,9 @@ public class DateUtil {
     	Calendar calendar = Calendar.getInstance();
     	calendar.setTime(date);
     	return calendar.getMaximum(field);
+    }
+
+    public static String getIntDateByTime(Date time) {
+        return dateIntFormat.format(time);
     }
 }

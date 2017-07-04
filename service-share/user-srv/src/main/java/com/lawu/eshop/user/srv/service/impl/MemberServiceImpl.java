@@ -601,4 +601,12 @@ public class MemberServiceImpl implements MemberService {
         return memberDO == null ? "" : memberDO.getAccount();
     }
 
+    @Override
+    public Integer getTotalCount() {
+        MemberDOExample example = new MemberDOExample();
+         example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        Integer count = memberDOMapper.countByExample(example);
+        return count;
+    }
+
 }

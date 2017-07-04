@@ -1,6 +1,7 @@
 package com.lawu.eshop.user.srv.service.impl;
 
 import com.lawu.eshop.solr.SolrUtil;
+import com.lawu.eshop.user.constants.UserStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStatusEnum;
 import com.lawu.eshop.user.dto.MerchantStoreImageEnum;
 import com.lawu.eshop.user.dto.MerchantStoreTypeEnum;
@@ -9,14 +10,13 @@ import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
 import com.lawu.eshop.user.srv.converter.MerchantStoreConverter;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreDOExample;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDO;
-import com.lawu.eshop.user.srv.domain.MerchantStoreImageDOExample;
+import com.lawu.eshop.user.srv.domain.*;
 import com.lawu.eshop.user.srv.domain.extend.MerchantAdInfoView;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
 import com.lawu.eshop.user.srv.mapper.MerchantStoreImageDOMapper;
 import com.lawu.eshop.user.srv.mapper.extend.MerchantStoreDOMapperExtend;
@@ -45,6 +45,9 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
 
     @Autowired
     private MerchantStoreImageDOMapper merchantStoreImageDOMapper;
+
+    @Autowired
+    private MerchantDOMapper merchantDOMapper;
 
     @Override
     public MerchantStoreBO selectMerchantStore(Long merchantId) {
@@ -225,6 +228,24 @@ public class MerchantStoreServiceImpl implements MerchantStoreService {
             storeStatusBO.setStatus(merchantStoreDO.getStatus());
             return storeStatusBO;
         }
+    }
+
+    @Override
+    public MerchantInfoBO findAccountAndRegionPathByNum(String merchantNum) {
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andNumEqualTo(merchantNum).andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        List<MerchantDO> merchantDOS = merchantDOMapper.selectByExample(example);
+        MerchantInfoBO merchantInfoBO = new MerchantInfoBO();
+        if(!merchantDOS.isEmpty()){
+            merchantInfoBO.setAccount(merchantDOS.get(0).getAccount());
+            MerchantStoreDOExample storeDOExample = new MerchantStoreDOExample();
+            storeDOExample.createCriteria().andMerchantIdEqualTo(merchantDOS.get(0).getId());
+            List<MerchantStoreDO> storeDOS = merchantStoreDOMapper.selectByExample(storeDOExample);
+            if (!storeDOS.isEmpty()){
+                merchantInfoBO.setRegionPath(storeDOS.get(0).getRegionPath());
+            }
+        }
+        return merchantInfoBO;
     }
 
 }

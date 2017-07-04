@@ -4,6 +4,7 @@ import com.lawu.eshop.user.param.ListMerchantStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import com.lawu.eshop.user.param.StoreStatisticsParam;
 import com.lawu.eshop.user.srv.bo.MerchantAdInfoBO;
+import com.lawu.eshop.user.srv.bo.MerchantInfoBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreBO;
 import com.lawu.eshop.user.srv.bo.MerchantStoreStatusBO;
 
@@ -87,4 +88,6 @@ public interface MerchantStoreService {
     List<MerchantAdInfoBO> getAdMerchantStoreByIds(List<Long> merchantIds);
 
     MerchantStoreStatusBO merchantStoreIsExist(Long id);
+
+    MerchantInfoBO findAccountAndRegionPathByNum(String merchantNum);
 }

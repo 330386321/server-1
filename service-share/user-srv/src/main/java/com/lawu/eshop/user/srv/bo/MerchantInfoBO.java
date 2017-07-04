@@ -21,6 +21,8 @@ public class MerchantInfoBO {
 
     private String name;
 
+    private String regionPath;
+
     public String getAccount() {
         return account;
     }
@@ -59,5 +61,13 @@ public class MerchantInfoBO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRegionPath() {
+        return regionPath;
+    }
+
+    public void setRegionPath(String regionPath) {
+        this.regionPath = regionPath;
     }
 }

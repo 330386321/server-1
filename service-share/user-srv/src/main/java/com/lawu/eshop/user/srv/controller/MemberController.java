@@ -17,6 +17,7 @@ import com.lawu.eshop.user.srv.service.MemberProfileService;
 import com.lawu.eshop.user.srv.service.MemberService;
 import com.lawu.eshop.utils.BeanUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -403,5 +404,37 @@ public class MemberController extends BaseController {
     public String getMemberAccountById(@RequestParam("memberId") Long memberId){
         String account = memberService.getMemberAccountById(memberId);
         return account;
+    }
+
+    /**
+     * 根据用户Num 查询用户账号及市级ID
+     * @param userNum
+     * @return
+     */
+    @RequestMapping(value = "findUserAccountAndRegionPathByNum", method = RequestMethod.GET)
+    public VisitUserInfoDTO findUserAccountAndRegionPathByNum(@RequestParam("userNum") String userNum) {
+        MemberBO memberBO = memberService.getMemberByNum(userNum);
+        if (memberBO == null) {
+            return null;
+        }
+        VisitUserInfoDTO userInfoDTO = new VisitUserInfoDTO();
+        userInfoDTO.setAccount(memberBO.getAccount());
+        if (StringUtils.isEmpty(memberBO.getRegionPath())) {
+            userInfoDTO.setRegionPath("");
+        } else {
+            userInfoDTO.setRegionPath(memberBO.getRegionPath());
+        }
+
+        return userInfoDTO;
+    }
+
+    /**
+     * 查询用户总数
+     * @return
+     */
+    @RequestMapping(value = "getTotalCount",method = RequestMethod.GET)
+    public Integer getTotalCount(){
+        Integer count = memberService.getTotalCount();
+        return count;
     }
 }

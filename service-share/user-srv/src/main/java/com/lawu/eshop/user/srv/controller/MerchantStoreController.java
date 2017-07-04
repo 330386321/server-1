@@ -621,5 +621,20 @@ public class MerchantStoreController extends BaseController {
 	}
 
 
+	/**
+	 * 查询商家账号及regionPath
+	 * @param merchantNum
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "merchantStore/findAccountAndRegionPathByNum")
+	VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum){
+		MerchantInfoBO merchantInfoBO = merchantStoreService.findAccountAndRegionPathByNum(merchantNum);
+		VisitUserInfoDTO visitUserInfoDTO = new VisitUserInfoDTO();
+		visitUserInfoDTO.setRegionPath(merchantInfoBO.getRegionPath());
+		visitUserInfoDTO.setAccount(merchantInfoBO.getAccount());
+		return visitUserInfoDTO;
+	}
+
+
 }
 

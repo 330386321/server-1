@@ -149,4 +149,6 @@ public interface MemberService {
     List<MemberBO> getMemberByIds(List<Long> memberIds);
 
     String getMemberAccountById(Long memberId);
+
+    Integer getTotalCount();
 }
