@@ -52,7 +52,12 @@ public class ReportSalesServiceImpl implements ReportSalesService {
 				reportSalesDailyDOMapper.insertSelective(reportSalesDailyDO);
 				break;
 			case MONTH:
-				ReportSalesMonthDO reportSalesMonthDO = ReportSalesMonthConverter.convert(param);
+				Date start = DateUtil.getFirstDayOfMonth(param.getGmtReport());
+				Date end = DateUtil.getLastDayOfMonth(param.getGmtReport());
+				ReportSalesDailyDOExample reportSalesDailyDOExample = new ReportSalesDailyDOExample();
+				reportSalesDailyDOExample.createCriteria().andGmtReportBetween(start, end);
+				List<ReportSalesDailyDO> reportSalesDailyDOList = reportSalesDailyDOMapper.selectByExample(reportSalesDailyDOExample);
+				ReportSalesMonthDO reportSalesMonthDO = ReportSalesMonthConverter.convert(param, reportSalesDailyDOList);
 				reportSalesMonthDOMapper.insertSelective(reportSalesMonthDO);
 				break;
 			default:

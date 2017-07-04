@@ -1,7 +1,9 @@
 package com.lawu.eshop.statistics.param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.statistics.constants.ReportTypeEnum;
 
 /**
@@ -12,12 +14,27 @@ import com.lawu.eshop.statistics.constants.ReportTypeEnum;
  */
 public class PlatformTotalSalesSaveParam {
 	
+	/**
+	 * 报表类型
+	 */
 	private ReportTypeEnum type;
 	
+	/**
+	 * 买单金额
+	 */
 	private BigDecimal payOrderAmount;
 	
+	/**
+	 * 订单金额
+	 */
 	private BigDecimal shoppingOrderAmount;
 
+	/**
+	 * 统计时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private Date gmtReport;
+	
 	public ReportTypeEnum getType() {
 		return type;
 	}
@@ -40,6 +57,14 @@ public class PlatformTotalSalesSaveParam {
 
 	public void setShoppingOrderAmount(BigDecimal shoppingOrderAmount) {
 		this.shoppingOrderAmount = shoppingOrderAmount;
+	}
+
+	public Date getGmtReport() {
+		return gmtReport;
+	}
+
+	public void setGmtReport(Date gmtReport) {
+		this.gmtReport = gmtReport;
 	}
 	
 }

@@ -1,13 +1,14 @@
 package com.lawu.eshop.statistics.srv.converter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.lawu.eshop.statistics.param.PlatformTotalSalesSaveParam;
 import com.lawu.eshop.statistics.srv.bo.ReportSalesBO;
+import com.lawu.eshop.statistics.srv.domain.ReportSalesDailyDO;
 import com.lawu.eshop.statistics.srv.domain.ReportSalesMonthDO;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * ReportSalesMonth转换器
@@ -23,12 +24,19 @@ public class ReportSalesMonthConverter {
      * @param param
      * @return
      */
-    public static ReportSalesMonthDO convert(PlatformTotalSalesSaveParam param) {
+    public static ReportSalesMonthDO convert(PlatformTotalSalesSaveParam param, List<ReportSalesDailyDO> reportSalesDailyDOList) {
     	ReportSalesMonthDO rtn = new ReportSalesMonthDO();
-        rtn.setPayOrderAmount(param.getPayOrderAmount());
-        rtn.setShoppingOrderAmount(param.getShoppingOrderAmount());
-        rtn.setTotalAmount(param.getPayOrderAmount().add(param.getShoppingOrderAmount()));
-        rtn.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(DateUtil.getNowDate())));
+    	
+    	BigDecimal payOrderAmount = new BigDecimal(0);
+    	BigDecimal shoppingOrderAmount = new BigDecimal(0);
+    	for (ReportSalesDailyDO reportSalesDailyDO : reportSalesDailyDOList) {
+    		payOrderAmount = payOrderAmount.add(reportSalesDailyDO.getPayOrderAmount());
+    		shoppingOrderAmount = shoppingOrderAmount.add(reportSalesDailyDO.getShoppingOrderAmount());
+    	}
+        rtn.setPayOrderAmount(payOrderAmount);
+        rtn.setShoppingOrderAmount(shoppingOrderAmount);
+        rtn.setTotalAmount(payOrderAmount.add(shoppingOrderAmount));
+        rtn.setGmtReport(param.getGmtReport());
         rtn.setGmtCreate(new Date());
         return rtn;
     }

@@ -7,7 +7,6 @@ import java.util.List;
 import com.lawu.eshop.statistics.param.PlatformTotalSalesSaveParam;
 import com.lawu.eshop.statistics.srv.bo.ReportSalesBO;
 import com.lawu.eshop.statistics.srv.domain.ReportSalesDailyDO;
-import com.lawu.eshop.utils.DateUtil;
 
 /**
  * ReportSalesDaily转换器
@@ -28,7 +27,7 @@ public class ReportSalesDailyConverter {
         rtn.setPayOrderAmount(param.getPayOrderAmount());
         rtn.setShoppingOrderAmount(param.getShoppingOrderAmount());
         rtn.setTotalAmount(param.getPayOrderAmount().add(param.getShoppingOrderAmount()));
-        rtn.setGmtReport(DateUtil.getDayBefore(DateUtil.getNowDate()));
+        rtn.setGmtReport(param.getGmtReport());
         rtn.setGmtCreate(new Date());
         return rtn;
     }

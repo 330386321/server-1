@@ -1,20 +1,31 @@
 package com.lawu.eshop.property.srv.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.property.dto.TotalSalesDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
+import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Sunny
@@ -88,6 +99,19 @@ public class TransactionDetailController extends BaseController {
 		Page<TransactionDetailBO> transactionDetailBOPage = transactionDetailService.getBackageRechargePageList(param);
 
 		return successCreated(TransactionDetailConverter.convertTransactionDetailBackageDTOPage(transactionDetailBOPage));
+	}
+	
+	/**
+	 * 查询指定日期的平台销量
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "totalSales", method = RequestMethod.PUT)
+	public Result<TotalSalesDTO> selectTotalSales(@RequestBody TotalSalesQueryParam param) {
+		List<TotalSalesBO> totalSalesBOList = transactionDetailService.selectTotalSales(param);
+		TotalSalesDTO rtn = TotalSalesConverter.convertTotalSalesDTO(totalSalesBOList);
+		return successCreated(rtn);
 	}
 
 }
