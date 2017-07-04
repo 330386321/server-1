@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
@@ -22,6 +23,7 @@ import com.lawu.eshop.statistics.constants.ReportAdEarningsStatusEnum;
 import com.lawu.eshop.statistics.param.ReportAdEarningsParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
+@Service
 public class ReportAdEarningsServiceImpl extends BaseController implements ReportAdEarningsCommissionService{
 	
 	@Autowired 

@@ -53,7 +53,7 @@ public class ReportSalesController extends BaseController {
      * @date 2017年7月3日
      */
 	@RequestMapping(value = "list", method = RequestMethod.PUT)
-    public Result<ReportDataDTO> list(@RequestBody PlatformTotalSalesQueryParam param){
+    public Result<ReportDataDTO> list(@RequestBody PlatformTotalSalesQueryParam param) {
 		List<ReportSalesBO> reportSalesBOList = reportSalesService.list(param);
 		ReportDataDTO rtn = ReportSalesConverter.convert(reportSalesBOList, param);
     	return successGet(rtn);

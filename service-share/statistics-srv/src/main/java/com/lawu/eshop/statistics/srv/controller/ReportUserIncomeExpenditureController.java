@@ -67,7 +67,7 @@ public class ReportUserIncomeExpenditureController extends BaseController {
 	 * @date 2017年7月3日
 	 */
 	@RequestMapping(value = "page", method = RequestMethod.PUT)
-	public Result<Page<ReportUserIncomeExpenditureDTO>> list(@RequestBody ReportUserIncomeExpenditureQueryParam param) {
+	public Result<Page<ReportUserIncomeExpenditureDTO>> page(@RequestBody ReportUserIncomeExpenditureQueryParam param) {
 		Page<ReportUserIncomeExpenditureBO> reportSalesBOPage = reportUserIncomeExpenditureService.page(param);
 		Page<ReportUserIncomeExpenditureDTO> rtn = ReportUserIncomeExpenditureConverter.convert(reportSalesBOPage);
 		return successGet(rtn);
