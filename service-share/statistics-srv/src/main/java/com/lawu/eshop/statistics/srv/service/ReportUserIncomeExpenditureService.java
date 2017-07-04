@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.srv.service;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureQueryParam;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveParam;
+import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveWrapperParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserIncomeExpenditureBO;
 
 /**
@@ -21,6 +22,15 @@ public interface ReportUserIncomeExpenditureService {
 	 * @date 2017年7月3日
 	 */
     void save(ReportUserIncomeExpenditureSaveParam param);
+    
+	/**
+	 * 保存用户收支记录
+	 * 
+	 * @param param
+	 * @author Sunny
+	 * @date 2017年7月3日
+	 */
+    void batchSave(ReportUserIncomeExpenditureSaveWrapperParam param);
     
     /**
      * 分页查询用户收支记录

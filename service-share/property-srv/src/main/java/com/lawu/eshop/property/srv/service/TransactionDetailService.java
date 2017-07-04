@@ -9,8 +9,10 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 
 /**
  * 交易明细服务接口
@@ -69,5 +71,13 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	List<TotalSalesBO> selectTotalSales(TotalSalesQueryParam param);
+	
+	/**
+	 * 查询用户收入和支出金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param);
 
 }

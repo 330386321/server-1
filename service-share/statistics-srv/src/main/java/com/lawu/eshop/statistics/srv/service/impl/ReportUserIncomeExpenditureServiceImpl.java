@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureQueryParam;
 import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveParam;
+import com.lawu.eshop.statistics.param.ReportUserIncomeExpenditureSaveWrapperParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserIncomeExpenditureBO;
 import com.lawu.eshop.statistics.srv.converter.ReportUserIncomeExpenditureConverter;
 import com.lawu.eshop.statistics.srv.domain.ReportUserIncomeExpenditureDO;
@@ -41,6 +42,21 @@ public class ReportUserIncomeExpenditureServiceImpl implements ReportUserIncomeE
 	public void save(ReportUserIncomeExpenditureSaveParam param) {
 		ReportUserIncomeExpenditureDO record = ReportUserIncomeExpenditureConverter.convert(param);
 		reportUserIncomeExpenditureDOMapper.insertSelective(record);
+	}
+	
+	/**
+	 * 批量保存用户收支记录
+	 * 
+	 * @param param
+	 * @author Sunny
+	 * @date 2017年7月3日
+	 */
+	@Override
+	@Transactional
+	public void batchSave(ReportUserIncomeExpenditureSaveWrapperParam param) {
+		for (ReportUserIncomeExpenditureSaveParam reportUserIncomeExpenditureSaveParam : param.getParams()) {
+			save(reportUserIncomeExpenditureSaveParam);
+		}
 	}
 
     /**

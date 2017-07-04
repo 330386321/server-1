@@ -20,15 +20,20 @@ import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
+import com.lawu.eshop.property.srv.converter.UserIncomeExpenditureConverter;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
 import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
 import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
@@ -214,6 +219,19 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 		TotalSalesQueryExample example = TotalSalesConverter.convert(param);
 		List<TotalSalesDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSales(example);
 		return TotalSalesConverter.convertTotalSalesBOList(totalSalesDOList);
+	}
+	
+	/**
+	 * 查询平台销售金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param) {
+		UserIncomeExpenditureExample example = UserIncomeExpenditureConverter.convert(param);
+		List<UserIncomeExpenditureDO> userIncomeExpenditureDOList = transactionDetailExtendDOMapper.selectUserIncomeExpenditure(example);
+		return UserIncomeExpenditureConverter.convertUserIncomeExpenditureBOList(userIncomeExpenditureDOList);
 	}
 
 }

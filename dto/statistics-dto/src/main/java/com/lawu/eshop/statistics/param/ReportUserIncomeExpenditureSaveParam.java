@@ -3,10 +3,10 @@ package com.lawu.eshop.statistics.param;
 import java.math.BigDecimal;
 
 /**
- * 平台总销量保存参数
+ * 用户收入和支出保存参数
  * 
  * @author Sunny
- * @date 2017年6月30日
+ * @date 2017年7月4日
  */
 public class ReportUserIncomeExpenditureSaveParam {
 	

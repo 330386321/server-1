@@ -16,15 +16,19 @@ import com.lawu.eshop.property.dto.TotalSalesDTO;
 import com.lawu.eshop.property.dto.TransactionDetailBackageDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMemberDTO;
 import com.lawu.eshop.property.dto.TransactionDetailToMerchantDTO;
+import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
 import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
 import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
+import com.lawu.eshop.property.srv.converter.UserIncomeExpenditureConverter;
 import com.lawu.eshop.property.srv.service.TransactionDetailService;
 
 /**
@@ -111,6 +115,19 @@ public class TransactionDetailController extends BaseController {
 	public Result<TotalSalesDTO> selectTotalSales(@RequestBody TotalSalesQueryParam param) {
 		List<TotalSalesBO> totalSalesBOList = transactionDetailService.selectTotalSales(param);
 		TotalSalesDTO rtn = TotalSalesConverter.convertTotalSalesDTO(totalSalesBOList);
+		return successCreated(rtn);
+	}
+	
+	/**
+	 * 查询用户收入和支出
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "userIncomeExpenditure", method = RequestMethod.PUT)
+	public Result<UserIncomeExpenditureDatailDTO> selectUserIncomeExpenditure(@RequestBody UserIncomeExpenditureQueryParam param) {
+		List<UserIncomeExpenditureBO> userIncomeExpenditureBOList = transactionDetailService.selectUserIncomeExpenditure(param);
+		UserIncomeExpenditureDatailDTO rtn = UserIncomeExpenditureConverter.convertUserIncomeExpenditureDatailDTO(userIncomeExpenditureBOList);
 		return successCreated(rtn);
 	}
 

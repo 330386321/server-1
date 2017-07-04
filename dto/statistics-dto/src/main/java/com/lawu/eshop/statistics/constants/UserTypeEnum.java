@@ -7,16 +7,16 @@ package com.lawu.eshop.statistics.constants;
  * @date 2017年7月3日
  */
 public enum UserTypeEnum {
-
-	/**
-	 * 1-商家
-	 */
-	MERCHANT((byte)0x01, "B"),
 	
 	/**
-	 * 2-会员
+	 * 1-会员
 	 */
-	MEMBER((byte)0x02, "M");
+	MEMBER((byte)0x02, "M"),
+	
+	/**
+	 * 2-商家
+	 */
+	MERCHANT((byte)0x01, "B");
 	
 	private Byte value;
 	

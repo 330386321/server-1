@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
 import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
 
 public interface TransactionDetailExtendDOMapper {
 	
@@ -15,6 +17,16 @@ public interface TransactionDetailExtendDOMapper {
 	 * @author Sunny
 	 * @date 2017年7月3日
 	 */
-	List<TotalSalesDO> selectTotalSales(TotalSalesQueryExample param);
+	List<TotalSalesDO> selectTotalSales(TotalSalesQueryExample example);
+	
+	/**
+	 * 查询用户支出和收入的金额
+	 * 
+	 * @param param
+	 * @return
+	 * @author Sunny
+	 * @date 2017年7月3日
+	 */
+	List<UserIncomeExpenditureDO> selectUserIncomeExpenditure(UserIncomeExpenditureExample example);
 	
 }

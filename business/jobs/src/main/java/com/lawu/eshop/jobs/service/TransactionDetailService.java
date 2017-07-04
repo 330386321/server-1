@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.TotalSalesDTO;
+import com.lawu.eshop.property.dto.UserIncomeExpenditureDatailDTO;
 import com.lawu.eshop.property.param.TotalSalesQueryParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
 
 /**
  * 交易明细服务
@@ -26,5 +28,14 @@ public interface TransactionDetailService {
 	 */
 	@RequestMapping(value = "totalSales", method = RequestMethod.PUT)
 	public Result<TotalSalesDTO> selectTotalSales(@RequestBody TotalSalesQueryParam param);
+	
+	/**
+	 * 查询用户收入和支出
+	 *
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "userIncomeExpenditure", method = RequestMethod.PUT)
+	Result<UserIncomeExpenditureDatailDTO> selectUserIncomeExpenditure(@RequestBody UserIncomeExpenditureQueryParam param);
 	
 }
