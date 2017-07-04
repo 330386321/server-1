@@ -169,6 +169,7 @@ public class PayOrderController extends BaseController {
         return payOrderService.delPayOrderInfo(id);
     }
 
+    @Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "买单记录详情", notes = "买单记录详情  [1000,1100,1004] （章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

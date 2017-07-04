@@ -8,6 +8,7 @@ import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.PayOrderService;
 import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
@@ -29,6 +30,7 @@ public class PayOrderController extends BaseController{
     @Autowired
     private PayOrderService payOrderService;
 
+    @Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "买单列表", notes = "买单列表 [1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization

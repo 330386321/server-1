@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import javax.validation.constraints.NotNull;
 
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +89,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐列表", notes = "根据商家id查询商家全部优惠套餐列表,不分页。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -111,6 +113,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐详情", notes = "查询单个优惠套餐详情。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -130,6 +133,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "保存优惠套餐详情", notes = "保存优惠套餐。[]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -211,6 +215,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "更新优惠套餐", notes = "更新优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "POST")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -286,6 +291,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "删除优惠套餐", notes = "删除优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
@@ -309,6 +315,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "上架优惠套餐", notes = "上架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -329,6 +336,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "下架优惠套餐", notes = "下架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -349,6 +357,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "批量删除优惠套餐", notes = "批量删除优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
@@ -376,6 +385,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "批量上架优惠套餐", notes = "批量上架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
@@ -400,6 +410,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "批量下架优惠套餐", notes = "批量下架优惠套餐。[1100|1024]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")

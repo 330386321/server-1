@@ -98,6 +98,7 @@ public class BankAccountController extends BaseController{
         return successDelete();
     }
 
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@Authorization
     @ApiOperation(value = "单个查询", notes = "单个查询（张荣成）", httpMethod = "GET")
@@ -108,6 +109,7 @@ public class BankAccountController extends BaseController{
         return successCreated(bankAccountService.selectAccount(id));
     }
 
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @Authorization
     @ApiOperation(value = "修改银行卡", notes = "修改银行卡[6000|6021]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")

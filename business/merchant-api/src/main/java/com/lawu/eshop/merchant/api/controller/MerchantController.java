@@ -298,7 +298,8 @@ public class MerchantController extends BaseController {
             response.sendRedirect(merchantApiConfig.getShareRegisterUrl() + merchantId);
         }
     }
-    
+
+    @Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "获取商家电话", notes = "获取商家电话。 (张荣成)", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectMobile/{merchantId}", method = RequestMethod.GET)

@@ -243,6 +243,7 @@ public class AdController extends BaseController {
     	return adService.selectById(id);
     }
 
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@ApiOperation(value = "广告批量删除", notes = "广告批量删除,[]（张荣成）", httpMethod = "DELETE")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -257,8 +258,9 @@ public class AdController extends BaseController {
 		Result rs = adService.batchDeleteAd(adIds);
 		return successDelete();
 	}
-	
-	
+
+
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "广告再次投放(2.2.0)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -343,7 +345,8 @@ public class AdController extends BaseController {
     		return successCreated(ResultCode.FAIL);
     	}
 	}
-    
+
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "广告详情", notes = "广告详情,[]（张荣成）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

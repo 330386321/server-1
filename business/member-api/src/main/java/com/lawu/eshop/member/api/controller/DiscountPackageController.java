@@ -1,5 +1,8 @@
 package com.lawu.eshop.member.api.controller;
 
+import java.util.List;
+
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -42,6 +45,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐列表", notes = "根据商家id查询商家全部优惠套餐列表,不分页。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -60,6 +64,7 @@ public class DiscountPackageController extends BaseController {
 	 * @author Sunny
 	 * @date 2017年6月26日
 	 */
+	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐详情", notes = "查询单个优惠套餐详情。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
