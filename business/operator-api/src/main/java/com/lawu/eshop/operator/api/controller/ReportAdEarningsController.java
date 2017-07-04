@@ -52,10 +52,10 @@ public class ReportAdEarningsController extends BaseController{
 	
 	
 	
-	@ApiOperation(value = "广告收益列表", notes = "广告收益列表,[]（张荣成）", httpMethod = "POST")
+	@ApiOperation(value = "广告收益列表", notes = "广告收益列表,[]（张荣成）", httpMethod = "GET")
 	@PageBody
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.POST)
+    @RequestMapping(value = "selectReportAdEarnings", method = RequestMethod.GET)
     public Result<Page<ReportAdEarningsDTO>> selectReportAdEarnings(@ModelAttribute @ApiParam(value = "查询信息") ReportAdEarningsQueryParam param) {
         return reportAdEarningsService.selectReportAdEarnings(param);
     }
