@@ -38,6 +38,8 @@ public class RegionConverter {
         regionDTO.setParentId(regionBO.getParentId());
         regionDTO.setPath(regionBO.getPath());
         regionDTO.setLevelEnum(regionBO.getLevelEnum());
+        regionDTO.setLongitude(regionBO.getLongitude());
+        regionDTO.setLatitude(regionBO.getLatitude());
         return regionDTO;
     }
 
@@ -68,6 +70,8 @@ public class RegionConverter {
         regionBO.setParentId(regionDO.getParentId());
         regionBO.setPath(regionDO.getPath());
         regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDO.getLevel()));
+        regionBO.setLongitude(regionDO.getLongitude());
+        regionBO.setLatitude(regionDO.getLatitude());
         return regionBO;
     }
 

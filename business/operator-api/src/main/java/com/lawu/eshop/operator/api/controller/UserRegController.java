@@ -48,7 +48,7 @@ public class UserRegController extends BaseController {
     //@RequiresPermissions("user_reg:month")
     @RequestMapping(value = "getReportUserRegMonth", method = RequestMethod.GET)
     public Result<List<ReportUserRegDTO>> getReportUserRegMonth(@ModelAttribute UserRegParam param) {
-        return userRegService.getReportUserRegDaily(param);
+        return userRegService.getReportUserRegMonth(param);
     }
 
     @ApiOperation(value = "查询区域统计列表", notes = "查询区域统计列表（梅述全）", httpMethod = "GET")
