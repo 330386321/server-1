@@ -18,7 +18,7 @@ public class AdPage<T> {
     	//数据总数
     	Integer totalCount = list.size();
     	//总的页数
-    	Integer pageCount = 0;
+    	Integer pageCount = 0;  
     	//每页显示的总数
     	Integer endNum = pageSize;
     	//当前页码

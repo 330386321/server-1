@@ -247,7 +247,18 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         List<CommentMerchantBO> commentMerchantBOS = new ArrayList<>();
         for (CommentMerchantDO commentProductDO : commentMerchantDOS) {
             CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentProductDO);
-            commentMerchantBOS.add(commentMerchantBO);
+            CommentImageDOExample commentImageExample=new CommentImageDOExample();
+			commentImageExample.createCriteria().andCommentIdEqualTo(commentProductDO.getId())
+			.andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_PRODUCT.val).andStatusEqualTo(true);
+			
+			 List<CommentImageDO>  list=commentImageDOMapper.selectByExample(commentImageExample);
+			 
+			 List<String> listImg=new ArrayList<>();
+			 for (CommentImageDO commentImageDO : list) {
+				 listImg.add(commentImageDO.getImgUrl());
+			 }
+			 commentMerchantBO.setUrlImgs(listImg);
+             commentMerchantBOS.add(commentMerchantBO);
         }
         page.setRecords(commentMerchantBOS);
         return page;

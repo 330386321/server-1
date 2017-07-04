@@ -87,6 +87,7 @@ public class CommentProductConverter {
             commentOperatorDTO.setContent(commentProductBO.getContent());
             commentOperatorDTO.setId(commentProductBO.getId());
             commentOperatorDTO.setCommentToId(commentProductBO.getProductId());
+            commentOperatorDTO.setUrlImgs(commentProductBO.getUrlImgs());
             commentOperatorDTOS.add(commentOperatorDTO);
         }
         return commentOperatorDTOS;

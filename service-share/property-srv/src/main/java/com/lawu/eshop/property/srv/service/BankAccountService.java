@@ -38,7 +38,7 @@ public interface BankAccountService {
 	 * @param account
 	 * @return
 	 */
-	Boolean selectByAccount(String account);
+	Boolean selectByAccount(String account,String userNum);
 	
 	/**
 	 * 单个查询
