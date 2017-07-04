@@ -1,4 +1,4 @@
-package com.lawu.eshop.jobs.impl.ReportAdEarnings;
+package com.lawu.eshop.jobs.impl.reportAdEarnings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
