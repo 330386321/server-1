@@ -114,11 +114,10 @@ public class ReportUserIncomeExpenditureConverter {
      * @return
      */
     public static List<ReportUserIncomeExpenditureDTO> convertReportUserIncomeExpenditureDTOList(List<ReportUserIncomeExpenditureBO> reportUserIncomeExpenditureBOList) {
-    	List<ReportUserIncomeExpenditureDTO> rtn = null;
+    	List<ReportUserIncomeExpenditureDTO> rtn = new ArrayList<>();
     	if (reportUserIncomeExpenditureBOList == null || reportUserIncomeExpenditureBOList.isEmpty()) {
     		return rtn;
     	}
-    	rtn = new ArrayList<>();
     	for (ReportUserIncomeExpenditureBO reportUserIncomeExpenditureBO : reportUserIncomeExpenditureBOList) {
     		rtn.add(convert(reportUserIncomeExpenditureBO));
     	}

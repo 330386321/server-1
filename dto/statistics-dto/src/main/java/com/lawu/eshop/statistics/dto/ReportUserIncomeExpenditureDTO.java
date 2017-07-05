@@ -3,6 +3,7 @@ package com.lawu.eshop.statistics.dto;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.statistics.constants.UserTypeEnum;
 
 /**
@@ -46,6 +47,7 @@ public class ReportUserIncomeExpenditureDTO {
     /**
      * 统计日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date gmtReport;
 
 	public String getUserNum() {

@@ -1,5 +1,6 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +39,7 @@ public class ReportUserIncomeExpenditureController extends BaseController {
 	@ApiOperation(value = "查询用户支出收入记录", notes = "分页查询用户支出收入记录[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @PageBody
-    //@RequiresPermissions("reportUserIncomeExpenditure:page")
+    @RequiresPermissions("reportUserIncomeExpenditure:page")
     @RequestMapping(value = "page", method = RequestMethod.GET)
     public Result<Page<ReportUserIncomeExpenditureDTO>> selectListByMerchant(@ModelAttribute @ApiParam(value = "查询参数") ReportUserIncomeExpenditureQueryParam param) {
     	Result<Page<ReportUserIncomeExpenditureDTO>> pageResult = reportUserIncomeExpenditureService.page(param);

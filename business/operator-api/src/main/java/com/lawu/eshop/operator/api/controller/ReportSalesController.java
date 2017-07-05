@@ -36,7 +36,7 @@ public class ReportSalesController extends BaseController {
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询平台总销量记录", notes = "查询平台总销量记录[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("reportSales:list")
+    @RequiresPermissions("reportSales:list")
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public Result<ReportDataDTO> selectListByMerchant(@ModelAttribute @ApiParam(value = "查询参数") PlatformTotalSalesQueryParam param) {
     	Result<ReportDataDTO> listResult = reportSalesService.list(param);

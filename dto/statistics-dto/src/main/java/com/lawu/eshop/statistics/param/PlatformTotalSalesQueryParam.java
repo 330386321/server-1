@@ -2,6 +2,8 @@ package com.lawu.eshop.statistics.param;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.statistics.constants.ReportTypeEnum;
 
@@ -24,11 +26,20 @@ public class PlatformTotalSalesQueryParam {
 	private ReportTypeEnum type;
 	
 	/**
-	 * 查询日期(yyyy-MM-dd)
+	 * 查询日期-开始(yyyy-MM-dd)
 	 */
 	@ApiModelProperty(value = "查询日期", required = true)
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date date;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date start;
+	
+	/**
+	 * 查询日期-结束(yyyy-MM-dd)
+	 */
+	@ApiModelProperty(value = "查询日期", required = true)
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date end;
 	
 	public ReportTypeEnum getType() {
 		return type;
@@ -38,12 +49,20 @@ public class PlatformTotalSalesQueryParam {
 		this.type = type;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getStart() {
+		return start;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public void setStart(Date start) {
+		this.start = start;
+	}
+
+	public Date getEnd() {
+		return end;
+	}
+
+	public void setEnd(Date end) {
+		this.end = end;
 	}
 	
 }

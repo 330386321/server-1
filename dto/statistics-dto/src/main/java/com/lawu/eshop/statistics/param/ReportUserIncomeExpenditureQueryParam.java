@@ -1,6 +1,9 @@
 package com.lawu.eshop.statistics.param;
 
+import java.math.BigDecimal;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
@@ -33,6 +36,7 @@ public class ReportUserIncomeExpenditureQueryParam extends AbstractPageParam {
 	 */
 	@ApiModelProperty(value = "开始日期(yyyy-MM-dd)", required = true)
 	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date start;
 	
 	/**
@@ -40,7 +44,20 @@ public class ReportUserIncomeExpenditureQueryParam extends AbstractPageParam {
 	 */
 	@ApiModelProperty(value = "结束日期(yyyy-MM-dd)", required = true)
 	@JsonFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date end;
+	
+	/**
+	 * 差额范围-最小
+	 */
+	@ApiModelProperty(value = "差额范围-最小", required = true)
+	private BigDecimal min;
+	
+	/**
+	 * 差额范围-最大
+	 */
+	@ApiModelProperty(value = "差额范围-最大", required = true)
+	private BigDecimal max;
 
 	public UserTypeEnum getUserType() {
 		return userType;
@@ -72,6 +89,22 @@ public class ReportUserIncomeExpenditureQueryParam extends AbstractPageParam {
 
 	public void setEnd(Date end) {
 		this.end = end;
+	}
+
+	public BigDecimal getMin() {
+		return min;
+	}
+
+	public void setMin(BigDecimal min) {
+		this.min = min;
+	}
+
+	public BigDecimal getMax() {
+		return max;
+	}
+
+	public void setMax(BigDecimal max) {
+		this.max = max;
 	}
 	
 }

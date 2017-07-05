@@ -77,22 +77,18 @@ public class ReportSalesServiceImpl implements ReportSalesService {
 	@Override
 	public List<ReportSalesBO> list(PlatformTotalSalesQueryParam param) {
 		List<ReportSalesBO> rtn = null;
-		Date start = null;
-		Date end = null;
 		switch (param.getType()) {
 			case DAILY:
 				ReportSalesDailyDOExample reportSalesDailyDOExample = new ReportSalesDailyDOExample();
-				start = DateUtil.getFirstSecondOfDay(DateUtil.getFirstDayOfMonth(param.getDate()));
-				end = DateUtil.getLastSecondOfDay(DateUtil.getLastDayOfMonth(param.getDate()));
-				reportSalesDailyDOExample.createCriteria().andGmtReportBetween(start, end);
+				reportSalesDailyDOExample.createCriteria().andGmtReportBetween(param.getStart(), param.getEnd());
+				reportSalesDailyDOExample.setOrderByClause("gmt_report asc");
 				List<ReportSalesDailyDO> reportSalesDailyDOList = reportSalesDailyDOMapper.selectByExample(reportSalesDailyDOExample);
 				rtn = ReportSalesDailyConverter.convertReportSalesBOList(reportSalesDailyDOList);
 				break;
 			case MONTH:
-				start = DateUtil.getFirstDayOfMonth(DateUtil.getFirstMonthOfYear(param.getDate()));
-				end = DateUtil.getLastDayOfMonth(DateUtil.getLastMonthOfYear(param.getDate()));
 				ReportSalesMonthDOExample reportSalesMonthDOExample = new ReportSalesMonthDOExample();
-				reportSalesMonthDOExample.createCriteria().andGmtReportBetween(start, end);
+				reportSalesMonthDOExample.createCriteria().andGmtReportBetween(param.getStart(), param.getEnd());
+				reportSalesMonthDOExample.setOrderByClause("gmt_report asc");
 				List<ReportSalesMonthDO> reportSalesMonthDOList = reportSalesMonthDOMapper.selectByExample(reportSalesMonthDOExample);
 				rtn = ReportSalesMonthConverter.convertReportSalesBOList(reportSalesMonthDOList);
 				break;

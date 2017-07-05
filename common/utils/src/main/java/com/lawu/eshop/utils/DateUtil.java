@@ -30,6 +30,12 @@ public class DateUtil {
 
     // int日期格式
     private static final String DATE_INT_FORMAT = "yyyyMMdd";
+    
+    // 年月日期格式
+    public static final String DATE_YYYY_MM_FORMAT = "yyyy-MM";
+    
+    // 月日日期格式
+    public static final String DATE_MM_DD_FORMAT = "MM-dd";
 
     // 默认日期时间格式
     private static final String DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -45,7 +51,7 @@ public class DateUtil {
 
     //int时间格式
     private static final String TIME_INT_FORMAT = "HHmmss";
-
+    
     // 默认日期格式化
     private static DateFormat dateFormat;
 
