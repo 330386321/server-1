@@ -86,6 +86,16 @@ public class UserRegServiceImpl implements UserRegService {
     @Override
     public List<ReportUserRegAreaBO> getReportUserRegArea() {
         ReportUserRegAreaDOExample example = new ReportUserRegAreaDOExample();
+        ReportUserRegAreaDOExample.Criteria criteria = example.createCriteria();
+
+        ReportUserRegAreaDOExample.Criteria memberCriteria = example.or();
+        memberCriteria.andMemberCountGreaterThan(0);
+        memberCriteria.getAllCriteria().addAll(criteria.getAllCriteria());
+
+        ReportUserRegAreaDOExample.Criteria merchantCriteria = example.or();
+        merchantCriteria.andMerchantCountGreaterThan(0);
+        merchantCriteria.getAllCriteria().addAll(criteria.getAllCriteria());
+
         List<ReportUserRegAreaDO> regAreaDOList = reportUserRegAreaDOMapper.selectByExample(example);
         return ReportUserRegConverter.convertAreaBO(regAreaDOList);
     }

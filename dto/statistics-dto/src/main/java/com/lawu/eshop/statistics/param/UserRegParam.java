@@ -6,24 +6,23 @@ package com.lawu.eshop.statistics.param;
  */
 public class UserRegParam {
 
-    private Integer year;
+    private String beginDate;
 
-    private Integer month;
+    private String endDate;
 
-    public Integer getYear() {
-        return year;
+    public String getBeginDate() {
+        return beginDate;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
     }
 
-    public Integer getMonth() {
-        return month;
+    public String getEndDate() {
+        return endDate;
     }
 
-    public void setMonth(Integer month) {
-        this.month = month;
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
-
 }

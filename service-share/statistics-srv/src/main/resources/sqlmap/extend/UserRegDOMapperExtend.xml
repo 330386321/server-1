@@ -4,12 +4,12 @@
 
     <select id="getReportUserRegDaily" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView" parameterType="com.lawu.eshop.statistics.param.UserRegParam">
         select member_count as memberCount,merchant_count as merchantCount,gmt_report as gmtReport
-        from report_user_reg_daily where year(gmt_report)=#{year} and month(gmt_report)=#{month}
+        from report_user_reg_daily where gmt_report &gt;= #{beginDate} and gmt_report &lt;= #{endDate}
     </select>
 
     <select id="getReportUserRegMonth" resultType="com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView" parameterType="com.lawu.eshop.statistics.param.UserRegParam">
         select member_count as memberCount,merchant_count as merchantCount,gmt_report as gmtReport
-        from report_user_reg_month where year(gmt_report)=#{year}
+        from report_user_reg_month where gmt_report &gt;= #{beginDate} and gmt_report &lt;= #{endDate}
     </select>
 
 </mapper>
