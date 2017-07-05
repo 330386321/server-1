@@ -4,10 +4,7 @@ import com.lawu.eshop.statistics.param.UserRegAreaParam;
 import com.lawu.eshop.statistics.param.UserRegParam;
 import com.lawu.eshop.statistics.srv.bo.ReportUserRegAreaBO;
 import com.lawu.eshop.statistics.srv.converter.ReportUserRegConverter;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDO;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegAreaDOExample;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegDailyDO;
-import com.lawu.eshop.statistics.srv.domain.ReportUserRegMonthDO;
+import com.lawu.eshop.statistics.srv.domain.*;
 import com.lawu.eshop.statistics.srv.domain.extend.ReportUserRegDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegAreaDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserRegDailyDOMapper;
@@ -17,6 +14,7 @@ import com.lawu.eshop.statistics.srv.service.UserRegService;
 import com.lawu.eshop.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -41,7 +39,12 @@ public class UserRegServiceImpl implements UserRegService {
     private UserRegDOMapperExtend userRegDOMapperExtend;
 
     @Override
+    @Transactional
     public void saveUserRegDaily(Integer memberCount, Integer merchantCount) {
+        ReportUserRegDailyDOExample example = new ReportUserRegDailyDOExample();
+        example.createCriteria().andGmtReportEqualTo(DateUtil.getDayBefore(new Date()));
+        reportUserRegDailyDOMapper.deleteByExample(example);
+
         ReportUserRegDailyDO reportUserRegDailyDO = new ReportUserRegDailyDO();
         reportUserRegDailyDO.setMemberCount(memberCount);
         reportUserRegDailyDO.setMerchantCount(merchantCount);
@@ -51,7 +54,12 @@ public class UserRegServiceImpl implements UserRegService {
     }
 
     @Override
+    @Transactional
     public void saveUserRegMonth(Integer memberCount, Integer merchantCount) {
+        ReportUserRegMonthDOExample example = new ReportUserRegMonthDOExample();
+        example.createCriteria().andGmtReportEqualTo(DateUtil.getMonthBefore(new Date()));
+        reportUserRegMonthDOMapper.deleteByExample(example);
+
         ReportUserRegMonthDO reportUserRegMonthDO = new ReportUserRegMonthDO();
         reportUserRegMonthDO.setMemberCount(memberCount);
         reportUserRegMonthDO.setMerchantCount(merchantCount);
@@ -61,6 +69,7 @@ public class UserRegServiceImpl implements UserRegService {
     }
 
     @Override
+    @Transactional
     public void updateUserRegArea(UserRegAreaParam param) {
         ReportUserRegAreaDO reportUserRegAreaDO = new ReportUserRegAreaDO();
         reportUserRegAreaDO.setMemberCount(param.getMemberCount());
