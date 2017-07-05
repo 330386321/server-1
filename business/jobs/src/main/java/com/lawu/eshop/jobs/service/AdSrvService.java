@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.MemberAdRecodeCommissionDTO;
 import com.lawu.eshop.ad.dto.ReportAdDTO;
+import com.lawu.eshop.ad.dto.ReportAdEarningsDTO;
 import com.lawu.eshop.ad.dto.ViewDTO;
 import com.lawu.eshop.framework.web.Result;
 
@@ -64,5 +65,9 @@ public interface AdSrvService {
 	 */
 	@RequestMapping(value = "ad/selectReportAdEarnings", method = RequestMethod.GET)
 	public Result<List<ReportAdDTO>> selectReportAdEarnings();
+	
+	
+	@RequestMapping(value = "ad/getReportEarnings", method = RequestMethod.GET)
+    public Result<List<ReportAdEarningsDTO>> getReportEarnings();
 
 }

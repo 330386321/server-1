@@ -2,10 +2,10 @@ package com.lawu.eshop.ad.srv.mapper.extend;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 
 import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
 import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
 

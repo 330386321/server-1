@@ -98,11 +98,11 @@
   </select>
   
   
-  
   <select resultType="java.lang.Integer" id="selectReportAdEarningscount" >
     SELECT 
      	count(*)
     FROM ad 
     where   <![CDATA[ status > 0 and status < 5  ]]>
   </select>
+ 
 </mapper>

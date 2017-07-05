@@ -9,5 +9,10 @@
   <select id="selectPointToday" parameterType="com.lawu.eshop.ad.srv.domain.MemberAdRecordDO" resultMap="BaseResultMap">
    select point from member_ad_record  WHERE member_id=#{memberId,jdbcType=BIGINT}   and click_date=#{clickDate,jdbcType=DATE}
   </select>
+  
+  
+  <select id="getTotlePoint" resultType="java.lang.Integer">
+   	  SELECT sum(original_point) FROM member_ad_record  where   ad_id=#{adId,jdbcType=BIGINT}
+  </select>
  
 </mapper>

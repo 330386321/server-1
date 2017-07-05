@@ -25,4 +25,26 @@
 	      	love_type =#{pointType,jdbcType=TINYINT}
 	      	and biz_id=#{bizId,jdbcType=VARCHAR}
 	 </select>
+	 
+	 <!-- 用户广告总收益统计   包括点广告  红包   广告提成  抢赞  -->
+	 <select id="getUserPointByBzId"  resultMap="BaseResultMap"  resultType="java.lang.Integer">
+	    select
+	    	sum(point) as user_totle_point
+	    from point_detail
+	    where
+	      	and point_type in (2,3,5,16)
+	      	and biz_id=#{bizId,jdbcType=VARCHAR}
+	 </select>
+	 
+	 
+	 <select id="getLovePointByBzId"  resultMap="BaseResultMap"  resultType="java.lang.Integer">
+	    select
+	    	sum(amount) as love_totle_point
+	    from love_detail
+	    where
+	      	and love_type in (1,2,5,6)
+	      	and biz_id=#{bizId,jdbcType=VARCHAR}
+	 </select>
+	 
+	 
 </mapper>

@@ -1,10 +1,13 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 import com.lawu.eshop.property.srv.bo.ReportAdEarningsPointBO;
+import com.lawu.eshop.property.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.property.srv.domain.extend.ReportAdEarningsPointView;
 import com.lawu.eshop.property.srv.mapper.extend.PointDetailDOMapperExtend;
 import com.lawu.eshop.property.srv.service.ReportAdEarningsPointService;
@@ -26,6 +29,20 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 		bo.setUserTotalPoint(viewDate.getUserTotalPoint());
 		bo.setLoveTotalPoint(viewLoveDate.getLoveTotalPoint());
 		return bo;
+	}
+
+	@Override
+	public ReportEarningsBO getReportEarnings(Long bzId) {
+		
+		 ReportAdEarningsPointView  userPoint=pointDetailDOMapperExtend.getUserPointByBzId(bzId);
+		 
+		 ReportAdEarningsPointView  lovePoint=pointDetailDOMapperExtend.getLovePointByBzId(bzId);
+		 
+		 ReportEarningsBO bo=new ReportEarningsBO();
+		 bo.setLovaPoint(userPoint.getUserTotalPoint());
+		 bo.setUserPoint(lovePoint.getLoveTotalPoint());
+		 
+		 return bo;
 	}
 
 }

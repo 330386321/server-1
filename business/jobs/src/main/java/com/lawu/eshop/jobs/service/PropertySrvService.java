@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.lawu.eshop.ad.param.CommissionJobParam;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
+import com.lawu.eshop.property.dto.ReportEarningsDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 
 @FeignClient(value= "property-srv")
@@ -38,5 +39,13 @@ public interface PropertySrvService {
 	 * @return
 	 */
 	@RequestMapping(value = "reportAdEarningsPoint/getReportAdEarningsPoint", method = RequestMethod.GET)
-	public Result<ReportAdEarningsPointDTO> getReportAdEarningsPoint(@RequestBody ReportAdEarningsPointParam reportAdEarningsPointParam);
+	Result<ReportAdEarningsPointDTO> getReportAdEarningsPoint(@RequestBody ReportAdEarningsPointParam reportAdEarningsPointParam);
+	
+	/**
+	 * 广告用户  爱心账户收益
+	 * @param bzId
+	 * @return
+	 */
+	@RequestMapping(value = "reportAdEarningsPoint/getReportEarnings", method = RequestMethod.GET)
+	Result<ReportEarningsDTO> getReportEarnings(@RequestParam("bzId") Long bzId);
 }
