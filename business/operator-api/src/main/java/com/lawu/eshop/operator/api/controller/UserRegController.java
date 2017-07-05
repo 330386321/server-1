@@ -12,6 +12,7 @@ import com.lawu.eshop.statistics.param.UserRegParam;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class UserRegController extends BaseController {
 
     @ApiOperation(value = "查询日统计列表", notes = "查询日统计列表（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("user_reg:daily")
+    @RequiresPermissions("user_reg:date")
     @RequestMapping(value = "getReportUserRegDaily", method = RequestMethod.GET)
     public Result<List<ReportUserRegDTO>> getReportUserRegDaily(@ModelAttribute UserRegParam param) {
         return userRegService.getReportUserRegDaily(param);
@@ -45,7 +46,7 @@ public class UserRegController extends BaseController {
 
     @ApiOperation(value = "查询月统计列表", notes = "查询月统计列表（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("user_reg:month")
+    @RequiresPermissions("user_reg:date")
     @RequestMapping(value = "getReportUserRegMonth", method = RequestMethod.GET)
     public Result<List<ReportUserRegDTO>> getReportUserRegMonth(@ModelAttribute UserRegParam param) {
         return userRegService.getReportUserRegMonth(param);
@@ -53,14 +54,14 @@ public class UserRegController extends BaseController {
 
     @ApiOperation(value = "查询区域统计列表", notes = "查询区域统计列表（梅述全）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    //@RequiresPermissions("user_reg:area")
+    @RequiresPermissions("user_reg:area")
     @RequestMapping(value = "getReportUserRegArea", method = RequestMethod.GET)
     public Result<List<ReportUserRegAreaDTO>> getReportUserRegArea() {
         Result<List<ReportUserRegAreaDTO>> result = userRegService.getReportUserRegArea();
-        if (result != null && !result.getModel().isEmpty()) {
+        if (!result.getModel().isEmpty()) {
             for (ReportUserRegAreaDTO regAreaDTO : result.getModel()) {
                 Result<RegionDTO> regionDTOResult = regionService.getRegionById(regAreaDTO.getCityId());
-                if (regionDTOResult != null && regionDTOResult.getModel() != null) {
+                if (regionDTOResult.getModel() != null) {
                     regAreaDTO.setLongitude(regionDTOResult.getModel().getLongitude());
                     regAreaDTO.setLatitude(regionDTOResult.getModel().getLatitude());
                 }
