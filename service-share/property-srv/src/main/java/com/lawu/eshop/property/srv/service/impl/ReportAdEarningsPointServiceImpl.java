@@ -1,6 +1,6 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,21 +26,43 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 		ReportAdEarningsPointView  viewDate=pointDetailDOMapperExtend.getReportAdEarningsPoint(view);
 		ReportAdEarningsPointView  viewLoveDate=pointDetailDOMapperExtend.getReportAdEarningsLovePoint(viewDate);
 		ReportAdEarningsPointBO bo=new ReportAdEarningsPointBO();
-		bo.setUserTotalPoint(viewDate.getUserTotalPoint());
-		bo.setLoveTotalPoint(viewLoveDate.getLoveTotalPoint());
+		if(viewDate==null){
+			bo.setUserTotalPoint(BigDecimal.valueOf(0));
+		}else{
+			bo.setUserTotalPoint(viewDate.getUserTotalPoint());
+		}
+		
+		if(viewLoveDate==null){
+			bo.setLoveTotalPoint(BigDecimal.valueOf(0));
+		}else{
+			bo.setLoveTotalPoint(viewLoveDate.getLoveTotalPoint());
+		}
+		
 		return bo;
 	}
 
 	@Override
 	public ReportEarningsBO getReportEarnings(Long bzId) {
-		
-		 ReportAdEarningsPointView  userPoint=pointDetailDOMapperExtend.getUserPointByBzId(bzId);
+		ReportAdEarningsPointView view=new ReportAdEarningsPointView();
+		view.setBizId(bzId);
+		ReportAdEarningsPointView  userPoint=pointDetailDOMapperExtend.getUserPointByBzId(view);
 		 
-		 ReportAdEarningsPointView  lovePoint=pointDetailDOMapperExtend.getLovePointByBzId(bzId);
+		ReportAdEarningsPointView  lovePoint=pointDetailDOMapperExtend.getLovePointByBzId(view);
 		 
 		 ReportEarningsBO bo=new ReportEarningsBO();
-		 bo.setLovaPoint(userPoint.getUserTotalPoint());
-		 bo.setUserPoint(lovePoint.getLoveTotalPoint());
+		 if(userPoint==null){
+			 bo.setUserPoint(new BigDecimal("0"));
+		 }else{
+			 bo.setUserPoint(lovePoint.getLoveTotalPoint());
+		 }
+		 
+		 if(lovePoint==null){
+			 bo.setLovaPoint(new BigDecimal("0"));
+		 }else{
+			 bo.setLovaPoint(lovePoint.getLoveTotalPoint());
+		 }
+		 
+		 
 		 
 		 return bo;
 	}

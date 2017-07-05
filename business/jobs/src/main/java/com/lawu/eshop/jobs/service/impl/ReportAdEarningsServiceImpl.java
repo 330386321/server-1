@@ -20,6 +20,7 @@ import com.lawu.eshop.property.dto.ReportAdEarningsPointDTO;
 import com.lawu.eshop.property.param.ReportAdEarningsPointParam;
 import com.lawu.eshop.statistics.constants.AdStatusEnum;
 import com.lawu.eshop.statistics.constants.ReportAdEarningsStatusEnum;
+import com.lawu.eshop.statistics.dto.ReportAdEarningsEndDTO;
 import com.lawu.eshop.statistics.param.ReportAdEarningsParam;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
 
@@ -51,7 +52,7 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					 ReportAdEarningsParam reportAdEarningsParam=new ReportAdEarningsParam();
 					 reportAdEarningsParam.setAdCreateTime(reportAdDTO.getGmtCreate());
 					 reportAdEarningsParam.setAdId(reportAdDTO.getId());
-					 reportAdEarningsParam.setAdStatusEnum(AdStatusEnum.getEnum(reportAdDTO.getStatusEnum().val));
+					 reportAdEarningsParam.setAdTypeEnum(com.lawu.eshop.statistics.constants.AdTypeEnum.getEnum(reportAdDTO.getTypeEnum().val));
 					 reportAdEarningsParam.setAdTitle(reportAdDTO.getTitle());
 					 reportAdEarningsParam.setAdTotalPoint(reportAdDTO.getTotalPoint());
 					 reportAdEarningsParam.setMerchantNum(reportAdDTO.getMerchantNum());
@@ -68,12 +69,12 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					 }
 					 
 					 //已经统计完结束的广告
-					 Result<List<Long>> idsResult=reportAdEarningsService.getReportAdEarningsIds();
+					 Result<List<ReportAdEarningsEndDTO>> idsResult=reportAdEarningsService.getReportAdEarningsIds();
 					 
 					// 统计积分
 					if (isSuccess(idsResult) && !idsResult.getModel().isEmpty()) {
-						for (Long id : idsResult.getModel()) {
-							if (reportAdDTO.getId().intValue() == id.intValue()) {
+						for (ReportAdEarningsEndDTO dto : idsResult.getModel()) {
+							if (reportAdDTO.getId().intValue() == dto.getId().intValue()) {
 								continue OK;
 							}
 						}

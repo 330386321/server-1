@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.statistics.dto.ReportCommonEarningsDTO;
 import com.lawu.eshop.statistics.dto.ReportEarningsDailyDTO;
 import com.lawu.eshop.statistics.param.ReportEarningParam;
+import com.lawu.eshop.statistics.srv.bo.ReportCommonEarningsBO;
 import com.lawu.eshop.statistics.srv.bo.ReportEarningsDailyBO;
 import com.lawu.eshop.statistics.srv.service.ReportEarningService;
 
@@ -78,6 +80,29 @@ public class ReportEarningsController extends BaseController{
 			dtoList.add(dto);
 		}
 		return successCreated(dtoList);
+	}
+	
+	/**
+	 * 广告收益报表
+	 * @param bdate
+	 * @param edate
+	 * @return
+	 */
+	@RequestMapping(value = "selectReport", method = RequestMethod.GET)
+	public Result<ReportCommonEarningsDTO> selectReport(@RequestParam("bdate") String bdate,@RequestParam("edate") String edate) {
+		 ReportCommonEarningsBO  bo=reportEarningService.selectReport(bdate,edate);
+		 
+		 ReportCommonEarningsDTO dto=new ReportCommonEarningsDTO();
+		 
+		 dto.setBdate(bo.getBdate());
+		 dto.setEdate(bo.getEdate());
+		 dto.setxAxisData(bo.getxAxisData());
+		 dto.setyAxisAdPointData(bo.getyAxisAdPointData());
+		 dto.setyAxisLovePointData(bo.getyAxisLovePointData());
+		 dto.setyAxisPlateformPointData(bo.getyAxisPlateformPointData());
+		 dto.setyAxisUserPointData(bo.getyAxisUserPointData());
+		 
+		return successCreated(dto);
 	}
 
 }

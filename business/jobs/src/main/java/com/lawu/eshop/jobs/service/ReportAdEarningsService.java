@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.statistics.dto.ReportAdEarningsEndDTO;
 import com.lawu.eshop.statistics.param.ReportAdEarningsParam;
 
 /**
@@ -32,7 +33,7 @@ public interface ReportAdEarningsService {
 	 * @return
 	 */
 	@RequestMapping(value = "reportAdEarnings/getReportAdEarningsIds", method = RequestMethod.GET)
-	public Result<List<Long>> getReportAdEarningsIds();
+	public Result<List<ReportAdEarningsEndDTO>> getReportAdEarningsIds();
 
 	
 

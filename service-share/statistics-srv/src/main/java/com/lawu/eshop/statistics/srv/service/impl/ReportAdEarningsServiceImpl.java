@@ -53,7 +53,6 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 		reportAdEarningsDO.setGmtCreate(new Date());
 		reportAdEarningsDO.setStatus(reportAdEarningsParam.getReportAdEarningsStatusEnum().val);
 		reportAdEarningsDO.setGmtModified(new Date());
-		ReportAdEarningsDOMapper.insertSelective(reportAdEarningsDO);
 		
 		
 		ReportAdEarningsDOExample example =new ReportAdEarningsDOExample();
@@ -61,8 +60,10 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 		Long count=ReportAdEarningsDOMapper.countByExample(example);
 		
 		if(count.intValue()>0){
+			List<ReportAdEarningsDO> list=ReportAdEarningsDOMapper.selectByExample(example);
+			reportAdEarningsDO.setId(list.get(0).getId());
 			reportAdEarningsDO.setGmtModified(new Date());
-			ReportAdEarningsDOMapper.updateByExampleSelective(reportAdEarningsDO, example);
+			ReportAdEarningsDOMapper.updateByPrimaryKeySelective(reportAdEarningsDO);
 		}else{
 			reportAdEarningsDO.setGmtModified(new Date());
 			ReportAdEarningsDOMapper.insertSelective(reportAdEarningsDO);
@@ -100,9 +101,13 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 	@Override
 	public List<Long> getReportAdEarningsIds() {
 		
-		 List<Long> ids=reportAdEarningsDOMapperExtend.getReportAdEarningsIds();
+		 List<ReportAdEarningsDO> dos=reportAdEarningsDOMapperExtend.getReportAdEarningsIds();
+		 List<Long> ids=new ArrayList<>();
+		 for (ReportAdEarningsDO reportAdEarningsDO : dos) {
+			 ids.add(reportAdEarningsDO.getAdId());
+		 }
 		
-		return ids;
+		 return ids;
 	}
 
 }

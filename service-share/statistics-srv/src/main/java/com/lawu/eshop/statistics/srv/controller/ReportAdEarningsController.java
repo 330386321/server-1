@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.statistics.dto.ReportAdEarningsDTO;
+import com.lawu.eshop.statistics.dto.ReportAdEarningsEndDTO;
 import com.lawu.eshop.statistics.param.ReportAdEarningsParam;
 import com.lawu.eshop.statistics.param.ReportAdEarningsQueryParam;
 import com.lawu.eshop.statistics.srv.bo.ReportAdEarningsBO;
@@ -80,9 +81,16 @@ public class ReportAdEarningsController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "getReportAdEarningsIds", method = RequestMethod.GET)
-	public Result<List<Long>> getReportAdEarningsIds(){
+	public Result<List<ReportAdEarningsEndDTO>> getReportAdEarningsIds(){
+		List<Long> ids=reportAdEarningsService.getReportAdEarningsIds();
 		
-		return successCreated(reportAdEarningsService.getReportAdEarningsIds());
+		List<ReportAdEarningsEndDTO> list=new ArrayList<>();
+		for (Long id : ids) {
+			ReportAdEarningsEndDTO dto=new ReportAdEarningsEndDTO();
+			dto.setId(id);
+			list.add(dto);
+		}
+		return successCreated(list);
 		
 	}
 

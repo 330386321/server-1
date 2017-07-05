@@ -67,7 +67,7 @@ public interface AdSrvService {
 	public Result<List<ReportAdDTO>> selectReportAdEarnings();
 	
 	
-	@RequestMapping(value = "ad/getReportEarnings", method = RequestMethod.GET)
+	@RequestMapping(value = "reportEarnings/getReportEarnings", method = RequestMethod.GET)
     public Result<List<ReportAdEarningsDTO>> getReportEarnings();
 
 }

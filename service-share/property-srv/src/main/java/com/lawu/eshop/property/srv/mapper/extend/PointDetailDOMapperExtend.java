@@ -8,8 +8,8 @@ public interface PointDetailDOMapperExtend {
 	
 	ReportAdEarningsPointView  getReportAdEarningsLovePoint(ReportAdEarningsPointView view);
 	
-	ReportAdEarningsPointView getUserPointByBzId(Long bzId);
+	ReportAdEarningsPointView getUserPointByBzId(ReportAdEarningsPointView view);
 	
-	ReportAdEarningsPointView getLovePointByBzId(Long bzId);
+	ReportAdEarningsPointView getLovePointByBzId(ReportAdEarningsPointView view);
     
 }

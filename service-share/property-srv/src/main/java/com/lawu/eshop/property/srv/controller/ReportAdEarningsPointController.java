@@ -24,7 +24,7 @@ public class ReportAdEarningsPointController extends BaseController{
 	private ReportAdEarningsPointService reportAdEarningsPointService;
 	
 	
-	@RequestMapping(value = "getReportAdEarningsPoint", method = RequestMethod.GET)
+	@RequestMapping(value = "getReportAdEarningsPoint", method = RequestMethod.POST)
 	public Result<ReportAdEarningsPointDTO> getReportAdEarningsPoint(@RequestBody ReportAdEarningsPointParam reportAdEarningsPointParam) {
 		 
 		ReportAdEarningsPointBO bo=reportAdEarningsPointService.getReportAdEarningsPoint(reportAdEarningsPointParam);

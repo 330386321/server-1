@@ -1,6 +1,7 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,8 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.srv.bo.ReportEarningsBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
+import com.lawu.eshop.ad.srv.domain.extend.MemberAdRecordDOView;
+import com.lawu.eshop.ad.srv.domain.extend.PointPoolDOView;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.extend.MemberAdRecordDOMapperExtend;
 import com.lawu.eshop.ad.srv.mapper.extend.PointPoolDOMapperExtend;
@@ -39,8 +42,11 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 		
 		AdDOExample adDOExample=new AdDOExample();
 		
-		Date begin = DateUtil.formatDate(new Date()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.formatDate(new Date()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+	    String dateNowStr = sdf.format(new Date());  
+		
+		Date begin = DateUtil.formatDate(dateNowStr+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(dateNowStr+" 23:59:59","yyyy-MM-dd HH:mm:ss");
 		
 		adDOExample.createCriteria().andStatusBetween(AdStatusEnum.AD_STATUS_PUTED.val, AdStatusEnum.AD_STATUS_OUT.val)
 					.andGmtModifiedBetween(begin, end);
@@ -58,13 +64,22 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 			//平面和视频
 			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
 				
-				 BigDecimal adClickPoint=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
-				 bo.setAdPoint(adClickPoint);
+				MemberAdRecordDOView view=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
+				if(view==null){
+					bo.setAdPoint(new BigDecimal("0"));
+				}else{
+					bo.setAdPoint(view.getTotlePoint());
+				}
+				
 				 
 			}else{ //红包和抢赞
 				 
-				 BigDecimal adPraisePoint= pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-				 bo.setAdPoint(adPraisePoint);
+				PointPoolDOView view= pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				 if(view==null){
+					bo.setAdPoint(new BigDecimal("0"));
+				 }else{
+					 bo.setAdPoint(view.getPoint());
+				 }
 			}
 			
 			listBO.add(bo);
@@ -99,13 +114,13 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 			//平面和视频
 			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
 				
-				 BigDecimal adClickPoint=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
-				 bo.setAdPoint(adClickPoint);
+				MemberAdRecordDOView view=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
+				bo.setAdPoint(view.getTotlePoint());
 				 
 			}else{ //红包和抢赞
 				 
-				 BigDecimal adPraisePoint= pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
-				 bo.setAdPoint(adPraisePoint);
+				PointPoolDOView view= pointPoolDOMapperExtend.getTotlePoint(adDO.getId());
+				 bo.setAdPoint(view.getPoint());
 			}
 			
 			listBO.add(bo);
