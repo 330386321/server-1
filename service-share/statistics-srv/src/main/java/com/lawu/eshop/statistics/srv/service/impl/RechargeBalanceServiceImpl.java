@@ -97,7 +97,7 @@ public class RechargeBalanceServiceImpl implements RechargeBalanceService {
 		List<BigDecimal> yAxisMemberData = new ArrayList<>();
 		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
 		List<BigDecimal> yAxisTotalData = new ArrayList<>();
-		if(bdate.length() > 4){
+		if(bdate.length() > 7){
 			ReportRechargeBalanceDailyDOExample example = new ReportRechargeBalanceDailyDOExample();
 			Date begin = DateUtil.formatDate(bdate, "yyyy-MM-dd");
 			Date end = DateUtil.formatDate(edate, "yyyy-MM-dd");
@@ -113,8 +113,9 @@ public class RechargeBalanceServiceImpl implements RechargeBalanceService {
 			}
 		}else {
 			ReportRechargeBalanceMonthDOExample example = new ReportRechargeBalanceMonthDOExample();
-			Date begin = DateUtil.formatDate(bdate+"-01-01", "yyyy-MM-dd");
-			Date end = DateUtil.formatDate(edate+"-12-01", "yyyy-MM-dd");
+			Date begin = DateUtil.formatDate(bdate+"-01", "yyyy-MM-dd");
+			Date endFirst = DateUtil.formatDate(edate+"-01", "yyyy-MM-dd");
+			Date end = DateUtil.getLastDayOfMonth(endFirst);
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportRechargeBalanceMonthDO> rntList = reportRechargeBalanceMonthDOMapper.selectByExample(example);

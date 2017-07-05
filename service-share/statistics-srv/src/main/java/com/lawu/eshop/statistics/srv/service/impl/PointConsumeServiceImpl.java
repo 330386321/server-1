@@ -97,7 +97,7 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 		List<BigDecimal> yAxisMemberData = new ArrayList<>();
 		List<BigDecimal> yAxisMerchantData = new ArrayList<>();
 		List<BigDecimal> yAxisTotalData = new ArrayList<>();
-		if(bdate.length() > 4){
+		if(bdate.length() > 7){
 			ReportPointConsumeDailyDOExample example = new ReportPointConsumeDailyDOExample();
 			Date begin = DateUtil.formatDate(bdate, "yyyy-MM-dd");
 			Date end = DateUtil.formatDate(edate, "yyyy-MM-dd");
@@ -113,8 +113,9 @@ public class PointConsumeServiceImpl implements PointConsumeService {
 			}
 		}else {
 			ReportPointConsumeMonthDOExample example = new ReportPointConsumeMonthDOExample();
-			Date begin = DateUtil.formatDate(bdate+"-01-01", "yyyy-MM-dd");
-			Date end = DateUtil.formatDate(edate+"-12-01", "yyyy-MM-dd");
+			Date begin = DateUtil.formatDate(bdate+"-01", "yyyy-MM-dd");
+			Date endFirst = DateUtil.formatDate(edate+"-01", "yyyy-MM-dd");
+			Date end = DateUtil.getLastDayOfMonth(endFirst);
 			example.createCriteria().andGmtReportBetween(begin, end);
 			example.setOrderByClause(" gmt_report asc ");
 			List<ReportPointConsumeMonthDO> rntList = reportPointConsumeMonthDOMapper.selectByExample(example);
