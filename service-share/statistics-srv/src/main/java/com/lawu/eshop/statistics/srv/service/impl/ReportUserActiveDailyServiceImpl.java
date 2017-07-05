@@ -72,12 +72,12 @@ public class ReportUserActiveDailyServiceImpl implements ReportUserActiveDailySe
     @Override
     public List<ReportUserActiveBO> getUserActiveListMonth(String beginTime, String endTime) {
         if(StringUtils.isEmpty(beginTime) || StringUtils.isEmpty(endTime)){
-            beginTime = DateUtil.getDateFormat(new Date(), "yyyy");
-            endTime = DateUtil.getDateFormat(new Date(), "yyyy");
+            beginTime = DateUtil.getDateFormat(new Date(), "yyyy"+"-01");
+            endTime = DateUtil.getDateFormat(new Date(), "yyyy-MM");
         }
         ReportUserActiveMonthDOExample example = new ReportUserActiveMonthDOExample();
-        Date begin = DateUtil.formatDate(beginTime+"-01-01", "yyyy-MM-dd");
-        Date end = DateUtil.formatDate(endTime+"-12-01", "yyyy-MM-dd");
+        Date begin = DateUtil.formatDate(beginTime+"-01", "yyyy-MM-dd");
+        Date end = DateUtil.formatDate(endTime+"-01", "yyyy-MM-dd");
         example.createCriteria().andGmtReportBetween(begin, end);
         example.setOrderByClause(" gmt_report asc ");
         List<ReportUserActiveMonthDO> reportUserActiveMonthDOS = reportUserActiveMonthDOMapper.selectByExample(example);
