@@ -56,7 +56,7 @@ public class UserActiveController extends BaseController{
     @ApiOperation(value = "查询区域日统计列表", notes = "查询区域日统计列表（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getReportUserActiveAreaDailyList", method = RequestMethod.GET)
-    public Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaDailyList(@RequestParam("reportDate") String reportDate) {
+    public Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaDailyList(@RequestParam(required = false) String reportDate) {
         if(StringUtils.isEmpty(reportDate)){
             reportDate = DateUtil.getDateFormat(new Date(),"yyyy-MM-dd");
         }
@@ -76,7 +76,7 @@ public class UserActiveController extends BaseController{
     @ApiOperation(value = "查询区域月统计列表", notes = "查询区域月统计列表（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getReportUserActiveAreaMonthList", method = RequestMethod.GET)
-    public Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaMonthList(@RequestParam("reportDate") String reportDate) {
+    public Result<List<ReportUserActiveAreaDTO>> getReportUserActiveAreaMonthList(@RequestParam(required = false) String reportDate) {
         if(StringUtils.isEmpty(reportDate)){
             reportDate = DateUtil.getDateFormat(new Date(),"yyyy-MM");
         }
