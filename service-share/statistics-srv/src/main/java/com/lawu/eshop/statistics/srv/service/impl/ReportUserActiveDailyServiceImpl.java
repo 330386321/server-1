@@ -4,7 +4,6 @@ import com.lawu.eshop.statistics.srv.bo.ReportUserActiveAreaDailyBO;
 import com.lawu.eshop.statistics.srv.bo.ReportUserActiveBO;
 import com.lawu.eshop.statistics.srv.converter.UserActiveConverter;
 import com.lawu.eshop.statistics.srv.domain.*;
-import com.lawu.eshop.statistics.srv.domain.extend.ReportUserActiveDOView;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveAreaDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveDailyDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.ReportUserActiveMonthDOMapper;
@@ -73,8 +72,8 @@ public class ReportUserActiveDailyServiceImpl implements ReportUserActiveDailySe
     @Override
     public List<ReportUserActiveBO> getUserActiveListMonth(String beginTime, String endTime) {
         if(StringUtils.isEmpty(beginTime) || StringUtils.isEmpty(endTime)){
-            beginTime = DateUtil.getDateFormat(new Date(), "yyyy-MM")+"-01";
-            endTime = DateUtil.getDateFormat(new Date(), "yyyy-MM-dd");
+            beginTime = DateUtil.getDateFormat(new Date(), "yyyy");
+            endTime = DateUtil.getDateFormat(new Date(), "yyyy");
         }
         ReportUserActiveMonthDOExample example = new ReportUserActiveMonthDOExample();
         Date begin = DateUtil.formatDate(beginTime+"-01-01", "yyyy-MM-dd");
