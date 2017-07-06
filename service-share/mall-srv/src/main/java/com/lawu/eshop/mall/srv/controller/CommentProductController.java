@@ -101,9 +101,11 @@ public class CommentProductController extends BaseController {
      * @return
      */
     @RequestMapping(value = "replyProductComment/{commentId}", method = RequestMethod.PUT)
-    public Result replyProductComment(@PathVariable("commentId") Long commentId, @RequestParam("replyContent") String replyContent) {
+    public Result replyProductComment(@PathVariable("commentId") Long commentId,
+                                      @RequestParam("replyContent") String replyContent,
+                                      @RequestParam("merchantId") Long merchantId) {
         //查询评论信息
-        CommentProductBO commentProductBO = commentProductService.findProductComment(commentId);
+        CommentProductBO commentProductBO = commentProductService.findProductComment(commentId,merchantId);
         if (commentProductBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
@@ -213,7 +215,7 @@ public class CommentProductController extends BaseController {
 
     /**
      * 根据商品ID删除评论
-     * @param productId
+     * @param productModelId
      * @return
      */
     @RequestMapping(value = "delCommentByProductModelId",method = RequestMethod.DELETE)

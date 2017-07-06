@@ -63,8 +63,8 @@ public class CommentController extends BaseController {
     public Result replyProductComment(@PathVariable("commentId") @ApiParam(required = true, value = "评价ID") Long commentId,
                                       @RequestParam("replyContent") @ApiParam(required = true, value = "回复内容") String replyContent,
                                       @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-
-        return commentService.replyProductComment(commentId, replyContent);
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return commentService.replyProductComment(commentId, replyContent,merchantId);
     }
 
     /**
@@ -83,8 +83,8 @@ public class CommentController extends BaseController {
     public Result replyMerchantComment(@PathVariable("commentId") @ApiParam(required = true, value = "评价ID") Long commentId,
                                        @RequestParam("replyContent") @ApiParam(required = true, value = "回复内容") String replyContent,
                                        @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-
-        return commentService.replyMerchantComment(commentId, replyContent);
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        return commentService.replyMerchantComment(commentId, replyContent, merchantId);
     }
 
     @Audit(date = "2017-04-21", reviewer = "孙林青")

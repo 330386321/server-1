@@ -40,7 +40,7 @@ public interface CommentProductService {
      */
     Page<CommentProductBO> getCommentProductsWithImgs(CommentProductListParam listParam);
 
-    CommentProductBO findProductComment(Long commentId);
+    CommentProductBO findProductComment(Long commentId, Long merchantId);
 
     Integer replyProductComment(Long commentId, String replyContent);
 

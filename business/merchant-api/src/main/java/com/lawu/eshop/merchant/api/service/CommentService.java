@@ -22,7 +22,9 @@ public interface CommentService {
      * @return
      */
     @RequestMapping(value = "commentProduct/replyProductComment/{commentId}", method = RequestMethod.PUT)
-    public Result replyProductComment(@PathVariable("commentId") Long commentId, @RequestParam("replyContent") String replyContent);
+    public Result replyProductComment(@PathVariable("commentId") Long commentId,
+                                      @RequestParam("replyContent") String replyContent,
+                                      @RequestParam("merchantId") Long merchantId);
 
     /**
      * 商家回复评论商家
@@ -31,7 +33,9 @@ public interface CommentService {
      * @return
      */
     @RequestMapping(value = "commentMerchant/replyMerchantComment/{commentId}", method = RequestMethod.PUT)
-    Result replyMerchantComment(@PathVariable("commentId") Long commentId, @RequestParam("replyContent") String replyContent);
+    Result replyMerchantComment(@PathVariable("commentId") Long commentId,
+                                @RequestParam("replyContent") String replyContent,
+                                @RequestParam("merchantId") Long merchantId);
 
     /**
      * 根据商家ID查询商品评论信息

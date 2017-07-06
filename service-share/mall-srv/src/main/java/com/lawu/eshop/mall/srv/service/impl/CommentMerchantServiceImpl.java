@@ -170,9 +170,14 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     }
 
     @Override
-    public CommentMerchantBO findMerchantComment(Long commentId) {
-        CommentMerchantDO commentMerchantDO = commentMerchantDOMapper.selectByPrimaryKey(commentId);
-        CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentMerchantDO);
+    public CommentMerchantBO findMerchantComment(Long commentId, Long merchantId) {
+        CommentMerchantDOExample example = new CommentMerchantDOExample();
+        example.createCriteria().andIdEqualTo(commentId).andMerchantIdEqualTo(merchantId);
+        List<CommentMerchantDO> commentMerchantDOS = commentMerchantDOMapper.selectByExample(example);
+        if(commentMerchantDOS.isEmpty()){
+            return null;
+        }
+        CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentMerchantDOS.get(0));
         return commentMerchantBO;
     }
 

@@ -40,7 +40,7 @@ public interface CommentMerchantService {
      * @param commentId
      * @return
      */
-    CommentMerchantBO findMerchantComment(Long commentId);
+    CommentMerchantBO findMerchantComment(Long commentId, Long merchantId);
 
     /**
      * 回复商家评价

@@ -1,17 +1,5 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.alibaba.druid.util.StringUtils;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
@@ -20,11 +8,7 @@ import com.lawu.eshop.mall.constants.CommentGradeEnum;
 import com.lawu.eshop.mall.constants.CommentStatusEnum;
 import com.lawu.eshop.mall.constants.CommentTypeEnum;
 import com.lawu.eshop.mall.dto.MemberProductCommentDTO;
-import com.lawu.eshop.mall.param.CommentListParam;
-import com.lawu.eshop.mall.param.CommentMerchantListParam;
-import com.lawu.eshop.mall.param.CommentProductListParam;
-import com.lawu.eshop.mall.param.CommentProductPageParam;
-import com.lawu.eshop.mall.param.CommentProductParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.CommentGradeBO;
 import com.lawu.eshop.mall.srv.bo.CommentProductBO;
 import com.lawu.eshop.mall.srv.converter.CommentProductConverter;
@@ -39,6 +23,17 @@ import com.lawu.eshop.mall.srv.mapper.extend.CommentProductDOMapperExtend;
 import com.lawu.eshop.mall.srv.service.CommentProductService;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderAutoCommentNotification;
 import com.lawu.eshop.utils.DateUtil;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -177,10 +172,14 @@ public class CommentProductServiceImpl implements CommentProductService {
 	}
 
 	@Override
-	public CommentProductBO findProductComment(Long commentId) {
-
-		CommentProductDO commentProductDO = commentProductDOMapper.selectByPrimaryKey(commentId);
-		CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDO);
+	public CommentProductBO findProductComment(Long commentId, Long merchantId) {
+		CommentProductDOExample example =  new CommentProductDOExample();
+		example.createCriteria().andIdEqualTo(commentId).andMerchantIdEqualTo(merchantId);
+		List<CommentProductDO> commentProductDOS = commentProductDOMapper.selectByExample(example);
+		if(commentProductDOS.isEmpty()){
+			return null;
+		}
+		CommentProductBO commentProductBO = CommentProductConverter.converterBO(commentProductDOS.get(0));
 		return commentProductBO;
 	}
 
