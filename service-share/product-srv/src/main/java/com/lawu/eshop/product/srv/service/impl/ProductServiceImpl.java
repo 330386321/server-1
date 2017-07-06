@@ -149,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public int updateProductStatus(String ids, ProductStatusEnum productStatus) {
+    public int updateProductStatus(String ids, ProductStatusEnum productStatus,Long merchantId) {
         int rows = 0;
         List<String> delIds = new ArrayList<>();
         Collection<SolrInputDocument> documents = new ArrayList<>();
@@ -173,7 +173,8 @@ public class ProductServiceImpl implements ProductService {
             	productDO.setGmtDown(null);
             }
             productDO.setGmtModified(new Date());
-            int row = productDOMapper.updateByPrimaryKey(productDO);
+            productDO.setMerchantId(merchantId);
+            int row = productDOMapper.updateByPrimaryKeySelective(productDO);
             rows = rows + row;
 
             //更新solr索引
@@ -418,8 +419,11 @@ public class ProductServiceImpl implements ProductService {
                 productDO.setIsAllowRefund(false);
             }
             ProductDOExample example = new ProductDOExample();
-            example.createCriteria().andIdEqualTo(productId);
-            productDOMapper.updateByExampleSelective(productDO, example);
+            example.createCriteria().andIdEqualTo(productId).andMerchantIdEqualTo(param.getMerchantId());
+            int ret = productDOMapper.updateByExampleSelective(productDO, example);
+            if(ret == 0){
+            	return;
+            }
         }
 
         String spec = param.getSpec();

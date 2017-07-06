@@ -34,7 +34,7 @@ public interface ProductService {
      * @param productStatus
      * @return
      */
-    int updateProductStatus(String ids, ProductStatusEnum productStatus);
+    int updateProductStatus(String ids, ProductStatusEnum productStatus,Long merchantId);
 
     /**
      * 用户端商品详情，根据商品ID获取商品信息

@@ -36,7 +36,7 @@ public interface ProductService {
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "product/updateProductStatus")
-    Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("productStatus") ProductStatusEnum productStatus);
+    Result updateProductStatus(@RequestParam("ids") String ids, @RequestParam("productStatus") ProductStatusEnum productStatus,@RequestParam("merchantId") Long merchantId);
     
     /**
      * 根据商品ID查询商品详情信息
