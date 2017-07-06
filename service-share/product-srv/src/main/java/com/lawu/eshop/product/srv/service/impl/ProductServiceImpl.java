@@ -154,27 +154,26 @@ public class ProductServiceImpl implements ProductService {
         List<String> delIds = new ArrayList<>();
         Collection<SolrInputDocument> documents = new ArrayList<>();
         String idArray[] = ids.split(",");
-        ProductDOExample examle = new ProductDOExample();
         for (int i = 0; i < idArray.length; i++) {
-
+        	
+        	ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
         	if(productStatus.val.equals(ProductStatusEnum.PRODUCT_STATUS_UP.val)){
-        		ProductDO rntProduct = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
-        		if(rntProduct.getTotalInventory() == 0){
+        		if(productDO.getTotalInventory() < 0){
         			return -1;
         		}
         	}
 
-            examle.clear();
-            ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
-            productDO.setStatus(productStatus.val);
+        	ProductDO productDOEdit = new ProductDO();
+        	productDOEdit.setStatus(productStatus.val);
             if (ProductStatusEnum.PRODUCT_STATUS_DOWN.equals(productStatus)) {
-            	productDO.setGmtDown(new Date());
+            	productDOEdit.setGmtDown(new Date());
             } else {
-            	productDO.setGmtDown(null);
+            	productDOEdit.setGmtDown(null);
             }
-            productDO.setGmtModified(new Date());
-            productDO.setMerchantId(merchantId);
-            int row = productDOMapper.updateByPrimaryKeySelective(productDO);
+            productDOEdit.setGmtModified(new Date());
+            ProductDOExample example = new ProductDOExample();
+            example.createCriteria().andIdEqualTo(Long.valueOf(idArray[i])).andMerchantIdEqualTo(merchantId);
+            int row = productDOMapper.updateByExampleSelective(productDOEdit, example);
             rows = rows + row;
 
             //更新solr索引

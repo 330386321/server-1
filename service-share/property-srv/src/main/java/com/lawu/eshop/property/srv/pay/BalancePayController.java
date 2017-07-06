@@ -1,4 +1,4 @@
-package com.lawu.eshop.property.srv.controller;
+package com.lawu.eshop.property.srv.pay;
 
 import javax.validation.Valid;
 
@@ -56,7 +56,7 @@ public class BalancePayController extends BaseController {
 	}
 
 	/**
-	 *  买单余额支付
+	 *  余额支付买单
 	 * @param param
 	 * @param result
 	 * @return
@@ -77,7 +77,7 @@ public class BalancePayController extends BaseController {
 	}
 	
 	/**
-	 * 余额充值积分
+	 * 余额支付充值积分
 	 * @param param
 	 * @param result
 	 * @return

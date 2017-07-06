@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 
 import com.lawu.eshop.property.constants.CashStatusEnum;
 
-import io.swagger.annotations.ApiModelProperty;
-
 public class WithdrawCashBackageQueryBO {
 
 	private Long id;
