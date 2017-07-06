@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.converter.ExpressCompanyConverter;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
@@ -33,7 +34,7 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 	@Override
 	public List<ExpressCompanyBO> list() {
 		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
-		example.createCriteria().andStatusEqualTo((byte) 1);
+		example.createCriteria().andStatusEqualTo(StatusEnum.STATUS_VALID.val);
 		example.setOrderByClause("ordinal ASC");
 
 		return ExpressCompanyConverter.convertBOS(expressCompanyDOMapper.selectByExample(example));
@@ -52,8 +53,7 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 		if (expressCompanyDO == null || expressCompanyDO.getId() == null || expressCompanyDO.getId() <= 0) {
 			return null;
 		}
-		
 		return ExpressCompanyConverter.convert(expressCompanyDO);
 	}
-
+	
 }
