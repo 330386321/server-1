@@ -24,6 +24,8 @@ public class MessagePushInfo implements Serializable{
 
     private byte messageType;
 
+    private Long relateId;
+
     public Long getMessageId() {
         return messageId;
     }
@@ -78,5 +80,13 @@ public class MessagePushInfo implements Serializable{
 
     public void setMessageType(byte messageType) {
         this.messageType = messageType;
+    }
+
+    public Long getRelateId() {
+        return relateId;
+    }
+
+    public void setRelateId(Long relateId) {
+        this.relateId = relateId;
     }
 }

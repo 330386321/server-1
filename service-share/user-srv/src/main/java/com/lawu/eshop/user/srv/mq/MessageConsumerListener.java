@@ -32,6 +32,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
     public static final String TITLE = "title";
     public static final String CONTENT = "content";
     public static final String TYPE = "type";
+    public static final String RELATE_ID = "relateId";
     @Autowired
     private MerchantStoreInfoService merchantStoreInfoService;
 
@@ -67,22 +68,23 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
         }else if (MqConstant.TOPIC_MALL_SRV.equals(topic) && MqConstant.TAG_GTPUSH.equals(tags)){
             //发送推送消息
             MessagePushInfo info = (MessagePushInfo) message;
-            JSONObject jobj = new JSONObject();
-            jobj.put(TITLE,info.getTitle());
-            jobj.put(CONTENT,info.getContent());
-            jobj.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
+            JSONObject contents = new JSONObject();
+            contents.put(TITLE,info.getTitle());
+            contents.put(CONTENT,info.getContent());
+            contents.put(RELATE_ID,info.getRelateId());
+            contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             if(info.getUserNum().contains("M")){
               MemberBO memberBO =  memberService.findMemberByNum(info.getUserNum());
                 //会员单个推送
                 GtPush push = new GtPush();
-                push.sendMessageToCidCustoms(jobj.toString(),memberBO.getGtCid(),
+                push.sendMessageToCidCustoms(contents.toString(),memberBO.getGtCid(),
                         info.getTitle(),userSrvConfig.getGtHost(),userSrvConfig.getGtMemberAppKey(),
                         userSrvConfig.getGtMemberMasterSecret(),userSrvConfig.getGtMemberAppId());
             }else {
                 //商家单个推送
                 MerchantBO merchantBO = merchantService.findMemberByNum(info.getUserNum());
                 GtPush push = new GtPush();
-                push.sendMessageToCid(jobj.toString(),merchantBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),
+                push.sendMessageToCid(contents.toString(),merchantBO.getGtCid(),info.getTitle(),userSrvConfig.getGtHost(),
                         userSrvConfig.getGtMerchantAppKey(),userSrvConfig.getGtMerchantMasterSecret(),
                         userSrvConfig.getGtMerchantAppId());
             }
@@ -91,6 +93,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             MessagePushInfo info = (MessagePushInfo) message;
             JSONObject contents = new JSONObject();
             contents.put(TITLE,info.getTitle());
+            contents.put(RELATE_ID,info.getRelateId());
             contents.put(CONTENT,info.getContent());
             contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
@@ -106,6 +109,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             MessagePushInfo info = (MessagePushInfo) message;
             JSONObject contents = new JSONObject();
             contents.put(TITLE,info.getTitle());
+            contents.put(RELATE_ID,info.getRelateId());
             contents.put(CONTENT,info.getContent());
             contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();

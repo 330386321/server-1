@@ -1,24 +1,9 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.param.MessageInfoParam;
-import com.lawu.eshop.mall.param.MessageParam;
-import com.lawu.eshop.mall.param.MessageQueryParam;
-import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
-import com.lawu.eshop.mall.param.OperatorMessageParam;
-import com.lawu.eshop.mall.param.PushParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -33,6 +18,15 @@ import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * message service实现类
@@ -161,6 +155,8 @@ public class MessageServiceImpl implements MessageService {
         messageDO.setTitle(dos.get(0).getTitle());
         if (messageInfoParam.getRelateId() != null && messageInfoParam.getRelateId() > 0) {
             messageDO.setRelateId(messageInfoParam.getRelateId());
+        }else{
+            messageDO.setRelateId(0L);
         }
         messageDO.setGmtModified(new Date());
         messageDO.setGmtCreate(new Date());
@@ -172,6 +168,11 @@ public class MessageServiceImpl implements MessageService {
         pushInfo.setMessageId(messageDO.getId());
         pushInfo.setUserNum(userNum);
         pushInfo.setMessageType(messageInfoParam.getTypeEnum().getVal());
+        if(messageInfoParam.getRelateId() == null){
+            pushInfo.setRelateId(0L);
+        }else{
+            pushInfo.setRelateId(messageInfoParam.getRelateId());
+        }
         messageProducerService.sendMessage(MqConstant.TOPIC_MALL_SRV, MqConstant.TAG_GTPUSH, pushInfo);
         return id;
     }
