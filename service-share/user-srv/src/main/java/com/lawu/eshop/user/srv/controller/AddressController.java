@@ -1,15 +1,5 @@
 package com.lawu.eshop.user.srv.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -18,6 +8,10 @@ import com.lawu.eshop.user.param.AddressParam;
 import com.lawu.eshop.user.srv.bo.AddressBO;
 import com.lawu.eshop.user.srv.converter.AddressConverter;
 import com.lawu.eshop.user.srv.service.AddressService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 描述：收货地址管理
@@ -32,37 +26,6 @@ public class AddressController extends BaseController {
 
 	@Autowired
 	private AddressService addressService;
-
-	/**
-	 * 收货地址列表
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	@Deprecated
-	@RequestMapping(value = "selectByUserId", method = RequestMethod.GET)
-	public Result selectByUserId(@RequestParam Long userId) {
-		List<AddressBO> addressBOS = addressService.selectByUserId(userId);
-		return successAccepted(AddressConverter.convertListDOTS(addressBOS));
-	}
-
-	/**
-	 * 增加收货地址
-	 * 
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	@Deprecated
-	@RequestMapping(value = "save", method = RequestMethod.POST)
-	public Result save(@RequestParam Long userId, @RequestBody AddressParam addressDO) {
-		Integer i = addressService.save(userId, addressDO);
-		if (i > 0) {
-			return successCreated(ResultCode.SUCCESS);
-		} else {
-			return successCreated(ResultCode.SAVE_FAIL);
-		}
-
-	}
 
 	/**
 	 * 根据用户编号 查询用户所有地址
@@ -85,10 +48,8 @@ public class AddressController extends BaseController {
 	 * 
 	 * @param userNum
 	 *            用户编号
-	 * @param param
+	 * @param addressDO
 	 *            保存地址参数
-	 * @param bindingResult
-	 *            参数验证结果
 	 * @author Sunny
 	 */
 	@SuppressWarnings("rawtypes")
@@ -121,8 +82,8 @@ public class AddressController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
-	public Result update(@RequestBody AddressParam addressParam, @PathVariable Long id) {
-		Integer i = addressService.update(addressParam, id);
+	public Result update(@RequestBody AddressParam addressParam, @PathVariable Long id, @RequestParam String userNum) {
+		Integer i = addressService.update(addressParam, id, userNum);
 		if (i > 0) {
 			return successCreated(ResultCode.SUCCESS);
 		} else {

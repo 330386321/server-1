@@ -1,17 +1,5 @@
 package com.lawu.eshop.merchant.api.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.authorization.annotation.Authorization;
 import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
@@ -24,11 +12,16 @@ import com.lawu.eshop.merchant.api.service.AddressService;
 import com.lawu.eshop.user.dto.AddressDTO;
 import com.lawu.eshop.user.param.AddressMerchantParam;
 import com.lawu.eshop.user.param.AddressParam;
-
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 收货地址管理
@@ -129,7 +122,8 @@ public class AddressController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.POST)
 	public Result update(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id, @ModelAttribute @ApiParam(required = true, value = "收货地址信息") AddressParam address) {
-		Result rs = addressService.update(address, id);
+		String userNum = UserUtil.getCurrentUserNum(getRequest());
+		Result rs = addressService.update(address, id, userNum);
 		if (!isSuccess(rs)) {
 			return successCreated(rs.getRet());
 		}

@@ -1,12 +1,5 @@
 package com.lawu.eshop.user.srv.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.user.constants.StatusEnum;
 import com.lawu.eshop.user.param.AddressParam;
@@ -16,6 +9,12 @@ import com.lawu.eshop.user.srv.domain.AddressDO;
 import com.lawu.eshop.user.srv.domain.AddressDOExample;
 import com.lawu.eshop.user.srv.mapper.AddressDOMapper;
 import com.lawu.eshop.user.srv.service.AddressService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class AddressServiceImpl implements AddressService {
@@ -23,33 +22,15 @@ public class AddressServiceImpl implements AddressService {
 	@Autowired
 	private AddressDOMapper addressDOMapper;
 
-	@Deprecated
 	@Override
 	@Transactional
-	public Integer save(Long userId, AddressParam address) {
+	public Integer update(AddressParam address, Long id, String userNum) {
 		AddressDO addressDO = AddressConverter.convertDO(address);
-		String reg = "^\\d(\\d|\\/)*\\d$";
-		String regionPath = addressDO.getRegionPath();
-		boolean tag = regionPath.matches(reg);
-		if (!tag) {
-			return 0;
-		}
-		addressDO.setUserId(userId);
-		addressDO.setGmtCreate(new Date());
 		addressDO.setGmtModified(new Date());
-		addressDO.setIsDefault(true);
-		addressDO.setStatus(new Byte("1"));
-		Integer id = addressDOMapper.insert(addressDO);
-		return id;
-	}
 
-	@Override
-	@Transactional
-	public Integer update(AddressParam address, Long id) {
-		AddressDO addressDO = AddressConverter.convertDO(address);
-		addressDO.setId(id);
-		addressDO.setGmtModified(new Date());
-		Integer i = addressDOMapper.updateByPrimaryKeySelective(addressDO);
+		AddressDOExample example = new AddressDOExample();
+		example.createCriteria().andIdEqualTo(id).andUserNumEqualTo(userNum);
+		Integer i = addressDOMapper.updateByExampleSelective(addressDO, example);
 		return i;
 	}
 
@@ -57,17 +38,6 @@ public class AddressServiceImpl implements AddressService {
 	public AddressBO get(Long id) {
 		AddressDO address = addressDOMapper.selectByPrimaryKey(id);
 		return AddressConverter.convertBO(address);
-	}
-
-	@Deprecated
-	@Override
-	public List<AddressBO> selectByUserId(Long userId) {
-		AddressDOExample example = new AddressDOExample();
-		Byte status = 1;
-		example.setOrderByClause("gmt_create asc");
-		example.createCriteria().andUserIdEqualTo(userId).andStatusEqualTo(status);
-		List<AddressDO> addressDOS = addressDOMapper.selectByExample(example);
-		return addressDOS.isEmpty() ? null : AddressConverter.convertListBOS(addressDOS);
 	}
 
 	@Override
@@ -127,8 +97,6 @@ public class AddressServiceImpl implements AddressService {
 	 *            用户编号
 	 * @param param
 	 *            保存地址参数
-	 * @param bindingResult
-	 *            参数验证结果
 	 * @author Sunny
 	 */
 	@Override
@@ -163,7 +131,7 @@ public class AddressServiceImpl implements AddressService {
 	@Override
 	public boolean isCheckAddress(Long id, String userNum) {
 		AddressDOExample example = new AddressDOExample();
-		example.createCriteria().andUserNumEqualTo(userNum).andUserNumEqualTo(userNum);
+		example.createCriteria().andIdEqualTo(id).andUserNumEqualTo(userNum);
 		Long count=addressDOMapper.countByExample(example);
 		if(count.intValue()>0){
 			return true;

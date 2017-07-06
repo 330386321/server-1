@@ -15,19 +15,11 @@ import com.lawu.eshop.user.srv.bo.AddressBO;
 public interface AddressService {
 
 	/**
-	 * 添加收货地址
-	 * 
-	 * @param address
-	 */
-	@Deprecated
-	Integer save(Long userId, AddressParam address);
-
-	/**
 	 * 编辑收货地址
 	 * 
 	 * @param address
 	 */
-	Integer update(AddressParam address, Long id);
+	Integer update(AddressParam address, Long id, String userNum);
 
 	/**
 	 * 单个查询地址
@@ -35,15 +27,6 @@ public interface AddressService {
 	 * @return
 	 */
 	AddressBO get(Long id);
-
-	/**
-	 * 查询所有地址
-	 * 
-	 * @deprecated
-	 * @return
-	 */
-	@Deprecated
-	List<AddressBO> selectByUserId(Long userId);
 
 	/**
 	 * 查询所有地址
