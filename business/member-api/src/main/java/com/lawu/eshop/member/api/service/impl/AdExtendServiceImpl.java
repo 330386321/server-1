@@ -497,27 +497,26 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 			if (isSuccess(merchantResult)) {
 				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
 				for (AdDTO adDTO : screenList) {
+					AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
+					adFlatVideoDTO.setId(adDTO.getId());
+					adFlatVideoDTO.setContent(adDTO.getContent());
+					adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
+					adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
+					adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
+					adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
+					adFlatVideoDTO.setTitle(adDTO.getTitle());
+					adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());
+					adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
+					adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
+					adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
+					adFlatVideoDTO.setViewCount(adDTO.getViewCount());
+					adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
+					Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+					if (isSuccess(resultFavoriteAd)) {
+						adFlatVideoDTO.setIsFavorite(resultFavoriteAd.getModel());
+					}
 					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-						
 						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-							AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
-							adFlatVideoDTO.setId(adDTO.getId());
-							adFlatVideoDTO.setContent(adDTO.getContent());
-							adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
-							adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
-							adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-							adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
-							adFlatVideoDTO.setTitle(adDTO.getTitle());
-							adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());
-							adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
-							adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
-							adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
-							adFlatVideoDTO.setViewCount(adDTO.getViewCount());
-							adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-							Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
-							if (isSuccess(resultFavoriteAd)) {
-								adFlatVideoDTO.setIsFavorite(resultFavoriteAd.getModel());
-							}
 							adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
 							if (merchantAdInfoDTO.getName() != null) {
 								adFlatVideoDTO.setName(merchantAdInfoDTO.getName());
@@ -533,21 +532,21 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 								adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
 										.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
 							}
-							//广告词
-							Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
-							if(isSuccess(adLexiconDTOS)){
-								adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
-							}
-							Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
-				        	if(isSuccess(mpRs)){
-				        		adFlatVideoDTO.setJdUrl(mpRs.getModel().getJdUrl());
-				        		adFlatVideoDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
-				        		adFlatVideoDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
-				        		adFlatVideoDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
-				        	}
-							egainList.add(adFlatVideoDTO);
 						}
 					}
+					//广告词
+					Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
+					if(isSuccess(adLexiconDTOS)){
+						adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
+					}
+					Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+		        	if(isSuccess(mpRs)){
+		        		adFlatVideoDTO.setJdUrl(mpRs.getModel().getJdUrl());
+		        		adFlatVideoDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
+		        		adFlatVideoDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
+		        		adFlatVideoDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
+		        	}
+					egainList.add(adFlatVideoDTO);
 				}
 			}
 			
