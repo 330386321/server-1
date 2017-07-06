@@ -19,10 +19,10 @@ public class ReportAdEarningsQueryParam  extends AbstractPageParam {
 	private AdStatusEnum adStatusEnum;
 	
 	@ApiParam (name="beginTime", value = "统计时间开始")
-	private Date beginTime;
+	private String beginTime;
 	
 	@ApiParam (name="endTime", value = "统计时间结束")
-	private Date endTime;
+	private String endTime;
 
 	public String getMerchantNum() {
 		return merchantNum;
@@ -48,21 +48,23 @@ public class ReportAdEarningsQueryParam  extends AbstractPageParam {
 		this.adStatusEnum = adStatusEnum;
 	}
 
-	public Date getBeginTime() {
+	public String getBeginTime() {
 		return beginTime;
 	}
 
-	public void setBeginTime(Date beginTime) {
+	public void setBeginTime(String beginTime) {
 		this.beginTime = beginTime;
 	}
 
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+
+	
 
 	
 

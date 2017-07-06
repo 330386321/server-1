@@ -19,6 +19,7 @@ import com.lawu.eshop.statistics.srv.domain.ReportAdEarningsDOExample;
 import com.lawu.eshop.statistics.srv.mapper.ReportAdEarningsDOMapper;
 import com.lawu.eshop.statistics.srv.mapper.extend.ReportAdEarningsDOMapperExtend;
 import com.lawu.eshop.statistics.srv.service.ReportAdEarningsService;
+import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 广告收益统计接口实现类
@@ -73,14 +74,14 @@ public class ReportAdEarningsServiceImpl implements ReportAdEarningsService {
 	@Override
 	public Page<ReportAdEarningsBO> selectReportAdEarnings(ReportAdEarningsQueryParam query) {
 		ReportAdEarningsDOExample example =new ReportAdEarningsDOExample();
-		if(query.getAdTitle()!=null){
+		if(query.getAdTitle()!=null && query.getAdTitle()!=""){
 			example.createCriteria().andAdTitleLike("%" + query.getAdTitle() + "%");
-		}else if(query.getMerchantNum()!=null){
+		}else if(query.getMerchantNum()!=null && query.getMerchantNum()!=""){
 			example.createCriteria().andMerchantNumEqualTo(query.getMerchantNum());
 		}else if(query.getAdStatusEnum()!=null){
 			example.createCriteria().andAdStatusEqualTo(query.getAdStatusEnum().val);
-		}else if(query.getBeginTime()!=null && query.getEndTime()!=null){
-			example.createCriteria().andGmtCreateBetween(query.getBeginTime(), query.getEndTime());
+		}else if(query.getBeginTime()!=null && query.getEndTime()!=null && query.getBeginTime()!="" && query.getEndTime()!=""){
+			example.createCriteria().andGmtCreateBetween(DateUtil.formatDate(query.getBeginTime(), "yyyy-MM-dd HH:mm:ss"), DateUtil.formatDate(query.getEndTime(), "yyyy-MM-dd HH:mm:ss"));
 		}
 		Long count=ReportAdEarningsDOMapper.countByExample(example);
 		RowBounds rowBounds = new RowBounds(query.getOffset(), query.getPageSize());
