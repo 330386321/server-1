@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
 
@@ -90,6 +91,19 @@ public class ExpressCompanyConverter {
 			rtn.add(convert(bo));
 		}
 
+		return rtn;
+	}
+	
+	/**
+	 * 
+	 * @param expressCompanyBOList
+	 * @return
+	 * @author Sunny
+	 * @date 2017年7月6日
+	 */
+	public static ExpressCompanyRetrieveDTO convertExpressCompanyRetrieveDTO(List<ExpressCompanyBO> expressCompanyBOList) {
+		ExpressCompanyRetrieveDTO rtn = new ExpressCompanyRetrieveDTO();
+		rtn.setList(convertDTOS(expressCompanyBOList));
 		return rtn;
 	}
 
