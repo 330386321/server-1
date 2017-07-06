@@ -41,11 +41,11 @@ public class MerchantAuditController extends BaseController {
      */
     @RequestMapping(value = "updateMerchantAudit/{storeAuditId}", method = RequestMethod.PUT)
     public Result updateMerchantAudit(@PathVariable("storeAuditId") Long storeAuditId, @RequestBody MerchantAuditParam auditParam) {
-        MerchantStoreAuditBO merchantStoreAuditBO = merchantAuditService.getMerchantStoreAuditById(storeAuditId);
+        MerchantStoreAuditBO merchantStoreAuditBO = merchantAuditService.getMerchantStoreAudit(storeAuditId, auditParam.getMerchantStoreId());
         if(merchantStoreAuditBO == null){
             return successCreated(ResultCode.STORE_AUDIT_RECORD_NOT_EXIST);
         }
-        if(merchantStoreAuditBO.getStatus() != MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val){
+        if(merchantStoreAuditBO.getStatus() != MerchantAuditStatusEnum.MERCHANT_AUDIT_STATUS_UNCHECK.val.byteValue()){
             return successCreated(ResultCode.STORE_AUDIT_RECORD_AUDITED);
         }
         merchantAuditService.updateMerchantAudit(storeAuditId, auditParam);
