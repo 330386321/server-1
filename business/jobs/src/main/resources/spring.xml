@@ -62,7 +62,7 @@
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
 
 	<job:simple id="userActiveAreaMonthJob" description="按地区每月活跃用户总数同步" class="com.lawu.eshop.jobs.impl.user.UserActiveAreaMonthJob" registry-center-ref="regCenter" cron="0 0 0 1 1/1 ? *"
-				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> -->
+				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" /> 
 		
 	<job:simple id="reportEarningDailyReportJob" description="每日广告收益同步" class="com.lawu.eshop.jobs.impl.reportAdEarnings.ReportEarningDailyReportJob" registry-center-ref="regCenter" cron="0 0 3 * * ?"
 				sharding-total-count="1" overwrite="true" disabled="${dangdang.ddframe.job.disabled}" />
