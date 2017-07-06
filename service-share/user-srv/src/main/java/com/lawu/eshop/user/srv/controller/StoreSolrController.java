@@ -17,6 +17,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,9 @@ public class StoreSolrController extends BaseController {
      */
     @RequestMapping(value = "listStore", method = RequestMethod.POST)
     public Result<Page<StoreSolrDTO>> listStore(@RequestBody StoreSolrParam storeSolrParam) {
-        String latLon = storeSolrParam.getLatitude() + "," + storeSolrParam.getLongitude();
+        double lat = storeSolrParam.getLatitude().setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+        double lon = storeSolrParam.getLongitude().setScale(3, BigDecimal.ROUND_HALF_UP).doubleValue();
+        String latLon = lat + "," + lon;
         StringBuilder sb = new StringBuilder("regionPath_s:");
         sb.append(storeSolrParam.getRegionPath()).append("*");
         if (StringUtils.isNotEmpty(storeSolrParam.getName())) {
@@ -48,7 +51,7 @@ public class StoreSolrController extends BaseController {
         if (StringUtils.isNotEmpty(storeSolrParam.getIndustryPath())) {
             sb.append(" AND industryPath_s:").append(storeSolrParam.getIndustryPath()).append("*");
         }
-        if(storeSolrParam.getStoreId() != null && storeSolrParam.getStoreId() > 0){
+        if (storeSolrParam.getStoreId() != null && storeSolrParam.getStoreId() > 0) {
             sb.append(" AND -id:").append(storeSolrParam.getStoreId());
         }
         SolrQuery query = new SolrQuery();

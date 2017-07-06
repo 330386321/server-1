@@ -4,6 +4,8 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
 import com.lawu.eshop.user.constants.StoreSolrEnum;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.math.BigDecimal;
+
 /**
  * @author meishuquan
  * @date 2017/4/13.
@@ -23,10 +25,10 @@ public class StoreSolrParam extends AbstractPageParam {
     private String regionPath;
 
     @ApiModelProperty(value = "经度", required = true)
-    private Double longitude;
+    private BigDecimal longitude;
 
     @ApiModelProperty(value = "纬度", required = true)
-    private Double latitude;
+    private BigDecimal latitude;
 
     @ApiModelProperty(value = "门店ID，更多商家必传参数")
     private Long storeId;
@@ -74,19 +76,19 @@ public class StoreSolrParam extends AbstractPageParam {
         this.storeSolrEnum = storeSolrEnum;
     }
 
-    public Double getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Double longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
-    public Double getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Double latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
