@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.IsMyDateDTO;
 import com.lawu.eshop.ad.param.AdAgainPutParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdParam;
@@ -164,7 +165,18 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "unShelve/{id}", method = RequestMethod.PUT)
     public Result unShelve(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	return adService.updateStatus(id);
+    	Long merchantId=UserUtil.getCurrentUserId(getRequest());
+    	Result<IsMyDateDTO> result=adService.isMyData(id, merchantId);
+    	if(isSuccess(result)){
+    		if(result.getModel().isFlag()){
+    			return adService.updateStatus(id);
+    		}else{
+    			return successCreated(ResultCode.NOT_FOUND_DATA);
+    		}
+    	}else{
+    		return successCreated(ResultCode.FAIL);
+    	}
+    	
     }
 
 
@@ -174,8 +186,20 @@ public class AdController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-    	adService.remove(id);
-    	return successDelete();
+    	Long merchantId=UserUtil.getCurrentUserId(getRequest());
+    	Result<IsMyDateDTO> result=adService.isMyData(id, merchantId);
+    	if(isSuccess(result)){
+    		if(result.getModel().isFlag()){
+    			adService.remove(id);
+    			return successDelete();
+    		}else{
+    			return successCreated(ResultCode.NOT_FOUND_DATA); 
+    		}
+    	}else{
+    		return successCreated(ResultCode.FAIL);
+    	}
+    	
+    	
     }
 
 	@Audit(date = "2017-05-03", reviewer = "孙林青")
@@ -255,7 +279,8 @@ public class AdController extends BaseController {
 		for (String str : strIds) {
 			adIds.add(Long.valueOf(str));
 		}
-		Result rs = adService.batchDeleteAd(adIds);
+		Long merchantId=UserUtil.getCurrentUserId(getRequest());
+		Result rs = adService.batchDeleteAd(adIds,merchantId);
 		return successDelete();
 	}
 

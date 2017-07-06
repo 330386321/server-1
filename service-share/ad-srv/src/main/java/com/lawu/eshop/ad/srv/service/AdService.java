@@ -276,5 +276,13 @@ public interface AdService {
 	 * @return
 	 */
 	AdDetailBO selectDetail(Long id);
+	
+	/**
+	 * 判断是否是当前用户的数据
+	 * @param id
+	 * @param merchantId
+	 * @return
+	 */
+	Boolean isMyData(Long id ,Long merchantId);
 
 }

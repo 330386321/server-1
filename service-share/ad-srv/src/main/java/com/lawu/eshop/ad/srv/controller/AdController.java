@@ -525,7 +525,11 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "batchDeleteAd", method = RequestMethod.DELETE)
-	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids) {
+	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids,@RequestParam Long merchantId) {
+		for (int i=0; i<ids.size() ;i++) {
+			Boolean flag= adService.isMyData(ids.get(i), merchantId);
+			if(!flag) ids.remove(i);
+		}
 		adService.batchDeleteAd(ids);
 		return successDelete();
 	}
@@ -538,6 +542,21 @@ public class AdController extends BaseController{
 	@RequestMapping(value = "selectDetail/{id}", method = RequestMethod.GET)
 	public Result<AdDetailDTO> selectDetail(@PathVariable Long id) {
 		return successCreated(AdConverter.convertDetailDTO(adService.selectDetail(id)));
+	}
+	
+	/**
+	 * 判断数据是否是当前用户的
+	 * 
+	 * @param id
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "isMyData/{id}", method = RequestMethod.GET)
+	public Result<IsMyDateDTO> isMyData(@PathVariable Long id,@RequestParam Long merchantId) {
+		Boolean flag= adService.isMyData(id, merchantId);
+		IsMyDateDTO dto=new IsMyDateDTO();
+		dto.setFlag(flag);
+		return successCreated(dto);
 	}
 
 }

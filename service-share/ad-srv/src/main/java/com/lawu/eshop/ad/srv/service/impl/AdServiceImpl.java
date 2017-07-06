@@ -933,11 +933,7 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andMerchantIdEqualTo(merchantId)
 		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		long count=adDOMapper.countByExample(example);
-		if(count>0){
-			return false;
-		}else{
-			return true;
-		}
+		return count>0?true:false;
 		
 	}
 
@@ -947,11 +943,7 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andMerchantIdEqualTo(merchantId)
 		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		long count=adDOMapper.countByExample(example);
-		if(count>0){
-			return true;
-		}else{
-			return false;
-		}
+		return count>0?true:false;
 	}
 
 	@Override
@@ -998,6 +990,14 @@ public class AdServiceImpl implements AdService {
 			detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
 		}
 		return detail;
+	}
+
+	@Override
+	public Boolean isMyData(Long id, Long merchantId) {
+		AdDOExample example = new AdDOExample();
+		example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+		int count= adDOMapper.countByExample(example);
+		return count>0?true:false;
 	}
 
 }

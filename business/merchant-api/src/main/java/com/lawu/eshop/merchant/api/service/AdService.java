@@ -14,6 +14,7 @@ import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
+import com.lawu.eshop.ad.dto.IsMyDateDTO;
 import com.lawu.eshop.ad.param.AdMerchantParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -88,7 +89,7 @@ public interface AdService {
 	 * @return
 	 */
 	@RequestMapping(value = "ad/batchDeleteAd", method = RequestMethod.DELETE)
-	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids);
+	public Result batchDeleteAd(@RequestParam("ids") List<Long> ids,@RequestParam("merchantId") Long merchantId);
 	
 	/**
 	 * 广告详情
@@ -97,5 +98,14 @@ public interface AdService {
 	 */
 	@RequestMapping(value = "ad/selectDetail/{id}", method = RequestMethod.GET)
 	public Result<AdDetailDTO> selectDetail(@PathVariable("id") Long id);
+	
+	/**
+	 * 判断数据是否是当前的用户
+	 * @param id
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "ad/isMyDate/{id}", method = RequestMethod.GET)
+	Result<IsMyDateDTO> isMyData(@PathVariable("id") Long id,@RequestParam("merchantId") Long merchantId);
 
 }
