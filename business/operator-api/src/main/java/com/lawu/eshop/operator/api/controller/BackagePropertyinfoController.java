@@ -5,6 +5,9 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.annotation.PageBody;
+import com.lawu.eshop.mall.constants.MessageTypeEnum;
+import com.lawu.eshop.mall.param.MessageInfoParam;
+import com.lawu.eshop.mall.param.MessageTempParam;
 import com.lawu.eshop.operator.api.service.*;
 import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
 import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
@@ -60,6 +63,8 @@ public class BackagePropertyinfoController extends BaseController {
 	private TransactionDetailService transactionDetailService;
 	@Autowired
 	private PointDetailService pointDetailService;
+	@Autowired
+	private MessageService messageService;
 
 	@PageBody
 	@ApiOperation(value = "余额、积分明细查询", notes = "余额、积分明细查询[]（杨清华）", httpMethod = "POST")
@@ -321,7 +326,21 @@ public class BackagePropertyinfoController extends BaseController {
 	@RequiresPermissions("account:freeze")
 	@RequestMapping(value = "updatePropertyinfoFreeze", method = RequestMethod.PUT)
 	public Result updatePropertyinfoFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
-		return propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.YES);
+		Result result =  propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.YES);
+		if(isSuccess(result)){
+			//发送站内消息
+			MessageTempParam messageTempParam = new MessageTempParam();
+			if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				messageTempParam.setUserName("E店会员");
+			} else {
+				messageTempParam.setUserName("E店商家");
+			}
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_MONEY_FREEZE);
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(userNum, messageInfoParam);
+		}
+		return result;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -329,7 +348,21 @@ public class BackagePropertyinfoController extends BaseController {
 	@RequiresPermissions("account:unfreeze")
 	@RequestMapping(value = "updatePropertyinfoUnFreeze", method = RequestMethod.PUT)
 	public Result updatePropertyinfoUnFreeze(@RequestParam @ApiParam(required = true, value = "用户编号") String userNum) {
-		return propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.NO);
+		Result result = propertyinfoService.updatePropertyinfoFreeze(userNum, PropertyinfoFreezeEnum.NO);
+		if(isSuccess(result)){
+			//发送站内消息
+			MessageTempParam messageTempParam = new MessageTempParam();
+			if (userNum.startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
+				messageTempParam.setUserName("E店会员");
+			} else {
+				messageTempParam.setUserName("E店商家");
+			}
+			MessageInfoParam messageInfoParam = new MessageInfoParam();
+			messageInfoParam.setTypeEnum(MessageTypeEnum.MESSAGE_TYPE_MONEY_UNFREEZE);
+			messageInfoParam.setMessageParam(messageTempParam);
+			messageService.saveMessage(userNum, messageInfoParam);
+		}
+		return result;
 	}
 
 }

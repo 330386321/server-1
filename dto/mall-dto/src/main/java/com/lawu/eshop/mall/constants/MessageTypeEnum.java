@@ -67,7 +67,7 @@ public enum MessageTypeEnum {
 
     MESSAGE_TYPE_MONEY_FREEZE((byte) 0x2C),//资金冻结 44
 
-    MESSAGE_TYPE_MONEY_UNFREEZE((byte) 0x2D);//资金冻结 45
+    MESSAGE_TYPE_MONEY_UNFREEZE((byte) 0x2D);//资金解冻 45
 
     private Byte val;
     
