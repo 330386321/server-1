@@ -28,11 +28,12 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public List<RegionBO> getRegionList() {
+        List<RegionBO> regionBOS = new ArrayList<>();
         List<RegionDOView> viewList = regionDOMMapperExtend.getRegionList();
         if (viewList == null) {
-            return null;
+            return regionBOS;
         }
-        List<RegionBO> regionBOS = new ArrayList<RegionBO>();
+
         for (RegionDOView regionDOView : viewList) {
             RegionBO regionBO = RegionConverter.coverBO(regionDOView);
             regionBOS.add(regionBO);
@@ -42,24 +43,24 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public String getRegionFullName(Integer id) {
-        String regionFullName = "";
+        StringBuilder regionFullName = new StringBuilder("");
         RegionDO regionDO = regionDOMapper.selectByPrimaryKey(id);
         if (regionDO == null) {
-            return regionFullName;
+            return regionFullName.toString();
         }
         int cnt = 0;
-        regionFullName = regionDO.getName();
+        regionFullName.append(regionDO.getName());
         do {
             if (regionDO.getParentId() > 0) {
                 regionDO = regionDOMapper.selectByPrimaryKey(regionDO.getParentId());
                 if (regionDO == null) {
-                    return regionFullName;
+                    return regionFullName.toString();
                 }
-                regionFullName = regionDO.getName() + regionFullName;
+                regionFullName.append(regionFullName).append(regionDO.getName());
             }
             cnt++;
         } while (cnt < 2);
-        return regionFullName;
+        return regionFullName.toString();
     }
 
     @Override
