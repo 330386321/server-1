@@ -38,12 +38,6 @@ public class ExpressCompanyController extends BaseController {
     @Autowired
     private ExpressCompanyService expressCompanyService;
     
-    /**
-     * 查询全部快递公司，根据ordinal排序。
-     * 
-     * @param token
-     * @return
-     */
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
@@ -52,6 +46,15 @@ public class ExpressCompanyController extends BaseController {
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.list());
+    }
+    
+    @SuppressWarnings("unchecked")
+	@ApiOperation(value = "分组查询全部快递公司", notes = "查询全部快递公司,并且按照名称首字母分组。[]（蒋鑫俊）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @Authorization
+    @RequestMapping(value = "group", method = RequestMethod.GET)
+    public Result<List<ExpressCompanyDTO>> group(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    	return successGet(expressCompanyService.group());
     }
     
     @SuppressWarnings("unchecked")
