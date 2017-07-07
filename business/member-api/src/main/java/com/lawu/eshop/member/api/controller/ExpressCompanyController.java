@@ -18,6 +18,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.member.api.service.ExpressCompanyService;
 
@@ -53,7 +54,7 @@ public class ExpressCompanyController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "group", method = RequestMethod.GET)
-    public Result<List<ExpressCompanyDTO>> group(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
+    public Result<ExpressCompanyQueryDTO> group(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.group());
     }
     
