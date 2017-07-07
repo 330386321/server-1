@@ -128,6 +128,17 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 	}
 
 	@Override
+	public MerchantStoreInfoBO getMerchantStore(Long id, Long merchantId) {
+		MerchantStoreDOExample example = new MerchantStoreDOExample();
+		example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+		List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(example);
+		if(merchantStoreDOS.isEmpty()){
+			return null;
+		}
+		return MerchantStoreConverter.coverter(merchantStoreDOS.get(0));
+	}
+
+	@Override
 	@Transactional
 	public void saveMerchantStoreInfo(Long merchantId, MerchantStoreParam merchantStoreParam) {
 		boolean isShow = true;
@@ -278,7 +289,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 
 		// 更新门店信息
 		MerchantStoreDOExample example = new MerchantStoreDOExample();
-		example.createCriteria().andIdEqualTo(merchantStoreId);
+		example.createCriteria().andIdEqualTo(merchantStoreId).andMerchantIdEqualTo(merchantId);
 		merchantStoreDOMapper.updateByExample(merchantStoreDO, example);
 
 		// 更新门店扩展信息
@@ -287,14 +298,14 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreProfileDO.setManageType(merchantStoreParam.getManageType().val);
 		merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
 		MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
-		merchantStoreProfileDOExample.createCriteria().andIdEqualTo(merchantStoreId);
+		merchantStoreProfileDOExample.createCriteria().andIdEqualTo(merchantStoreId).andMerchantIdEqualTo(merchantId);
 		merchantStoreProfileDOMapper.updateByExample(merchantStoreProfileDO, merchantStoreProfileDOExample);
 
 		// 更新门店图片信息
 
 		// 先删除对应商家门店图片---逻辑删除
 		MerchantStoreImageDOExample merchantStoreImageDOExample = new MerchantStoreImageDOExample();
-		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId);
+		merchantStoreImageDOExample.createCriteria().andMerchantStoreIdEqualTo(merchantStoreId).andMerchantIdEqualTo(merchantId);
 		MerchantStoreImageDO merchantStoreImageDODel = new MerchantStoreImageDO();
 		merchantStoreImageDODel.setStatus(false);
 		merchantStoreImageDOMapper.updateByExampleSelective(merchantStoreImageDODel, merchantStoreImageDOExample);

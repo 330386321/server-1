@@ -21,6 +21,8 @@ public interface MerchantStoreInfoService {
      */
     MerchantStoreInfoBO selectMerchantStore(Long id);
 
+    MerchantStoreInfoBO getMerchantStore(Long id, Long merchantId);
+
     /**
      * 新增门店信息
      *
