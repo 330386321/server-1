@@ -18,6 +18,8 @@ import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 import com.lawu.eshop.order.srv.service.ShoppingCartService;
 
@@ -56,10 +58,7 @@ public class ShoppingCartController extends BaseController {
 	 */
 	@RequestMapping(value = "list/{memberId}", method = RequestMethod.GET)
 	public Result<List<ShoppingCartDTO>> findListByMemberId(@PathVariable(name = "memberId") Long memberId) {
-
-		List<ShoppingCartBO> shoppingCartBOList = shoppingCartService.findListByMemberId(memberId);
-
-		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));
+		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartService.findListByMemberId(memberId)));
 	}
 
 	/**
@@ -72,13 +71,13 @@ public class ShoppingCartController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
 	public Result update(@PathVariable(name = "id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingCartUpdateParam param) {
-
-		int resultCode = shoppingCartService.update(id, memberId, param);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+		try {
+			shoppingCartService.update(id, memberId, param);
+		} catch ( DataNotExistException e) {
+			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch ( IllegalOperationException e ) {
+			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-
 		return successCreated();
 	}
 
@@ -93,31 +92,34 @@ public class ShoppingCartController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "delete", method = RequestMethod.PUT)
 	public Result delete(@RequestParam("memberId") Long memberId, @RequestBody List<Long> ids) {
-		int resultCode = shoppingCartService.remove(memberId, ids);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+		try {	
+			shoppingCartService.remove(memberId, ids);
+		} catch ( DataNotExistException e) {
+			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch ( IllegalOperationException e ) {
+			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-
 		return successCreated();
 	}
 
 	/**
 	 * 根据购物车id列表查询购物车列表
 	 * 
-	 * @param memberId
+	 * @param memberId 会员id
+	 * @param ids 购物车id列表
 	 * @return
 	 */
-	@RequestMapping(value = "list/findListByIds", method = RequestMethod.GET)
-	public Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids) {
-
-		Result<List<ShoppingCartBO>> shoppingCartBOListResult = shoppingCartService.findListByIds(ids);
-
-		if (!isSuccess(shoppingCartBOListResult)) {
-			return successGet(shoppingCartBOListResult.getRet());
+	@RequestMapping(value = "list/findListByIds/{memberId}", method = RequestMethod.GET)
+	public Result<List<ShoppingCartDTO>> findListByIds(@PathVariable("memberId") Long memberId, @RequestParam(name = "ids") List<Long> ids) {
+		List<ShoppingCartBO> shoppingCartBOList = null;
+		try {
+			shoppingCartBOList = shoppingCartService.findListByIds(memberId, ids);
+		} catch ( DataNotExistException e) {
+			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch ( IllegalOperationException e ) {
+			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-
-		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOListResult.getModel()));
+		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));
 	}
 
 	/**

@@ -65,11 +65,12 @@ public interface ShoppingCartService {
 	/**
 	 * 根据购物车id列表查询购物车列表
 	 * 
-	 * @param memberId
+	 * @param memberId 会员id
+	 * @param ids 购物车id列表
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingCart/list/findListByIds",  method = RequestMethod.GET)
-	Result<List<ShoppingCartDTO>> findListByIds(@RequestParam(name = "ids") List<Long> ids);
+	@RequestMapping(value = "shoppingCart/list/findListByIds/{memberId}",  method = RequestMethod.GET)
+	Result<List<ShoppingCartDTO>> findListByIds(@PathVariable("memberId") Long memberId, @RequestParam(name = "ids") List<Long> ids);
 	
 	/**
 	 * 根据用户id列表查询购物车数量

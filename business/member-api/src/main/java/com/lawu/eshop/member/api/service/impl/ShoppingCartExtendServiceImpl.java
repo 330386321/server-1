@@ -218,7 +218,7 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 			shoppingOrderSettlementForeignParamMap.put(shoppingOrderSettlementForeignParam.getMerchantId(), shoppingOrderSettlementForeignParam);
 		}
 		
-    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(ids);
+    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(memberId, ids);
     	
     	if (!isSuccess(resultShoppingCartDTOS)) {
     		return successCreated(resultShoppingCartDTOS.getRet());
@@ -353,12 +353,13 @@ public class ShoppingCartExtendServiceImpl extends BaseController implements Sho
 	 * @param memberNum 用户编号
 	 * @return 返回结算数据
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Result<ShoppingCartSettlementDTO> settlement(List<Long> idList, String memberNum) {
-    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(idList);
+	public Result<ShoppingCartSettlementDTO> settlement(List<Long> idList, String memberNum, Long memberId) {
+    	Result<List<ShoppingCartDTO>> resultShoppingCartDTOS = shoppingCartService.findListByIds(memberId, idList);
     	
     	if (!isSuccess(resultShoppingCartDTOS)) {
-    		return successGet(resultShoppingCartDTOS.getRet());
+    		return successGet(resultShoppingCartDTOS);
     	}
     	
     	// 把要查询的id放入set,统一一次性查询

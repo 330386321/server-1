@@ -40,7 +40,7 @@ public interface ShoppingCartExtendService {
 	 * @param memberNum 用户编号
 	 * @return 返回结算数据
 	 */
-	Result<ShoppingCartSettlementDTO> settlement(List<Long> idList, String memberNum);
+	Result<ShoppingCartSettlementDTO> settlement(List<Long> idList, String memberNum, Long memberId);
 	
 	/**
 	 * 根据结算参数列表批量创建订单

@@ -2,10 +2,11 @@ package com.lawu.eshop.order.srv.service;
 
 import java.util.List;
 
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 
 /**
@@ -26,6 +27,15 @@ public interface ShoppingCartService {
 	List<ShoppingCartBO> findListByMemberId(Long memberId);
 	
 	/**
+	 * 根据购物车id查询购物车
+	 * 
+	 * @param memberId 会员id
+	 * @param id 购物车id
+	 * @return
+	 */
+	ShoppingCartBO get(Long memberId, Long id);
+	
+	/**
 	 * 加入购物车
 	 * 
 	 * @param memberId 会员id
@@ -40,20 +50,29 @@ public interface ShoppingCartService {
 	 * @param id 购物车id
 	 * @param memberId 会员id
 	 * @param param 更新参数
-	 * @return
 	 * @author Sunny
 	 */
-	int update(Long id, Long memberId, ShoppingCartUpdateParam param);
+	void update(Long id, Long memberId, ShoppingCartUpdateParam param) throws DataNotExistException, IllegalOperationException ;
 	
 	/**
-	 * 根据id删除购物车的商品
+	 * 根据id列表删除购物车的商品
 	 * 
 	 * @param memberId 会员id
 	 * @param ids 购物车id列表
 	 * @return
 	 * @author Sunny
 	 */
-	int remove(Long memberId, List<Long> ids);
+	void remove(Long memberId, List<Long> ids) throws DataNotExistException, IllegalOperationException;
+	
+	/**
+	 * 根据id删除购物车的商品
+	 * 
+	 * @param memberId 会员id
+	 * @param id 购物车id
+	 * @return
+	 * @author Sunny
+	 */
+	void remove(Long memberId, Long id) throws DataNotExistException, IllegalOperationException;
 	
 	/**
 	 * 根据购物车id列表查询购物车列表
@@ -61,7 +80,7 @@ public interface ShoppingCartService {
 	 * @param ids 购物车id列表
 	 * @return
 	 */
-	Result<List<ShoppingCartBO>> findListByIds(List<Long> ids);
+	List<ShoppingCartBO> findListByIds(Long memberId, List<Long> ids);
 	
 	/**
 	 * 根据用户id列表查询购物车数量

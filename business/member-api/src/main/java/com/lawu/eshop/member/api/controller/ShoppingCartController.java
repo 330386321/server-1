@@ -133,13 +133,6 @@ public class ShoppingCartController extends BaseController {
     	return successCreated();
     }
     
-    /**
-     * 根据id删除购物车的商品。
-     * 
-     * @param id
-     * @param token
-     * @return
-     */
     @SuppressWarnings({ "rawtypes"})
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
     @ApiOperation(value = "删除购物车的商品", notes = "根据id列表删除购物车的商品。[1002|1003|1024]（蒋鑫俊）", httpMethod = "DELETE")
@@ -181,8 +174,8 @@ public class ShoppingCartController extends BaseController {
     	}
     	
     	String memberNum = UserUtil.getCurrentUserNum(getRequest());
-    	
-    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.settlement(ids, memberNum);
+    	Long memberId = UserUtil.getCurrentUserId(getRequest());
+    	Result<ShoppingCartSettlementDTO> result = shoppingcartExtendService.settlement(ids, memberNum, memberId);
     	if (!isSuccess(result)) {
     		return successGet(result.getRet());
     	}

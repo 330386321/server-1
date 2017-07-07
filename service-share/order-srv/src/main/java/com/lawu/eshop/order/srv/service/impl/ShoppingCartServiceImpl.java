@@ -1,22 +1,23 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.param.ShoppingCartSaveParam;
 import com.lawu.eshop.order.param.ShoppingCartUpdateParam;
 import com.lawu.eshop.order.srv.bo.ShoppingCartBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingCartConverter;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDO;
 import com.lawu.eshop.order.srv.domain.ShoppingCartDOExample;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingCartUpdateQuantityDO;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.MoreThanMaximumException;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.extend.ShoppingCartExtendDOMapper;
@@ -30,7 +31,7 @@ import com.lawu.eshop.order.srv.service.ShoppingCartService;
  * @date 2017/3/24
  */
 @Service
-public class ShoppingCartServiceImpl extends BaseController implements ShoppingCartService {
+public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	@Autowired
 	private ShoppingCartDOMapper shoppingCartDOMapper;
@@ -41,12 +42,37 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	@Autowired
 	private PropertyService propertyService;
 
+	/**
+	 * 根据用户id查询用户的购物车
+	 * 
+	 * @param memberId
+	 * @return
+	 */
 	@Override
 	public List<ShoppingCartBO> findListByMemberId(Long memberId) {
 		ShoppingCartDOExample example = new ShoppingCartDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId);
-		List<ShoppingCartBO> rtn = ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
-		return rtn;
+		return ShoppingCartConverter.convertBOS(shoppingCartDOMapper.selectByExample(example));
+	}
+	
+	/**
+	 * 根据购物车id查询购物车
+	 * 
+	 * @param memberId 会员id
+	 * @param id 购物车id
+	 * @return
+	 */
+	@Override
+	public ShoppingCartBO get(Long memberId, Long id) throws DataNotExistException, IllegalOperationException {
+		ShoppingCartDO shoppingCartDO = shoppingCartDOMapper.selectByPrimaryKey(id);
+		if (shoppingCartDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_CART_DATA_NOT_EXIST);
+		}
+		
+		if (!shoppingCartDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_CART);
+		}
+		return ShoppingCartConverter.convert(shoppingCartDO);
 	}
 
 	/**
@@ -96,27 +122,36 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 */
 	@Transactional
 	@Override
-	public int update(Long id, Long memberId, ShoppingCartUpdateParam param) {
-
+	public void update(Long id, Long memberId, ShoppingCartUpdateParam param) throws DataNotExistException, IllegalOperationException {
 		ShoppingCartDO shoppingCartDO = shoppingCartDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingCartDO == null || shoppingCartDO.getId() == null || shoppingCartDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingCartDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_CART_DATA_NOT_EXIST);
 		}
-
-		// 验证此条记录是否属于当前用户
+		
 		if (!shoppingCartDO.getMemberId().equals(memberId)) {
-			return ResultCode.ILLEGAL_OPERATION;
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_CART);
 		}
-
-		ShoppingCartDO shoppingCartDOUpdate = ShoppingCartConverter.convert(param, id);
-
-		// 空值交给Mybatis去处理
-		shoppingCartDOMapper.updateByPrimaryKeySelective(shoppingCartDOUpdate);
-
-		return ResultCode.SUCCESS;
+		shoppingCartDOMapper.updateByPrimaryKeySelective(ShoppingCartConverter.convert(param, id));
 	}
 
+	/**
+	 * 根据id列表删除购物车的商品
+	 * 
+	 * @param ids
+	 *            购物车id列表
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 * @author Sunny
+	 */
+	@Transactional
+	@Override
+	public void remove(Long memberId, List<Long> ids) throws DataNotExistException, IllegalOperationException {
+		for (Long id : ids) {
+			remove(memberId, id);
+		}
+	}
+	
 	/**
 	 * 根据id删除购物车的商品
 	 * 
@@ -129,11 +164,16 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 */
 	@Transactional
 	@Override
-	public int remove(Long memberId, List<Long> ids) {
-		ShoppingCartDOExample example = new ShoppingCartDOExample();
-		example.createCriteria().andMemberIdEqualTo(memberId).andIdIn(ids);
-		shoppingCartDOMapper.deleteByExample(example);
-		return ResultCode.SUCCESS;
+	public void remove(Long memberId, Long id) throws DataNotExistException, IllegalOperationException {
+		ShoppingCartDO shoppingCartDO = shoppingCartDOMapper.selectByPrimaryKey(id);
+		if (shoppingCartDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_CART_DATA_NOT_EXIST);
+		}
+		
+		if (!shoppingCartDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_CART);
+		}
+		shoppingCartDOMapper.deleteByPrimaryKey(id);
 	}
 
 	/**
@@ -144,21 +184,12 @@ public class ShoppingCartServiceImpl extends BaseController implements ShoppingC
 	 * @return
 	 */
 	@Override
-	public Result<List<ShoppingCartBO>> findListByIds(List<Long> ids) {
-		
-		if (ids == null || ids.isEmpty()) {
-			return successGet(ResultCode.ID_EMPTY);
+	public List<ShoppingCartBO> findListByIds(Long memberId, List<Long> ids) throws DataNotExistException, IllegalOperationException {
+		List<ShoppingCartBO> rtn = new ArrayList<>();
+		for (Long id : ids) {
+			rtn.add(get(memberId, id));
 		}
-
-		ShoppingCartDOExample example = new ShoppingCartDOExample();
-		example.createCriteria().andIdIn(ids);
-
-		List<ShoppingCartDO> list = shoppingCartDOMapper.selectByExample(example);
-		if (list == null || list.isEmpty()) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-		
-		return successGet(ShoppingCartConverter.convertBOS(list));
+		return rtn;
 	}
 
 	/**
