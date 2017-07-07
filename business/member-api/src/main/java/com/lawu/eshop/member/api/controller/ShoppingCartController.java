@@ -114,7 +114,7 @@ public class ShoppingCartController extends BaseController {
      */
 	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-01", reviewer = "孙林青")
-    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1002|1004|1024]（蒋鑫俊）", httpMethod = "PUT")
+    @ApiOperation(value = "更新购物车商品", notes = "根据id更新购物车的商品（使用实时更新不采用批量更新的方式）。[1004|1100|1024]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
@@ -127,7 +127,7 @@ public class ShoppingCartController extends BaseController {
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	Result result = shoppingCartService.update(id, memberId, param);
     	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
+    		return successCreated(result);
     	}
     			
     	return successCreated();
@@ -135,7 +135,7 @@ public class ShoppingCartController extends BaseController {
     
     @SuppressWarnings({ "rawtypes"})
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
-    @ApiOperation(value = "删除购物车的商品", notes = "根据id列表删除购物车的商品。[1002|1003|1024]（蒋鑫俊）", httpMethod = "DELETE")
+    @ApiOperation(value = "删除购物车的商品", notes = "根据id列表删除购物车的商品。[1004|1100|1024]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@RequestMapping(value = "delete", method = RequestMethod.DELETE)
@@ -147,9 +147,9 @@ public class ShoppingCartController extends BaseController {
     	
     	Long memberId = UserUtil.getCurrentUserId(getRequest());
     	
-    	Result result = successCreated(shoppingCartService.delete(memberId, ids));
+    	Result result = shoppingCartService.delete(memberId, ids);
     	if (!isSuccess(result)) {
-    		successCreated(result);
+    		return successCreated(result);
     	}
     	
     	return successDelete();

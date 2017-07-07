@@ -74,9 +74,9 @@ public class ShoppingCartController extends BaseController {
 		try {
 			shoppingCartService.update(id, memberId, param);
 		} catch ( DataNotExistException e) {
-			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
-			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successCreated();
 	}
@@ -95,9 +95,9 @@ public class ShoppingCartController extends BaseController {
 		try {	
 			shoppingCartService.remove(memberId, ids);
 		} catch ( DataNotExistException e) {
-			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
-			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successCreated();
 	}
@@ -115,9 +115,9 @@ public class ShoppingCartController extends BaseController {
 		try {
 			shoppingCartBOList = shoppingCartService.findListByIds(memberId, ids);
 		} catch ( DataNotExistException e) {
-			successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
-			successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));
 	}
