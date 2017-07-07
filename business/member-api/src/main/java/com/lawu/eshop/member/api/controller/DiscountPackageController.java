@@ -1,8 +1,5 @@
 package com.lawu.eshop.member.api.controller;
 
-import java.util.List;
-
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -16,6 +13,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.member.api.service.DiscountPackageService;
@@ -51,7 +49,7 @@ public class DiscountPackageController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "list/{merchantId}", method = RequestMethod.GET)
-	public Result<Page<DiscountPackageQueryDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "商家id") @PathVariable("merchantId") Long merchantId) {
+	public Result<Page<DiscountPackageQueryDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "商家id", required = true) @PathVariable("merchantId") Long merchantId) {
 		Result<Page<DiscountPackageQueryDTO>> result = discountPackageService.listForMember(merchantId);
 		return successGet(result);
 	}
@@ -70,7 +68,7 @@ public class DiscountPackageController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public Result<DiscountPackageDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,  @ApiParam(value = "优惠套餐id") @PathVariable("id") Long id) {
+	public Result<DiscountPackageDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,  @ApiParam(value = "优惠套餐id", required = true) @PathVariable("id") Long id) {
 		Result<DiscountPackageDetailDTO> result = discountPackageService.get(id);
 		return successGet(result);
 	}

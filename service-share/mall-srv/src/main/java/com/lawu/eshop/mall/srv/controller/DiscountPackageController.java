@@ -80,6 +80,9 @@ public class DiscountPackageController extends BaseController {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public Result<DiscountPackageDetailDTO> get(@PathVariable("id") Long id) {
 		DiscountPackageDetailDTO discountPackageDetailDTO = DiscountPackageExtendConverter.convert(discountPackageService.get(id));
+		if (discountPackageDetailDTO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
+		}
 		return successGet(discountPackageDetailDTO);
 	}
 	
