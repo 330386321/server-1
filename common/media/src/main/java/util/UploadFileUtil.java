@@ -24,12 +24,12 @@ public class UploadFileUtil {
 
     private static final  String MAP_KEY = "resultFlag";
     private static final  String MAP_KEY_MSG = "msg";
-    private static final  String mapValue = "0";
+    private static final  String MAP_VALUE = "0";
     private static final String IMAGE_FORMAT_WRONG_UPLOAD = "1011";
     private static final String IMAGE_WRONG_UPLOAD = "1010";
     private static final String IMAGE_SIZE_ERROR = "1015";
     private static final String UPLOAD_SIZE_BIGER = "1021";
-    private static final String UPLOAD_VEDIO_FAIL = "1020";
+    private static final String UPLOAD_VIDEO_FAIL = "1020";
 
     private static final String IMAGE_FORMAT_WRONG_UPLOAD_MSG = "上传图片格式错误";
     private static final String UPLOAD_SIZE_BIGER_MSG = "图片文件太大";
@@ -51,9 +51,9 @@ public class UploadFileUtil {
                                                      String dir, String baseImageDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
+        byte[] b = new byte[1024 * 1024];
         Collection<Part> parts;
 
         String urlImg = "";
@@ -98,7 +98,7 @@ public class UploadFileUtil {
                 }
             }
             valsMap.put(UPLOAD_IMG_URL, urlImg);
-            valsMap.put(MAP_KEY, mapValue);
+            valsMap.put(MAP_KEY, MAP_VALUE);
         } catch (Exception e) {
             valsMap.put(MAP_KEY, IMAGE_WRONG_UPLOAD);
             valsMap.put(MAP_KEY_MSG, UPLOAD_FAIL);
@@ -107,7 +107,7 @@ public class UploadFileUtil {
             try {
                 out.close();
             } catch (IOException e) {
-                logger.info("out stream close exception");
+                logger.info("out stream close exception {}",e);
             }
 
         }
@@ -127,10 +127,10 @@ public class UploadFileUtil {
     public static Map<String, String> uploadImages(HttpServletRequest request, String dir, Part part, String baseImageDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         //String bashdir = baseImageDir;// 根路径
         FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
+        byte[] b = new byte[1024 * 1024];
         String urlImg = "";
         if (part.getContentType() == null) {
             valsMap.put(part.getName(), request.getParameter(part.getName()));
@@ -169,19 +169,19 @@ public class UploadFileUtil {
                 //文件路径，文件类型
                 urlImg =   dir + File.separator + newfileName;
             } catch (IOException e) {
-                logger.info(UPLOAD_FAIL);
+                logger.info(UPLOAD_FAIL,e);
             }
             finally {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    logger.info("out stream close exception");
+                    logger.info("out stream close exception {}",e);
                 }
 
             }
         }
         valsMap.put(UPLOAD_IMG_URL, urlImg);
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
 
         return valsMap;
 
@@ -190,10 +190,10 @@ public class UploadFileUtil {
     public static Map<String, String> uploadVideo(HttpServletRequest request, String dir, String baseVideoDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         //String bashdir = baseVideoDir;// 上传文件根路径
         FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
+        byte[] b = new byte[1024 * 1024];
         Collection<Part> parts;
 
         String videoUrl = "";
@@ -235,16 +235,16 @@ public class UploadFileUtil {
                 }
             }
             valsMap.put(UPLOAD_VIDEO_URL, videoUrl);
-            valsMap.put(MAP_KEY, mapValue);
+            valsMap.put(MAP_KEY, MAP_VALUE);
         } catch (Exception e) {
-            valsMap.put(MAP_KEY, UPLOAD_VEDIO_FAIL);
+            valsMap.put(MAP_KEY, UPLOAD_VIDEO_FAIL);
             valsMap.put(MAP_KEY_MSG, UPLOAD_FAIL);
-            logger.info(UPLOAD_FAIL);
+            logger.info(UPLOAD_FAIL,e);
         } finally {
             try {
                 out.close();
             } catch (IOException e) {
-                logger.info("out stream close exception");
+                logger.info("out stream close exception {}",e);
             }
 
         }
