@@ -198,21 +198,24 @@ public class AdController extends BaseController {
         		adEgainDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
         		adEgainDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
         	}
+        	
     		 Result<Set<String>> rs= adViewService.getAdviews(id.toString());
-    		 if(isSuccess(rs)){
-    			 if(!rs.getModel().isEmpty()){
-    				 boolean flag=false;
-    				 for (String str : rs.getModel()) {
-            			 flag=memberId.toString().equals(str);
-    				} 
-    				if(!flag){
-    					adViewService.setAdView(id.toString(), memberId.toString());
-    				}
-    			 }else{
-    				 adViewService.setAdView(id.toString(), memberId.toString());
-    			 }
-        		
+    		 
+    		 if(!isSuccess(rs)){
+    			 return successCreated(rs.getRet());
         	 }
+    		 
+    		 if(!rs.getModel().isEmpty()){
+				boolean flag = false;
+				for (String str : rs.getModel()) {
+					flag = memberId.toString().equals(str);
+				}
+				if (!flag) {
+					adViewService.setAdView(id.toString(), memberId.toString());
+				}
+			 }else{
+				 adViewService.setAdView(id.toString(), memberId.toString());
+			 }
         	 
         }
        
@@ -247,28 +250,33 @@ public class AdController extends BaseController {
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
 		List<UserTopDTO> user = new ArrayList<>();
 		if(isSuccess(member)){
-			List<PointPoolDTO> top3 = member.getModel();
-			if(!top3.isEmpty()){
-				List<Long> memberIds=new ArrayList<>();
-				for (PointPoolDTO pointPoolDTO : top3) {
-					memberIds.add(pointPoolDTO.getMemberId());
-				}
-				Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
-				if(isSuccess(resultUser)){
-					List<MemberDTO> listUser=resultUser.getModel();
-					for (MemberDTO memberDTO : listUser) {
-						for (PointPoolDTO pointPoolDTO : top3) {
-							if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
-								UserTopDTO userTop = new UserTopDTO();
-								userTop.setMoney(pointPoolDTO.getPoint());
-								userTop.setHeadimg(memberDTO.getHeadimg());
-								userTop.setRegionPath(memberDTO.getRegionPath());
-								userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
-								user.add(userTop);
-							}
-						}
-						
-					}
+			return successCreated(member.getRet());
+		}
+		List<PointPoolDTO> top3 = member.getModel();
+		
+		if(top3.isEmpty()){
+			return successGet(user);
+		}
+		List<Long> memberIds=new ArrayList<>();
+		for (PointPoolDTO pointPoolDTO : top3) {
+			memberIds.add(pointPoolDTO.getMemberId());
+		}
+		
+		Result<List<MemberDTO>> resultUser=memberService.getMemberByIds(memberIds);
+		
+		if(!isSuccess(resultUser)){
+			return successCreated(resultUser.getRet());
+		}
+		List<MemberDTO> listUser=resultUser.getModel();
+		for (MemberDTO memberDTO : listUser) {
+			for (PointPoolDTO pointPoolDTO : top3) {
+				if(memberDTO.getId().intValue()==pointPoolDTO.getMemberId().intValue()){
+					UserTopDTO userTop = new UserTopDTO();
+					userTop.setMoney(pointPoolDTO.getPoint());
+					userTop.setHeadimg(memberDTO.getHeadimg());
+					userTop.setRegionPath(memberDTO.getRegionPath());
+					userTop.setMobile(memberDTO.getMobile().replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2"));
+					user.add(userTop);
 				}
 			}
 			
@@ -312,16 +320,20 @@ public class AdController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectAdByTitle", method = RequestMethod.GET)
 	public Result<Page<AdSolrDTO>> selectListByMember(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdSolrParam adSolrParam) {
+		
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		List<Long> merchantIds = fansMerchantService.findMerchant(memberId);
 		Result<UserDTO> userRS = memberService.findMemberInfo(memberId);
+		
 		AdsolrFindParam findParam = new AdsolrFindParam();
 		findParam.setAdSolrParam(adSolrParam);
 		findParam.setMerchantIds(merchantIds);
 		findParam.setMemberId(memberId);
+		
 		if (userRS.getModel().getRegionPath() != null) {
 			findParam.setRegionPath(userRS.getModel().getRegionPath());
 		}
+		
 		return adService.queryAdByTitle(findParam);
 	}
 
@@ -335,10 +347,11 @@ public class AdController extends BaseController {
 			Long memberId = userRs.getModel().getMemberId();
 			String userNum = userRs.getModel().getUserNum();
 			Result<Boolean> result = fansMerchantService.isFansMerchant(merchantId, memberId);
-			if (isSuccess(result)) {
-				if (!result.getModel()) {
-					fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
-				}
+			if (!isSuccess(result)) {
+				return successCreated(result.getRet());
+			}
+			if (!result.getModel()) {
+				fansMerchantService.saveFansMerchant(merchantId, memberId, FansMerchantChannelEnum.REDPACKET);
 			}
 			return adService.getRedPacket(merchantId, memberId, userNum);
 		}else {
@@ -432,24 +445,27 @@ public class AdController extends BaseController {
 		if (DateUtil.smsIsOverdue(verifyCodeDTO.getGmtCreate(), memberApiConfig.getSmsValidMinutes())) {
 			return successGet(ResultCode.VERIFY_SMS_CODE_OVERTIME);
 		}
+		
 		registerRealParam.setAccount(param.getAccount());
 		registerRealParam.setPwd(param.getPwd());
 		Result rs = memberService.register(registerRealParam);
-		if (isSuccess(rs)) { // 注册成功，领取红包
-			Result<UserRedPacketDTO> userRs = memberService.isRegister(param.getAccount());
-			Long memberId = userRs.getModel().getMemberId();
-			String userNum = userRs.getModel().getUserNum();
-			Result<PraisePointDTO> rsPoint = adService.getRedPacket(param.getMerchantId(), memberId, userNum);
-			Result<Boolean> result = fansMerchantService.isFansMerchant(param.getMerchantId(), memberId);
-			if (isSuccess(result)) {
-				if (!result.getModel()) {
-					fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
-				}
-			}
-			return rsPoint;
-		} else {
-			return successGet(ResultCode.FAIL);
+		
+		if (!isSuccess(rs)) { 
+			return successGet(rs.getRet());
 		}
+		// 注册成功，领取红包
+		Result<UserRedPacketDTO> userRs = memberService.isRegister(param.getAccount());
+		Long memberId = userRs.getModel().getMemberId();
+		String userNum = userRs.getModel().getUserNum();
+		Result<PraisePointDTO> rsPoint = adService.getRedPacket(param.getMerchantId(), memberId, userNum);
+		Result<Boolean> result = fansMerchantService.isFansMerchant(param.getMerchantId(), memberId);
+		if (!isSuccess(result)) {
+			return successGet(result.getRet());
+		}
+		if (!result.getModel()) {
+			fansMerchantService.saveFansMerchant(param.getMerchantId(), memberId, FansMerchantChannelEnum.REDPACKET);
+		}
+		return rsPoint;
 
 	}
 
