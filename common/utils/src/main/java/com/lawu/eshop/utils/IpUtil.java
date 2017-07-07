@@ -18,6 +18,8 @@ public class IpUtil {
 
     private static final String UNKNOWN = "unknown";
 
+    private static final String LOC_IP = "127.0.0.1";
+
     private IpUtil(){}
 
     /**
@@ -39,7 +41,7 @@ public class IpUtil {
         if (ipAddress == null || ipAddress.length() == 0
                 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getRemoteAddr();
-            if (ipAddress.equals("127.0.0.1")) {
+            if (ipAddress.equals(LOC_IP)) {
                 // 根据网卡取本机配置的IP
                 InetAddress inet = null;
                 try {
@@ -51,8 +53,8 @@ public class IpUtil {
             }
         }
         // 对于通过多个代理的情况，第一个IP为客户端真实IP,多个IP按照','分割
-        if (ipAddress != null && ipAddress.length() > 15 && ipAddress.indexOf(",") > 0) { // "***.***.***.***".length()
-            ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+        if (ipAddress != null && ipAddress.length() > 15 && ipAddress.indexOf(',') > 0) { // "***.***.***.***".length()
+            ipAddress = ipAddress.substring(0, ipAddress.indexOf(','));
         }
         return ipAddress;
     }
@@ -66,9 +68,9 @@ public class IpUtil {
     public static long ipToLong(String strIp) {
         long[] ip = new long[4];
         // 先找到IP地址字符串中.的位置
-        int position1 = strIp.indexOf(".");
-        int position2 = strIp.indexOf(".", position1 + 1);
-        int position3 = strIp.indexOf(".", position2 + 1);
+        int position1 = strIp.indexOf('.');
+        int position2 = strIp.indexOf('.', position1 + 1);
+        int position3 = strIp.indexOf('.', position2 + 1);
         // 将每个.之间的字符串转换成整型
         ip[0] = Long.parseLong(strIp.substring(0, position1));
         ip[1] = Long.parseLong(strIp.substring(position1 + 1, position2));
