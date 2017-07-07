@@ -33,29 +33,14 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 	public Map<String, BigDecimal> getAdCommissionPropertys() {
 		Result result = propertyService.getValue(PropertyType.ad_commission_0);
 		String ad_commission_0 = result.getModel().toString();
-		if ("".equals(ad_commission_0)) {
-			ad_commission_0 = PropertyType.ad_commission_0_default;
-		}
 		result = propertyService.getValue(PropertyType.ad_commission_1);
 		String ad_commission_1 = result.getModel().toString();
-		if ("".equals(ad_commission_1)) {
-			ad_commission_1 = PropertyType.ad_commission_1_default;
-		}
 		result = propertyService.getValue(PropertyType.ad_commission_2);
 		String ad_commission_2 = result.getModel().toString();
-		if ("".equals(ad_commission_2)) {
-			ad_commission_2 = PropertyType.ad_commission_2_default;
-		}
 		result = propertyService.getValue(PropertyType.ad_commission_3);
 		String ad_commission_3 = result.getModel().toString();
-		if ("".equals(ad_commission_3)) {
-			ad_commission_3 = PropertyType.ad_commission_3_default;
-		}
 		result = propertyService.getValue(PropertyType.love_account_scale);
 		String love_account_scale = result.getModel().toString();
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
 		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 
@@ -75,30 +60,15 @@ public class CommonPropertyServiceImpl implements CommonPropertyService {
 	public Map<String, BigDecimal> getSaleCommissionPropertys() {
 		Result result = propertyService.getValue(PropertyType.sale_commission_1);
 		String sale_commission_1 = result.getModel().toString();
-		if ("".equals(sale_commission_1)) {
-			sale_commission_1 = PropertyType.sale_commission_1_default;
-		}
 		result = propertyService.getValue(PropertyType.sale_commission_2);
 		String sale_commission_2 = result.getModel().toString();
-		if ("".equals(sale_commission_2)) {
-			sale_commission_2 = PropertyType.sale_commission_2_default;
-		}
 		result = propertyService.getValue(PropertyType.sale_commission_3);
 		String sale_commission_3 = result.getModel().toString();
-		if ("".equals(sale_commission_3)) {
-			sale_commission_3 = PropertyType.sale_commission_3_default;
-		}
 		result = propertyService.getValue(PropertyType.sale_commission_add_scope);
 		String sale_commission_add_scope = result.getModel().toString();
-		if ("".equals(sale_commission_add_scope)) {
-			sale_commission_add_scope = PropertyType.sale_commission_add_scope_default;
-		}
 
 		result = propertyService.getValue(PropertyType.love_account_scale);
 		String love_account_scale = result.getModel().toString();
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
 		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 

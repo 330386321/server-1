@@ -73,9 +73,6 @@ public class RechargeController extends BaseController {
 				name = PropertyType.MERCHANT_THIRD_PAY_POINT;
 			}
 			value = propertySrevice.getValue(name);
-			if ("".equals(value)) {
-				value = PropertyType.THIRD_PAY_POINT_DEFAULT;
-			}
 		}
 		param.setRechargeScale(value);
 		

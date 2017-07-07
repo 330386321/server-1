@@ -296,9 +296,6 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		BusinessDepositDO deposit = businessDepositDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getId()));
 		int diffDays = DateUtil.daysOfTwo(deposit.getGmtModified(), new Date());
 		String sysDays = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
-		if ("".equals(sysDays)) {
-			sysDays = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
-		}
 		if (diffDays <= Integer.parseInt(sysDays)) {
 			return ResultCode.DEPOSIT_IN_SYSTEM_DAYS;
 		}

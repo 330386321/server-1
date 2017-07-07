@@ -67,9 +67,6 @@ public class BusinessDepositController extends BaseController {
     	}
 		
 		String deposit = propertyService.getValue(PropertyType.MERCHANT_BONT);
-		if ("".equals(deposit)) {
-			deposit = PropertyType.MERCHANT_BONT_DEFAULT;
-		}
 		param.setDeposit(deposit);
 		BusinessDepositInitDTO dto = businessDepositService.save(param);
 		return successCreated(dto);
@@ -186,9 +183,6 @@ public class BusinessDepositController extends BaseController {
 	@RequestMapping(value = "getDepositValue", method = RequestMethod.GET)
 	public Result getDepositValue() {
 		String deposit = propertyService.getValue(PropertyType.MERCHANT_BONT);
-		if ("".equals(deposit)) {
-			deposit = PropertyType.MERCHANT_BONT_DEFAULT;
-		}
 		return successCreated(deposit);
 
 	}

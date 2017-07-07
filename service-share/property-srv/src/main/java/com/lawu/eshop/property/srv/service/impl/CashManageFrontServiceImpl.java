@@ -65,9 +65,6 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		
 		// 校验最小金额
 		String minMoney = propertyService.getValue(PropertyType.CASH_MIN_MONEY);
-		if ("".equals(minMoney)) {
-			minMoney = PropertyType.CASH_MIN_MONEY_DEFAULT;
-		}
 		double dCashMoney = Double.parseDouble(cash.getCashMoney());
 		if (dCashMoney < Double.parseDouble(minMoney)) {
 			return ResultCode.CASH_MORE_NUM_MAX_MONEY_ERROR;
@@ -93,17 +90,11 @@ public class CashManageFrontServiceImpl implements CashManageFrontService {
 		int count = withdrawCashDOMapper.countByExample(example);
 		if (count > 0) {
 			String minusMoney = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
-			if ("".equals(minusMoney)) {
-				minusMoney = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
-			}
 			dCashMoney = dCashMoney - Double.parseDouble(minusMoney);
 			withdrawCashDO.setRemark("自然月提现次数大于1次后，提现金额需要扣除" + minusMoney + "元");
 		}
 
 		String currentScale = propertyService.getValue(PropertyType.CASH_SCALE);
-		if ("".equals(currentScale)) {
-			currentScale = PropertyType.CASH_SCALE_DEFAULT;
-		}
 		double dCurrentScale = Double.parseDouble(currentScale);
 		double money = dCashMoney * dCurrentScale;
 

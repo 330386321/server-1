@@ -35,7 +35,61 @@ public class PropertyServiceImpl implements PropertyService {
 		example.createCriteria().andNameEqualTo(key);
 		List<PropertyDO> list = propertyDOMapper.selectByExample(example);
 		if (list == null || list.isEmpty()) {
-			return PropertyType.MERCHANT_BONT_DEFAULT;
+			String defaultValue = "";
+
+			switch (key) {
+			case PropertyType.CASH_SCALE:
+				defaultValue = PropertyType.CASH_SCALE_DEFAULT;
+				break;
+			case PropertyType.CASH_GREATER_ONE_MINUS_MONEY:
+				defaultValue = PropertyType.CASH_GREATER_ONE_MINUS_MONEY_DEFAULT;
+				break;
+			case PropertyType.CASH_MIN_MONEY:
+				defaultValue = PropertyType.CASH_MIN_MONEY_DEFAULT;
+				break;
+			case PropertyType.MEMBER_THIRD_PAY_POINT:
+				defaultValue = PropertyType.MEMBER_THIRD_PAY_POINT_DEFAULT;
+				break;
+			case PropertyType.MERCHANT_BONT:
+				defaultValue = PropertyType.MERCHANT_BONT_DEFAULT;
+				break;
+			case PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS:
+				defaultValue = PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS_DEFAULT;
+				break;
+			case PropertyType.DEPOSIT_REFUND_DIFF_DAYS:
+				defaultValue = PropertyType.DEPOSIT_REFUND_DIFF_DAYS_DEFAULT;
+				break;
+			case PropertyType.ad_commission_0:
+				defaultValue = PropertyType.ad_commission_0_default;
+				break;
+			case PropertyType.ad_commission_1:
+				defaultValue = PropertyType.ad_commission_1_default;
+				break;
+			case PropertyType.ad_commission_2:
+				defaultValue = PropertyType.ad_commission_2_default;
+				break;
+			case PropertyType.ad_commission_3:
+				defaultValue = PropertyType.ad_commission_3_default;
+				break;
+			case PropertyType.love_account_scale:
+				defaultValue = PropertyType.love_account_scale_default;
+				break;
+			case PropertyType.sale_commission_1:
+				defaultValue = PropertyType.sale_commission_1_default;
+				break;
+			case PropertyType.sale_commission_2:
+				defaultValue = PropertyType.sale_commission_2_default;
+				break;
+			case PropertyType.sale_commission_3:
+				defaultValue = PropertyType.sale_commission_3_default;
+				break;
+			case PropertyType.sale_commission_add_scope:
+				defaultValue = PropertyType.sale_commission_add_scope_default;
+				break;
+			default:
+				break;
+			}
+			return defaultValue;
 		}
 		return list.get(0).getValue();
 	}

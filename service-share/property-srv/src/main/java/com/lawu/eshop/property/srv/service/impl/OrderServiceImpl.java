@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
 		 */
 		FreezeDOExample freezeDOExample = new FreezeDOExample();
 		FreezeDOExample.Criteria criteria = freezeDOExample.createCriteria();
-		criteria.andBizIdEqualTo(Long.valueOf(param.getBizId()));
+		criteria.andBizIdEqualTo(Long.valueOf(param.getBizId())).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val);
 		int count = freezeDOMapper.countByExample(freezeDOExample);
 		if (count > 0) {
 			return ResultCode.SUCCESS;
@@ -197,9 +197,6 @@ public class OrderServiceImpl implements OrderService {
 		freezeDO.setStatus(FreezeStatusEnum.FREEZE.val);
 		freezeDO.setGmtCreate(new Date());
 		String days = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
-		if ("".equals(days)) {
-			days = PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS_DEFAULT;
-		}
 		freezeDO.setDays(Integer.valueOf(days));
 		freezeDOMapper.insertSelective(freezeDO);
 

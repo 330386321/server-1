@@ -85,9 +85,6 @@ public class AlipayController extends BaseController {
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
 			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			String bond = bondRet.getModel().toString();
-			if ("".equals(bond)) {
-				bond = PropertyType.MERCHANT_BONT_DEFAULT;
-			}
 			aparam.setTotalAmount(bond);
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
@@ -122,9 +119,6 @@ public class AlipayController extends BaseController {
 		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
 			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			String bond = bondRet.getModel().toString();
-			if ("".equals(bond)) {
-				bond = PropertyType.MERCHANT_BONT_DEFAULT;
-			}
 			aparam.setTotalAmount(bond);
 		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
 				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {

@@ -64,13 +64,7 @@ public class CommissionServiceImpl implements CommissionService {
 		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
 
 		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
-		if ("".equals(ad_commission_0)) {
-			ad_commission_0 = PropertyType.ad_commission_0_default;
-		}
 		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
 		double d_love_account_scale = Double.parseDouble(love_account_scale);
 		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
 

@@ -26,13 +26,7 @@ public class CommissionUtilServiceImpl implements CommissionUtilService{
 	@Override
 	public CommissionUtilBO getClickAdMine(BigDecimal clickMoney) {
 		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
-		if ("".equals(ad_commission_0)) {
-			ad_commission_0 = PropertyType.ad_commission_0_default;
-		}
 		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
 		double d_acture_in = 1 - Double.parseDouble(love_account_scale); // 用户实际进账比例：1-爱心账户比例
 		
 		BigDecimal b_ad_commission_0 = new BigDecimal(ad_commission_0);
@@ -59,9 +53,6 @@ public class CommissionUtilServiceImpl implements CommissionUtilService{
 	@Override
 	public CommissionUtilBO getIncomeMoney(BigDecimal clickMoney) {
 		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
-		if ("".equals(love_account_scale)) {
-			love_account_scale = PropertyType.love_account_scale_default;
-		}
 		double d_acture_in = 1 - Double.parseDouble(love_account_scale); // 用户实际进账比例：1-爱心账户比例
 		
 		BigDecimal b_love_account_scale = new BigDecimal(love_account_scale);
