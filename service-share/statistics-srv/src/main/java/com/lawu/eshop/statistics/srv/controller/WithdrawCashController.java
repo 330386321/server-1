@@ -93,8 +93,8 @@ public class WithdrawCashController extends BaseController {
 	
 	/**
 	 * 
-	 * @param date 时间条件
-	 * @param isTotal 0-区分商家用户1-平台总提现
+	 * @param bdate 时间条件
+	 * @param edate
 	 * @return
 	 * @author yangqh
 	 * @date 2017年7月3日 上午10:28:40

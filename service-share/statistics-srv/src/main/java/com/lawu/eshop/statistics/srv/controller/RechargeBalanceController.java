@@ -93,8 +93,8 @@ public class RechargeBalanceController extends BaseController {
 	
 	/**
 	 * 
-	 * @param date
-	 * @param isTotal
+	 * @param bdate
+	 * @param edate
 	 * @return
 	 * @author yangqh
 	 * @date 2017年7月3日 下午3:22:46
