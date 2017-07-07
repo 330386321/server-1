@@ -18,8 +18,7 @@ public class IdWorker {
     private static long sequence = 0L;
     private static long lastTimestamp = -1L;
 
-    @SuppressWarnings("static-access")
-    public IdWorker(long workerId, long datacenterId) {
+    private IdWorker(long workerId, long datacenterId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
@@ -30,7 +29,7 @@ public class IdWorker {
         IdWorker.datacenterId = datacenterId;
     }
 
-    public synchronized static long nextId() {
+    public static synchronized long nextId() {
         long timestamp = timeGen();
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
@@ -49,7 +48,7 @@ public class IdWorker {
         return ((timestamp - TWEPOCH) << TIMESTAMP_LEFT_SHIFT) | (datacenterId << DATACENTER_ID_SHIFT) | (workerId << WORKER_ID_SHIFT) | sequence;
     }
 
-    protected static long tilNextMillis(long lastTimestamp) {
+    private static long tilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
             timestamp = timeGen();
@@ -57,7 +56,7 @@ public class IdWorker {
         return timestamp;
     }
 
-    protected static long timeGen() {
+    private static long timeGen() {
         return System.currentTimeMillis();
     }
 
