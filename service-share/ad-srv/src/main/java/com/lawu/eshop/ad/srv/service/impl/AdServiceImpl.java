@@ -698,10 +698,7 @@ public class AdServiceImpl implements AdService {
 		PointPoolDOExample example=new PointPoolDOExample();
 		example.createCriteria().andMemberIdEqualTo(memberId).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val).andAdIdEqualTo(adDO.getId());
 		List<PointPoolDO> list=pointPoolDOMapper.selectByExample(example);
-		if(list.isEmpty())
-			return false;
-		else
-			return true;
+		return list.isEmpty()?false:true;
 	}
 
 	@Override
@@ -910,7 +907,7 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public RedPacketInfoBO getRedPacketInfo(Long merchantId) { 
 		AdDOExample example =new AdDOExample();
-		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeEqualTo(AdStatusEnum.AD_STATUS_OUT.val);
+		example.createCriteria().andMerchantIdEqualTo(merchantId).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val).andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val);
 		List<AdDO>  list=adDOMapper.selectByExample(example);
 		RedPacketInfoBO redPacketInfoBO=new RedPacketInfoBO();
 		if(!list.isEmpty()){ 
@@ -920,10 +917,8 @@ public class AdServiceImpl implements AdService {
 			ppexample.setOrderByClause("point desc");
 			List<PointPoolDO>  ppList=pointPoolDOMapper.selectByExample(ppexample);
 			redPacketInfoBO.setPoint(ppList.get(0).getPoint());
-			return redPacketInfoBO;
-		}else{
-			return null;
 		}
+		return redPacketInfoBO;
 			
 	}
 	
@@ -933,11 +928,7 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andMerchantIdEqualTo(merchantId)
 		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		long count=adDOMapper.countByExample(example);
-		if(count>0){
-			return false;
-		}else{
-			return true;
-		}
+		return count>0?false:true;
 		
 	}
 
@@ -947,11 +938,7 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andMerchantIdEqualTo(merchantId)
 		.andTypeEqualTo(AdTypeEnum.AD_TYPE_PACKET.val).andStatusEqualTo(AdStatusEnum.AD_STATUS_ADD.val);
 		long count=adDOMapper.countByExample(example);
-		if(count>0){
-			return true;
-		}else{
-			return false;
-		}
+		return count>0?true:false;
 	}
 
 	@Override

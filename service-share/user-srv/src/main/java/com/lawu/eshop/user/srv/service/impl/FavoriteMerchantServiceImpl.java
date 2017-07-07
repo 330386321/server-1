@@ -118,8 +118,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         List<FavoriteMerchantDOView> list=favoriteMerchantDOMapperExtend.selectFavoriteMerchantByRowbounds(view, rowBounds);
         List<FavoriteMerchantBO> listBO=new ArrayList<>();
         for (FavoriteMerchantDOView favoriteMerchantDOView : list) {
-        	FavoriteMerchantBO favoriteMerchantBO =new FavoriteMerchantBO();
-        	favoriteMerchantBO=FavoriteMerchantConverter.convertListBO(favoriteMerchantDOView);
+        	FavoriteMerchantBO favoriteMerchantBO=FavoriteMerchantConverter.convertListBO(favoriteMerchantDOView);
     		if(pageQuery.getLongitude()!=null && pageQuery.getLatitude()!=null){
     			 int distance= DistanceUtil.getDistance(pageQuery.getLongitude(), pageQuery.getLatitude(), 
     					 favoriteMerchantDOView.getLongitude().doubleValue(),  favoriteMerchantDOView.getLatitude().doubleValue());
@@ -134,7 +133,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
         	}
         	listBO.add(favoriteMerchantBO);
 		}
-        Page<FavoriteMerchantBO> page = new Page<FavoriteMerchantBO>();
+        Page<FavoriteMerchantBO> page = new Page<>();
         Long count=favoriteMerchantDOMapper.countByExample(exmple);
         page.setTotalCount(count.intValue());
         page.setCurrentPage(pageQuery.getCurrentPage());
@@ -144,14 +143,12 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
 	@Override
 	public Boolean get(Long memberId, FavoriteStoreParam pageQuery) {
+		
 		FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
     	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val);
     	long count=favoriteMerchantDOMapper.countByExample(exmple);
-    	if(count>0){
-    		return true;
-    	}else{
-    		return false;
-    	}
+    	
+    	return count>0?true:false;
     	
 		
 	}
