@@ -47,6 +47,7 @@ public class FavoriteMerchantController extends BaseController{
 	@Resource
 	private ProductService productService;
 
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "商家收藏", notes = "商家收藏[2014]（张荣成）", httpMethod = "PUT")
@@ -87,6 +88,7 @@ public class FavoriteMerchantController extends BaseController{
     	return successGet(newPage);
     }
 	
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-03-29", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "取消商家收藏", notes = "取消商家收藏[]（张荣成）", httpMethod = "DELETE")
@@ -96,6 +98,9 @@ public class FavoriteMerchantController extends BaseController{
 			@ModelAttribute @ApiParam(value = "查询信息") FavoriteStoreParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		Result rs = favoriteMerchantService.remove(param,memberId);
+		if(!isSuccess(rs)){
+			return successCreated(rs.getRet());
+		}
 		return successDelete();
 	}
 
