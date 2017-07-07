@@ -22,6 +22,9 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 
 /**
  * 购物订单服务接口
@@ -90,11 +93,13 @@ public interface ShoppingOrderService {
 	/**
 	 * 取消购物订单
 	 * 
+	 * @param memberId
+	 *            会员id(可以为空,为空不处理鉴权)
 	 * @param id
 	 *            购物订单id
 	 * @return
 	 */
-	int cancelOrder(Long id);
+	void cancelOrder(Long memberId, Long id) throws DataNotExistException, IllegalOperationException, OrderNotCanceledException;
 
 	/**
 	 * 删除购物订单
@@ -123,8 +128,7 @@ public interface ShoppingOrderService {
 	int tradingSuccess(Long id, boolean isAutomaticReceipt);
 
 	/**
-	 * 买家申请退款
-	 * 修改订单项状态为待商家确认
+	 * 买家申请退款 修改订单项状态为待商家确认
 	 * 
 	 * @param shoppingOrderitemId
 	 *            购物订单项id
@@ -155,83 +159,85 @@ public interface ShoppingOrderService {
 	Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds);
 
 	/**
-	 * 减少产品库存成功回调 更改订单的状态为待支付状态
-	 * 删除对应的购物车记录
+	 * 减少产品库存成功回调 更改订单的状态为待支付状态 删除对应的购物车记录
 	 * 
 	 * @param id
 	 *            购物订单id
 	 * @author Sunny
 	 */
 	void minusInventorySuccess(Long id, ShoppingOrderCreateOrderReply reply);
-	
+
 	/**
 	 * 更新订单信息
+	 * 
 	 * @param id
-	 * 			     购物订单id
+	 *            购物订单id
 	 * @param param
 	 *            查询参数
 	 * @return
 	 */
 	int updateInformation(Long id, ShoppingOrderUpdateInfomationParam param);
-	
+
 	/**
-	 * 检查数据库中超时评论的订单
-	 * 执行自动评论
+	 * 检查数据库中超时评论的订单 执行自动评论
 	 * 
 	 * @author Sunny
 	 */
 	void executetAutoComment();
-	
+
 	/**
 	 * 根据商家的id查询商家是否有进行中的订单
 	 * 
-	 * @param merchantId 商家的id
+	 * @param merchantId
+	 *            商家的id
 	 * @return
 	 * @author Sunny
 	 */
 	ShoppingOrderIsNoOnGoingOrderBO isNoOnGoingOrder(Long merchantId);
-	
+
 	/**
 	 * 根据购物订单项查询订单以及订单项
 	 * 
-	 * @param ShoppingOrderItemId 购物订单项id
-	 * @param isAll 是否查找全部的订单项 
+	 * @param ShoppingOrderItemId
+	 *            购物订单项id
+	 * @param isAll
+	 *            是否查找全部的订单项
 	 * @return
 	 * @author Sunny
 	 */
 	ShoppingOrderExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId);
-	
+
 	/**
 	 * 自动取消为付款的订单
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoCancelOrder();
-	
+
 	/**
 	 * 自动提醒发货
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoRemindShipments();
-	
+
 	/**
 	 * 自动收货
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoReceipt();
-	
+
 	/**
-	 * 查询各种订单状态的数量
-	 * To Member
+	 * 查询各种订单状态的数量 To Member
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	ShoppingOrderNumberOfOrderStatusBO numberOfOrderStartus(Long memberId);
-	
+
 	/**
 	 * 查询未计算提成订单
 	 * 
@@ -239,26 +245,27 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	List<ShoppingOrderBO> commissionShoppingOrder();
-	
+
 	/**
 	 * 根据订单id更新购物订单的提成状态和提成时间
 	 * 
-	 * @param ids 购物订单id集合
+	 * @param ids
+	 *            购物订单id集合
 	 * @return
 	 * @author Sunny
 	 */
 	int updateCommissionStatus(List<Long> ids);
-	
+
 	/**
-	 * 查询各种订单状态的数量
-	 * To Merchant
+	 * 查询各种订单状态的数量 To Merchant
 	 * 
-	 * @param merchantId 商家id
+	 * @param merchantId
+	 *            商家id
 	 * @return
 	 * @author Sunny
 	 */
 	ShoppingOrderNumberOfOrderStatusForMerchantBO numberOfOrderStartusByMerchant(Long merchantId);
-	
+
 	/**
 	 * 统计商家的交易数据
 	 * 
@@ -267,7 +274,7 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	ReportRiseRateDTO selectByTransactionData(ReportDataParam param);
-	
+
 	/**
 	 * 粉丝数据-消费转化
 	 * 
@@ -276,13 +283,12 @@ public interface ShoppingOrderService {
 	 * @author Sunny
 	 */
 	List<ReportRiseRerouceDTO> fansSaleTransform(ReportDataParam param);
-	
+
 	/**
-	 * 订单收货之后
-	 * 如果超过退款申请时间，直接付款给商家
+	 * 订单收货之后 如果超过退款申请时间，直接付款给商家
 	 * 
 	 * @author Sunny
 	 */
 	void executeAutoPaymentsToMerchant();
-	
+
 }

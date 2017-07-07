@@ -61,25 +61,18 @@ import util.UploadFileUtil;
 @RestController
 @RequestMapping(value = "shoppingOrder/")
 public class ShoppingOrderController extends BaseController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderController.class);
-	
+
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
-	
-    @Autowired
-    private PropertyInfoService propertyInfoService;
 
-    @Autowired
+	@Autowired
+	private PropertyInfoService propertyInfoService;
+
+	@Autowired
 	private MemberApiConfig memberApiConfig;
-	
-    /**
-	 * 分页查询购物订单
-	 * 
-	 * @param token
-	 * @param param
-	 * @return
-	 */
+
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "分页查询购物订单", notes = "根据订单状态和是否评论分页查询购物订单。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -158,19 +151,14 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1002|1003|4002]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1100|1024|4002]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
-	public Result cancelOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-		Result resultShoppingOrderExpressDTO = shoppingOrderService.cancelOrder(id);
-
-		if (!isSuccess(resultShoppingOrderExpressDTO)) {
-			return successCreated(resultShoppingOrderExpressDTO.getRet());
-		}
-
-		return successCreated();
+	public Result cancelOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "购物订单id", required = true) Long id) {
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.cancelOrder(memberId, id);
+		return successCreated(result);
 	}
 
 	/**
@@ -234,45 +222,45 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.POST)
-	public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required= true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
-		
+	public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required = true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
+
 		String message = validate(bindingResult);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
-		
-    	HttpServletRequest request = getRequest();
-        StringBuilder headImg = new StringBuilder();
-        Collection<Part> parts = null;
-        try {
-           parts = request.getParts();
-        } catch (IOException | ServletException e) {
-        	logger.error("读取上传文件异常", e);
-            return successCreated(e.getMessage());
-        }
-        if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
-            for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_ORDER, part, memberApiConfig.getImageUploadUrl());
-                String flag = map.get("resultFlag");
-                if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
-                    //有图片上传成功返回,拼接图片url
-                    String imgUrl = map.get("imgUrl");
-                    if (headImg.length() > 0) {
-                    	headImg.append(",");
-                    }
-                    headImg.append(imgUrl);
-                } else {
-                    return successCreated(Integer.valueOf(flag));
-                }
-            }
-        }
-    	
-        ShoppingOrderRequestRefundParam shoppingOrderRequestRefundParam = new ShoppingOrderRequestRefundParam();
-        shoppingOrderRequestRefundParam.setDescription(param.getDescription());
-        shoppingOrderRequestRefundParam.setReason(param.getReason());
-        shoppingOrderRequestRefundParam.setType(param.getType());
-        shoppingOrderRequestRefundParam.setVoucherPicture(headImg.toString());
-        
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
+
+		HttpServletRequest request = getRequest();
+		StringBuilder headImg = new StringBuilder();
+		Collection<Part> parts = null;
+		try {
+			parts = request.getParts();
+		} catch (IOException | ServletException e) {
+			logger.error("读取上传文件异常", e);
+			return successCreated(e.getMessage());
+		}
+		if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
+			for (Part part : parts) {
+				Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_ORDER, part, memberApiConfig.getImageUploadUrl());
+				String flag = map.get("resultFlag");
+				if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
+					// 有图片上传成功返回,拼接图片url
+					String imgUrl = map.get("imgUrl");
+					if (headImg.length() > 0) {
+						headImg.append(",");
+					}
+					headImg.append(imgUrl);
+				} else {
+					return successCreated(Integer.valueOf(flag));
+				}
+			}
+		}
+
+		ShoppingOrderRequestRefundParam shoppingOrderRequestRefundParam = new ShoppingOrderRequestRefundParam();
+		shoppingOrderRequestRefundParam.setDescription(param.getDescription());
+		shoppingOrderRequestRefundParam.setReason(param.getReason());
+		shoppingOrderRequestRefundParam.setType(param.getType());
+		shoppingOrderRequestRefundParam.setVoucherPicture(headImg.toString());
+
 		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, shoppingOrderRequestRefundParam);
 
 		if (!isSuccess(result)) {
@@ -303,7 +291,7 @@ public class ShoppingOrderController extends BaseController {
 		}
 		return successGet(result.getModel());
 	}
-	
+
 	/**
 	 * 订单支付页面
 	 * 
@@ -315,27 +303,27 @@ public class ShoppingOrderController extends BaseController {
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderPaymentForeignDTO> orderPayment(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,  @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-		
+	public Result<ShoppingOrderPaymentForeignDTO> orderPayment(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+
 		Result<ShoppingOrderPaymentDTO> result = shoppingOrderService.orderPayment(id);
-		
+
 		if (!isSuccess(result)) {
 			return successGet(result.getRet());
 		}
-		
+
 		String memberNum = UserUtil.getCurrentUserNum(getRequest());
-		
+
 		Result<PropertyBalanceDTO> propertyBalanceDTOResult = propertyInfoService.getPropertyBalance(memberNum);
 		if (!isSuccess(propertyBalanceDTOResult)) {
 			return successGet(propertyBalanceDTOResult.getRet());
 		}
-		
+
 		ShoppingOrderPaymentForeignDTO shoppingOrderPaymentForeignDTO = new ShoppingOrderPaymentForeignDTO();
 		shoppingOrderPaymentForeignDTO.setId(result.getModel().getId());
 		shoppingOrderPaymentForeignDTO.setOrderNum(result.getModel().getOrderNum());
 		shoppingOrderPaymentForeignDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
 		shoppingOrderPaymentForeignDTO.setBalance(propertyBalanceDTOResult.getModel().getBalance());
-		
+
 		return successGet(shoppingOrderPaymentForeignDTO);
 	}
 }

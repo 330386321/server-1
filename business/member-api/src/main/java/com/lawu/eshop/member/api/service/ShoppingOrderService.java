@@ -28,7 +28,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
  * @author Sunny
  * @date 2017/04/06
  */
-@FeignClient(value= "order-srv")
+@FeignClient(value= "order-srv", path = "shoppingOrder/")
 public interface ShoppingOrderService {
 	
 	/**
@@ -36,7 +36,7 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param params
 	 */
-	@RequestMapping(value = "shoppingOrder/save", method = RequestMethod.POST)
+	@RequestMapping(value = "save", method = RequestMethod.POST)
 	Result<List<Long>> save(@RequestBody List<ShoppingOrderSettlementParam> params);
 
 	/**
@@ -44,7 +44,7 @@ public interface ShoppingOrderService {
 	 * @param orderId
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/getOrderCommentStatus/{shoppingOrderItemId}", method = RequestMethod.GET)
+	@RequestMapping(value = "getOrderCommentStatus/{shoppingOrderItemId}", method = RequestMethod.GET)
     Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
 	
 	/**
@@ -54,7 +54,7 @@ public interface ShoppingOrderService {
 	 * @param params 查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectPageByMemberId/{memberId}", method = RequestMethod.POST)
+	@RequestMapping(value = "selectPageByMemberId/{memberId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param);
 	
 	/**
@@ -63,7 +63,7 @@ public interface ShoppingOrderService {
 	 * @param id 购物订单id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/get/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
 	
 	/**
@@ -73,19 +73,20 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/getExpressInfo/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
 	
 	/**
 	 * 取消购物订单
-	 * 
+	 * @param memberId
+	 * 			  会员id
 	 * @param id
 	 *            购物订单id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/cancelOrder/{id}", method = RequestMethod.PUT)
-	public Result cancelOrder(@PathVariable("id") Long id);
+	@RequestMapping(value = "cancelOrder/{memberId}/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id);
 	
 	/**
 	 * 删除购物订单
@@ -95,7 +96,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/deleteOrder/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.PUT)
 	Result deleteOrder(@PathVariable("id") Long id);
 	
 	/**
@@ -107,7 +108,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/tradingSuccess/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	Result tradingSuccess(@PathVariable("id") Long id);
 	
 	/**
@@ -119,7 +120,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
+	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
 	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param);
 	
 	/**
@@ -132,7 +133,7 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
+	@RequestMapping(value = "selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param);
 	
 	/**
@@ -141,7 +142,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "shoppingOrder/selectOrderMoney")
+	@RequestMapping(method = RequestMethod.GET, value = "selectOrderMoney")
 	Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds);
 	
 	/**
@@ -151,7 +152,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	@RequestMapping(value = "shoppingOrder/numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
+	@RequestMapping(value = "numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
 	Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId);
 	
 	/**
@@ -161,6 +162,6 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/orderPayment/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.PUT)
 	Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id);
 }

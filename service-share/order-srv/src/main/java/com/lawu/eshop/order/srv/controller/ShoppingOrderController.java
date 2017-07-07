@@ -57,6 +57,9 @@ import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -75,21 +78,21 @@ public class ShoppingOrderController extends BaseController {
 
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
-	
+
 	@Autowired
 	private ShoppingOrderItemService shoppingOrderItemService;
 
 	@Autowired
 	@Qualifier("kDNiaoExpressStrategy")
 	private ExpressStrategy expressStrategy;
-	
+
 	@Autowired
 	private PropertyService propertyService;
 
 	/*********************************************************
-	 * 					Member Api
-	 * ******************************************************/
-	
+	 * Member Api
+	 ******************************************************/
+
 	/**
 	 * 保存订单
 	 * 
@@ -97,24 +100,12 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result<List<Long>> save(@RequestBody List<ShoppingOrderSettlementParam> params) {
-
-		// 参数验证
-		if (params == null || params.isEmpty()) {
-			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-		}
-
 		List<Long> ids = shoppingOrderService.save(params);
-
-		if (ids == null || params.isEmpty()) {
-			return successCreated(ResultCode.SAVE_FAIL);
-		}
-
 		return successCreated(ids);
 	}
-	
+
 	/**
-	 * To 用户
-	 * 根据查询参数分页查询
+	 * To 用户 根据查询参数分页查询
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -125,38 +116,36 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectPageByMemberId/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param) {
 		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMemberId(memberId, param);
-
 		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = ShoppingOrderExtendConverter.convertShoppingOrderExtendQueryDTOPage(shoppingOrderExtendQueryBOPage);
 		// 把无用对象置空
 		shoppingOrderExtendQueryBOPage = null;
-		
 		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
-	
+
 	/**
 	 * 取消购物订单
 	 * 
+	 * @param memberId
+	 *            会员id
 	 * @param id
 	 *            购物订单id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
-	public Result cancelOrder(@PathVariable("id") Long id) {
-		// 参数验证
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+	@RequestMapping(value = "cancelOrder/{memberId}/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id) {
+		try {
+			shoppingOrderService.cancelOrder(memberId, id);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (OrderNotCanceledException e) {
+			return successCreated(ResultCode.ORDER_NOT_CANCELED, e.getMessage());
 		}
-		
-		int resultCode = shoppingOrderService.cancelOrder(id);
-		
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
-		}
-		
 		return successCreated();
 	}
-	
+
 	/**
 	 * 删除购物订单
 	 * 
@@ -168,14 +157,14 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.PUT)
 	public Result deleteOrder(@PathVariable("id") Long id) {
 		int resultCode = shoppingOrderService.deleteOrder(id);
-		
+
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-		
+
 		return successCreated();
 	}
-	
+
 	/**
 	 * 根据id查询订单物流信息
 	 * 
@@ -195,20 +184,18 @@ public class ShoppingOrderController extends BaseController {
 		if (shoppingOrderBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-		
+
 		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
 		if (StringUtils.isNotBlank(shoppingOrderBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderBO.getWaybillNum())) {
 			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderBO.getExpressCompanyCode(), shoppingOrderBO.getWaybillNum());
 		}
-		
+
 		return successGet(ShoppingOrderConverter.covert(shoppingOrderBO, expressInquiriesDetailBO));
 	}
-	
+
 	/**
-	 * 根据查询参数分页查询退款记录
-	 * 购物订单 购物订单项 退款详情关联查询
-	 * To Member 
+	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询 To Member
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -218,19 +205,19 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param) {
-		
+
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMemberId(memberId, param);
-		
+
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundDTOPage(page));
 	}
-	
+
 	/**
-	 * 买家申请退款
-	 * 修改订单项订单状态为退款中
-	 * 修改订单项退款状态为待商家确认
+	 * 买家申请退款 修改订单项订单状态为退款中 修改订单项退款状态为待商家确认
 	 * 
-	 * @param shoppingOrderitemId 购物订单项id
-	 * @param param 退款参数
+	 * @param shoppingOrderitemId
+	 *            购物订单项id
+	 * @param param
+	 *            退款参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
@@ -239,14 +226,14 @@ public class ShoppingOrderController extends BaseController {
 
 		// 修改购物订单以及订单项状态，保存退款详情记录
 		int result = shoppingOrderService.requestRefund(shoppingOrderitemId, param);
-		
+
 		if (result != ResultCode.SUCCESS) {
 			return successCreated(result);
 		}
-		
+
 		return successCreated();
 	}
-	
+
 	/**
 	 * 订单支付
 	 * 
@@ -256,19 +243,18 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.PUT)
 	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id) {
-		
+
 		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-		
+
 		if (shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
 			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
 		}
-		
+
 		return successCreated(ShoppingOrderConverter.convert(shoppingOrderBO));
 	}
-	
+
 	/**
-	 * 确认收货之后
-	 * 修改购物订单以及订单项状态为交易成功
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
 	 * 
 	 * @param id
 	 *            购物订单id
@@ -277,23 +263,22 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	public Result tradingSuccess(@PathVariable("id") Long id) {
-		
+
 		int resultCode = shoppingOrderService.tradingSuccess(id, false);
-		
+
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
 
 		return successCreated();
 	}
-	
+
 	/*********************************************************
-	 * 					Merchant Api
-	 * ******************************************************/
-	
+	 * Merchant Api
+	 ******************************************************/
+
 	/**
-	 * To商家
-	 * 根据查询参数分页查询
+	 * To商家 根据查询参数分页查询
 	 * 
 	 * @param merchantId
 	 *            商家id
@@ -308,11 +293,9 @@ public class ShoppingOrderController extends BaseController {
 		shoppingOrderExtendQueryBOPage = null;
 		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
-	
-	
+
 	/**
-	 * 商家发货填写物流信息
-	 * 并修改购物订单以及购物订单项的状态为待收货
+	 * 商家发货填写物流信息 并修改购物订单以及购物订单项的状态为待收货
 	 * 
 	 * @param id
 	 *            购物订单id
@@ -326,14 +309,12 @@ public class ShoppingOrderController extends BaseController {
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-		
+
 		return successCreated();
 	}
-	
+
 	/**
-	 * 根据查询参数分页查询退款记录
-	 * 购物订单 购物订单项 退款详情关联查询
-	 * To Merchant
+	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询 To Merchant
 	 * 
 	 * @param merchantId
 	 *            商家id
@@ -343,15 +324,15 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingRefundQueryForeignParam param) {
-		
+
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMerchantId(merchantId, param);
-		
+
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForMerchantDTOPage(page));
 	}
-	
+
 	/*********************************************************
-	 * 					Operator Api
-	 * ******************************************************/
+	 * Operator Api
+	 ******************************************************/
 	/**
 	 * 根据查询参数分页查询
 	 * 
@@ -370,7 +351,7 @@ public class ShoppingOrderController extends BaseController {
 
 		return successGet(shoppingOrderQueryToOperatorDTOPage);
 	}
-	
+
 	/**
 	 * 更新订单信息
 	 * 
@@ -380,41 +361,39 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateInformation/{id}", method = RequestMethod.PUT)
-	public Result updateInformation(@PathVariable Long id , @RequestBody ShoppingOrderUpdateInfomationParam param) {
-		
+	public Result updateInformation(@PathVariable Long id, @RequestBody ShoppingOrderUpdateInfomationParam param) {
+
 		int result = shoppingOrderService.updateInformation(id, param);
-		
+
 		if (result != ResultCode.SUCCESS) {
 			return successCreated(result);
 		}
 
 		return successCreated();
 	}
-	
+
 	/**
-	 * 查询各种订单状态的数量
-	 * To Merchant
+	 * 查询各种订单状态的数量 To Merchant
 	 * 
-	 * @param merchantId 商家id
+	 * @param merchantId
+	 *            商家id
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
 	public Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("merchantId") Long merchantId) {
-		
+
 		ShoppingOrderNumberOfOrderStatusForMerchantBO shoppingOrderNumberOfOrderStatusForMerchantBO = shoppingOrderService.numberOfOrderStartusByMerchant(merchantId);
-		
+
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusForMerchantBO));
 	}
-	
+
 	/*********************************************************
-	 * 					Operator
-	 * ******************************************************/
-	
+	 * Operator
+	 ******************************************************/
+
 	/**
-	 * 根据查询参数分页查询退款记录
-	 * 购物订单 购物订单项 退款详情关联查询
-	 * To Operator
+	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询 To Operator
 	 * 
 	 * @param param
 	 *            查询参数
@@ -422,16 +401,38 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPage", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param) {
-		
+
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPage(param);
-		
+
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForOperatorDTOPage(page));
 	}
-	
+
+	/**
+	 * 取消购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "cancelOrder/{id}", method = RequestMethod.PUT)
+	public Result cancelOrder(@PathVariable("id") Long id) {
+		try {
+			shoppingOrderService.cancelOrder(null, id);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (OrderNotCanceledException e) {
+			return successCreated(ResultCode.ORDER_NOT_CANCELED, e.getMessage());
+		}
+		return successCreated();
+	}
+
 	/*********************************************************
-	 * 					Common
-	 * ******************************************************/
-	
+	 * Common
+	 ******************************************************/
+
 	/**
 	 * 根据id查询订单详情
 	 * 
@@ -452,43 +453,45 @@ public class ShoppingOrderController extends BaseController {
 		if (isNotFind) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-		
+
 		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
 		if (StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getWaybillNum())) {
 			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExtendDetailBO.getExpressCompanyCode(), shoppingOrderExtendDetailBO.getWaybillNum());
 		}
-		
+
 		ShoppingOrderExtendDetailDTO shoppingOrderExtendDetailDTO = ShoppingOrderExtendConverter.convert(shoppingOrderExtendDetailBO, expressInquiriesDetailBO);
-		
+
 		// 倒计时在服务端放入
 		Long countdown = null;
 		switch (shoppingOrderExtendDetailDTO.getOrderStatus()) {
-			case PENDING_PAYMENT:
-				// 1.自动取消订单
-				String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
-				
-				Date automaticCancelOrderTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
-				
-				countdown = DateUtil.interval(new Date(), automaticCancelOrderTo, Calendar.MILLISECOND);
-				break;
-			case TO_BE_RECEIVED:
-				// 2.自动确认收货
-				String automaticReceipt = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
-				
-				Date automaticReceiptTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtTransport(), Integer.valueOf(automaticReceipt), Calendar.DAY_OF_YEAR);
-				
-				countdown = DateUtil.interval(new Date(), automaticReceiptTo, Calendar.MILLISECOND);
-				break;
-			default:
-				break;
+		case PENDING_PAYMENT:
+			// 1.自动取消订单
+			String automaticCancelOrder = propertyService.getByName(PropertyNameConstant.AUTOMATIC_CANCEL_ORDER);
+
+			Date automaticCancelOrderTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtCreate(), Integer.valueOf(automaticCancelOrder), Calendar.DAY_OF_YEAR);
+
+			countdown = DateUtil.interval(new Date(), automaticCancelOrderTo, Calendar.MILLISECOND);
+			break;
+		case TO_BE_RECEIVED:
+			// 2.自动确认收货
+			String automaticReceipt = propertyService.getByName(PropertyNameConstant.AUTOMATIC_RECEIPT);
+
+			Date automaticReceiptTo = DateUtil.add(shoppingOrderExtendDetailDTO.getGmtTransport(), Integer.valueOf(automaticReceipt), Calendar.DAY_OF_YEAR);
+
+			countdown = DateUtil.interval(new Date(), automaticReceiptTo, Calendar.MILLISECOND);
+			break;
+		default:
+			break;
 		}
 		shoppingOrderExtendDetailDTO.setCountdown(countdown);
-		
+
 		return successGet(shoppingOrderExtendDetailDTO);
 	}
-	
-	/** 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+
+	/**
+	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
+	 * 
 	 * @param orderIds
 	 * @return
 	 * @author Yangqh
@@ -501,10 +504,10 @@ public class ShoppingOrderController extends BaseController {
 		}
 		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
 		shoppingOrderMoneyDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
-		
+
 		return successGet(shoppingOrderMoneyDTO);
 	}
-	
+
 	/**
 	 * 获取商品评价状态
 	 * 
@@ -518,11 +521,12 @@ public class ShoppingOrderController extends BaseController {
 		CommentOrderDTO commentOrderDTO = ShoppingOrderConverter.coverCommentStatusDTO(shoppingOrderItemBO);
 		return successGet(commentOrderDTO);
 	}
-	
+
 	/**
 	 * 查询商家是否有正在进行中的订单
 	 * 
-	 * @param merchantId 商家id
+	 * @param merchantId
+	 *            商家id
 	 * @return
 	 * @author Sunny
 	 */
@@ -530,88 +534,93 @@ public class ShoppingOrderController extends BaseController {
 	public Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId) {
 		// 查询订单商品评价状态
 		ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = shoppingOrderService.isNoOnGoingOrder(merchantId);
-		
+
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderIsNoOnGoingOrderBO));
 	}
-	
+
 	/**
 	 * 查询各种订单状态的数量
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
 	public Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId) {
-		
+
 		ShoppingOrderNumberOfOrderStatusBO shoppingOrderNumberOfOrderStatusBO = shoppingOrderService.numberOfOrderStartus(memberId);
-		
+
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusBO));
 	}
-	
+
 	/**
 	 * 查询已完成但是未计算提成的购物订单
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "commissionShoppingOrder", method = RequestMethod.GET)
 	public Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder() {
-		
+
 		List<ShoppingOrderBO> shoppingOrderBOList = shoppingOrderService.commissionShoppingOrder();
-		
+
 		return successGet(ShoppingOrderConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
 	}
-	
+
 	/**
 	 * 查询已完成但是未计算提成的购物订单
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateCommissionStatus", method = RequestMethod.PUT)
 	public Result updateCommissionStatus(@RequestParam("ids") List<Long> ids) {
-		
+
 		int resultCode = shoppingOrderService.updateCommissionStatus(ids);
-		
+
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-		
+
 		return successCreated();
 	}
-	
+
 	/**
 	 * 查询已完成但是未计算提成的购物订单
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "selectByTransactionData", method = RequestMethod.PUT)
 	public Result selectByTransactionData(@RequestBody ReportDataParam param) {
-		
+
 		ReportRiseRateDTO reportRiseRateDTO = shoppingOrderService.selectByTransactionData(param);
-		
+
 		return successCreated(reportRiseRateDTO);
 	}
-	
+
 	/**
 	 * 查询已完成但是未计算提成的购物订单
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.PUT)
 	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam param) {
-		
+
 		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(param);
-		
+
 		return successCreated(reportRiseRerouceDTOList);
 	}
 }
