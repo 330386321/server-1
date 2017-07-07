@@ -16,8 +16,6 @@ public class DateUtil {
 
     private static Logger logger = LoggerFactory.getLogger(DateUtil.class);
 
-    private DateUtil(){}
-
     // 默认日期格式
     private static final String DATE_DEFAULT_FORMAT = "yyyy-MM-dd";
 
@@ -66,7 +64,7 @@ public class DateUtil {
     //int时间格式化
     private static DateFormat timeIntFormat;
 
-    private static Calendar gregorianCalendar;
+    private static Calendar gregorianCalendar = new GregorianCalendar();
 
     static {
         dateFormat = new SimpleDateFormat(DATE_DEFAULT_FORMAT);
@@ -77,8 +75,9 @@ public class DateUtil {
         dateTimeIntFormat = new SimpleDateFormat(DATETIME_INT_FORMAT);
         timeFormat = new SimpleDateFormat(TIME_DEFAULT_FORMAT);
         timeIntFormat = new SimpleDateFormat(TIME_INT_FORMAT);
-        gregorianCalendar = new GregorianCalendar();
     }
+
+    private DateUtil(){}
 
     /**
      * 获取当前日期   yyyy-MM-dd
