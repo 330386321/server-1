@@ -55,7 +55,8 @@ public class MerchantFavoredController extends BaseController {
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequestMapping(value = "delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
     public Result delMerchantFavoredInfo(@PathVariable("id") Long id,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        Result result = merchantFavoredService.delMerchantFavoredInfo(id);
+        Long merchantId = UserUtil.getCurrentUserId(getRequest());
+        Result result = merchantFavoredService.delMerchantFavoredInfo(id, merchantId);
         return successDelete(result);
     }
 

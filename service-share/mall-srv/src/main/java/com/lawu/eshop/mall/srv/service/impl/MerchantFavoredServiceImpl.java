@@ -63,11 +63,12 @@ public class MerchantFavoredServiceImpl implements MerchantFavoredService {
 
     @Override
     @Transactional
-    public void delMerchantFavoredInfoById(Long id) {
+    public void delMerchantFavoredInfoById(Long id, Long merchantId) {
         MerchantFavoredDO merchantFavoredDO = new MerchantFavoredDO();
-        merchantFavoredDO.setId(id);
         merchantFavoredDO.setStatus(StatusEnum.STATUS_INVALID.val);
-        merchantFavoredDOMapper.updateByPrimaryKeySelective(merchantFavoredDO);
+        MerchantFavoredDOExample example = new MerchantFavoredDOExample();
+        example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
+        merchantFavoredDOMapper.updateByExampleSelective(merchantFavoredDO,example);
     }
 
     @Override

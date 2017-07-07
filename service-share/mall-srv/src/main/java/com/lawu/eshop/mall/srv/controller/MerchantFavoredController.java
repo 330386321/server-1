@@ -67,7 +67,7 @@ public class MerchantFavoredController extends BaseController {
     }
 
     @RequestMapping(value = "delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
-    public Result delMerchantFavoredInfo(@PathVariable("id") Long id) {
+    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
         if (id == null) {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
@@ -75,7 +75,7 @@ public class MerchantFavoredController extends BaseController {
         if (merchantFavoredBO == null) {
             return successCreated(ResultCode.RESOURCE_NOT_FOUND);
         }
-        merchantFavoredService.delMerchantFavoredInfoById(id);
+        merchantFavoredService.delMerchantFavoredInfoById(id,merchantId);
         return successDelete(ResultCode.SUCCESS);
     }
 

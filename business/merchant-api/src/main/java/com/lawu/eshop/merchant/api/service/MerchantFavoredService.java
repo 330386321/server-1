@@ -20,7 +20,7 @@ public interface MerchantFavoredService {
     public Result<MerchantFavoredDTO> findFavoredByMerchantId(@PathVariable("merchantId") Long merchantId);
 
     @RequestMapping(value = "merchantFavored/delMerchantFavoredInfo/{id}", method = RequestMethod.DELETE)
-    public Result delMerchantFavoredInfo(@PathVariable("id") Long id);
+    public Result delMerchantFavoredInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 
     @RequestMapping(value = "merchantFavored/updateMerchantFavoredInfo/{merchantId}", method = RequestMethod.PUT)
     public Result updateMerchantFavoredInfo(@PathVariable("merchantId") Long merchantId, @ModelAttribute MerchantFavoredParam param);

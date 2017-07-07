@@ -12,7 +12,7 @@ public interface MerchantFavoredService {
 
     MerchantFavoredBO findFavoredByMerchantId(Long merchantId);
 
-    void delMerchantFavoredInfoById(Long merchantId);
+    void delMerchantFavoredInfoById(Long id, Long merchantId);
 
     MerchantFavoredBO findFavoredById(Long id);
 
