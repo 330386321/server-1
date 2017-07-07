@@ -82,24 +82,22 @@ public class MessageController extends BaseController {
      * 站内信息操作（已读）
      *
      * @param messageId
-     * @param statusEnum
      * @return
      */
     @RequestMapping(value = "updateMessageStatus/{messageId}", method = RequestMethod.PUT)
-    public Result updateMessageStatus(@PathVariable("messageId") Long messageId) {
-        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_READ);
+    public Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum) {
+        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_READ, userNum);
         return successCreated();
     }
     /**
      * 站内信息操作（删除）
      *
      * @param messageId
-     * @param statusEnum
      * @return
      */
     @RequestMapping(value = "delMessageStatus/{messageId}", method = RequestMethod.DELETE)
-    public Result delMessageStatus(@PathVariable("messageId") Long messageId) {
-        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_DELETE);
+    public Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum) {
+        messageService.updateMessageStatus(messageId, MessageStatusEnum.MESSAGE_STATUS_DELETE, userNum);
         return successCreated();
     }
 
@@ -159,7 +157,7 @@ public class MessageController extends BaseController {
 
     /**
      * 运营平台给一类用户推送消息
-     * @param messageInfoParam
+     * @param param
      * @return
      */
     @RequestMapping(value = "saveMessageToAll", method = RequestMethod.POST)
@@ -191,12 +189,12 @@ public class MessageController extends BaseController {
     }
 
     @RequestMapping(value = "delMessageByIds", method = RequestMethod.DELETE)
-    public Result delMessageByIds(@RequestParam("ids") String ids) {
+    public Result delMessageByIds(@RequestParam("ids") String ids, @RequestParam("userNum") String userNum) {
         String[] idString = ids.split(",");
         Long[] lids = new Long[idString.length];
         for (int i = 0; i < idString.length; i++) {
             lids[i] = Long.valueOf(idString[i]);
-            messageService.updateMessageStatus(lids[i], MessageStatusEnum.MESSAGE_STATUS_DELETE);
+            messageService.updateMessageStatus(lids[i], MessageStatusEnum.MESSAGE_STATUS_DELETE, userNum);
         }
         return successDelete();
     }

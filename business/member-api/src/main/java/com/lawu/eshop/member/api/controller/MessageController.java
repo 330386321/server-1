@@ -68,7 +68,8 @@ public class MessageController extends BaseController {
     @Authorization
     @RequestMapping(value = "read/{messageId}", method = RequestMethod.PUT)
     public Result read(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        messageService.updateMessageStatus(messageId);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        messageService.updateMessageStatus(messageId, userNum);
         return successCreated();
     }
 
@@ -78,7 +79,8 @@ public class MessageController extends BaseController {
     @Authorization
     @RequestMapping(value = "del/{messageId}", method = RequestMethod.DELETE)
     public Result del(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-       Result result = messageService.delMessageStatus(messageId);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+       Result result = messageService.delMessageStatus(messageId, userNum);
         return successDelete(result);
     }
 
@@ -89,6 +91,7 @@ public class MessageController extends BaseController {
     @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
     public Result delMessage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                              @PathVariable(value = "ids") String ids) {
-        return messageService.delMessageByIds(ids);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return messageService.delMessageByIds(ids, userNum);
     }
 }

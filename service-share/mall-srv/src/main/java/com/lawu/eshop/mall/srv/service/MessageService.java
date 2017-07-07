@@ -43,7 +43,7 @@ public interface MessageService {
      * @param messageId
      * @param statusEnum
      */
-    void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum);
+    void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum, String userNum);
 
     /**
      * 新增站内信息

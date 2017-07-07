@@ -1,24 +1,9 @@
 package com.lawu.eshop.mall.srv.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.mall.constants.MessageStatusEnum;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
-import com.lawu.eshop.mall.param.MessageInfoParam;
-import com.lawu.eshop.mall.param.MessageParam;
-import com.lawu.eshop.mall.param.MessageQueryParam;
-import com.lawu.eshop.mall.param.OperatorMessageInfoParam;
-import com.lawu.eshop.mall.param.OperatorMessageParam;
-import com.lawu.eshop.mall.param.PushParam;
+import com.lawu.eshop.mall.param.*;
 import com.lawu.eshop.mall.srv.bo.MessageBO;
 import com.lawu.eshop.mall.srv.bo.MessageStatisticsBO;
 import com.lawu.eshop.mall.srv.bo.MessageTemplateBO;
@@ -33,6 +18,15 @@ import com.lawu.eshop.mall.srv.service.MessageService;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.user.MessagePushInfo;
 import com.lawu.eshop.mq.message.MessageProducerService;
+import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * message service实现类
@@ -97,11 +91,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum) {
+    public void updateMessageStatus(Long messageId, MessageStatusEnum statusEnum, String userNum) {
         MessageDO messageDO = new MessageDO();
-        messageDO.setId(messageId);
         messageDO.setStatus(statusEnum.val);
-        messageDOMapper.updateByPrimaryKeySelective(messageDO);
+        MessageDOExample example = new MessageDOExample();
+        example.createCriteria().andIdEqualTo(messageId).andUserNumEqualTo(userNum);
+        messageDOMapper.updateByExampleSelective(messageDO,example);
     }
 
     @Override

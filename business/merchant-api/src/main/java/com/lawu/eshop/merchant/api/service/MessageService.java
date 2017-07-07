@@ -35,7 +35,7 @@ public interface MessageService {
      * @param messageId
      */
     @RequestMapping(method = RequestMethod.PUT, value = "message/updateMessageStatus/{messageId}")
-    Result updateMessageStatus(@PathVariable("messageId") Long messageId);
+    Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum);
 
     /**
      * 插入站内消息
@@ -47,7 +47,7 @@ public interface MessageService {
     Result saveMessage(@PathVariable("userNum") String userNum, @ModelAttribute MessageInfoParam messageInfoParam);
 
     @RequestMapping(value = "message/delMessageStatus/{messageId}", method = RequestMethod.DELETE)
-    Result delMessageStatus(@PathVariable("messageId") Long messageId);
+    Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum);
     
     @RequestMapping(value = "message/selectMessageById/{id}", method = RequestMethod.GET)
     Result<MessageDTO> selectMessageById(@PathVariable("id") Long id);
@@ -58,5 +58,5 @@ public interface MessageService {
      * @return
      */
     @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
-    Result delMessageByIds(@RequestParam("ids") String ids);
+    Result delMessageByIds(@RequestParam("ids") String ids, @RequestParam("userNum") String userNum);
 }

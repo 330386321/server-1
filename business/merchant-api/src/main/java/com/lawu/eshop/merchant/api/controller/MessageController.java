@@ -60,7 +60,8 @@ public class MessageController extends BaseController {
     @Authorization
     @RequestMapping(value = "read/{messageId}", method = RequestMethod.PUT)
     public Result read(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        messageService.updateMessageStatus(messageId);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        messageService.updateMessageStatus(messageId, userNum);
         return successCreated();
     }
 
@@ -71,25 +72,11 @@ public class MessageController extends BaseController {
     @Authorization
     @RequestMapping(value = "del/{messageId}", method = RequestMethod.DELETE)
     public Result del(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-        Result result = messageService.delMessageStatus(messageId);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        Result result = messageService.delMessageStatus(messageId, userNum);
         return successDelete(result);
     }
 
-    @Audit(date = "2017-05-12", reviewer = "孙林青")
-    @ApiOperation(value = "站内信息操作（批量删除）", notes = "站内信息操作（批量删除） [1000]（张荣成）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @Authorization
-    @RequestMapping(value = "batchDel", method = RequestMethod.PUT)
-    public Result batchDel(@RequestParam("messageIds") String messageIds, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-    	if(messageIds == null){
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-        }
-        String[] ids=messageIds.split(",");
-        for (String messageId : ids) {
-        	 Result result = messageService.delMessageStatus(Long.parseLong(messageId));
-		}
-        return successDelete();
-    }
 
     @Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（批量标记已读）", notes = "站内信息操作（批量标记已读） [1000]（张荣成）", httpMethod = "PUT")
@@ -101,8 +88,9 @@ public class MessageController extends BaseController {
             return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
         }
         String[] ids=messageIds.split(",");
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
         for (String messageId : ids) {
-        	 Result result = messageService.updateMessageStatus(Long.parseLong(messageId));
+        	 Result result = messageService.updateMessageStatus(Long.parseLong(messageId), userNum);
 		}
         return successCreated();
     }
@@ -123,6 +111,7 @@ public class MessageController extends BaseController {
     @RequestMapping(value = "delMessage/{ids}", method = RequestMethod.DELETE)
     public Result delMessage(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                              @PathVariable(value = "ids") String ids) {
-        return messageService.delMessageByIds(ids);
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        return messageService.delMessageByIds(ids, userNum);
     }
 }

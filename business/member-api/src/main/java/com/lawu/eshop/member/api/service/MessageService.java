@@ -19,7 +19,7 @@ public interface MessageService {
     /**
      * 站内信息统计
      *
-     * @param userNum用户编号
+     * @param userNum
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "message/getMessageStatistics/{userNum}")
@@ -38,15 +38,14 @@ public interface MessageService {
     /**
      * 站内信息操作（已读）
      * @param messageId
-     * @param statusEnum
      */
     @SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.PUT, value = "message/updateMessageStatus/{messageId}")
-    Result updateMessageStatus(@PathVariable("messageId") Long messageId);
+    Result updateMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum);
 
     @SuppressWarnings("rawtypes")
 	@RequestMapping(value = "message/delMessageStatus/{messageId}", method = RequestMethod.DELETE)
-    Result delMessageStatus(@PathVariable("messageId") Long messageId);
+    Result delMessageStatus(@PathVariable("messageId") Long messageId, @RequestParam("userNum") String userNum);
     
     /**
      * 插入站内消息
@@ -64,5 +63,5 @@ public interface MessageService {
      * @return
      */
     @RequestMapping(value = "message/delMessageByIds",method = RequestMethod.DELETE)
-    Result delMessageByIds(@RequestParam("ids") String ids);
+    Result delMessageByIds(@RequestParam("ids") String ids, @RequestParam("userNum") String userNum);
 }
