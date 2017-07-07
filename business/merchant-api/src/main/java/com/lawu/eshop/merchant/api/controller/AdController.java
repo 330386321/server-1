@@ -74,6 +74,8 @@ public class AdController extends BaseController {
 
     @Autowired
 	private MerchantApiConfig merchantApiConfig;
+    
+    private final static String ALL_PLACE="ALL_PLACE";
 
     @Audit(date = "2017-04-15", reviewer = "孙林青")
     @Authorization
@@ -122,7 +124,7 @@ public class AdController extends BaseController {
     	if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==1){
     		String areas=adParam.getAreas();
     		if(areas==null || areas==""){
-    			areas="ALL_PLACE";
+    			areas=ALL_PLACE;
     		}
     		count=memberCountService.findMemberCount(areas);
     	}else if(adParam.getPutWayEnum()!=null && adParam.getPutWayEnum().val==2){
@@ -187,51 +189,50 @@ public class AdController extends BaseController {
     		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
     		@RequestParam @ApiParam(required = true, value = "广告投放时间") String beginTime) {
 		Result<AdMerchantDetailDTO> rs= adService.selectById(id);
-    	if(isSuccess(rs)){
-    		Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        	String userNum = UserUtil.getCurrentUserNum(getRequest());
-        	Result<PropertyPointDTO>  propertyPointRs=propertyInfoService.getPropertyPoint(userNum);
-        	PropertyPointDTO propertyPointDTO=propertyPointRs.getModel();
-        	AdMerchantDetailDTO adDTO=rs.getModel();
-        	if(adDTO.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
-        		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
-        	}
-        	Integer count=0;
-        	if(adDTO.getPutWayEnum().val==1){
-        		String areas=rs.getModel().getAreas();
-        		if(areas==null){
-        			areas="ALL_PLACE";
-        		}
-        		count=memberCountService.findMemberCount(areas);
-        	}else if(adDTO.getPutWayEnum().val==2){
-        		count=memberCountService.findFensCount(merchantId);
-        	}
-        	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
-        	MerchantStoreDTO storeDTO= storeRs.getModel();
-        	AdSaveParam adSave=new AdSaveParam();
-        	AdParam adParam=new AdParam();
-        	adParam.setTitle(adDTO.getTitle());
-        	adParam.setAdCount(adDTO.getAdCount());
-        	adParam.setAreas(adDTO.getAreas());
-        	adParam.setBeginTime(beginTime);  
-        	adParam.setContent(adDTO.getContent());
-        	adParam.setPoint(adDTO.getPoint());
-        	adParam.setTotalPoint(adDTO.getTotalPoint());
-        	adParam.setPutWayEnum(adDTO.getPutWayEnum());
-        	adParam.setRadius(adDTO.getRadius());
-        	adParam.setTypeEnum(adDTO.getTypeEnum());
-        	adSave.setAdParam(adParam);
-        	adSave.setLatitude(storeDTO.getLatitude());
-        	adSave.setLongitude(storeDTO.getLongitude());
-        	adSave.setCount(count);
-        	adSave.setMediaUrl(adDTO.getMediaUrl());
-        	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
-        	adSave.setMerchantId(merchantId);
-        	adSave.setUserNum(userNum);
-        	return adService.saveAd(adSave);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
+    	if(!isSuccess(rs)){
+    		return successCreated(rs.getRet());
     	}
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result<PropertyPointDTO>  propertyPointRs=propertyInfoService.getPropertyPoint(userNum);
+    	PropertyPointDTO propertyPointDTO=propertyPointRs.getModel();
+    	AdMerchantDetailDTO adDTO=rs.getModel();
+    	if(adDTO.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+    	}
+    	Integer count=0;
+    	if(adDTO.getPutWayEnum().val==1){
+    		String areas=rs.getModel().getAreas();
+    		if(areas==null){
+    			areas=ALL_PLACE;
+    		}
+    		count=memberCountService.findMemberCount(areas);
+    	}else if(adDTO.getPutWayEnum().val==2){
+    		count=memberCountService.findFensCount(merchantId);
+    	}
+    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
+    	MerchantStoreDTO storeDTO= storeRs.getModel();
+    	AdSaveParam adSave=new AdSaveParam();
+    	AdParam adParam=new AdParam();
+    	adParam.setTitle(adDTO.getTitle());
+    	adParam.setAdCount(adDTO.getAdCount());
+    	adParam.setAreas(adDTO.getAreas());
+    	adParam.setBeginTime(beginTime);  
+    	adParam.setContent(adDTO.getContent());
+    	adParam.setPoint(adDTO.getPoint());
+    	adParam.setTotalPoint(adDTO.getTotalPoint());
+    	adParam.setPutWayEnum(adDTO.getPutWayEnum());
+    	adParam.setRadius(adDTO.getRadius());
+    	adParam.setTypeEnum(adDTO.getTypeEnum());
+    	adSave.setAdParam(adParam);
+    	adSave.setLatitude(storeDTO.getLatitude());
+    	adSave.setLongitude(storeDTO.getLongitude());
+    	adSave.setCount(count);
+    	adSave.setMediaUrl(adDTO.getMediaUrl());
+    	adSave.setVideoImgUrl(adDTO.getVideoImgUrl());
+    	adSave.setMerchantId(merchantId);
+    	adSave.setUserNum(userNum);
+    	return adService.saveAd(adSave);
 	}
 
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
@@ -243,6 +244,7 @@ public class AdController extends BaseController {
     	return adService.selectById(id);
     }
 
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
 	@ApiOperation(value = "广告批量删除", notes = "广告批量删除,[]（张荣成）", httpMethod = "DELETE")
 	@Authorization
@@ -256,10 +258,14 @@ public class AdController extends BaseController {
 			adIds.add(Long.valueOf(str));
 		}
 		Result rs = adService.batchDeleteAd(adIds);
+		if(!isSuccess(rs)){
+			return successCreated(rs.getRet());
+		}
 		return successDelete();
 	}
 
 
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
     @ApiOperation(value = "广告再次投放(2.2.0)", notes = "广告再次投放,[1011|5000|5003|5010|6024|6026](张荣成)", httpMethod = "POST")
     @Authorization
@@ -269,81 +275,83 @@ public class AdController extends BaseController {
     		@PathVariable @ApiParam(required = true, value = "广告id") Long id,
     		@ModelAttribute @ApiParam(required = true, value = "广告信息") AdAgainPutParam adAgainParam) {
 		Result<AdMerchantDetailDTO> result= adService.selectById(id);
-    	if(isSuccess(result)){
-    		Long merchantId = UserUtil.getCurrentUserId(getRequest());
-        	String userNum = UserUtil.getCurrentUserNum(getRequest());
-        	if(!StringUtils.isNotEmpty(adAgainParam.getBeginTime())){
-    			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
-    		}
-        	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
-        	if (isSuccess(resultFreeze)){
-        		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
-        			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
-        		}
-        	} else {
-        		return successCreated(resultFreeze.getRet());
-        	}
-        	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
-        	PropertyPointDTO propertyPointDTO=rs.getModel();
-        	if(adAgainParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
-        		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
-        	}
-        	String mediaUrl="";
-        	String videoImgUrl="";
-        	HttpServletRequest request = getRequest();
-        	if(result.getModel().getTypeEnum().val==1 || result.getModel().getTypeEnum().val==3){ //平面投放
-        		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
-                if(!"".equals(retMap.get("imgUrl"))){
-                	mediaUrl = retMap.get("imgUrl");
-                }
-        	}else if(result.getModel().getTypeEnum().val==2){//视频投放
-        		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
-        		if(!"".equals(retMap.get("videoUrl"))){
-                	mediaUrl = retMap.get("videoUrl");
-                	//截取视频图片
-                	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
-                	
-                	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
-                	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
-                }
-        	}
-        	Integer count=0;
-        	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==1){
-        		String areas=adAgainParam.getAreas();
-        		if(areas==null || areas==""){
-        			areas="ALL_PLACE";
-        		}
-        		count=memberCountService.findMemberCount(areas);
-        	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==2){
-        		count=memberCountService.findFensCount(merchantId);
-        	}
-        	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
-        	MerchantStoreDTO storeDTO= storeRs.getModel();
-        	AdSaveParam adSave=new AdSaveParam();
-        	AdParam adParam=new AdParam();
-        	adParam.setTitle(adAgainParam.getTitle());
-        	adParam.setAdCount(adAgainParam.getAdCount());
-        	adParam.setAreas(adAgainParam.getAreas());
-        	adParam.setBeginTime(adAgainParam.getBeginTime());  
-        	adParam.setContent(adAgainParam.getContent());
-        	adParam.setPoint(adAgainParam.getPoint());
-        	adParam.setTotalPoint(adAgainParam.getTotalPoint());
-        	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
-        	adParam.setRadius(adAgainParam.getRadius());
-        	adParam.setTypeEnum(result.getModel().getTypeEnum());
-        	adSave.setAdParam(adParam);
-        	adSave.setLatitude(storeDTO.getLatitude());
-        	adSave.setLongitude(storeDTO.getLongitude());
-        	adSave.setCount(count);
-        	adSave.setMediaUrl(mediaUrl);
-        	adSave.setVideoImgUrl(videoImgUrl);
-        	adSave.setMerchantId(merchantId);
-        	adSave.setUserNum(userNum);
-        	Result rsAd = adService.saveAd(adSave);
-        	return rsAd;
-    	}else{
-    		return successCreated(ResultCode.FAIL);
+    	if(!isSuccess(result)){
+    		return successCreated(result.getRet());
     	}
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	if(!StringUtils.isNotEmpty(adAgainParam.getBeginTime())){
+			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
+		}
+    	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
+    	if (isSuccess(resultFreeze)){
+    		if(PropertyinfoFreezeEnum.YES.equals(resultFreeze.getModel())){
+    			return successCreated(ResultCode.PROPERTYINFO_FREEZE_YES);
+    		}
+    	} else {
+    		return successCreated(resultFreeze.getRet());
+    	}
+    	Result<PropertyPointDTO>  rs=propertyInfoService.getPropertyPoint(userNum);
+    	PropertyPointDTO propertyPointDTO=rs.getModel();
+    	if(adAgainParam.getTotalPoint().intValue()>propertyPointDTO.getPoint().intValue()){
+    		return successCreated(ResultCode.AD_POINT_NOT_ENOUGH);
+    	}
+    	String mediaUrl="";
+    	String videoImgUrl="";
+    	HttpServletRequest request = getRequest();
+    	if(result.getModel().getTypeEnum().val==1 || result.getModel().getTypeEnum().val==3){ //平面投放
+    		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
+            if(!"".equals(retMap.get("imgUrl"))){
+            	mediaUrl = retMap.get("imgUrl");
+            }
+    	}else if(result.getModel().getTypeEnum().val==2){//视频投放
+    		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
+    		if(!"".equals(retMap.get("videoUrl"))){
+            	mediaUrl = retMap.get("videoUrl");
+            	//截取视频图片
+            	String veido_path= merchantApiConfig.getVideoUploadUrl()+"/"+mediaUrl; //视频路径
+            	
+            	String ffmpegUrl=merchantApiConfig.getFfmpegUrl();  //ffmpeg安装路径
+            	videoImgUrl=VideoCutImgUtil.processImg(veido_path,FileDirConstant.DIR_AD_VIDEO_IMAGE, merchantApiConfig.getImageUploadUrl(),ffmpegUrl);
+            }
+    	}
+    	Integer count=0;
+    	if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==1){
+    		String areas=adAgainParam.getAreas();
+    		if(areas==null || areas==""){
+    			areas=ALL_PLACE;
+    		}
+    		count=memberCountService.findMemberCount(areas);
+    	}else if(adAgainParam.getPutWayEnum()!=null && adAgainParam.getPutWayEnum().val==2){
+    		count=memberCountService.findFensCount(merchantId);
+    	}
+    	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
+    	MerchantStoreDTO storeDTO= storeRs.getModel();
+    	AdSaveParam adSave=new AdSaveParam();
+    	AdParam adParam=new AdParam();
+    	adParam.setTitle(adAgainParam.getTitle());
+    	adParam.setAdCount(adAgainParam.getAdCount());
+    	adParam.setAreas(adAgainParam.getAreas());
+    	adParam.setBeginTime(adAgainParam.getBeginTime());  
+    	adParam.setContent(adAgainParam.getContent());
+    	adParam.setPoint(adAgainParam.getPoint());
+    	adParam.setTotalPoint(adAgainParam.getTotalPoint());
+    	adParam.setPutWayEnum(adAgainParam.getPutWayEnum());
+    	adParam.setRadius(adAgainParam.getRadius());
+    	adParam.setTypeEnum(result.getModel().getTypeEnum());
+    	adSave.setAdParam(adParam);
+    	adSave.setLatitude(storeDTO.getLatitude());
+    	adSave.setLongitude(storeDTO.getLongitude());
+    	adSave.setCount(count);
+    	adSave.setMediaUrl(mediaUrl);
+    	adSave.setVideoImgUrl(videoImgUrl);
+    	adSave.setMerchantId(merchantId);
+    	adSave.setUserNum(userNum);
+    	Result rsAd = adService.saveAd(adSave);
+    	if (!isSuccess(rsAd)) {
+    		return successCreated(result.getRet());
+    	}
+    	return successCreated();
 	}
 
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
