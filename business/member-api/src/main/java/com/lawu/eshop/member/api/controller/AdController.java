@@ -284,7 +284,6 @@ public class AdController extends BaseController {
 		return successGet(user);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "抢赞", notes = "抢赞[]（张荣成）", httpMethod = "PUT")

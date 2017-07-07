@@ -409,6 +409,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Override
 	public Result<Page<AdDTO>> selectChoiceness(AdChoicenessParam adChoicenessParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
+		
 		AdMemberParam param=new AdMemberParam();
    	    param.setCurrentPage(adChoicenessParam.getCurrentPage());
    	    param.setPageSize(adChoicenessParam.getPageSize());
