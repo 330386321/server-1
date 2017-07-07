@@ -14,6 +14,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.converter.ExpressCompanyConverter;
@@ -29,14 +30,25 @@ public class ExpressCompanyController extends BaseController {
 
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
-
+	
 	/**
 	 * 查询全部快递公司，根据ordinal排序
 	 */
 	@RequestMapping(value = "list", method = RequestMethod.GET)
 	public Result<List<ExpressCompanyDTO>> list() {
-		List<ExpressCompanyBO> bos = expressCompanyService.list();
-		return successGet(ExpressCompanyConverter.convertDTOS(bos));
+		return successGet(ExpressCompanyConverter.convertDTOS(expressCompanyService.list()));
+	}
+	
+	/**
+	 * 查询全部快递公司,并且按照名称首字母分组
+	 * 
+	 * @return
+	 * @author Sunny
+	 * @date 2017年7月7日
+	 */
+	@RequestMapping(value = "group", method = RequestMethod.GET)
+	public Result<ExpressCompanyQueryDTO> group() {
+		return successGet(ExpressCompanyConverter.convertExpressCompanyQueryDTO(expressCompanyService.list()));
 	}
 	
 	/**
@@ -47,16 +59,10 @@ public class ExpressCompanyController extends BaseController {
 	 */
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	public Result<ExpressCompanyDTO> get(@PathVariable("id") Integer id) {
-		if (id == null || id <= 0) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
-		
 		ExpressCompanyBO expressCompanyBO = expressCompanyService.get(id);
-		
-		if (expressCompanyBO == null || expressCompanyBO.getId() == null || expressCompanyBO.getId() <= 0) {
+		if (expressCompanyBO == null) {
 			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
-		
 		return successGet(ExpressCompanyConverter.convert(expressCompanyBO));
 	}
 	
@@ -76,7 +82,7 @@ public class ExpressCompanyController extends BaseController {
 		 * 最终的检索结果 
 		 * 最大size为10
 		 */
-		int maxSize = 20;
+		int maxSize = 10;
 		List<ExpressCompanyBO> filterList =  new ArrayList<>();
 		
 		/*

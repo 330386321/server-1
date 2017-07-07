@@ -1,9 +1,13 @@
 package com.lawu.eshop.mall.srv.converter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyGroupDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
@@ -106,5 +110,37 @@ public class ExpressCompanyConverter {
 		rtn.setList(convertDTOS(expressCompanyBOList));
 		return rtn;
 	}
-
+	
+	
+	/**
+	 * <code>List&lt;ExpressCompanyBO&gt;</code>转ExpressCompanyQueryDTO
+	 * 
+	 * @param expressCompanyBOList
+	 * @return
+	 * @author Sunny
+	 * @date 2017年7月7日
+	 */
+	public static ExpressCompanyQueryDTO convertExpressCompanyQueryDTO(List<ExpressCompanyBO> expressCompanyBOList) {
+		ExpressCompanyQueryDTO rtn = new ExpressCompanyQueryDTO();
+		List<ExpressCompanyGroupDTO> list = new ArrayList<>();
+		Map<String, List<ExpressCompanyDTO>> map = new HashMap<>();
+		for (ExpressCompanyBO expressCompanyBO : expressCompanyBOList) {
+			char ascii =  (char) expressCompanyBO.getOrdinal().intValue();
+			String key = String.valueOf(ascii);
+			if (map.get(key) == null) {
+				map.put(key, new ArrayList<>());
+			}
+			map.get(key).add(convert(expressCompanyBO));
+		}
+		
+		for (Map.Entry<String, List<ExpressCompanyDTO>> entry : map.entrySet()) {
+			ExpressCompanyGroupDTO expressCompanyGroupDTO = new ExpressCompanyGroupDTO();
+			expressCompanyGroupDTO.setKey(entry.getKey());
+			expressCompanyGroupDTO.setItems(entry.getValue());
+			list.add(expressCompanyGroupDTO);
+		}
+		rtn.setList(list);
+		return rtn;
+	}
+	
 }

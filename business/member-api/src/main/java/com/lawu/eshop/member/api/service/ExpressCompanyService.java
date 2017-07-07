@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
+import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 
 /**
@@ -24,7 +25,17 @@ public interface ExpressCompanyService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "list")
     Result<List<ExpressCompanyDTO>> list();
- 
+    
+	/**
+	 * 查询全部快递公司,并且按照名称首字母分组
+	 * 
+	 * @return
+	 * @author Sunny
+	 * @date 2017年7月7日
+	 */
+	@RequestMapping(value = "group", method = RequestMethod.GET)
+	Result<ExpressCompanyQueryDTO> group();
+    
 	/**
 	 * 根据id查询快递公司
 	 * 

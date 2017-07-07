@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.lawu.eshop.mall.constants.StatusEnum;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.converter.ExpressCompanyConverter;
-import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDOExample;
 import com.lawu.eshop.mall.srv.mapper.ExpressCompanyDOMapper;
 import com.lawu.eshop.mall.srv.service.ExpressCompanyService;
@@ -36,7 +35,6 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
 		example.createCriteria().andStatusEqualTo(StatusEnum.STATUS_VALID.val);
 		example.setOrderByClause("ordinal ASC");
-
 		return ExpressCompanyConverter.convertBOS(expressCompanyDOMapper.selectByExample(example));
 	}
 	
@@ -49,11 +47,7 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 	 */
 	@Override
 	public ExpressCompanyBO get(Integer id) {
-		ExpressCompanyDO expressCompanyDO = expressCompanyDOMapper.selectByPrimaryKey(id);
-		if (expressCompanyDO == null || expressCompanyDO.getId() == null || expressCompanyDO.getId() <= 0) {
-			return null;
-		}
-		return ExpressCompanyConverter.convert(expressCompanyDO);
+		return ExpressCompanyConverter.convert(expressCompanyDOMapper.selectByPrimaryKey(id));
 	}
 	
 }
