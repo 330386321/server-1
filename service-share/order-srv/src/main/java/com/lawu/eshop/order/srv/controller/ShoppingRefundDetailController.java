@@ -35,6 +35,9 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
 import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
+import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -285,35 +288,16 @@ public class ShoppingRefundDetailController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "platformIntervention/{id}", method = RequestMethod.PUT)
-	public Result platformIntervention(@PathVariable("id") Long id) {
-		if (id == null || id <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
+	public Result platformIntervention(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
+		try {
+			shoppingRefundDetailService.platformIntervention(id, memberId);
+		} catch (DataNotExistException e) {
+		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (CanNotApplyForPlatformInterventionException e) {
+		 	return successCreated(ResultCode.CAN_NOT_APPLY_FOR_PLATFORM_INTERVENTION, e.getMessage());
 		}
-
-		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
-
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
-
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
-		// 订单状态必须为退款中
-		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
-			return successCreated(ResultCode.NOT_REFUNDING);
-		}
-
-		// 只有退款失败才能申请平台介入
-		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.REFUND_FAILED)) {
-			return successCreated(ResultCode.ORDER_NOT_REFUND_FAILED);
-		}
-
-		shoppingRefundDetailService.platformIntervention(shoppingRefundDetailBO);
-
 		return successCreated();
 	}
 

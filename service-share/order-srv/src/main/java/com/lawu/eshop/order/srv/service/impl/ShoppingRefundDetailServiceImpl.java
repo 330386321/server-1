@@ -32,6 +32,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeig
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
@@ -43,6 +44,9 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
+import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
@@ -455,40 +459,59 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	/**
 	 * 如果商家拒绝买家的退款申请或者拒绝退款 买家可以申请平台介入
 	 * 
-	 * @param ORDER_NOT_REFUND_FAILED
-	 *            退款详情
-	 * @param param
-	 *            参数 是否需要平台介入
-	 * @return
+	 * @param id
+	 *            退款详情id
+	 * @param memberId
+	 *            会员id
 	 */
 	@Transactional
 	@Override
-	public Integer platformIntervention(ShoppingRefundDetailBO shoppingRefundDetailBO) {
+	public void platformIntervention(Long id, Long memberId) {
+		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
+		}
+		ShoppingOrderItemDO shoppingOrderItemDO  = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		if (shoppingOrderItemDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		// 订单状态必须为退款中
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
+			throw new CanNotApplyForPlatformInterventionException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
+		}
+		// 只有退款失败才能申请平台介入
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.REFUND_FAILED.getValue())) {
+			throw new CanNotApplyForPlatformInterventionException(ExceptionMessageConstant.THE_REFUND_STATUS_IS_NOT_A_REFUND_FAILURE);
+		}
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		if (!shoppingOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		// 更新订单项的退款状态为平台介入
-		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
-		shoppingOrderItemDO.setId(shoppingRefundDetailBO.getShoppingOrderItemId());
-		shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.PLATFORM_INTERVENTION.getValue());
+		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
+		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
+		shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.PLATFORM_INTERVENTION.getValue());
 		// 重置发送提醒的次数
-		shoppingOrderItemDO.setSendTime(0);
-		shoppingOrderItemDO.setGmtModified(new Date());
-		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		shoppingOrderItemUpdateDO.setSendTime(0);
+		shoppingOrderItemUpdateDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemUpdateDO);
 
 		// 更新退款详情
-		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		shoppingRefundDetailDO.setId(shoppingRefundDetailBO.getId());
-		shoppingRefundDetailDO.setGmtIntervention(new Date());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailUpdateDO.setId(shoppingRefundDetailDO.getId());
+		shoppingRefundDetailUpdateDO.setGmtIntervention(new Date());
+		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 		
 		// 加入退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
-		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
-		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemUpdateDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailUpdateDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
-
-		return result;
-
 	}
 
 	/**

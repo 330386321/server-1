@@ -36,11 +36,12 @@ public interface ShoppingRefundDetailService {
 	 * 买家可以申请平台介入
 	 * 
 	 * @param id 退款详情id
+	 * @param memberId 会员id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "platformIntervention/{id}", method = RequestMethod.PUT)
-	Result platformIntervention(@PathVariable("id") Long id);
+	Result platformIntervention(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 	
 	/**
 	 * 根据订单项id查询退款详情

@@ -40,9 +40,11 @@ public class ExceptionMessageConstant {
 	/** shopping order refund **/
 	public final static String SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST = "购物订单退款数据不存在";
 	
-	public final static String ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS = "订单状态不是待退款状态";
+	public final static String ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS = "订单状态不是退款中状态";
 	
 	public final static String REFUND_STATE_IS_NOT_A_STATE_TO_BE_RETURNED = "退款状态不是待退货状态";
+	
+	public final static String THE_REFUND_STATUS_IS_NOT_A_REFUND_FAILURE = "退款状态不是退款失败状态";
 	
 	
 }

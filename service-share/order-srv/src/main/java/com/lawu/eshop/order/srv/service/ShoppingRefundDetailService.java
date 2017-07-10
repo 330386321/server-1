@@ -80,9 +80,10 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情id
-	 * @return
+	 * @param memberId
+	 *            会员id
 	 */
-	Integer platformIntervention(ShoppingRefundDetailBO shoppingRefundDetailBO);
+	void platformIntervention(Long id, Long memberId);
 	
 	/**
 	 * 买家撤销退货申请

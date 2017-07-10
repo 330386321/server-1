@@ -85,19 +85,15 @@ public class ShoppingRefundDetailController extends BaseController {
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "申请平台介入", notes = "申请平台介入。[1002|1003|1004|4011|4014]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "申请平台介入", notes = "申请平台介入。[1100|1024|4024]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
 	@RequestMapping(value = "platformIntervention/{id}", method = RequestMethod.PUT)
 	public Result platformIntervention(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id") Long id) {
 		// 买家是否申请平台介入
-		Result result = shoppingRefundDetailservice.platformIntervention(id);
-		
-		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
-		}
-		
-		return successCreated();
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingRefundDetailservice.platformIntervention(id, memberId);
+		return successCreated(result);
 	}
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
