@@ -28,9 +28,9 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
  * @author Sunny
  * @date 2017/04/06
  */
-@FeignClient(value= "order-srv", path = "shoppingOrder/")
+@FeignClient(value = "order-srv", path = "shoppingOrder/")
 public interface ShoppingOrderService {
-	
+
 	/**
 	 * 批量保存订单
 	 * 
@@ -41,31 +41,35 @@ public interface ShoppingOrderService {
 
 	/**
 	 * 查询订单评价状态
+	 * 
 	 * @param orderId
 	 * @return
 	 */
 	@RequestMapping(value = "getOrderCommentStatus/{shoppingOrderItemId}", method = RequestMethod.GET)
-    Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
-	
+	Result<CommentOrderDTO> getOrderCommentStatus(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
+
 	/**
 	 * 根据查询参数分页查询
 	 * 
-	 * @param memberId 会员id
-	 * @param params 查询参数
+	 * @param memberId
+	 *            会员id
+	 * @param params
+	 *            查询参数
 	 * @return
 	 */
 	@RequestMapping(value = "selectPageByMemberId/{memberId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param);
-	
+
 	/**
 	 * 根据id查询订单详情
 	 * 
-	 * @param id 购物订单id
+	 * @param id
+	 *            购物订单id
 	 * @return
 	 */
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
-	
+
 	/**
 	 * 根据id查询订单物流信息
 	 * 
@@ -75,11 +79,12 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
-	
+
 	/**
 	 * 取消购物订单
+	 * 
 	 * @param memberId
-	 * 			  会员id
+	 *            会员id
 	 * @param id
 	 *            购物订单id
 	 * @return
@@ -87,21 +92,22 @@ public interface ShoppingOrderService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "cancelOrder/{memberId}/{id}", method = RequestMethod.PUT)
 	public Result cancelOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id);
-	
+
 	/**
-	 * 删除购物订单
 	 * 
+	 * @param memberId
+	 *            会员id
 	 * @param id
 	 *            购物订单id
-	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.PUT)
-	Result deleteOrder(@PathVariable("id") Long id);
-	
+	@RequestMapping(value = "deleteOrder/{memberId}/{id}", method = RequestMethod.PUT)
+	Result deleteOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id);
+
 	/**
-	 * 确认收货之后
-	 * 修改购物订单以及订单项状态为交易成功
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
 	 * 
 	 * @param id
 	 *            购物订单id
@@ -110,22 +116,22 @@ public interface ShoppingOrderService {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
 	Result tradingSuccess(@PathVariable("id") Long id);
-	
+
 	/**
-	 * 买家申请退款
-	 * 修改订单状态为待商家确认
+	 * 买家申请退款 修改订单状态为待商家确认
 	 * 
-	 * @param shoppingOrderitemId 购物订单项id
-	 * @param param 退款参数
+	 * @param shoppingOrderitemId
+	 *            购物订单项id
+	 * @param param
+	 *            退款参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
 	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param);
-	
+
 	/**
-	 * 根据查询参数分页查询退款记录
-	 * 购物订单 购物订单项 退款详情关联查询
+	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询
 	 * 
 	 * @param memberId
 	 *            会员id
@@ -135,26 +141,28 @@ public interface ShoppingOrderService {
 	 */
 	@RequestMapping(value = "selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param);
-	
+
 	/**
 	 * 获取商品订单的总金额
+	 * 
 	 * @param orderIds
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "selectOrderMoney")
 	Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam("orderIds") String orderIds);
-	
+
 	/**
 	 * 查询各种订单状态的数量
 	 * 
-	 * @param memberId 会员id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author Sunny
 	 */
 	@RequestMapping(value = "numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
 	Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId);
-	
+
 	/**
 	 * 订单支付
 	 * 

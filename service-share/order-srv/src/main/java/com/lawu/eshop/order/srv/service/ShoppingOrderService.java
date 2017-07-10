@@ -102,13 +102,15 @@ public interface ShoppingOrderService {
 	void cancelOrder(Long memberId, Long id) throws DataNotExistException, IllegalOperationException, OrderNotCanceledException;
 
 	/**
-	 * 删除购物订单
 	 * 
+	 * @param memberId
+	 *            会员id
 	 * @param id
 	 *            购物订单id
-	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
-	int deleteOrder(Long id);
+	void deleteOrder(Long memberId, Long id);
 
 	/**
 	 * 支付成功之后 修改购物订单以及订单项状态为待发货

@@ -60,6 +60,7 @@ import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
+import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -147,21 +148,26 @@ public class ShoppingOrderController extends BaseController {
 	}
 
 	/**
-	 * 删除购物订单
 	 * 
+	 * @param memberId
+	 *            会员id
 	 * @param id
 	 *            购物订单id
-	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.PUT)
-	public Result deleteOrder(@PathVariable("id") Long id) {
-		int resultCode = shoppingOrderService.deleteOrder(id);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	@RequestMapping(value = "deleteOrder/{memberId}/{id}", method = RequestMethod.PUT)
+	public Result deleteOrder(@PathVariable("memberId") Long memberId, @PathVariable("id") Long id) {
+		try {
+			shoppingOrderService.deleteOrder(memberId, id);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (OrderNotDeleteException e) {
+			return successCreated(ResultCode.ORDER_NOT_DELETE, e.getMessage());
 		}
-
 		return successCreated();
 	}
 

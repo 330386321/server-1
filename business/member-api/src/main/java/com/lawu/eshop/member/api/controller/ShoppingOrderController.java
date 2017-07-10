@@ -170,16 +170,15 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "删除购物订单", notes = "根据购物订单id删除购物订单。[1002|1003|4003]（蒋鑫俊）", httpMethod = "DELETE")
+	@ApiOperation(value = "删除购物订单", notes = "根据购物订单id删除购物订单。[1100|1024|4003]（蒋鑫俊）", httpMethod = "DELETE")
 	@ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
 	@Authorization
 	@RequestMapping(value = "deleteOrder/{id}", method = RequestMethod.DELETE)
 	public Result deleteOrder(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-		Result result = shoppingOrderService.deleteOrder(id);
-
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.deleteOrder(memberId, id);
 		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
+			return successCreated(result);
 		}
 		return successDelete();
 	}
