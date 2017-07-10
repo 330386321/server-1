@@ -20,11 +20,11 @@ public class RongCloud {
 	private RongCloud(String appKey, String appSecret) {
 		user = new User(appKey, appSecret);
 		message = new Message(appKey, appSecret);
-		wordfilter = new Wordfilter(appKey, appSecret);
+		/*wordfilter = new Wordfilter(appKey, appSecret);
 		group = new Group(appKey, appSecret);
 		chatroom = new Chatroom(appKey, appSecret);
 		push = new Push(appKey, appSecret);
-		sms = new SMS(appKey, appSecret);
+		sms = new SMS(appKey, appSecret);*/
 
 	}
 
