@@ -27,6 +27,7 @@ import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
@@ -67,13 +68,22 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
-	public Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("memberId") Long memberId, @RequestParam("merchantId") Long merchantId) {
+	public Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam(name = "memberId", required = false) Long memberId, @RequestParam(name = "merchantId", required = false) Long merchantId) {
 		ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingRefundDetailService.getByShoppingOrderItemId(shoppingOrderItemId);
-		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getShoppingOrder() == null) {
-			return successGet(ResultCode.NOT_FOUND_DATA);
+		if (shoppingOrderItemExtendBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-		if (shoppingOrderItemExtendBO.getShoppingOrder().getMemberId().equals(memberId)) {
-			return successGet(ResultCode.ILLEGAL_OPERATION);
+		if (shoppingOrderItemExtendBO.getShoppingOrder() == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (shoppingOrderItemExtendBO.getShoppingRefundDetail() == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
+		}
+		if (memberId != null && !shoppingOrderItemExtendBO.getShoppingOrder().getMemberId().equals(memberId)) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		if (merchantId != null && !shoppingOrderItemExtendBO.getShoppingOrder().getMerchantId().equals(merchantId)) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
 		}
 		ShoppingRefundDetailExtendBO shoppingRefundDetailBO = shoppingOrderItemExtendBO.getShoppingRefundDetail();
 		ShoppingRefundDetailDTO shoppingRefundDetailDTO = ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO);
