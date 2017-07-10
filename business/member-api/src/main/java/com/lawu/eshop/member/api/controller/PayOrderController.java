@@ -82,13 +82,12 @@ public class PayOrderController extends BaseController {
                 }
                 BigDecimal realFavoredAmount2 =   BigDecimal.valueOf(realFavoredAmount);
                 double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
-                if(rfa2 != param.getFavoredAmount()){
+                if(Double.doubleToLongBits(rfa2) != Double.doubleToLongBits(param.getFavoredAmount())){
                     return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
                 }
             }
         }
-        Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param,userNum);
-        return result;
+        return  payOrderService.savePayOrderInfo(memberId, param,userNum);
     }
 
     @Audit(date = "2017-04-12", reviewer = "孙林青")
