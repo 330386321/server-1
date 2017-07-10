@@ -57,13 +57,17 @@ public interface ShoppingRefundDetailService {
 	/**
 	 * 买家填写退货的物流信息
 	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
+	 * @param memberId
+	 *            会员id
 	 * @param param
 	 *            退款详情物流信息
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
-	Integer fillLogisticsInformation(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailLogisticsInformationParam param);
+	void fillLogisticsInformation(Long id, Long memberId, ShoppingRefundDetailLogisticsInformationParam param);
 
 	/**
 	 * 商家是否同意退款

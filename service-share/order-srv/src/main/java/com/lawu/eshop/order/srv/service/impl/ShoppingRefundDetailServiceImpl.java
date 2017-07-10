@@ -45,6 +45,7 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
+import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
@@ -137,54 +138,73 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	/**
 	 * 买家填写退货的物流信息
 	 * 
-	 * @param param
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
+	 * @param memberId
+	 *            会员id
 	 * @param param
 	 *            退款详情物流信息
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	@Transactional
 	@Override
-	public Integer fillLogisticsInformation(ShoppingRefundDetailBO shoppingRefundDetailBO, ShoppingRefundDetailLogisticsInformationParam param) {
+	public void fillLogisticsInformation(Long id, Long memberId, ShoppingRefundDetailLogisticsInformationParam param) {
+		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
+		}
+		ShoppingOrderItemDO shoppingOrderItemDO  = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		if (shoppingOrderItemDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		// 订单状态必须为退款中
+		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
+			throw new CanNotFillOutTheReturnLogisticsException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
+		}
+		// 只有退款失败才能申请平台介入
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.REFUND_FAILED.getValue())) {
+			throw new CanNotFillOutTheReturnLogisticsException(ExceptionMessageConstant.REFUND_STATE_IS_NOT_A_STATE_TO_BE_RETURNED);
+		}
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		if (!shoppingOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		// 更新订单项状态为待退款
-		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailBO.getShoppingOrderItemId());
-		shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+		ShoppingOrderItemDO shoppingOrderItemUpdateDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
 		// 重置发送提醒的次数
-		shoppingOrderItemDO.setSendTime(0);
-		shoppingOrderItemDO.setGmtModified(new Date());
-		Integer result = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
+		shoppingOrderItemUpdateDO.setSendTime(0);
+		shoppingOrderItemUpdateDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemUpdateDO);
 		// 更新退款详情的物流信息
-		ShoppingRefundDetailDO shoppingRefundDetailDO = new ShoppingRefundDetailDO();
-		shoppingRefundDetailDO.setId(shoppingRefundDetailBO.getId());
-
-		shoppingRefundDetailDO.setGmtSubmit(new Date());
-		shoppingRefundDetailDO.setExpressCompanyId(param.getExpressCompanyId());
-		shoppingRefundDetailDO.setExpressCompanyCode(param.getExpressCompanyCode());
-		shoppingRefundDetailDO.setExpressCompanyName(param.getExpressCompanyName());
-		shoppingRefundDetailDO.setWaybillNum(param.getWaybillNum());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-		
+		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailUpdateDO.setId(shoppingRefundDetailDO.getId());
+		shoppingRefundDetailUpdateDO.setGmtSubmit(new Date());
+		shoppingRefundDetailUpdateDO.setExpressCompanyId(param.getExpressCompanyId());
+		shoppingRefundDetailUpdateDO.setExpressCompanyCode(param.getExpressCompanyCode());
+		shoppingRefundDetailUpdateDO.setExpressCompanyName(param.getExpressCompanyName());
+		shoppingRefundDetailUpdateDO.setWaybillNum(param.getWaybillNum());
+		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 		// 加入退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
-		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
-		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemUpdateDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailUpdateDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
-		
 		// 用户填写退货物流，提醒买家退款
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 		ShoppingRefundToBeReturnRemindNotification notification = new ShoppingRefundToBeReturnRemindNotification();
-		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+		notification.setShoppingOrderItemId(shoppingOrderItemUpdateDO.getId());
 		notification.setMerchantNum(shoppingOrderDO.getMerchantNum());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
 		notification.setOrderNum(shoppingOrderDO.getOrderNum());
-		notification.setWaybillNum(shoppingRefundDetailDO.getWaybillNum());
+		notification.setWaybillNum(shoppingRefundDetailUpdateDO.getWaybillNum());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_TO_BE_RETURN_REMIND, notification);
-		
-		return result;
 	}
 
 	/**
