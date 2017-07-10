@@ -1,0 +1,75 @@
+package com.lawu.eshop.ad.srv.service.impl;
+
+import com.lawu.eshop.ad.srv.bo.AdLexiconBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.domain.AdLexiconDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
+import com.lawu.eshop.ad.srv.mapper.AdLexiconDOMapper;
+import com.lawu.eshop.ad.srv.service.AdLexiconService;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * @author Leach
+ * @date 2017/7/6
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/spring-test.xml"})
+public class AdLexiconServiceImplTest {
+
+    @Autowired
+    private AdLexiconService adLexiconService;
+
+    @Autowired
+    private AdDOMapper adDOMapper;
+
+    @Autowired
+    private AdLexiconDOMapper adLexiconDOMapper;
+
+    @Transactional
+    @Rollback
+    @Test
+    public void save() {
+
+        adLexiconService.save("save-title");
+
+        List<AdLexiconDO> adLexiconDOS = adLexiconDOMapper.selectByExample(null);
+        Assert.assertNotNull(adLexiconDOS);
+        Assert.assertTrue(adLexiconDOS.size() == 1);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void selectList() {
+
+        adLexiconService.save("selectList-title");
+        adLexiconService.save("selectList-title1");
+        adLexiconService.save("selectList-title2");
+        adLexiconService.save("selectList-title3");
+        adLexiconService.save("selectList-title4");
+
+        AdDO adRecord = new AdDO();
+        adRecord.setGmtCreate(new Date());
+        adRecord.setGmtModified(new Date());
+        adRecord.setAdCount(1);
+        adRecord.setAreas("44");
+        adRecord.setTitle("selectList-title");
+        long adId = adDOMapper.insert(adRecord);
+        Assert.assertTrue( adId > 0);
+
+        List<AdLexiconBO> adLexiconBOS = adLexiconService.selectList(adId);
+        Assert.assertNotNull(adLexiconBOS);
+        Assert.assertTrue(adLexiconBOS.size() == 4);
+
+    }
+}
