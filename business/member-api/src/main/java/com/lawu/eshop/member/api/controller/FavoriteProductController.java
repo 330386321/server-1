@@ -79,6 +79,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "取消收藏的商品", notes = "取消收藏的商品[1002]（张荣成）", httpMethod = "DELETE")
@@ -88,6 +89,9 @@ public class FavoriteProductController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "商品id") Long productId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
         Result rs = favoriteProductService.remove(productId,memberId);
+        if(!isSuccess(rs)){
+        	return successCreated(rs.getRet());
+        }
         return successDelete();
     }
 }

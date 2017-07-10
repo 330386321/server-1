@@ -332,7 +332,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	List<AdDTO> newList =new ArrayList<>();
     	for (AdDTO adDTO : list) {
     		if(adDTO.getPutWayEnum().val==1){ //区域
-    			if(adDTO.getAreas()==null){
+    			if(adDTO.getAreas()==null || adDTO.getAreas()==""){
     				newList.add(adDTO);
     			}else{
     				if(memberPath!=null){

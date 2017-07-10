@@ -47,21 +47,20 @@ public class BankAccountServiceImpl implements BankAccountService {
 		String str=bankAccountParam.getAccountNumber().substring(bankAccountParam.getAccountNumber().length()-4, bankAccountParam.getAccountNumber().length());
 		String number=bankDO.getName()+"("+str+")";
 		bankAccountDO.setNote(number);
-		Integer id= bankAccountDOMapper.insert(bankAccountDO);
-		return id;
+		return bankAccountDOMapper.insert(bankAccountDO);
 	}
 
 	@Override
 	public List<BankAccountBO> selectMyBank(String userNum) {
 		BankAccountDOExample example = new BankAccountDOExample();
 		example.createCriteria().andUserNumEqualTo(userNum).andStatusEqualTo(new Byte("1"));
-		List<BankAccountDO> DOS=bankAccountDOMapper.selectByExample(example);
-		List<BankDO> bankDOS=new ArrayList<BankDO>();
-		for (BankAccountDO bankAccountDO : DOS) {
+		List<BankAccountDO> list=bankAccountDOMapper.selectByExample(example);
+		List<BankDO> bankDOS=new ArrayList<>();
+		for (BankAccountDO bankAccountDO : list) {
 			BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountDO.getBankId());
 			bankDOS.add(bankDO);
 		}
-		return DOS.isEmpty() ? null :BankAccountConverter.convertBOS(DOS,bankDOS);
+		return list.isEmpty() ? null :BankAccountConverter.convertBOS(list,bankDOS);
 	}
 
 	@Override
@@ -71,8 +70,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 		example.createCriteria().andIdEqualTo(id);
 		BankAccountDO bankAccount=new BankAccountDO();
 		bankAccount.setStatus(new Byte("0"));
-		Integer i=bankAccountDOMapper.updateByExampleSelective(bankAccount, example);
-		return i;
+		return bankAccountDOMapper.updateByExampleSelective(bankAccount, example);
 	}
 
 	@Override
