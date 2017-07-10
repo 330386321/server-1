@@ -74,11 +74,28 @@ public interface ShoppingOrderService {
 	Page<ShoppingOrderExtendBO> selectPage(ShoppingOrderQueryForeignToOperatorParam param);
 
 	/**
-	 * 根据id获取购物订单以及订单项
+	 * 查询订单详情
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	ShoppingOrderExtendBO get(Long id, Long memberId, Long merchantId);
+
+	/**
+	 * 查询订单详情
 	 * 
 	 * @param id
 	 *            购物订单id
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	ShoppingOrderExtendBO get(Long id);
 
@@ -88,7 +105,22 @@ public interface ShoppingOrderService {
 	 * @param id
 	 * @return
 	 */
-	ShoppingOrderBO getShoppingOrder(Long id);
+	ShoppingOrderBO getShoppingOrder(Long id) throws DataNotExistException, IllegalOperationException;
+
+	/**
+	 * 根据id获取购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	ShoppingOrderBO getShoppingOrder(Long id, Long memberId, Long merchantId)  throws DataNotExistException, IllegalOperationException;
 
 	/**
 	 * 取消购物订单

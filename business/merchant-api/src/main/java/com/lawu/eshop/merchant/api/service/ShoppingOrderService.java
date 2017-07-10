@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
@@ -22,7 +23,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
  * @author Sunny
  * @date 2017/04/12
  */
-@FeignClient(value = "order-srv")
+@FeignClient(value = "order-srv", path = "shoppingOrder/")
 public interface ShoppingOrderService {
 	
 	/**
@@ -35,7 +36,7 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectPageByMerchantId/{merchantId}", method = RequestMethod.POST)
+	@RequestMapping(value = "selectPageByMerchantId/{merchantId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderQueryToMerchantDTO>> selectPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingOrderQueryForeignToMerchantParam param);
 	
 	/**
@@ -43,10 +44,12 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/get/{id}", method = RequestMethod.GET)
-	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
+	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 	
 	/**
 	 * 商家发货填写物流信息 并修改购物订单以及购物订单项的状态为待收货
@@ -58,7 +61,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingOrder/fillLogisticsInformation/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
 	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingOrderLogisticsInformationParam param);
 	
 	/**
@@ -68,7 +71,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	@RequestMapping(value = "shoppingOrder/isNoOnGoingOrder/{merchantId}", method = RequestMethod.GET)
+	@RequestMapping(value = "isNoOnGoingOrder/{merchantId}", method = RequestMethod.GET)
 	Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId);
 	
 	/**
@@ -82,7 +85,7 @@ public interface ShoppingOrderService {
 	 *            查询参数
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
+	@RequestMapping(value = "selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
 	Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingRefundQueryForeignParam param);
 	
 	/**
@@ -93,7 +96,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	@RequestMapping(value = "shoppingOrder/numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
+	@RequestMapping(value = "numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
 	Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("merchantId") Long merchantId);
 	
 	/**
@@ -101,8 +104,10 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingOrder/getExpressInfo/{id}", method = RequestMethod.GET)
-	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
+	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 }

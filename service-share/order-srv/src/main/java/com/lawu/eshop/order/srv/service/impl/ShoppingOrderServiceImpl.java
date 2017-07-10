@@ -347,7 +347,40 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	}
 
 	/**
-	 * 根据id获取购物订单以及订单项
+	 * 查询订单详情
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	@Override
+	public ShoppingOrderExtendBO get(Long id, Long memberId, Long merchantId) {
+		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
+		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
+		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
+		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
+		// 如果是会员端请求,需要判断订单的数据状态是否是正常
+		boolean isNotFind = shoppingOrderExtendDO == null || shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty() 
+				|| (memberId != null && shoppingOrderExtendDO.getStatus().equals(StatusEnum.INVALID.getValue()));
+		if (isNotFind) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (memberId != null && !shoppingOrderExtendDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		if (merchantId != null && !shoppingOrderExtendDO.getMerchantId().equals(merchantId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		return ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDO);
+	}
+	
+	/**
+	 * 查询订单详情
 	 * 
 	 * @param id
 	 *            购物订单id
@@ -355,22 +388,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Override
 	public ShoppingOrderExtendBO get(Long id) {
-		ShoppingOrderExtendBO rtn = null;
-		ShoppingOrderExtendDOExample shoppingOrderExtendDOExample = new ShoppingOrderExtendDOExample();
-		shoppingOrderExtendDOExample.setIncludeShoppingOrderItem(true);
-		shoppingOrderExtendDOExample.setIncludeViewShoppingOrderItem(true);
-
-		ShoppingOrderExtendDO shoppingOrderExtendDO = shoppingOrderDOExtendMapper.selectByPrimaryKey(id);
-
-		boolean isNotFind = shoppingOrderExtendDO == null || shoppingOrderExtendDO.getId() == null || shoppingOrderExtendDO.getId() <= 0 || shoppingOrderExtendDO.getItems() == null || shoppingOrderExtendDO.getItems().isEmpty();
-		if (isNotFind) {
-			return rtn;
-		}
-
-		rtn = ShoppingOrderExtendConverter.convertShoppingOrderExtendDetailBO(shoppingOrderExtendDO);
-		shoppingOrderExtendDO = null;
-
-		return rtn;
+		return get(id, null, null);
 	}
 
 	/**
@@ -381,9 +399,29 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @return
 	 */
 	@Override
-	public ShoppingOrderBO getShoppingOrder(Long id) {
+	public ShoppingOrderBO getShoppingOrder(Long id) throws DataNotExistException, IllegalOperationException {
+		return getShoppingOrder(id, null, null);
+	}
+	
+	/**
+	 * 根据id获取购物订单
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @return
+	 */
+	@Override
+	public ShoppingOrderBO getShoppingOrder(Long id, Long memberId, Long merchantId) throws DataNotExistException, IllegalOperationException {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
+		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID)) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (memberId != null && !shoppingOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		if (merchantId != null && !shoppingOrderDO.getMerchantId().equals(merchantId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		return ShoppingOrderConverter.convertShoppingOrderBO(shoppingOrderDO);
 	}
 
@@ -452,21 +490,21 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
 
 		if (shoppingOrderDO == null || shoppingOrderDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
-			throw new DataNotExistException("购物订单不存在");
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 		
 		if (!shoppingOrderDO.getMemberId().equals(memberId)) {
-			throw new IllegalOperationException("非法操作购物订单");
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
 		}
 		
 		// 订单的当前状态必须已结束状态的订单
 		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue())) {
-			throw new OrderNotDeleteException("订单还未结束");
+			throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_IS_NOT_OVER);
 		}
 		
 		// 如果订单的状态是交易成功，检查订单项的订单状态是否是否是完成状态s
 		if (shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue()) && !shoppingOrderDO.getIsDone()) {
-			throw new OrderNotDeleteException("订单还未完成");
+			throw new OrderNotDeleteException(ExceptionMessageConstant.ORDER_HAS_NOT_BEEN_COMPLETED);
 		}
 
 		// 更新购物订单的状态

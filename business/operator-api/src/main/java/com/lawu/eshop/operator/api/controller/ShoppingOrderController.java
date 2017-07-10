@@ -1,5 +1,16 @@
 package com.lawu.eshop.operator.api.controller;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
@@ -21,17 +32,12 @@ import com.lawu.eshop.order.dto.foreign.ShoppingOrderQueryToOperatorDTO;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderQueryForeignToOperatorParam;
 import com.lawu.eshop.order.param.foreign.ShoppingOrderUpdateInfomationForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundQueryForeignParam;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Sunny
@@ -84,23 +90,13 @@ public class ShoppingOrderController extends BaseController {
      * @return
      */
     @SuppressWarnings("unchecked")
-    @ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
+    @ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequiresAuthentication
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-        if (id == null || id <= 0) {
-            return successGet(ResultCode.ID_EMPTY);
-        }
-
-        Result<ShoppingOrderExtendDetailDTO> resultShoppingOrderExtendDetailDTO = shoppingOrderService.get(id);
-
-        if (!isSuccess(resultShoppingOrderExtendDetailDTO)) {
-            return successGet(resultShoppingOrderExtendDetailDTO.getRet());
-        }
-
-        return successGet(resultShoppingOrderExtendDetailDTO);
+    public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") @ApiParam(value = "购物订单id") Long id) {
+        Result<ShoppingOrderExtendDetailDTO> result = shoppingOrderService.get(id);
+        return successGet(result);
     }
 
     /**

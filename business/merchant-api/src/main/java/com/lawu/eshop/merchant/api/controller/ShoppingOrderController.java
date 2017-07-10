@@ -53,13 +53,6 @@ public class ShoppingOrderController extends BaseController {
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
 
-	/**
-	 * To商家 根据查询参数分页查询
-	 * 
-	 * @param params
-	 *            查询参数
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@ApiOperation(value = "分页查询订单", notes = "根据查询参数分页查询。[]（蒋鑫俊）", httpMethod = "GET")
@@ -77,43 +70,18 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(result);
 	}
 
-	/**
-	 * 根据购物订单id查询购物订单详情
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
+	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderExtendDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
-
-		Result<ShoppingOrderExtendDetailDTO> resultShoppingOrderExtendDetailDTO = shoppingOrderService.get(id);
-
-		if (!isSuccess(resultShoppingOrderExtendDetailDTO)) {
-			return successGet(resultShoppingOrderExtendDetailDTO.getRet());
-		}
-
-		return successGet(resultShoppingOrderExtendDetailDTO);
+	public Result<ShoppingOrderExtendDetailDTO> get(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "购物订单id", required = true) Long id) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderExtendDetailDTO> result = shoppingOrderService.get(id, merchantId);
+		return successGet(result);
 	}
 
-	/**
-	 * 商家发货填写物流信息 并修改购物订单以及购物订单项的状态为待收货
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @param param
-	 *            订单物流参数
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "填写物流信息", notes = "填写物流信息。[1002|1003|4008]（蒋鑫俊）", httpMethod = "PUT")
@@ -151,16 +119,6 @@ public class ShoppingOrderController extends BaseController {
 		return successCreated(result);
 	}
 	
-    /**
-	 * 根据查询参数分页查询退款记录
-	 * 购物订单 购物订单项 退款详情关联查询
-	 * 
-	 * @param memberId
-	 *            会员id
-	 * @param param
-	 *            查询参数
-	 * @return
-	 */
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
@@ -178,11 +136,6 @@ public class ShoppingOrderController extends BaseController {
     	return successGet(result);
     }
 	
-    /**
-	 * 查询订单各种状态的数量
-	 * 
-	 * @return
-	 */
 	@Audit(date = "2017-05-02", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询订单各种状态的数量", notes = "查询订单各种状态的数量。[]（蒋鑫俊）", httpMethod = "GET")
@@ -200,13 +153,6 @@ public class ShoppingOrderController extends BaseController {
     	return successGet(result);
     }
 	
-    /**
-     * 查询物流动态
-     * 
-     * @param token
-     * @param id
-     * @return
-     */
 	@Audit(date = "2017-05-03", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
@@ -214,13 +160,8 @@ public class ShoppingOrderController extends BaseController {
     @Authorization
     @RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
     public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-    	
-    	Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingOrderService.getExpressInfo(id);
-    	
-    	if (!isSuccess(resultShoppingOrderExpressDTO)) {
-    		return successGet(resultShoppingOrderExpressDTO.getRet());
-    	}
-    	
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingOrderService.getExpressInfo(id, merchantId);
     	return successGet(resultShoppingOrderExpressDTO);
     }
 }

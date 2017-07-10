@@ -65,20 +65,24 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 */
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id);
+	Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
 	/**
 	 * 根据id查询订单物流信息
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员idid
 	 * @return
 	 */
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
+	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 
 	/**
 	 * 取消购物订单

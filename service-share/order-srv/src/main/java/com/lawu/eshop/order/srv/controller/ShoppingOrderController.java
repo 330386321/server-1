@@ -176,21 +176,25 @@ public class ShoppingOrderController extends BaseController {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param merchantId
+	 *            商家id
 	 * @return
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successGet(ResultCode.ID_EMPTY);
+	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memeberId, @RequestParam(name = "merchantId", required = false) Long merchantId) {
+		ShoppingOrderBO shoppingOrderBO = null;
+		try {
+			shoppingOrderBO = shoppingOrderService.getShoppingOrder(id, memeberId, merchantId);
+		} catch (DataNotExistException e) {
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-
-		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-
-		if (shoppingOrderBO == null) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
 		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
 		if (StringUtils.isNotBlank(shoppingOrderBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderBO.getWaybillNum())) {
@@ -441,33 +445,29 @@ public class ShoppingOrderController extends BaseController {
 
 	/**
 	 * 根据id查询订单详情
-	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *           会员id
+	 *            
 	 * @return
 	 */
 	@RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successGet(ResultCode.ID_EMPTY);
+	public Result<ShoppingOrderExtendDetailDTO> get(@PathVariable("id") Long id, @RequestParam(value = "memberId", required = false) Long memberId, @RequestParam(value = "merchantId", required = false) Long merchantId) {
+		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = null;
+		try {
+			shoppingOrderExtendDetailBO = shoppingOrderService.get(id, memberId, merchantId);
+		} catch (DataNotExistException e) {
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-
-		ShoppingOrderExtendBO shoppingOrderExtendDetailBO = shoppingOrderService.get(id);
-
-		boolean isNotFind = shoppingOrderExtendDetailBO == null || shoppingOrderExtendDetailBO.getId() == null || shoppingOrderExtendDetailBO.getId() <= 0 || shoppingOrderExtendDetailBO.getItems() == null || shoppingOrderExtendDetailBO.getItems().isEmpty();
-		if (isNotFind) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
-		}
-
 		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
 		if (StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingOrderExtendDetailBO.getWaybillNum())) {
 			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingOrderExtendDetailBO.getExpressCompanyCode(), shoppingOrderExtendDetailBO.getWaybillNum());
 		}
-
 		ShoppingOrderExtendDetailDTO shoppingOrderExtendDetailDTO = ShoppingOrderExtendConverter.convert(shoppingOrderExtendDetailBO, expressInquiriesDetailBO);
-
 		// 倒计时在服务端放入
 		Long countdown = null;
 		switch (shoppingOrderExtendDetailDTO.getOrderStatus()) {
@@ -494,7 +494,7 @@ public class ShoppingOrderController extends BaseController {
 
 		return successGet(shoppingOrderExtendDetailDTO);
 	}
-
+	
 	/**
 	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台
 	 * 

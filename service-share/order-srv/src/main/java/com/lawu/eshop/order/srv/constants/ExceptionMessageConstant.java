@@ -20,4 +20,8 @@ public class ExceptionMessageConstant {
 	
 	public final static String ORDER_IS_NOT_PENDING_PAYMENT_STATUS = "订单当前是不是待支付状态";
 	
+	public final static String ORDER_IS_NOT_OVER = "订单还未结束";
+	
+	public final static String ORDER_HAS_NOT_BEEN_COMPLETED = "订单还未完成";
+	
 }
