@@ -157,9 +157,35 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 */
-	int tradingSuccess(Long id, boolean isAutomaticReceipt);
+	void tradingSuccess(Long id, Long memberId);
+	
+	/**
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param isAutomaticReceipt
+	 *            是否是自动收货
+	 * @return
+	 */
+	void tradingSuccess(Long id, boolean isAutomaticReceipt);
+	
+	/**
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @param isAutomaticReceipt
+	 *            是否是自动收货
+	 * @return
+	 */
+	void tradingSuccess(Long id, Long memberId, boolean isAutomaticReceipt);
 
 	/**
 	 * 买家申请退款 修改订单项状态为待商家确认

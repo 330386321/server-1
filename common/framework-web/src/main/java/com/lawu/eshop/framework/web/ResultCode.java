@@ -249,7 +249,7 @@ public class ResultCode {
         ResultCode.messageMap.put(ORDER_NOT_CANCELED, "订单不能被取消");
         ResultCode.messageMap.put(ORDER_NOT_DELETE, "订单不能被删除");
         ResultCode.messageMap.put(ORDER_NOT_PENDING_PAYMENT, "订单不是待支付状态");
-        ResultCode.messageMap.put(ORDER_NOT_RECEIVED, "订单不是待收货状态");
+        ResultCode.messageMap.put(ORDER_NOT_RECEIVED, "订单不能确认收货");
         ResultCode.messageMap.put(ORDER_NOT_REFUND, "订单不能被退款");
         ResultCode.messageMap.put(EXCEEDS_RETURN_TIME, "订单超过退货时间");
         ResultCode.messageMap.put(NOT_SHIPPING_STATUS, "订单不是待发货状态");

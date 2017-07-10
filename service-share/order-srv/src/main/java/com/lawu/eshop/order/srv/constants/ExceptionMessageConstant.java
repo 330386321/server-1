@@ -33,4 +33,6 @@ public class ExceptionMessageConstant {
 	
 	public final static String THE_ORDER_EXCEEDS_THE_REFUND_TIME = "订单超过退款时间";
 	
+	public final static String THE_ORDER_IS_NOT_IN_RECEIPT = "订单不是待收货状态";
+	
 }

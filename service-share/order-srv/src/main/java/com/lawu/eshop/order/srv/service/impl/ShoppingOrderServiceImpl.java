@@ -81,6 +81,7 @@ import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
+import com.lawu.eshop.order.srv.exception.OrderNotReceivedException;
 import com.lawu.eshop.order.srv.exception.OrderNotRefundException;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
@@ -596,38 +597,32 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public int tradingSuccess(Long id, boolean isAutomaticReceipt) {
-
-		// 验证
-		if (id == null || id <= 0) {
-			return ResultCode.ID_EMPTY;
-		}
-
+	public void tradingSuccess(Long id, Long memberId, boolean isAutomaticReceipt) {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
-
+		if (memberId != null && !shoppingOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		// 订单的当前状态必须是待收货
 		if (!shoppingOrderDO.getOrderStatus().equals(ShoppingOrderStatusEnum.TO_BE_RECEIVED.getValue())) {
-			return ResultCode.ORDER_NOT_RECEIVED;
+			throw new OrderNotReceivedException(ExceptionMessageConstant.THE_ORDER_IS_NOT_IN_RECEIPT);
 		}
-
 		// 更新购物订单的状态
-		shoppingOrderDO.setId(id);
-		shoppingOrderDO.setGmtModified(new Date());
-		shoppingOrderDO.setIsAutomaticReceipt(isAutomaticReceipt);
+		ShoppingOrderDO shoppingOrderUpdateDO = new ShoppingOrderDO();
+		shoppingOrderUpdateDO.setId(id);
+		shoppingOrderUpdateDO.setGmtModified(new Date());
+		shoppingOrderUpdateDO.setIsAutomaticReceipt(isAutomaticReceipt);
 		// 如果是自动收货，设置订单的状态为完成
 		if (isAutomaticReceipt) {
-			shoppingOrderDO.setIsDone(true);
+			shoppingOrderUpdateDO.setIsDone(true);
 		}
 		// 更改订单状态为交易成功
-		shoppingOrderDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
+		shoppingOrderUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		// 更新成交时间
-		shoppingOrderDO.setGmtTransaction(new Date());
-		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderDO);
-
+		shoppingOrderUpdateDO.setGmtTransaction(new Date());
+		shoppingOrderDOMapper.updateByPrimaryKeySelective(shoppingOrderUpdateDO);
 		// 更新购物订单项状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
 		ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
@@ -653,21 +648,46 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			item.setGmtModified(new Date());
 			shoppingOrderItemDOMapper.updateByPrimaryKey(item);
 		}
-
 		// 发送MQ消息通知产品模块增加销量
 		shoppingOrderTradingSuccessIncreaseSalesTransactionMainServiceImpl.sendNotice(id);
-
 		/*
 		 * 发送MQ消息通知资产模块 如果是手动收货保存资金冻结表 如果是自动收货直接付款给商家
 		 */
 		shoppingOrderTradingSuccessTransactionMainServiceImpl.sendNotice(id);
-
 		if (shoppingOrderDO.getIsDone()) {
 			// 提示商家新增一笔订单交易收入
-			ordersTradingIncomeNotice(shoppingOrderDO.getId(), shoppingOrderDO.getActualAmount(), shoppingOrderDO.getMerchantNum());
+			ordersTradingIncomeNotice(shoppingOrderUpdateDO.getId(), shoppingOrderUpdateDO.getActualAmount(), shoppingOrderUpdateDO.getMerchantNum());
 		}
-
-		return ResultCode.SUCCESS;
+	}
+	
+	/**
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public void tradingSuccess(Long id, Long memberId) {
+		tradingSuccess(id, memberId, false);
+	}
+	
+	/**
+	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
+	 * 
+	 * @param id
+	 *            购物订单id
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public void tradingSuccess(Long id, boolean isAutomaticReceipt) {
+		tradingSuccess(id, null, isAutomaticReceipt);
 	}
 
 	/**

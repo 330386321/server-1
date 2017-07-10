@@ -62,6 +62,7 @@ import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
+import com.lawu.eshop.order.srv.exception.OrderNotReceivedException;
 import com.lawu.eshop.order.srv.exception.OrderNotRefundException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
@@ -276,18 +277,22 @@ public class ShoppingOrderController extends BaseController {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "tradingSuccess/{id}", method = RequestMethod.PUT)
-	public Result tradingSuccess(@PathVariable("id") Long id) {
-
-		int resultCode = shoppingOrderService.tradingSuccess(id, false);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	public Result tradingSuccess(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
+		try {
+			shoppingOrderService.tradingSuccess(id, memberId);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (OrderNotReceivedException e) {
+			return successCreated(ResultCode.ORDER_NOT_REFUND, e.getMessage());
 		}
-
 		return successCreated();
 	}
 
