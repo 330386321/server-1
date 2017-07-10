@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,7 +112,7 @@ public class MessageConsumerListener extends AbstractMessageConsumerListener {
             contents.put(CONTENT,info.getContent());
             contents.put(TYPE, MessageTypeEnum.getEnum(info.getMessageType()));
             GtPush push = new GtPush();
-            List<MessagePushBO> messagePushBOS = new ArrayList<>();
+            List<MessagePushBO> messagePushBOS ;
             logger.info("gtpush-area-type type:result({}) flag:flag({})", info.getUserType(),UserTypeEnum.MEMBER.val.byteValue()==info.getUserType());
             if(UserTypeEnum.MEMBER.val.byteValue()==info.getUserType()){
                 //推送用户
