@@ -40,7 +40,7 @@ public class ExpressCompanyController extends BaseController {
 	}
 	
 	/**
-	 * 查询全部快递公司,并且按照名称首字母分组
+	 * 查询可显示的快递公司,并且按照名称首字母分组
 	 * 
 	 * @return
 	 * @author Sunny
@@ -48,7 +48,9 @@ public class ExpressCompanyController extends BaseController {
 	 */
 	@RequestMapping(value = "group", method = RequestMethod.GET)
 	public Result<ExpressCompanyQueryDTO> group() {
-		return successGet(ExpressCompanyConverter.convertExpressCompanyQueryDTO(expressCompanyService.list()));
+		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list(true);
+		ExpressCompanyQueryDTO rtn = ExpressCompanyConverter.convertExpressCompanyQueryDTO(expressCompanyBOList);
+		return successGet(rtn);
 	}
 	
 	/**
@@ -76,7 +78,7 @@ public class ExpressCompanyController extends BaseController {
 	 */
 	@RequestMapping(value = "keyWord", method = RequestMethod.GET)
 	public Result<ExpressCompanyRetrieveDTO> listByKeyWord(@RequestParam("keyWord") String keyWord) {
-		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list();
+		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list(false);
 		
 		/*
 		 * 最终的检索结果 
