@@ -217,32 +217,28 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(result.getModel());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-05-05", reviewer = "孙林青")
 	@ApiOperation(value = "待支付订单支付", notes = "用于对已生成但未支付的订单进行支付。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.GET)
 	public Result<ShoppingOrderPaymentForeignDTO> orderPayment(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
-
-		Result<ShoppingOrderPaymentDTO> result = shoppingOrderService.orderPayment(id);
-
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderPaymentDTO> result = shoppingOrderService.orderPayment(id, memberId);
 		if (!isSuccess(result)) {
-			return successGet(result.getRet());
+			return successGet(result);
 		}
-
 		String memberNum = UserUtil.getCurrentUserNum(getRequest());
-
 		Result<PropertyBalanceDTO> propertyBalanceDTOResult = propertyInfoService.getPropertyBalance(memberNum);
 		if (!isSuccess(propertyBalanceDTOResult)) {
 			return successGet(propertyBalanceDTOResult.getRet());
 		}
-
 		ShoppingOrderPaymentForeignDTO shoppingOrderPaymentForeignDTO = new ShoppingOrderPaymentForeignDTO();
 		shoppingOrderPaymentForeignDTO.setId(result.getModel().getId());
 		shoppingOrderPaymentForeignDTO.setOrderNum(result.getModel().getOrderNum());
 		shoppingOrderPaymentForeignDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
 		shoppingOrderPaymentForeignDTO.setBalance(propertyBalanceDTOResult.getModel().getBalance());
-
 		return successGet(shoppingOrderPaymentForeignDTO);
 	}
 }

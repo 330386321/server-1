@@ -53,6 +53,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
@@ -254,17 +255,19 @@ public class ShoppingOrderController extends BaseController {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 */
-	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.PUT)
-	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id) {
-
+	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.GET)
+	public Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
 		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
-
-		if (shoppingOrderBO.getId() == null || shoppingOrderBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		if (shoppingOrderBO.getId() == null) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
-
+		if (!shoppingOrderBO.getMemberId().equals(memberId)) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		return successCreated(ShoppingOrderConverter.convert(shoppingOrderBO));
 	}
 

@@ -176,6 +176,6 @@ public interface ShoppingOrderService {
 	 *            购物订单id
 	 * @return
 	 */
-	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.PUT)
-	Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id);
+	@RequestMapping(value = "orderPayment/{id}", method = RequestMethod.GET)
+	Result<ShoppingOrderPaymentDTO> orderPayment(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 }
