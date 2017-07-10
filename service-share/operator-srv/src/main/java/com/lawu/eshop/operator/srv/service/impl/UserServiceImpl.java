@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     public List<String> findRolePermission(Integer roleId) {
         List<RolePermissionDOView> rolePermissionDOViews = rolePermissionDOMapperExtend.findRolePermission(roleId);
         if (rolePermissionDOViews.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<String> permissionKeys = new ArrayList<>();
         for (RolePermissionDOView rolePermissionDOView : rolePermissionDOViews) {
@@ -97,14 +97,13 @@ public class UserServiceImpl implements UserService {
         if (userRoleDOViews.isEmpty()) {
             return null;
         }
-        List<Map<String, String>> list = new ArrayList<>();
         List<Integer> roleids = new ArrayList<>();
         for (UserRoleDOView userRoleDOView : userRoleDOViews) {
             roleids.add(userRoleDOView.getId());
         }
         List<RolePermissionDOView> rolePermissionDOViews = rolePermissionDOMapperExtend.findRolePermissionList(roleids);
         if(rolePermissionDOViews.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         List<PerssionInfoListBO> listBOS = new ArrayList<>();
         for (RolePermissionDOView rolePermissionDOView :rolePermissionDOViews){
@@ -116,7 +115,6 @@ public class UserServiceImpl implements UserService {
             perssionInfoListBO.setPermissionUrl(rolePermissionDOView.getPermissionUrl());
             listBOS.add(perssionInfoListBO);
         }
-        /*perssionInfoListBO.setPerssionInfo(set);*/
         return listBOS;
     }
 
@@ -143,8 +141,7 @@ public class UserServiceImpl implements UserService {
         userDO.setName(userParam.getName());
         userDO.setGmtModified(new Date());
         userDO.setId(userParam.getId());
-        Integer row = userDOMapper.updateByPrimaryKeySelective(userDO);
-        return row;
+        return userDOMapper.updateByPrimaryKeySelective(userDO);
     }
 
     @Override
@@ -190,8 +187,7 @@ public class UserServiceImpl implements UserService {
         UserDO userDO = new UserDO();
         userDO.setId(id);
         userDO.setStatus(StatusEnum.STATUS_DISABLE.val);
-       int row =  userDOMapper.updateByPrimaryKeySelective(userDO);
-        return row;
+        return userDOMapper.updateByPrimaryKeySelective(userDO);
     }
 
     @Override
@@ -200,8 +196,7 @@ public class UserServiceImpl implements UserService {
         UserDO userDO = new UserDO();
         userDO.setId(id);
         userDO.setStatus(StatusEnum.STATUS_VALID.val);
-        int row =  userDOMapper.updateByPrimaryKeySelective(userDO);
-        return row;
+        return  userDOMapper.updateByPrimaryKeySelective(userDO);
     }
 
     @Override
