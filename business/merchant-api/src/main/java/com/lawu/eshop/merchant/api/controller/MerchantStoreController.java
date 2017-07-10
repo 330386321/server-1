@@ -79,10 +79,10 @@ public class MerchantStoreController extends BaseController {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.info("stackTrace:{}",e.getStackTrace().toString());
+            logger.info("stackTrace:{}",e);
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("异常情况:{}",ex);
+            logger.info("ServletException:{}",ex);
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
@@ -95,19 +95,19 @@ public class MerchantStoreController extends BaseController {
                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && StringUtils.isNotEmpty(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    else  if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
+                      if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) && StringUtils.isNotEmpty(imgUrl)) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -173,10 +173,10 @@ public class MerchantStoreController extends BaseController {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.info("IOException:{}",e.getStackTrace().toString());
+            logger.info("IOException:{}",e);
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("异常情况:{}","Servlet异常");
+            logger.info("ServletException:{}","Servlet异常");
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
@@ -188,19 +188,19 @@ public class MerchantStoreController extends BaseController {
                     String imgUrl = map.get(UploadFileTypeConstant.IMG_URL);
                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_STORE) && StringUtils.isNotEmpty(imgUrl)) {
                         storeUrls.append(imgUrl + ",");
-                    } else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
+                    }  if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_ENVIRONMENT) && StringUtils.isNotEmpty(imgUrl)) {
                         environmentUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LOGO) && StringUtils.isNotEmpty(imgUrl)) {
                         storeLogoUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_IDCARD) && StringUtils.isNotEmpty(imgUrl)) {
                         idCardUrls.append(imgUrl + ",");
                     }
-                    else if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
+                     if (fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_LICENCE) && StringUtils.isNotEmpty(imgUrl)) {
                         licenseUrls.append(imgUrl + ",");
                     }
-                    else if (StringUtils.isNotEmpty(imgUrl) && fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) ) {
+                     if (StringUtils.isNotEmpty(imgUrl) && fileName.contains(UploadFileTypeConstant.IMAGE_TYPE_OTHER) ) {
                         otherUrls.append(imgUrl + ",");
                     }
                 } else {
@@ -275,7 +275,7 @@ public class MerchantStoreController extends BaseController {
             logger.info("IOException {}",e.getStackTrace().toString());
             return successCreated(e.getMessage());
         } catch (ServletException ex) {
-            logger.info("异常情况:{}",ex);
+            logger.info("ServletException:{}",ex);
         }
         if (parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
