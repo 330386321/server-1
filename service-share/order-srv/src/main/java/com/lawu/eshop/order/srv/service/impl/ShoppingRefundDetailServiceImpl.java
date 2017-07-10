@@ -45,6 +45,7 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
+import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
 import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -543,35 +544,39 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 */
 	@Transactional
 	@Override
-	public int revokeRefundRequest(Long id) {
-		
-		if (id == null || id <= 0) {
-			return ResultCode.ID_EMPTY;
-		}
-		
+	public void revokeRefundRequest(Long id) {
+		revokeRefundRequest(id, null);
+	}
+	
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @return
+	 */
+	@Transactional
+	@Override
+	public void revokeRefundRequest(Long id, Long memberId) {
 		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
-		
-		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-		
-		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
-		
-		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		ShoppingOrderItemDO shoppingOrderItemDO  = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		if (shoppingOrderItemDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-		
-		// 订单项状态必须为退款中
+		// 订单状态必须为退款中
 		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
-			return ResultCode.NOT_REFUNDING;
+			throw new CanNotCancelApplicationException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-		
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
-		
-		if (shoppingOrderDO == null || shoppingOrderDO.getId() == null || shoppingOrderDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-		
+		if (memberId != null && !shoppingOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		// 清空退款状态
 		shoppingOrderItemDO.setRefundStatus(null);
 		// 还原订单之前状态
@@ -583,12 +588,12 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 
 		// 更新退款详情
 		// 设置订单的状态为无效
-		shoppingRefundDetailDO.setStatus(StatusEnum.INVALID.getValue());
-		shoppingRefundDetailDO.setGmtIntervention(new Date());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-		
-		return ResultCode.SUCCESS;
+		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailUpdateDO.setId(shoppingRefundDetailDO.getId());
+		shoppingRefundDetailUpdateDO.setStatus(StatusEnum.INVALID.getValue());
+		shoppingRefundDetailUpdateDO.setGmtIntervention(new Date());
+		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 	}
 
 	/**

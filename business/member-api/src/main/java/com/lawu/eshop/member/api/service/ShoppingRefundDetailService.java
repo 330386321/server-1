@@ -60,10 +60,12 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
-	Result revokeRefundRequest(@PathVariable("id") Long id);
+	Result revokeRefundRequest(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
 	
 }

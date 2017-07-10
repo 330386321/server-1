@@ -30,6 +30,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
+import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
 import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -311,14 +312,16 @@ public class ShoppingRefundDetailController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
-	public Result revokeRefundRequest(@PathVariable("id") Long id) {
-
-		int resultCode = shoppingRefundDetailService.revokeRefundRequest(id);
-		
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	public Result revokeRefundRequest(@PathVariable("id") Long id, @RequestParam(name = "memberId", required = false) Long memberId) {
+		try {
+			shoppingRefundDetailService.revokeRefundRequest(id, memberId);
+		} catch (DataNotExistException e) {
+		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (CanNotCancelApplicationException e) {
+		 	return successCreated(ResultCode.CAN_NOT_CANCEL_APPLICATION, e.getMessage());
 		}
-
 		return successCreated();
 	}
 }

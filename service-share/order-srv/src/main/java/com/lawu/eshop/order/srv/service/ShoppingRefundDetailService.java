@@ -96,7 +96,18 @@ public interface ShoppingRefundDetailService {
 	 *            退款详情id
 	 * @return
 	 */
-	int revokeRefundRequest(Long id);
+	void revokeRefundRequest(Long id);
+	
+	/**
+	 * 买家撤销退货申请
+	 * 
+	 * @param id
+	 *            退款详情id
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 */
+	void revokeRefundRequest(Long id, Long memberId);
 	
 	/**
 	 * 买家申请退款，商家未操作处理

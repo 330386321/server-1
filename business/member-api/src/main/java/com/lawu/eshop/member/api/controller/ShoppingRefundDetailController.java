@@ -86,7 +86,7 @@ public class ShoppingRefundDetailController extends BaseController {
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "申请平台介入", notes = "申请平台介入。[1100|1024|4024]（蒋鑫俊）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
 	@RequestMapping(value = "platformIntervention/{id}", method = RequestMethod.PUT)
 	public Result platformIntervention(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物退款详情id") Long id) {
@@ -97,19 +97,17 @@ public class ShoppingRefundDetailController extends BaseController {
 	}
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
-	@ApiOperation(value = "撤销退款申请", notes = "买家撤销退款申请。[1002|1003|1004|4011|4014]（蒋鑫俊）", httpMethod = "DELETE")
+	@ApiOperation(value = "撤销退款申请", notes = "买家撤销退款申请。[1100|1024|4025]（蒋鑫俊）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.DELETE)
 	public Result revokeRefundRequest(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") Long id) {
-		
-		Result result = shoppingRefundDetailservice.revokeRefundRequest(id);
-		
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingRefundDetailservice.revokeRefundRequest(id, memberId);
 		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
+			return successCreated(result);
 		}
-		
 		return successDelete();
 	}
 }
