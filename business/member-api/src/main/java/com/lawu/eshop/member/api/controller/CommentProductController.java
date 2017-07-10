@@ -116,7 +116,7 @@ public class CommentProductController extends BaseController {
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
-    public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception{
+    public Result<Page<CommentProductDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam){
 
         List<CommentProductDTO> commentProductDTOS = new ArrayList<>();
         Page<CommentProductDTO> pages = new Page<>();
@@ -166,7 +166,7 @@ public class CommentProductController extends BaseController {
     @ApiOperation(value = "评价商品列表（有图）", notes = "评价商品列表（有图） [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.GET)
-    public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception{
+    public Result<Page<CommentProductDTO>> getCommentProductsWithImgs(@ModelAttribute @ApiParam CommentProductListParam listParam) {
 
         List<CommentProductDTO> commentProductDTOS = new ArrayList<>();
         Page<CommentProductDTO> pages = new Page<>();

@@ -1,14 +1,5 @@
 package com.lawu.eshop.product.srv.controller;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
@@ -18,7 +9,10 @@ import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 import com.lawu.eshop.product.srv.converter.ShoppingCartProductModelConverter;
 import com.lawu.eshop.product.srv.service.ProductModelService;
-import com.lawu.eshop.utils.BeanUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 
@@ -79,7 +73,7 @@ public class ProductModelController extends BaseController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
-	public Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception {
+	public Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) {
 
 		CommentProductInfoBO commentProductInfoBO = productModelService.selectCommentProductInfo(productModelId);
 
@@ -88,7 +82,10 @@ public class ProductModelController extends BaseController {
 		}
 
 		CommentProductInfoDTO dto = new CommentProductInfoDTO();
-		BeanUtil.copyProperties(commentProductInfoBO, dto);
+		dto.setFeatureImage(commentProductInfoBO.getFeatureImage());
+		dto.setModelName(commentProductInfoBO.getModelName());
+		dto.setName(commentProductInfoBO.getName());
+		dto.setPrice(commentProductInfoBO.getPrice());
 
 		return successGet(dto);
 	}

@@ -32,7 +32,7 @@ public interface ProductService {
     /**
 	 * 批量处理
 	 * @param ids
-	 * @param status
+	 * @param productStatus
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.PUT, value = "product/updateProductStatus")
@@ -40,7 +40,7 @@ public interface ProductService {
     
     /**
      * 根据商品ID查询商品详情信息
-     * @param id 商品ID
+     * @param productId 商品ID
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "product/selectEditProductById")
@@ -69,12 +69,12 @@ public interface ProductService {
      * @return
      */
     @RequestMapping(value = "productModel/selectCommentProductInfo/{productModelId}", method = RequestMethod.GET)
-    Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId) throws Exception;
+    Result<CommentProductInfoDTO> selectCommentProductInfo(@PathVariable("productModelId") Long productModelId);
 
     /**
      * 根据商品ID查询商品详情信息
      *
-     * @param productModelId 型号ID
+     * @param id
      * @return
      */
     @RequestMapping(value = "product/getProduct/{id}", method = RequestMethod.GET)
