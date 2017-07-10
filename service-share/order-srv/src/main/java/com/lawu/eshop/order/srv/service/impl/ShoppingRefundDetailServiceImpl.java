@@ -117,10 +117,6 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 */
 	@Override
 	public ShoppingOrderItemExtendBO getByShoppingOrderItemId(Long shoppingOrderItemId) {
-		if (shoppingOrderItemId == null || shoppingOrderItemId <= 0) {
-			return null;
-		}
-		
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
@@ -129,11 +125,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		criteria.andIdEqualTo(shoppingOrderItemId);
 		// 找到有效记录
 		criteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
-		
 		shoppingOrderItemExtendDOExample.setOrderByClause("srp.gmt_create desc");
-		
 		List<ShoppingOrderItemExtendDO> list = shoppingOrderItemExtendDOMapper.selectByExample(shoppingOrderItemExtendDOExample);
-
 		return (list != null && !list.isEmpty()) ? ShoppingOrderItemExtendConverter.convert(list.get(0)) : null;
 	}
 

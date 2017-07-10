@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
@@ -38,7 +39,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@RequestMapping(value = "shoppingRefundDetail/getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
-	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
+	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("merchantId") Long merchantId);
 
 	/**
 	 * 商家是否同意买家的退货申请

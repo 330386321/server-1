@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.framework.web.BaseController;
@@ -18,6 +19,7 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.RefundStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingOrderStatusEnum;
 import com.lawu.eshop.order.constants.ShoppingRefundTypeEnum;
+import com.lawu.eshop.order.constants.StatusEnum;
 import com.lawu.eshop.order.dto.foreign.ShoppingOrderExpressDTO;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
 import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
@@ -25,14 +27,17 @@ import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
+import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 import com.lawu.eshop.utils.DateUtil;
@@ -60,6 +65,9 @@ public class ShoppingRefundDetailController extends BaseController {
 	@Autowired
 	private PropertyService propertyService;
 	
+	@Autowired
+	private ShoppingOrderService shoppingOrderService;
+	
 	/**
 	 * 根据订单项id查询退款信息
 	 * 
@@ -68,20 +76,16 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
-	public Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId) {
-		if (shoppingOrderItemId == null || shoppingOrderItemId <= 0) {
-			return successCreated(ResultCode.ID_EMPTY);
-		}
-
+	public Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("memberId") Long memberId, @RequestParam("merchantId") Long merchantId) {
 		ShoppingOrderItemExtendBO shoppingOrderItemExtendBO = shoppingRefundDetailService.getByShoppingOrderItemId(shoppingOrderItemId);
-
-		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getId() == null || shoppingOrderItemExtendBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		if (shoppingOrderItemExtendBO == null || shoppingOrderItemExtendBO.getShoppingOrder() == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA);
 		}
-		
+		if (shoppingOrderItemExtendBO.getShoppingOrder().getMemberId().equals(memberId)) {
+			return successGet(ResultCode.ILLEGAL_OPERATION);
+		}
 		ShoppingRefundDetailExtendBO shoppingRefundDetailBO = shoppingOrderItemExtendBO.getShoppingRefundDetail();
 		ShoppingRefundDetailDTO shoppingRefundDetailDTO = ShoppingRefundDetailConverter.convert(shoppingOrderItemExtendBO);
-		
 		// 倒计时在服务端放入
 		Long countdown = null;
 		String time = null;
@@ -164,7 +168,6 @@ public class ShoppingRefundDetailController extends BaseController {
 				break;
 		}
 		shoppingRefundDetailDTO.setCountdown(countdown);
-		
 		return successCreated(shoppingRefundDetailDTO);
 	}
 
@@ -222,33 +225,32 @@ public class ShoppingRefundDetailController extends BaseController {
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailLogisticsInformationParam param) {
-		
+	public Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingRefundDetailLogisticsInformationParam param) {
 		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
-
-		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getId() == null || shoppingRefundDetailBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		if (shoppingRefundDetailBO == null || shoppingRefundDetailBO.getStatus().equals(StatusEnum.INVALID)) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-
 		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getShoppingOrderItemId());
-
-		if (shoppingOrderItemBO == null || shoppingOrderItemBO.getId() == null || shoppingOrderItemBO.getId() <= 0) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+		if (shoppingOrderItemBO == null) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-
 		// 订单状态必须为退款中
 		if (!shoppingOrderItemBO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING)) {
-			return successCreated(ResultCode.NOT_REFUNDING);
+			return successCreated(ResultCode.CAN_NOT_FILL_OUT_THE_RETURN_LOGISTICS, ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-
 		// 只有退款状态为待退货才能被允许填写退货物流
 		if (!shoppingOrderItemBO.getRefundStatus().equals(RefundStatusEnum.TO_BE_RETURNED)) {
-			return successCreated(ResultCode.NOT_RETURNED_STATE);
+			return successCreated(ResultCode.CAN_NOT_FILL_OUT_THE_RETURN_LOGISTICS, ExceptionMessageConstant.REFUND_STATE_IS_NOT_A_STATE_TO_BE_RETURNED);
 		}
-
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(id);
+		if (shoppingOrderBO == null) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (shoppingOrderBO.getMemberId().equals(memberId)) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER); 
+		}
 		// 修改订单项的退款状态为待退款状态，更新退款详情的物流信息
 		shoppingRefundDetailService.fillLogisticsInformation(shoppingRefundDetailBO, param);
-
 		return successCreated();
 	}
 

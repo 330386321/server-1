@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.authorization.annotation.Authorization;
+import com.lawu.eshop.authorization.util.UserUtil;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
@@ -49,14 +50,6 @@ public class ShoppingRefundDetailController extends BaseController {
 	@Autowired
 	private AddressService addressService;
 	
-	
-	/**
-	 * 根据id查询退款详情的物流信息
-	 * 
-	 * @param id
-	 *            退款详情id
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询退货的物流信息", notes = "查询退货的物流信息。[1003]（蒋鑫俊）", httpMethod = "GET")
@@ -77,42 +70,18 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(resultShoppingOrderExpressDTO);
     }
 	
-	/**
-	 * 根据购物订单项id查询退款详情
-	 * 
-	 * @param shoppingOrderItemId
-	 *            购物订单项id
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
-	@ApiOperation(value = "查询退款详情", notes = "根据购物订单项id查询退款详情。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
+	@ApiOperation(value = "查询退款详情", notes = "根据购物订单项id查询退款详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
     public Result<ShoppingRefundDetailDTO> getRefundDetail(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderItemId") @ApiParam(name = "shoppingOrderItemId", value = "购物订单项id") Long shoppingOrderItemId) {
-    	if (shoppingOrderItemId == null || shoppingOrderItemId <= 0) {
-    		return successCreated(ResultCode.ID_EMPTY);
-    	}
-		
-    	Result<ShoppingRefundDetailDTO> resultShoppingRefundDetailDTO = shoppingRefundDetailService.getRefundDetail(shoppingOrderItemId);
-    	
-    	if (!isSuccess(resultShoppingRefundDetailDTO)) {
-    		return successGet(resultShoppingRefundDetailDTO.getRet());
-    	}
-		
-    	return successCreated(resultShoppingRefundDetailDTO);
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingRefundDetailDTO> result = shoppingRefundDetailService.getRefundDetail(shoppingOrderItemId, merchantId);
+    	return successCreated(result);
     }
 	
-	/**
-	 * 商家是否同意买家的退货申请
-	 * 
-	 * @param id
-	 *            退款详情id
-	 * @param param
-	 *            参数 是否同意申请
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1002|1003|1004|4009|4011]（蒋鑫俊）", httpMethod = "PUT")
@@ -138,16 +107,6 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(result);
     }
 	
-	/**
-	 * 商家填写退货地址 
-	 * 根据退款详情id更新退货地址
-	 * 
-	 * @param id
-	 *            退款详情id
-	 * @param param
-	 *            参数 退货信息参数
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@ApiOperation(value = "商家填写退货地址 ", notes = "商家填写退货地址 。[1002|1003|4011|4012]（蒋鑫俊）", httpMethod = "PUT")
@@ -184,15 +143,6 @@ public class ShoppingRefundDetailController extends BaseController {
     	return successCreated(result);
     }
 	
-	/**
-	 * 商家是否同意退款
-	 * 
-	 * @param id
-	 *            退款详情id
-	 * @param param
-	 *            参数 是否同意申请
-	 * @return
-	 */
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "rawtypes" })
 	@ApiOperation(value = "商家是否同意退款", notes = "商家是否同意退款。[1002|1003|4011|4013]（蒋鑫俊）", httpMethod = "PUT")

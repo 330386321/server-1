@@ -35,4 +35,14 @@ public class ExceptionMessageConstant {
 	
 	public final static String THE_ORDER_IS_NOT_IN_RECEIPT = "订单不是待收货状态";
 	
+	public final static String SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST = "购物订单项数据不存在";
+	
+	/** shopping order refund **/
+	public final static String SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST = "购物订单退款数据不存在";
+	
+	public final static String ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS = "订单状态不是待退款状态";
+	
+	public final static String REFUND_STATE_IS_NOT_A_STATE_TO_BE_RETURNED = "退款状态不是待退货状态";
+	
+	
 }

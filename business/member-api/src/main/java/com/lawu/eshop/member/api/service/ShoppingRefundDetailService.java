@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.order.dto.foreign.ShoppingRefundDetailDTO;
@@ -14,7 +15,7 @@ import com.lawu.eshop.order.param.ShoppingRefundDetailLogisticsInformationParam;
  * @author Sunny
  * @date 2017/04/06
  */
-@FeignClient(value= "order-srv")
+@FeignClient(value= "order-srv", path = "shoppingRefundDetail/")
 public interface ShoppingRefundDetailService {
 	
 	/**
@@ -22,12 +23,13 @@ public interface ShoppingRefundDetailService {
 	 * 修改订单项退款状态为待退款
 	 * 
 	 * @param shoppingOrderitemId 购物订单项id
+	 * @param memberId 会员id
 	 * @param param 参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailLogisticsInformationParam param);
+	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
+	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId, @RequestBody ShoppingRefundDetailLogisticsInformationParam param);
 	
 	/**
 	 * 如果商家拒绝买家的退款申请或者拒绝退款
@@ -37,7 +39,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/platformIntervention/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "platformIntervention/{id}", method = RequestMethod.PUT)
 	Result platformIntervention(@PathVariable("id") Long id);
 	
 	/**
@@ -45,10 +47,12 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param shoppingOrderitemId
 	 *            购物订单项id
+	 * @param memberId
+	 *            会员id(用于鉴权)
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingRefundDetail/getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
-	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId);
+	@RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
+	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("memberId") Long memberId);
 	
 	/**
 	 * 买家撤销退货申请
@@ -58,7 +62,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/revokeRefundRequest/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "revokeRefundRequest/{id}", method = RequestMethod.PUT)
 	Result revokeRefundRequest(@PathVariable("id") Long id);
 	
 }
