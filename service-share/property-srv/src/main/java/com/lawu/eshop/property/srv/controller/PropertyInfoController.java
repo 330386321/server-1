@@ -226,7 +226,7 @@ public class PropertyInfoController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "selectLoveAccount/{userNum}", method = RequestMethod.GET)
-	public Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum) throws Exception {
+	public Result<PropertyLoveAccountDTO> selectLoveAccount(@PathVariable("userNum") String userNum){
 		BigDecimal selectLoveAccount = propertyInfoService.selectLoveAccount(userNum);
 		PropertyLoveAccountDTO dto = new PropertyLoveAccountDTO();
 		dto.setLoveAccount(selectLoveAccount);

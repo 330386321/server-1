@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,32 +38,38 @@ public class AdLexiconServiceImpl implements AdLexiconService {
 
 	@Override
 	public List<AdLexiconBO> selectList(Long adId) {
-		AdDO adDO=adDOMapper.selectByPrimaryKey(adId);
-		AdLexiconDOExample example=new AdLexiconDOExample();
-		List<AdLexiconDO> dos=adLexiconDOMapper.selectByExample(example);
-		List<AdLexiconDO> newDOS=new ArrayList<>();
-		if(dos!=null){
-			int s=0;
-			String str="";
-			while(true){
-				Random random = new Random();  
-				Integer r=random.nextInt(dos.size());
-				AdLexiconDO adLexiconDO=new AdLexiconDO();
-				if(r!=s){
-					adLexiconDO=dos.get(r);
-					if(adLexiconDO.getTitle()!=str)
+		AdDO adDO = adDOMapper.selectByPrimaryKey(adId);
+		AdLexiconDOExample example = new AdLexiconDOExample();
+		List<AdLexiconDO> dos = adLexiconDOMapper.selectByExample(example);
+		List<AdLexiconDO> newDOS = new ArrayList<>();
+	
+		if(dos.size()<3){
+			for (AdLexiconDO adLexiconDO : dos) {
+				newDOS.add(adLexiconDO);
+			}
+			
+		}else{
+			int s = 0;
+			String str = "";
+			while (true) {
+				Integer r = ThreadLocalRandom.current().nextInt(0, dos.size());
+				if (r != s) {
+					AdLexiconDO adLexiconDO = dos.get(r);
+					if (adLexiconDO.getTitle() != str){
 						newDOS.add(adLexiconDO);
+						str = adLexiconDO.getTitle();
+					}
 				}
-				s=r;
-				str=adLexiconDO.getTitle();
-				if(newDOS.size()>2) break;
+				s = r;
+				if (newDOS.size() > 2)
+					break;
 			}
 		}
-		List<AdLexiconBO> list=AdLexiconConverter.convertBOS(newDOS);
-		AdLexiconBO bo=new AdLexiconBO();
+		List<AdLexiconBO> list = AdLexiconConverter.convertBOS(newDOS);
+		AdLexiconBO bo = new AdLexiconBO();
 		bo.setTitle(adDO.getTitle());
 		list.add(bo);
-		Collections.shuffle(list); //随机打乱顺序
+		Collections.shuffle(list); // 随机打乱顺序
 		return list;
 	}
 

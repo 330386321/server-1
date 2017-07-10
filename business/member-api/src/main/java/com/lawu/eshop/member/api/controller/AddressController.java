@@ -78,6 +78,9 @@ public class AddressController extends BaseController {
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "收货地址id") Long id) {
 		String userNum = UserUtil.getCurrentUserNum(getRequest());
 		Result rs = addressService.delete(id,userNum);
+		if (!isSuccess(rs)) {
+			return successGet(rs.getRet());
+		}
 		return successDelete();
 	}
 
