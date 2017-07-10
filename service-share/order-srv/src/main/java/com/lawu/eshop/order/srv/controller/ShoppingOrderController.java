@@ -61,6 +61,7 @@ import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
+import com.lawu.eshop.order.srv.exception.OrderNotRefundException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -224,23 +225,27 @@ public class ShoppingOrderController extends BaseController {
 	/**
 	 * 买家申请退款 修改订单项订单状态为退款中 修改订单项退款状态为待商家确认
 	 * 
-	 * @param shoppingOrderitemId
+	 * @param shoppingOrderItemId
 	 *            购物订单项id
+	 * @param memberId
+	 *            会员id(用于鉴权)
 	 * @param param
 	 *            退款参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
-	public Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param) {
-
-		// 修改购物订单以及订单项状态，保存退款详情记录
-		int result = shoppingOrderService.requestRefund(shoppingOrderitemId, param);
-
-		if (result != ResultCode.SUCCESS) {
-			return successCreated(result);
+	@RequestMapping(value = "requestRefund/{shoppingOrderItemId}", method = RequestMethod.PUT)
+	public Result requestRefund(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("memberId") Long memberId, @RequestBody ShoppingOrderRequestRefundParam param) {
+		try {
+			// 修改购物订单以及订单项状态，保存退款详情记录
+			shoppingOrderService.requestRefund(shoppingOrderItemId, memberId, param);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (OrderNotRefundException e) {
+			return successCreated(ResultCode.ORDER_NOT_REFUND, e.getMessage());
 		}
-
 		return successCreated();
 	}
 

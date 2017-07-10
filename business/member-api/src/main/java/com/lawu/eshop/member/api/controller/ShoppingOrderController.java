@@ -90,13 +90,6 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(result.getModel());
 	}
 
-	/**
-	 * 根据购物订单id查询购物订单详情
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询购物订单详情", notes = "根据购物订单id查询购物订单详情。[1100|1024]（蒋鑫俊）", httpMethod = "GET")
@@ -109,13 +102,6 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(result);
 	}
 
-	/**
-	 * 查询物流动态
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询物流动态", notes = "查询物流动态。[1002|1003]（蒋鑫俊）", httpMethod = "GET")
@@ -128,13 +114,6 @@ public class ShoppingOrderController extends BaseController {
 		return successGet(result);
 	}
 
-	/**
-	 * 取消购物订单
-	 * 
-	 * @param token
-	 * @param id
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "取消购物订单", notes = "取消购物订单。[1100|1024|4002]（蒋鑫俊）", httpMethod = "PUT")
@@ -147,13 +126,6 @@ public class ShoppingOrderController extends BaseController {
 		return successCreated(result);
 	}
 
-	/**
-	 * 删除购物订单
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "删除购物订单", notes = "根据购物订单id删除购物订单。[1100|1024|4003]（蒋鑫俊）", httpMethod = "DELETE")
@@ -169,13 +141,6 @@ public class ShoppingOrderController extends BaseController {
 		return successDelete();
 	}
 
-	/**
-	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
-	 * 
-	 * @param id
-	 *            购物订单id
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "确认收货", notes = "根据购物订单id确认收货。[1002|1003|4005]（蒋鑫俊）", httpMethod = "PUT")
@@ -192,15 +157,6 @@ public class ShoppingOrderController extends BaseController {
 		return successCreated();
 	}
 
-	/**
-	 * 买家申请退款 修改订单状态为待商家确认
-	 * 
-	 * @param shoppingOrderitemId
-	 *            购物订单项id
-	 * @param param
-	 *            退款参数
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
 	@ApiOperation(value = "申请退款", notes = "根据购物订单项id申请退款。[1002|1003|4005]（蒋鑫俊）", httpMethod = "POST")
@@ -208,12 +164,10 @@ public class ShoppingOrderController extends BaseController {
 	@Authorization
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.POST)
 	public Result requestRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("shoppingOrderitemId") @ApiParam(name = "shoppingOrderitemId", value = "购物订单项id", required = true) Long shoppingOrderitemId, @ModelAttribute @ApiParam(name = "param", value = "退款参数") @Validated ShoppingOrderRequestRefundForeignParam param, BindingResult bindingResult) {
-
 		String message = validate(bindingResult);
 		if (message != null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
-
 		HttpServletRequest request = getRequest();
 		StringBuilder headImg = new StringBuilder();
 		Collection<Part> parts = null;
@@ -239,28 +193,16 @@ public class ShoppingOrderController extends BaseController {
 				}
 			}
 		}
-
 		ShoppingOrderRequestRefundParam shoppingOrderRequestRefundParam = new ShoppingOrderRequestRefundParam();
 		shoppingOrderRequestRefundParam.setDescription(param.getDescription());
 		shoppingOrderRequestRefundParam.setReason(param.getReason());
 		shoppingOrderRequestRefundParam.setType(param.getType());
 		shoppingOrderRequestRefundParam.setVoucherPicture(headImg.toString());
-
-		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, shoppingOrderRequestRefundParam);
-
-		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
-		}
-		return successCreated();
+		Long memberId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.requestRefund(shoppingOrderitemId, memberId, shoppingOrderRequestRefundParam);
+		return successCreated(result);
 	}
 
-	/**
-	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询
-	 * 
-	 * @param param
-	 *            查询参数
-	 * @return
-	 */
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "分页查询退款记录", notes = "分页查询退款记录。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -268,21 +210,13 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectRefundPageByMemberId", method = RequestMethod.GET)
 	public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(name = "param", value = "查询参数") ShoppingRefundQueryForeignParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-
 		Result<Page<ShoppingOrderItemRefundDTO>> result = shoppingOrderService.selectRefundPageByMemberId(memberId, param);
-
 		if (!isSuccess(result)) {
 			return successGet(result.getRet());
 		}
 		return successGet(result.getModel());
 	}
 
-	/**
-	 * 订单支付页面
-	 * 
-	 * @param id
-	 * @return
-	 */
 	@Audit(date = "2017-05-05", reviewer = "孙林青")
 	@ApiOperation(value = "待支付订单支付", notes = "用于对已生成但未支付的订单进行支付。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")

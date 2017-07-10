@@ -24,4 +24,13 @@ public class ExceptionMessageConstant {
 	
 	public final static String ORDER_HAS_NOT_BEEN_COMPLETED = "订单还未完成";
 	
+	/** shopping order item **/
+	public final static String IN_THE_ORDER_HAS_BEEN_REFUNDED = "订单已经在退款中";
+	
+	public final static String THE_CURRENT_ORDER_STATUS_DOES_NOT_MATCH = "当前订单状态不符合";
+	
+	public final static String PRODUCT_DOES_NOT_SUPPORT_REFUNDS = "商品不支持退款";
+	
+	public final static String THE_ORDER_EXCEEDS_THE_REFUND_TIME = "订单超过退款时间";
+	
 }

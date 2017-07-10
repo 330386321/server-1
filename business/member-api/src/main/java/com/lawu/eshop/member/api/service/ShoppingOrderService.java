@@ -126,13 +126,15 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param shoppingOrderitemId
 	 *            购物订单项id
+	 * @param memberId
+	 *            会员id(用于鉴权)
 	 * @param param
 	 *            退款参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "requestRefund/{shoppingOrderitemId}", method = RequestMethod.PUT)
-	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestBody ShoppingOrderRequestRefundParam param);
+	Result requestRefund(@PathVariable("shoppingOrderitemId") Long shoppingOrderitemId, @RequestParam("memberId") Long memberId, @RequestBody ShoppingOrderRequestRefundParam param);
 
 	/**
 	 * 根据查询参数分页查询退款记录 购物订单 购物订单项 退款详情关联查询

@@ -166,11 +166,13 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param shoppingOrderitemId
 	 *            购物订单项id
+	 * @param memberId
+	 *            会员id
 	 * @param param
 	 *            退款参数
 	 * @return
 	 */
-	int requestRefund(Long shoppingOrderitemId, ShoppingOrderRequestRefundParam param);
+	void requestRefund(Long shoppingOrderitemId, Long memberId, ShoppingOrderRequestRefundParam param);
 
 	/**
 	 * 商家填写物流信息
