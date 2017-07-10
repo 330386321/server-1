@@ -40,7 +40,7 @@ public class PayOrderConverter {
     }
 
     public static PayOrderDTO coverDTO(PayOrderBO payOrderBO) {
-    	PayOrderDTO rtn = null;
+    	PayOrderDTO rtn ;
         if (payOrderBO == null) {
             return null;
         }
@@ -57,10 +57,10 @@ public class PayOrderConverter {
 
     public static List<PayOrderBO> coverBOS(List<PayOrderDO> payOrderDOS) {
         if (payOrderDOS == null || payOrderDOS.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<PayOrderBO> payOrderBOS = new ArrayList<>();
-        PayOrderBO payOrderBO = null;
+        PayOrderBO payOrderBO ;
         for (PayOrderDO payOrderDO : payOrderDOS) {
             payOrderBO = new PayOrderBO();
             payOrderBO.setOrderNum(payOrderDO.getOrderNum());
@@ -77,7 +77,7 @@ public class PayOrderConverter {
             return  new ArrayList<>();
         }
         List<MerchantPayOrderListDTO> payOrderListDTOS = new ArrayList<>();
-        MerchantPayOrderListDTO merchantPayOrderListDTO = null;
+        MerchantPayOrderListDTO merchantPayOrderListDTO ;
         for(PayOrderBO payOrderBO :payOrderBOS){
             merchantPayOrderListDTO = new MerchantPayOrderListDTO();
             merchantPayOrderListDTO.setOrderNum(payOrderBO.getOrderNum());
