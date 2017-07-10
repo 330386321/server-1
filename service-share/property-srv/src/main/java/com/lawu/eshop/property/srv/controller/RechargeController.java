@@ -61,9 +61,9 @@ public class RechargeController extends BaseController {
 	@RequestMapping(value = "save", method = RequestMethod.POST)
 	public Result save(@RequestBody @Valid RechargeSaveDataParam param, BindingResult result) {
 		String message = validate(result);
-    	if (message != null) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
-    	}
+		if (message != null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+		}
 		
 		String value = "1";//充值余额
 		if (PayTypeEnum.POINT.getVal().equals(param.getPayTypeEnum().getVal())) {
