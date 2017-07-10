@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import util.DownLoadUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,11 +45,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
             Result<RongYunHistoryMessageDTO> messageDTOResult = rongYunService.getHistoryMessage(dateStr);
             RongYunHistoryMessageDTO messageDTO = messageDTOResult.getModel();
             if (StringUtils.isNotEmpty(messageDTO.getUrl())) {
-                try {
-                    DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", statisticsConfig.getDownLoadDir() + File.separator+ dateFormat);
-                } catch (IOException e) {
-                    logger.error("下载消息失败！IO异常",e);
-                }
+                DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", statisticsConfig.getDownLoadDir() + File.separator+ dateFormat);
             }
         }
     }
