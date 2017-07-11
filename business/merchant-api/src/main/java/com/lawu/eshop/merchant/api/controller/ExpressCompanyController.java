@@ -55,28 +55,6 @@ public class ExpressCompanyController extends BaseController {
 
 		return successGet(result);
 	}
-	
-    @SuppressWarnings("unchecked")
-	@ApiOperation(value = "分组查询全部快递公司", notes = "查询全部快递公司,并且按照名称首字母分组。[]（蒋鑫俊）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
-    @RequestMapping(value = "group", method = RequestMethod.GET)
-    public Result<ExpressCompanyQueryDTO> group(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
-    	return successGet(expressCompanyService.group());
-    }
-	
-    @SuppressWarnings("unchecked")
-	@ApiOperation(value = "检索快递公司", notes = "根据关键字查询全部快递公司[]（蒋鑫俊）", httpMethod = "GET")
-    @ApiResponse(code = HttpCode.SC_OK, message = "success")
-    @Authorization
-    @RequestMapping(value = "keyWord", method = RequestMethod.GET)
-    public Result<ExpressCompanyRetrieveDTO> listByKeyWord(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(value = "关键字", required = true) @RequestParam("keyWord") String keyWord) {
-    	if (StringUtils.isBlank(keyWord)) {
-    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, "关键字不能为空");
-    	}
-    	Result<ExpressCompanyRetrieveDTO> result = expressCompanyService.listByKeyWord(keyWord);
-    	return successGet(result);
-    }
 
 	@Audit(date = "2017-07-07", reviewer = "孙林青")
     @SuppressWarnings("unchecked")

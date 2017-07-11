@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
 		 */
 		FreezeDOExample freezeDOExample = new FreezeDOExample();
 		FreezeDOExample.Criteria criteria = freezeDOExample.createCriteria();
-		criteria.andBizIdEqualTo(Long.valueOf(param.getBizId())).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.val);
+		criteria.andBizIdEqualTo(Long.valueOf(param.getBizId())).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal());
 		int count = freezeDOMapper.countByExample(freezeDOExample);
 		if (count > 0) {
 			return ResultCode.SUCCESS;
