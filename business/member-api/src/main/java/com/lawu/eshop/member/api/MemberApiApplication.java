@@ -48,7 +48,7 @@ public class MemberApiApplication {
     public FilterRegistrationBean  filterRegistrationBean() {
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new XssFilter());
-        registrationBean.addUrlPatterns("/*");;
+        registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }
 }
