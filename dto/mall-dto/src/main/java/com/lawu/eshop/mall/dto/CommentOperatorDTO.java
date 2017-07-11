@@ -30,6 +30,12 @@ public class CommentOperatorDTO {
     
     @ApiModelProperty(value = "评价图片列表")
     private List urlImgs;
+    
+    @ApiModelProperty(value = "评价人id")
+    private Long memberId;
+    
+    @ApiModelProperty(value = "评价人姓名")
+    private String memberName;
 
     public Long getId() {
         return id;
@@ -78,6 +84,24 @@ public class CommentOperatorDTO {
 	public void setUrlImgs(List urlImgs) {
 		this.urlImgs = urlImgs;
 	}
+
+	public Long getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	
     
 	
     

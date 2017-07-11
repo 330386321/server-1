@@ -84,6 +84,7 @@ public class CommentMerchantConverter {
             commentOperatorDTO.setId(commentMerchantBO.getId());
             commentOperatorDTO.setCommentToId(commentMerchantBO.getMerchantId());
             commentOperatorDTO.setUrlImgs(commentMerchantBO.getUrlImgs());
+            commentOperatorDTO.setMemberId(commentMerchantBO.getMemberId());
             commentOperatorDTOS.add(commentOperatorDTO);
         }
         return commentOperatorDTOS;

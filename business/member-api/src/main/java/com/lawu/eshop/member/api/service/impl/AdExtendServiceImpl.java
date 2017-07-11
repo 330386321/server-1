@@ -149,57 +149,55 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
 		if (newList.size() > 9) {
 			newList = newList.subList(0, 9);
-		}else{
+		} else {
 			newList = newList.subList(0, newList.size());
 		}
-		if (!newList.isEmpty()) {
-			for (int i = 0; i < newList.size(); i++) {
-				Calendar calendar = Calendar.getInstance(); // 得到日历
-				calendar.setTime(new Date());// 把当前时间赋给日历
-				calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
-				Date before14days = calendar.getTime(); // 得到14天前的时间
-				if (before14days.getTime() > newList.get(i).getBeginTime().getTime()) {
-					newList.remove(i);
-				}
+		for (int i = 0; i < newList.size(); i++) {
+			Calendar calendar = Calendar.getInstance(); // 得到日历
+			calendar.setTime(new Date());// 把当前时间赋给日历
+			calendar.add(Calendar.DAY_OF_MONTH, -14); // 设置为14天前
+			Date before14days = calendar.getTime(); // 得到14天前的时间
+			if (before14days.getTime() > newList.get(i).getBeginTime().getTime()) {
+				newList.remove(i);
 			}
-			List<Long> merchantIds = new ArrayList<>();
-			for (AdDTO adDTO : newList) {
-				merchantIds.add(adDTO.getMerchantId());
-			}
-			List<Long> newMerchantIdsList = new ArrayList(new TreeSet(merchantIds));
-			if (!newMerchantIdsList.isEmpty()) {
-				Result<List<MerchantAdInfoDTO>> merchantResult = merchantStoreService
-						.getAdMerchantStoreByIds(newMerchantIdsList);
-				if (isSuccess(merchantResult)) {
-					List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
-					for (AdDTO adDTO : newList) {
-						for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-							if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-								Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(),
-										memberId);
-								if (isSuccess(resultFavoriteAd)) {
-									adDTO.setIsFavorite(resultFavoriteAd.getModel());
-								}
-								adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
-								if (merchantAdInfoDTO.getName() != null) {
-									adDTO.setName(merchantAdInfoDTO.getName());
-								} else {
-									adDTO.setName("E店商家");
-								}
-								if (merchantAdInfoDTO.getPath() != null) {
-									adDTO.setLogoUrl(merchantAdInfoDTO.getPath());
-								} else {
-									adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-								}
-								if (merchantAdInfoDTO.getManageTypeEnum() != null) {
-									adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
-											.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
-								}
-							}
-						}
+		}
+		List<Long> merchantIds = new ArrayList<>();
+		for (AdDTO adDTO : newList) {
+			merchantIds.add(adDTO.getMerchantId());
+		}
+		List<Long> newMerchantIdsList = new ArrayList(new TreeSet(merchantIds));
+		if (newMerchantIdsList.isEmpty()) {
+			return successGet(newList);
+		}
+		Result<List<MerchantAdInfoDTO>> merchantResult = merchantStoreService
+				.getAdMerchantStoreByIds(newMerchantIdsList);
+		if (!isSuccess(merchantResult)) {
+			return successCreated(merchantResult.getRet());
+		}
+		List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
+		for (AdDTO adDTO : newList) {
+			for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+				if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
+					Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+					if (isSuccess(resultFavoriteAd)) {
+						adDTO.setIsFavorite(resultFavoriteAd.getModel());
+					}
+					adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
+					if (merchantAdInfoDTO.getName() != null) {
+						adDTO.setName(merchantAdInfoDTO.getName());
+					} else {
+						adDTO.setName("E店商家");
+					}
+					if (merchantAdInfoDTO.getPath() != null) {
+						adDTO.setLogoUrl(merchantAdInfoDTO.getPath());
+					} else {
+						adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+					}
+					if (merchantAdInfoDTO.getManageTypeEnum() != null) {
+						adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
+								.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
 					}
 				}
-
 			}
 		}
 		return successGet(newList);
@@ -221,46 +219,47 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		List<Long> newMerchantIdsList = new ArrayList(new TreeSet(merchantIds));
 		if(!newMerchantIdsList.isEmpty()){
 			Result<List<MerchantAdInfoDTO>> merchantResult = merchantStoreService.getAdMerchantStoreByIds(newMerchantIdsList);
-			if (isSuccess(merchantResult)) {
-				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
-				for (AdDTO adDTO : screenList) {
-					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-							AdPraiseDTO praise=new AdPraiseDTO();
-							praise.setId(adDTO.getId());
-							praise.setTitle(adDTO.getTitle());
-							praise.setBeginTime(adDTO.getBeginTime());
-							praise.setTotalPoint(adDTO.getTotalPoint());
-							if(adDTO.getNumber()==null){
-								praise.setCount(0);
-							}else{
-								praise.setCount(adDTO.getNumber());
-							}
-							praise.setNeedBeginTime(adDTO.getNeedBeginTime());
-							praise.setMediaUrl(adDTO.getMediaUrl());
-							praise.setIsPraise(adDTO.getIsPraise());
-							praise.setMerchantId(adDTO.getMerchantId());
-							Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
-							if (isSuccess(resultFavoriteAd)) {
-								praise.setIsFavorite(resultFavoriteAd.getModel());
-							}
-							praise.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
-							if (merchantAdInfoDTO.getName() != null) {
-								praise.setName(merchantAdInfoDTO.getName());
-							} else {
-								praise.setName("E店商家");
-							}
-							if (merchantAdInfoDTO.getPath() != null) {
-								praise.setLogoUrl(merchantAdInfoDTO.getPath());
-							} else {
-								praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-							}
-							if (merchantAdInfoDTO.getManageTypeEnum() != null) {
-								praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
-										.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
-							}
-							adPraiseDTOS.add(praise);
+			if (!isSuccess(merchantResult)) {
+				return successCreated(merchantResult.getRet());
+			}
+			List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
+			for (AdDTO adDTO : screenList) {
+				for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+					if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
+						AdPraiseDTO praise=new AdPraiseDTO();
+						praise.setId(adDTO.getId());
+						praise.setTitle(adDTO.getTitle());
+						praise.setBeginTime(adDTO.getBeginTime());
+						praise.setTotalPoint(adDTO.getTotalPoint());
+						if(adDTO.getNumber()==null){
+							praise.setCount(0);
+						}else{
+							praise.setCount(adDTO.getNumber());
 						}
+						praise.setNeedBeginTime(adDTO.getNeedBeginTime());
+						praise.setMediaUrl(adDTO.getMediaUrl());
+						praise.setIsPraise(adDTO.getIsPraise());
+						praise.setMerchantId(adDTO.getMerchantId());
+						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+						if (isSuccess(resultFavoriteAd)) {
+							praise.setIsFavorite(resultFavoriteAd.getModel());
+						}
+						praise.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
+						if (merchantAdInfoDTO.getName() != null) {
+							praise.setName(merchantAdInfoDTO.getName());
+						} else {
+							praise.setName("E店商家");
+						}
+						if (merchantAdInfoDTO.getPath() != null) {
+							praise.setLogoUrl(merchantAdInfoDTO.getPath());
+						} else {
+							praise.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+						}
+						if (merchantAdInfoDTO.getManageTypeEnum() != null) {
+							praise.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
+									.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
+						}
+						adPraiseDTOS.add(praise);
 					}
 				}
 			}

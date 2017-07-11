@@ -46,4 +46,8 @@ public interface MemberService {
 
     @RequestMapping(method = RequestMethod.GET, value = "member/getMemberAccountById")
     String getMemberAccountById(@RequestParam("memberId") Long memberId);
+    
+    
+    @RequestMapping(value = "member/findMember/{memberId}", method = RequestMethod.GET)
+    Result<MemberDTO> findMember(@PathVariable("memberId") Long memberId);
 }

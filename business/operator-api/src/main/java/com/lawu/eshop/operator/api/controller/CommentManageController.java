@@ -1,5 +1,16 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
@@ -9,19 +20,17 @@ import com.lawu.eshop.framework.web.annotation.PageBody;
 import com.lawu.eshop.mall.dto.CommentOperatorDTO;
 import com.lawu.eshop.mall.param.CommentListParam;
 import com.lawu.eshop.operator.api.service.CommentProductService;
+import com.lawu.eshop.operator.api.service.MemberService;
 import com.lawu.eshop.operator.api.service.MerchantStoreService;
 import com.lawu.eshop.operator.api.service.ProductAuditService;
 import com.lawu.eshop.product.dto.ProductEditInfoDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -40,6 +49,9 @@ public class CommentManageController extends BaseController{
     
     @Autowired
     private MerchantStoreService merchantStoreService;
+    
+    @Autowired 
+    private MemberService memberService;
 
     @PageBody
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "POST")
@@ -56,6 +68,10 @@ public class CommentManageController extends BaseController{
     			 Result<ProductEditInfoDTO>  productRs=productAuditService.selectEditProductById(commentOperatorDTO.getCommentToId());
     			 if(isSuccess(productRs)){
     				 commentOperatorDTO.setName(productRs.getModel().getName());
+    			 }
+    			 Result<MemberDTO>  result=memberService.findMember(commentOperatorDTO.getMemberId());
+    			 if(isSuccess(result)){
+    				 commentOperatorDTO.setMemberName(result.getModel().getName()); 
     			 }
 			}
     	 }
@@ -76,6 +92,10 @@ public class CommentManageController extends BaseController{
     			 Result<MerchantStoreDTO>  merchantRs=merchantStoreService.selectMerchantStore(commentOperatorDTO.getCommentToId());
     			 if(isSuccess(merchantRs)){
     				 commentOperatorDTO.setName(merchantRs.getModel().getName());
+    			 }
+    			 Result<MemberDTO>  result=memberService.findMember(commentOperatorDTO.getMemberId());
+    			 if(isSuccess(result)){
+    				 commentOperatorDTO.setMemberName(result.getModel().getName()); 
     			 }
 			}
     	 }
