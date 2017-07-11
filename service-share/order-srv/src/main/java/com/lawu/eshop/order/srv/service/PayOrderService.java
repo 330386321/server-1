@@ -80,7 +80,6 @@ public interface PayOrderService {
      * @date 2017年7月11日
      */
 	PayOrderBO getOrderInfo(Long id, Long memberId);
-	PayOrderBO getOrderInfo(Long id);
 
     Page<PayOrderBO> getOperatorPayOrderList(OperatorPayOrderParam param);
 }
