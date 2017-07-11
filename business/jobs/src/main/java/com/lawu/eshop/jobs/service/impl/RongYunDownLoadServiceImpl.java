@@ -44,7 +44,7 @@ public class RongYunDownLoadServiceImpl implements RongYunDownLoadService {
             Result<RongYunHistoryMessageDTO> messageDTOResult = rongYunService.getHistoryMessage(dateStr);
             RongYunHistoryMessageDTO messageDTO = messageDTOResult.getModel();
             if (StringUtils.isNotEmpty(messageDTO.getUrl())) {
-                DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", statisticsConfig.getDownLoadDir() + File.separator+ dateFormat);
+                DownLoadUtil.downLoadFromUrl(messageDTO.getUrl(), dateStr+".zip", jobsConfig.getDownLoadDir() + File.separator+ dateFormat);
             }
         }
     }
