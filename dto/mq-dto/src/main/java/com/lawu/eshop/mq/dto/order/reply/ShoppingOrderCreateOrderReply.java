@@ -1,6 +1,7 @@
 package com.lawu.eshop.mq.dto.order.reply;
 
 import com.lawu.eshop.compensating.transaction.Reply;
+import com.lawu.eshop.mq.dto.product.CheckLessInventoryResultEnum;
 
 /**
  * 创建订单事务回复消息
@@ -12,14 +13,14 @@ public class ShoppingOrderCreateOrderReply extends Reply {
 
 	private static final long serialVersionUID = -5142282166586603538L;
 	
-	private Integer resultCode;
+	private CheckLessInventoryResultEnum result;
 
-	public Integer getResultCode() {
-		return resultCode;
+	public CheckLessInventoryResultEnum getResult() {
+		return result;
 	}
 
-	public void setResultCode(Integer resultCode) {
-		this.resultCode = resultCode;
+	public void setResult(CheckLessInventoryResultEnum result) {
+		this.result = result;
 	}
 	
 }

@@ -993,7 +993,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 
-		if (reply.getResultCode().equals(ResultCode.SUCCESS)) {
+		if (reply.getResult() == null) {
 			// 设置订单状态为待支付状态(局部更新)
 			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue());
 
@@ -1017,7 +1017,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			}
 		} else {
 			// 设置订单状态为交易关闭(局部更新)
-			shoppingOrderDOUpdate.setRemark(ResultCode.get(reply.getResultCode()));
+			shoppingOrderDOUpdate.setRemark(reply.getResult().getDescription());
 			shoppingOrderDOUpdate.setOrderStatus(ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue());
 
 			// 设置购物订单项为交易关闭状态

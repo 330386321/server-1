@@ -29,15 +29,7 @@ public class ShoppingOrderPaymentTransactionFollowServiceImpl extends AbstractTr
 	 */
     @Transactional
     @Override
-    public Reply execute(ShoppingOrderPaymentNotification notification) {
-    	Reply rtn = new Reply();
-    	
-    	if (notification == null) {
-    		return null;
-    	}
-    	
+    public void execute(ShoppingOrderPaymentNotification notification) {
     	shoppingOrderService.paymentSuccessful(notification);
-    	
-        return rtn;
     }
 }

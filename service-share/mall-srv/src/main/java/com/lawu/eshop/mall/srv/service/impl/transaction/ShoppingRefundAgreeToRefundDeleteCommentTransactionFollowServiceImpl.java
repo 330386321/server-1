@@ -11,8 +11,7 @@ import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundAgreeToRefundDeleteCommentNotification;
 
 /**
- * 商家同意退款事务-从模块
- * 删除商品订单评论
+ * 商家同意退款事务-从模块 删除商品订单评论
  * 
  * @author Sunny
  * @date 2017/04/18
@@ -23,20 +22,10 @@ public class ShoppingRefundAgreeToRefundDeleteCommentTransactionFollowServiceImp
 
 	@Autowired
 	private CommentProductService commentProductService;
-	
-    @Override
-    public Reply execute(ShoppingRefundAgreeToRefundDeleteCommentNotification notification) {
-		Reply rtn = null;
-		
-		if (notification == null) {
-			return rtn;
-		}
-		
-		rtn = new Reply();
-		
+
+	@Override
+	public void execute(ShoppingRefundAgreeToRefundDeleteCommentNotification notification) {
 		// 删除商品评价
 		commentProductService.delCommentByOrderItemId(notification.getShoppingOrderItemId());
-		
-		return rtn;
-    }
+	}
 }

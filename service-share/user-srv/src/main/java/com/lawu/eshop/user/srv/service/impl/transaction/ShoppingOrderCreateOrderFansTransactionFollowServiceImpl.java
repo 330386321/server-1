@@ -32,17 +32,7 @@ public class ShoppingOrderCreateOrderFansTransactionFollowServiceImpl extends Ab
 	 */
     @Transactional
     @Override
-    public Reply execute(ShoppingOrderCreateOrderFansNotification notification) {
-    	Reply rtn = null;
-    	
-    	if (notification == null) {
-    		return rtn;
-    	}
-    	
-    	rtn = new Reply();
-    	
+    public void execute(ShoppingOrderCreateOrderFansNotification notification) {
     	fansMerchantService.saveFansMerchant(notification.getMerchantId(), notification.getMemberId(), FansMerchantChannelEnum.ORDER_PAY);
-    	
-        return rtn;
     }
 }

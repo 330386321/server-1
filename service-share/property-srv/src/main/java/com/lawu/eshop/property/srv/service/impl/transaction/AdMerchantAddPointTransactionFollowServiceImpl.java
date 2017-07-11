@@ -19,18 +19,17 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 @Service
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_ME_ADD_POINT)
 public class AdMerchantAddPointTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
-    
-    @Autowired
-    private PropertyInfoDataService propertyInfoDataService;
 
-    @Override
-    public Reply execute(AdPointNotification notification) {
-	    PropertyInfoDataParam param=new PropertyInfoDataParam();
-	    param.setPoint(notification.getPoint().toString());
-	    param.setUserNum(notification.getUserNum());
-	    //param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
-	    param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
-	    propertyInfoDataService.doHanlderAddPoint(param);
-        return new Reply();
-    }
+	@Autowired
+	private PropertyInfoDataService propertyInfoDataService;
+
+	@Override
+	public void execute(AdPointNotification notification) {
+		PropertyInfoDataParam param = new PropertyInfoDataParam();
+		param.setPoint(notification.getPoint().toString());
+		param.setUserNum(notification.getUserNum());
+		// param.setTransactionTitleEnum(TransactionTitleEnum.ADD_AD);
+		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.AD_RETURN_POINT);
+		propertyInfoDataService.doHanlderAddPoint(param);
+	}
 }

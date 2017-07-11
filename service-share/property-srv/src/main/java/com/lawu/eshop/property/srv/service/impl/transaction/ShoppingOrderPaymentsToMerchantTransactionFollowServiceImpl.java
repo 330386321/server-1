@@ -26,21 +26,12 @@ public class ShoppingOrderPaymentsToMerchantTransactionFollowServiceImpl extends
 	
 	@Transactional
     @Override
-    public Reply execute(ShoppingOrderPaymentsToMerchantNotification notification) {
-	    Reply rtn = null;
-	    
-	    if (notification == null) {
-	    	return rtn;
-	    }
-	    
+    public void execute(ShoppingOrderPaymentsToMerchantNotification notification) {
 	    // 组装请求参数
 	    OrderReleaseFreezeParam param = new OrderReleaseFreezeParam();
     	param.setOrderIds(notification.getShoppingOrderId().toString());
     	param.setUserNums(notification.getMerchantNum());
     	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
     	orderService.comfirmReleaseFreeze(param);
-	    
-    	rtn = new Reply();
-        return rtn;
     }
 }

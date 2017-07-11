@@ -15,6 +15,7 @@ import com.lawu.eshop.mq.dto.product.DelProductCommentNotification;
  * <p>
  * Description: 删除商品型号时，发送消息删除商品型号下的评价
  * </p>
+ * 
  * @author Yangqh
  * @date 2017年4月18日 下午12:55:22
  *
@@ -22,15 +23,14 @@ import com.lawu.eshop.mq.dto.product.DelProductCommentNotification;
 @Service("delProductCommentTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PRODUCT_SRV, tags = MqConstant.TAG_DEL_COMMENT)
 public class DelProductCommentTransactionFollowServiceImpl extends AbstractTransactionFollowService<DelProductCommentNotification, Reply> {
-   
+
 	@Autowired
 	private CommentProductService commentProductService;
 
-    @Override
-    public Reply execute(DelProductCommentNotification notification) {
-        Long productModelId = notification.getProductModelId();
-        commentProductService.delCommentByProductModelId(productModelId);
-        return new Reply();
-    }
+	@Override
+	public void execute(DelProductCommentNotification notification) {
+		Long productModelId = notification.getProductModelId();
+		commentProductService.delCommentByProductModelId(productModelId);
+	}
 
 }

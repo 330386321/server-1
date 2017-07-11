@@ -95,19 +95,12 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	 */
 	@Transactional
 	@Override
-	public Integer commentsSuccessful(Long id) {
-		Integer rtn = null;
-		if (id == null || id <= 0) {
-			return rtn;
-		}
-
+	public void commentsSuccessful(Long id) {
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 		shoppingOrderItemDO.setId(id);
 		// 设置为已评论
 		shoppingOrderItemDO.setIsEvaluation(true);
-
-		rtn = shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-		return rtn;
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
 	}
 
 	/**

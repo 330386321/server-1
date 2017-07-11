@@ -27,13 +27,7 @@ public class ShoppingOrderTradingSuccessTransactionFollowServiceImpl extends Abs
 	
 	@Transactional
     @Override
-    public Reply execute(ShoppingOrderTradingSuccessNotification notification) {
-	    Reply rtn = null;
-	    
-	    if (notification == null) {
-	    	return rtn;
-	    }
-	    
+    public void execute(ShoppingOrderTradingSuccessNotification notification) {
 	    if (!notification.getIsAutoReceipt()) {
 		    // 组装请求参数
 		    OrderComfirmDataParam param = new OrderComfirmDataParam();
@@ -49,8 +43,5 @@ public class ShoppingOrderTradingSuccessTransactionFollowServiceImpl extends Abs
 	    	param.setPayWays(new Byte[]{notification.getPaymentMethod().getVal()});
 	    	orderService.comfirmSysJob(param);
 	    }
-	    
-	    rtn = new Reply();
-        return rtn;
     }
 }

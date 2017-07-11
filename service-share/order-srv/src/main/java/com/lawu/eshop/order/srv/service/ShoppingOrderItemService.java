@@ -52,7 +52,7 @@ public interface ShoppingOrderItemService {
 	 * @return
 	 * @author Sunny
 	 */
-	Integer commentsSuccessful(Long id);
+	void commentsSuccessful(Long id);
 	
 	/**
 	 * 查询处于退款中的订单项

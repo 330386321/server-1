@@ -21,19 +21,17 @@ import com.lawu.eshop.property.srv.service.PropertyInfoDataService;
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_AD_SRV, tags = MqConstant.TAG_AD_USER_CLICK_POINT)
 public class UserClickAdTransactionFollowServiceImpl extends AbstractTransactionFollowService<AdPointNotification, Reply> {
 
-    
-	 @Autowired
-	 private PropertyInfoDataService propertyInfoDataService;
+	@Autowired
+	private PropertyInfoDataService propertyInfoDataService;
 
-	    @Override
-	    public Reply execute(AdPointNotification notification) {
-		    PropertyInfoDataParam param=new PropertyInfoDataParam();
-		    param.setPoint(notification.getPoint().toString());
-		    param.setUserNum(notification.getUserNum());
-		    param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
-		    param.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
-		    param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
-		    propertyInfoDataService.doHanlderBalanceIncome(param);
-	        return new Reply();
-	    }
+	@Override
+	public void execute(AdPointNotification notification) {
+		PropertyInfoDataParam param = new PropertyInfoDataParam();
+		param.setPoint(notification.getPoint().toString());
+		param.setUserNum(notification.getUserNum());
+		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.ADVERTISING);
+		param.setLoveTypeEnum(LoveTypeEnum.AD_CLICK);
+		param.setTempBizId(notification.getAdId() == null ? "0" : notification.getAdId().toString());
+		propertyInfoDataService.doHanlderBalanceIncome(param);
+	}
 }

@@ -12,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.dto.order.ProductModeUpdateInventoryDTO;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
+import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
+import com.lawu.eshop.mq.dto.product.CheckLessInventoryResultEnum;
 import com.lawu.eshop.product.constant.ProductModelInventoryTypeEnum;
 import com.lawu.eshop.product.constant.ProductNumFlagEnum;
 import com.lawu.eshop.product.constant.ProductStatusEnum;
@@ -118,10 +119,8 @@ public class ProductModelServiceImpl implements ProductModelService {
 	 */
 	@Transactional
 	@Override
-	public int lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
-		
+	public void lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
-			
 			/*
 	    	 * 可能重复收到MQ消息
 	    	 * 需要实现幂等性
@@ -132,37 +131,30 @@ public class ProductModelServiceImpl implements ProductModelService {
 			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
 			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
 			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
-			
 			// 如果记录已经存在。继续循环
 			if (count > 0) {
 				continue;
 			}
-			
 			// 获取商品型号之前的库存数据
 			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
-			
 			// 获取商品库存信息
 			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-			
 			/*
 			 *  判断商品是否有效
 			 *  商品状态是否是上架状态
 			 *  商品型号状态是否正常
 			 */
 			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
-				return ResultCode.PRODUCT_HAS_EXPIRED;
+				return;
 			}
-			
 			// 判断库存
 			if (productModelDO.getInventory() < param.getQuantity()) {
-				return ResultCode.INVENTORY_SHORTAGE;
+				return;
 			}
-			
 			// 判断库存
 			if (productDO.getTotalInventory() < param.getQuantity()) {
-				return ResultCode.INVENTORY_SHORTAGE;
+				return;
 			}
-			
 			// 减商品型号库存
 			ProductModelNumsView productModelNumsView = new ProductModelNumsView();
 			productModelNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
@@ -170,7 +162,6 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelNumsView.setNum(param.getQuantity());
 			productModelNumsView.setProductModelId(param.getProdecutModelId());
 			productModelDOMapperExtend.editInventory(productModelNumsView);
-			
 			// 保存库存流程记录
 			ProductModelInventoryDO productModelInventoryDO = new ProductModelInventoryDO();
 			productModelInventoryDO.setProductModelId(param.getProdecutModelId());
@@ -181,7 +172,6 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productModelInventoryDO.setGmtCreate(new Date());
 			productModelInventoryDO.setGmtModified(new Date());
 			productModelInventoryDOMapper.insertSelective(productModelInventoryDO);
-			
 			// 减商品库存
 			ProductNumsView productNumsView = new ProductNumsView();
 			productNumsView.setFlag(ProductNumFlagEnum.MINUS.getValue());
@@ -189,9 +179,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			productNumsView.setNum(param.getQuantity());
 			productNumsView.setProductId(productModelDO.getProductId());
 			productDOMapperExtend.editTotalInventory(productNumsView);
-			
 		}
-		return ResultCode.SUCCESS;
 	}
 	
 	/**
@@ -263,11 +251,12 @@ public class ProductModelServiceImpl implements ProductModelService {
 	 * 确认收货，增加销量
 	 * 
 	 * @param notification 接收的数据
-	 * @author Sunny
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@Transactional
 	@Override
-	public int increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification) {
+	public void increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification) {
 		for (ProductModeUpdateInventoryDTO param : notification.getParams()) {
 			
 			/*
@@ -321,22 +310,21 @@ public class ProductModelServiceImpl implements ProductModelService {
 			}
 			
 		}
-		
-		return ResultCode.SUCCESS;
 	}
 	
 	/**
 	 * 检查库存是否扣除成功
 	 * 
-	 * @param shoppingOrderCreateOrderNotification 接收的数据
-	 * @author Sunny
+	 * @param shoppingOrderCreateOrderNotification 接收到的数据
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@Transactional
 	@Override
-	public int checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
-		
+	public ShoppingOrderCreateOrderReply checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
+		ShoppingOrderCreateOrderReply rtn = new ShoppingOrderCreateOrderReply();
 		for (ProductModeUpdateInventoryDTO param : shoppingOrderCreateOrderNotification.getParams()) {
-			
 			/*
 	    	 * 可能重复收到MQ消息
 	    	 * 需要实现幂等性
@@ -347,38 +335,31 @@ public class ProductModelServiceImpl implements ProductModelService {
 			criteria.andTypeEqualTo(ProductModelInventoryTypeEnum.CREATE_ORDER.getValue());
 			criteria.andProductModelIdEqualTo(param.getProdecutModelId());
 			int count = productModelInventoryDOMapper.countByExample(productModelInventoryDOExample);
-			
 			// 如果记录已经存在。继续循环
 			if (count > 0) {
 				continue;
 			}
-			
 			// 获取商品型号之前的库存数据
 			ProductModelDO productModelDO = productModelDOMapper.selectByPrimaryKey(param.getProdecutModelId());
-			
 			// 获取商品库存信息
 			ProductDO productDO = productDOMapper.selectByPrimaryKey(productModelDO.getProductId());
-			
 			/*
 			 *  判断商品是否有效
 			 *  商品状态是否是上架状态
 			 *  商品型号状态是否正常
 			 */
 			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
-				return ResultCode.PRODUCT_HAS_EXPIRED;
+				rtn.setResult(CheckLessInventoryResultEnum.PRODUCT_HAS_EXPIRED);
 			}
-			
 			// 判断库存
 			if (productModelDO.getInventory() < param.getQuantity()) {
-				return ResultCode.INVENTORY_SHORTAGE;
+				rtn.setResult(CheckLessInventoryResultEnum.INVENTORY_SHORTAGE);
 			}
-			
 			// 判断库存
 			if (productDO.getTotalInventory() < param.getQuantity()) {
-				return ResultCode.INVENTORY_SHORTAGE;
+				rtn.setResult(CheckLessInventoryResultEnum.INVENTORY_SHORTAGE);
 			}
-			
 		}
-		return ResultCode.SUCCESS;
+		return rtn;
 	}
 }

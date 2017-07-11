@@ -6,6 +6,7 @@ import java.util.List;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCancelOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderCreateOrderNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderTradingSuccessIncreaseSalesNotification;
+import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.product.srv.bo.CommentProductInfoBO;
 import com.lawu.eshop.product.srv.bo.ShoppingCartProductModelBO;
 
@@ -39,7 +40,7 @@ public interface ProductModelService {
 	 * @param shoppingCartCreateOrderNotification 发送的数据
 	 * @author Sunny
 	 */
-	int lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
+	void lessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
 	
 	/**
 	 * 取消购物订单
@@ -62,16 +63,19 @@ public interface ProductModelService {
 	 * 确认收货，增加销量
 	 * 
 	 * @param notification 接收的数据
-	 * @author Sunny
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification);
+	void increaseSales(ShoppingOrderTradingSuccessIncreaseSalesNotification notification);
 	
 	/**
 	 * 检查库存是否扣除成功
 	 * 
-	 * @param shoppingOrderCreateOrderNotification 接收的数据
-	 * @author Sunny
+	 * @param shoppingOrderCreateOrderNotification 接收到的数据
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
+	ShoppingOrderCreateOrderReply checkLessInventory(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification);
 
 }

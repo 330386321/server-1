@@ -24,15 +24,7 @@ public class ShoppingOrderAutoCommentTransactionFollowServiceImpl extends Abstra
 	private CommentProductService commentProductService;
 	
     @Override
-    public Reply execute(ShoppingOrderAutoCommentNotification notification) {
-		Reply rtn = new Reply();
-		
-		if (notification == null) {
-			return rtn;
-		}
-		
+    public void execute(ShoppingOrderAutoCommentNotification notification) {
 		commentProductService.saveCommentProductInfoOrderJob(notification);
-    	
-        return rtn;
     }
 }

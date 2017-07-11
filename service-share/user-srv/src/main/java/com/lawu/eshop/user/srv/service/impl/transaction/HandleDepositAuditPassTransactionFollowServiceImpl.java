@@ -1,5 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
@@ -8,9 +12,6 @@ import com.lawu.eshop.mq.dto.property.StoreStatusNotification;
 import com.lawu.eshop.mq.dto.user.MerchantStatusEnum;
 import com.lawu.eshop.user.srv.service.MerchantAuditService;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhangyong
@@ -19,27 +20,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("handleDepositAuditPassTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_DEPOSIT_AUDIT_PASS)
 public class HandleDepositAuditPassTransactionFollowServiceImpl extends AbstractTransactionFollowService<StoreStatusNotification, Reply> {
-    @Autowired
-    private MerchantStoreInfoService merchantStoreInfoService;
-    @Autowired
-    private MerchantAuditService merchantAuditService;
-    /**
-     *
-     */
-    @Transactional
-    @Override
-    public Reply execute(StoreStatusNotification notification) {
-        Reply rtn = null;
 
-        if (notification == null) {
-            return rtn;
-        }
+	@Autowired
+	private MerchantStoreInfoService merchantStoreInfoService;
 
-        rtn = new Reply();
-        merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
-        if(notification.getShow()){
-            merchantAuditService.setAuditInfoShow(notification.getMerchantId());
-        }
-        return rtn;
-    }
+	@Autowired
+	private MerchantAuditService merchantAuditService;
+
+	@Transactional
+	@Override
+	public void execute(StoreStatusNotification notification) {
+		merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+		if (notification.getShow()) {
+			merchantAuditService.setAuditInfoShow(notification.getMerchantId());
+		}
+	}
 }

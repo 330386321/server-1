@@ -46,7 +46,6 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
     	// 统一处理事务异常，手动捕捉异常，并且打印错误信息
     	StringBuilder locakName = new StringBuilder();
 		locakName.append(topic).append("_").append(annotation.tags()).append("_").append(notification.getTransactionId());
-		
 		// 从事务幂等性保证，表中存在记录，说明消息已经被成功消费，直接返回
 		if (followTransactionRecordService.isExist(topic, notification.getTransactionId())) {
 			logger.info("消息已经被消费");
@@ -57,32 +56,24 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
             }
 			return;
 		}
-		
 		// 如果没有获取到锁直接返回
 		if (!lockService.tryLock(locakName.toString())) {
 			logger.info("锁还未释放");
 			return;
 		}
-		
     	try {
-    		
-    		R reply = execute(notification);
-    		
+    		execute(notification);
+    		R reply = getReply(notification);
     		// 如果消息被成功消费，保存一条消费记录
     		followTransactionRecordService.consumptionSuccessful(topic, notification.getTransactionId());
-    		
     		// 只有事务全部执行成功，才会发送回复消息
-    		if ( reply != null ) {
-                reply.setTransactionId(notification.getTransactionId());
-                sendCallback(reply);
-            }
-    		
+            reply.setTransactionId(notification.getTransactionId());
+            sendCallback(reply);
     	} catch (Exception e) {
     		logger.error("事务执行异常", e);
     		// 抛出异常，回滚事务
     		throw e;
     	}
-    	
     	//事务执行完成释放锁
 		lockService.unLock(locakName.toString());
     }
@@ -97,7 +88,7 @@ public abstract class AbstractTransactionFollowService<N extends Notification, R
      *
      * @param notification
      */
-    public abstract R execute(N notification);
+    public abstract void execute(N notification);
     
     /**
      * 默认为返回一个Reply空对象

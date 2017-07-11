@@ -19,26 +19,17 @@ import com.lawu.eshop.product.srv.service.ProductModelService;
 @Service("shoppingOrderCancelOrderTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_ORDER_SRV, tags = MqConstant.TAG_CANCEL_ORDER)
 public class ShoppingOrderCancelOrderTransactionFollowServiceImpl extends AbstractTransactionFollowService<ShoppingOrderCancelOrderNotification, Reply> {
-	
+
 	@Autowired
 	private ProductModelService productModelService;
-	
+
 	/**
 	 * 释放库存
 	 */
-    @Override
-    @Transactional
-    public Reply execute(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
-    	Reply rtn = new Reply();
-    	
-    	// 如果接收的消息为空直接返回
-    	if (shoppingOrderCancelOrderNotification == null) {
-    		return rtn;
-    	}
-    	
-    	// 释放商品库存，以及在商品型号库存表添加记录
-    	productModelService.releaseInventory(shoppingOrderCancelOrderNotification);
-    	
-		return rtn;
-    }
+	@Override
+	@Transactional
+	public void execute(ShoppingOrderCancelOrderNotification shoppingOrderCancelOrderNotification) {
+		// 释放商品库存，以及在商品型号库存表添加记录
+		productModelService.releaseInventory(shoppingOrderCancelOrderNotification);
+	}
 }

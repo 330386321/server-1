@@ -28,39 +28,18 @@ public class ShoppingOrderCreateOrderTransactionFollowServiceImpl extends Abstra
 	 */
 	@Transactional
     @Override
-    public ShoppingOrderCreateOrderReply execute(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
-		ShoppingOrderCreateOrderReply rtn = null;
-    	
-    	// 如果接收的消息为空直接返回
-    	if (shoppingOrderCreateOrderNotification == null) {
-    		return rtn;
-    	}
-    	
+    public void execute(ShoppingOrderCreateOrderNotification shoppingOrderCreateOrderNotification) {
     	/*
     	 *  减商品型号库存
     	 *  减商品总库存
     	 *  以及在商品型号库存表添加记录
     	 *  所有减库存的操作必须在同一个事务中(只要其中一个产品的型号库存不够，全部回滚)
     	 */
-    	int resultCode = productModelService.lessInventory(shoppingOrderCreateOrderNotification);
-    	
-    	rtn = new ShoppingOrderCreateOrderReply();
-		rtn.setResultCode(resultCode);
-		return rtn;
+    	productModelService.lessInventory(shoppingOrderCreateOrderNotification);
     }
 	
 	@Override
 	public ShoppingOrderCreateOrderReply getReply(ShoppingOrderCreateOrderNotification notification) {
-		ShoppingOrderCreateOrderReply rtn = null;
-		
-    	// 如果接收的消息为空直接返回
-    	if (notification == null) {
-    		return rtn;
-    	}
-		
-		int resultCode =  productModelService.checkLessInventory(notification);
-		rtn = new ShoppingOrderCreateOrderReply();
-		rtn.setResultCode(resultCode);
-		return rtn;
+		return productModelService.checkLessInventory(notification);
 	}
 }

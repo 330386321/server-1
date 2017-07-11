@@ -28,17 +28,9 @@ public class ShoppingRefundAgreeToRefundTransactionFollowServiceImpl extends Abs
 	
 	@Transactional
     @Override
-    public Reply execute(ShoppingRefundAgreeToRefundNotification notification) {
-	    Reply rtn = null;
-	    
-	    if (notification == null) {
-	    	return rtn;
-	    }
-	    
-	    
+    public void execute(ShoppingRefundAgreeToRefundNotification notification) {
 	    // 组装请求参数
 	    OrderRefundDataParam param = new OrderRefundDataParam();
-	    
 	    param.setLast(notification.getIsLast());
 	    param.setOrderId(notification.getShoppingOrderId().toString());
 	    param.setOrderItemIds(notification.getShoppingOrderItemId().toString());
@@ -48,14 +40,10 @@ public class ShoppingRefundAgreeToRefundTransactionFollowServiceImpl extends Abs
 	    param.setTradeNo(notification.getThirdNumber());
 	    param.setOrderRefundStatusEnum(OrderRefundStatusEnum.getEnum(notification.getStatus().getValue()));
 	    param.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(notification.getPaymentMethod().getVal()));
-	    
 		try {
 			orderService.doRefundScopeInside(param);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-    	
-	    rtn = new Reply();
-        return rtn;
     }
 }

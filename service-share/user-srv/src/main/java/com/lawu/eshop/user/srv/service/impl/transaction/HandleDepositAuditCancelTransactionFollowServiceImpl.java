@@ -1,5 +1,9 @@
 package com.lawu.eshop.user.srv.service.impl.transaction;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow;
 import com.lawu.eshop.compensating.transaction.impl.AbstractTransactionFollowService;
@@ -10,9 +14,6 @@ import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.user.srv.UserSrvConfig;
 import com.lawu.eshop.user.srv.bo.MerchantStoreInfoBO;
 import com.lawu.eshop.user.srv.service.MerchantStoreInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author zhangyong
@@ -21,32 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("handleDepositAuditCancelTransactionFollowServiceImpl")
 @CompensatingTransactionFollow(topic = MqConstant.TOPIC_PROPERTY_SRV, tags = MqConstant.TAG_HANDLE_DEPOSIT_AUDIT_CANCEL)
 public class HandleDepositAuditCancelTransactionFollowServiceImpl extends AbstractTransactionFollowService<StoreStatusNotification, Reply> {
-    @Autowired
-    private MerchantStoreInfoService merchantStoreInfoService;
-    @Autowired
-    private UserSrvConfig userSrvConfig;
 
-    /**
-     *
-     */
-    @Transactional
-    @Override
-    public Reply execute(StoreStatusNotification notification) {
-        Reply rtn = null;
+	@Autowired
+	private MerchantStoreInfoService merchantStoreInfoService;
 
-        if (notification == null) {
-            return rtn;
-        }
+	@Autowired
+	private UserSrvConfig userSrvConfig;
 
-        rtn = new Reply();
-        MerchantStoreInfoBO storeInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(notification.getMerchantId());
-        if (storeInfoBO == null) {
-            return null;
-        }
-        merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
-
-        //删除solr门店信息
-        SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
-        return rtn;
-    }
+	/**
+	 *
+	 */
+	@Transactional
+	@Override
+	public void execute(StoreStatusNotification notification) {
+		MerchantStoreInfoBO storeInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(notification.getMerchantId());
+		merchantStoreInfoService.updateMerchantStoreStatus(notification.getMerchantId(), MerchantStatusEnum.MERCHANT_STATUS_UNCHECK.val);
+		// 删除solr门店信息
+		SolrUtil.delSolrDocsById(storeInfoBO.getMerchantStoreId(), userSrvConfig.getSolrUrl(), userSrvConfig.getSolrMerchantCore(), userSrvConfig.getIsCloudSolr());
+	}
 }
