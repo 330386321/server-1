@@ -1,8 +1,10 @@
 package com.lawu.eshop.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,9 +38,12 @@ public final class BeanUtil {
 	 * @param to
 	 * @param excludsArray
 	 *            排除属性列表
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 * @throws Exception
 	 */
-	public static void copyPropertiesExclude(Object from, Object to, String[] excludsArray) throws Exception {
+	public static void copyPropertiesExclude(Object from, Object to, String[] excludsArray) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
 		List<String> excludesList = null;
 
@@ -49,7 +54,7 @@ public final class BeanUtil {
 
 		Method[] fromMethods = from.getClass().getDeclaredMethods();
 		Method[] toMethods = to.getClass().getDeclaredMethods();
-		Method fromMethod = null, toMethod = null;
+		Method fromMethod, toMethod;
 		String fromMethodName = null, toMethodName = null;
 
 		for (int i = 0; i < fromMethods.length; i++) {
@@ -92,11 +97,14 @@ public final class BeanUtil {
 	 * @param from
 	 * @param to
 	 * @param includsArray
+	 * @throws InvocationTargetException 
+	 * @throws IllegalArgumentException 
+	 * @throws IllegalAccessException 
 	 * @throws Exception
 	 */
-	public static void copyPropertiesInclude(Object from, Object to, String[] includsArray) throws Exception {
+	public static void copyPropertiesInclude(Object from, Object to, String[] includsArray) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-		List<String> includesList = null;
+		List<String> includesList = Collections.emptyList();
 
 		if (includsArray != null && includsArray.length > 0) {
 
@@ -108,8 +116,8 @@ public final class BeanUtil {
 		}
 		Method[] fromMethods = from.getClass().getDeclaredMethods();
 		Method[] toMethods = to.getClass().getDeclaredMethods();
-		Method fromMethod = null, toMethod = null;
-		String fromMethodName = null, toMethodName = null;
+		Method fromMethod , toMethod ;
+		String fromMethodName, toMethodName;
 
 		for (int i = 0; i < fromMethods.length; i++) {
 
@@ -142,7 +150,7 @@ public final class BeanUtil {
 
 				Collection<?> newValue = (Collection<?>) value;
 
-				if (newValue.size() <= 0)
+				if (newValue.isEmpty())
 					continue;
 			}
 

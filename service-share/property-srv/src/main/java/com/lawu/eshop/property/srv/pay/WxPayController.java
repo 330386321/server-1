@@ -70,13 +70,13 @@ public class WxPayController extends BaseController {
 		SortedMap<Object, Object> packageParams = new TreeMap<Object, Object>();
 		packageParams.put("trade_type", "APP");
 		packageParams.put("notify_url", propertySrvConfig.getWxpayNotifyUrl());
-		if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
+		if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
 			packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
 			packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdMember());
-		} else if (UserTypeEnum.MEMCHANT.val == param.getUserTypeEnum().val) {
+		} else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
 			packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
 			packageParams.put("mch_id", propertySrvConfig.getWxpayMchIdBusiness());
-		} else if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
+		} else if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
 			packageParams.put("appid", propertySrvConfig.getWxpayAppId());
 			packageParams.put("mch_id", propertySrvConfig.getWxpayMchId());
 			packageParams.put("trade_type", "NATIVE");
@@ -84,14 +84,14 @@ public class WxPayController extends BaseController {
 			key = propertySrvConfig.getWxpayKey();
 		}
 		packageParams.put("nonce_str", RandomStringGenerator.getRandomStringByLength(32));
-		packageParams.put("body", param.getThirdPayBodyEnum().val);
+		packageParams.put("body", param.getThirdPayBodyEnum().getVal());
 		packageParams.put("out_trade_no", param.getOutTradeNo());
 		double fTotalAmount = Double.parseDouble(param.getTotalAmount());
 		int iTotalAmount = (int) (fTotalAmount * 100);
 		packageParams.put("total_fee", String.valueOf(iTotalAmount));
 		packageParams.put("spbill_create_ip", propertySrvConfig.getWxpayIp());
-		packageParams.put("attach", param.getBizFlagEnum().val + split + param.getUserNum() + split
-				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());
+		packageParams.put("attach", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
+				+ param.getThirdPayBodyEnum().getVal() + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId());
 
 		String sign = PayCommonUtil.createSign("UTF-8", packageParams, key);
 		packageParams.put("sign", sign);
@@ -117,7 +117,7 @@ public class WxPayController extends BaseController {
 				return successCreated(ResultCode.FAIL, err_code + ":" + err_code_des);
 
 			} else {
-				if (UserTypeEnum.MEMCHANT_PC.val == param.getUserTypeEnum().val) {
+				if (UserTypeEnum.MEMCHANT_PC.getVal() == param.getUserTypeEnum().getVal()) {
 					String code_url = map.get("code_url") == null ? "" : map.get("code_url").toString();
 					packageParams.clear();
 					packageParams.put("codeUrl", code_url);
@@ -125,10 +125,10 @@ public class WxPayController extends BaseController {
 				} else {
 					String prepay_id = map.get("prepay_id") == null ? "" : map.get("prepay_id").toString();
 					packageParams.clear();
-					if (UserTypeEnum.MEMBER.val == param.getUserTypeEnum().val) {
+					if (UserTypeEnum.MEMBER.getVal() == param.getUserTypeEnum().getVal()) {
 						packageParams.put("appid", propertySrvConfig.getWxpayAppIdMember());
 						packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdMember());
-					} else if (UserTypeEnum.MEMCHANT.val == param.getUserTypeEnum().val) {
+					} else if (UserTypeEnum.MEMCHANT.getVal() == param.getUserTypeEnum().getVal()) {
 						packageParams.put("appid", propertySrvConfig.getWxpayAppIdBusiness());
 						packageParams.put("partnerid", propertySrvConfig.getWxpayMchIdBusiness());
 					}

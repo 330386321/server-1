@@ -7,11 +7,14 @@ import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 import com.lawu.eshop.mall.srv.converter.RegionConverter;
 import com.lawu.eshop.mall.srv.service.RegionService;
+import com.lawu.eshop.utils.LonLatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhangyong
@@ -60,6 +63,56 @@ public class RegionController extends BaseController {
     public Result<String> getAreaName(@RequestParam String regionPath) {
         String areaPath = regionService.getAreaName(regionPath);
         return successGet(areaPath);
+    }
+
+    /**
+     * 查询城市列表
+     *
+     * @return
+     */
+    @RequestMapping(value = "getRegionLevelTwo", method = RequestMethod.GET)
+    public Result<List<RegionDTO>> getRegionLevelTwo() {
+        List<RegionDTO> regionDTOS = new ArrayList<>();
+        List<RegionBO> regionBOS = regionService.getRegionLevelTwo();
+        if (regionBOS.isEmpty()) {
+            return successGet(regionDTOS);
+        }
+        for (RegionBO regionBO : regionBOS) {
+            RegionDTO regionDTO = RegionConverter.coverDTO(regionBO);
+            regionDTOS.add(regionDTO);
+        }
+        return successGet(regionDTOS);
+    }
+
+    /**
+     * 根据区域ID查询区域信息
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "getRegion/{id}", method = RequestMethod.GET)
+    public Result<RegionDTO> getRegion(@PathVariable Integer id) {
+        RegionBO regionBO = regionService.getRegionById(id);
+        return successGet(RegionConverter.coverDTO(regionBO));
+    }
+
+    /**
+     * 更新区域表经纬度
+     */
+    @RequestMapping(value = "updateRegionLonLat", method = RequestMethod.GET)
+    public Result updateRegionLonLat() {
+        List<RegionBO> regionBOS = regionService.getRegionLevelTwo();
+        if (!regionBOS.isEmpty()) {
+            for (RegionBO regionBO : regionBOS) {
+                Map<String, String> map = LonLatUtil.getLonLat(regionBO.getName());
+                if (map != null) {
+                    BigDecimal lon = new BigDecimal(map.get("lng"));
+                    BigDecimal lat = new BigDecimal(map.get("lat"));
+                    regionService.updateRegionLonLat(regionBO.getId(), lon.setScale(7, BigDecimal.ROUND_HALF_UP), lat.setScale(7, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+        }
+        return successGet();
     }
 
 }

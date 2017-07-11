@@ -223,7 +223,7 @@ public class MessageServiceImpl implements MessageService {
         MessagePushInfo pushInfo = new MessagePushInfo();
         pushInfo.setTitle(param.getTitle());
         pushInfo.setContent(param.getContent());
-        pushInfo.setUserType(param.getUserTypeEnum().val);
+        pushInfo.setUserType(param.getUserTypeEnum().getVal());
         pushInfo.setMessageType(MessageTypeEnum.MESSAGE_TYPE_PLATFORM_NOTICE.getVal());
         //推送全部
         if ("all".equals(param.getArea())) {

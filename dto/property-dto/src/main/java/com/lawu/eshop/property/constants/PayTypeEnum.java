@@ -34,16 +34,8 @@ public enum PayTypeEnum {
 		return val;
 	}
 
-	public void setVal(Byte val) {
-		this.val = val;
-	}
-
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 }

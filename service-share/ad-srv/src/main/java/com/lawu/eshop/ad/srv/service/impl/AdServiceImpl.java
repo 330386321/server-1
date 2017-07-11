@@ -38,6 +38,7 @@ import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -49,6 +50,7 @@ import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
+import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
@@ -63,6 +65,7 @@ import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.solr.SolrUtil;
 import com.lawu.eshop.utils.AdArithmeticUtil;
+import com.lawu.eshop.utils.DateUtil;
 
 
 /**
@@ -123,6 +126,7 @@ public class AdServiceImpl implements AdService {
 	
 	private int currentPage=1;
 	
+	private int reportCurrentPage=1;
 
 	/**
 	 * 商家发布E赚
@@ -537,7 +541,7 @@ public class AdServiceImpl implements AdService {
 			cr.andStatusEqualTo(AdStatusEnum.AD_STATUS_PUTED.val);
 			example.setOrderByClause("gmt_create desc");
 		}
-		
+
 		List<AdDO> DOS=adDOMapper.selectByExample(example);
 		List<AdBO> BOS=new ArrayList<AdBO>();
 		for (AdDO adDO : DOS) {
@@ -562,12 +566,14 @@ public class AdServiceImpl implements AdService {
 			AdDO ad=new AdDO();
 			ad.setId(memberId);
 			ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
+			ad.setGmtModified(new Date());
 			adDOMapper.updateByPrimaryKeySelective(ad);
 			return new BigDecimal(0);
 		}else{
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(num);
 			pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+			pointPoolDO.setGmtModified(new Date());
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
@@ -666,6 +672,7 @@ public class AdServiceImpl implements AdService {
 			pointPoolDO.setStatus(new Byte("1"));
 			pointPoolDO.setMemberId(memberId);
 			pointPoolDO.setMemberNum(memberNum);
+			pointPoolDO.setGmtModified(new Date());
 			pointPoolDOMapper.updateByPrimaryKeySelective(pointPoolDO);
 			//给用户加积分
 			adtransactionMainAddService.sendNotice(pointPoolDO.getId());
@@ -998,6 +1005,39 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andIdEqualTo(id).andMerchantIdEqualTo(merchantId);
 		int count= adDOMapper.countByExample(example);
 		return count>0?true:false;
+	}
+
+	@Override
+	public List<ReportAdBO> selectReportAdEarnings() {
+		int count=adDOMapperExtend.selectReportAdEarningscount();
+		int totalPageNum;
+		if(count%1000==0){
+			totalPageNum=count/1000;
+		}else{
+			totalPageNum=count/1000+1;
+		}
+		if(reportCurrentPage>=totalPageNum){
+			reportCurrentPage=1;
+		}else{
+			reportCurrentPage++;
+		}
+		RowBounds rowBounds = new RowBounds(1000 * (reportCurrentPage - 1), 1000);
+		List<ReportAdView> list =adDOMapperExtend.selectReportAdEarningsByRowbounds(rowBounds);
+		List<ReportAdBO> listBO=new ArrayList<>();
+		for (ReportAdView reportAdView : list) {
+			ReportAdBO bo=new ReportAdBO();
+			bo.setGmtCreate(reportAdView.getGmtCreate());
+			bo.setId(reportAdView.getId());
+			bo.setMerchantId(reportAdView.getMerchantId());
+			bo.setMerchantNum(reportAdView.getMerchantNum());
+			bo.setStatusEnum(AdStatusEnum.getEnum(reportAdView.getStatus()));
+			bo.setTypeEnum(AdTypeEnum.getEnum(reportAdView.getType()));
+			bo.setTotalPoint(reportAdView.getTotalPoint());
+			bo.setTitle(reportAdView.getTitle());
+			listBO.add(bo);
+		}
+
+		return listBO;
 	}
 
 }

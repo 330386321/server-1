@@ -3,6 +3,7 @@ package com.lawu.eshop.order.srv.converter;
 import com.lawu.eshop.order.constants.EvaluationEnum;
 import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
+import com.lawu.eshop.order.dto.OperatorPayOrderListDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
@@ -57,7 +58,7 @@ public class PayOrderConverter {
 
     public static List<PayOrderBO> coverBOS(List<PayOrderDO> payOrderDOS) {
         if (payOrderDOS == null || payOrderDOS.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<PayOrderBO> payOrderBOS = new ArrayList<>();
         PayOrderBO payOrderBO = null;
@@ -67,6 +68,8 @@ public class PayOrderConverter {
             payOrderBO.setId(payOrderDO.getId());
             payOrderBO.setActualAmount(payOrderDO.getActualAmount());
             payOrderBO.setGmtCreate(payOrderDO.getGmtCreate());
+            payOrderBO.setMemberId(payOrderDO.getMemberId());
+            payOrderBO.setMerchantId(payOrderDO.getMerchantId());
             payOrderBOS.add(payOrderBO);
         }
         return payOrderBOS;
@@ -102,5 +105,24 @@ public class PayOrderConverter {
         infoDTO.setOrderNum(payOrderBO.getOrderNum());
         infoDTO.setTotalAmount(payOrderBO.getTotalAmount());
         return  infoDTO;
+    }
+
+    public static List<OperatorPayOrderListDTO> coverOperatorPayOrderListDTOS(List<PayOrderBO> records) {
+        if (records.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<OperatorPayOrderListDTO> payOrderListDTOS = new ArrayList<>();
+        OperatorPayOrderListDTO payOrderListDTO = null;
+        for (PayOrderBO payOrderBO : records) {
+            payOrderListDTO = new OperatorPayOrderListDTO();
+            payOrderListDTO.setId(payOrderBO.getId());
+            payOrderListDTO.setOrderNum(payOrderBO.getOrderNum());
+            payOrderListDTO.setActualAmount(payOrderBO.getActualAmount());
+            payOrderListDTO.setGmtCreate(payOrderBO.getGmtCreate());
+            payOrderListDTO.setMerchantId(payOrderBO.getMerchantId());
+            payOrderListDTO.setMemberId(payOrderBO.getMemberId());
+            payOrderListDTOS.add(payOrderListDTO);
+        }
+        return payOrderListDTOS;
     }
 }

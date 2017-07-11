@@ -5,7 +5,6 @@ import com.lawu.eshop.product.param.ListShoppingProductParam;
 import com.lawu.eshop.product.srv.bo.ProductSearchBO;
 import com.lawu.eshop.product.srv.converter.ProductConverter;
 import com.lawu.eshop.product.srv.domain.extend.ShoppingProductDOView;
-import com.lawu.eshop.product.srv.mapper.ProductDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.ProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.ShoppingProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import java.util.List;
  */
 @Service
 public class ShoppingProductServiceImpl implements ShoppingProductService {
-
-    @Autowired
-    private ProductDOMapper productDOMapper;
 
     @Autowired
     private ProductDOMapperExtend productDOMapperExtend;

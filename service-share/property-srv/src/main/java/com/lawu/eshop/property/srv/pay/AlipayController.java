@@ -67,15 +67,15 @@ public class AlipayController extends BaseController {
 
 		String appId = "";
 		String public_key = "";
-		if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMBER.val)) {
+		if (param.getUserTypeEnum().getVal().equals(UserTypeEnum.MEMBER.getVal())) {
 			appId = propertySrvConfig.getAlipayAppIdMember();
 			public_key = propertySrvConfig.getAlipayEdianMemberPublicKey();
-		} else if (param.getUserTypeEnum().val.equals(UserTypeEnum.MEMCHANT.val)) {
+		} else if (param.getUserTypeEnum().getVal().equals(UserTypeEnum.MEMCHANT.getVal())) {
 			appId = propertySrvConfig.getAlipayAppIdBusiness();
 			public_key = propertySrvConfig.getAlipayEdianBusinessPublicKey();
 		}
-		String passback_params = param.getBizFlagEnum().val + split + param.getUserNum() + split
-				+ param.getThirdPayBodyEnum().val + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId();
+		String passback_params = param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
+				+ param.getThirdPayBodyEnum().getVal() + split + param.getBizIds() + split + param.getSideUserNum() + split + param.getMerchantId();
 		// 实例化客户端
 		AlipayClient alipayClient = new DefaultAlipayClient(propertySrvConfig.getAlipayGateway(), appId,
 				propertySrvConfig.getAlipayPrivateKey(), "json", "utf-8", public_key, "RSA");
@@ -128,14 +128,14 @@ public class AlipayController extends BaseController {
 
 		paramMap.put("out_trade_no", param.getOutTradeNo());
 		paramMap.put("subject", param.getSubject());
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
-			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(param.getBizFlagEnum().getVal())) {
+			paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
 					+ "商家缴纳保证金P" + split + param.getBizId() + split + param.getMerchantId());
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)) {
-			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())) {
+			paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
 					+ "商家充值余额P" + split + param.getBizId());
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
-			paramMap.put("extra_common_param", param.getBizFlagEnum().val + split + param.getUserNum() + split
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
+			paramMap.put("extra_common_param", param.getBizFlagEnum().getVal() + split + param.getUserNum() + split
 					+ "商家充值积分P" + split + param.getBizId());
 		}
 		paramMap.put("total_fee", param.getTotalAmount());

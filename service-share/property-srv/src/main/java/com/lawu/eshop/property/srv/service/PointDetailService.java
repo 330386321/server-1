@@ -1,9 +1,13 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.PointDetailQueryParam;
+import com.lawu.eshop.property.param.PointDetailReportParam;
 import com.lawu.eshop.property.param.PointDetailSaveDataParam;
 import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.srv.bo.PointConsumeReportBO;
 import com.lawu.eshop.property.srv.bo.PointDetailBO;
 
 /**
@@ -37,5 +41,23 @@ public interface PointDetailService {
 	 * @return
 	 */
 	Page<PointDetailBO> getBackagePointPageList(TransactionDetailQueryForBackageParam param);
+
+	/**
+	 * 
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月30日 下午2:34:48
+	 */
+	List<PointConsumeReportBO> selectPointDetailListByDateAndDirection(PointDetailReportParam param);
+
+	/**
+	 * 
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月30日 下午2:47:59
+	 */
+	List<PointConsumeReportBO> selectPointDetailListByDateAndDirectionAndPointType(PointDetailReportParam param);
 
 }

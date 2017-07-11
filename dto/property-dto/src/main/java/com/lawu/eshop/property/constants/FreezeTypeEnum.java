@@ -12,7 +12,7 @@ package com.lawu.eshop.property.constants;
 public enum FreezeTypeEnum {
 
 	PRODUCT_ORDER((byte) 0x01); // 商品订单
-	public Byte val;
+	private Byte val;
 
 	FreezeTypeEnum(Byte val) {
 		this.val = val;
@@ -27,4 +27,9 @@ public enum FreezeTypeEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

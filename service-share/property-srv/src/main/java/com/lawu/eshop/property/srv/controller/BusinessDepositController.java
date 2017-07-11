@@ -133,7 +133,7 @@ public class BusinessDepositController extends BaseController {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
 		
-		if (BusinessDepositOperEnum.REFUND_FAILURE.val.equals(param.getBusinessDepositOperEnum().val)
+		if (BusinessDepositOperEnum.REFUND_FAILURE.getVal().equals(param.getBusinessDepositOperEnum().getVal())
 				&& (param.getFailReason() == null || "".equals(param.getFailReason()))) {
 			return successCreated(ResultCode.CASH_BACKAGE_FAILURE_REASON_NULL);
 		}

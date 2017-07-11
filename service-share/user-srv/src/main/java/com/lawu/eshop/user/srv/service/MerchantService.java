@@ -131,4 +131,6 @@ public interface MerchantService {
      * @return
      */
     MerchantDOView getMerchantView(Long id);
+
+    Integer getTotalCount();
 }

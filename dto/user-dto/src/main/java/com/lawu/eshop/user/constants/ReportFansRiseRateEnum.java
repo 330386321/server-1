@@ -19,10 +19,6 @@ public enum ReportFansRiseRateEnum {
 		return value;
 	}
 
-	public void setValue(Byte value) {
-		this.value = value;
-	}
-
 	ReportFansRiseRateEnum(Byte value) {
         this.value = value;
     }

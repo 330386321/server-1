@@ -1,8 +1,18 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.property.param.*;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.TotalSalesQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.srv.bo.TotalSalesBO;
 import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
 
 /**
  * 交易明细服务接口
@@ -53,5 +63,21 @@ public interface TransactionDetailService {
 	 * @return
 	 */
 	Page<TransactionDetailBO> getBackageRechargePageList(TransactionDetailQueryForBackageParam param);
+	
+	/**
+	 * 查询平台销售金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	List<TotalSalesBO> selectTotalSales(TotalSalesQueryParam param);
+	
+	/**
+	 * 查询用户收入和支出金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param);
 
 }

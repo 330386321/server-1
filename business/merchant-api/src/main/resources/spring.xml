@@ -24,6 +24,10 @@
                      <property name="testId" value="1"/>
                      <property name="testAccount" value="18696523658" />
               </bean>
+
+
+              <!--访问拦截器-->
+              <bean id="userVisitInterceptor" class="com.lawu.eshop.framework.web.interceptor.UserVisitInterceptor" />
        </mvc:interceptors>
 
        <!--管理验证信息的bean-->
@@ -35,4 +39,6 @@
        </bean>
 
        <bean id="redisCacheService" class="com.lawu.eshop.merchant.api.service.impl.RedisCacheServiceImpl" />
+
+       <import resource="spring-event.xml" />
 </beans>

@@ -2,6 +2,7 @@ package com.lawu.eshop.mall.srv.service;
 
 import com.lawu.eshop.mall.srv.bo.RegionBO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,4 +29,30 @@ public interface RegionService {
      * @return
      */
     String getAreaName(String regionPath);
+
+    /**
+     * 查询城市列表
+     *
+     * @return
+     */
+    List<RegionBO> getRegionLevelTwo();
+
+    /**
+     * 根据区域ID查询区域信息
+     *
+     * @param id
+     * @return
+     */
+    RegionBO getRegionById(Integer id);
+
+    /**
+     *
+     * 更新区域表经纬度
+     *
+     * @param id
+     * @param longitude
+     * @param latitude
+     */
+    void updateRegionLonLat(Integer id, BigDecimal longitude, BigDecimal latitude);
+
 }

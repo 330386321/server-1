@@ -37,6 +37,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param productId
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save(@RequestParam Long memberId,@RequestParam  Long  productId ) {
     	Integer i=favoriteProductService.save(memberId,productId);
@@ -55,6 +56,7 @@ public class FavoriteProductController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "remove/{productId}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable Long productId,@RequestParam Long memberId) {
     	favoriteProductService.remove(productId,memberId);

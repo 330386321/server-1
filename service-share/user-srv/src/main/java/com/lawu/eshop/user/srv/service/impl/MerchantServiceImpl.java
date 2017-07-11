@@ -562,4 +562,12 @@ public class MerchantServiceImpl implements MerchantService {
         return merchantDOMapperExtend.getMerchantViewById(id);
     }
 
+    @Override
+    public Integer getTotalCount() {
+        MerchantDOExample example = new MerchantDOExample();
+        example.createCriteria().andStatusEqualTo(UserStatusEnum.MEMBER_STATUS_VALID.val);
+        Integer count = merchantDOMapper.countByExample(example);
+        return count;
+    }
+
 }

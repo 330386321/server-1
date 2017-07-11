@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.lawu.eshop.product.dto.FavoriteProductDTO;
 import com.lawu.eshop.product.srv.bo.FavoriteProductBO;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
 import com.lawu.eshop.product.srv.domain.extend.FavoriteProductView;
 
 public class FavoriteProductConverter {

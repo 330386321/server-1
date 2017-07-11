@@ -2,6 +2,8 @@ package com.lawu.eshop.mall.srv.bo;
 
 import com.lawu.eshop.mall.constants.RegionLevelEnum;
 
+import java.math.BigDecimal;
+
 /**
  * @author zhangyong
  * @date 2017/4/10.
@@ -52,6 +54,10 @@ public class RegionBO {
      */
     private String name;
 
+    private BigDecimal longitude;
+
+    private BigDecimal latitude;
+
     public Integer getId() {
         return id;
     }
@@ -90,5 +96,21 @@ public class RegionBO {
 
     public void setLevelEnum(RegionLevelEnum levelEnum) {
         this.levelEnum = levelEnum;
+    }
+
+    public BigDecimal getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(BigDecimal longitude) {
+        this.longitude = longitude;
+    }
+
+    public BigDecimal getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(BigDecimal latitude) {
+        this.latitude = latitude;
     }
 }

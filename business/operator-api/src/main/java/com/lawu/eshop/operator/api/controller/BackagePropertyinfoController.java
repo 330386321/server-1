@@ -68,12 +68,12 @@ public class BackagePropertyinfoController extends BaseController {
 	public Result<Page<BalanceAndPointListQueryDTO>> selectPropertyinfoList(@RequestBody RechargeQueryParam param) {
 		RechargeQueryDataParam dparam = new RechargeQueryDataParam();
 		String userNum = "";
-		if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
+		if (UserTypeEnum.MEMBER.getVal().equals(param.getUserType().getVal())) {
 			Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 			if (member.getRet() == ResultCode.SUCCESS) {
 				userNum = member.getModel().getNum();
 			}
-		} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
+		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() == ResultCode.SUCCESS) {
 				userNum = merchant.getModel().getNum();
@@ -94,8 +94,8 @@ public class BackagePropertyinfoController extends BaseController {
 	public Result<Page<TransactionDetailBackageDTO>> getBackageRechargePageList(@RequestBody RechargeQueryParam param) {
 		String userNum = "";
 		TransactionDetailQueryForBackageParam realParam = new TransactionDetailQueryForBackageParam();
-		if(!param.getUserType().val.equals(UserTypeEnum.MEMCHANT_PC.val)){
-			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
+		if(!param.getUserType().getVal().equals(UserTypeEnum.MEMCHANT_PC.getVal())){
+			if (UserTypeEnum.MEMBER.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 					if (member.getRet() == ResultCode.SUCCESS) {
@@ -103,7 +103,7 @@ public class BackagePropertyinfoController extends BaseController {
 					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
-			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
+			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {
@@ -149,8 +149,8 @@ public class BackagePropertyinfoController extends BaseController {
 	public Result<Page<PointDetailBackageDTO>> getBackagePointPageList(@RequestBody RechargeQueryParam param) {
 		String userNum = "";
 		TransactionDetailQueryForBackageParam realParam = new TransactionDetailQueryForBackageParam();
-		if(!param.getUserType().val.equals(UserTypeEnum.MEMCHANT_PC.val)){
-			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
+		if(!param.getUserType().getVal().equals(UserTypeEnum.MEMCHANT_PC.getVal())){
+			if (UserTypeEnum.MEMBER.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 					if (member.getRet() == ResultCode.SUCCESS) {
@@ -158,7 +158,7 @@ public class BackagePropertyinfoController extends BaseController {
 					}
 				}
 				realParam.setMemberTransactionType(MemberTransactionTypeEnum.BACKAGE);
-			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
+			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {
@@ -217,13 +217,13 @@ public class BackagePropertyinfoController extends BaseController {
 		BackagePropertyinfoDataParam dparam = new BackagePropertyinfoDataParam();
 		dparam.setMoney(param.getMoney());
 		dparam.setPayTypeEnum(param.getPayTypeEnum());
-		if (UserTypeEnum.MEMBER.val.equals(param.getUserTypeEnum().val)) {
+		if (UserTypeEnum.MEMBER.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 			if (member.getRet() != ResultCode.SUCCESS) {
 				return member;
 			}
 			dparam.setUserNum(member.getModel().getNum());
-		} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserTypeEnum().val)) {
+		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() != ResultCode.SUCCESS) {
 				return merchant;
@@ -247,13 +247,13 @@ public class BackagePropertyinfoController extends BaseController {
 		BackagePropertyinfoDataParam dparam = new BackagePropertyinfoDataParam();
 		dparam.setMoney(param.getMoney());
 		dparam.setPayTypeEnum(param.getPayTypeEnum());
-		if (UserTypeEnum.MEMBER.val.equals(param.getUserTypeEnum().val)) {
+		if (UserTypeEnum.MEMBER.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 			if (member.getRet() != ResultCode.SUCCESS) {
 				return member;
 			}
 			dparam.setUserNum(member.getModel().getNum());
-		} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserTypeEnum().val)) {
+		} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserTypeEnum().getVal())) {
 			Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 			if (merchant.getRet() != ResultCode.SUCCESS) {
 				return merchant;
@@ -270,17 +270,17 @@ public class BackagePropertyinfoController extends BaseController {
 	@RequiresPermissions("property:list")
 	public Result<Page<PropertyInfoDTO>> getPropertyinfoPageList(@RequestBody PropertyInfoBackageParam param) {
 		String userNum = "";
-		if(param.getUserType().val == UserTypeEnum.MEMCHANT_PC.val){
+		if(param.getUserType().getVal() == UserTypeEnum.MEMCHANT_PC.getVal()){
 			param.setUserType(null);
 		}else{
-			if (UserTypeEnum.MEMBER.val.equals(param.getUserType().val)) {
+			if (UserTypeEnum.MEMBER.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MemberDTO> member = memberService.getMemberByAccount(param.getAccount());
 					if (member.getRet() == ResultCode.SUCCESS) {
 						userNum = member.getModel().getNum();
 					}
 				}
-			} else if (UserTypeEnum.MEMCHANT.val.equals(param.getUserType().val)) {
+			} else if (UserTypeEnum.MEMCHANT.getVal().equals(param.getUserType().getVal())) {
 				if(StringUtils.isNotEmpty(param.getAccount())){
 					Result<MerchantDTO> merchant = merchantService.getMerchantByAccount(param.getAccount());
 					if (merchant.getRet() == ResultCode.SUCCESS) {

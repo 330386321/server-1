@@ -6,8 +6,14 @@ import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
-import com.lawu.eshop.property.param.*;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.PointDetailSaveDataParam;
+import com.lawu.eshop.property.param.RechargeQueryDataParam;
+import com.lawu.eshop.property.param.RechargeReportParam;
+import com.lawu.eshop.property.param.RechargeSaveDataParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
+import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.domain.RechargeDOExample;
 import com.lawu.eshop.property.srv.domain.extend.PropertyInfoDOEiditView;
@@ -106,10 +112,10 @@ public class RechargeServiceImpl implements RechargeService {
 		int bizFlagInt = Integer.parseInt(param.getBizFlag());
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.val.equals(StringUtil.intToByte(bizFlagInt))) {
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_BALANCE.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
 			
-			tdsParam.setTitle(TransactionTitleEnum.RECHARGE.val);
+			tdsParam.setTitle(TransactionTitleEnum.RECHARGE.getVal());
 			
 			//加余额
 			PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
@@ -118,14 +124,14 @@ public class RechargeServiceImpl implements RechargeService {
 			infoDoView.setGmtModified(new Date());
 			propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
 			
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))
-				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.val.equals(StringUtil.intToByte(bizFlagInt))) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))
+				|| ThirdPartyBizFlagEnum.MEMBER_PAY_POINT.getVal().equals(StringUtil.intToByte(bizFlagInt))) {
 
-			tdsParam.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);
+			tdsParam.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
 			
 			//新增积分明细
 			PointDetailSaveDataParam pdsParam = new PointDetailSaveDataParam();
-			pdsParam.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);
+			pdsParam.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
 			pdsParam.setPointNum(param.getOutTradeNo());
 			pdsParam.setUserNum(param.getUserNum());
 			if(param.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)){
@@ -134,7 +140,7 @@ public class RechargeServiceImpl implements RechargeService {
 				pdsParam.setPointType(MerchantTransactionTypeEnum.RECHARGE.getValue());
 			} 
 			pdsParam.setPoint(recharge.getMoney());
-			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+			pdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 			pdsParam.setRemark("");
 			pointDetailService.save(pdsParam);
 			
@@ -158,7 +164,7 @@ public class RechargeServiceImpl implements RechargeService {
 		tdsParam.setAmount(new BigDecimal(param.getTotalFee()));
 		tdsParam.setBizId(param.getBizIds());
 		tdsParam.setThirdTransactionNum(param.getTradeNo());
-		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.val);
+		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
 		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam);
 		
@@ -237,5 +243,23 @@ public class RechargeServiceImpl implements RechargeService {
 		}
 		return payTypeEnum.getName();
     }
+
+	@Override
+	public List<RechargeReportBO> selectWithdrawCashListByDateAndStatus(RechargeReportParam param) {
+		RechargeDOExample example = new RechargeDOExample();
+		Date begin = DateUtil.formatDate(param.getDate()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(param.getDate()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		example.createCriteria().andStatusEqualTo(param.getStatus()).andRechargeTypeEqualTo(param.getRechargeType()).andGmtModifiedBetween(begin, end);
+		List<RechargeDO> rntList = rechargeDOMapper.selectByExample(example);
+		List<RechargeReportBO> bos = new ArrayList<>();
+		for(RechargeDO rdo : rntList){
+			RechargeReportBO bo = new RechargeReportBO();
+			bo.setId(rdo.getId());
+			bo.setRechargeMoney(rdo.getRechargeMoney());
+			bo.setUserNum(rdo.getUserNum());
+			bos.add(bo);
+		}
+		return bos;
+	}
 
 }

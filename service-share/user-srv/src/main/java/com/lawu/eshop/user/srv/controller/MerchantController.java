@@ -294,4 +294,9 @@ public class MerchantController extends BaseController {
         return successGet(merchantViewDTO);
     }
 
+    @RequestMapping(value = "getTotalCount",method = RequestMethod.GET)
+    public Integer getTotalCount(){
+        return merchantService.getTotalCount();
+    }
+
 }

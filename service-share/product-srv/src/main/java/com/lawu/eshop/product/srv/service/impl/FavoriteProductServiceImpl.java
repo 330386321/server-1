@@ -1,6 +1,5 @@
 package com.lawu.eshop.product.srv.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +14,8 @@ import com.lawu.eshop.product.srv.bo.FavoriteProductBO;
 import com.lawu.eshop.product.srv.converter.FavoriteProductConverter;
 import com.lawu.eshop.product.srv.domain.FavoriteProductDO;
 import com.lawu.eshop.product.srv.domain.FavoriteProductDOExample;
-import com.lawu.eshop.product.srv.domain.ProductModelDO;
-import com.lawu.eshop.product.srv.domain.ProductModelDOExample;
 import com.lawu.eshop.product.srv.domain.extend.FavoriteProductView;
 import com.lawu.eshop.product.srv.mapper.FavoriteProductDOMapper;
-import com.lawu.eshop.product.srv.mapper.ProductModelDOMapper;
 import com.lawu.eshop.product.srv.mapper.extend.FavoriteProductDOMapperExtend;
 import com.lawu.eshop.product.srv.service.FavoriteProductService;
 import com.lawu.eshop.product.srv.service.ProductService;
@@ -39,9 +35,6 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 
 	@Autowired
 	private FavoriteProductDOMapperExtend favoriteProductDOExtendMapper;
-
-	@Autowired
-	private ProductModelDOMapper productModelDOMapper;
 
 	@Autowired
 	private ProductService productService;

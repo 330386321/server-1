@@ -1,12 +1,16 @@
 package com.lawu.eshop.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Leach
@@ -26,6 +30,12 @@ public class DateUtil {
 
     // int日期格式
     private static final String DATE_INT_FORMAT = "yyyyMMdd";
+    
+    // 年月日期格式
+    public static final String DATE_YYYY_MM_FORMAT = "yyyy-MM";
+    
+    // 月日日期格式
+    public static final String DATE_MM_DD_FORMAT = "MM-dd";
 
     // 默认日期时间格式
     private static final String DATETIME_DEFAULT_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -41,7 +51,7 @@ public class DateUtil {
 
     //int时间格式
     private static final String TIME_INT_FORMAT = "HHmmss";
-
+    
     // 默认日期格式化
     private static DateFormat dateFormat;
 
@@ -461,6 +471,58 @@ public class DateUtil {
     }
 
     /**
+     * 获取指定年的第一个月
+     *
+     * @param date
+     * @return
+     */
+    public static Date getFirstMonthOfYear(Date date) {
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.MONTH, gregorianCalendar.getActualMinimum(Calendar.MONTH));
+        return gregorianCalendar.getTime();
+    }
+
+    /**
+     * 获取指定年的最后一个月
+     *
+     * @param date
+     * @return
+     */
+    public static Date getLastMonthOfYear(Date date) {
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.MONTH, gregorianCalendar.getActualMaximum(Calendar.MONTH));
+        return gregorianCalendar.getTime();
+    }
+
+    /**
+     * 获取指定天的第一秒
+     *
+     * @param date
+     * @return
+     */
+    public static Date getFirstSecondOfDay(Date date) {
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, gregorianCalendar.getActualMinimum(Calendar.HOUR_OF_DAY));
+        gregorianCalendar.set(Calendar.MINUTE, gregorianCalendar.getActualMinimum(Calendar.MINUTE));
+        gregorianCalendar.set(Calendar.SECOND, gregorianCalendar.getActualMinimum(Calendar.SECOND));
+        return gregorianCalendar.getTime();
+    }
+
+    /**
+     * 获取指定天的最后一秒
+     *
+     * @param date
+     * @return
+     */
+    public static Date getLastSecondOfDay(Date date) {
+        gregorianCalendar.setTime(date);
+        gregorianCalendar.set(Calendar.HOUR_OF_DAY, gregorianCalendar.getMaximum(Calendar.HOUR_OF_DAY));
+        gregorianCalendar.set(Calendar.MINUTE, gregorianCalendar.getMaximum(Calendar.MINUTE));
+        gregorianCalendar.set(Calendar.SECOND, gregorianCalendar.getMaximum(Calendar.SECOND));
+        return gregorianCalendar.getTime();
+    }
+
+    /**
      * 获取日期前一天
      *
      * @param date
@@ -483,6 +545,19 @@ public class DateUtil {
         gregorianCalendar.setTime(date);
         int day = gregorianCalendar.get(Calendar.DATE);
         gregorianCalendar.set(Calendar.DATE, day + 1);
+        return gregorianCalendar.getTime();
+    }
+    
+    /**
+     * 获取日期前一月
+     *
+     * @param date
+     * @return
+     */
+    public static Date getMonthBefore(Date date) {
+        gregorianCalendar.setTime(date);
+        int day = gregorianCalendar.get(Calendar.MONTH);
+        gregorianCalendar.set(Calendar.MONTH, day - 1);
         return gregorianCalendar.getTime();
     }
 
@@ -633,5 +708,39 @@ public class DateUtil {
 				break;
 		}
         return rtn;
+    }
+
+    /**
+     * 获取date中field的值
+     *
+     * @param date
+     * @param field @see {@link java.util.Calendar#Calendar Calendar}
+     * @return
+     * @author Sunny
+     * @date 2017年7月3日
+     */
+    public static int getFieldValue(Date date, int field){
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(date);
+    	return calendar.get(field);
+    }
+
+    /**
+     * 获取date中field的最大值
+     *
+     * @param date
+     * @param field @see {@link java.util.Calendar#Calendar Calendar}
+     * @return
+     * @author Sunny
+     * @date 2017年7月3日
+     */
+    public static int getFieldMaxValue(Date date, int field){
+    	Calendar calendar = Calendar.getInstance();
+    	calendar.setTime(date);
+    	return calendar.getMaximum(field);
+    }
+
+    public static String getIntDateByTime(Date time) {
+        return dateIntFormat.format(time);
     }
 }

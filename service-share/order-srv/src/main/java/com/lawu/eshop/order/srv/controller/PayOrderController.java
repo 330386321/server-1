@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.dto.*;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
+import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -81,7 +82,7 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 删除买单记录
-	 * 
+	 *
 	 * @param id
 	 *            买单id
 	 * @param memberId
@@ -139,7 +140,7 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 修改为已计算提成
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -156,7 +157,7 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 商家端买单列表
-	 * 
+	 *
 	 * @param userId
 	 *            商家id
 	 * @param param
@@ -182,7 +183,7 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 用户买单详情
-	 * 
+	 *
 	 * @param id
 	 *            买单id
 	 * @param memberId
@@ -202,5 +203,24 @@ public class PayOrderController extends BaseController {
 			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successGet(PayOrderConverter.coverOrderInfoDTO(payOrderBO));
+	}
+
+	/**
+	 * 运营平台查询买单列表
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "getOperatorPayOrderList", method = RequestMethod.POST)
+	public Result<Page<OperatorPayOrderListDTO>> getOperatorPayOrderList(@RequestBody OperatorPayOrderParam param) {
+		if (param.getCurrentPage() < 1) {
+			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
+		}
+		Page<PayOrderBO> payOrderBOPage = payOrderService.getOperatorPayOrderList(param);
+		Page<OperatorPayOrderListDTO> page = new Page<>();
+		page.setCurrentPage(payOrderBOPage.getCurrentPage());
+		page.setTotalCount(payOrderBOPage.getTotalCount());
+		page.setRecords(PayOrderConverter.coverOperatorPayOrderListDTOS(
+				payOrderBOPage.getRecords()));
+		return successGet(page);
 	}
 }

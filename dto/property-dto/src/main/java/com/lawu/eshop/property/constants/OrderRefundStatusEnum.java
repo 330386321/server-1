@@ -14,7 +14,7 @@ public enum OrderRefundStatusEnum {
 	FINISH((byte)0x01),		//订单完成
 	IN_PROCESSING((byte)0x02);		//处理中未确认收货
 	
-	public Byte val;
+	private Byte val;
 	OrderRefundStatusEnum(Byte val){
 		this.val = val;
 	}
@@ -28,4 +28,9 @@ public enum OrderRefundStatusEnum {
 		}
 		return null;
 	}
+
+	public Byte getVal() {
+		return val;
+	}
+	
 }

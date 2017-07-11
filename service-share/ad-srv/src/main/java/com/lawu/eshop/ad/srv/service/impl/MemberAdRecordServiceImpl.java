@@ -37,7 +37,7 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 	@Override
 	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds() {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
-		example.createCriteria().andStatusEqualTo(MemberAdRecordStatusEnum.NONE.val);
+		example.createCriteria().andStatusEqualTo(MemberAdRecordStatusEnum.NONE.getVal());
 		List<MemberAdRecordDO> dos = memberAdRecordDOMapper.selectByExample(example);
 		List<MemberAdRecodeCommissionBO> bos = new ArrayList<MemberAdRecodeCommissionBO>();
 		for(MemberAdRecordDO mdo : dos){
@@ -58,7 +58,7 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
 		example.createCriteria().andIdEqualTo(id);
 		MemberAdRecordDO mdo = new MemberAdRecordDO();
-		mdo.setStatus(MemberAdRecordStatusEnum.YES.val);
+		mdo.setStatus(MemberAdRecordStatusEnum.YES.getVal());
 		mdo.setGmtCommission(new Date());
 		memberAdRecordDOMapper.updateByExampleSelective(mdo, example);
 		return ResultCode.SUCCESS;

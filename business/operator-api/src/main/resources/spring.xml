@@ -1,18 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-       <!-- 采用SpringMVC自带的JSON转换工具，支持@ResponseBody注解 -->
-       <bean
-               class=" org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-              <!-- 自定义返回值拦截 -->
-              <property name="responseBodyAdvice">
-                     <list>
-                            <bean class="com.lawu.eshop.framework.web.PageResponseBodyAdvice"></bean>
-                     </list>
-              </property>
-       </bean>
+	<!-- 采用SpringMVC自带的JSON转换工具，支持@ResponseBody注解 -->
+	<bean class=" org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<!-- json转换器 -->
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				    <property name="objectMapper">
+	                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+	                        <!-- 处理responseBody 里面日期类型 -->
+	                        <property name="dateFormat">
+	                            <bean class="java.text.SimpleDateFormat">
+	                                <constructor-arg type="java.lang.String" value="${spring.jackson.date-format}" />
+	                            </bean>
+	                        </property>
+	                        <!-- 时区指定 -->
+	                        <property name="timeZone" value="${spring.jackson.time-zone}" />
+	                        <!-- 为null字段时不显示 -->
+	                        <property name="serializationInclusion">
+	                            <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
+	                        </property>
+	                    </bean>
+	                </property>
+				</bean>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+			</list>
+		</property>
+		<!-- 自定义返回值拦截 -->
+		<property name="responseBodyAdvice">
+			<list>
+				<bean class="com.lawu.eshop.framework.web.PageResponseBodyAdvice"></bean>
+			</list>
+		</property>
+		<property name="webBindingInitializer">
+			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+				<property name="conversionService">
+					<bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
 
 </beans>

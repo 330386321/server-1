@@ -64,9 +64,6 @@ public class ProductController extends BaseController {
 			return result;
 		}
 		
-//		Result<MerchantBaseInfoDTO> merchantResult = merchantService.getMerchantById(result.getModel().getMerchantId());
-//		result.getModel().setMerchantUserNum(merchantResult.getModel().getUserNum());
-
 		// 查询门店信息
 		Result<MemberProductStoreDTO> storeDTOResult = merchantStoreService.getMemberProductDetailStore(result.getModel().getMerchantId());
 		if (result.getRet() != ResultCode.SUCCESS) {
@@ -95,7 +92,6 @@ public class ProductController extends BaseController {
 				cidto.setIsAnonymous(comment.getIsAnonymous());
 				cidto.setReplyContent(comment.getReplyContent());
 
-				//Result<com.lawu.eshop.product.dto.CommentProductInfoDTO> product = productService.selectCommentProductInfo(comment.getProductModelId());
 				boolean flag = true;
 				for(MemberProductModelDTO model : spec){
 					if(comment.getProductModelId().longValue() == model.getId().longValue()){

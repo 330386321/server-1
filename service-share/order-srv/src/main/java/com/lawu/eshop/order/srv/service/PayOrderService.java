@@ -5,6 +5,7 @@ import java.util.List;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
+import com.lawu.eshop.order.param.OperatorPayOrderParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
@@ -33,7 +34,7 @@ public interface PayOrderService {
 
 	/**
 	 * 删除买单记录
-	 * 
+	 *
 	 * @param id 买单id
 	 * @param memberId 会员id
 	 * @return
@@ -71,7 +72,7 @@ public interface PayOrderService {
 
     /**
      * 获取买单记录
-     * 
+     *
      * @param id 买单id
      * @param memberId 会员id
      * @return
@@ -79,4 +80,7 @@ public interface PayOrderService {
      * @date 2017年7月11日
      */
 	PayOrderBO getOrderInfo(Long id, Long memberId);
+	PayOrderBO getOrderInfo(Long id);
+
+    Page<PayOrderBO> getOperatorPayOrderList(OperatorPayOrderParam param);
 }

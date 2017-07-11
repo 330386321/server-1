@@ -73,7 +73,7 @@ public class AlipayController extends BaseController {
 
 		ThirdPayDataParam aparam = new ThirdPayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setSubject(param.getThirdPayBodyEnum().val);
+		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizIds(param.getBizIds());
 		aparam.setThirdPayBodyEnum(param.getThirdPayBodyEnum());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
@@ -82,12 +82,12 @@ public class AlipayController extends BaseController {
 		aparam.setMerchantId(UserUtil.getCurrentUserId(getRequest()));
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(param.getBizFlagEnum().getVal())) {
 			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			String bond = bondRet.getModel().toString();
 			aparam.setTotalAmount(bond);
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizIds());
 			double money = recharge.getActualMoney();
 			if (StringUtil.doubleCompareTo(money, 0) == 0) {
@@ -109,19 +109,19 @@ public class AlipayController extends BaseController {
 		String userNum = UserUtil.getCurrentUserNumByToken(token);
 		PcAlipayDataParam aparam = new PcAlipayDataParam();
 		aparam.setOutTradeNo(StringUtil.getRandomNum(""));
-		aparam.setSubject(param.getThirdPayBodyEnum().val);
+		aparam.setSubject(param.getThirdPayBodyEnum().getVal());
 		aparam.setBizId(param.getBizId());
 		aparam.setBizFlagEnum(param.getBizFlagEnum());
 		aparam.setUserNum(userNum);
 		aparam.setMerchantId(Long.valueOf(UserUtil.getCurrentUserIdByToken(token) == null ? "0" : UserUtil.getCurrentUserIdByToken(token)));
 
 		// 查询支付金额
-		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.val.equals(param.getBizFlagEnum().val)) {
+		if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BOND.getVal().equals(param.getBizFlagEnum().getVal())) {
 			Result bondRet = propertyService.getValue(PropertyType.MERCHANT_BONT);
 			String bond = bondRet.getModel().toString();
 			aparam.setTotalAmount(bond);
-		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.val.equals(param.getBizFlagEnum().val)
-				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.val.equals(param.getBizFlagEnum().val)) {
+		} else if (ThirdPartyBizFlagEnum.BUSINESS_PAY_BALANCE.getVal().equals(param.getBizFlagEnum().getVal())
+				|| ThirdPartyBizFlagEnum.BUSINESS_PAY_POINT.getVal().equals(param.getBizFlagEnum().getVal())) {
 			ThirdPayCallBackQueryPayOrderDTO recharge = rechargeService.getRechargeMoney(param.getBizId());
 			double money = recharge.getActualMoney();
 			aparam.setTotalAmount(String.valueOf(money));

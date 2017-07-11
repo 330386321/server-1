@@ -52,7 +52,7 @@ public class MessageController extends BaseController {
         String moblie = messageInfoParam.getMoblie();
         String userNum ;
         MessagePushDTO messagePushDTO;
-        if (UserTypeEnum.MEMBER.val == messageInfoParam.getUserType().val) {
+        if (UserTypeEnum.MEMBER.getVal() == messageInfoParam.getUserType().getVal()) {
             //查询用户信息
             messagePushDTO = memberService.findMessagePushByMobile(moblie);
             if (messagePushDTO == null) {
@@ -85,7 +85,7 @@ public class MessageController extends BaseController {
         if (StringUtils.isEmpty(area)) {
             area = "all";
         }
-        if (UserTypeEnum.MEMBER.val == messageInfoParam.getUserTypeEnum().val) {
+        if (UserTypeEnum.MEMBER.getVal() == messageInfoParam.getUserTypeEnum().getVal()) {
             result = memberService.findMessagePushList(area);
         } else {
             result = merchantService.findMessagePushList(area);

@@ -20,6 +20,7 @@
         <module>property-srv</module>
         <module>user-srv</module>
         <module>operator-srv</module>
+        <module>statistics-srv</module>
     </modules>
 
     <properties>

@@ -34,4 +34,5 @@ public class MemberController extends BaseController{
     public Result<MemberDTO> getMember(@PathVariable @ApiParam(value = "会员账号") String account) {
         return memberService.getMemberByAccount(account);
     }
+    
 }

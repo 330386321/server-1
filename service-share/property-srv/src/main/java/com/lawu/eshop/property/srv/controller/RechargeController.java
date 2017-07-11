@@ -8,13 +8,16 @@ import com.lawu.eshop.property.constants.PayTypeEnum;
 import com.lawu.eshop.property.constants.PropertyType;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.dto.BalanceAndPointListQueryDTO;
+import com.lawu.eshop.property.dto.RechargeReportDTO;
 import com.lawu.eshop.property.dto.RechargeSaveDTO;
 import com.lawu.eshop.property.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.property.param.NotifyCallBackParam;
 import com.lawu.eshop.property.param.RechargeQueryDataParam;
+import com.lawu.eshop.property.param.RechargeReportParam;
 import com.lawu.eshop.property.param.RechargeSaveDataParam;
 import com.lawu.eshop.property.srv.bo.BalanceAndPointListQueryBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
+import com.lawu.eshop.property.srv.bo.RechargeReportBO;
 import com.lawu.eshop.property.srv.service.PropertyInfoService;
 import com.lawu.eshop.property.srv.service.PropertyService;
 import com.lawu.eshop.property.srv.service.RechargeService;
@@ -164,4 +167,33 @@ public class RechargeController extends BaseController {
 		return successGet(payType);
 	}
 
+
+	// -------------------------------统计报表
+
+		/**
+		 * 查询某天平台用户商家充值余额成功的记录
+		 * @param param
+		 * @param result
+		 * @return
+		 * @throws Exception
+		 * @author yangqh
+		 * @date 2017年6月29日 下午5:26:31
+		 */
+		@RequestMapping(value = "selectWithdrawCashListByDateAndStatus", method = RequestMethod.POST)
+		public Result<List<RechargeReportDTO>> selectWithdrawCashListByDateAndStatus(@RequestBody @Valid RechargeReportParam param, BindingResult result) throws Exception {
+			String message = validate(result);
+	    	if (message != null) {
+	    		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
+	    	}
+	    	List<RechargeReportDTO> dtos = new ArrayList<>();
+	    	List<RechargeReportBO> rntList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
+			for(RechargeReportBO bo : rntList){
+				RechargeReportDTO dto = new RechargeReportDTO();
+				dto.setId(bo.getId());
+				dto.setRechargeMoney(bo.getRechargeMoney());
+				dto.setUserNum(bo.getUserNum());
+				dtos.add(dto);
+			}
+			return successCreated(dtos);
+		}
 }

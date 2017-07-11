@@ -1,12 +1,16 @@
 package com.lawu.eshop.property.srv.service;
 
+import java.util.List;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.property.param.CashBackageOperDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDataParam;
 import com.lawu.eshop.property.param.CashBackageQueryDetailParam;
 import com.lawu.eshop.property.param.CashBackageQuerySumParam;
+import com.lawu.eshop.property.param.WithdrawCashReportParam;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQueryBO;
 import com.lawu.eshop.property.srv.bo.WithdrawCashBackageQuerySumBO;
+import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
 
 /**
  * 
@@ -46,6 +50,15 @@ public interface CashManageBackageService {
 	 * @return
 	 */
 	int updateWithdrawCash(CashBackageOperDataParam param);
+
+	/**
+	 * 查询某天平台用户商家提现成功的记录
+	 * @param param
+	 * @return
+	 * @author yangqh
+	 * @date 2017年6月28日 下午4:34:03
+	 */
+	List<WithdrawCashReportBO> selectWithdrawCashListByDateAndStatus(WithdrawCashReportParam param);
 	
 	
 

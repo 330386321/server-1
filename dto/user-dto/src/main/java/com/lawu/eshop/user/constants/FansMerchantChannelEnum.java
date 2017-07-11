@@ -23,14 +23,8 @@ public enum FansMerchantChannelEnum {
     public Byte getValue() {
 		return value;
 	}
-	public void setValue(Byte value) {
-		this.value = value;
-	}
 	public String getName() {
 		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	FansMerchantChannelEnum(Byte value,String name) {
         this.value = value;

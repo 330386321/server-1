@@ -5,10 +5,7 @@ import com.lawu.eshop.user.dto.MemberDTO;
 import com.lawu.eshop.user.dto.MessagePushDTO;
 import com.lawu.eshop.user.dto.UserDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -46,4 +43,7 @@ public interface MemberService {
      */
     @RequestMapping(method = RequestMethod.GET, value = "member/getMemberByNum")
     Result<UserDTO> getMemberByNum(@RequestParam("num") String num);
+
+    @RequestMapping(method = RequestMethod.GET, value = "member/getMemberAccountById")
+    String getMemberAccountById(@RequestParam("memberId") Long memberId);
 }

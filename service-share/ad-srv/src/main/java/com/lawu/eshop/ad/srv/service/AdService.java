@@ -15,6 +15,7 @@ import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
+import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
 import com.lawu.eshop.framework.core.page.Page;
 
@@ -276,7 +277,7 @@ public interface AdService {
 	 * @return
 	 */
 	AdDetailBO selectDetail(Long id);
-	
+
 	/**
 	 * 判断是否是当前用户的数据
 	 * @param id
@@ -284,5 +285,11 @@ public interface AdService {
 	 * @return
 	 */
 	Boolean isMyData(Long id ,Long merchantId);
+
+	/**
+	 * 统计广告
+	 * @return
+	 */
+	List<ReportAdBO> selectReportAdEarnings();
 
 }

@@ -1,27 +1,43 @@
 package com.lawu.eshop.property.srv.service.impl;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
-import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
-import com.lawu.eshop.property.param.*;
-import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
-import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
-import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
-import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
-import com.lawu.eshop.property.srv.service.TransactionDetailService;
-import com.lawu.eshop.utils.StringUtil;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.ResultCode;
+import com.lawu.eshop.property.constants.MemberTransactionTypeEnum;
+import com.lawu.eshop.property.constants.MerchantTransactionTypeEnum;
+import com.lawu.eshop.property.param.NotifyCallBackParam;
+import com.lawu.eshop.property.param.TotalSalesQueryParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForBackageParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMemberParam;
+import com.lawu.eshop.property.param.TransactionDetailQueryForMerchantParam;
+import com.lawu.eshop.property.param.TransactionDetailSaveDataParam;
+import com.lawu.eshop.property.param.UserIncomeExpenditureQueryParam;
+import com.lawu.eshop.property.srv.bo.TotalSalesBO;
+import com.lawu.eshop.property.srv.bo.TransactionDetailBO;
+import com.lawu.eshop.property.srv.bo.UserIncomeExpenditureBO;
+import com.lawu.eshop.property.srv.converter.TotalSalesConverter;
+import com.lawu.eshop.property.srv.converter.TransactionDetailConverter;
+import com.lawu.eshop.property.srv.converter.UserIncomeExpenditureConverter;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDO;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample;
+import com.lawu.eshop.property.srv.domain.TransactionDetailDOExample.Criteria;
+import com.lawu.eshop.property.srv.domain.extend.TotalSalesDO;
+import com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO;
+import com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample;
+import com.lawu.eshop.property.srv.mapper.TransactionDetailDOMapper;
+import com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper;
+import com.lawu.eshop.property.srv.service.TransactionDetailService;
+import com.lawu.eshop.utils.StringUtil;
 
 /**
  * 交易明细服务实现
@@ -34,6 +50,9 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
 	@Autowired
 	private TransactionDetailDOMapper transactionDetailDOMapper;
+	
+	@Autowired
+	private TransactionDetailExtendDOMapper transactionDetailExtendDOMapper;
 
 	/**
 	 * 根据用户编号、查询参数分页查询交易明细  - 商家
@@ -182,11 +201,37 @@ public class TransactionDetailServiceImpl implements TransactionDetailService {
 
 		transactionDetailDOExample.setOrderByClause("gmt_create desc");
 		RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
-
+		
 		List<TransactionDetailBO> transactionDetailBOS = TransactionDetailConverter.convertBOS(transactionDetailDOMapper.selectByExampleWithRowbounds(transactionDetailDOExample, rowBounds));
 		page.setRecords(transactionDetailBOS);
 
 		return page;
+	}
+
+	/**
+	 * 查询平台销售金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<TotalSalesBO> selectTotalSales(TotalSalesQueryParam param) {
+		TotalSalesQueryExample example = TotalSalesConverter.convert(param);
+		List<TotalSalesDO> totalSalesDOList = transactionDetailExtendDOMapper.selectTotalSales(example);
+		return TotalSalesConverter.convertTotalSalesBOList(totalSalesDOList);
+	}
+	
+	/**
+	 * 查询平台销售金额
+	 *
+	 * @param param
+	 * @return
+	 */
+	@Override
+	public List<UserIncomeExpenditureBO> selectUserIncomeExpenditure(UserIncomeExpenditureQueryParam param) {
+		UserIncomeExpenditureExample example = UserIncomeExpenditureConverter.convert(param);
+		List<UserIncomeExpenditureDO> userIncomeExpenditureDOList = transactionDetailExtendDOMapper.selectUserIncomeExpenditure(example);
+		return UserIncomeExpenditureConverter.convertUserIncomeExpenditureBOList(userIncomeExpenditureDOList);
 	}
 
 }

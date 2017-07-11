@@ -3,7 +3,11 @@ package com.lawu.eshop.mall.srv.converter;
 import com.lawu.eshop.mall.constants.RegionLevelEnum;
 import com.lawu.eshop.mall.dto.RegionDTO;
 import com.lawu.eshop.mall.srv.bo.RegionBO;
+import com.lawu.eshop.mall.srv.domain.RegionDO;
 import com.lawu.eshop.mall.srv.domain.extend.RegionDOView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author zhangyong
@@ -34,6 +38,41 @@ public class RegionConverter {
         regionDTO.setParentId(regionBO.getParentId());
         regionDTO.setPath(regionBO.getPath());
         regionDTO.setLevelEnum(regionBO.getLevelEnum());
+        regionDTO.setLongitude(regionBO.getLongitude());
+        regionDTO.setLatitude(regionBO.getLatitude());
         return regionDTO;
     }
+
+    public static List<RegionBO> coverBO(List<RegionDO> regionDOList) {
+        List<RegionBO> regionBOList = new ArrayList<>();
+        if (regionDOList == null || regionDOList.isEmpty()) {
+            return regionBOList;
+        }
+        for (RegionDO regionDO : regionDOList) {
+            RegionBO regionBO = new RegionBO();
+            regionBO.setId(regionDO.getId());
+            regionBO.setName(regionDO.getName());
+            regionBO.setParentId(regionDO.getParentId());
+            regionBO.setPath(regionDO.getPath());
+            regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDO.getLevel()));
+            regionBOList.add(regionBO);
+        }
+        return regionBOList;
+    }
+
+    public static RegionBO coverBO(RegionDO regionDO) {
+        if (regionDO == null) {
+            return null;
+        }
+        RegionBO regionBO = new RegionBO();
+        regionBO.setId(regionDO.getId());
+        regionBO.setName(regionDO.getName());
+        regionBO.setParentId(regionDO.getParentId());
+        regionBO.setPath(regionDO.getPath());
+        regionBO.setLevelEnum(RegionLevelEnum.getEnum(regionDO.getLevel()));
+        regionBO.setLongitude(regionDO.getLongitude());
+        regionBO.setLatitude(regionDO.getLatitude());
+        return regionBO;
+    }
+
 }

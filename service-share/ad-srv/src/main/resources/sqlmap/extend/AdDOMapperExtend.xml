@@ -79,4 +79,30 @@
             #{id}
         </foreach>
     </update>
+   
+   <resultMap id="BaseResultReportAdEarningsMap" type="com.lawu.eshop.ad.srv.domain.extend.ReportAdView">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="merchant_num" jdbcType="VARCHAR" property="merchantNum" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="total_point" jdbcType="DECIMAL" property="totalPoint" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select resultMap="BaseResultReportAdEarningsMap"  id="selectReportAdEarningsByRowbounds" >
+    SELECT 
+     	id,merchant_id,  merchant_num, title, type,  total_point, gmt_create,  status
+    FROM ad 
+    where   <![CDATA[ status > 0 and status < 5  ]]>
+  </select>
+  
+  
+  <select resultType="java.lang.Integer" id="selectReportAdEarningscount" >
+    SELECT 
+     	count(*)
+    FROM ad 
+    where   <![CDATA[ status > 0 and status < 5  ]]>
+  </select>
+ 
 </mapper>

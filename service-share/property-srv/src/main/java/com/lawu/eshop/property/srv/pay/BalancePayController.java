@@ -50,7 +50,7 @@ public class BalancePayController extends BaseController {
     	}
     	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY_ORDERS);
-		param.setTitle(TransactionTitleEnum.ORDER_PAY.val);
+		param.setTitle(TransactionTitleEnum.ORDER_PAY.getVal());
 		int retCode = balancePayService.balancePayProductOrder(param);
 		return successCreated(retCode);
 	}
@@ -71,7 +71,7 @@ public class BalancePayController extends BaseController {
     	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.PAY);
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.PAY);
-		param.setTitle(TransactionTitleEnum.PAY.val);
+		param.setTitle(TransactionTitleEnum.PAY.getVal());
 		int retCode = balancePayService.balancePay(param);
 		return successCreated(retCode);
 	}
@@ -92,7 +92,7 @@ public class BalancePayController extends BaseController {
     	
 		param.setMemberTransactionTypeEnum(MemberTransactionTypeEnum.INTEGRAL_RECHARGE);
 		param.setMerchantTransactionTypeEnum(MerchantTransactionTypeEnum.INTEGRAL_RECHARGE);
-		param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.val);
+		param.setTitle(TransactionTitleEnum.INTEGRAL_RECHARGE.getVal());
 		int retCode = balancePayService.balancePayPoint(param);
 		return successCreated(retCode);
 	}

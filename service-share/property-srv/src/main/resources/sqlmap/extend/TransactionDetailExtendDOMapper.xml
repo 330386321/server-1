@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lawu.eshop.property.srv.mapper.extend.TransactionDetailExtendDOMapper" >
+    
+    <resultMap id="TotalSalesResultMap" type="com.lawu.eshop.property.srv.domain.extend.TotalSalesDO">
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="transaction_type" jdbcType="TINYINT" property="transactionType" />
+    </resultMap>
+    
+    <resultMap id="UserIncomeExpenditureResultMap" type="com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureDO">
+        <result column="user_num" jdbcType="VARCHAR" property="userNum" />
+        <result column="amount" jdbcType="DECIMAL" property="amount" />
+        <result column="direction" jdbcType="TINYINT" property="direction" />
+    </resultMap>
+    
+    <!-- 根据时间获取获取买单和订单的收入 -->
+	<select id="selectTotalSales"  resultMap="TotalSalesResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.TotalSalesQueryExample">
+		SELECT sum(amount) as amount, transaction_type FROM transaction_detail 
+		WHERE transaction_type in (100, 101)
+		AND gmt_create BETWEEN #{start} AND #{end}
+		GROUP BY transaction_type
+	</select>
+	
+	<!-- 用户收入统计 -->
+    <select id="selectUserIncomeExpenditure"  resultMap="UserIncomeExpenditureResultMap" parameterType="com.lawu.eshop.property.srv.domain.extend.UserIncomeExpenditureExample">
+		SELECT user_num, sum(amount) AS amount, direction FROM transaction_detail 
+		WHERE AND gmt_create BETWEEN #{start} and #{end}
+		GROUP BY user_num, direction
+    </select>
+</mapper>
