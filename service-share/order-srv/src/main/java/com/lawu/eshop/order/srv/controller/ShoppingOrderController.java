@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,7 +82,9 @@ import com.lawu.eshop.utils.DateUtil;
 @RestController
 @RequestMapping(value = "shoppingOrder/")
 public class ShoppingOrderController extends BaseController {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(ShoppingOrderController.class);
+	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
 
@@ -122,8 +126,6 @@ public class ShoppingOrderController extends BaseController {
 	public Result<Page<ShoppingOrderExtendQueryDTO>> selectPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingOrderQueryForeignToMemberParam param) {
 		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMemberId(memberId, param);
 		Page<ShoppingOrderExtendQueryDTO> shoppingOrderExtendQueryDTOPage = ShoppingOrderExtendConverter.convertShoppingOrderExtendQueryDTOPage(shoppingOrderExtendQueryBOPage);
-		// 把无用对象置空
-		shoppingOrderExtendQueryBOPage = null;
 		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
 
@@ -142,10 +144,13 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderService.cancelOrder(memberId, id);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (OrderNotCanceledException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ORDER_NOT_CANCELED, e.getMessage());
 		}
 		return successCreated();
@@ -166,10 +171,13 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderService.deleteOrder(memberId, id);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (OrderNotDeleteException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ORDER_NOT_DELETE, e.getMessage());
 		}
 		return successCreated();
@@ -195,8 +203,10 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderBO = shoppingOrderService.getShoppingOrder(id, memeberId, merchantId);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		// 如果快递公司编码和物流编号为空.不查询物流
@@ -219,9 +229,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPageByMemberId/{memberId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundDTO>> selectRefundPageByMemberId(@PathVariable("memberId") Long memberId, @RequestBody ShoppingRefundQueryForeignParam param) {
-
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMemberId(memberId, param);
-
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundDTOPage(page));
 	}
 
@@ -243,10 +251,13 @@ public class ShoppingOrderController extends BaseController {
 			// 修改购物订单以及订单项状态，保存退款详情记录
 			shoppingOrderService.requestRefund(shoppingOrderItemId, memberId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (OrderNotRefundException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ORDER_NOT_REFUND, e.getMessage());
 		}
 		return successCreated();
@@ -288,10 +299,13 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderService.tradingSuccess(id, memberId);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (OrderNotReceivedException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ORDER_NOT_REFUND, e.getMessage());
 		}
 		return successCreated();
@@ -314,7 +328,6 @@ public class ShoppingOrderController extends BaseController {
 	public Result<Page<ShoppingOrderQueryToMerchantDTO>> selectPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingOrderQueryForeignToMerchantParam param) {
 		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPageByMerchantId(merchantId, param);
 		Page<ShoppingOrderQueryToMerchantDTO> shoppingOrderExtendQueryDTOPage = ShoppingOrderExtendConverter.convertShoppingOrderQueryToMerchantDTOPage(shoppingOrderExtendQueryBOPage);
-		shoppingOrderExtendQueryBOPage = null;
 		return successCreated(shoppingOrderExtendQueryDTOPage);
 	}
 
@@ -335,10 +348,13 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderService.fillLogisticsInformation(id, merchantId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotFillInShippingLogisticsException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.CAN_NOT_FILL_IN_SHIPPING_LOGISTICS, e.getMessage());
 		}
 		return successCreated();
@@ -355,9 +371,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPageByMerchantId/{merchantId}", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundForMerchantDTO>> selectRefundPageByMerchantId(@PathVariable("merchantId") Long merchantId, @RequestBody ShoppingRefundQueryForeignParam param) {
-
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPageByMerchantId(merchantId, param);
-
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForMerchantDTOPage(page));
 	}
 
@@ -374,12 +388,10 @@ public class ShoppingOrderController extends BaseController {
 	@RequestMapping(value = "selectPage", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderQueryToOperatorDTO>> selectPage(@RequestBody ShoppingOrderQueryForeignToOperatorParam param) {
 		Page<ShoppingOrderExtendBO> shoppingOrderExtendQueryBOPage = shoppingOrderService.selectPage(param);
-
 		Page<ShoppingOrderQueryToOperatorDTO> shoppingOrderQueryToOperatorDTOPage = new Page<ShoppingOrderQueryToOperatorDTO>();
 		shoppingOrderQueryToOperatorDTOPage.setCurrentPage(shoppingOrderExtendQueryBOPage.getCurrentPage());
 		shoppingOrderQueryToOperatorDTOPage.setTotalCount(shoppingOrderExtendQueryBOPage.getTotalCount());
 		shoppingOrderQueryToOperatorDTOPage.setRecords(ShoppingOrderExtendConverter.convertShoppingOrderQueryToOperatorDTOList(shoppingOrderExtendQueryBOPage.getRecords()));
-
 		return successGet(shoppingOrderQueryToOperatorDTOPage);
 	}
 
@@ -413,9 +425,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "numberOfOrderStartusByMerchant/{merchantId}", method = RequestMethod.GET)
 	public Result<ShoppingOrderNumberOfOrderStatusForMerchantForeignDTO> numberOfOrderStartusByMerchant(@PathVariable("merchantId") Long merchantId) {
-
 		ShoppingOrderNumberOfOrderStatusForMerchantBO shoppingOrderNumberOfOrderStatusForMerchantBO = shoppingOrderService.numberOfOrderStartusByMerchant(merchantId);
-
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusForMerchantBO));
 	}
 
@@ -432,9 +442,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectRefundPage", method = RequestMethod.POST)
 	public Result<Page<ShoppingOrderItemRefundForOperatorDTO>> selectRefundPage(@RequestBody ShoppingRefundQueryForeignParam param) {
-
 		Page<ShoppingOrderItemExtendBO> page = shoppingOrderItemService.selectRefundPage(param);
-
 		return successCreated(ShoppingOrderItemExtendConverter.convertShoppingOrderItemRefundForOperatorDTOPage(page));
 	}
 
@@ -451,10 +459,13 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderService.cancelOrder(null, id);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (OrderNotCanceledException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ORDER_NOT_CANCELED, e.getMessage());
 		}
 		return successCreated();
@@ -479,8 +490,10 @@ public class ShoppingOrderController extends BaseController {
 		try {
 			shoppingOrderExtendDetailBO = shoppingOrderService.get(id, memberId, merchantId);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		// 如果快递公司编码和物流编号为空.不查询物流
@@ -512,7 +525,6 @@ public class ShoppingOrderController extends BaseController {
 			break;
 		}
 		shoppingOrderExtendDetailDTO.setCountdown(countdown);
-
 		return successGet(shoppingOrderExtendDetailDTO);
 	}
 	
@@ -531,7 +543,6 @@ public class ShoppingOrderController extends BaseController {
 		}
 		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
 		shoppingOrderMoneyDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
-
 		return successGet(shoppingOrderMoneyDTO);
 	}
 
@@ -561,7 +572,6 @@ public class ShoppingOrderController extends BaseController {
 	public Result<ShoppingOrderIsNoOnGoingOrderDTO> isNoOnGoingOrder(@PathVariable("merchantId") Long merchantId) {
 		// 查询订单商品评价状态
 		ShoppingOrderIsNoOnGoingOrderBO shoppingOrderIsNoOnGoingOrderBO = shoppingOrderService.isNoOnGoingOrder(merchantId);
-
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderIsNoOnGoingOrderBO));
 	}
 
@@ -575,9 +585,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "numberOfOrderStartus/{memberId}", method = RequestMethod.GET)
 	public Result<ShoppingOrderNumberOfOrderStatusDTO> numberOfOrderStartus(@PathVariable("memberId") Long memberId) {
-
 		ShoppingOrderNumberOfOrderStatusBO shoppingOrderNumberOfOrderStatusBO = shoppingOrderService.numberOfOrderStartus(memberId);
-
 		return successGet(ShoppingOrderConverter.convert(shoppingOrderNumberOfOrderStatusBO));
 	}
 
@@ -591,9 +599,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "commissionShoppingOrder", method = RequestMethod.GET)
 	public Result<List<ShoppingOrderCommissionDTO>> commissionShoppingOrder() {
-
 		List<ShoppingOrderBO> shoppingOrderBOList = shoppingOrderService.commissionShoppingOrder();
-
 		return successGet(ShoppingOrderConverter.convertShoppingOrderCommissionDTOList(shoppingOrderBOList));
 	}
 
@@ -608,13 +614,10 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateCommissionStatus", method = RequestMethod.PUT)
 	public Result updateCommissionStatus(@RequestParam("ids") List<Long> ids) {
-
 		int resultCode = shoppingOrderService.updateCommissionStatus(ids);
-
 		if (resultCode != ResultCode.SUCCESS) {
 			return successCreated(resultCode);
 		}
-
 		return successCreated();
 	}
 
@@ -629,9 +632,7 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "selectByTransactionData", method = RequestMethod.PUT)
 	public Result selectByTransactionData(@RequestBody ReportDataParam param) {
-
 		ReportRiseRateDTO reportRiseRateDTO = shoppingOrderService.selectByTransactionData(param);
-
 		return successCreated(reportRiseRateDTO);
 	}
 
@@ -645,9 +646,7 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "fansSaleTransform", method = RequestMethod.PUT)
 	public Result<List<ReportRiseRerouceDTO>> fansSaleTransform(@RequestBody ReportDataParam param) {
-
 		List<ReportRiseRerouceDTO> reportRiseRerouceDTOList = shoppingOrderService.fansSaleTransform(param);
-
 		return successCreated(reportRiseRerouceDTOList);
 	}
 }

@@ -2,6 +2,8 @@ package com.lawu.eshop.order.srv.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,8 @@ import com.lawu.eshop.order.srv.service.ShoppingCartService;
 @RequestMapping(value = "shoppingCart/")
 public class ShoppingCartController extends BaseController {
 
+	private static Logger logger = LoggerFactory.getLogger(ShoppingCartController.class);
+	
 	@Autowired
 	private ShoppingCartService shoppingCartService;
 
@@ -45,6 +49,7 @@ public class ShoppingCartController extends BaseController {
 		try {
 			shoppingCartService.save(memberId, param);
 		} catch (MoreThanMaximumException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.MAX_SHOPPING_CART_QUANTITY);
 		}
 		return successCreated();
@@ -74,8 +79,10 @@ public class ShoppingCartController extends BaseController {
 		try {
 			shoppingCartService.update(id, memberId, param);
 		} catch ( DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successCreated();
@@ -95,8 +102,10 @@ public class ShoppingCartController extends BaseController {
 		try {	
 			shoppingCartService.remove(memberId, ids);
 		} catch ( DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successCreated();
@@ -115,8 +124,10 @@ public class ShoppingCartController extends BaseController {
 		try {
 			shoppingCartBOList = shoppingCartService.findListByIds(memberId, ids);
 		} catch ( DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch ( IllegalOperationException e ) {
+			logger.error(e.getMessage(), e);
 			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
 		return successGet(ShoppingCartConverter.convertDTOS(shoppingCartBOList));

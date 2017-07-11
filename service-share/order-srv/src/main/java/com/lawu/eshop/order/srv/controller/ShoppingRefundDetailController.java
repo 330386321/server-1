@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +58,8 @@ import com.lawu.eshop.utils.DateUtil;
 @RestController
 @RequestMapping(value = "shoppingRefundDetail/")
 public class ShoppingRefundDetailController extends BaseController {
+	
+	private static Logger logger = LoggerFactory.getLogger(ShoppingRefundDetailController.class);
 	
 	@Autowired
 	private ShoppingOrderService shoppingOrderService;
@@ -204,10 +208,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		try {
 			shoppingRefundDetailService.agreeToApply(id, merchantId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotAgreeToApplyException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_AGREE_TO_APPLY, e.getMessage());
 		}
 		return successCreated();
@@ -231,10 +238,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		try {
 			shoppingRefundDetailService.fillReturnAddress(id, merchantId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotFillInTheReturnAddressException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, e.getMessage());
 		}
 		return successCreated();
@@ -256,10 +266,13 @@ public class ShoppingRefundDetailController extends BaseController {
 			// 修改订单项的退款状态为待退款状态，更新退款详情的物流信息
 			shoppingRefundDetailService.fillLogisticsInformation(id, memberId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotFillOutTheReturnLogisticsException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_FILL_OUT_THE_RETURN_LOGISTICS, e.getMessage());
 		}
 		return successCreated();
@@ -283,10 +296,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		try {
 			shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotAgreeToARefundException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_AGREE_TO_A_REFUND, e.getMessage());
 		}
 		return successCreated();
@@ -305,10 +321,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		try {
 			shoppingRefundDetailService.platformIntervention(id, memberId);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotApplyForPlatformInterventionException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_APPLY_FOR_PLATFORM_INTERVENTION, e.getMessage());
 		}
 		return successCreated();
@@ -363,10 +382,13 @@ public class ShoppingRefundDetailController extends BaseController {
 		try {
 			shoppingRefundDetailService.revokeRefundRequest(id, memberId);
 		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
 		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		} catch (CanNotCancelApplicationException e) {
+			logger.error(e.getMessage(), e);
 		 	return successCreated(ResultCode.CAN_NOT_CANCEL_APPLICATION, e.getMessage());
 		}
 		return successCreated();
