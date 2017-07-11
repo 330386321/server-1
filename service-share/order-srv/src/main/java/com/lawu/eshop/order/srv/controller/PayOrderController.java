@@ -1,23 +1,38 @@
 package com.lawu.eshop.order.srv.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.order.dto.*;
+import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
+import com.lawu.eshop.order.dto.MerchantPayOrderListDTO;
+import com.lawu.eshop.order.dto.PayOrderDTO;
+import com.lawu.eshop.order.dto.PayOrderIdDTO;
+import com.lawu.eshop.order.dto.ShoppingOrderCommissionDTO;
+import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
 import com.lawu.eshop.order.param.MerchantPayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.BeanUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -26,6 +41,9 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "payOrder")
 public class PayOrderController extends BaseController {
+	
+	private static Logger logger = LoggerFactory.getLogger(PayOrderController.class);
+	
 	@Autowired
 	private PayOrderService payOrderService;
 
@@ -72,15 +90,29 @@ public class PayOrderController extends BaseController {
 		payOrderDTOPage.setCurrentPage(boPage.getCurrentPage());
 		return successGet(payOrderDTOPage);
 	}
-
-	@SuppressWarnings({ "rawtypes", "deprecation" })
-	@RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.DELETE)
-	public Result delPayOrderInfo(@PathVariable("id") Long id) {
-		if (id == null) {
-			return successDelete(ResultCode.REQUIRED_PARM_EMPTY);
+	
+	/**
+	 * 删除买单记录
+	 * 
+	 * @param id 买单id
+	 * @param memberId 会员id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
+	@SuppressWarnings({ "rawtypes"})
+	@RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.PUT)
+	public Result delPayOrderInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
+		try {
+			payOrderService.delPayOrderInfo(id, memberId);
+		} catch (DataNotExistException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			logger.error(e.getMessage(), e);
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-		payOrderService.delPayOrderInfo(id);
-		return successDelete();
+		return successCreated();
 	}
 
 	/**

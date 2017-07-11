@@ -11,12 +11,12 @@ public class ExceptionMessageConstant {
 	/**  shopping cat **/
 	public final static String SHOPPING_CART_DATA_NOT_EXIST = "购物车数据不存在";
 	
-	public final static String ILLEGAL_OPERATION_SHOPPING_CART = "非法操作购物车";
+	public final static String ILLEGAL_OPERATION_SHOPPING_CART = "非法操作购物车数据";
 	
 	/**  shopping order **/
 	public final static String SHOPPING_ORDER_DATA_NOT_EXIST = "购物订单数据不存在";
 	
-	public final static String ILLEGAL_OPERATION_SHOPPING_ORDER = "非法操作购物订单";
+	public final static String ILLEGAL_OPERATION_SHOPPING_ORDER = "非法操作购物订单数据";
 	
 	public final static String ORDER_IS_NOT_PENDING_PAYMENT_STATUS = "订单当前是不是待支付状态";
 	
@@ -52,4 +52,8 @@ public class ExceptionMessageConstant {
 	
 	public final static String REFUND_STATUS_DOES_NOT_MATCH = "退款状态不符合";
 	
+	/** pay order **/
+	public final static String PAY_ORDER_DATA_DOES_NOT_EXIST = "买单数据不存在";
+	
+	public final static String ILLEGAL_OPERATION_PAY_ORDER = "非法操作买单数据";
 }

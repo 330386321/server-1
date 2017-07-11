@@ -1,5 +1,15 @@
 package com.lawu.eshop.order.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.order.constants.CommissionStatusEnum;
@@ -10,21 +20,15 @@ import com.lawu.eshop.order.param.PayOrderListParam;
 import com.lawu.eshop.order.param.PayOrderParam;
 import com.lawu.eshop.order.srv.bo.PayOrderBO;
 import com.lawu.eshop.order.srv.bo.ThirdPayCallBackQueryPayOrderBO;
+import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.converter.PayOrderConverter;
 import com.lawu.eshop.order.srv.domain.PayOrderDO;
 import com.lawu.eshop.order.srv.domain.PayOrderDOExample;
+import com.lawu.eshop.order.srv.exception.DataNotExistException;
+import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.mapper.PayOrderDOMapper;
 import com.lawu.eshop.order.srv.service.PayOrderService;
 import com.lawu.eshop.utils.StringUtil;
-import org.apache.ibatis.session.RowBounds;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author zhangyong
@@ -93,13 +97,29 @@ public class PayOrderServiceImpl implements PayOrderService {
 		return page;
 	}
 
+	/**
+	 * 删除买单记录
+	 * 
+	 * @param id 买单id
+	 * @param memberId 会员id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
 	@Override
 	@Transactional
-	public void delPayOrderInfo(Long id) {
-		PayOrderDO payOrderDO = new PayOrderDO();
-		payOrderDO.setId(id);
-		payOrderDO.setOrderStatus(false);
-		payOrderDOMapper.updateByPrimaryKeySelective(payOrderDO);
+	public void delPayOrderInfo(Long id, Long memberId) {
+		PayOrderDO payOrderDO = payOrderDOMapper.selectByPrimaryKey(id);
+		if (payOrderDO == null || !payOrderDO.getOrderStatus()) {
+			throw new DataNotExistException(ExceptionMessageConstant.PAY_ORDER_DATA_DOES_NOT_EXIST);
+		}
+		if (!payOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_PAY_ORDER);
+		}
+		PayOrderDO payOrderUpdateDO = new PayOrderDO();
+		payOrderUpdateDO.setId(id);
+		payOrderUpdateDO.setOrderStatus(false);
+		payOrderDOMapper.updateByPrimaryKeySelective(payOrderUpdateDO);
 	}
 
 	@Override

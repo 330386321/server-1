@@ -1,6 +1,5 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.order.dto.MemberPayOrderInfoDTO;
 import com.lawu.eshop.order.dto.PayOrderDTO;
 import com.lawu.eshop.order.dto.PayOrderIdDTO;
 import com.lawu.eshop.order.dto.ThirdPayCallBackQueryPayOrderDTO;
@@ -20,18 +20,28 @@ import com.lawu.eshop.order.param.PayOrderParam;
  * @author zhangyong
  * @date 2017/4/11.
  */
-@FeignClient(value = "order-srv")
+@FeignClient(value = "order-srv", path = "payOrder/")
 public interface PayOrderService {
 
-    @RequestMapping(value = "payOrder/savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderParam param,@RequestParam("param") String numNum);
+    @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
+    Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderParam param,@RequestParam("param") String numNum);
 
-    @RequestMapping(value = "payOrder/getpayOrderList/{memberId}", method = RequestMethod.POST)
-    public Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderListParam param);
+    @RequestMapping(value = "getpayOrderList/{memberId}", method = RequestMethod.POST)
+    Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderListParam param);
 
+	
+	/**
+	 * 删除买单记录
+	 * 
+	 * @param id 买单id
+	 * @param memberId 会员id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
     @SuppressWarnings("rawtypes")
-	@RequestMapping(value = "payOrder/delPayOrderInfo/{id}", method = RequestMethod.DELETE)
-    public Result delPayOrderInfo(@PathVariable("id") Long id);
+	@RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.PUT)
+    Result delPayOrderInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId);
     
     /**
      * 第三方支付时获取买单的实际总金额，用于调用第三方支付平台
@@ -39,9 +49,9 @@ public interface PayOrderService {
      * @return
      * @author Yangqh
      */
-	@RequestMapping(method = RequestMethod.GET, value = "payOrder/selectThirdPayCallBackQueryPayOrder")
+	@RequestMapping(method = RequestMethod.GET, value = "selectThirdPayCallBackQueryPayOrder")
 	ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam("orderId") String orderId);
 
-    @RequestMapping(method = RequestMethod.GET, value = "payOrder/getOrderInfo")
+    @RequestMapping(method = RequestMethod.GET, value = "getOrderInfo")
     MemberPayOrderInfoDTO getOrderInfo(@RequestParam("id") Long id);
 }
