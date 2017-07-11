@@ -107,12 +107,7 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 */
 	@Override
 	public ShoppingRefundDetailBO get(Long id) {
-		if (id == null || id <= 0) {
-			return null;
-		}
-
 		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
-
 		return ShoppingRefundDetailConverter.convert(shoppingRefundDetailDO);
 	}
 

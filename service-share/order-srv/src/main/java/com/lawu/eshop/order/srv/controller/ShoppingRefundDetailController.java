@@ -24,6 +24,8 @@ import com.lawu.eshop.order.param.ShoppingRefundDetailRerurnAddressParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToApplyForeignParam;
 import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForeignParam;
 import com.lawu.eshop.order.srv.bo.ExpressInquiriesDetailBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderBO;
+import com.lawu.eshop.order.srv.bo.ShoppingOrderItemBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderItemExtendBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
@@ -39,6 +41,8 @@ import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsExcepti
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.service.PropertyService;
+import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
+import com.lawu.eshop.order.srv.service.ShoppingOrderService;
 import com.lawu.eshop.order.srv.service.ShoppingRefundDetailService;
 import com.lawu.eshop.order.srv.strategy.ExpressStrategy;
 import com.lawu.eshop.utils.DateUtil;
@@ -52,7 +56,13 @@ import com.lawu.eshop.utils.DateUtil;
 @RestController
 @RequestMapping(value = "shoppingRefundDetail/")
 public class ShoppingRefundDetailController extends BaseController {
-
+	
+	@Autowired
+	private ShoppingOrderService shoppingOrderService;
+	
+	@Autowired
+	private ShoppingOrderItemService shoppingOrderItemService;
+	
 	@Autowired
 	private ShoppingRefundDetailService shoppingRefundDetailService;
 
@@ -309,27 +319,34 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id(用于鉴权)
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id) {
-
-		if (id == null || id <= 0) {
-			return successGet(ResultCode.ID_EMPTY);
-		}
-
+	public Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId) {
 		ShoppingRefundDetailBO shoppingRefundDetailBO = shoppingRefundDetailService.get(id);
-
 		if (shoppingRefundDetailBO == null) {
-			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-		
+		ShoppingOrderItemBO shoppingOrderItemBO = shoppingOrderItemService.get(shoppingRefundDetailBO.getId());
+		if (shoppingOrderItemBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		ShoppingOrderBO shoppingOrderBO = shoppingOrderService.getShoppingOrder(shoppingOrderItemBO.getId());
+		if (shoppingOrderBO == null) {
+			return successGet(ResultCode.NOT_FOUND_DATA, ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
+		}
+		if (merchantId != null && !shoppingOrderBO.getMerchantId().equals(merchantId)) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
 		// 如果快递公司编码和物流编号为空.不查询物流
 		ExpressInquiriesDetailBO expressInquiriesDetailBO = null;
 		if (StringUtils.isNotBlank(shoppingRefundDetailBO.getExpressCompanyCode()) && StringUtils.isNotBlank(shoppingRefundDetailBO.getWaybillNum())) {
 			expressInquiriesDetailBO = expressStrategy.inquiries(shoppingRefundDetailBO.getExpressCompanyCode(), shoppingRefundDetailBO.getWaybillNum());
 		}
-		
 		return successGet(ShoppingRefundDetailConverter.covert(shoppingRefundDetailBO, expressInquiriesDetailBO));
 	}
 	

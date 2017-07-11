@@ -19,7 +19,7 @@ public interface ShoppingOrderItemService {
 	 * @param id 购物订单项id
 	 * @return
 	 */
-	ShoppingOrderItemBO get (Long id);
+	ShoppingOrderItemBO get(Long id);
 	
 	/**
 	 * 查询处于退款中的订单项

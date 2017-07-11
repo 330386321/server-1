@@ -40,12 +40,7 @@ public class ShoppingOrderItemServiceImpl implements ShoppingOrderItemService {
 	 */
 	@Override
 	public ShoppingOrderItemBO get(Long id) {
-		if (id == null || id <= 0) {
-			return null;
-		}
-
 		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(id);
-
 		return ShoppingOrderItemConverter.convert(shoppingOrderItemDO);
 	}
 

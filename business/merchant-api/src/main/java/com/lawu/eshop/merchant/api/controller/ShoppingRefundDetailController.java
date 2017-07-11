@@ -56,18 +56,10 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-    public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "退款详情id") Long id) {
-    	if (id == null || id <= 0) {
-    		return successCreated(ResultCode.ID_EMPTY);
-    	}
-		
-    	Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingRefundDetailService.getExpressInfo(id);
-    	
-    	if (!isSuccess(resultShoppingOrderExpressDTO)) {
-    		return successCreated(resultShoppingOrderExpressDTO.getRet());
-    	}
-		
-    	return successCreated(resultShoppingOrderExpressDTO);
+    public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id", required = true) Long id) {
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result<ShoppingOrderExpressDTO> result = shoppingRefundDetailService.getExpressInfo(id, merchantId);
+    	return successCreated(result);
     }
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")

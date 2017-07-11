@@ -26,10 +26,14 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id(用于鉴权)
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
+	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId);
 
 	/**
 	 * 根据订单项id查询退款详情
