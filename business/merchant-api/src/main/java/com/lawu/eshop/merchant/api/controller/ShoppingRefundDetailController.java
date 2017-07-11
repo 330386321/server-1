@@ -84,26 +84,17 @@ public class ShoppingRefundDetailController extends BaseController {
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1002|1003|1004|4009|4011]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "商家确认买家的退货申请", notes = "商家是否同意买家的退货申请。[1004|1100|1024|4027]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
     public Result<ShoppingOrderExpressDTO> agreeToApply(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(value = "申请审核参数") @Validated ShoppingRefundDetailAgreeToApplyForeignParam param, BindingResult bindingResult) {
-    	if (id == null || id <= 0) {
-    		return successCreated(ResultCode.ID_EMPTY);
-    	}
-    	
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
-    	Result result = shoppingRefundDetailService.agreeToApply(id, param);
-    	
-    	if (!isSuccess(result)) {
-    		return successGet(result.getRet());
-    	}
-		
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	Result result = shoppingRefundDetailService.agreeToApply(id, merchantId, param);
     	return successCreated(result);
     }
 	
