@@ -100,6 +100,7 @@ public class ResultCode {
     public static final int CAN_NOT_CANCEL_APPLICATION = 4025;
     public static final int CAN_NOT_FILL_IN_SHIPPING_LOGISTICS = 4026;
     public static final int CAN_NOT_AGREE_TO_APPLY = 4027;
+    public static final int CAN_NOT_AGREE_TO_A_REFUND = 4028;
 
     // 广告模块代码 5xxx
     public static final int AD_POINT_NOT_ENOUGH = 5000;
@@ -277,6 +278,7 @@ public class ResultCode {
         ResultCode.messageMap.put(CAN_NOT_CANCEL_APPLICATION, "不能撤销申请");
         ResultCode.messageMap.put(CAN_NOT_FILL_IN_SHIPPING_LOGISTICS, "不能填写发货物流");
         ResultCode.messageMap.put(CAN_NOT_AGREE_TO_APPLY, "不能同意退款申请");
+        ResultCode.messageMap.put(CAN_NOT_AGREE_TO_A_REFUND, "不能同意退款");
         
         // 广告模块 5xxx
         ResultCode.messageMap.put(AD_POINT_NOT_ENOUGH, "当前积分不够");

@@ -30,6 +30,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailExtendBO;
 import com.lawu.eshop.order.srv.constants.ExceptionMessageConstant;
 import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingRefundDetailConverter;
+import com.lawu.eshop.order.srv.exception.CanNotAgreeToARefundException;
 import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
 import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
@@ -252,21 +253,26 @@ public class ShoppingRefundDetailController extends BaseController {
 	 * 商家是否同意退款
 	 * 
 	 * @param id
-	 *            退款详情id
+	 *            退款详情Id
+	 * @param merchantId
+	 *            商家Id
 	 * @param param
-	 *            参数 是否同意申请
-	 * @return
+	 * 			      参数
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
-	public Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
-
-		int resultCode = shoppingRefundDetailService.agreeToRefund(id, param);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	public Result agreeToRefund(@PathVariable("id") Long id, @RequestParam(name = "merchantId", required = false) Long merchantId, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param) {
+		try {
+			shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
+		} catch (DataNotExistException e) {
+		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (CanNotAgreeToARefundException e) {
+		 	return successCreated(ResultCode.CAN_NOT_AGREE_TO_A_REFUND, e.getMessage());
 		}
-		
 		return successCreated();
 	}
 

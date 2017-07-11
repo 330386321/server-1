@@ -50,4 +50,6 @@ public class ExceptionMessageConstant {
 	
 	public final static String THE_STATUS_OF_THE_REFUND_IS_NOT_PENDING = "退款状态不是待确认状态";
 	
+	public final static String REFUND_STATUS_DOES_NOT_MATCH = "退款状态不符合";
+	
 }

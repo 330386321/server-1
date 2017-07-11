@@ -75,12 +75,15 @@ public interface ShoppingRefundDetailService {
 	 * 商家是否同意退款
 	 * 
 	 * @param id
-	 *            退款详情id
+	 *            退款详情Id
+	 * @param merchantId
+	 *            商家Id
 	 * @param param
-	 *            参数 是否同意申请
-	 * @return
+	 * 			      参数
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
-	Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
+	Result agreeToRefund(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
 }

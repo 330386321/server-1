@@ -79,10 +79,24 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情Id
+	 * @param merchantId
+	 *            商家Id
 	 * @param param
-	 * @return
+	 * 			      参数
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int agreeToRefund(Long id, ShoppingRefundDetailAgreeToRefundForeignParam param);
+	void agreeToRefund(Long id, Long merchantId, ShoppingRefundDetailAgreeToRefundForeignParam param);
+	
+	/**
+	 * 商家是否同意退款
+	 * 
+	 * @param id
+	 *            退款详情Id
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
+	void agreeToRefund(Long id);
 
 	/**
 	 * 如果商家拒绝买家的退款申请或者拒绝退款 买家可以申请平台介入

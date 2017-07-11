@@ -140,22 +140,13 @@ public class ShoppingRefundDetailController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
-    public Result agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") @Validated @NotNull Long id, @ModelAttribute @ApiParam(value = "同意退款参数") @Validated ShoppingRefundDetailAgreeToRefundForeignParam param, BindingResult bindingResult) {
-    	if (id == null || id <= 0) {
-    		return successCreated(ResultCode.ID_EMPTY);
-    	}
-		
+    public Result agreeToRefund(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id", required = true) Long id, @ModelAttribute @ApiParam(value = "同意退款参数") @Validated ShoppingRefundDetailAgreeToRefundForeignParam param, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
-    	Result result = shoppingRefundDetailService.agreeToRefund(id, param);
-    	
-    	if (!isSuccess(result)) {
-    		return successGet(result.getRet());
-    	}
-		
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	Result result = shoppingRefundDetailService.agreeToRefund(id, merchantId, param);
     	return successCreated(result);
     }
 }
