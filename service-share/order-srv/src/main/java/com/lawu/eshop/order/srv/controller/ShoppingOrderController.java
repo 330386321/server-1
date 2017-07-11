@@ -58,6 +58,7 @@ import com.lawu.eshop.order.srv.constants.PropertyNameConstant;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderExtendConverter;
 import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
+import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
@@ -322,17 +323,24 @@ public class ShoppingOrderController extends BaseController {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
+	 * @param param
+	 *            物流信息参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingOrderLogisticsInformationParam param) {
-
-		int resultCode = shoppingOrderService.fillLogisticsInformation(id, param);
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	public Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingOrderLogisticsInformationParam param) {
+		try {
+			shoppingOrderService.fillLogisticsInformation(id, merchantId, param);
+		} catch (DataNotExistException e) {
+			return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (CanNotFillInShippingLogisticsException e) {
+			return successCreated(ResultCode.CAN_NOT_FILL_IN_SHIPPING_LOGISTICS, e.getMessage());
 		}
-
 		return successCreated();
 	}
 

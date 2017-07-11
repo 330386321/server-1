@@ -46,5 +46,6 @@ public class ExceptionMessageConstant {
 	
 	public final static String THE_REFUND_STATUS_IS_NOT_A_REFUND_FAILURE = "退款状态不是退款失败状态";
 	
+	public final static String ORDERS_NOT_TO_BE_SHIPPING_STATUS = "订单不是待发货状态";
 	
 }

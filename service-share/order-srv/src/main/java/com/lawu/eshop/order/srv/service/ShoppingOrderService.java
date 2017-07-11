@@ -22,6 +22,7 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderIsNoOnGoingOrderBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderMoneyBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusBO;
 import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO;
+import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
@@ -120,7 +121,7 @@ public interface ShoppingOrderService {
 	 * @author jiangxinjun
 	 * @date 2017年7月10日
 	 */
-	ShoppingOrderBO getShoppingOrder(Long id, Long memberId, Long merchantId)  throws DataNotExistException, IllegalOperationException;
+	ShoppingOrderBO getShoppingOrder(Long id, Long memberId, Long merchantId) throws DataNotExistException, IllegalOperationException;
 
 	/**
 	 * 取消购物订单
@@ -162,7 +163,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	void tradingSuccess(Long id, Long memberId);
-	
+
 	/**
 	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
 	 * 
@@ -173,7 +174,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 */
 	void tradingSuccess(Long id, boolean isAutomaticReceipt);
-	
+
 	/**
 	 * 确认收货之后 修改购物订单以及订单项状态为交易成功
 	 * 
@@ -205,11 +206,17 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
 	 *            物流信息参数
-	 * @return
+	 * @throws DataNotExistException
+	 * @throws IllegalOperationException
+	 * @throws CanNotFillInShippingLogisticsException
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int fillLogisticsInformation(Long id, ShoppingOrderLogisticsInformationParam param);
+	void fillLogisticsInformation(Long id, Long merchantId, ShoppingOrderLogisticsInformationParam param) throws DataNotExistException, IllegalOperationException, CanNotFillInShippingLogisticsException;
 
 	/**
 	 * 第三方支付时获取订单原始总金额，用于调用第三方支付平台

@@ -84,38 +84,30 @@ public class ShoppingOrderController extends BaseController {
 
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings("rawtypes")
-	@ApiOperation(value = "填写物流信息", notes = "填写物流信息。[1002|1003|4008]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "填写物流信息", notes = "填写物流信息。[1004|1100|1024|4026]（蒋鑫俊）", httpMethod = "PUT")
 	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
 	@Authorization
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(name = "id", value = "购物订单id") Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") @Validated ShoppingOrderLogisticsInformationForeignParam param, BindingResult bindingResult) {
-
+	public Result fillLogisticsInformation(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(value = "购物订单id", required = true) Long id, @ModelAttribute @ApiParam(name = "param", value = "物流参数") @Validated ShoppingOrderLogisticsInformationForeignParam param, BindingResult bindingResult) {
 		// 校验参数
 		String message = validate(bindingResult);
 		if (message != null) {
 			return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
 		}
-		
 		ShoppingOrderLogisticsInformationParam shoppingOrderLogisticsInformationParam = new ShoppingOrderLogisticsInformationParam();
 		shoppingOrderLogisticsInformationParam.setIsNeedsLogistics(param.getIsNeedsLogistics());
-		
 		if (param.getIsNeedsLogistics()) {
-			Result<ExpressCompanyDTO> resultExpressCompanyDTO = expressCompanyService.get(param.getExpressCompanyId());
-			if (!isSuccess(resultExpressCompanyDTO)) {
-				return successCreated(resultExpressCompanyDTO.getRet());
+			Result<ExpressCompanyDTO> getResult = expressCompanyService.get(param.getExpressCompanyId());
+			if (!isSuccess(getResult)) {
+				return successCreated(getResult.getRet());
 			}
-	
-			shoppingOrderLogisticsInformationParam.setExpressCompanyId(resultExpressCompanyDTO.getModel().getId());
-			shoppingOrderLogisticsInformationParam.setExpressCompanyCode(resultExpressCompanyDTO.getModel().getCode());
-			shoppingOrderLogisticsInformationParam.setExpressCompanyName(resultExpressCompanyDTO.getModel().getName());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyId(getResult.getModel().getId());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyCode(getResult.getModel().getCode());
+			shoppingOrderLogisticsInformationParam.setExpressCompanyName(getResult.getModel().getName());
 			shoppingOrderLogisticsInformationParam.setWaybillNum(param.getWaybillNum());
 		}
-		
-		Result result = shoppingOrderService.fillLogisticsInformation(id, shoppingOrderLogisticsInformationParam);
-		if (!isSuccess(result)) {
-			return successCreated(result.getRet());
-		}
-
+		Long merchantId = UserUtil.getCurrentUserId(getRequest());
+		Result result = shoppingOrderService.fillLogisticsInformation(id, merchantId, shoppingOrderLogisticsInformationParam);
 		return successCreated(result);
 	}
 	
@@ -159,7 +151,7 @@ public class ShoppingOrderController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
-    public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(name = "id", value = "购物订单id") Long id) {
+    public Result<ShoppingOrderExpressDTO> getExpressInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "购物订单id", required = true) Long id) {
 		Long merchantId = UserUtil.getCurrentUserId(getRequest());
 		Result<ShoppingOrderExpressDTO> resultShoppingOrderExpressDTO = shoppingOrderService.getExpressInfo(id, merchantId);
     	return successGet(resultShoppingOrderExpressDTO);

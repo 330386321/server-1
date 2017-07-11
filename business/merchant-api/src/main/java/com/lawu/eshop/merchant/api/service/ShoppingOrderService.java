@@ -56,13 +56,15 @@ public interface ShoppingOrderService {
 	 * 
 	 * @param id
 	 *            购物订单id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
 	 *            订单物流参数
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillLogisticsInformation/{id}", method = RequestMethod.PUT)
-	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestBody ShoppingOrderLogisticsInformationParam param);
+	Result fillLogisticsInformation(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingOrderLogisticsInformationParam param);
 	
 	/**
 	 * 查询商家是否有正在进行中的订单
