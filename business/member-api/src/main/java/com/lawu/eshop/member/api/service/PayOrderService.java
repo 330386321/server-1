@@ -52,6 +52,17 @@ public interface PayOrderService {
 	@RequestMapping(method = RequestMethod.GET, value = "selectThirdPayCallBackQueryPayOrder")
 	ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam("orderId") String orderId);
 
-    @RequestMapping(method = RequestMethod.GET, value = "getOrderInfo")
-    MemberPayOrderInfoDTO getOrderInfo(@RequestParam("id") Long id);
+	/**
+	 * 用户买单详情
+	 * 
+	 * @param id
+	 *            买单id
+	 * @param memberId
+	 *            会员id
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
+	 */
+    @RequestMapping(value = "getOrderInfo", method = RequestMethod.GET)
+    Result<MemberPayOrderInfoDTO> getOrderInfo(@RequestParam("id") Long id, @RequestParam("memberId") Long memberId);
 }

@@ -182,39 +182,38 @@ public class PayOrderController extends BaseController {
 		return successDelete();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-07-04", reviewer = "孙林青")
-	@ApiOperation(value = "买单记录详情", notes = "买单记录详情  [1000,1100,1004] （章勇）", httpMethod = "GET")
+	@ApiOperation(value = "买单记录详情", notes = "买单记录详情  [1100|1024] （章勇）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@Authorization
 	@RequestMapping(value = "getOrderInfo/{id}", method = RequestMethod.GET)
-	public Result<MemberPayOrderInfoDTO> getOrderInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(required = true, value = "买单id") Long id) {
-		if (id == null) {
-			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-		}
+	public Result<MemberPayOrderInfoDTO> getOrderInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ApiParam(required = true, value = "买单id") @PathVariable("id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		MemberPayOrderInfoDTO payOrderInfoDTO = payOrderService.getOrderInfo(id);
-		if (payOrderInfoDTO == null) {
-			return successGet(ResultCode.NOT_FOUND_DATA);
+		Result<MemberPayOrderInfoDTO> getOrderInfoResult = payOrderService.getOrderInfo(id, memberId);
+		if (!isSuccess(getOrderInfoResult)) {
+			return successGet(getOrderInfoResult);
 		}
+		MemberPayOrderInfoDTO memberPayOrderInfoDTO = getOrderInfoResult.getModel();
 		// 查询商家信息
-		PayOrderMerchantStoreInfoDTO storeInfoDTO = merchantStoreService.getPayOrderDetailStoreInfo(payOrderInfoDTO.getMerchantId());
+		PayOrderMerchantStoreInfoDTO storeInfoDTO = merchantStoreService.getPayOrderDetailStoreInfo(memberPayOrderInfoDTO.getMerchantId());
 		if (storeInfoDTO != null) {
-			payOrderInfoDTO.setMerchantStoreId(storeInfoDTO.getMerchantStoreId());
-			payOrderInfoDTO.setName(storeInfoDTO.getName());
-			payOrderInfoDTO.setAddress(storeInfoDTO.getAddress());
-			payOrderInfoDTO.setStoreUrl(storeInfoDTO.getStoreUrl());
-			payOrderInfoDTO.setPrincipalMobile(storeInfoDTO.getPrincipalMobile());
+			memberPayOrderInfoDTO.setMerchantStoreId(storeInfoDTO.getMerchantStoreId());
+			memberPayOrderInfoDTO.setName(storeInfoDTO.getName());
+			memberPayOrderInfoDTO.setAddress(storeInfoDTO.getAddress());
+			memberPayOrderInfoDTO.setStoreUrl(storeInfoDTO.getStoreUrl());
+			memberPayOrderInfoDTO.setPrincipalMobile(storeInfoDTO.getPrincipalMobile());
 		}
-		if (EvaluationEnum.EVALUATION_SUCCESS.equals(payOrderInfoDTO.getEvaluationEnum())) {
+		if (EvaluationEnum.EVALUATION_SUCCESS.equals(memberPayOrderInfoDTO.getEvaluationEnum())) {
 			// 已经评论
-			Byte grade = commentMerchantService.getGradeByOrderId(payOrderInfoDTO.getId(), memberId);
+			Byte grade = commentMerchantService.getGradeByOrderId(memberPayOrderInfoDTO.getId(), memberId);
 			if (grade == null) {
 				grade = 0;
 			}
-			payOrderInfoDTO.setGrade(grade);
+			memberPayOrderInfoDTO.setGrade(grade);
 		}
 
-		return successGet(payOrderInfoDTO);
+		return successGet(getOrderInfoResult);
 	}
 
 }

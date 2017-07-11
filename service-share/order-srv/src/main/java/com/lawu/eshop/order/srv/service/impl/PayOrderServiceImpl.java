@@ -189,11 +189,25 @@ public class PayOrderServiceImpl implements PayOrderService {
 		page.setRecords(payOrderBOS);
 		return page;
 	}
-
+	
+    /**
+     * 获取买单记录
+     * 
+     * @param id 买单id
+     * @param memberId 会员id
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月11日
+     */
 	@Override
-	public PayOrderBO getOrderInfo(Long id) {
+	public PayOrderBO getOrderInfo(Long id, Long memberId) {
 		PayOrderDO payOrderDO = payOrderDOMapper.selectByPrimaryKey(id);
-
+		if (payOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.PAY_ORDER_DATA_DOES_NOT_EXIST);
+		}
+		if (memberId != null && !payOrderDO.getMemberId().equals(memberId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_PAY_ORDER);
+		}
 		return  PayOrderConverter.coverBO(payOrderDO);
 	}
 }

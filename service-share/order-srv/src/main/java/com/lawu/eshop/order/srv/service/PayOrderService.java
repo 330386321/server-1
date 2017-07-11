@@ -69,5 +69,14 @@ public interface PayOrderService {
 
     Page<PayOrderBO> getMerchantPayOrderList(Long userId, MerchantPayOrderListParam param);
 
-	PayOrderBO getOrderInfo(Long id);
+    /**
+     * 获取买单记录
+     * 
+     * @param id 买单id
+     * @param memberId 会员id
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月11日
+     */
+	PayOrderBO getOrderInfo(Long id, Long memberId);
 }

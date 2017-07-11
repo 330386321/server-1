@@ -41,37 +41,36 @@ import com.lawu.eshop.utils.BeanUtil;
 @RestController
 @RequestMapping(value = "payOrder")
 public class PayOrderController extends BaseController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(PayOrderController.class);
-	
+
 	@Autowired
 	private PayOrderService payOrderService;
 
-    /**
-     * 新增买单记录
-     *
-     * @param memberId
-     * @param param
-     * @return
-     */
-    @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param,@RequestParam("param") String numNum) {
-        if (memberId == null || param == null) {
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-        }
-        PayOrderBO orderBO = payOrderService.savePayOrderInfo(memberId, param,numNum);
-        if (orderBO == null) {
-            return successCreated(ResultCode.SAVE_FAIL);
-        }
-        PayOrderIdDTO orderIdDTO = new PayOrderIdDTO();
-        orderIdDTO.setOrderNum(orderBO.getOrderNum());
-        orderIdDTO.setOrderId(orderBO.getId());
-        return successCreated(orderIdDTO);
-    }
+	/**
+	 * 新增买单记录
+	 *
+	 * @param memberId
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
+	public Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @RequestBody PayOrderParam param, @RequestParam("param") String numNum) {
+		if (memberId == null || param == null) {
+			return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
+		}
+		PayOrderBO orderBO = payOrderService.savePayOrderInfo(memberId, param, numNum);
+		if (orderBO == null) {
+			return successCreated(ResultCode.SAVE_FAIL);
+		}
+		PayOrderIdDTO orderIdDTO = new PayOrderIdDTO();
+		orderIdDTO.setOrderNum(orderBO.getOrderNum());
+		orderIdDTO.setOrderId(orderBO.getId());
+		return successCreated(orderIdDTO);
+	}
 
 	@RequestMapping(value = "getpayOrderList/{memberId}", method = RequestMethod.POST)
-	public Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId,
-			@RequestBody PayOrderListParam param) {
+	public Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @RequestBody PayOrderListParam param) {
 		if (memberId == null) {
 			return successGet(ResultCode.REQUIRED_PARM_EMPTY);
 		}
@@ -90,17 +89,19 @@ public class PayOrderController extends BaseController {
 		payOrderDTOPage.setCurrentPage(boPage.getCurrentPage());
 		return successGet(payOrderDTOPage);
 	}
-	
+
 	/**
 	 * 删除买单记录
 	 * 
-	 * @param id 买单id
-	 * @param memberId 会员id
+	 * @param id
+	 *            买单id
+	 * @param memberId
+	 *            会员id
 	 * @return
 	 * @author jiangxinjun
 	 * @date 2017年7月11日
 	 */
-	@SuppressWarnings({ "rawtypes"})
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(value = "delPayOrderInfo/{id}", method = RequestMethod.PUT)
 	public Result delPayOrderInfo(@PathVariable("id") Long id, @RequestParam("memberId") Long memberId) {
 		try {
@@ -124,8 +125,7 @@ public class PayOrderController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "selectThirdPayCallBackQueryPayOrder", method = RequestMethod.GET)
-	public ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam String orderId)
-			throws Exception {
+	public ThirdPayCallBackQueryPayOrderDTO selectThirdPayCallBackQueryPayOrder(@RequestParam String orderId) throws Exception {
 		if (orderId == null || "".equals(orderId.trim())) {
 			return null;
 		}
@@ -150,6 +150,7 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 修改为已计算提成
+	 * 
 	 * @param ids
 	 * @return
 	 */
@@ -166,19 +167,22 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 商家端买单列表
-	 * @param userId 商家id
-	 * @param param 分页
+	 * 
+	 * @param userId
+	 *            商家id
+	 * @param param
+	 *            分页
 	 * @return
 	 * @author zhangy
 	 */
 	@RequestMapping(value = "getMerchantPayOrderList", method = RequestMethod.POST)
 	public Result<Page<MerchantPayOrderListDTO>> getMerchantPayOrderList(@RequestParam("userId") Long userId, @RequestBody MerchantPayOrderListParam param) {
 
-		Page<PayOrderBO> payOrderBOPage = payOrderService.getMerchantPayOrderList(userId,param);
+		Page<PayOrderBO> payOrderBOPage = payOrderService.getMerchantPayOrderList(userId, param);
 		Page<MerchantPayOrderListDTO> payOrderListDTOPage = new Page<>();
 		payOrderListDTOPage.setCurrentPage(payOrderBOPage.getCurrentPage());
 		payOrderListDTOPage.setTotalCount(payOrderBOPage.getTotalCount());
-		if(payOrderBOPage.getRecords() == null){
+		if (payOrderBOPage.getRecords() == null) {
 			payOrderListDTOPage.setRecords(new ArrayList<>());
 			return successGet(payOrderListDTOPage);
 		}
@@ -189,17 +193,25 @@ public class PayOrderController extends BaseController {
 
 	/**
 	 * 用户买单详情
+	 * 
 	 * @param id
+	 *            买单id
 	 * @param memberId
+	 *            会员id
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "getOrderInfo")
-	public MemberPayOrderInfoDTO getOrderInfo(@RequestParam("id") Long id) {
-		PayOrderBO payOrderBO = payOrderService.getOrderInfo(id);
-		if (payOrderBO == null) {
-			return null;
+	@RequestMapping(value = "getOrderInfo", method = RequestMethod.GET)
+	public Result<MemberPayOrderInfoDTO> getOrderInfo(@RequestParam("id") Long id, @RequestParam("memberId") Long memberId) {
+		PayOrderBO payOrderBO = null;
+		try {
+			payOrderBO = payOrderService.getOrderInfo(id, memberId);
+		} catch (DataNotExistException e) {
+			return successGet(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+			return successGet(ResultCode.ILLEGAL_OPERATION, e.getMessage());
 		}
-		MemberPayOrderInfoDTO memberPayOrderInfoDTO = PayOrderConverter.coverOrderInfoDTO(payOrderBO);
-		return memberPayOrderInfoDTO;
+		return successGet(PayOrderConverter.coverOrderInfoDTO(payOrderBO));
 	}
 }
