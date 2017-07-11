@@ -37,8 +37,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         if (userRoleDOList.isEmpty()) {
             return null;
         }
-        UserRoleBO userRoleBO = UserRoleCoverter.cover(userRoleDOList.get(0));
-        return userRoleBO;
+        return UserRoleCoverter.cover(userRoleDOList.get(0));
     }
 
     @Override
@@ -56,7 +55,7 @@ public class UserRoleServiceImpl implements UserRoleService {
             userRoleDO.setUserId(userId);
             userRoleDO.setRoleId(id[i]);
             userRoleDO.setGmtCreate(new Date());
-            int row = userRoleDOMapper.insert(userRoleDO);
+            userRoleDOMapper.insert(userRoleDO);
         }
     }
 
@@ -66,7 +65,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         example.createCriteria().andRoleIdEqualTo(id);
         List<UserRoleDO> list = userRoleDOMapper.selectByExample(example);
         if (list.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<UserRoleBO> userRoleBOS = new ArrayList<>();
         for (UserRoleDO userRoleDO : list) {
@@ -103,7 +102,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         example.createCriteria().andUserIdEqualTo(userId);
         List<UserRoleDO> list = userRoleDOMapper.selectByExample(example);
         if (list.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         List<UserRoleBO> userRoleBOS = new ArrayList<>();
         for (UserRoleDO userRoleDO : list) {

@@ -128,7 +128,7 @@ public class MerchantDetailController extends BaseController {
                 return successGet(storeDetailDTO);
             }
             List<ProductSearchListDTO> productLists = new ArrayList<>();
-            ProductSearchListDTO productSearchListDTO = null;
+            ProductSearchListDTO productSearchListDTO ;
             for (ProductSearchDTO productSearchDTO : productSearchDTOList) {
                 productSearchListDTO = new ProductSearchListDTO();
                 productSearchListDTO.setContent(productSearchDTO.getContent());

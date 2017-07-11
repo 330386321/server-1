@@ -38,7 +38,7 @@ public class ExpressCompanyController extends BaseController {
 
     @Autowired
     private ExpressCompanyService expressCompanyService;
-    
+
     @Audit(date = "2017-04-12", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询全部快递公司", notes = "查询全部快递公司，根据ordinal排序。[]（蒋鑫俊）", httpMethod = "GET")
@@ -48,7 +48,8 @@ public class ExpressCompanyController extends BaseController {
     public Result<List<ExpressCompanyDTO>> list(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.list());
     }
-    
+
+    @Audit(date = "2017-07-07", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "分组查询全部快递公司", notes = "查询全部快递公司,并且按照名称首字母分组。[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
@@ -57,7 +58,8 @@ public class ExpressCompanyController extends BaseController {
     public Result<ExpressCompanyQueryDTO> group(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
     	return successGet(expressCompanyService.group());
     }
-    
+
+    @Audit(date = "2017-07-07", reviewer = "孙林青")
     @SuppressWarnings("unchecked")
 	@ApiOperation(value = "检索快递公司", notes = "根据关键字查询全部快递公司[]（蒋鑫俊）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")

@@ -63,7 +63,11 @@ public enum MessageTypeEnum {
     MESSAGE_TYPE_USE_POINT_AD((byte) 0x27),//消费积分投放广告 39
     MESSAGE_TYPE_USE_POINT_REDPACKET((byte) 0x28),//消费积分红包 40
     MESSAGE_TYPE_ORDER_SUCCESS((byte) 0x29),//订单成功--商家 41
-    MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT((byte) 0x2A);//买单成功--商家 42
+    MESSAGE_TYPE_PAY_ORDER_SUCCESS_MERCHANT((byte) 0x2A),//买单成功--商家 42
+
+    MESSAGE_TYPE_MONEY_FREEZE((byte) 0x2C),//资金冻结 44
+
+    MESSAGE_TYPE_MONEY_UNFREEZE((byte) 0x2D);//资金解冻 45
 
     private Byte val;
     

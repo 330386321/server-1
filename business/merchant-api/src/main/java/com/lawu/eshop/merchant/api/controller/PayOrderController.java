@@ -40,7 +40,6 @@ public class PayOrderController extends BaseController{
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
         }
         Long userId = UserUtil.getCurrentUserId(getRequest());
-        Result<Page<MerchantPayOrderListDTO>> result =  payOrderService.getMerchantPayOrderList(userId,param);
-        return result;
+        return payOrderService.getMerchantPayOrderList(userId,param);
     }
 }

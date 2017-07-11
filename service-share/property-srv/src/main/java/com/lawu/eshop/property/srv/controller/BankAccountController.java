@@ -44,14 +44,8 @@ public class BankAccountController extends BaseController{
 		if(!flag){
 			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);
 		}
-		Integer id= bankAccountService.saveBankAccount(userNum,bankAccountParam);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else if(id==0){
-    		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+		bankAccountService.saveBankAccount(userNum,bankAccountParam);
+    	return successCreated();
     }
 	
 	/**
@@ -73,12 +67,8 @@ public class BankAccountController extends BaseController{
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.DELETE)
     public Result remove(@PathVariable Long id) {
-		Integer i = bankAccountService.remove(id);
-		if(i>0){
-    		return successDelete();
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+		bankAccountService.remove(id);
+		return successDelete();
     }
 	
 	/**
@@ -100,7 +90,7 @@ public class BankAccountController extends BaseController{
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateBankAccount/{id}", method = RequestMethod.PUT)
-    public Result updateBankAccount(@PathVariable Long id,@RequestBody BankAccountParam bankAccountParam,@RequestParam String userNum) {
+    public Result updateBankAccount(@PathVariable Long id,@RequestParam String userNum,@RequestBody BankAccountParam bankAccountParam) {
 		Boolean  flag=bankAccountService.selectByAccount(bankAccountParam.getAccountNumber(),userNum);
 		if(!flag){
 			return successCreated(ResultCode.BANK_ACCOUNT_IS_EXIST);

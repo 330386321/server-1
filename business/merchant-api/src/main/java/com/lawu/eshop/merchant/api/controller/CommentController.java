@@ -92,7 +92,9 @@ public class CommentController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "getProductCommentListByMerchantId", method = RequestMethod.GET)
-    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(required = true) CommentListParam listparam) throws Exception {
+    public Result<Page<ProductCommentListDTO>> getProductCommentListByMerchantId(
+            @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+            @ModelAttribute @ApiParam(required = true) CommentListParam listparam){
         Long merchantId = UserUtil.getCurrentUserId(getRequest());
         if (listparam == null) {
             return successGet(ResultCode.REQUIRED_PARM_EMPTY);
@@ -188,7 +190,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "评价商品列表(全部)", notes = "评价商品列表 [1002，1000]（章勇）", httpMethod = "GET")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.GET)
-    public Result<Page<MerchantProductCommentListDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam) throws Exception {
+    public Result<Page<MerchantProductCommentListDTO>> getCommentProducts(@ModelAttribute @ApiParam CommentProductListParam listParam){
 
         List<MerchantProductCommentListDTO> commentProductDTOS = new ArrayList<>();
         Page<MerchantProductCommentListDTO> pages = new Page<>();

@@ -30,7 +30,7 @@ public class ExpressCompanyController extends BaseController {
 
 	@Autowired
 	private ExpressCompanyService expressCompanyService;
-	
+
 	/**
 	 * 查询全部快递公司，根据ordinal排序
 	 */
@@ -38,17 +38,19 @@ public class ExpressCompanyController extends BaseController {
 	public Result<List<ExpressCompanyDTO>> list() {
 		return successGet(ExpressCompanyConverter.convertDTOS(expressCompanyService.list()));
 	}
-	
+
 	/**
-	 * 查询全部快递公司,并且按照名称首字母分组
-	 * 
+	 * 查询可显示的快递公司,并且按照名称首字母分组
+	 *
 	 * @return
 	 * @author Sunny
 	 * @date 2017年7月7日
 	 */
 	@RequestMapping(value = "group", method = RequestMethod.GET)
 	public Result<ExpressCompanyQueryDTO> group() {
-		return successGet(ExpressCompanyConverter.convertExpressCompanyQueryDTO(expressCompanyService.list()));
+		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list(true);
+		ExpressCompanyQueryDTO rtn = ExpressCompanyConverter.convertExpressCompanyQueryDTO(expressCompanyBOList);
+		return successGet(rtn);
 	}
 	
 	/**
@@ -68,7 +70,7 @@ public class ExpressCompanyController extends BaseController {
 	
 	/**
 	 * 根据关键字检索快递公司
-	 * 
+	 *
 	 * @param keyWord 快递公司的name
 	 * @return
 	 * @author Sunny
@@ -76,42 +78,42 @@ public class ExpressCompanyController extends BaseController {
 	 */
 	@RequestMapping(value = "keyWord", method = RequestMethod.GET)
 	public Result<ExpressCompanyRetrieveDTO> listByKeyWord(@RequestParam("keyWord") String keyWord) {
-		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list();
-		
+		List<ExpressCompanyBO> expressCompanyBOList = expressCompanyService.list(false);
+
 		/*
-		 * 最终的检索结果 
+		 * 最终的检索结果
 		 * 最大size为10
 		 */
 		int maxSize = 10;
 		List<ExpressCompanyBO> filterList =  new ArrayList<>();
-		
+
 		/*
 		 * 第一级筛选
 		 * 以keyword开头的
 		 */
 		List<ExpressCompanyBO> firstFilterList =  new ArrayList<>();
-		
+
 		/*
 		 * 第二级筛选
 		 * 包含keyword的
 		 * 如果secondFilterList为空或者size小于5
 		 */
 		List<ExpressCompanyBO> secondFilterList =  new ArrayList<>();
-		
+
 		/*
 		 * 第三级筛选
 		 * 拆分keyword为单个字,去匹配,全部匹配
 		 * 如果secondFilterList的size小于5
 		 */
 		List<ExpressCompanyBO> thirdFilterList =  new ArrayList<>();
-		
+
 		/*
 		 * 第四级筛选
 		 * 拆分keyword为单个字,去匹配,单个匹配
 		 * 如果secondFilterList的size小于5
 		 */
 		List<ExpressCompanyBO> fourthFilterList =  new ArrayList<>();
-		
+
 		for (ExpressCompanyBO expressCompanyBO : expressCompanyBOList) {
 			if (expressCompanyBO.getName().startsWith(keyWord)) {
 				firstFilterList.add(expressCompanyBO);
@@ -134,12 +136,12 @@ public class ExpressCompanyController extends BaseController {
 				}
 			}
 		}
-		
+
 		filterList.addAll(firstFilterList);
 		filterList.addAll(secondFilterList);
 		filterList.addAll(thirdFilterList);
 		filterList.addAll(fourthFilterList);
-		
+
 		// 如果数量超过最大限制,截取List
 		if (filterList.size() > maxSize) {
 			filterList = filterList.subList(0, maxSize);

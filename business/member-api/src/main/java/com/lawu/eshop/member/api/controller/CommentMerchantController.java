@@ -65,23 +65,22 @@ public class CommentMerchantController extends BaseController {
     public Result saveCommentMerchantInfo(@ModelAttribute CommentMerchantParam param,@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         HttpServletRequest request = getRequest();
         Long memberId = UserUtil.getCurrentUserId(request);
-        StringBuffer commentPic = new StringBuffer();
+        StringBuilder commentPic = new StringBuilder();
         Collection<Part> parts = null;
         try {
             parts = request.getParts();
 
         } catch (IOException e) {
-            logger.error(e.getStackTrace().toString());
+            logger.error("IOException {}",e);
             return successCreated(e.getMessage());
         }
         catch (ServletException ex){
-            logger.info("Servlet异常");
+            logger.info("ServletException :{}",ex);
         }
         if(parts != null &&StringUtils.isNotEmpty(parts.toString())){
             for (Part part : parts) {
                 Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_STORE, part, memberApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
-                String fileName = part.getSubmittedFileName();
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
                     String imgUrl = map.get("imgUrl");

@@ -50,7 +50,7 @@ public class SmsUtil {
         httpclient.executeMethod(post);
         String sendResult = new String(post.getResponseBody(), smsConfigParam.getSmsEncoding());
         logger.info("发送短信结果：{} --------- {}", sendResult, ip);
-        if (sendResult.indexOf("发送短信成功") > 0) {
+        if (sendResult.contains("发送短信成功")) {
             map.put("sendCode", SmsConstant.SMS_SEND_SUCCESS);
             map.put("sendResult", "");
         } else {

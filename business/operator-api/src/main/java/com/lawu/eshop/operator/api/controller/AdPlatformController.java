@@ -67,28 +67,29 @@ public class AdPlatformController extends BaseController {
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @RequestMapping(value = "selectList", method = RequestMethod.POST)
     @RequiresPermissions("adPlatForm:list")
-    public Result<Page<AdPlatformOperatorDTO>> selectByPosition(@RequestBody @ApiParam AdPlatformFindParam queryParams) {
+    public Result<Page<AdPlatformOperatorDTO>> list(@RequestBody @ApiParam AdPlatformFindParam queryParams) {
         Result<Page<AdPlatformOperatorDTO>> adPlatformDTOS = adPlatformService.selectList(queryParams);
-        if(isSuccess(adPlatformDTOS)){
-   		 Page<AdPlatformOperatorDTO> page=adPlatformDTOS.getModel();
-   		 List<AdPlatformOperatorDTO> list= page.getRecords();
-   		 for (AdPlatformOperatorDTO adPlatformDTO : list) {
-   			 if(adPlatformDTO.getProductId()!=null){
-   				 Result<ProductEditInfoDTO>  productRs=productAuditService.selectEditProductById(adPlatformDTO.getProductId());
-   	   			 if(isSuccess(productRs)){
-   	   				adPlatformDTO.setProductName(productRs.getModel().getName());
-   	   			 }
-   			 }
-   			if(adPlatformDTO.getMerchantStoreId()!=null){
-   				Result<MerchantStoreDTO>  merchantRs=merchantStoreService.selectMerchantStore(adPlatformDTO.getMerchantStoreId());
-   				if(isSuccess(merchantRs)){
-   				  adPlatformDTO.setMerchantName(merchantRs.getModel().getName());
-   				}
-   			}
-   			 
-		  }
-   	   }
-       return adPlatformDTOS;
+        if(!isSuccess(adPlatformDTOS)){
+        	return successCreated(adPlatformDTOS.getRet());
+   	    }
+        Page<AdPlatformOperatorDTO> page=adPlatformDTOS.getModel();
+  		List<AdPlatformOperatorDTO> list= page.getRecords();
+  		for (AdPlatformOperatorDTO adPlatformDTO : list) {
+  			 if(adPlatformDTO.getProductId()!=null){
+  				 Result<ProductEditInfoDTO>  productRs=productAuditService.selectEditProductById(adPlatformDTO.getProductId());
+  	   			 if(isSuccess(productRs)){
+  	   				adPlatformDTO.setProductName(productRs.getModel().getName());
+  	   			 }
+  			 }
+  			if(adPlatformDTO.getMerchantStoreId()!=null){
+  				Result<MerchantStoreDTO>  merchantRs=merchantStoreService.selectMerchantStore(adPlatformDTO.getMerchantStoreId());
+  				if(isSuccess(merchantRs)){
+  				  adPlatformDTO.setMerchantName(merchantRs.getModel().getName());
+  				}
+  			}
+  			 
+		}
+        return adPlatformDTOS;
     }
 
     

@@ -124,7 +124,7 @@ public class BankAccountController extends BaseController{
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
     	Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
 		if(flag.getModel()!=null && (Boolean)flag.getModel()){
-			 bankAccountService.updateBankAccount(id, bankAccountParam,userNum);
+			 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
 			 return successCreated(ResultCode.SUCCESS);
 		}else{
 			 return successCreated(ResultCode.PAY_PWD_ERROR);

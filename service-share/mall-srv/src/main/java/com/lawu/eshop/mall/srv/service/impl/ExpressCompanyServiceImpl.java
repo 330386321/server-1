@@ -25,15 +25,31 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 
 	/**
 	 * 查询全部快递公司，根据ordinal排序
-	 * 
-	 * @param query
-	 *            查询参数
+	 *
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
 	 */
 	@Override
 	public List<ExpressCompanyBO> list() {
+		return list(null);
+	}
+
+	/**
+	 * 查询快递公司，根据ordinal排序
+	 *
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月10日
+	 */
+	@Override
+	public List<ExpressCompanyBO> list(Boolean isShow) {
 		ExpressCompanyDOExample example = new ExpressCompanyDOExample();
-		example.createCriteria().andStatusEqualTo(StatusEnum.STATUS_VALID.val);
+		ExpressCompanyDOExample.Criteria criteria = example.createCriteria();
+		criteria.andStatusEqualTo(StatusEnum.STATUS_VALID.val);
+		if (isShow != null) {
+			criteria.andIsShowEqualTo(isShow);
+		}
 		example.setOrderByClause("ordinal ASC");
 		return ExpressCompanyConverter.convertBOS(expressCompanyDOMapper.selectByExample(example));
 	}
@@ -49,5 +65,5 @@ public class ExpressCompanyServiceImpl implements ExpressCompanyService {
 	public ExpressCompanyBO get(Integer id) {
 		return ExpressCompanyConverter.convert(expressCompanyDOMapper.selectByPrimaryKey(id));
 	}
-	
+
 }

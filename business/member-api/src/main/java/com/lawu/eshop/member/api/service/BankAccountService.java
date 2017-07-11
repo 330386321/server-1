@@ -62,6 +62,6 @@ public interface BankAccountService {
 	 * @return
 	 */
 	@RequestMapping(value = "bankAccount/updateBankAccount/{id}", method = RequestMethod.PUT)
-    public Result updateBankAccount(@PathVariable("id") Long id,@RequestBody BankAccountParam bankAccountParam,@RequestParam("userNum") String userNum);
+    public Result updateBankAccount(@PathVariable("id") Long id,@RequestParam("userNum") String userNum,@RequestBody BankAccountParam bankAccountParam);
 
 }

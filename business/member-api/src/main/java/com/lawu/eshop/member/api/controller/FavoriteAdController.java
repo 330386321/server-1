@@ -52,6 +52,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param adId
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "收藏广告", notes = "收藏广告[5002]（张荣成）", httpMethod = "PUT")
@@ -61,6 +62,9 @@ public class FavoriteAdController extends BaseController{
     						@RequestParam @ApiParam(required = true, value = "商品id") Long adId) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
         Result rs = favoriteAdService.save(memberId, adId);
+        if(!isSuccess(rs)){
+        	return successCreated(rs.getRet());
+        }
         return rs;
     }
 	
@@ -79,16 +83,17 @@ public class FavoriteAdController extends BaseController{
                                                                  @ModelAttribute @ApiParam( value = "查询信息") FavoriteAdParam param) {
     	Long memberId=UserUtil.getCurrentUserId(getRequest());
     	Result<Page<FavoriteAdDOViewDTO>>  pageDTOS=favoriteAdService.selectMyFavoriteAd(memberId, param);
-    	if(isSuccess(pageDTOS)){
-    		List<FavoriteAdDOViewDTO> list=pageDTOS.getModel().getRecords();
-    		for (FavoriteAdDOViewDTO favoriteAdDOViewDTO : list) {
-    			Result<MerchantStoreDTO> rs=merchantStoreService.selectMerchantStoreByMId(favoriteAdDOViewDTO.getMerchantId());
-				if(isSuccess(rs)){
-					favoriteAdDOViewDTO.setLogoUrl(rs.getModel().getLogoUrl());
-					favoriteAdDOViewDTO.setName(rs.getModel().getName());
-				}
-			}
+    	if(!isSuccess(pageDTOS)){
+    		return successCreated(pageDTOS.getRet());
     	}
+    	List<FavoriteAdDOViewDTO> list=pageDTOS.getModel().getRecords();
+		for (FavoriteAdDOViewDTO favoriteAdDOViewDTO : list) {
+			Result<MerchantStoreDTO> rs=merchantStoreService.selectMerchantStoreByMId(favoriteAdDOViewDTO.getMerchantId());
+			if(isSuccess(rs)){
+				favoriteAdDOViewDTO.setLogoUrl(rs.getModel().getLogoUrl());
+				favoriteAdDOViewDTO.setName(rs.getModel().getName());
+			}
+		}
     	return pageDTOS;
     }
 
@@ -98,6 +103,7 @@ public class FavoriteAdController extends BaseController{
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@Authorization
     @ApiOperation(value = "取消收藏的广告", notes = "取消收藏的广告[1002]（张荣成）", httpMethod = "DELETE")
@@ -107,6 +113,9 @@ public class FavoriteAdController extends BaseController{
                          @PathVariable @ApiParam(required = true, value = "广告id") Long adId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
         Result rs = favoriteAdService.remove(adId,memberId);
+        if(!isSuccess(rs)){
+        	return successCreated(rs.getRet());
+        }
         return successDelete();
     }
 }

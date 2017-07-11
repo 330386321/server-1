@@ -51,10 +51,14 @@ public class MessageController extends BaseController {
     public Result<Page<MessageDTO>> getMessageList(@ModelAttribute @ApiParam MessageParam pageParam, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result<Page<MessageDTO>> messageDTOPage = messageService.getMessageList(userNum, pageParam);
+        if(!isSuccess(messageDTOPage)){
+        	successCreated(messageDTOPage.getRet());
+        }
         return messageDTOPage;
     }
 
-    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（已读）", notes = "站内信息操作（已读） [1000]（章勇）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @Authorization
@@ -66,7 +70,8 @@ public class MessageController extends BaseController {
     }
 
 
-    @Audit(date = "2017-04-15", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+	@Audit(date = "2017-04-15", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（删除）", notes = "站内信息操作（删除） [1000]（章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -74,11 +79,15 @@ public class MessageController extends BaseController {
     public Result del(@PathVariable("messageId") Long messageId, @RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token) {
         String userNum = UserUtil.getCurrentUserNum(getRequest());
         Result result = messageService.delMessageStatus(messageId, userNum);
-        return successDelete(result);
+        if(!isSuccess(result)){
+            successCreated(result.getRet());
+        }
+        return successDelete();
     }
 
 
-    @Audit(date = "2017-05-12", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+	@Audit(date = "2017-05-12", reviewer = "孙林青")
     @ApiOperation(value = "站内信息操作（批量标记已读）", notes = "站内信息操作（批量标记已读） [1000]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization
@@ -104,7 +113,8 @@ public class MessageController extends BaseController {
         return messageService.selectMessageById(id);
     }
 
-    @Audit(date = "2017-06-30", reviewer = "孙林青")
+    @SuppressWarnings("rawtypes")
+	@Audit(date = "2017-06-30", reviewer = "孙林青")
     @ApiOperation(value = "消息批量删除", notes = "消息批量删除 （章勇）", httpMethod = "DELETE")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @Authorization

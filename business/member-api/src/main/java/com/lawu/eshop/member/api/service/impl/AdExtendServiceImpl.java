@@ -91,7 +91,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 
 	@Override
 	public Result<Page<AdDTO>> selectListByMember(AdEgainParam adEgainParam) {
-		Long memberId=UserUtil.getCurrentUserId(getRequest()); 
+		Long memberId=UserUtil.getCurrentUserId(getRequest());
 		AdMemberParam param=new AdMemberParam();
    	    param.setCurrentPage(adEgainParam.getCurrentPage());
    	    param.setPageSize(adEgainParam.getPageSize());
@@ -332,7 +332,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	List<AdDTO> newList =new ArrayList<>();
     	for (AdDTO adDTO : list) {
     		if(adDTO.getPutWayEnum().val==1){ //区域
-    			if(adDTO.getAreas()==null){
+    			if(adDTO.getAreas()==null || adDTO.getAreas()==""){
     				newList.add(adDTO);
     			}else{
     				if(memberPath!=null){
@@ -409,6 +409,7 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 	@Override
 	public Result<Page<AdDTO>> selectChoiceness(AdChoicenessParam adChoicenessParam) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
+
 		AdMemberParam param=new AdMemberParam();
    	    param.setCurrentPage(adChoicenessParam.getCurrentPage());
    	    param.setPageSize(adChoicenessParam.getPageSize());
@@ -427,40 +428,43 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		if (!newMerchantIdsList.isEmpty()) {
 			Result<List<MerchantAdInfoDTO>> merchantResult = merchantStoreService
 					.getAdMerchantStoreByIds(newMerchantIdsList);
-			if (isSuccess(merchantResult)) {
-				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
-				for (AdDTO adDTO : screenList) {
-					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-						
-						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-							Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(),
-									memberId);
-							if (isSuccess(resultFavoriteAd)) {
-								adDTO.setIsFavorite(resultFavoriteAd.getModel());
-							}
-							adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
-							if (merchantAdInfoDTO.getName() != null) {
-								adDTO.setName(merchantAdInfoDTO.getName());
-							} else {
-								adDTO.setName("E店商家");
-							}
-							if (merchantAdInfoDTO.getPath() != null) {
-								adDTO.setLogoUrl(merchantAdInfoDTO.getPath());
-							} else {
-								adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
-							}
-							if (merchantAdInfoDTO.getManageTypeEnum() != null) {
-								adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
-										.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
-							}
-							Date date=new Date();
-				     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
-				     		if(time>0){
-				     			adDTO.setNeedBeginTime(time);
-				     		}else{
-				     			adDTO.setNeedBeginTime(0l);
-				     		}
+
+			if (!isSuccess(merchantResult)) {
+				return successCreated(merchantResult.getRet());
+			}
+
+			List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
+			for (AdDTO adDTO : screenList) {
+				for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+
+					if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
+						Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(),
+								memberId);
+						if (isSuccess(resultFavoriteAd)) {
+							adDTO.setIsFavorite(resultFavoriteAd.getModel());
 						}
+						adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
+						if (merchantAdInfoDTO.getName() != null) {
+							adDTO.setName(merchantAdInfoDTO.getName());
+						} else {
+							adDTO.setName("E店商家");
+						}
+						if (merchantAdInfoDTO.getPath() != null) {
+							adDTO.setLogoUrl(merchantAdInfoDTO.getPath());
+						} else {
+							adDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+						}
+						if (merchantAdInfoDTO.getManageTypeEnum() != null) {
+							adDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
+									.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
+						}
+						Date date=new Date();
+			     		Long time=adDTO.getBeginTime().getTime()-date.getTime();
+			     		if(time>0){
+			     			adDTO.setNeedBeginTime(time);
+			     		}else{
+			     			adDTO.setNeedBeginTime(0l);
+			     		}
 					}
 				}
 			}
@@ -470,22 +474,29 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     	newPage.setCurrentPage(adChoicenessParam.getCurrentPage());
     	newPage.setTotalCount(newList.size());
     	newPage.setRecords(screenList);
+
 		return successGet(newPage);
 	}
 	
 	@Override
 	public Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam) {
+
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
+
 		AdMemberParam param = new AdMemberParam();
 		param.setCurrentPage(adEgainParam.getCurrentPage());
 		param.setPageSize(adEgainParam.getPageSize());
 		param.setTypeEnum(adEgainParam.getTypeEnum());
 		param.setLatitude(adEgainParam.getLatitude());
 		param.setLongitude(adEgainParam.getLongitude());
+
 		Result<Page<AdDTO>> pageDTOS = adService.selectListByMember(param, memberId);
+
 		List<AdDTO> newList = adFilter(param, pageDTOS.getModel().getRecords(), memberId);
+
 		AdPage<AdDTO> adpage = new AdPage<>();
 		List<AdDTO> screenList = adpage.page(newList, param.getPageSize(), param.getCurrentPage());
+
 		List<AdFlatVideoDTO> egainList = new ArrayList<>();
 		List<Long> merchantIds = new ArrayList<>();
 		for (AdDTO adDTO : screenList) {
@@ -494,60 +505,61 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		List<Long> newMerchantIdsList = new ArrayList(new TreeSet(merchantIds));
 		if(!newMerchantIdsList.isEmpty()){
 			Result<List<MerchantAdInfoDTO>> merchantResult = merchantStoreService.getAdMerchantStoreByIds(newMerchantIdsList);
-			if (isSuccess(merchantResult)) {
-				List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
-				for (AdDTO adDTO : screenList) {
-					AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
-					adFlatVideoDTO.setId(adDTO.getId());
-					adFlatVideoDTO.setContent(adDTO.getContent());
-					adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
-					adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
-					adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-					adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
-					adFlatVideoDTO.setTitle(adDTO.getTitle());
-					adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());
-					adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
-					adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
-					adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
-					adFlatVideoDTO.setViewCount(adDTO.getViewCount());
-					adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
-					Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
-					if (isSuccess(resultFavoriteAd)) {
-						adFlatVideoDTO.setIsFavorite(resultFavoriteAd.getModel());
-					}
-					for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
-						if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
-							adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
-							if (merchantAdInfoDTO.getName() != null) {
-								adFlatVideoDTO.setName(merchantAdInfoDTO.getName());
-							} else {
-								adFlatVideoDTO.setName("E店商家");
-							}
-							if (merchantAdInfoDTO.getPath() != null) {
-								adFlatVideoDTO.setLogoUrl(merchantAdInfoDTO.getPath());
-							} else {
-								adFlatVideoDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg()); 
-							}
-							if (merchantAdInfoDTO.getManageTypeEnum() != null) {
-								adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
-										.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
-							}
+			if (!isSuccess(merchantResult)) {
+				return successCreated(merchantResult.getRet());
+			}
+			List<MerchantAdInfoDTO> merchantList = merchantResult.getModel();
+			for (AdDTO adDTO : screenList) {
+				AdFlatVideoDTO adFlatVideoDTO = new AdFlatVideoDTO();
+				adFlatVideoDTO.setId(adDTO.getId());
+				adFlatVideoDTO.setContent(adDTO.getContent());
+				adFlatVideoDTO.setGmtCreate(adDTO.getGmtCreate());
+				adFlatVideoDTO.setMediaUrl(adDTO.getMediaUrl());
+				adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
+				adFlatVideoDTO.setMerchantId(adDTO.getMerchantId());
+				adFlatVideoDTO.setTitle(adDTO.getTitle());
+				adFlatVideoDTO.setPutWayEnum(adDTO.getPutWayEnum());
+				adFlatVideoDTO.setStatusEnum(adDTO.getStatusEnum());
+				adFlatVideoDTO.setTypeEnum(adDTO.getTypeEnum());
+				adFlatVideoDTO.setBeginTime(adDTO.getBeginTime());
+				adFlatVideoDTO.setViewCount(adDTO.getViewCount());
+				adFlatVideoDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
+				Result<Boolean> resultFavoriteAd = favoriteAdService.isFavoriteAd(adDTO.getId(), memberId);
+				if (isSuccess(resultFavoriteAd)) {
+					adFlatVideoDTO.setIsFavorite(resultFavoriteAd.getModel());
+				}
+				for (MerchantAdInfoDTO merchantAdInfoDTO : merchantList) {
+					if (adDTO.getMerchantId().longValue() == merchantAdInfoDTO.getMerchantId().longValue()) {
+						adDTO.setMerchantStoreId(merchantAdInfoDTO.getMerchantStoreId());
+						if (merchantAdInfoDTO.getName() != null) {
+							adFlatVideoDTO.setName(merchantAdInfoDTO.getName());
+						} else {
+							adFlatVideoDTO.setName("E店商家");
+						}
+						if (merchantAdInfoDTO.getPath() != null) {
+							adFlatVideoDTO.setLogoUrl(merchantAdInfoDTO.getPath());
+						} else {
+							adFlatVideoDTO.setLogoUrl(memberApiConfig.getDefaultHeadimg());
+						}
+						if (merchantAdInfoDTO.getManageTypeEnum() != null) {
+							adFlatVideoDTO.setManageTypeEnum(com.lawu.eshop.ad.constants.ManageTypeEnum
+									.getEnum(merchantAdInfoDTO.getManageTypeEnum().val));
 						}
 					}
-					//广告词
-					Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
-					if(isSuccess(adLexiconDTOS)){
-						adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
-					}
-					Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
-		        	if(isSuccess(mpRs)){
-		        		adFlatVideoDTO.setJdUrl(mpRs.getModel().getJdUrl());
-		        		adFlatVideoDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
-		        		adFlatVideoDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
-		        		adFlatVideoDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
-		        	}
-					egainList.add(adFlatVideoDTO);
 				}
+				//广告词
+				Result<List<AdLexiconDTO>> adLexiconDTOS = adService.selectList(adDTO.getId());
+				if(isSuccess(adLexiconDTOS)){
+					adFlatVideoDTO.setLexiconList(adLexiconDTOS.getModel());
+				}
+				Result<MerchantProfileDTO> mpRs=merchantProfileService.getMerchantProfile(adDTO.getMerchantId());
+	        	if(isSuccess(mpRs)){
+	        		adFlatVideoDTO.setJdUrl(mpRs.getModel().getJdUrl());
+	        		adFlatVideoDTO.setTaobaoUrl(mpRs.getModel().getTaobaoUrl());
+	        		adFlatVideoDTO.setTmallUrl(mpRs.getModel().getTmallUrl());
+	        		adFlatVideoDTO.setWebsiteUrl(mpRs.getModel().getWebsiteUrl());
+	        	}
+				egainList.add(adFlatVideoDTO);
 			}
 			
 		}

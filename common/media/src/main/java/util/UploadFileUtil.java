@@ -5,12 +5,10 @@ import com.lawu.eshop.utils.ValidateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,12 +22,12 @@ public class UploadFileUtil {
 
     private static final  String MAP_KEY = "resultFlag";
     private static final  String MAP_KEY_MSG = "msg";
-    private static final  String mapValue = "0";
+    private static final  String MAP_VALUE = "0";
     private static final String IMAGE_FORMAT_WRONG_UPLOAD = "1011";
     private static final String IMAGE_WRONG_UPLOAD = "1010";
     private static final String IMAGE_SIZE_ERROR = "1015";
     private static final String UPLOAD_SIZE_BIGER = "1021";
-    private static final String UPLOAD_VEDIO_FAIL = "1020";
+    private static final String UPLOAD_VIDEO_FAIL = "1020";
 
     private static final String IMAGE_FORMAT_WRONG_UPLOAD_MSG = "上传图片格式错误";
     private static final String UPLOAD_SIZE_BIGER_MSG = "图片文件太大";
@@ -51,15 +49,20 @@ public class UploadFileUtil {
                                                      String dir, String baseImageDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
-        Collection<Part> parts;
+        byte[] b = new byte[1024 * 1024];
+        Collection<Part> parts = null;
 
         String urlImg = "";
         try {
             parts = request.getParts();
-            for (Part part : parts) {
+        } catch (IOException e) {
+            logger.info("IOException {}",e);
+        } catch (ServletException e) {
+            logger.info("ServletException {}",e);
+        }
+        for (Part part : parts) {
                 if (part.getContentType() == null) {
                     valsMap.put(part.getName(), request.getParameter(part.getName()));
                 } else {
@@ -84,34 +87,27 @@ public class UploadFileUtil {
                         file.mkdirs();
                     }
 
-                    InputStream in = part.getInputStream();
-                    out = new FileOutputStream(new File(file, newfileName));
-                    int index = 0;
-                    while ((index = in.read(b)) != -1) {
-                        out.write(b, 0, index);
+                    try (InputStream in = part.getInputStream()) {
+                        out = new FileOutputStream(new File(file, newfileName));
+                        int index;
+                        while ((index = in.read(b)) != -1) {
+                            out.write(b, 0, index);
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                    } catch (FileNotFoundException e) {
+                        logger.info("FileNotFoundException {}",e);
+                    } catch (IOException e) {
+                        logger.info("IOException {}",e);
                     }
-                    in.close();
-                    out.flush();
                     //文件路径，文件类型
                     urlImg =   dir + File.separator + newfileName;
-
                 }
             }
             valsMap.put(UPLOAD_IMG_URL, urlImg);
-            valsMap.put(MAP_KEY, mapValue);
-        } catch (Exception e) {
-            valsMap.put(MAP_KEY, IMAGE_WRONG_UPLOAD);
-            valsMap.put(MAP_KEY_MSG, UPLOAD_FAIL);
-            logger.info(UPLOAD_FAIL);
-        }finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                logger.info("out stream close exception");
-            }
-
-        }
-        return valsMap;
+            valsMap.put(MAP_KEY, MAP_VALUE);
+            return valsMap;
 
     }
 
@@ -127,10 +123,10 @@ public class UploadFileUtil {
     public static Map<String, String> uploadImages(HttpServletRequest request, String dir, Part part, String baseImageDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         //String bashdir = baseImageDir;// 根路径
-        FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
+       // FileOutputStream out = null;
+        byte[] b = new byte[1024 * 1024];
         String urlImg = "";
         if (part.getContentType() == null) {
             valsMap.put(part.getName(), request.getParameter(part.getName()));
@@ -155,34 +151,23 @@ public class UploadFileUtil {
             if (!file.exists()) {
                 file.mkdirs();
             }
-
-            InputStream in = null;
-            try {
-                in = part.getInputStream();
-                out = new FileOutputStream(new File(file, newfileName));
-                int index = 0;
+            try (InputStream in = part.getInputStream()) {
+                FileOutputStream  out = new FileOutputStream(new File(file, newfileName));
+                int index;
                 while ((index = in.read(b)) != -1) {
                     out.write(b, 0, index);
                 }
                 in.close();
                 out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
                 //文件路径，文件类型
                 urlImg =   dir + File.separator + newfileName;
-            } catch (IOException e) {
-                logger.info(UPLOAD_FAIL);
-            }
-            finally {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    logger.info("out stream close exception");
-                }
-
-            }
         }
         valsMap.put(UPLOAD_IMG_URL, urlImg);
-        valsMap.put(MAP_KEY, mapValue);
-
+        valsMap.put(MAP_KEY, MAP_VALUE);
         return valsMap;
 
     }
@@ -190,16 +175,21 @@ public class UploadFileUtil {
     public static Map<String, String> uploadVideo(HttpServletRequest request, String dir, String baseVideoDir) {
         Map<String, String> valsMap = new HashMap<>();
         // 设置默认返回类型成功
-        valsMap.put(MAP_KEY, mapValue);
+        valsMap.put(MAP_KEY, MAP_VALUE);
         //String bashdir = baseVideoDir;// 上传文件根路径
         FileOutputStream out = null;
-        byte b[] = new byte[1024 * 1024];
-        Collection<Part> parts;
+        byte[] b = new byte[1024 * 1024];
+        Collection<Part> parts = null;
 
         String videoUrl = "";
         try {
             parts = request.getParts();
-            for (Part part : parts) {
+        } catch (IOException e) {
+            logger.info("IOException {}",e);
+        } catch (ServletException e) {
+            logger.info("ServletException {}",e);
+        }
+        for (Part part : parts) {
                 if (part.getContentType() == null) {
                     valsMap.put(part.getName(), request.getParameter(part.getName()));
                 } else {
@@ -220,35 +210,28 @@ public class UploadFileUtil {
                         file.mkdirs();
                     }
 
-                    InputStream in = part.getInputStream();
-                    out = new FileOutputStream(new File(file, newfileName));
+                    try (InputStream in = part.getInputStream()) {
+                        out = new FileOutputStream(new File(file, newfileName));
 
-                    int index = 0;
-                    while ((index = in.read(b)) != -1) {
-                        out.write(b, 0, index);
+                        int index = 0;
+                        while ((index = in.read(b)) != -1) {
+                            out.write(b, 0, index);
+                        }
+                        in.close();
+                        out.flush();
+                        out.close();
+                    } catch (IOException e) {
+                        logger.info("out stream close exception {}",e);
                     }
-                    in.close();
-                    out.flush();
+
                     //文件路径，文件类型
                     videoUrl =  dir + File.separator + newfileName;
 
                 }
             }
             valsMap.put(UPLOAD_VIDEO_URL, videoUrl);
-            valsMap.put(MAP_KEY, mapValue);
-        } catch (Exception e) {
-            valsMap.put(MAP_KEY, UPLOAD_VEDIO_FAIL);
-            valsMap.put(MAP_KEY_MSG, UPLOAD_FAIL);
-            logger.info(UPLOAD_FAIL);
-        } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                logger.info("out stream close exception");
-            }
-
-        }
-        return valsMap;
+            valsMap.put(MAP_KEY, MAP_VALUE);
+          return valsMap;
 
     }
     

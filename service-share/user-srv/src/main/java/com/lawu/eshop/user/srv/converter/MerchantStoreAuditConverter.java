@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class MerchantStoreAuditConverter {
 
+    private MerchantStoreAuditConverter(){}
+
     /**
      * BO转换
      *
@@ -82,7 +84,7 @@ public class MerchantStoreAuditConverter {
         merchantStoreAuditDTO.setCertifType(merchantStoreParam.getCertifType());
         merchantStoreAuditDTO.setOperatorCardId(merchantStoreParam.getOperatorCardId());
         merchantStoreAuditDTO.setOperatorName(merchantStoreParam.getOperatorName());
-        if(StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl().lastIndexOf(",") > 0){
+        if(StringUtils.isNotEmpty(merchantStoreParam.getLogoUrl()) && merchantStoreParam.getLogoUrl().lastIndexOf(',') > 0){
             merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl().substring(0,merchantStoreParam.getLogoUrl().length() - 1));
         }else{
             merchantStoreAuditDTO.setLogoUrl(merchantStoreParam.getLogoUrl());

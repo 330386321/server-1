@@ -66,40 +66,41 @@ public class PayOrderController extends BaseController {
 	@Autowired
 	private CommentMerchantService commentMerchantService;
 
-	@Audit(date = "2017-04-21", reviewer = "孙林青")
-	@ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
-	@ApiResponse(code = HttpCode.SC_CREATED, message = "success")
-	@Authorization
-	@RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
-	public Result<PayOrderIdDTO> savePayOrderInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute PayOrderParam param) {
-		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		String userNum = UserUtil.getCurrentUserNum(getRequest());
-		// 查询优惠信息记录
-		double realFavoredAmount = 0;// 实际优惠金额
-		double canFavoredAmount = param.getTotalAmount() - param.getNotFavoredAmount();// 参与优惠金额
-		if (param.getMerchantFavoredId() != null && param.getMerchantFavoredId() > 0) {
-			Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredById(param.getMerchantFavoredId());
-			if (favoredDTOResult.getModel() != null) {
-				if (favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val) {
-					// 每满xxx减xxx
-					int m = (int) (canFavoredAmount / (favoredDTOResult.getModel().getReachAmount().doubleValue()));
-					realFavoredAmount = m * favoredDTOResult.getModel().getFavoredAmount().doubleValue();
-				} else if (favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val && (canFavoredAmount - favoredDTOResult.getModel().getReachAmount().doubleValue()) >= 0) {
-					// 满xxx减xxx
-					realFavoredAmount = favoredDTOResult.getModel().getFavoredAmount().doubleValue();
-				} else if (favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val) {
-					realFavoredAmount = canFavoredAmount * ((10 - favoredDTOResult.getModel().getDiscountRate().doubleValue()) / 10);
-				}
-				BigDecimal realFavoredAmount2 = BigDecimal.valueOf(realFavoredAmount);
-				double rfa2 = realFavoredAmount2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-				if (rfa2 != param.getFavoredAmount()) {
-					return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
-				}
-			}
-		}
-		Result<PayOrderIdDTO> result = payOrderService.savePayOrderInfo(memberId, param, userNum);
-		return result;
-	}
+    @Audit(date = "2017-04-21", reviewer = "孙林青")
+    @ApiOperation(value = "新增买单记录", notes = "新增买单记录  [1004,1005,1000] （章勇）", httpMethod = "POST")
+    @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
+    @Authorization
+    @RequestMapping(value = "savePayOrderInfo", method = RequestMethod.POST)
+    public Result<PayOrderIdDTO> savePayOrderInfo(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                                  @ModelAttribute PayOrderParam param) {
+        Long memberId = UserUtil.getCurrentUserId(getRequest());
+        String userNum = UserUtil.getCurrentUserNum(getRequest());
+        //查询优惠信息记录
+        double realFavoredAmount = 0;//实际优惠金额
+        double canFavoredAmount = param.getTotalAmount()-param.getNotFavoredAmount();//参与优惠金额
+        if(param.getMerchantFavoredId() !=null && param.getMerchantFavoredId() >0){
+            Result<MerchantFavoredDTO> favoredDTOResult = merchantFavoredService.findFavoredById(param.getMerchantFavoredId());
+            if(favoredDTOResult.getModel() !=null){
+                if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL.val){
+                    //每满xxx减xxx
+                    int m =  (int)(canFavoredAmount/(favoredDTOResult.getModel().getReachAmount().doubleValue()));
+                    realFavoredAmount =  m*favoredDTOResult.getModel().getFavoredAmount().doubleValue();
+                } else if (favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_FULL_REDUCE.val
+                        && (canFavoredAmount - favoredDTOResult.getModel().getReachAmount().doubleValue()) >= 0) {
+                    //满xxx减xxx
+                    realFavoredAmount = favoredDTOResult.getModel().getFavoredAmount().doubleValue();
+                }else if(favoredDTOResult.getModel().getTypeEnum().val == MerchantFavoredTypeEnum.TYPE_DISCOUNT.val){
+                    realFavoredAmount = canFavoredAmount*((10-favoredDTOResult.getModel().getDiscountRate().doubleValue())/10);
+                }
+                BigDecimal realFavoredAmount2 =   BigDecimal.valueOf(realFavoredAmount);
+                double rfa2  =  realFavoredAmount2.setScale(2,   BigDecimal.ROUND_HALF_UP).doubleValue();
+                if(Double.doubleToLongBits(rfa2) != Double.doubleToLongBits(param.getFavoredAmount())){
+                    return successCreated(ResultCode.PAY_ORDER_FAVORED_AMOUNT_UNEQUAL);
+                }
+            }
+        }
+        return  payOrderService.savePayOrderInfo(memberId, param,userNum);
+    }
 
 	@Audit(date = "2017-04-12", reviewer = "孙林青")
 	@ApiOperation(value = "买单记录列表", notes = "买单记录列表  [1004,1002,1000] （章勇）", httpMethod = "POST")
