@@ -86,18 +86,20 @@ public class AdController extends BaseController{
 	 */
 	@RequestMapping(value = "saveAd", method = RequestMethod.POST)
     public Result saveAd(@RequestBody AdSaveParam adSaveParam) {
-		if(adSaveParam.getAdParam().getTypeEnum().val==4){
+		
+		if(adSaveParam.getAdParam().getTypeEnum().val==AdTypeEnum.AD_TYPE_PACKET.val){
 			Integer count=adService.selectRPIsSend(adSaveParam.getMerchantId());
 			if(count>0){
 				return successCreated(ResultCode.AD_RED_PACKGE_EXIST);
 			}
 		}
-		Integer id= adService.saveAd(adSaveParam);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+		Integer id=adService.saveAd(adSaveParam);
+		
+		if (id == null || id < 0) {
+            successCreated(ResultCode.SAVE_FAIL);
+        }
+		return successCreated();
+    	
     }
 	
 	/**
@@ -131,13 +133,9 @@ public class AdController extends BaseController{
 	     if(BO.getBeginTime()!=null && before14days.getTime() < BO.getBeginTime().getTime()){  
 	        return successCreated(ResultCode.AD_PUT_NOT_TIME);  
 	     }else{  
-	    	 Integer i= adService.updateStatus(id);
-	 		if(i>0){
-	 			//
-	     		return successCreated(ResultCode.SUCCESS);
-	     	}else{
-	     		return successCreated(ResultCode.FAIL);
-	     	}
+	    	 adService.updateStatus(id);
+	     	 return successCreated();
+	     	
 	     }  
 		
     }
@@ -149,12 +147,8 @@ public class AdController extends BaseController{
 	 */
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@PathVariable Long id) {
-    	Integer i= adService.remove(id);
- 		if(i>0){
-     		return successCreated();
-     	}else{
-     		return successCreated(ResultCode.FAIL);
-     	}
+    	adService.remove(id);
+     	return successDelete();
     }
 	
 	/**
@@ -205,11 +199,10 @@ public class AdController extends BaseController{
 			return successGet(ResultCode.AD_AUDITED);
 		}
 		Integer i = adService.auditVideo(id, auditorId, remark, auditEnum);
-		if (i > 0) {
-			return successCreated(ResultCode.SUCCESS);
-		} else {
-			return successCreated(ResultCode.FAIL);
-		}
+		if (i == null || i < 0) {
+            successCreated(ResultCode.SAVE_FAIL);
+        }
+		return successCreated();
 	}
 	
 	/**

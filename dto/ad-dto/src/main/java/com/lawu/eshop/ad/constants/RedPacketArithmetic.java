@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RedPacketArithmetic {  
+	
+	private RedPacketArithmetic(){}
+	
     //红包最小值  
     private static final double MINVALUE = 0.2;  
     //红包最大值  
@@ -21,11 +24,9 @@ public class RedPacketArithmetic {
      */  
     public static boolean isRight(double money,double count) {  
     	double avg = Double.parseDouble(format.format(money/count));  
-        if(avg < MINVALUE*money/count) {  
+        if(avg < MINVALUE*money/count || avg > MAXVALUE*money/count) {  
             return false;  
-        } else if(avg > MAXVALUE*money/count) {  
-            return false;  
-        }  
+        }
         return true;  
     }  
   
@@ -49,7 +50,7 @@ public class RedPacketArithmetic {
         double max = maxS>money?money:maxS;  
         //随机产生一个红包  
         maxS=Double.parseDouble(format.format(max-minS));
-        double one = (double)(Math.random()*Double.parseDouble(format.format(maxS+minS)));  
+        double one = (Math.random()*Double.parseDouble(format.format(maxS+minS)));  
         double balance = Double.parseDouble(format.format(money - one));  
        
         //判断此次分配后，后续是否合理  
@@ -74,11 +75,13 @@ public class RedPacketArithmetic {
      * @return 
      */  
     public static List<Double> spiltRedPackets(double money,int count) {  
+    	List<Double> list = new ArrayList<>();  
+    	
         //首先判断红包是否合情理  
         if(!isRight(money,count)) {  
-            return null;  
+            return list;  
         }  
-        List<Double> list = new ArrayList<Double>();  
+        
         double max = Double.parseDouble(format.format(money/count))*MAXVALUE;  
         max = max>money?money:max;  
         for(int i = 0 ; i < count; i++) {  

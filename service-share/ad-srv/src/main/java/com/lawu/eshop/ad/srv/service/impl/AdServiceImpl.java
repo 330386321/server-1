@@ -2,8 +2,6 @@ package com.lawu.eshop.ad.srv.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -44,7 +42,6 @@ import com.lawu.eshop.ad.srv.converter.AdConverter;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdDOExample;
 import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
-import com.lawu.eshop.ad.srv.domain.AdRegionDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
@@ -81,9 +78,6 @@ public class AdServiceImpl implements AdService {
 	
 	@Autowired
 	private AdDOMapperExtend adDOMapperExtend;
-	
-	@Autowired
-	private AdRegionDOMapper adRegionDOMapper;
 	
 	@Autowired
 	private FavoriteAdDOMapper favoriteAdDOMapper;
@@ -154,8 +148,11 @@ public class AdServiceImpl implements AdService {
 		adDO.setPoint(adParam.getPoint());
 		adDO.setAdCount(adParam.getAdCount());
 		adDO.setRadius(adParam.getRadius());
-		if(adParam.getTypeEnum().val==2){
+		if(adParam.getTypeEnum().val==AdTypeEnum.AD_TYPE_VIDEO.val){
 			adDO.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val); //视频广告默认为审核中
+		}
+		if(adParam.getTypeEnum().val==AdTypeEnum.AD_TYPE_PRAISE.val){
+			adDO.setAdCount(adSaveParam.getCount());
 		}
 		adDO.setTotalPoint(adParam.getTotalPoint());
 		adDO.setGmtCreate(new Date());
@@ -168,18 +165,6 @@ public class AdServiceImpl implements AdService {
 			savePointPool(adDO,adSaveParam.getCount());
 		}else if(adParam.getTypeEnum().val==4){
 			saveRPPool(adDO);
-		}
-		if(adParam.getAreas()!=null){ //不是全国投放
-			String[] path=adParam.getAreas().split(",");
-			for (String s : path) {
-				AdRegionDO adRegionDO=new AdRegionDO();
-				adRegionDO.setAdId(adDO.getId());
-				adRegionDO.setMerchantId(adSaveParam.getMerchantId());
-				adRegionDO.setGmtCreate(new Date());
-				adRegionDO.setRegionId(s);
-				adRegionDOMapper.insert(adRegionDO);
-			}
-			
 		}
 		//发送消息，通知其他模块处理事务 积分的处理
 		mctransactionMainAddService.sendNotice(adDO.getId());
@@ -427,13 +412,17 @@ public class AdServiceImpl implements AdService {
 		example.createCriteria().andAdIdEqualTo(adDO.getId()).andMemberIdEqualTo(memberId);
 		Long count = favoriteAdDOMapper.countByExample(example);
 		AdBO adBO = AdConverter.convertBO(adDO);
-		Long praiseCount = 0l;
-		boolean isPraise = false;
+		if (count.intValue() > 0) {
+			adBO.setIsFavorite(true);
+		} else {
+			adBO.setIsFavorite(false);
+		}
 		if (adDO.getType() == 3) { // 获取E赞的抢赞人数
 			PointPoolDOExample ppexample = new PointPoolDOExample();
 			ppexample.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
-			praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			Long praiseCount = pointPoolDOMapper.countByExample(ppexample);
+			adBO.setNumber(praiseCount.intValue());
 
 			PointPoolDOExample ppexample2 = new PointPoolDOExample();
 			ppexample2.createCriteria().andAdIdEqualTo(adDO.getId())
@@ -441,16 +430,12 @@ public class AdServiceImpl implements AdService {
 					.andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andMemberIdEqualTo(memberId);
 			Long number = pointPoolDOMapper.countByExample(ppexample2);
 			if (number > 0) {
-				isPraise = true;
+				adBO.setIsPraise(true);
+			}else{
+				adBO.setIsPraise(false);
 			}
 		}
-		adBO.setIsPraise(isPraise);
-		adBO.setNumber(praiseCount.intValue());
-		if (count.intValue() > 0) {
-			adBO.setIsFavorite(true);
-		} else {
-			adBO.setIsFavorite(false);
-		}
+		
 		return adBO;
 	}
 	
