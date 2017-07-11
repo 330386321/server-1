@@ -233,7 +233,7 @@ public class ProductConverter {
         productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
-            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());
@@ -252,7 +252,7 @@ public class ProductConverter {
         if (id == 0L) {
             productDO.setMerchantId(param.getMerchantId());
             productDO.setMerchantNum(param.getMerchantNum());
-            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             productDO.setGmtCreate(new Date());
         }
         productDO.setGmtModified(new Date());

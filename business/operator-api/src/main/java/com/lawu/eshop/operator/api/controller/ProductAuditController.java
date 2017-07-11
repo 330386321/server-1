@@ -84,7 +84,7 @@ public class ProductAuditController extends BaseController {
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DOWN.val);
+        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal());
         LogParam logParam = new LogParam();
         logParam.setAccount(UserUtil.getCurrentUserAccount());
         logParam.setTypeEnum(OperationTypeEnum.UPDATE);
@@ -108,7 +108,7 @@ public class ProductAuditController extends BaseController {
 
         //保存操作日志
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DEL.val);
+        jsonObject.put("status", ProductStatusEnum.PRODUCT_STATUS_DEL.getVal());
         LogParam logParam = new LogParam();
         logParam.setAccount(UserUtil.getCurrentUserAccount());
         logParam.setTypeEnum(OperationTypeEnum.DELETE);

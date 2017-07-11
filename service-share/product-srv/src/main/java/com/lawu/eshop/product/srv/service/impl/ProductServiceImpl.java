@@ -100,7 +100,7 @@ public class ProductServiceImpl implements ProductService {
     public Page<ProductQueryBO> selectProduct(ProductDataQuery query) {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
-        criteria.andMerchantIdEqualTo(query.getMerchantId()).andStatusEqualTo(query.getProductStatus().val);
+        criteria.andMerchantIdEqualTo(query.getMerchantId()).andStatusEqualTo(query.getProductStatus().getVal());
         if (query.getName() != null && !"".equals(query.getName())) {
             criteria.andNameLike("%" + query.getName() + "%");
         }
@@ -157,14 +157,14 @@ public class ProductServiceImpl implements ProductService {
         for (int i = 0; i < idArray.length; i++) {
         	
         	ProductDO productDO = productDOMapper.selectByPrimaryKey(Long.valueOf(idArray[i]));
-        	if(productStatus.val.equals(ProductStatusEnum.PRODUCT_STATUS_UP.val)){
+        	if(productStatus.getVal().equals(ProductStatusEnum.PRODUCT_STATUS_UP.getVal())){
         		if(productDO.getTotalInventory() < 0){
         			return -1;
         		}
         	}
 
         	ProductDO productDOEdit = new ProductDO();
-        	productDOEdit.setStatus(productStatus.val);
+        	productDOEdit.setStatus(productStatus.getVal());
             if (ProductStatusEnum.PRODUCT_STATUS_DOWN.equals(productStatus)) {
             	productDOEdit.setGmtDown(new Date());
             } else {
@@ -177,11 +177,11 @@ public class ProductServiceImpl implements ProductService {
             rows = rows + row;
 
             //更新solr索引
-            if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_DEL.val
-                    || productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_DOWN.val) {
+            if (productStatus.getVal().byteValue() == ProductStatusEnum.PRODUCT_STATUS_DEL.getVal()
+                    || productStatus.getVal().byteValue() == ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal()) {
                     delIds.add(idArray[i]);
             }
-            if (productStatus.val.byteValue() == ProductStatusEnum.PRODUCT_STATUS_UP.val) {
+            if (productStatus.getVal().byteValue() == ProductStatusEnum.PRODUCT_STATUS_UP.getVal()) {
                     SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
                     documents.add(document);
             }
@@ -234,9 +234,9 @@ public class ProductServiceImpl implements ProductService {
         List<String> imagesHead = new ArrayList<String>();
         List<String> imagesDetail = new ArrayList<String>();
         for (ProductImageDO image : imageDOS) {
-            if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_HEAD.val.byteValue()) {
+            if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal().byteValue()) {
                 imagesHead.add(image.getImagePath().replaceAll("\\\\", "/"));
-            } else if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val.byteValue()) {
+            } else if (image.getImgType().byteValue() == ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal().byteValue()) {
                 imagesDetail.add(image.getImagePath().replaceAll("\\\\", "/"));
             }
         }
@@ -349,7 +349,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询滚动图片
         ProductImageDOExample imageExample = new ProductImageDOExample();
         imageExample.createCriteria().andProductIdEqualTo(productDO.getId())
-                .andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val).andStatusEqualTo(true);
+                .andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal()).andStatusEqualTo(true);
         List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
         List<String> images = new ArrayList<String>();
         for (ProductImageDO image : imageDOS) {
@@ -363,7 +363,7 @@ public class ProductServiceImpl implements ProductService {
         // 查询详情图片
         imageExample.clear();
         imageExample.createCriteria().andProductIdEqualTo(productDO.getId())
-                .andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val).andStatusEqualTo(true);
+                .andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal()).andStatusEqualTo(true);
         List<ProductImageDO> imageDetailDOS = productImageDOMapper.selectByExample(imageExample);
         List<String> imageDetails = new ArrayList<String>();
         for (ProductImageDO image : imageDetailDOS) {
@@ -578,7 +578,7 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setGmtModified(new Date());
             pcDO.setSortid(0);
             pcDO.setStatus(true);
-            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val);
+            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal());
             productImageDOMapper.insert(pcDO);
         }
 
@@ -595,7 +595,7 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setGmtModified(new Date());
             pcDO.setStatus(true);
             pcDO.setSortid(i + 1);
-            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val);
+            pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal());
             productImageDOMapper.insert(pcDO);
         }
 
@@ -640,7 +640,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductQueryBO> selectProductPlat(ProductParam param) {
         ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         List<ProductDO> doList = productDOMapper.selectByExample(example);
         List<ProductQueryBO> boList = new ArrayList<>();
         if (!doList.isEmpty()) {
@@ -663,7 +663,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Integer selectProductCount(Long merchantId) {
         ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val).andMerchantIdEqualTo(merchantId);
+        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal()).andMerchantIdEqualTo(merchantId);
         Integer count = Long.valueOf(productDOMapper.countByExample(example)).intValue();
         return count;
     }
@@ -671,7 +671,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductInfoBO> listProduct(ListProductParam listProductParam) {
         ProductDOExample example = new ProductDOExample();
-        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+        example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
         RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
         List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
         return ProductConverter.convertInfoBO(productDOS);
@@ -731,7 +731,7 @@ public class ProductServiceImpl implements ProductService {
             currentPage ++;
             listProductParam.setCurrentPage(currentPage);
             ProductDOExample example = new ProductDOExample();
-            example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            example.createCriteria().andStatusEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
             List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
             if (productDOS == null || productDOS.isEmpty()) {
@@ -764,7 +764,7 @@ public class ProductServiceImpl implements ProductService {
             currentPage ++;
             listProductParam.setCurrentPage(currentPage);
             ProductDOExample example = new ProductDOExample();
-            example.createCriteria().andStatusNotEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.val);
+            example.createCriteria().andStatusNotEqualTo(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
             RowBounds rowBounds = new RowBounds(listProductParam.getOffset(), listProductParam.getPageSize());
             List<ProductDO> productDOS = productDOMapper.selectByExampleWithRowbounds(example, rowBounds);
             if (productDOS == null || productDOS.isEmpty()) {
@@ -784,7 +784,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDOExample example = new ProductDOExample();
         Criteria criteria = example.createCriteria();
         if (listProductParam.getStatusEnum() != null) {
-            criteria.andStatusEqualTo(listProductParam.getStatusEnum().val);
+            criteria.andStatusEqualTo(listProductParam.getStatusEnum().getVal());
         }
         if (StringUtils.isNotEmpty(listProductParam.getName())) {
             criteria.andNameLike("%" + listProductParam.getName() + "%");

@@ -149,7 +149,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			 *  商品状态是否是上架状态
 			 *  商品型号状态是否正常
 			 */
-			if (!ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus()) || !productModelDO.getStatus()) {
+			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
 				return ResultCode.PRODUCT_HAS_EXPIRED;
 			}
 			
@@ -364,7 +364,7 @@ public class ProductModelServiceImpl implements ProductModelService {
 			 *  商品状态是否是上架状态
 			 *  商品型号状态是否正常
 			 */
-			if (!ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus()) || !productModelDO.getStatus()) {
+			if (!ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus()) || !productModelDO.getStatus()) {
 				return ResultCode.PRODUCT_HAS_EXPIRED;
 			}
 			

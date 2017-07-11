@@ -51,7 +51,7 @@ public class ShoppingCartProductModelConverter {
 		if (productDO != null) {
 			rtn.setProductName(productDO.getName());
 			rtn.setFeatureImage(productDO.getFeatureImage());
-			if (ProductStatusEnum.PRODUCT_STATUS_UP.val.equals(productDO.getStatus())) {
+			if (ProductStatusEnum.PRODUCT_STATUS_UP.getVal().equals(productDO.getStatus())) {
 				if (productModelDO.getStatus()) {
 					rtn.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP);
 				} else {
@@ -60,7 +60,7 @@ public class ShoppingCartProductModelConverter {
 				}
 			} else {
 				rtn.setStatus(ProductStatusEnum.getEnum(productDO.getStatus()));
-				if (ProductStatusEnum.PRODUCT_STATUS_DOWN.val.equals(productDO.getStatus())) {
+				if (ProductStatusEnum.PRODUCT_STATUS_DOWN.getVal().equals(productDO.getStatus())) {
 					rtn.setGmtDown(productDO.getGmtDown());
 				} else {
 					rtn.setGmtDown(productDO.getGmtModified());

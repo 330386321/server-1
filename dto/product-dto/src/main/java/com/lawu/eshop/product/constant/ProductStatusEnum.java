@@ -15,7 +15,7 @@ public enum ProductStatusEnum {
 	PRODUCT_STATUS_UP((byte)0x02),		//已上架
 	PRODUCT_STATUS_DOWN((byte)0x03);	//已下架
 	
-	public Byte val;
+	private Byte val;
 	ProductStatusEnum(Byte val){
 		this.val = val;
 	}
@@ -29,7 +29,8 @@ public enum ProductStatusEnum {
 		}
 		return null;
 	}
-	
-	
-	
+
+	public Byte getVal() {
+		return val;
+	}
 }

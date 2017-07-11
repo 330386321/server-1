@@ -14,7 +14,7 @@ public enum ProductImgTypeEnum {
 	PRODUCT_IMG_HEAD((byte)0x01),		//1-头部滚动图片
 	PRODUCT_IMG_DETAIL((byte)0x02);		//2-详情图片
 	
-	public Byte val;
+	private Byte val;
 	ProductImgTypeEnum(Byte val){
 		this.val = val;
 	}
@@ -28,7 +28,8 @@ public enum ProductImgTypeEnum {
 		}
 		return null;
 	}
-	
-	
-	
+
+	public Byte getVal() {
+		return val;
+	}
 }
