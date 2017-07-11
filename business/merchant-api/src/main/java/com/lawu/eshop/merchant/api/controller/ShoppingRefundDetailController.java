@@ -100,37 +100,27 @@ public class ShoppingRefundDetailController extends BaseController {
 	
 	@Audit(date = "2017-04-15", reviewer = "孙林青")
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@ApiOperation(value = "商家填写退货地址 ", notes = "商家填写退货地址 。[1002|1003|4011|4012]（蒋鑫俊）", httpMethod = "PUT")
+	@ApiOperation(value = "商家填写退货地址 ", notes = "商家填写退货地址 。[1004|1100|1024|4029]（蒋鑫俊）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
     @Authorization
     @RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
-    public Result<ShoppingOrderExpressDTO> fillReturnAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id") Long id, @ModelAttribute @ApiParam(value = "退货地址参数") ShoppingRefundDetailRerurnAddressForeignParam foreignParam, BindingResult bindingResult) {
-    	if (id == null || id <= 0) {
-    		return successCreated(ResultCode.ID_EMPTY);
-    	}
-		
+    public Result<ShoppingOrderExpressDTO> fillReturnAddress(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable("id") @ApiParam(value = "退款详情id", required = true) Long id, @ModelAttribute @ApiParam(value = "退货地址参数") ShoppingRefundDetailRerurnAddressForeignParam foreignParam, BindingResult bindingResult) {
 		String message = validate(bindingResult);
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-    	
 		ShoppingRefundDetailRerurnAddressParam param = new ShoppingRefundDetailRerurnAddressParam();
     	if (foreignParam.getAddressId() != null && foreignParam.getAddressId() > 0) {
-    		Result<AddressDTO> resultAddressDTO = addressService.get(foreignParam.getAddressId());
-    		if (!isSuccess(resultAddressDTO)) {
-    			return successCreated(resultAddressDTO.getRet());
+    		Result<AddressDTO> getResult = addressService.get(foreignParam.getAddressId());
+    		if (!isSuccess(getResult)) {
+    			return successCreated(getResult);
     		}
-    		param.setConsigneeName(resultAddressDTO.getModel().getName());
-    		param.setConsigneeMobile(resultAddressDTO.getModel().getMobile());
-    		param.setConsigneeAddress(resultAddressDTO.getModel().getRegionName() + resultAddressDTO.getModel().getAddr());
+    		param.setConsigneeName(getResult.getModel().getName());
+    		param.setConsigneeMobile(getResult.getModel().getMobile());
+    		param.setConsigneeAddress(getResult.getModel().getRegionName() + getResult.getModel().getAddr());
     	}
-    	
-    	Result result = shoppingRefundDetailService.fillReturnAddress(id, param);
-    	
-    	if (!isSuccess(result)) {
-    		return successCreated(result.getRet());
-    	}
-		
+    	Long merchantId = UserUtil.getCurrentUserId(getRequest());
+    	Result result = shoppingRefundDetailService.fillReturnAddress(id, merchantId, param);
     	return successCreated(result);
     }
 	

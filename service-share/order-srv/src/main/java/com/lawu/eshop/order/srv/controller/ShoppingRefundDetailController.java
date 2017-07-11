@@ -34,6 +34,7 @@ import com.lawu.eshop.order.srv.exception.CanNotAgreeToARefundException;
 import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
 import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
+import com.lawu.eshop.order.srv.exception.CanNotFillInTheReturnAddressException;
 import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -203,24 +204,29 @@ public class ShoppingRefundDetailController extends BaseController {
 	}
 
 	/**
-	 * 商家填写退货地址 根据退款详情id更新退货地址
+	 * 商家填写退货地址信息
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
-	 *            退货信息参数
-	 * @return
+	 * 			     退货地址信息
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
-	public Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressParam param) {
-		
-		int resultCode = shoppingRefundDetailService.fillReturnAddress(id, param);
-
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
+	public Result fillReturnAddress(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailRerurnAddressParam param) {
+		try {
+			shoppingRefundDetailService.fillReturnAddress(id, merchantId, param);
+		} catch (DataNotExistException e) {
+		 	return successCreated(ResultCode.NOT_FOUND_DATA, e.getMessage());
+		} catch (IllegalOperationException e) {
+		 	return successCreated(ResultCode.ILLEGAL_OPERATION, e.getMessage());
+		} catch (CanNotFillInTheReturnAddressException e) {
+		 	return successCreated(ResultCode.CAN_NOT_FILL_IN_THE_RETURN_ADDRESS, e.getMessage());
 		}
-		
 		return successCreated();
 	}
 

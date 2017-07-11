@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
-import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundFillReturnAddressRemindNotification;
 import com.lawu.eshop.mq.dto.order.ShoppingRefundRefuseRefundRemindNotification;
@@ -48,6 +47,7 @@ import com.lawu.eshop.order.srv.exception.CanNotAgreeToARefundException;
 import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
 import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
+import com.lawu.eshop.order.srv.exception.CanNotFillInTheReturnAddressException;
 import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
@@ -215,73 +215,75 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
-	 *            退款详情物流信息
-	 * @return
+	 * 			     退货地址信息
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@Transactional
 	@Override
-	public int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressParam param) {
-		
-		if (id == null || id <= 0) {
-			return ResultCode.ID_EMPTY;
-		}
-		
+	public void fillReturnAddress(Long id, Long merchantId, ShoppingRefundDetailRerurnAddressParam param) {
 		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
-		
-		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-		
 		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
-		
-		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingOrderItemDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-
 		// 订单状态必须为退款中
 		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
-			return ResultCode.NOT_REFUNDING;
+			throw new CanNotFillInTheReturnAddressException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-
-		// 退款状态必须为填写退货地址
+		/*
+		 *  1.退款状态必须为填写退货地址
+		 *  2.退款类型为退货退款,并且退款状态当前为待确认状态	
+		 */
 		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue())
 				&& !(RefundStatusEnum.TO_BE_CONFIRMED.getValue().equals(shoppingOrderItemDO.getRefundStatus()) && ShoppingRefundTypeEnum.RETURN_REFUND.getValue().equals(shoppingRefundDetailDO.getType()))) {
-			return ResultCode.ORDER_NOT_FILL_RETURN_ADDRESS;
+			throw new CanNotFillInTheReturnAddressException(ExceptionMessageConstant.REFUND_STATUS_DOES_NOT_MATCH);
+		}
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		if (!shoppingOrderDO.getMerchantId().equals(merchantId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
 		}
 		
-		// 更新订单项退款状态为待退货
-		shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_RETURNED.getValue());
-
+		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailUpdateDO.setId(shoppingRefundDetailDO.getId());
 		// 更新退款详情的退货地址信息
-		shoppingRefundDetailDO.setGmtFill(new Date());
-		shoppingRefundDetailDO.setConsigneeName(param.getConsigneeName());
-		shoppingRefundDetailDO.setConsigneeMobile(param.getConsigneeMobile());
-		shoppingRefundDetailDO.setConsigneeAddress(param.getConsigneeAddress());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
+		shoppingRefundDetailUpdateDO.setGmtFill(new Date());
+		shoppingRefundDetailUpdateDO.setConsigneeName(param.getConsigneeName());
+		shoppingRefundDetailUpdateDO.setConsigneeMobile(param.getConsigneeMobile());
+		shoppingRefundDetailUpdateDO.setConsigneeAddress(param.getConsigneeAddress());
+		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 		
+		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
+		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
+		// 更新订单项退款状态为待退货
+		shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_RETURNED.getValue());
 		// 重置发送提醒的次数
-		shoppingOrderItemDO.setSendTime(0);
-		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
+		shoppingOrderItemUpdateDO.setSendTime(0);
+		shoppingOrderItemUpdateDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemUpdateDO);
 		
 		// 加入退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
-		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
-		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
+		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemUpdateDO.getRefundStatus());
+		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailUpdateDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
 		
 		// 商家填写退货地址，提醒买家退货
-		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 		ShoppingRefundFillReturnAddressRemindNotification notification = new ShoppingRefundFillReturnAddressRemindNotification();
-		notification.setShoppingOrderItemId(shoppingOrderItemDO.getId());
+		notification.setShoppingOrderItemId(shoppingOrderItemUpdateDO.getId());
 		notification.setMemberNum(shoppingOrderDO.getMemberNum());
 		messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_FILL_RETURN_ADDRESS_REMIND, notification);
-		
-		return ResultCode.SUCCESS;
 	}
 
 	/**
@@ -393,10 +395,14 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 			throw new CanNotAgreeToARefundException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-		// 退款状态必须为待退款或者平台介入状态
+		/*
+		 *  1.退款状态必须为待退款或者平台介入状态
+		 *  2.待确认状态，如果退款类型为退款可以直接退款
+		 *  3.如果退款状态为平台介入,运营人员可以操作退款
+		 */
 		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_REFUNDED.getValue())
 				&& !shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.PLATFORM_INTERVENTION.getValue())
-				// 待确认状态，如果退款类型为退款可以直接退款
+				// 
 				&& !(ShoppingRefundTypeEnum.REFUND.getValue().equals(shoppingRefundDetailDO.getType()) && RefundStatusEnum.TO_BE_CONFIRMED.getValue().equals(shoppingOrderItemDO.getRefundStatus())) ) {
 			throw new CanNotAgreeToARefundException(ExceptionMessageConstant.REFUND_STATUS_DOES_NOT_MATCH);
 		}

@@ -53,11 +53,14 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
-	 *            退货地址信息
-	 * @return
+	 * 			     退货地址信息
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int fillReturnAddress(Long id, ShoppingRefundDetailRerurnAddressParam param);
+	void fillReturnAddress(Long id, Long merchantId, ShoppingRefundDetailRerurnAddressParam param);
 
 	/**
 	 * 买家填写退货的物流信息

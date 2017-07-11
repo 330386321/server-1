@@ -59,17 +59,20 @@ public interface ShoppingRefundDetailService {
 	Result agreeToApply(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailAgreeToApplyForeignParam param);
 	
 	/**
-	 * 商家填写退货地址 根据退款详情id更新退货地址
+	 * 商家填写退货地址信息
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
-	 *            参数 退货信息参数
-	 * @return
+	 * 			     退货地址信息
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
-	Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressParam param);
+	Result fillReturnAddress(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailRerurnAddressParam param);
 	
 	/**
 	 * 商家是否同意退款
