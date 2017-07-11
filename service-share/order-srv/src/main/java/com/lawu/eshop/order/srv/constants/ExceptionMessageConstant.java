@@ -48,4 +48,6 @@ public class ExceptionMessageConstant {
 	
 	public final static String ORDERS_NOT_TO_BE_SHIPPING_STATUS = "订单不是待发货状态";
 	
+	public final static String THE_STATUS_OF_THE_REFUND_IS_NOT_PENDING = "退款状态不是待确认状态";
+	
 }

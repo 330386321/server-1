@@ -35,13 +35,18 @@ public interface ShoppingRefundDetailService {
 
 	/**
 	 * 商家是否同意买家的退货申请
+	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
-	 *            参数
+	 *            参数 是否同意申请
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
-	int agreeToApply(Long id, ShoppingRefundDetailAgreeToApplyForeignParam param);
+	void agreeToApply(Long id, Long merchantId, ShoppingRefundDetailAgreeToApplyForeignParam param);
 
 	/**
 	 * 商家填写退货地址信息

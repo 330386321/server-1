@@ -44,6 +44,7 @@ import com.lawu.eshop.order.srv.domain.ShoppingRefundProcessDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDO;
 import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
+import com.lawu.eshop.order.srv.exception.CanNotAgreeToApplyException;
 import com.lawu.eshop.order.srv.exception.CanNotApplyForPlatformInterventionException;
 import com.lawu.eshop.order.srv.exception.CanNotCancelApplicationException;
 import com.lawu.eshop.order.srv.exception.CanNotFillOutTheReturnLogisticsException;
@@ -164,8 +165,8 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
 			throw new CanNotFillOutTheReturnLogisticsException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-		// 只有退款失败才能申请平台介入
-		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.REFUND_FAILED.getValue())) {
+		// 只有待退货状态才能填写退货物流
+		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_RETURNED.getValue())) {
 			throw new CanNotFillOutTheReturnLogisticsException(ExceptionMessageConstant.REFUND_STATE_IS_NOT_A_STATE_TO_BE_RETURNED);
 		}
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
@@ -285,81 +286,83 @@ public class ShoppingRefundDetailServiceImpl implements ShoppingRefundDetailServ
 	/**
 	 * 商家是否同意买家的退货申请
 	 * 
-	 * @param shoppingRefundDetailBO
-	 *            退款详情
+	 * @param id
+	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
 	 *            参数 是否同意申请
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@Transactional
 	@Override
-	public int agreeToApply(Long id, ShoppingRefundDetailAgreeToApplyForeignParam param) {
-		
+	public void agreeToApply(Long id, Long merchantId, ShoppingRefundDetailAgreeToApplyForeignParam param) {
 		ShoppingRefundDetailDO shoppingRefundDetailDO = shoppingRefundDetailDOMapper.selectByPrimaryKey(id);
-
-		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getId() == null || shoppingRefundDetailDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		if (shoppingRefundDetailDO == null || shoppingRefundDetailDO.getStatus().equals(StatusEnum.INVALID.getValue())) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_REFUND_DATA_DOES_NOT_EXIST);
 		}
-
-		ShoppingOrderItemDO shoppingOrderItemDO = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
-		
-		if (shoppingOrderItemDO == null || shoppingOrderItemDO.getId() == null || shoppingOrderItemDO.getId() <= 0) {
-			return ResultCode.RESOURCE_NOT_FOUND;
+		ShoppingOrderItemDO shoppingOrderItemDO  = shoppingOrderItemDOMapper.selectByPrimaryKey(shoppingRefundDetailDO.getShoppingOrderItemId());
+		if (shoppingOrderItemDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
 		}
-
 		// 订单状态必须为退款中
 		if (!shoppingOrderItemDO.getOrderStatus().equals(ShoppingOrderStatusEnum.REFUNDING.getValue())) {
-			return ResultCode.NOT_REFUNDING;
+			throw new CanNotAgreeToApplyException(ExceptionMessageConstant.ORDER_STATUS_IS_NOT_TO_BE_REFUND_STATUS);
 		}
-
-		// 退款状态必须为待商家确认
+		// 只有待确认状态才能同意会员的退款申请
 		if (!shoppingOrderItemDO.getRefundStatus().equals(RefundStatusEnum.TO_BE_CONFIRMED.getValue())) {
-			return ResultCode.NOT_AGREE_TO_APPLY;
+			throw new CanNotAgreeToApplyException(ExceptionMessageConstant.THE_STATUS_OF_THE_REFUND_IS_NOT_PENDING);
 		}
-		
+		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
+		if (shoppingOrderDO == null) {
+			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_ITEM_DATA_DOES_NOT_EXIST);
+		}
+		if (!shoppingOrderDO.getMerchantId().equals(merchantId)) {
+			throw new IllegalOperationException(ExceptionMessageConstant.ILLEGAL_OPERATION_SHOPPING_ORDER);
+		}
+		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
+		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
 		// 更新退款状态
 		if (param.getIsAgree()) {
 			// 判断是否需要退货
 			if (shoppingRefundDetailDO.getType().equals(ShoppingRefundTypeEnum.REFUND.getValue())) {
-				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
+				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.TO_BE_REFUNDED.getValue());
 			} else {
-				shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
+				shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.FILL_RETURN_ADDRESS.getValue());
 			}
 		} else {
-			shoppingOrderItemDO.setRefundStatus(RefundStatusEnum.REFUND_FAILED.getValue());
+			shoppingOrderItemUpdateDO.setRefundStatus(RefundStatusEnum.REFUND_FAILED.getValue());
 		}
-
 		// 重置发送提醒的次数
-		shoppingOrderItemDO.setSendTime(0);
-		shoppingOrderItemDO.setGmtModified(new Date());
-		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemDO);
-
+		shoppingOrderItemUpdateDO.setSendTime(0);
+		shoppingOrderItemUpdateDO.setGmtModified(new Date());
+		shoppingOrderItemDOMapper.updateByPrimaryKeySelective(shoppingOrderItemUpdateDO);
+		ShoppingRefundDetailDO shoppingRefundDetailUpdateDO = new ShoppingRefundDetailDO();
+		shoppingRefundDetailUpdateDO.setId(shoppingRefundDetailDO.getId());
 		// 更新退款详情
-		shoppingRefundDetailDO.setGmtConfirmed(new Date());
+		shoppingRefundDetailUpdateDO.setGmtConfirmed(new Date());
 		if (!param.getIsAgree()) {
-			shoppingRefundDetailDO.setGmtRefund(new Date());
+			shoppingRefundDetailUpdateDO.setGmtRefund(new Date());
 		}
-		shoppingRefundDetailDO.setRefusalReasons(param.getRefusalReasons());
-		shoppingRefundDetailDO.setIsAgree(param.getIsAgree());
-		shoppingRefundDetailDO.setGmtModified(new Date());
-		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailDO);
-		
+		shoppingRefundDetailUpdateDO.setRefusalReasons(param.getRefusalReasons());
+		shoppingRefundDetailUpdateDO.setIsAgree(param.getIsAgree());
+		shoppingRefundDetailUpdateDO.setGmtModified(new Date());
+		shoppingRefundDetailDOMapper.updateByPrimaryKeySelective(shoppingRefundDetailUpdateDO);
 		// 加入退款流程
 		ShoppingRefundProcessDO shoppingRefundProcessDO = new ShoppingRefundProcessDO();
 		shoppingRefundProcessDO.setRefundStatus(shoppingOrderItemDO.getRefundStatus());
 		shoppingRefundProcessDO.setShoppingRefundDetailId(shoppingRefundDetailDO.getId());
 		shoppingRefundProcessDO.setGmtCreate(new Date());
 		shoppingRefundProcessDOMapper.insertSelective(shoppingRefundProcessDO);
-		
 		if (!param.getIsAgree()) {
-			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(shoppingOrderItemDO.getShoppingOrderId());
 			// 商家拒绝退款，提醒买家
 			ShoppingRefundRefuseRefundRemindNotification notification = new ShoppingRefundRefuseRefundRemindNotification();
 			notification.setShoppingOrderItemId(shoppingOrderDO.getId());
 			notification.setMemberNum(shoppingOrderDO.getMemberNum());
 			messageProducerService.sendMessage(MqConstant.TOPIC_ORDER_SRV, MqConstant.TAG_REFUSE_REFUND_REMIND, notification);
 		}
-		return ResultCode.SUCCESS;
 	}
 
 	/**

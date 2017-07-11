@@ -18,7 +18,7 @@ import com.lawu.eshop.order.param.foreign.ShoppingRefundDetailAgreeToRefundForei
  * @author Sunny
  * @date 2017/04/06
  */
-@FeignClient(value = "order-srv")
+@FeignClient(value = "order-srv", path = "shoppingRefundDetail/")
 public interface ShoppingRefundDetailService {
 
 	/**
@@ -28,7 +28,7 @@ public interface ShoppingRefundDetailService {
 	 *            退款详情id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingRefundDetail/getExpressInfo/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "getExpressInfo/{id}", method = RequestMethod.GET)
 	Result<ShoppingOrderExpressDTO> getExpressInfo(@PathVariable("id") Long id);
 
 	/**
@@ -38,7 +38,7 @@ public interface ShoppingRefundDetailService {
 	 *            购物订单项id
 	 * @return
 	 */
-	@RequestMapping(value = "shoppingRefundDetail/getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
+	@RequestMapping(value = "getRefundDetail/{shoppingOrderItemId}", method = RequestMethod.GET)
 	Result<ShoppingRefundDetailDTO> getRefundDetail(@PathVariable("shoppingOrderItemId") Long shoppingOrderItemId, @RequestParam("merchantId") Long merchantId);
 
 	/**
@@ -46,13 +46,17 @@ public interface ShoppingRefundDetailService {
 	 * 
 	 * @param id
 	 *            退款详情id
+	 * @param merchantId
+	 *            商家id
 	 * @param param
 	 *            参数 是否同意申请
 	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月11日
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/agreeToApply/{id}", method = RequestMethod.PUT)
-	Result agreeToApply(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToApplyForeignParam param);
+	@RequestMapping(value = "agreeToApply/{id}", method = RequestMethod.PUT)
+	Result agreeToApply(@PathVariable("id") Long id, @RequestParam("merchantId") Long merchantId, @RequestBody ShoppingRefundDetailAgreeToApplyForeignParam param);
 	
 	/**
 	 * 商家填写退货地址 根据退款详情id更新退货地址
@@ -64,7 +68,7 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/fillReturnAddress/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "fillReturnAddress/{id}", method = RequestMethod.PUT)
 	Result fillReturnAddress(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailRerurnAddressParam param);
 	
 	/**
@@ -77,6 +81,6 @@ public interface ShoppingRefundDetailService {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "shoppingRefundDetail/agreeToRefund/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "agreeToRefund/{id}", method = RequestMethod.PUT)
 	Result agreeToRefund(@PathVariable("id") Long id, @RequestBody ShoppingRefundDetailAgreeToRefundForeignParam param);
 }
