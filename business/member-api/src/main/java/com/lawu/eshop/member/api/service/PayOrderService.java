@@ -24,7 +24,7 @@ import com.lawu.eshop.order.param.PayOrderParam;
 public interface PayOrderService {
 
     @RequestMapping(value = "savePayOrderInfo/{memberId}", method = RequestMethod.POST)
-    Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderParam param,@RequestParam("param") String numNum);
+    Result<PayOrderIdDTO> savePayOrderInfo(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderParam param,@RequestParam("numNum") String numNum);
 
     @RequestMapping(value = "getpayOrderList/{memberId}", method = RequestMethod.POST)
     Result<Page<PayOrderDTO>> getpayOrderList(@PathVariable("memberId") Long memberId, @ModelAttribute PayOrderListParam param);
