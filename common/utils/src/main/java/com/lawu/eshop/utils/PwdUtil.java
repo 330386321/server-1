@@ -85,6 +85,6 @@ public class PwdUtil {
         }  
         String salt = new String(cs2);  
         return MD5Encode(PRE+password + salt).equals(new String(cs1));  
-    }  
-	
+    }
+
 }

@@ -15,7 +15,7 @@ public interface BankAccountService {
 	
 	/**
 	 * 添加银行卡
-	 * @param bankAccountDO
+	 * @param bankAccountParam
 	 * @return
 	 */
 	Integer saveBankAccount(String userNum,BankAccountParam bankAccountParam);

@@ -42,8 +42,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 			
 	@Autowired
 	private BusinessDepositDOMapper businessDepositDOMapper;
-//	@Autowired
-//	private TransactionDetailService transactionDetailService;
+
 	@Autowired
 	private BankAccountDOMapper bankAccountDOMapper;
 
@@ -140,10 +139,6 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 
 		// 回调成功后，发送消息修改门店状态为：已缴保证金待核实
 		handleDepositEditStoreStatusTransactionMainServiceImpl.sendNotice(param.getMerchantId());
-/*		HandleDepostMessage message = new HandleDepostMessage();
-		message.setUserNum(param.getUserNum());
-		message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_GIVE_MONEY_CHECK);
-		messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 
 		result.setRet(ResultCode.SUCCESS);
 		return result;
@@ -301,8 +296,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		}
 
 		// 校验提交的银行卡是否正确
-		BankAccountDO bankAccountDo = bankAccountDOMapper
-				.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
+		BankAccountDO bankAccountDo = bankAccountDOMapper.selectByPrimaryKey(Long.valueOf(dparam.getBusinessBankAccountId()));
 		if (bankAccountDo == null) {
 			return ResultCode.PROPERTY_CASH_BANK_NOT_EXIST;
 		} else if (!bankAccountDo.getUserNum().trim().equals(dparam.getUserNum())) {
