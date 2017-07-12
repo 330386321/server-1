@@ -142,8 +142,6 @@ public class BusinessDepositServiceImplTest {
         bddo.setGmtPay(new Date());
         businessDepositDOMapper.insertSelective(bddo);
 
-//        List<BusinessDepositDO> rntList = businessDepositDOMapper.selectByExample(null);
-
         BusinessDepositQueryDataParam param = new BusinessDepositQueryDataParam();
         param.setContent("11111111111111111111");
         param.setCurrentPage(1);
