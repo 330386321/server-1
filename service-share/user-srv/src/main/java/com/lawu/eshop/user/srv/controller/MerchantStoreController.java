@@ -636,6 +636,20 @@ public class MerchantStoreController extends BaseController {
 		return visitUserInfoDTO;
 	}
 
+	/**
+	 * 根据商家ID获取商家门店的名称
+	 *
+	 * @param merchantId
+	 * @return
+	 */
+	@RequestMapping(value = "getNameBymerchantId/{merchantId}", method = RequestMethod.GET)
+	public Result<String> getNameByMerchantId(@PathVariable("merchantId") Long merchantId) {
+		MerchantStoreInfoBO merchantStoreInfoBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
+		if (merchantStoreInfoBO == null || StringUtils.isEmpty(merchantStoreInfoBO.getName())) {
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
+		}
+		return successGet(merchantStoreInfoBO.getName());
+	}
 
 }
 
