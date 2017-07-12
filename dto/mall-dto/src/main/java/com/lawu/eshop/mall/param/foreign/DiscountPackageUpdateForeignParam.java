@@ -97,14 +97,14 @@ public class DiscountPackageUpdateForeignParam {
 	 * 套餐内容
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容")
+	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容", notes = "如果是新增的套餐内容id置空", example = "[{\"id\":null,\"name\":null,\"quantity\":null,\"unit\":null,\"unitPrice\":null}]")
 	private String discountPackageContents;
 	
 	/**
 	 * 套餐图片详情
 	 */
 	@NotBlank(message = "套餐图片详情不能为空")
-	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情")
+	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", notes = "如果是新增的图片详情id置空", example = "[{\"description\":null,\"id\":null}]")
 	private String discountPackageImages;
 	
 	public Long getId() {

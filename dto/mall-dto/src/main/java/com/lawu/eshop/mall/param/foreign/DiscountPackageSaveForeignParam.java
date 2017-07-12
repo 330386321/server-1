@@ -90,14 +90,14 @@ public class DiscountPackageSaveForeignParam {
 	 * 套餐内容
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容")
+	@ApiModelProperty(name = "discountPackageContents", value = "套餐内容", example = "[{\"name\":null,\"quantity\":null,\"unit\":null,\"unitPrice\":null}]")
 	private String discountPackageContents;
 	
 	/**
 	 * 套餐图片详情
 	 */
 	@NotBlank(message = "套餐内容不能为空")
-	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情")
+	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情", example = "[{\"description\":null}]")
 	private String discountPackageImages;
 
 	public String getName() {
