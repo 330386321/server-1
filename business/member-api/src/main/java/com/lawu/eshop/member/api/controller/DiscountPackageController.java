@@ -45,7 +45,6 @@ public class DiscountPackageController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐列表", notes = "根据商家id查询商家全部优惠套餐列表,不分页。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@Authorization
 	@RequestMapping(value = "list/{merchantId}", method = RequestMethod.GET)
 	public Result<Page<DiscountPackageQueryDTO>> list(@ApiParam(value = "商家id") @PathVariable("merchantId") Long merchantId) {
 		Result<Page<DiscountPackageQueryDTO>> result = discountPackageService.listForMember(merchantId);
@@ -64,7 +63,6 @@ public class DiscountPackageController extends BaseController {
 	@SuppressWarnings("unchecked")
 	@ApiOperation(value = "查询优惠套餐详情", notes = "查询单个优惠套餐详情。[]（蒋鑫俊）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
-	@Authorization
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public Result<DiscountPackageDetailDTO> get(@ApiParam(value = "优惠套餐id") @PathVariable("id") Long id) {
 		Result<DiscountPackageDetailDTO> result = discountPackageService.get(id);
