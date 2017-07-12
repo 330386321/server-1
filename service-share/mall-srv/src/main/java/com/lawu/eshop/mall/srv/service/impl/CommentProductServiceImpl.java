@@ -354,10 +354,11 @@ public class CommentProductServiceImpl implements CommentProductService {
 	@Transactional
 	public void delCommentByProductModelId(Long productModelId) {
 		CommentProductDO commentProductDO = new CommentProductDO();
-		commentProductDO.setProductModelId(productModelId);
 		commentProductDO.setStatus(CommentStatusEnum.COMMENT_STATUS_INVALID.val);
 		commentProductDO.setGmtModified(new Date());
-		commentProductDOMapper.updateByPrimaryKeySelective(commentProductDO);
+		CommentProductDOExample example = new CommentProductDOExample();
+		example.createCriteria().andProductModelIdEqualTo(productModelId);
+		commentProductDOMapper.updateByExampleSelective(commentProductDO,example);
 	}
 
 	@Override
