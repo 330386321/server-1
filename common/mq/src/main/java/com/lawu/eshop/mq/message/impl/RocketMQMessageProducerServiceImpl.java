@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.rocketmq.client.exception.MQBrokerException;
 import com.alibaba.rocketmq.client.exception.MQClientException;
@@ -19,7 +18,6 @@ import com.lawu.eshop.mq.utils.ByteUtil;
  * @author Leach
  * @date 2017/4/9
  */
-@Service
 public class RocketMQMessageProducerServiceImpl implements MessageProducerService {
 
     private Logger logger = LoggerFactory.getLogger(RocketMQMessageProducerServiceImpl.class);
