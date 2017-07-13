@@ -54,7 +54,7 @@ public class DiscountPackageSaveForeignParam {
 	 * 使用时间-周一到周日(用1-7表示,并用逗号分隔)
 	 */
 	@NotBlank(message = "使用时间-周一到周日不能为空")
-	@ApiModelProperty(name = "useTimeWeek", value = "使用时间-周一到周日(用1-7表示,并用逗号分隔)", required = true)
+	@ApiModelProperty(name = "useTimeWeek", value = "使用时间-周一到周日(用0-6表示,0为周日,并用逗号分隔)", required = true)
 	private String useTimeWeek;
 
 	/**

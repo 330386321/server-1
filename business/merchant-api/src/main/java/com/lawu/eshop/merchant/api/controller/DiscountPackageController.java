@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import javax.validation.constraints.NotNull;
 
-import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +36,7 @@ import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.framework.web.constants.FileDirConstant;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.DiscountPackageDetailDTO;
 import com.lawu.eshop.mall.dto.DiscountPackageQueryDTO;
 import com.lawu.eshop.mall.param.DiscountPackageImageSaveParam;
@@ -65,7 +65,7 @@ import util.UploadFileUtil;
  * @author Sunny
  * @date 2017/3/27
  */
-@Api(tags = "discountPackage")
+@Api(tags = "discountPackage", value = "优惠套餐")
 @RestController
 @RequestMapping(value = "discountPackage/")
 public class DiscountPackageController extends BaseController {
