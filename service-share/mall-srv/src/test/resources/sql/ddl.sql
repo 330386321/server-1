@@ -139,16 +139,18 @@ CREATE TABLE `discount_package_image` (
 DROP TABLE IF EXISTS `express_company`;
 CREATE TABLE `express_company` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `code` varchar(10)  NOT NULL COMMENT '编码',
-  `name` varchar(25)  NOT NULL COMMENT '名称',
-  `homepage` varchar(75) NOT NULL COMMENT '网址',
+  `code` varchar(10) NOT NULL COMMENT '编码',
+  `name` varchar(25) NOT NULL COMMENT '名称',
+  `homepage` varchar(75)  NOT NULL COMMENT '网址',
   `tel` varchar(15)  NOT NULL COMMENT '电话',
-  `ordinal` int(11) unsigned NOT NULL COMMENT '排序',
+  `ordinal` int(11) unsigned NOT NULL COMMENT '排序(对应name首字母ASCII编码的十进制',
+  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否显示在列表',
   `status` tinyint(3) unsigned NOT NULL COMMENT '状态',
   `gmt_modified` datetime NOT NULL COMMENT '修改时间',
   `gmt_create` datetime NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ;
+
 
 -- ----------------------------
 -- Table structure for follow_transaction_record
