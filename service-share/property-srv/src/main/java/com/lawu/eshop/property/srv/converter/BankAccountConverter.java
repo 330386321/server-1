@@ -79,6 +79,7 @@ public class BankAccountConverter {
         bankAccountDTO.setBankName(bankAccountBO.getBankName());
         bankAccountDTO.setSubBranchName(bankAccountBO.getSubBranchName());
         bankAccountDTO.setIconUrl(bankAccountBO.getIconUrl());
+        bankAccountDTO.setBankId(bankAccountBO.getBankId());
         return bankAccountDTO;
     }
 	

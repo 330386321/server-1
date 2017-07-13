@@ -21,6 +21,9 @@ public class BankAccountDTO {
 
 	@ApiModelProperty(value = "银行卡图标", required = true)
 	private String iconUrl;
+	
+	@ApiModelProperty(value = "所属银行主键", required = true)
+	private Long bankId;
 
 	public Long getId() {
 		return id;
@@ -69,6 +72,14 @@ public class BankAccountDTO {
 	public void setIconUrl(String iconUrl) {
 		this.iconUrl = iconUrl;
 	}
-	 
 
+	public Long getBankId() {
+		return bankId;
+	}
+
+	public void setBankId(Long bankId) {
+		this.bankId = bankId;
+	}
+	 
+	
 }
