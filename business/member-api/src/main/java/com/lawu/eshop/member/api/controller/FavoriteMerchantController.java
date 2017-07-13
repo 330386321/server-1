@@ -97,10 +97,7 @@ public class FavoriteMerchantController extends BaseController{
 	public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
 			@ModelAttribute @ApiParam(value = "查询信息") FavoriteStoreParam param) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
-		Result rs = favoriteMerchantService.remove(param,memberId);
-		if(!isSuccess(rs)){
-			return successCreated(rs.getRet());
-		}
+		favoriteMerchantService.remove(param,memberId);
 		return successDelete();
 	}
 

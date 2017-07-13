@@ -88,10 +88,7 @@ public class FavoriteProductController extends BaseController{
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                          @PathVariable @ApiParam(required = true, value = "商品id") Long productId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-        Result rs = favoriteProductService.remove(productId,memberId);
-        if(!isSuccess(rs)){
-        	return successCreated(rs.getRet());
-        }
+        favoriteProductService.remove(productId,memberId);
         return successDelete();
     }
 }

@@ -112,10 +112,7 @@ public class FavoriteAdController extends BaseController{
     public Result remove(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
                          @PathVariable @ApiParam(required = true, value = "广告id") Long adId) {
 		Long memberId=UserUtil.getCurrentUserId(getRequest());
-        Result rs = favoriteAdService.remove(adId,memberId);
-        if(!isSuccess(rs)){
-        	return successCreated(rs.getRet());
-        }
+        favoriteAdService.remove(adId,memberId);
         return successDelete();
     }
 }
