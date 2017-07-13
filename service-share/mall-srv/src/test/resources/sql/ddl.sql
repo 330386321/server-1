@@ -257,6 +257,8 @@ CREATE TABLE `region` (
   `path` varchar(25) NOT NULL DEFAULT '' COMMENT '路径',
   `level` tinyint(3) unsigned NOT NULL COMMENT '层级',
   `name` varchar(50) NOT NULL COMMENT '区域名称',
+  `longitude` decimal(10,7) unsigned DEFAULT NULL COMMENT '经度',
+  `latitude` decimal(10,7) unsigned DEFAULT NULL COMMENT '纬度',
   PRIMARY KEY (`id`)
 );
 
@@ -375,3 +377,9 @@ INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('42', '退货提醒', '亲爱的{0}，商家已经填写退货地址，请您及时退货', '43', '2017-05-20 13:35:19', '2017-05-20 13:35:19');
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('43', '资金冻结', '亲爱的{0}：您的资金账户已被冻结，有疑问请致电E店客服400-000-1111', '44', '2017-07-06 11:15:19', '2017-07-06 11:15:19');
 INSERT INTO `message_template` (`id`, `title`, `content`, `type`, `gmt_modified`, `gmt_create`) VALUES ('44', '资金解冻', '亲爱的{0}：您的资金账户已解除冻结，恢复正常使用，有疑问请致电E店客服400-000-1111', '45', '2017-07-06 11:15:19', '2017-07-06 11:15:19');
+
+
+INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `latitude`) VALUES ('4403', '44', '44/4403', '2', '深圳市', '114.0259737', '22.5460535');
+INSERT INTO `region` (`id`, `parent_id`, `path`, `level`, `name`, `longitude`, `latitude`) VALUES ('440305', '4403', '44/4403/440305', '3', '南山区', NULL, NULL);
+
+
