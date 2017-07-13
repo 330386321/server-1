@@ -24,6 +24,10 @@ public class ExceptionMessageConstant {
 	
 	public final static String ORDER_HAS_NOT_BEEN_COMPLETED = "订单还未完成";
 	
+	public final static String THE_ORDER_IS_BEING_PROCESSED = "订单正在处理";
+	
+	public final static String ORDER_CREATION_FAILED = "订单创建失败";
+	
 	/** shopping order item **/
 	public final static String IN_THE_ORDER_HAS_BEEN_REFUNDED = "订单已经在退款中";
 	

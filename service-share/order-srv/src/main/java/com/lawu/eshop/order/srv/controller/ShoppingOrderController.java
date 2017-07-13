@@ -63,10 +63,12 @@ import com.lawu.eshop.order.srv.converter.ShoppingOrderItemExtendConverter;
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.OrderCreationFailedException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
 import com.lawu.eshop.order.srv.exception.OrderNotReceivedException;
 import com.lawu.eshop.order.srv.exception.OrderNotRefundException;
+import com.lawu.eshop.order.srv.exception.TheOrderIsBeingProcessedException;
 import com.lawu.eshop.order.srv.service.PropertyService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderItemService;
 import com.lawu.eshop.order.srv.service.ShoppingOrderService;
@@ -537,12 +539,18 @@ public class ShoppingOrderController extends BaseController {
 	 */
 	@RequestMapping(value = "selectOrderMoney", method = RequestMethod.GET)
 	public Result<ShoppingOrderMoneyDTO> selectOrderMoney(@RequestParam String orderIds) {
-		Result<ShoppingOrderMoneyBO> result = shoppingOrderService.selectOrderMoney(orderIds);
-		if (!isSuccess(result)) {
-			return successGet(result.getRet());
+		ShoppingOrderMoneyBO shoppingOrderMoneyBO = null;
+		try {
+			shoppingOrderMoneyBO = shoppingOrderService.selectOrderMoney(orderIds);
+		} catch (TheOrderIsBeingProcessedException e) {
+			logger.warn(e.getMessage(), e);
+			return successGet(ResultCode.THE_ORDER_IS_BEING_PROCESSED);
+		} catch (OrderCreationFailedException e) {
+			logger.warn(e.getMessage(), e);
+			return successGet(ResultCode.ORDER_CREATION_FAILED);
 		}
 		ShoppingOrderMoneyDTO shoppingOrderMoneyDTO = new ShoppingOrderMoneyDTO();
-		shoppingOrderMoneyDTO.setOrderTotalPrice(result.getModel().getOrderTotalPrice());
+		shoppingOrderMoneyDTO.setOrderTotalPrice(shoppingOrderMoneyBO.getOrderTotalPrice());
 		return successGet(shoppingOrderMoneyDTO);
 	}
 
@@ -614,10 +622,7 @@ public class ShoppingOrderController extends BaseController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "updateCommissionStatus", method = RequestMethod.PUT)
 	public Result updateCommissionStatus(@RequestParam("ids") List<Long> ids) {
-		int resultCode = shoppingOrderService.updateCommissionStatus(ids);
-		if (resultCode != ResultCode.SUCCESS) {
-			return successCreated(resultCode);
-		}
+		shoppingOrderService.updateCommissionStatus(ids);
 		return successCreated();
 	}
 

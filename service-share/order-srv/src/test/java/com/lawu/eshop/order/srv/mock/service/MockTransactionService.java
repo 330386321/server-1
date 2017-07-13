@@ -17,10 +17,11 @@ public class MockTransactionService extends BaseController implements Transactio
 
     @Override
     public Result<Long> getCount(@PathVariable("type") String type) {
-        return successGet(1);
+        return successGet(1L);
     }
 
-    @Override
+    @SuppressWarnings("rawtypes")
+	@Override
     public Result addCount(@PathVariable("type") String type) {
         return successGet();
     }

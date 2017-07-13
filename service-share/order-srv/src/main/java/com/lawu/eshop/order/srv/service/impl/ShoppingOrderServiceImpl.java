@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.compensating.transaction.Reply;
 import com.lawu.eshop.compensating.transaction.TransactionMainService;
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.mq.constants.MqConstant;
 import com.lawu.eshop.mq.dto.order.ShoppingOrderNoPaymentNotification;
@@ -80,10 +79,12 @@ import com.lawu.eshop.order.srv.domain.extend.ShoppingOrderItemExtendDOExample;
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.OrderCreationFailedException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
 import com.lawu.eshop.order.srv.exception.OrderNotDeleteException;
 import com.lawu.eshop.order.srv.exception.OrderNotReceivedException;
 import com.lawu.eshop.order.srv.exception.OrderNotRefundException;
+import com.lawu.eshop.order.srv.exception.TheOrderIsBeingProcessedException;
 import com.lawu.eshop.order.srv.mapper.ShoppingCartDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
@@ -540,9 +541,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			 */
 			Long id = Long.valueOf(shoppingOrderId);
 			ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-			if (!ShoppingOrderStatusEnum.PENDING_PAYMENT.getValue().equals(shoppingOrderDO.getOrderStatus())) {
-				return;
-			}
 
 			// 更新购物订单的状态
 			shoppingOrderDO.setGmtModified(new Date());
@@ -708,7 +706,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			throw new DataNotExistException(ExceptionMessageConstant.SHOPPING_ORDER_DATA_NOT_EXIST);
 		}
 		// 检查订单是否已经是退款
-		if (shoppingOrderItemDO.getOrderStatus() != null) {
+		if (shoppingOrderItemDO.getRefundStatus() != null) {
 			throw new OrderNotRefundException(ExceptionMessageConstant.IN_THE_ORDER_HAS_BEEN_REFUNDED);
 
 		}
@@ -733,6 +731,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		}
 		// 更新购物订单项状态
 		ShoppingOrderItemDO shoppingOrderItemUpdateDO = new ShoppingOrderItemDO();
+		shoppingOrderItemUpdateDO.setId(shoppingOrderItemDO.getId());
 		shoppingOrderItemUpdateDO.setGmtModified(new Date());
 		shoppingOrderItemUpdateDO.setOrderStatus(ShoppingOrderStatusEnum.REFUNDING.getValue());
 		// 根据订单状态是否需要退货
@@ -856,8 +855,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 * @author Yangqh
 	 */
 	@Override
-	public Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds) {
-		Result<ShoppingOrderMoneyBO> rtn = new Result<ShoppingOrderMoneyBO>();
+	public ShoppingOrderMoneyBO selectOrderMoney(String orderIds) throws TheOrderIsBeingProcessedException, OrderCreationFailedException {
 		String[] orderIdsArray = orderIds.split(",");
 		BigDecimal total = new BigDecimal(0);
 		for (int i = 0; i < orderIdsArray.length; i++) {
@@ -866,23 +864,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 			 * 判断订单的状态是否是待支付 如果不是，说明扣除库存失败，提示买家库存不足
 			 */
 			if (ShoppingOrderStatusEnum.PENDING.getValue().equals(orderDO.getOrderStatus())) {
-				rtn.setRet(ResultCode.THE_ORDER_IS_BEING_PROCESSED);
-				return rtn;
+				throw new TheOrderIsBeingProcessedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
 			}
-
 			if (ShoppingOrderStatusEnum.CANCEL_TRANSACTION.getValue().equals(orderDO.getOrderStatus())) {
-				rtn.setRet(ResultCode.ORDER_CREATION_FAILED);
-				return rtn;
+				throw new OrderCreationFailedException(ExceptionMessageConstant.THE_ORDER_IS_BEING_PROCESSED);
 			}
-
 			total = total.add(orderDO.getOrderTotalPrice());
 		}
-
-		ShoppingOrderMoneyBO shoppingOrderMoneyBO = new ShoppingOrderMoneyBO();
-		shoppingOrderMoneyBO.setOrderTotalPrice(total);
-		rtn.setModel(shoppingOrderMoneyBO);
-		rtn.setRet(ResultCode.SUCCESS);
-
+		ShoppingOrderMoneyBO rtn = new ShoppingOrderMoneyBO();
+		rtn.setOrderTotalPrice(total);
 		return rtn;
 	}
 
@@ -976,20 +966,13 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	@Override
 	public void minusInventorySuccess(Long id, ShoppingOrderCreateOrderReply reply) {
 		ShoppingOrderDO shoppingOrderDO = shoppingOrderDOMapper.selectByPrimaryKey(id);
-
-		/*
-		 * 实现MQ消息的幂等性 如果订单的状态已经不是待确认的状态不再去更新订单的状态
-		 */
-		if (!ShoppingOrderStatusEnum.PENDING.getValue().equals(shoppingOrderDO.getOrderStatus())) {
-			return;
-		}
-
+		
 		ShoppingOrderDO shoppingOrderDOUpdate = new ShoppingOrderDO();
 		shoppingOrderDOUpdate.setId(shoppingOrderDO.getId());
 
 		// 设置购物订单项为待支付状态
 		ShoppingOrderItemDOExample shoppingOrderItemDOExample = new ShoppingOrderItemDOExample();
-		com.lawu.eshop.order.srv.domain.ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
+		ShoppingOrderItemDOExample.Criteria shoppingOrderItemDOExampleCriteria = shoppingOrderItemDOExample.createCriteria();
 		shoppingOrderItemDOExampleCriteria.andShoppingOrderIdEqualTo(id);
 		ShoppingOrderItemDO shoppingOrderItemDO = new ShoppingOrderItemDO();
 
@@ -1183,10 +1166,10 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 				continue;
 			}
 
-			boolean isexceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
-			if (isexceeds) {
+			boolean isExceeds = DateUtil.isExceeds(item.getGmtCreate(), new Date(), Integer.valueOf(automaticCancelOrderTime), Calendar.DAY_OF_YEAR);
+			if (isExceeds) {
+				cancelOrder(null, item.getId());
 			}
-			cancelOrder(null, item.getId());
 		}
 	}
 
@@ -1285,7 +1268,7 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMemberIdEqualTo(memberId);
-		// 订单状态为交易成功并且是退款状态
+		// 订单状态为交易成功并且未评价
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.TRADING_SUCCESS.getValue());
 		shoppingOrderItemExtendDOExampleCriteria.andIsEvaluationEqualTo(false);
 		long evaluationCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
@@ -1304,7 +1287,6 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		rtn.setToBeReceivedCount(toBeReceivedCount);
 		rtn.setEvaluationCount(evaluationCount);
 		rtn.setRefundingCount(refundingCount);
-
 		return rtn;
 	}
 
@@ -1343,18 +1325,14 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 	 */
 	@Transactional
 	@Override
-	public int updateCommissionStatus(List<Long> ids) {
+	public void updateCommissionStatus(List<Long> ids) {
 		ShoppingOrderDOExample shoppingOrderDOExample = new ShoppingOrderDOExample();
 		shoppingOrderDOExample.createCriteria().andIdIn(ids);
-
 		ShoppingOrderDO shoppingOrderDO = new ShoppingOrderDO();
 		// 更新提成状态和提成时间
 		shoppingOrderDO.setGmtCommission(new Date());
 		shoppingOrderDO.setCommissionStatus(CommissionStatusEnum.CALCULATED.getValue());
-
 		shoppingOrderDOMapper.updateByExampleSelective(shoppingOrderDO, shoppingOrderDOExample);
-
-		return ResultCode.SUCCESS;
 	}
 
 	@Override
@@ -1385,19 +1363,15 @@ public class ShoppingOrderServiceImpl implements ShoppingOrderService {
 		// 查询退货中数量
 		ShoppingOrderItemExtendDOExample shoppingOrderItemExtendDOExample = new ShoppingOrderItemExtendDOExample();
 		shoppingOrderItemExtendDOExample.setIsIncludeShoppingOrder(true);
-		shoppingOrderItemExtendDOExample.setIsIncludeShoppingRefundDetail(true);
 		ShoppingOrderItemExtendDOExample.Criteria shoppingOrderItemExtendDOExampleCriteria = shoppingOrderItemExtendDOExample.createCriteria();
 		shoppingOrderItemExtendDOExampleCriteria.andSOMerchantIdEqualTo(merchantId);
 		shoppingOrderItemExtendDOExampleCriteria.andOrderStatusEqualTo(ShoppingOrderStatusEnum.REFUNDING.getValue());
-		// 用户可以多次申请退款，查询当中有效的一条记录
-		shoppingOrderItemExtendDOExampleCriteria.andSRDStatusEqualTo(StatusEnum.VALID.getValue());
 		long refundingCount = shoppingOrderItemExtendDOMapper.countByExample(shoppingOrderItemExtendDOExample);
 
 		rtn.setPendingPaymentCount(pendingPaymentCount);
 		rtn.setBeShippedCount(beShippedCount);
 		rtn.setToBeReceivedCount(toBeReceivedCount);
 		rtn.setRefundingCount(refundingCount);
-
 		return rtn;
 	}
 

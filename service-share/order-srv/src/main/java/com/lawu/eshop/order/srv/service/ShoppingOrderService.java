@@ -3,7 +3,6 @@ package com.lawu.eshop.order.srv.service;
 import java.util.List;
 
 import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.mq.dto.order.reply.ShoppingOrderCreateOrderReply;
 import com.lawu.eshop.mq.dto.property.ShoppingOrderPaymentNotification;
 import com.lawu.eshop.order.dto.ReportRiseRateDTO;
@@ -25,7 +24,9 @@ import com.lawu.eshop.order.srv.bo.ShoppingOrderNumberOfOrderStatusForMerchantBO
 import com.lawu.eshop.order.srv.exception.CanNotFillInShippingLogisticsException;
 import com.lawu.eshop.order.srv.exception.DataNotExistException;
 import com.lawu.eshop.order.srv.exception.IllegalOperationException;
+import com.lawu.eshop.order.srv.exception.OrderCreationFailedException;
 import com.lawu.eshop.order.srv.exception.OrderNotCanceledException;
+import com.lawu.eshop.order.srv.exception.TheOrderIsBeingProcessedException;
 
 /**
  * 购物订单服务接口
@@ -225,7 +226,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Yangqh
 	 */
-	Result<ShoppingOrderMoneyBO> selectOrderMoney(String orderIds);
+	ShoppingOrderMoneyBO selectOrderMoney(String orderIds) throws TheOrderIsBeingProcessedException, OrderCreationFailedException;
 
 	/**
 	 * 减少产品库存成功回调 更改订单的状态为待支付状态 删除对应的购物车记录
@@ -323,7 +324,7 @@ public interface ShoppingOrderService {
 	 * @return
 	 * @author Sunny
 	 */
-	int updateCommissionStatus(List<Long> ids);
+	void updateCommissionStatus(List<Long> ids);
 
 	/**
 	 * 查询各种订单状态的数量 To Merchant
