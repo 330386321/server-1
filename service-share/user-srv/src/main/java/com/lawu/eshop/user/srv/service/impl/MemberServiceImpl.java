@@ -137,9 +137,16 @@ public class MemberServiceImpl implements MemberService {
     }
     
     @Override
-    public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType) {
-    	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
-    	int count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+    public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType){
+    	int count=0;
+    	if(inviterType==UserTypeEnum.MEMBER.val){
+    		MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
+        	count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+    	}else{
+    		 MerchantProfileDO  merchantProfileDO=merchantProfileDOMapper.selectByPrimaryKey(inviterId);
+    		 count = merchantProfileDO == null ? 0 : merchantProfileDO.getInviteMemberCount().intValue();
+    	}
+    	
 
     	InviterUserDOView view = new InviterUserDOView();
     	view.setInviterId(inviterId);
@@ -156,7 +163,7 @@ public class MemberServiceImpl implements MemberService {
         	if(memberDO.getHeadimg()==null){
         		memberDO.setHeadimg(userSrvConfig.getDefaultHeadimg());
         	}
-            memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
+        	MemberProfileDO  memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
             if (memberProfileDO != null)
                 mpList.add(memberProfileDO);
         }

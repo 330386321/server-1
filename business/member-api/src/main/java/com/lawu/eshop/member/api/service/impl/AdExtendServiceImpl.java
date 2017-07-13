@@ -27,6 +27,7 @@ import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
@@ -354,19 +355,19 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
     			if(rs.getModel())
     				newList.add(adDTO);
     		}else{
-    			 Result<MerchantStoreDTO> rs= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
-    			 MerchantStoreDTO dto= rs.getModel();
-    			 if(dto!=null){
-    				 if(adMemberParam.getLongitude()!=null && adMemberParam.getLatitude()!=null){
+    			 if(adMemberParam.getLongitude()==null || adMemberParam.getLatitude()==null){
+    				 continue;
+    			 }else{
+    				 Result<MerchantStoreDTO> rs= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
+        			 MerchantStoreDTO dto= rs.getModel();
+        			 if(dto!=null){
         				 int distance= DistanceUtil.getDistance(adMemberParam.getLongitude(), adMemberParam.getLatitude(), 
             					 dto.getLongitude().doubleValue(), dto.getLatitude().doubleValue());
             			 if(adDTO.getRadius()!=null && adDTO.getRadius()>distance/1000){
             				 newList.add(adDTO);
             			 }
-            				
         			 }
     			 }
-    			
     		}
 			
 		}
@@ -567,6 +568,32 @@ public class AdExtendServiceImpl extends BaseController implements AdExtendServi
 		newPage.setTotalCount(newList.size());
 		newPage.setRecords(egainList);
 		return successGet(newPage);
+	}
+
+	
+	@Override
+	public Result<ClickAdPointDTO> clickAd(Long id, Long memberId, String num) {
+	
+		Future<Result<ClickAdPointDTO>> future=null;
+		try {
+			
+			future=service.submit(new AdClickThread(adService,id, memberId, num));
+			 
+		} catch (RejectedExecutionException  e) {
+			// 队列已满，直接失败
+			return successCreated(ResultCode.FAIL);
+		}
+		try {
+			Result<ClickAdPointDTO> rs=future.get();
+			if(!isSuccess(rs)){
+				return successCreated(rs.getRet());
+			}
+			return rs;
+				
+		} catch (InterruptedException | ExecutionException e) {
+			logger.error("点广告失败",e);
+		}
+		return null;
 	}
 
 }

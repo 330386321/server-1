@@ -308,7 +308,7 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		return adService.clickAd(id, memberId, num);
+		return adExtendService.clickAd(id, memberId, num);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")

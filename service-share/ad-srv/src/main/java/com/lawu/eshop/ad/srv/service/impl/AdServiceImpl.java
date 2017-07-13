@@ -47,9 +47,9 @@ import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
+import com.lawu.eshop.ad.srv.domain.extend.MemberAdRecordDOView;
 import com.lawu.eshop.ad.srv.domain.extend.ReportAdView;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
-import com.lawu.eshop.ad.srv.mapper.AdRegionDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.MemberAdRecordDOMapper;
 import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
@@ -443,31 +443,27 @@ public class AdServiceImpl implements AdService {
 	@Transactional
 	public BigDecimal clickAd(Long id, Long memberId,String num) {
 		AdDO adDO=adDOMapper.selectByPrimaryKey(id);
-		Integer hits= adDO.getHits();
-		if(hits<adDO.getAdCount()){
-			MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
-			memberAdRecordD.setAdId(adDO.getId());
-			memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-			memberAdRecordD.setMemberId(memberId);
-			memberAdRecordD.setMemberNum(num);
-			memberAdRecordD.setStatus(new Byte("0"));
-			memberAdRecordD.setGmtCreate(new Date());
-			memberAdRecordD.setClickDate(new Date());
-			memberAdRecordD.setOriginalPoint(adDO.getPoint());
-			memberAdRecordDOMapper.insert(memberAdRecordD);
-			//修改点击次数记录
-			adDOMapperExtend.updateHitsByPrimaryKey(id);
-			hits++;
-			if(hits==adDO.getAdCount()){
-				adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
-				adDO.setGmtModified(new Date());
-				adDO.setHits(hits);
-				adDOMapper.updateByPrimaryKey(adDO);
-				//删除solr中的数据
-				SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
-			}
-			userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
+		
+		MemberAdRecordDO memberAdRecordD=new MemberAdRecordDO();
+		memberAdRecordD.setAdId(adDO.getId());
+		memberAdRecordD.setPoint(adDO.getPoint().multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
+		memberAdRecordD.setMemberId(memberId);
+		memberAdRecordD.setMemberNum(num);
+		memberAdRecordD.setStatus(new Byte("0"));
+		memberAdRecordD.setGmtCreate(new Date());
+		memberAdRecordD.setClickDate(new Date());
+		memberAdRecordD.setOriginalPoint(adDO.getPoint());
+		memberAdRecordDOMapper.insert(memberAdRecordD);
+		//修改点击次数记录
+		adDOMapperExtend.updateHitsByPrimaryKey(id);
+		if(adDO.getHits()+1==adDO.getAdCount()){
+			adDO.setStatus(AdStatusEnum.AD_STATUS_PUTED.val); //投放结束
+			adDO.setGmtModified(new Date());
+			adDOMapper.updateByPrimaryKey(adDO);
+			//删除solr中的数据
+			SolrUtil.delSolrDocsById(adDO.getId(), adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 		}
+		userClicktransactionMainAddService.sendNotice(memberAdRecordD.getId());
 		return adDO.getPoint();
 	}
 
@@ -691,16 +687,10 @@ public class AdServiceImpl implements AdService {
 		MemberAdRecordDO marDO=new MemberAdRecordDO();
 		marDO.setMemberId(memberId);
 		marDO.setClickDate(new Date());
-		List<MemberAdRecordDO> list= MemberAdRecordDOMapperExtend.selectPointToday(marDO);
-		BigDecimal totlePoint=new BigDecimal(0);
-		if(!list.isEmpty()){
-			for (MemberAdRecordDO memberAdRecordDO : list) {
-				totlePoint=totlePoint.add(memberAdRecordDO.getPoint());
-			}
-		}
+		MemberAdRecordDOView view= MemberAdRecordDOMapperExtend.selectPointToday(marDO);
 		ClickAdPointBO clickAdPointBO=new ClickAdPointBO();
 		clickAdPointBO.setAdTotlePoint(point.multiply(new BigDecimal(PropertyType.ad_commission_0_default)).multiply(new BigDecimal(PropertyType.ad_account_scale_default)));
-		clickAdPointBO.setAddPoint(totlePoint);
+		clickAdPointBO.setAddPoint(view.getTotlePoint());
 		return clickAdPointBO;
 	}
 

@@ -2,9 +2,15 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
@@ -52,8 +58,25 @@ public interface AdExtendService {
      */
     Result<AdPraiseDTO> selectAbPraiseById(Long id);
 	
-	
-   Result<PraisePointDTO> clickPraise(Long id);
+	/**
+	 * 抢赞
+	 * @param id
+	 * @return
+	 */
+    Result<PraisePointDTO> clickPraise(Long id);
     
-   Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam);
+    /**
+     * 精选广告
+     * @param adEgainParam
+     * @return
+     */
+    Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam);
+    
+    /**
+	 * 点击广告
+	 * @param id
+	 * @param memberId
+	 * @return
+	 */
+    Result<ClickAdPointDTO> clickAd( Long id, Long memberId,String num);
 }

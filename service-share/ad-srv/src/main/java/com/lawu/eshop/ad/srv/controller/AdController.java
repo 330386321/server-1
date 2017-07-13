@@ -149,7 +149,7 @@ public class AdController extends BaseController{
 	@RequestMapping(value = "remove/{id}", method = RequestMethod.PUT)
     public Result remove(@PathVariable Long id) {
     	adService.remove(id);
-     	return successDelete();
+     	return successCreated();
     }
 	
 	/**
@@ -170,8 +170,7 @@ public class AdController extends BaseController{
 	 */
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
     public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId ,@RequestParam String num) {
-		boolean flag=memberAdRecordService.isClickToDay(memberId, id);
-		if(flag){
+		if(memberAdRecordService.isClickToDay(memberId, id)){
 			return successCreated(ResultCode.AD_CLICK_EXIST);
 		}else{
 			BigDecimal point=adService.clickAd(id, memberId,num);
@@ -179,11 +178,7 @@ public class AdController extends BaseController{
 	    	ClickAdPointDTO dto=new ClickAdPointDTO();
 	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
 	    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
-			if(point.compareTo(BigDecimal.valueOf(0))==1){
-	     		return successCreated(dto); 
-	     	}else{
-	     		return successCreated(ResultCode.AD_CLICK_PUTED);
-	     	}
+	     	return successCreated(dto); 
 		}
 	}
 

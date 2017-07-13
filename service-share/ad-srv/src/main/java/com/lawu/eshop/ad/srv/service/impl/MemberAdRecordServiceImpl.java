@@ -27,10 +27,7 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
 		example.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId).andClickDateEqualTo(new Date());
 		long count = memberAdRecordDOMapper.countByExample(example);
-		if (count > 0)
-			return true;
-		else
-			return false;
+		return count > 0?true:false;
 
 	}
 
