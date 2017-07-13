@@ -9,8 +9,6 @@
     <context:component-scan base-package="com.lawu.eshop">
         <context:exclude-filter type="annotation" expression="org.springframework.cloud.netflix.feign.FeignClient" />
         <context:exclude-filter type="annotation" expression="org.springframework.boot.autoconfigure.SpringBootApplication" />
-        <context:exclude-filter type="annotation" expression="com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionMain" />
-        <context:exclude-filter type="annotation" expression="com.lawu.eshop.compensating.transaction.annotation.CompensatingTransactionFollow" />
     </context:component-scan>
 
     <bean id="propertyConfigurer"
