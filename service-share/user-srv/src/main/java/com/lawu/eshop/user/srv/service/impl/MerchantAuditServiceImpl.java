@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,11 +68,7 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
 
             //查询门店信息记录
             MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(auditParam.getMerchantStoreId());
-            //查询商家店铺扩展信息
-            MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
-            merchantStoreProfileDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
-            List<MerchantStoreProfileDO> merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
-
+            List<MerchantStoreProfileDO> merchantStoreProfileDOS = new ArrayList<>();
             if (merchantStoreDO != null && merchantStoreDO.getId() > 0) {
                 MerchantStoreDO newStoreDO = new MerchantStoreDO();
                 newStoreDO.setId(merchantStoreDO.getId());
@@ -241,6 +238,10 @@ public class MerchantAuditServiceImpl implements MerchantAuditService {
                             merchantStoreImageDOMapper.insert(merchantStoreImageDO);
                         }
 
+                        //查询商家店铺扩展信息
+                        MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
+                        merchantStoreProfileDOExample.createCriteria().andMerchantIdEqualTo(merchantStoreDO.getMerchantId());
+                        merchantStoreProfileDOS = merchantStoreProfileDOMapper.selectByExample(merchantStoreProfileDOExample);
                         if(!merchantStoreProfileDOS.isEmpty()){
                             MerchantStoreProfileDO merchantStoreProfileDO = new MerchantStoreProfileDO();
                             merchantStoreProfileDO.setId(merchantStoreProfileDOS.get(0).getId());
