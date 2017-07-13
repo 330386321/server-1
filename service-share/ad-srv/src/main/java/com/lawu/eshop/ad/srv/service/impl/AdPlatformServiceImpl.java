@@ -113,24 +113,6 @@ public class AdPlatformServiceImpl implements AdPlatformService {
 
     @Override
     @Transactional
-    public Integer issueAd(Long id) {
-        AdPlatformDO adPlatformDO = new AdPlatformDO();
-        adPlatformDO.setId(id);
-        adPlatformDO.setStatus(AdPlatformStatusEnum.DOWN.val);
-        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-    }
-
-    @Override
-    @Transactional
-    public Integer setPosition(Long id, PositionEnum positionEnum) {
-        AdPlatformDO adPlatformDO = new AdPlatformDO();
-        adPlatformDO.setId(id);
-        adPlatformDO.setPosition(positionEnum.val);
-        return adPlatformDOMapper.updateByPrimaryKeySelective(adPlatformDO);
-    }
-
-    @Override
-    @Transactional
     public Integer update(Long id, AdPlatformParam adPlatformParam, String url) {
         AdPlatformDO adPlatformDO = new AdPlatformDO();
         adPlatformDO.setId(id);

@@ -45,13 +45,6 @@ public interface AdPlatformService {
 	Result<Page<AdPlatformOperatorDTO>> selectList(@RequestBody AdPlatformFindParam param);
 	
 	
-	/**
-	 * 发布广告
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/issueAd/{id}")
-	Result issueAd(@PathVariable("id") Long id);
 	
 	/**
 	 * 下架广告
@@ -69,13 +62,6 @@ public interface AdPlatformService {
 	@RequestMapping(method = RequestMethod.PUT, value = "adPlatform/onShelve/{id}")
 	Result onShelve(@PathVariable("id") Long id);
 	
-	/**
-	 * 设置广告位
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.POST, value = "adPlatform/setPosition/{id}")
-	Result setPosition(@PathVariable("id") Long id,@RequestBody PositionEnum positionEnum);
 	
 	/**
 	 * 修改

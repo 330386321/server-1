@@ -103,13 +103,6 @@ public class AdPlatformController extends BaseController {
     }
     
     
-    @ApiOperation(value = "发布广告", notes = "发布广告[]（张荣成）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "issueAd/{id}", method = RequestMethod.PUT)
-    public Result issueAd(@PathVariable @ApiParam(required = true, value = "广告id") Long id) {
-        return adPlatformService.issueAd(id);
-    }
-    
     @ApiOperation(value = "下架广告", notes = "下架广告[]（张荣成）", httpMethod = "PUT")
     @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
     @RequiresPermissions("adPlatForm:soldOut")
@@ -126,13 +119,6 @@ public class AdPlatformController extends BaseController {
         return adPlatformService.onShelve(id);
     }
     
-    
-    @ApiOperation(value = "设置广告位", notes = "设置广告位[]（张荣成）", httpMethod = "PUT")
-    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
-    @RequestMapping(value = "setPosition/{id}", method = RequestMethod.PUT)
-    public Result setPositon(@PathVariable @ApiParam(required = true, value = "广告id") Long id,@ModelAttribute @ApiParam(required = true, value = "位置") PositionEnum positionEnum) {
-        return adPlatformService.setPosition(id,positionEnum);
-    }
  
     
     @ApiOperation(value = "添加广告", notes = "添加广告[1011|1015|1010]（张荣成）", httpMethod = "POST")

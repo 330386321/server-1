@@ -94,7 +94,15 @@ public class BankAccountConverter {
         	return DTOS;
         }
         for (BankAccountBO bankAccountBO: bankAccountBOS) {
-        	DTOS.add(convertDTO(bankAccountBO));
+        	BankAccountDTO bankAccountDTO=new BankAccountDTO();
+            bankAccountDTO.setId(bankAccountBO.getId());
+            bankAccountDTO.setAccountName(bankAccountBO.getAccountName());
+            bankAccountDTO.setAccountNumber(bankAccountBO.getAccountNumber());
+            bankAccountDTO.setBankName(bankAccountBO.getBankName());
+            bankAccountDTO.setSubBranchName(bankAccountBO.getSubBranchName());
+            bankAccountDTO.setIconUrl(bankAccountBO.getIconUrl());
+            bankAccountDTO.setBankId(bankAccountBO.getBankId());
+            DTOS.add(bankAccountDTO);
 		}
         return DTOS;
     }

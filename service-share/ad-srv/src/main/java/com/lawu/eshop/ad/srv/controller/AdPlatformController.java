@@ -103,22 +103,7 @@ public class AdPlatformController extends BaseController {
         }
     }
 
-    /**
-     * 发布广告
-     *
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "issueAd/{id}", method = RequestMethod.PUT)
-    public Result issueAd(@PathVariable Long id) {
-        Integer i = adPlatformService.issueAd(id);
-        if (i > 0) {
-            return successCreated(ResultCode.SUCCESS);
-        } else {
-            return successCreated(ResultCode.FAIL);
-        }
-    }
-
+   
     /**
      * 广告下架
      *
@@ -143,21 +128,6 @@ public class AdPlatformController extends BaseController {
         return successCreated(ResultCode.SUCCESS);
     }
 
-    /**
-     * 设置广告位
-     *
-     * @param id
-     * @return
-     */
-    @RequestMapping(value = "setPosition/{id}", method = RequestMethod.POST)
-    public Result setPosition(@PathVariable Long id, @RequestBody PositionEnum positionEnum) {
-        Integer i = adPlatformService.setPosition(id, positionEnum);
-        if (i > 0) {
-            return successCreated(ResultCode.SUCCESS);
-        } else {
-            return successCreated(ResultCode.FAIL);
-        }
-    }
 
     /**
      * 修改

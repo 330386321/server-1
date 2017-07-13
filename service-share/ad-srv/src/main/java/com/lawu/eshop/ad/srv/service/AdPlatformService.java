@@ -51,22 +51,6 @@ public interface AdPlatformService {
      */
     Page<AdPlatformBO> selectList(AdPlatformFindParam param);
 
-    /**
-     * 发布广告
-     *
-     * @param id
-     * @return
-     */
-    Integer issueAd(Long id);
-
-    /**
-     * 设置广告位
-     *
-     * @param id
-     * @param positionEnum
-     * @return
-     */
-    Integer setPosition(Long id, PositionEnum positionEnum);
 
     /**
      * @param id
