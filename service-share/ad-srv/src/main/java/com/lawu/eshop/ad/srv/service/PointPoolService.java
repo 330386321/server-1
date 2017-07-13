@@ -2,6 +2,7 @@ package com.lawu.eshop.ad.srv.service;
 
 import java.util.List;
 
+import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 
 /**
@@ -33,7 +34,7 @@ public interface PointPoolService {
 	 * @param userNum 会员编号
 	 * @return
 	 */
-	Boolean isGetRedPacket(Long merchantId,String userNum);
+	GetRedPacketBO isGetRedPacket(Long merchantId,String userNum);
 	
 
 

@@ -44,6 +44,7 @@ import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.AdSrvConfig;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
+import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
 import com.lawu.eshop.ad.srv.bo.ViewBO;
@@ -360,9 +361,12 @@ public class AdController extends BaseController{
      */
 	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam  Long  merchantId,@RequestParam  Long  memberId,@RequestParam String memberNum) {
-		Boolean flag=pointPoolService.isGetRedPacket(merchantId, memberNum);
-		if(flag){
+		GetRedPacketBO redPacketBO=pointPoolService.isGetRedPacket(merchantId, memberNum);
+		if(redPacketBO.isGetRedPacket()){
 			return successCreated(ResultCode.AD_RED_PACKGE_GET);
+		}
+		if(redPacketBO.isNullRedPacket()){
+			return successCreated(ResultCode.AD_RED_PACKGE_PUTED);
 		}
     	BigDecimal point=adService.getRedPacket(merchantId,memberId,memberNum);
     	PraisePointDTO dto=new PraisePointDTO();
