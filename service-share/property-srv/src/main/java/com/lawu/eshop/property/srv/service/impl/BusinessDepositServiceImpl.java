@@ -341,7 +341,7 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 				bo.setAccountName(accountName);
 				bo.setCardNo(bankAccountDO.getNote() == null ? ""
 						: bankAccountDO.getNote().substring(bankAccountDO.getNote().indexOf('(') + 1,
-								bankAccountDO.getNote().indexOf('(')));
+								bankAccountDO.getNote().indexOf(')')));
 			}else{
 				bo.setBankName("");
 				bo.setAccountName("");
