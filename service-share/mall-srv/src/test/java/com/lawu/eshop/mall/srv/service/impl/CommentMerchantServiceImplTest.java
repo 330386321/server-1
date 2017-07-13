@@ -246,7 +246,7 @@ public class CommentMerchantServiceImplTest {
         commentMerchantDOMapper.insert(commentMerchantDO);
 
         CommentMerchantDO commentMerchantDO2 = new CommentMerchantDO();
-        commentMerchantDO2.setGmtCreate(DateUtil.getDayBefore(new Date()));
+        commentMerchantDO2.setGmtCreate(new Date());
         commentMerchantDO2.setMerchantId(1L);
         commentMerchantDO2.setPayOrderId(1L);
         commentMerchantDO2.setAvgSpend(BigDecimal.TEN);
@@ -254,16 +254,16 @@ public class CommentMerchantServiceImplTest {
         commentMerchantDO2.setGrade(CommentGradeEnum.COMMENT_STAR_LEVEL_FIVE.val);
         commentMerchantDO2.setStatus(CommentStatusEnum.COMMENT_STATUS_VALID.val);
         commentMerchantDO2.setIsAnonymous(true);
-        commentMerchantDOMapper.insert(commentMerchantDO);
+        commentMerchantDOMapper.insert(commentMerchantDO2);
         CommentListParam param = new CommentListParam();
         param.setCurrentPage(1);
         param.setPageSize(10);
-        param.setBeginDate("2017-07-11");
-        param.setEndDate("2017-07-12");
+        param.setBeginDate(DateUtil.getDate());
+        param.setEndDate(DateUtil.getDate());
 
         Page<CommentMerchantBO> page = commentMerchantService.getCommentMerchantListOperator(param);
         Assert.assertNotNull(page.getRecords());
-        Assert.assertEquals(2,page.getTotalCount().intValue());
+        Assert.assertEquals(2,page.getRecords().size());
     }
 
     @Transactional

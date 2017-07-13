@@ -236,7 +236,7 @@ public class CommentProductServiceImplTest {
 
         CommentProductDO commentProductDO = new CommentProductDO();
         commentProductDO.setContent("test2");
-        commentProductDO.setGmtCreate(DateUtil.getDayBefore(new Date()));
+        commentProductDO.setGmtCreate(new Date());
         commentProductDO.setMemberId(1L);
         commentProductDO.setMerchantId(1L);
         commentProductDO.setProductId(1L);
@@ -251,8 +251,8 @@ public class CommentProductServiceImplTest {
         CommentListParam param2 = new CommentListParam();
         param2.setCurrentPage(1);
         param2.setPageSize(10);
-        param2.setBeginDate("2017-07-11");
-        param2.setEndDate("2017-07-12");
+        param2.setBeginDate(DateUtil.getDate());
+        param2.setEndDate(DateUtil.getDate());
         Page<CommentProductBO> page =  commentProductService.getCommentProductListOperator(param2);
         Assert.assertNotNull(page.getRecords());
         Assert.assertEquals(2,page.getRecords().size());
