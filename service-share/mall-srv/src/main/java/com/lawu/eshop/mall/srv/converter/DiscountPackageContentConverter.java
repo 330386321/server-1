@@ -92,7 +92,7 @@ public class DiscountPackageContentConverter {
 		rtn.setQuantity(discountPackageContentSaveForeignParam.getQuantity());
 		rtn.setUnit(discountPackageContentSaveForeignParam.getUnit());
 		rtn.setUnitPrice(discountPackageContentSaveForeignParam.getUnitPrice());
-		rtn.setSubtotal(discountPackageContentSaveForeignParam.getUnitPrice().add(new BigDecimal(discountPackageContentSaveForeignParam.getQuantity())));
+		rtn.setSubtotal(discountPackageContentSaveForeignParam.getUnitPrice().multiply(new BigDecimal(discountPackageContentSaveForeignParam.getQuantity())));
 		
 		rtn.setStatus(StatusEnum.STATUS_VALID.val);
 		rtn.setGmtCreate(new Date());
