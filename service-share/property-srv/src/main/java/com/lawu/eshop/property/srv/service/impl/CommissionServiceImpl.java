@@ -60,66 +60,6 @@ public class CommissionServiceImpl implements CommissionService {
 
 	@Override
 	@Transactional
-	public int clickAd(PropertyInfoDataParam param) {
-		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
-
-		String ad_commission_0 = propertyService.getValue(PropertyType.ad_commission_0);
-		String love_account_scale = propertyService.getValue(PropertyType.love_account_scale);
-		double d_love_account_scale = Double.parseDouble(love_account_scale);
-		double d_acture_in = 1 - d_love_account_scale; // 用户实际进账比例：1-爱心账户比例
-
-		BigDecimal clickMoney = new BigDecimal(param.getPoint()); // 广告点击实际所得
-		BigDecimal adCommission0 = new BigDecimal(ad_commission_0); // 所得比例
-		BigDecimal actureScaleIn = new BigDecimal(String.valueOf(d_acture_in)); // 实际所得
-		BigDecimal loveScaleIn = new BigDecimal(love_account_scale);// 爱心账户
-
-		BigDecimal actureMoneyIn = clickMoney.multiply(adCommission0).multiply(actureScaleIn);// 实际所得余额
-		BigDecimal actureLoveIn = clickMoney.multiply(adCommission0).multiply(loveScaleIn);// 爱心账户
-		String num = StringUtil.getRandomNum("");
-
-		// 新增点广告的余额交易明细
-		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
-		tdsParam.setTitle(MemberTransactionTypeEnum.ADVERTISING.getName());
-		tdsParam.setTransactionNum(num);
-		tdsParam.setUserNum(param.getUserNum());
-		tdsParam.setTransactionType(MemberTransactionTypeEnum.ADVERTISING.getValue());
-		tdsParam.setTransactionAccount("");
-		tdsParam.setTransactionAccountType(TransactionPayTypeEnum.BALANCE.getVal());
-		tdsParam.setAmount(actureMoneyIn);
-		tdsParam.setDirection(PropertyInfoDirectionEnum.IN.getVal());
-		tdsParam.setBizId("");
-		transactionDetailService.save(tdsParam);
-
-		// 加会员财产余额
-		PropertyInfoDOEiditView infoDoView = new PropertyInfoDOEiditView();
-		infoDoView.setUserNum(param.getUserNum());
-		infoDoView.setBalance(actureMoneyIn);
-		infoDoView.setGmtModified(new Date());
-		propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
-
-		// 计爱心账户
-		LoveDetailDO loveDetailDO = new LoveDetailDO();
-		loveDetailDO.setTitle(LoveTypeEnum.AD_CLICK.getName());
-		loveDetailDO.setLoveNum(num);
-		loveDetailDO.setUserNum(param.getUserNum());
-		loveDetailDO.setLoveType(LoveTypeEnum.AD_CLICK.getValue());
-		loveDetailDO.setAmount(actureLoveIn);
-		loveDetailDO.setRemark("用户点广告所得，计入的爱心账户");
-		loveDetailDO.setGmtCreate(new Date());
-		loveDetailDOMapper.insertSelective(loveDetailDO);
-
-		// 加会员财产爱心账户
-		PropertyInfoDOEiditView infoDoView1 = new PropertyInfoDOEiditView();
-		infoDoView1.setUserNum(param.getUserNum());
-		infoDoView1.setLoveAccount(actureLoveIn);
-		infoDoView1.setGmtModified(new Date());
-		propertyInfoDOMapperExtend.updatePropertyInfoAddLove(infoDoView1);
-
-		return ResultCode.SUCCESS;
-	}
-
-	@Override
-	@Transactional
 	public int calculation(CommissionJobParam param) {
 		// 新增交易明细记录、加财产余额、计爱心账户、加财产爱心账户
 
@@ -254,23 +194,5 @@ public class CommissionServiceImpl implements CommissionService {
 		return ResultCode.SUCCESS;
 	}
 
-	// public static void main(String[] args) {
-	// String money = "1";
-	// String love_account_scale = "0.003";
-	// String scale1 = "0.5";
-	// double d_love_account_scale =
-	// Double.valueOf(love_account_scale).doubleValue();
-	// double d_acture_in = 1 - d_love_account_scale;
-	// BigDecimal clickMoney = new BigDecimal(money); //广告点击实际所得
-	// BigDecimal adCommission0 = new BigDecimal(scale1); //所得比例
-	// BigDecimal actureScaleIn = new BigDecimal(String.valueOf(d_acture_in));
-	// //实际所得
-	// BigDecimal loveScaleIn = new BigDecimal(love_account_scale); //爱心账户
-	//
-	// BigDecimal actureMoneyIn =
-	// clickMoney.multiply(adCommission0).multiply(actureScaleIn);//实际所得余额
-	// BigDecimal actureLoveIn =
-	// clickMoney.multiply(adCommission0).multiply(loveScaleIn);//爱心账户
-	// System.out.println(actureMoneyIn+"<----->"+actureLoveIn);
-	// }
+
 }
