@@ -89,7 +89,7 @@ public class ShoppingStoreDetailDTO {
         this.productList = productList;
     }
 
-    public boolean isExistStore() {
+    public boolean getIsExistStore() {
         return isExistStore;
     }
 

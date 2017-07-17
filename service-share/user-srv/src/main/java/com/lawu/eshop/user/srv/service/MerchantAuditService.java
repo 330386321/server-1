@@ -37,4 +37,6 @@ public interface MerchantAuditService {
     MerchantStoreAuditBO getMerchantStoreAuditById(Long id);
 
     void setAuditInfoShow(Long merchantId);
+
+    MerchantStoreAuditBO getRecentMerchantAuditRecord(Long merchantId);
 }
