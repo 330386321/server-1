@@ -38,9 +38,6 @@ public class CommentProductController extends BaseController {
      */
     @RequestMapping(value = "saveCommentProductInfo/{memberId}", method = RequestMethod.POST)
     public Result saveCommentProductInfo(@PathVariable("memberId") Long memberId, @RequestBody CommentProductParam param, @RequestParam("headImg") String headImg) {
-        if (param == null) {
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-        }
         Integer id = commentProductService.saveCommentProductInfo(memberId, param, headImg);
         if (id == null || id < 0) {
             successCreated(ResultCode.SAVE_FAIL);
@@ -57,9 +54,6 @@ public class CommentProductController extends BaseController {
     @RequestMapping(value = "getCommentProducts", method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentProducts(@RequestBody CommentProductListParam listParam) {
 
-        if (listParam == null) {
-            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-        }
         Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProducts(listParam);
 
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
@@ -79,9 +73,6 @@ public class CommentProductController extends BaseController {
      */
     @RequestMapping(value = "getCommentProductsWithImgs", method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentProductsWithImgs(@RequestBody CommentProductListParam listParam) {
-        if (listParam == null) {
-            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-        }
         Page<CommentProductBO> commentProductBOPage = commentProductService.getCommentProductsWithImgs(listParam);
 
         List<CommentProductBO> commentProductBOS = commentProductBOPage.getRecords();
@@ -250,10 +241,10 @@ public class CommentProductController extends BaseController {
     @RequestMapping(value = "geNewlyProductComment",method = RequestMethod.GET)
     public Result<List<MemberProductCommentDTO>> geNewlyProductComment(@RequestParam Long productId){
     	if(productId == null){
-    		return successCreated(ResultCode.ID_EMPTY);
+    		return successGet(ResultCode.ID_EMPTY);
     	}
     	List<MemberProductCommentDTO> dtos = commentProductService.geNewlyProductComment(productId);
-    	return successCreated(dtos);
+    	return successGet(dtos);
     }
     
     /**
@@ -264,9 +255,9 @@ public class CommentProductController extends BaseController {
     @RequestMapping(value = "getProductCommentCount",method = RequestMethod.GET)
     public Result<Integer> getProductCommentCount(@RequestParam Long productId){
     	if(productId == null){
-    		return successCreated(ResultCode.ID_EMPTY);
+    		return successGet(ResultCode.ID_EMPTY);
     	}
     	Integer count = commentProductService.getProductCommentCount(productId);
-    	return successCreated(count);
+    	return successGet(count);
     }
 }

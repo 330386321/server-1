@@ -42,9 +42,7 @@ public class CommentMerchantController extends BaseController {
     @RequestMapping(value = "saveCommentMerchantInfo/{memberId}", method = RequestMethod.POST)
     public Result saveCommentMerchantInfo(@PathVariable("memberId") Long memberId, @RequestBody CommentMerchantParam param,
                                           @RequestParam("commentPic") String commentPic) {
-        if (param == null) {
-            return successCreated(ResultCode.REQUIRED_PARM_EMPTY);
-        }
+
         Integer id = commentMerchantService.saveCommentMerchantInfo(memberId, param, commentPic);
         if (id == null || id < 0) {
             successCreated(ResultCode.SAVE_FAIL);
@@ -60,9 +58,6 @@ public class CommentMerchantController extends BaseController {
      */
     @RequestMapping(value = "getCommentMerchantAllList", method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentMerchantAllList(@RequestBody CommentMerchantListParam listParam) {
-        if (listParam == null) {
-            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-        }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantAllList(listParam);
 
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
@@ -77,9 +72,6 @@ public class CommentMerchantController extends BaseController {
 
     @RequestMapping(value = "getCommentMerchantListWithImgs", method = RequestMethod.POST)
     public Result<Page<CommentDTO>> getCommentMerchantListWithImgs(@RequestBody CommentMerchantListParam listParam) {
-        if (listParam == null) {
-            return successGet(ResultCode.REQUIRED_PARM_EMPTY);
-        }
         Page<CommentMerchantBO> commentMerchantBOPage = commentMerchantService.getCommentMerchantListWithImgs(listParam);
 
         List<CommentMerchantBO> commentMerchantBOS = commentMerchantBOPage.getRecords();
