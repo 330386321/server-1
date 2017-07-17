@@ -1,6 +1,8 @@
 package com.lawu.eshop.merchant.api.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -189,15 +191,23 @@ public class DiscountPackageController extends BaseController {
 		discountPackageSaveParam.setUseTimeWeek(discountPackageSaveForeignParam.getUseTimeWeek());
 		discountPackageSaveParam.setValidityPeriodBegin(discountPackageSaveForeignParam.getValidityPeriodBegin());
 		discountPackageSaveParam.setValidityPeriodEnd(discountPackageSaveForeignParam.getValidityPeriodEnd());
-		discountPackageSaveParam.setDiscountPackageContents(JSONObject.parseArray(discountPackageSaveForeignParam.getDiscountPackageContents(), DiscountPackageContentSaveForeignParam.class));
-		
-		List<DiscountPackageImageSaveForeignParam> discountPackageImages = JSONObject.parseArray(discountPackageSaveForeignParam.getDiscountPackageImages(), DiscountPackageImageSaveForeignParam.class);
+		String discountPackageContentsStr = null;
+		String discountPackageImagesStr = null;
+		try {
+			discountPackageContentsStr = URLDecoder.decode(discountPackageSaveForeignParam.getDiscountPackageContents(), "UTF-8");
+			discountPackageImagesStr = URLDecoder.decode(discountPackageSaveForeignParam.getDiscountPackageImages(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error("解码失败", e);
+			return successCreated(ResultCode.FAIL, e.getMessage());
+		}
+		discountPackageSaveParam.setDiscountPackageContents(JSONObject.parseArray(discountPackageContentsStr, DiscountPackageContentSaveForeignParam.class));
+		List<DiscountPackageImageSaveForeignParam> discountPackageImages = JSONObject.parseArray(discountPackageImagesStr, DiscountPackageImageSaveForeignParam.class);
 		
 		discountPackageSaveParam.setDiscountPackageImages(new ArrayList<>());
 		for (int i = 0; i < discountPackageImages.size(); i++) {
 			DiscountPackageImageSaveForeignParam discountPackageImage = discountPackageImages.get(i);
 			DiscountPackageImageSaveParam discountPackageImageSaveParam = new DiscountPackageImageSaveParam();
-			discountPackageImageSaveParam.setImage(images.get("discountPackageImage"+i));
+			discountPackageImageSaveParam.setImage(images.get("discountPackageImage-"+i));
 			discountPackageImageSaveParam.setDescription(discountPackageImage.getDescription());
 			discountPackageSaveParam.getDiscountPackageImages().add(discountPackageImageSaveParam);
 			
@@ -264,15 +274,24 @@ public class DiscountPackageController extends BaseController {
 		discountPackageUpdateParam.setUseTimeWeek(discountPackageUpdateForeignParam.getUseTimeWeek());
 		discountPackageUpdateParam.setValidityPeriodBegin(discountPackageUpdateForeignParam.getValidityPeriodBegin());
 		discountPackageUpdateParam.setValidityPeriodEnd(discountPackageUpdateForeignParam.getValidityPeriodEnd());
-		discountPackageUpdateParam.setDiscountPackageContents(JSONObject.parseArray(discountPackageUpdateForeignParam.getDiscountPackageContents(), DiscountPackageContentUpdateForeignParam.class));
+		String discountPackageContentsStr = null;
+		String discountPackageImagesStr = null;
+		try {
+			discountPackageContentsStr = URLDecoder.decode(discountPackageUpdateForeignParam.getDiscountPackageContents(), "UTF-8");
+			discountPackageImagesStr = URLDecoder.decode(discountPackageUpdateForeignParam.getDiscountPackageImages(), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			logger.error("解码失败", e);
+			return successCreated(ResultCode.FAIL, e.getMessage());
+		}
+		discountPackageUpdateParam.setDiscountPackageContents(JSONObject.parseArray(discountPackageContentsStr, DiscountPackageContentUpdateForeignParam.class));
+		List<DiscountPackageImageUpdateForeignParam> discountPackageImages = JSONObject.parseArray(discountPackageImagesStr, DiscountPackageImageUpdateForeignParam.class);
 		
-		List<DiscountPackageImageUpdateForeignParam> discountPackageImages = JSONObject.parseArray(discountPackageUpdateForeignParam.getDiscountPackageImages(), DiscountPackageImageUpdateForeignParam.class);
 		discountPackageUpdateParam.setDiscountPackageImages(new ArrayList<>());
 		for (int i = 0; i < discountPackageImages.size(); i++) {
 			DiscountPackageImageUpdateForeignParam discountPackageImage = discountPackageImages.get(i);
 			DiscountPackageImageUpdateParam discountPackageImageUpdateParam = new DiscountPackageImageUpdateParam();
 			discountPackageImageUpdateParam.setId(discountPackageImage.getId());
-			discountPackageImageUpdateParam.setImage(images.get("discountPackageImage"+i) != null ? images.get("discountPackageImage"+i) : null);
+			discountPackageImageUpdateParam.setImage(images.get("discountPackageImage-"+i) != null ? images.get("discountPackageImage-"+i) : null);
 			discountPackageImageUpdateParam.setDescription(discountPackageImage.getDescription());
 			discountPackageUpdateParam.getDiscountPackageImages().add(discountPackageImageUpdateParam);
 		};
