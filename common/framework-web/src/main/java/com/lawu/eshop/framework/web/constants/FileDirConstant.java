@@ -22,6 +22,9 @@ public class FileDirConstant {
     
     // 订单图片路径
     public static final String DIR_ORDER = "order";
+    
+    // 优惠套餐图片路径
+    public static final String DIR_MALL_DISCOUNT_PACKAGE = "mall_discount_package";
 
     /**
      * 默认图片
