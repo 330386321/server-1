@@ -40,7 +40,7 @@ public class WithdrawCashQueryDTO {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	private Date finishDate;
 	
-	@ApiModelProperty(value = "提现描述(成功时显示提现金额实际到账金额和手续费，失败时显示原因)", required = true)
+	@ApiModelProperty(value = "提现描述(失败时显示原因)", required = true)
 	private String remark;
 
 	public Long getId() {
