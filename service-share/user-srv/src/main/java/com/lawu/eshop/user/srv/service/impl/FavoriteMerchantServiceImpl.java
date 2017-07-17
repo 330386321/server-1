@@ -145,7 +145,7 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 	public Boolean get(Long memberId, FavoriteStoreParam pageQuery) {
 		
 		FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
-    	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val);
+    	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val).andMemberIdEqualTo(pageQuery.getMerchantId());
     	long count=favoriteMerchantDOMapper.countByExample(exmple);
     	
     	return count>0?true:false;
