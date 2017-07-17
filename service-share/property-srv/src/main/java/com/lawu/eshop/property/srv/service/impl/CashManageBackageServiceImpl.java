@@ -246,7 +246,7 @@ public class CashManageBackageServiceImpl implements CashManageBackageService {
 			// 新增退回交易明细
 			TransactionDetailDO transactionDetailDO = new TransactionDetailDO();
 			transactionDetailDO.setTitle(TransactionTitleEnum.CASH_FAIL_BACK.getVal());
-			transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));//wcdo.getCashNumber()
+			transactionDetailDO.setTransactionNum(StringUtil.getRandomNum(""));
 			transactionDetailDO.setUserNum(wcdo.getUserNum());
 			if (wcdo.getUserNum().startsWith(UserCommonConstant.MEMBER_NUM_TAG)) {
 				transactionDetailDO.setTransactionType(MemberTransactionTypeEnum.WITHDRAW_BACK.getValue());
