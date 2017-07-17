@@ -68,7 +68,7 @@ public class MerchantDetailController extends BaseController {
             String storeUrl = merchantStoreService.getStoreUrlByStoreId(id);
             StoreDetailDTO storeDetailDTO = new StoreDetailDTO();
             storeDetailDTO.setStorePic(storeUrl);
-            storeDetailDTO.setExistStore(false);
+            storeDetailDTO.setIsExistStore(false);
             return successGet(storeDetailDTO);
         }
 
@@ -78,7 +78,7 @@ public class MerchantDetailController extends BaseController {
             return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         StoreDetailDTO storeDetailDTO = stoResult.getModel();
-        storeDetailDTO.setExistStore(true);
+        storeDetailDTO.setIsExistStore(true);
         Result<MerchantFavoredDTO> merResult = merchantFavoredService.findFavoredByMerchantId(storeDetailDTO.getMerchantId());
         if (isSuccess(merResult)) {
             MerchantFavoredDTO merchantFavoredDTO = merResult.getModel();

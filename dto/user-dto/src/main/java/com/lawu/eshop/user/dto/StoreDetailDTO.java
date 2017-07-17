@@ -282,7 +282,7 @@ public class StoreDetailDTO {
         return isExistStore;
     }
 
-    public void setExistStore(boolean existStore) {
+    public void setIsExistStore(boolean existStore) {
         isExistStore = existStore;
     }
 }
