@@ -53,7 +53,7 @@ public class ReportAdEarningsPointServiceImpl implements ReportAdEarningsPointSe
 		 if(userPoint==null){
 			 bo.setUserPoint(new BigDecimal("0"));
 		 }else{
-			 bo.setUserPoint(lovePoint.getLoveTotalPoint());
+			 bo.setUserPoint(userPoint.getUserTotalPoint());
 		 }
 		 
 		 if(lovePoint==null){

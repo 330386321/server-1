@@ -1,12 +1,19 @@
 package com.lawu.eshop.property.srv.service.impl;
 
+import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
 import com.lawu.eshop.property.constants.FreezeStatusEnum;
+import com.lawu.eshop.property.constants.PayTypeEnum;
+import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
+import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
+import com.lawu.eshop.property.param.PropertyInfoBackageParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyInfoBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointAndBalanceBO;
 import com.lawu.eshop.property.srv.bo.PropertyPointBO;
 import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
+import com.lawu.eshop.property.srv.domain.PropertyInfoDOExample;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.service.CommissionUtilService;
@@ -22,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author yangqh
@@ -213,6 +221,131 @@ public class PropertyInfoServiceImplTest {
         PropertyPointAndBalanceBO bo = propertyInfoService.getPropertyInfoMoney("M10001");
         Assert.assertNotNull(bo);
         Assert.assertEquals(200,bo.getBalance().intValue());
+
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void savePropertyInfo(){
+        propertyInfoService.savePropertyInfo("M10001");
+        PropertyInfoDOExample example = new PropertyInfoDOExample();
+        example.createCriteria().andUserNumEqualTo("M10001");
+        List<PropertyInfoDO> rtnList =  propertyInfoDOMapper.selectByExample(example);
+        Assert.assertNotNull(rtnList);
+        Assert.assertEquals(1,rtnList.size());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void selectLoveAccount(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+        BigDecimal money = propertyInfoService.selectLoveAccount("M10001");
+        Assert.assertEquals(200,money.intValue());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void updateBalanceAndPoint(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
+        BackagePropertyinfoDataParam param = new BackagePropertyinfoDataParam();
+        param.setAccount("12045");
+        param.setUserTypeEnum(UserTypeEnum.MEMBER);
+        param.setPayTypeEnum(PayTypeEnum.BALANCE);
+        param.setMoney("20");
+        param.setUserNum("M10001");
+        int ret = propertyInfoService.updateBalanceAndPoint(param);
+        Assert.assertEquals(ResultCode.SUCCESS,ret);
+
+        param.setPayTypeEnum(PayTypeEnum.POINT);
+        int ret1 = propertyInfoService.updateBalanceAndPoint(param);
+        Assert.assertEquals(ResultCode.SUCCESS,ret1);
+
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void updatePropertyinfoFreeze(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
+        int ret = propertyInfoService.updatePropertyinfoFreeze("M10001", PropertyinfoFreezeEnum.YES);
+        Assert.assertEquals(ResultCode.SUCCESS,ret);
+
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getPropertyinfoPageList(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
+        PropertyInfoBackageParam param = new PropertyInfoBackageParam();
+        param.setUserNum("M10001");
+        param.setCurrentPage(1);
+        param.setPageSize(10);
+        Page<PropertyInfoBO> rtnPage = propertyInfoService.getPropertyinfoPageList(param);
+        Assert.assertEquals(1,rtnPage.getTotalCount().intValue());
+
+        PropertyInfoBackageParam param1 = new PropertyInfoBackageParam();
+        param1.setCurrentPage(1);
+        param1.setPageSize(10);
+        param1.setUserType(UserTypeEnum.MEMBER);
+        Page<PropertyInfoBO> rtnPage1 = propertyInfoService.getPropertyinfoPageList(param1);
+        Assert.assertEquals(1,rtnPage1.getTotalCount().intValue());
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void getPropertyinfoFreeze(){
+        PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
+        propertyInfoDO.setUserNum("M10001");
+        propertyInfoDO.setGmtCreate(new Date());
+        propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
+        propertyInfoDO.setBalance(new BigDecimal("200"));
+        propertyInfoDO.setPoint(new BigDecimal("200"));
+        propertyInfoDO.setLoveAccount(new BigDecimal("200"));
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDOMapper.insertSelective(propertyInfoDO);
+
+        PropertyinfoFreezeEnum bean = propertyInfoService.getPropertyinfoFreeze("M10001");
+        Assert.assertNotNull(bean);
 
     }
 }

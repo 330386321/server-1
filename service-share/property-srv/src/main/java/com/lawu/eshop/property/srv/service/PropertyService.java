@@ -22,11 +22,11 @@ public interface PropertyService {
 	
 	List<String> getValues(String key);
 
-	Page<QueryPropertyBO> query(TestQuery1Param param);
-
-	int save(TestQueryParam param);
-
-	int delete(String propertyIds);
-
-	QueryPropertyBO get(Long propertyId);
+//	Page<QueryPropertyBO> query(TestQuery1Param param);
+//
+//	int save(TestQueryParam param);
+//
+//	int delete(String propertyIds);
+//
+//	QueryPropertyBO get(Long propertyId);
 }

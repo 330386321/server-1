@@ -65,39 +65,39 @@ public class PropertyController extends BaseController {
     ////////////////////////////////////////////////////////////////////////////////
     
     
-    @RequestMapping(value = "query", method = RequestMethod.POST)
-	public Result<Page<QueryPropertyDTO>> query(@RequestBody TestQuery1Param param) throws Exception {
-		
-		Page<QueryPropertyBO> page = propertyService.query(param);
-		List<QueryPropertyBO> cbos = page.getRecords();
-		List<QueryPropertyDTO> dtos = new ArrayList<QueryPropertyDTO>();
-		for (QueryPropertyBO bo : cbos) {
-			QueryPropertyDTO dto = new QueryPropertyDTO();
-			BeanUtil.copyProperties(bo, dto);
-			dtos.add(dto);
-		}
-		Page<QueryPropertyDTO> pageResult = new Page<QueryPropertyDTO>();
-		pageResult.setTotalCount(page.getTotalCount());
-		pageResult.setCurrentPage(page.getCurrentPage());
-		pageResult.setRecords(dtos);
-		return successCreated(pageResult);
-	}
-
-    @RequestMapping(value = "save", method = RequestMethod.POST)
-   	public int save(@RequestBody TestQueryParam param) {
-    	return propertyService.save(param);
-    }
-    
-    @RequestMapping(value = "delete/{propertyIds}", method = RequestMethod.DELETE)
-   	public int delete(@PathVariable String propertyIds) {
-    	return propertyService.delete(propertyIds);
-    }
-    
-    @RequestMapping(value = "get/{propertyId}", method = RequestMethod.GET)
-   	public QueryPropertyDTO get(@PathVariable Long propertyId) throws Exception {
-    	QueryPropertyBO bo = propertyService.get(propertyId);
-    	QueryPropertyDTO dto = new QueryPropertyDTO();
-    	BeanUtil.copyProperties(bo, dto);
-    	return dto;
-    }
+//    @RequestMapping(value = "query", method = RequestMethod.POST)
+//	public Result<Page<QueryPropertyDTO>> query(@RequestBody TestQuery1Param param) throws Exception {
+//
+//		Page<QueryPropertyBO> page = propertyService.query(param);
+//		List<QueryPropertyBO> cbos = page.getRecords();
+//		List<QueryPropertyDTO> dtos = new ArrayList<QueryPropertyDTO>();
+//		for (QueryPropertyBO bo : cbos) {
+//			QueryPropertyDTO dto = new QueryPropertyDTO();
+//			BeanUtil.copyProperties(bo, dto);
+//			dtos.add(dto);
+//		}
+//		Page<QueryPropertyDTO> pageResult = new Page<QueryPropertyDTO>();
+//		pageResult.setTotalCount(page.getTotalCount());
+//		pageResult.setCurrentPage(page.getCurrentPage());
+//		pageResult.setRecords(dtos);
+//		return successCreated(pageResult);
+//	}
+//
+//    @RequestMapping(value = "save", method = RequestMethod.POST)
+//   	public int save(@RequestBody TestQueryParam param) {
+//    	return propertyService.save(param);
+//    }
+//
+//    @RequestMapping(value = "delete/{propertyIds}", method = RequestMethod.DELETE)
+//   	public int delete(@PathVariable String propertyIds) {
+//    	return propertyService.delete(propertyIds);
+//    }
+//
+//    @RequestMapping(value = "get/{propertyId}", method = RequestMethod.GET)
+//   	public QueryPropertyDTO get(@PathVariable Long propertyId) throws Exception {
+//    	QueryPropertyBO bo = propertyService.get(propertyId);
+//    	QueryPropertyDTO dto = new QueryPropertyDTO();
+//    	BeanUtil.copyProperties(bo, dto);
+//    	return dto;
+//    }
 }
