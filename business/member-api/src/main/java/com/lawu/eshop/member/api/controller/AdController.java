@@ -2,6 +2,7 @@ package com.lawu.eshop.member.api.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -47,6 +48,7 @@ import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.AdExtendService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.AdViewService;
+import com.lawu.eshop.member.api.service.ClickAdRecordService;
 import com.lawu.eshop.member.api.service.FansMerchantService;
 import com.lawu.eshop.member.api.service.MemberService;
 import com.lawu.eshop.member.api.service.MerchantProfileService;
@@ -122,7 +124,10 @@ public class AdController extends BaseController {
 
 	@Autowired
 	private MerchantService merchantService;
-
+	
+	@Autowired
+	private ClickAdRecordService clickAdRecordService;
+ 
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
 	@ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	@Authorization
@@ -308,7 +313,17 @@ public class AdController extends BaseController {
 	public Result<ClickAdPointDTO> clickAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @PathVariable @ApiParam(required = true, value = "广告id") Long id) {
 		Long memberId = UserUtil.getCurrentUserId(getRequest());
 		String num = UserUtil.getCurrentUserNum(getRequest());
-		return adExtendService.clickAd(id, memberId, num);
+		Result<Boolean> result= clickAdRecordService.getClickAdRecord(memberId+id+DateUtil.getIntDate());
+		if(!isSuccess(result)){
+			return successCreated(result.getRet());
+		}
+		if(result.getModel()){
+			return successCreated(ResultCode.AD_CLICK_EXIST);
+		}else{
+			clickAdRecordService.setClickAdRecord(memberId+id+DateUtil.getIntDate());
+			return adExtendService.clickAd(id, memberId, num);
+		}
+		
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")

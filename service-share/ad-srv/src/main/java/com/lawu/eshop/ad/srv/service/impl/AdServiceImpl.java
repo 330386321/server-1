@@ -919,6 +919,11 @@ public class AdServiceImpl implements AdService {
 	@Override
 	public void batchDeleteAd(List<Long> adIds) {
 		adDOMapperExtend.batchDeleteAd(adIds);
+		List<String> ids = new ArrayList<>();
+		for (Long id : adIds) {
+			ids.add(String.valueOf(id));
+		}
+		SolrUtil.delSolrDocsByIds(ids, adSrvConfig.getSolrUrl(), adSrvConfig.getSolrAdCore(), adSrvConfig.getIsCloudSolr());
 	}
 
 	@Override

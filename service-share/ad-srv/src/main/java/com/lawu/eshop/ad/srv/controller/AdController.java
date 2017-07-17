@@ -170,16 +170,12 @@ public class AdController extends BaseController{
 	 */
 	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
     public Result<ClickAdPointDTO> clickAd(@PathVariable Long id, @RequestParam Long memberId ,@RequestParam String num) {
-		if(memberAdRecordService.isClickToDay(memberId, id)){
-			return successCreated(ResultCode.AD_CLICK_EXIST);
-		}else{
-			BigDecimal point=adService.clickAd(id, memberId,num);
-			ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,point);
-	    	ClickAdPointDTO dto=new ClickAdPointDTO();
-	    	dto.setAddPoint(clickAdPointBO.getAddPoint());
-	    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
-	     	return successCreated(dto); 
-		}
+		BigDecimal point=adService.clickAd(id, memberId,num);
+		ClickAdPointBO clickAdPointBO=adService.getClickAdPoint(memberId,point);
+    	ClickAdPointDTO dto=new ClickAdPointDTO();
+    	dto.setAddPoint(clickAdPointBO.getAddPoint());
+    	dto.setPoint(clickAdPointBO.getAdTotlePoint());
+     	return successCreated(dto); 
 	}
 
 	/**
