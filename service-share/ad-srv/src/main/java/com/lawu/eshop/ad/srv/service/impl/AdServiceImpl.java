@@ -146,7 +146,7 @@ public class AdServiceImpl implements AdService {
 		adDO.setPutWay(adParam.getPutWayEnum().val);
 		adDO.setViewcount(0);
 		adDO.setHits(0);
-		adDO.setEndTime(DateUtil.formatDate(adParam.getBeginTime(), "yyyy-MM-dd HH:mm"));
+		adDO.setBeginTime(DateUtil.formatDate(adParam.getBeginTime(), "yyyy-MM-dd HH:mm"));
 		adDO.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
 		adDO.setPoint(adParam.getPoint());
 		adDO.setAdCount(adParam.getAdCount());
