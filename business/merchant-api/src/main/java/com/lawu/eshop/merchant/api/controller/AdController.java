@@ -258,9 +258,6 @@ public class AdController extends BaseController {
 			adIds.add(Long.valueOf(str));
 		}
 		Result rs = adService.batchDeleteAd(adIds);
-		if(!isSuccess(rs)){
-			return successCreated(rs.getRet());
-		}
 		return successDelete();
 	}
 
