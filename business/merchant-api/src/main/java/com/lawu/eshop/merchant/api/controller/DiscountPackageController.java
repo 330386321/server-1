@@ -160,7 +160,7 @@ public class DiscountPackageController extends BaseController {
         
         if(parts != null && StringUtils.isNotEmpty(parts.toString())) {
             for (Part part : parts) {
-                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_ORDER, part, merchantApiConfig.getImageUploadUrl());
+                Map<String, String> map = UploadFileUtil.uploadImages(request, FileDirConstant.DIR_MALL_DISCOUNT_PACKAGE, part, merchantApiConfig.getImageUploadUrl());
                 String flag = map.get("resultFlag");
                 if (UploadFileTypeConstant.UPLOAD_RETURN_TYPE.equals(flag)) {
                     //有图片上传成功返回,拼接图片url
