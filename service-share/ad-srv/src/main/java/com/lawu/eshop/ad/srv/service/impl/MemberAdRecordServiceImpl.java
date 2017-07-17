@@ -23,15 +23,6 @@ public class MemberAdRecordServiceImpl implements MemberAdRecordService {
 	private MemberAdRecordDOMapper memberAdRecordDOMapper;
 
 	@Override
-	public boolean isClickToDay(Long memberId, Long adId) {
-		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
-		example.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId).andClickDateEqualTo(new Date());
-		long count = memberAdRecordDOMapper.countByExample(example);
-		return count > 0?true:false;
-
-	}
-
-	@Override
 	public List<MemberAdRecodeCommissionBO> getNoneCommissionAds() {
 		MemberAdRecordDOExample example = new MemberAdRecordDOExample();
 		example.createCriteria().andStatusEqualTo(MemberAdRecordStatusEnum.NONE.getVal());
