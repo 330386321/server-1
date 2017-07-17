@@ -15,13 +15,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class DiscountPackageUpdateForeignParam {
 	
 	/**
-	 * 优惠套餐id
-	 */
-	@NotNull
-	@ApiModelProperty(name = "id", value = "优惠套餐id", required = true)
-	private Long id;
-	
-	/**
 	 * 套餐名称
 	 */
 	@NotBlank
@@ -107,14 +100,6 @@ public class DiscountPackageUpdateForeignParam {
 	@ApiModelProperty(name = "discountPackageImages", value = "套餐图片详情")
 	private String discountPackageImages;
 	
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
 	}
