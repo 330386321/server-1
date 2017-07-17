@@ -955,28 +955,44 @@ public class AdServiceImpl implements AdService {
 			example.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 				   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
 			List<PointPoolDO>  ppList=pointPoolDOMapper.selectByExample(example);
-			BigDecimal sumPoint=new BigDecimal(0);
-			for (PointPoolDO pointPoolDO : ppList) {
-				sumPoint=sumPoint.add(pointPoolDO.getPoint());
+			if(ppList.isEmpty()){
+				detail.setAlreadyGetCount(0);
+				detail.setNotGetCount(adDO.getAdCount());
+				detail.setAlreadyGetPoint(BigDecimal.valueOf(0));
+				detail.setNotGetPoint(adDO.getTotalPoint());
+			}else{
+				BigDecimal sumPoint=new BigDecimal(0);
+				for (PointPoolDO pointPoolDO : ppList) {
+					sumPoint=sumPoint.add(pointPoolDO.getPoint());
+				}
+				detail.setAlreadyGetCount(ppList.size());
+				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
+				detail.setAlreadyGetPoint(sumPoint);
+				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
 			}
-			detail.setAlreadyGetCount(ppList.size());
-			detail.setNotGetCount(adDO.getAdCount()-ppList.size());
-			detail.setAlreadyGetPoint(sumPoint);
-			detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
+			
 		}else{
 			PointPoolDOExample example =new PointPoolDOExample();
 			example.createCriteria().andAdIdEqualTo(adDO.getId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PACKET.val)
 				   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val);
 			List<PointPoolDO>  ppList=pointPoolDOMapper.selectByExample(example);
-			BigDecimal sumPoint=new BigDecimal(0);
-			for (PointPoolDO pointPoolDO : ppList) {
-				sumPoint=sumPoint.add(pointPoolDO.getPoint());
+			if(ppList.isEmpty()){
+				detail.setAlreadyGetCount(0);
+				detail.setNotGetCount(adDO.getAdCount());
+				detail.setAlreadyGetPoint(BigDecimal.valueOf(0));
+				detail.setNotGetPoint(adDO.getTotalPoint());
+			}else{
+				BigDecimal sumPoint=new BigDecimal(0);
+				for (PointPoolDO pointPoolDO : ppList) {
+					sumPoint=sumPoint.add(pointPoolDO.getPoint());
+				}
+				detail.setAlreadyGetCount(ppList.size());
+				detail.setNotGetCount(adDO.getAdCount()-ppList.size());
+				detail.setAlreadyGetPoint(sumPoint);
+				detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
+				detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
 			}
-			detail.setAlreadyGetCount(ppList.size());
-			detail.setNotGetCount(adDO.getAdCount()-ppList.size());
-			detail.setAlreadyGetPoint(sumPoint);
-			detail.setNotGetPoint(adDO.getTotalPoint().subtract(sumPoint));
-			detail.setMediaUrl(adSrvConfig.getAdDefaultMediaUrl());
+			
 		}
 		return detail;
 	}
