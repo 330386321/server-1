@@ -120,7 +120,7 @@ public class MerchantDetailController extends BaseController {
             String logoUrl = merchantStoreService.getLogoUrlByStoreId(id);
             ShoppingStoreDetailDTO storeDetailDTO = new ShoppingStoreDetailDTO();
             storeDetailDTO.setLogoPic(logoUrl);
-            storeDetailDTO.setExistStore(false);
+            storeDetailDTO.setIsExistStore(false);
             //查询商品列表
             List<ProductSearchDTO> productSearchDTOList = productSolrService.findProductSearchList(searchParam);
             if (productSearchDTOList.isEmpty()) {
@@ -148,7 +148,7 @@ public class MerchantDetailController extends BaseController {
         Result<ShoppingStoreDetailDTO> shoppingStoreDetailDTOResult = merchantStoreService.getShoppingStoreDetailById(id, memberId);
         if(shoppingStoreDetailDTOResult.getModel() != null){
             shoppingStoreDetailDTOResult.getModel().setProductList(new ArrayList<>());
-            shoppingStoreDetailDTOResult.getModel().setExistStore(true);
+            shoppingStoreDetailDTOResult.getModel().setIsExistStore(true);
         }
         return shoppingStoreDetailDTOResult;
     }
