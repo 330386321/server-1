@@ -290,7 +290,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		// 更新门店信息
 		MerchantStoreDOExample example = new MerchantStoreDOExample();
 		example.createCriteria().andIdEqualTo(merchantStoreId).andMerchantIdEqualTo(merchantId);
-		merchantStoreDOMapper.updateByExample(merchantStoreDO, example);
+		merchantStoreDOMapper.updateByExampleSelective(merchantStoreDO, example);
 
 		// 更新门店扩展信息
 		MerchantStoreProfileDO merchantStoreProfileDO = (MerchantStoreProfileDO) MerchantStoreConverter.couverDOByParam(merchantStoreParam, 2);
@@ -299,7 +299,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 		merchantStoreProfileDO.setCertifType(merchantStoreParam.getCertifType().val);
 		MerchantStoreProfileDOExample merchantStoreProfileDOExample = new MerchantStoreProfileDOExample();
 		merchantStoreProfileDOExample.createCriteria().andIdEqualTo(merchantStoreId).andMerchantIdEqualTo(merchantId);
-		merchantStoreProfileDOMapper.updateByExample(merchantStoreProfileDO, merchantStoreProfileDOExample);
+		merchantStoreProfileDOMapper.updateByExampleSelective(merchantStoreProfileDO, merchantStoreProfileDOExample);
 
 		// 更新门店图片信息
 
@@ -325,7 +325,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(storeUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_STORE.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 		// 新增门店环境照
 		if (!StringUtils.isEmpty(merchantStoreParam.getEnvironmentUrl())) {
@@ -336,7 +336,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(evUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_ENVIRONMENT.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 		// 新增营业执照
 		if (!StringUtils.isEmpty(merchantStoreParam.getLicenseUrl())) {
@@ -347,7 +347,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(licenseUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LICENSE.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 		// 新增其他许可证
 		if (!StringUtils.isEmpty(merchantStoreParam.getOtherUrl())) {
@@ -358,7 +358,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(otherUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_OTHER.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 		// 新增门店LOGO
 		if (!StringUtils.isEmpty(merchantStoreParam.getLogoUrl())) {
@@ -369,7 +369,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(logoUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_LOGO.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 		// 新增门店手持身份证照
 		if (!StringUtils.isEmpty(merchantStoreParam.getIdcardUrl())) {
@@ -380,7 +380,7 @@ public class MerchantStoreInfoServiceImpl implements MerchantStoreInfoService {
 			}
 			merchantStoreImageDO.setPath(idcardUrl);
 			merchantStoreImageDO.setType(MerchantStoreImageEnum.STORE_IMAGE_IDCARD.val);
-			merchantStoreImageDOMapper.insert(merchantStoreImageDO);
+			merchantStoreImageDOMapper.insertSelective(merchantStoreImageDO);
 		}
 
 	}
