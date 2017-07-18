@@ -356,6 +356,7 @@ public class AdConverter {
 		adDetailBO.setRegionName(adDO.getRegionName());
 		adDetailBO.setRemark(adDO.getRemark());
 		adDetailBO.setAuditTime(adDO.getAuditTime());
+		adDetailBO.setBeginTime(adDO.getBeginTime());
         return adDetailBO;
 		
 		
@@ -388,6 +389,7 @@ public class AdConverter {
 		adDetailDTO.setNotGetCount(adDetailBO.getNotGetCount());
 		adDetailDTO.setAlreadyGetPoint(adDetailBO.getAlreadyGetPoint());
 		adDetailDTO.setNotGetPoint(adDetailBO.getNotGetPoint());
+		adDetailDTO.setBeginTime(adDetailBO.getBeginTime());
         return adDetailDTO;
 		
 		

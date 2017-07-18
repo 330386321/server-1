@@ -48,6 +48,8 @@ public class AdDetailBO {
 	private String remark;
 	
 	private Date auditTime;
+	
+	private Date beginTime;
 
 	public Long getId() {
 		return id;
@@ -207,6 +209,14 @@ public class AdDetailBO {
 
 	public void setAuditTime(Date auditTime) {
 		this.auditTime = auditTime;
+	}
+
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
 	}
 
 	
