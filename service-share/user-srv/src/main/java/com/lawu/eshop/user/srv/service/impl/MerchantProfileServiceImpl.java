@@ -41,7 +41,9 @@ public class MerchantProfileServiceImpl implements MerchantProfileService {
     public MerchantSizeLinkBO getMerchantSizeLink(Long merchantId) {
         MerchantProfileDO merchantProfileDO = merchantProfileDOMapper.selectByPrimaryKey(merchantId);
         MerchantSizeLinkBO merchantSizeLinkBO = new MerchantSizeLinkBO();
-        BeanUtils.copyProperties(merchantProfileDO,merchantSizeLinkBO);
+        if(merchantProfileDO != null){
+            BeanUtils.copyProperties(merchantProfileDO,merchantSizeLinkBO);
+        }
         return merchantSizeLinkBO;
     }
 

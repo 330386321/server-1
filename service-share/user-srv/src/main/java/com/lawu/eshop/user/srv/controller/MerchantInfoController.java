@@ -112,7 +112,9 @@ public class MerchantInfoController extends BaseController{
         }
         MerchantSizeLinkBO merchantSizeLinkBO = merchantProfileService.getMerchantSizeLink(merchantId);
         MerchantSizeLinkDTO merchantSizeLinkDTO = new MerchantSizeLinkDTO();
-        BeanUtils.copyProperties(merchantSizeLinkBO,merchantSizeLinkDTO);
+        if(merchantSizeLinkBO != null){
+            BeanUtils.copyProperties(merchantSizeLinkBO,merchantSizeLinkDTO);
+        }
         return successGet(merchantSizeLinkDTO);
     }
 
