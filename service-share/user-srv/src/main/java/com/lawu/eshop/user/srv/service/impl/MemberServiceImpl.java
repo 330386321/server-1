@@ -420,7 +420,9 @@ public class MemberServiceImpl implements MemberService {
         memberDO.setId(mermberId);
         memberDOMapper.updateByPrimaryKeySelective(memberDO);
         MemberDO old = memberDOMapper.selectByPrimaryKey(mermberId);
-        rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headimg);
+        if(old != null){
+            rongUserService.refreshUserInfo(old.getNum(), memberDO.getNickname(), headimg);
+        }
     }
 
     public CashUserInfoBO findCashUserInfo(Long id) {
