@@ -1,17 +1,13 @@
 package com.lawu.eshop.mall.srv.controller;
 
-import java.util.List;
-
+import com.lawu.eshop.framework.web.BaseController;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.mall.srv.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.lawu.eshop.framework.web.BaseController;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.mall.srv.service.PropertyService;
 
 /**
  * 
@@ -42,16 +38,5 @@ public class PropertyController extends BaseController {
         return successCreated(value);
     }
 
-    /**
-     * 
-     * @param name
-     * @return
-     */
-    @RequestMapping(value = "getValues", method = RequestMethod.GET)
-    public List<String> getValues(@PathVariable("name") String name) {
-    	
-    	List<String> values = propertyService.getValues(name);
-        return values;
-    }
 
 }
