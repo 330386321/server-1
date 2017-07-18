@@ -89,6 +89,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 	    bankAccountBO.setAccountName(bankAccountDO.getAccountName());
 	    bankAccountBO.setAccountNumber(bankAccountDO.getAccountNumber());
 	    bankAccountBO.setSubBranchName(bankAccountDO.getSubBranchName());
+	    bankAccountBO.setBankId(bankAccountDO.getBankId());
 	    BankDO bankDO=bankDOMapper.selectByPrimaryKey(bankAccountDO.getBankId());
 	    bankAccountBO.setBankName(bankDO.getName());
 		return bankAccountBO;
