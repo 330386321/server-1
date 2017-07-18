@@ -208,7 +208,9 @@ public class MerchantController extends BaseController {
     public Result<MobileDTO> selectMobile(@PathVariable("merchantId") Long merchantId) {
     	MerchantBO merchantBO=merchantService.getMerchantBOById(merchantId);
     	MobileDTO dto=new MobileDTO();
-    	dto.setMobile(merchantBO.getMobile());
+    	if(merchantBO != null){
+            dto.setMobile(merchantBO.getMobile());
+        }
         return successCreated(dto);
     }
 
