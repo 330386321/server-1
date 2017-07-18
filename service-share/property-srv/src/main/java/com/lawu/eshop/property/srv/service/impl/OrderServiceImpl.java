@@ -113,9 +113,7 @@ public class OrderServiceImpl implements OrderService {
 		tdsParam.setBizNum(param.getOutTradeNo());
 		transactionDetailService.save(tdsParam);
 
-		/*
-		 * 更新订单状态 发送MQ消息更新订单状态
-		 */
+		//更新订单状态 发送MQ消息更新订单状态
 		shoppingOrderPaymentTransactionMainServiceImpl.sendNotice(tdsParam.getId());
 
 		return ResultCode.SUCCESS;
@@ -131,8 +129,6 @@ public class OrderServiceImpl implements OrderService {
 			return ResultCode.SUCCESS;
 		}
 		
-		// 新增会员交易记录，加商家交易明细，加商家财产余额，<更新订单状态>
-
 		// 新增会员交易明细
 		TransactionDetailSaveDataParam tdsParam = new TransactionDetailSaveDataParam();
 		tdsParam.setTitle(TransactionTitleEnum.PAY.getVal());
@@ -187,7 +183,6 @@ public class OrderServiceImpl implements OrderService {
 		if (count > 0) {
 			return ResultCode.SUCCESS;
 		}
-
 		FreezeDO freezeDO = new FreezeDO();
 		freezeDO.setUserNum(param.getUserNum());
 		freezeDO.setMoney(new BigDecimal(param.getTotalOrderMoney()));
@@ -226,9 +221,7 @@ public class OrderServiceImpl implements OrderService {
 				freezeDOMapper.updateByExampleSelective(freezeDO, example);
 			} else {
 				// 校验退款金额不能大于冻结金额
-				example.createCriteria().andUserNumEqualTo(param.getUserNum())
-						.andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal())
-						.andBizIdEqualTo(Long.valueOf(param.getOrderId()));
+				example.createCriteria().andUserNumEqualTo(param.getUserNum()).andFundTypeEqualTo(FreezeTypeEnum.PRODUCT_ORDER.getVal()).andBizIdEqualTo(Long.valueOf(param.getOrderId()));
 				List<FreezeDO> freezeDOS = freezeDOMapper.selectByExample(example);
 				if (freezeDOS == null || freezeDOS.isEmpty()) {
 					return ResultCode.FREEZE_NULL;
@@ -334,7 +327,6 @@ public class OrderServiceImpl implements OrderService {
 	public int comfirmReleaseFreeze(OrderReleaseFreezeParam param) {
 		String[] userNums = param.getUserNums().split(",");
 		String[] orderIds = param.getOrderIds().split(",");
-		//String[] accounts = param.getAccounts().split(",");
 		Byte[] payWays = param.getPayWays();
 		FreezeDOExample example = new FreezeDOExample();
 		List<String> finishOrderIds = new ArrayList<String>();//成功处理的订单ID
@@ -352,7 +344,6 @@ public class OrderServiceImpl implements OrderService {
 				tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
 				tdsParam.setUserNum(userNums[i]);
 				tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-				//tdsParam.setTransactionAccount(accounts[i]);
 				tdsParam.setTransactionAccountType(payWays[i]);
 				tdsParam.setAmount(freeze.getMoney());
 				tdsParam.setBizId(orderIds[i]);
@@ -372,11 +363,9 @@ public class OrderServiceImpl implements OrderService {
 				infoDoView.setBalance(freeze.getMoney());
 				infoDoView.setGmtModified(new Date());
 				propertyInfoDOMapperExtend.updatePropertyInfoAddBalance(infoDoView);
-
 				finishOrderIds.add(orderIds[i]);
 			}
 		}
-
 		return ResultCode.SUCCESS;
 	}
 
@@ -385,7 +374,6 @@ public class OrderServiceImpl implements OrderService {
 	public int comfirmSysJob(OrderSysJobParam param) {
 		String[] userNums = param.getUserNums().split(",");
 		String[] orderIds = param.getOrderIds().split(",");
-		//String[] accounts = param.getAccounts().split(",");
 		Byte[] payWays = param.getPayWays();
 		String[] orderActualMoneys = param.getOrderActualMoney().split(",");
 		for (int i = 0; i < userNums.length; i++) {
@@ -394,7 +382,6 @@ public class OrderServiceImpl implements OrderService {
 			tdsParam.setTitle(MerchantTransactionTypeEnum.ORDER.getName());
 			tdsParam.setUserNum(userNums[i]);
 			tdsParam.setTransactionType(MerchantTransactionTypeEnum.ORDER.getValue());
-			//tdsParam.setTransactionAccount(accounts[i]);
 			tdsParam.setTransactionAccountType(payWays[i]);
 			tdsParam.setAmount(new BigDecimal(orderActualMoneys[i]));
 			tdsParam.setBizId(orderIds[i]);

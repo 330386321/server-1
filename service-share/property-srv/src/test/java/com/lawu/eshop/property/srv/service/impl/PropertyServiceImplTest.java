@@ -37,6 +37,36 @@ public class PropertyServiceImplTest {
     public void getValue(){
         String value = propertyService.getValue(PropertyType.CASH_SCALE);
         Assert.assertNotEquals("",value);
+        String value1 = propertyService.getValue(PropertyType.CASH_GREATER_ONE_MINUS_MONEY);
+        Assert.assertNotEquals("",value1);
+        String value2 = propertyService.getValue(PropertyType.CASH_MIN_MONEY);
+        Assert.assertNotEquals("",value2);
+        String value3 = propertyService.getValue(PropertyType.MEMBER_THIRD_PAY_POINT);
+        Assert.assertNotEquals("",value3);
+        String value4 = propertyService.getValue(PropertyType.MERCHANT_BONT);
+        Assert.assertNotEquals("",value4);
+        String value5 = propertyService.getValue(PropertyType.PRODUCT_ORDER_MONEY_FREEZE_DAYS);
+        Assert.assertNotEquals("",value5);
+        String value6 = propertyService.getValue(PropertyType.DEPOSIT_REFUND_DIFF_DAYS);
+        Assert.assertNotEquals("",value6);
+        String value7 = propertyService.getValue(PropertyType.ad_commission_0);
+        Assert.assertNotEquals("",value7);
+        value = propertyService.getValue(PropertyType.ad_commission_1);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.ad_commission_2);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.ad_commission_3);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.love_account_scale);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.sale_commission_1);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.sale_commission_2);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.sale_commission_3);
+        Assert.assertNotEquals("",value);
+        value = propertyService.getValue(PropertyType.sale_commission_add_scope);
+        Assert.assertNotEquals("",value);
     }
 
     @Transactional

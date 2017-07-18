@@ -53,7 +53,7 @@ public class BankAccountServiceImplTest {
         BankAccountParam bankAccountParam = new BankAccountParam();
         bankAccountParam.setAccountName("习大大");
         bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("10001",bankAccountParam);
 
@@ -78,7 +78,7 @@ public class BankAccountServiceImplTest {
         BankAccountParam bankAccountParam = new BankAccountParam();
         bankAccountParam.setAccountName("习大大");
         bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("10001",bankAccountParam);
 
@@ -103,7 +103,7 @@ public class BankAccountServiceImplTest {
         BankAccountParam bankAccountParam = new BankAccountParam();
         bankAccountParam.setAccountName("习大大");
         bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("10001",bankAccountParam);
 
@@ -132,7 +132,7 @@ public class BankAccountServiceImplTest {
         BankAccountParam bankAccountParam = new BankAccountParam();
         bankAccountParam.setAccountName("习大大");
         bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
+        bankAccountParam.setBankId(bdo.getId());
         bankAccountParam.setSubBranchName("南山支行");
         bankAccountService.saveBankAccount("10001",bankAccountParam);
 
@@ -152,18 +152,18 @@ public class BankAccountServiceImplTest {
         bdo.setGmtCreate(new Date());
         bankDOMapper.insert(bdo);
 
-        BankAccountParam bankAccountParam = new BankAccountParam();
-        bankAccountParam.setAccountName("习大大");
-        bankAccountParam.setAccountNumber("6217852000014838927");
-        bankAccountParam.setBankId(1);
-        bankAccountParam.setSubBranchName("南山支行");
-        bankAccountService.saveBankAccount("10001",bankAccountParam);
+        BankAccountDO bankAccountDO=new BankAccountDO();
+        bankAccountDO.setUserNum("10001");
+        bankAccountDO.setAccountName("习大大");
+        bankAccountDO.setAccountNumber("6217852000014838927");
+        bankAccountDO.setBankId(bdo.getId());
+        bankAccountDO.setSubBranchName("南山支行");
+        bankAccountDO.setStatus(new Byte("1"));
+        BankDO bankDO=bankDOMapper.selectByPrimaryKey(bdo.getId());
+        bankAccountDO.setNote("中银(0000)");
+        bankAccountDOMapper.insert(bankAccountDO);
 
-//        List<BankAccountBO> rntList = bankAccountService.selectMyBank("10001");
-//        Assert.assertNotNull(rntList);
-//        Assert.assertTrue(rntList.size() == 1);
-
-        BankAccountBO bo = bankAccountService.selectAccount(1L);
+        BankAccountBO bo = bankAccountService.selectAccount(bankAccountDO.getId());
         Assert.assertNotNull(bo);
         Assert.assertEquals("6217852000014838927",bo.getAccountNumber());
     }

@@ -22,6 +22,7 @@ import com.lawu.eshop.property.srv.service.BankAccountService;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.StringUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -83,37 +84,76 @@ public class BusinessDepositServiceImplTest {
     @Rollback
     @Test
     public void doHandleDepositNotify(){
-        BusinessDepositSaveDataParam param = new BusinessDepositSaveDataParam();
-        param.setBusinessId(1L);
-        param.setUserNum("10001");
-        param.setBusinessAccount("17512036361");
-        param.setBusinessName("张三");
-        param.setDeposit("1000");
-        param.setProvinceId("1");
-        param.setCityId("101");
-        param.setAreaId("10101");
-        BusinessDepositInitDTO dto = businessDepositService.save(param);
+        NotifyCallBackParam notifyParam1 = new NotifyCallBackParam();
+        notifyParam1.setBizIds("0");
+        notifyParam1.setUserNum("B10001");
+        notifyParam1.setTotalFee("1000");
+        notifyParam1.setTradeNo("10000000001");
+        notifyParam1.setBuyerLogonId("yqh**01");
+        notifyParam1.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(new Byte("2")));
+        notifyParam1.setMerchantId(1L);
+        Result result1 = businessDepositService.doHandleDepositNotify(notifyParam1);
+        Assert.assertEquals(ResultCode.FAIL,result1.getRet());
+
+        BusinessDepositDO bddo = new BusinessDepositDO();
+        bddo.setBusinessId(1L);
+        bddo.setUserNum("B10001");
+        bddo.setBusinessAccount("17512036361");
+        bddo.setBusinessName("张三");
+        bddo.setDepositNumber(StringUtil.getRandomNum(""));
+        bddo.setAmount(new BigDecimal("1000"));
+        bddo.setStatus(BusinessDepositStatusEnum.PAYING.getVal());
+        bddo.setProvinceId(Long.valueOf("1"));
+        bddo.setCityId(Long.valueOf("101"));
+        bddo.setAreaId(Long.valueOf("10101"));
+        bddo.setGmtCreate(new Date());
+        businessDepositDOMapper.insertSelective(bddo);
 
         NotifyCallBackParam notifyParam = new NotifyCallBackParam();
-        notifyParam.setBizIds("1");
-        notifyParam.setUserNum("10001");
-        notifyParam.setTotalFee("1000");
+        notifyParam.setBizIds(bddo.getId().toString());
+        notifyParam.setUserNum("B10001");
+        notifyParam.setTotalFee("1001");
         notifyParam.setTradeNo("10000000001");
         notifyParam.setBuyerLogonId("yqh**01");
         notifyParam.setTransactionPayTypeEnum(TransactionPayTypeEnum.getEnum(new Byte("2")));
         notifyParam.setMerchantId(1L);
         Result result = businessDepositService.doHandleDepositNotify(notifyParam);
+        Assert.assertEquals(ResultCode.NOTIFY_MONEY_ERROR,result.getRet());
 
-        Assert.assertEquals(ResultCode.SUCCESS,result.getRet());
+        notifyParam.setTotalFee("1000");
+        Result result2 = businessDepositService.doHandleDepositNotify(notifyParam);
+        Assert.assertEquals(ResultCode.SUCCESS,result2.getRet());
+
+        Result result3 = businessDepositService.doHandleDepositNotify(notifyParam);
+        Assert.assertEquals(ResultCode.SUCCESS,result3.getRet());
+
     }
 
     @Transactional
     @Rollback
     @Test
     public void selectDepositList(){
+        BankDO bdo = new BankDO();
+        bdo.setName("test");
+        bdo.setIconUrl("/1.jpg");
+        bdo.setStatus(new Byte("1"));
+        bdo.setOrdinal(1);
+        bdo.setGmtCreate(new Date());
+        bankDOMapper.insert(bdo);
+
+        BankAccountDO bankAccountDO=new BankAccountDO();
+        bankAccountDO.setUserNum("B10001");
+        bankAccountDO.setAccountName("习大大");
+        bankAccountDO.setAccountNumber("6217852000014838927");
+        bankAccountDO.setBankId(bdo.getId());
+        bankAccountDO.setSubBranchName("南山支行");
+        bankAccountDO.setStatus(new Byte("1"));
+        bankAccountDO.setNote("南山支行(0000)");
+        bankAccountDOMapper.insertSelective(bankAccountDO);
+
         BusinessDepositDO bddo = new BusinessDepositDO();
         bddo.setBusinessId(1L);
-        bddo.setUserNum("10001");
+        bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("吕布");
         bddo.setDepositNumber("11111111111111111111");
@@ -125,10 +165,11 @@ public class BusinessDepositServiceImplTest {
         bddo.setPaymentMethod(TransactionPayTypeEnum.ALIPAY.getVal());
         bddo.setGmtCreate(new Date());
         bddo.setGmtPay(new Date());
+        bddo.setBusinessBankAccountId(bankAccountDO.getId());
         businessDepositDOMapper.insertSelective(bddo);
 
         bddo.setBusinessId(1L);
-        bddo.setUserNum("10001");
+        bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("吕布");
         bddo.setDepositNumber("22222222222222222222");
@@ -140,6 +181,7 @@ public class BusinessDepositServiceImplTest {
         bddo.setPaymentMethod(TransactionPayTypeEnum.WX.getVal());
         bddo.setGmtCreate(new Date());
         bddo.setGmtPay(new Date());
+        bddo.setBusinessBankAccountId(bankAccountDO.getId());
         businessDepositDOMapper.insertSelective(bddo);
 
         BusinessDepositQueryDataParam param = new BusinessDepositQueryDataParam();
@@ -152,8 +194,8 @@ public class BusinessDepositServiceImplTest {
         param = new BusinessDepositQueryDataParam();
         param.setBusinessDepositStatusEnum(BusinessDepositStatusEnum.getEnum(BusinessDepositStatusEnum.APPLY_REFUND.getVal()));
         param.setRegionPath("1/11/111");
-        param.setBeginDate("2017-07-11");
-        param.setEndDate("2017-07-13");
+        param.setBeginDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
+        param.setEndDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         param.setCurrentPage(1);
         param.setPageSize(10);
         Page<BusinessDepositQueryBO> page1 = businessDepositService.selectDepositList(param);
@@ -210,24 +252,24 @@ public class BusinessDepositServiceImplTest {
         bankDOMapper.insert(bdo);
 
         BankAccountDO bankAccountDO=new BankAccountDO();
-        bankAccountDO.setUserNum("10001");
+        bankAccountDO.setUserNum("B10001");
         bankAccountDO.setAccountName("习大大");
         bankAccountDO.setAccountNumber("6217852000014838927");
         bankAccountDO.setBankId(bdo.getId());
         bankAccountDO.setSubBranchName("南山支行");
         bankAccountDO.setStatus(new Byte("1"));
-        bankAccountDO.setNote("南山支行");
+        bankAccountDO.setNote("南山支行(0000)");
         bankAccountDOMapper.insertSelective(bankAccountDO);
 
         PropertyInfoDO propertyInfoDO = new PropertyInfoDO();
-        propertyInfoDO.setUserNum("10001");
+        propertyInfoDO.setUserNum("B10001");
         propertyInfoDO.setGmtCreate(new Date());
         propertyInfoDO.setPayPassword(PwdUtil.generate("123456"));
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
 
         BusinessDepositDO bddo = new BusinessDepositDO();
         bddo.setBusinessId(1L);
-        bddo.setUserNum("10001");
+        bddo.setUserNum("B10001");
         bddo.setBusinessAccount("17512036361");
         bddo.setBusinessName("吕布");
         bddo.setDepositNumber("11111111111111111111");
@@ -240,11 +282,12 @@ public class BusinessDepositServiceImplTest {
         bddo.setGmtCreate(new Date());
         bddo.setGmtPay(new Date());
         bddo.setGmtModified(DateUtil.formatDate("2017-01-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
+        bddo.setBusinessBankAccountId(bankAccountDO.getId());
         businessDepositDOMapper.insertSelective(bddo);
 
         BusinessRefundDepositDataParam param = new BusinessRefundDepositDataParam();
-        param.setUserNum("10001");
-        param.setId("1");
+        param.setUserNum("B10001");
+        param.setId(bddo.getId().toString());
         param.setBusinessBankAccountId(bankAccountDO.getId().toString());
         param.setPayPwd("123456");
         int ret = businessDepositService.refundDeposit(param);
@@ -271,7 +314,7 @@ public class BusinessDepositServiceImplTest {
         bankAccountDO.setBankId(bdo.getId());
         bankAccountDO.setSubBranchName("南山支行");
         bankAccountDO.setStatus(new Byte("1"));
-        bankAccountDO.setNote("南山支行");
+        bankAccountDO.setNote("南山支行(0000)");
         bankAccountDOMapper.insertSelective(bankAccountDO);
 
         BusinessDepositDO bddo = new BusinessDepositDO();
@@ -289,6 +332,7 @@ public class BusinessDepositServiceImplTest {
         bddo.setGmtCreate(new Date());
         bddo.setGmtPay(new Date());
         bddo.setGmtModified(DateUtil.formatDate("2017-01-01 00:00:00","yyyy-MM-dd HH:mm:ss"));
+        bddo.setBusinessBankAccountId(bankAccountDO.getId());
         businessDepositDOMapper.insertSelective(bddo);
 
         BusinessDepositDetailBO bo = businessDepositService.selectDeposit("1");

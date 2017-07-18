@@ -12,6 +12,7 @@ import com.lawu.eshop.property.srv.bo.PointDetailBO;
 import com.lawu.eshop.property.srv.domain.PointDetailDO;
 import com.lawu.eshop.property.srv.mapper.PointDetailDOMapper;
 import com.lawu.eshop.property.srv.service.PointDetailService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.junit.Assert;
 import org.junit.Test;
@@ -130,7 +131,7 @@ public class PointDetailServiceImplTest {
 
         PointDetailReportParam param = new PointDetailReportParam();
         param.setDirection(new Byte("1"));
-        param.setDate("2017-07-17");
+        param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirection(param);
         Assert.assertEquals(1,rntList.size());
     }
@@ -153,7 +154,7 @@ public class PointDetailServiceImplTest {
 
         PointDetailReportParam param = new PointDetailReportParam();
         param.setDirection(new Byte("1"));
-        param.setDate("2017-07-17");
+        param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         param.setPointType(MemberTransactionTypeEnum.BACKAGE.getValue());
         List<PointConsumeReportBO> rntList = pointDetailService.selectPointDetailListByDateAndDirectionAndPointType(param);
         Assert.assertEquals(1,rntList.size());

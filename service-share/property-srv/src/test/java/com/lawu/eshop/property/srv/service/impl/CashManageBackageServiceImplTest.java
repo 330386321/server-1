@@ -10,6 +10,7 @@ import com.lawu.eshop.property.srv.bo.WithdrawCashReportBO;
 import com.lawu.eshop.property.srv.domain.*;
 import com.lawu.eshop.property.srv.mapper.*;
 import com.lawu.eshop.property.srv.service.CashManageBackageService;
+import com.lawu.eshop.utils.DateUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -288,7 +289,7 @@ public class CashManageBackageServiceImplTest {
         withdrawCashDO.setCityId(11);
         withdrawCashDO.setAreaId(111);
         withdrawCashDO.setGmtAccept(new Date());
-        withdrawCashDO.setGmtFinish(new Date());
+        withdrawCashDO.setGmtFinish(DateUtil.formatDate("2017-07-17 00:00:00","yyyy-MM-dd HH:mm:ss"));
         withdrawCashDO.setRegionFullName("北京市/县辖/东城区");
         int ret = withdrawCashDOMapper.insertSelective(withdrawCashDO);
         Assert.assertEquals(1,ret);

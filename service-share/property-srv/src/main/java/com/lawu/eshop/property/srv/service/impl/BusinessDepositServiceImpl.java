@@ -255,16 +255,10 @@ public class BusinessDepositServiceImpl implements BusinessDepositService {
 		if (BusinessDepositOperEnum.VERIFYD.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
 			// 核实操作成功后，发送MQ消息修改门店状态为：待审核,并修改门店审核显示状态
 			handleDepositAuditPassTransactionMainServiceImpl.sendNotice(param.getBusinessId());
-		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_UNCHECK);
-			message.setShow(true);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
-
 
 		} else if (BusinessDepositOperEnum.REFUND_SUCCESS.getVal().equals(param.getBusinessDepositOperEnum().getVal())) {
 			// 退款成功操作后，发送MQ消息修改门店状态为：注销
 			handleDepositAuditCancelTransactionMainServiceImpl.sendNotice(param.getBusinessId());
-		/*	message.setStatusEnum(MerchantStatusEnum.MERCHANT_STATUS_CANCEL);
-			messageProducerService.sendMessage(MqConstant.TOPIC_PROPERTY_SRV, MqConstant.TAG_HANDLE_DEPOSIT, message);*/
 		}
 		return ResultCode.SUCCESS;
 	}

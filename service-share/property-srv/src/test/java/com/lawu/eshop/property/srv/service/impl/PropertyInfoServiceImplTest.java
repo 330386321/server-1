@@ -2,10 +2,7 @@ package com.lawu.eshop.property.srv.service.impl;
 
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.ResultCode;
-import com.lawu.eshop.property.constants.FreezeStatusEnum;
-import com.lawu.eshop.property.constants.PayTypeEnum;
-import com.lawu.eshop.property.constants.PropertyinfoFreezeEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
+import com.lawu.eshop.property.constants.*;
 import com.lawu.eshop.property.param.BackagePropertyinfoDataParam;
 import com.lawu.eshop.property.param.PropertyInfoBackageParam;
 import com.lawu.eshop.property.srv.bo.PropertyBalanceBO;
@@ -115,7 +112,7 @@ public class PropertyInfoServiceImplTest {
         propertyInfoDO.setBalance(new BigDecimal("200"));
         propertyInfoDO.setPoint(new BigDecimal("200"));
         propertyInfoDO.setLoveAccount(new BigDecimal("0"));
-        propertyInfoDO.setFreeze(FreezeStatusEnum.FREEZE.getVal());
+        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
 
         PropertyPointBO bo = propertyInfoService.getPropertyPointByUserNum("M10001");
@@ -179,7 +176,7 @@ public class PropertyInfoServiceImplTest {
         propertyInfoDO.setBalance(new BigDecimal("200"));
         propertyInfoDO.setPoint(new BigDecimal("200"));
         propertyInfoDO.setLoveAccount(new BigDecimal("200"));
-        propertyInfoDO.setFreeze(FreezeStatusEnum.RELEASE.getVal());
+        propertyInfoDO.setFreeze(new Byte("0"));
         propertyInfoDOMapper.insertSelective(propertyInfoDO);
 
         int ret = propertyInfoService.validateBalance("M10001","200",true,"123456");

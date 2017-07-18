@@ -17,6 +17,7 @@ import com.lawu.eshop.property.srv.domain.RechargeDO;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
 import com.lawu.eshop.property.srv.mapper.RechargeDOMapper;
 import com.lawu.eshop.property.srv.service.RechargeService;
+import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
 import com.lawu.eshop.utils.StringUtil;
 import org.junit.Assert;
@@ -205,7 +206,7 @@ public class RechargeServiceImplTest {
         rechargeDOMapper.insertSelective(recharge);
 
         RechargeReportParam param = new RechargeReportParam();
-        param.setDate("2017-07-17");
+        param.setDate(DateUtil.getDateFormat(new Date(),"yyyy-MM-dd"));
         param.setRechargeType(PayTypeEnum.BALANCE.getVal());
         param.setStatus(ThirdPayStatusEnum.PAYING.getVal());
         List<RechargeReportBO> rtnList = rechargeService.selectWithdrawCashListByDateAndStatus(param);
