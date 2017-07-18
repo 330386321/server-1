@@ -1,16 +1,16 @@
 package com.lawu.eshop.mall.srv.converter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.lawu.eshop.mall.dto.ExpressCompanyDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyGroupDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyQueryDTO;
 import com.lawu.eshop.mall.dto.ExpressCompanyRetrieveDTO;
 import com.lawu.eshop.mall.srv.bo.ExpressCompanyBO;
 import com.lawu.eshop.mall.srv.domain.ExpressCompanyDO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -121,6 +121,9 @@ public class ExpressCompanyConverter {
 	 * @date 2017年7月7日
 	 */
 	public static ExpressCompanyQueryDTO convertExpressCompanyQueryDTO(List<ExpressCompanyBO> expressCompanyBOList) {
+		if(expressCompanyBOList == null || expressCompanyBOList.isEmpty()){
+			return null;
+		}
 		ExpressCompanyQueryDTO rtn = new ExpressCompanyQueryDTO();
 		List<ExpressCompanyGroupDTO> list = new ArrayList<>();
 		Map<String, List<ExpressCompanyDTO>> map = new HashMap<>();
