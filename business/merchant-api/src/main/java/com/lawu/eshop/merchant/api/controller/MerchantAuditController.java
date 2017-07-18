@@ -6,6 +6,7 @@ import com.lawu.eshop.framework.web.BaseController;
 import com.lawu.eshop.framework.web.HttpCode;
 import com.lawu.eshop.framework.web.Result;
 import com.lawu.eshop.framework.web.constants.UserConstant;
+import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.merchant.api.service.MerchantAuditService;
 import com.lawu.eshop.user.dto.MerchantStoreAuditDTO;
 import io.swagger.annotations.Api;
@@ -29,6 +30,7 @@ public class MerchantAuditController extends BaseController{
     @Autowired
     private MerchantAuditService merchantAuditService;
 
+    @Audit(date = "2017-07-18", reviewer = "章勇")
     @ApiOperation(value = "获取最新一条审核信息", notes = "获取最新一条审核信息。[2009] （章勇）", httpMethod = "GET")
     @Authorization
     @ApiResponse(code = HttpCode.SC_OK, message = "success")
