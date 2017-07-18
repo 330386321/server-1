@@ -176,7 +176,7 @@ public class AdController extends BaseController {
     	adEgainDTO.setVideoImgUrl(adDTO.getVideoImgUrl());
     	adEgainDTO.setMerchantId(adDTO.getMerchantId());
     	adEgainDTO.setStatusEnum(adDTO.getStatusEnum());
-    	
+    	adEgainDTO.setIsClickAd(adDTO.getIsClickAd());
     	Result<MerchantStoreDTO> merchantStoreDTO= merchantStoreService.selectMerchantStoreByMId(adDTO.getMerchantId());
     	Result<ManageTypeEnum> manageType =merchantStoreService.getManageType(adDTO.getMerchantId());
     	

@@ -116,6 +116,7 @@ public class AdConverter {
 		adDTO.setVideoImgUrl(adBO.getVideoImgUrl());
 		adDTO.setAuditorId(adBO.getAuditorId());
 		adDTO.setRemark(adBO.getRemark());
+		adDTO.setIsClickAd(adBO.getIsClickAd());
 		Date date=new Date();
 		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){ //结束倒计时
 			Long time=adBO.getBeginTime().getTime()+ 300000-date.getTime();

@@ -46,6 +46,7 @@ import com.lawu.eshop.ad.srv.domain.AdDOExample.Criteria;
 import com.lawu.eshop.ad.srv.domain.AdRegionDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDOExample;
 import com.lawu.eshop.ad.srv.domain.MemberAdRecordDO;
+import com.lawu.eshop.ad.srv.domain.MemberAdRecordDOExample;
 import com.lawu.eshop.ad.srv.domain.PointPoolDO;
 import com.lawu.eshop.ad.srv.domain.PointPoolDOExample;
 import com.lawu.eshop.ad.srv.domain.extend.AdDOView;
@@ -439,6 +440,16 @@ public class AdServiceImpl implements AdService {
 			Long number = pointPoolDOMapper.countByExample(ppexample2);
 			if (number > 0) {
 				isPraise = true;
+			}
+		}else{
+			
+			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
+			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(id).andMemberIdEqualTo(memberId);
+			Long clickCount= memberAdRecordDOMapper.countByExample(memberAdRecordDOExample);
+			if (clickCount.intValue() > 0) {
+				adBO.setIsClickAd(true);
+			} else {
+			 	adBO.setIsClickAd(false);
 			}
 		}
 		adBO.setIsPraise(isPraise);
