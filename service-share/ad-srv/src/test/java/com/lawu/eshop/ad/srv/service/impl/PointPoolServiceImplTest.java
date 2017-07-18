@@ -1,8 +1,24 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
+import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
+import com.lawu.eshop.ad.srv.bo.GetRedPacketBO;
+import com.lawu.eshop.ad.srv.domain.PointPoolDO;
+import com.lawu.eshop.ad.srv.mapper.PointPoolDOMapper;
+import com.lawu.eshop.ad.srv.service.PointPoolService;
 
 /**
  * 广告积分测试
@@ -13,5 +29,82 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/spring-test.xml"})
 public class PointPoolServiceImplTest {
+	
+	@Autowired
+	private PointPoolService pointPoolService;
+	
+	@Autowired
+	private PointPoolDOMapper pointPoolDOMapper;
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectList() {
+
+		PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(1l);
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setMemberNum("aaa");
+        pointPoolDOMapper.insert(pointPoolDO);
+       
+        List<PointPoolDO> list= pointPoolService.selectMemberList(1l);
+        Assert.assertNotNull(list);
+        Assert.assertTrue(list.size() > 0);
+
+    }
+	
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectStatusByMember() {
+
+		PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(1l);
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PRAISE.val);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setMemberNum("aaa");
+        pointPoolDOMapper.insert(pointPoolDO);
+       
+        Boolean flag= pointPoolService.selectStatusByMember(1l, 1l);
+        Assert.assertTrue(flag);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void isGetRedPacket() {
+
+		PointPoolDO pointPoolDO=new PointPoolDO();
+        pointPoolDO.setAdId(1l);
+        pointPoolDO.setGmtCreate(new Date());
+        pointPoolDO.setGmtModified(new Date());
+        pointPoolDO.setMerchantId(1002l);
+        pointPoolDO.setOrdinal(0);
+        pointPoolDO.setPoint(BigDecimal.valueOf(15));
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
+        pointPoolDO.setMemberId(1l);
+        pointPoolDO.setMemberNum("aaa");
+        pointPoolDOMapper.insert(pointPoolDO);
+       
+        GetRedPacketBO bo= pointPoolService.isGetRedPacket(1002l, "aaa");
+        Assert.assertNotNull(bo);
+
+    }
 
 }

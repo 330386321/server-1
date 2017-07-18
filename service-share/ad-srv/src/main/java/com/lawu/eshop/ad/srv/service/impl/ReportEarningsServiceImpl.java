@@ -95,8 +95,8 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 	public List<ReportEarningsBO> getReportMonthEarnings() {
 		AdDOExample adDOExample=new AdDOExample();
 		
-		Date begin = DateUtil.formatDate(new Date()+" 00:00:00","yyyy-MM-dd HH:mm:ss");
-		Date end = DateUtil.formatDate(new Date()+" 23:59:59","yyyy-MM-dd HH:mm:ss");
+		Date begin = DateUtil.formatDate(DateUtil.getDateFormat(new Date())+" 00:00:00","yyyy-MM-dd HH:mm:ss");
+		Date end = DateUtil.formatDate(DateUtil.getDateFormat(new Date())+" 23:59:59","yyyy-MM-dd HH:mm:ss");
 		
 		adDOExample.createCriteria().andStatusBetween(AdStatusEnum.AD_STATUS_PUTED.val, AdStatusEnum.AD_STATUS_OUT.val)
 					.andGmtModifiedBetween(begin, end);
