@@ -526,7 +526,9 @@ public class MerchantServiceImpl implements MerchantService {
 	public MerchantBaseInfoBO getMerchantById(Long merchantId) {
 		MerchantDO merchantDO = merchantDOMapper.selectByPrimaryKey(merchantId);
 		MerchantBaseInfoBO bo = new MerchantBaseInfoBO();
-		bo.setUserNum(merchantDO.getNum());
+		if(merchantDO != null){
+            bo.setUserNum(merchantDO.getNum());
+        }
 		return bo;
 	}
 
