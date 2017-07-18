@@ -101,9 +101,7 @@ public class OrderController extends BaseController {
     	if (message != null) {
     		return successCreated(ResultCode.REQUIRED_PARM_EMPTY, message);
     	}
-		/*if (TransactionPayTypeEnum.WX.val.equals(param.getTransactionPayTypeEnum().val)) {
-			String certPath = getRequest().getSession().getServletContext().getRealPath(propertySrvConfig.getWxpay_cert_local_path_member());
-		}*/
+
 		int retCode = orderService.doRefundScopeInside(param);
 		return successCreated(retCode);
 	}
