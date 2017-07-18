@@ -10,7 +10,7 @@ public interface CacheService {
 	/**
 	 * 获取次数
 	 * 
-	 * @param key
+	 * @param type
 	 * @return
 	 * @author Sunny
 	 */
@@ -19,7 +19,7 @@ public interface CacheService {
 	/**
 	 * 添加次数
 	 * 
-	 * @param key
+	 * @param type
 	 * @author Sunny
 	 */
 	void addCount(String type);
