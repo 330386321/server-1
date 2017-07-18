@@ -33,12 +33,6 @@ public class IndustryTypeServiceImplTest {
     @Rollback
     @Test
     public void listIndustryType(){
-        IndustryTypeDO industryTypeDO = new IndustryTypeDO();
-        industryTypeDO.setGmtCreate(new Date());
-        industryTypeDO.setParentId(new Short("0"));
-        industryTypeDO.setStatus((byte)1);
-        industryTypeDO.setName("test");
-        industryTypeDOMapper.insert(industryTypeDO);
 
         List<IndustryTypeBO> list = industryTypeService.listIndustryType();
         Assert.assertNotNull(list);
@@ -50,12 +44,7 @@ public class IndustryTypeServiceImplTest {
     @Rollback
     @Test
     public void listIndustryTypeByParentId(){
-        IndustryTypeDO industryTypeDO = new IndustryTypeDO();
-        industryTypeDO.setGmtCreate(new Date());
-        industryTypeDO.setParentId(new Short("0"));
-        industryTypeDO.setStatus((byte)1);
-        industryTypeDO.setName("test");
-        industryTypeDOMapper.insert(industryTypeDO);
+
         List<IndustryTypeBO> list = industryTypeService.listIndustryTypeByParentId(new Short("0"));
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
@@ -66,12 +55,6 @@ public class IndustryTypeServiceImplTest {
     @Rollback
     @Test
     public void getAllIndustryList(){
-        IndustryTypeDO industryTypeDO = new IndustryTypeDO();
-        industryTypeDO.setGmtCreate(new Date());
-        industryTypeDO.setParentId(new Short("0"));
-        industryTypeDO.setStatus((byte)1);
-        industryTypeDO.setName("test");
-        industryTypeDOMapper.insert(industryTypeDO);
         List<IndustryTypeBO> list = industryTypeService.getAllIndustryList();
         Assert.assertNotNull(list);
         Assert.assertEquals(1,list.size());
