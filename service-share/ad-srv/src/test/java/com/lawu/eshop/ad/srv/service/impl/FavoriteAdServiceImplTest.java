@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -20,6 +21,7 @@ import com.lawu.eshop.ad.param.AdParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
+import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.FavoriteAdDO;
 import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.FavoriteAdDOMapper;
@@ -74,25 +76,26 @@ public class FavoriteAdServiceImplTest {
     @Rollback
     @Test
     public void selectMyFavoriteAd() {
-    	AdSaveParam adSaveParam=new AdSaveParam();
-    	adSaveParam.setLatitude(BigDecimal.valueOf(22.547153));
-    	adSaveParam.setLongitude(BigDecimal.valueOf(113.960333));
-    	adSaveParam.setMerchantId(1002l);
-    	adSaveParam.setUserNum("B856392484215848969");
-    	adSaveParam.setMediaUrl("ad_image/1494582624025648401.png");
-    	AdParam param=new AdParam();
-    	param.setAdCount(20);
-    	param.setBeginTime("2017-05-17 11:35:00");
-    	param.setContent("广告测试内容");
-    	param.setPoint(BigDecimal.valueOf(0.5));
-    	param.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
-    	param.setRegionName("全国");
-    	param.setTitle("广告测试标题");
-    	param.setTotalPoint(BigDecimal.valueOf(100));
-    	param.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
-    	adSaveParam.setAdParam(param);
-    	Integer  id=adService.saveAd(adSaveParam);
-    	favoriteAdService.save(Long.parseLong(id.toString()), 1l);
+    	AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+    	favoriteAdService.save(ad.getId(), 1l);
     	
     	FavoriteAdParam paramQuery=new FavoriteAdParam();
     	paramQuery.setCurrentPage(1);
@@ -102,6 +105,20 @@ public class FavoriteAdServiceImplTest {
     	Assert.assertNotNull(page.getRecords());
         Assert.assertTrue(page.getRecords().size()>0);
 
+    }
+    
+    
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void isFavoriteAd() {
+
+    	favoriteAdService.save(1l, 1l);
+
+        Boolean flag = favoriteAdService.isFavoriteAd(1l, 1l);
+        Assert.assertNotNull(flag);
+        Assert.assertTrue(flag);
     }
     
     
