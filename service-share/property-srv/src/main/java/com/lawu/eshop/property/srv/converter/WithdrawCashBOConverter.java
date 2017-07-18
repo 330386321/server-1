@@ -112,7 +112,7 @@ public class WithdrawCashBOConverter {
 	/**
 	 * WithdrawCashBO List 转换为 WithdrawCashStatusDTO List
 	 * 
-	 * @param withdrawCashDOList
+	 * @param withdrawCashBOList
 	 * @return
 	 */
 	public static List<WithdrawCashStatusDTO> convertWithdrawCashStatusDTOList(List<WithdrawCashBO> withdrawCashBOList) {

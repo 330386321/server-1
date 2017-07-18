@@ -49,7 +49,7 @@ public class BankConverter {
 	
 	/**
 	 * BO转DTO
-	 * @param bankDO
+	 * @param bankBO
 	 * @return
 	 */
 	public static BankDTO convertDTO(BankBO bankBO ) {
@@ -65,7 +65,7 @@ public class BankConverter {
 	
 	/**
 	 * BOS 转DTOS
-	 * @param bankDOS
+	 * @param bankBOS
 	 * @return
 	 */
 	public static List<BankDTO> convertDTOS(List<BankBO> bankBOS ) {
