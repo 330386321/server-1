@@ -1,22 +1,37 @@
 package com.lawu.eshop.member.api.service;
 
-import com.lawu.eshop.framework.core.page.Page;
-import com.lawu.eshop.framework.web.Result;
-import com.lawu.eshop.user.dto.*;
-import com.lawu.eshop.user.param.MemberQuery;
-import com.lawu.eshop.user.param.RegisterRealParam;
-import com.lawu.eshop.user.param.UserParam;
-
 import java.util.List;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.lawu.eshop.framework.core.page.Page;
+import com.lawu.eshop.framework.web.Result;
+import com.lawu.eshop.user.dto.AdQueryMemberInfoDTO;
+import com.lawu.eshop.user.dto.CashUserInfoDTO;
+import com.lawu.eshop.user.dto.EfriendDTO;
+import com.lawu.eshop.user.dto.LoginUserDTO;
+import com.lawu.eshop.user.dto.MemberDTO;
+import com.lawu.eshop.user.dto.MemberInfoForShoppingOrderDTO;
+import com.lawu.eshop.user.dto.MemberMineInfoDTO;
+import com.lawu.eshop.user.dto.RongYunDTO;
+import com.lawu.eshop.user.dto.UserDTO;
+import com.lawu.eshop.user.dto.UserHeadImgDTO;
+import com.lawu.eshop.user.dto.UserRedPacketDTO;
+import com.lawu.eshop.user.param.MemberQuery;
+import com.lawu.eshop.user.param.RegisterRealParam;
+import com.lawu.eshop.user.param.UserParam;
 
 /**
  * @author Leach
  * @date 2017/3/13
  */
-@FeignClient(value = "user-srv")
+@FeignClient(value = "user-srv", path = "member/")
 public interface MemberService {
 
     /**
@@ -26,7 +41,7 @@ public interface MemberService {
      * @param pwd     密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/withPwd/{account}")
+    @RequestMapping(method = RequestMethod.GET, value = "withPwd/{account}")
     Result<LoginUserDTO> find(@PathVariable("account") String account, @RequestParam("pwd") String pwd);
 
     /**
@@ -35,7 +50,7 @@ public interface MemberService {
      * @param memberId 会员id
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/findMemberInfo/{memberId}")
+    @RequestMapping(method = RequestMethod.GET, value = "findMemberInfo/{memberId}")
     Result<UserDTO> findMemberInfo(@PathVariable("memberId") Long memberId);
 
     /**
@@ -43,7 +58,7 @@ public interface MemberService {
      *
      * @param memberParam 会员信息
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "member/updateMemberInfo/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "updateMemberInfo/{id}")
     Result updateMemberInfo(@ModelAttribute UserParam memberParam, @PathVariable("id") Long id);
 
     /**
@@ -54,7 +69,7 @@ public interface MemberService {
      * @param newPwd      新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "member/updateLoginPwd/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "updateLoginPwd/{id}")
     Result updateLoginPwd(@PathVariable("id") Long id, @RequestParam("originalPwd") String originalPwd, @RequestParam("newPwd") String newPwd);
 
     /**
@@ -64,7 +79,7 @@ public interface MemberService {
      * @param newPwd 新密码
      * @return
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "member/resetLoginPwd/{mobile}")
+    @RequestMapping(method = RequestMethod.PUT, value = "resetLoginPwd/{mobile}")
     Result resetLoginPwd(@PathVariable("mobile") String mobile, @RequestParam("newPwd") String newPwd);
 
     /**
@@ -74,7 +89,7 @@ public interface MemberService {
      * @author zhangrc
      * @date 2017/03/23
      */
-    @RequestMapping(method = RequestMethod.POST, value = "member/findMemberListByUser")
+    @RequestMapping(method = RequestMethod.POST, value = "findMemberListByUser")
     Result<Page<EfriendDTO>> findMemberListByUser(@RequestParam("userId") Long id, @RequestBody MemberQuery query,@RequestParam("inviterType") Byte inviterType);
 
     /**
@@ -82,7 +97,7 @@ public interface MemberService {
      *
      * @param registerRealParam 会员注册信息
      */
-    @RequestMapping(method = RequestMethod.POST, value = "member/register")
+    @RequestMapping(method = RequestMethod.POST, value = "register")
     Result register(@ModelAttribute RegisterRealParam registerRealParam);
 
     /**
@@ -91,7 +106,7 @@ public interface MemberService {
      * @param account 会员账号
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/getMember/{account}")
+    @RequestMapping(method = RequestMethod.GET, value = "getMember/{account}")
     Result<MemberDTO> getMemberByAccount(@PathVariable("account") String account);
 
     /**
@@ -101,7 +116,7 @@ public interface MemberService {
      * @param headimg
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "member/saveHeadImage/{memberId}")
+    @RequestMapping(method = RequestMethod.POST, value = "saveHeadImage/{memberId}")
     Result<UserHeadImgDTO> saveHeadImage(@PathVariable("memberId") Long memberId, @RequestParam("headimg") String headimg);
 
     /**
@@ -111,7 +126,7 @@ public interface MemberService {
      * @return
      * @author Yangqh
      */
-    @RequestMapping(method = RequestMethod.GET, value = "member/findCashUserInfo/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "findCashUserInfo/{id}")
     CashUserInfoDTO findCashUserInfo(@PathVariable("id") Long id);
 
     /**
@@ -121,7 +136,7 @@ public interface MemberService {
      * @param ryToken
      * @return
      */
-    @RequestMapping(value = "member/setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
+    @RequestMapping(value = "setGtAndRongYunInfo/{id}",method = RequestMethod.PUT)
     Result setGtAndRongYunInfo(@PathVariable("id") Long id,@RequestParam("cid") String cid);
 
 	/**
@@ -131,7 +146,7 @@ public interface MemberService {
 	 *            用户id
 	 * @return
 	 */
-	@RequestMapping(value = "member/getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "getMemberInfoForShoppingOrder/{id}", method = RequestMethod.GET)
 	Result<MemberInfoForShoppingOrderDTO> getMemberInfoForShoppingOrder(@PathVariable("id") Long id);
 	
 	/**
@@ -139,7 +154,7 @@ public interface MemberService {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "member/findMember/{memberId}")
+	@RequestMapping(method = RequestMethod.GET, value = "findMember/{memberId}")
     Result<MemberDTO> findMemberInfoById(@PathVariable("memberId") Long memberId);
 	
 	/**
@@ -147,7 +162,7 @@ public interface MemberService {
 	 * @param moblie
 	 * @return
 	 */
-	@RequestMapping(value = "member/isRegister", method = RequestMethod.GET)
+	@RequestMapping(value = "isRegister", method = RequestMethod.GET)
     Result<UserRedPacketDTO> isRegister(@RequestParam("moblie") String moblie);
 
     /**
@@ -156,7 +171,7 @@ public interface MemberService {
      * @param num
      * @return
      */
-    @RequestMapping(value = "member/getRongYunInfo/{num}", method = RequestMethod.GET)
+    @RequestMapping(value = "getRongYunInfo/{num}", method = RequestMethod.GET)
     Result<RongYunDTO> getRongYunInfoByNum(@PathVariable("num") String num);
     
     /**
@@ -164,10 +179,10 @@ public interface MemberService {
      * @param mobile
      * @return
      */
-    @RequestMapping(value = "member/isExistsMobile", method = RequestMethod.GET)
+    @RequestMapping(value = "isExistsMobile", method = RequestMethod.GET)
     Result<Boolean> isExistsMobile(@RequestParam("mobile") String mobile);
 
-    @RequestMapping(value = "member/delUserGtPush", method = RequestMethod.PUT)
+    @RequestMapping(value = "delUserGtPush", method = RequestMethod.PUT)
     Result delUserGtPush(@RequestParam("memberId") Long memberId);
     
     /**
@@ -175,7 +190,7 @@ public interface MemberService {
      * @param memberIds
      * @return
      */
-    @RequestMapping(value = "member/getMemberByIds", method = RequestMethod.GET)
+    @RequestMapping(value = "getMemberByIds", method = RequestMethod.GET)
    	Result<List<MemberDTO>> getMemberByIds(@RequestParam("memberIds") List<Long> memberIds);
     
     /**
@@ -186,7 +201,16 @@ public interface MemberService {
      * @author Sunny
      * @date 2017年6月16日
      */
-    @RequestMapping(value = "member/findMemberMineInfo/{memberId}", method = RequestMethod.GET)
+    @RequestMapping(value = "findMemberMineInfo/{memberId}", method = RequestMethod.GET)
     Result<MemberMineInfoDTO> findMemberMineInfo(@PathVariable("memberId") Long memberId);
-
+    
+	/**
+	 * 查询广告所需要的用户信息
+	 * 
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月18日
+	 */
+	@RequestMapping(value = "adQueryMemberInfo/{memberId}", method = RequestMethod.GET)
+	Result<AdQueryMemberInfoDTO> adQueryMemberInfo(@PathVariable("memberId") Long memberId);
 }

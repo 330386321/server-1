@@ -104,5 +104,196 @@
     FROM ad 
     where   <![CDATA[ status > 0 and status < 5  ]]>
   </select>
- 
+  
+	<!-- 
+	                  查询E赚广告(平面广告,视频广告)
+	      ①筛选
+	      1.区域投放,查询用户的所在区域,作为筛选条件
+	      2.粉丝投放,查询用户的所有是粉丝商家,作为筛选条件
+	      3.雷达投放,根据用户以及广告的经度和纬度,以及投放半径,作为筛选条件
+	      4.广告类型,状态为投放中
+	      ②排序
+	      1.根据用户的点击次数,以及投放时间来排序,属于filesort排序,排序的性能比较低,需要继续优化
+	 -->
+	<select resultType="java.lang.Long" id="selectPageAdEgainId" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample">
+		<if test="latitude != null and longitude != null">
+		SET @r = #{radius};
+		SET @lat = #{latitude};
+		SET @lon = #{longitude};
+		</if>
+		SELECT id FROM ad
+		WHERE
+		type = #{type} AND status = 2 AND
+		(
+		    <if test="latitude != null and longitude != null">
+		    ( 
+		      put_way = 3
+		      AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
+		      AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+		    )
+		    </if>
+		    <if test="merchantIds != null">
+		    OR 
+		    ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
+			</if>
+			OR
+			( put_way = 1 AND areas IS NULL )
+			<if test="areas != null">
+			OR
+		    ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
+		    </if>
+		)
+		order by hits desc, gmt_create desc
+	</select>
+	
+	<!-- 查询E赚广告总数 -->
+	<select resultType="java.lang.Long" id="selectAdEgainCount" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample">
+        <if test="latitude != null and longitude != null">
+        SET @r = #{radius};
+        SET @lat = #{latitude};
+        SET @lon = #{longitude};
+        </if>
+        SELECT count(*) FROM ad
+        WHERE
+        type = #{type} AND status = 2 AND
+        (
+            <if test="latitude != null and longitude != null">
+            ( 
+                put_way = 3
+                AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
+                AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+            )
+            </if>
+            <if test="merchantIds != null">
+            OR 
+            ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
+            </if>
+            OR
+            ( put_way = 1 AND areas IS NULL )
+            <if test="areas != null">
+            OR
+            ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
+            </if>
+        )
+    </select>
+    
+    <!-- 
+                       查询广告排行榜(平面广告,视频广告)
+          ①筛选
+          1.区域投放,查询用户的所在区域,作为筛选条件
+          2.粉丝投放,查询用户的所有是粉丝商家,作为筛选条件
+          3.雷达投放,根据用户以及广告的经度和纬度,以及投放半径,作为筛选条件
+          4.广告类型(平面广告和视频广告),状态(上架和投放中),以及广告的开始时间
+          ②排序
+          1.根据广告的积分和总积分来排序,属于filesort排序,排序的性能比较低,需要继续优化
+     -->
+    <select resultType="java.lang.Long" id="selectAdPointIdExample" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdPointIdExample">
+        <if test="latitude != null and longitude != null">
+        SET @r = #{radius};
+        SET @lat = #{latitude};
+        SET @lon = #{longitude};
+        </if>
+        SELECT id FROM ad
+        WHERE
+        type IN (1, 2) AND status IN (1, 2) AND begin_time > #{beginTime} AND
+        (
+            <if test="latitude != null and longitude != null">
+            ( 
+              put_way = 3
+              AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
+              AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+            )
+            </if>
+            <if test="merchantIds != null">
+            OR 
+            ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
+            </if>
+            OR
+            ( put_way = 1 AND areas IS NULL )
+            <if test="areas != null">
+            OR
+            ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
+            </if>
+        )
+        order by 
+        <choose>
+	        <when test="orderType == 1">
+	             total_point desc
+	        </when>
+	        <when test="orderType == 2">
+                 point desc
+            </when>
+        </choose>
+        LIMIT 0,10
+    </select>
+    
+    <!-- 
+                      查询精选推荐广告(平面广告,视频广告)
+          ①筛选
+          1.区域投放,查询用户的所在区域,作为筛选条件
+          2.粉丝投放,查询用户的所有是粉丝商家,作为筛选条件
+          3.雷达投放,根据用户以及广告的经度和纬度,以及投放半径,作为筛选条件
+          4.广告类型,状态为投放中
+          ②排序
+          1.根据用户的点击次数,以及投放时间来排序,属于filesort排序,排序的性能比较低,需要继续优化
+     -->
+    <select resultType="java.lang.Long" id="selectPageChoicenessAdId" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectChoicenessAdIdExample">
+        <if test="latitude != null and longitude != null">
+        SET @r = #{radius};
+        SET @lat = #{latitude};
+        SET @lon = #{longitude};
+        </if>
+        SELECT id FROM ad
+        WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
+        (
+            <if test="latitude != null and longitude != null">
+            ( 
+              put_way = 3
+              AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
+              AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+            )
+            </if>
+            <if test="merchantIds != null">
+            OR 
+            ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
+            </if>
+            OR
+            ( put_way = 1 AND areas IS NULL )
+            <if test="areas != null">
+            OR
+            ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
+            </if>
+        )
+        ORDER BY gmt_create DESC
+    </select>
+    
+    <!-- 查询精选推荐广告总数 -->
+    <select resultType="java.lang.Long" id="selectChoicenessAdCount" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectChoicenessAdIdExample">
+        <if test="latitude != null and longitude != null">
+        SET @r = #{radius};
+        SET @lat = #{latitude};
+        SET @lon = #{longitude};
+        </if>
+        SELECT count(*) FROM ad
+        WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
+        (
+            <if test="latitude != null and longitude != null">
+            ( 
+                put_way = 3
+                AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
+                AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+            )
+            </if>
+            <if test="merchantIds != null">
+            OR 
+            ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
+            </if>
+            OR
+            ( put_way = 1 AND areas IS NULL )
+            <if test="areas != null">
+            OR
+            ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
+            </if>
+        )
+    </select>
 </mapper>

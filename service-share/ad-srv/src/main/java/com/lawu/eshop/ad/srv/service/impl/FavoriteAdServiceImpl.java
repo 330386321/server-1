@@ -84,12 +84,12 @@ public class FavoriteAdServiceImpl implements FavoriteAdService {
 
 	@Override
 	public Boolean isFavoriteAd(Long adId, Long memberId) {
-		FavoriteAdDOExample fAexample=new FavoriteAdDOExample();
+		FavoriteAdDOExample fAexample = new FavoriteAdDOExample();
 		fAexample.createCriteria().andAdIdEqualTo(adId).andMemberIdEqualTo(memberId);
-		Long count=favoriteAdDOMapper.countByExample(fAexample);
-		if(count.intValue()>0){  //是否收藏
+		Long count = favoriteAdDOMapper.countByExample(fAexample);
+		if (count.intValue() > 0) { // 是否收藏
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

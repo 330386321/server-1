@@ -121,7 +121,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -158,7 +158,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -194,7 +194,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -230,7 +230,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_VIDEO.val);
+		ad.setType(AdTypeEnum.AD_TYPE_VIDEO.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
@@ -266,7 +266,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_VIDEO.val);
+		ad.setType(AdTypeEnum.AD_TYPE_VIDEO.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_AUDIT.val);
@@ -302,7 +302,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -339,7 +339,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -374,7 +374,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -447,7 +447,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -482,7 +482,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -524,7 +524,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setHits(0);
@@ -556,7 +556,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -586,7 +586,7 @@ public class AdServiceImplTest {
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PACKET.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -609,7 +609,7 @@ public class AdServiceImplTest {
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PACKET.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -650,7 +650,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -675,7 +675,7 @@ public class AdServiceImplTest {
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PACKET.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -716,7 +716,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -760,7 +760,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -791,7 +791,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -826,7 +826,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -864,7 +864,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -894,7 +894,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -930,7 +930,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -968,7 +968,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -1002,7 +1002,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -1035,7 +1035,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -1068,7 +1068,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -1091,7 +1091,7 @@ public class AdServiceImplTest {
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PACKET.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
@@ -1114,7 +1114,7 @@ public class AdServiceImplTest {
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PACKET.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PACKET.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -1144,7 +1144,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
@@ -1172,7 +1172,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -1204,7 +1204,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -1239,7 +1239,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setHits(0);
@@ -1280,7 +1280,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setHits(0);
@@ -1321,7 +1321,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setHits(0);
@@ -1351,7 +1351,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setHits(0);

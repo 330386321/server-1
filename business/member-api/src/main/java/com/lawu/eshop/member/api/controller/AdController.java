@@ -2,7 +2,6 @@ package com.lawu.eshop.member.api.controller;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -17,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdEgainDTO;
+import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
 import com.lawu.eshop.ad.dto.AdLexiconDTO;
+import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
@@ -29,6 +31,7 @@ import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
 import com.lawu.eshop.ad.dto.UserTopDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
+import com.lawu.eshop.ad.param.AdPointForeignParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSolrParam;
@@ -46,6 +49,7 @@ import com.lawu.eshop.framework.web.doc.annotation.Audit;
 import com.lawu.eshop.mall.dto.VerifyCodeDTO;
 import com.lawu.eshop.member.api.MemberApiConfig;
 import com.lawu.eshop.member.api.service.AdExtendService;
+import com.lawu.eshop.member.api.service.AdLexiconService;
 import com.lawu.eshop.member.api.service.AdService;
 import com.lawu.eshop.member.api.service.AdViewService;
 import com.lawu.eshop.member.api.service.ClickAdRecordService;
@@ -84,7 +88,7 @@ import io.swagger.annotations.ApiResponse;
  * @author zhangrc
  * @date 2017/04/5
  */
-@Api(tags = "ad")
+@Api(tags = "ad", value = "广告接口")
 @RestController
 @RequestMapping(value = "ad/")
 public class AdController extends BaseController {
@@ -127,9 +131,16 @@ public class AdController extends BaseController {
 	
 	@Autowired
 	private ClickAdRecordService clickAdRecordService;
- 
+	
+	@Autowired
+	private AdLexiconService adLexiconService;
+	
+	/**
+	 * @see selectEgainAd
+	 */
+	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
-	@ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgain", method = RequestMethod.GET)
@@ -137,8 +148,9 @@ public class AdController extends BaseController {
 		return adExtendService.selectListByMember(adEgainParam);
 	}
 
+	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
-	@ApiOperation(value = "会员查询广告列表(精选推荐)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "会员查询广告列表(精选推荐)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectChoiceness", method = RequestMethod.GET)
@@ -146,8 +158,9 @@ public class AdController extends BaseController {
 		return adExtendService.selectChoiceness(param);
 	}
 
+	@Deprecated
 	@Audit(date = "2017-04-17", reviewer = "孙林青")
-	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "会员查询广告列表(积分榜，人气榜)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectListPointTotle", method = RequestMethod.GET)
@@ -326,13 +339,15 @@ public class AdController extends BaseController {
 		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
 	@Authorization
 	@ApiOperation(value = "广告词库查询", notes = "广告词库查询[]（张荣成）", httpMethod = "GET")
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectLexicon", method = RequestMethod.GET)
 	public Result<List<AdLexiconDTO>> selectList(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @RequestParam @ApiParam(required = true, value = "广告id") Long adId) {
-		return adService.selectList(adId);
+		Result<List<AdLexiconDTO>> result = adLexiconService.selectList(adId);
+		return successGet(result);
 	}
 
 	@Audit(date = "2017-04-13", reviewer = "孙林青")
@@ -412,8 +427,9 @@ public class AdController extends BaseController {
 
 	}
 
+	@Deprecated
 	@Audit(date = "2017-05-12", reviewer = "孙林青")
-	@ApiOperation(value = "E赚列表(E赚平面和视频)", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
+	@ApiOperation(value = "E赚列表(E赚平面和视频)[Deprecated]", notes = "广告列表,[]（张荣成）", httpMethod = "GET")
 	@Authorization
 	@ApiResponse(code = HttpCode.SC_OK, message = "success")
 	@RequestMapping(value = "selectEgainAd", method = RequestMethod.GET)
@@ -498,5 +514,33 @@ public class AdController extends BaseController {
 		return adService.isExistsRedPacket(merchantId);
 	}
 	
-
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询E赚列表", notes = "分页查询E赚列表(平面和视频)[]（蒋鑫俊）", httpMethod = "GET")
+	@Authorization
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "egainAd", method = RequestMethod.GET)
+	public Result<Page<AdEgainQueryDTO>> egainAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdEgainParam adEgainParam) {
+		Result<Page<AdEgainQueryDTO>> result = adExtendService.selectEgain(adEgainParam);
+		return successGet(result);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询积分排行榜广告列表", notes = "查询积分排行榜广告列表(积分榜，人气榜),[]（蒋鑫俊）", httpMethod = "GET")
+	@Authorization
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "selectPointTotle", method = RequestMethod.GET)
+	public Result<List<AdPointDTO>> selectPointTotle(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdPointForeignParam adPointParam) {
+		Result<List<AdPointDTO>> result = adExtendService.selectAdTop(adPointParam);
+		return successGet(result);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@ApiOperation(value = "查询精选推荐广告列表", notes = "分页查询精选推荐广告列表,[]（蒋鑫俊）", httpMethod = "GET")
+	@Authorization
+	@ApiResponse(code = HttpCode.SC_OK, message = "success")
+	@RequestMapping(value = "choiceness", method = RequestMethod.GET)
+	public Result<Page<ChoicenessAdDTO>> selectChoicenessAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token, @ModelAttribute @ApiParam(value = "查询信息") AdChoicenessParam param) {
+		Result<Page<ChoicenessAdDTO>> result = adExtendService.selectChoicenessAd(param);
+		return successGet(result);
+	}
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
@@ -86,7 +87,7 @@ public class AdController extends BaseController {
     public Result saveAd(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,@ModelAttribute @ApiParam(required = true, value = "广告信息") AdParam adParam) {
     	Long merchantId = UserUtil.getCurrentUserId(getRequest());
     	String userNum = UserUtil.getCurrentUserNum(getRequest());
-		if(adParam.getTypeEnum().val!=4 && !StringUtils.isNotEmpty(adParam.getBeginTime())){
+		if(adParam.getTypeEnum().getVal()!=4 && !StringUtils.isNotEmpty(adParam.getBeginTime())){
 			return successCreated(ResultCode.AD_BEGIN_TIME_NOT_EXIST);
 		}
     	Result<PropertyInfoFreezeDTO> resultFreeze = propertyInfoService.getPropertyinfoFreeze(userNum);
@@ -105,12 +106,12 @@ public class AdController extends BaseController {
     	String mediaUrl="";
     	String videoImgUrl="";
     	HttpServletRequest request = getRequest();
-    	if(adParam.getTypeEnum().val==1 || adParam.getTypeEnum().val==3){ //平面投放
+    	if(adParam.getTypeEnum().getVal()==1 || adParam.getTypeEnum().getVal()==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl");
             }
-    	}else if(adParam.getTypeEnum().val==2){//视频投放
+    	}else if(adParam.getTypeEnum().getVal()==2){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
@@ -139,6 +140,10 @@ public class AdController extends BaseController {
         	if(storeDTO!=null){
         		adSave.setLatitude(storeDTO.getLatitude());
             	adSave.setLongitude(storeDTO.getLongitude());
+            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            	adSave.setMerchantStoreName(storeDTO.getName());
         	}
     	}
     	adSave.setCount(count);
@@ -321,12 +326,12 @@ public class AdController extends BaseController {
     	String mediaUrl="";
     	String videoImgUrl="";
     	HttpServletRequest request = getRequest();
-    	if(result.getModel().getTypeEnum().val==1 || result.getModel().getTypeEnum().val==3){ //平面投放
+    	if(result.getModel().getTypeEnum().getVal()==1 || result.getModel().getTypeEnum().getVal()==3){ //平面投放
     		Map<String, String> retMap = UploadFileUtil.uploadOneImage(request, FileDirConstant.DIR_AD_IMAGE, merchantApiConfig.getImageUploadUrl());
             if(!"".equals(retMap.get("imgUrl"))){
             	mediaUrl = retMap.get("imgUrl");
             }
-    	}else if(result.getModel().getTypeEnum().val==2){//视频投放
+    	}else if(result.getModel().getTypeEnum().getVal()==2){//视频投放
     		Map<String, String> retMap = UploadFileUtil.uploadVideo(request, FileDirConstant.DIR_AD_VIDEO, merchantApiConfig.getVideoUploadUrl());
     		if(!"".equals(retMap.get("videoUrl"))){
             	mediaUrl = retMap.get("videoUrl");
@@ -348,7 +353,6 @@ public class AdController extends BaseController {
     		count=memberCountService.findFensCount(merchantId);
     	}
     	Result<MerchantStoreDTO> storeRs=merchantStoreService.selectMerchantStoreByMId(merchantId);
-    	MerchantStoreDTO storeDTO= storeRs.getModel();
     	AdSaveParam adSave=new AdSaveParam();
     	AdParam adParam=new AdParam();
     	adParam.setTitle(adAgainParam.getTitle());
@@ -362,8 +366,17 @@ public class AdController extends BaseController {
     	adParam.setRadius(adAgainParam.getRadius());
     	adParam.setTypeEnum(result.getModel().getTypeEnum());
     	adSave.setAdParam(adParam);
-    	adSave.setLatitude(storeDTO.getLatitude());
-    	adSave.setLongitude(storeDTO.getLongitude());
+    	if(isSuccess(storeRs)){
+    		MerchantStoreDTO storeDTO= storeRs.getModel();
+        	if(storeDTO!=null){
+        		adSave.setLatitude(storeDTO.getLatitude());
+            	adSave.setLongitude(storeDTO.getLongitude());
+            	adSave.setLogoUrl(storeDTO.getLogoUrl());
+            	adSave.setManageType(ManageTypeEnum.getEnum(storeDTO.getManageType().val));
+            	adSave.setMerchantStoreId(storeDTO.getMerchantStoreId());
+            	adSave.setMerchantStoreName(storeDTO.getName());
+        	}
+    	}
     	adSave.setCount(count);
     	adSave.setMediaUrl(mediaUrl);
     	adSave.setVideoImgUrl(videoImgUrl);

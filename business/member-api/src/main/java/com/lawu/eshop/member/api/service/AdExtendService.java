@@ -2,18 +2,17 @@ package com.lawu.eshop.member.api.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.lawu.eshop.ad.dto.AdDTO;
+import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
 import com.lawu.eshop.ad.dto.AdFlatVideoDTO;
+import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.param.AdChoicenessParam;
 import com.lawu.eshop.ad.param.AdEgainParam;
+import com.lawu.eshop.ad.param.AdPointForeignParam;
 import com.lawu.eshop.ad.param.AdPointParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.framework.core.page.Page;
@@ -35,6 +34,7 @@ public interface AdExtendService {
      * @param adChoicenessParam
      * @return
      */
+    @Deprecated
     Result<Page<AdDTO>> selectChoiceness(AdChoicenessParam adChoicenessParam);
     
     /**
@@ -42,6 +42,7 @@ public interface AdExtendService {
      * @param adMemberParam
      * @return
      */
+    @Deprecated
     Result<List<AdDTO>> selectAdTopList(AdPointParam adPointParam);
 	
 	/**
@@ -70,6 +71,7 @@ public interface AdExtendService {
      * @param adEgainParam
      * @return
      */
+    @Deprecated
     Result<Page<AdFlatVideoDTO>> selectEgainAd(AdEgainParam adEgainParam);
     
     /**
@@ -79,4 +81,34 @@ public interface AdExtendService {
 	 * @return
 	 */
     Result<ClickAdPointDTO> clickAd( Long id, Long memberId,String num);
+    
+    /**
+     * 查询E赚广告
+     * 
+     * @param adEgainParam
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月18日
+     */
+    Result<Page<AdEgainQueryDTO>> selectEgain(AdEgainParam adEgainParam);
+    
+    /**
+     * 积分榜，人气榜查询
+     * 
+     * @param adPointParam
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月19日
+     */
+    Result<List<AdPointDTO>> selectAdTop(AdPointForeignParam adPointParam);
+    
+    /**
+     * 查询精品推荐广告列表
+     * 
+     * @param adChoicenessParam
+     * @return
+     * @author jiangxinjun
+     * @date 2017年7月19日
+     */
+    Result<Page<ChoicenessAdDTO>> selectChoicenessAd(AdChoicenessParam adChoicenessParam);
 }

@@ -1,26 +1,40 @@
 package com.lawu.eshop.ad.param;
 
-import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiParam;
 
-public class AdEgainParam extends AbstractPageParam{
+/**
+ * 查询E赚参数
+ */
+@ApiModel
+public class AdEgainParam extends AbstractPageParam {
 	
-	@ApiParam (name="longitude", value = "经度")
+	/**
+	 * 经度
+	 */
+	@ApiParam (value = "经度")
 	private Double longitude;
 	
-	@ApiParam (name="latitude", value = "纬度")
+	/**
+	 * 纬度
+	 */
+	@ApiParam (value = "纬度")
 	private Double latitude;
 	
-	@ApiParam (name="typeEnum", value = "AD_TYPE_FLAT 平面 AD_TYPE_VIDEO 视频 AD_TYPE_PRAISE E赞 AD_TYPE_PACKET 红包")
-	private AdTypeEnum typeEnum;
+	/**
+	 * 广告类型
+	 */
+	@ApiParam (value = "广告类型(AD_TYPE_FLAT-平面|AD_TYPE_VIDEO-视频)", required = true)
+	private AdEgainTypeEnum typeEnum;
 
-	public AdTypeEnum getTypeEnum() {
+	public AdEgainTypeEnum getTypeEnum() {
 		return typeEnum;
 	}
 
-	public void setTypeEnum(AdTypeEnum typeEnum) {
+	public void setTypeEnum(AdEgainTypeEnum typeEnum) {
 		this.typeEnum = typeEnum;
 	}
 

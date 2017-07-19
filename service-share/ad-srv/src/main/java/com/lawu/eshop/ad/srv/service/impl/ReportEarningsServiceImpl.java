@@ -62,7 +62,7 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 			bo.setId(adDO.getId());
 			
 			//平面和视频
-			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
 				
 				MemberAdRecordDOView view=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
 				if(view==null){
@@ -112,7 +112,7 @@ public class ReportEarningsServiceImpl implements ReportEarningsService {
 			bo.setId(adDO.getId());
 			
 			//平面和视频
-			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.val || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.val){
+			if(adDO.getType()==AdTypeEnum.AD_TYPE_FLAT.getVal() || adDO.getType()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
 				
 				MemberAdRecordDOView view=  memberAdRecordDOMapperExtend.getTotlePoint(adDO.getId());
 				bo.setAdPoint(view.getTotlePoint());

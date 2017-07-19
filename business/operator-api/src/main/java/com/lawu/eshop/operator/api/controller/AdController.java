@@ -1,5 +1,19 @@
 package com.lawu.eshop.operator.api.controller;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -17,7 +31,12 @@ import com.lawu.eshop.framework.web.constants.UserConstant;
 import com.lawu.eshop.mall.constants.MessageTypeEnum;
 import com.lawu.eshop.mall.param.MessageInfoParam;
 import com.lawu.eshop.mall.param.MessageTempParam;
-import com.lawu.eshop.operator.api.service.*;
+import com.lawu.eshop.operator.api.service.AdService;
+import com.lawu.eshop.operator.api.service.LogService;
+import com.lawu.eshop.operator.api.service.MerchantService;
+import com.lawu.eshop.operator.api.service.MessageService;
+import com.lawu.eshop.operator.api.service.RegionService;
+import com.lawu.eshop.operator.api.service.UserService;
 import com.lawu.eshop.operator.constants.LogTitleEnum;
 import com.lawu.eshop.operator.constants.ModuleEnum;
 import com.lawu.eshop.operator.constants.OperationTypeEnum;
@@ -25,17 +44,12 @@ import com.lawu.eshop.operator.dto.UserListDTO;
 import com.lawu.eshop.operator.param.LogParam;
 import com.lawu.eshop.user.dto.MerchantSNSDTO;
 import com.lawu.eshop.user.dto.MerchantViewDTO;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import om.lawu.eshop.shiro.util.UserUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 描述：广告管理
@@ -80,7 +94,7 @@ public class AdController extends BaseController {
     @RequiresPermissions("adAudit:list")
     @RequestMapping(value = "listAd", method = RequestMethod.POST)
     public Result<Page<AdDTO>> listAd(@RequestBody @ApiParam ListAdParam listAdParam) {
-        if (listAdParam.getTypeEnum().val.byteValue() == AdTypeEnum.AD_TYPE_PACKET.val) {
+        if (listAdParam.getTypeEnum().getVal().byteValue() == AdTypeEnum.AD_TYPE_PACKET.getVal()) {
             listAdParam.setTypeEnum(null);
         }
         if (listAdParam.getPutWayEnum().val.byteValue() == PutWayEnum.PUT_WAY_COMMON.val) {

@@ -52,7 +52,7 @@ public class ReportAdEarningsServiceImpl extends BaseController implements Repor
 					 ReportAdEarningsParam reportAdEarningsParam=new ReportAdEarningsParam();
 					 reportAdEarningsParam.setAdCreateTime(reportAdDTO.getGmtCreate());
 					 reportAdEarningsParam.setAdId(reportAdDTO.getId());
-					 reportAdEarningsParam.setAdTypeEnum(com.lawu.eshop.statistics.constants.AdTypeEnum.getEnum(reportAdDTO.getTypeEnum().val));
+					 reportAdEarningsParam.setAdTypeEnum(com.lawu.eshop.statistics.constants.AdTypeEnum.getEnum(reportAdDTO.getTypeEnum().getVal()));
 					 reportAdEarningsParam.setAdTitle(reportAdDTO.getTitle());
 					 reportAdEarningsParam.setAdTotalPoint(reportAdDTO.getTotalPoint());
 					 reportAdEarningsParam.setMerchantNum(reportAdDTO.getMerchantNum());
