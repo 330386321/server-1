@@ -227,7 +227,7 @@ public class MerchantStoreController extends BaseController {
 	public Result<StoreDetailDTO> storeDetail(@PathVariable Long id, @RequestParam Long memberId) {
 		StoreDetailBO storeDetailBO = merchantStoreInfoService.getStoreDetailById(id, memberId);
 		if (storeDetailBO == null) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		return successGet(MerchantStoreConverter.convertDTO(storeDetailBO));
 	}
@@ -331,7 +331,7 @@ public class MerchantStoreController extends BaseController {
 	public Result<ShoppingStoreDetailDTO> shoppingStoreDetail(@PathVariable Long id, @RequestParam Long memberId) {
 		ShoppingStoreDetailBO shoppingStoreDetailBO = merchantStoreInfoService.getShoppingStoreDetailById(id, memberId);
 		if (shoppingStoreDetailBO == null) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		return successGet(MerchantStoreConverter.convertDTO(shoppingStoreDetailBO));
 	}
@@ -376,11 +376,11 @@ public class MerchantStoreController extends BaseController {
 	@RequestMapping(value = "getMemberProductDetailStore", method = RequestMethod.GET)
 	public Result<MemberProductStoreDTO> getMemberProductDetailStore(@RequestParam Long merchantId) {
 		if (merchantId == null) {
-			return successCreated(ResultCode.ID_EMPTY);
+			return successGet(ResultCode.ID_EMPTY);
 		}
 		MerchantStoreInfoBO storeBO = merchantStoreInfoService.selectMerchantStoreByMId(merchantId);
 		if (storeBO == null) {
-			return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 		List<MerchantStoreImageBO> logo = merchantStoreImageService.listMerchantStoreImageByType(merchantId, MerchantStoreImageEnum.STORE_IMAGE_LOGO);
 		MemberProductStoreDTO dto = new MemberProductStoreDTO();
@@ -393,7 +393,7 @@ public class MerchantStoreController extends BaseController {
 			dto.setLogo(logo.get(0).getPath());
 		}
 		
-		return successCreated(dto);
+		return successGet(dto);
 	}
 	
 	/**
@@ -404,10 +404,10 @@ public class MerchantStoreController extends BaseController {
 	@RequestMapping(value = "getManageType", method = RequestMethod.GET)
 	public Result<ManageTypeEnum> getManageType(@RequestParam Long merchantId) {
 		if (merchantId == null) {
-			return successCreated(ResultCode.ID_EMPTY);
+			return successGet(ResultCode.ID_EMPTY);
 		}
 		ManageTypeEnum type=merchantStoreProfileService.getManageType(merchantId);
-		return successCreated(type);
+		return successGet(type);
 	}
 
 	/**
@@ -460,7 +460,7 @@ public class MerchantStoreController extends BaseController {
 	@RequestMapping(value = "rebuildStoreIndex", method = RequestMethod.GET)
 	public Result rebuildStoreIndex() {
 		merchantStoreService.rebuildStoreIndex();
-		return successCreated();
+		return successGet();
 	}
 
 	/**
@@ -470,7 +470,7 @@ public class MerchantStoreController extends BaseController {
 	@RequestMapping(value = "delInvalidStoreIndex", method = RequestMethod.GET)
 	public Result delInvalidStoreIndex() {
 		merchantStoreService.delInvalidStoreIndex();
-		return successCreated();
+		return successGet();
 	}
 
 	/**
@@ -631,8 +631,10 @@ public class MerchantStoreController extends BaseController {
 	VisitUserInfoDTO findAccountAndRegionPathByNum(@RequestParam("merchantNum") String merchantNum){
 		MerchantInfoBO merchantInfoBO = merchantStoreService.findAccountAndRegionPathByNum(merchantNum);
 		VisitUserInfoDTO visitUserInfoDTO = new VisitUserInfoDTO();
-		visitUserInfoDTO.setRegionPath(merchantInfoBO.getRegionPath());
-		visitUserInfoDTO.setAccount(merchantInfoBO.getAccount());
+		if(merchantInfoBO != null){
+			visitUserInfoDTO.setRegionPath(merchantInfoBO.getRegionPath());
+			visitUserInfoDTO.setAccount(merchantInfoBO.getAccount());
+		}
 		return visitUserInfoDTO;
 	}
 
