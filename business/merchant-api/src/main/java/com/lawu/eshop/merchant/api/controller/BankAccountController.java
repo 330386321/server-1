@@ -112,5 +112,39 @@ public class BankAccountController extends BaseController{
     	}
         return successDelete();
     }
+	
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
+    @SuppressWarnings("unchecked")
+	@Authorization
+    @ApiOperation(value = "单个查询", notes = "单个查询（张荣成）", httpMethod = "GET")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "selectAccount/{id}", method = RequestMethod.GET)
+    public Result<BankAccountDTO> selectAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                         @PathVariable @ApiParam(required = true, value = "id") Long id) {
+        return successCreated(bankAccountService.selectAccount(id));
+    }
+
+	@Audit(date = "2017-04-12", reviewer = "孙林青")
+    @Authorization
+    @ApiOperation(value = "修改银行卡", notes = "修改银行卡[6000|6021]（张荣成）", httpMethod = "PUT")
+    @ApiResponse(code = HttpCode.SC_NO_CONTENT, message = "success")
+    @RequestMapping(value = "updateBankAccount/{id}", method = RequestMethod.PUT)
+    public Result<BankAccountDTO> updateBankAccount(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                         @PathVariable @ApiParam(required = true, value = "id") Long id,
+                         @RequestParam @ApiParam(required = true, value = "支付密码") String payPwd,
+                         @ModelAttribute @ApiParam(required = true, value = "银行卡信息") BankAccountParam bankAccountParam) {
+    	if(!bankAccountParam.getAccountNumber().matches("^(?!0)\\d{15,19}$")){
+    		return successCreated(ResultCode.BANK_ACCOUNT_ERROR);
+    	}
+    	String userNum = UserUtil.getCurrentUserNum(getRequest());
+    	Result flag=propertyInfoService.varifyPayPwd(userNum, payPwd);
+		if(flag.getModel()!=null && (Boolean)flag.getModel()){
+			 bankAccountService.updateBankAccount(id,userNum, bankAccountParam);
+			 return successCreated(ResultCode.SUCCESS);
+		}else{
+			 return successCreated(ResultCode.PAY_PWD_ERROR);
+		}
+
+    }
 
 }

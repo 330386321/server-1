@@ -78,7 +78,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 		BankAccountDOExample example = new BankAccountDOExample();
 		example.createCriteria().andAccountNumberEqualTo(account).andStatusEqualTo(new Byte("1")).andUserNumEqualTo(userNum);
 		List<BankAccountDO>  list=bankAccountDOMapper.selectByExample(example);
-		return list.isEmpty()?true:false;
+		return list.isEmpty()?false:true;
 	}
 
 	@Override
