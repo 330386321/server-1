@@ -23,9 +23,6 @@ import java.util.List;
  */
 public class TransactionDetailConverter {
 	
-	/**
-	 * 隐藏默认的构造函数
-	 */
 	private TransactionDetailConverter() {
 		throw new IllegalAccessError("Utility class");
 	}
@@ -36,7 +33,6 @@ public class TransactionDetailConverter {
 		if (transactionDetailDO == null || transactionDetailDO.getId() == null || transactionDetailDO.getId() <= 0) {
 			return rtn;
 		}
-
 		rtn = new TransactionDetailBO();
 		rtn.setAmount(transactionDetailDO.getAmount());
 		rtn.setBizId(transactionDetailDO.getBizId());
@@ -49,58 +45,46 @@ public class TransactionDetailConverter {
 		rtn.setTransactionNum(transactionDetailDO.getTransactionNum());
 		rtn.setTransactionType(transactionDetailDO.getTransactionType());
 		rtn.setUserNum(transactionDetailDO.getUserNum());
-		
 		rtn.setDirection(ConsumptionTypeEnum.getEnum(transactionDetailDO.getDirection()));
 		rtn.setTransactionAccountType(TransactionPayTypeEnum.getEnum(transactionDetailDO.getTransactionAccountType()));
-
 		return rtn;
 	}
 
 	public static List<TransactionDetailBO> convertBOS(List<TransactionDetailDO> transactionDetailDOS) {
 		List<TransactionDetailBO> rtn = null;
-
 		if (transactionDetailDOS == null || transactionDetailDOS.isEmpty()) {
 			return rtn;
 		}
-
 		rtn = new ArrayList<>();
 		for (TransactionDetailDO item : transactionDetailDOS) {
 			rtn.add(convert(item));
 		}
-
 		return rtn;
 	}
 
 	public static TransactionDetailDTO convert(TransactionDetailBO transactionDetailBO) {
 		TransactionDetailDTO rtn = null;
-
 		if (transactionDetailBO == null) {
 			return rtn;
 		}
-
 		rtn = new TransactionDetailDTO();
 		rtn.setAmount(transactionDetailBO.getAmount());
 		rtn.setBizId(transactionDetailBO.getBizId());
 		rtn.setRemark(transactionDetailBO.getRemark());
 		rtn.setTitle(transactionDetailBO.getTitle());
 		rtn.setDirection(transactionDetailBO.getDirection());
-		
 		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
-
 		return rtn;
 	}
 
 	public static List<TransactionDetailDTO> convertDTOS(List<TransactionDetailBO> transactionDetailBOS) {
 		List<TransactionDetailDTO> rtn = new ArrayList<>();
-
 		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
 			return rtn;
 		}
-
 		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
 			rtn.add(convert(transactionDetailBO));
 		}
-
 		return rtn;
 	}
 
@@ -114,11 +98,9 @@ public class TransactionDetailConverter {
 	
 	public static TransactionDetailToMemberDTO convertTransactionDetailToMemberDTO(TransactionDetailBO transactionDetailBO) {
 		TransactionDetailToMemberDTO rtn = null;
-
 		if (transactionDetailBO == null) {
 			return rtn;
 		}
-
 		rtn = new TransactionDetailToMemberDTO();
 		rtn.setAmount(transactionDetailBO.getAmount());
 		rtn.setBizId(transactionDetailBO.getBizId());
@@ -127,21 +109,17 @@ public class TransactionDetailConverter {
 		rtn.setDirection(transactionDetailBO.getDirection());
 		rtn.setTransactionType(MemberTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()));
 		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
-
 		return rtn;
 	}
 
 	public static List<TransactionDetailToMemberDTO> convertTransactionDetailToMemberDTOS(List<TransactionDetailBO> transactionDetailBOS) {
 		List<TransactionDetailToMemberDTO> rtn = new ArrayList<>();
-
 		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
 			return rtn;
 		}
-
 		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
 			rtn.add(convertTransactionDetailToMemberDTO(transactionDetailBO));
 		}
-
 		return rtn;
 	}
 	
@@ -155,11 +133,9 @@ public class TransactionDetailConverter {
 	
 	public static TransactionDetailToMerchantDTO convertTransactionDetailToMerchantDTO(TransactionDetailBO transactionDetailBO) {
 		TransactionDetailToMerchantDTO rtn = null;
-
 		if (transactionDetailBO == null) {
 			return rtn;
 		}
-
 		rtn = new TransactionDetailToMerchantDTO();
 		rtn.setAmount(transactionDetailBO.getAmount());
 		rtn.setBizId(transactionDetailBO.getBizId());
@@ -168,21 +144,17 @@ public class TransactionDetailConverter {
 		rtn.setDirection(transactionDetailBO.getDirection());
 		rtn.setTransactionType(MerchantTransactionTypeEnum.getEnum(transactionDetailBO.getTransactionType()));
 		rtn.setTransactionDate(transactionDetailBO.getGmtCreate());
-
 		return rtn;
 	}
 
 	public static List<TransactionDetailToMerchantDTO> convertTransactionDetailToMerchantDTOS(List<TransactionDetailBO> transactionDetailBOS) {
 		List<TransactionDetailToMerchantDTO> rtn = new ArrayList<>();
-
 		if (transactionDetailBOS == null || transactionDetailBOS.isEmpty()) {
 			return rtn;
 		}
-
 		for (TransactionDetailBO transactionDetailBO : transactionDetailBOS) {
 			rtn.add(convertTransactionDetailToMerchantDTO(transactionDetailBO));
 		}
-
 		return rtn;
 	}
 	
@@ -215,5 +187,4 @@ public class TransactionDetailConverter {
 		rtn.setRecords(transactionDetailBackageDTOS);
 		return rtn;
 	}
-
 }

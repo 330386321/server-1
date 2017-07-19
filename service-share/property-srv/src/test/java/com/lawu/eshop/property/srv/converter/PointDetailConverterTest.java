@@ -98,7 +98,15 @@ public class PointDetailConverterTest {
         Page<PointDetailBO> pointDetailBOPage = new Page<>();
         pointDetailBOPage.setCurrentPage(1);
         pointDetailBOPage.setTotalCount(1);
-        pointDetailBOPage.setRecords(new ArrayList<>());
+        List<PointDetailBO> record =new ArrayList<>();
+        PointDetailBO pointDetailBO = new PointDetailBO();
+        pointDetailBO.setDirection(ConsumptionTypeEnum.INCOME);
+        pointDetailBO.setPoint(new BigDecimal("1"));
+        pointDetailBO.setRemark("");
+        pointDetailBO.setTitle("");
+        pointDetailBO.setGmtCreate(new Date());
+        record.add(pointDetailBO);
+        pointDetailBOPage.setRecords(record);
         Page<PointDetailBackageDTO> rtnPage = PointDetailConverter.convertBackageDTOPage(pointDetailBOPage);
         Assert.assertNotNull(rtnPage);
     }

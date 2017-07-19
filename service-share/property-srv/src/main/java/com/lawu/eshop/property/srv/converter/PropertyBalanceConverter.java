@@ -8,22 +8,15 @@ import com.lawu.eshop.property.srv.domain.PropertyInfoDO;
 
 /**
  * 资产余额转换器
- *
  * @author Sunny
  * @date 2017/3/31
  */
 public class PropertyBalanceConverter {
-	
-	/**
-	 * 隐藏默认的构造函数
-	 */
 	private PropertyBalanceConverter() {
 		throw new IllegalAccessError("Utility class");
 	}
-	
 	/**
 	 * PropertyBalanceBO转换器
-	 * 
 	 * @param propertyInfoDO
 	 * @return
 	 */
@@ -31,7 +24,6 @@ public class PropertyBalanceConverter {
         if (propertyInfoDO == null) {
             return null;
         }
-
         PropertyBalanceBO propertyBalanceBO = new PropertyBalanceBO();
         propertyBalanceBO.setBalance(propertyInfoDO.getBalance());
         return  propertyBalanceBO;
@@ -39,7 +31,6 @@ public class PropertyBalanceConverter {
     
     /**
      * PropertyBalanceDTO转换器
-     * 
      * @param propertyBalanceBO
      * @return
      */
@@ -53,5 +44,4 @@ public class PropertyBalanceConverter {
         propertyBalanceDTO.setBalance(propertyBalanceBO.getBalance().setScale(2,BigDecimal.ROUND_DOWN));
         return  propertyBalanceDTO;
     }
-    
 }

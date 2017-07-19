@@ -27,11 +27,9 @@ public class PointDetailConverter {
 	
 	public static PointDetailBO convert(PointDetailDO pointDetailDO) {
 		PointDetailBO rtn = null;
-
 		if (pointDetailDO == null || pointDetailDO.getId() == null || pointDetailDO.getId() <= 0) {
 			return rtn;
 		}
-
 		rtn = new PointDetailBO();
 		rtn.setGmtCreate(pointDetailDO.getGmtCreate());
 		rtn.setPoint(pointDetailDO.getPoint());
@@ -42,55 +40,43 @@ public class PointDetailConverter {
 		rtn.setUserNum(pointDetailDO.getUserNum());
 		rtn.setBizId(pointDetailDO.getBizId());
 		rtn.setDirection(ConsumptionTypeEnum.getEnum(pointDetailDO.getDirection()));
-
 		return rtn;
 	}
 
 	public static List<PointDetailBO> convertBOS(List<PointDetailDO> pointDetailDOS) {
 		List<PointDetailBO> rtn = null;
-
 		if (pointDetailDOS == null || pointDetailDOS.isEmpty()) {
 			return rtn;
 		}
-
 		rtn = new ArrayList<>();
-
 		for (PointDetailDO item : pointDetailDOS) {
 			rtn.add(convert(item));
 		}
-
 		return rtn;
 	}
 
 	public static PointDetailDTO convert(PointDetailBO pointDetailBO) {
 		PointDetailDTO rtn = null;
-
 		if (pointDetailBO == null) {
 			return rtn;
 		}
-
 		rtn = new PointDetailDTO();
 		rtn.setDirection(pointDetailBO.getDirection());
 		rtn.setPoint(pointDetailBO.getPoint());
 		rtn.setRemark(pointDetailBO.getRemark());
 		rtn.setTitle(pointDetailBO.getTitle());
-		
 		rtn.setIntegralDate(pointDetailBO.getGmtCreate());
-
 		return rtn;
 	}
 
 	public static List<PointDetailDTO> convertDTOS(List<PointDetailBO> pointDetailBOS) {
 		List<PointDetailDTO> rtn = new ArrayList<>();
-
 		if (pointDetailBOS == null || pointDetailBOS.isEmpty()) {
 			return rtn;
 		}
-
 		for (PointDetailBO item : pointDetailBOS) {
 			rtn.add(convert(item));
 		}
-
 		return rtn;
 	}
 	

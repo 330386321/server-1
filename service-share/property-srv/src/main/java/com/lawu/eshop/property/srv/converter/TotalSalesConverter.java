@@ -14,23 +14,18 @@ import com.lawu.eshop.utils.DateUtil;
 
 /**
  * 平台总销量转换
- * 
  * @author Sunny
  * @date 2017/04/20
  *
  */
 public class TotalSalesConverter {
 
-	/**
-	 * 隐藏默认的构造方法
-	 */
 	private TotalSalesConverter() {
 		throw new IllegalAccessError("Utility class");
 	}
 
 	/**
 	 * TotalSalesQueryParam转TotalSalesQueryExample
-	 * 
 	 * @param param
 	 * @return
 	 */
@@ -47,7 +42,6 @@ public class TotalSalesConverter {
 	
 	/**
 	 * TotalSalesDO转TotalSalesBO
-	 * 
 	 * @param totalSalesDO
 	 * @return
 	 */
@@ -64,7 +58,6 @@ public class TotalSalesConverter {
 	
 	/**
 	 * TotalSalesDOList转TotalSalesBOList
-	 * 
 	 * @param totalSalesDOList
 	 * @return
 	 */
@@ -82,7 +75,6 @@ public class TotalSalesConverter {
 	
 	/**
 	 * TotalSalesBOList转TotalSalesDTO
-	 * 
 	 * @param totalSalesBOList
 	 * @return
 	 */
@@ -102,5 +94,4 @@ public class TotalSalesConverter {
 		}
 		return rtn;
 	}
-
 }
