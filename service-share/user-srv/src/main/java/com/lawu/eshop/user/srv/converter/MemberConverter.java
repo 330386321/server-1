@@ -11,7 +11,6 @@ import com.lawu.eshop.user.srv.bo.MemberBO;
 import com.lawu.eshop.user.srv.domain.MemberDO;
 import com.lawu.eshop.user.srv.domain.MemberProfileDO;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -265,15 +264,11 @@ public class MemberConverter {
      * @return
      */
     public static MemberInfoForShoppingOrderDTO convert(MemberBO memberBO) {
-    	MemberInfoForShoppingOrderDTO rtn = null;
-    	
     	if (memberBO == null) {
-    		return rtn;
+    		return null;
     	}
-    	
-    	rtn = new MemberInfoForShoppingOrderDTO();
-    	BeanUtils.copyProperties(memberBO, rtn);
-    	
+        MemberInfoForShoppingOrderDTO rtn = new MemberInfoForShoppingOrderDTO();
+        rtn.setNum(memberBO.getNum());
     	return rtn;
     }
 
