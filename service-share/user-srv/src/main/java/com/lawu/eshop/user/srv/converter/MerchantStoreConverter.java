@@ -427,7 +427,7 @@ public class MerchantStoreConverter {
     	ShoppingOrderFindUserInfoDTO rtn = new ShoppingOrderFindUserInfoDTO();
     	
     	rtn.setShoppingOrderFindMerchantInfoDTOList(convertShoppingOrderFindMerchantInfoDTOList(merchantStoreNoReasonReturnBOList));
-        rtn.setMemberNum(memberBO.getNum());
+        rtn.setMemberNum(memberBO == null ? null : memberBO.getNum());
         
         return rtn;
     }
