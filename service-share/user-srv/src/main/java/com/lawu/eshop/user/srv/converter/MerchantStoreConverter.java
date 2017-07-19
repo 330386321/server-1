@@ -11,7 +11,6 @@ import com.lawu.eshop.utils.DataTransUtil;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,14 +258,17 @@ public class MerchantStoreConverter {
      * @return
      */
     public static ShoppingOrderFindMerchantInfoDTO convert(ShoppingOrderFindMerchantInfoBO merchantStoreNoReasonReturnBO) {
-    	ShoppingOrderFindMerchantInfoDTO rtn = null;
         if (merchantStoreNoReasonReturnBO == null) {
-            return rtn;
+            return null;
         }
 
-        rtn = new ShoppingOrderFindMerchantInfoDTO();
-        BeanUtils.copyProperties(merchantStoreNoReasonReturnBO, rtn);
-
+        ShoppingOrderFindMerchantInfoDTO rtn = new ShoppingOrderFindMerchantInfoDTO();
+        rtn.setMerchantId(merchantStoreNoReasonReturnBO.getMerchantId());
+        rtn.setMerchantStoreId(merchantStoreNoReasonReturnBO.getMerchantStoreId());
+        rtn.setMerchantStoreName(merchantStoreNoReasonReturnBO.getMerchantStoreName());
+        rtn.setMerchantNum(merchantStoreNoReasonReturnBO.getMerchantNum());
+        rtn.setIsNoReasonReturn(merchantStoreNoReasonReturnBO.getIsNoReasonReturn());
+        rtn.setIsFans(merchantStoreNoReasonReturnBO.getIsFans());
         return rtn;
     }
 
