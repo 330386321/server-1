@@ -47,7 +47,7 @@ public class PropertyController extends BaseController {
     public Result deleteProperty(@PathVariable Long id) {
         PropertyBO propertyBO = propertyService.getPropertyById(id);
         if (propertyBO == null) {
-            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         propertyService.deletePropertyById(id);
         return successDelete();
