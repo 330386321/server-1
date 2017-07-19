@@ -10,7 +10,6 @@ import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
-import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
 import com.lawu.eshop.utils.DateUtil;
 import org.junit.Assert;

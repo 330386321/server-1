@@ -18,7 +18,6 @@ import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
 import com.lawu.eshop.property.srv.mapper.PropertyInfoDOMapper;
-import com.lawu.eshop.property.srv.service.BankAccountService;
 import com.lawu.eshop.property.srv.service.BusinessDepositService;
 import com.lawu.eshop.utils.DateUtil;
 import com.lawu.eshop.utils.PwdUtil;
@@ -34,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author yangqh

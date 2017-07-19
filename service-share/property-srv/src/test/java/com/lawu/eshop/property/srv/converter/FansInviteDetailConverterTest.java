@@ -1,10 +1,7 @@
 package com.lawu.eshop.property.srv.converter;
 
-import com.lawu.eshop.property.dto.BankDTO;
 import com.lawu.eshop.property.dto.FansInviteDetailDTO;
-import com.lawu.eshop.property.srv.bo.BankBO;
 import com.lawu.eshop.property.srv.bo.FansInviteDetailBO;
-import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.domain.FansInviteDetailDO;
 import org.junit.Assert;
 import org.junit.Test;

@@ -2,18 +2,13 @@ package com.lawu.eshop.property.srv.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lawu.eshop.framework.web.HttpCode;
-import com.lawu.eshop.property.constants.CashOperEnum;
 import com.lawu.eshop.property.constants.CashStatusEnum;
-import com.lawu.eshop.property.constants.UserTypeEnum;
 import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
-import com.lawu.eshop.property.srv.domain.BankAccountDO;
-import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.domain.WithdrawCashDO;
 import com.lawu.eshop.property.srv.mapper.BankAccountDOMapper;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
 import com.lawu.eshop.property.srv.mapper.WithdrawCashDOMapper;
-import com.lawu.eshop.utils.DateUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

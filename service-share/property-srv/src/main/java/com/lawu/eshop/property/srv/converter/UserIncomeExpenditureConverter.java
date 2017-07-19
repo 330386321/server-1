@@ -69,7 +69,7 @@ public class UserIncomeExpenditureConverter {
 	/**
 	 * <code>List&lt;UserIncomeExpenditureDO&gt;<code>转<code>List&lt;UserIncomeExpenditureBO&gt;<code>
 	 * 
-	 * @param param
+	 * @param userIncomeExpenditureDOList
 	 * @return
 	 */
 	public static List<UserIncomeExpenditureBO> convertUserIncomeExpenditureBOList(List<UserIncomeExpenditureDO> userIncomeExpenditureDOList) {

@@ -7,7 +7,6 @@ import com.lawu.eshop.property.constants.BusinessDepositStatusEnum;
 import com.lawu.eshop.property.constants.TransactionPayTypeEnum;
 import com.lawu.eshop.property.param.*;
 import com.lawu.eshop.property.srv.PropertySrvApplicationTest;
-import com.lawu.eshop.property.srv.domain.BankDO;
 import com.lawu.eshop.property.srv.domain.BusinessDepositDO;
 import com.lawu.eshop.property.srv.mapper.BankDOMapper;
 import com.lawu.eshop.property.srv.mapper.BusinessDepositDOMapper;
