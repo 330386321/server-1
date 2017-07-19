@@ -71,7 +71,7 @@ public class ReportEarningsServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTED.val);
@@ -114,7 +114,7 @@ public class ReportEarningsServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.val);
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(DateUtil.formatDate("2017-07-18 12:20:00", "yyyy-MM-dd HH:mm:ss"));
         ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);

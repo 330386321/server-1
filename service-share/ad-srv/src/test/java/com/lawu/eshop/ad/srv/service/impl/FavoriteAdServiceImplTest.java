@@ -17,8 +17,6 @@ import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.AdParam;
-import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
@@ -90,7 +88,7 @@ public class FavoriteAdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.val);
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
