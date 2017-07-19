@@ -5,14 +5,20 @@ import java.util.List;
 
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
+import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
+import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdSaveParam;
 import com.lawu.eshop.ad.param.ListAdParam;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainBO;
+import com.lawu.eshop.ad.srv.bo.AdPointBO;
+import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.bo.ClickAdPointBO;
 import com.lawu.eshop.ad.srv.bo.RedPacketInfoBO;
 import com.lawu.eshop.ad.srv.bo.ReportAdBO;
@@ -291,5 +297,36 @@ public interface AdService {
 	 * @return
 	 */
 	List<ReportAdBO> selectReportAdEarnings();
-
+	
+	/**
+	 * 分页查询E赚广告
+	 * 
+	 * @param memberId 会员id
+	 * @param param 查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月18日
+	 */
+	Page<AdEgainBO> selectPageAdEgain(Long memberId, AdEgainInternalParam param);
+	
+	/**
+	 * 查询积分排行版广告
+	 * 
+	 * @param param 查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月19日
+	 */
+	List<AdPointBO> selectAdPoint(AdPointInternalParam param);
+	
+	/**
+	 * 分页查询精选推荐广告
+	 * 
+	 * @param memberId 会员id
+	 * @param param 查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月18日
+	 */
+	Page<ChoicenessAdBO> selectPageChoicenessAd(Long memberId, AdChoicenessInternalParam param);
 }

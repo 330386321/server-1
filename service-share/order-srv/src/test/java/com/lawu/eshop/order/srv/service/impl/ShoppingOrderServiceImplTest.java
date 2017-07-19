@@ -2042,7 +2042,7 @@ public class ShoppingOrderServiceImplTest {
     	expected.setConsigneeMobile("123456");
     	expected.setConsigneeName("Sunny");
     	expected.setIsDone(false);
-    	expected.setShoppingCartIdsStr("1");
+    	expected.setShoppingCartIdsStr(shoppingCartDO.getId().toString());
     	expected.setSendTime(0);
     	shoppingOrderDOMapper.insertSelective(expected);
     	

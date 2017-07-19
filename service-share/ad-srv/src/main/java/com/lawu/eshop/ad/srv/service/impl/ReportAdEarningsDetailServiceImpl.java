@@ -45,7 +45,7 @@ public class ReportAdEarningsDetailServiceImpl implements ReportAdEarningsDetail
 		
 		Integer count=0;
 		
-		if(param.getAdTypeEnum().val==AdTypeEnum.AD_TYPE_FLAT.val || param.getAdTypeEnum().val==AdTypeEnum.AD_TYPE_VIDEO.val){
+		if(param.getAdTypeEnum().getVal()==AdTypeEnum.AD_TYPE_FLAT.getVal() || param.getAdTypeEnum().getVal()==AdTypeEnum.AD_TYPE_VIDEO.getVal()){
 			MemberAdRecordDOExample memberAdRecordDOExample=new MemberAdRecordDOExample();
 			memberAdRecordDOExample.createCriteria().andAdIdEqualTo(param.getAdId()).andGmtCreateLessThan(DateUtil.getNowDate());
 			RowBounds rowBounds = new RowBounds(param.getOffset(), param.getPageSize());
@@ -66,7 +66,7 @@ public class ReportAdEarningsDetailServiceImpl implements ReportAdEarningsDetail
 			}
 		}else {
 			PointPoolDOExample pointPoolDOExample=new PointPoolDOExample();
-			if(param.getAdTypeEnum().val==AdTypeEnum.AD_TYPE_PRAISE.val){
+			if(param.getAdTypeEnum().getVal()==AdTypeEnum.AD_TYPE_PRAISE.getVal()){
 				pointPoolDOExample.createCriteria().andAdIdEqualTo(param.getAdId()).andTypeEqualTo(PointPoolTypeEnum.AD_TYPE_PRAISE.val)
 								   .andStatusEqualTo(PointPoolStatusEnum.AD_POINT_GET.val).andGmtModifiedLessThan(DateUtil.getNowDate());
 			}

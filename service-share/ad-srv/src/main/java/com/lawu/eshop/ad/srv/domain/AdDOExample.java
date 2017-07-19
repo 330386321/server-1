@@ -316,6 +316,196 @@ public class AdDOExample {
             return (Criteria) this;
         }
 
+        public Criteria andMerchantStoreIdIsNull() {
+            addCriterion("merchant_store_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIsNotNull() {
+            addCriterion("merchant_store_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdEqualTo(Long value) {
+            addCriterion("merchant_store_id =", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotEqualTo(Long value) {
+            addCriterion("merchant_store_id <>", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThan(Long value) {
+            addCriterion("merchant_store_id >", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id >=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThan(Long value) {
+            addCriterion("merchant_store_id <", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdLessThanOrEqualTo(Long value) {
+            addCriterion("merchant_store_id <=", value, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdIn(List<Long> values) {
+            addCriterion("merchant_store_id in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotIn(List<Long> values) {
+            addCriterion("merchant_store_id not in", values, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreIdNotBetween(Long value1, Long value2) {
+            addCriterion("merchant_store_id not between", value1, value2, "merchantStoreId");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameIsNull() {
+            addCriterion("merchant_store_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameIsNotNull() {
+            addCriterion("merchant_store_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameEqualTo(String value) {
+            addCriterion("merchant_store_name =", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameNotEqualTo(String value) {
+            addCriterion("merchant_store_name <>", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameGreaterThan(String value) {
+            addCriterion("merchant_store_name >", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameGreaterThanOrEqualTo(String value) {
+            addCriterion("merchant_store_name >=", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameLessThan(String value) {
+            addCriterion("merchant_store_name <", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameLessThanOrEqualTo(String value) {
+            addCriterion("merchant_store_name <=", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameLike(String value) {
+            addCriterion("merchant_store_name like", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameNotLike(String value) {
+            addCriterion("merchant_store_name not like", value, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameIn(List<String> values) {
+            addCriterion("merchant_store_name in", values, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameNotIn(List<String> values) {
+            addCriterion("merchant_store_name not in", values, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameBetween(String value1, String value2) {
+            addCriterion("merchant_store_name between", value1, value2, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andMerchantStoreNameNotBetween(String value1, String value2) {
+            addCriterion("merchant_store_name not between", value1, value2, "merchantStoreName");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeIsNull() {
+            addCriterion("manage_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeIsNotNull() {
+            addCriterion("manage_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeEqualTo(Byte value) {
+            addCriterion("manage_type =", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotEqualTo(Byte value) {
+            addCriterion("manage_type <>", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeGreaterThan(Byte value) {
+            addCriterion("manage_type >", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeGreaterThanOrEqualTo(Byte value) {
+            addCriterion("manage_type >=", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeLessThan(Byte value) {
+            addCriterion("manage_type <", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeLessThanOrEqualTo(Byte value) {
+            addCriterion("manage_type <=", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeIn(List<Byte> values) {
+            addCriterion("manage_type in", values, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotIn(List<Byte> values) {
+            addCriterion("manage_type not in", values, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeBetween(Byte value1, Byte value2) {
+            addCriterion("manage_type between", value1, value2, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotBetween(Byte value1, Byte value2) {
+            addCriterion("manage_type not between", value1, value2, "manageType");
+            return (Criteria) this;
+        }
+
         public Criteria andMerchantNumIsNull() {
             addCriterion("merchant_num is null");
             return (Criteria) this;
@@ -573,6 +763,76 @@ public class AdDOExample {
 
         public Criteria andTitleNotBetween(String value1, String value2) {
             addCriterion("title not between", value1, value2, "title");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlIsNull() {
+            addCriterion("logo_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlIsNotNull() {
+            addCriterion("logo_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlEqualTo(String value) {
+            addCriterion("logo_url =", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlNotEqualTo(String value) {
+            addCriterion("logo_url <>", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlGreaterThan(String value) {
+            addCriterion("logo_url >", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("logo_url >=", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlLessThan(String value) {
+            addCriterion("logo_url <", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlLessThanOrEqualTo(String value) {
+            addCriterion("logo_url <=", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlLike(String value) {
+            addCriterion("logo_url like", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlNotLike(String value) {
+            addCriterion("logo_url not like", value, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlIn(List<String> values) {
+            addCriterion("logo_url in", values, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlNotIn(List<String> values) {
+            addCriterion("logo_url not in", values, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlBetween(String value1, String value2) {
+            addCriterion("logo_url between", value1, value2, "logoUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andLogoUrlNotBetween(String value1, String value2) {
+            addCriterion("logo_url not between", value1, value2, "logoUrl");
             return (Criteria) this;
         }
 

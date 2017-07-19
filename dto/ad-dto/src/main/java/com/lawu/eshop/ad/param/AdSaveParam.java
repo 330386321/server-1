@@ -2,10 +2,12 @@ package com.lawu.eshop.ad.param;
 
 import java.math.BigDecimal;
 
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
+
 public class AdSaveParam {
-	
+
 	private AdParam adParam;
-	
+
 	/**
 	 * 商家经度
 	 */
@@ -15,29 +17,48 @@ public class AdSaveParam {
 	 * 商家纬度
 	 */
 	private BigDecimal latitude;
-	
+
 	/**
 	 * 商家id
 	 */
 	private Long merchantId;
-	
+
 	/**
 	 * 附件路径
 	 */
 	private String mediaUrl;
-	
+
 	/**
 	 * 人数
 	 */
 	private Integer count;
-	
+
 	/**
 	 * 商家编号
 	 */
 	private String userNum;
-	
+
 	private String videoImgUrl;
-	
+
+	/**
+	 * 商家门店id
+	 */
+	private Long merchantStoreId;
+
+	/**
+	 * 店铺名称
+	 */
+	private String merchantStoreName;
+
+	/**
+	 * 经营类型
+	 */
+	private ManageTypeEnum manageType;
+
+	/**
+	 * 门店logo
+	 */
+	private String logoUrl;
 
 	public AdParam getAdParam() {
 		return adParam;
@@ -103,8 +124,36 @@ public class AdSaveParam {
 		this.videoImgUrl = videoImgUrl;
 	}
 
-	
-	
-	
+	public Long getMerchantStoreId() {
+		return merchantStoreId;
+	}
+
+	public void setMerchantStoreId(Long merchantStoreId) {
+		this.merchantStoreId = merchantStoreId;
+	}
+
+	public String getMerchantStoreName() {
+		return merchantStoreName;
+	}
+
+	public void setMerchantStoreName(String merchantStoreName) {
+		this.merchantStoreName = merchantStoreName;
+	}
+
+	public ManageTypeEnum getManageType() {
+		return manageType;
+	}
+
+	public void setManageType(ManageTypeEnum manageType) {
+		this.manageType = manageType;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
 
 }

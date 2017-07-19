@@ -11,20 +11,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.lawu.eshop.ad.dto.AdDTO;
-import com.lawu.eshop.ad.dto.AdLexiconDTO;
+import com.lawu.eshop.ad.dto.AdEgainQueryDTO;
+import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdSolrDTO;
+import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.dto.ClickAdPointDTO;
 import com.lawu.eshop.ad.dto.IsExistsRedPacketDTO;
 import com.lawu.eshop.ad.dto.PointPoolDTO;
 import com.lawu.eshop.ad.dto.PraisePointDTO;
 import com.lawu.eshop.ad.dto.RedPacketInfoDTO;
+import com.lawu.eshop.ad.param.AdChoicenessInternalParam;
+import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
+import com.lawu.eshop.ad.param.AdPointInternalParam;
 import com.lawu.eshop.ad.param.AdPraiseParam;
 import com.lawu.eshop.ad.param.AdsolrFindParam;
 import com.lawu.eshop.framework.core.page.Page;
 import com.lawu.eshop.framework.web.Result;
 
-@FeignClient(value = "ad-srv")
+@FeignClient(value = "ad-srv", path = "ad/")
 public interface AdService {
 	
 
@@ -34,7 +39,7 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(method = RequestMethod.GET, value = "ad/selectListByMember")
+	@RequestMapping(method = RequestMethod.GET, value = "selectListByMember")
     Result<Page<AdDTO>> selectListByMember(@RequestBody AdMemberParam adMemberParam,@RequestParam("memberId") Long memberId);
 	
 	
@@ -42,7 +47,7 @@ public interface AdService {
 	  * 单个查询广告
 	  * @return
 	  */
-	@RequestMapping(method = RequestMethod.GET, value = "ad/selectAbById/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "selectAbById/{id}")
 	Result<AdDTO> selectAbById(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId);
 	
 	/**
@@ -50,7 +55,7 @@ public interface AdService {
 	 * @param adPraiseParam
 	 * @return
 	 */
-	@RequestMapping(value = "ad/selectPraiseListByMember", method = RequestMethod.GET)
+	@RequestMapping(value = "selectPraiseListByMember", method = RequestMethod.GET)
     public Result<Page<AdDTO>> selectPraiseListByMember(@RequestBody AdPraiseParam adPraiseParam,@RequestParam("memberId") Long memberId);
 	
 	/**
@@ -68,7 +73,7 @@ public interface AdService {
 	 * @param num
 	 * @return
 	 */
-	@RequestMapping(value = "ad/clickPraise/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "clickPraise/{id}", method = RequestMethod.PUT)
     public Result<PraisePointDTO> clickPraise(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
 	/**
@@ -77,17 +82,9 @@ public interface AdService {
 	 * @param memberId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/clickAd/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "clickAd/{id}", method = RequestMethod.PUT)
     public Result<ClickAdPointDTO> clickAd(@PathVariable("id") Long id,@RequestParam("memberId") Long memberId,@RequestParam("num") String num);
 	
-	
-	/**
-	 * 根据不同的位置查询不同的广告
-	 * @param positionEnum
-	 * @return
-	 */
-	@RequestMapping(method = RequestMethod.GET, value = "adLexicon/selectList")
-	Result<List<AdLexiconDTO>> selectList(@RequestParam("adId") Long  adId);
 	
 	/**
      * 会员APP广告搜索
@@ -95,7 +92,7 @@ public interface AdService {
      * @param productSolrParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "ad/queryAdByTitle")
+    @RequestMapping(method = RequestMethod.GET, value = "queryAdByTitle")
     Result<Page<AdSolrDTO>> queryAdByTitle(@ModelAttribute AdsolrFindParam adSolrParam);
 
 
@@ -105,7 +102,7 @@ public interface AdService {
      * @param adChoicenessParam
      * @return
      */
-    @RequestMapping(method = RequestMethod.GET, value = "ad/selectChoiceness")
+    @RequestMapping(method = RequestMethod.GET, value = "selectChoiceness")
 	Result<Page<AdDTO>> selectChoiceness(@ModelAttribute AdMemberParam param);
     
     /**
@@ -113,7 +110,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/getRedPacket", method = RequestMethod.PUT)
+	@RequestMapping(value = "getRedPacket", method = RequestMethod.PUT)
     public Result<PraisePointDTO> getRedPacket(@RequestParam("merchantId")  Long  merchantId,@RequestParam("memberId")  Long  memberId,@RequestParam("memberNum") String memberNum);
 	
 	
@@ -122,7 +119,7 @@ public interface AdService {
 	 * @param merchantId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
+	@RequestMapping(value = "getRedPacketInfo/{merchantId}", method = RequestMethod.GET)
 	public Result<RedPacketInfoDTO> getRedPacketInfo(@PathVariable("merchantId") Long merchantId) ;
 	
 	/**
@@ -130,6 +127,46 @@ public interface AdService {
 	 * @param adId
 	 * @return
 	 */
-	@RequestMapping(value = "ad/isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
+	@RequestMapping(value = "isExistsRedPacket/{merchantId}", method = RequestMethod.GET)
 	public Result<IsExistsRedPacketDTO> isExistsRedPacket(@PathVariable("merchantId") Long merchantId);
+	
+	/**
+	 * 分页查询E赚广告
+	 * 
+	 * @param memberId
+	 *            会员id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月18日
+	 */
+	@RequestMapping(value = "pageAdEgain/{memberId}", method = RequestMethod.PUT)
+	Result<Page<AdEgainQueryDTO>> selectPageAdEgain(@PathVariable("memberId") Long memberId, @RequestBody AdEgainInternalParam param);
+	
+	/**
+	 * 查询积分排行榜广告
+	 * 
+	 * @param param
+	 *            查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月19日
+	 */
+	@RequestMapping(value = "adPoint", method = RequestMethod.PUT)
+	Result<List<AdPointDTO>> selectAdPoint(@RequestBody AdPointInternalParam param);
+	
+	/**
+	 * 分页查询精选推荐广告
+	 * 
+	 * @param memberId
+	 *            会员id
+	 * @param param
+	 *            查询参数
+	 * @return
+	 * @author jiangxinjun
+	 * @date 2017年7月19日
+	 */
+	@RequestMapping(value = "choiceness/{memberId}", method = RequestMethod.PUT)
+	Result<Page<ChoicenessAdDTO>> selectChoiceness(@PathVariable("memberId") Long memberId, @RequestBody AdChoicenessInternalParam param);
 }

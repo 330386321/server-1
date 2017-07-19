@@ -23,7 +23,13 @@ public interface FansMerchantService {
 	 */
     @RequestMapping(value = "fansMerchant/isFansMerchant/{merchantId}", method = RequestMethod.GET)
     Result<Boolean> isFansMerchant(@PathVariable("merchantId") Long merchantId, @RequestParam("memberId") Long memberId);
-
+    
+    /**
+     * 粉丝列表
+     *
+     * @param memberId
+     * @return
+     */
     @RequestMapping(value = "fansMerchant/findMerchant", method = RequestMethod.GET)
     public List<Long> findMerchant(@RequestParam("memberId") Long memberId);
 

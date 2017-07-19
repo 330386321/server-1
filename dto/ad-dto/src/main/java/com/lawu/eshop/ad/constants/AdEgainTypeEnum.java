@@ -1,26 +1,25 @@
 package com.lawu.eshop.ad.constants;
 
 /**
- * 商家店铺类型 
- *  
+ * E赚的广告类型
  * @author jiangxinjun
  * @date 2017年7月18日
  */
-public enum ManageTypeEnum {
-   
+public enum AdEgainTypeEnum {
+	
 	/**
-	 * 普通
+	 * 平面
 	 */
-    COMMON((byte) 0x01),
-    
-    /**
-     * 实体
-     */
-	ENTITY((byte) 0x02);
+	AD_TYPE_FLAT((byte) 0x01),
+	
+	/**
+	 * 视频
+	 */
+	AD_TYPE_VIDEO((byte) 0x02);
 	
     private Byte val;
-
-    ManageTypeEnum(Byte val) {
+    
+    AdEgainTypeEnum(Byte val) {
         this.val = val;
     }
     
@@ -28,9 +27,9 @@ public enum ManageTypeEnum {
 		return val;
 	}
 
-	public static ManageTypeEnum getEnum(Byte val) {
-    	ManageTypeEnum[] values = ManageTypeEnum.values();
-        for (ManageTypeEnum object : values) {
+	public static AdEgainTypeEnum getEnum(Byte val) {
+    	AdEgainTypeEnum[] values = AdEgainTypeEnum.values();
+        for (AdEgainTypeEnum object : values) {
             if (object.val.equals(val)) {
                 return object;
             }

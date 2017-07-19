@@ -5,7 +5,12 @@ package com.lawu.eshop.utils;
  * @date 2017/4/5.
  */
 public class DistanceUtil {
-
+	
+	/**
+	 *  地球半径
+	 */
+	public static final int RADIUS = 6378137;
+	
     private DistanceUtil(){}
 
     /**
@@ -18,7 +23,6 @@ public class DistanceUtil {
      * @return
      */
     public static int getDistance(Double longitude1, Double latitude1, Double longitude2, Double latitude2) {
-        double radius = 6378137; // 地球半径
         double longDiff; // 保存二个经度的差值
         double latDiff; // 保存二个纬度的差值
         double longDiffSin; // 经度差的sin
@@ -31,7 +35,7 @@ public class DistanceUtil {
         longDiffSin = Math.sin(longDiff / 2.0);
         latDiffSin = Math.sin(latDiff / 2.0);
         distance = 2
-                * radius
+                * RADIUS
                 * Math.asin(Math.sqrt(latDiffSin * latDiffSin
                 + Math.cos(latitude1) * Math.cos(latitude2)
                 * longDiffSin * longDiffSin));

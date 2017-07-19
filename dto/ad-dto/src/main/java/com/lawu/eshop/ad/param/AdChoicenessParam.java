@@ -4,12 +4,24 @@ import com.lawu.eshop.framework.core.page.AbstractPageParam;
 
 import io.swagger.annotations.ApiParam;
 
-public class AdChoicenessParam extends AbstractPageParam{
+/**
+ * 查询精选推荐广告
+ * 
+ * @author jiangxinjun
+ * @date 2017年7月19日
+ */
+public class AdChoicenessParam extends AbstractPageParam {
 	
-	@ApiParam (name="longitude", value = "经度")
+	/**
+	 * 经度
+	 */
+	@ApiParam (value = "经度")
 	private Double longitude;
 	
-	@ApiParam (name="latitude", value = "纬度")
+	/**
+	 * 纬度
+	 */
+	@ApiParam (value = "纬度")
 	private Double latitude;
 
 	public Double getLongitude() {

@@ -14,7 +14,10 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.wall.WallConfig;
+import com.alibaba.druid.wall.WallFilter;
 
 /**
  * @author Leach
@@ -36,6 +39,17 @@ public class MybatisDataSource {
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
+        // 防火墙过滤配置
+        WallFilter wallFilter = new WallFilter();
+        WallConfig wallConfig = new WallConfig();
+        // 允许执行多条语句
+        wallConfig.setMultiStatementAllow(true);
+        wallFilter.setConfig(wallConfig);
+        datasource.getProxyFilters().add(wallFilter);
+        // 统计过滤配置
+        StatFilter statFilter = new StatFilter();
+        // 合并统计sql语句
+        statFilter.setMergeSql(true);
         return datasource;
     }
 
