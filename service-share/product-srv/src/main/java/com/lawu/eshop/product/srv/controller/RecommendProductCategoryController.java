@@ -99,7 +99,7 @@ public class RecommendProductCategoryController extends BaseController {
         page.setRecords(RecommendProductCategoryConverter.convertDTO(recommendProductCategoryBOPage.getRecords()));
         page.setCurrentPage(recommendProductCategoryBOPage.getCurrentPage());
         page.setTotalCount(recommendProductCategoryBOPage.getTotalCount());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**

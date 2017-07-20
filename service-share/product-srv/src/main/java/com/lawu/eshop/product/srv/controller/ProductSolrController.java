@@ -52,7 +52,7 @@ public class ProductSolrController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(param.getCurrentPage());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**
@@ -78,7 +78,7 @@ public class ProductSolrController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(param.getCurrentPage());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**
@@ -103,7 +103,7 @@ public class ProductSolrController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(productSearchParam.getCurrentPage());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**
@@ -121,14 +121,14 @@ public class ProductSolrController extends BaseController {
         query.setRows(param.getPageSize());
         SolrDocumentList solrDocumentList = SolrUtil.getSolrDocsByQuery(query, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         if (solrDocumentList == null || solrDocumentList.isEmpty()) {
-            return successGet(ResultCode.NOT_FOUND_DATA);
+            return successCreated(ResultCode.NOT_FOUND_DATA);
         }
 
         Page<ProductSearchDTO> page = new Page<>();
         page.setRecords(ProductConverter.convertDTO(solrDocumentList));
         page.setTotalCount((int) solrDocumentList.getNumFound());
         page.setCurrentPage(param.getCurrentPage());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**

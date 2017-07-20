@@ -59,7 +59,7 @@ public class FavoriteProductControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testsave() {
+	public void save() {
 		RequestBuilder request = post("/favoriteProduct/save").param("memberId", "1").param("productId", "1");
 		try {
 			ResultActions perform = mvc.perform(request);
@@ -78,7 +78,7 @@ public class FavoriteProductControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testremove() {
+	public void remove() {
 		RequestBuilder request = post("/favoriteProduct/save").param("memberId", "1").param("productId", "1");
 		RequestBuilder request1 = post("/favoriteProduct/save").param("memberId", "2").param("productId", "2");
 		RequestBuilder requestRemove = delete("/favoriteProduct/remove/1").param("memberId", "1");
@@ -102,7 +102,7 @@ public class FavoriteProductControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testselectMyFavoriteProduct() {
+	public void selectMyFavoriteProduct() {
 		RequestBuilder request1 = post("/favoriteProduct/save").param("memberId", "1").param("productId", "1");
 		FavoriteProductQuery query = new FavoriteProductQuery();
 		RequestBuilder request = post("/favoriteProduct/selectMyFavoriteProduct").param("memberId", "1")
@@ -126,7 +126,7 @@ public class FavoriteProductControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testgetUserFavorite() {
+	public void getUserFavorite() {
 		RequestBuilder request1 = post("/favoriteProduct/save").param("memberId", "1").param("productId", "1");
 		RequestBuilder request = get("/favoriteProduct/getUserFavorite/1").param("memberId", "1");
 		try {

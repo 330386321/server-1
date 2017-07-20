@@ -54,7 +54,7 @@ public class ProductCategoryControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testfindAll() {
+	public void findAll() {
 		RequestBuilder request = get("/productCategory/findAll");
 		try {
 			ResultActions perform = mvc.perform(request);
@@ -74,7 +74,7 @@ public class ProductCategoryControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testgetById() {
+	public void getById() {
 		RequestBuilder request = get("/productCategory/getById").param("id", "1");
 		try {
 			ResultActions perform = mvc.perform(request);
@@ -94,7 +94,7 @@ public class ProductCategoryControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testlistRecommendProductCategory() {
+	public void listRecommendProductCategory() {
 		RequestBuilder request = get("/productCategory/listRecommendProductCategory");
 		try{
 			ResultActions perform = mvc.perform(request);
@@ -114,7 +114,7 @@ public class ProductCategoryControllerTest {
 	@Transactional
 	@Rollback
 	@Test
-	public void testfind() {
+	public void find() {
 		RequestBuilder request = get("/productCategory/find/1");
 		try{
 			ResultActions perform = mvc.perform(request);

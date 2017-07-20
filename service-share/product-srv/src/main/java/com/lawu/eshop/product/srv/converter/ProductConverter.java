@@ -230,7 +230,7 @@ public class ProductConverter {
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
-        productDO.setImageContent(param.getImageContents());
+//        productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
             productDO.setStatus(ProductStatusEnum.PRODUCT_STATUS_UP.getVal());
@@ -247,7 +247,7 @@ public class ProductConverter {
         productDO.setContent(param.getContent());
         productDO.setFeatureImage(param.getFeatureImage());
         productDO.setImageContent(param.getImageContents());
-        productDO.setImageContent(param.getImageContents());
+//        productDO.setImageContent(param.getImageContents());
         productDO.setIsAllowRefund(param.getIsAllowRefund());
         if (id == 0L) {
             productDO.setMerchantId(param.getMerchantId());

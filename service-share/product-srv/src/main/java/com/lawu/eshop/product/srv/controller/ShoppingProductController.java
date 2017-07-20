@@ -38,7 +38,7 @@ public class ShoppingProductController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(productSearchBOPage.getRecords()));
         page.setCurrentPage(productSearchBOPage.getCurrentPage());
         page.setTotalCount(productSearchBOPage.getTotalCount());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**
@@ -54,7 +54,7 @@ public class ShoppingProductController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(productSearchBOPage.getRecords()));
         page.setCurrentPage(productSearchBOPage.getCurrentPage());
         page.setTotalCount(productSearchBOPage.getTotalCount());
-        return successGet(page);
+        return successCreated(page);
     }
 
     /**
@@ -70,6 +70,6 @@ public class ShoppingProductController extends BaseController {
         page.setRecords(ProductConverter.convertDTO(productSearchBOPage.getRecords()));
         page.setCurrentPage(productSearchBOPage.getCurrentPage());
         page.setTotalCount(productSearchBOPage.getTotalCount());
-        return successGet(page);
+        return successCreated(page);
     }
 }

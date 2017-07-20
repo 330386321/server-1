@@ -84,13 +84,13 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "selectProductById", method = RequestMethod.GET)
     public Result<ProductInfoDTO> selectProductById(@RequestParam Long productId) {
         if (productId == null) {
-            return successCreated(ResultCode.ID_EMPTY);
+            return successGet(ResultCode.ID_EMPTY);
         }
 
         // 商品基本信息
         ProductInfoBO productBO = productService.selectProductById(productId);
         if (productBO == null) {
-            return successCreated(ResultCode.RESOURCE_NOT_FOUND);
+            return successGet(ResultCode.RESOURCE_NOT_FOUND);
         }
         ProductInfoDTO productDTO = new ProductInfoDTO();
         productDTO.setGmtCreate(productBO.getGmtCreate());
@@ -110,7 +110,7 @@ public class ProductController extends BaseController {
         productDTO.setImageDetail(productBO.getImageDetail());
         productDTO.setAllowRefund(productBO.isAllowRefund());
         productDTO.setProductStatus(productBO.getProductStatus());
-        return successCreated(productDTO);
+        return successGet(productDTO);
     }
 
     /**
@@ -135,7 +135,7 @@ public class ProductController extends BaseController {
         BeanUtil.copyProperties(productBO, productDTO);
         productDTO.setAllowRefund(productBO.isAllowRefund());
         productDTO.setFullCategoryId(productBO.getFullCategoryId());
-        return successCreated(productDTO);
+        return successGet(productDTO);
     }
 
     /**
@@ -221,7 +221,7 @@ public class ProductController extends BaseController {
             }
         }
 
-        return successGet(dtoList);
+        return successCreated(dtoList);
     }
 
 
@@ -234,7 +234,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "selectProductCount", method = RequestMethod.GET)
     public Result<Integer> selectProductCount(@RequestParam Long merchantId) {
     	Integer count = productService.selectProductCount(merchantId);
-        return successCreated(count);
+        return successGet(count);
     }
 
     /**
@@ -248,7 +248,7 @@ public class ProductController extends BaseController {
         if (productInfoBOS == null || productInfoBOS.isEmpty()) {
             return successGet(ResultCode.NOT_FOUND_DATA);
         }
-        return successGet(ProductConverter.convertInfoDTO(productInfoBOS));
+        return successCreated(ProductConverter.convertInfoDTO(productInfoBOS));
     }
 
     /**
@@ -290,7 +290,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "rebuildProductIndex", method = RequestMethod.GET)
     public Result rebuildProductIndex() {
         productService.rebuildProductIndex();
-        return successCreated();
+        return successGet();
     }
 
     /**
@@ -301,7 +301,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "delInvalidProductIndex", method = RequestMethod.GET)
     public Result delInvalidProductIndex() {
         productService.delInvalidProductIndex();
-        return successCreated();
+        return successGet();
     }
 
     /**
