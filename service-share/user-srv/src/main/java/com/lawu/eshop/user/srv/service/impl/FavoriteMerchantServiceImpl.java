@@ -86,8 +86,11 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
     	FavoriteMerchantDOExample example = new FavoriteMerchantDOExample();
         example.createCriteria().andMemberIdEqualTo(memberId).andMerchantIdEqualTo(param.getMerchantId()).andManageTypeEqualTo(param.getManageTypeEnum().val);
         Integer i = favoriteMerchantDOMapper.deleteByExample(example);
-        MerchantStoreDO merchantStoreDO = merchantStoreDOMapper.selectByPrimaryKey(param.getMerchantId());
-        if (merchantStoreDO!=null) {
+        MerchantStoreDOExample storeDOExample = new MerchantStoreDOExample();
+        storeDOExample.createCriteria().andMerchantIdEqualTo(param.getMerchantId());
+        List<MerchantStoreDO> merchantStoreDOS = merchantStoreDOMapper.selectByExample(storeDOExample);
+        if (!merchantStoreDOS.isEmpty()) {
+            MerchantStoreDO merchantStoreDO = merchantStoreDOS.get(0);
             Integer count = merchantStoreDO.getFavoriteNumber();
             count -= 1;
             if(count<0){
@@ -143,14 +146,10 @@ public class FavoriteMerchantServiceImpl implements FavoriteMerchantService {
 
 	@Override
 	public Boolean get(Long memberId, FavoriteStoreParam pageQuery) {
-		
 		FavoriteMerchantDOExample exmple=new FavoriteMerchantDOExample();
     	exmple.createCriteria().andMemberIdEqualTo(memberId).andManageTypeEqualTo(pageQuery.getManageTypeEnum().val);
-    	long count=favoriteMerchantDOMapper.countByExample(exmple);
-    	
-    	return count>0?true:false;
-    	
-		
+    	long count = favoriteMerchantDOMapper.countByExample(exmple);
+    	return count > 0;
 	}
 
 }
