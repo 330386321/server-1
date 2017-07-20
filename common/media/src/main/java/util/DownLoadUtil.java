@@ -48,18 +48,18 @@ public class DownLoadUtil {
         try {
             url = new URL(urlStr);
             conn = (HttpURLConnection)url.openConnection();
+            //设置超时间为3秒
+            conn.setConnectTimeout(3*1000);
+            //防止屏蔽程序抓取而返回403错误
+            conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         } catch (MalformedURLException e) {
             logger.info("MalformedURLException {} ",e);
         } catch (IOException e) {
             logger.info("IOException {} ",e);
         }
-        //设置超时间为3秒
-        conn.setConnectTimeout(3*1000);
-        //防止屏蔽程序抓取而返回403错误
-        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-
         //得到输入流
-        try (InputStream inputStream = conn.getInputStream()) {
+        try (InputStream inputStream = conn.getInputStream();
+             FileOutputStream fos = new FileOutputStream(file)) {
             //获取自己数组
             byte[] getData = readInputStream(inputStream);
 
@@ -69,7 +69,7 @@ public class DownLoadUtil {
                 saveDir.mkdirs();
             }
             File file = new File(saveDir + File.separator + fileName);
-            FileOutputStream fos = new FileOutputStream(file);
+
             fos.write(getData);
 
             fos.close();
