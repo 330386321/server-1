@@ -119,7 +119,7 @@ public class AdConverter {
 		adDTO.setIsClickAd(adBO.getIsClickAd());
 		Date date=new Date();
 		if(adBO.getTypeEnum().val==3 && adBO.getStatusEnum().val==2){ //结束倒计时
-			Long time=adBO.getBeginTime().getTime()+ 300000-date.getTime();
+			Long time=adBO.getBeginTime().getTime()+ (20*60*1000)-date.getTime();
 			if(time>0){
 				adDTO.setNeedBeginTime(time);
 			}else{
