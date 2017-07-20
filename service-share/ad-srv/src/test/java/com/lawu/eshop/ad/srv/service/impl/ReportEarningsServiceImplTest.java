@@ -125,7 +125,7 @@ public class ReportEarningsServiceImplTest {
 		ad.setTotalPoint(BigDecimal.valueOf(100));
 		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
-        ad.setGmtModified(DateUtil.formatDate("2017-07-18 12:20:00", "yyyy-MM-dd HH:mm:ss"));
+        ad.setGmtModified(DateUtil.formatDate("2017-07-20 12:20:00", "yyyy-MM-dd HH:mm:ss"));
         ad.setStatus(AdStatusEnum.AD_STATUS_OUT.val);
         adDOMapper.insertSelective(ad);
 

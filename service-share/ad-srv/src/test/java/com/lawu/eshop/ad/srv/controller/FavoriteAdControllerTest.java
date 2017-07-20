@@ -72,6 +72,27 @@ public class FavoriteAdControllerTest {
      @Transactional
      @Rollback
      @Test
+     public void saveExist() {
+    	 FavoriteAdDO favoriteAdDO = new FavoriteAdDO();
+    	 favoriteAdDO.setAdId(1l);
+    	 favoriteAdDO.setGmtCreate(new Date());
+    	 favoriteAdDO.setMemberId(1l);
+    	 favoriteAdDOMapper.insert(favoriteAdDO);
+         try {
+             RequestBuilder request = put("/favoriteAd/save").param("memberId", favoriteAdDO.getMemberId().toString()).param("adId", favoriteAdDO.getAdId().toString());
+             ResultActions perform= mvc.perform(request);
+             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+         } catch (Exception e) {
+             e.printStackTrace();
+             Assert.fail(e.getMessage());
+         }
+
+     }
+     
+     @Transactional
+     @Rollback
+     @Test
      public void remove() {
     	 FavoriteAdDO favoriteAdDO=new FavoriteAdDO();
     	 favoriteAdDO.setAdId(1l);

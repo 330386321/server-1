@@ -1,6 +1,9 @@
 package com.lawu.eshop.ad.srv.controller;
 
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.srv.AdSrvApplicationTest;
+import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.ad.srv.mapper.AdDOMapper;
 import com.lawu.eshop.ad.srv.mapper.AdLexiconDOMapper;
 import com.lawu.eshop.framework.web.HttpCode;
 import org.junit.Assert;
@@ -21,7 +24,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Date;
 
 /**
  * @author Leach
@@ -39,6 +45,9 @@ public class AdLexiconControllerTest {
 
     @Autowired
     private AdLexiconDOMapper adLexiconDOMapper;
+    
+    @Autowired
+    private AdDOMapper adDOMapper;
 
     @Before
     public void setUp() throws Exception {
@@ -53,6 +62,33 @@ public class AdLexiconControllerTest {
         try {
             ResultActions perform = mvc.perform(request);
             MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+
+    }
+    
+    @Transactional
+    @Rollback
+    @Test
+    public void selectList() {
+		AdDO adRecord = new AdDO();
+		adRecord.setGmtCreate(new Date());
+		adRecord.setGmtModified(new Date());
+		adRecord.setAdCount(1);
+		adRecord.setAreas("44");
+		adRecord.setTitle("selectList-title");
+		adRecord.setMerchantStoreId(1001l);
+		adRecord.setMerchantStoreName("E店商家");
+		adRecord.setManageType(ManageTypeEnum.ENTITY.getVal());
+		adRecord.setLogoUrl("store/1494582624025648402.png");
+		long adId = adDOMapper.insert(adRecord);
+        RequestBuilder request = get("/adLexicon/selectList").param("adId", adRecord.getId().toString());
+        try {
+            ResultActions perform = mvc.perform(request);
+            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_ACCEPTED)).andDo(MockMvcResultHandlers.print()).andReturn();
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -72,7 +72,7 @@ public class AdLexiconServiceImplTest {
         long adId = adDOMapper.insert(adRecord);
         Assert.assertTrue( adId > 0);
 
-        List<AdLexiconBO> adLexiconBOS = adLexiconService.selectList(adId);
+        List<AdLexiconBO> adLexiconBOS = adLexiconService.selectList(adRecord.getId());
         Assert.assertNotNull(adLexiconBOS);
         Assert.assertTrue(adLexiconBOS.size() == 4);
 

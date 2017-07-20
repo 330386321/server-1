@@ -20,6 +20,7 @@ import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
 import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.MemberAdRecordStatusEnum;
+import com.lawu.eshop.ad.constants.OrderTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
@@ -141,6 +142,124 @@ public class AdServiceImplTest {
         adMerchantParam.setCurrentPage(1);
         adMerchantParam.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
         adMerchantParam.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+        adMerchantParam.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+        Page<AdBO> page= adService.selectListByMerchant(adMerchantParam, 1002l);
+        Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size() >0);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectListByMerchantPutWay() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        AdMerchantParam adMerchantParam=new AdMerchantParam();
+        adMerchantParam.setPageSize(10);
+        adMerchantParam.setCurrentPage(1);
+        adMerchantParam.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+        adMerchantParam.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
+        Page<AdBO> page= adService.selectListByMerchant(adMerchantParam, 1002l);
+        Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size() >0);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectListByMerchantType() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        AdMerchantParam adMerchantParam=new AdMerchantParam();
+        adMerchantParam.setPageSize(10);
+        adMerchantParam.setCurrentPage(1);
+        adMerchantParam.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
+        adMerchantParam.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
+        Page<AdBO> page= adService.selectListByMerchant(adMerchantParam, 1002l);
+        Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size() >0);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
+    public void selectListByMerchantStatus() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        adDOMapper.insertSelective(ad);
+        
+        AdMerchantParam adMerchantParam=new AdMerchantParam();
+        adMerchantParam.setPageSize(10);
+        adMerchantParam.setCurrentPage(1);
+        adMerchantParam.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
         adMerchantParam.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
         Page<AdBO> page= adService.selectListByMerchant(adMerchantParam, 1002l);
         Assert.assertNotNull(page.getRecords());
@@ -392,6 +511,45 @@ public class AdServiceImplTest {
 	@Transactional
     @Rollback
     @Test
+    public void selectListByMemberPoint() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        AdMemberParam adMemberParam=new AdMemberParam();
+        adMemberParam.setCurrentPage(1);
+        adMemberParam.setPageSize(20);
+        adMemberParam.setOrderTypeEnum(OrderTypeEnum.AD_TORLEPOINT_DESC);
+        Page<AdBO> page= adService.selectListByMember(adMemberParam, null);
+        
+        Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size()>0);
+
+    }
+	
+	@Transactional
+    @Rollback
+    @Test
     public void selectAbById() {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
@@ -411,7 +569,7 @@ public class AdServiceImplTest {
 		ad.setRegionName("全国");
 		ad.setTitle("广告测试标题");
 		ad.setTotalPoint(BigDecimal.valueOf(100));
-		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+		ad.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
         ad.setGmtCreate(new Date());
         ad.setGmtModified(new Date());
         ad.setStatus(AdStatusEnum.AD_STATUS_ADD.val);
@@ -619,10 +777,33 @@ public class AdServiceImplTest {
         ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
         Integer id=adDOMapper.insertSelective(ad);
         
+        AdDO recode=new AdDO();
+        recode.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+        recode.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+        recode.setMerchantId(1002l);
+        recode.setMerchantStoreId(1001l);
+        recode.setMerchantStoreName("E店商家");
+        recode.setManageType(ManageTypeEnum.ENTITY.getVal());
+        recode.setLogoUrl("store/1494582624025648402.png");
+        recode.setMerchantNum("B856392484215848969");
+        recode.setMediaUrl("ad_image/1494582624025648401.png");
+        recode.setAdCount(20);
+        recode.setBeginTime(new Date());
+        recode.setContent("广告测试内容");
+        recode.setPoint(BigDecimal.valueOf(0.5));
+        recode.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+        recode.setRegionName("全国");
+        recode.setTitle("广告测试标题");
+        recode.setTotalPoint(BigDecimal.valueOf(100));
+        recode.setType(AdTypeEnum.AD_TYPE_PRAISE.getVal());
+        recode.setGmtCreate(new Date());
+        recode.setGmtModified(new Date());
+        recode.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer row=adDOMapper.insertSelective(recode);
+        
         AdMemberParam adMemberParam=new AdMemberParam();
         adMemberParam.setCurrentPage(1);
         adMemberParam.setPageSize(20);
-        adMemberParam.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
         Page<AdBO> page= adService.selectChoiceness(adMemberParam);
         
         Assert.assertNotNull(page.getRecords());

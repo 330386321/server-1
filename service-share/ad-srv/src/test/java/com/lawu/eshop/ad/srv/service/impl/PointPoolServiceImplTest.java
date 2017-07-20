@@ -96,7 +96,7 @@ public class PointPoolServiceImplTest {
         pointPoolDO.setMerchantId(1002l);
         pointPoolDO.setOrdinal(0);
         pointPoolDO.setPoint(BigDecimal.valueOf(15));
-        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_GET.val);
+        pointPoolDO.setStatus(PointPoolStatusEnum.AD_POINT_NO_GET.val);
         pointPoolDO.setType(PointPoolTypeEnum.AD_TYPE_PACKET.val);
         pointPoolDO.setMemberId(1l);
         pointPoolDO.setMemberNum("aaa");

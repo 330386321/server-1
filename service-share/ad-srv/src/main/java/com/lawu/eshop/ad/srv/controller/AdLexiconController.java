@@ -35,12 +35,9 @@ public class AdLexiconController extends BaseController{
 	 */
 	@RequestMapping(value = "save", method = RequestMethod.POST)
     public Result save( @RequestParam String title) {
-		Integer id= adLexiconService.save(title);
-		if(id>0){
-    		return successCreated(ResultCode.SUCCESS);
-    	}else{
-    		return successCreated(ResultCode.FAIL);
-    	}
+		adLexiconService.save(title);
+    	return successCreated(ResultCode.SUCCESS);
+    	
     }
 	
 	/**
