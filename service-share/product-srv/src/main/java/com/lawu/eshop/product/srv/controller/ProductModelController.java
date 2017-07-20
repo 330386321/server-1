@@ -82,7 +82,7 @@ public class ProductModelController extends BaseController {
 		}
 
 		CommentProductInfoDTO dto = new CommentProductInfoDTO();
-		dto.setFeatureImage(commentProductInfoBO.getFeatureImage());
+		dto.setFeatureImage(commentProductInfoBO.getFeatureImage() == null ? "" : commentProductInfoBO.getFeatureImage());
 		dto.setModelName(commentProductInfoBO.getModelName());
 		dto.setName(commentProductInfoBO.getName());
 		dto.setPrice(commentProductInfoBO.getPrice());
