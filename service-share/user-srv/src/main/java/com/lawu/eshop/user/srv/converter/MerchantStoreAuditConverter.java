@@ -18,8 +18,6 @@ import java.util.List;
  */
 public class MerchantStoreAuditConverter {
 
-    private MerchantStoreAuditConverter(){}
-
     /**
      * BO转换
      *
