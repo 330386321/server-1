@@ -37,8 +37,7 @@ public class SuggestionBO {
 	 * 客户端类型：1是android，2是ios
 	 */
 	private SuggestionClientType clientType;
-	;
-	
+
 	/**
 	 * 修改时间
 	 */
