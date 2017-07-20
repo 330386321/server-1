@@ -125,20 +125,20 @@
 		WHERE
 		type = #{type} AND status = 2 AND
 		(
+		    ( put_way = 1 AND areas IS NULL )
 		    <if test="latitude != null and longitude != null">
+		    OR
 		    ( 
 		      put_way = 3
 		      AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
 		      AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
 		    )
 		    </if>
-		    <if test="merchantIds != null">
+		    <if test="merchantIds != null and merchantIds.size > 0">
 		    OR 
 		    ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
 			</if>
-			OR
-			( put_way = 1 AND areas IS NULL )
-			<if test="areas != null">
+			<if test="areas != null and areas.size > 0">
 			OR
 		    ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
 		    </if>
@@ -157,20 +157,20 @@
         WHERE
         type = #{type} AND status = 2 AND
         (
+            ( put_way = 1 AND areas IS NULL )
             <if test="latitude != null and longitude != null">
+            OR
             ( 
                 put_way = 3
                 AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
                 AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
-            <if test="merchantIds != null">
+            <if test="merchantIds != null and merchantIds.size > 0">
             OR 
             ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
             </if>
-            OR
-            ( put_way = 1 AND areas IS NULL )
-            <if test="areas != null">
+            <if test="areas != null and areas.size > 0">
             OR
             ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
             </if>
@@ -197,20 +197,20 @@
         WHERE
         type IN (1, 2) AND status IN (1, 2) AND begin_time > #{beginTime} AND
         (
+            ( put_way = 1 AND areas IS NULL )
             <if test="latitude != null and longitude != null">
+            OR
             ( 
               put_way = 3
               AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
               AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
-            <if test="merchantIds != null">
+            <if test="merchantIds != null and merchantIds.size > 0">
             OR 
             ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
             </if>
-            OR
-            ( put_way = 1 AND areas IS NULL )
-            <if test="areas != null">
+            <if test="areas != null and areas.size > 0">
             OR
             ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
             </if>
@@ -246,20 +246,20 @@
         SELECT id FROM ad
         WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
         (
+            ( put_way = 1 AND areas IS NULL )
             <if test="latitude != null and longitude != null">
+            OR
             ( 
               put_way = 3
               AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
               AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
-            <if test="merchantIds != null">
+            <if test="merchantIds != null and merchantIds.size > 0">
             OR 
             ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
             </if>
-            OR
-            ( put_way = 1 AND areas IS NULL )
-            <if test="areas != null">
+            <if test="areas != null and areas.size > 0">
             OR
             ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
             </if>
@@ -277,20 +277,21 @@
         SELECT count(*) FROM ad
         WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
         (
+            ( put_way = 1 AND areas IS NULL )
             <if test="latitude != null and longitude != null">
+            OR
             ( 
                 put_way = 3
                 AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
                 AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
-            <if test="merchantIds != null">
+            <if test="merchantIds != null and merchantIds.size > 0">
             OR 
             ( put_way = 2 AND merchant_id IN <foreach collection="merchantIds" item="merchantId" open="(" close=")" separator="," >#{merchantId}</foreach> )
             </if>
-            OR
-            ( put_way = 1 AND areas IS NULL )
-            <if test="areas != null">
+            
+            <if test="areas != null and areas.size > 0">
             OR
             ( put_way = 1 AND areas IN <foreach collection="areas" item="area" open="(" close=")" separator="," >#{area}</foreach> )
             </if>
