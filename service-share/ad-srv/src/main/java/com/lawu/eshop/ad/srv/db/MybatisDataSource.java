@@ -48,8 +48,9 @@ public class MybatisDataSource {
         datasource.getProxyFilters().add(wallFilter);
         // 统计过滤配置
         StatFilter statFilter = new StatFilter();
-        // 合并统计sql语句
+        // 合并sql语句
         statFilter.setMergeSql(true);
+        datasource.getProxyFilters().add(statFilter);
         return datasource;
     }
 

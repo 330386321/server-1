@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 
 /**
@@ -36,6 +37,11 @@ public class MybatisDataSource {
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
+        // 统计过滤配置
+        StatFilter statFilter = new StatFilter();
+        // 合并sql语句
+        statFilter.setMergeSql(true);
+        datasource.getProxyFilters().add(statFilter);
         return datasource;
     }
 

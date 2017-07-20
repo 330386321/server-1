@@ -1,5 +1,6 @@
 package com.lawu.eshop.product.srv.db;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -35,6 +36,11 @@ public class MybatisDataSource {
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
+        // 统计过滤配置
+        StatFilter statFilter = new StatFilter();
+        // 合并sql语句
+        statFilter.setMergeSql(true);
+        datasource.getProxyFilters().add(statFilter);
         return datasource;
     }
 
