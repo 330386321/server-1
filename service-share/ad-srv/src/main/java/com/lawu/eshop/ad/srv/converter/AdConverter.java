@@ -181,6 +181,7 @@ public class AdConverter {
 			dto.setVideoImgUrl(adBO.getVideoImgUrl());
 			dto.setRadius(adBO.getRadius());
 			dto.setRegionName(adBO.getRegionName());
+			dto.setAdCount(adBO.getAdCount());
 			DTOS.add(dto);
 		}
 		return DTOS;

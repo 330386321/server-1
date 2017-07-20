@@ -192,7 +192,7 @@ public class AdController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value = "selectListByPlatForm", method = RequestMethod.POST)
-    public Result<Page<AdDTO>> selectListByMerchant(@RequestBody AdFindParam adPlatParam) {
+    public Result<Page<AdDTO>> selectListByPlatForm(@RequestBody AdFindParam adPlatParam) {
 		Page<AdBO> pageBO=  adService.selectListByPlatForm(adPlatParam);
 		Page<AdDTO> pageDTO=new Page<AdDTO>();
 		pageDTO.setCurrentPage(pageBO.getCurrentPage());

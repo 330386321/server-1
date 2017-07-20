@@ -56,6 +56,9 @@ public class AdMerchantDTO {
 	
 	@ApiModelProperty(value = "区域名称")
 	private String regionName;
+	
+	@ApiModelProperty(value = "广告个数")
+	private Integer adCount;
 
 	public Long getId() {
 		return id;
@@ -167,6 +170,14 @@ public class AdMerchantDTO {
 
 	public void setRegionName(String regionName) {
 		this.regionName = regionName;
+	}
+
+	public Integer getAdCount() {
+		return adCount;
+	}
+
+	public void setAdCount(Integer adCount) {
+		this.adCount = adCount;
 	}
 
 	
