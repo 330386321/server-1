@@ -356,47 +356,6 @@ public class MerchantServiceImpl implements MerchantService {
         return pageMerchantInviter;
     }
 
-//    @Override
-    public Page<MerchantInviterBO> getMerchantByInviter_bak(Long userId, MerchantInviterParam pageParam, byte inviterType) {
-    	MerchantDOExample example=new MerchantDOExample();
-    	example.createCriteria().andInviterIdEqualTo(userId).andInviterTypeEqualTo(inviterType);
-    	int count=merchantDOMapper.countByExample(example);
-    	InviterMerchantDOView inviterMerchantDO = new InviterMerchantDOView();
-        inviterMerchantDO.setInviterId(userId);
-        inviterMerchantDO.setInviterType(inviterType);
-        if (pageParam.getName() != null)
-            inviterMerchantDO.setName(pageParam.getName());
-        RowBounds rowBounds = new RowBounds(pageParam.getOffset(), pageParam.getPageSize());
-        //推荐的商家
-        List<InviterMerchantDOView> inviterMerchantDOS = inviterMerchantDOMapper.selectInviterMerchantByRowbounds(inviterMerchantDO, rowBounds);
-        for (InviterMerchantDOView inviterMerchantDOView : inviterMerchantDOS) {
-        	 MerchantProfileDO  merchantProfileDO =merchantProfileDOMapper.selectByPrimaryKey(inviterMerchantDOView.getId());
-        	 inviterMerchantDOView.setInviterCount(merchantProfileDO.getInviteMerchantCount2()+merchantProfileDO.getInviteMerchantCount3());
-        	//获取门店logo
-         	MerchantStoreImageDOExample msidExample=new MerchantStoreImageDOExample();
-         	msidExample.createCriteria().andMerchantIdEqualTo(inviterMerchantDOView.getId()).andStatusEqualTo(true).andTypeEqualTo(new Byte("3"));
-         	List<MerchantStoreImageDO>  msiList= merchantStoreImageDOMapper.selectByExample(msidExample);
-         	if(!msiList.isEmpty()){
-         		if(msiList.get(0).getPath()==null){
-         			inviterMerchantDOView.setPath(userSrvConfig.getMerchant_headimg());
-         		}else{
-         			inviterMerchantDOView.setPath(msiList.get(0).getPath());
-         		}
-         		
-         	}else{
-         		inviterMerchantDOView.setPath(userSrvConfig.getMerchant_headimg());
-         	}
-		}
-       
-        Page<MerchantInviterBO> pageMerchantInviter = new Page<MerchantInviterBO>();
-        pageMerchantInviter.setTotalCount(count);
-        List<MerchantInviterBO> memberBOS = MerchantInviterConverter.convertMerchantInviterBOS(inviterMerchantDOS);
-        pageMerchantInviter.setRecords(memberBOS);
-        pageMerchantInviter.setCurrentPage(pageParam.getCurrentPage());
-        return pageMerchantInviter;
-    }
-
-
     @Override
     public MerchantBO find(String account, String pwd) {
         MerchantDOExample example = new MerchantDOExample();
