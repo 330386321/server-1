@@ -256,70 +256,6 @@ public class ProductServiceImpl implements ProductService {
         return productInfoBO;
     }
 
-
-    //备份方法，支持商品描述多张
-//	@Override
-//	public ProductEditInfoBO selectEditProductById(Long productId) {
-//		ProductDO productDO = productDOMapper.selectByPrimaryKey(productId);
-//		if (productDO == null) {
-//			return null;
-//		}
-//
-//		ProductEditInfoBO productEditInfoBO = ProductConverter.convertEditInfoBO(productDO);
-//
-//		// 查询商品型号
-//		ProductModelDOExample modelExample = new ProductModelDOExample();
-//		modelExample.createCriteria().andProductIdEqualTo(productDO.getId()).andStatusEqualTo(true);
-//		List<ProductModelDO> productModelDOS = productModelDOMapper.selectByExample(modelExample);
-//
-//		List<ProductModelBO> ProductModelBOS = new ArrayList<ProductModelBO>();
-//		for (ProductModelDO productModelDO : productModelDOS) {
-//			ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
-//			ProductModelBOS.add(productModelBO);
-//		}
-//		String specJson = JSON.toJSONString(ProductModelBOS);
-//		productEditInfoBO.setSpec(specJson);
-//
-//		// 查询滚动图片
-//		ProductImageDOExample imageExample = new ProductImageDOExample();
-//		imageExample.createCriteria().andProductIdEqualTo(productDO.getId())
-//				.andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_HEAD.val).andStatusEqualTo(true);
-//		List<ProductImageDO> imageDOS = productImageDOMapper.selectByExample(imageExample);
-//		List<String> images = new ArrayList<String>();
-//		for (ProductImageDO image : imageDOS) {
-//			images.add(image.getImagePath());
-//		}
-//		String iamgesJson = JSON.toJSONString(images);
-//		productEditInfoBO.setImagesUrl(iamgesJson);
-//
-//		// 查询详情图片
-//		imageExample.clear();
-//		imageExample.createCriteria().andProductIdEqualTo(productDO.getId())
-//				.andImgTypeEqualTo(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.val).andStatusEqualTo(true);
-//		List<ProductImageDO> imageDetailDOS = productImageDOMapper.selectByExample(imageExample);
-//
-//		Map<String, List<String>> detailImageMap = new HashMap<String, List<String>>();
-//		for (ProductImageDO image : imageDetailDOS) {
-//			String key = ProductImagePrefix.productDetailImage + "-" + image.getSortid();
-//			if (!detailImageMap.containsKey(key)) {
-//				List<String> list = new ArrayList<String>();
-//				list.add(image.getImagePath());
-//				detailImageMap.put(key, list);
-//			} else {
-//				List<String> list = detailImageMap.get(key);
-//				list.add(image.getImagePath());
-//				detailImageMap.put(key, list);
-//			}
-//		}
-//		String imageDetailUrl = JSON.toJSONString(detailImageMap);
-//		productEditInfoBO.setImageDetailUrl(imageDetailUrl);
-//
-//		String category = productCategoryService.getFullName(productDO.getCategoryId());
-//		productEditInfoBO.setCategoryName(category);
-//
-//		return productEditInfoBO;
-//	}
-
     @Override
     public ProductEditInfoBO selectEditProductById(Long productId) {
         ProductDO productDO = productDOMapper.selectByPrimaryKey(productId);
@@ -339,7 +275,6 @@ public class ProductServiceImpl implements ProductService {
             ProductModelBO productModelBO = ProductModelConverter.convertBO(productModelDO);
             ProductModelBOS.add(productModelBO);
         }
-//		String specJson = JSON.toJSONString(ProductModelBOS);
         productEditInfoBO.setSpec(ProductModelBOS);
 
         String featureImage = productEditInfoBO.getFeatureImage();
@@ -357,7 +292,6 @@ public class ProductServiceImpl implements ProductService {
             imageUrl = imageUrl.replaceAll("\\\\", "/");
             images.add(imageUrl);
         }
-        //String iamgesJson = JSON.toJSONString(images);
         productEditInfoBO.setImagesUrl(images);
 
         // 查询详情图片
@@ -371,7 +305,6 @@ public class ProductServiceImpl implements ProductService {
             imageUrl = imageUrl.replaceAll("\\\\", "/");
             imageDetails.add(imageUrl);
         }
-//		String imageDetailsJson = JSON.toJSONString(imageDetails);
         productEditInfoBO.setImageDetailUrl(imageDetails);
 
         String category = productCategoryService.getFullName(productDO.getCategoryId());
@@ -476,7 +409,6 @@ public class ProductServiceImpl implements ProductService {
                     pmDO.setGmtModified(new Date());
                     productModelDOMapper.insertSelective(pmDO);
 
-//                    inventory += dataBO.getInventory();
                 } else {
                 	ProductModelDOView modelDO = new ProductModelDOView();
                     modelDO.setId(Long.valueOf(dataBO.getId()));
@@ -500,8 +432,6 @@ public class ProductServiceImpl implements ProductService {
                         pmiDO.setGmtCreate(new Date());
                         pmiDO.setGmtModified(new Date());
                         productModelInventoryDOMapper.insertSelective(pmiDO);
-
-//                        inventory += gapInventory;
                     }
                 }
 
@@ -581,7 +511,6 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_HEAD.getVal());
             productImageDOMapper.insert(pcDO);
         }
-
         // 保存商品详情图片
         String detaiImageUrl = param.getDetailImages();
         String[] detaiImageUrls = detaiImageUrl.split(",");
@@ -598,7 +527,6 @@ public class ProductServiceImpl implements ProductService {
             pcDO.setImgType(ProductImgTypeEnum.PRODUCT_IMG_DETAIL.getVal());
             productImageDOMapper.insert(pcDO);
         }
-
         ProductDO productDO1 = productDOMapper.selectByPrimaryKey(productId);
         SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO1);
         SolrUtil.addSolrDocs(document, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
@@ -742,13 +670,6 @@ public class ProductServiceImpl implements ProductService {
             for (ProductDO productDO : productDOS) {
                 SolrInputDocument document = ProductConverter.convertSolrInputDocument(productDO);
                 documents.add(document);
-                //ProductCategoryeDO productCategoryeDO = productCategoryeDOMapper.selectByPrimaryKey(productDO.getCategoryId());
-                //if (productCategoryeDO != null) {
-                //    String[] categoryIdArr = productCategoryeDO.getPath().split("/");
-                //    for (String categoryId : categoryIdArr) {
-                //        document.addField("categoryId_is", categoryId);
-                //    }
-                //}
             }
             SolrUtil.addSolrDocsList(documents, productSrvConfig.getSolrUrl(), productSrvConfig.getSolrProductCore(), productSrvConfig.getIsCloudSolr());
         }
