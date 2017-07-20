@@ -11,17 +11,26 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
+import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.dto.AdDTO;
 import com.lawu.eshop.ad.dto.AdDetailDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDTO;
 import com.lawu.eshop.ad.dto.AdMerchantDetailDTO;
+import com.lawu.eshop.ad.dto.AdPointDTO;
 import com.lawu.eshop.ad.dto.AdPraiseDTO;
+import com.lawu.eshop.ad.dto.ChoicenessAdDTO;
 import com.lawu.eshop.ad.srv.bo.AdBO;
 import com.lawu.eshop.ad.srv.bo.AdDetailBO;
+import com.lawu.eshop.ad.srv.bo.AdEgainBO;
+import com.lawu.eshop.ad.srv.bo.AdPointBO;
+import com.lawu.eshop.ad.srv.bo.ChoicenessAdBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
+import com.lawu.eshop.framework.core.page.Page;
 
 /**
  * 
@@ -350,6 +359,159 @@ public class AdConverterTest {
 		AdDetailDTO  dto = AdConverter.convertDetailDTO(adDetailBO);
         
         Assert.assertNotNull(dto);
+    }
+	
+	
+	@Test
+    public void convert(){
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        
+        AdEgainBO  bo = AdConverter.convert(ad,true);
+        
+        Assert.assertNotNull(bo);
+    }
+	
+	@Test
+    public void convertList(){
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        
+        List<AdDO> adDOList =new ArrayList<>();
+        adDOList.add(ad);
+        
+        List<AdPointBO>  boList = AdConverter.convert(adDOList);
+        
+        Assert.assertNotNull(boList);
+    }
+	
+	
+	@Test
+    public void convertAdPointDTOList(){
+		
+		AdPointBO bo = new AdPointBO();
+		bo.setId(1l);
+		bo.setImgUrl("ad_image/1494582624025648401.png");
+		bo.setLogoUrl("ad_image/1494582624025648401.png");
+		bo.setManageType(ManageTypeEnum.COMMON);
+		bo.setMerchantStoreId(1001l);
+		bo.setTitle("广告标题");
+		bo.setTotalPoint(BigDecimal.valueOf(100));
+		
+		List<AdPointBO> adPointBOList =new ArrayList<>();
+		adPointBOList.add(bo);
+        
+		List<AdPointDTO>  dtoList = AdConverter.convertAdPointDTOList(adPointBOList);
+        
+        Assert.assertNotNull(dtoList);
+    }
+	
+	
+	@Test
+    public void convertChoicenessAdBO(){
+		
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setRegionName("全国");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        
+        ChoicenessAdBO  bo = AdConverter.convertChoicenessAdBO(ad,true);
+        
+        Assert.assertNotNull(bo);
+    }
+	
+	
+	@Test
+    public void convertChoicenessAdDTOPage(){
+		
+		Page<ChoicenessAdBO> pageChoicenessAdBO =new Page<>();
+		
+		ChoicenessAdBO bo = new ChoicenessAdBO();
+		bo.setBeginTime(new Date());
+		bo.setContent("广告内容");
+		bo.setId(1l);
+		bo.setIsFavorite(true);
+		bo.setLogoUrl("ad_image/1494582624025648401.png");
+		bo.setManageType(ManageTypeEnum.COMMON);
+		bo.setMediaUrl("ad_image/1494582624025648401.png");
+		bo.setMerchantStoreId(1001l);
+		bo.setMerchantStoreName("E店商家");
+		bo.setStatus(AdPraiseStatusEnum.AD_STATUS_SHOOT);
+		bo.setTitle("广告标题");
+		bo.setTotalPoint(BigDecimal.valueOf(100));
+		bo.setType(AdEgainTypeEnum.AD_TYPE_FLAT);
+		bo.setVideoImgUrl("ad_image/1494582624025648401.png");
+		bo.setViewcount(10);
+		
+		List<ChoicenessAdBO> list = new ArrayList<>();
+		list.add(bo);
+		pageChoicenessAdBO.setCurrentPage(1);
+		pageChoicenessAdBO.setTotalCount(20);
+		pageChoicenessAdBO.setRecords(list);
+		
+		Page<ChoicenessAdDTO>  page = AdConverter.convertChoicenessAdDTOPage(pageChoicenessAdBO);
+        
+        Assert.assertNotNull(page.getRecords());
     }
 	
 }

@@ -18,6 +18,7 @@ import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.AuditEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.MemberAdRecordStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
@@ -84,6 +85,10 @@ public class AdServiceImplTest {
     	adSaveParam.setMerchantId(1002l);
     	adSaveParam.setUserNum("B856392484215848969");
     	adSaveParam.setMediaUrl("ad_image/1494582624025648401.png");
+    	adSaveParam.setLogoUrl("store/1494582624025648402.png");
+    	adSaveParam.setMerchantStoreId(1001l);
+    	adSaveParam.setMerchantStoreName("E店商家");
+    	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
     	AdParam param=new AdParam();
     	param.setAdCount(20);
     	param.setBeginTime("2017-05-17 11:35:00");
@@ -113,6 +118,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -150,6 +159,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -186,6 +199,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -222,6 +239,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -257,6 +278,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -293,6 +318,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -329,6 +358,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
@@ -366,6 +399,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1003l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -404,6 +441,10 @@ public class AdServiceImplTest {
     	adSaveParam.setCount(10);
     	adSaveParam.setUserNum("B856392484215848969");
     	adSaveParam.setMediaUrl("ad_image/1494582624025648401.png");
+    	adSaveParam.setLogoUrl("store/1494582624025648402.png");
+    	adSaveParam.setMerchantStoreId(1001l);
+    	adSaveParam.setMerchantStoreName("E店商家");
+    	adSaveParam.setManageType(ManageTypeEnum.ENTITY);
     	AdParam param=new AdParam();
     	param.setAdCount(20);
     	param.setBeginTime("2017-05-17 11:35:00");
@@ -438,6 +479,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -474,6 +519,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -516,6 +565,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -546,6 +599,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
@@ -583,6 +640,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
@@ -606,6 +667,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
 		ad.setTotalPoint(BigDecimal.valueOf(100));
@@ -642,6 +707,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -671,6 +740,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantNum("B856392484215848969");
 		ad.setAdCount(20);
 		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
@@ -706,6 +779,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
@@ -750,6 +827,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
@@ -783,6 +864,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -818,6 +903,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -856,6 +945,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -887,6 +980,10 @@ public class AdServiceImplTest {
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
 		ad.setPoint(BigDecimal.valueOf(0.5));
@@ -922,6 +1019,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -939,6 +1040,10 @@ public class AdServiceImplTest {
         ListAdParam listAdParam=new ListAdParam();
         listAdParam.setPageSize(10);
         listAdParam.setCurrentPage(1);
+        ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
         listAdParam.setPutWayEnum(PutWayEnum.PUT_WAY_AREAS);
         listAdParam.setStatusEnum(AdStatusEnum.AD_STATUS_PUTING);
         listAdParam.setTypeEnum(AdTypeEnum.AD_TYPE_FLAT);
@@ -960,6 +1065,10 @@ public class AdServiceImplTest {
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
 		ad.setContent("广告测试内容");
@@ -991,6 +1100,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1026,6 +1139,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -1057,6 +1174,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1086,6 +1207,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setAdCount(20);
@@ -1109,6 +1234,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setAdCount(20);
@@ -1135,6 +1264,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -1161,6 +1294,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1193,6 +1330,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1228,6 +1369,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1269,6 +1414,10 @@ public class AdServiceImplTest {
 		AdDO ad=new AdDO();
 		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
@@ -1312,6 +1461,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -1342,6 +1495,10 @@ public class AdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -1362,4 +1519,56 @@ public class AdServiceImplTest {
         Assert.assertNotNull(list);
         Assert.assertTrue(list.size()>0);
     }
+	
+	
+	/*@Transactional
+	@Rollback
+    @Test
+    public void selectPageAdEgain() {
+		AdDO ad=new AdDO();
+		ad.setMerchantLatitude(BigDecimal.valueOf(22.547153));
+		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
+		ad.setMerchantId(1002l);
+		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
+		ad.setMediaUrl("ad_image/1494582624025648401.png");
+		ad.setAdCount(20);
+		ad.setBeginTime(new Date());
+		ad.setContent("广告测试内容");
+		ad.setPoint(BigDecimal.valueOf(0.5));
+		ad.setPutWay(PutWayEnum.PUT_WAY_AREAS.val);
+		ad.setAreas("11");
+		ad.setRegionName("北京");
+		ad.setTitle("广告测试标题");
+		ad.setTotalPoint(BigDecimal.valueOf(100));
+		ad.setType(AdTypeEnum.AD_TYPE_FLAT.getVal());
+        ad.setGmtCreate(new Date());
+        ad.setGmtModified(new Date());
+        ad.setHits(0);
+        ad.setStatus(AdStatusEnum.AD_STATUS_PUTING.val);
+        Integer id=adDOMapper.insertSelective(ad);
+        
+        AdEgainInternalParam param =new AdEgainInternalParam();
+        
+        List<Long> merchantIds=new ArrayList<>();
+        merchantIds.add(1002l);
+        param.setMerchantIds(merchantIds);
+        
+        List<String> areas=new ArrayList<>();
+        areas.add("11");
+        param.setAreas(areas);
+        
+        param.setLatitude(22.547153);
+        param.setLongitude(113.960333);
+        
+        param.setCurrentPage(1);
+        param.setPageSize(20);
+        param.setTypeEnum(AdEgainTypeEnum.AD_TYPE_FLAT);
+        Page<AdEgainBO> page=adService.selectPageAdEgain(1l, param);
+        Assert.assertNotNull(page.getRecords());
+        Assert.assertTrue(page.getRecords().size()>0);
+    }*/
 }

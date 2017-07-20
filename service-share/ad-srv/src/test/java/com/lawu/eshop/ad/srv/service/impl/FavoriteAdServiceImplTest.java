@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
 import com.lawu.eshop.ad.constants.FavoriteAdTypeEnum;
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
 import com.lawu.eshop.ad.param.FavoriteAdParam;
 import com.lawu.eshop.ad.srv.bo.FavoriteAdDOViewBO;
@@ -79,6 +80,10 @@ public class FavoriteAdServiceImplTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
+		ad.setMerchantStoreId(1001l);
+		ad.setMerchantStoreName("E店商家");
+		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
+		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());

@@ -6,9 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,7 +27,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
-import com.lawu.eshop.ad.constants.AdEgainTypeEnum;
 import com.lawu.eshop.ad.constants.AdPraiseStatusEnum;
 import com.lawu.eshop.ad.constants.AdStatusEnum;
 import com.lawu.eshop.ad.constants.AdTypeEnum;
@@ -38,7 +35,6 @@ import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.constants.PointPoolStatusEnum;
 import com.lawu.eshop.ad.constants.PointPoolTypeEnum;
 import com.lawu.eshop.ad.constants.PutWayEnum;
-import com.lawu.eshop.ad.param.AdEgainInternalParam;
 import com.lawu.eshop.ad.param.AdFindParam;
 import com.lawu.eshop.ad.param.AdMemberParam;
 import com.lawu.eshop.ad.param.AdMerchantParam;
@@ -927,10 +923,6 @@ public class AdControllerTest {
 		ad.setMerchantLongitude(BigDecimal.valueOf(113.960333));
 		ad.setMerchantId(1002l);
 		ad.setMerchantNum("B856392484215848969");
-		ad.setMerchantStoreId(1001l);
-		ad.setMerchantStoreName("E店商家");
-		ad.setManageType(ManageTypeEnum.ENTITY.getVal());
-		ad.setLogoUrl("store/1494582624025648402.png");
 		ad.setMediaUrl("ad_image/1494582624025648401.png");
 		ad.setAdCount(20);
 		ad.setBeginTime(new Date());
@@ -974,40 +966,4 @@ public class AdControllerTest {
         }
 
     }
-    
-    /*@Transactional
-    @Rollback
-    @Test
-    public void pageAdEgain() {
-    	
-        AdEgainInternalParam param =new AdEgainInternalParam();
-        
-        List<Long> merchantIds=new ArrayList<>();
-        merchantIds.add(1002l);
-        param.setMerchantIds(merchantIds);
-        
-        List<String> areas=new ArrayList<>();
-        areas.add("11");
-        param.setAreas(areas);
-        
-        param.setLatitude(22.547153);
-        param.setLongitude(113.960333);
-        
-        param.setCurrentPage(1);
-        param.setPageSize(20);
-        param.setTypeEnum(AdEgainTypeEnum.AD_TYPE_FLAT);
-        
-        String requestJson = JSONObject.toJSONString(param);
-        
-        try {
-            RequestBuilder request = put("/ad/pageAdEgain/"+1l).contentType(MediaType.APPLICATION_JSON).content(requestJson);
-            ResultActions perform= mvc.perform(request);
-            MvcResult mvcResult = perform.andExpect(status().is(HttpCode.SC_CREATED)).andDo(MockMvcResultHandlers.print()).andReturn();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-
-    }*/
 }

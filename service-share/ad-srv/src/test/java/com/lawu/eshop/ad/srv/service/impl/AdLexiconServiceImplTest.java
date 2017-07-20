@@ -1,5 +1,6 @@
 package com.lawu.eshop.ad.srv.service.impl;
 
+import com.lawu.eshop.ad.constants.ManageTypeEnum;
 import com.lawu.eshop.ad.srv.bo.AdLexiconBO;
 import com.lawu.eshop.ad.srv.domain.AdDO;
 import com.lawu.eshop.ad.srv.domain.AdLexiconDO;
@@ -64,6 +65,10 @@ public class AdLexiconServiceImplTest {
         adRecord.setAdCount(1);
         adRecord.setAreas("44");
         adRecord.setTitle("selectList-title");
+        adRecord.setMerchantStoreId(1001l);
+        adRecord.setMerchantStoreName("E店商家");
+        adRecord.setManageType(ManageTypeEnum.ENTITY.getVal());
+        adRecord.setLogoUrl("store/1494582624025648402.png");
         long adId = adDOMapper.insert(adRecord);
         Assert.assertTrue( adId > 0);
 
