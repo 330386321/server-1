@@ -13,6 +13,7 @@ import com.lawu.eshop.merchant.api.service.MerchantStoreService;
 import com.lawu.eshop.user.constants.UploadFileTypeConstant;
 import com.lawu.eshop.user.dto.MerchantAuditInfoDTO;
 import com.lawu.eshop.user.dto.MerchantStoreDTO;
+import com.lawu.eshop.user.param.ApplyPhysicalStoreParam;
 import com.lawu.eshop.user.param.ApplyStoreParam;
 import com.lawu.eshop.user.param.MerchantStoreParam;
 import io.swagger.annotations.Api;
@@ -260,7 +261,8 @@ public class MerchantStoreController extends BaseController {
     @Authorization
     @ApiResponse(code = HttpCode.SC_CREATED, message = "success")
     @RequestMapping(value = "applyPhysicalStore", method = RequestMethod.POST)
-    public Result applyPhysicalStore(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token){
+    public Result applyPhysicalStore(@RequestHeader(UserConstant.REQ_HEADER_TOKEN) String token,
+                                     @ModelAttribute @ApiParam ApplyPhysicalStoreParam param){
         HttpServletRequest request = getRequest();
         Long merchantId = UserUtil.getCurrentUserId(request);
         StringBuilder storeUrls = new StringBuilder();        //门店照
@@ -300,9 +302,23 @@ public class MerchantStoreController extends BaseController {
             }
         }
         ApplyStoreParam applyStoreParam = new ApplyStoreParam();
-        applyStoreParam.setEnvironmentUrl(environmentUrls.toString());
-        applyStoreParam.setLogoUrl(storeLogoUrls.toString());
-        applyStoreParam.setStoreUrl(storeUrls.toString());
+        //判断回显照片
+        if (StringUtils.isNotEmpty(param.getStoreUrl())) {
+            applyStoreParam.setStoreUrl(storeUrls + param.getStoreUrl());
+        } else {
+            applyStoreParam.setStoreUrl(storeUrls.toString());
+        }
+        if (StringUtils.isNotEmpty(param.getEnvironmentUrl())) {
+            applyStoreParam.setEnvironmentUrl(environmentUrls + param.getEnvironmentUrl());
+        } else {
+            applyStoreParam.setEnvironmentUrl(environmentUrls.toString());
+        }
+        if (StringUtils.isNotEmpty(param.getLogoUrl())) {
+            applyStoreParam.setLogoUrl(storeLogoUrls + param.getLogoUrl());
+        } else {
+            applyStoreParam.setLogoUrl(storeLogoUrls.toString());
+        }
+
         return merchantStoreService.applyPhysicalStore(merchantId,applyStoreParam);
     }
 
