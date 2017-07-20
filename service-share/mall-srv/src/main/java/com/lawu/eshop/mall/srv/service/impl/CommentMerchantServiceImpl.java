@@ -71,20 +71,18 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDOMapper.insert(commentMerchantDO);
         Long id = commentMerchantDO.getId();
         if (!StringUtils.isEmpty(commentPic)) {
-            String imgs[] = commentPic.split(",");
+            String[] imgs = commentPic.split(",");
             if (id != null && id > 0) {
                 //新增评价图片
                 for (int i = 0; i < imgs.length; i++) {
-                    if (!StringUtils.isEmpty(imgs[i])) {
                         CommentImageDO commentImageDO = new CommentImageDO();
                         commentImageDO.setCommentId(id);
-                        commentImageDO.setImgUrl(imgs[i]);
+                        commentImageDO.setImgUrl(imgs[i] == null ? "" : imgs[i]);
                         commentImageDO.setStatus(true);//有效
                         commentImageDO.setType(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);//评论商家
                         commentImageDO.setGmtCreate(new Date());
                         commentImageDO.setGmtModified(new Date());
                         commentImageDOMapper.insert(commentImageDO);
-                    }
                 }
             }
         }
@@ -115,7 +113,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
             CommentImageDOExample imageDOExample = new CommentImageDOExample();
             imageDOExample.createCriteria().andCommentIdEqualTo(commentMerchantDO.getId()).andTypeEqualTo(CommentTypeEnum.COMMENT_TYPE_MERCHANT.val);
             List<CommentImageDO> commentImageDOS = commentImageDOMapper.selectByExample(imageDOExample);
-            List<String> images = new ArrayList<String>();
+            List<String> images = new ArrayList<>();
             if (!commentImageDOS.isEmpty()) {
                 for (int i = 0; i < commentImageDOS.size(); i++) {
                     images.add(commentImageDOS.get(i).getImgUrl());
@@ -133,7 +131,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     public Page<CommentMerchantBO> getCommentMerchantListWithImgs(CommentMerchantListParam listParam) {
         int totalCount = commentMerchantDOMapperExtend.selectCountByMerchantId(listParam.getMerchantId());
 
-        Page<CommentMerchantBO> commentProductBOPage = new Page<CommentMerchantBO>();
+        Page<CommentMerchantBO> commentProductBOPage = new Page<>();
         commentProductBOPage.setTotalCount(totalCount);
         commentProductBOPage.setCurrentPage(listParam.getCurrentPage());
 
@@ -143,8 +141,8 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         merchantPageParam.setMerchantId(listParam.getMerchantId());
         //查询评论列表信息
         List<CommentMerchantDOView> commentMerchantDOViews = commentMerchantDOMapperExtend.selectCommentsWithImg(merchantPageParam);
-        Page<CommentMerchantBO> pages = new Page<CommentMerchantBO>();
-        List<CommentMerchantBO> commentMerchantBOS = new ArrayList<CommentMerchantBO>();
+        Page<CommentMerchantBO> pages = new Page<>();
+        List<CommentMerchantBO> commentMerchantBOS = new ArrayList<>();
         if (!commentMerchantDOViews.isEmpty()) {
             for (CommentMerchantDOView commentMerchantDOView : commentMerchantDOViews) {
                 CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converterBOFromView(commentMerchantDOView);
@@ -172,8 +170,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
     @Override
     public CommentMerchantBO findMerchantComment(Long commentId) {
         CommentMerchantDO commentMerchantDO = commentMerchantDOMapper.selectByPrimaryKey(commentId);
-        CommentMerchantBO commentMerchantBO = CommentMerchantConverter.converBO(commentMerchantDO);
-        return commentMerchantBO;
+        return CommentMerchantConverter.converBO(commentMerchantDO);
     }
 
     @Override
@@ -183,8 +180,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         commentMerchantDO.setId(commentId);
         commentMerchantDO.setReplyContent(replyContent);
         commentMerchantDO.setGmtReply(new Date());
-        int row = commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
-        return row;
+        return  commentMerchantDOMapper.updateByPrimaryKeySelective(commentMerchantDO);
     }
 
     @Override
@@ -208,7 +204,7 @@ public class CommentMerchantServiceImpl implements CommentMerchantService {
         Integer totalCount = commentMerchantDOMapper.countByExample(example);
         double goodGrade = 0;
         if(totalCount > 0){
-            goodGrade = new BigDecimal((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
+            goodGrade =  BigDecimal.valueOf((double) goodCount / totalCount).setScale(2, RoundingMode.UP).doubleValue();
         }
 
         //人均消费
