@@ -23,6 +23,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
 
     @Autowired
     private ReportUserActiveAreaMonthDOMapper reportUserActiveAreaMonthDOMapper;
+    
     @Override
     public List<ReportUserActiveAreaMonthBO> getReportUserActiveAreaMonthList(String reportDate) {
 
@@ -38,7 +39,7 @@ public class ReportUserActiveAreaMonthServiceImpl implements ReportUserActiveAre
         for (UserActiveDTO userActiveDTO : userActiveDTOS) {
             ReportUserActiveAreaMonthDO  reportUserActiveAreaMonthDO = new ReportUserActiveAreaMonthDO();
             reportUserActiveAreaMonthDO.setCityName(userActiveDTO.getCityName());
-            reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
+            reportUserActiveAreaMonthDO.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date())));
             reportUserActiveAreaMonthDO.setGmtCreate(new Date());
             reportUserActiveAreaMonthDO.setMemberCount(userActiveDTO.getUserCount());
             reportUserActiveAreaMonthDO.setCityId(userActiveDTO.getCityId());

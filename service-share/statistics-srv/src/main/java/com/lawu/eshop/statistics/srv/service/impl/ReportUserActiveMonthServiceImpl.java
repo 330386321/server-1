@@ -18,14 +18,14 @@ public class ReportUserActiveMonthServiceImpl implements ReportUserActiveMonthSe
 
     @Autowired
     private ReportUserActiveMonthDOMapper reportUserActiveMonthDOMapper;
-
+    
     @Override
     public void saveUserActiveMonth(Integer memberCount, Integer merchantCount) {
         ReportUserActiveMonthDO userActiveMonthDO = new ReportUserActiveMonthDO();
         userActiveMonthDO.setMemberCount(memberCount);
         userActiveMonthDO.setMerchantCount(merchantCount);
         userActiveMonthDO.setGmtCreate(new Date());
-        userActiveMonthDO.setGmtReport(DateUtil.getMonthBefore(new Date()));
+        userActiveMonthDO.setGmtReport(DateUtil.getFirstDayOfMonth(DateUtil.getMonthBefore(new Date())));
         reportUserActiveMonthDOMapper.insertSelective(userActiveMonthDO);
     }
 }
