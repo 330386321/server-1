@@ -256,7 +256,7 @@ public class AdController extends BaseController {
 
 		Result<List<PointPoolDTO>> member = adService.selectMemberList(id);
 		List<UserTopDTO> user = new ArrayList<>();
-		if(isSuccess(member)){
+		if(!isSuccess(member)){
 			return successCreated(member.getRet());
 		}
 		List<PointPoolDTO> top3 = member.getModel();
