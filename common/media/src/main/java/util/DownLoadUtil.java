@@ -57,6 +57,11 @@ public class DownLoadUtil {
         } catch (IOException e) {
             logger.info("IOException {} ",e);
         }
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            saveDir.mkdirs();
+        }
+        File file = new File(saveDir + File.separator + fileName);
         //得到输入流
         try (InputStream inputStream = conn.getInputStream();
              FileOutputStream fos = new FileOutputStream(file)) {
@@ -64,14 +69,7 @@ public class DownLoadUtil {
             byte[] getData = readInputStream(inputStream);
 
             //文件保存位置
-            File saveDir = new File(savePath);
-            if (!saveDir.exists()) {
-                saveDir.mkdirs();
-            }
-            File file = new File(saveDir + File.separator + fileName);
-
             fos.write(getData);
-
             fos.close();
             inputStream.close();
         } catch (FileNotFoundException e) {
