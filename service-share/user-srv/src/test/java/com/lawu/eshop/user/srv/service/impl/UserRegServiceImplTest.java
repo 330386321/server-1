@@ -1,0 +1,241 @@
+package com.lawu.eshop.user.srv.service.impl;
+
+import com.lawu.eshop.user.constants.UserCommonConstant;
+import com.lawu.eshop.user.param.CollectionUserRegParam;
+import com.lawu.eshop.user.srv.domain.MemberDO;
+import com.lawu.eshop.user.srv.domain.MerchantDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreDO;
+import com.lawu.eshop.user.srv.domain.MerchantStoreProfileDO;
+import com.lawu.eshop.user.srv.mapper.MemberDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreDOMapper;
+import com.lawu.eshop.user.srv.mapper.MerchantStoreProfileDOMapper;
+import com.lawu.eshop.user.srv.mapper.extend.UserRegDOMapperExtend;
+import com.lawu.eshop.user.srv.service.UserRegService;
+import com.lawu.eshop.utils.DataTransUtil;
+import com.lawu.eshop.utils.PwdUtil;
+import com.lawu.eshop.utils.RandomUtil;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * @author meishuquan
+ * @date 2017/7/12.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/spring-test.xml"})
+public class UserRegServiceImplTest {
+
+    @Autowired
+    private UserRegService userRegService;
+
+    @Autowired
+    private UserRegDOMapperExtend userRegDOMapperExtend;
+
+    @Autowired
+    private MemberDOMapper memberDOMapper;
+
+    @Autowired
+    private MerchantDOMapper merchantDOMapper;
+
+    @Autowired
+    private MerchantStoreDOMapper merchantStoreDOMapper;
+
+    @Autowired
+    private MerchantStoreProfileDOMapper merchantStoreProfileDOMapper;
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMemberRegDaily() {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        Calendar calendar = Calendar.getInstance();
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(calendar.get(Calendar.YEAR));
+        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+        param.setDay(calendar.get(Calendar.DATE));
+        int result = userRegService.collectionMemberRegDaily(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantRegDaily() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setAccount("13888888888");
+        merchantDO.setPwd("123456");
+        merchantDO.setMobile("13888888888");
+        merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        Calendar calendar = Calendar.getInstance();
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(calendar.get(Calendar.YEAR));
+        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+        param.setDay(calendar.get(Calendar.DATE));
+        int result = userRegService.collectionMerchantRegDaily(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMemberRegMonth() {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        Calendar calendar = Calendar.getInstance();
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(calendar.get(Calendar.YEAR));
+        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+        int result = userRegService.collectionMemberRegMonth(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantRegMonth() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setAccount("13888888888");
+        merchantDO.setPwd("123456");
+        merchantDO.setMobile("13888888888");
+        merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        Calendar calendar = Calendar.getInstance();
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setYear(calendar.get(Calendar.YEAR));
+        param.setMonth(calendar.get(Calendar.MONTH) + 1);
+        int result = userRegService.collectionMerchantRegMonth(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMemberRegArea() {
+        MemberDO memberDO = new MemberDO();
+        memberDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MEMBER_NUM_TAG));
+        memberDO.setAccount("13666666666");
+        memberDO.setPwd(PwdUtil.generate("123456"));
+        memberDO.setMobile("13666666666");
+        memberDO.setRegionPath("44/4403/440303");
+        memberDO.setStatus(DataTransUtil.intToByte(1));
+        memberDO.setGmtCreate(new Date());
+        memberDOMapper.insertSelective(memberDO);
+
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setRegionPath("44/4403");
+        int result = userRegService.collectionMemberRegArea(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantCommonRegArea() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setAccount("13888888888");
+        merchantDO.setPwd("123456");
+        merchantDO.setMobile("13888888888");
+        merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(merchantDO.getId());
+        storeDO.setName("测试店铺");
+        storeDO.setRegionPath("44/4403/440303");
+        storeDO.setRegionName("广东省深圳市南山区");
+        storeDO.setAddress("大冲商务中心");
+        storeDO.setLongitude(new BigDecimal(104.23));
+        storeDO.setLatitude(new BigDecimal(22.36));
+        storeDO.setIntro("店铺介绍");
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        MerchantStoreProfileDO profileDO = new MerchantStoreProfileDO();
+        profileDO.setId(storeDO.getId());
+        profileDO.setMerchantId(merchantDO.getId());
+        profileDO.setManageType(DataTransUtil.intToByte(1));
+        profileDO.setCertifType(DataTransUtil.intToByte(1));
+        merchantStoreProfileDOMapper.insertSelective(profileDO);
+
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setRegionPath("44/4403");
+        int result = userRegService.collectionMerchantCommonRegArea(param);
+        Assert.assertEquals(1, result);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void collectionMerchantEntityRegArea() {
+        MerchantDO merchantDO = new MerchantDO();
+        merchantDO.setNum(RandomUtil.getTableNumRandomString(UserCommonConstant.MERCHANT_NUM_TAG));
+        merchantDO.setAccount("13888888888");
+        merchantDO.setPwd("123456");
+        merchantDO.setMobile("13888888888");
+        merchantDO.setStatus(DataTransUtil.intToByte(1));
+        merchantDO.setGmtCreate(new Date());
+        merchantDOMapper.insertSelective(merchantDO);
+
+        MerchantStoreDO storeDO = new MerchantStoreDO();
+        storeDO.setMerchantId(merchantDO.getId());
+        storeDO.setName("测试店铺");
+        storeDO.setRegionPath("44/4403/440303");
+        storeDO.setRegionName("广东省深圳市南山区");
+        storeDO.setAddress("大冲商务中心");
+        storeDO.setLongitude(new BigDecimal(104.23));
+        storeDO.setLatitude(new BigDecimal(22.36));
+        storeDO.setIntro("店铺介绍");
+        storeDO.setStatus(DataTransUtil.intToByte(1));
+        storeDO.setIsNoReasonReturn(true);
+        merchantStoreDOMapper.insertSelective(storeDO);
+
+        MerchantStoreProfileDO profileDO = new MerchantStoreProfileDO();
+        profileDO.setId(storeDO.getId());
+        profileDO.setMerchantId(merchantDO.getId());
+        profileDO.setManageType(DataTransUtil.intToByte(2));
+        profileDO.setCertifType(DataTransUtil.intToByte(2));
+        merchantStoreProfileDOMapper.insertSelective(profileDO);
+
+        CollectionUserRegParam param = new CollectionUserRegParam();
+        param.setRegionPath("44/4403");
+        int result = userRegService.collectionMerchantEntityRegArea(param);
+        Assert.assertEquals(1, result);
+    }
+
+}
