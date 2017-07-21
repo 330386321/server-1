@@ -2532,7 +2532,7 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(expected, actual.getIsNoOnGoingOrder());
     }
     
-    private void assertShoppingOrderBO(ShoppingOrderDO expected, ShoppingOrderBO actual){
+    public static void assertShoppingOrderBO(ShoppingOrderDO expected, ShoppingOrderBO actual){
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(expected.getActualAmount().doubleValue(), actual.getActualAmount().doubleValue(), 0D);
     	Assert.assertEquals(expected.getCommissionStatus(), actual.getCommissionStatus().getValue());
@@ -2544,10 +2544,10 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(expected.getExpressCompanyId(), actual.getExpressCompanyId());
     	Assert.assertEquals(expected.getExpressCompanyName(), actual.getExpressCompanyName());
     	Assert.assertEquals(expected.getFreightPrice().doubleValue(), actual.getFreightPrice().doubleValue(), 0D);
-    	Assert.assertEquals(expected.getGmtCommission().getTime(), actual.getGmtCommission().getTime());
+    	Assert.assertEquals(expected.getGmtCommission() != null ? expected.getGmtCommission().getTime() : null, actual.getGmtCommission() != null ? actual.getGmtCommission().getTime() : null);
     	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
     	Assert.assertEquals(expected.getGmtModified().getTime(), actual.getGmtModified().getTime());
-    	Assert.assertEquals(expected.getGmtPayment().getTime(), actual.getGmtPayment().getTime());
+    	Assert.assertEquals(expected.getGmtPayment() != null ? expected.getGmtPayment().getTime() : null, actual.getGmtPayment() != null ? actual.getGmtPayment().getTime() : null);
     	Assert.assertEquals(expected.getId(), actual.getId());
     	Assert.assertEquals(expected.getIsAutomaticReceipt(), actual.getIsAutomaticReceipt());
     	Assert.assertEquals(expected.getIsDone(), actual.getIsDone());
@@ -2569,11 +2569,11 @@ public class ShoppingOrderServiceImplTest {
     	Assert.assertEquals(expected.getStatus(), actual.getStatus().getValue());
     	Assert.assertEquals(expected.getThirdNumber(), actual.getThirdNumber());
     	Assert.assertEquals(expected.getWaybillNum(), actual.getWaybillNum());
-    	Assert.assertEquals(expected.getGmtTransaction().getTime(), actual.getGmtTransaction().getTime());
-    	Assert.assertEquals(expected.getGmtTransport().getTime(), actual.getGmtTransport().getTime());
+    	Assert.assertEquals(expected.getGmtTransaction() != null ? expected.getGmtTransaction().getTime() : null, expected.getGmtTransaction() != null ? actual.getGmtTransaction().getTime() : null);
+    	Assert.assertEquals(expected.getGmtTransport() != null ? expected.getGmtTransport().getTime() : null, actual.getGmtTransport() != null ? actual.getGmtTransport().getTime() : null);
     }
     
-    private void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemBO actual){
+    public static void assertShoppingOrderItemBO(ShoppingOrderItemDO expected, ShoppingOrderItemBO actual){
     	Assert.assertNotNull(actual);
     	Assert.assertEquals(expected.getGmtCreate().getTime(), actual.getGmtCreate().getTime());
     	Assert.assertEquals(expected.getGmtModified().getTime(), actual.getGmtModified().getTime());
