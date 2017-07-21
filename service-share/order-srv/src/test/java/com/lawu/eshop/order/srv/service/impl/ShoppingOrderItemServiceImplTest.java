@@ -24,7 +24,6 @@ import com.lawu.eshop.order.srv.bo.ShoppingRefundDetailBO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderDO;
 import com.lawu.eshop.order.srv.domain.ShoppingOrderItemDO;
 import com.lawu.eshop.order.srv.domain.ShoppingRefundDetailDO;
-import com.lawu.eshop.order.srv.mapper.PropertyDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingOrderItemDOMapper;
 import com.lawu.eshop.order.srv.mapper.ShoppingRefundDetailDOMapper;
