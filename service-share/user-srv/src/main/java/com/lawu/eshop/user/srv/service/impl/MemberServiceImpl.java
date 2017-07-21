@@ -18,6 +18,7 @@ import com.lawu.eshop.user.constants.UserCommonConstant;
 import com.lawu.eshop.user.constants.UserInviterTypeEnum;
 import com.lawu.eshop.user.constants.UserSexEnum;
 import com.lawu.eshop.user.constants.UserStatusEnum;
+import com.lawu.eshop.user.constants.UserTypeEnum;
 import com.lawu.eshop.user.param.MemberQuery;
 import com.lawu.eshop.user.param.RegisterRealParam;
 import com.lawu.eshop.user.param.UserParam;
@@ -156,8 +157,14 @@ public class MemberServiceImpl implements MemberService {
     
     @Override
     public Page<MemberBO> findMemberListByUser(Long inviterId, MemberQuery memberQuery, byte inviterType) {
-    	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
-    	int count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+    	int count=0;
+    	if(inviterType==UserTypeEnum.MEMBER.val){
+    		MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(inviterId);
+        	count = memberProfileDO == null ? 0 : memberProfileDO.getInviteMemberCount().intValue();
+    	}else{
+    		 MerchantProfileDO  merchantProfileDO=merchantProfileDOMapper.selectByPrimaryKey(inviterId);
+    		 count = merchantProfileDO == null ? 0 : merchantProfileDO.getInviteMemberCount().intValue();
+    	}
 
     	InviterUserDOView view = new InviterUserDOView();
     	view.setInviterId(inviterId);
@@ -174,7 +181,7 @@ public class MemberServiceImpl implements MemberService {
         	if(memberDO.getHeadimg()==null){
         		memberDO.setHeadimg(userSrvConfig.getDefaultHeadimg());
         	}
-            memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
+        	MemberProfileDO memberProfileDO = memberProfileDOMapper.selectByPrimaryKey(memberDO.getId());
             if (memberProfileDO != null)
                 mpList.add(memberProfileDO);
         }
