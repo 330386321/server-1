@@ -63,6 +63,9 @@ public class DownLoadUtil {
         }
         File file = new File(saveDir + File.separator + fileName);
         //得到输入流
+        if (conn == null) {
+            return;
+        }
         try (InputStream inputStream = conn.getInputStream();
              FileOutputStream fos = new FileOutputStream(file)) {
             //获取自己数组

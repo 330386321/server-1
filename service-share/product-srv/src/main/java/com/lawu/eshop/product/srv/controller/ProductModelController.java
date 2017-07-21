@@ -78,11 +78,11 @@ public class ProductModelController extends BaseController {
 		CommentProductInfoBO commentProductInfoBO = productModelService.selectCommentProductInfo(productModelId);
 
 		if (commentProductInfoBO == null) {
-			successGet(ResultCode.RESOURCE_NOT_FOUND);
+			return successGet(ResultCode.RESOURCE_NOT_FOUND);
 		}
 
 		CommentProductInfoDTO dto = new CommentProductInfoDTO();
-		dto.setFeatureImage(commentProductInfoBO.getFeatureImage() == null ? "" : commentProductInfoBO.getFeatureImage());
+		dto.setFeatureImage(commentProductInfoBO.getFeatureImage());
 		dto.setModelName(commentProductInfoBO.getModelName());
 		dto.setName(commentProductInfoBO.getName());
 		dto.setPrice(commentProductInfoBO.getPrice());
