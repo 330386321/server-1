@@ -116,22 +116,16 @@
 	      1.根据用户的点击次数,以及投放时间来排序,属于filesort排序,排序的性能比较低,需要继续优化
 	 -->
 	<select resultType="java.lang.Long" id="selectPageAdEgainId" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample">
-		<if test="latitude != null and longitude != null">
-		SET @r = #{radius};
-		SET @lat = #{latitude};
-		SET @lon = #{longitude};
-		</if>
 		SELECT id FROM ad
-		WHERE
-		type = #{type} AND status = 2 AND
+		WHERE type = #{type} AND status = 2 AND
 		(
 		    ( put_way = 1 AND areas IS NULL )
 		    <if test="latitude != null and longitude != null">
 		    OR
 		    ( 
 		      put_way = 3
-		      AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
-		      AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+		      AND  merchant_latitude &gt; #{latitude} - 1 AND  merchant_latitude &lt; #{latitude} + 1 AND merchant_longitude &gt;  #{longitude} - 1 AND merchant_longitude &lt; #{longitude} + 1 
+		      AND (#{radius} * 2 * ASIN(SQRT(POW(SIN((#{latitude} - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(#{latitude} * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((#{longitude} - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
 		    )
 		    </if>
 		    <if test="merchantIds != null and merchantIds.size > 0">
@@ -148,22 +142,16 @@
 	
 	<!-- 查询E赚广告总数 -->
 	<select resultType="java.lang.Long" id="selectAdEgainCount" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdEgainIdExample">
-        <if test="latitude != null and longitude != null">
-        SET @r = #{radius};
-        SET @lat = #{latitude};
-        SET @lon = #{longitude};
-        </if>
         SELECT count(*) FROM ad
-        WHERE
-        type = #{type} AND status = 2 AND
+        WHERE type = #{type} AND status = 2 AND
         (
             ( put_way = 1 AND areas IS NULL )
             <if test="latitude != null and longitude != null">
             OR
             ( 
                 put_way = 3
-                AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
-                AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+                AND merchant_latitude &gt; #{latitude} - 1 AND  merchant_latitude &lt; #{latitude} + 1 AND merchant_longitude &gt;  #{longitude} - 1 AND merchant_longitude &lt; #{longitude} + 1 
+                AND (#{radius} * 2 * ASIN(SQRT(POW(SIN((#{latitude} - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(#{latitude} * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((#{longitude} - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
             <if test="merchantIds != null and merchantIds.size > 0">
@@ -188,11 +176,6 @@
           1.根据广告的积分和总积分来排序,属于filesort排序,排序的性能比较低,需要继续优化
      -->
     <select resultType="java.lang.Long" id="selectAdPointIdExample" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectAdPointIdExample">
-        <if test="latitude != null and longitude != null">
-        SET @r = #{radius};
-        SET @lat = #{latitude};
-        SET @lon = #{longitude};
-        </if>
         SELECT id FROM ad
         WHERE
         type IN (1, 2) AND status IN (1, 2) AND begin_time > #{beginTime} AND
@@ -202,8 +185,8 @@
             OR
             ( 
               put_way = 3
-              AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
-              AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+              AND  merchant_latitude &gt; #{latitude} - 1 AND  merchant_latitude &lt; #{latitude} + 1 AND merchant_longitude &gt;  #{longitude} - 1 AND merchant_longitude &lt; #{longitude} + 1 
+              AND (#{radius} * 2 * ASIN(SQRT(POW(SIN((#{latitude} - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(#{latitude} * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((#{longitude} - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
             <if test="merchantIds != null and merchantIds.size > 0">
@@ -238,11 +221,6 @@
           1.根据用户的点击次数,以及投放时间来排序,属于filesort排序,排序的性能比较低,需要继续优化
      -->
     <select resultType="java.lang.Long" id="selectPageChoicenessAdId" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectChoicenessAdIdExample">
-        <if test="latitude != null and longitude != null">
-        SET @r = #{radius};
-        SET @lat = #{latitude};
-        SET @lon = #{longitude};
-        </if>
         SELECT id FROM ad
         WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
         (
@@ -251,8 +229,8 @@
             OR
             ( 
               put_way = 3
-              AND  merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
-              AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+              AND  merchant_latitude &gt; #{latitude} - 1 AND  merchant_latitude &lt; #{latitude} + 1 AND merchant_longitude &gt;  #{longitude} - 1 AND merchant_longitude &lt; #{longitude} + 1 
+              AND (#{radius} * 2 * ASIN(SQRT(POW(SIN((#{latitude} - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(#{latitude} * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((#{longitude} - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
             <if test="merchantIds != null and merchantIds.size > 0">
@@ -269,11 +247,6 @@
     
     <!-- 查询精选推荐广告总数 -->
     <select resultType="java.lang.Long" id="selectChoicenessAdCount" parameterType="com.lawu.eshop.ad.srv.domain.extend.SelectChoicenessAdIdExample">
-        <if test="latitude != null and longitude != null">
-        SET @r = #{radius};
-        SET @lat = #{latitude};
-        SET @lon = #{longitude};
-        </if>
         SELECT count(*) FROM ad
         WHERE (type IN (1, 2) AND status = 2) OR (type = 3 AND status IN (1, 2)) AND
         (
@@ -282,8 +255,8 @@
             OR
             ( 
                 put_way = 3
-                AND merchant_latitude &gt; @lat - 1 AND  merchant_latitude &lt; @lat + 1 AND merchant_longitude &gt;  @lon - 1 AND merchant_longitude &lt; @lon + 1 
-                AND (@r * 2 * ASIN(SQRT(POW(SIN((@lat - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(@lat * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((@lon - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
+                AND merchant_latitude &gt; #{latitude} - 1 AND  merchant_latitude &lt; #{latitude} + 1 AND merchant_longitude &gt;  #{longitude} - 1 AND merchant_longitude &lt; #{longitude} + 1 
+                AND (#{radius} * 2 * ASIN(SQRT(POW(SIN((#{latitude} - merchant_latitude) * PI() / 180 / 2 ), 2) + COS(#{latitude} * PI() / 180) * COS(merchant_latitude * PI() / 180 ) * POW(SIN((#{longitude} - merchant_longitude) * PI() / 180 / 2), 2)))) &gt; radius
             )
             </if>
             <if test="merchantIds != null and merchantIds.size > 0">
