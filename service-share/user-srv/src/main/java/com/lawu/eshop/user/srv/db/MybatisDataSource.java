@@ -32,16 +32,19 @@ public class MybatisDataSource {
     private static final String CONFIG_LOCATION = "classpath:mapperConfig.xml";
 
     private DruidDataSource datasource = null;
-
+    
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.stat.filter")
+    public StatFilter statFilter(){
+    	StatFilter filter = new StatFilter();
+        return filter;
+    }
+    
     @Bean(destroyMethod = "close")
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
-        // 统计过滤配置
-        StatFilter statFilter = new StatFilter();
-        // 合并sql语句
-        statFilter.setMergeSql(true);
-        datasource.getProxyFilters().add(statFilter);
+        datasource.getProxyFilters().add(statFilter());
         return datasource;
     }
 

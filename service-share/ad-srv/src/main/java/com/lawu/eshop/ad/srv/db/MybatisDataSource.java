@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.wall.WallConfig;
-import com.alibaba.druid.wall.WallFilter;
 
 /**
  * @author Leach
@@ -34,26 +32,22 @@ public class MybatisDataSource {
     private static final String CONFIG_LOCATION = "classpath:mapperConfig.xml";
 
     private DruidDataSource datasource = null;
-
+    
+    @Bean
+    @ConfigurationProperties("spring.datasource.druid.stat.filter")
+    public StatFilter statFilter(){
+    	StatFilter filter = new StatFilter();
+        return filter;
+    }
+    
     @Bean(destroyMethod = "close")
     @ConfigurationProperties(prefix = "spring.datasource.druid")
     public DataSource dataSource() {
         datasource = new DruidDataSource();
-        // 防火墙过滤配置
-        WallFilter wallFilter = new WallFilter();
-        WallConfig wallConfig = new WallConfig();
-        // 允许执行多条语句
-        wallConfig.setMultiStatementAllow(true);
-        wallFilter.setConfig(wallConfig);
-        datasource.getProxyFilters().add(wallFilter);
-        // 统计过滤配置
-        StatFilter statFilter = new StatFilter();
-        // 合并sql语句
-        statFilter.setMergeSql(true);
-        datasource.getProxyFilters().add(statFilter);
+        datasource.getProxyFilters().add(statFilter());
         return datasource;
     }
-
+    
     @PreDestroy
     public void close() {
         if (datasource != null) {
