@@ -25,6 +25,9 @@ public class GtPush {
 
     public static final String RESULT ="result";
 
+    //毫秒 24小时  24 * 3600 * 1000
+    public static final long OFFLINE_EXPIRE_TIME  = 86400000L;
+
     /**
      * 单推
      *
@@ -38,7 +41,7 @@ public class GtPush {
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
-        message.setOfflineExpireTime(24 * 3600 * 1000);
+        message.setOfflineExpireTime(OFFLINE_EXPIRE_TIME);
         message.setData(template);
         // 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
         message.setPushNetWorkType(0);
@@ -66,27 +69,27 @@ public class GtPush {
      * 单推用户端
      *
      * @param contents
-     * @param CID
+     * @param cid
      * @return
      */
-    public String sendMessageToCidCustoms(String contents, String CID, String title,String host,String appkey,String masterSecret,String appId) {
+    public String sendMessageToCidCustoms(String contents, String cid, String title,String host,String appkey,String masterSecret,String appId) {
         IGtPush push = new IGtPush(host, appkey, masterSecret);
         TransmissionTemplate template = getTemplateUser(title, contents,appId,appkey);
         SingleMessage message = new SingleMessage();
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
-        message.setOfflineExpireTime(24 * 3600 * 1000);
+        message.setOfflineExpireTime(OFFLINE_EXPIRE_TIME);
         message.setData(template);
         // 可选，1为wifi，0为不限制网络环境。根据手机处于的网络情况，决定是否下发
         message.setPushNetWorkType(0);
         Target target = new Target();
         target.setAppId(appId);
-        target.setClientId(CID);
+        target.setClientId(cid);
         IPushResult ret = null;
         try {
             ret = push.pushMessageToSingle(message, target);
         } catch (RequestException e) {
-            e.printStackTrace();
+            logger.info("RequestException {}",e);
             ret = push.pushMessageToSingle(message, target, e.getRequestId());
         }
         if (ret != null) {
@@ -114,7 +117,7 @@ public class GtPush {
 
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
-        message.setOfflineExpireTime(24 * 1000 * 3600);
+        message.setOfflineExpireTime(OFFLINE_EXPIRE_TIME);
         // 推送给App的目标用户需要满足的条件
         List<String> appIdList = new ArrayList<>();
         appIdList.add(appId);
@@ -141,7 +144,7 @@ public class GtPush {
 
         message.setOffline(true);
         // 离线有效时间，单位为毫秒，可选
-        message.setOfflineExpireTime(24 * 1000 * 3600);
+        message.setOfflineExpireTime(OFFLINE_EXPIRE_TIME);
         // 推送给App的目标用户需要满足的条件
         List<String> appIdList = new ArrayList<>();
         appIdList.add(appId);
@@ -168,9 +171,10 @@ public class GtPush {
         template.setTransmissionContent(contents);
         template.setTransmissionType(2);
         APNPayload payload = new APNPayload();
-        payload.setBadge(1);
-        payload.setContentAvailable(1);
+        //在已有数字基础上加1显示，设置为-1时，在已有数字上减1显示，设置为数字时，显示指定数字
+        payload.setAutoBadge("+1");
         payload.setSound("default");
+        payload.setContentAvailable(1);
         // 字典模式使用下者
         payload.setAlertMsg(getDictionaryAlertMsg(title, contents));
         template.setAPNInfo(payload);
@@ -186,12 +190,13 @@ public class GtPush {
      */
     public static TransmissionTemplate getTemplateUser(String title, String contents,String appId,String appkey) {
         TransmissionTemplate template = new TransmissionTemplate();
+        template.setTransmissionContent(contents);
         template.setAppId(appId);
         template.setAppkey(appkey);
-        template.setTransmissionContent(contents);
         template.setTransmissionType(2);
         APNPayload payload = new APNPayload();
-        payload.setBadge(1);
+        //在已有数字基础上加1显示，设置为-1时，在已有数字上减1显示，设置为数字时，显示指定数字
+        payload.setAutoBadge("+1");
         payload.setContentAvailable(1);
         payload.setSound("default");
 
